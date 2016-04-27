@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Profile>
+  <Name>Goblin Explorer 1.0 by xzjv [REQUIRES QUESTTOOLS 3.5.13+]</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" />
+  <Order>
+
+    <If condition="ZetaDia.WorldType != Act.OpenWorld">
+      <LeaveGame questId="1" reason="Profile must be in adventure mode!" stayInParty="False" />
+    </If>
+
+    <If condition="CurrentLevelAreaSnoId != 332339 and CurrentWorldSnoId != 379962 and CurrentWorldSnoId != 380753">      
+      <UseWaypoint waypointNumber="0" questId="1" />
+      <WaitWhile condition="IsCastingOrLoading()" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+    </If>
+    
+    <TownRun minFreeBagSlots="50" />
+    
+    <!--[1F071CB4] GizmoType: Portal Name: p1_Greed_Portal-13530 ActorSNO: 393030 Distance: 8.175404 Position: <401.25, 581.25, 23.94532> Barracade: False Radius: 9.013878-->
+    <If condition="CurrentLevelAreaSnoId == 332339 and not ActorExistsAt(393030, 403, 575, 24, 50) and ItemCount(197837) > 0">
+
+      <LogMessage Output="Getting Puzzle Ring" />
+
+      <GetItemFromStash questId="1" actorId="197837" maxItems="5" />
+
+      <LogMessage questId="1" output="Moving to Cube" />
+
+      <MoveToActor
+        questId="1"
+        x="425" y="588" z="24"
+        actorId="439975"
+        interactRange="8"
+        pathPrecision="5"
+        pathPointLimit="250"
+        statusText="" />
+
+      <LogMessage questId="1" output="Opening Greed Portal" />
+
+      <Transmute>
+        <Items>
+          <Item id="197837" name="Puzzle Ring" /><!-- 197837 -->
+        </Items>
+      </Transmute>
+
+    </If>
+
+    <WaitTimer questId="1" stepId="1" waitTime="1000" />
+
+    <If condition="CurrentLevelAreaSnoId == 332339 and ActorExistsAt(393030, 403, 575, 24, 50)">
+
+      <LogMessage Output="Entering to Greed Portal " />
+
+      <!-- Quest: x1_OpenWorld_quest (312429) World: X1_Tristram_Adventure_Mode_Hub (332336) LevelArea: A1_Tristram_Adventure_Mode_Hub (332339) Actor: p1_Greed_Portal-12549 (393030) Gizmo  -->
+      <MoveToActor
+        questId="312429" stepId="2" x="401" y="581" z="24"
+        actorId="393030" interactRange="10" name="p1_Greed_Portal-12549"
+        isPortal="True" destinationWorldId="-1" pathPrecision="5"
+        pathPointLimit="250" statusText="" />
+
+    </If>
+
+    <If condition="CurrentWorldSnoId == 379962">
+
+      <LogMessage questId="1" output="Exploring Goblin Realm!" />
+
+      <ExploreDungeon
+        routeMode="WeightedNearestMinimapUnvisited"
+        questId="1"
+        until="ObjectFound"
+        actorId="380766"
+        objectDistance="60"
+        pathPrecision="30"
+        boxSize="11"
+        boxTolerance="0.01"
+        markerDistance="45" />
+
+      <!-- Quest: x1_OpenWorld_quest (312429) World: p1_TGoblin_Realm (379962) LevelArea: p1_TreasureRealm (380773) Actor: Boss_Portal_Greed-4809 (380766) Gizmo  -->
+      <MoveToActor questId="312429" stepId="2" x="208" y="180" z="-78" actorId="380766" interactRange="19"
+                   name="Boss_Portal_Greed-4809" isPortal="True" destinationWorldId="-1" pathPrecision="5"
+                   pathPointLimit="250" statusText="" />
+
+    </If>
+    
+    <WaitTimer questId="1" stepId="1" waitTime="1000" />    
+    
+    <If condition="CurrentWorldSnoId == 380753">
+
+      <LogMessage questId="1" output="Time to plunder!" />
+      
+      <SafeMoveTo questId="312429" stepId="2" x="81" y="176" z="-82" pathPrecision="5" pathPointLimit="250" scene="p1_TGoblin_Realm_Prototype3_W01_S01" statusText="" />      
+            
+      <!-- Quest: x1_OpenWorld_quest (312429) World: p1_TGoblin_Realm_BossRoom (380753) LevelArea: p1_TreasureRealm_Greed (380774) Actor: p1_Tgoblin_Greed_Bait-5698 (403041) Gizmo  -->
+      <MoveToActor questId="312429" stepId="2" x="68" y="179" z="-82"  actorId="403041" interactRange="14" name="p1_Tgoblin_Greed_Bait-5698"  pathPrecision="5" pathPointLimit="250" statusText="" /> 
+
+      <WaitTimer questId="1" stepId="1" waitTime="12000" />          
+      
+      <!-- Quest: x1_OpenWorld_quest (312429) World: p1_TGoblin_Realm_BossRoom (380753) LevelArea: p1_TreasureRealm_Greed (380774) Actor: p1_Greed_deathChest_Multiclick-6206 (403683) Gizmo  -->
+      <MoveToActor questId="312429" stepId="2" x="73" y="173" z="-82"  actorId="403683" interactRange="20" name="p1_Greed_deathChest_Multiclick-6206"  pathPrecision="5" pathPointLimit="250" statusText="" />     
+    
+      <WaitTimer questId="1" stepId="1" waitTime="6000" />         
+    
+    </If>
+
+    <WaitTimer questId="1" stepId="1" waitTime="4000" />
+
+    <If condition="ItemCount(197837)">
+      
+      <LogMessage questId="1" output="Finished!" />  
+      <LeaveGame questId="1" reason="End of Profile." stayInParty="False" />
+    
+    </If>
+    
+    <LogMessage questId="1" output="You have no Puzzle rings!" />    
+    <WaitTimer questId="1" stepId="1" waitTime="1000" />
+
+  </Order>
+</Profile>

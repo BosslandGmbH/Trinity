@@ -1,0 +1,1211 @@
+<Profile>
+  <Name>Act 5 by rrrix</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams quest="251355" step="-1" act="A5" resumeFromSave="True" isPrivate="True" numGames="-1" />
+
+  <TargetBlacklists>
+  </TargetBlacklists>
+
+  <Order>
+    <LogMessage message="Loaded Act 5 by rrrix" />
+    <ToggleTargeting questId="1" combat="True" killRadius="90" looting="True" lootRadius="300" />
+    <QuestToolsSetVariable questId="1" key="DebugLogging" value="True" />
+    <SetQuesting questId="1" mode="true" />
+
+    <If condition="ZetaDia.CurrentActSnoId == 70015">
+      <LogMessage message="We're in the wrong act, loading Act 1" />
+      <LoadProfile profile="Act1.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70016">
+      <LogMessage message="We're in the wrong act, loading Act 2" />
+      <LoadProfile profile="Act2.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70017">
+      <LogMessage message="We're in the wrong act, loading Act 3" />
+      <LoadProfile profile="Act3.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70018">
+      <LogMessage message="We're in the wrong act, loading Act 4" />
+      <LoadProfile profile="Act4.xml" />
+    </If>
+
+    <!-- Diablo 1.0.7 resume game handling -->
+    <If condition="IsInTown">
+      <ResumeUseTownPortal forceUsePortal="True" timeLimit="30" />
+    </If>
+
+    <!-- Quest: x1_WestM_IntroQuest World: X1_Westmarch_Overlook_D LevelArea: x1_westm_intro_overlook -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(-1) and CurrentWorldId==308705 and CurrentLevelAreaId==284069">
+      <SafeMoveTo questId="251355" stepId="-1" x="617" y="269" z="-5" pathPrecision="5" pathPointLimit="250" statusText="Moving to Cart" />
+    </If>
+
+    <!-- Quest: x1_WestM_IntroQuest World: X1_Westmarch_Overlook_D LevelArea: x1_westm_intro_overlook -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(2) and CurrentWorldId==308705 and CurrentLevelAreaId==284069">
+      <MoveToMapMarker questId="251355" stepId="2" x="617" y="269" z="-5" markerNameHash="115613072" actorId="176002"
+                       interactRange="20" pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="306549" statusText="" />
+    </If>
+
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_IntroBridge_A -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(2) and CurrentWorldId==306549 and CurrentLevelAreaId==315938">
+      <SafeMoveTo questId="251355" stepId="2" x="1246" y="684" z="15" pathPrecision="5" pathPointLimit="250" statusText="" />
+
+      <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_IntroBridge_A -->
+      <WaitTimer questId="251355" stepId="2" waitTime="500" />
+
+      <SafeMoveTo questId="251355" stepId="2" x="1249" y="568" z="10" pathPrecision="5" pathPointLimit="250" statusText="Checking for Rare Chest" />
+
+      <SafeMoveTo questId="251355" stepId="2" x="1242" y="763" z="10" pathPrecision="5" pathPointLimit="250" statusText="Wolf Gate 1" />
+      <SafeMoveTo questId="251355" stepId="2" x="1078" y="764" z="0" pathPrecision="5" pathPointLimit="250" statusText="Wolf Gate 2" />
+      <SafeMoveTo questId="251355" stepId="2" x="1076" y="848" z="-29" pathPrecision="5" pathPointLimit="250" statusText="Wolf Gate 3" />
+
+      <SafeMoveTo questId="251355" stepId="2" x="1010" y="849" z="-30" pathPrecision="5" pathPointLimit="250" statusText="Moldering Waterway 1" />
+    </If>
+
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_IntroBridge_A -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(2) and CurrentWorldId==306549 and CurrentLevelAreaId==315938">
+      <SafeMoveTo questId="251355" stepId="2" x="890" y="819" z="0" pathPrecision="5" pathPointLimit="250" statusText="Moving to Stars" />
+    </If>
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_Warehouse -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(2) and CurrentWorldId==306549 and CurrentLevelAreaId==316374">
+      <SafeMoveTo questId="251355" stepId="2" x="890" y="819" z="0" pathPrecision="5" pathPointLimit="250" statusText="Moving up Stairs" />
+      <SafeMoveTo questId="251355" stepId="2" x="907" y="726" z="5" pathPrecision="5" pathPointLimit="250" statusText="Moving to Storehouse" />
+    </If>
+
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_Warehouse -->
+    <!-- Inside Old Westmarch Storehouse -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(2) and CurrentWorldId==306549">
+      <MoveToActor questId="251355" stepId="2" x="903" y="720" z="5" actorId="308377" interactRange="8"
+                   name="x1_NPC_Westmarch_IntroGuy-4560"  pathPrecision="5" pathPointLimit="250" statusText="Talk to Victor" />
+    </If>
+
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_Warehouse -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(59) and CurrentWorldId==306549">
+      <!--
+      <SafeMoveTo questId="251355" stepId="59" x="876" y="718" z="5" pathPrecision="5" pathPointLimit="250" statusText="Move to door" />
+      <MoveToActor questId="251355" stepId="59" x="872" y="718" z="6" actorId="309222"
+                   interactRange="14" name="X1_Westm_Door_Giant_Inset-839"  pathPrecision="5" pathPointLimit="250" statusText="Opening Door" />
+      -->
+      <SafeMoveTo questId="251355" stepId="59" x="802" y="715" z="0" pathPrecision="5" pathPointLimit="250" statusText="Outside to birds" />
+      <SafeMoveTo questId="251355" stepId="59" x="700" y="906" z="-10" pathPrecision="5" pathPointLimit="250" statusText="Streets of Westmarch" />
+    </If>
+
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_IntroAlley -->
+    <!-- Streets of Westmarch -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(59) and CurrentWorldId==306549">
+      <SafeMoveTo questId="251355" stepId="59" x="700" y="906" z="-10" pathPrecision="5" pathPointLimit="250" statusText="Streets of Westmarch" />
+      <SafeMoveTo questId="251355" stepId="59" x="555" y="740" z="0" pathPrecision="5" pathPointLimit="250" statusText="Door to Cathedral" />
+      <SafeMoveTo questId="251355" stepId="59" x="559" y="629" z="10" pathPrecision="5" pathPointLimit="250" statusText="Cathedral Courtyard Locked Gate" />
+    </If>
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_CathedralCourtyard -->
+    <While condition="IsActiveQuest(251355) and IsActiveQuestStep(59) and CurrentWorldId==306549">
+      <SafeMoveTo questId="251355" stepId="59" x="402" y="524" z="7" pathPrecision="5" pathPointLimit="250" statusText="Moving to Quest Trigger Point" />
+      <WaitTimer questId="251355" stepId="59" waitTime="500" />
+    </While>
+    <While condition="IsActiveQuest(251355) and IsActiveQuestStep(14) and CurrentWorldId==306549 and CurrentLevelAreaId==311624">
+      <SafeMoveTo questId="251355" stepId="14" x="402" y="524" z="7" pathPrecision="5" pathPointLimit="250" statusText="Moving to Quest Trigger Point" />
+      <WaitTimer questId="251355" stepId="14" waitTime="500" />
+    </While>
+    <While condition="IsActiveQuest(251355) and IsActiveQuestStep(7) and CurrentWorldId==306549 and CurrentLevelAreaId==311624">
+      <SafeMoveTo questId="251355" stepId="7" x="402" y="524" z="7" pathPrecision="5" pathPointLimit="250" statusText="Moving to Quest Trigger Point" />
+      <MoveToActor questId="251355" stepId="7" x="396" y="530" z="7" actorId="289293"
+                   interactRange="8" name="x1_Tyrael_Hurt-2472"  pathPrecision="5" pathPointLimit="250" statusText="Talking to Tyrael" />
+      <WaitTimer questId="251355" stepId="7" waitTime="500" />
+    </While>
+
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_CathedralCourtyard -->
+    <!-- Search Zakarum Cathedral -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(57) and CurrentWorldId==306549 and CurrentLevelAreaId==311624">
+      <SafeMoveTo questId="251355" stepId="57" x="311" y="522" z="19" pathPrecision="5" pathPointLimit="250" statusText="Cathedral Door" />
+      <WaitTimer questId="251355" stepId="57" waitTime="1500" />
+      <MoveToMapMarker questId="251355" stepId="57" x="311" y="522" z="19" markerNameHash="-352978241" actorId="374925" interactRange="20"
+                       pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="308549" statusText="Cathedral Portal" />
+    </If>
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_CathedralCourtyard -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(57) and CurrentWorldId==306549 and CurrentLevelAreaId==311624">
+      <MoveToActor questId="251355" stepId="57" x="312" y="523" z="20"  actorId="316548" interactRange="17" name="x1_westm_Church_Ext_Door_A-21"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_CathedralCourtyard -->
+    <!-- Search Zakarum Cathedral -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(18) and CurrentWorldId==306549 and CurrentLevelAreaId==311624">
+      <SafeMoveTo questId="251355" stepId="18" x="311" y="522" z="19" pathPrecision="5" pathPointLimit="250" statusText="Cathedral Door" />
+      <WaitTimer questId="251355" stepId="18" waitTime="1500" />
+      <MoveToMapMarker questId="251355" stepId="18" x="311" y="522" z="19" markerNameHash="-352978241" actorId="374925" interactRange="20"
+                       pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="308549" statusText="Cathedral Portal" />
+    </If>
+
+    <!-- Quest: x1_WestM_IntroQuest World: X1_Westmarch_Cath_Int LevelArea: X1_WestM_Intro_Cath_Int_Door -->
+    <!-- Inside Cathedral -->
+    <While condition="IsActiveQuest(251355) and IsActiveQuestStep(57) and CurrentWorldId==308549 and CurrentLevelAreaId==309413">
+      <SafeMoveTo questId="251355" stepId="57" x="442" y="365" z="1" pathPrecision="5" pathPointLimit="250" statusText="Clearing the Cathedral" />
+      <WaitTimer questId="251355" stepId="57" waitTime="500" statusText="Clearing the Cathedral" />
+    </While>
+
+    <!--
+    [QuestTools] questStepId changed from 57 to 18
+    [QuestTools] Change(s) occured at Position x="442" y="365" z="1"
+    -->
+    <!-- Quest: x1_WestM_IntroQuest World: X1_Westmarch_Cath_Int LevelArea: X1_WestM_Intro_Cath_Int_Door -->
+    <!-- Inside Cathedral -->
+    <While condition="IsActiveQuest(251355) and IsActiveQuestStep(18) and CurrentWorldId==308549 and CurrentLevelAreaId==309413">
+      <SafeMoveTo questId="251355" stepId="18" x="389" y="352" z="1" pathPrecision="5" pathPointLimit="250" statusText="Clearing the Cathedral" />
+      <WaitTimer questId="251355" stepId="18" waitTime="500" statusText="Clearing the Cathedral" />
+    </While>
+
+    <!--
+    [QuestTools] questStepId changed from 18 to 11
+    [QuestTools] Change(s) occured at Position x="408" y="350" z="0"
+    -->
+    <!-- Quest: x1_WestM_IntroQuest World: X1_Westmarch_Cath_Int LevelArea: X1_WestM_Intro_Cath_Int_Door -->
+    <While condition="IsActiveQuest(251355) and IsActiveQuestStep(11) and CurrentWorldId==308549 and CurrentLevelAreaId==309413">
+      <SafeMoveTo questId="251355" stepId="11" x="389" y="352" z="1" pathPrecision="5" pathPointLimit="250" statusText="Clearing the Cathedral" />
+      <WaitTimer questId="251355" stepId="57" waitTime="500" statusText="Clearing the Cathedral" />
+      <MoveToActor questId="251355" stepId="11" x="408" y="365" z="1" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-3785"
+                   pathPrecision="5" pathPointLimit="250" statusText="Talk to Tyrael" />
+    </While>
+    <!-- Quest: x1_WestM_IntroQuest World: X1_Westmarch_Cath_Int LevelArea: X1_WestM_Intro_Cath_Int_Door -->
+    <!-- Back to Town -->
+    <If condition="IsActiveQuest(251355) and IsActiveQuestStep(67) and CurrentWorldId==308549 and CurrentLevelAreaId==309413">
+      <MoveToMapMarker questId="251355" stepId="67" x="561" y="366" z="-3" markerNameHash="1877684886" actorId="185156" interactRange="20"
+                       pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="306549" statusText="" />
+    </If>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(-1) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <MoveToActor questId="284683" stepId="-1" x="370" y="522" z="8" actorId="303828" interactRange="8" name="x1_WestmHub_General-4003"
+                   pathPrecision="5" pathPointLimit="250" statusText="Talk to General Torion" />
+    </If>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <!-- Go to Westmarch Commons -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(47) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <MoveTo questId="284683" stepId="47" x="559" y="650" z="10" pathPrecision="5" />
+      <SafeMoveTo questId="284683" stepId="47" x="558" y="632" z="10" pathPrecision="5" straightLinePathing="True" />
+      <MoveToMapMarker questId="284683" stepId="47" x="558" y="632" z="12" markerNameHash="-1359413965" actorId="176001" interactRange="16.4802"
+                             pathPrecision="16" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" straightLinePathing="True" />
+    </If>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(62) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <MoveToMapMarker questId="284683" stepId="47" x="558" y="632" z="12" markerNameHash="-1359413965" actorId="176001" interactRange="16.4802"
+                             pathPrecision="16" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+    </If>
+    <!--
+    [QuestTools] worldId changed from 304235 to 261712 - X1_WESTM_ZONE_01
+    [QuestTools] levelAreaId changed from 270011 to 261758 - X1_WESTM_ZONE_01
+    [QuestTools] Change(s) occured at Position x="779" y="385" z="10"
+    [QuestTools] questStepId changed from 47 to 62
+    [QuestTools] Change(s) occured at Position x="779" y="385" z="10"
+    -->
+
+    <!-- Quest: X1_WestmHub_Survivor_Rescue (284683) World: X1_Westmarch_Hub (304235) LevelArea: x1_Westm_Hub (270011) -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(62) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <MoveToMapMarker questId="284683" stepId="62" x="558" y="632" z="12" markerNameHash="-1359413965" actorId="176001" interactRange="16.4802"
+                             pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+    </If>
+
+
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WESTM_ZONE_01 LevelArea: X1_WESTM_ZONE_01 -->
+    <!-- Location: Westmarch Commons -->
+    <!-- Major Quest Objective: Find the Soul Crucible -->
+
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WESTM_ZONE_01 LevelArea: X1_WESTM_ZONE_01 -->
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(62) and CurrentWorldId==261712 and (CurrentLevelAreaId==261758 or CurrentLevelAreaId==314782)">
+      <TrinityExploreDungeon questId="284683" stepId="62" until="ExitFound" exitNameHash="-270336747" actorId="176001" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <If condition="MarkerExistsAt(-270336747, Me.Position.X, Me.Position.Y, Me.Position.Z, 300)">
+        <!-- Use Portal to Gideon's Row -->
+        <MoveToMapMarker questId="284683" stepId="62" markerNameHash="-270336747" actorId="176002" interactRange="20"
+                        pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="338891" statusText="" />
+      </If>
+    </While>
+
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_GideonsCourt LevelArea: X1_WestM_DeathOrb_GideonsCourt -->
+    <!-- Gideon's Row -->
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(62) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
+      <TrinityUseOnce id="338956">
+        <SafeMoveTo questId="284683" stepId="62" x="564" y="555" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+        <SafeMoveTo questId="284683" stepId="62" x="395" y="407" z="1" pathPrecision="5" pathPointLimit="250" statusText="" />
+      </TrinityUseOnce>
+      <SafeMoveTo questId="284683" stepId="62" x="316" y="380" z="-20" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="62" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="62" x="369" y="377" z="-20" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="62" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="62" x="376" y="334" z="-19" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="62" waitTime="500" />
+    </While>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_GideonsCourt LevelArea: X1_WestM_DeathOrb_GideonsCourt -->
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(60) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
+      <SafeMoveTo questId="284683" stepId="60" x="316" y="380" z="-20" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="60" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="60" x="369" y="377" z="-20" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="60" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="60" x="376" y="334" z="-19" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="60" waitTime="500" />
+    </While>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_GideonsCourt LevelArea: X1_WestM_DeathOrb_GideonsCourt -->
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(57) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
+      <TrinityUseOnce id="338956">
+        <SafeMoveTo questId="284683" stepId="57" x="564" y="555" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+        <SafeMoveTo questId="284683" stepId="57" x="395" y="407" z="1" pathPrecision="5" pathPointLimit="250" statusText="" />
+      </TrinityUseOnce>
+      <SafeMoveTo questId="284683" stepId="57" x="316" y="380" z="-20" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="57" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="57" x="369" y="377" z="-20" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="57" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="57" x="376" y="334" z="-19" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="57" waitTime="500" />
+    </While>
+    <!--
+    [QuestTools] questId changed from 0 to 284683 - X1_WestmHub_Survivor_Rescue
+    [QuestTools] questStepId changed from 0 to 1
+    [QuestTools] Change(s) occured at Position x="368" y="363" z="-20"
+    -->
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(1) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
+      <WaitTimer questId="284683" stepId="1" waitTime="500" />
+    </While>
+
+    <!--
+    [QuestTools] questStepId changed from 1 to 68
+    [QuestTools] Change(s) occured at Position x="368" y="363" z="-20"
+    -->
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(68) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
+      <MoveToActor questId="284683" stepId="68" x="387" y="282" z="-18" actorId="360303" interactRange="12" name="x1_Westm_MysticCorpsePile-38652"
+                   pathPrecision="5" pathPointLimit="250" statusText="Writhing Corpse Pile" />
+    </While>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_GideonsCourt LevelArea: X1_WestM_DeathOrb_GideonsCourt -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(30) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
+      <MoveToActor questId="284683" stepId="30" x="386" y="289" z="-19" actorId="175310" interactRange="9" name="PT_Mystic_NoVendor_NonGlobalFollower-39462"
+                   pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_GideonsCourt LevelArea: X1_WestM_DeathOrb_GideonsCourt -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(32) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
+      <SafeMoveTo questId="284683" stepId="32" x="287" y="280" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <MoveToMapMarker questId="284683" stepId="32" x="67" y="58" z="0" markerNameHash="-1426177532" actorId="176002" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="338944" statusText="Briarthorn Cemetary" />
+    </If>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_GideonsCourt LevelArea: X1_WestM_DeathOrb_GideonsCourt -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(60) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
+      <SafeMoveTo questId="284683" stepId="60" x="287" y="280" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <MoveToMapMarker questId="284683" stepId="60" x="67" y="58" z="0" markerNameHash="-1426177532" actorId="176002" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="338944" statusText="Briarthorn Cemetary" />
+    </If>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue (284683) World: X1_Westmarch_Hub (304235) LevelArea: x1_Westm_Hub (270011) -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(55) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <UseWaypoint questId="284683" stepId="55" waypointNumber="2" name="Waypoint-2225" statusText="" />
+    </If>
+
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: x1_westm_Graveyard_DeathOrb LevelArea: X1_Westm_Graveyard_DeathOrb -->
+    <!-- Briarthorn Cemetary -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(55) and CurrentWorldId==338944 and CurrentLevelAreaId==338946">
+      <TrinityExploreDungeon questId="284683" stepId="55" until="ExitFound" exitNameHash="-1433641830" pathPrecision="25" boxSize="25" boxTolerance="0.15" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <LogMessage questId="284683" stepId="55" message="Using Portal to Nobles Rest" />
+      <MoveToMapMarker questId="284683" stepId="55" markerNameHash="-1433641830" interactRange="20"
+                       pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="339151" statusText="Nobles Rest Courtyard" />
+    </If>
+
+
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_KerwinsRow LevelArea: X1_WestM_DeathOrb_KerwinsRow -->
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(55) and CurrentWorldId==339151 and CurrentLevelAreaId==339158">
+      <SafeMoveTo questId="284683" stepId="55" x="554" y="522" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <SafeMoveTo questId="284683" stepId="55" x="396" y="389" z="3" pathPrecision="5" pathPointLimit="250" statusText="" />
+    </While>
+
+    <!-- Stuck in Town Somehow? Lets fix that... -->
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(49) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <TrinityTownRun questId="1" />
+      <UseWaypoint questId="284683" stepId="49" waypointNumber="2" />
+    </If>
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: x1_westm_Graveyard_DeathOrb LevelArea: X1_Westm_Graveyard_DeathOrb -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(49) and CurrentWorldId==338944 and CurrentLevelAreaId==338946">
+      <MoveToMapMarker questId="284683" stepId="49" markerNameHash="-1433641830" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="339151" statusText="Nobles Rest Courtyard" />
+
+      <TrinityExploreDungeon questId="284683" stepId="49" until="ExitFound" exitNameHash="-1433641830" pathPrecision="25" boxSize="25" boxTolerance="0.15" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <LogMessage questId="284683" stepId="49" message="Using Portal to Nobles Rest" />
+
+      <MoveToMapMarker questId="284683" stepId="49" markerNameHash="-1433641830" interactRange="20"
+                       pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="339151" statusText="Nobles Rest Courtyard" />
+    </If>
+
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_KerwinsRow LevelArea: X1_WestM_DeathOrb_KerwinsRow -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(53) and CurrentWorldId==339151 and CurrentLevelAreaId==339158">
+      <SafeMoveTo questId="284683" stepId="53" x="396" y="389" z="3" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="53" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="53" x="384" y="299" z="5" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="53" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="53" x="328" y="405" z="4" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="53" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="53" x="301" y="389" z="6" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="53" waitTime="500" />
+    </If>
+
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_KerwinsRow LevelArea: X1_WestM_DeathOrb_KerwinsRow -->
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(49) and CurrentWorldId==339151 and CurrentLevelAreaId==339158">
+      <SafeMoveTo questId="284683" stepId="49" x="396" y="389" z="3" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="49" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="49" x="384" y="299" z="5" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="49" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="49" x="328" y="405" z="4" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="49" waitTime="500" />
+      <SafeMoveTo questId="284683" stepId="49" x="301" y="389" z="6" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="284683" stepId="49" waitTime="500" />
+    </While>
+
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_KerwinsRow LevelArea: X1_WestM_DeathOrb_KerwinsRow -->
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(34) and CurrentWorldId==339151 and CurrentLevelAreaId==339158">
+      <ToggleTargeting questId="284683" stepId="34" combat="False" killRadius="90" looting="True" lootRadius="300" />
+      <SafeMoveTo questId="284683" stepId="34" x="373" y="379" z="3" pathPrecision="5" pathPointLimit="250" statusText="Destroy the Death Orb!" />
+      <ToggleTargeting questId="284683" stepId="34" combat="True" killRadius="90" looting="True" lootRadius="300" />
+      <WaitTimer questId="284683" stepId="34" waitTime="500" />
+
+    </While>
+    <While condition="IsActiveQuest(284683) and IsActiveQuestStep(40) and CurrentWorldId==339151 and CurrentLevelAreaId==339158">
+      <WaitTimer questId="284683" stepId="40" waitTime="500" />
+      <MoveToActor questId="284683" stepId="40" x="452" y="430" z="10" actorId="175310" interactRange="9" name="PT_Mystic_NoVendor_NonGlobalFollower-53186"
+                   pathPrecision="5" pathPointLimit="250" statusText="" />
+    </While>
+    <!--
+    [QuestTools] questStepId changed from 34 to 40
+    [QuestTools] Change(s) occured at Position x="385" y="312" z="3"
+    -->
+    <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_KerwinsRow LevelArea: X1_WestM_DeathOrb_KerwinsRow -->
+    <If condition="IsActiveQuest(284683) and IsActiveQuestStep(42) and CurrentWorldId==339151 and CurrentLevelAreaId==339158">
+      <TrinityTownPortal questId="284683" stepId="42" />
+    </If>
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(-1) and CurrentWorldId==339151 and CurrentLevelAreaId==339158">
+      <TrinityTownPortal questId="285098" stepId="-1" />
+    </If>
+
+    <!-- Quest: X1_Westm_KillUrzael World: X1_WestM_DeathOrb_KerwinsRow LevelArea: X1_WestM_DeathOrb_KerwinsRow -->
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(1) and CurrentWorldId==339151 and CurrentLevelAreaId==339158">
+      <UseWaypoint questId="285098" stepId="1" waypointNumber="0" name="Waypoint-18017" statusText="" />
+    </If>
+    <!-- Quest: X1_Westm_KillUrzael World: [sno unknown] LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(-1) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <TrinityTownRun questId="1" />
+      <MoveToActor questId="285098" stepId="-1" x="381" y="510" z="7" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-425"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+    <!--[QuestTools] questStepId changed from -1 to 1-->
+    <!-- Quest: X1_Westm_KillUrzael World: [sno unknown] LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(1) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <MoveToMapMarker questId="285098" stepId="1" x="431" y="592" z="-2" markerNameHash="-1359413963" actorId="176001" interactRange="16.51981"
+                             pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+    </If>
+
+    <!-- Quest: X1_Westm_KillUrzael World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(6) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <UseWaypoint questId="285098" stepId="6" waypointNumber="3" />
+    </If>
+
+    <!-- Quest: X1_Westm_KillUrzael World: X1_WESTM_ZONE_03 LevelArea: X1_WESTM_ZONE_03 -->
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(6) and CurrentWorldId==263494 and CurrentLevelAreaId==263493">
+      <TrinityExploreDungeon questId="285098" stepId="6" until="ExitFound" exitNameHash="-1689330047" actorId="0" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="285098" stepId="6" markerNameHash="-1689330047" actorId="309883" interactRange="20"
+                pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="308446" statusText="" />
+    </If>
+    <!-- [QuestTools] questStepId changed from 6 to 12-->
+
+    <!-- Quest: X1_Westm_KillUrzael World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(12) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <UseWaypoint questId="285098" stepId="12" waypointNumber="3" />
+    </If>
+
+    <!-- Quest: X1_Westm_KillUrzael World: X1_WESTM_ZONE_03 LevelArea: X1_WESTM_ZONE_03 -->
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(12) and CurrentWorldId==263494 and CurrentLevelAreaId==263493">
+      <MoveToMapMarker questId="285098" stepId="12" markerNameHash="-1689330047" actorId="309883" interactRange="20"
+                pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="308446" statusText="" />
+
+      <TrinityExploreDungeon questId="285098" stepId="12" until="ExitFound" exitNameHash="-1689330047" actorId="0" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+
+      <MoveToMapMarker questId="285098" stepId="12" markerNameHash="-1689330047" actorId="309883" interactRange="20"
+                pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="308446" statusText="" />
+    </If>
+
+    <!-- Quest: X1_Westm_KillUrzael World: x1_Urzael_Arena LevelArea: x1_Urzael_Arena -->
+    <While condition="IsActiveQuest(285098) and IsActiveQuestStep(12) and CurrentWorldId==308446 and CurrentLevelAreaId==308487">
+      <SafeMoveTo questId="285098" stepId="12" x="329" y="343" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="285098" stepId="12" waitTime="1000" />
+    </While>
+    <!-- Quest: X1_Westm_KillUrzael World: x1_Urzael_Arena LevelArea: x1_Urzael_Arena -->
+    <While condition="IsActiveQuest(285098) and IsActiveQuestStep(14) and CurrentWorldId==308446 and CurrentLevelAreaId==308487">
+      <SafeMoveTo questId="285098" stepId="14" x="329" y="343" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <MoveToActor questId="285098" stepId="14" x="332" y="348" z="0" actorId="274457" interactRange="46" name="x1_Malthael_NPC-46446"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="285098" stepId="14" waitTime="1000" />
+    </While>
+    <!-- Quest: X1_Westm_KillUrzael World: x1_Urzael_Arena LevelArea: x1_Urzael_Arena -->
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(16) and CurrentWorldId==308446 and CurrentLevelAreaId==308487">
+      <WaitTimer questId="285098" stepId="16" waitTime="500" />
+      <TrinityTownPortal questId="285098" stepId="16" />
+    </If>
+
+    <!-- Quest: X1_Westm_KillUrzael World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(285098) and IsActiveQuestStep(18) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <MoveToActor questId="285098" stepId="18" x="381" y="510" z="7" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-19511"
+                   pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: [sno unknown] LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(-1) and CurrentWorldId==304235">
+      <TrinityTownRun questId="1" />
+      <MoveToActor questId="257120" stepId="-1" x="531" y="567" z="3" actorId="56948"
+                   interactRange="9" name="PT_Mystic-53"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: [sno unknown] LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(67) and CurrentWorldId==304235">
+      <MoveToMapMarker questId="257120" stepId="67" x="435" y="919" z="-1" markerNameHash="1232608241" actorId="176001" interactRange="24.65643"
+                             pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+    </If>
+    <!-- Quest: x1_Adria World: x1_Bog_AdriaRitual LevelArea: x1_Bog_AdriaRitual -->
+    <While condition="IsActiveQuest(257120) and IsActiveQuestStep(67) and CurrentWorldId==2824607">
+      <TrinityExploreDungeon questId="257120" stepId="67" until="SceneFound" sceneId="337783" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Entrance" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <While condition="IsSceneLoaded(337783) and IsActiveQuest(257120) and IsActiveQuestStep(65) and CurrentWorldId==282460">
+        <TrinityMoveToScene questId="257120" stepId="67" sceneId="337783"/>
+      </While>
+    </While>
+    <!-- Quest: x1_Adria (257120) World: x1_Bog_AdriaRitual (282460) LevelArea: x1_Bog_AdriaRitual (282487) -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(67) and CurrentWorldId==282460">
+      <TrinityExploreDungeon questId="257120" stepId="67" until="SceneFound" sceneId="337783" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Entrance" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <While condition="IsSceneLoaded(337783) and IsActiveQuest(257120) and IsActiveQuestStep(65) and CurrentWorldId==282460">
+        <TrinityMoveToScene questId="257120" stepId="67" sceneId="337783"/>
+      </While>
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Bog_AdriaRitual LevelArea: x1_Bog_AdriaRitual -->
+    <While condition="IsActiveQuest(257120) and IsActiveQuestStep(65) and CurrentWorldId==282460">
+      <While condition="IsSceneLoaded(337783) and IsActiveQuest(257120) and IsActiveQuestStep(65) and CurrentWorldId==282460">
+        <TrinityMoveToScene questId="257120" stepId="65" sceneId="337783"/>
+      </While>
+      <TrinityExploreDungeon questId="257120" stepId="65" until="SceneFound" sceneId="337783" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Entrance" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+    </While>
+
+    <!--[QuestTools] questStepId changed from 67 to 65-->
+    <!-- Quest: x1_Adria World: x1_Bog_AdriaRitual LevelArea: x1_Bog_AdriaRitual -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(92) and CurrentWorldId==282460">
+      <MoveToActor questId="257120" stepId="92" x="538" y="563" z="0" actorId="340914" interactRange="19" name="x1_Catacombs_Door_B-1713"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="257120" stepId="92" waitTime="500" />
+      <MoveToMapMarker questId="257120" stepId="92" x="494" y="579" z="-19" markerNameHash="97677856" actorId="365394" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="267412" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Bog_01 LevelArea: x1_Bog_01 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(92) and CurrentWorldId==267412">
+      <TrinityExploreDungeon questId="257120" stepId="92" until="ObjectFound" actorId="348096" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+    </If>
+
+    <!--[QuestTools] questStepId changed from 92 to 106-->
+    <!-- Quest: x1_Adria World: x1_Bog_01 LevelArea: x1_Bog_01 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(106) and CurrentWorldId==267412">
+      <MoveToActor questId="257120" stepId="106" actorId="348096" interactRange="9" name="x1_Bog_Beacon_B-5498"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Bog_01 LevelArea: x1_Bog_01 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(73) and CurrentWorldId==267412">
+      <TrinityExploreDungeon questId="257120" stepId="73" until="FullyExplored" exitNameHash="-1927255288"
+                             pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+    </If>
+    <!-- Quest: x1_Adria World: x1_Bog_01 LevelArea: x1_Bog_01_Part2 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(61) and CurrentWorldId==267412">
+      <MoveToMapMarker questId="257120" stepId="61" markerNameHash="1943159981" actorId="341165" interactRange="20"
+                               pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="283552" statusText="" />
+
+      <TrinityMoveToScene questId="257120" stepId="61" sceneName="Exit" />
+
+      <TrinityExploreDungeon questId="257120" stepId="61" until="ExitFound" exitNameHash="1943159981" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45" ignoreGridReset="True">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+
+      <TrinityMoveToScene questId="257120" stepId="61" sceneName="Exit" />
+
+      <MoveToMapMarker questId="257120" stepId="61" markerNameHash="1943159981" actorId="341165" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="283552" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Bog_01 LevelArea: x1_Bog_01_Part2 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(101) and CurrentWorldId==267412">
+      <MoveToMapMarker questId="257120" stepId="101" markerNameHash="1943159981" actorId="341165" interactRange="20"
+                         pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="283552" statusText="" />
+
+      <TrinityMoveToScene questId="257120" stepId="101" sceneName="Exit" />
+
+      <TrinityExploreDungeon questId="257120" stepId="101" until="ExitFound" exitNameHash="1943159981" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45" ignoreGridReset="True">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+
+      <TrinityMoveToScene questId="257120" stepId="101" sceneName="Exit" />
+
+      <MoveToMapMarker questId="257120" stepId="101" markerNameHash="1943159981" actorId="341165" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="283552" statusText="" />
+    </If>
+
+
+    <!-- Quest: x1_Adria World: x1_Bog_01 LevelArea: x1_Bog_01 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(102) and CurrentWorldId==267412">
+      <MoveToMapMarker questId="257120" stepId="102" markerNameHash="1943159981" actorId="341165" interactRange="20"
+                   pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="283552" statusText="" />
+
+      <TrinityMoveToScene questId="257120" stepId="102" sceneName="Exit" />
+
+      <TrinityExploreDungeon questId="257120" stepId="102" until="ExitFound" exitNameHash="1943159981" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45" ignoreGridReset="True">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+
+      <TrinityMoveToScene questId="257120" stepId="102" sceneName="Exit" />
+
+      <MoveToMapMarker questId="257120" stepId="102" markerNameHash="1943159981" actorId="341165" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="283552" statusText="" />
+
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Bog_01 LevelArea: x1_Bog_01_Part2 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(98) and CurrentWorldId==267412">
+      <MoveToMapMarker questId="257120" stepId="98" markerNameHash="1943159981" actorId="341165" interactRange="20"
+                   pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="283552" statusText="" />
+
+      <TrinityMoveToScene questId="257120" stepId="98" sceneName="Exit" />
+
+      <TrinityExploreDungeon questId="257120" stepId="98" until="ExitFound" exitNameHash="1943159981" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45" ignoreGridReset="True">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <Objectives>
+          <Objective markerNameHash="0" interact="True" />
+        </Objectives>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+
+      <TrinityMoveToScene questId="257120" stepId="98" sceneName="Exit" />
+
+      <MoveToMapMarker questId="257120" stepId="98" markerNameHash="1943159981" actorId="341165" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="283552" statusText="" />
+
+    </If>
+    <!-- Quest: x1_Adria World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(73) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <UseWaypoint questId="257120" stepId="73" waypointNumber="5" name="Waypoint-2816" statusText="" />
+    </If>
+    <!-- Quest: x1_Adria World: x1_Catacombs_Level01 LevelArea: x1_Catacombs_Level01 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(73) and CurrentWorldId==283552 and CurrentLevelAreaId==283553">
+      <UseWaypoint questId="257120" stepId="73" waypointNumber="5" name="Waypoint-2816" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Catacombs_Level01 LevelArea: x1_Catacombs_Level01 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(73) and CurrentWorldId==283552 and CurrentLevelAreaId==283553">
+      <MoveToMapMarker questId="257120" stepId="73" x="796" y="828" z="3" markerNameHash="-1927255288" actorId="341572" interactRange="20"
+            pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="267412" statusText="" />
+    </If>
+    <!-- Quest: x1_Adria World: x1_Catacombs_Level01 LevelArea: x1_Catacombs_Level01 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(108) and CurrentWorldId==283552 and CurrentLevelAreaId==283553">
+      <TrinityExploreDungeon questId="257120" stepId="108" until="ExitFound" exitNameHash="1943159982" actorId="341572" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="257120" stepId="108" markerNameHash="1943159982" actorId="341572" interactRange="20"
+                       pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="0" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Catacombs_Level01 LevelArea: x1_Catacombs_Level01 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(10) and CurrentWorldId==283552">
+      <TrinityExploreDungeon questId="257120" stepId="10" until="ExitFound" exitNameHash="1943159982" actorId="341572" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="257120" stepId="10" markerNameHash="1943159982" actorId="341572" interactRange="20"
+                       pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="0" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Catacombs_Level02 LevelArea: x1_Catacombs_Level02 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(10) and CurrentWorldId==283566 and CurrentLevelAreaId==283567">
+      <MoveToMapMarker questId="257120" stepId="10" markerNameHash="-131340091" actorId="293005" interactRange="20"
+                pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="297771" statusText="" />
+      <TrinityExploreDungeon questId="257120" stepId="10" until="ExitFound" exitNameHash="-131340091" actorId="293005 " pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="257120" stepId="10" markerNameHash="-131340091" actorId="293005" interactRange="20"
+               pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="297771" statusText="" />
+    </If>
+    <!-- Quest: x1_Adria World: x1_Catacombs_Level02 LevelArea: x1_Catacombs_Level02 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(110) and CurrentWorldId==283566 and CurrentLevelAreaId==283567">
+      <MoveToMapMarker questId="257120" stepId="110" markerNameHash="-131340091" actorId="293005" interactRange="20"
+                pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="297771" statusText="" />
+      <TrinityExploreDungeon questId="257120" stepId="110" until="ExitFound" exitNameHash="-131340091" actorId="293005 " pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="257120" stepId="110" markerNameHash="-131340091" actorId="293005" interactRange="20"
+               pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="297771" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Catacombs_Level02 LevelArea: x1_Catacombs_Level02 -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(14) and CurrentWorldId==283566 and CurrentLevelAreaId==283567">
+      <MoveToMapMarker questId="257120" stepId="14" markerNameHash="-131340091" actorId="293005" interactRange="20"
+                pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="297771" statusText="" />
+      <TrinityExploreDungeon questId="257120" stepId="14" until="ExitFound" exitNameHash="-131340091" actorId="293005 " pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="257120" stepId="14" markerNameHash="-131340091" actorId="293005" interactRange="20"
+               pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="297771" statusText="" />
+
+    </If>
+
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(14) and CurrentWorldId==297771 and CurrentLevelAreaId==287220">
+      <WaitTimer questId="257120" stepId="78" waitTime="500" />
+    </If>
+
+    <!--[QuestTools] questStepId changed from 110 to 14-->
+    <!-- Quest: x1_Adria World: x1_Adria_Boss_Arena_02 LevelArea: x1_Adria_Boss_Arena -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(78) and CurrentWorldId==297771 and CurrentLevelAreaId==287220">
+      <MoveToActor questId="257120" stepId="78" x="404" y="358" z="1" actorId="284530" interactRange="7" name="x1_NPC_LorathNahr-36690"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Adria World: x1_Adria_Boss_Arena_02 LevelArea: x1_Adria_Boss_Arena -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(115) and CurrentWorldId==297771 and CurrentLevelAreaId==287220">
+      <TrinityTownPortal questId="257120" stepId="115" />
+    </If>
+    <!-- Quest: x1_Adria World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(115) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <TrinityTownRun questId="1" />
+      <MoveToActor questId="257120" stepId="115" x="381" y="510" z="7" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-37078"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Pandemonium Gate -->
+
+
+    <!-- Quest: x1_ToHeaven World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(263851) and IsActiveQuestStep(15) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <MoveToMapMarker questId="263851" stepId="15" x="374" y="755" z="7" markerNameHash="-352978241" actorId="277401" interactRange="9.013878"
+                             pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+    </If>
+    <!-- Quest: x1_ToHeaven World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(263851) and IsActiveQuestStep(15) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <MoveToActor questId="263851" stepId="15" x="374" y="755" z="7"  actorId="277401" interactRange="10" name="x1_Heaven_PandemoniumPortal-553"  isPortal="True" destinationWorldId="-1" pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+    <!-- Quest: x1_ToHeaven World: x1_Heaven_Pandemonium_Portal LevelArea: x1_Heaven_Pandemonium_Portal -->
+    <If condition="IsActiveQuest(263851) and IsActiveQuestStep(15) and CurrentWorldId==339160 and CurrentLevelAreaId==339468">
+      <SafeMoveTo questId="263851" stepId="15" x="421" y="421" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="263851" stepId="15" waitTime="500" />
+    </If>
+
+    <!-- Quest: x1_ToHeaven World: x1_Heaven_Pandemonium_Portal LevelArea: x1_Heaven_Pandemonium_Portal -->
+    <If condition="IsActiveQuest(263851) and IsActiveQuestStep(17) and CurrentWorldId==339160 and CurrentLevelAreaId==339468">
+      <SafeMoveTo questId="263851" stepId="17" x="421" y="421" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <WaitTimer questId="263851" stepId="17" waitTime="5000" />
+    </If>
+    <!-- Quest: x1_ToHeaven World: x1_Heaven_Pandemonium_Portal LevelArea: x1_Heaven_Pandemonium_Portal -->
+    <If condition="IsActiveQuest(263851) and IsActiveQuestStep(19) and CurrentWorldId==339160 and CurrentLevelAreaId==339468">
+      <MoveToActor questId="263851" stepId="19" x="444" y="444" z="0" actorId="368315" interactRange="23" name="x1_Imperius_HeavenToPandGate-37969"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Quest: x1_ToHeaven World: x1_Heaven_Pandemonium_Portal LevelArea: x1_Heaven_Pandemonium_Portal -->
+    <If condition="IsActiveQuest(263851) and (IsActiveQuestStep(11) or IsActiveQuestStep(35)) and CurrentWorldId==339160 and CurrentLevelAreaId==339468">
+      <MoveToMapMarker questId="263851" stepId="11" x="392" y="389" z="-15" markerNameHash="607983116" actorId="343991" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="291941" statusText="" />
+    </If>
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(35) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <MoveToMapMarker questId="273790" stepId="35" x="371" y="509" z="7" markerNameHash="0" actorId="277401" interactRange="20"
+            pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="291941" statusText="" />
+    </If>
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: x1_Heaven_Pandemonium_Portal LevelArea: x1_Heaven_Pandemonium_Portal -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(35) and CurrentWorldId==339160 and CurrentLevelAreaId==339468">
+      <MoveToMapMarker questId="273790" stepId="35" x="392" y="389" z="-15" markerNameHash="607983116" actorId="343991" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="291941" statusText="" />
+      <WaitTimer questId="273790" stepId="35" waitTime="5000" />
+    </If>
+
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_GateOverlook LevelArea: X1_PandExt_RamOverlook -->
+    <If condition="IsActiveQuest(273790) and (IsActiveQuestStep(41) or IsActiveQuestStep(35)) and CurrentWorldId==291941 and CurrentLevelAreaId==274985">
+      <SafeMoveTo questId="273790" stepId="41" x="598" y="633" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <SafeMoveTo questId="273790" stepId="35" x="598" y="633" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_GateOverlook LevelArea: X1_PandExt_RamOverlook -->
+    <If condition="IsActiveQuest(273790) and (IsActiveQuestStep(1) or IsActiveQuestStep(35)) and CurrentWorldId==291941 and CurrentLevelAreaId==274985">
+      <SafeMoveTo questId="273790" stepId="1" x="382" y="527" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <SafeMoveTo questId="273790" stepId="1" x="392" y="299" z="-26" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <SafeMoveTo questId="273790" stepId="35" x="382" y="527" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <SafeMoveTo questId="273790" stepId="35" x="392" y="299" z="-26" pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+    <If condition="IsActiveQuest(273790) and (IsActiveQuestStep(51) or IsActiveQuestStep(35)) and CurrentWorldId==291941 and (CurrentLevelAreaId==274985 or CurrentLevelAreaId==279169)">
+      <SafeMoveTo questId="273790" stepId="51" x="392" y="299" z="-26" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <SafeMoveTo questId="273790" stepId="51" x="392" y="320" z="-26" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <SafeMoveTo questId="273790" stepId="35" x="392" y="299" z="-26" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <SafeMoveTo questId="273790" stepId="35" x="392" y="320" z="-26" pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+    <If condition="IsActiveQuest(273790) and (IsActiveQuestStep(11) or IsActiveQuestStep(35)) and CurrentWorldId==291941 and (CurrentLevelAreaId==274985 or CurrentLevelAreaId==279169)">
+      <SafeMoveTo questId="273790" stepId="11" x="358" y="105" z="-66" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <MoveToActor questId="273790" stepId="11" x="352" y="101" z="-66" actorId="275409" interactRange="23" name="x1_Imperius-69077"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <SafeMoveTo questId="273790" stepId="35" x="358" y="105" z="-66" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <MoveToActor questId="273790" stepId="35" x="352" y="101" z="-66" actorId="275409" interactRange="23" name="x1_Imperius-69077"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(43) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <UseWaypoint questId="273790" stepId="43" waypointNumber="8" />
+    </If>
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_GateOverlook LevelArea: X1_PandExt_RamOverlook -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(43) and CurrentWorldId==291941 and (CurrentLevelAreaId==274985 or CurrentLevelAreaId==279169)">
+      <MoveToMapMarker questId="273790" stepId="43" x="448" y="54" z="-62" markerNameHash="298775102" actorId="277401" interactRange="20"
+                        pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="338600" statusText="" />
+    </If>
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_2_Battlefields LevelArea: X1_Pand_Ext_2_Battlefields -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(43) and CurrentWorldId==338600 and CurrentLevelAreaId==338602">
+      <TrinityExploreDungeon questId="273790" stepId="43" until="FullyExplored" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+    </If>
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(45) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <UseWaypoint questId="273790" stepId="45" waypointNumber="8" name="Waypoint-808" statusText="" />
+    </If>
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_GateOverlook LevelArea: X1_PandExt_RamOverlookAtGate -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(45) and CurrentWorldId==291941 and CurrentLevelAreaId==279169">
+      <MoveToMapMarker questId="273790" stepId="45" x="448" y="54" z="-62" markerNameHash="298775102" actorId="277401" interactRange="20"
+                        pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="338600" statusText="" />
+    </If>
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_2_Battlefields LevelArea: X1_Pand_Ext_2_Battlefields -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(45) and CurrentWorldId==338600">
+      <TrinityExploreDungeon questId="273790" stepId="45" until="ExitFound" exitNameHash="235765865" actorId="277401 " pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45" ignoreGridReset="True">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="273790" stepId="45" markerNameHash="235765865" actorId="277401" interactRange="20"
+                  pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="339254" statusText="" />
+    </If>
+    
+    
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_BatteringRam_Entrance_A LevelArea: X1_Pand_Ext_BatteringRam_Entrance_A -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(30) and CurrentWorldId==339254 and CurrentLevelAreaId==339397">
+      <SafeMoveTo questId="273790" stepId="30" x="404" y="183" z="-51" pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_BatteringRam_Entrance_A LevelArea: X1_Pand_Ext_BatteringRam_Entrance_A -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(30) and CurrentWorldId==339254 and CurrentLevelAreaId==339397">
+      <MoveToActor questId="273790" stepId="30" x="393" y="148" z="-51" actorId="290323" interactRange="8" name="X1_Tyrael_PandExt-62537"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_BatteringRam_Entrance_A LevelArea: X1_Pand_Ext_BatteringRam_Entrance_A -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(45) and CurrentWorldId==339254 and CurrentLevelAreaId==339397">
+      <SafeMoveTo questId="273790" stepId="45" x="404" y="183" z="-51" pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+    <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_BatteringRam_Entrance_A LevelArea: X1_Pand_Ext_BatteringRam_Entrance_A -->
+    <If condition="IsActiveQuest(273790) and IsActiveQuestStep(33) and CurrentWorldId==339254 and CurrentLevelAreaId==339397">
+      <MoveToActor questId="273790" stepId="33" x="393" y="148" z="-51" actorId="290323" interactRange="8" name="X1_Tyrael_PandExt-62537"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Quest: x1_BatteringRamFight World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
+    <If condition="IsActiveQuest(269552) and IsActiveQuestStep(32) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
+      <UseWaypoint questId="269552" stepId="32" waypointNumber="9" name="Waypoint-366" statusText="" />
+    </If>
+
+    <!-- Quest: x1_BatteringRamFight World: X1_Pand_Ext_BatteringRam_Entrance_A LevelArea: X1_Pand_Ext_BatteringRam_Entrance_A -->
+    <If condition="IsActiveQuest(269552) and IsActiveQuestStep(32) and CurrentWorldId==339254 and CurrentLevelAreaId==339397">
+      <MoveToMapMarker questId="269552" stepId="32" x="331" y="182" z="-51" markerNameHash="-433834934" actorId="296314" interactRange="20"
+                        pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="295225" statusText="" />
+    </If>
+    <!-- Quest: x1_BatteringRamFight World: X1_Pand_BatteringRam LevelArea: X1_Pand_BatteringRam -->
+    <While condition="IsActiveQuest(269552) and IsActiveQuestStep(25) and CurrentWorldId==295225 and CurrentLevelAreaId==295228">
+      <WaitTimer questId="269552" stepId="25" waitTime="5000" />
+    </While>
+    <!-- Quest: x1_BatteringRamFight World: X1_Pand_BatteringRam LevelArea: X1_Pand_BatteringRam -->
+    <While condition="IsActiveQuest(269552) and IsActiveQuestStep(29) and CurrentWorldId==295225 and CurrentLevelAreaId==295228">
+      <WaitTimer questId="269552" stepId="29" waitTime="500" />
+    </While>
+    <!-- Quest: x1_BatteringRamFight (269552) World: X1_Pand_BatteringRam (295225) LevelArea: X1_Pand_BatteringRam (295228) -->
+    <While condition="IsActiveQuest(269552) and IsActiveQuestStep(27) and CurrentWorldId==295225 and CurrentLevelAreaId==295228">
+      <WaitTimer questId="269552" stepId="27" waitTime="500" />
+    </While>
+    <!-- Quest: x1_BatteringRamFight World: X1_Pand_BatteringRam LevelArea: X1_Pand_BatteringRam -->
+    <If condition="IsActiveQuest(269552) and IsActiveQuestStep(22) and CurrentWorldId==295225 and CurrentLevelAreaId==295228">
+      <MoveToMapMarker questId="269552" stepId="22" x="55" y="105" z="4" markerNameHash="70258615" actorId="176002" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="271233" statusText="" />
+    </If>
+
+    <!-- Inside Panemonium Fortress Level 1 -->
+    <!-- Quest: x1_Fortress_KillMalthael World: x1_fortress_level_01 LevelArea: x1_fortress_level_01 -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(30) and CurrentWorldId==271233">
+      <TrinityExploreDungeon questId="273408" stepId="30" until="ObjectFound" actorId="6353" pathPrecision="25" boxSize="10" boxTolerance="0.01" objectDistance="15">
+        <IgnoreScenes>
+          <IgnoreScene sceneName="Entrance" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToActor questId="273408" stepId="30" x="981" y="1210" z="98" actorId="6353" interactRange="8" name="Tyrael-63493"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Fortress_KillMalthael World: x1_fortress_level_01 LevelArea: x1_fortress_level_01 -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(12) and CurrentWorldId==271233">
+      <TrinityExploreDungeon questId="273408" stepId="12" until="ExitFound" exitNameHash="70258616" actorId="176007" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45" ignoreGridReset="True">
+        <AlternateActors>
+          <AlternateActor actorId="0" objectDistance="45" />
+        </AlternateActors>
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="Entrance" />
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="273408" stepId="12" markerNameHash="1012176886" actorId="176002" interactRange="20"
+                 pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="346410" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Fortress_KillMalthael World: x1_fortress_level_01 LevelArea: x1_fortress_level_01 -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(36) and CurrentWorldId==271233">
+      <TrinityExploreDungeon questId="273408" stepId="36" until="ExitFound" exitNameHash="70258616" actorId="176007" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45" ignoreGridReset="True">
+        <AlternateActors>
+          <AlternateActor actorId="0" objectDistance="45" />
+        </AlternateActors>
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="Entrance" />
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="273408" stepId="36" markerNameHash="70258616" actorId="176007" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="271235" statusText="" />
+    </If>
+    <!-- Quest: x1_Fortress_KillMalthael World: x1_fortress_level_01 LevelArea: x1_fortress_level_01 -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(3) and CurrentWorldId==271233">
+      <TrinityExploreDungeon questId="273408" stepId="3" until="ExitFound" exitNameHash="70258616" actorId="176007" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45" ignoreGridReset="True">
+        <AlternateActors>
+          <AlternateActor actorId="0" objectDistance="45" />
+        </AlternateActors>
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="Entrance" />
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="273408" stepId="3" markerNameHash="70258616" actorId="176007" interactRange="20"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="271235" statusText="" />
+    </If>
+    <!-- Quest: x1_Fortress_KillMalthael World: x1_fortress_level_02 LevelArea: x1_fortress_level_02_Intro -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(36) and CurrentWorldId==271235">
+      <TrinityExploreDungeon questId="273408" stepId="36" until="ExitFound" exitNameHash="70258616" actorId="176007" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+          <PriorityScene sceneName="Island" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="Entrance" />
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="273408" stepId="3" markerNameHash="70258616" actorId="176007" interactRange="20"
+           pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="271235" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Fortress_KillMalthael World: x1_fortress_level_01 LevelArea: x1_fortress_level_01 -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(3) and CurrentWorldId==271233">
+      <TrinityExploreDungeon questId="273408" stepId="3" until="ExitFound" exitNameHash="70258616" actorId="176007" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+          <PriorityScene sceneName="Island" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="Entrance" />
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+
+      <MoveToMapMarker questId="273408" stepId="3" markerNameHash="70258616" actorId="176007" interactRange="20"
+          pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="271235" statusText="" />
+    </If>
+    <!-- Quest: x1_Fortress_KillMalthael World: x1_fortress_level_02 LevelArea: x1_fortress_level_02_Intro -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(3) and CurrentWorldId==271235">
+      <TrinityExploreDungeon questId="273408" stepId="3" until="ExitFound" exitNameHash="1012176886" actorId="176002" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+          <PriorityScene sceneName="Island" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="273408" stepId="3" markerNameHash="1012176886" actorId="176002" interactRange="20"
+                   pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="346410" statusText="" />
+    </If>
+
+
+    <!-- Quest: x1_Fortress_KillMalthael (273408) World: x1_fortress_level_01 (271233) LevelArea: x1_fortress_level_01 (271234) -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(61) and CurrentWorldId==271233">
+      <TrinityExploreDungeon questId="273408" stepId="61" until="ExitFound" exitNameHash="70258616" actorId="176007" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <AlternateActors>
+          <AlternateActor actorId="0" objectDistance="45" />
+        </AlternateActors>
+        <PriorityScenes>
+          <PriorityScene sceneName="Exit" />
+        </PriorityScenes>
+        <IgnoreScenes>
+          <IgnoreScene sceneName="Entrance" />
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToMapMarker questId="273408" stepId="61" markerNameHash="70258616" interactRange="25.55409"
+                           pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+    </If>
+
+    <!-- Quest: x1_Fortress_KillMalthael World: x1_fortress_level_02 LevelArea: x1_fortress_level_02_Intro -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(61) and CurrentWorldId==271235">
+      <TrinityExploreDungeon questId="273408" stepId="61" until="ObjectFound" actorId="347276" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
+        <IgnoreScenes>
+          <IgnoreScene sceneName="_N_" />
+          <IgnoreScene sceneName="_S_" />
+          <IgnoreScene sceneName="_E_" />
+          <IgnoreScene sceneName="_W_" />
+        </IgnoreScenes>
+      </TrinityExploreDungeon>
+      <MoveToActor questId="273408" stepId="61" actorId="347276" interactRange="181" name="x1_Fortress_Soul_Grinder_A-11701"  pathPrecision="5" pathPointLimit="250" statusText="" />
+
+    </If>
+
+
+    <!-- Quest: x1_Fortress_KillMalthael World: X1_fortress_malthael_entrance LevelArea: X1_fortress_malthael_entrance -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(3) and CurrentWorldId==346410 and CurrentLevelAreaId==349787">
+      <TrinityTownRun questId="273408" stepId="3" minFreeBagSlots="6" minDurabilityPercent="50" />
+      <SafeMoveTo questId="273408" stepId="3" x="430" y="423" z="-24" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <MoveToMapMarker questId="273408" stepId="3" markerNameHash="-144918420" actorId="374257" interactRange="25"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="328484" statusText="Portal to Maltheael" />
+    </If>
+    <!-- Quest: x1_Fortress_KillMalthael World: X1_fortress_malthael_entrance LevelArea: X1_fortress_malthael_entrance -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(8) and CurrentWorldId==346410 and CurrentLevelAreaId==349787">
+      <TrinityTownRun questId="273408" stepId="8" minFreeBagSlots="6" minDurabilityPercent="50" />
+      <SafeMoveTo questId="273408" stepId="8" x="430" y="423" z="-24" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <MoveToMapMarker questId="273408" stepId="8" markerNameHash="-144918420" actorId="374257" interactRange="25"
+                      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="328484" statusText="Portal to Maltheael" />
+    </If>
+    <!-- Quest: x1_Fortress_KillMalthael World: X1_Malthael_Boss_Arena LevelArea: X1_Malthael_Boss_Arena -->
+    <While condition="IsActiveQuest(273408) and IsActiveQuestStep(8) and CurrentWorldId==328484 and CurrentLevelAreaId==330576">
+      <WaitTimer questId="273408" stepId="8" waitTime="15000" />
+    </While>
+
+    <!-- Quest: x1_Fortress_KillMalthael World: X1_Malthael_Boss_Arena LevelArea: X1_Malthael_Boss_Arena -->
+    <If condition="IsActiveQuest(273408) and IsActiveQuestStep(21) and CurrentWorldId==328484 and CurrentLevelAreaId==330576">
+      <MoveToActor questId="273408" stepId="21" x="110" y="110" z="0" actorId="6353" interactRange="8" name="Tyrael-152829"  pathPrecision="5" pathPointLimit="250" statusText="" />
+    </If>
+
+    <If condition="IsActiveQuest(-1) and IsActiveQuestStep(999) and CurrentWorldId == 196292">
+      <WaitTimer questId="-1" stepId="999" waitTime="10000" />
+      <!-- OK to end game -->
+      <!-- Step 5 - you've defeated the game, press esc -->
+      <SkipCutscene questId="-1" stepId="999"  />
+      <LoadProfile profile="Act1.xml" />
+    </If>
+    <If condition="not IsActiveQuest(114901) and not IsActiveQuestStep(999) and not CurrentWorldId == 196292">
+      <LogMessage message="Something unexpected happened!" />
+      <ReloadProfile />
+      <LogMessage output="Stuck: Something unexpected happened!" />
+    </If>
+    <ReloadProfile />
+  </Order>
+</Profile>

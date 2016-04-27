@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<Profile>
+  <Name>Cow Level Explorer 1.0 by xzjv [REQUIRES QUESTTOOLS 3.5.13+]</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" />
+  <Order>
+
+    <If condition="ZetaDia.WorldType != Act.OpenWorld">
+      <LeaveGame questId="1" reason="Profile must be in adventure mode!" stayInParty="False" />
+    </If>
+
+    <!-- Quest: x1_OpenWorld_quest (312429) World: p2_TotallyNotACowLevel (434649) LevelArea: p2_TotallyNotACowLevel (434650) -->
+    
+    <If condition="CurrentLevelAreaSnoId != 332339 and CurrentWorldSnoId != 434649">      
+      <UseWaypoint waypointNumber="0" questId="1" />
+      <WaitWhile condition="IsCastingOrLoading()" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+    </If>
+    
+    <TownRun minFreeBagSlots="50" />
+    
+    <If condition="CurrentLevelAreaSnoId == 332339 and not ActorExistsAt(434659, 403, 575, 24, 50) and ItemCount(272056) > 0">
+
+      <LogMessage Output="Getting Bovine Bardiche from Stash" />
+
+      <GetItemFromStash questId="1" actorId="272056" maxItems="5" />
+
+      <LogMessage questId="1" output="Moving to Cube" />
+
+      <MoveToActor
+        questId="1"
+        x="425" y="588" z="24"
+        actorId="439975"
+        interactRange="8"
+        pathPrecision="5"
+        pathPointLimit="250"
+        statusText="" />
+
+      <LogMessage questId="1" output="Opening Cow Portal" />
+
+      <Transmute>
+        <Items>
+          <Item id="272056" name="Bovine Bardiche" />
+        </Items>
+      </Transmute>
+
+    </If>
+
+    <WaitTimer questId="1" stepId="1" waitTime="1000" />
+
+    <If condition="CurrentLevelAreaSnoId == 332339 and ActorExistsAt(434659, 403, 575, 24, 50)">
+
+      <LogMessage Output="Entering to Cow Level" />
+
+      <MoveToActor
+        questId="312429" stepId="2" x="401" y="581" z="24"
+        actorId="434659" interactRange="10" name="p2_TotallyNotACowLevel_Portal"
+        isPortal="True" destinationWorldId="-1" pathPrecision="5"
+        pathPointLimit="250" statusText="" />
+
+    </If>
+
+    <If condition="CurrentWorldSnoId == 434649">
+
+      <LogMessage questId="1" output="Exploring Cow Level!" />
+
+      <!-- // TentacleLord (209133) -->
+      <ExploreDungeon
+        routeMode="WeightedNearestMinimapUnvisited"
+        questId="1"
+        until="ObjectFound"
+        actorId="209133"
+        objectDistance="60"
+        pathPrecision="30"
+        boxSize="11"
+        boxTolerance="0.01"
+        markerDistance="45" />
+
+      <!--
+      QuestSNO: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!, Header: 434753 1 0, State: InProgress, Index: 0
+      [1E50B724] [Tipping Point] QuestSNO: 434753, QuestMeter: 1, QuestState: Completed, QuestStep: 2, KillCount: 0, BonusCount: 0
+      [Step] ClickChestToStart, Id: 13
+      [Objective] TippingPointBegin, Type: EventReceived
+      [Step] MonsterWaves, Id: 1
+      [Objective] Challenge_TippingPoint_WaveDead, Type: EventReceived
+      -->
+
+      <MoveToActor questId="312429" stepId="2" actorId="209133" interactRange="12" name="TentacleLord"  pathPrecision="5" pathPointLimit="250" statusText="" />
+
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+
+      <While condition="CurrentWorldSnoId == 434649 and IsActiveQuestAndStep(434753, 1)">        
+        <ClearArea questId="434753" stepId="1" radius="100" points="15" timeout="60" />
+        <WaitTimer questId="1" stepId="1" waitTime="1000" />
+        <WaitTimer questId="1" stepId="1" waitTime="1000" />        
+      </While>
+
+      <!-- UNCOMMENT THIS TAG BELOW TO RE-EXPLORE THE WHOLE LEVEL -->
+      <!--<ExploreDungeon
+        routeMode="WeightedNearestMinimapUnvisited"
+        questId="1"
+        until="FullyExplored"
+        pathPrecision="30"
+        boxSize="11"
+        boxTolerance="0.01"
+        markerDistance="45" />-->
+      
+    </If>   
+
+    <WaitTimer questId="1" stepId="1" waitTime="4000" />
+
+    <If condition="ItemCount(272056)">
+      
+      <LogMessage questId="1" output="Finished!" />  
+      <LeaveGame questId="1" reason="End of Profile." stayInParty="False" />
+    
+    </If>
+    
+    <LogMessage questId="1" output="You have no Bovine Bardiches!" />    
+    <WaitTimer questId="1" stepId="1" waitTime="1000" />
+
+  </Order>
+</Profile>

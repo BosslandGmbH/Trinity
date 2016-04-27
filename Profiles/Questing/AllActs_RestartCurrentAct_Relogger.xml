@@ -1,0 +1,10 @@
+<Profile>
+  <Name>Full Questing - All Acts Relogger Restart Act</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams quest="87700" step="-1" act="A1" resumeFromSave="True" isPrivate="True" numGames="-1" />
+  <Order>
+    <LogMessage message="Loaded Questing Restart Act Loader Profile" />
+    <LoadProfile profile="AllActs_RestartCurrentAct.xml" />
+  </Order>
+</Profile>

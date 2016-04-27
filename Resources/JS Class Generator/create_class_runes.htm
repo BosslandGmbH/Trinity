@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <title>Runes</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="jquery.xdomainajax.js"></script>
+        <script src="handlebars.js"></script>
+        <script src="handlebars_helper.js"></script>
+        <script src="skills.js"></script>    
+        <style>            
+             span, .class, .skill, .rune, .passive { padding-left: 25px; display: block }
+             .template { display: none; }
+        </style>
+    </head>
+    <body>
+        
+        <div class="template">
+                            
+<div>                    
+using System;<br/>
+using System.Collections.Generic;<br/>
+using System.Linq;<br/>
+using Trinity.Helpers;<br/>
+using Trinity.Objects;<br/>
+using Trinity.Combat;<br/>
+using Zeta.Game;<br/>
+
+<br/>// AUTO-GENERATED on {{timestamp}}<br/><br/>    
+
+namespace Trinity.Reference<br/>
+{<br/>
+<span>  
+    public static class Runes<br/>
+    {<br/>
+    <span>
+        {{#each classes}}
+        public class {{name}} : FieldCollection&lt;{{name}}, Rune&gt;<br/>
+        {<br/>
+        <span>
+            
+            <br/>           
+            /// &lt;summary&gt;<br/>
+            /// No Rune<br/>
+            /// &lt;/summary&gt;<br/>
+            public static Rune None = new Rune<br/>
+            {<br/>
+            <span>
+                Index = 0,<br/>
+                Name = "None",<br/>
+                Description = "No Rune Selected",<br/>
+                Tooltip = string.Empty,<br/>
+                TypeId = string.Empty,<br/>     
+                RuneIndex = -1,<br/>
+                Class = ActorClass.{{Format name}}<br/>
+            </span>
+            };<br/><br/>      
+
+            {{#each skills}}                                     
+            #region Skill: {{name}}<br/>    
+            
+            {{#each runes}} 
+            <br/>
+            /// &lt;summary&gt;<br/>
+            /// {{description}}<br/>
+            /// &lt;/summary&gt;<br/>
+            public static Rune {{StripRune name skill}} = new Rune<br/>
+            {<br/>
+            <span>
+                Index = {{orderIndex}},<br/>
+                Name = "{{name}}",<br/>
+                Description = "{{description}}",<br/>
+                Tooltip = "{{tooltipParams}}",<br/>
+                TypeId = "{{type}}",<br/>
+                RuneIndex = {{RuneIndex type}},<br/>
+                SkillIndex = {{../orderIndex}},<br/>
+                                
+                {{{ICombatProperties description "Duration"}}}
+                {{{ICombatProperties description "Cost"}}}
+                {{{ICombatProperties description "Cooldown"}}}
+                {{{ICombatProperties description "Element" name}}}
+                {{{ICombatProperties description "IsDamaging"}}}
+                {{{ICombatProperties description "AreaEffectRadius"}}}
+
+                Class = ActorClass.{{Format className}}<br/>
+            </span>
+            };<br/>
+                    
+            {{/each}}
+            #endregion<br/>
+            <br/>
+            {{/each}}
+                                                
+        </span>
+        }<br/>  
+        {{/each}}
+    </span>
+    }
+</span>
+}
+</div> 
+       
+        </div>
+        
+        <div class="container">
+            
+        </div>
+
+        <script>
+            
+            $(document).ready(function () {
+
+                Skills.HandleSkillData(function (data) {
+
+                    var container = $(".container");
+                    var template = $(".template").html();
+                    var compiledTemplate = Handlebars.compile(template);
+                    var renderedElement = $(compiledTemplate(data));
+                    container.append(renderedElement);
+
+                });
+
+            });
+
+        </script>        
+    </body>    
+</html>

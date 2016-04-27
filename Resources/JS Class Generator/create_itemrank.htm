@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <title>ItemRanks</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="jquery.xdomainajax.js"></script>
+        <script src="handlebars.js"></script>
+        <script src="handlebars_helper.js"></script>
+        <script src="itemrank-parse.js"></script>    
+        <style>
+            * { font-family: Consolas, Courier, monospace; font-size: 10pt; }
+            span, .class, .skill, .rune, .passive { padding-left: 25px; display: block;  }
+            .template { display: none; }
+        </style>
+    </head>
+    <body>
+        
+            
+        <div class="template">
+                            
+            <div>
+using System.Collections.Generic;
+                <br/>using Trinity.Objects;
+                <br/>using Trinity.Helpers;
+                <br/>using Zeta.Game;                    
+                <br/>namespace Trinity.Reference
+                <br/>{
+                <br/>public partial class ItemRanks : FieldCollection&lt;ItemRanks, ItemRank&gt;
+                <br/>{                
+                <br/>// AUTO-GENERATED on {{timestamp}}<br/><br/>
+
+                {{#each all}} 
+                public static ItemRank {{Strip Name }} = new ItemRank<br/>
+                {<br/>
+                <span>
+                    Item = Legendary.{{Id}},<br/><br/>
+                    
+
+                    HardcoreRank = new List&lt;ItemRankData&gt;<br/> 
+                    {
+                    <span>
+                        {{#each HardcoreRankByClass}}
+
+                        new ItemRankData
+                        {                                         
+                        {{#each this}}
+                        {{@key}} = {{this}},
+                        {{/each}}  
+                        },    <br/> 
+                                  
+                        {{/each}}</span><br/>   
+                                                            
+                    },<br/>
+                    
+
+                    SoftcoreRank = new List&lt;ItemRankData&gt;<br/> 
+                    {
+                    <span>
+                        {{#each SoftcoreRankByClass}}
+
+                        new ItemRankData
+                        {                                         
+                        {{#each this}}
+                        {{@key}} = {{this}},
+                        {{/each}}  
+                        },    <br/> 
+                                  
+                        {{/each}}</span><br/>   
+                                                            
+                    }<br/>
+                    
+                </span>
+                };<br/>                
+
+                {{/each}}    
+
+                }
+                }
+            </div> 
+       
+        </div>
+        
+        <div class="container">
+            
+        </div>
+
+        <script>
+            
+            $(document).ready(function () {
+
+                DiabloProgress.GetData(function (data) {
+
+                    var container = $(".container");
+                    var template = $(".template").html();
+                    var compiledTemplate = Handlebars.compile(template);
+                    var renderedElement = $(compiledTemplate(data));
+                    container.append(renderedElement);
+
+                });
+
+            });
+
+        </script>        
+    </body>    
+</html>
+

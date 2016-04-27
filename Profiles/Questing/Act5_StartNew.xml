@@ -1,0 +1,12 @@
+<Profile>
+  <Name>Start New Act 5 by rrrix</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams quest="251355" step="-1" act="A5" resumeFromSave="False" isPrivate="True" numGames="-1" />
+  <Order>
+    <If condition="not (IsActiveQuest(251355) and IsActiveQuestStep(-1))">
+			<LeaveGame reason="Starting new Act 5" stayInParty="False" />
+		</If>
+		<LoadProfile questId="112498" stepId="2" profile="Act5.xml" />
+	</Order>
+</Profile>

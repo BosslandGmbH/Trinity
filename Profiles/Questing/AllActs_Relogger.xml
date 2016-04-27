@@ -1,0 +1,28 @@
+<Profile>
+  <Name>Full Questing - All Acts Relogger Resume</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams quest="87700" step="-1" act="A1" resumeFromSave="True" isPrivate="True" numGames="-1" />
+  <Order>
+    <If condition="ZetaDia.CurrentActSnoId == 70015">
+      <LogMessage message="Loading Act 1" />
+      <LoadProfile profile="Act1.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70016">
+      <LogMessage message="Loading Act 2" />
+      <LoadProfile profile="Act2.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70017">
+      <LogMessage message="Loading Act 3" />
+      <LoadProfile profile="Act3.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70018">
+      <LogMessage message="Loading Act 4" />
+      <LoadProfile profile="Act4.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 236915">
+      <LogMessage message="Loading Act 5" />
+      <LoadProfile profile="Act5.xml" />
+    </If>
+  </Order>
+</Profile>

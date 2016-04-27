@@ -1,0 +1,32 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
+             d:DesignHeight="350" d:DesignWidth="390">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Misc" Foreground="{DynamicResource TextBrush}">
+                <Border Tag="Combat\ConfigMisc.xaml"/>
+            </TabItem>
+            <TabItem Header="Crusader" Foreground="{DynamicResource TextBrush}">
+                <Border Tag="Combat\ConfigCrusader.xaml"/>
+            </TabItem>
+            <TabItem Header="Barbarian" Foreground="{DynamicResource TextBrush}">
+                <Border Tag="Combat\ConfigBarb.xaml"/>
+            </TabItem>
+            <TabItem Header="Monk" Foreground="{DynamicResource TextBrush}">
+                <Border Tag="Combat\ConfigMonk.xaml"/>
+            </TabItem>
+            <TabItem Header="Wizard" Foreground="{DynamicResource TextBrush}">
+                <Border Tag="Combat\ConfigWiz.xaml"/>
+            </TabItem>
+            <TabItem Header="WitchDoctor" Foreground="{DynamicResource TextBrush}">
+                <Border Tag="Combat\ConfigWD.xaml"/>
+            </TabItem>
+            <TabItem Header="DemonHunter" Foreground="{DynamicResource TextBrush}">
+                <Border Tag="Combat\ConfigDH.xaml"/>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

@@ -1,0 +1,13 @@
+<Profile>
+	<Name>Start New Act 2 by rrrix</Name>
+	<KillMonsters>True</KillMonsters>
+	<PickupLoot>True</PickupLoot>
+	<GameParams quest="80322" step="-1" act="A2" resumeFromSave="False" isPrivate="True" numGames="-1" />
+	<Order>
+		<If condition="ZetaDia.IsInGame and ZetaDia.CurrentQuest.StepId != -1 and ZetaDia.CurrentQuest.QuestSnoId != 80322">
+			<LeaveGame questId="1" reason="Starting new Act 2" stayInParty="False" />
+		</If>
+    <LogMessage questId="1" output="Starting new Act 2" />
+    <LoadProfile questId="80322" stepId="-1" profile="Act2.xml" />
+  </Order>
+</Profile>

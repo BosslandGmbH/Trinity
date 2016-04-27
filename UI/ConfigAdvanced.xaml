@@ -1,0 +1,171 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ut="clr-namespace:Trinity.UIComponents"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" 
+             d:DesignHeight="1150" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!-- Don't format this line otherwise Db can't open config window -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <ut:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top">
+                <!-- Misc Advanced -->
+                <GroupBox Header="Trinity Support Required Logs:">
+                    <UniformGrid Columns="2" HorizontalAlignment="Stretch">
+                        <CheckBox IsChecked="{Binding Path=Advanced.DebugInStatusBar}" ToolTip="Update the DB Status bar with Combat Info">Use Trinity Status Bar</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ProfileTag}">Use Profile Tag Logging</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Targetting}">Log Targetting System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Weight}">Log Target Weight System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=CacheManagement}">Log Cache System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Behavior}">Log Behavior System</CheckBox>
+                    </UniformGrid>
+                </GroupBox>
+                <GroupBox Header="Misc Settings">
+                    <UniformGrid Columns="2">
+                        <CheckBox IsChecked="{Binding Advanced.ShowBattleTag}" Content="Show BattleTag in Title bar"/>
+                        <CheckBox IsChecked="{Binding Advanced.ShowHeroName}" Content="Show Hero Name in Title bar"/>
+                        <CheckBox IsChecked="{Binding Advanced.ShowHeroClass}" Content="Show Hero Class in Title bar"/>
+                        <CheckBox IsChecked="{Binding Advanced.LazyRaiderClickToPause}" Content="Lazy Raider Click to Pause"/>
+                        <CheckBox IsChecked="{Binding Advanced.DisableAllMovement}" Content="Disable All Movement"/>
+                        <CheckBox IsChecked="{Binding Advanced.AllowDuplicateMessages}" Content="Allow Duplicate Messages"/>
+                        <!--<CheckBox IsChecked="{Binding Advanced.UseTrinityDeathHandler}" Content="Use Trinity Death Handler"/>-->
+                        <!--<CheckBox IsChecked="{Binding Advanced.UseExperimentalTownRun}" Content="Use Experimental Town Run"/>-->
+                        <CheckBox IsChecked="{Binding Advanced.UseExperimentalAvoidance}" Content="Use Experimental Avoidance"/>
+                    </UniformGrid>
+                </GroupBox>
+                <GroupBox Header="Unstucker">
+                    <UniformGrid VerticalAlignment="Top">
+                        <CheckBox IsChecked="{Binding Advanced.UnstuckerEnabled}" Content="Enable Trinity Unstucker"/>
+                        <CheckBox IsChecked="{Binding Advanced.AllowRestartGame}" Content="Allow game restarts"/>
+                    </UniformGrid>
+                </GroupBox>
+                <!--<GroupBox Header="Composite Settings">
+                    <StackPanel>
+                        <Label>When using a Global settings file, force BattleTag Specific Settings for the following components:</Label>
+                        <UniformGrid VerticalAlignment="Top">
+                            <CheckBox IsChecked="{Binding Advanced.ForceSpecificGambleSettings}" Content="Gambling"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>-->                
+                <GroupBox Margin="2" Header="Inactivity Timers">
+                    <UniformGrid Columns="1" VerticalAlignment="Top">
+                        <UniformGrid Columns="2" VerticalAlignment="Top">
+                            <CheckBox IsChecked="{Binding Advanced.GoldInactivityEnabled}" Content="Enable Gold Inactivity" Height="20"/>
+                            <CheckBox IsChecked="{Binding Advanced.XpInactivityEnabled}" Content="Enable Experience Inactivity" Height="20"/>
+                        </UniformGrid>
+                        <Slider Template="{DynamicResource SliderEditable}" 
+                	Interval="500" Maximum="1800" Minimum="0" SmallChange="1" TickFrequency="10" TickPlacement="BottomRight"
+                	Value="{Binding Advanced.InactivityTimer}" IsSnapToTickEnabled="True"
+                	ToolTip="Number of seconds after which if no gold or XP is collected the game will restart" Margin="5,0,5,0"/>
+                        <CheckBox IsChecked="{Binding Advanced.IsDBInactivityEnabled}" Content="Enable DemonBuddy Inactivity" Height="20"/>
+
+                    </UniformGrid>
+                </GroupBox>
+
+
+                <GroupBox Header="TrinityLogs Directory:">
+                    <UniformGrid Columns="2" HorizontalAlignment="Stretch">
+                        <CheckBox IsChecked="{Binding Path=Advanced.ItemRulesLogs}" ToolTip="Record ItemRules logs">ItemRules logs</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.OutputReports}" ToolTip="Output Reports to TrinityLogs">Output Reports</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogDroppedItems}" ToolTip="Create a CSV file for all dropped items">Log dropped Items</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogStuckLocation}" ToolTip="Create a separated file for stuck locations">Log stuck locations</CheckBox>
+
+                    </UniformGrid>
+                </GroupBox>
+                <GroupBox Header="Trinity Support Specialized logs">
+                    <UniformGrid Columns="2" HorizontalAlignment="Stretch">
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Performance}">Log System Performance</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=GlobalHandler}">Log Global Handling System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Movement}">Log Movement System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Navigator}">Log Navigation System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ItemValuation}">Log Item Valuations</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Configuration}">Log Configuration System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=UI}">Log UI Loading</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ScriptRule}">Log Script Rules System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Avoidance}">Log Avoidance System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Animation}">Log Monster Animations</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=UnknownObjects}">Log Unknown Objects</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ActiveBuffs}">Log Active Buffs</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=SkillSelection}">Log Skill Selection</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cooldowns}">Cooldowns</CheckBox>                    </UniformGrid>
+                </GroupBox>
+                <!--APS-->
+                <GroupBox Header="Actions Per Second">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap">Prevents Trinity from casting too many spells in too short of a time peroid. Default=10. Higher settings (or disabling) will allow faster attacks but risks causing a disconnection from diablo3</TextBlock>
+                        <UniformGrid Columns="2"  VerticalAlignment="Center">
+                            <CheckBox IsChecked="{Binding Path=Advanced.ThrottleAPS}">Enable Action Throttling</CheckBox>
+                            <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding Path=Advanced.ThrottleAPS}"
+                    Interval="500" Maximum="20" Minimum="1" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight"
+                    Value="{Binding Path=Advanced.ThrottleAPSActionCount}" 
+                    HorizontalAlignment="Stretch" Margin="5,0,5,0" ToolTip=""/>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>                
+                <!--TPS-->
+                <GroupBox Header="Ticks Per Second">
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap">Set below 10 to reduce CPU use (but dumb the bot down). You can experiment above 10 (Default), but this will eat CPU)</TextBlock>
+                        <UniformGrid Columns="2"  VerticalAlignment="Center">
+                            <CheckBox IsChecked="{Binding Path=Advanced.TPSEnabled}">Enable TPS modification</CheckBox>
+                            <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding Path=Advanced.TPSEnabled}"
+                    Interval="500" Maximum="30" Minimum="1" SmallChange="1" TickFrequency="3" TickPlacement="BottomRight"
+                    Value="{Binding Path=Advanced.TPSLimit}" 
+                    HorizontalAlignment="Stretch" Margin="5,0,5,0"
+                        ToolTip="Set below 10 to reduce CPU use (but dumb the bot down). You can experiment above 10 (Db Default), but this will eat CPU)"/>
+                        </UniformGrid>
+                    </StackPanel>
+                </GroupBox>
+
+                <!--Cache Refresh Rate-->
+                <!--
+                <GroupBox Header="Cache">
+                    <StackPanel>
+                        <TextBlock Text="Cache Refresh Rate (Default 300) - use with caution!" FontWeight="Bold" TextAlignment="Center" Margin="2"/>
+                        <TextBlock Text="May reduce CPU usage very slightly when running > 2 bots per CPU core. Over 400 not recommended. Use only to troubleshoot performance." TextWrapping="Wrap" />
+                        <UniformGrid VerticalAlignment="Top" Columns="2">
+                            <TextBlock Text="Fast" TextAlignment="Left" />
+                            <TextBlock Text="Slow" TextAlignment="Right" />
+                        </UniformGrid>
+                        <Slider Template="{DynamicResource SliderEditable}" IsEnabled="True"
+                    Interval="500" Maximum="500" Minimum="0" SmallChange="5" TickFrequency="5"  TickPlacement="BottomRight"
+                    Value="{Binding Path=Advanced.CacheRefreshRate}" IsSnapToTickEnabled="True"
+                    HorizontalAlignment="Stretch"
+                        ToolTip="Default 100. Increase value to decrease CPU usage."/>
+                    </StackPanel>
+                </GroupBox>
+                -->
+                <!--<GroupBox Header="Low Priority Object Cache">
+                    <StackPanel Margin="10">
+                        <TextBlock Text="Refresh Rate (ms)" TextWrapping="Wrap" Margin="0" />
+                        <Slider Template="{DynamicResource SliderEditable}" IsEnabled="True"
+                    Interval="50" Maximum="2000" Minimum="100" SmallChange="50" TickFrequency="50"  TickPlacement="BottomRight"
+                    Value="{Binding Path=Advanced.CacheLowPriorityRefreshRate}" IsSnapToTickEnabled="True"
+                    HorizontalAlignment="Stretch"
+                        ToolTip="Default 500."/>
+                        <TextBlock Text="Threshold (Percentage of current target's weight)" TextWrapping="Wrap" Width="341" HorizontalAlignment="Left" />
+                        <Slider Template="{DynamicResource SliderEditable}" IsEnabled="True"
+                    Interval="5" Maximum="80" Minimum="20" SmallChange="5" TickFrequency="5"  TickPlacement="BottomRight"
+                    Value="{Binding Path=Advanced.CacheWeightThresholdPct}" IsSnapToTickEnabled="True"
+                    HorizontalAlignment="Stretch"
+                        ToolTip="Default 50."/>
+                    </StackPanel>
+                </GroupBox>-->                
+            </StackPanel>
+            <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
+                <!--Reset Button-->
+                <Button Margin="5,0" HorizontalAlignment="Center" Command="{Binding ResetAdvancedCommand}">Reset</Button>
+                <Button Margin="5,0" HorizontalAlignment="Center" Command="{Binding UseGlobalConfigFileCommand}">Use Global Configuration File</Button>
+            </WrapPanel>
+        </DockPanel>
+    </ScrollViewer>
+</UserControl>
