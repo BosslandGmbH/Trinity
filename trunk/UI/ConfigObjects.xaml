@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
              xmlns:ut="clr-namespace:Trinity.UIComponents"     
-             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"   Background="#434343"
              d:DesignHeight="750" d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -27,7 +27,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
-        <StackPanel>
+        <StackPanel Margin="10,10,10,0">
             <!-- <GroupBox Header="Bounties">
                 <UniformGrid>
                     <CheckBox IsChecked="{Binding Path=WorldObject.EnableBountyEvents}" ToolTip="Allow Bounty Events">Enable Wait for Bounty Events</CheckBox>

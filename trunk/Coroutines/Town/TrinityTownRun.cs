@@ -66,7 +66,7 @@ namespace Trinity.Coroutines.Town
 
                 IsInTownVendoring = true;
 
-                while (DateTime.UtcNow.Subtract(Trinity.LastWorldChangeTime).TotalMilliseconds < 2000 || ZetaDia.IsLoadingWorld || ZetaDia.CurrentWorldSnoId <= 0)
+                while (DateTime.UtcNow.Subtract(TrinityPlugin.LastWorldChangeTime).TotalMilliseconds < 2000 || ZetaDia.IsLoadingWorld || ZetaDia.CurrentWorldSnoId <= 0)
                 {
                     await Coroutine.Sleep(2000);
                 }
@@ -180,12 +180,12 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (Trinity.Player.IsDead)
+            if (TrinityPlugin.Player.IsDead)
                 return false;
 
             if (!DeathHandler.EquipmentNeedsEmergencyRepair())
             {
-                if (Trinity.Player.IsInventoryLockedForGreaterRift)
+                if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift)
                 {
                     Logger.LogDebug("Can't townrun while in greater rift!");
                     DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(5);
@@ -193,7 +193,7 @@ namespace Trinity.Coroutines.Town
                 }
 
                 // Close Greater rift before doing a town run.
-                if (!Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
+                if (!TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
                     return false;
             }
 
@@ -204,21 +204,21 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (Trinity.Player.LevelAreaId == 19947 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && new Vector3(2959.893f, 2806.495f, 24.04533f).Distance(ZetaDia.Me.Position) > 180f)
+            if (TrinityPlugin.Player.LevelAreaId == 19947 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && new Vector3(2959.893f, 2806.495f, 24.04533f).Distance(ZetaDia.Me.Position) > 180f)
             {
                 Logger.Log("Can't townrun with the current quest (A1 New Game) !");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(30);
                 return false;
             }
 
-            if (DataDictionary.BossLevelAreaIDs.Contains(Trinity.Player.LevelAreaId))
+            if (DataDictionary.BossLevelAreaIDs.Contains(TrinityPlugin.Player.LevelAreaId))
             {
                 Logger.Log("Unable to Town Portal - Boss Area!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
                 return false;
             }
 
-            if (DataDictionary.NeverTownPortalLevelAreaIds.Contains(Trinity.Player.LevelAreaId))
+            if (DataDictionary.NeverTownPortalLevelAreaIds.Contains(TrinityPlugin.Player.LevelAreaId))
             {
                 Logger.Log("Unable to Town Portal in this area!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
@@ -264,7 +264,7 @@ namespace Trinity.Coroutines.Town
             Navigator.PlayerMover.MoveStop();
             await Coroutine.Wait(2000, () => !ZetaDia.Me.Movement.IsMoving);
             StartedOutOfTown = true;
-            await CommonCoroutines.UseTownPortal("Trinity can haz town now plz?");
+            await CommonCoroutines.UseTownPortal("TrinityPlugin can haz town now plz?");
             return true;
         }
 
@@ -297,7 +297,7 @@ namespace Trinity.Coroutines.Town
                 return true;
             }
 
-            if (Trinity.Player.IsCastingPortal)
+            if (TrinityPlugin.Player.IsCastingPortal)
             {
                 lastTownPortalCheckTime = DateTime.UtcNow;
                 lastTownPortalCheckResult = true;
@@ -306,7 +306,7 @@ namespace Trinity.Coroutines.Town
 
             lastTownPortalCheckTime = DateTime.UtcNow;
             lastTownPortalCheckResult = false;
-            return Trinity.WantToTownRun;
+            return TrinityPlugin.WantToTownRun;
         }
 
         private async static Task<bool> TakeReturnPortal()

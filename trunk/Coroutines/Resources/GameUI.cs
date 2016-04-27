@@ -352,7 +352,7 @@ namespace TrinityCoroutines.Resources
         /// <returns></returns>
         public static bool SafeClickElement(UIElement element, string name = "", bool fireWorldTransfer = false)
         {
-            if (!Trinity.Trinity.Player.IsValid)
+            if (!Trinity.TrinityPlugin.Player.IsValid)
                 return false;
 
             if (!IsElementVisible(element))
@@ -369,7 +369,7 @@ namespace TrinityCoroutines.Resources
         private static DateTime _lastCheckedUiButtons = DateTime.MinValue;
         public static void SafeClickUIButtons()
         {
-            var isInGame = Trinity.Trinity.Player.IsInGame;
+            var isInGame = Trinity.TrinityPlugin.Player.IsInGame;
 
             // These buttons should be clicked with no delay
 
@@ -408,8 +408,8 @@ namespace TrinityCoroutines.Resources
 
             if (IsElementVisible(PartyFollowerBossDecline))
             {
-                var declineInBounty = Trinity.Trinity.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.DeclineInBounty && ZetaDia.ActInfo.ActiveBounty != null;
-                var alwaysDecline = Trinity.Trinity.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.AlwaysDecline;
+                var declineInBounty = Trinity.TrinityPlugin.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.DeclineInBounty && ZetaDia.ActInfo.ActiveBounty != null;
+                var alwaysDecline = Trinity.TrinityPlugin.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.AlwaysDecline;
 
                 if (declineInBounty || alwaysDecline)
                 {
@@ -425,7 +425,7 @@ namespace TrinityCoroutines.Resources
 
             _lastCheckedUiButtons = DateTime.UtcNow;
 
-            if (Trinity.Trinity.Player.IsCasting)
+            if (Trinity.TrinityPlugin.Player.IsCasting)
                 return;
 
             if (isInGame && SafeClickElement(MercenaryOKButton, "Mercenary OK Button"))

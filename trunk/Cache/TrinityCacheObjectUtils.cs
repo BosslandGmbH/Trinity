@@ -12,7 +12,7 @@ namespace Trinity.Cache
             if (_currentCacheObject != null && _currentCacheObject.RActorGuid == o.RActorGuid)
                 return _isNavBlocking;
 
-            _isNavBlocking = Trinity.LastTargetACDGuid != o.ACDGuid && CacheData.NavigationObstacles.Any(ob => MathUtil.IntersectsPath(ob.Position, ob.Radius, CacheData.Player.Position, o.Position));
+            _isNavBlocking = TrinityPlugin.LastTargetACDGuid != o.ACDGuid && CacheData.NavigationObstacles.Any(ob => MathUtil.IntersectsPath(ob.Position, ob.Radius, CacheData.Player.Position, o.Position));
             _currentCacheObject = o;
             return _isNavBlocking;
         }

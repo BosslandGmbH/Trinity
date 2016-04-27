@@ -26,6 +26,7 @@ using Trinity.Configuration;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Avoidance;
+using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
 using Trinity.Framework.Objects.Attributes;
 using Trinity.Helpers;
@@ -73,7 +74,7 @@ namespace Trinity.UI.RadarUI
         private bool _isBlacklisted;
         private SortDirection _sortDirection;
 
-        public VisualizerViewModel() : base(Path.Combine(FileManager.SpecificSettingsPath,"Visualizer.xml"))
+        public VisualizerViewModel() : base(Path.Combine(FileManager.SpecificSettingsPath, "Visualizer.xml"))
         {
             _instance = this;
 
@@ -110,7 +111,7 @@ namespace Trinity.UI.RadarUI
                 Logger.LogVerbose("Starting Thread for Visualizer Updates");
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    Worker.Start(ThreadUpdateTask);                   
+                    Worker.Start(ThreadUpdateTask);
                 });
             }
         }
@@ -121,15 +122,17 @@ namespace Trinity.UI.RadarUI
         private bool ThreadUpdateTask()
         {
             if (BotMain.IsPausedForStateExecution)
-                return false;      
-                
+                return false;
+
             if (DateTime.UtcNow.Subtract(LastUpdated).TotalMilliseconds < 50)
                 return false;
 
             LastUpdated = DateTime.UtcNow;
 
-            using (ZetaDia.Memory.AcquireFrame(true))
+            using (ZetaDia.Memory.AcquireFrame())
             {
+                ZetaDia.Actors.Update();
+
                 if (ZetaDia.Me == null || !ZetaDia.Me.IsValid || !ZetaDia.Service.Hero.IsValid)
                     return false;
 
@@ -140,9 +143,9 @@ namespace Trinity.UI.RadarUI
                     LastUpdatedNav = DateTime.UtcNow;
                 }
 
-                ZetaDia.Actors.Update();
-                Trinity.Player.UpdatePlayerCache();
-                Trinity.RefreshDiaObjectCache();
+
+                TrinityPlugin.Player.UpdatePlayerCache();
+                TrinityPlugin.RefreshDiaObjectCache();
                 ScenesStorage.Update();
                 Core.Avoidance.Update();
                 UpdateVisualizer();
@@ -154,7 +157,7 @@ namespace Trinity.UI.RadarUI
         {
             if (Worker.IsRunning)
                 Logger.LogVerbose("Stopping Thread for Visualizer Updates");
-            
+
             Worker.Stop();
             StartThreadAllowed = true;
             RemoveStatChangerListeners();
@@ -172,65 +175,53 @@ namespace Trinity.UI.RadarUI
 
                 LastRefresh = DateTime.UtcNow;
 
-                var objects = Trinity.ObjectCache.Select(o => o.IActor).ToList();
-
-                //Logger.Log("Objects={0}", objects.Count);
-
+                var objects = TrinityPlugin.ObjectCache.Select(o => o.IActor).ToList();
                 objects = ApplyFilter(objects);
-
                 var queryableObjects = ApplySort(objects.AsQueryable());
-
                 Objects = new ObservableCollection<IActor>(queryableObjects);
-                
-                if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache) && DateTime.UtcNow.Subtract(LastUpdatedNotInCacheObjects).TotalSeconds > 1)
-                {
-                    var objectsByRActorGuid = Objects.ToDictionary(k => k.RActorGuid, v => v);
 
-                    var allObjects = ZetaDia.Actors.GetActorsOfType<DiaObject>(true);
+                //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache) && DateTime.UtcNow.Subtract(LastUpdatedNotInCacheObjects).TotalSeconds > 1)
+                //{
+                //    var objectsByRActorGuid = Objects.ToDictionary(k => k.RActorGuid, v => v);
 
-                    NotInCacheObjects.Clear();
+                //    var allObjects = ZetaDia.Actors.GetActorsOfType<DiaObject>(true);
 
-                    foreach (var obj in allObjects)
-                    {
-                        if (objectsByRActorGuid.ContainsKey(obj.RActorId))
-                            continue;
+                //    NotInCacheObjects.Clear();
 
-                        var newObj = new TrinityCacheObject(obj);
+                //    foreach (var obj in allObjects)
+                //    {
+                //        if (objectsByRActorGuid.ContainsKey(obj.RActorId))
+                //            continue;
 
-                        if (CacheData.IgnoreReasons.ContainsKey(obj.RActorId))
-                            newObj.IgnoreReason = CacheData.IgnoreReasons[obj.RActorId];
+                //        var newObj = new TrinityCacheObject(obj);
 
-                        NotInCacheObjects.Add(newObj);
+                //        if (CacheData.IgnoreReasons.ContainsKey(obj.RActorId))
+                //            newObj.IgnoreReason = CacheData.IgnoreReasons[obj.RActorId];
 
-                    }
+                //        NotInCacheObjects.Add(newObj);
 
-                    LastUpdatedNotInCacheObjects = DateTime.UtcNow;
-                }
+                //    }
 
-                CurrentTarget = CombatBase.CurrentTarget;                
+                //    LastUpdatedNotInCacheObjects = DateTime.UtcNow;
+                //}
 
-                Player = Trinity.Player.IActor;
+                //CurrentTarget = CombatBase.CurrentTarget;
 
+                Player = TrinityPlugin.Player.IActor;
                 PlayerPositionX = Player.Position.X;
                 PlayerPositionY = Player.Position.Y;
                 PlayerPositionZ = Player.Position.Z;
-
-                WorldSnoId = Trinity.Player.WorldID;
-
-                LevelAreaSnoId = Trinity.Player.LevelAreaId;
-
+                WorldSnoId = TrinityPlugin.Player.WorldID;
+                LevelAreaSnoId = TrinityPlugin.Player.LevelAreaId;
                 PlayerRotation = MathUtil.RadianToDegree(Player.RotationRadians);
 
-                IsStuck = Navigator.StuckHandler.IsStuck;
+                //IsStuck = Navigator.StuckHandler.IsStuck;
+                //IsAvoiding = Core.Avoidance.Avoider.IsAvoiding;
+                //IsBlocked = PlayerMover.IsBlocked;
+                //OnPropertyChanged(nameof(Player));
 
-                IsAvoiding = Core.Avoidance.IsAvoiding;
-
-                IsBlocked = PlayerMover.IsBlocked;
-
-                OnPropertyChanged("Player");
-
-                if (!_listeningForStatChanges)
-                    AddStatChangerListeners();
+                //if (!_listeningForStatChanges)
+                //    AddStatChangerListeners();
 
                 // OnPropertyChanged("CurrentTarget");
                 // OnPropertyChanged("SelectedObject");
@@ -332,7 +323,7 @@ namespace Trinity.UI.RadarUI
         {
             get { return _player; }
             set { SetField(ref _player, value); }
-        } 
+        }
 
         private List<IActor> ApplyFilter(IList<IActor> objects)
         {
@@ -340,7 +331,7 @@ namespace Trinity.UI.RadarUI
             var playerGuid = ZetaDia.ActivePlayerACDId;
 
             foreach (var o in objects)
-            {                
+            {
                 //if (!ShowIgnored && o.TargetingType == TargetingType.Ignore)
                 //    continue;
 
@@ -404,7 +395,7 @@ namespace Trinity.UI.RadarUI
 
         public TrinitySetting Settings
         {
-            get { return Trinity.Settings; }
+            get { return TrinityPlugin.Settings; }
         }
 
         [Zeta.XmlEngine.XmlElement("WindowHeight")]
@@ -438,7 +429,7 @@ namespace Trinity.UI.RadarUI
         //    get { return _showGrid; }
         //    set { SetField(ref _showGrid, value); }
         //}
-        
+
         //public GridLength GridPanelHeight
         //{
         //    get
@@ -454,7 +445,7 @@ namespace Trinity.UI.RadarUI
         //        {
         //            return _starHeight;
         //        };
-                          
+
         //        return new GridLength(height);
         //    }
         //    set
@@ -481,13 +472,14 @@ namespace Trinity.UI.RadarUI
                 if (_gridPanelHeight.IsAuto)
                 {
                     if (!string.IsNullOrEmpty(StoredGridPanelHeight))
-                    { 
+                    {
                         var storedGridLength = GetGridLength(StoredGridPanelHeight);
                         _gridPanelHeight = storedGridLength;
                         IsGridPanelExpanded = Math.Abs(_gridPanelHeight.Value) > float.Epsilon;
                         return storedGridLength;
                     }
                     _gridPanelHeight = GetGridLength("*");
+                    IsGridPanelExpanded = true;
                 }
                 return _gridPanelHeight;
             }
@@ -496,7 +488,7 @@ namespace Trinity.UI.RadarUI
                 if (_gridPanelHeight != value)
                 {
                     _gridPanelHeight = value;
-                    StoredGridPanelHeight = value.Value.ToString(CultureInfo.InvariantCulture);     
+                    StoredGridPanelHeight = value.Value.ToString(CultureInfo.InvariantCulture);
                     OnPropertyChanged();
                     IsGridPanelExpanded = Math.Abs(value.Value) > float.Epsilon;
                 }
@@ -530,11 +522,12 @@ namespace Trinity.UI.RadarUI
                         return storedGridLength;
                     }
                     _sidePanelWidth = GetGridLength("*");
+                    IsSidePanelExpanded = true;
                 }
                 return _sidePanelWidth;
             }
             set
-            {                
+            {
                 if (_sidePanelWidth != value)
                 {
                     _sidePanelWidth = value;
@@ -549,16 +542,16 @@ namespace Trinity.UI.RadarUI
         [DefaultValue(true)]
         public bool IsSidePanelExpanded
         {
-            get { return _isSidePanelExpanded; }
+            get { return _isSidePanelExpanded || _sidePanelWidth.IsAuto || _sidePanelWidth.IsStar; }
             set { SetField(ref _isSidePanelExpanded, value); }
         }
 
 
         readonly GridLengthConverter _gridLengthConverter = new GridLengthConverter();
         public GridLength GetGridLength<T>(T input)
-        {            
+        {
             var result = new GridLength(1, GridUnitType.Star);
-            
+
             if (!_gridLengthConverter.CanConvertFrom(input.GetType()))
             {
                 return result;
@@ -572,7 +565,7 @@ namespace Trinity.UI.RadarUI
         }
 
 
-        
+
 
         [Zeta.XmlEngine.XmlElement("ShowPriority")]
         [DefaultValue(true)]
@@ -654,7 +647,7 @@ namespace Trinity.UI.RadarUI
             ACDGuid = 1 << 1,
             ActorSNO = 1 << 2,
             InternalName = 1 << 3,
-            GameBalanceId = 1 << 4,                        
+            GameBalanceId = 1 << 4,
             RadiusDistance = 1 << 5,
             Distance = 1 << 6,
             Weight = 1 << 7,
@@ -663,7 +656,7 @@ namespace Trinity.UI.RadarUI
             ActorType = 1 << 10,
             Radius = 1 << 11,
             AnimationState = 1 << 12,
-            CurrentAnimation = 1 << 13,                        
+            CurrentAnimation = 1 << 13,
             All = ~(-1 << 14)
         }
 
@@ -768,7 +761,7 @@ namespace Trinity.UI.RadarUI
                 {
                     try
                     {
-                        Trinity.Settings.Save();
+                        TrinityPlugin.Settings.Save();
                     }
                     catch (Exception ex)
                     {
@@ -837,7 +830,7 @@ namespace Trinity.UI.RadarUI
                 {
                     try
                     {
-                        var sort = (GridColumnFlags)Enum.Parse(typeof(GridColumnFlags), (string) param);
+                        var sort = (GridColumnFlags)Enum.Parse(typeof(GridColumnFlags), (string)param);
 
                         if (SelectedSort == sort)
                             SortDirection = 1 - SortDirection;
@@ -863,7 +856,7 @@ namespace Trinity.UI.RadarUI
                     try
                     {
                         Pause();
-                        
+
                         Thread.Sleep(500);
 
                         var actor = param as IActor;
@@ -980,7 +973,7 @@ namespace Trinity.UI.RadarUI
             }
         }
 
-        
+
 
         private bool _isBotRunning;
         public bool IsBotRunning

@@ -63,7 +63,7 @@ namespace Trinity.UI
                         ConfigWindow = new Window();
                     }
                     Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Load Context");
-                    var viewmodel= new ConfigViewModel(Trinity.Settings);
+                    var viewmodel= new ConfigViewModel(TrinityPlugin.Settings);
                     DataContext = viewmodel;
                     ConfigWindow.DataContext = viewmodel;
 
@@ -115,7 +115,7 @@ namespace Trinity.UI
 
         private static void UpdateVolatileSttings()
         {
-            Trinity.Settings.Gambling.OnPropertyChanged("MaximumBloodShards");
+            TrinityPlugin.Settings.Gambling.OnPropertyChanged("MaximumBloodShards");
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace Trinity.UI
         {
             try
             {
-                Trinity.BeginInvoke(() => LoadWindowContent(Path.Combine(FileManager.PluginPath, "UI")));
+                TrinityPlugin.BeginInvoke(() => LoadWindowContent(Path.Combine(FileManager.PluginPath, "UI")));
 
 
             }
@@ -206,7 +206,7 @@ namespace Trinity.UI
                 Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Load XAML file : {0}", filename);
                 string filecontent = File.ReadAllText(filename);
 
-                // Change reference to custom Trinity class
+                // Change reference to custom TrinityPlugin class
                 filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UIComponents;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:objects=\"clr-namespace:Trinity.Objects\"", "xmlns:objects=\"clr-namespace:Trinity.Objects;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:mock=\"clr-namespace:Trinity.Settings.Mock\"", "xmlns:mock=\"clr-namespace:Trinity.Settings.Mock;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");

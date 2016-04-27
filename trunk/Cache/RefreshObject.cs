@@ -15,7 +15,7 @@ using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity
 {
-    public partial class Trinity
+    public partial class TrinityPlugin
     {
         /// <summary>
         /// This will eventually be come our single source of truth and we can get rid of most/all of the below "c_" variables
@@ -544,197 +544,126 @@ namespace Trinity
 
             // Either get the cached object type, or calculate it fresh
             if (!c_IsObstacle)
-            {
-                // See if it's an avoidance first from the SNO
-                bool isAvoidanceSNO = DataDictionary.Avoidances.Contains(CurrentCacheObject.ActorSNO) ||
-                    DataDictionary.ButcherFloorPanels.Contains(CurrentCacheObject.ActorSNO) ||
-                    DataDictionary.AvoidanceProjectiles.Contains(CurrentCacheObject.ActorSNO);
-
-                // Check if it's a unit with an animation we should avoid. We need to recheck this every time.
-                if (c_diaObject is DiaUnit && Settings.Combat.Misc.AvoidAOE &&
-                    DataDictionary.AvoidanceAnimations.Contains(new DoubleInt(CurrentCacheObject.ActorSNO, (int)c_diaObject.CommonData.CurrentAnimation)))
+            {   
+                // Calculate the object type of this object
+                if (c_diaObject.ActorType == ActorType.Monster)
+                //if (c_diaObject is DiaUnit)
                 {
-                    // The ActorSnoId and Animation match a known pair, avoid this!
-                    // Example: "Grotesque" death animation
-                    AddToCache = true;
-                    CurrentCacheObject.Type = TrinityObjectType.Avoidance;
-                    isAvoidanceSNO = true;
-                }
-
-                if (CurrentCacheObject.Unit != null && CurrentCacheObject.Unit.Movement.IsValid)
-                {
-                    CurrentCacheObject.Rotation = CurrentCacheObject.Unit.Movement.Rotation;
-                    CurrentCacheObject.DirectionVector = CurrentCacheObject.Unit.Movement.DirectionVector;
-                    // Check if it's a unit with an animation we should avoid. We need to recheck this every time.
-                    if (c_diaObject is DiaUnit && Settings.Combat.Misc.AvoidAOE && CurrentCacheObject.IsFacing(Player.Position) &&
-                        DataDictionary.DirectionalAvoidanceAnimations.Contains(new DoubleInt(CurrentCacheObject.ActorSNO, (int)c_diaObject.CommonData.CurrentAnimation)))
+                    using (new PerformanceLogger("RefreshCachedType.1"))
                     {
-                        // The ActorSnoId and Animation match a known pair, avoid this!
-                        AddToCache = true;
-                        CurrentCacheObject.Type = TrinityObjectType.Avoidance;
-                        isAvoidanceSNO = true;
-                    }
-                }
-
-                // We're avoiding AoE and this is an AoE
-                if (Settings.Combat.Misc.AvoidAOE && isAvoidanceSNO)
-                {
-                    using (new PerformanceLogger("RefreshCachedType.0"))
-                    {
-                        // Checking for BuffVisualEffect - for Butcher, maybe useful other places?
-                        if (DataDictionary.ButcherFloorPanels.Contains(CurrentCacheObject.ActorSNO))
+                        if (c_diaObject.CommonData == null)
                         {
-                            bool hasBuff = false;
-                            try
-                            {
-                                //hasBuff = c_diaObject.CommonData.GetAttribute<int>(ActorAttributeType.HasLookOverride) > 0;
-                                hasBuff = c_diaObject.CommonData.HasLookOverride > 0;
-                            }
-                            catch
-                            {
-
-                            }
-                            if (hasBuff)
-                            {
-                                AddToCache = true;
-                                CurrentCacheObject.Type = TrinityObjectType.Avoidance;
-                            }
-                            else
-                            {
-                                AddToCache = false;
-                                c_IgnoreSubStep = "NoBuffVisualEffect";
-                            }
+                            c_IgnoreSubStep = "InvalidUnitCommonData";
+                            AddToCache = false;
+                        }
+                        else if (c_diaObject.ACDId != c_diaObject.CommonData.ACDId)
+                        {
+                            c_IgnoreSubStep = "InvalidUnitACDGuid";
+                            AddToCache = false;
                         }
                         else
                         {
-                            // Avoidance isn't disabled, so set this object type to avoidance
-                            CurrentCacheObject.Type = TrinityObjectType.Avoidance;
+                            CurrentCacheObject.Type = TrinityObjectType.Unit;
                         }
                     }
                 }
-                else if (!Settings.Combat.Misc.AvoidAOE && isAvoidanceSNO)
+                else if (c_diaObject.ActorType == ActorType.Player)
                 {
-                    AddToCache = false;
-                    c_IgnoreSubStep = "IgnoreAvoidance";
+                    CurrentCacheObject.Type = TrinityObjectType.Player;
                 }
-                // It's not an avoidance, so let's calculate it's object type "properly"
-                else
+                else if (DataDictionary.ForceToItemOverrideIds.Contains(CurrentCacheObject.ActorSNO) || (c_diaObject.ActorType == ActorType.Item))
                 {
-                    // Calculate the object type of this object
-                    if (c_diaObject.ActorType == ActorType.Monster)
-                    //if (c_diaObject is DiaUnit)
+                    using (new PerformanceLogger("RefreshCachedType.2"))
                     {
-                        using (new PerformanceLogger("RefreshCachedType.1"))
+                        CurrentCacheObject.Type = TrinityObjectType.Item;
+
+                        if (c_diaObject.CommonData == null)
                         {
-                            if (c_diaObject.CommonData == null)
-                            {
-                                c_IgnoreSubStep = "InvalidUnitCommonData";
-                                AddToCache = false;
-                            }
-                            else if (c_diaObject.ACDId != c_diaObject.CommonData.ACDId)
-                            {
-                                c_IgnoreSubStep = "InvalidUnitACDGuid";
-                                AddToCache = false;
-                            }
-                            else
-                            {
-                                CurrentCacheObject.Type = TrinityObjectType.Unit;
-                            }
+                            AddToCache = false;
+                        }
+                        if (c_diaObject.CommonData != null && c_diaObject.ACDId != c_diaObject.CommonData.ACDId)
+                        {
+                            AddToCache = false;
+                        }
+
+                        if (CurrentCacheObject.InternalNameLowerCase.StartsWith("gold"))
+                        {
+                            CurrentCacheObject.Type = TrinityObjectType.Gold;
                         }
                     }
-                    else if (c_diaObject.ActorType == ActorType.Player)
+                }
+                else if (DataDictionary.InteractWhiteListIds.Contains(CurrentCacheObject.ActorSNO))
+                {
+                    CurrentCacheObject.Type = TrinityObjectType.Interactable;
+                }
+                else if (c_diaObject is DiaGizmo && c_diaObject.ActorType == ActorType.Gizmo && CurrentCacheObject.Distance <= 90)
+                {
+
+                    c_diaGizmo = (DiaGizmo) c_diaObject;
+
+                    if (CurrentCacheObject.InternalName.Contains("CursedChest"))
                     {
-                        CurrentCacheObject.Type = TrinityObjectType.Player;
+                        CurrentCacheObject.Type = TrinityObjectType.CursedChest;
+                        return true;
                     }
-                    else if (DataDictionary.ForceToItemOverrideIds.Contains(CurrentCacheObject.ActorSNO) || (c_diaObject.ActorType == ActorType.Item))
+
+                    if (CurrentCacheObject.InternalName.Contains("CursedShrine"))
                     {
-                        using (new PerformanceLogger("RefreshCachedType.2"))
-                        {
-                            CurrentCacheObject.Type = TrinityObjectType.Item;
-
-                            if (c_diaObject.CommonData == null)
-                            {
-                                AddToCache = false;
-                            }
-                            if (c_diaObject.CommonData != null && c_diaObject.ACDId != c_diaObject.CommonData.ACDId)
-                            {
-                                AddToCache = false;
-                            }
-
-                            if (CurrentCacheObject.InternalNameLowerCase.StartsWith("gold"))
-                            {
-                                CurrentCacheObject.Type = TrinityObjectType.Gold;
-                            }
-                        }
+                        CurrentCacheObject.Type = TrinityObjectType.CursedShrine;
+                        return true;
                     }
-                    else if (DataDictionary.InteractWhiteListIds.Contains(CurrentCacheObject.ActorSNO))
-                        CurrentCacheObject.Type = TrinityObjectType.Interactable;
 
-                    else if (c_diaObject is DiaGizmo && c_diaObject.ActorType == ActorType.Gizmo && CurrentCacheObject.Distance <= 90)
+                    if (c_diaGizmo.IsBarricade)
                     {
-
-                        c_diaGizmo = (DiaGizmo)c_diaObject;
-
-                        if (CurrentCacheObject.InternalName.Contains("CursedChest"))
-                        {
-                            CurrentCacheObject.Type = TrinityObjectType.CursedChest;
-                            return true;
-                        }
-
-                        if (CurrentCacheObject.InternalName.Contains("CursedShrine"))
-                        {
-                            CurrentCacheObject.Type = TrinityObjectType.CursedShrine;
-                            return true;
-                        }
-
-                        if (c_diaGizmo.IsBarricade)
-                        {
-                            CurrentCacheObject.Type = TrinityObjectType.Barricade;
-                        }
-                        else
-                        {
-                            switch (c_diaGizmo.ActorInfo.GizmoType)
-                            {
-                                case GizmoType.HealingWell:
-                                    CurrentCacheObject.Type = TrinityObjectType.HealthWell;
-                                    break;
-                                case GizmoType.Door:
-                                    CurrentCacheObject.Type = TrinityObjectType.Door;
-                                    break;
-                                case GizmoType.PoolOfReflection:
-                                case GizmoType.PowerUp:
-                                    CurrentCacheObject.Type = TrinityObjectType.Shrine;
-                                    break;
-                                case GizmoType.Chest:
-                                    CurrentCacheObject.Type = TrinityObjectType.Container;
-                                    break;
-                                case GizmoType.BreakableDoor:
-                                    CurrentCacheObject.Type = TrinityObjectType.Barricade;
-                                    break;
-                                case GizmoType.BreakableChest:
-                                    CurrentCacheObject.Type = TrinityObjectType.Destructible;
-                                    break;
-                                case GizmoType.DestroyableObject:
-                                    CurrentCacheObject.Type = TrinityObjectType.Destructible;
-                                    break;
-                                case GizmoType.PlacedLoot:
-                                case GizmoType.Switch:
-                                case GizmoType.Headstone:
-                                    CurrentCacheObject.Type = TrinityObjectType.Interactable;
-                                    break;
-                                default:
-                                    CurrentCacheObject.Type = TrinityObjectType.Unknown;
-                                    break;
-                            }
-                        }
+                        CurrentCacheObject.Type = TrinityObjectType.Barricade;
                     }
                     else
-                        CurrentCacheObject.Type = TrinityObjectType.Unknown;
+                    {
+                        switch (c_diaGizmo.ActorInfo.GizmoType)
+                        {
+                            case GizmoType.HealingWell:
+                                CurrentCacheObject.Type = TrinityObjectType.HealthWell;
+                                break;
+                            case GizmoType.Door:
+                                CurrentCacheObject.Type = TrinityObjectType.Door;
+                                break;
+                            case GizmoType.PoolOfReflection:
+                            case GizmoType.PowerUp:
+                                CurrentCacheObject.Type = TrinityObjectType.Shrine;
+                                break;
+                            case GizmoType.Chest:
+                                CurrentCacheObject.Type = TrinityObjectType.Container;
+                                break;
+                            case GizmoType.BreakableDoor:
+                                CurrentCacheObject.Type = TrinityObjectType.Barricade;
+                                break;
+                            case GizmoType.BreakableChest:
+                                CurrentCacheObject.Type = TrinityObjectType.Destructible;
+                                break;
+                            case GizmoType.DestroyableObject:
+                                CurrentCacheObject.Type = TrinityObjectType.Destructible;
+                                break;
+                            case GizmoType.PlacedLoot:
+                            case GizmoType.Switch:
+                            case GizmoType.Headstone:
+                                CurrentCacheObject.Type = TrinityObjectType.Interactable;
+                                break;
+                            default:
+                                CurrentCacheObject.Type = TrinityObjectType.Unknown;
+                                break;
+                        }
+                    }
                 }
+                else
+                {
+                    CurrentCacheObject.Type = TrinityObjectType.Unknown;
+                }
+                
                 if (CurrentCacheObject.Type != TrinityObjectType.Unknown)
                 {  // Now cache the object type if it's on the screen and we know what it is
                     //CacheData.ObjectType.Add(CurrentCacheObject.RActorId, CurrentCacheObject.Type);
                 }
+
             }
             return AddToCache;
         }
@@ -819,12 +748,8 @@ namespace Trinity
                     }
                 // Handle Avoidance Objects
                 case TrinityObjectType.Avoidance:
-                    {
-                        if (Settings.Combat.Misc.AvoidAOE)
-                        {
-                            AddToCache = RefreshAvoidance();
-                            if (!AddToCache) { c_IgnoreSubStep = "RefreshAvoidance"; }
-                        }
+                {
+                        AddToCache = false;
                         break;
                     }
                 // Handle Other-type Objects
@@ -864,7 +789,7 @@ namespace Trinity
             try
             {                
                 // todo figure out why this method causes massive lockups if called while player is dead
-                if (Trinity.Player.IsDead)
+                if (TrinityPlugin.Player.IsDead)
                     return true;
 
                 if (CurrentCacheObject.Type == TrinityObjectType.Item || CurrentCacheObject.Type == TrinityObjectType.Gold)
@@ -928,7 +853,7 @@ namespace Trinity
                                     if (Single.IsNaN(cPos.X) || Single.IsNaN(cPos.Y) || Single.IsNaN(cPos.Z))
                                         cPos = CurrentCacheObject.Position;
 
-                                    var withinCollisionRadius = CurrentCacheObject.CollisionRadius + Trinity.Player.Radius <= CurrentCacheObject.Distance;
+                                    var withinCollisionRadius = CurrentCacheObject.CollisionRadius + TrinityPlugin.Player.Radius <= CurrentCacheObject.Distance;
                                     var barricadeWithinRadius = CurrentCacheObject.Type == TrinityObjectType.Barricade && withinCollisionRadius;
                                     if (!barricadeWithinRadius && !NavHelper.CanRayCast(myPos, cPos))
                                     {
@@ -1040,7 +965,7 @@ namespace Trinity
             {
                 return 0f;
             }
-            return Math.Abs((float)(obj.Position.Z - Trinity.Player.Position.Z));
+            return Math.Abs((float)(obj.Position.Z - TrinityPlugin.Player.Position.Z));
         }
 
         private static bool RefreshStepObjectTypeZDiff(bool AddToCache)

@@ -14,7 +14,7 @@ namespace Trinity.Helpers
     public class NotifyBase : INotifyPropertyChanged
     {
         /// <summary>
-        /// Called by KnownType Attribute, avoids having to specify all known types for DatContract in derived types.
+        /// Called by KnownType Attribute, avoids having to specify all known types for DataContract in derived types.
         /// </summary>
         private static Type[] DerivedTypes()
         {

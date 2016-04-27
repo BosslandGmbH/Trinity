@@ -54,14 +54,14 @@ namespace Trinity.Technicals
                 _Stopwatch.Stop();
                 if (_Stopwatch.Elapsed.TotalMilliseconds > 5 || _ForceLog)
                 {
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Performance) || _ForceLog)
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Performance) || _ForceLog)
                     {
-                        Logging.DebugFormat("[Trinity][Performance] Execution of {0} took {1:00.00000}ms.", _BlockName,
+                        Logging.DebugFormat("[TrinityPlugin][Performance] Execution of {0} took {1:00.00000}ms.", _BlockName,
                                             _Stopwatch.Elapsed.TotalMilliseconds);
                     }
                     else if (_Stopwatch.Elapsed.TotalMilliseconds > 1000)
                     {
-                        Logging.ErrorFormat("[Trinity][Performance] Execution of {0} took {1:00.00000}ms.", _BlockName,
+                        Logging.ErrorFormat("[TrinityPlugin][Performance] Execution of {0} took {1:00.00000}ms.", _BlockName,
                                             _Stopwatch.Elapsed.TotalMilliseconds);
                     }
                 }

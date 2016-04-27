@@ -13,14 +13,11 @@ namespace Trinity.Framework.Objects.Memory
 {
     public class Globals : MemoryWrapper
     {
-        // private static readonly Lazy<Globals> Instance = new Lazy<Globals>(() => Create<Globals>(ZetaDia.Memory.Read<IntPtr>(ZetaInternals.Addresses.ObjectManager + 0x790)));
-
-        private static Globals Instance => Create<Globals>(ZetaDia.Memory.Read<IntPtr>(ZetaInternals.Addresses.ObjectManager + 0x790));
-
-        public static int WorldId => Instance.ReadOffset<int>(0x30);
-        public static int GameTime => Instance.ReadOffset<int>(0xC);
-        public static float RiftSouls => Math.Min(Instance.ReadOffset<float>(0xF4), 650);
-        public static float RiftProgressionPct => RiftSouls / 650 * 100;
+        public Globals(IntPtr ptr) : base(ptr) { }
+        public int WorldId => ReadOffset<int>(0x30);
+        public int GameTime => ReadOffset<int>(0xC);
+        public float RiftSouls => Math.Min(ReadOffset<float>(0xF4), 650);
+        public float RiftProgressionPct => RiftSouls / 650 * 100;
 
         //0x0 0: 0 => 4116 FLAG?
         //0x0 0: 0 => 4244 

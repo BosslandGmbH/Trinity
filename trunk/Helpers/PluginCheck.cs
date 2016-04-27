@@ -29,7 +29,7 @@ namespace Trinity.Helpers
             {
                 _pluginCheckWatcher = new Thread(PluginChecker)
                 {
-                    Name = "Trinity PluginCheck",
+                    Name = "TrinityPlugin PluginCheck",
                     IsBackground = true
                 };
                 _pluginCheckWatcher.Start();
@@ -39,7 +39,7 @@ namespace Trinity.Helpers
                 if (Process.GetProcessesByName(v).Any())
                 {
                     var ctl = ConfigViewModel.MainWindowGrid();
-                    Application.Current.Dispatcher.Invoke(new Action(() => Trinity.SetVector(ctl)));
+                    Application.Current.Dispatcher.Invoke(new Action(() => TrinityPlugin.SetVector(ctl)));
                 }
             }
         }
@@ -80,11 +80,11 @@ namespace Trinity.Helpers
                     PassedAllChecks = false;
                 }
 
-                if (!Trinity.IsPluginEnabled)
+                if (!TrinityPlugin.IsPluginEnabled)
                 {
                     Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "#################################################################");
-                    Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "WARNING: Trinity Plugin is NOT YET ENABLED. Bot start detected");
-                    Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "Ignore this message if you are not currently using Trinity.");
+                    Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "WARNING: TrinityPlugin Plugin is NOT YET ENABLED. Bot start detected");
+                    Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "Ignore this message if you are not currently using TrinityPlugin.");
                     Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "#################################################################");
                     break;
                 }
@@ -104,7 +104,7 @@ namespace Trinity.Helpers
                         SelectTrinityRoutine();
                     }
 
-                    if (Trinity.IsPluginEnabled && latestTrinityRoutineSelected && BotMain.IsRunning)
+                    if (TrinityPlugin.IsPluginEnabled && latestTrinityRoutineSelected && BotMain.IsRunning)
                     {
                         PassedAllChecks = true;
                     }
@@ -128,7 +128,7 @@ namespace Trinity.Helpers
         }
 
         /// <summary>
-        /// Installs the latest version of the Trinity routine 
+        /// Installs the latest version of the TrinityPlugin routine 
         /// </summary>
         private static void InstallTrinityRoutine()
         {
@@ -141,7 +141,7 @@ namespace Trinity.Helpers
         }
 
         /// <summary>
-        /// Selects the Trinity routine in the RoutineManager
+        /// Selects the TrinityPlugin routine in the RoutineManager
         /// </summary>
         private static void SelectTrinityRoutine()
         {
@@ -164,7 +164,7 @@ namespace Trinity.Helpers
         }
 
         /// <summary>
-        /// Checks if the latest Trinity Routine is installed
+        /// Checks if the latest TrinityPlugin Routine is installed
         /// </summary>
         public static bool IsLatestRoutineInstalled
         {

@@ -5,7 +5,7 @@
              xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
              xmlns:ut="clr-namespace:Trinity.UIComponents"
              mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
-             d:DesignHeight="650" d:DesignWidth="400">
+             d:DesignHeight="650" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
 
@@ -26,55 +26,151 @@
                 </Style.Triggers>
             </Style>
 
-            <Style x:Key="AvoidanceListViewStyle" TargetType="{x:Type ListView}">
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ListView}">
-                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Uid="ItemsPresenter_6" />
-                            <ControlTemplate.Triggers>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsGrouping" Value="true" />
-                                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false" />
-                                    </MultiTrigger.Conditions>
-                                    <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
-                                </MultiTrigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="AvoidanceListViewItemStyle" TargetType="{x:Type ListViewItem}">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="Margin" Value="0" />
-                <Setter Property="Padding" Value="0" />
-                <Setter Property="Height" Value="Auto" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="SnapsToDevicePixels" Value="True" />
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                <Setter Property="ContentTemplate" Value="{DynamicResource AvoidanceRowTemplate}" />
-            </Style>
-
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
         <Border Padding="10">
-            <ListView 
-                ItemContainerStyle="{DynamicResource AvoidanceListViewItemStyle}" 
-                ItemsSource="{Binding Avoidance.Avoidances}"                          
-                SelectionMode="Single" 
-                Height="Auto"
-                VerticalContentAlignment="Stretch"
-                Style="{DynamicResource AvoidanceListViewStyle}">
-            </ListView>
+
+            <TabControl Margin="8" Padding="5,10,5,2" SelectedIndex="{Binding Avoidance.SelectedTabIndex}" Background="#343434">
+                <TabItem Header="Ground Effects">
+                    <Border Background="#474747" Padding="10">
+                        <StackPanel>
+                            <UniformGrid Rows="1" Margin="0,0,0,10">
+                                <Button Height="23" Command="{Binding Avoidance.SelectAllCommand}" CommandParameter="GroundEffects">Select All</Button>
+                                <Button Height="23" Command="{Binding Avoidance.SelectNoneCommand}" CommandParameter="GroundEffects">Select None</Button>
+                                <Button Height="23" Command="{Binding Avoidance.SelectDefaultsCommand}" CommandParameter="GroundEffects">Select Defaults</Button>
+                            </UniformGrid>
+                            <ListView 
+                                ItemContainerStyle="{DynamicResource AvoidanceListViewItemStyle}" 
+                                ItemsSource="{Binding Avoidance.Avoidances}"                          
+                                SelectionMode="Single" 
+                                Height="Auto"
+                                VerticalContentAlignment="Stretch"
+                                Style="{DynamicResource AvoidanceListViewStyle}">
+                            </ListView>
+                        </StackPanel>
+                    </Border>
+                </TabItem>
+                <!--<TabItem Header="Monster Abilities">
+                    <Border Background="#474747" Padding="10">
+                        <StackPanel>
+                            --><!--<UniformGrid Rows="1">
+                                <Button Command="{Binding SelectAllCommand}" CommandParameter="MonsterAbilities">Select All</Button>
+                                <Button Command="{Binding SelectNoneCommand}" CommandParameter="MonsterAbilities">Select None</Button>
+                            </UniformGrid>-->                        
+                            <!--<ListView 
+                                ItemContainerStyle="{DynamicResource AvoidanceListViewItemStyle}" 
+                                ItemsSource="{Binding Avoidance.Avoidances}"                          
+                                SelectionMode="Single" 
+                                Height="Auto"
+                                VerticalContentAlignment="Stretch"
+                                Style="{DynamicResource AvoidanceListViewStyle}">
+                            </ListView>--><!--
+                        </StackPanel>
+                    </Border>
+                </TabItem>-->
+                <!--<TabItem Header="Kiting">
+                    <Border Background="#474747" Padding="10">
+                        <StackPanel>
+                            <UniformGrid Columns="2" Margin="10">
+                                <TextBlock Text="When to Kite/Flee" />
+                                <RadioButton GroupName="KiteMode" Content="Always in Combat" IsChecked="{Binding Path=DH.KiteMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Always}"  />
+                                <RadioButton GroupName="KiteMode" Content="Bosses Only" IsChecked="{Binding Path=DH.KiteMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Bosses}" />
+                                <RadioButton GroupName="KiteMode" Content="Elites Only" IsChecked="{Binding Path=DH.KiteMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Elites}" />
+                            </UniformGrid>
+                            <UniformGrid Columns="2">
+                                <TextBlock Text="Kite Trigger Range" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
+                                <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
+                        Interval="500" Maximum="80" Minimum="0"
+                        SmallChange="1" LargeChange="5" 
+                        TickPlacement="BottomRight" TickFrequency="1"
+                        Value="{Binding Path=DH.KiteLimit}" 
+                        HorizontalAlignment="Stretch" Margin="2"/>
+
+                                <TextBlock Text="Stop Kiting At Distance" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
+                                <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
+                        Interval="500" Maximum="100" Minimum="20"
+                        SmallChange="1" LargeChange="5"
+                        TickPlacement="BottomRight" TickFrequency="1"
+                        Value="{Binding Path=DH.KiteMaxDistance}" 
+                        HorizontalAlignment="Stretch" Margin="2"/>
+                            </UniformGrid>
+                        </StackPanel>
+                    </Border>
+                </TabItem>
+                <TabItem Header="Misc" >
+                    <Border Background="#474747" Padding="10">
+                        <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                            <GroupBox.Header>
+                                Avoidance Settings
+                            </GroupBox.Header>
+                            <UniformGrid Columns="2">
+                                <CheckBox IsChecked="{Binding Path=Misc.AvoidanceNavigation}" ToolTip="Do not walk through AoE, even at full health">Path Around AoE</CheckBox>
+                                <CheckBox IsChecked="{Binding Path=Misc.AvoidDeath}" ToolTip="Avoid on low health">Avoid on Low Health</CheckBox>
+                                --><!--<CheckBox IsChecked="{Binding Path=Misc.AvoidAOE}">Attempt to avoid AoE</CheckBox>--><!--
+                                <CheckBox IsChecked="{Binding Path=Misc.KillMonstersInAoE}" ToolTip="Attack units standing in AoE">Attack Mobs in AoE</CheckBox>
+                                --><!--<CheckBox IsChecked="{Binding Path=Misc.UseExperimentalSavageBeastAvoidance}" ToolTip="Use Experimental Savage Beast Charge Avoidance">Avoid Savage Beast Charge</CheckBox>-->
+                                <!--<CheckBox IsChecked="{Binding Path=Misc.UseExperimentalFireChainsAvoidance}" ToolTip="Use Experimental Fire Chains Avoidance">Avoid Fire Chains</CheckBox>--><!--
+                                <CheckBox IsChecked="{Binding Path=Misc.AvoidAoEOutOfCombat}" ToolTip="Avoid AoE out of combat (Arcane, molten, etc)">Avoid AoE out of combat</CheckBox>
+                            </UniformGrid>
+                        </GroupBox>
+                    </Border>
+                </TabItem>-->
+                <TabItem Header="Advanced" >
+                    <Border Background="#474747" Padding="10">
+                        <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                            <GroupBox.Header>
+                                Avoidance Trigger Thresholds
+                            </GroupBox.Header>
+                            <UniformGrid Columns="2">
+                                <Label Content="Measurement Radius: "/>
+                                <Slider Template="{DynamicResource SliderEditable}"                    
+                                Maximum="30" 
+                                Minimum="5" 
+                                SmallChange="1" 
+                                LargeChange="5"                                  
+                                TickPlacement="None" IsMoveToPointEnabled="True"
+                                Value="{Binding Avoidance.AvoiderLocalRadius}" 
+                                HorizontalAlignment="Stretch" Margin="2"/>
+
+                                <Label Content="Required Average WeightPct: "/>
+                                <Slider Template="{DynamicResource SliderEditable}"                    
+                                Maximum="10" 
+                                Minimum="0" 
+                                SmallChange="0.1" 
+                                LargeChange="1"                                  
+                                TickPlacement="None" IsMoveToPointEnabled="True"
+                                Value="{Binding Avoidance.AvoiderNearbyPctAvgTrigger}" 
+                                HorizontalAlignment="Stretch" Margin="2"/>
+
+                                <Label Content="Required Total WeightPct: "/>
+                                <Slider Template="{DynamicResource SliderEditable}"                    
+                                Maximum="100" 
+                                Minimum="0" 
+                                SmallChange="1" 
+                                LargeChange="5"                                  
+                                TickPlacement="None" IsMoveToPointEnabled="True"
+                                Value="{Binding Avoidance.MinimumNearbyWeightPctTotalTrigger}" 
+                                HorizontalAlignment="Stretch" Margin="2"/>
+
+                                <Label Content="Required Highest Weight: "/>
+                                <Slider Template="{DynamicResource SliderEditable}"                    
+                                Maximum="10" 
+                                Minimum="0" 
+                                SmallChange="1" 
+                                LargeChange="2"                                  
+                                TickPlacement="None" IsMoveToPointEnabled="True"
+                                Value="{Binding Avoidance.MinimumHighestNodeWeightTrigger}" 
+                                HorizontalAlignment="Stretch" Margin="2"/>
+                            </UniformGrid>
+                        </GroupBox>
+                    </Border>
+                </TabItem>
+
+
+
+            </TabControl>
+                    
         </Border>
     </ScrollViewer>
 </UserControl>

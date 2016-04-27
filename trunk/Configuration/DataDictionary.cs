@@ -1554,7 +1554,7 @@ namespace Trinity
         /// <summary>
         /// Last used-timers for all abilities to prevent spamming D3 memory for cancast checks too often
         /// These should NEVER need manually editing
-        /// But you do need to make sure every skill used by Trinity is listed in here once!
+        /// But you do need to make sure every skill used by TrinityPlugin is listed in here once!
         /// </summary>
         public static Dictionary<SNOPower, DateTime> LastUseAbilityTimeDefaults
         {
@@ -1582,10 +1582,13 @@ namespace Trinity
 
         public static HashSet<string> WhiteItemCraftingWhiteList { get { return whiteItemCraftingWhiteList; } }
 
+        /// <summary>
+        /// Mark the area underneath these objects @ radius 'unwalkable' - use with caution.
+        /// </summary>
         public static Dictionary<int, float> PathFindingObstacles = new Dictionary<int, float>
         {
-            {(int) SNOActor.a3_Battlefield_demonic_forge, 25f},
-            {(int) SNOActor.a3_crater_st_demonic_forge, 25f},
+            {(int) SNOActor.a3_Battlefield_demonic_forge, 16f},
+            {(int) SNOActor.a3_crater_st_demonic_forge, 16f},
             {(int) SNOActor.Player_Shared_Stash, 6f},
             {(int) SNOActor.PoolOfReflection, 8f},
             {(int) SNOActor.a2dun_Aqd_Act_Wood_Platform_A_01, 5f} // Environment post blocking nav

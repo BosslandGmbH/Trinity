@@ -2,7 +2,7 @@
 //using System.Runtime.InteropServices;
 //using Zeta.Game;
 
-//namespace Trinity.Framework.Objects.Memory.Items
+//namespace TrinityPlugin.Framework.Objects.Memory.Items
 //{
 //    [StructLayout(LayoutKind.Sequential, Pack = 1)]
 //    public struct ItemTypeRecord

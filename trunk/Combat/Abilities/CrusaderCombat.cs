@@ -27,7 +27,7 @@ namespace Trinity.Combat.Abilities
 
         public static CrusaderSetting CrusaderSettings
         {
-            get { return Trinity.Settings.Combat.Crusader; }
+            get { return TrinityPlugin.Settings.Combat.Crusader; }
         }
 
         public static bool IsBombardmentBuild
@@ -377,7 +377,7 @@ namespace Trinity.Combat.Abilities
         //        if (IsSteedCharging && !IsCurrentlyAvoiding)
         //        {
         //            //Logger.Log("Steed Charge Damage");
-        //            return new TrinityPower(SNOPower.Walk, 20f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 35f, true), Trinity.CurrentWorldDynamicId, -1, 0, 1);
+        //            return new TrinityPower(SNOPower.Walk, 20f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 35f, true), TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);
         //        }
         //    }
 
@@ -524,7 +524,7 @@ namespace Trinity.Combat.Abilities
                 // Walk Spam
                 //if (!IsCurrentlyAvoiding && EveryOtherTick)
                 //{
-                //    return new TrinityPower(SNOPower.Walk, 24f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 35f, true), Trinity.CurrentWorldDynamicId, -1, 0, 1);
+                //    return new TrinityPower(SNOPower.Walk, 24f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 35f, true), TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);
                 //}
 
                 //if (!IsCurrentlyAvoiding && !isSteedCharging && EveryOtherTick)
@@ -647,7 +647,7 @@ namespace Trinity.Combat.Abilities
                 if (IsSteedCharging && !IsCurrentlyAvoiding)
                 {
                     //Logger.Log("Steed Charge Damage");
-                    return new TrinityPower(SNOPower.Walk, 20f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 35f, true), Trinity.CurrentWorldDynamicId, -1, 0, 1);
+                    return new TrinityPower(SNOPower.Walk, 20f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 35f, true), TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);
                 }
             }
 

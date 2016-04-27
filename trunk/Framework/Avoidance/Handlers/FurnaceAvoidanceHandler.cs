@@ -23,7 +23,7 @@ namespace Trinity.Framework.Avoidance.Handlers
     { 
         private int _healthThresholdPct;
 
-        public void UpdateNodes(AvoidanceGrid grid, Avoidance avoidance)
+        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
         {
             foreach (var actor in avoidance.Actors)
             {
@@ -43,7 +43,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                     if (actor.CommonData.GetAttribute<int>(((int)part.Power << 12) + ((int)part.Attribute & 0xFFF)) == 1)
                     {
                         Logger.Log("Power {0} on {1} ({1}) in Attribute {2}", part.Power, actor.InternalName, part.Name, part.Attribute);
-                        var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 20f, actor.DiaUnit.Movement.Rotation)).SelectMany(n => n.AdjacentNodes).Distinct();
+                        var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 30f, actor.DiaUnit.Movement.Rotation)).SelectMany(n => n.AdjacentNodes).Distinct();
                         grid.FlagNodes(nodes, AvoidanceFlags.Avoidance, 10);
                     }
                 }
@@ -59,7 +59,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         public bool IsAllowed
         {
-            get { return Trinity.Player.CurrentHealthPct <= HealthThresholdPct; }
+            get { return TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct; }
         }
 
         [DataMember]

@@ -161,7 +161,7 @@ namespace Trinity.Technicals
         private static string _PluginPath;
 
         /// <summary>
-        /// The full path to the built-in Trinity combat routine, for auto-installation
+        /// The full path to the built-in TrinityPlugin combat routine, for auto-installation
         /// </summary>
         public static string CombatRoutineSourcePath
         {
@@ -172,7 +172,7 @@ namespace Trinity.Technicals
         }
 
         /// <summary>
-        /// The full path to the Demonbuddy combat routine for Trinity
+        /// The full path to the Demonbuddy combat routine for TrinityPlugin
         /// </summary>
         public static string CombatRoutineDestinationPath
         {
@@ -183,7 +183,7 @@ namespace Trinity.Technicals
         }
 
         /// <summary>
-        /// The string name of Trinity
+        /// The string name of TrinityPlugin
         /// </summary>
         public static string TrinityName
         {
@@ -206,7 +206,7 @@ namespace Trinity.Technicals
         }
 
         /// <summary>
-        /// The file name of the Trinity Combat Routine
+        /// The file name of the TrinityPlugin Combat Routine
         /// </summary>
         public static string CombatRoutineFileName
         {
@@ -391,7 +391,7 @@ namespace Trinity.Technicals
         }
 
         /// <summary>
-        /// Will delete old Trinity routines from the Demonbuddy Routines directory
+        /// Will delete old TrinityPlugin routines from the Demonbuddy Routines directory
         /// </summary>
         public static void CleanupOldRoutines()
         {

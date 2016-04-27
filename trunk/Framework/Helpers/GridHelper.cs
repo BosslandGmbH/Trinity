@@ -11,29 +11,20 @@ namespace Trinity.Framework.Grid
 {
     public class GridHelper
     {
-        protected NavigationGrid _navigation
-        {
-            get { return NavigationGrid.Instance; }
-        }
+        protected NavigationGrid Navigation => NavigationGrid.Instance;
 
-        private ExplorationGrid _exploration
-        {
-            get { return ExplorationGrid.Instance; }
-        }
+        public ExplorationGrid Exploration => ExplorationGrid.Instance;
 
-        private AvoidanceGrid _avoidance
-        {
-            get { return AvoidanceGrid.Instance; }
-        }
+        public AvoidanceGrid Avoidance => AvoidanceGrid.Instance;
 
         public bool CanRayCast(Vector3 @from, Vector3 to)
         {
-            return _navigation.CanRayCast(@from, to);
+            return Navigation.CanRayCast(@from, to);
         }
 
         public bool CanRayWalk(Vector3 @from, Vector3 to)
         {
-            return _navigation.CanRayCast(@from, to);
+            return Navigation.CanRayCast(@from, to);
         }
     }
 

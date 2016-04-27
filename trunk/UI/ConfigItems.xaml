@@ -3,40 +3,39 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
               xmlns:ut="clr-namespace:Trinity.UIComponents"
-              mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
+              mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" Background="#343434"
              d:DesignHeight="350" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>
-            <!-- Don't format this line otherwise Db can't open config window -->
-            <ResourceDictionary.MergedDictionaries><ResourceDictionary Source="Template.xaml"/></ResourceDictionary.MergedDictionaries>
-
-            <ut:EnumVisibilityConverter x:Key="enumVisibilityConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ut:EnumVisibilityConverter x:Key="EnumVisibilityConverter" Reverse="False" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <TabControl>
+    <Grid Margin="10,10,10,0">
+        <TabControl Padding="10">
             <TabItem Header="Pickup" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\ConfigPickup.xaml"/>
+            </TabItem>
+            <TabItem Header="Item List" Foreground="{DynamicResource TextBrush}">
+                <Border Tag="Items\ConfigItemList.xaml"/>
             </TabItem>
             <TabItem Header="Kanai's Cube" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\KanaisCube.xaml"/>
             </TabItem>
             <TabItem Header="Gambling" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\Gambling.xaml"/>
-            </TabItem>            
-            <TabItem Header="Item List" Foreground="{DynamicResource TextBrush}">
-                <Border Tag="Items\ConfigItemList.xaml"/>
-            </TabItem>            
-            <TabItem Header="ItemRules" Foreground="{DynamicResource TextBrush}">
+            </TabItem>
+            <TabItem Header="ItemRules" Foreground="{DynamicResource TextBrush}" Visibility="{Binding Loot.ItemFilterMode, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=TrinityWithItemRules}">
                 <Border Tag="Items\ConfigItemRules.xaml"/>
             </TabItem>
             <TabItem Header="Town Run" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\ConfigScoring.xaml"/>
             </TabItem>
-            <TabItem Header="Mobile Notification" Foreground="{DynamicResource TextBrush}">
+            <TabItem Header="Alerts" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\ConfigNotification.xaml"/>
             </TabItem>
-
         </TabControl>
     </Grid>
 </UserControl>

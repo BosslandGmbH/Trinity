@@ -1,0 +1,61 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ut="clr-namespace:Trinity.UIComponents"
+             xmlns:mock="clr-namespace:Trinity.Settings.Mock"
+             mc:Ignorable="d" Foreground="{DynamicResource TextBrush}" 
+             Background="#434343" Padding="10,0,0,0"
+             d:DesignHeight="600" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ut:PercentConverter x:Key="PercentConverter" />
+            <ut:PropertyValueConverter x:Key="PropertyValueConverter" />
+            <mock:MockData x:Key="DesignViewModel" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Background="Transparent" d:DataContext="{Binding Source={StaticResource DesignViewModel}}">
+        <StackPanel Orientation="Vertical">
+            <!--<Label Content="{Binding SkillSettings.Settings.Name}" />
+            <Label Content="{Binding SkillSettings.Settings.Author}" />
+            <Label Content="{Binding SkillSettings.Settings.Description}" />
+            <Label Content="{Binding SkillSettings.Settings.Version}" />-->            
+            <ItemsControl 
+                ItemsSource="{Binding SkillSettings.Settings.Items}">
+                <ItemsControl.Template>
+                    <ControlTemplate>
+                        <ItemsPresenter VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <UniformGrid>
+                                <Label Content="Power" />
+                                <Label Content="{Binding SnoPower}" />
+                                <Label Content="CastRange" />
+                                <Label Content="{Binding CastRange}" />
+                                <Label Content="{Binding ClusterSize}" />
+                                <Label Content="{Binding HealthPct}" />
+                                
+                                <Label Content="{Binding Reasons}" />
+                                <ContentPresenter 
+                                    Style="{DynamicResource SimpleItemsControlSelector}"
+                                    Content="{Binding
+                                    Converter={StaticResourceExtension PropertyValueConverter}, 
+                                    ConverterParameter=VisibilityFlags}" />
+
+                                <Label Content="{Binding ResourcePct}" />
+                                <Label Content="{Binding Target}" />
+                                <Label Content="{Binding UseTime}" />
+                            </UniformGrid>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>                
+            </ItemsControl>
+        </StackPanel>
+    </Grid>
+</UserControl>

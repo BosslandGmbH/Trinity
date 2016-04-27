@@ -77,17 +77,17 @@ namespace Trinity.DbProvider
 
         public static List<TrinityCacheObject> MeleeMonsters
         {
-            get { return Trinity.ObjectCache.Where(u => u.IsUnit && u.MonsterSize != MonsterSize.Ranged && u.Distance < ClearAreaMeleeDistance).ToList(); }
+            get { return TrinityPlugin.ObjectCache.Where(u => u.IsUnit && u.MonsterSize != MonsterSize.Ranged && u.Distance < ClearAreaMeleeDistance).ToList(); }
         }
 
         public static List<TrinityCacheObject> ImportantLoot
         {
-            get { return Trinity.ObjectCache.Where(u => u.TrinityItemType != TrinityItemType.Unknown && u.ItemQuality >= Zeta.Game.Internals.Actors.ItemQuality.Legendary && u.Distance <= 40f).ToList(); }
+            get { return TrinityPlugin.ObjectCache.Where(u => u.TrinityItemType != TrinityItemType.Unknown && u.ItemQuality >= Zeta.Game.Internals.Actors.ItemQuality.Legendary && u.Distance <= 40f).ToList(); }
         }
 
         public static List<TrinityCacheObject> SummonAndRangedMonsters
         {
-            get { return Trinity.ObjectCache.Where(u => u.Distance < ClearAreaRangedDistance && (u.IsSummoner || u.MonsterSize == MonsterSize.Ranged)).ToList(); }
+            get { return TrinityPlugin.ObjectCache.Where(u => u.Distance < ClearAreaRangedDistance && (u.IsSummoner || u.MonsterSize == MonsterSize.Ranged)).ToList(); }
         }
 
         public static int WeightedMonsterCount
@@ -138,19 +138,11 @@ namespace Trinity.DbProvider
         /// </summary>
         public static void PulseClearAreaCheck(object sender, EventArgs e)
         {
-            //// How this should interact with new town run is TBD
-            //if (Trinity.Settings.Advanced.UseExperimentalTownRun)
-            //{
-            //    Reset();
-            //    RevertClearAreaMode();
-            //    return;
-            //}
-
             if (!HookAdded)
                 AddHooks();            
 
-            var secondsSinceWorldChange = DateTime.UtcNow.Subtract(Trinity.LastWorldChangeTime).TotalSeconds;
-            var secondsSinceLevelAreaChange = DateTime.UtcNow.Subtract(Trinity.Player.LastChangedLevelAreaId).TotalSeconds;
+            var secondsSinceWorldChange = DateTime.UtcNow.Subtract(TrinityPlugin.LastWorldChangeTime).TotalSeconds;
+            var secondsSinceLevelAreaChange = DateTime.UtcNow.Subtract(TrinityPlugin.Player.LastChangedLevelAreaId).TotalSeconds;
             if (secondsSinceWorldChange < 10 || secondsSinceLevelAreaChange < 10 || ZetaDia.IsInTown || ZetaDia.Me == null || ZetaDia.Me.IsDead)
             {
                 Reset();
@@ -165,7 +157,7 @@ namespace Trinity.DbProvider
             // Attempt to run back to position every X seconds if we get too far away, will take a while for monsters to follow us.
             if (PreTownRunPosition != Vector3.Zero)
             {
-                if (Trinity.Player.IsLoadingWorld || ZetaDia.IsInTown || ZetaDia.Me.IsDead)
+                if (TrinityPlugin.Player.IsLoadingWorld || ZetaDia.IsInTown || ZetaDia.Me.IsDead)
                 {
                     Reset();
                     return;
@@ -190,7 +182,7 @@ namespace Trinity.DbProvider
                 
                 if (PreTownRunPosition == Vector3.Zero && !ZetaDia.IsInTown)
                 {
-                    Logger.Log("Setting Portal Position to {0} (ClearAreaCheck)", Trinity.Player.Position, Trinity.Player.WorldID);
+                    Logger.Log("Setting Portal Position to {0} (ClearAreaCheck)", TrinityPlugin.Player.Position, TrinityPlugin.Player.WorldID);
                     PreTownRunPosition = ZetaDia.Me.Position;
                 }      
             }
@@ -206,7 +198,7 @@ namespace Trinity.DbProvider
 
         private static void CheckIsCasting()
         {
-            if (Trinity.Player.IsCasting)
+            if (TrinityPlugin.Player.IsCasting)
             {
                 if (_isCasting) return;                
                 _isCasting = true;
@@ -228,7 +220,7 @@ namespace Trinity.DbProvider
         {
             try
             {
-                if (!ShouldMoveToPortalPosition || !Trinity.Player.IsInGame)
+                if (!ShouldMoveToPortalPosition || !TrinityPlugin.Player.IsInGame)
                 {
                     return false;
                 }
@@ -282,7 +274,7 @@ namespace Trinity.DbProvider
                         lastMovedTime = DateTime.UtcNow;
                     }
 
-                    if (PlayerMover.IsBlocked || DateTime.UtcNow.Subtract(MoveToPortalPositionStartTime).TotalSeconds > 45 || ZetaDia.IsInTown || Navigator.StuckHandler.IsStuck || Trinity.Player.IsDead)
+                    if (PlayerMover.IsBlocked || DateTime.UtcNow.Subtract(MoveToPortalPositionStartTime).TotalSeconds > 45 || ZetaDia.IsInTown || Navigator.StuckHandler.IsStuck || TrinityPlugin.Player.IsDead)
                     {
                         Logger.Log("Moving Stopped due to Timeout or Blocked or InTown");
                         Reset();
@@ -342,13 +334,13 @@ namespace Trinity.DbProvider
                 return false;
             }
 
-            if (Trinity.Player.IsInTown || Legendary.HomingPads.IsEquipped || CacheData.BuffsCache.Instance.HasInvulnerableShrine)
+            if (TrinityPlugin.Player.IsInTown || Legendary.HomingPads.IsEquipped || CacheData.BuffsCache.Instance.HasInvulnerableShrine)
             {
                 LastClearingResult = false;
                 return false;
             }
 
-            if ((Trinity.Player.IsCastingPortal || BrainBehavior.IsVendoring) && (MeleeMonsters.Count > 0 || SummonAndRangedMonsters.Count > 0))
+            if ((TrinityPlugin.Player.IsCastingPortal || BrainBehavior.IsVendoring) && (MeleeMonsters.Count > 0 || SummonAndRangedMonsters.Count > 0))
             {
                 //Logger.LogVerbose("Can't use portal with monsters nearby. Clearing Area! Within{3}={0} Ranged/SummonWithin{4}={1} WeightedWithin{4}={2}",
                 //    MeleeMonsters.Count, SummonAndRangedMonsters.Count, WeightedMonsterCount, ClearAreaMeleeDistance, ClearAreaRangedDistance);
@@ -371,7 +363,7 @@ namespace Trinity.DbProvider
         }
 
         /// <summary>
-        /// Adjusts Trinity combat settings to kill everything in a small radius around player.
+        /// Adjusts TrinityPlugin combat settings to kill everything in a small radius around player.
         /// </summary>
         public static void SetClearAreaMode()
         {
@@ -380,20 +372,20 @@ namespace Trinity.DbProvider
                 var baseRange = SummonAndRangedMonsters.Count > 0 ? ClearAreaRangedDistance : ClearAreaMeleeDistance;
                 var finalRange = baseRange + Math.Min(CurrentAttempt*5, ExtendRangeLimit);
 
-                _previousTrashPackSize = Trinity.Settings.Combat.Misc.TrashPackSize;
-                _previousTrashClusterRadius = Trinity.Settings.Combat.Misc.TrashPackClusterRadius;
-                _previousExtendedTrashKill = Trinity.Settings.Combat.Misc.ExtendedTrashKill;
-                _previousEliteRange = Trinity.Settings.Combat.Misc.EliteRange;
-                _previousNonEliteRange = Trinity.Settings.Combat.Misc.NonEliteRange;
+                _previousTrashPackSize = TrinityPlugin.Settings.Combat.Misc.TrashPackSize;
+                _previousTrashClusterRadius = TrinityPlugin.Settings.Combat.Misc.TrashPackClusterRadius;
+                _previousExtendedTrashKill = TrinityPlugin.Settings.Combat.Misc.ExtendedTrashKill;
+                _previousEliteRange = TrinityPlugin.Settings.Combat.Misc.EliteRange;
+                _previousNonEliteRange = TrinityPlugin.Settings.Combat.Misc.NonEliteRange;
 
                 Logger.Log("Reducing combat range settings to: Elites={0} Trash={1} ClusterSize={2} TrashCount={3} Attempt={4}",
                     finalRange, finalRange, ClearAreaTrashClusterRadius, ClearAreaTrashPackSize, CurrentAttempt);
 
-                Trinity.Settings.Combat.Misc.TrashPackSize = ClearAreaTrashPackSize;
-                Trinity.Settings.Combat.Misc.TrashPackClusterRadius = ClearAreaTrashClusterRadius;
-                Trinity.Settings.Combat.Misc.ExtendedTrashKill = false;
-                Trinity.Settings.Combat.Misc.EliteRange = (int) finalRange;
-                Trinity.Settings.Combat.Misc.NonEliteRange = (int) finalRange;
+                TrinityPlugin.Settings.Combat.Misc.TrashPackSize = ClearAreaTrashPackSize;
+                TrinityPlugin.Settings.Combat.Misc.TrashPackClusterRadius = ClearAreaTrashClusterRadius;
+                TrinityPlugin.Settings.Combat.Misc.ExtendedTrashKill = false;
+                TrinityPlugin.Settings.Combat.Misc.EliteRange = (int) finalRange;
+                TrinityPlugin.Settings.Combat.Misc.NonEliteRange = (int) finalRange;
 
                 AttemptOfLastCombatSettingsChange = CurrentAttempt;
                 CombatBase.CombatMode = CombatMode.KillAll;
@@ -409,8 +401,8 @@ namespace Trinity.DbProvider
                 var baseRange = SummonAndRangedMonsters.Count > 0 ? ClearAreaRangedDistance : ClearAreaMeleeDistance;
                 var finalRange = baseRange + Math.Min(CurrentAttempt*5, ExtendRangeLimit);
 
-                Trinity.Settings.Combat.Misc.EliteRange = (int) finalRange;
-                Trinity.Settings.Combat.Misc.NonEliteRange = (int) finalRange;
+                TrinityPlugin.Settings.Combat.Misc.EliteRange = (int) finalRange;
+                TrinityPlugin.Settings.Combat.Misc.NonEliteRange = (int) finalRange;
 
                 Logger.Log("Changing Kill Ranges to Elites={0} Trash={1} Attempt={2}",
                     finalRange, finalRange, CurrentAttempt);
@@ -422,17 +414,17 @@ namespace Trinity.DbProvider
         public static int AttemptOfLastCombatSettingsChange { get; set; }
 
         /// <summary>
-        /// Reverts Trinity combat settings to what they were previously.
+        /// Reverts TrinityPlugin combat settings to what they were previously.
         /// </summary>
         public static void RevertClearAreaMode()
         {
             if (IsCombatModeOverridden && CombatBase.CombatMode != CombatBase.LastCombatMode)
             {
-                Trinity.Settings.Combat.Misc.TrashPackSize = _previousTrashPackSize;
-                Trinity.Settings.Combat.Misc.TrashPackClusterRadius = _previousTrashClusterRadius;
-                Trinity.Settings.Combat.Misc.ExtendedTrashKill = _previousExtendedTrashKill;
-                Trinity.Settings.Combat.Misc.EliteRange = _previousEliteRange;
-                Trinity.Settings.Combat.Misc.NonEliteRange = _previousNonEliteRange;
+                TrinityPlugin.Settings.Combat.Misc.TrashPackSize = _previousTrashPackSize;
+                TrinityPlugin.Settings.Combat.Misc.TrashPackClusterRadius = _previousTrashClusterRadius;
+                TrinityPlugin.Settings.Combat.Misc.ExtendedTrashKill = _previousExtendedTrashKill;
+                TrinityPlugin.Settings.Combat.Misc.EliteRange = _previousEliteRange;
+                TrinityPlugin.Settings.Combat.Misc.NonEliteRange = _previousNonEliteRange;
 
                 Logger.Log("Restoring previous combat range settings to: Elites={0} Trash={1} ClusterSize={2} TrashCount={3}", 
                     _previousEliteRange, _previousNonEliteRange, _previousTrashClusterRadius, _previousTrashPackSize);

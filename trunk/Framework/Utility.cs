@@ -8,29 +8,21 @@ namespace Trinity.Framework
     {
         public DateTime LastUpdated = DateTime.MinValue;
 
-        public Utility()
-        {
-            UpdateInterval = TimeSpan.FromMilliseconds(100);
-        }
-
         public void Enable()
         {
-            Pulsator.OnPulse += BasePulse;
-            GameEvents.OnWorldChanged -= BaseWorldChanged;
+            Pulsator.OnPulse += FirePulse;
+            GameEvents.OnWorldChanged -= FireWorldChanged;
         }
 
         public void Disable()
         {
-            Pulsator.OnPulse -= BasePulse;
-            GameEvents.OnWorldChanged -= BaseWorldChanged;
+            Pulsator.OnPulse -= FirePulse;
+            GameEvents.OnWorldChanged -= FireWorldChanged;
         }
 
-        /// <summary>
-        /// How quickly OnPulse() will be executed
-        /// </summary>
-        protected TimeSpan UpdateInterval { get; set; }
+        protected TimeSpan UpdateInterval { get; set; } = TimeSpan.FromMilliseconds(100);
 
-        internal void BasePulse(object sender, EventArgs eventArgs)
+        internal void FirePulse(object sender, EventArgs eventArgs)
         {
             if (DateTime.UtcNow.Subtract(LastUpdated).TotalMilliseconds < UpdateInterval.TotalMilliseconds)
                 return;
@@ -44,7 +36,7 @@ namespace Trinity.Framework
 
         }
 
-        private void BaseWorldChanged(object sender, EventArgs e)
+        private void FireWorldChanged(object sender, EventArgs e)
         {
             OnWorldChanged();
         }

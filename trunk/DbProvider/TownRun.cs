@@ -83,19 +83,19 @@ namespace Trinity.DbProvider
 
             var commonData = ZetaDia.Me.CommonData;
 
-            if (Trinity.Player.CheckVisualEffectNoneForPower(commonData, SNOPower.IdentifyWithCast))
+            if (TrinityPlugin.Player.CheckVisualEffectNoneForPower(commonData, SNOPower.IdentifyWithCast))
             {
                 Logger.LogVerbose("Player is casting 'IdentifyWithCast'");
                 return;
             }
 
-            if (Trinity.Player.CheckVisualEffectNoneForPower(commonData, SNOPower.IdentifyWithCastLegendary))
+            if (TrinityPlugin.Player.CheckVisualEffectNoneForPower(commonData, SNOPower.IdentifyWithCastLegendary))
             {
                 Logger.LogVerbose("Player is casting 'IdentifyWithCast'");
                 return;
             }
 
-            if (Trinity.Player.CheckVisualEffectNoneForPower(commonData, SNOPower.IdentifyWithCastLegendary))
+            if (TrinityPlugin.Player.CheckVisualEffectNoneForPower(commonData, SNOPower.IdentifyWithCastLegendary))
             {
                 Logger.LogVerbose("Player is casting 'IdentifyAllWithCast'");
                 return;
@@ -112,10 +112,10 @@ namespace Trinity.DbProvider
         //internal static void VendorRunPulseCheck()
         //{
         //    // If we're in town and vendoring
-        //    if (Trinity.Player.IsInTown && BrainBehavior.IsVendoring)
+        //    if (TrinityPlugin.Player.IsInTown && BrainBehavior.IsVendoring)
         //    {
         //        WasVendoring = true;
-        //        Trinity.ForceVendorRunASAP = true;
+        //        TrinityPlugin.ForceVendorRunASAP = true;
         //    }
 
             
@@ -135,16 +135,16 @@ namespace Trinity.DbProvider
                     if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
                         return false;
 
-                    Trinity.WantToTownRun = false;
+                    TrinityPlugin.WantToTownRun = false;
 
-                    if (Trinity.Player.IsDead)
+                    if (TrinityPlugin.Player.IsDead)
                     {
                         return false;
                     }
 
                     if (BrainBehavior.IsVendoring && ZetaDia.IsInTown)
                     {
-                        var secondsSinceWorldChange = DateTime.UtcNow.Subtract(Trinity.LastWorldChangeTime).TotalSeconds;
+                        var secondsSinceWorldChange = DateTime.UtcNow.Subtract(TrinityPlugin.LastWorldChangeTime).TotalSeconds;
                         if (secondsSinceWorldChange < 2)
                         {
                             if (!_hasResolvedInTown)
@@ -162,7 +162,7 @@ namespace Trinity.DbProvider
                     _hasResolvedInTown = false;
 
                     // Check if we should be forcing a town-run
-                    if (Trinity.ForceVendorRunASAP || BrainBehavior.IsVendoring)
+                    if (TrinityPlugin.ForceVendorRunASAP || BrainBehavior.IsVendoring)
                     {
                         if (!LastTownRunCheckResult)
                         {
@@ -172,15 +172,15 @@ namespace Trinity.DbProvider
                             }
                         }
                         SetPreTownRunPosition();
-                        Trinity.WantToTownRun = true;
+                        TrinityPlugin.WantToTownRun = true;
                     }
 
                     // Fix for A1 new game with bags full
                     // center of town x="2959.893" y="2806.495" z="24.04533" (new Vector3(2959.893f,2806.495f,24.04533f))
-                    if (Trinity.Player.LevelAreaId == 19947 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && new Vector3(2959.893f, 2806.495f, 24.04533f).Distance(ZetaDia.Me.Position) > 180f)
+                    if (TrinityPlugin.Player.LevelAreaId == 19947 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && new Vector3(2959.893f, 2806.495f, 24.04533f).Distance(ZetaDia.Me.Position) > 180f)
                     {
                         Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Can't townrun with the current quest!");
-                        Trinity.WantToTownRun = false;
+                        TrinityPlugin.WantToTownRun = false;
                         return false;
                     }
 
@@ -190,7 +190,7 @@ namespace Trinity.DbProvider
                         LastCheckBackpackDurability = DateTime.UtcNow;
 
                         // Check for no space in backpack
-                        if (!Trinity.Player.IsInventoryLockedForGreaterRift && (Trinity.Settings.Loot.TownRun.KeepLegendaryUnid || !Trinity.Player.ParticipatingInTieredLootRun))
+                        if (!TrinityPlugin.Player.IsInventoryLockedForGreaterRift && (TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid || !TrinityPlugin.Player.ParticipatingInTieredLootRun))
                         {
                             Vector2 validLocation = TrinityItemManager.FindValidBackpackLocation(true);
                             if (validLocation.X < 0 || validLocation.Y < 0)
@@ -200,9 +200,9 @@ namespace Trinity.DbProvider
                                 {
                                     LastTownRunCheckResult = true;
                                 }
-                                Trinity.WantToTownRun = true;
+                                TrinityPlugin.WantToTownRun = true;
 
-                                Trinity.ForceVendorRunASAP = true;
+                                TrinityPlugin.ForceVendorRunASAP = true;
                                 // Record the first position when we run out of bag space, so we can return later
                                 SetPreTownRunPosition();
                             }
@@ -220,15 +220,15 @@ namespace Trinity.DbProvider
                                 double min = equippedItems.Average(i => i.DurabilityPercent);
                                 var dbsetting = CharacterSettings.Instance.RepairWhenDurabilityBelow;
 
-                                float threshold = Trinity.Player.IsInTown ? Math.Min(0.50f, dbsetting) : dbsetting;
+                                float threshold = TrinityPlugin.Player.IsInTown ? Math.Min(0.50f, dbsetting) : dbsetting;
                                 bool needsRepair = min <= threshold;
 
                                 if (needsRepair)
                                 {
                                     Logger.Log("Items may need repair, now running town-run routine.");
 
-                                    Trinity.WantToTownRun = true;
-                                    Trinity.ForceVendorRunASAP = true;
+                                    TrinityPlugin.WantToTownRun = true;
+                                    TrinityPlugin.ForceVendorRunASAP = true;
                                     SetPreTownRunPosition();
                                 }
                             }
@@ -237,63 +237,63 @@ namespace Trinity.DbProvider
 
                     if (ErrorDialog.IsVisible)
                     {
-                        Trinity.WantToTownRun = false;
+                        TrinityPlugin.WantToTownRun = false;
                     }
 
-                    LastTownRunCheckResult = Trinity.WantToTownRun;
+                    LastTownRunCheckResult = TrinityPlugin.WantToTownRun;
 
                     // Clear blacklists to triple check any potential targets
-                    if (Trinity.WantToTownRun)
+                    if (TrinityPlugin.WantToTownRun)
                     {
-                        Trinity.Blacklist1Second = new HashSet<int>();
-                        Trinity.Blacklist3Seconds = new HashSet<int>();
-                        Trinity.Blacklist15Seconds = new HashSet<int>();
-                        Trinity.Blacklist60Seconds = new HashSet<int>();
-                        Trinity.Blacklist90Seconds = new HashSet<int>();
+                        TrinityPlugin.Blacklist1Second = new HashSet<int>();
+                        TrinityPlugin.Blacklist3Seconds = new HashSet<int>();
+                        TrinityPlugin.Blacklist15Seconds = new HashSet<int>();
+                        TrinityPlugin.Blacklist60Seconds = new HashSet<int>();
+                        TrinityPlugin.Blacklist90Seconds = new HashSet<int>();
                     }
 
-                    if (Trinity.WantToTownRun && !(BrainBehavior.IsVendoring || Trinity.Player.IsInTown))
+                    if (TrinityPlugin.WantToTownRun && !(BrainBehavior.IsVendoring || TrinityPlugin.Player.IsInTown))
                     {
                         string cantUseTPreason;
                         if (!ZetaDia.Me.CanUseTownPortal(out cantUseTPreason) && !ZetaDia.IsInTown)
                         {
                             Logger.LogVerbose("It appears we need to town run but can't: {0}", cantUseTPreason);
-                            Trinity.WantToTownRun = false;
+                            TrinityPlugin.WantToTownRun = false;
                             ClearArea.Reset();
                         }
                     }
                         
-                    if (Trinity.WantToTownRun && DataDictionary.BossLevelAreaIDs.Contains(Trinity.Player.LevelAreaId))
+                    if (TrinityPlugin.WantToTownRun && DataDictionary.BossLevelAreaIDs.Contains(TrinityPlugin.Player.LevelAreaId))
                     {
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.GlobalHandler, "Unable to Town Portal - Boss Area!");
                         return false;
                     }
-                    if (Trinity.WantToTownRun && ZetaDia.IsInTown && DeathHandler.EquipmentNeedsEmergencyRepair())
+                    if (TrinityPlugin.WantToTownRun && ZetaDia.IsInTown && DeathHandler.EquipmentNeedsEmergencyRepair())
                     {
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.GlobalHandler, "EquipmentNeedsEmergencyRepair!");
                         return true;
                     }
-                    if (Trinity.WantToTownRun && Trinity.CurrentTarget != null)
+                    if (TrinityPlugin.WantToTownRun && TrinityPlugin.CurrentTarget != null)
                     {
                         TownRunCheckTimer.Restart();
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.GlobalHandler, "Restarting TownRunCheckTimer, we have a target!");
                         return false;
                     }
 
-                    if (Trinity.WantToTownRun && DataDictionary.NeverTownPortalLevelAreaIds.Contains(Trinity.Player.LevelAreaId))
+                    if (TrinityPlugin.WantToTownRun && DataDictionary.NeverTownPortalLevelAreaIds.Contains(TrinityPlugin.Player.LevelAreaId))
                     {
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.GlobalHandler, "Unable to Town Portal in this area!");
                         return false;
                     }
-                    if (Trinity.WantToTownRun && (TownRunTimerFinished() || BrainBehavior.IsVendoring) && !ClearArea.ShouldMoveToPortalPosition)
+                    if (TrinityPlugin.WantToTownRun && (TownRunTimerFinished() || BrainBehavior.IsVendoring) && !ClearArea.ShouldMoveToPortalPosition)
                     {
                         Logger.Log(TrinityLogLevel.Verbose, LogCategory.GlobalHandler, "Town run timer finished {0} or in town {1} or is vendoring {2} (TownRun)",
-                            TownRunTimerFinished(), Trinity.Player.IsInTown, BrainBehavior.IsVendoring);
+                            TownRunTimerFinished(), TrinityPlugin.Player.IsInTown, BrainBehavior.IsVendoring);
 
-                        Trinity.WantToTownRun = false;
+                        TrinityPlugin.WantToTownRun = false;
                         return true;
                     }
-                    if (Trinity.WantToTownRun && !TownRunCheckTimer.IsRunning)
+                    if (TrinityPlugin.WantToTownRun && !TownRunCheckTimer.IsRunning)
                     {
                         Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Starting town run timer");
                         TownRunCheckTimer.Start();
@@ -320,9 +320,9 @@ namespace Trinity.DbProvider
         /// </summary>
         public static void SetPreTownRunPosition()
         {
-            if (PreTownRunPosition == Vector3.Zero && PreTownRunWorldId == -1 && !Trinity.Player.IsInTown)
+            if (PreTownRunPosition == Vector3.Zero && PreTownRunWorldId == -1 && !TrinityPlugin.Player.IsInTown)
             {
-                PreTownRunPosition = Trinity.Player.Position;
+                PreTownRunPosition = TrinityPlugin.Player.Position;
             }
         }
 
@@ -335,15 +335,15 @@ namespace Trinity.DbProvider
                 return;
             }
 
-            //[Trinity 2.14.45] Child 0 type: Zeta.TreeSharp.Action
-            //[Trinity 2.14.45] Child 1 type: Zeta.TreeSharp.Decorator
-            //[Trinity 2.14.45] Child 2 type: Zeta.Common.HookExecutor IdentifyItems
-            //[Trinity 2.14.45] Child 3 type: Zeta.TreeSharp.Action
-            //[Trinity 2.14.45] Child 4 type: Zeta.Common.HookExecutor StashItems 
-            //[Trinity 2.14.45] Child 5 type: Zeta.Common.HookExecutor SellAndRepair
-            //[Trinity 2.14.45] Child 6 type: Zeta.Common.HookExecutor SalvageItems
-            //[Trinity 2.14.45] Child 7 type: Zeta.TreeSharp.Decorator
-            //[Trinity 2.14.45] Child 8 type: Zeta.TreeSharp.Action
+            //[TrinityPlugin 2.14.45] Child 0 type: Zeta.TreeSharp.Action
+            //[TrinityPlugin 2.14.45] Child 1 type: Zeta.TreeSharp.Decorator
+            //[TrinityPlugin 2.14.45] Child 2 type: Zeta.Common.HookExecutor IdentifyItems
+            //[TrinityPlugin 2.14.45] Child 3 type: Zeta.TreeSharp.Action
+            //[TrinityPlugin 2.14.45] Child 4 type: Zeta.Common.HookExecutor StashItems 
+            //[TrinityPlugin 2.14.45] Child 5 type: Zeta.Common.HookExecutor SellAndRepair
+            //[TrinityPlugin 2.14.45] Child 6 type: Zeta.Common.HookExecutor SalvageItems
+            //[TrinityPlugin 2.14.45] Child 7 type: Zeta.TreeSharp.Decorator
+            //[TrinityPlugin 2.14.45] Child 8 type: Zeta.TreeSharp.Action
 
             if (firstChild.Children.Count != 9)
                 return;
@@ -390,8 +390,8 @@ namespace Trinity.DbProvider
             if (!BrainBehavior.IsVendoring)
             {
                 Logger.Log("TownRun complete");
-                Trinity.WantToTownRun = false;
-                Trinity.ForceVendorRunASAP = false;
+                TrinityPlugin.WantToTownRun = false;
+                TrinityPlugin.ForceVendorRunASAP = false;
                 TownRunCheckTimer.Reset();
                 Helpers.Notifications.SendEmailNotification();
                 Helpers.Notifications.SendMobileNotifications();
@@ -439,7 +439,7 @@ namespace Trinity.DbProvider
         {
             get
             {
-                switch (Trinity.Player.LevelAreaId)
+                switch (TrinityPlugin.Player.LevelAreaId)
                 {
                     case 19947: // Campaign A1 Hub
                         return new Vector3(2968.16f, 2789.63f, 23.94531f);
@@ -452,7 +452,7 @@ namespace Trinity.DbProvider
                     case 270011: // A5 Hub
                         return new Vector3(502.8296f, 739.7472f, 2.598635f);
                     default:
-                        throw new ValueUnavailableException("Unknown LevelArea Id " + Trinity.Player.LevelAreaId);
+                        throw new ValueUnavailableException("Unknown LevelArea Id " + TrinityPlugin.Player.LevelAreaId);
                 }
             }
         }

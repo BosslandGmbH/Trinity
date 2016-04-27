@@ -7,7 +7,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity
 {
-    public partial class Trinity : IPlugin
+    public partial class TrinityPlugin : IPlugin
     {
 
 
@@ -37,7 +37,7 @@ namespace Trinity
         ///// <param name="power">The power.</param>
         ///// <param name="recheck">if set to <c>true</c> check again.</param>
         ///// <returns>
-        ///// Returns whether or not we can use a skill, or if it's on our own internal Trinity cooldown timer
+        ///// Returns whether or not we can use a skill, or if it's on our own internal TrinityPlugin cooldown timer
         ///// </returns>
         //public static bool SNOPowerUseTimer(SNOPower power, bool recheck = false)
         //{

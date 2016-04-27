@@ -337,7 +337,7 @@ namespace Trinity.Config
                         var globalSettings = LoadSettingsFromFile(filename);
                         loadSuccessful = globalSettings != null;
 
-                        //if (Trinity.Settings.Advanced.ForceSpecificGambleSettings && File.Exists(BattleTagSettingsFile))
+                        //if (TrinityPlugin.Settings.Advanced.ForceSpecificGambleSettings && File.Exists(BattleTagSettingsFile))
                         //{
                         //    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Loading BattleTag Settings for Gambling");
                         //    var specificSettings = LoadSettingsFromFile(BattleTagSettingsFile, false);
@@ -474,7 +474,7 @@ namespace Trinity.Config
                         filename = GlobalSettingsFile;
                         SaveToFile(filename, this);
 
-                        //if (Trinity.Settings.Advanced.ForceSpecificGambleSettings && File.Exists(BattleTagSettingsFile))
+                        //if (TrinityPlugin.Settings.Advanced.ForceSpecificGambleSettings && File.Exists(BattleTagSettingsFile))
                         //{
                         //    Logger.Log("Saving Gambling settings to Specific settings file");
                         //    filename = BattleTagSettingsFile;

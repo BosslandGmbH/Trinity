@@ -30,7 +30,7 @@ namespace Trinity
         {
             get
             {
-                return Trinity.ObjectCache;
+                return TrinityPlugin.ObjectCache;
             }
         }
         private static CacheData.PlayerCache Player
@@ -54,7 +54,7 @@ namespace Trinity
         {
             get
             {
-                return Trinity.CurrentTarget;
+                return TrinityPlugin.CurrentTarget;
             }
         }
         private static HashSet<SNOPower> Hotbar
@@ -68,7 +68,7 @@ namespace Trinity
         {
             get
             {
-                return Trinity.MainGridProvider;
+                return TrinityPlugin.MainGridProvider;
             }
         }
         #endregion
@@ -101,7 +101,7 @@ namespace Trinity
 
             using (new PerformanceLogger("CanRayCast"))
             {
-                if (DataDictionary.NeverRaycastLevelAreaIds.Contains(Trinity.Player.LevelAreaId))
+                if (DataDictionary.NeverRaycastLevelAreaIds.Contains(TrinityPlugin.Player.LevelAreaId))
                     return true;
 
                 bool rayCastHit = Navigator.Raycast(vStartLocation, vDestination);
@@ -128,7 +128,7 @@ namespace Trinity
             var butcherFloorPanels = CacheData.TimeBoundAvoidance.Where(aoe => DataDictionary.ButcherFloorPanels.Contains(aoe.ActorSNO)).ToList();
             if (butcherFloorPanels.Any())
             {
-                foreach (var safePoint in DataDictionary.ButcherPanelPositions.OrderBy(p => p.Value.Distance2DSqr(Trinity.Player.Position)))
+                foreach (var safePoint in DataDictionary.ButcherPanelPositions.OrderBy(p => p.Value.Distance2DSqr(TrinityPlugin.Player.Position)))
                 {
                     // Floor panel with fire animation was added to cache
                     if (butcherFloorPanels.Any(p => p.ActorSNO == safePoint.Key && p.Position.Distance2DSqr(safePoint.Value) <= 15f * 15f))
@@ -222,8 +222,8 @@ namespace Trinity
             
             if (maxDistance <= 0 || maxDistance <= minDistance)
             {
-                var dhMaxDistance = Math.Max(Trinity.Settings.Combat.DemonHunter.KiteMaxDistance, Trinity.Settings.Combat.DemonHunter.KiteLimit + 5);
-                maxDistance = Trinity.Player.ActorClass == ActorClass.DemonHunter ? dhMaxDistance : 100f;
+                var dhMaxDistance = Math.Max(TrinityPlugin.Settings.Combat.DemonHunter.KiteMaxDistance, TrinityPlugin.Settings.Combat.DemonHunter.KiteLimit + 5);
+                maxDistance = TrinityPlugin.Player.ActorClass == ActorClass.DemonHunter ? dhMaxDistance : 100f;
             }
 
             const int maxWeight = 100;
@@ -251,7 +251,7 @@ namespace Trinity
             int navRaycast = 0;
             int pointsFound = 0;
 
-            int worldId = Trinity.Player.WorldID;
+            int worldId = TrinityPlugin.Player.WorldID;
             Stopwatch[] timers = Enumerable.Range(0, 12).Select(i => new Stopwatch()).ToArray();
 
             Vector2 minWorld;
@@ -307,7 +307,7 @@ namespace Trinity
                         Vector2 xy = MainGridProvider.GridToWorld(new Point(x, y));
                         Vector3 xyz = Vector3.Zero;
 
-                        if (Trinity.Settings.Combat.Misc.UseNavMeshTargeting)
+                        if (TrinityPlugin.Settings.Combat.Misc.UseNavMeshTargeting)
                         {
                             xyz = new Vector3(xy.X, xy.Y, MainGridProvider.GetHeight(xy));
                         }
@@ -401,7 +401,7 @@ namespace Trinity
 
                         // Boss Areas
                         timers[5].Start();
-                        if (UnSafeZone.UnsafeKiteAreas.Any(a => a.WorldId == Trinity.Player.WorldID && a.Position.Distance2DSqr(gridPoint.Position) <= (a.Radius * a.Radius)))
+                        if (UnSafeZone.UnsafeKiteAreas.Any(a => a.WorldId == TrinityPlugin.Player.WorldID && a.Position.Distance2DSqr(gridPoint.Position) <= (a.Radius * a.Radius)))
                         {
                             continue;
                         }
@@ -479,7 +479,7 @@ namespace Trinity
                         else if (!avoidDeath) // melee avoidance use only
                         {
                             timers[9].Start();
-                            var monsterCount = Trinity.ObjectCache.Count(u => u.IsUnit && u.Position.Distance(gridPoint.Position) <= 2.5f);
+                            var monsterCount = TrinityPlugin.ObjectCache.Count(u => u.IsUnit && u.Position.Distance(gridPoint.Position) <= 2.5f);
                             if (monsterCount > 0)
                                 gridPoint.Weight *= monsterCount;
                             timers[9].Stop();
@@ -555,8 +555,8 @@ namespace Trinity
 
         internal static Vector3 SimpleUnstucker()
         {
-            var myPos = Trinity.Player.Position;
-            float rotation = Trinity.Player.Rotation;
+            var myPos = TrinityPlugin.Player.Position;
+            float rotation = TrinityPlugin.Player.Rotation;
 
             const double totalPoints = 2 * Math.PI;
             const double start = 0;

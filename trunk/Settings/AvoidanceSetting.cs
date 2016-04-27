@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Windows;
+using System.Windows.Input;
 using Adventurer.UI.UIComponents;
 using JetBrains.Annotations;
 using Trinity.Config.Combat;
@@ -17,6 +18,8 @@ using Trinity.Helpers;
 using Trinity.Settings.Loot;
 using TrinityCoroutines.Resources;
 using Trinity.Technicals;
+using Trinity.UIComponents;
+using Extensions = Zeta.Common.Extensions;
 
 namespace Trinity.Config
 {
@@ -55,7 +58,6 @@ namespace Trinity.Config
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(null)]
         public IAvoidanceHandler Handler
         {
             get { return _handler; }
@@ -71,16 +73,20 @@ namespace Trinity.Config
                 a.Handler = this.Handler;
         }
 
+        public override void LoadDefaults()
+        {
+            base.LoadDefaults();
+            if (Handler != null)
+            {
+                Handler.LoadDefaults();
+                OnPropertyChanged(nameof(Handler));
+            }
+        }
+
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {
-            foreach (var p in GetType().GetProperties())
-            {
-                foreach (var dv in p.GetCustomAttributes(true).OfType<DefaultValueAttribute>())
-                {
-                    p.SetValue(this, dv.Value);
-                }
-            }
+            LoadDefaults();
         }
     }
 
@@ -92,6 +98,7 @@ namespace Trinity.Config
         private float _avoiderLocalRadius;
         private int _minimumHighestNodeWeightTrigger;
         private float _minimumNearbyWeightPctTotalTrigger;
+        private int _selectedTabIndex;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public AvoidanceSetting()
@@ -100,6 +107,22 @@ namespace Trinity.Config
 
             if (Avoidances == null)
                 Avoidances = new FullyObservableCollection<AvoidanceDataSettingViewModel>();
+        }
+        [IgnoreDataMember]
+        public Tab SelectedTab => (Tab)SelectedTabIndex;
+
+        public int SelectedTabIndex
+        {
+            get { return _selectedTabIndex; }
+            set { SetField(ref _selectedTabIndex, value); }
+        }
+
+        public enum Tab
+        {
+            GroundEffects,
+            MonsterAbilities,
+            Kiting,
+            Misc,
         }
 
         [DataMember]
@@ -160,9 +183,8 @@ namespace Trinity.Config
             foreach (var avoidanceSetting in Avoidances)
             {
                 AvoidanceData def;
-                if (avoidanceSetting != null && avoidanceSetting.Name != null && avoidanceSetting .Handler != null && data.TryGetValue(avoidanceSetting.Name, out def))
+                if (avoidanceSetting?.Name != null && avoidanceSetting .Handler != null && data.TryGetValue(avoidanceSetting.Name, out def))
                 {
-                    //Logger.Log("Applying Loaded Setting {0} to avoidance", avoidanceSetting.Name);
                     avoidanceSetting.CopyTo(def);
                 }
             }
@@ -176,7 +198,7 @@ namespace Trinity.Config
 
                 foreach (var def in AvoidanceDataFactory.AvoidanceData)
                 {
-                    if (def == null || def.Name == null || def.Handler == null)
+                    if (def?.Name == null || def.Handler == null)
                         continue;
 
                     AvoidanceDataSettingViewModel setting;
@@ -187,16 +209,13 @@ namespace Trinity.Config
                         {
                             // Handler name was invalid but other settings exist.
                             setting.Handler = def.Handler;
-                            LoadHandlerDefaults(def);
+                            (def.Handler as NotifyBase)?.LoadDefaults();
                         }
-
-                        //Logger.Log("Applying Loaded Setting {0}", setting.Name);
                         setting.CopyTo(def);              
                     }
                     else 
                     {
-                        //Logger.Log("Creating new Setting for {0} ", def.Name);
-                        LoadHandlerDefaults(def);
+                        (def.Handler as NotifyBase)?.LoadDefaults();
                         Avoidances.Add(new AvoidanceDataSettingViewModel(def));
                     }
                 }
@@ -204,12 +223,45 @@ namespace Trinity.Config
             });
         }
 
-        private static void LoadHandlerDefaults(AvoidanceData def)
+        public ICommand SelectAllCommand
         {
-            var handlerBase = def.Handler as NotifyBase;
-            if (handlerBase != null)
+            get
             {
-                handlerBase.LoadDefaults();
+                return new RelayCommand(param =>
+                {
+                    foreach (var item in Avoidances)
+                    {
+                        item.IsEnabled = true;
+                    }
+                });
+            }
+        }
+
+        public ICommand SelectNoneCommand
+        {
+            get
+            {
+                return new RelayCommand(param =>
+                {
+                    foreach (var item in Avoidances)
+                    {
+                        item.IsEnabled = false;
+                    }
+                });
+            }
+        }
+
+        public ICommand SelectDefaultsCommand
+        {
+            get
+            {
+                return new RelayCommand(param =>
+                {
+                    foreach (var item in Avoidances)
+                    {
+                        item.LoadDefaults();
+                    }
+                });
             }
         }
 

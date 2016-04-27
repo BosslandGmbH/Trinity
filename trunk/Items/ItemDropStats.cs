@@ -173,10 +173,10 @@ namespace Trinity
                 if (ZetaDia.Me.IsFullyValid())
                     return;
 
-                if (!Trinity.Settings.Advanced.OutputReports)
+                if (!TrinityPlugin.Settings.Advanced.OutputReports)
                     return;
 
-                if (Player.WorldID <= 0 || Trinity.Player.ActorClass == ActorClass.Invalid)
+                if (Player.WorldID <= 0 || TrinityPlugin.Player.ActorClass == ActorClass.Invalid)
                     return;
 
                 /*
@@ -186,7 +186,7 @@ namespace Trinity
                  */
                 try
                 {
-                    Level = Trinity.Player.Level;
+                    Level = TrinityPlugin.Player.Level;
 
                     if (Player.Level < 70)
                     {
@@ -237,20 +237,20 @@ namespace Trinity
                             logWriter.WriteLine("===== Misc Statistics =====");
                             logWriter.WriteLine("Total tracking time: " + ((int)totalRunningTime.TotalHours) + "h " + totalRunningTime.Minutes +
                                                 "m " + totalRunningTime.Seconds + "s");
-                            logWriter.WriteLine("Total deaths: " + Trinity.TotalDeaths + " [" + Math.Round(Trinity.TotalDeaths / totalRunningTime.TotalHours, 2) + " per hour]");
-                            logWriter.WriteLine("Total games (approx): " + Trinity.TotalLeaveGames + " [" + Math.Round(Trinity.TotalLeaveGames / totalRunningTime.TotalHours, 2) + " per hour]");
-                            logWriter.WriteLine("Total Caches Opened:" + Trinity.TotalBountyCachesOpened);
-                            if (Trinity.TotalLeaveGames == 0 && Trinity.TotalGamesJoined > 0)
+                            logWriter.WriteLine("Total deaths: " + TrinityPlugin.TotalDeaths + " [" + Math.Round(TrinityPlugin.TotalDeaths / totalRunningTime.TotalHours, 2) + " per hour]");
+                            logWriter.WriteLine("Total games (approx): " + TrinityPlugin.TotalLeaveGames + " [" + Math.Round(TrinityPlugin.TotalLeaveGames / totalRunningTime.TotalHours, 2) + " per hour]");
+                            logWriter.WriteLine("Total Caches Opened:" + TrinityPlugin.TotalBountyCachesOpened);
+                            if (TrinityPlugin.TotalLeaveGames == 0 && TrinityPlugin.TotalGamesJoined > 0)
                             {
-                                if (Trinity.TotalGamesJoined == 1 && Trinity.TotalProfileRecycles > 1)
+                                if (TrinityPlugin.TotalGamesJoined == 1 && TrinityPlugin.TotalProfileRecycles > 1)
                                 {
                                     logWriter.WriteLine("(a profile manager/death handler is interfering with join/leave game events, attempting to guess total runs based on profile-loops)");
-                                    logWriter.WriteLine("Total full profile cycles: " + Trinity.TotalProfileRecycles + " [" + Math.Round(Trinity.TotalProfileRecycles / totalRunningTime.TotalHours, 2) + " per hour]");
+                                    logWriter.WriteLine("Total full profile cycles: " + TrinityPlugin.TotalProfileRecycles + " [" + Math.Round(TrinityPlugin.TotalProfileRecycles / totalRunningTime.TotalHours, 2) + " per hour]");
                                 }
                                 else
                                 {
                                     logWriter.WriteLine("(your games left value may be bugged @ 0 due to profile managers/routines etc., now showing games joined instead:)");
-                                    logWriter.WriteLine("Total games joined: " + Trinity.TotalGamesJoined + " [" + Math.Round(Trinity.TotalGamesJoined / totalRunningTime.TotalHours, 2) + " per hour]");
+                                    logWriter.WriteLine("Total games joined: " + TrinityPlugin.TotalGamesJoined + " [" + Math.Round(TrinityPlugin.TotalGamesJoined / totalRunningTime.TotalHours, 2) + " per hour]");
                                 }
                             }
 

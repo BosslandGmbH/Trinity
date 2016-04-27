@@ -339,12 +339,14 @@ namespace Trinity.Combat.Abilities
         /// <returns></returns>
         private static bool EvasiveFireCondition(SkillMeta meta)
         {
+            meta.CastRange = Settings.Combat.DemonHunter.CastRangeEvasiveFire;
+
             if (Skills.DemonHunter.Multishot.IsActive || Skills.DemonHunter.Strafe.IsActive)
             {
                 // Still generates resource when hitting nothing.
                 if (CurrentTarget.IsBoss && !ShouldRefreshBastiansGeneratorBuff)
                 {
-                    meta.CastRange = Skills.DemonHunter.Multishot.IsActive ? 80f : 40f;
+                    meta.CastRange = Skills.DemonHunter.Multishot.IsActive ? meta.CastRange : 40f;
                 }
 
                 meta.TargetUnitSelector = ret => TargetUtil.GetClosestUnit();
@@ -353,10 +355,10 @@ namespace Trinity.Combat.Abilities
             if (Legendary.YangsRecurve.IsEquipped && Legendary.DeadMansLegacy.IsEquipped)
             {
                 // Only use when we have to, it deals basically no damage, just generates resource and bastians buff.
-                return (Player.PrimaryResourcePct < 0.5 || ShouldRefreshBastiansGeneratorBuff) && TargetUtil.AnyMobsInRange(80f);
+                return (Player.PrimaryResourcePct < 0.5 || ShouldRefreshBastiansGeneratorBuff) && TargetUtil.AnyMobsInRange(meta.CastRange);
             }
 
-            return TargetUtil.AnyMobsInRange(80f) || UseDestructiblePower;
+            return TargetUtil.AnyMobsInRange(meta.CastRange, Settings.Combat.DemonHunter.ClusterSizeEvasiveFire) || UseDestructiblePower;
         }
 
         /// <summary>
@@ -364,17 +366,17 @@ namespace Trinity.Combat.Abilities
         /// </summary>
         private static bool ImpaleCondition(SkillMeta meta)
         {
-            meta.CastRange = 80f;
+            meta.CastRange = Settings.Combat.DemonHunter.CastRangeImpale;
             meta.TargetUnitSelector = null;
 
             // Not enough resource
             if (Player.PrimaryResource <= EnergyReserve || Player.PrimaryResource <= GetAdjustedCost(20))
                 return false;
 
-            if (CurrentTarget.RadiusDistance > 75f || !TargetUtil.AnyMobsInRange(75f))
+            if (CurrentTarget.RadiusDistance > meta.CastRange || !TargetUtil.AnyMobsInRange(meta.CastRange))
                 return false;            
 
-            if (TargetUtil.AnyMobsInRange(12, 4) || (IsUsingShadowFanBuild || Legendary.KarleisPoint.IsEquipped) && TargetUtil.AnyMobsInRange(75f) || Player.PrimaryResourcePct >= 0.5)
+            if (TargetUtil.AnyMobsInRange(meta.CastRange, Settings.Combat.DemonHunter.ClusterSizeImpale) || (IsUsingShadowFanBuild || Legendary.KarleisPoint.IsEquipped) && TargetUtil.AnyMobsInRange(meta.CastRange) || Player.PrimaryResourcePct >= 0.5)
                 return true;
             
             return false;
@@ -406,7 +408,7 @@ namespace Trinity.Combat.Abilities
         /// </summary>
         private static bool ChakramCondition(SkillMeta meta)
         {
-            meta.CastRange = 50f;
+            meta.CastRange = Settings.Combat.DemonHunter.CastRangeChakram;
 
             // Spam it for Shuriken Cloud buff
             if (Runes.DemonHunter.ShurikenCloud.IsActive && TimeSincePowerUse(SNOPower.DemonHunter_Chakram) >= 110000 &&
@@ -421,7 +423,7 @@ namespace Trinity.Combat.Abilities
                 return true;
 
             // Monsters nearby
-            if (TargetUtil.ClusterExists(45f,4))
+            if (TargetUtil.ClusterExists(meta.CastRange, Settings.Combat.DemonHunter.ClusterSizeChakram))
                 return true;       
 
             return false;
@@ -432,7 +434,7 @@ namespace Trinity.Combat.Abilities
         /// </summary>
         private static bool ClusterArrowCondition(SkillMeta meta)
         {
-            meta.CastRange = 75f;
+            meta.CastRange = Settings.Combat.DemonHunter.CastRangeClusterArrow;
             meta.TargetUnitSelector = ret => GetClusterTarget();
 
             // Natalyas - Wait for damage buff
@@ -445,6 +447,7 @@ namespace Trinity.Combat.Abilities
 
             return true;
         }
+
 
         private static TrinityCacheObject GetClusterTarget()
         {
@@ -511,7 +514,7 @@ namespace Trinity.Combat.Abilities
             //meta.ReUseDelay = 250;
             meta.TargetPositionSelector = ret =>
             {
-                var kitePoint = NavHelper.FindSafeZone(false, 0, CurrentTarget.Position, true, Trinity.ObjectCache, false);
+                var kitePoint = NavHelper.FindSafeZone(false, 0, CurrentTarget.Position, true, TrinityPlugin.ObjectCache, false);
                 if (kitePoint == Vector3.Zero)
                 {
                     return TargetUtil.GetZigZagTarget(CurrentTarget.Position, 20f);
@@ -522,7 +525,7 @@ namespace Trinity.Combat.Abilities
                 }
                 
             };
-            //meta.TargetPositionSelector = ret => NavHelper.FindSafeZone(false, 0, CurrentTarget.Position, true, Trinity.ObjectCache, false);
+            //meta.TargetPositionSelector = ret => NavHelper.FindSafeZone(false, 0, CurrentTarget.Position, true, TrinityPlugin.ObjectCache, false);
             meta.CastFlags = CanCastFlags.NoTimer;
             meta.RequiredResource = Math.Max(Settings.Combat.DemonHunter.StrafeMinHatred, 12);
 
@@ -719,11 +722,11 @@ namespace Trinity.Combat.Abilities
                 return true;
 
             // Ferrets used for picking up Health Globes when low on Health
-            if (Runes.DemonHunter.FerretCompanion.IsActive && Trinity.ObjectCache.Any(o => o.Type == TrinityObjectType.HealthGlobe && o.Distance < 60f) && Player.CurrentHealthPct < EmergencyHealthPotionLimit)
+            if (Runes.DemonHunter.FerretCompanion.IsActive && TrinityPlugin.ObjectCache.Any(o => o.Type == TrinityObjectType.HealthGlobe && o.Distance < 60f) && Player.CurrentHealthPct < EmergencyHealthPotionLimit)
                 return true;
 
             // Use Wolf Howl on Unique/Elite/Champion - Would help for farming trash, but trash farming should not need this - Used on Elites to reduce Deaths per hour
-            if (Runes.DemonHunter.WolfCompanion.IsActive && (TargetUtil.AnyElitesInRange(100f) || TargetUtil.AnyMobsInRange(40, 8)))            
+            if (Runes.DemonHunter.WolfCompanion.IsActive && (TargetUtil.AnyElitesInRange(100f) || TargetUtil.AnyMobsInRange(40, Settings.Combat.DemonHunter.ClusterSizeCompanionWolf)))            
                 return true;
 
             // Companion off CD
@@ -755,7 +758,7 @@ namespace Trinity.Combat.Abilities
             if (meta.Skill.Charges == 0)
                 return false;
 
-            if (TargetUtil.AnyMobsInRange(65) && Trinity.PlayerOwnedDHSentryCount < MaxSentryCount)
+            if (TargetUtil.AnyMobsInRange(65) && TrinityPlugin.PlayerOwnedDHSentryCount < MaxSentryCount)
                 return true;
 
             return false;
@@ -904,6 +907,9 @@ namespace Trinity.Combat.Abilities
         private static bool VengeanceCondition(SkillMeta meta)
         {
             meta.CastFlags = CanCastFlags.NoTimer;
+
+            if (Settings.Combat.DemonHunter.AlwaysVengeance)
+                return true;
 
             if (Legendary.Dawn.IsEquipped)
                 return true;

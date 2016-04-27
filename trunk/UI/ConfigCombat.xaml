@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" Background="#343434"
              d:DesignHeight="350" d:DesignWidth="390">
-    <Grid>
-        <TabControl>
+    <Grid Margin="10,10,10,0">
+        <TabControl Padding="10">
             <TabItem Header="Misc" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Combat\ConfigMisc.xaml"/>
             </TabItem>

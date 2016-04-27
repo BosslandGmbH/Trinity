@@ -62,7 +62,7 @@ namespace Trinity.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || ZetaDia.WorldType != Act.OpenWorld)
                 return false;
 
-            if (Trinity.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
+            if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
                 return false;
 
             if (DateTime.UtcNow < DisabledUntil)
@@ -100,7 +100,7 @@ namespace Trinity.Coroutines.Town
 
             _backpackCandidates = GetLegendaryExtractionCandidates(InventorySlot.BackpackItems).DistinctBy(i => i.ActorSnoId).ToList();
 
-            _stashCandidates = Trinity.Settings.KanaisCube.CubeExtractFromStash
+            _stashCandidates = TrinityPlugin.Settings.KanaisCube.CubeExtractFromStash
                 ? GetLegendaryExtractionCandidates(InventorySlot.SharedStash).DistinctBy(i => i.ActorSnoId).ToList()
                 : new List<CachedItem>();
 
@@ -118,7 +118,7 @@ namespace Trinity.Coroutines.Town
         {
             var result = new List<CachedItem>();
 
-            if (Trinity.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
+            if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
                 return result;
 
            // var source = ZetaDia.Actors.ACDList.OfType<ACDItem>().Where(i => i.InventorySlot == slot);
@@ -142,11 +142,11 @@ namespace Trinity.Coroutines.Town
                 if (_blacklistedActorSnoIds.Contains(item.ActorSnoId))
                     continue;
 
-                if (Trinity.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed &&
-                    (ItemList.ShouldStashItem(item) || Trinity.Settings.Loot.ItemFilterMode != ItemFilterMode.ItemList))
+                if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed &&
+                    (ItemList.ShouldStashItem(item) || TrinityPlugin.Settings.Loot.ItemFilterMode != ItemFilterMode.ItemList))
                     continue;
 
-                if (Trinity.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient &&
+                if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient &&
                     item.IsAncient)
                     continue;
 
@@ -194,7 +194,7 @@ namespace Trinity.Coroutines.Town
                 if (!started)
                 {
                     Logger.Log("[ExtractLegendaryPowers] Extraction is currently set to: {0}",
-                        Trinity.Settings.KanaisCube.ExtractLegendaryPowers);
+                        TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers);
                     ;
                     Logger.Log("[ExtractLegendaryPowers] We begin the extractions.");
                     started = true;
@@ -220,7 +220,7 @@ namespace Trinity.Coroutines.Town
                     if (!await TakeItemsFromStash.Execute(ExtractLegendaryPowerRecipe.Select(pair => (int) pair.Key), 5000))
                         return false;
                 }
-                else if (_stashCandidates.Any() && Trinity.Settings.KanaisCube.CubeExtractFromStash)
+                else if (_stashCandidates.Any() && TrinityPlugin.Settings.KanaisCube.CubeExtractFromStash)
                 {
                     Logger.Log("[ExtractLegendaryPowers] Getting Legendaries from Stash");
 

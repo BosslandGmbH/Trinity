@@ -23,11 +23,11 @@ namespace Trinity.Reference
                 var item = new Item(cItem.AcdItem);
                 var wrappedItem = new ItemWrapper(cItem.AcdItem);
 
-                if (Trinity.Settings.Loot.ItemRank.AncientItemsOnly && wrappedItem.IsEquipment && !cItem.IsAncient)
+                if (TrinityPlugin.Settings.Loot.ItemRank.AncientItemsOnly && wrappedItem.IsEquipment && !cItem.IsAncient)
                 {
                     result = false;
                 }
-                else if (Trinity.Settings.Loot.ItemRank.RequireSocketsOnJewelry && wrappedItem.IsJewelry && cItem.AcdItem.NumSockets != 0)
+                else if (TrinityPlugin.Settings.Loot.ItemRank.RequireSocketsOnJewelry && wrappedItem.IsJewelry && cItem.AcdItem.NumSockets != 0)
                 {
                     result = false;
                 }
@@ -95,13 +95,13 @@ namespace Trinity.Reference
         private static List<ItemRank> LastRankedItemsList = new List<ItemRank>();
         public static List<ItemRank> GetRankedItemsFromSettings()
         {
-            var irs = Trinity.Settings.Loot.ItemRank;
-            var settingSignature = (int)Trinity.Player.ActorClass + (int)irs.ItemRankMode + irs.MinimumRank + irs.MinimumSampleSize + irs.MinimumPercent;
+            var irs = TrinityPlugin.Settings.Loot.ItemRank;
+            var settingSignature = (int)TrinityPlugin.Player.ActorClass + (int)irs.ItemRankMode + irs.MinimumRank + irs.MinimumSampleSize + irs.MinimumPercent;
             if (settingSignature == lastSettingSignature)
                 return LastRankedItemsList;
 
             lastSettingSignature = settingSignature;
-            LastRankedItemsList = GetRankedItemsFromSettings(Trinity.Settings.Loot.ItemRank);
+            LastRankedItemsList = GetRankedItemsFromSettings(TrinityPlugin.Settings.Loot.ItemRank);
             return LastRankedItemsList;
         }
 

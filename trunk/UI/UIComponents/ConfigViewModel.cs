@@ -3,9 +3,11 @@ using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Adventurer;
 using Trinity.Config;
 using Trinity.Config.Combat;
 using Trinity.Config.Loot;
+using Trinity.Framework;
 using Trinity.Helpers;
 using Trinity.ItemRules;
 using Trinity.Items;
@@ -45,10 +47,10 @@ namespace Trinity.UI.UIComponents
                     {
                         try
                         {
-                            if (Trinity.StashRule == null && _Model.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+                            if (TrinityPlugin.StashRule == null && _Model.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
                             {
                                 // Load interpreter for the first time if needed
-                                Trinity.StashRule = new Interpreter();
+                                TrinityPlugin.StashRule = new Interpreter();
                             }
 
                             _Model.CopyTo(_OriginalModel);
@@ -59,12 +61,6 @@ namespace Trinity.UI.UIComponents
                                 BotManager.SetBotTicksPerSecond();
 
                             Logger.Log("TPSActual={0}", BotMain.TicksPerSecond);
-
-                            if (_Model.Advanced.UnstuckerEnabled != _OriginalModel.Advanced.UnstuckerEnabled)
-                                BotManager.SetUnstuckProvider();
-
-                            if (_Model.Loot.ItemFilterMode != _OriginalModel.Loot.ItemFilterMode)
-                                BotManager.SetItemManagerProvider();
 
                             CacheData.FullClear();
                             UsedProfileManager.SetProfileInWindowTitle();
@@ -289,14 +285,14 @@ namespace Trinity.UI.UIComponents
                     parameter =>
                     {
                         DialogResult rusure = MessageBox.Show("This will force all bots running under this Demonbuddy directory to use a shared configuration file.\n"
-                                                              + "You can undo this by removing the Trinity.xml file under your Demonbuddy settings directory. \n"
+                                                              + "You can undo this by removing the TrinityPlugin.xml file under your Demonbuddy settings directory. \n"
                                                               + "Are you sure?",
                             "Confirm global settings",
                             MessageBoxButtons.OKCancel);
 
                         if (rusure == DialogResult.OK)
                         {
-                            Trinity.Settings.Save(true);
+                            TrinityPlugin.Settings.Save(true);
                         }
                     });
                 DumpSkillsCommand = new RelayCommand(
@@ -308,7 +304,7 @@ namespace Trinity.UI.UIComponents
             }
             catch (Exception ex)
             {
-                Logger.LogError("Error creating Trinity View Model {0}", ex);
+                Logger.LogError("Error creating TrinityPlugin View Model {0}", ex);
             }
         }
 
@@ -522,7 +518,7 @@ namespace Trinity.UI.UIComponents
         public ICommand ResetAllCommand { get; private set; }
 
         /// <summary>
-        ///     Makes Trinity use a "Global" configuration file
+        ///     Makes TrinityPlugin use a "Global" configuration file
         /// </summary>
         /// <value>The reset command for all settings.</value>
         public ICommand UseGlobalConfigFileCommand { get; private set; }
@@ -761,12 +757,12 @@ namespace Trinity.UI.UIComponents
                         {
                             _Model.CopyTo(_OriginalModel);
                             _OriginalModel.Save();
-                            if (Trinity.StashRule == null)
-                                Trinity.StashRule = new Interpreter();
+                            if (TrinityPlugin.StashRule == null)
+                                TrinityPlugin.StashRule = new Interpreter();
 
-                            if (Trinity.StashRule != null)
+                            if (TrinityPlugin.StashRule != null)
                             {
-                                BotMain.PauseWhile(Trinity.StashRule.reloadFromUI);
+                                BotMain.PauseWhile(TrinityPlugin.StashRule.reloadFromUI);
                             }
                         }
                         catch (Exception ex)

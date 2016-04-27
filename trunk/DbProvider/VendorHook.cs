@@ -33,7 +33,7 @@ namespace Trinity.DbProvider
                 bool? result = null;
 
                 // Can't manage inventory while participating in a greater rift.
-                if (Trinity.Player.IsInventoryLockedForGreaterRift || !Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
+                if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
                     result = false;
 
                 // Learn some recipies.
@@ -89,7 +89,7 @@ namespace Trinity.DbProvider
                 bool? result = null;
 
                 // Can't manage inventory while participating in a greater rift.
-                if (Trinity.Player.IsInventoryLockedForGreaterRift || !Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
+                if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
                     result = false;
 
                 // Run again in case we missed first time due to full bags.

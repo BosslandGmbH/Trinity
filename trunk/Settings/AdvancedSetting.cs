@@ -638,7 +638,9 @@ namespace Trinity.Config
         [OnDeserializing()]
         internal void OnDeserializingMethod(StreamingContext context)
         {
-            ThrottleAPS = true;
+            TPSEnabled = true;
+            TPSLimit = 15;
+            ThrottleAPS = false;
             ThrottleAPSActionCount = 10;
             CacheRefreshRate = 100;
             OutputReports = true;

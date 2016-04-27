@@ -25,6 +25,7 @@ using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Utilities;
 using Trinity.Helpers;
 using Trinity.Items;
+using Trinity.Movement;
 using Trinity.Settings.Loot;
 using Trinity.Technicals;
 using Trinity.UI;
@@ -45,9 +46,9 @@ using BotManager = Trinity.BotManager;
 namespace Trinity
 {
     /// <summary>
-    /// Trinity DemonBuddy Plugin 
+    /// TrinityPlugin DemonBuddy Plugin 
     /// </summary>
-    public partial class Trinity : ICommunicationEnabledPlugin
+    public partial class TrinityPlugin : ICommunicationEnabledPlugin
     {
         public const bool IsDeveloperLoggingEnabled = false;
 
@@ -64,7 +65,7 @@ namespace Trinity
                 if (_version != null) return _version;
                 var verXml = XDocument.Load(FileManager.VersionPath).Descendants("Revision").FirstOrDefault();
                 if (verXml != null) return new Version(2,14, int.Parse(verXml.Value));
-                return new Version(2, 14, 0);
+                return new Version(2, 41, 0);
             }
         }
 
@@ -80,7 +81,7 @@ namespace Trinity
         {
             get
             {
-                return string.Format("Trinity v{0}", Version);
+                return string.Format("TrinityPlugin v{0}", Version);
             }
         }
 
@@ -103,7 +104,7 @@ namespace Trinity
         {
             try
             {
-                using (new PerformanceLogger("Trinity Pulse"))
+                using (new PerformanceLogger("TrinityPlugin Pulse"))
                 {
 
                     if (ZetaDia.Me == null)
@@ -115,7 +116,7 @@ namespace Trinity
                     if (RiftProgression.IsInRift && DateTime.UtcNow.Subtract(_lastTestPulseTime).TotalMilliseconds > 5000)
                     {
                         _lastTestPulseTime = DateTime.UtcNow;
-                        Logger.LogSpecial(() => $"RiftProgression%={Globals.RiftProgressionPct} RiftSouls={Globals.RiftSouls}");
+                        Logger.LogSpecial(() => $"RiftProgression%={Core.Globals.RiftProgressionPct} RiftSouls={Core.Globals.RiftSouls}");
                     }
 
                     using (new PerformanceLogger("OnPulse"))
@@ -233,7 +234,7 @@ namespace Trinity
                 {
                     Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Cannot enable plugin. Invalid path: {0}", FileManager.PluginPath);
                     Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Please check you have installed the plugin to the correct location, and then restart DemonBuddy and re-enable the plugin.");
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, @"Plugin should be installed to \<DemonBuddyFolder>\Plugins\Trinity\");
+                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, @"Plugin should be installed to \<DemonBuddyFolder>\Plugins\TrinityPlugin\");
                 }
                 else
                 {
@@ -244,10 +245,9 @@ namespace Trinity
                     // Settings are available after this... 
                     LoadConfiguration();
 
-                    
 
-                    Navigator.PlayerMover = new PlayerMover();
-                    BotManager.SetUnstuckProvider();
+                    Navigator.PlayerMover = Core.PlayerMover;
+                    Navigator.StuckHandler = Core.StuckHandler;
                     GameEvents.OnPlayerDied += TrinityOnDeath;
                     GameEvents.OnGameJoined += TrinityOnJoinGame;
                     GameEvents.OnGameLeft += TrinityOnLeaveGame;
@@ -342,7 +342,7 @@ namespace Trinity
             ItemManager.Current = new LootRuleItemManager();
 
             Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "");
-            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "DISABLED: Trinity is now shut down...");
+            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "DISABLED: TrinityPlugin is now shut down...");
             Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "");
             GenericCache.Shutdown();
             GenericBlacklist.Shutdown();
@@ -373,7 +373,7 @@ namespace Trinity
             PluginCheck.CheckAndInstallTrinityRoutine();
             Logger.Log("Initialized v{0}", Version);
 
-            Logger.LogVerbose("Trinity Initialized with PID: {0} CurrentThread={1} '{2}' CanAccessApplication={3}",
+            Logger.LogVerbose("TrinityPlugin Initialized with PID: {0} CurrentThread={1} '{2}' CanAccessApplication={3}",
                 Process.GetCurrentProcess().Id, Thread.CurrentThread.ManagedThreadId,
                 Thread.CurrentThread.Name, Application.Current.CheckAccess());
 
@@ -394,22 +394,24 @@ namespace Trinity
             return (other.Name == Name) && (other.Version == Version);
         }
 
-        private static Trinity _instance;
-        public static Trinity Instance
+        private static TrinityPlugin _instance;
+        public static TrinityPlugin Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new Trinity();
+                    _instance = new TrinityPlugin();
                 }
                 return _instance;
             }
         }
 
+        public static StuckHandler StuckHandler { get; set; }
+
         //public static bool IsMoveRequested { get; set; }
 
-        public Trinity()
+        public TrinityPlugin()
         {
             _instance = this;
             PluginCheck.CheckAndInstallTrinityRoutine();
@@ -423,23 +425,23 @@ namespace Trinity
         /// </summary>
         public static void NavServerReport(bool silent = false, MoveResult moveResult = default(MoveResult), [System.Runtime.CompilerServices.CallerMemberName] string caller = "")
         {
-            if (Navigator.SearchGridProvider.Width == 0 || Navigator.SearchGridProvider.SearchArea.Length == 0)
-            {
-                if (silent)
-                    Logger.LogVerbose("Waiting for Navigation Server... ({0})", caller);
-                else
-                    Logger.Log("Waiting for Navigation Server... ({0})", caller);
-            }
+            //if (Navigator.SearchGridProvider.Width == 0 || Navigator.SearchGridProvider.SearchArea.Length == 0)
+            //{
+            //    if (silent)
+            //        Logger.LogVerbose("Waiting for Navigation Server... ({0})", caller);
+            //    else
+            //        Logger.Log("Waiting for Navigation Server... ({0})", caller);
+            //}
 
-            else if (moveResult == MoveResult.PathGenerating)
-            {
-                Logger.LogVerbose("Navigation Path is Generating... ({0})", caller);
-            }
+            //else if (moveResult == MoveResult.PathGenerating)
+            //{
+            //    Logger.LogVerbose("Navigation Path is Generating... ({0})", caller);
+            //}
 
-            else if (moveResult == MoveResult.PathGenerationFailed)
-            {
-                Logger.LogVerbose("Navigation Path Failed to Generate... ({0})", caller);
-            }
+            //else if (moveResult == MoveResult.PathGenerationFailed)
+            //{
+            //    Logger.LogVerbose("Navigation Path Failed to Generate... ({0})", caller);
+            //}
         }
 
         private static DateTime _lastWindowTitleTick = DateTime.MinValue;

@@ -21,7 +21,7 @@ namespace Trinity.Helpers
         /// </summary>
         internal void ResetCheckGold()
         {
-            Logger.LogDebug(LogCategory.GlobalHandler, "Resetting Gold Timer, Last gold changed from {0} to {1}", _lastGoldAmount, Trinity.Player.Coinage);
+            Logger.LogDebug(LogCategory.GlobalHandler, "Resetting Gold Timer, Last gold changed from {0} to {1}", _lastGoldAmount, TrinityPlugin.Player.Coinage);
 
             _lastCheckBag = DateTime.UtcNow;
             _lastFoundGold = DateTime.UtcNow;
@@ -36,13 +36,13 @@ namespace Trinity.Helpers
         /// <returns></returns>
         internal bool GoldInactive()
         {
-            if (Trinity.Player.ParticipatingInTieredLootRun)
+            if (TrinityPlugin.Player.ParticipatingInTieredLootRun)
                 return false;
 
-            if (Trinity.Settings.Advanced.DisableAllMovement)
+            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
                 return false;
 
-            if (!Trinity.Settings.Advanced.GoldInactivityEnabled)
+            if (!TrinityPlugin.Settings.Advanced.GoldInactivityEnabled)
             {
                 // timer isn't enabled so move along!
                 //ResetCheckGold();
@@ -69,26 +69,26 @@ namespace Trinity.Helpers
                 _lastCheckBag = DateTime.UtcNow;
 
                 // sometimes bosses take a LONG time
-                if (Trinity.CurrentTarget != null && Trinity.CurrentTarget.IsBoss)
+                if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.IsBoss)
                 {
                     Logger.Log("Current target is boss, gold inactivity reset");
                     ResetCheckGold();
                     return false;
                 }
 
-                if (Trinity.Player.Coinage != _lastGoldAmount && Trinity.Player.Coinage != 0)
+                if (TrinityPlugin.Player.Coinage != _lastGoldAmount && TrinityPlugin.Player.Coinage != 0)
                 {
-                    Logger.LogVerbose(LogCategory.GlobalHandler, "Gold Changed from {0} to {1}", _lastGoldAmount, Trinity.Player.Coinage);
+                    Logger.LogVerbose(LogCategory.GlobalHandler, "Gold Changed from {0} to {1}", _lastGoldAmount, TrinityPlugin.Player.Coinage);
                     _lastFoundGold = DateTime.UtcNow;
-                    _lastGoldAmount = Trinity.Player.Coinage;
+                    _lastGoldAmount = TrinityPlugin.Player.Coinage;
                 }
 
                 int goldUnchangedSeconds = Convert.ToInt32(DateTime.UtcNow.Subtract(_lastFoundGold).TotalSeconds);
-                if (goldUnchangedSeconds >= Trinity.Settings.Advanced.InactivityTimer)
+                if (goldUnchangedSeconds >= TrinityPlugin.Settings.Advanced.InactivityTimer)
                 {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Gold inactivity after {0}s. (Setting={1}) Sending abort. ", goldUnchangedSeconds, Trinity.Settings.Advanced.InactivityTimer);
+                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Gold inactivity after {0}s. (Setting={1}) Sending abort. ", goldUnchangedSeconds, TrinityPlugin.Settings.Advanced.InactivityTimer);
                     _lastFoundGold = DateTime.UtcNow;
-                    _lastGoldAmount = Trinity.Player.Coinage;
+                    _lastGoldAmount = TrinityPlugin.Player.Coinage;
                     return true;
                 }
                 if (goldUnchangedSeconds > 0)

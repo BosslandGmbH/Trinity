@@ -45,7 +45,7 @@ namespace Trinity.Coroutines.Town
 
             _highest = Inventory.Materials.HighestCountMaterial(Inventory.MaterialConversionTypes);
 
-            var settingsTypes = global::Trinity.Trinity.Settings.KanaisCube.GetCraftingMaterialTypes();
+            var settingsTypes = global::Trinity.TrinityPlugin.Settings.KanaisCube.GetCraftingMaterialTypes();
             if (!settingsTypes.Any())
             {
                 Logger.LogVerbose("[CubeItemsToMaterials] No materials have been selected in settings", _highest.Type, _highest.TotalStackQuantity);

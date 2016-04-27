@@ -24,7 +24,7 @@ namespace Trinity.Coroutines
 
         //private async static Task<bool> DestroyUbersDoor()
         //{            
-        //    if (Trinity.Player.WorldID != 332336 || Trinity.Player.WorldType != Act.OpenWorld)
+        //    if (TrinityPlugin.Player.WorldID != 332336 || TrinityPlugin.Player.WorldType != Act.OpenWorld)
         //        return false;
 
         //    //ActorId: 258064, Type: Gizmo, Name: Uber_BossPortal_Door-548, 
@@ -39,7 +39,7 @@ namespace Trinity.Coroutines
 
         //    await TrinityCoroutines.MoveTo.Execute(uberDoor.Position, "Ubers Door", 3);
 
-        //    if (ZetaDia.Me.UsePower(power, uberDoor.Position, Trinity.CurrentWorldDynamicId, -1))
+        //    if (ZetaDia.Me.UsePower(power, uberDoor.Position, TrinityPlugin.CurrentWorldDynamicId, -1))
         //    {
         //        Logger.Log("[Override] Attacked Uber Door with {0}", power);
         //        await Coroutine.Sleep(3000);

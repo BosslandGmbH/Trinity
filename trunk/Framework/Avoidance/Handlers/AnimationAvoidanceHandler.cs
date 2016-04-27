@@ -20,17 +20,17 @@ using Logger = Trinity.Technicals.Logger;
 namespace Trinity.Framework.Avoidance.Handlers
 {
     [DataContract(Namespace = "")]
-    public class AnimationAvoidanceHandler : NotifyBase, IAvoidanceHandler //, INotifyPropertyChanged
+    public class AnimationAvoidanceHandler : NotifyBase, IAvoidanceHandler
     {
         private int _healthThresholdPct;
         private float _distanceMultiplier;
 
         public bool IsAllowed
         {
-            get { return Trinity.Player.CurrentHealthPct <= HealthThresholdPct; }
+            get { return TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct; }
         }
 
-        public void UpdateNodes(AvoidanceGrid grid, Avoidance avoidance)
+        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
         {
             foreach (var actor in avoidance.Actors)
             {
@@ -44,9 +44,9 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                 if (part.Severity == Severity.Extreme)
                 {
-                    Trinity.MainGridProvider.AddCellWeightingObstacle(actor.ActorSNO, finalRadius);
+                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(actor.ActorSNO, finalRadius);
 
-                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk)))
+                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.NavigationBlocking)))
                     {
                         node.Weight += 50;
                         node.AddNodeFlags(AvoidanceFlags.CriticalAvoidance);
@@ -55,7 +55,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 }
                 else
                 {
-                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk)))
+                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.NavigationBlocking)))
                     {
                         node.Weight += 10;
                         node.AddNodeFlags(AvoidanceFlags.Avoidance);

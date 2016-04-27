@@ -38,7 +38,7 @@ namespace TrinityCoroutines
             if (interactLimit < 1) interactLimit = 5;
             if (range < 0) range = obj.CollisionSphere.Radius;
 
-            if (Trinity.Trinity.Player.IsInTown)
+            if (Trinity.TrinityPlugin.Player.IsInTown)
                 GameUI.CloseVendorWindow();
 
             if (obj.Position.Distance(ZetaDia.Me.Position) > range)
@@ -99,7 +99,7 @@ namespace TrinityCoroutines
 
             if (radiusDistanceRequired < 0) radiusDistanceRequired = 4f;
 
-            if (Trinity.Trinity.Player.IsInTown)
+            if (Trinity.TrinityPlugin.Player.IsInTown)
                 GameUI.CloseVendorWindow();
 
             Navigator.PlayerMover.MoveTowards(position);

@@ -23,7 +23,7 @@ namespace Trinity.Framework.Avoidance.Handlers
     { 
         private int _healthThresholdPct;
 
-        public void UpdateNodes(AvoidanceGrid grid, Avoidance avoidance)
+        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
         {
             foreach (var actor in avoidance.Actors)
             {
@@ -73,7 +73,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         public bool IsAllowed
         {
-            get { return Trinity.Player.CurrentHealthPct <= HealthThresholdPct; }
+            get { return TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct; }
         }
 
         [DataMember]

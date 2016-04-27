@@ -12,7 +12,7 @@ using Zeta.Game.Internals.SNO;
 
 namespace Trinity
 {
-    public partial class Trinity
+    public partial class TrinityPlugin
     {
         private static bool RefreshUnit()
         {
@@ -182,7 +182,7 @@ namespace Trinity
             if (c_MonsterAffixes.HasFlag(MonsterAffixes.Shielding))
                 c_unit_HasShieldAffix = true;
 
-            //[Trinity 2.14.34] Unit FallenGrunt_A-68856 has MonsterAffix_IllusionistCast (PowerBuff0VisualEffectNone)
+            //[TrinityPlugin 2.14.34] Unit FallenGrunt_A-68856 has MonsterAffix_IllusionistCast (PowerBuff0VisualEffectNone)
             if (CurrentCacheObject.Affixes.Any() && CurrentCacheObject.Affixes.Contains(TrinityMonsterAffix.Illusionist))
             {                
                 var isIllusion = CurrentCacheObject.CommonData.GetAttribute<int>(((int) SNOPower.MonsterAffix_IllusionistCast << 12) + ((int) ActorAttributeType.PowerBuff0VisualEffectNone & 0xFFF)) == 1;

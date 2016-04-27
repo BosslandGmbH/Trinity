@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Items;
+using Trinity.Helpers;
 using Trinity.Technicals;
 using Zeta.Game;
 
@@ -15,7 +16,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         static AttributeManager()
         {
-            var descriptors = ReadObjects<AttributeDescripter>((IntPtr)0x01EEA578, 1435, 0x28).ToList();
+            var descriptors = ReadObjects<AttributeDescripter>(Internals.Addresses.AttributeDescripters, 1435, 0x28).ToList();
             AttributeDescriptors = descriptors.ToDictionary(descripter => descripter.Id);
         }
 
@@ -37,6 +38,18 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         }
 
         private static bool IsValid => _attributeGroups != null && !_attributeGroups.IsDisposed && _attributeGroups.Count > 0 && _attributeGroups.Bits < 1000 && _attributeGroups.ItemSize > 0;
+
+        private static List<AttributeGroup> Groups => _attributeGroups?.Where(g => g.Id > 0).ToList();
+
+        private static List<AttributeGroup> PlayerAttribtues
+        {
+            get
+            {
+                if (ZetaDia.Me == null) return null;
+                var playerGroupId = ZetaDia.Me.CommonData.FastAttribGroupId;
+                return _attributeGroups?.Where(g => g.Id > 0 && g.Id == playerGroupId).ToList();
+            }
+        }
 
         public static AttributeGroup FindGroup(int groupId)
         {

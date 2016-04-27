@@ -13,12 +13,12 @@ namespace Trinity.DbProvider
         private static readonly List<DiaObject> targetList = new List<DiaObject>();
 
         /// <summary> Gets list of target in range by weight.</summary>
-        /// <returns>Blank list of target, Trinity don't use this Db process.</returns>
+        /// <returns>Blank list of target, TrinityPlugin don't use this Db process.</returns>
         public List<DiaObject> GetObjectsByWeight()
         {
             var list = new List<DiaObject>();
-            if (Trinity.CurrentTarget != null && Trinity.CurrentTarget.Object != null && Trinity.CurrentTarget.Object.IsValid)
-                list.Add(Trinity.CurrentTarget.Object);
+            if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.Object != null && TrinityPlugin.CurrentTarget.Object.IsValid)
+                list.Add(TrinityPlugin.CurrentTarget.Object);
             return list;
         }
 
@@ -39,7 +39,7 @@ namespace Trinity.DbProvider
 
         public bool IsAvoiding
         {
-            get { return Trinity.Settings.Advanced.UseExperimentalAvoidance ? Core.Avoidance.IsAvoiding : CombatBase.IsCurrentlyAvoiding; }
+            get { return Core.Avoidance.Avoider.IsAvoiding; }
         }
     }
 }

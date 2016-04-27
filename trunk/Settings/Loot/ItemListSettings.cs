@@ -12,7 +12,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using JetBrains.Annotations;
-using Microsoft.Scripting.Utils;
 using Trinity.Config;
 using Trinity.Framework.Helpers;
 using Trinity.Helpers;
@@ -20,7 +19,10 @@ using Trinity.Reference;
 using Trinity.UI;
 using Trinity.UI.UIComponents;
 using Trinity.UIComponents;
+using Zeta.Bot;
 using Zeta.Common;
+using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Settings.Loot
@@ -48,6 +50,8 @@ namespace Trinity.Settings.Loot
         private bool _alwaysStashAncients;
         private bool _alwaysTrashNonAncients;
         private FullyObservableCollection<LItem> _itemTypes;
+        private int _selectedTabIndex;
+        private bool _upgradeRules;
 
         #endregion
 
@@ -91,7 +95,8 @@ namespace Trinity.Settings.Loot
         public void CreateView()
         {
             Collection = new CollectionViewSource();
-            Collection.Source = DisplayItems;
+            Collection.Source = DisplayItems; 
+
             ChangeGrouping(Grouping);
             ChangeSorting(SortingType.Name);
             CreateItemTypes();
@@ -265,8 +270,6 @@ namespace Trinity.Settings.Loot
             //TrinityItemType.UberReagent
         };
 
-        private int _selectedTabIndex;
-
         public LItem GetitemTypeRule(TrinityItemType itemType)
         {
             return ItemTypes.FirstOrDefault(sr => sr.TrinityItemType == itemType);
@@ -319,10 +322,12 @@ namespace Trinity.Settings.Loot
             ItemType,
             SetName,
             IsEquipped,
-            ActorClass,
+            ClassRestriction,
             IsSetItem,
             IsCrafted,
-            IsValid
+            IsValid,
+            IsLegendaryAffixed,
+            IsSelected
         }
 
         public enum SortingType
@@ -368,6 +373,21 @@ namespace Trinity.Settings.Loot
                 if (_alwaysTrashNonAncients != value)
                 {
                     _alwaysTrashNonAncients = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool UpgradeRules
+        {
+            get { return _upgradeRules; }
+            set
+            {
+                if (_upgradeRules != value)
+                {
+                    _upgradeRules = value;
                     OnPropertyChanged();
                 }
             }
@@ -453,7 +473,7 @@ namespace Trinity.Settings.Loot
                 {
                     _filterText = value;
                     OnPropertyChanged();
-                    OnPropertyChanged("IsFiltered");
+                    OnPropertyChanged(nameof(IsFiltered));
                     ChangeFilterPending(value);
                 }
             }
@@ -592,8 +612,75 @@ namespace Trinity.Settings.Loot
         public ICommand AddAllLegendaryAffixCommand { get; set; }
         public ICommand Add24ItemsCommand { get; set; }
 
+        public ICommand LoadEquippedItemsCommand { get; set; }
+        public ICommand LoadStashedItemsCommand { get; set; }
+
         public void LoadCommands()
         {
+            LoadEquippedItemsCommand = new RelayCommand(parameter =>
+            {
+                try
+                {
+                    if (ZetaDia.Me == null || !ZetaDia.IsInGame)
+                    {
+                        if (BotMain.IsRunning)
+                        {
+                            Logger.Log("Must be in a game to use this feature");
+                        }
+                        else
+                        {
+                            using (ZetaDia.Memory.AcquireFrame())
+                            {
+                                ZetaDia.Actors.Update();
+                                Logger.Log("Scanning Character for Stashed Items");
+                                SelectItems(ZetaDia.Me.Inventory.Backpack);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Logger.Log("Scanning Character for Stashed Items");
+                        SelectItems(ZetaDia.Me.Inventory.Backpack);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError("Exception in SelectAllCommand {0}", ex);
+                }
+            });
+
+            LoadStashedItemsCommand = new RelayCommand(parameter =>
+            {
+                try
+                {
+                    if (ZetaDia.Me == null || !ZetaDia.IsInGame)
+                    {
+                        if (BotMain.IsRunning)
+                        {
+                            Logger.Log("Must be in a game to use this feature");
+                        }
+                        else
+                        {
+                            using (ZetaDia.Memory.AcquireFrame())
+                            {
+                                ZetaDia.Actors.Update();
+                                Logger.Log("Scanning Character for Stashed Items");
+                                SelectItems(ZetaDia.Me.Inventory.StashItems);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Logger.Log("Scanning Character for Stashed Items");
+                        SelectItems(ZetaDia.Me.Inventory.StashItems);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError("Exception in SelectAllCommand {0}", ex);
+                }
+            });
+
             AdvancedOptionCommand = new RelayCommand(parameter =>
             {
                 try
@@ -819,6 +906,12 @@ namespace Trinity.Settings.Loot
             });
         }
 
+        private void SelectItems(IEnumerable<ACDItem> collection)
+        {
+            var itemIds = new HashSet<int>(collection.Where(i => i.ItemQualityLevel >= ItemQuality.Legendary).Select(i => i.ActorSnoId));
+            AddToSelection(item => itemIds.Contains(item.Id));
+        }
+
         private void AddToSelection(Func<LItem, bool> match)
         {
             var newSelections = new List<LItem>(_selectedItems);
@@ -889,6 +982,17 @@ namespace Trinity.Settings.Loot
         {
             if (Collection == null)
                 return;
+
+            if (groupingType == GroupingType.IsSelected)
+            {
+                Collection.LiveGroupingProperties.Clear();
+                Collection.LiveGroupingProperties.Add("IsSelected");
+                Collection.IsLiveGroupingRequested = true;
+            }
+            else
+            {
+                Collection.IsLiveGroupingRequested = false;
+            }
 
             // Prevent the collection from updating until outside of the using block.
             using (Collection.DeferRefresh())
@@ -1078,7 +1182,7 @@ namespace Trinity.Settings.Loot
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {
-            if (Trinity.Settings.Loot.TownRun.AlwaysStashAncients && Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList)
+            if (TrinityPlugin.Settings.Loot.TownRun.AlwaysStashAncients && TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList)
                 AlwaysStashAncients = true;
         }
 

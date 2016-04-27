@@ -18,7 +18,7 @@ namespace Trinity.DbProvider
         /// <summary>
         /// Gets list of obstacle in range by weight.
         /// </summary>
-        /// <returns>Blank list of target, Trinity don't use this Db process.</returns>
+        /// <returns>Blank list of target, TrinityPlugin don't use this Db process.</returns>
         public List<DiaObject> GetObjectsByWeight()
         {
             return listEmptyList;

@@ -63,52 +63,38 @@ namespace Trinity.Combat.Abilities
 
         internal static void LoadCombatSettings()
         {
+            EmergencyHealthPotionLimit = Settings.Combat.Misc.PotionLevel;
+            EmergencyHealthGlobeLimit = Settings.Combat.Misc.HealthGlobeLevel;
+            HealthGlobeResource = Settings.Combat.Misc.HealthGlobeLevelResource;
+
             switch (Player.ActorClass)
             {
                 case ActorClass.Barbarian:
-                    EmergencyHealthPotionLimit = Settings.Combat.Barbarian.PotionLevel;
-                    EmergencyHealthGlobeLimit = Settings.Combat.Barbarian.HealthGlobeLevel;
-                    HealthGlobeResource = Settings.Combat.Barbarian.HealthGlobeLevelResource;
                     KiteDistance = Settings.Combat.Barbarian.KiteLimit;
                     KiteMode = KiteMode.Never;
                     break;
 
                 case ActorClass.Crusader:
-                    EmergencyHealthPotionLimit = Settings.Combat.Crusader.PotionLevel;
-                    EmergencyHealthGlobeLimit = Settings.Combat.Crusader.HealthGlobeLevel;
-                    HealthGlobeResource = Settings.Combat.Crusader.HealthGlobeLevelResource;
                     KiteDistance = 0;
                     KiteMode = KiteMode.Never;
                     break;
 
                 case ActorClass.Monk:
-                    EmergencyHealthPotionLimit = Settings.Combat.Monk.PotionLevel;
-                    EmergencyHealthGlobeLimit = Settings.Combat.Monk.HealthGlobeLevel;
-                    HealthGlobeResource = Settings.Combat.Monk.HealthGlobeLevelResource;
                     KiteDistance = 0;
                     KiteMode = KiteMode.Never;
                     break;
 
                 case ActorClass.Wizard:
-                    EmergencyHealthPotionLimit = Settings.Combat.Wizard.PotionLevel;
-                    EmergencyHealthGlobeLimit = Settings.Combat.Wizard.HealthGlobeLevel;
-                    HealthGlobeResource = Settings.Combat.Wizard.HealthGlobeLevelResource;
                     KiteDistance = Settings.Combat.Wizard.KiteLimit;
                     KiteMode = KiteMode.Always;
                     break;
 
                 case ActorClass.Witchdoctor:
-                    EmergencyHealthPotionLimit = Settings.Combat.WitchDoctor.PotionLevel;
-                    EmergencyHealthGlobeLimit = Settings.Combat.WitchDoctor.HealthGlobeLevel;
-                    HealthGlobeResource = Settings.Combat.WitchDoctor.HealthGlobeLevelResource;
                     KiteDistance = Settings.Combat.WitchDoctor.KiteLimit;
                     KiteMode = KiteMode.Always;
                     break;
 
                 case ActorClass.DemonHunter:
-                    EmergencyHealthPotionLimit = Settings.Combat.DemonHunter.PotionLevel;
-                    EmergencyHealthGlobeLimit = Settings.Combat.DemonHunter.HealthGlobeLevel;
-                    HealthGlobeResource = Settings.Combat.DemonHunter.HealthGlobeLevelResource;
                     KiteDistance = Settings.Combat.DemonHunter.KiteLimit;
                     KiteMode = Settings.Combat.DemonHunter.KiteMode;
                     break;
@@ -274,7 +260,7 @@ namespace Trinity.Combat.Abilities
                 if (CombatMode == CombatMode.On)
                     return true;
 
-                if (CombatMode == CombatMode.Off || CombatMode == CombatMode.SafeZerg && TargetUtil.NumMobsInRangeOfPosition(Trinity.Player.Position, 10f) > 4)
+                if (CombatMode == CombatMode.Off || CombatMode == CombatMode.SafeZerg && TargetUtil.NumMobsInRangeOfPosition(TrinityPlugin.Player.Position, 10f) > 4)
                     return true;
 
                 return true;
@@ -322,7 +308,7 @@ namespace Trinity.Combat.Abilities
         {
             get
             {
-                return Trinity.LastPowerUsed;
+                return TrinityPlugin.LastPowerUsed;
             }
         }
 
@@ -340,10 +326,10 @@ namespace Trinity.Combat.Abilities
             get
             {
                 return
-                   Trinity.ObjectCache.Any(o => o.IsEliteRareUnique &&
+                   TrinityPlugin.ObjectCache.Any(o => o.IsEliteRareUnique &&
                           o.MonsterAffixes.HasFlag(MonsterAffixes.ArcaneEnchanted | MonsterAffixes.Frozen | MonsterAffixes.Jailer | MonsterAffixes.Molten | MonsterAffixes.Nightmarish) ||
                           (o.MonsterAffixes.HasFlag(MonsterAffixes.Electrified) && o.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage))) ||
-                        Trinity.ObjectCache.Any(o => o.IsBoss);
+                        TrinityPlugin.ObjectCache.Any(o => o.IsBoss);
             }
         }
 
@@ -357,7 +343,7 @@ namespace Trinity.Combat.Abilities
 
         public static TrinitySetting Settings
         {
-            get { return Trinity.Settings; }
+            get { return TrinityPlugin.Settings; }
         }
 
         public static bool UseOOCBuff
@@ -426,7 +412,7 @@ namespace Trinity.Combat.Abilities
         {
             get
             {
-                return Trinity.CurrentTarget;
+                return TrinityPlugin.CurrentTarget;
             }
         }
 
@@ -564,7 +550,7 @@ namespace Trinity.Combat.Abilities
         ///// <param name="power">The power.</param>
         ///// <param name="recheck">if set to <c>true</c> check again.</param>
         ///// <returns>
-        ///// Returns whether or not we can use a skill, or if it's on our own internal Trinity cooldown timer
+        ///// Returns whether or not we can use a skill, or if it's on our own internal TrinityPlugin cooldown timer
         ///// </returns>
         //public static bool SNOPowerUseTimer(SNOPower power, bool recheck = false)
         //{
@@ -842,7 +828,7 @@ namespace Trinity.Combat.Abilities
         {
             //Element.Arcane, Element.Cold, Element.Fire, Element.Holy, Element.Lightning, Element.Physical, Element.Poison
 
-            switch (Trinity.Player.ActorClass)
+            switch (TrinityPlugin.Player.ActorClass)
             {
                 case ActorClass.Crusader:
                     return CrusaderElements;

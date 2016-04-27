@@ -89,7 +89,7 @@ namespace Trinity.UI.Overlays
             using (ZetaDia.Memory.AcquireFrame())
             {
                 _axialCylinderPosition = ZetaDia.Me.ActorInfo.AxialCylinder.Position;
-                PlayerPosition = ZetaInternals.Objects.ActivePlayerData.Position;
+                PlayerPosition = Internals.Objects.ActivePlayerData.Position;
             }
             //StartThread();
         }
@@ -102,7 +102,7 @@ namespace Trinity.UI.Overlays
 
             UpdateVisualizer();
 
-            PlayerPosition = ZetaInternals.Objects.ActivePlayerData.Position;
+            PlayerPosition = Internals.Objects.ActivePlayerData.Position;
 
             Task.Factory.StartNew(UpdatePosition);
 
@@ -130,7 +130,7 @@ namespace Trinity.UI.Overlays
                     {
                         //PlayerPosition = ZetaDia.Me.Position;
 
-                        PlayerPosition = ZetaInternals.Objects.ActivePlayerData.Position - _axialCylinderPosition; //MathEx.GetPointAt(ZetaDia.Me.Position, ZetaDia.Me.Position  ZetaDia.Me.CollisionSphere.Center, ZetaDia.Me.Movement.Rotation);// MathEx.WrapAngle((float)(ZetaDia.Me.Movement.Rotation + Math.PI)));
+                        PlayerPosition = Internals.Objects.ActivePlayerData.Position - _axialCylinderPosition; //MathEx.GetPointAt(ZetaDia.Me.Position, ZetaDia.Me.Position  ZetaDia.Me.CollisionSphere.Center, ZetaDia.Me.Movement.Rotation);// MathEx.WrapAngle((float)(ZetaDia.Me.Movement.Rotation + Math.PI)));
 
                         if (_lastPosition == PlayerPosition)
                         {

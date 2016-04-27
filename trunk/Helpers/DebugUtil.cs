@@ -174,7 +174,7 @@ namespace Trinity.Helpers
 
         public static bool LogCategoryEnabled(LogCategory category)
         {
-            return Trinity.Settings != null && Trinity.Settings.Advanced.LogCategories.HasFlag(category);
+            return TrinityPlugin.Settings != null && TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(category);
         }
 
 
@@ -365,7 +365,7 @@ namespace Trinity.Helpers
         internal static void DumpReferenceItems(TrinityLogLevel level = TrinityLogLevel.Debug)
         {
 
-            var path = Path.Combine(FileManager.DemonBuddyPath, "Plugins\\Trinity\\Resources\\JS Class Generator\\ItemReference.js");
+            var path = Path.Combine(FileManager.DemonBuddyPath, "Plugins\\TrinityPlugin\\Resources\\JS Class Generator\\ItemReference.js");
 
             if (File.Exists(path))
                 File.Delete(path);

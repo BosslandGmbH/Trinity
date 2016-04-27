@@ -20,14 +20,14 @@ namespace Trinity.Helpers
 
         public static void SendEmailNotification()
         {
-            if (Trinity.Settings.Notification.MailEnabled && NotificationManager.EmailMessage.Length > 0)
+            if (TrinityPlugin.Settings.Notification.MailEnabled && NotificationManager.EmailMessage.Length > 0)
                 NotificationManager.SendEmail(
-                    Trinity.Settings.Notification.EmailAddress,
-                    Trinity.Settings.Notification.EmailAddress,
+                    TrinityPlugin.Settings.Notification.EmailAddress,
+                    TrinityPlugin.Settings.Notification.EmailAddress,
                     "New DB stash loot - " + FileManager.BattleTagName,
                     NotificationManager.EmailMessage.ToString(),
                     NotificationManager.SmtpServer,
-                    Trinity.Settings.Notification.EmailPassword);
+                    TrinityPlugin.Settings.Notification.EmailPassword);
             NotificationManager.EmailMessage.Clear();
         }
 
@@ -48,7 +48,7 @@ namespace Trinity.Helpers
             FileStream logStream = null;
             try
             {
-                string filePath = Path.Combine(FileManager.LoggingPath, "StashLog - " + Trinity.Player.ActorClass + ".log");
+                string filePath = Path.Combine(FileManager.LoggingPath, "StashLog - " + TrinityPlugin.Player.ActorClass + ".log");
                 logStream = File.Open(filePath, FileMode.Append, FileAccess.Write, FileShare.Read);
 
                 //TODO : Change File Log writing
@@ -65,9 +65,9 @@ namespace Trinity.Helpers
 
                     if (item.ItemQualityLevel >= ItemQuality.Legendary)
                     {
-                        if (!Trinity.Settings.Notification.LegendaryScoring)
+                        if (!TrinityPlugin.Settings.Notification.LegendaryScoring)
                             shouldSendNotifications = true;
-                        else if (Trinity.Settings.Notification.LegendaryScoring && ItemValuation.CheckScoreForNotification(itemBaseType, itemValue))
+                        else if (TrinityPlugin.Settings.Notification.LegendaryScoring && ItemValuation.CheckScoreForNotification(itemBaseType, itemValue))
                             shouldSendNotifications = true;
                         if (shouldSendNotifications)
                             NotificationManager.AddNotificationToQueue(item.Name + " [" + itemType +
@@ -118,7 +118,7 @@ namespace Trinity.Helpers
             FileStream logStream = null;
             try
             {
-                string filePath = Path.Combine(FileManager.LoggingPath, "JunkLog - " + Trinity.Player.ActorClass + ".log");
+                string filePath = Path.Combine(FileManager.LoggingPath, "JunkLog - " + TrinityPlugin.Player.ActorClass + ".log");
                 logStream = File.Open(filePath, FileMode.Append, FileAccess.Write, FileShare.Read);
                 using (var logWriter = new StreamWriter(logStream))
                 {

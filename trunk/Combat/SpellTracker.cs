@@ -105,7 +105,7 @@ namespace Trinity.Combat
 
             MaintenanceThread = new Thread(RunMaintenance)
             {
-                Name = "Trinity SpellTracker",
+                Name = "TrinityPlugin SpellTracker",
                 IsBackground = true,
                 Priority = ThreadPriority.Lowest
             };

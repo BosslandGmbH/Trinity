@@ -81,7 +81,7 @@
                         <GridViewColumn Width="175" Header="InternalName" DisplayMemberBinding="{Binding InternalName, Mode=OneWay}" CellTemplate="{StaticResource ListViewTextCellTemplate}" />
                         <GridViewColumn Width="Auto" Header="RDistance" DisplayMemberBinding="{Binding RadiusDistance, Mode=OneWay, StringFormat={}{0:0.##}}" CellTemplate="{StaticResource ListViewTextCellTemplate}" />
                         <GridViewColumn Width="65" Header="Weight" DisplayMemberBinding="{Binding Weight, Mode=OneWay, StringFormat={}{0:0.##}}" CellTemplate="{StaticResource ListViewTextCellTemplate}" />
-                        <GridViewColumn Width="80" Header="TrinityType" DisplayMemberBinding="{Binding TrinityType, Mode=OneWay}" CellTemplate="{StaticResource ListViewTextCellTemplate}" />
+                        <GridViewColumn Width="80" Header="TrinityPluginType" DisplayMemberBinding="{Binding TrinityType, Mode=OneWay}" CellTemplate="{StaticResource ListViewTextCellTemplate}" />
                         <GridViewColumn Width="60" Header="DBType" DisplayMemberBinding="{Binding ActorType, Mode=OneWay}" CellTemplate="{StaticResource ListViewTextCellTemplate}" />
                         <GridViewColumn Width="Auto" Header="Radius" DisplayMemberBinding="{Binding Radius, Mode=OneWay, StringFormat={}{0:0.##}}" CellTemplate="{StaticResource ListViewTextCellTemplate}" />
                         <!--<GridViewColumn Width="Auto" Header="MoveSpeed" DisplayMemberBinding="{Binding MovementSpeed, Mode=OneWay, StringFormat={}{0:0.##}}" CellTemplate="{StaticResource ListViewTextCellTemplate}" />-->

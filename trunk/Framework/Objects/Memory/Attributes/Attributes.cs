@@ -16,9 +16,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
     public class Attributes
     {
         public AttributeItem this[short index] => Items[index];
-
         public Dictionary<int, AttributeItem> Items = new Dictionary<int, AttributeItem>();
-
         public Func<ACD, int> GetFastAttributeGroupId = acd => ZetaDia.Memory.Read<int>(acd.BaseAddress + 0x120);
         public int FastAttributeGroupId;
         public Map<AttributeItem> PtrMap;
@@ -56,9 +54,6 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         internal List<TValue> GetCachedAttributes<TValue>(ActorAttributeType attr)
         {
             var result = new List<TValue>();
-
-            //if (!IsValid) return result;
-
             foreach (var a in Items)
             {
                 if (a.Value.Key.BaseAttribute == attr)
@@ -71,10 +66,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal Dictionary<TModifier, TValue> GetCachedAttributes<TModifier, TValue>(ActorAttributeType attr) where TModifier : IConvertible
         {
-            var result = new Dictionary<TModifier, TValue>();
-
-            //if (!IsValid) return result;
-
+            var result = new Dictionary<TModifier, TValue>();        
             foreach (var a in Items)
             {
                 if (a.Value.Key.BaseAttribute == attr)
@@ -87,8 +79,6 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal T GetFirstCachedAttribute<T>(ActorAttributeType attr)
         {
-            //if(!IsValid) return default(T);
-
             var foundAttribute = Items.FirstOrDefault(IsAttributeMatch(attr));
             if (foundAttribute.Value != null)
             {
@@ -99,8 +89,6 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal T GetCachedAttribute<T>(Predicate<AttributeItem> condition = null)
         {
-            //if (!IsValid) return default(T);
-
             foreach (var item in Items.Where(item => condition == null || condition(item.Value)))
             {
                 return item.Value.GetValue<T>();
@@ -115,7 +103,6 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal T GetCachedAttribute<T>(AttributeKey key)
         {
-            //if (!IsValid) return default(T);
 
             AttributeItem foundAttribute;
             if (!Items.TryGetValue(key.Value, out foundAttribute))
@@ -135,8 +122,6 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal T GetAttribute<T>(ActorAttributeType attr)
         {
-            //if (!IsValid) return default(T);
-
             AttributeItem foundAttribute;
             if (!Items.TryGetValue((int)attr, out foundAttribute))
                 return default(T);
@@ -147,8 +132,6 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal AttributeItem GetAttributeItem(ActorAttributeType attr)
         {
-            //if (!IsValid) return default(AttributeItem);
-
             AttributeItem foundAttribute;
             if (!Items.TryGetValue((int)attr, out foundAttribute))
                 return null;

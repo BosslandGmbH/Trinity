@@ -192,7 +192,7 @@ namespace Trinity.Config
 
         public HashSet<ItemSelectionType> GetRareUpgradeSettings()
         {
-            var selectedTypes = Trinity.Settings.KanaisCube.RareUpgradeTypes;
+            var selectedTypes = TrinityPlugin.Settings.KanaisCube.RareUpgradeTypes;
             return new HashSet<ItemSelectionType>(Enum.GetValues(selectedTypes.GetType()).Cast<Enum>().Where(selectedTypes.HasFlag).Cast<ItemSelectionType>());
         }
 

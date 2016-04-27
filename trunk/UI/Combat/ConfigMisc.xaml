@@ -4,8 +4,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ut="clr-namespace:Trinity.UIComponents"
              xmlns:cc="clr-namespace:CustomControls"
-             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" Background="#434343"
-             d:DesignHeight="1200" d:DesignWidth="450">
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" Background="#474747" Padding="10,0,0,0"
+             d:DesignHeight="1500" d:DesignWidth="450">
     <UserControl.Resources>
         <ResourceDictionary>
             <!-- Don't format this line otherwise Db can't open config window -->
@@ -20,7 +20,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
-        <StackPanel Margin="10,0,10,0">
+        <StackPanel Margin="0,10,5,0">
          
             <!--Elite/Rare/Unique Settings-->
             <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
@@ -34,7 +34,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Trigger range for Elite combat:" FontWeight="Bold" TextAlignment="Center"/>
+                        <TextBlock Text="Trigger range for Elite combat:" FontWeight="Normal" TextAlignment="Center"/>
                         <Slider Grid.Row="1" Template="{DynamicResource SliderEditable}" 
                     Interval="500" Maximum="150" Minimum="15" 
                     SmallChange="1" TickFrequency="5" IsSnapToTickEnabled="True"
@@ -46,7 +46,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Always kill elites below % Health" FontWeight="Bold" TextAlignment="Center"/>
+                        <TextBlock Text="Always kill elites below % Health" FontWeight="Normal" TextAlignment="Center"/>
                         <Slider Grid.Row="1" Template="{DynamicResource SliderEditable}" 
                     Interval="500" Maximum="100" Minimum="0" 
                     SmallChange="1" TickFrequency="5" IsSnapToTickEnabled="True"
@@ -56,7 +56,7 @@
                     <UniformGrid Columns="2" HorizontalAlignment="Center" VerticalAlignment="Top">
                         <CheckBox Margin="5,0" IsChecked="{Binding Path=Misc.IgnoreElites}" ToolTip="Attack trash mobs only">Ignore Elite/Rare/Unique</CheckBox>
                         <CheckBox Margin="5,0" IsChecked="{Binding Path=Misc.ProfileTagOverride}" 
-                                  ToolTip="Ignore kill-everything logic for WaitTimer, TrinityTownPortal, UseTownPortal, TrinityTownRun"
+                                  ToolTip="Ignore kill-everything logic for WaitTimer, TrinityPluginTownPortal, UseTownPortal, TrinityPluginTownRun"
                                   IsEnabled="{Binding Path=Misc.IgnoreElites}">Override Profile Tags</CheckBox>
                         <CheckBox Margin="5,0" IsChecked="{Binding Misc.IgnoreRares}" Content="Ignore Yellow/Rare Packs"/>
                         <CheckBox Margin="5,0" IsChecked="{Binding Misc.IgnoreMinions}" Content="Ignore Minions"/>
@@ -77,8 +77,8 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <StackPanel>
-                            <TextBlock Text="Ignore trash further away than:" FontWeight="Bold" TextAlignment="Center"/>
-                            <TextBlock  TextWrapping="Wrap" Text="Warning! a low setting will cause face-tanking! and prevent ranged spell casting from working properly." FontWeight="Bold" Foreground="OrangeRed" Visibility="{Binding Value, ElementName=TrashTriggerSlider, Converter={StaticResource sliderValueToVisibilityConverter},ConverterParameter=40}" TextAlignment="Center"/>
+                            <TextBlock Text="Ignore trash further away than:" FontWeight="Normal" TextAlignment="Center"/>
+                            <TextBlock  TextWrapping="Wrap" Text="Warning! a low setting will cause face-tanking! and prevent ranged spell casting from working properly." FontWeight="Normal" Foreground="OrangeRed" Visibility="{Binding Value, ElementName=TrashTriggerSlider, Converter={StaticResource sliderValueToVisibilityConverter},ConverterParameter=40}" TextAlignment="Center"/>
                         </StackPanel>
                         <Slider Grid.Row="1" Template="{DynamicResource SliderEditable}" 
                             x:Name="TrashTriggerSlider"
@@ -96,7 +96,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Minimum Trash Mob Pack Size:" FontWeight="Bold" TextAlignment="Center"/>
+                        <TextBlock Text="Minimum Trash Mob Pack Size:" FontWeight="Normal" TextAlignment="Center"/>
                         <!--<cc:RangeSlider 
                             Grid.Row="1" Grid.Column="0"
                             LowerValue="{Binding Misc.TrashPackSizeMin}"
@@ -112,7 +112,7 @@
                             Value="{Binding Path=Misc.TrashPackSize}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
-                        <TextBlock Grid.Column="1" Text="Trash Pack Cluster Radius:" FontWeight="Bold" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="1" Text="Trash Pack Cluster Radius:" FontWeight="Normal" TextAlignment="Center"/>
                         <Slider  Grid.Row="1" Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="100" IsSnapToTickEnabled="True"
                             Maximum="90" Minimum="0" SmallChange="100" TickFrequency="5" TickPlacement="BottomRight" 
@@ -130,14 +130,14 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Always kill Trash below % Health:" FontWeight="Bold" TextAlignment="Center" Margin="2,0"/>
+                        <TextBlock Text="Always kill Trash below % Health:" FontWeight="Normal" TextAlignment="Center" Margin="2,0"/>
                         <Slider Grid.Row="1" Template="{DynamicResource SliderEditable}" ToolTip="Always Kill Trash Mobs Below this % Health"
                             Interval="100" IsSnapToTickEnabled="True"
                             Maximum="100" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
                             Value="{Binding Path=Misc.ForceKillTrashBelowHealth, Converter={StaticResource percentConverter}}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="200"/>
-                        <TextBlock Grid.Column="1" Text="Ignore Below Health % w/ DoT:" FontWeight="Bold" TextAlignment="Center" Margin="2,0"/>
+                        <TextBlock Grid.Column="1" Text="Ignore Below Health % w/ DoT:" FontWeight="Normal" TextAlignment="Center" Margin="2,0"/>
                         <Slider  Grid.Row="1" Grid.Column="1" Template="{DynamicResource SliderEditable}" ToolTip="Ignore Trash Mobs Below this Percent Health who also have a DoT applied"
                             Interval="100" IsSnapToTickEnabled="True"
                             Maximum="1" Minimum="0" SmallChange="100" TickFrequency=".05" TickPlacement="BottomRight" 
@@ -167,14 +167,14 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>-->
-                    <TextBlock Text="Always ignore trash below % value" Margin="2,0,2,0" FontWeight="Bold" TextAlignment="Center" />
+                    <TextBlock Text="Always ignore trash below % value" Margin="2,0,2,0" FontWeight="Normal" TextAlignment="Center" />
                         <Slider Grid.Row="1" Template="{DynamicResource SliderEditable}" ToolTip="Monsters with a rift value below this threshold will always be ignored"
                                 Interval="100" IsSnapToTickEnabled="True"
                                 Maximum="1" Minimum="0" SmallChange="100" TickFrequency=".05" TickPlacement="BottomRight" 
                                 Value="{Binding Path=Misc.RiftValueIgnoreUnitsBelow}" 
                                 HorizontalAlignment="Stretch" Margin="0,0,0,0"
                                 MinWidth="200"/>
-                    <TextBlock Grid.Column="2" Margin="2,10,2,0" Text="Always kill trash above % value" FontWeight="Bold" TextAlignment="Center" />
+                    <TextBlock Grid.Column="2" Margin="2,10,2,0" Text="Always kill trash above % value" FontWeight="Normal" TextAlignment="Center" />
                         <Slider  Grid.Row="1" Grid.Column="2" Template="{DynamicResource SliderEditable}" ToolTip="Monsters with a rift value above this threshold will always be attacked"
                                 Interval="100" IsSnapToTickEnabled="True"
                                 Maximum="1" Minimum="0" SmallChange="100" TickFrequency=".05" TickPlacement="BottomRight" 
@@ -182,7 +182,7 @@
                                 HorizontalAlignment="Stretch" Margin="0,0,0,0"
                                 MinWidth="200"/>
 
-                    <TextBlock Grid.Column="2" Margin="2,10,2,0" Text="Always kill when combined rift value is more than:" FontWeight="Bold" TextAlignment="Center" />
+                    <TextBlock Grid.Column="2" Margin="2,10,2,0" Text="Always kill when combined rift value is more than:" FontWeight="Normal" TextAlignment="Center" />
                     <Slider  Grid.Row="1" Grid.Column="2" Template="{DynamicResource SliderEditable}" ToolTip="Boost weight of monsters who have a total rift value within [cluster radius] of them greater than value."
                             Interval="100" IsSnapToTickEnabled="True"
                             Maximum="20" Minimum="0" SmallChange="100" TickFrequency=".5" TickPlacement="BottomRight" 
@@ -190,7 +190,7 @@
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="200"/>
 
-                    <TextBlock Grid.Column="2" Margin="2,10,2,0" Text="Always kill when rift is almost complete (%):" FontWeight="Bold" TextAlignment="Center" />
+                    <TextBlock Grid.Column="2" Margin="2,10,2,0" Text="Always kill when rift is almost complete (%):" FontWeight="Normal" TextAlignment="Center" />
                     <Slider  Grid.Row="1" Grid.Column="2" Template="{DynamicResource SliderEditable}" ToolTip="Kill everything when rift progression has reached specified amount."
                                 Interval="1" IsSnapToTickEnabled="True"
                                 Maximum="100" Minimum="90" SmallChange="1" TickFrequency="1" TickPlacement="BottomRight" 
@@ -215,7 +215,48 @@
                 </StackPanel>
             </GroupBox>
 
-            <!-- Misc -->
+            <GroupBox>
+                <GroupBox.Header>Consumables</GroupBox.Header>
+                <StackPanel>
+                    <UniformGrid Columns="2">
+                        <TextBlock Text="Potion %" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
+                                    Interval="500" Maximum="99" Minimum="0" 
+                                    SmallChange="1" LargeChange="5"
+                                    TickPlacement="None" 
+                                    Value="{Binding Path=Misc.PotionLevel, Converter={StaticResource percentConverter}}" 
+                                    HorizontalAlignment="Stretch" Margin="2,0"/>
+                        <TextBlock Text="Globe Health %" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}"
+                                    Interval="500" Maximum="100" Minimum="0"
+                                    SmallChange="1" LargeChange="5"
+                                    TickPlacement="None"
+                                    Value="{Binding Path=Misc.HealthGlobeLevel, Converter={StaticResource percentConverter}}"
+                                    HorizontalAlignment="Stretch" Margin="2,0"/>
+                        <TextBlock Grid.Column="2" Text="Globe Resource %" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
+                        <Slider Grid.Column="3" Template="{DynamicResource SliderEditable}"
+                                    Interval="500" Maximum="100" Minimum="0"
+                                    SmallChange="1" LargeChange="5"
+                                    TickPlacement="None"
+                                    Value="{Binding Path=Misc.HealthGlobeLevelResource, Converter={StaticResource percentConverter}}"
+                                    HorizontalAlignment="Stretch" Margin="2,0"
+                                    ToolTip="Only applies when Reaper's Wraps are equipped"/>
+                    </UniformGrid>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <GroupBox.Header>
+                    Movement
+                </GroupBox.Header>
+                <StackPanel>
+                    <CheckBox IsChecked="{Binding Path=Misc.AllowOOCMovement}" ToolTip="leap, charge, teleport, sprint, spirit walk">Use movement spells Out of Combat</CheckBox>
+                    <CheckBox IsChecked="{Binding Path=Misc.AttackWhenBlocked}" ToolTip="Attack Mobs When Blocked">Attack When Blocked</CheckBox>
+                    <CheckBox IsChecked="{Binding Path=Misc.FleeInGhostMode}">Flee In Ghost Mode</CheckBox>
+                </StackPanel>
+            </GroupBox>
+     
+                        <!-- Misc -->
             <StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0">
                 <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                     <GroupBox.Header>
@@ -255,7 +296,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Wait for loot drop - Delay after kill :" FontWeight="Bold" TextAlignment="Center"/>
+                            <TextBlock Text="Wait for loot drop - Delay after kill :" FontWeight="Normal" TextAlignment="Center"/>
                             <Slider Grid.Row="1" Template="{DynamicResource SliderEditable}" 
                                 Interval="100" IsSnapToTickEnabled="True"
                                 Maximum="1500" Minimum="0" SmallChange="100" TickFrequency="50" TickPlacement="BottomRight" 
@@ -264,32 +305,15 @@
                         </Grid>
 
                         <UniformGrid Columns="2" HorizontalAlignment="Center" VerticalAlignment="Top">
-                            <CheckBox IsChecked="{Binding Path=Misc.AllowOOCMovement}" ToolTip="leap, charge, teleport, sprint, spirit walk">Use movement spells Out of Combat</CheckBox>
                             <CheckBox IsChecked="{Binding Path=Misc.CollectHealthGlobe}">Attempt to collect health globes</CheckBox>
-                            <CheckBox IsChecked="{Binding Path=Misc.UseNavMeshTargeting}" ToolTip="Recommended ON, May increase CPU/Memory usage">Use NavMesh to prevent stucks</CheckBox>
                             <CheckBox IsChecked="{Binding Path=Misc.HiPriorityHG}">Give higher priority to health globes</CheckBox>
-                            <CheckBox IsChecked="{Binding Path=Misc.FleeInGhostMode}">Flee In Ghost Mode</CheckBox>
                             <CheckBox IsChecked="{Binding Path=Misc.UseConventionElementOnly}" ToolTip="Restrict casting of spells to match the element rotation on the ring Convention of Elements">Wait for Convention Element</CheckBox>
                             <CheckBox IsChecked="{Binding Path=Misc.IgnoreCoEunlessGRift}" ToolTip="Doesn't wait for CoE cycle when not in a Greater Rift.">Ignore CoE Cycle unless in GRift</CheckBox>
                         </UniformGrid>
                     </StackPanel>
                 </GroupBox>
 
-                <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
-                    <GroupBox.Header>
-                        Avoidance Settings
-                    </GroupBox.Header>
-                    <UniformGrid Columns="2">
-                        <CheckBox IsChecked="{Binding Path=Misc.AvoidanceNavigation}" ToolTip="Do not walk through AoE, even at full health">Path Around AoE</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Misc.AvoidDeath}" ToolTip="Kite to Avoid Death on low health">Kite to Avoid Death on Low HP</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Misc.AvoidAOE}">Attempt to avoid AoE</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Misc.KillMonstersInAoE}" ToolTip="Attack units standing in AoE">Attack Mobs in AoE</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Misc.UseExperimentalSavageBeastAvoidance}" ToolTip="Use Experimental Savage Beast Charge Avoidance">Avoid Savage Beast Charge</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Misc.UseExperimentalFireChainsAvoidance}" ToolTip="Use Experimental Fire Chains Avoidance">Avoid Fire Chains</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Misc.AvoidAoEOutOfCombat}" ToolTip="Avoid AoE out of combat (Arcane, molten, etc)">Avoid AoE out of combat</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Misc.AttackWhenBlocked}" ToolTip="Attack Mobs When Blocked">Attack Mobs When Blocked</CheckBox>
-                    </UniformGrid>
-                </GroupBox>
+
             </StackPanel>
 
             <!--Reset Button-->

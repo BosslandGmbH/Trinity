@@ -21,9 +21,10 @@ namespace TrinityRoutine
             foreach (PluginContainer plugin in PluginManager.Plugins)
             {
                 if (plugin.Plugin.Name == "Trinity" && !plugin.Enabled)
-                {
-                    plugin.Enabled = true;
-                }
+                    if (plugin.Plugin.Name == "TrinityPlugin" && !plugin.Enabled)
+                    {
+                        plugin.Enabled = true;
+                    }
             }
         }
 
@@ -42,17 +43,21 @@ namespace TrinityRoutine
                     foreach (PluginContainer plugin in PluginManager.Plugins)
                     {
                         if (plugin.Plugin.Name == "Trinity")
-                        {
-                            return plugin.Plugin.DisplayWindow;
-                        }
+                            if (plugin.Plugin.Name == "TrinityPlugin")
+                            {
+                                return plugin.Plugin.DisplayWindow;
+                            }
                     }
                 }
                 catch (Exception ex)
                 {
                     Log.Error("[Trinity] Error Opening Plugin Config window!");
                     Log.Error("[Trinity] {0}", ex);
+                    Log.Error("[TrinityPlugin] Error Opening Plugin Config window!");
+                    Log.Error("[TrinityPlugin] {0}", ex);
                 }
                 Log.Error("[Trinity] Unable to open Plugin Config window!");
+                Log.Error("[TrinityPlugin] Unable to open Plugin Config window!");
                 return null;
             }
         }

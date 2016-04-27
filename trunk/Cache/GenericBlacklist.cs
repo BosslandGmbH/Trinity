@@ -109,7 +109,7 @@ namespace Trinity.Cache
                         Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Starting up Generic Blacklist Manager thread");
                         _manager = new Thread(Manage)
                         {
-                            Name = "Trinity Generic Blacklist",
+                            Name = "TrinityPlugin Generic Blacklist",
                             IsBackground = true,
                             Priority = ThreadPriority.Lowest
                         };

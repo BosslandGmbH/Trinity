@@ -25,7 +25,6 @@ using GameBalanceType = Zeta.Game.Internals.SNO.GameBalanceType;
 using GemType = Zeta.Game.Internals.Actors.GemType;
 using ItemQuality = Zeta.Game.Internals.Actors.ItemQuality;
 using Logger = Trinity.Technicals.Logger;
-using Sno = Trinity.Framework.Objects.Memory.Sno.Sno;
 
 
 namespace Trinity.Framework.Actors
@@ -153,7 +152,7 @@ namespace Trinity.Framework.Actors
             var realname = GetName(GameBalanceId);
             Name = string.IsNullOrEmpty(realname) ? InternalName : realname;
 
-            var gbi = Sno.GameBalance.GetRecord<SnoGameBalanceItem>(SnoGameBalanceType.Items, GameBalanceId);
+            var gbi = SnoManager.GameBalance.GetRecord<SnoGameBalanceItem>(SnoGameBalanceType.Items, GameBalanceId);
             ItemLevel = RequiredLevel; //gbi.ItemLevel;
             InternalName = gbi.InternalName;
             MaxStackCount = gbi.StackSize;
@@ -179,7 +178,7 @@ namespace Trinity.Framework.Actors
 
         public string GetName(int gameBalanceId)
         {
-            return Sno.StringList.GetStringListValue(SnoStringListType.Items, gameBalanceId);
+            return SnoManager.StringList.GetStringListValue(SnoStringListType.Items, gameBalanceId);
         }
 
         public override string ToString()
@@ -352,7 +351,7 @@ namespace Trinity.Framework.Actors
                 return true;
             }
 
-            return Attributes.IsTradeable && Attributes.ItemTradePlayerLow.Contains(Hero.PlayerTradeId);
+            return Attributes.IsTradeable && Attributes.ItemTradePlayerLow.Contains(Core.Hero.PlayerTradeId);
         }
 
     }

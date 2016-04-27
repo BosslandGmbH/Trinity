@@ -7,7 +7,9 @@
                     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:ui="clr-namespace:Trinity.UI"
-                    xmlns:cc="clr-namespace:CustomControls">
+                    xmlns:cc="clr-namespace:CustomControls"
+
+                    >
 
 
     <ut:IntToStringConverter x:Key="intToStringConverter" />
@@ -32,6 +34,159 @@
     <ut:DisplayNameAttributeConverter x:Key="displayNameAttributeConverter" />
     <ut:PropertyValueConverter x:Key="PropertyValueConverter" />
     <ut:PropertyValuesDisabledToVisibilityConverter x:Key="PropertyValuesDisabledToVisibilityConverter" />
+
+
+    <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
+    <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+
+    <Style  TargetType="{x:Type TabControl}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Foreground" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabControl}">
+                    <Grid KeyboardNavigation.TabNavigation="Local" Background="Transparent">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TabPanel 
+                            Name="HeaderPanel"
+                            Grid.Row="0"
+                            Panel.ZIndex="1" 
+                            Margin="0,0,0,0"                             
+                            IsItemsHost="True"
+                            KeyboardNavigation.TabIndex="1"
+                            Background="{TemplateBinding Background}" />
+                        <Border 
+                            Name="Border" 
+                            Grid.Row="1" 
+                            Background="{TemplateBinding Foreground}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="0" 
+                            CornerRadius="2" 
+                            KeyboardNavigation.TabNavigation="Local"
+                            KeyboardNavigation.DirectionalNavigation="Contained"
+                            KeyboardNavigation.TabIndex="2" 
+                            Padding="0">
+                            <ContentPresenter 
+                                Name="PART_SelectedContentHost"                                
+                                Margin="0"
+                                ContentSource="SelectedContent" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type TabItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid x:Name="Container">
+                        <Border Name="Border" Background="Transparent" Margin="0,0,0,0" Padding="0,2,0,2" BorderBrush="#474747" BorderThickness="0" CornerRadius="2,2,0,0">
+                            <ContentPresenter x:Name="ContentSite" ContentSource="Header" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,4,8,6" RecognizesAccessKey="True"/>
+                        </Border>
+                        <!--<Rectangle Height="100" Width="10" Margin="0,0,-10,0" Stroke="Black" VerticalAlignment="Bottom" HorizontalAlignment="Right" StrokeThickness="0" Fill="#FFD4D0C8"/>-->
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#474747" />
+                            <Setter TargetName="Container" Property="Background" Value="#474747" />
+                            <Setter TargetName="Container" Property="TextBlock.Foreground" Value="#F2F2F2" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="#343434" />
+                            <Setter TargetName="Container" Property="Background" Value="#343434" />
+                            <Setter TargetName="Container" Property="TextBlock.Foreground" Value="#999999" />
+                        </Trigger>                        
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="#999999" />
+        <Setter Property="Margin" Value="-1,0,0,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+    </Style>
+
+    <Style x:Key="MainMenuTabItem" TargetType="{x:Type TabItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid x:Name="Container" Background="#1d1d1d">
+                        <Border Name="Border" Background="#1d1d1d" Margin="0,0,0,0" Padding="0,2,0,2" BorderBrush="Transparent" BorderThickness="0,0,0,0" CornerRadius="2,2,0,0">
+                            <ContentPresenter x:Name="ContentSite" ContentSource="Header" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,4,8,6" RecognizesAccessKey="True"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#343434" />
+                            <Setter TargetName="Container" Property="Background" Value="#343434" />
+                            <Setter TargetName="Container" Property="TextBlock.Foreground" Value="#F2F2F2" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="#1d1d1d" />
+                            <Setter TargetName="Container" Property="Background" Value="#1d1d1d" />
+                            <Setter TargetName="Container" Property="TextBlock.Foreground" Value="#999999" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="#1d1d1d" />
+        <Setter Property="Foreground" Value="#999999" />
+        <Setter Property="Margin" Value="-1,0,0,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+    </Style>
+
+    <Style x:Key="TertiaryTabItem" TargetType="{x:Type TabItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <Grid x:Name="Container" Background="#434343">
+                        <Border Name="Border" Background="#434343" Margin="0,0,0,0" Padding="0,2,0,2" BorderBrush="Transparent" BorderThickness="0,0,0,0" CornerRadius="2,2,0,0">
+                            <ContentPresenter x:Name="ContentSite" ContentSource="Header" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,4,8,6" RecognizesAccessKey="True"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#333333" />
+                            <Setter TargetName="Container" Property="Background" Value="#333333" />
+                            <Setter TargetName="Container" Property="TextBlock.Foreground" Value="#F2F2F2" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="#434343" />
+                            <Setter TargetName="Container" Property="Background" Value="#434343" />
+                            <Setter TargetName="Container" Property="TextBlock.Foreground" Value="#999999" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="#333333" />
+        <Setter Property="Foreground" Value="#999999" />
+        <Setter Property="Margin" Value="-1,0,0,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+    </Style>
 
     <!-- Base Template Colors -->
     <Color x:Key="CustomControlMouseOverColor">#FF3843C4</Color>
@@ -783,7 +938,32 @@
                     HorizontalAlignment="Stretch" 
                     VerticalAlignment="Center" 
                     Margin="0,0,2,0" Style="{x:Null}" x:Name="MySlider" />
-            <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Value, Converter={StaticResource intToStringConverter}, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" Width="Auto" Margin="0,2,2,2" TextAlignment="Center" IsReadOnly="True" />
+            <TextBox Grid.Column="1" Grid.Row="1" BorderBrush="#333" Text="{Binding Value, Converter={StaticResource intToStringConverter}, RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" Width="Auto" Margin="0,2,2,2" TextAlignment="Center" IsReadOnly="True" />
+        </Grid>
+    </ControlTemplate>
+    <ControlTemplate x:Key="LabelledSliderEditable" TargetType="{x:Type Slider}">
+        <Grid Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition MinWidth="35" Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="1" TextAlignment="Left" Text="{TemplateBinding Tag}" FontWeight="Normal" VerticalAlignment="Center"/>
+            <Slider Grid.Column="1" Grid.Row="1" Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}" Delay="{TemplateBinding Delay}" 
+                    Interval="{TemplateBinding Interval}" IsEnabled="{TemplateBinding IsEnabled}" IsMoveToPointEnabled="True" IsSnapToTickEnabled="{TemplateBinding IsSnapToTickEnabled}" 
+                    LargeChange="{TemplateBinding LargeChange}" Orientation="{TemplateBinding Orientation}" SmallChange="{TemplateBinding SmallChange}" TickFrequency="{TemplateBinding TickFrequency}" 
+                    TickPlacement="{TemplateBinding TickPlacement}" Ticks="{TemplateBinding Ticks}" ToolTip="{TemplateBinding ToolTip}" 
+                    Maximum="{TemplateBinding Maximum}" Minimum="{TemplateBinding Minimum}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,2,0" Style="{x:Null}" x:Name="MySlider" />
+            <TextBox Grid.Column="2" Grid.Row="1" ut:SelectTextOnFocus.Active="True" ut:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" 
+                     Text="{Binding Value, 
+                Converter={StaticResource intToStringConverter}, 
+                UpdateSourceTrigger=Default, 
+                RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" BorderBrush="#333" Margin="0,2,2,2" TextAlignment="Center" IsReadOnly="False" />
         </Grid>
     </ControlTemplate>
     <ControlTemplate x:Key="SliderEditable" TargetType="{x:Type Slider}">
@@ -806,7 +986,7 @@
                      Text="{Binding Value, 
                 Converter={StaticResource intToStringConverter}, 
                 UpdateSourceTrigger=Default, 
-                RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" Margin="0,2,2,2" TextAlignment="Center" IsReadOnly="False" />
+                RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" BorderBrush="#333" Margin="0,2,2,2" TextAlignment="Center" IsReadOnly="False" />
         </Grid>
     </ControlTemplate>
     <ControlTemplate x:Key="RangeSliderTemplate" TargetType="{x:Type Slider}">
@@ -1849,7 +2029,7 @@
     </Style>-->
 
     <Style TargetType="{x:Type GroupBox}">
-        <Setter Property="Margin" Value="0,10,0,0" />
+        <Setter Property="Margin" Value="0,0,0,10" />
         <Setter Property="Foreground" Value="WhiteSmoke" />
         <Setter Property="Background" Value="#333333" />
         <Setter Property="TextBlock.Foreground" Value="WhiteSmoke" />
@@ -1861,30 +2041,17 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0" Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="#222" BorderThickness="1" ClipToBounds="True">
+                        <Border Grid.Row="0" Background="{TemplateBinding Background}" CornerRadius="2" BorderBrush="#2C2C2C" BorderThickness="1" ClipToBounds="True">
                             <Grid>
-                                <Border Background="Transparent" BorderBrush="Black" BorderThickness="10,10,0,0" Margin="-11,-11,0,0" Padding="0">
+                                <Border Background="Transparent" BorderBrush="#333" BorderThickness="6,6,0,0" Margin="-11,-11,0,0" Padding="0">
                                     <Border.Effect>
-                                        <DropShadowEffect ShadowDepth="0" BlurRadius="10" />
+                                        <DropShadowEffect ShadowDepth="0" BlurRadius="5" />
                                     </Border.Effect>
                                 </Border>
                                 <Label FontWeight="Bold" Foreground="Tan">
-                                    <ContentPresenter Margin="4,-2,4,4" ContentSource="Header" RecognizesAccessKey="True" />
+                                    <ContentPresenter Margin="4,0,4,4" ContentSource="Header" RecognizesAccessKey="True" />
                                 </Label>
                                 <ContentPresenter Margin="12,25,12,12" />
-                                <!--<Border>
-                                    <Border Grid.Row="0"
-                          BorderThickness="1"
-                          BorderBrush="#25A0DA"
-                          Background="#25A0DA">
-                            <Label Foreground="White">
-                                <ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" />
-                            </Label>
-                        </Border>
-                        <Border Grid.Row="1"
-                          BorderThickness="1,0,1,1"
-                          BorderBrush="#25A0DA">
-                            <ContentPresenter Margin="4" />-->
                             </Grid>
                         </Border>
                     </Grid>
@@ -2543,7 +2710,35 @@
             </Grid>
         </Border>
     </DataTemplate>
-    
+
+    <Style x:Key="AvoidanceListViewStyle" TargetType="{x:Type ListView}">
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListView}">
+                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Uid="ItemsPresenter_6" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="AvoidanceListViewItemStyle" TargetType="{x:Type ListViewItem}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="ContentTemplate" Value="{DynamicResource AvoidanceRowTemplate}" />
+    </Style>
+
 
 
 </ResourceDictionary>
@@ -3657,7 +3852,7 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         --><!--<Border Grid.Row="1" Name="tabItemStyle" Background="#15160e" BorderBrush="Transparent" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" SnapsToDevicePixels="True" Margin="0, 0, 0, 0">--><!--
-                        <ContentPresenter x:Name="ContentSite" TextBlock.Foreground="White" TextBlock.FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="0" />
+                        <ContentPresenter x:Name="ContentSite" TextBlock.Foreground="White" TextBlock.FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="0" />
                         --><!--</Border>--><!--
                     </Grid>
                     <ControlTemplate.Triggers>

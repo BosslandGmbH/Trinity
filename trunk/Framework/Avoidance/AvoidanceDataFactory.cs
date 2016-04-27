@@ -17,7 +17,26 @@ namespace Trinity.Framework.Avoidance
     {
         internal static List<AvoidanceData> AvoidanceData = new List<AvoidanceData>();
 
-        private static readonly Dictionary<int, AvoidancePart> AvoidanceDataDictionary = new Dictionary<int, AvoidancePart>();
+        public static readonly Dictionary<int, AvoidancePart> AvoidanceDataDictionary = new Dictionary<int, AvoidancePart>();
+
+        public static bool TryCreateAvoidance(List<IActor> actors, IActor actor, out Structures.Avoidance avoidance)
+        {
+            avoidance = null;
+
+            var data = GetAvoidanceData(actor);
+            if (data == null)
+                return false;
+
+            avoidance = new Structures.Avoidance
+            {
+                Data = data,
+                CreationTime = DateTime.UtcNow,
+                StartPosition = actor.Position,
+                Actors = new List<IActor>() { actor }
+            };
+
+            return true;
+        }
 
         static AvoidanceDataFactory()
         {
@@ -499,7 +518,7 @@ namespace Trinity.Framework.Avoidance
                 }
             });
 
-            //[Trinity 2.14.34] Unit Grenadier_Proj_mortar_inpact-17615 has None (ProjectileDetonateTime) Value=134387
+            //[TrinityPlugin 2.14.34] Unit Grenadier_Proj_mortar_inpact-17615 has None (ProjectileDetonateTime) Value=134387
 
             AvoidanceData.Add(new AvoidanceData
             {
@@ -530,7 +549,7 @@ namespace Trinity.Framework.Avoidance
                     component.Parent = avoidanceDatum;
 
                     try
-                    {
+                    {        
                         AvoidanceDataDictionary.Add(component.ActorSnoId, component);
                     }
                     catch(Exception ex)                   
@@ -579,7 +598,7 @@ namespace Trinity.Framework.Avoidance
         {
             data = null;
 
-            if (actor == null || actor.MonsterAffixes == null || !actor.MonsterAffixes.Any())
+            if (actor?.MonsterAffixes == null || !actor.MonsterAffixes.Any())
                 return false;
 
             foreach (var affix in actor.MonsterAffixes)
@@ -603,7 +622,6 @@ namespace Trinity.Framework.Avoidance
         {
             return AvoidanceDataDictionary.Values.FirstOrDefault(a => a.Affix == affix);
         }
-
     }
 }
 

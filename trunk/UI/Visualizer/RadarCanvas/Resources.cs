@@ -26,6 +26,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         public static SolidColorBrush BackTrackNode;
         private static SolidColorBrush _nodeN2;
         private static SolidColorBrush _nodeN1;
+        private static SolidColorBrush _Node0;
 
 
         public class ResourceSet
@@ -39,8 +40,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
             WalkableTerrainBorder = new Pen(Brushes.NavajoWhite, 0.3);
 
-            CurrentPathPen = new Pen(Brushes.Yellow, 3);
-            CurrentPathPen = new Pen(Brushes.Orange, 3);
+            CurrentPathPen1 = new Pen(Brushes.Yellow, 3);
+            CurrentPathPen2 = new Pen(Brushes.LightYellow, 3);
 
 
             RangeGuidePen = new Pen(Brushes.LightYellow, 0.1);
@@ -53,7 +54,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             AvoidanceLightPen = new Pen(new SolidColorBrush(ControlPaint.Light(AvoidanceBrush.Color.ToDrawingColor(), 75).ToMediaColor()), 2);
 
             GreyBrush = new SolidColorBrush(Colors.DarkGray);
-            GreyPen = new Pen(GreyBrush, 2);
+            GreyPen = new Pen(GreyBrush, 1);
 
             BlackBrush = new SolidColorBrush(Colors.Black);
             BlackPen = new Pen(BlackBrush, 2);
@@ -173,6 +174,11 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 Opacity = 0.7
             };
 
+            _Node0 = new SolidColorBrush(Color.FromRgb(150, 150, 150))
+            {
+                Opacity = 1
+            };
+
             _NodeP9 = new SolidColorBrush(Color.FromRgb(255, 0, 0))
             {
                 Opacity = 1
@@ -257,6 +263,9 @@ namespace Trinity.UI.UIComponents.RadarCanvas
  	            tomato	#FF6347	(255,99,71)
  	            coral	#FF7F50	(255,127,80)
              */
+
+            if(current < 1)
+                return _Node0;
 
             if (Math.Abs(current) < float.Epsilon)
                 return TransparentBrush;                        
@@ -474,7 +483,9 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
         public static SolidColorBrush LabelBrush { get; set; }
 
-        public static Pen CurrentPathPen { get; set; }
+        public static Pen CurrentPathPen1 { get; set; }
+
+        public static Pen CurrentPathPen2 { get; set; }
 
         public static Pen HighlightPen { get; set; }
 

@@ -63,6 +63,9 @@ namespace Trinity.Config.Combat
         private bool _ignoreGreaterProgressionGlobes;
         private int _trashPackSizeMin;
         private double _riftProgressionAlwaysKillPct;
+        private float _HealthGlobeLevel;
+        private float _PotionLevel;
+        private float _HealthGlobeLevelResource;
 
         #endregion Events
 
@@ -74,6 +77,60 @@ namespace Trinity.Config.Combat
         #endregion Constructors
 
         #region Properties
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(0.40f)]
+        public float PotionLevel
+        {
+            get
+            {
+                return _PotionLevel;
+            }
+            set
+            {
+                if (_PotionLevel != value)
+                {
+                    _PotionLevel = value;
+                    OnPropertyChanged("PotionLevel");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(0.55f)]
+        public float HealthGlobeLevel
+        {
+            get
+            {
+                return _HealthGlobeLevel;
+            }
+            set
+            {
+                if (_HealthGlobeLevel != value)
+                {
+                    _HealthGlobeLevel = value;
+                    OnPropertyChanged("HealthGlobeLevel");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(0.5f)]
+        public float HealthGlobeLevelResource
+        {
+            get
+            {
+                return _HealthGlobeLevelResource;
+            }
+            set
+            {
+                if (_HealthGlobeLevelResource != value)
+                {
+                    _HealthGlobeLevelResource = value;
+                    OnPropertyChanged("HealthGlobeLevelResource");
+                }
+            }
+        }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]

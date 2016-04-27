@@ -72,6 +72,11 @@ namespace Trinity.Objects
             get { return Sets.SetItemIds.Contains(Id); }
         }
 
+        public bool IsLegendaryAffixed
+        {
+            get { return !string.IsNullOrEmpty(LegendaryAffix); }
+        }
+
         /// <summary>
         /// The set this item belongs to, if applicable.
         /// </summary>

@@ -14,6 +14,7 @@ using Trinity.Framework;
 using Trinity.Framework.Actors;
 using Trinity.Helpers;
 using Trinity.Items;
+using Trinity.Movement;
 using Trinity.Settings.Loot;
 using Trinity.Technicals;
 using Zeta.Bot;
@@ -33,7 +34,7 @@ namespace Trinity
         {
         }
 
-        private static TrinitySetting Settings { get { return Trinity.Settings; } }
+        private static TrinitySetting Settings { get { return TrinityPlugin.Settings; } }
 
         private static readonly Dictionary<string, Composite> OriginalHooks = new Dictionary<string, Composite>();
 
@@ -45,7 +46,7 @@ namespace Trinity
         /// </summary>
         internal static void ReplaceTreeHooks()
         {
-            if (Trinity.IsPluginEnabled)
+            if (TrinityPlugin.IsPluginEnabled)
             {
                 ReplaceCombatHook();
                 ReplaceVendorRunHook();
@@ -110,7 +111,7 @@ namespace Trinity
                     itemCount++;
                 }
                 catch
-                { 
+                {
                     // Ring them bells for the chosen few who will judge the many when the game is through
                 }
                 if (itemCount > 0 && durabilitySum / itemCount < 0.05)
@@ -118,7 +119,7 @@ namespace Trinity
             }
 
             // We keep dying because we're spawning in AoE and next to 50 elites and we need to just leave the game
-            if (DateTime.UtcNow.Subtract(Trinity.LastDeathTime).TotalSeconds < 30 && !ZetaDia.IsInTown && needEmergencyRepair && !Settings.Advanced.UseTrinityDeathHandler)
+            if (DateTime.UtcNow.Subtract(TrinityPlugin.LastDeathTime).TotalSeconds < 30 && !ZetaDia.IsInTown && needEmergencyRepair && !Settings.Advanced.UseTrinityDeathHandler)
             {
                 Logger.Log("Durability is zero, emergency leave game");
                 ZetaDia.Service.Party.LeaveGame(true);
@@ -130,10 +131,7 @@ namespace Trinity
             await AutoEquipSkills.Instance.Execute();
             await AutoEquipItems.Instance.Execute();
 
-            var isTarget = Trinity.TargetCheck(null);
-
-            if (!await Core.Avoidance.Avoid())
-                return true;
+            var isTarget = TrinityPlugin.TargetCheck(null);
 
             if (CombatBase.CombatMovement.IsQueuedMovement & CombatBase.IsCombatAllowed)
             {
@@ -142,13 +140,13 @@ namespace Trinity
                     if (!CombatTargeting.Instance.AllowedToKillMonsters)
                         return false;
 
-                    Trinity.RefreshDiaObjectCache();
+                    TrinityPlugin.RefreshDiaObjectCache();
                     await Coroutine.Yield();
                 }
                 return true;
             }
 
-            if (!CombatTargeting.Instance.AllowedToKillMonsters && (Trinity.CurrentTarget == null || Trinity.CurrentTarget.IsUnit))
+            if (!CombatTargeting.Instance.AllowedToKillMonsters && (TrinityPlugin.CurrentTarget == null || TrinityPlugin.CurrentTarget.IsUnit))
             {
                 Logger.LogVerbose(LogCategory.Behavior, "Aborting MainCombatTask() AllowCombat={0}", CombatTargeting.Instance.AllowedToKillMonsters);
                 return false;
@@ -156,11 +154,11 @@ namespace Trinity
 
             if (isTarget)
             {
-                return await new Action(ret => Trinity.HandleTarget()).ExecuteCoroutine();
+                return await new Action(ret => TrinityPlugin.HandleTarget()).ExecuteCoroutine();
             }
 
             return false;
-            //return await new Decorator(Trinity.TargetCheck, new Action(ret => Trinity.HandleTarget())).ExecuteCoroutine();
+            //return await new Decorator(TrinityPlugin.TargetCheck, new Action(ret => TrinityPlugin.HandleTarget())).ExecuteCoroutine();
         }
 
 
@@ -176,7 +174,7 @@ namespace Trinity
             //}
 
             StoreAndReplaceHook("VendorRun", new ActionRunCoroutine(ret => TrinityTownRun.Execute()));
-            
+
         }
 
         //private static async Task<bool> TownRunSelector(Decorator originalTownRun)
@@ -241,9 +239,9 @@ namespace Trinity
             if (!TreeHooks.Instance.Hooks.ContainsKey("Death"))
                 return;
 
-            //if (Trinity.Settings.Advanced.UseTrinityDeathHandler)
+            //if (TrinityPlugin.Settings.Advanced.UseTrinityDeathHandler)
             //{
-                StoreAndReplaceHook("Death", new ActionRunCoroutine(ret => DeathHandler.Execute()));
+            StoreAndReplaceHook("Death", new ActionRunCoroutine(ret => DeathHandler.Execute()));
             //}
             //else
             //{
@@ -315,32 +313,6 @@ namespace Trinity
                 BotMain.TicksPerSecond = 30;
                 ActorManager.TickDelayMs = 30;
                 Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Reset bot TPS to default: {0}", 30);
-            }
-        }
-
-        internal static void SetItemManagerProvider()
-        {
-            //if (Settings.Loot.ItemFilterMode != ItemFilterMode.DemonBuddy)
-            //{
-            //    ItemManager.Current = new TrinityItemManager();
-            //}
-            //else
-            //{
-            //    ItemManager.Current = new LootRuleItemManager();
-            //}
-        }
-
-        internal static void SetUnstuckProvider()
-        {
-            if (Settings.Advanced.UnstuckerEnabled)
-            {
-                Navigator.StuckHandler = new StuckHandler();
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Using Trinity Unstucker", true);
-            }
-            else
-            {
-                Navigator.StuckHandler = new DefaultStuckHandler();
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Using Default Demonbuddy Unstucker", true);
             }
         }
 

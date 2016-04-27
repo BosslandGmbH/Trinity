@@ -28,7 +28,7 @@ namespace Trinity.Combat.Abilities
 
         public static MonkSetting MonkSettings
         {
-            get { return Trinity.Settings.Combat.Monk; }
+            get { return TrinityPlugin.Settings.Combat.Monk; }
         }
 
         public static bool IsWolMonk
@@ -347,8 +347,7 @@ namespace Trinity.Combat.Abilities
             }
 
             // Defensive Salvation.
-            if (!Player.IsIncapacitated && (Player.CurrentHealthPct <= 0.65 ||
-                Trinity.ObjectCache.Any(o => o.AvoidanceType == AvoidanceType.IceBall) || Trinity.ObjectCache.Any(o => o.AvoidanceType == AvoidanceType.MoltenCore)) 
+            if (!Player.IsIncapacitated && (Player.CurrentHealthPct <= 0.65 || Player.IsFrozen) 
                 && CanCastMantra(SNOPower.X1_Monk_MantraOfEvasion_v2) &&
                 !CacheData.Buffs.HasBuff(SNOPower.X1_Monk_MantraOfEvasion_v2_Passive, 1) && Settings.Combat.Monk.DisableMantraSpam)
                 return new TrinityPower(SNOPower.X1_Monk_MantraOfEvasion_v2, 3);            
@@ -497,20 +496,20 @@ namespace Trinity.Combat.Abilities
             if (CanRecastTempestRush())
             {
                 GenerateMonkZigZag();
-                Trinity.MaintainTempestRush = true;
+                TrinityPlugin.MaintainTempestRush = true;
                 const string trUse = "Continuing Tempest Rush for Combat";
                 LogTempestRushStatus(trUse);
-                return new TrinityPower(SNOPower.Monk_TempestRush, 23f, ZigZagPosition, Trinity.CurrentWorldDynamicId, -1, 0, 0);
+                return new TrinityPower(SNOPower.Monk_TempestRush, 23f, ZigZagPosition, TrinityPlugin.CurrentWorldDynamicId, -1, 0, 0);
             }
 
             // Tempest rush at elites or groups of mobs
             if (CanCastTempestRushAsAttack())
             {
                 GenerateMonkZigZag();
-                Trinity.MaintainTempestRush = true;
+                TrinityPlugin.MaintainTempestRush = true;
                 const string trUse = "Starting Tempest Rush for Combat";
                 LogTempestRushStatus(trUse);
-                return new TrinityPower(SNOPower.Monk_TempestRush, 23f, ZigZagPosition, Trinity.CurrentWorldDynamicId, -1, 0, 0);
+                return new TrinityPower(SNOPower.Monk_TempestRush, 23f, ZigZagPosition, TrinityPlugin.CurrentWorldDynamicId, -1, 0, 0);
             }
 
             // 4 Mantra spam for the 4 second buff
@@ -539,7 +538,7 @@ namespace Trinity.Combat.Abilities
             if (!IsCurrentlyAvoiding && CanCast(SNOPower.Monk_FistsofThunder) && Runes.Monk.StaticCharge.IsActive &&
                 CanCast(SNOPower.Monk_WayOfTheHundredFists) && Runes.Monk.FistsOfFury.IsActive)
             {
-                var nearbyEnemyCount = Trinity.ObjectCache.Count(u => u.IsUnit && u.HitPoints > 0 && u.Distance <= 30f);
+                var nearbyEnemyCount = TrinityPlugin.ObjectCache.Count(u => u.IsUnit && u.HitPoints > 0 && u.Distance <= 30f);
                 var currentGeneratorStep = GetCurrentComboLevel();
 
                 // Dashing Strike resets the current generator step, so it's the perfect opportunity to snapshot FoF's 75% proc
@@ -651,7 +650,7 @@ namespace Trinity.Combat.Abilities
         private static bool CanRecastTempestRush()
         {
             return Player.PrimaryResource >= 15 && CanCast(SNOPower.Monk_TempestRush) &&
-                    Trinity.TimeSinceUse(SNOPower.Monk_TempestRush) <= 150 &&
+                    TrinityPlugin.TimeSinceUse(SNOPower.Monk_TempestRush) <= 150 &&
                     ((Settings.Combat.Monk.TROption != TempestRushOption.MovementOnly) &&
                     !(Settings.Combat.Monk.TROption == TempestRushOption.TrashOnly && TargetUtil.AnyElitesInRange(40f)));
         }
@@ -781,7 +780,7 @@ namespace Trinity.Combat.Abilities
 
         private static bool CanCastSevenSidedStrike()
         {
-            var shouldWaitForPrimary = Settings.Combat.Monk.PrimaryBeforeSSS && !Trinity.ObjectCache.Any(u => u.IsUnit && u.Distance < 35f && u.HasDebuff(SNOPower.Monk_ExplodingPalm));
+            var shouldWaitForPrimary = Settings.Combat.Monk.PrimaryBeforeSSS && !TrinityPlugin.ObjectCache.Any(u => u.IsUnit && u.Distance < 35f && u.HasDebuff(SNOPower.Monk_ExplodingPalm));
 
             if (!shouldWaitForPrimary && Settings.Combat.Monk.SSSOffCD && (Player.PrimaryResource >= 50 || Runes.Monk.Pandemonium.IsActive) && 
                 CanCast(SNOPower.Monk_SevenSidedStrike, CanCastFlags.NoTimer) && TargetUtil.AnyMobsInRange(15))
@@ -988,15 +987,15 @@ namespace Trinity.Combat.Abilities
             _lastTargetChange = DateTime.UtcNow;
 
             var currentTarget = CurrentTarget;
-            var lowestHealthTarget = TargetUtil.LowestHealthTarget(15f, Trinity.Me.Position, Skills.Monk.ExplodingPalm.SNOPower);
+            var lowestHealthTarget = TargetUtil.LowestHealthTarget(15f, TrinityPlugin.Me.Position, Skills.Monk.ExplodingPalm.SNOPower);
 
             //Logger.LogNormal("Blacklisting {0} {1} - Changing Target", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId);
-            Trinity.Blacklist3Seconds.Add(CurrentTarget.AnnId);
+            TrinityPlugin.Blacklist3Seconds.Add(CurrentTarget.AnnId);
 
             // Would like the new target to be different than the one we just blacklisted, or be very close to dead.
             if (lowestHealthTarget.ACDGuid == currentTarget.ACDGuid && lowestHealthTarget.HitPointsPct < 0.2) return;
 
-            Trinity.CurrentTarget = lowestHealthTarget;
+            TrinityPlugin.CurrentTarget = lowestHealthTarget;
             //Logger.LogNormal("Found lowest health target {0} {1} ({2:0.##}%)", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId, lowestHealthTarget.HitPointsPct * 100);
         }
 
@@ -1007,7 +1006,7 @@ namespace Trinity.Combat.Abilities
 			{
 				_lastTargetChange = DateTime.UtcNow;
 				Logger.Log(LogCategory.Behavior, "Blacklisting {0} {1} for 1 second", bossTarget.InternalName, bossTarget.CommonData.ACDId);
-				Trinity.Blacklist1Second.Add(bossTarget.RActorGuid);
+				TrinityPlugin.Blacklist1Second.Add(bossTarget.RActorGuid);
 				return bossTarget;				
 			}
 			var bestTarget = TargetUtil.ClosestUnit(20f, t => t.ACDGuid != CurrentTarget.ACDGuid && !t.HasDebuff(SNOPower.Monk_FistsofThunder));            
@@ -1017,7 +1016,7 @@ namespace Trinity.Combat.Abilities
             _lastTargetChange = DateTime.UtcNow;
 
             Logger.Log(LogCategory.Behavior, "Blacklisting {0} {1} for 1 second", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId);
-            Trinity.Blacklist1Second.Add(CurrentTarget.RActorGuid);
+            TrinityPlugin.Blacklist1Second.Add(CurrentTarget.RActorGuid);
 
             Logger.Log(LogCategory.Behavior, "Changing target to {0} {1} (Health={2:0.##}%)", bestTarget.InternalName, bestTarget.CommonData.ACDId, bestTarget.HitPointsPct * 100);
             return bestTarget;
@@ -1032,7 +1031,7 @@ namespace Trinity.Combat.Abilities
             _lastTargetChange = DateTime.UtcNow;
 
             Logger.Log(LogCategory.Behavior, "Blacklisting {0} {1} for 1 second", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId);
-            Trinity.Blacklist1Second.Add(CurrentTarget.RActorGuid);
+            TrinityPlugin.Blacklist1Second.Add(CurrentTarget.RActorGuid);
 
             Logger.Log(LogCategory.Behavior, "Changing target to {0} {1} (Health={2:0.##}%)", bestTarget.InternalName, bestTarget.CommonData.ACDId, bestTarget.HitPointsPct * 100);
             return bestTarget;
@@ -1045,10 +1044,10 @@ namespace Trinity.Combat.Abilities
 
                 if (IsCurrentlyAvoiding ||
                     TimeSincePowerUse(SNOPower.X1_Monk_DashingStrike) < Settings.Combat.Monk.DashingStrikeDelay ||
-                    Trinity.ShouldWaitForLootDrop || charges < 1 || !CanCast(SNOPower.X1_Monk_DashingStrike))
+                    TrinityPlugin.ShouldWaitForLootDrop || charges < 1 || !CanCast(SNOPower.X1_Monk_DashingStrike))
                     return false;
                 
-                if (Sets.ThousandStorms.IsSecondBonusActive && (charges > 1 && Trinity.Player.PrimaryResource >= 75 || CacheData.BuffsCache.Instance.HasCastingShrine))
+                if (Sets.ThousandStorms.IsSecondBonusActive && (charges > 1 && TrinityPlugin.Player.PrimaryResource >= 75 || CacheData.BuffsCache.Instance.HasCastingShrine))
                     return true;
 
                 if (!Sets.ThousandStorms.IsSecondBonusActive && (TargetUtil.AnyMobsInRange(60f) || CacheData.BuffsCache.Instance.HasCastingShrine))
@@ -1072,30 +1071,30 @@ namespace Trinity.Combat.Abilities
             {
                 if (farthestTarget != null) // found a target within 33-49 yards.
                 {
-                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, farthestTarget.Position, Trinity.CurrentWorldDynamicId, -1, 2, 2);
+                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, farthestTarget.Position, TrinityPlugin.CurrentWorldDynamicId, -1, 2, 2);
                 }
                 // no free target found, get a nearby cluster point instead.
                 var bestClusterPoint = TargetUtil.GetBestClusterPoint(15f, procDistance);
-                return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, bestClusterPoint, Trinity.CurrentWorldDynamicId, -1, 2, 2);
+                return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, bestClusterPoint, TrinityPlugin.CurrentWorldDynamicId, -1, 2, 2);
             }
 
             //usually this trigger after dash to the farthest target. dash a single mobs >30 yards, trying to dash back the cluster
             if (Skills.Monk.DashingStrike.Charges > 1 && TargetUtil.ClusterExists(20, 50, 3))
             {
                 var dashStrikeBestClusterPoint = TargetUtil.GetDashStrikeBestClusterPoint(20f, 50f);
-                if (dashStrikeBestClusterPoint != Trinity.Player.Position)
+                if (dashStrikeBestClusterPoint != TrinityPlugin.Player.Position)
                 {
-                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, dashStrikeBestClusterPoint, Trinity.CurrentWorldDynamicId, -1, 2, 2);
+                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, dashStrikeBestClusterPoint, TrinityPlugin.CurrentWorldDynamicId, -1, 2, 2);
                 }
             }
 
             // dash to anything which is free.               
             if (Skills.Monk.DashingStrike.Charges > 1 && farthestTarget != null)
             {
-                return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, farthestTarget.Position, Trinity.CurrentWorldDynamicId, -1, 2, 2);
+                return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, farthestTarget.Position, TrinityPlugin.CurrentWorldDynamicId, -1, 2, 2);
             }
 
-            return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, CurrentTarget.Position, Trinity.CurrentWorldDynamicId, -1, 2, 2);
+            return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, CurrentTarget.Position, TrinityPlugin.CurrentWorldDynamicId, -1, 2, 2);
         }
 
         private static Vector3 _zigZagPosition = Vector3.Zero;
@@ -1169,11 +1168,11 @@ namespace Trinity.Combat.Abilities
             double currentSpirit = ZetaDia.Me.CurrentPrimaryResource;
 
             // Minimum 10 spirit to continue channeling tempest rush
-            if (Trinity.TimeSinceUse(SNOPower.Monk_TempestRush) < 150 && currentSpirit > 10f)
+            if (TrinityPlugin.TimeSinceUse(SNOPower.Monk_TempestRush) < 150 && currentSpirit > 10f)
                 return true;
 
             // Minimum 25 Spirit to start Tempest Rush
-            if (PowerManager.CanCast(SNOPower.Monk_TempestRush) && currentSpirit > Settings.Combat.Monk.TR_MinSpirit && Trinity.TimeSinceUse(SNOPower.Monk_TempestRush) > 550)
+            if (PowerManager.CanCast(SNOPower.Monk_TempestRush) && currentSpirit > Settings.Combat.Monk.TR_MinSpirit && TrinityPlugin.TimeSinceUse(SNOPower.Monk_TempestRush) > 550)
                 return true;
 
             return false;
@@ -1233,7 +1232,7 @@ namespace Trinity.Combat.Abilities
             if (TrinityTownRun.IsTryingToTownPortal())
                 return;
 
-            if (Trinity.TimeSinceUse(SNOPower.Monk_TempestRush) > 150)
+            if (TrinityPlugin.TimeSinceUse(SNOPower.Monk_TempestRush) > 150)
                 return;
 
             bool shouldMaintain = false;
@@ -1288,7 +1287,7 @@ namespace Trinity.Combat.Abilities
                 {
                     LogTempestRushStatus(String.Format("Using Tempest Rush to maintain channeling, source={0}, V3={1} dist={2:0}", locationSource, target, destinationDistance));
 
-                    var usePowerResult = ZetaDia.Me.UsePower(SNOPower.Monk_TempestRush, target, Trinity.CurrentWorldDynamicId);
+                    var usePowerResult = ZetaDia.Me.UsePower(SNOPower.Monk_TempestRush, target, TrinityPlugin.CurrentWorldDynamicId);
                     if (usePowerResult)
                     {
                         CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush] = DateTime.UtcNow;
@@ -1296,7 +1295,7 @@ namespace Trinity.Combat.Abilities
                     }
                     else
                     {
-                        Trinity.LastActionTimes.Add(DateTime.UtcNow);
+                        TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
                     }
                 }
             }
@@ -1307,8 +1306,8 @@ namespace Trinity.Combat.Abilities
 
             Logger.Log(TrinityLogLevel.Debug, LogCategory.Behavior, "{0}, xyz={4} spirit={1:0} cd={2} lastUse={3:0}",
                 trUse,
-                Trinity.Player.PrimaryResource, PowerManager.CanCast(SNOPower.Monk_TempestRush),
-                Trinity.TimeSinceUse(SNOPower.Monk_TempestRush), ZigZagPosition);
+                TrinityPlugin.Player.PrimaryResource, PowerManager.CanCast(SNOPower.Monk_TempestRush),
+                TrinityPlugin.TimeSinceUse(SNOPower.Monk_TempestRush), ZigZagPosition);
         }
 
         private static bool MonkHasNoPrimary

@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Combat.Abilities;
 using Trinity.Config.Combat;
+using Trinity.Framework;
+using Trinity.Framework.Utilities;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Trinity.UI.UIComponents.RadarCanvas;
@@ -115,7 +117,7 @@ namespace Trinity.DbProvider
             //    return false;
             //}                
 
-            var testObjects = Trinity.ObjectCache.Where(o => !o.IsMe && ((o.IsTrashMob || o.IsBossOrEliteRareUnique || o.IsMinion) && o.HitPoints > 0) && o.Distance <= 12f).ToList();
+            var testObjects = TrinityPlugin.ObjectCache.Where(o => !o.IsMe && ((o.IsTrashMob || o.IsBossOrEliteRareUnique || o.IsMinion) && o.HitPoints > 0) && o.Distance <= 12f).ToList();
 
             //testObjects.ForEach(o => Logger.Log("testObject: {0}",o.InternalName));
 
@@ -134,7 +136,7 @@ namespace Trinity.DbProvider
             //}
 
             var surrounded = false;
-            var testPoints = MathUtil.GetCirclePoints(8, 10f, ZetaDia.Me.Position).Where(p => NavHelper.CanRayCast(p) && Trinity.MainGridProvider.CanStandAt(p)).ToList();
+            var testPoints = MathUtil.GetCirclePoints(8, 10f, ZetaDia.Me.Position).Where(p => NavHelper.CanRayCast(p) && TrinityPlugin.MainGridProvider.CanStandAt(p)).ToList();
             var halfPoints = Math.Round(testPoints.Count * 0.60, 0, MidpointRounding.AwayFromZero);
             var blockedPoints = testPoints.Count(p => testObjects.Any(o => MathUtil.PositionIsInCircle(p, o.Position, o.Radius / 2)));
             if (blockedPoints > halfPoints)
@@ -143,11 +145,11 @@ namespace Trinity.DbProvider
                 surrounded = true;
             }
 
-            //var pointInFacingDirection0 = MathEx.GetPointAt(Trinity.Player.Position, 10f, Trinity.Player.Rotation);
+            //var pointInFacingDirection0 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 10f, TrinityPlugin.Player.Rotation);
 
-            //var pointInFacingDirectionPlus60 = MathEx.GetPointAt(Trinity.Player.Position, 15f, Trinity.Player.Rotation + (float)(Math.PI / 3));
+            //var pointInFacingDirectionPlus60 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 15f, TrinityPlugin.Player.Rotation + (float)(Math.PI / 3));
 
-            //var pointInFacingDirecitonMinus60 = MathEx.GetPointAt(Trinity.Player.Position, 15f, Trinity.Player.Rotation + (float)(Math.PI / 3));
+            //var pointInFacingDirecitonMinus60 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 15f, TrinityPlugin.Player.Rotation + (float)(Math.PI / 3));
 
             //RadarDebug.Draw(new List<Vector3>
             //{
@@ -159,16 +161,16 @@ namespace Trinity.DbProvider
             var blocked = false;
             if (CurrentTarget != null && CurrentTarget.Distance > 10f)
             {
-                //testPoints.RemoveAll(p => !MathUtil.PositionIsInsideArc(p, Trinity.Player.Position, 12f, Trinity.Player.Rotation, 65f));
-                //testObjects.RemoveAll(obj => !MathUtil.PositionIsInsideArc(obj.Position, Trinity.Player.Position, 12f, Trinity.Player.Rotation, 65f));
+                //testPoints.RemoveAll(p => !MathUtil.PositionIsInsideArc(p, TrinityPlugin.Player.Position, 12f, TrinityPlugin.Player.Rotation, 65f));
+                //testObjects.RemoveAll(obj => !MathUtil.PositionIsInsideArc(obj.Position, TrinityPlugin.Player.Position, 12f, TrinityPlugin.Player.Rotation, 65f));
                 //RadarDebug.Draw(testObjects.Select(o => o.Position), 50);
                 //RadarDebug.Draw(testPoints, 50, RadarDebug.DrawType.Elipse, RadarDebug.DrawColor.Green);
                 //blocked = testPoints.All(p => testObjects.Any(o => MathUtil.PositionIsInCircle(p, o.Position, o.Radius / 2)));
 
-                var pointInFacingDirection0 = MathEx.GetPointAt(Trinity.Player.Position, 8f, Trinity.Player.Rotation);
+                var pointInFacingDirection0 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 8f, TrinityPlugin.Player.Rotation);
 
-                var numMonstersInFront = (from u in Trinity.ObjectCache
-                                          where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, Trinity.Player.Position, pointInFacingDirection0)
+                var numMonstersInFront = (from u in TrinityPlugin.ObjectCache
+                                          where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, TrinityPlugin.Player.Position, pointInFacingDirection0)
                                           select u).Count();
 
                 blocked = numMonstersInFront > 0;
@@ -217,7 +219,7 @@ namespace Trinity.DbProvider
 
         public static bool IsBlocked
         {
-            get { return _isProperBlocked && Trinity.Settings.Combat.Misc.AttackWhenBlocked; }
+            get { return _isProperBlocked && TrinityPlugin.Settings.Combat.Misc.AttackWhenBlocked; }
         }
 
         public static long BlockedTimeMs
@@ -234,7 +236,7 @@ namespace Trinity.DbProvider
 
         private static bool ShrinesInArea(Vector3 targetpos)
         {
-            return Trinity.ObjectCache.Any(o => BasicMovementOnlyIDs.Contains(o.ActorSNO) && Vector3.Distance(o.Position, targetpos) <= 50f);
+            return TrinityPlugin.ObjectCache.Any(o => BasicMovementOnlyIDs.Contains(o.ActorSNO) && Vector3.Distance(o.Position, targetpos) <= 50f);
         }
 
         private static readonly DateTime LastUsedMoveStop = DateTime.MinValue;
@@ -282,7 +284,7 @@ namespace Trinity.DbProvider
             var myPosition = ZetaDia.Me.Position;
 
             // Never stuck if movement disabled
-            if (Trinity.Settings.Advanced.DisableAllMovement)
+            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
             {
                 return false;
             }
@@ -375,7 +377,7 @@ namespace Trinity.DbProvider
         // Actually deal with a stuck - find an unstuck point etc.
         public static Vector3 UnstuckHandler(Vector3 vMyCurrentPosition, Vector3 vOriginalDestination)
         {
-            if (Trinity.Settings.Advanced.DisableAllMovement)
+            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
                 return Vector3.Zero;
 
             // Update the last time we generated a path
@@ -425,9 +427,9 @@ namespace Trinity.DbProvider
                 vSafeMovementLocation = NavHelper.SimpleUnstucker();
 
                 // Temporarily log stuff
-                if (TotalAntiStuckAttempts == 1 && Trinity.Settings.Advanced.LogStuckLocation)
+                if (TotalAntiStuckAttempts == 1 && TrinityPlugin.Settings.Advanced.LogStuckLocation)
                 {
-                    FileStream LogStream = File.Open(Path.Combine(FileManager.LoggingPath, "Stucks - " + Trinity.Player.ActorClass.ToString() + ".log"), FileMode.Append, FileAccess.Write, FileShare.Read);
+                    FileStream LogStream = File.Open(Path.Combine(FileManager.LoggingPath, "Stucks - " + TrinityPlugin.Player.ActorClass.ToString() + ".log"), FileMode.Append, FileAccess.Write, FileShare.Read);
                     using (StreamWriter LogWriter = new StreamWriter(LogStream))
                     {
                         LogWriter.WriteLine(DateTime.UtcNow.ToString() + ": Original Destination=" + LastMoveToTarget.ToString() + ". Current player position when stuck=" + vMyCurrentPosition.ToString());
@@ -473,17 +475,17 @@ namespace Trinity.DbProvider
                 //iTimesReachedMaxUnstucks = 3;
             }
             // Exit the game and reload the profile
-            if (Trinity.Settings.Advanced.AllowRestartGame && DateTime.UtcNow.Subtract(LastRestartedGame).TotalMinutes >= 5)
+            if (TrinityPlugin.Settings.Advanced.AllowRestartGame && DateTime.UtcNow.Subtract(LastRestartedGame).TotalMinutes >= 5)
             {
                 LastRestartedGame = DateTime.UtcNow;
-                string sUseProfile = Trinity.FirstProfile;
+                string sUseProfile = TrinityPlugin.FirstProfile;
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Anti-stuck measures exiting current game.");
                 // Load the first profile seen last run
                 ProfileManager.Load(!string.IsNullOrEmpty(sUseProfile)
                                         ? sUseProfile
                                         : Zeta.Bot.ProfileManager.CurrentProfile.Path);
                 Thread.Sleep(1000);
-                Trinity.ResetEverythingNewGame();
+                TrinityPlugin.ResetEverythingNewGame();
                 ZetaDia.Service.Party.LeaveGame(true);
                 // Wait for 10 second log out timer if not in town
                 if (!ZetaDia.IsInTown)
@@ -493,7 +495,7 @@ namespace Trinity.DbProvider
             }
             else
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Unstucking measures failed. Now stopping Trinity unstucker for 12 minutes to inactivity timers to kick in or DB to auto-fix.");
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Unstucking measures failed. Now stopping TrinityPlugin unstucker for 12 minutes to inactivity timers to kick in or DB to auto-fix.");
                 CancelUnstuckerForSeconds = 720;
                 LastCancelledUnstucker = DateTime.UtcNow;
                 return vSafeMovementLocation;
@@ -519,7 +521,7 @@ namespace Trinity.DbProvider
         public static double GetMovementSpeed()
         {
             // Just changed worlds, Clean up the stack
-            if (SpeedSensors.Any(s => s.WorldID != Trinity.CurrentWorldDynamicId))
+            if (SpeedSensors.Any(s => s.WorldID != TrinityPlugin.CurrentWorldDynamicId))
             {
                 SpeedSensors.Clear();
                 return 1d;
@@ -536,7 +538,7 @@ namespace Trinity.DbProvider
                         Location = MyPosition,
                         TimeSinceLastMove = new TimeSpan(0),
                         Distance = 0f,
-                        WorldID = Trinity.CurrentWorldDynamicId
+                        WorldID = TrinityPlugin.CurrentWorldDynamicId
                     });
                 }
                 else
@@ -547,7 +549,7 @@ namespace Trinity.DbProvider
                         Location = MyPosition,
                         TimeSinceLastMove = new TimeSpan(DateTime.UtcNow.Subtract(lastSensor.TimeSinceLastMove).Ticks),
                         Distance = Vector3.Distance(MyPosition, lastSensor.Location),
-                        WorldID = Trinity.CurrentWorldDynamicId
+                        WorldID = TrinityPlugin.CurrentWorldDynamicId
                     });
                 }
 
@@ -555,16 +557,16 @@ namespace Trinity.DbProvider
             }
 
             // If we just used a spell, we "moved"
-            if (DateTime.UtcNow.Subtract(Trinity.lastGlobalCooldownUse).TotalMilliseconds <= 1000)
+            if (DateTime.UtcNow.Subtract(TrinityPlugin.lastGlobalCooldownUse).TotalMilliseconds <= 1000)
                 return 1d;
 
-            if (DateTime.UtcNow.Subtract(Trinity.lastHadUnitInSights).TotalMilliseconds <= 1000)
+            if (DateTime.UtcNow.Subtract(TrinityPlugin.lastHadUnitInSights).TotalMilliseconds <= 1000)
                 return 1d;
 
-            if (DateTime.UtcNow.Subtract(Trinity.lastHadEliteUnitInSights).TotalMilliseconds <= 1000)
+            if (DateTime.UtcNow.Subtract(TrinityPlugin.lastHadEliteUnitInSights).TotalMilliseconds <= 1000)
                 return 1d;
 
-            if (DateTime.UtcNow.Subtract(Trinity.lastHadContainerInSights).TotalMilliseconds <= 1000)
+            if (DateTime.UtcNow.Subtract(TrinityPlugin.lastHadContainerInSights).TotalMilliseconds <= 1000)
                 return 1d;
 
             // Minimum of 2 records to calculate speed
@@ -622,10 +624,10 @@ namespace Trinity.DbProvider
 
         public void MoveTowards(Vector3 destination)
         {
-            if (Trinity.Settings.Advanced.DisableAllMovement)
+            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
                 return;
 
-            Trinity.NavServerReport(true);
+            TrinityPlugin.NavServerReport(true);
 
             if (!ZetaDia.IsInGame || !ZetaDia.Me.IsValid || ZetaDia.Me.IsDead || ZetaDia.IsLoadingWorld)
             {
@@ -650,7 +652,7 @@ namespace Trinity.DbProvider
             float destinationDistance = MyPosition.Distance(destination);
 
             //// Do unstuckery things
-            //if (Trinity.Settings.Advanced.UnstuckerEnabled)
+            //if (TrinityPlugin.Settings.Advanced.UnstuckerEnabled)
             //{
             //    // See if we can reset the 10-limit unstuck counter, if >120 seconds since we last generated an unstuck location
             //    // this is used if we're NOT stuck...
@@ -711,7 +713,7 @@ namespace Trinity.DbProvider
             //        }
             //        else
             //        {
-            //            if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+            //            if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
             //                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Clearing old route and trying new path find to: " + LastMoveToTarget.ToString());
             //            // Reset the path and allow a whole "New" unstuck generation next cycle
             //            TimesReachedStuckPoint = 0;
@@ -740,47 +742,47 @@ namespace Trinity.DbProvider
             bool cancelSpecialMovementAfterStuck = DateTime.UtcNow.Subtract(LastGeneratedStuckPosition).TotalMilliseconds > 3000;
 
             // See if we can use abilities like leap etc. for movement out of combat, but not in town
-            if (Trinity.Settings.Combat.Misc.AllowOOCMovement && !Trinity.Player.IsInTown && cancelSpecialMovementAfterStuck && (!CombatBase.IsInCombat || !CombatBase.IsCombatAllowed || IsBlocked))
+            if (TrinityPlugin.Settings.Combat.Misc.AllowOOCMovement && !TrinityPlugin.Player.IsInTown && cancelSpecialMovementAfterStuck && (!CombatBase.IsInCombat || !CombatBase.IsCombatAllowed || IsBlocked))
             {
                 if (NavigationProvider == null)
                     NavigationProvider = Navigator.GetNavigationProviderAs<DefaultNavigationProvider>();
 
                 // Whirlwind for a barb, special context only
-                if (Trinity.Settings.Combat.Barbarian.SprintMode != BarbarianSprintMode.CombatOnly &&
-                    CacheData.Hotbar.ActivePowers.Contains(SNOPower.Barbarian_Whirlwind) && Trinity.ObjectCache.Any(u => u.IsUnit &&
-                    MathUtil.IntersectsPath(u.Position, u.Radius + 5f, Trinity.Player.Position, destination)) &&
-                    Trinity.Player.PrimaryResource >= 10 && Trinity.Settings.Combat.Barbarian.WWMoveAlways)
+                if (TrinityPlugin.Settings.Combat.Barbarian.SprintMode != BarbarianSprintMode.CombatOnly &&
+                    CacheData.Hotbar.ActivePowers.Contains(SNOPower.Barbarian_Whirlwind) && TrinityPlugin.ObjectCache.Any(u => u.IsUnit &&
+                    MathUtil.IntersectsPath(u.Position, u.Radius + 5f, TrinityPlugin.Player.Position, destination)) &&
+                    TrinityPlugin.Player.PrimaryResource >= 10 && TrinityPlugin.Settings.Combat.Barbarian.WWMoveAlways)
                 {
                     Skills.Barbarian.Whirlwind.Cast(destination);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Whirlwind for OOC movement, distance={0:0}", destinationDistance);
                     return;
                 }
 
-                if (Skills.Crusader.SteedCharge.CanCast() && !Trinity.Player.IsCastingOrLoading &&
-                    Trinity.Settings.Combat.Crusader.SteedChargeOOC && ZetaDia.Me.Movement.SpeedXY != 0)
+                if (Skills.Crusader.SteedCharge.CanCast() && !TrinityPlugin.Player.IsCastingOrLoading &&
+                    TrinityPlugin.Settings.Combat.Crusader.SteedChargeOOC && ZetaDia.Me.Movement.SpeedXY != 0)
                 {
                     Skills.Crusader.SteedCharge.Cast();
                 }
 
                 // Furious Charge movement for a barb
-                if (Trinity.Settings.Combat.Barbarian.UseChargeOOC &&
+                if (TrinityPlugin.Settings.Combat.Barbarian.UseChargeOOC &&
                     CacheData.Hotbar.ActivePowers.Contains(SNOPower.Barbarian_FuriousCharge) &&
                     (!Sets.TheLegacyOfRaekor.IsSecondBonusActive && Skills.Barbarian.FuriousCharge.Charges > 0 || Skills.Barbarian.FuriousCharge.Charges > 1) &&
                     PowerManager.CanCast(SNOPower.Barbarian_FuriousCharge) && (destinationDistance >= 20f &&
-                    !ShrinesInArea(destination) || Trinity.ObjectCache.Any(u => u.IsUnit &&
+                    !ShrinesInArea(destination) || TrinityPlugin.ObjectCache.Any(u => u.IsUnit &&
                                                                                 MathUtil.IntersectsPath(u.Position,
                                                                                     u.Radius + 5f,
-                                                                                    Trinity.Player.Position, destination)) ||
+                                                                                    TrinityPlugin.Player.Position, destination)) ||
                     TargetUtil.TargetsInFrontOfMe(Math.Min(45, destinationDistance)).Count * 2 >
                     Skills.Barbarian.FuriousCharge.CooldownRemaining / 1000))
                 {
                     Vector3 vThisTarget = destination;
                     if (destinationDistance > 35f)
                         vThisTarget = MathEx.CalculatePointFrom(destination, MyPosition, 35f);
-                    ZetaDia.Me.UsePower(SNOPower.Barbarian_FuriousCharge, vThisTarget, Trinity.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.Barbarian_FuriousCharge, vThisTarget, TrinityPlugin.CurrentWorldDynamicId, -1);
                     SpellHistory.RecordSpell(SNOPower.Barbarian_FuriousCharge);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement,
                             "Using Furious Charge for OOC movement, distance={0:0}", destinationDistance);
                     return;
@@ -792,9 +794,9 @@ namespace Trinity.DbProvider
                     Vector3 vThisTarget = destination;
                     if (destinationDistance > 35f)
                         vThisTarget = MathEx.CalculatePointFrom(destination, MyPosition, 35f);
-                    ZetaDia.Me.UsePower(SNOPower.Barbarian_FuriousCharge, vThisTarget, Trinity.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.Barbarian_FuriousCharge, vThisTarget, TrinityPlugin.CurrentWorldDynamicId, -1);
                     SpellHistory.RecordSpell(SNOPower.Barbarian_FuriousCharge);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement,
                             "Using Furious Charge for OOC movement, distance={0:0}", destinationDistance);
                     return;
@@ -805,26 +807,26 @@ namespace Trinity.DbProvider
                     return;
 
                 // Whirlwind to keep Taguk's up
-                if (CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) && Trinity.Player.PrimaryResource > 10 && !Sets.BulKathossOath.IsFullyEquipped &&
+                if (CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) && TrinityPlugin.Player.PrimaryResource > 10 && !Sets.BulKathossOath.IsFullyEquipped &&
                     !(CurrentTarget != null && CurrentTarget.Type == TrinityObjectType.Item && CurrentTarget.Distance < 10f) &&
                     Gems.Taeguk.IsEquipped && Skills.Barbarian.Whirlwind.TimeSinceUse > 2500 && Skills.Barbarian.Whirlwind.TimeSinceUse < 3000)
                 {
                     Skills.Barbarian.Whirlwind.Cast(destination);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Whirlwind for OOC movement, distance={0:0}", destinationDistance);
                     return;
                 }
 
                 // Leap movement for a barb
-                if (Trinity.Settings.Combat.Barbarian.UseLeapOOC && CacheData.Hotbar.ActivePowers.Contains(SNOPower.Barbarian_Leap) &&
+                if (TrinityPlugin.Settings.Combat.Barbarian.UseLeapOOC && CacheData.Hotbar.ActivePowers.Contains(SNOPower.Barbarian_Leap) &&
                 PowerManager.CanCast(SNOPower.Barbarian_Leap) && !ShrinesInArea(destination))
                 {
                     Vector3 vThisTarget = destination;
                     if (destinationDistance > 35f)
                         vThisTarget = MathEx.CalculatePointFrom(destination, MyPosition, 35f);
-                    ZetaDia.Me.UsePower(SNOPower.Barbarian_Leap, vThisTarget, Trinity.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.Barbarian_Leap, vThisTarget, TrinityPlugin.CurrentWorldDynamicId, -1);
                     SpellHistory.RecordSpell(SNOPower.Barbarian_Leap);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Leap for OOC movement, distance={0:0}", destinationDistance);
                     return;
                 }
@@ -832,15 +834,15 @@ namespace Trinity.DbProvider
                 // Boulder toss for the new Leapquake barb
                 if (PowerManager.CanCast(SNOPower.X1_Barbarian_AncientSpear) && Sets.MightOfTheEarth.IsFullyEquipped &&
                     Legendary.LutSocks.IsEquipped &&
-                    Skills.Barbarian.AncientSpear.TimeSinceUse > Trinity.Settings.Combat.Barbarian.AncientSpearWaitDelay &&
+                    Skills.Barbarian.AncientSpear.TimeSinceUse > TrinityPlugin.Settings.Combat.Barbarian.AncientSpearWaitDelay &&
                     Skills.Barbarian.Leap.Cooldown > TimeSpan.FromMilliseconds(1000))
                 {
                     Vector3 vThisTarget = destination;
                     if (destinationDistance > 35f)
                         vThisTarget = MathEx.CalculatePointFrom(destination, MyPosition, 35f);
-                    ZetaDia.Me.UsePower(SNOPower.X1_Barbarian_AncientSpear, vThisTarget, Trinity.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.X1_Barbarian_AncientSpear, vThisTarget, TrinityPlugin.CurrentWorldDynamicId, -1);
                     SpellHistory.RecordSpell(SNOPower.X1_Barbarian_AncientSpear);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using AncientSpear to reset Leap cooldown, distance={0:0}", destinationDistance);
                     return;
                 }
@@ -849,20 +851,20 @@ namespace Trinity.DbProvider
                     return;
 
                 // DemonHunter Strafe
-                if (Skills.DemonHunter.Strafe.IsActive && Trinity.Player.PrimaryResource > 12 && TargetUtil.AnyMobsInRange(30f, false) &&
+                if (Skills.DemonHunter.Strafe.IsActive && TrinityPlugin.Player.PrimaryResource > 12 && TargetUtil.AnyMobsInRange(30f, false) &&
                     !(CurrentTarget != null && CurrentTarget.Type == TrinityObjectType.Item && CurrentTarget.Distance < 10f) &&
                     // Don't Strafe into avoidance/monsters if we're kiting
                     (CombatBase.KiteDistance <= 0 || (CombatBase.KiteDistance > 0 &&
                      (!CacheData.TimeBoundAvoidance.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance) ||
-                     (!CacheData.TimeBoundAvoidance.Any(a => MathEx.IntersectsPath(a.Position, a.Radius, Trinity.Player.Position, destination)))))))
+                     (!CacheData.TimeBoundAvoidance.Any(a => MathEx.IntersectsPath(a.Position, a.Radius, TrinityPlugin.Player.Position, destination)))))))
                 {
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Strafe for OOC movement, distance={0}", destinationDistance);
                     Skills.DemonHunter.Strafe.Cast(destination);
                 }
 
                 // Strafe to keep Taguk's up
-                if (CombatBase.CanCast(SNOPower.DemonHunter_Strafe) && Trinity.Player.PrimaryResource > 12 &&
+                if (CombatBase.CanCast(SNOPower.DemonHunter_Strafe) && TrinityPlugin.Player.PrimaryResource > 12 &&
                     Gems.Taeguk.IsEquipped && Skills.DemonHunter.Strafe.TimeSinceUse > 2250 && Skills.DemonHunter.Strafe.TimeSinceUse < 3000)
                 {
                     Skills.DemonHunter.Strafe.Cast(destination);
@@ -871,8 +873,8 @@ namespace Trinity.DbProvider
 
                 // Tempest rush for a monk
                 if (CacheData.Hotbar.ActivePowers.Contains(SNOPower.Monk_TempestRush) &&
-                    (Trinity.Settings.Combat.Monk.TROption == TempestRushOption.MovementOnly || Trinity.Settings.Combat.Monk.TROption == TempestRushOption.Always ||
-                    (Trinity.Settings.Combat.Monk.TROption == TempestRushOption.TrashOnly && !TargetUtil.AnyElitesInRange(40f))))
+                    (TrinityPlugin.Settings.Combat.Monk.TROption == TempestRushOption.MovementOnly || TrinityPlugin.Settings.Combat.Monk.TROption == TempestRushOption.Always ||
+                    (TrinityPlugin.Settings.Combat.Monk.TROption == TempestRushOption.TrashOnly && !TargetUtil.AnyElitesInRange(40f))))
                 {
                     Vector3 vTargetAimPoint = destination;
 
@@ -881,14 +883,14 @@ namespace Trinity.DbProvider
                     vTargetAimPoint = TargetUtil.FindTempestRushTarget();
 
                     if (!CanChannelTempestRush &&
-                        ((Trinity.Player.PrimaryResource >= Trinity.Settings.Combat.Monk.TR_MinSpirit &&
-                        destinationDistance >= Trinity.Settings.Combat.Monk.TR_MinDist) ||
+                        ((TrinityPlugin.Player.PrimaryResource >= TrinityPlugin.Settings.Combat.Monk.TR_MinSpirit &&
+                        destinationDistance >= TrinityPlugin.Settings.Combat.Monk.TR_MinDist) ||
                          DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush]).TotalMilliseconds <= 150) &&
                         canRayCastTarget && PowerManager.CanCast(SNOPower.Monk_TempestRush))
                     {
                         CanChannelTempestRush = true;
                     }
-                    else if ((CanChannelTempestRush && (Trinity.Player.PrimaryResource < 10f)) || !canRayCastTarget)
+                    else if ((CanChannelTempestRush && (TrinityPlugin.Player.PrimaryResource < 10f)) || !canRayCastTarget)
                     {
                         CanChannelTempestRush = false;
                     }
@@ -901,7 +903,7 @@ namespace Trinity.DbProvider
                         {
                             LastTempestRushPosition = vTargetAimPoint;
 
-                            ZetaDia.Me.UsePower(SNOPower.Monk_TempestRush, vTargetAimPoint, Trinity.CurrentWorldDynamicId, -1);
+                            ZetaDia.Me.UsePower(SNOPower.Monk_TempestRush, vTargetAimPoint, TrinityPlugin.CurrentWorldDynamicId, -1);
                             SpellHistory.RecordSpell(SNOPower.Monk_TempestRush);
 
                             // simulate movement speed of 30
@@ -911,12 +913,12 @@ namespace Trinity.DbProvider
                                 Location = MyPosition,
                                 TimeSinceLastMove = new TimeSpan(0, 0, 0, 0, 1000),
                                 Distance = 5f,
-                                WorldID = Trinity.CurrentWorldDynamicId
+                                WorldID = TrinityPlugin.CurrentWorldDynamicId
                             });
 
-                            if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                            if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                                 Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Tempest Rush for OOC movement, distance={0:0} spirit={1:0} cd={2} lastUse={3:0} V3={4} vAim={5}",
-                                    destinationDistance, Trinity.Player.PrimaryResource, PowerManager.CanCast(SNOPower.Monk_TempestRush), lastUse, destination, vTargetAimPoint);
+                                    destinationDistance, TrinityPlugin.Player.PrimaryResource, PowerManager.CanCast(SNOPower.Monk_TempestRush), lastUse, destination, vTargetAimPoint);
                             return;
                         }
                         else
@@ -924,18 +926,18 @@ namespace Trinity.DbProvider
                     }
                     else
                     {
-                        if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                        if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                             Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement,
                             "Tempest rush failed!: {0:00.0} / {1} distance: {2:00.0} / {3} Raycast: {4} MS: {5:0.0} lastUse={6:0}",
-                            Trinity.Player.PrimaryResource,
-                            Trinity.Settings.Combat.Monk.TR_MinSpirit,
+                            TrinityPlugin.Player.PrimaryResource,
+                            TrinityPlugin.Settings.Combat.Monk.TR_MinSpirit,
                             destinationDistance,
-                            Trinity.Settings.Combat.Monk.TR_MinDist,
+                            TrinityPlugin.Settings.Combat.Monk.TR_MinDist,
                             canRayCastTarget,
                             GetMovementSpeed(),
                             lastUse);
 
-                        Trinity.MaintainTempestRush = false;
+                        TrinityPlugin.MaintainTempestRush = false;
                     }
 
                     // Always set this from PlayerMover
@@ -944,7 +946,7 @@ namespace Trinity.DbProvider
                 }
 
                 // Dashing Strike OOC
-                if (Trinity.Player.ActorClass == ActorClass.Monk && CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike) && Trinity.Settings.Combat.Monk.UseDashingStrikeOOC && destinationDistance > 15f)
+                if (TrinityPlugin.Player.ActorClass == ActorClass.Monk && CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike) && TrinityPlugin.Settings.Combat.Monk.UseDashingStrikeOOC && destinationDistance > 15f)
                 {
                     var charges = Skills.Monk.DashingStrike.Charges;
 
@@ -952,34 +954,34 @@ namespace Trinity.DbProvider
                         CurrentTarget.Type != TrinityObjectType.Item && charges >= 1)
                     {
                         Skills.Monk.DashingStrike.Cast(destination);
-                        if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                        if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                             Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Dashing Strike for OOC movement, distance={0}", destinationDistance);
                         return;
                     }
 
                     //Logger.LogVerbose("OOC Dash Charges={0}", charges);
-                    if (Sets.ThousandStorms.IsSecondBonusActive && !Trinity.ShouldWaitForLootDrop &&
-                        ((charges > 1 && Trinity.Player.PrimaryResource >= 75) || CacheData.BuffsCache.Instance.HasCastingShrine))
+                    if (Sets.ThousandStorms.IsSecondBonusActive && !TrinityPlugin.ShouldWaitForLootDrop &&
+                        ((charges > 1 && TrinityPlugin.Player.PrimaryResource >= 75) || CacheData.BuffsCache.Instance.HasCastingShrine))
                     {
-                        if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                        if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                             Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Dashing Strike for OOC movement, distance={0} charges={1}", destinationDistance, Skills.Monk.DashingStrike.Charges);
                         Skills.Monk.DashingStrike.Cast(destination);
                         return;
                     }
 
                     if (charges >= 1 &&
-                        (Trinity.Player.PrimaryResource <= 75 || !Sets.ThousandStorms.IsSecondBonusActive) && IsBlocked)
+                        (TrinityPlugin.Player.PrimaryResource <= 75 || !Sets.ThousandStorms.IsSecondBonusActive) && IsBlocked)
                     {
                         Skills.Monk.DashingStrike.Cast(destination);
-                        if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                        if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                             Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Dashing Strike for OOC movement, distance={0}", destinationDistance);
                         return;
                     }
 
-                    if (!Sets.ThousandStorms.IsSecondBonusActive && charges > 0 && PowerManager.CanCast(SNOPower.X1_Monk_DashingStrike) && !Trinity.ShouldWaitForLootDrop)
+                    if (!Sets.ThousandStorms.IsSecondBonusActive && charges > 0 && PowerManager.CanCast(SNOPower.X1_Monk_DashingStrike) && !TrinityPlugin.ShouldWaitForLootDrop)
                     {
                         Skills.Monk.DashingStrike.Cast(destination);
-                        if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                        if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                             Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Dashing Strike for OOC movement, distance={0}", destinationDistance);
                         return;
                     }
@@ -987,8 +989,8 @@ namespace Trinity.DbProvider
 
                 // Teleport for a wizard 
                 if (CombatBase.CanCast(SNOPower.Wizard_Teleport, CombatBase.CanCastFlags.NoTimer) &&
-                    (!Trinity.Settings.Combat.Wizard.TeleportUseOOCDelay || CombatBase.TimeSincePowerUse(SNOPower.Wizard_Teleport) >= Trinity.Settings.Combat.Wizard.TeleportDelay) &&
-                    CombatBase.TimeSincePowerUse(SNOPower.Wizard_Teleport) > 250 && Trinity.Settings.Combat.Wizard.TeleportOOC &&
+                    (!TrinityPlugin.Settings.Combat.Wizard.TeleportUseOOCDelay || CombatBase.TimeSincePowerUse(SNOPower.Wizard_Teleport) >= TrinityPlugin.Settings.Combat.Wizard.TeleportDelay) &&
+                    CombatBase.TimeSincePowerUse(SNOPower.Wizard_Teleport) > 250 && TrinityPlugin.Settings.Combat.Wizard.TeleportOOC &&
                     destinationDistance >= 10f && !ShrinesInArea(destination) && !ZetaDia.IsInTown)
                 {
                     const float maxTeleportRange = 75f;
@@ -996,9 +998,9 @@ namespace Trinity.DbProvider
                     Vector3 vThisTarget = destination;
                     if (destinationDistance > maxTeleportRange)
                         vThisTarget = MathEx.CalculatePointFrom(destination, MyPosition, maxTeleportRange);
-                    ZetaDia.Me.UsePower(SNOPower.Wizard_Teleport, vThisTarget, Trinity.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.Wizard_Teleport, vThisTarget, TrinityPlugin.CurrentWorldDynamicId, -1);
                     SpellHistory.RecordSpell(SNOPower.Wizard_Teleport);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Teleport for OOC movement, distance={0}", destinationDistance);
                     return;
                 }
@@ -1013,9 +1015,9 @@ namespace Trinity.DbProvider
                     Vector3 vThisTarget = destination;
                     if (destinationDistance > maxTeleportRange)
                         vThisTarget = MathEx.CalculatePointFrom(destination, MyPosition, maxTeleportRange);
-                    ZetaDia.Me.UsePower(SNOPower.Wizard_Teleport, vThisTarget, Trinity.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.Wizard_Teleport, vThisTarget, TrinityPlugin.CurrentWorldDynamicId, -1);
                     SpellHistory.RecordSpell(SNOPower.Wizard_Teleport);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Teleport for OOC movement, distance={0}", destinationDistance);
                     return;
 
@@ -1028,9 +1030,9 @@ namespace Trinity.DbProvider
                     Vector3 vThisTarget = destination;
                     if (destinationDistance > 35f)
                         vThisTarget = MathEx.CalculatePointFrom(destination, MyPosition, 35f);
-                    ZetaDia.Me.UsePower(SNOPower.Wizard_Archon_Teleport, vThisTarget, Trinity.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.Wizard_Archon_Teleport, vThisTarget, TrinityPlugin.CurrentWorldDynamicId, -1);
                     SpellHistory.RecordSpell(SNOPower.Wizard_Archon_Teleport);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Archon Teleport for OOC movement, distance={0}", destinationDistance);
                     return;
                 }
@@ -1040,9 +1042,9 @@ namespace Trinity.DbProvider
                     Skills.WitchDoctor.Firebats.IsActive &&
                     CombatBase.TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) > 2000)
                 {
-                    ZetaDia.Me.UsePower(SNOPower.Witchdoctor_Firebats, CombatBase.Player.Position, Trinity.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.Witchdoctor_Firebats, CombatBase.Player.Position, TrinityPlugin.CurrentWorldDynamicId, -1);
                     SpellHistory.RecordSpell(SNOPower.Witchdoctor_Firebats);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Firebats to refresh Taeguk");
                     return;
                 }
@@ -1053,9 +1055,9 @@ namespace Trinity.DbProvider
                     CombatBase.TimeSincePowerUse(SNOPower.DemonHunter_ClusterArrow) > 2000)
                 {
                     Vector3 vThisTarget = destination;
-                    ZetaDia.Me.UsePower(SNOPower.DemonHunter_ClusterArrow, vThisTarget, Trinity.CurrentWorldDynamicId);
+                    ZetaDia.Me.UsePower(SNOPower.DemonHunter_ClusterArrow, vThisTarget, TrinityPlugin.CurrentWorldDynamicId);
                     SpellHistory.RecordSpell(SNOPower.DemonHunter_ClusterArrow);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Cluster Arrow to refresh Taeguk");
                     return;
                 }
@@ -1066,9 +1068,9 @@ namespace Trinity.DbProvider
                     Vector3 vThisTarget = destination;
                     if (destinationDistance > 35f)
                         vThisTarget = MathEx.CalculatePointFrom(destination, MyPosition, 35f);
-                    ZetaDia.Me.UsePower(SNOPower.Witchdoctor_SpiritWalk, vThisTarget, Trinity.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.Witchdoctor_SpiritWalk, vThisTarget, TrinityPlugin.CurrentWorldDynamicId, -1);
                     SpellHistory.RecordSpell(SNOPower.Witchdoctor_SpiritWalk);
-                    if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement,
                             "Using SpiritWalk to get unstuck, distance={0:0}", destinationDistance);
                     return;
@@ -1081,56 +1083,56 @@ namespace Trinity.DbProvider
                 // Default movement
                 ZetaDia.Me.UsePower(SNOPower.Walk, destination, ZetaDia.WorldId, -1);
 
-                if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                     Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "PlayerMover Moved to:{0} dir:{1} Speed:{2:0.00} Dist:{3:0} ZDiff:{4:0} CanStand:{5} Raycast:{6}",
                         NavHelper.PrettyPrintVector3(destination), MathUtil.GetHeadingToPoint(destination), MovementSpeed, MyPosition.Distance(destination),
                         Math.Abs(MyPosition.Z - destination.Z),
-                        Trinity.MainGridProvider.CanStandAt(Trinity.MainGridProvider.WorldToGrid(destination.ToVector2())),
+                        TrinityPlugin.MainGridProvider.CanStandAt(TrinityPlugin.MainGridProvider.WorldToGrid(destination.ToVector2())),
                         !Navigator.Raycast(MyPosition, destination)
                         );
 
             }
             else
             {
-                if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                     Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Reached MoveTowards Destination {0} Current Speed: {1:0.0}", destination, MovementSpeed);
             }
 
-            //Trinity.IsMoveRequested = false;
+            //TrinityPlugin.IsMoveRequested = false;
         }
 
         public static bool DemonhunterVault(Vector3 destination)
         {
-            int vaultDelay = Trinity.Settings.Combat.DemonHunter.VaultMovementDelay;
+            int vaultDelay = TrinityPlugin.Settings.Combat.DemonHunter.VaultMovementDelay;
             var destinationDistance = destination.Distance(ZetaDia.Me.Position);
 
             // DemonHunter Vault
-            var vaultBaseCost = 8; //Skills.DemonHunter.Vault.Cost*(1 - Trinity.Player.ResourceCostReductionPct);
+            var vaultBaseCost = 8; //Skills.DemonHunter.Vault.Cost*(1 - TrinityPlugin.Player.ResourceCostReductionPct);
             var vaultCost = Runes.DemonHunter.Acrobatics.IsActive
                 ? 0
                 : Runes.DemonHunter.Tumble.IsActive && Skills.DemonHunter.Vault.TimeSinceUse < 6000
                     ? Math.Round(vaultBaseCost * 0.5)
                     : vaultBaseCost;
 
-            if (DemonHunterCombat.CanAcquireFreeVaultBuff && !CombatBase.IsInCombat && Trinity.Player.PrimaryResourcePct > 0.7f)
+            if (DemonHunterCombat.CanAcquireFreeVaultBuff && !CombatBase.IsInCombat && TrinityPlugin.Player.PrimaryResourcePct > 0.7f)
             {
                 Logger.LogVerbose(LogCategory.Movement, "Casting Impale for free vaults (PlayerMover)");
-                Skills.DemonHunter.Impale.Cast(MathEx.GetPointAt(Trinity.Player.Position, 5f, Trinity.Player.Rotation));
+                Skills.DemonHunter.Impale.Cast(MathEx.GetPointAt(TrinityPlugin.Player.Position, 5f, TrinityPlugin.Player.Rotation));
             }
 
             var isfree = DemonHunterCombat.IsVaultFree;
             var timeSinceUse = CombatBase.TimeSincePowerUse(SNOPower.DemonHunter_Vault);
-            var currentAnimation = Trinity.Player.CurrentAnimation;
+            var currentAnimation = TrinityPlugin.Player.CurrentAnimation;
 
-            var movementOnlySettingFailed = Trinity.Settings.Combat.DemonHunter.VaultMode == DemonHunterVaultMode.MovementOnly && (CombatBase.IsInCombat || ZetaDia.Me.IsInCombat);
-            var combatOnlySettingFailed = Trinity.Settings.Combat.DemonHunter.VaultMode == DemonHunterVaultMode.CombatOnly && !(CombatBase.IsInCombat || ZetaDia.Me.IsInCombat);
+            var movementOnlySettingFailed = TrinityPlugin.Settings.Combat.DemonHunter.VaultMode == DemonHunterVaultMode.MovementOnly && (CombatBase.IsInCombat || ZetaDia.Me.IsInCombat);
+            var combatOnlySettingFailed = TrinityPlugin.Settings.Combat.DemonHunter.VaultMode == DemonHunterVaultMode.CombatOnly && !(CombatBase.IsInCombat || ZetaDia.Me.IsInCombat);
 
             if (!movementOnlySettingFailed && !combatOnlySettingFailed && CacheData.Hotbar.ActivePowers.Contains(SNOPower.DemonHunter_Vault) &&
-                Trinity.Settings.Combat.DemonHunter.VaultMode != DemonHunterVaultMode.CombatOnly &&
+                TrinityPlugin.Settings.Combat.DemonHunter.VaultMode != DemonHunterVaultMode.CombatOnly &&
                 (timeSinceUse > vaultDelay || isfree && timeSinceUse > 250) &&
                 //(timeSinceUse > vaultDelay || (isfree && !VaultAnimations.Contains(currentAnimation))) && // Going too fast seemed to upset advneturer exploration.
-                (Trinity.Player.SecondaryResource >= vaultCost || isfree) &&
-                destinationDistance >= 20f && destination != Vector3.Zero && Trinity.Player.Position != Vector3.Zero &&
+                (TrinityPlugin.Player.SecondaryResource >= vaultCost || isfree) &&
+                destinationDistance >= 20f && destination != Vector3.Zero && TrinityPlugin.Player.Position != Vector3.Zero &&
                 PowerManager.CanCast(SNOPower.DemonHunter_Vault) && !ShrinesInArea(destination) &&
                 // Don't Vault into avoidance/monsters if we're kiting
                 (CombatBase.KiteDistance <= 0 || (CombatBase.KiteDistance > 0 &&
@@ -1138,7 +1140,7 @@ namespace Trinity.DbProvider
                                                       a => a.Position.Distance(destination) <= CombatBase.KiteDistance) ||
                                                    (!CacheData.TimeBoundAvoidance.Any(
                                                        a =>
-                                                           MathEx.IntersectsPath(a.Position, a.Radius, Trinity.Player.Position,
+                                                           MathEx.IntersectsPath(a.Position, a.Radius, TrinityPlugin.Player.Position,
                                                                destination))) ||
                                                    !CacheData.MonsterObstacles.Any(
                                                        a => a.Position.Distance(destination) <= CombatBase.KiteDistance))))
@@ -1173,7 +1175,7 @@ namespace Trinity.DbProvider
 
                 VaultDestination = vThisTarget;
 
-                ZetaDia.Me.UsePower(SNOPower.DemonHunter_Vault, vThisTarget, Trinity.CurrentWorldDynamicId, -1);
+                ZetaDia.Me.UsePower(SNOPower.DemonHunter_Vault, vThisTarget, TrinityPlugin.CurrentWorldDynamicId, -1);
                 SpellHistory.RecordSpell(SNOPower.DemonHunter_Vault);
                 Logger.LogVerbose(LogCategory.Movement, "Cast Vault from HandleTarget.UsedSpecialMovement()");
                 SpellHistory.RecordSpell(SNOPower.DemonHunter_Vault);
@@ -1183,7 +1185,7 @@ namespace Trinity.DbProvider
                 NavigationProvider.CurrentPath.Clear();
                 AbortCurrentNavigation = true;
 
-                if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                     Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Vault for OOC movement, distance={0}",
                         destinationDistance);
 
@@ -1218,7 +1220,7 @@ namespace Trinity.DbProvider
 
         public static Vector3 GetCurrentPathFarthestPoint(float maxDistance)
         {
-            var playerPosition = Trinity.Player.Position;
+            var playerPosition = TrinityPlugin.Player.Position;
             var remaining = GetCurrentPathPointsRemaining();
             var points = NavigationProvider.CurrentPath.Count;
             var lastPoint = Vector3.Zero;
@@ -1276,11 +1278,11 @@ namespace Trinity.DbProvider
         private static bool TryBulKathosWWMovement(Vector3 destination, float destinationDistance)
         {
             // Whirlwind for Bul-Kathos Sword Set D3 2.2.0
-            if (CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) && Trinity.Player.PrimaryResource > 10 && (Sets.BulKathossOath.IsFullyEquipped || Trinity.Settings.Combat.Barbarian.WWMoveAlways)
-                && !(CurrentTarget != null && (CurrentTarget.Type == TrinityObjectType.Item || CurrentTarget.IsNPC || CurrentTarget.Type == TrinityObjectType.Shrine) && CurrentTarget.Distance < Trinity.Settings.Combat.Barbarian.WWMoveStopDistance))
+            if (CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) && TrinityPlugin.Player.PrimaryResource > 10 && (Sets.BulKathossOath.IsFullyEquipped || TrinityPlugin.Settings.Combat.Barbarian.WWMoveAlways)
+                && !(CurrentTarget != null && (CurrentTarget.Type == TrinityObjectType.Item || CurrentTarget.IsNPC || CurrentTarget.Type == TrinityObjectType.Shrine) && CurrentTarget.Distance < TrinityPlugin.Settings.Combat.Barbarian.WWMoveStopDistance))
             {
                 Skills.Barbarian.Whirlwind.Cast(destination);
-                if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                     Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Whirlwind for OOC movement, distance={0:0}", destinationDistance);
                 return true;
             }
@@ -1292,7 +1294,7 @@ namespace Trinity.DbProvider
         {
             // The below code is to help profile/routine makers avoid waypoints with a long distance between them.
             // Long-distances between waypoints is bad - it increases stucks, and forces the DB nav-server to be called.
-            if (Trinity.Settings.Advanced.LogStuckLocation)
+            if (TrinityPlugin.Settings.Advanced.LogStuckLocation)
             {
                 if (vLastMoveTo == Vector3.Zero)
                     vLastMoveTo = vMoveToTarget;
@@ -1300,7 +1302,7 @@ namespace Trinity.DbProvider
                 {
                     float fDistance = Vector3.Distance(vMoveToTarget, vLastMoveTo);
                     // Log if not in town, last waypoint wasn't FROM town, and the distance is >200 but <2000 (cos 2000+ probably means we changed map zones!)
-                    if (!Trinity.Player.IsInTown && !bLastWaypointWasTown && fDistance >= 200 & fDistance <= 2000)
+                    if (!TrinityPlugin.Player.IsInTown && !bLastWaypointWasTown && fDistance >= 200 & fDistance <= 2000)
                     {
                         if (!hashDoneThisVector.Contains(vMoveToTarget))
                         {
@@ -1318,7 +1320,7 @@ namespace Trinity.DbProvider
                     }
                     vLastMoveTo = vMoveToTarget;
                     bLastWaypointWasTown = false;
-                    if (Trinity.Player.IsInTown)
+                    if (TrinityPlugin.Player.IsInTown)
                         bLastWaypointWasTown = true;
                 }
             }
@@ -1326,13 +1328,14 @@ namespace Trinity.DbProvider
         }
 
 
-        private static TrinityCacheObject CurrentTarget { get { return Trinity.CurrentTarget; } }
+        private static TrinityCacheObject CurrentTarget { get { return TrinityPlugin.CurrentTarget; } }
+
+
 
         internal static async Task<MoveResult> NavigateToTask(Vector3 destination, string destinationName = "")
         {
             PositionCache.AddPosition();
             MoveResult result;
-
             try
             {
                 Stopwatch t1 = new Stopwatch();
@@ -1340,7 +1343,7 @@ namespace Trinity.DbProvider
 
                 using (new PerformanceLogger("Navigator.MoveTo"))
                 {
-                    result = await Navigator.MoveTo(destination, destinationName);
+                    result = await Navigator.MoveTo(destination, destinationName);               
                 }
                 t1.Stop();
 
@@ -1348,11 +1351,11 @@ namespace Trinity.DbProvider
 
                 // Shit was slow, make it slower but tell us why :)
                 string pathCheck = "";
-                if (Trinity.Settings.Advanced.LogCategories.HasFlag(LogCategory.Navigator) && t1.ElapsedMilliseconds > maxTime)
+                if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Navigator) && t1.ElapsedMilliseconds > maxTime)
                 {
                     //if (Navigator.GetNavigationProviderAs<DefaultNavigationProvider>().CanFullyClientPathTo(destination))
                     //    pathCheck = "CanFullyPath";
-                    //else
+                    //else                   
                     pathCheck = "CannotFullyPath";
                 }
 
@@ -1369,7 +1372,7 @@ namespace Trinity.DbProvider
                     ll = TrinityLogLevel.Debug;
                 }
                 Logger.Log(ll, lc, "{0} in {1:0}ms {2} dist={3:0} {4}",
-                    result, t1.ElapsedMilliseconds, destinationName, destination.Distance(Trinity.Player.Position), pathCheck);
+                    result, t1.ElapsedMilliseconds, destinationName, destination.Distance(TrinityPlugin.Player.Position), pathCheck);
             }
             catch (OutOfMemoryException)
             {
@@ -1382,7 +1385,7 @@ namespace Trinity.DbProvider
                 return MoveResult.Failed;
             }
             return result;
-        }
+        }                
 
         private static Vector3 LastDestination { get; set; }
         public static DefaultNavigationProvider NavigationProvider { get; set; }
@@ -1393,14 +1396,13 @@ namespace Trinity.DbProvider
         {
             if (_navigateToCoroutine == null || _navigateToCoroutine.IsFinished)
             {
-                Trinity.NavServerReport();
+                TrinityPlugin.NavServerReport();
 
                 if (!ZetaDia.Me.Movement.IsMoving && LastDestination != destination && ZetaDia.IsInGame)
                 {
                     Logger.LogVerbose(LogCategory.Movement, "NavigateTo: Starting Movement Towards {0} ({1})", destination, destinationName);
                     Instance.MoveTowards(destination);
                 }
-
                 _navigateToCoroutine = new Coroutine(async () =>
                 {
                     _lastResult = await NavigateToTask(destination, destinationName);
@@ -1417,9 +1419,44 @@ namespace Trinity.DbProvider
                 return (MoveResult)_navigateToCoroutine.Result;
             }
 
-            Trinity.NavServerReport(false, _lastResult);
+            TrinityPlugin.NavServerReport(false, _lastResult);
             return MoveResult.Moved;
         }
+
+        //private static Coroutine _navigateToCoroutine;
+        //private static MoveResult _lastResult;
+        //public static MoveResult NavigateTo(Vector3 destination, string destinationName = "")
+        //{
+        //    if (_navigateToCoroutine == null || _navigateToCoroutine.IsFinished)
+        //    {
+        //        TrinityPlugin.NavServerReport();
+
+        //        if (!ZetaDia.Me.Movement.IsMoving && LastDestination != destination && ZetaDia.IsInGame)
+        //        {
+        //            Logger.LogVerbose(LogCategory.Movement, "NavigateTo: Starting Movement Towards {0} ({1})", destination, destinationName);
+        //            Instance.MoveTowards(destination);
+        //        }
+
+        //        _navigateToCoroutine = new Coroutine(async () =>
+        //        {
+        //            _lastResult = await NavigateToTask(destination, destinationName);
+        //            return _lastResult;
+        //        });
+        //    }
+
+        //    LastDestination = destination;
+        //    _navigateToCoroutine.Resume();
+
+
+        //    if (_navigateToCoroutine.Status == CoroutineStatus.RanToCompletion)
+        //    {
+        //        return (MoveResult)_navigateToCoroutine.Result;
+        //    }
+
+        //    TrinityPlugin.NavServerReport(false, _lastResult);
+        //    return MoveResult.Moved;
+        //}
+
 
         private static DateTime lastRecordedSkipAheadCache = DateTime.MinValue;
         internal static void RecordSkipAheadCachePoint()
@@ -1429,9 +1466,9 @@ namespace Trinity.DbProvider
 
             lastRecordedSkipAheadCache = DateTime.UtcNow;
 
-            if (!Trinity.SkipAheadAreaCache.Any(p => p.Position.Distance(Trinity.Player.Position) <= 5f))
+            if (!TrinityPlugin.SkipAheadAreaCache.Any(p => p.Position.Distance(TrinityPlugin.Player.Position) <= 5f))
             {
-                Trinity.SkipAheadAreaCache.Add(new CacheObstacleObject() { Position = Trinity.Player.Position, Radius = 20f });
+                TrinityPlugin.SkipAheadAreaCache.Add(new CacheObstacleObject() { Position = TrinityPlugin.Player.Position, Radius = 20f });
             }
         }
 

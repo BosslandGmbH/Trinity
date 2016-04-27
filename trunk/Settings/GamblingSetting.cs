@@ -369,9 +369,9 @@ namespace Trinity.Config
         //    }
         //    else
         //    {
-        //        if (Trinity.Player.MaxBloodShards != 0)
+        //        if (TrinityPlugin.Player.MaxBloodShards != 0)
         //        {
-        //            _maximumBloodShards = Trinity.Player.MaxBloodShards;
+        //            _maximumBloodShards = TrinityPlugin.Player.MaxBloodShards;
         //        }
         //    }
 

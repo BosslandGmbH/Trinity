@@ -1376,11 +1376,11 @@ namespace Trinity
             switch (itemBaseType)
             {
                 case ItemBaseType.Weapon:
-                    return Math.Round((double)Trinity.Settings.Loot.TownRun.WeaponScore);
+                    return Math.Round((double)TrinityPlugin.Settings.Loot.TownRun.WeaponScore);
                 case ItemBaseType.Armor:
-                    return Math.Round((double)Trinity.Settings.Loot.TownRun.ArmorScore);
+                    return Math.Round((double)TrinityPlugin.Settings.Loot.TownRun.ArmorScore);
                 case ItemBaseType.Jewelry:
-                    return Math.Round((double)Trinity.Settings.Loot.TownRun.JewelryScore);
+                    return Math.Round((double)TrinityPlugin.Settings.Loot.TownRun.JewelryScore);
                 default:
                     return 0;
             }
@@ -1396,12 +1396,12 @@ namespace Trinity
                 case TrinityItemBaseType.WeaponOneHand:
                 case TrinityItemBaseType.WeaponRange:
                 case TrinityItemBaseType.WeaponTwoHand:
-                    return (itemValue >= Trinity.Settings.Notification.WeaponScore);
+                    return (itemValue >= TrinityPlugin.Settings.Notification.WeaponScore);
                 case TrinityItemBaseType.Armor:
                 case TrinityItemBaseType.Offhand:
-                    return (itemValue >= Trinity.Settings.Notification.ArmorScore);
+                    return (itemValue >= TrinityPlugin.Settings.Notification.ArmorScore);
                 case TrinityItemBaseType.Jewelry:
-                    return (itemValue >= Trinity.Settings.Notification.JewelryScore);
+                    return (itemValue >= TrinityPlugin.Settings.Notification.JewelryScore);
             }
             return false;
         }
