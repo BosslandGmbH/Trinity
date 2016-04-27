@@ -18,13 +18,9 @@ namespace Trinity.Framework.Objects.Memory.Items
     public class AttributeItem : MemoryWrapper, ITableItem
     {
         public AttributeDescripter Descripter = new AttributeDescripter();
-
         public ActorAttributeType Attribute => Key.BaseAttribute;
-
         public int ModKey { get; private set; }
-
         public int Integer { get; private set; }
-
         public float Single { get; private set; }
 
         public int Size = 12;

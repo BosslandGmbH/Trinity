@@ -22,8 +22,8 @@ namespace Trinity.Helpers
         /// </summary>
         internal void ResetCheckXp()
         {
-            if (Trinity.Settings.Advanced.XpInactivityEnabled)
-                Logger.LogDebug(LogCategory.GlobalHandler, "Resetting Experience Timer, Last Experience changed from {0} to {1}", _lastXpAmount, Trinity.Player.Coinage);
+            if (TrinityPlugin.Settings.Advanced.XpInactivityEnabled)
+                Logger.LogDebug(LogCategory.GlobalHandler, "Resetting Experience Timer, Last Experience changed from {0} to {1}", _lastXpAmount, TrinityPlugin.Player.Coinage);
 
             _lastCheckBag = DateTime.UtcNow;
             _lastFoundXp = DateTime.UtcNow;
@@ -40,13 +40,13 @@ namespace Trinity.Helpers
         /// <returns></returns>
         internal bool XpInactive()
         {
-            if (!Trinity.Settings.Advanced.XpInactivityEnabled)
+            if (!TrinityPlugin.Settings.Advanced.XpInactivityEnabled)
             {
                 // these are not the inactivity timers we're looking for
                 return false;
             }
 
-            if (Trinity.Settings.Advanced.DisableAllMovement)
+            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
                 return false;
 
             try
@@ -83,7 +83,7 @@ namespace Trinity.Helpers
                 }
 
                 Int64 exp;
-                if (Trinity.Player.Level < 70)
+                if (TrinityPlugin.Player.Level < 70)
                     exp = ZetaDia.Me.CurrentExperience;
                 else
                     exp = ZetaDia.Me.ParagonCurrentExperience;
@@ -96,11 +96,11 @@ namespace Trinity.Helpers
                 }
 
                 int xpUnchangedSeconds = Convert.ToInt32(DateTime.UtcNow.Subtract(_lastFoundXp).TotalSeconds);
-                if (xpUnchangedSeconds >= Trinity.Settings.Advanced.InactivityTimer)
+                if (xpUnchangedSeconds >= TrinityPlugin.Settings.Advanced.InactivityTimer)
                 {
                     Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Experience inactivity after {0}s. Sending abort.", xpUnchangedSeconds);
                     _lastFoundXp = DateTime.UtcNow;
-                    _lastXpAmount = Trinity.Player.Coinage;
+                    _lastXpAmount = TrinityPlugin.Player.Coinage;
                     return true;
                 }
                 if (xpUnchangedSeconds > 0)

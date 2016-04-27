@@ -198,10 +198,10 @@ namespace Trinity
             updated.IsReset = false;
             updated.WhenStartedSession = ItemDropStats.ItemStatsWhenStartedBot;
             updated.TotalRunningTime += TotalRunningTime - PersistentLastSaved.TotalRunningTime;
-            updated.TotalDeaths += Trinity.TotalDeaths - PersistentLastSaved.TotalDeaths;
-            updated.TotalLeaveGames += Trinity.TotalLeaveGames - PersistentLastSaved.TotalLeaveGames;
-            updated.TotalJoinGames += Trinity.TotalGamesJoined - PersistentLastSaved.TotalJoinGames;
-            updated.TotalProfileRecycles += Trinity.TotalProfileRecycles - PersistentLastSaved.TotalProfileRecycles;
+            updated.TotalDeaths += TrinityPlugin.TotalDeaths - PersistentLastSaved.TotalDeaths;
+            updated.TotalLeaveGames += TrinityPlugin.TotalLeaveGames - PersistentLastSaved.TotalLeaveGames;
+            updated.TotalJoinGames += TrinityPlugin.TotalGamesJoined - PersistentLastSaved.TotalJoinGames;
+            updated.TotalProfileRecycles += TrinityPlugin.TotalProfileRecycles - PersistentLastSaved.TotalProfileRecycles;
             updated.TotalXp += ItemDropStats.TotalXP - PersistentLastSaved.TotalXp;
             updated.LastXp += ItemDropStats.LastXP - PersistentLastSaved.LastXp;
             updated.NextLvXp += ItemDropStats.NextLevelXP - PersistentLastSaved.NextLvXp;
@@ -228,16 +228,16 @@ namespace Trinity
 
         internal static void PersistentUpdateStats()
         {
-            int worldId = Trinity.Player.WorldID;
-            if (worldId <= 0 || Trinity.Player.ActorClass == ActorClass.Invalid)
+            int worldId = TrinityPlugin.Player.WorldID;
+            if (worldId <= 0 || TrinityPlugin.Player.ActorClass == ActorClass.Invalid)
                 return;
 
             // Total stats
-            string filename = Path.Combine(FileManager.LoggingPath, String.Format("FullStats - {0}.xml", Trinity.Player.ActorClass));
+            string filename = Path.Combine(FileManager.LoggingPath, String.Format("FullStats - {0}.xml", TrinityPlugin.Player.ActorClass));
             PersistentTotalStats = PersistentUpdateOne(filename);
 
             // World ID stats
-            filename = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.xml", Trinity.Player.ActorClass, worldId));
+            filename = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.xml", TrinityPlugin.Player.ActorClass, worldId));
             if (!WorldStatsDictionary.ContainsKey(worldId))
                 WorldStatsDictionary.Add(worldId, new PersistentStats());
             WorldStatsDictionary[worldId] = PersistentUpdateOne(filename);
@@ -245,10 +245,10 @@ namespace Trinity
             // Sets LastSaved to now for the rest of the things
             TimeSpan TotalRunningTime = DateTime.UtcNow.Subtract(ItemDropStats.ItemStatsWhenStartedBot);
             PersistentLastSaved.TotalRunningTime = TotalRunningTime;
-            PersistentLastSaved.TotalDeaths = Trinity.TotalDeaths;
-            PersistentLastSaved.TotalLeaveGames = Trinity.TotalLeaveGames;
-            PersistentLastSaved.TotalJoinGames = Trinity.TotalGamesJoined;
-            PersistentLastSaved.TotalProfileRecycles = Trinity.TotalProfileRecycles;
+            PersistentLastSaved.TotalDeaths = TrinityPlugin.TotalDeaths;
+            PersistentLastSaved.TotalLeaveGames = TrinityPlugin.TotalLeaveGames;
+            PersistentLastSaved.TotalJoinGames = TrinityPlugin.TotalGamesJoined;
+            PersistentLastSaved.TotalProfileRecycles = TrinityPlugin.TotalProfileRecycles;
             PersistentLastSaved.TotalXp = ItemDropStats.TotalXP;
             PersistentLastSaved.LastXp = ItemDropStats.LastXP;
             PersistentLastSaved.NextLvXp = ItemDropStats.NextLevelXP;
@@ -278,9 +278,9 @@ namespace Trinity
             // Full Stats
             try
             {
-                if (Trinity.Player.ActorClass.ToString() != "Invalid")
+                if (TrinityPlugin.Player.ActorClass.ToString() != "Invalid")
                 {
-                    var fullStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("FullStats - {0}.log", Trinity.Player.ActorClass));
+                    var fullStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("FullStats - {0}.log", TrinityPlugin.Player.ActorClass));
 
                     using (FileStream LogStream =
                         File.Open(fullStatsPath, FileMode.Create, FileAccess.Write, FileShare.Read))
@@ -298,13 +298,13 @@ namespace Trinity
 
             try
             {
-                if (Trinity.Player.WorldID > 0 && Trinity.Player.ActorClass != ActorClass.Invalid)
+                if (TrinityPlugin.Player.WorldID > 0 && TrinityPlugin.Player.ActorClass != ActorClass.Invalid)
                 {
-                    var worldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.log", Trinity.Player.ActorClass, Trinity.Player.WorldID));
+                    var worldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.log", TrinityPlugin.Player.ActorClass, TrinityPlugin.Player.WorldID));
 
                     using (FileStream LogStream = File.Open(worldStatsPath, FileMode.Create, FileAccess.Write, FileShare.Read))
                     {
-                        LogStats(LogStream, WorldStatsDictionary[Trinity.Player.WorldID]);
+                        LogStats(LogStream, WorldStatsDictionary[TrinityPlugin.Player.WorldID]);
                     }
                 }
             }
@@ -316,9 +316,9 @@ namespace Trinity
             // AggregateWorldStats
             try
             {
-                if (Trinity.Player.ActorClass != ActorClass.Invalid)
+                if (TrinityPlugin.Player.ActorClass != ActorClass.Invalid)
                 {
-                    var aggregateWorldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("AgregateWorldStats - {0}.log", Trinity.Player.ActorClass));
+                    var aggregateWorldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("AgregateWorldStats - {0}.log", TrinityPlugin.Player.ActorClass));
 
                     using (FileStream LogStream = File.Open(aggregateWorldStatsPath, FileMode.Create, FileAccess.Write, FileShare.Read))
                     {

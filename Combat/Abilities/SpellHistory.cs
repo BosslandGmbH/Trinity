@@ -49,12 +49,12 @@ namespace Trinity.Combat.Abilities
             {
                 Power = power,
                 UseTime = DateTime.UtcNow,
-                MyPosition = Trinity.Player.Position,
+                MyPosition = TrinityPlugin.Player.Position,
                 TargetPosition = power.TargetPosition
             });
 
-            Trinity.LastActionTimes.Add(DateTime.UtcNow);
-            Trinity.LastPowerUsed = power.SNOPower;
+            TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
+            TrinityPlugin.LastPowerUsed = power.SNOPower;
 
             LastSpellUseTime = DateTime.UtcNow;
             LastPowerUsed = power.SNOPower;
@@ -144,13 +144,13 @@ namespace Trinity.Combat.Abilities
         public static float DistanceFromLastTarget(SNOPower power)
         {
             var lastUsed = GetSpellLastTargetPosition(power);
-            return Trinity.Player.Position.Distance(lastUsed);
+            return TrinityPlugin.Player.Position.Distance(lastUsed);
         }
 
         public static float DistanceFromLastUsePosition(SNOPower power)
         {
             var lastUsed = GetSpellLastMyPosition(power);
-            return Trinity.Player.Position.Distance(lastUsed);
+            return TrinityPlugin.Player.Position.Distance(lastUsed);
         }
 
     }

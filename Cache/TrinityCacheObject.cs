@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Web.UI;
 using Trinity.Cache;
 using Trinity.Config.Combat;
+using Trinity.Framework;
+using Trinity.Framework.Avoidance;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Technicals;
@@ -175,44 +177,6 @@ namespace Trinity
 
         [DataMember]
         public bool IsIllusion { get; set; }
-
-        #region Rotator
-
-        private Rotator _rotator;
-        public Rotator Rotator
-        {
-            get { return _rotator ?? (_rotator = CacheObstacleObject.GetRotator(RActorGuid)); }
-        }
-
-        //public static Dictionary<int, Rotator> Rotators = new Dictionary<int, Rotator>();
-
-        //private Rotator _rotator;
-        //public Rotator Rotator
-        //{
-        //    get { return _rotator ?? (_rotator = GetRotator(ACDId)); }
-        //}
-
-        //public static bool CreateRotator(int acdGuid, Rotator rotator)
-        //{
-        //    if (!Rotators.ContainsKey(acdGuid))
-        //    {
-        //        Rotators.Add(acdGuid, rotator);
-        //        Task.FromResult(rotator.Rotate());
-        //        return true;
-        //    }
-        //    return false;
-        //}
-
-        //public static Rotator GetRotator(int acdGuid)
-        //{
-        //    Rotator rotator;
-        //    if (Rotators.TryGetValue(acdGuid, out rotator))
-        //        return rotator;
-
-        //    return null;
-        //}
-
-        #endregion
 
         [DataMember]
         public HashSet<TrinityMonsterAffix> Affixes { get; set; }
@@ -419,7 +383,7 @@ namespace Trinity
         public bool IsTrashMob { get { return (IsUnit && !(IsEliteRareUnique || IsBoss || IsTreasureGoblin || IsMinion)); } }
 
         [NoCopy]
-        public bool IsMe { get { return RActorGuid == Trinity.Player.RActorGuid; } }
+        public bool IsMe { get { return RActorGuid == TrinityPlugin.Player.RActorGuid; } }
 
         [DataMember]
         public bool IsSummonedByPlayer { get; set; }
@@ -511,7 +475,7 @@ namespace Trinity
         [NoCopy]
         public bool IsPlayerFacing(float arc)
         {
-            return Trinity.Player.IsFacing(this.Position, arc);
+            return TrinityPlugin.Player.IsFacing(this.Position, arc);
         }
 
         [NoCopy]
@@ -523,14 +487,6 @@ namespace Trinity
             }
         }
 
-        [NoCopy]
-        public AvoidanceType AvoidanceType
-        {
-            get
-            {
-                return OldAvoidanceManager.GetAvoidanceType(this.ActorSNO);
-            }
-        }
 
         public DateTime CreationTime = DateTime.MinValue;
         public bool IsACDBased;
@@ -577,7 +533,7 @@ namespace Trinity
                     this.IsACDBased = true;
                     this.IsElite = CommonData.IsElite;
                     this.Animation = CommonData.CurrentAnimation;
-                    this.GizmoType = diaObject.CommonData.GizmoType;
+                    this.GizmoType = CommonData.GizmoType;
 
                     if (this.IsElite)
                     {
@@ -602,7 +558,7 @@ namespace Trinity
                 if (this.Type != TrinityObjectType.Unit)
                     return 0;
 
-                return Trinity.ObjectCache
+                return TrinityPlugin.ObjectCache
                     .Count(u => u.RActorGuid != this.RActorGuid && u.IsUnit && u.Position.Distance(this.Position) <= range && u.HasBeenInLoS);
             }
         }
@@ -610,20 +566,20 @@ namespace Trinity
         public int CountUnitsBehind(float range)
         {
             return
-                (from u in Trinity.ObjectCache
+                (from u in TrinityPlugin.ObjectCache
                  where u.RActorGuid != this.RActorGuid &&
                  u.IsUnit &&
-                 MathUtil.IntersectsPath(this.Position, this.Radius, Trinity.Player.Position, u.Position)
+                 MathUtil.IntersectsPath(this.Position, this.Radius, TrinityPlugin.Player.Position, u.Position)
                  select u).Count();
         }
 
         public int CountUnitsInFront()
         {
             return
-                (from u in Trinity.ObjectCache
+                (from u in TrinityPlugin.ObjectCache
                  where u.RActorGuid != RActorGuid &&
                  u.IsUnit &&
-                 MathUtil.IntersectsPath(u.Position, u.Radius, Trinity.Player.Position, Position)
+                 MathUtil.IntersectsPath(u.Position, u.Radius, TrinityPlugin.Player.Position, Position)
                  select u).Count();
         }
 
@@ -737,7 +693,7 @@ namespace Trinity
         /// <returns><c>true</c> if [is in line of sight]; otherwise, <c>false</c>.</returns>
         public bool IsInLineOfSight()
         {
-            return !Navigator.Raycast(Trinity.Player.Position, Position);
+            return !Navigator.Raycast(TrinityPlugin.Player.Position, Position);
         }
 
         public bool IsFullyValid()
@@ -874,7 +830,7 @@ namespace Trinity
 
         bool IActor.IsInCombat
         {
-            get { return Trinity.Player.IsInCombat; }
+            get { return TrinityPlugin.Player.IsInCombat; }
             set { }
         }
 
@@ -957,7 +913,7 @@ namespace Trinity
 
         float IActor.ZDiff
         {
-            get { return Math.Abs(Position.Z - Trinity.Player.Position.Z); }
+            get { return Math.Abs(Position.Z - TrinityPlugin.Player.Position.Z); }
             set { }
         }
 
@@ -981,7 +937,7 @@ namespace Trinity
 
         bool IActor.IsMe
         {
-            get { return RActorGuid == Trinity.Player.RActorGuid; }
+            get { return RActorGuid == TrinityPlugin.Player.RActorGuid; }
             set { }
         }
 
@@ -993,7 +949,7 @@ namespace Trinity
 
         bool IActor.IsAvoidance
         {
-            get { return OldAvoidanceManager.GetAvoidanceType(ActorSNO) != AvoidanceType.None || DataDictionary.AvoidanceSNO.Contains(ActorSNO); }
+            get { return Core.Avoidance.ActiveAvoidanceIds.Contains(ActorSNO); }
             set { }
         }
 
@@ -1023,19 +979,19 @@ namespace Trinity
 
         bool IActor.InGreaterRift
         {
-            get { return DataDictionary.RiftWorldIds.Contains(Trinity.Player.WorldID); }
+            get { return DataDictionary.RiftWorldIds.Contains(TrinityPlugin.Player.WorldID); }
             set { }
         }
 
         long IActor.Coinage
         {
-            get { return Trinity.Player.Coinage; }
+            get { return TrinityPlugin.Player.Coinage; }
             set { }
         }
 
         Rotator IActor.Rotator
         {
-            get { return Rotator; }
+            get { return null; }
             set { }
         }
 
@@ -1077,13 +1033,13 @@ namespace Trinity
 
         double IActor.SecondaryResource
         {
-            get { return Trinity.Player.SecondaryResource; }
+            get { return TrinityPlugin.Player.SecondaryResource; }
             set { }
         }
 
         double IActor.PrimaryResource
         {
-            get { return Trinity.Player.PrimaryResource; }
+            get { return TrinityPlugin.Player.PrimaryResource; }
             set { }
         }
 

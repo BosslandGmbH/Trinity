@@ -3,7 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ut="clr-namespace:Trinity.UIComponents"
-             mc:Ignorable="d" Foreground="{DynamicResource TextBrush}" 
+             mc:Ignorable="d" Foreground="{DynamicResource TextBrush}"  Background="#434343" Padding="10,0,0,0"
              d:DesignHeight="1200" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,33 +18,33 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
-        <StackPanel>
+        <StackPanel Margin="0,10,5,0">
             <GroupBox Header="Item Rules Mode">
                 <StackPanel>
                     <Border BorderBrush="White" BorderThickness="1" Margin="5">
                         <ComboBox FontSize="14" HorizontalAlignment="Stretch" SelectedValuePath="Tag" SelectedValue="{Binding Path=Loot.ItemFilterMode, Mode=TwoWay}">
-                            <ComboBoxItem Content="Trinity Scoring Only" Tag="TrinityOnly" IsSelected="True" ToolTip="Uses Trinity Scoring Only (see Trinity Town-Runs Tab)" />
-                            <ComboBoxItem Content="File Based Script Rules" Tag="TrinityWithItemRules" ToolTip="Utilizes Item Rulesets (see ItemRules directory)" />
-                            <!--<ComboBoxItem Content="Demonbuddy Loot Rules" Tag="DemonBuddy" ToolTip="Use the Built-in Demonbuddy loot rule logic (see Demonbuddy Settings tab)" />-->
-                            <!--<ComboBoxItem Content="Item Ranking" Tag="ItemRanks" ToolTip="Use Top 1000 Greater Rift popular items" />-->
+                            <ComboBoxItem Content="TrinityPlugin (Not Recommended)" Tag="TrinityOnly" IsSelected="True" ToolTip="Uses TrinityPlugin Scoring Only (see TrinityPlugin Town-Runs Tab)" />
+                            <ComboBoxItem Content="File Based Rules (Obsolete)" Tag="TrinityWithItemRules" ToolTip="This is outdated and not supported" />
                             <ComboBoxItem Content="Item List" Tag="ItemList" ToolTip="Use custom list of items" />
                         </ComboBox>
                     </Border>
-                    <Button HorizontalAlignment="Center"
-                        Style="{DynamicResource LinkButton}"
-                        Command="{Binding Path=HelpLinkCommand}" 
-                        CommandParameter="http://www.thebuddyforum.com/demonbuddy-forum/plugins/trinity/91602-plugin-item-rules-2-file-based-scripting-language.html"
-                        Visibility="{Binding Path=Loot.ItemFilterMode, Converter={StaticResource enumVisibilityConverter}, ConverterParameter=TrinityWithItemRules}">
-                        Item Rules Documentation / Manual - Read Before using!
-                    </Button>
-                    <TextBlock
-                        Text="WARNING : This mode can sell or salvage your legendary items" 
-                           HorizontalAlignment="Center" 
-                           FontSize="12" 
-                           Foreground="#FFCC0000" 
+                </StackPanel>
+            </GroupBox>            
+            <!--<GroupBox Header="Item Management Mode">
+                <StackPanel>
+                    <Border BorderBrush="White" BorderThickness="1" Margin="5">
+                        <ComboBox FontSize="14" HorizontalAlignment="Stretch" SelectedValuePath="Tag" SelectedValue="{Binding Path=Loot.ItemFilterMode, Mode=TwoWay}">
+                            <ComboBoxItem Content="Item List" Tag="ItemList" IsSelected="True" ToolTip="Use custom list of items" />                            
+                            <ComboBoxItem Content="Basic Scoring (Not Recommended)" Tag="TrinityPluginOnly" ToolTip="Uses TrinityPlugin Scoring Only" />
+                            <ComboBoxItem Content="File Based Rules (Obsolete)" Tag="TrinityPluginWithItemRules" ToolTip="Utilizes Item Rulesets (see ItemRules directory)" />
+                        </ComboBox>
+                    </Border>
+                    <TextBlock TextWrapping="Wrap"
+                        Text="WARNING : This mode is not actively supported and may not work correctly." 
+                           HorizontalAlignment="Center" FontSize="12" FontWeight="Bold"  Foreground="#FFCC0000" 
                            Visibility="{Binding Path=Loot.ItemFilterMode, Converter={StaticResource enumVisibilityConverter}, ConverterParameter=TrinityWithItemRules}"/>
                 </StackPanel>
-            </GroupBox>
+            </GroupBox>-->
             <GroupBox Header="Equipment Pickup Options">
                 <StackPanel HorizontalAlignment="Center">
                     <CheckBox IsChecked="{Binding Path=Pickup.PickupLegendaries}" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -211,10 +211,6 @@
             </GroupBox>
             <GroupBox Header="Reset">
                 <StackPanel>
-                    <UniformGrid  Rows="1">
-                        <Button HorizontalAlignment="Stretch" Command="{Binding ConfigureLootToQuesting}">Set Questing</Button>
-                        <Button HorizontalAlignment="Stretch" Command="{Binding ConfigureLootToHunting}">Set Champion Hunting</Button>
-                    </UniformGrid>
                     <Button HorizontalAlignment="Center" Command="{Binding ResetItemCommand}">Reset All Item Settings to Defaults</Button>
                 </StackPanel>
             </GroupBox>

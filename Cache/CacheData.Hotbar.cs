@@ -14,7 +14,7 @@ namespace Trinity
     public partial class CacheData
     {
         /// <summary>
-        /// Fast Hotbar Cache, Self-Updating, use instead of ZetaDia.PlayerData / Trinity.Hotbar
+        /// Fast Hotbar Cache, Self-Updating, use instead of ZetaDia.PlayerData / TrinityPlugin.Hotbar
         /// </summary>
         public class HotbarCache
         {

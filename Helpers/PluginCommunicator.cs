@@ -23,7 +23,7 @@ namespace Trinity.Helpers
 
         static PluginCommunicator()
         {
-            Me = Trinity.Instance;
+            Me = TrinityPlugin.Instance;
         }
 
         public static void SetCombatMode(CombatMode combatMode)
@@ -58,7 +58,7 @@ namespace Trinity.Helpers
                     Logger.Log("Setting Combat Mode to {0} at request of {0}", sender.Name);
                     CombatBase.CombatOverrides.ModifyTrashSizeForDuration(-100, TimeSpan.FromSeconds(numSecs), 1, 1, () =>
                     {
-                        return DateTime.UtcNow.Subtract(Trinity.LastWorldChangeTime).TotalSeconds < 15;
+                        return DateTime.UtcNow.Subtract(TrinityPlugin.LastWorldChangeTime).TotalSeconds < 15;
                     });
 
                     return Respond(true);

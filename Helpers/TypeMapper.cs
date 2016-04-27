@@ -8,50 +8,50 @@ namespace Trinity.Helpers
 {
     public class TypeMapper
     {
-        public static Trinity.Weighting.ShrineTypes GetShrineType(IActor actor)
+        public static TrinityPlugin.Weighting.ShrineTypes GetShrineType(IActor actor)
         {
             switch (actor.ActorSNO)
             {
                 case (int)SNOActor.a4_Heaven_Shrine_Global_Fortune:
                 case (int)SNOActor.Shrine_Global_Fortune:
-                    return Trinity.Weighting.ShrineTypes.Fortune;
+                    return TrinityPlugin.Weighting.ShrineTypes.Fortune;
 
                 case (int)SNOActor.a4_Heaven_Shrine_Global_Frenzied:
                 case (int)SNOActor.Shrine_Global_Frenzied:
-                    return Trinity.Weighting.ShrineTypes.Frenzied;
+                    return TrinityPlugin.Weighting.ShrineTypes.Frenzied;
 
                 case (int)SNOActor.a4_Heaven_Shrine_Global_Reloaded:
                 case (int)SNOActor.Shrine_Global_Reloaded:
-                    return Trinity.Weighting.ShrineTypes.RunSpeed;
+                    return TrinityPlugin.Weighting.ShrineTypes.RunSpeed;
 
                 case (int)SNOActor.a4_Heaven_Shrine_Global_Enlightened:
                 case (int)SNOActor.Shrine_Global_Enlightened:
-                    return Trinity.Weighting.ShrineTypes.Enlightened;
+                    return TrinityPlugin.Weighting.ShrineTypes.Enlightened;
 
                 case (int)SNOActor.Shrine_Global_Glow:
-                    return Trinity.Weighting.ShrineTypes.Glow;
+                    return TrinityPlugin.Weighting.ShrineTypes.Glow;
 
                 case (int)SNOActor.a4_Heaven_Shrine_Global_Hoarder:
                 case (int)SNOActor.Shrine_Global_Hoarder:
-                    return Trinity.Weighting.ShrineTypes.Hoarder;
+                    return TrinityPlugin.Weighting.ShrineTypes.Hoarder;
 
                 case (int)SNOActor.x1_LR_Shrine_Infinite_Casting:
-                    return Trinity.Weighting.ShrineTypes.Casting;
+                    return TrinityPlugin.Weighting.ShrineTypes.Casting;
 
                 case (int)SNOActor.x1_LR_Shrine_Electrified_TieredRift:
                 case (int)SNOActor.x1_LR_Shrine_Electrified:
-                    return Trinity.Weighting.ShrineTypes.Conduit;
+                    return TrinityPlugin.Weighting.ShrineTypes.Conduit;
 
                 case (int)SNOActor.x1_LR_Shrine_Invulnerable:
-                    return Trinity.Weighting.ShrineTypes.Shield;
+                    return TrinityPlugin.Weighting.ShrineTypes.Shield;
 
                 case (int)SNOActor.x1_LR_Shrine_Run_Speed:
-                    return Trinity.Weighting.ShrineTypes.Shield;
+                    return TrinityPlugin.Weighting.ShrineTypes.Shield;
 
                 case (int)SNOActor.x1_LR_Shrine_Damage:
-                    return Trinity.Weighting.ShrineTypes.Damage;
+                    return TrinityPlugin.Weighting.ShrineTypes.Damage;
                 default:
-                    return Trinity.Weighting.ShrineTypes.Unknown;
+                    return TrinityPlugin.Weighting.ShrineTypes.Unknown;
             }
         }
 

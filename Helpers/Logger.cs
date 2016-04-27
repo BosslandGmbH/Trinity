@@ -36,9 +36,9 @@ namespace Trinity.Technicals
         public static void Log(TrinityLogLevel level, LogCategory category, string formatMessage, params object[] args)
         {
             if (string.IsNullOrEmpty(prefix))
-                prefix = string.Format("[Trinity {0}]", Trinity.Instance.Version);
+                prefix = string.Format("[Trinity {0}]", TrinityPlugin.Instance.Version);
 
-            if (category == LogCategory.UserInformation || level >= TrinityLogLevel.Error || (Trinity.Settings != null && Trinity.Settings.Advanced.LogCategories.HasFlag(category)))
+            if (category == LogCategory.UserInformation || level >= TrinityLogLevel.Error || (TrinityPlugin.Settings != null && TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(category)))
             {
                 string msg = string.Format(prefix + "{0} {1}", category != LogCategory.UserInformation ? "[" + category.ToString() + "]" : string.Empty, formatMessage);
 
@@ -56,7 +56,7 @@ namespace Trinity.Technicals
                 if (!LastLogMessages.ContainsKey(key))
                     LastLogMessages.Add(key, "");
 
-                var allowDuplicates = Trinity.Settings != null && Trinity.Settings.Advanced != null && Trinity.Settings.Advanced.AllowDuplicateMessages;
+                var allowDuplicates = TrinityPlugin.Settings != null && TrinityPlugin.Settings.Advanced != null && TrinityPlugin.Settings.Advanced.AllowDuplicateMessages;
 
                 string lastMessage;
                 if (LastLogMessages.TryGetValue(key, out lastMessage) && (allowDuplicates || lastMessage != msg))
@@ -105,9 +105,14 @@ namespace Trinity.Technicals
             LogNormal(formatMessage, 0);
         }
 
+        public static void LogRaw(string formatMessage)
+        {
+            _Logger.Info(formatMessage);
+        }
+
         public static void LogSpecial(Func<string> messageProducer)
         {
-            if(Trinity.IsDeveloperLoggingEnabled)
+            if(TrinityPlugin.IsDeveloperLoggingEnabled)
                 _Logger.InfoFormat("[^] " + messageProducer());
         }
 
@@ -240,7 +245,7 @@ namespace Trinity.Technicals
                 {
                     lock (_loglock)
                     {
-                        _Logger.Info("Setting up Trinity Logging");
+                        _Logger.Info("Setting up TrinityPlugin Logging");
                         int myPid = Process.GetCurrentProcess().Id;
                         DateTime startTime = Process.GetCurrentProcess().StartTime;
 
@@ -248,7 +253,7 @@ namespace Trinity.Technicals
                         trinityLayout.ActivateOptions();
 
                         trinityFilter = new log4net.Filter.LoggerMatchFilter();
-                        trinityFilter.LoggerToMatch = "Trinity";
+                        trinityFilter.LoggerToMatch = "TrinityPlugin";
                         trinityFilter.AcceptOnMatch = true;
                         trinityFilter.ActivateOptions();
 
@@ -279,7 +284,7 @@ namespace Trinity.Technicals
             }
             catch (Exception ex)
             {
-                _Logger.Error("Error setting up Trinity Logger:\n" + ex.ToString());
+                _Logger.Error("Error setting up TrinityPlugin Logger:\n" + ex.ToString());
             }
         }
 

@@ -10,7 +10,7 @@ namespace Trinity.Settings.Mock
     /// Usage:
     /// 
     /// Add namespace: 
-    /// xmlns:mock="clr-namespace:Trinity.Settings.Mock"
+    /// xmlns:mock="clr-namespace:TrinityPlugin.Settings.Mock"
     /// 
     /// Ensure you have d (designtime) namesapace    
     /// xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -28,7 +28,10 @@ namespace Trinity.Settings.Mock
         static MockData()
         {
             ItemList = new ItemListMockData();
+            SkillSettings = new SkillSettingsMockData();
         }
+
+        public static SkillSettingsMockData SkillSettings { get; set; }
 
         public static ItemListMockData ItemList { get; set; }
     }

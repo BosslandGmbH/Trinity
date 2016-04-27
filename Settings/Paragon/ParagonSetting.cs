@@ -18,7 +18,6 @@ using Trinity.Settings.Loot;
 using TrinityCoroutines.Resources;
 using Trinity.Technicals;
 using log4net;
-using Microsoft.Scripting.Utils;
 using Zeta.Common;
 using Zeta.Common.Plugins;
 using Zeta.Game;

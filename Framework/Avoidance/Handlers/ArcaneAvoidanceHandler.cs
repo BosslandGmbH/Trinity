@@ -24,14 +24,16 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         private int _healthThresholdPct;
 
-        public void UpdateNodes(AvoidanceGrid grid, Avoidance avoidance)
+        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
         {
             CleanUpRotators();
 
             foreach (var actor in avoidance.Actors)
             {
                 if (actor == null || !actor.IsValid || actor.IsDead || actor.CommonData == null || actor.CommonData.IsDisposed)
+                {
                     continue;
+                }
 
                 var part = avoidance.Data.GetPart(actor.ActorSNO);
 
@@ -90,7 +92,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         public bool IsAllowed
         {
-            get { return Trinity.Player.CurrentHealthPct <= HealthThresholdPct; }
+            get { return TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct; }
         }
 
         [DataMember]

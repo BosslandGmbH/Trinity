@@ -9,7 +9,7 @@ using Zeta.Game.Internals.SNO;
 
 namespace Trinity
 {
-    public partial class Trinity 
+    public partial class TrinityPlugin 
     {
         private static bool RefreshGizmo()
         {
@@ -604,16 +604,16 @@ namespace Trinity
                             return addToCache;
                         }
 
-                        float maxRadiusDistance;
+                        //float maxRadiusDistance;
 
-                        if (DataDictionary.DestructableObjectRadius.TryGetValue(CurrentCacheObject.ActorSNO, out maxRadiusDistance))
-                        {
-                            if (CurrentCacheObject.RadiusDistance < maxRadiusDistance)
-                            {
-                                addToCache = true;
-                                c_IgnoreSubStep = "DestructableObjectRadius";
-                            }
-                        }
+                        //if (DataDictionary.DestructableObjectRadius.TryGetValue(CurrentCacheObject.ActorSNO, out maxRadiusDistance))
+                        //{
+                        //    if (CurrentCacheObject.RadiusDistance < maxRadiusDistance)
+                        //    {
+                        //        addToCache = true;
+                        //        c_IgnoreSubStep = "DestructableObjectRadius";
+                        //    }
+                        //}
 
                         if (DateTime.UtcNow.Subtract(PlayerMover.LastGeneratedStuckPosition).TotalSeconds <= 1)
                         {
@@ -773,7 +773,7 @@ namespace Trinity
                         }
 
                         // This object isn't yet in our destructible desire range
-                        if (addToCache && (minDistance <= 1 || CurrentCacheObject.RadiusDistance > minDistance) && Trinity.Player.MovementSpeed >= 1)
+                        if (addToCache && (minDistance <= 1 || CurrentCacheObject.RadiusDistance > minDistance) && TrinityPlugin.Player.MovementSpeed >= 1)
                         {
                             addToCache = false;
                             c_IgnoreSubStep = "NotInDestructableRange";
@@ -785,7 +785,7 @@ namespace Trinity
                         }
 
                         // Add if we're standing still and bumping into it
-                        if (CurrentCacheObject.RadiusDistance <= 2f && Trinity.Player.MovementSpeed <= 0)
+                        if (CurrentCacheObject.RadiusDistance <= 2f && TrinityPlugin.Player.MovementSpeed <= 0)
                         {
                             addToCache = true;
                             c_IgnoreSubStep = "";

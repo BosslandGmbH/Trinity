@@ -3,7 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ut="clr-namespace:Trinity.UIComponents"
-             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"  Background="#434343" Padding="10,0,0,0"
              d:DesignHeight="800" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -18,8 +18,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
-        <StackPanel>
-
+        <StackPanel Margin="0,10,5,0">
             <GroupBox Grid.Row="0" Header="Misc Town Run Options">
                 <StackPanel HorizontalAlignment="Stretch">
                     <UniformGrid Columns="2" HorizontalAlignment="Stretch">

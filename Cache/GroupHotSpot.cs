@@ -30,7 +30,7 @@ namespace Trinity
         {
             ManagerThread = new Thread(HotSpotManager)
             {
-                Name = "Trinity HotSpot",
+                Name = "TrinityPlugin HotSpot",
                 IsBackground = true,
                 Priority = ThreadPriority.Lowest
             };
@@ -92,13 +92,13 @@ namespace Trinity
         {
             List<TrinityCacheObject> list = new List<TrinityCacheObject>();
 
-            if (Trinity.Player.IsInTown)
+            if (TrinityPlugin.Player.IsInTown)
                 return list;
 
             var hotSpotList = HotSpotList.Where(s => 
-                s.Location.Distance(Trinity.Player.Position) <= 2500 && 
-                s.Location.Distance(Trinity.Player.Position) >= 50 && 
-                s.WorldId == Trinity.Player.WorldID).ToList();
+                s.Location.Distance(TrinityPlugin.Player.Position) <= 2500 && 
+                s.Location.Distance(TrinityPlugin.Player.Position) >= 50 && 
+                s.WorldId == TrinityPlugin.Player.WorldID).ToList();
 
             foreach (var hotSpot in hotSpotList)
             {
@@ -108,7 +108,7 @@ namespace Trinity
                     Position = hotSpot.Location,
                     InternalName = "HotSpot",
                     Type = TrinityObjectType.HotSpot,
-                    Distance = Trinity.Player.Position.Distance(hotSpot.Location),
+                    Distance = TrinityPlugin.Player.Position.Distance(hotSpot.Location),
                     Radius = HotSpot.MaxPositionDistance,
                 };
 
@@ -125,12 +125,12 @@ namespace Trinity
 
         internal static bool CacheObjectIsInHotSpot(TrinityCacheObject cacheObject)
         {
-            return LocationIsInHotSpot(cacheObject.Position, Trinity.Player.WorldID);
+            return LocationIsInHotSpot(cacheObject.Position, TrinityPlugin.Player.WorldID);
         }
 
         internal static bool CacheObjectIsInHotSpot(Vector3 position)
         {
-            return LocationIsInHotSpot(position, Trinity.Player.WorldID);
+            return LocationIsInHotSpot(position, TrinityPlugin.Player.WorldID);
         }
 
     }

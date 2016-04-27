@@ -109,7 +109,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HandOfTheProphet = new Item
         {
-            //[Trinity 2.13.59] Hand Of The Prophet ActorSnoId=366980 GameBalanceId=-450681607
+            //[TrinityPlugin 2.13.59] Hand Of The Prophet ActorSnoId=366980 GameBalanceId=-450681607
             Id = -450681607,
             GameBalanceId = true,
             Name = "Hand of the Prophet",
@@ -158,7 +158,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VadimsSurge = new Item
         {
-            //[Trinity 2.13.59] Vadim's Surge ActorSnoId=366980 GameBalanceId=-450681606
+            //[TrinityPlugin 2.13.59] Vadim's Surge ActorSnoId=366980 GameBalanceId=-450681606
             Id = -450681606,
             GameBalanceId = true,
             Name = "Vadim's Surge",

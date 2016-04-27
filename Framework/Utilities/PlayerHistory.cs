@@ -16,9 +16,9 @@ namespace Trinity.Framework.Utilities
             {
                 if (ZetaDia.Me != null && ZetaDia.Me.IsValid)
                 {
-                    Position = Trinity.Player.Position;
+                    Position = TrinityPlugin.Player.Position;
                     RecordedAt = DateTime.UtcNow;
-                    WorldId = Trinity.Player.WorldID;
+                    WorldId = TrinityPlugin.Player.WorldID;
                 }
             }
 
@@ -32,13 +32,13 @@ namespace Trinity.Framework.Utilities
             }
         } 
 
-        private const int CacheLimit = 150;
+        private const int CacheLimit = 50;
         private const int RecentPositionsLimit = 20;
         private CacheField<Vector3> _centroid = new CacheField<Vector3>(UpdateSpeed.Fast);
         public DateTime LastRecordedTime;
         public Vector3 LastRecordedPosition;
-        public List<PositionHistory> Cache = new List<PositionHistory>();
-        public List<Vector3> RecentPositions = new List<Vector3>();
+        public IndexedList<PositionHistory> Cache = new IndexedList<PositionHistory>();
+        public IndexedList<Vector3> RecentPositions = new IndexedList<Vector3>();
 
         protected override void OnPulse()
         {
@@ -58,7 +58,7 @@ namespace Trinity.Framework.Utilities
             if (Cache.Any(p => DateTime.UtcNow.Subtract(p.RecordedAt).TotalMilliseconds < 250))
                 return;
 
-            var myPosition = Trinity.Player.Position;
+            var myPosition = TrinityPlugin.Player.Position;
 
             if (Cache.Any(p => p.Position.Distance(myPosition) < distance))
                 return;
@@ -73,15 +73,15 @@ namespace Trinity.Framework.Utilities
 
         public void MaintainCache()
         {
-            var worldId = Trinity.Player.WorldID;
-
-            if (RecentPositions.Count > RecentPositionsLimit)
-                RecentPositions.RemoveAt(0);
-
-            if (Cache.Count > CacheLimit)
-                Cache.RemoveAt(0);
+            var worldId = TrinityPlugin.Player.WorldID;
 
             Cache.RemoveAll(p => p.WorldId != worldId);
+
+            while (RecentPositions.Count > RecentPositionsLimit)
+                RecentPositions.RemoveAt(0);
+
+            while (Cache.Count > CacheLimit)
+                Cache.RemoveAt(0);
         }
 
         public Vector3 Centroid

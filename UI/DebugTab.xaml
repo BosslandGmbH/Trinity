@@ -3,7 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ut="clr-namespace:Trinity.UIComponents"
-             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"  Background="#434343" Padding="10,0,0,0"
              d:DesignHeight="420" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -13,20 +13,22 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel>
-        <UniformGrid Columns="2">
-            <Button Content="Dump Skills" Command="{Binding DumpSkillsCommand}"/>
-            <Button Content="Quick Dump Items" Command="{Binding DumpQuickItemsCommand}" />
-            <Button Content="Full Dump Backpack Items" Command="{Binding Path=DumpBackpackCommand}"/>
-            <Button Content="Full Dump Equipped Items" Command="{Binding Path=DumpEquippedCommand}"/>
-            <Button Content="Full Dump Ground Items" Command="{Binding Path=DumpGroundItemsCommand}"/>
-            <Button Content="Full Dump Stash items" Command="{Binding Path=DumpStashCommand}"/>
-            <Button Content="Full Dump Merchant items" Command="{Binding Path=DumpMerchantItemsCommand}"/>
-            <Button Content="Full Dump ALL items (SLOW!!)" Command="{Binding Path=DumpAllItemsCommand}"/>
-            <Button Content="Dump Build / Items" Command="{Binding Path=DumpSkillsAndItemsCommand}"/>
-            <Button Content="Dump Invalid Items" Command="{Binding Path=DumpInvalidItemsCommand}"/>
-            <Button Content="Dump ItemSNO Reference" Command="{Binding Path=DumpItemSNOReference}"/>
-            <Button Content="Dump Import Reference" Command="{Binding Path=DumpReferenceItems}"/> 
-        </UniformGrid>
-    </StackPanel>
+    <ScrollViewer>
+        <StackPanel Margin="0,10,5,0">
+            <UniformGrid Columns="2">
+                <Button Content="Dump Skills" Command="{Binding DumpSkillsCommand}"/>
+                <Button Content="Quick Dump Items" Command="{Binding DumpQuickItemsCommand}" />
+                <Button Content="Full Dump Backpack Items" Command="{Binding Path=DumpBackpackCommand}"/>
+                <Button Content="Full Dump Equipped Items" Command="{Binding Path=DumpEquippedCommand}"/>
+                <Button Content="Full Dump Ground Items" Command="{Binding Path=DumpGroundItemsCommand}"/>
+                <Button Content="Full Dump Stash items" Command="{Binding Path=DumpStashCommand}"/>
+                <Button Content="Full Dump Merchant items" Command="{Binding Path=DumpMerchantItemsCommand}"/>
+                <Button Content="Full Dump ALL items (SLOW!!)" Command="{Binding Path=DumpAllItemsCommand}"/>
+                <Button Content="Dump Build / Items" Command="{Binding Path=DumpSkillsAndItemsCommand}"/>
+                <Button Content="Dump Invalid Items" Command="{Binding Path=DumpInvalidItemsCommand}"/>
+                <Button Content="Dump ItemSNO Reference" Command="{Binding Path=DumpItemSNOReference}"/>
+                <Button Content="Dump Import Reference" Command="{Binding Path=DumpReferenceItems}"/>
+            </UniformGrid>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

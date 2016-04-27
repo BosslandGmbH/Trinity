@@ -7,17 +7,16 @@
              d:DesignHeight="600" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
-            <!-- Don't format this line otherwise Db can't open config window -->
-            <ResourceDictionary.MergedDictionaries><ResourceDictionary Source="..\Template.xaml"/></ResourceDictionary.MergedDictionaries>
-
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
             <ut:PercentConverter x:Key="percentConverter" />
-            
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="Transparent">
         <StackPanel Orientation="Vertical">
             <!-- Header -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
@@ -28,13 +27,13 @@
                 <TextBlock Margin="2" Text="Health %" FontWeight="Bold" Grid.Column="2" TextAlignment="Center"/>
             </Grid>
             <!-- Arcane -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Arcane" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Arcane" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -49,13 +48,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- AzmoBodies -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Azmo Bodies" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Azmo Bodies" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="60" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -70,13 +69,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- AzmoPools -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Azmo Pools" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Azmo Pools" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="60" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -91,13 +90,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- BeeWasps -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Bee/Wasps" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Bee/Wasps" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -112,13 +111,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- Desecrator -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Desecrator" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Desecrator" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -133,13 +132,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- FrozenPulse -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="FrozenPulse" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="FrozenPulse" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -154,13 +153,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- GhomGas -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Ghom Gas" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Ghom Gas" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -175,13 +174,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- Grotesque -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Grotesque" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Grotesque" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -196,13 +195,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- IceBalls -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Ice Balls" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Ice Balls" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -217,13 +216,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- Orbiter -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Orbiter" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Orbiter" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -238,13 +237,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- MoltenCore -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Molten Core" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Molten Core" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -259,13 +258,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- MoltenTrail -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Molten Trail" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Molten Trail" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -280,13 +279,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- PoisonEnchanted -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Poison Enchanted" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Poison Enchanted" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -301,13 +300,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- PoisonTree -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Poison Tree" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Poison Tree" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -322,13 +321,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- PlagueCloud -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Plague Cloud" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Plague Cloud" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -343,13 +342,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- PlagueHand -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Plague Hands" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Plague Hands" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -364,13 +363,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- ShamanFire -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Shaman Fire" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Shaman Fire" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -385,13 +384,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- Wormhole -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Wormhole" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Wormhole" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"
@@ -406,13 +405,13 @@
                             HorizontalAlignment="Stretch" Margin="2"/>
             </Grid>
             <!-- Thunderstorm -->
-            <Grid>
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Margin="2" Text="Thunderstorm" FontWeight="Bold" VerticalAlignment="Center"/>
+                <TextBlock Margin="2" Text="Thunderstorm" FontWeight="Normal" VerticalAlignment="Center"/>
                 <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
                             Interval="500" Maximum="30" Minimum="0" 
                             SmallChange="1" LargeChange="5"

@@ -4,6 +4,9 @@ using System.Linq;
 using Trinity.Combat;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
+using Trinity.Framework;
+using Trinity.Framework.Avoidance.Structures;
+using Trinity.Movement;
 using Trinity.Objects;
 using Trinity.Technicals;
 using Trinity.UI.UIComponents.RadarCanvas;
@@ -23,7 +26,7 @@ namespace Trinity
         {
             get
             {
-                return Trinity.ObjectCache;
+                return TrinityPlugin.ObjectCache;
             }
         }
         private static CacheData.PlayerCache Player
@@ -47,7 +50,7 @@ namespace Trinity
         {
             get
             {
-                return Trinity.CurrentTarget;
+                return TrinityPlugin.CurrentTarget;
             }
         }
         private static HashSet<SNOPower> Hotbar
@@ -228,7 +231,7 @@ namespace Trinity
         {
             Vector3 _bestMovementPosition = Vector3.Zero;
 
-            if (HealthGlobeExists(25) && Player.CurrentHealthPct < Trinity.Settings.Combat.Barbarian.HealthGlobeLevel)
+            if (HealthGlobeExists(25) && Player.CurrentHealthPct < TrinityPlugin.Settings.Combat.Barbarian.HealthGlobeLevel)
                 _bestMovementPosition = GetBestHealthGlobeClusterPoint(7, 25);
             else if (PowerGlobeExists(25))
                 _bestMovementPosition = GetBestPowerGlobeClusterPoint(7, 25);
@@ -263,8 +266,8 @@ namespace Trinity
 
                 if (clusterUnits.Any())
                     bestClusterUnit = clusterUnits.FirstOrDefault();
-                else if (Trinity.CurrentTarget != null)
-                    bestClusterUnit = Trinity.CurrentTarget;
+                else if (TrinityPlugin.CurrentTarget != null)
+                    bestClusterUnit = TrinityPlugin.CurrentTarget;
                 else
                     bestClusterUnit = default(TrinityCacheObject);
 
@@ -300,7 +303,7 @@ namespace Trinity
             if (clusterUnits.Any())
                 bestClusterPoint = clusterUnits.FirstOrDefault();
             else
-                bestClusterPoint = Trinity.Player.Position;
+                bestClusterPoint = TrinityPlugin.Player.Position;
 
             return bestClusterPoint;
 
@@ -334,7 +337,7 @@ namespace Trinity
             if (clusterUnits.Any())
                 bestClusterPoint = clusterUnits.FirstOrDefault();
             else
-                bestClusterPoint = Trinity.Player.Position;
+                bestClusterPoint = TrinityPlugin.Player.Position;
 
             return bestClusterPoint;
         }
@@ -404,8 +407,8 @@ namespace Trinity
 
             if (clusterUnits.Any())
                 bestClusterUnit = clusterUnits.FirstOrDefault();
-            else if (Trinity.CurrentTarget != null)
-                bestClusterUnit = Trinity.CurrentTarget;
+            else if (TrinityPlugin.CurrentTarget != null)
+                bestClusterUnit = TrinityPlugin.CurrentTarget;
             else
                 bestClusterUnit = default(TrinityCacheObject);
 
@@ -429,11 +432,11 @@ namespace Trinity
                 maxRange = 300f;
 
             bool includeHealthGlobes = false;
-            switch (Trinity.Player.ActorClass)
+            switch (TrinityPlugin.Player.ActorClass)
             {
                 case ActorClass.Barbarian:
                     includeHealthGlobes = CombatBase.Hotbar.Contains(SNOPower.Barbarian_Whirlwind) &&
-                                          Trinity.Settings.Combat.Misc.CollectHealthGlobe &&
+                                          TrinityPlugin.Settings.Combat.Misc.CollectHealthGlobe &&
                                           ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0);
                     break;
             }
@@ -454,10 +457,10 @@ namespace Trinity
 
             if (clusterUnits.Any())
                 bestClusterPoint = clusterUnits.FirstOrDefault();
-            else if (Trinity.CurrentTarget != null)
-                bestClusterPoint = Trinity.CurrentTarget.Position;
+            else if (TrinityPlugin.CurrentTarget != null)
+                bestClusterPoint = TrinityPlugin.CurrentTarget.Position;
             else
-                bestClusterPoint = Trinity.Player.Position;
+                bestClusterPoint = TrinityPlugin.Player.Position;
 
             return bestClusterPoint;
         }
@@ -640,7 +643,7 @@ namespace Trinity
         {
             if (range < 5f)
                 range = 5f;
-            return Trinity.CurrentTarget != null && Trinity.CurrentTarget.IsBossOrEliteRareUnique && Trinity.CurrentTarget.RadiusDistance <= range;
+            return TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.IsBossOrEliteRareUnique && TrinityPlugin.CurrentTarget.RadiusDistance <= range;
         }
 
         /// <summary>
@@ -652,9 +655,9 @@ namespace Trinity
             Vector3 target = PlayerMover.LastMoveToTarget;
             Vector3 myPos = ZetaDia.Me.Position;
 
-            if (Trinity.CurrentTarget != null && NavHelper.CanRayCast(myPos, target))
+            if (TrinityPlugin.CurrentTarget != null && NavHelper.CanRayCast(myPos, target))
             {
-                target = Trinity.CurrentTarget.Position;
+                target = TrinityPlugin.CurrentTarget.Position;
             }
 
             float distance = target.Distance(myPos);
@@ -690,20 +693,20 @@ namespace Trinity
             float maxDistance = 35f;
             int minTargets = 2;
 
-            if (Trinity.Player.ActorClass == ActorClass.Monk)
+            if (TrinityPlugin.Player.ActorClass == ActorClass.Monk)
             {
                 maxDistance = 20f;
                 minTargets = 3;
-                useTargetBasedZigZag = Trinity.Settings.Combat.Monk.TargetBasedZigZag;
+                useTargetBasedZigZag = TrinityPlugin.Settings.Combat.Monk.TargetBasedZigZag;
             }
-            if (Trinity.Player.ActorClass == ActorClass.Barbarian)
+            if (TrinityPlugin.Player.ActorClass == ActorClass.Barbarian)
             {
-                useTargetBasedZigZag = Trinity.Settings.Combat.Barbarian.TargetBasedZigZag;
+                useTargetBasedZigZag = TrinityPlugin.Settings.Combat.Barbarian.TargetBasedZigZag;
             }
 
             if (useTargetBasedZigZag && ObjectCache.Count(o => o.IsUnit) >= minTargets)
             {
-                bool attackInAoe = Trinity.Settings.Combat.Misc.KillMonstersInAoE;
+                bool attackInAoe = TrinityPlugin.Settings.Combat.Misc.KillMonstersInAoE;
                 var clusterPoint = GetBestClusterPoint(ringDistance, ringDistance, false, attackInAoe);
                 if (clusterPoint.Distance(Player.Position) >= minDistance)
                 {
@@ -763,7 +766,7 @@ namespace Trinity
                     // Find a new XY
                     zigZagPoint = MathEx.GetPointAt(origin, distance, (float)direction);
                     // Get the Z
-                    zigZagPoint.Z = Trinity.MainGridProvider.GetHeight(zigZagPoint.ToVector2());
+                    zigZagPoint.Z = TrinityPlugin.MainGridProvider.GetHeight(zigZagPoint.ToVector2());
 
                     // Make sure we're actually zig-zagging our target, except if we're kiting
 
@@ -782,7 +785,7 @@ namespace Trinity
                         continue;
 
                     // Ignore point if any AoE in this point position
-                    if (CacheData.TimeBoundAvoidance.Any(m => m.Position.Distance(zigZagPoint) <= m.Radius && Player.CurrentHealthPct <= OldAvoidanceManager.GetAvoidanceHealthBySNO(m.ActorSNO, 1)))
+                    if(Core.Avoidance.Grid.IsLocationInFlags(zigZagPoint, AvoidanceFlags.Avoidance))
                         continue;
 
                     // Make sure this point is in LoS/walkable (not around corners or into a wall)
@@ -808,9 +811,9 @@ namespace Trinity
                     {
                         highestWeightFound = pointWeight;
 
-                        if (Trinity.Settings.Combat.Misc.UseNavMeshTargeting)
+                        if (TrinityPlugin.Settings.Combat.Misc.UseNavMeshTargeting)
                         {
-                            bestLocation = new Vector3(zigZagPoint.X, zigZagPoint.Y, Trinity.MainGridProvider.GetHeight(zigZagPoint.ToVector2()));
+                            bestLocation = new Vector3(zigZagPoint.X, zigZagPoint.Y, TrinityPlugin.MainGridProvider.GetHeight(zigZagPoint.ToVector2()));
                         }
                         else
                         {
@@ -859,7 +862,7 @@ namespace Trinity
             if (position == Vector3.Zero)
                 return false;
 
-            return Trinity.ObjectCache.Any(m => m.Weight > 0 && m.IsUnit && m.Position.Distance(position) <= m.Radius * 0.85);
+            return TrinityPlugin.ObjectCache.Any(m => m.Weight > 0 && m.IsUnit && m.Position.Distance(position) <= m.Radius * 0.85);
         }
 
         internal static bool IsActorOnMonster(IActor actor)
@@ -1097,8 +1100,8 @@ namespace Trinity
 
             if (unitsByHealth.Any())
                 lowestHealthTarget = unitsByHealth.FirstOrDefault();
-            else if (Trinity.CurrentTarget != null)
-                lowestHealthTarget = Trinity.CurrentTarget;
+            else if (TrinityPlugin.CurrentTarget != null)
+                lowestHealthTarget = TrinityPlugin.CurrentTarget;
             else
                 lowestHealthTarget = default(TrinityCacheObject);
 
@@ -1123,8 +1126,8 @@ namespace Trinity
 
             if (unitsByHealth.Any())
                 lowestHealthTarget = unitsByHealth.FirstOrDefault();
-            else if (Trinity.CurrentTarget != null)
-                lowestHealthTarget = Trinity.CurrentTarget;
+            else if (TrinityPlugin.CurrentTarget != null)
+                lowestHealthTarget = TrinityPlugin.CurrentTarget;
             else
                 lowestHealthTarget = default(TrinityCacheObject);
 
@@ -1148,8 +1151,8 @@ namespace Trinity
             if (unitsByWeight.Any())
                 target = unitsByWeight.FirstOrDefault();
 
-            else if (Trinity.CurrentTarget != null)
-                target = Trinity.CurrentTarget;
+            else if (TrinityPlugin.CurrentTarget != null)
+                target = TrinityPlugin.CurrentTarget;
             else
                 target = default(TrinityCacheObject);
 
@@ -1175,11 +1178,11 @@ namespace Trinity
                 maxRange = 300f;
 
             bool includeHealthGlobes = false;
-            switch (Trinity.Player.ActorClass)
+            switch (TrinityPlugin.Player.ActorClass)
             {
                 case ActorClass.Barbarian:
                     includeHealthGlobes = CombatBase.Hotbar.Contains(SNOPower.Barbarian_Whirlwind) &&
-                                          Trinity.Settings.Combat.Misc.CollectHealthGlobe &&
+                                          TrinityPlugin.Settings.Combat.Misc.CollectHealthGlobe &&
                                           ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0);
                     break;
             }
@@ -1201,7 +1204,7 @@ namespace Trinity
             if (clusterUnits.Any())
                 bestClusterPoint = clusterUnits.FirstOrDefault();
             else
-                bestClusterPoint = Trinity.Player.Position;
+                bestClusterPoint = TrinityPlugin.Player.Position;
 
             return bestClusterPoint;
         }
@@ -1220,7 +1223,7 @@ namespace Trinity
 
         internal static bool AnyBossesInRange(float range)
         {
-            return NumBossInRangeOfPosition(Trinity.Player.Position, range) > 0;
+            return NumBossInRangeOfPosition(TrinityPlugin.Player.Position, range) > 0;
         }
 
         public static bool AvoidancesInRange(float radius)
@@ -1372,7 +1375,7 @@ namespace Trinity
         //        out positions, out bestRiftValueClusterPoint, out clusterValue))
         //        return bestRiftValueClusterPoint;
 
-        //    return Centroid(positions);
+        //    return GetCentroid(positions);
         //}
 
         internal static bool GetValueClusterUnits(
@@ -1444,7 +1447,7 @@ namespace Trinity
         //    return ObjectCache.Where(u => u.Position.Distance(obj.Position) <= distance).Sum(u => u.RiftValuePct);
         //}
 
-        //public static Vector3 Centroid(List<Vector3> points)
+        //public static Vector3 GetCentroid(List<Vector3> points)
         //{
         //    var result = points.Aggregate(Vector3.Zero, (current, point) => current + point);
         //    result /= points.Count();

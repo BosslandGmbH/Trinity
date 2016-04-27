@@ -69,12 +69,12 @@ namespace Trinity.UIComponents
 //using System.Linq;
 //using System.Reflection;
 //using System.Windows.Data;
-//using Trinity.Framework.Attributes;
+//using TrinityPlugin.Framework.Attributes;
 //using Zeta.Common;
-//using Trinity.Framework.Helpers;
+//using TrinityPlugin.Framework.Helpers;
 //
 
-//namespace Trinity.UI.UIComponents
+//namespace TrinityPlugin.UI.UIComponents
 //{
 //    /// <summary>
 //    /// Converts a collection of items into useful objects that UI controls can bind to.

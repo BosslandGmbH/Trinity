@@ -107,7 +107,7 @@ namespace Trinity.Coroutines.Town
                     }
 
                     Logger.LogVerbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
-                    ZetaDia.Me.Inventory.MoveItem(item.AnnId, Trinity.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
+                    ZetaDia.Me.Inventory.MoveItem(item.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
                     ItemEvents.FireItemStashed(item);
                     await Coroutine.Sleep(250);
                 }
@@ -154,7 +154,7 @@ namespace Trinity.Coroutines.Town
                 if (Equals(item, targetStack))
                     continue;
 
-                ZetaDia.Me.Inventory.MoveItem(item.AnnId, Trinity.Player.MyDynamicID, InventorySlot.SharedStash, targetStack.InventoryColumn, targetStack.InventoryRow);
+                ZetaDia.Me.Inventory.MoveItem(item.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, targetStack.InventoryColumn, targetStack.InventoryRow);
                 await Coroutine.Sleep(100);
             }
 
@@ -209,7 +209,7 @@ namespace Trinity.Coroutines.Town
                     if (CanStackOnPage(item, page, ref col, ref row, items))
                     {
                         Logger.LogVerbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
-                        ZetaDia.Me.Inventory.MoveItem(item.AnnId, Trinity.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
+                        ZetaDia.Me.Inventory.MoveItem(item.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
                         await Coroutine.Sleep(100);
                     }
                 }
@@ -224,10 +224,10 @@ namespace Trinity.Coroutines.Town
 
         public static async Task<bool> SortStashPages()
         {
-            if (!Trinity.Settings.Loot.TownRun.SortStashPages)
+            if (!TrinityPlugin.Settings.Loot.TownRun.SortStashPages)
                 return false;
 
-            if (Trinity.Settings.Loot.TownRun.StashGemsOnSecondToLastPage)
+            if (TrinityPlugin.Settings.Loot.TownRun.StashGemsOnSecondToLastPage)
             {
                 var secondLastPageIndex = TotalStashPages - 2;
                 ZetaDia.Me.Inventory.SwitchStashPage(secondLastPageIndex);
@@ -272,7 +272,7 @@ namespace Trinity.Coroutines.Town
                     if (CanSwapOrPlaceAtLocation(targetCol, targetRow, itemToMove.IsTwoSquareItem, map))
                     {
                         Logger.LogVerbose($"[StashItems] Sorting: {itemToMove.Name} ({itemToMove.ActorSnoId}) StashPage={page} from [{itemToMove.InventoryColumn},{itemToMove.InventoryRow}] to [{targetCol},{targetRow}]");
-                        ZetaDia.Me.Inventory.MoveItem(itemToMove.AnnId, Trinity.Player.MyDynamicID, InventorySlot.SharedStash, targetCol, targetRow);
+                        ZetaDia.Me.Inventory.MoveItem(itemToMove.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, targetCol, targetRow);
                         await Coroutine.Sleep(25);
                         await ActorManager.WaitForUpdate();
                         itemInTargetLocation?.Refresh();
@@ -284,9 +284,9 @@ namespace Trinity.Coroutines.Town
                         // Move an item away from the target square.
                         var moveToLocation = GetNextEmptySquare(targetCol, targetRow, itemInTargetLocation.IsTwoSquareItem);
                         Logger.LogVerbose($"[StashItems] >> Moving Item out of the way: {itemInTargetLocation.Name} ({itemInTargetLocation.ActorSnoId}) StashPage={Math.Floor(moveToLocation.Row / 10d)} from [{itemInTargetLocation.InventoryColumn},{itemInTargetLocation.InventoryRow}] to [{moveToLocation.Column},{moveToLocation.Row}]");
-                        ZetaDia.Me.Inventory.MoveItem(itemInTargetLocation.AnnId, Trinity.Player.MyDynamicID, InventorySlot.SharedStash, moveToLocation.Column, moveToLocation.Row);
+                        ZetaDia.Me.Inventory.MoveItem(itemInTargetLocation.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, moveToLocation.Column, moveToLocation.Row);
                         Logger.LogVerbose($"[StashItems] Sorting: {itemToMove.Name} ({itemToMove.ActorSnoId}) StashPage={page} from [{itemToMove.InventoryColumn},{itemToMove.InventoryRow}] to [{targetCol},{targetRow}]");
-                        ZetaDia.Me.Inventory.MoveItem(itemToMove.AnnId, Trinity.Player.MyDynamicID, InventorySlot.SharedStash, targetCol, targetRow);
+                        ZetaDia.Me.Inventory.MoveItem(itemToMove.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, targetCol, targetRow);
                         await Coroutine.Sleep(25);
                         await ActorManager.WaitForUpdate();
                         itemsMovedAway.Add(itemInTargetLocation);
@@ -299,9 +299,9 @@ namespace Trinity.Coroutines.Town
                         // Move item in lower half of the needed 2-square space.
                         var moveToLocation = GetNextEmptySquare(targetCol, targetRow, itemInLocationBelow.IsTwoSquareItem);
                         Logger.LogVerbose($"[StashItems] >> Moving Item out of the way (below): {itemInLocationBelow.Name} ({itemInLocationBelow.ActorSnoId}) StashPage={Math.Floor(moveToLocation.Row / 10d)} from [{itemInLocationBelow.InventoryColumn},{itemInLocationBelow.InventoryRow}] to [{moveToLocation.Column},{moveToLocation.Row}]");
-                        ZetaDia.Me.Inventory.MoveItem(itemInLocationBelow.AnnId, Trinity.Player.MyDynamicID, InventorySlot.SharedStash, moveToLocation.Column, moveToLocation.Row);
+                        ZetaDia.Me.Inventory.MoveItem(itemInLocationBelow.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, moveToLocation.Column, moveToLocation.Row);
                         Logger.LogVerbose($"[StashItems] Sorting: {itemToMove.Name} ({itemToMove.ActorSnoId}) StashPage={page} from [{itemToMove.InventoryColumn},{itemToMove.InventoryRow}] to [{targetCol},{targetRow}]");
-                        ZetaDia.Me.Inventory.MoveItem(itemToMove.AnnId, Trinity.Player.MyDynamicID, InventorySlot.SharedStash, targetCol, targetRow);
+                        ZetaDia.Me.Inventory.MoveItem(itemToMove.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, targetCol, targetRow);
                         await Coroutine.Sleep(25);
                         await ActorManager.WaitForUpdate();
                         itemsMovedAway.Add(itemInLocationBelow);
@@ -346,7 +346,7 @@ namespace Trinity.Coroutines.Town
                 }
 
                 Logger.LogVerbose($"[StashItems] << Restoring: {item.Name} ({item.ActorSnoId}) StashPage={page} from [{item.InventoryColumn},{item.InventoryRow}] to [{col},{row}]");
-                ZetaDia.Me.Inventory.MoveItem(item.AnnId, Trinity.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
+                ZetaDia.Me.Inventory.MoveItem(item.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
             }
 
             return true;
@@ -357,7 +357,7 @@ namespace Trinity.Coroutines.Town
         /// </summary>
         public static int GetIdealStashPage(IItem item)
         {
-            if (Trinity.Settings.Loot.TownRun.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
+            if (TrinityPlugin.Settings.Loot.TownRun.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
             {
                 return ItemLocationMap[item.RawItemType];
             }
@@ -386,7 +386,7 @@ namespace Trinity.Coroutines.Town
             col = 0;
             row = 0;
 
-            if (Trinity.Settings.Loot.TownRun.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
+            if (TrinityPlugin.Settings.Loot.TownRun.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
             {
                 var stashPageOffset = ItemLocationMap[item.RawItemType];
 

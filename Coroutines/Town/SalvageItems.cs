@@ -82,7 +82,7 @@ namespace Trinity.Coroutines.Town
                 var blacksmithNpc = TownInfo.Blacksmith;
                 if (blacksmithNpc != null)
                 {
-                    Trinity.MainGridProvider.AddCellWeightingObstacle(blacksmithNpc.ActorId, 4);
+                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(blacksmithNpc.ActorId, 4);
                 }
 
                 if (!await MoveTo.Execute(blacksmith.InteractPosition))

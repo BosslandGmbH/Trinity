@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Framework;
 using Trinity.Framework.Objects.Memory;
 using Zeta.Game;
 
@@ -10,7 +11,7 @@ namespace Trinity.Cache
 {
     public static class RiftProgression
     {
-        public static float CurrentProgressionPct => Globals.RiftProgressionPct;
+        public static float CurrentProgressionPct => Core.Globals.RiftProgressionPct;
 
         public static bool IsInRift
         {

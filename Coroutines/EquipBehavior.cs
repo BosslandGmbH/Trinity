@@ -120,7 +120,7 @@ namespace Trinity.Coroutines
                 if (Passives == null || !Passives.Any())
                     return false;
 
-                var validPasives = Passives.Where(p => p.Class == ZetaDia.Me.ActorClass && Trinity.Player.Level >= p.RequiredLevel).ToList();
+                var validPasives = Passives.Where(p => p.Class == ZetaDia.Me.ActorClass && TrinityPlugin.Player.Level >= p.RequiredLevel).ToList();
                 var passivePowers = validPasives.Select(p => p.SNOPower).ToList();
 
                 foreach (var passive in validPasives)

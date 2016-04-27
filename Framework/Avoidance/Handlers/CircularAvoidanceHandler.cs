@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -20,17 +19,14 @@ using Logger = Trinity.Technicals.Logger;
 namespace Trinity.Framework.Avoidance.Handlers
 {
     [DataContract(Namespace = "")]
-    public class CircularAvoidanceHandler : NotifyBase, IAvoidanceHandler //, INotifyPropertyChanged
+    public class CircularAvoidanceHandler : NotifyBase, IAvoidanceHandler
     {
         private int _healthThresholdPct;
         private float _distanceMultiplier;
 
-        public bool IsAllowed
-        {
-            get { return Trinity.Player.CurrentHealthPct <= HealthThresholdPct; }
-        }
+        public bool IsAllowed => TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct;
 
-        public void UpdateNodes(AvoidanceGrid grid, Avoidance avoidance)
+        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
         {
             foreach (var actor in avoidance.Actors)
             {
@@ -41,9 +37,9 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                 if (part.Severity == Severity.Extreme)
                 {
-                    Trinity.MainGridProvider.AddCellWeightingObstacle(actor.ActorSNO, finalRadius);
+                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(actor.ActorSNO, finalRadius);
 
-                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk)))
+                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.NavigationBlocking)))
                     {
                         node.Weight += 50;
                         node.AddNodeFlags(AvoidanceFlags.CriticalAvoidance);
@@ -52,7 +48,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 }
                 else
                 {
-                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk)))
+                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.NavigationBlocking)))
                     {
                         node.Weight += 10;
                         node.AddNodeFlags(AvoidanceFlags.Avoidance);
@@ -63,9 +59,9 @@ namespace Trinity.Framework.Avoidance.Handlers
         }
 
         [DataMember]
-        [Setting, DefaultValue(90)]
+        [Setting, DefaultValue(100)]
         [UIControl(UIControlType.Slider), Limit(1, 100)]
-        [Description("Player health must be below value for this to be avoided (Default=90)")]
+        [Description("Player health must be below value for this to be avoided (Default=100)")]
         public int HealthThresholdPct
         {
             get { return _healthThresholdPct; }

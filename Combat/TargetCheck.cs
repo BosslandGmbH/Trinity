@@ -12,7 +12,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity
 {
-    public partial class Trinity
+    public partial class TrinityPlugin
     {
         internal static int LastSceneId = -1;
 
@@ -51,21 +51,6 @@ namespace Trinity
 
                 ClearBlacklists();
 
-                // Special Handling for Pesky Destructible Carts
-                // [2014C3C0] GizmoType: DestroyableObject Name: caOut_Breakable_Wagon_C-11326 ActorSnoId: 93306 Distance: 21.10247 Position: <3659.942, 4390.15, 
-                //var cart = ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(g => g.ActorSnoId == 93306 && g.Distance <= 20f);
-                //if (cart != null)
-                //{
-                //    Logger.Log("Destroying really really annoying cart!");
-                //    ZetaDia.Me.UsePower(CombatBase.DefaultPower.SNOPower, cart.Position);
-                //}
-
-                //using (new PerformanceLogger("TargetCheck.RefreshCache"))
-                //{
-                //    // Refresh Cache if needed
-                //    RefreshDiaObjectCache();
-                //}
-
                 // We have a target, start the target handler!
                 if (CurrentTarget != null)
                 {
@@ -87,7 +72,7 @@ namespace Trinity
                         UsePotionIfNeededTask();
                     }
                 }
-                _statusText = "[Trinity] No more targets - DemonBuddy/profile management is now in control";
+                _statusText = "[TrinityPlugin] No more targets - DemonBuddy/profile management is now in control";
 
                 if (Settings.Advanced.DebugInStatusBar && _resetStatusText)
                 {

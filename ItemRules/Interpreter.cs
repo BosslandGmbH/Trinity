@@ -159,24 +159,24 @@ namespace Trinity.ItemRules
                 // instantiating our macro dictonary
                 macroDic = new Dictionary<string, string>();
 
-                // use Trinity setting
-                if (Trinity.Settings.Loot.ItemRules.Debug)
+                // use TrinityPlugin setting
+                if (TrinityPlugin.Settings.Loot.ItemRules.Debug)
                     Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ItemRules is running in debug mode!", logPickQuality);
 
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ItemRules is using the {0} rule set.", Trinity.Settings.Loot.ItemRules.ItemRuleType.ToString().ToLower());
-                logPickQuality = getTrinityItemQualityFromString(Trinity.Settings.Loot.ItemRules.PickupLogLevel.ToString());
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ItemRules is using the {0} rule set.", TrinityPlugin.Settings.Loot.ItemRules.ItemRuleType.ToString().ToLower());
+                logPickQuality = getTrinityItemQualityFromString(TrinityPlugin.Settings.Loot.ItemRules.PickupLogLevel.ToString());
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "PICKLOG = {0} ", logPickQuality);
-                logKeepQuality = getTrinityItemQualityFromString(Trinity.Settings.Loot.ItemRules.KeepLogLevel.ToString());
+                logKeepQuality = getTrinityItemQualityFromString(TrinityPlugin.Settings.Loot.ItemRules.KeepLogLevel.ToString());
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "KEEPLOG = {0} ", logKeepQuality);
 
                 string rulesPath;
-                if (Trinity.Settings.Loot.ItemRules.ItemRuleSetPath.ToString() != String.Empty)
+                if (TrinityPlugin.Settings.Loot.ItemRules.ItemRuleSetPath.ToString() != String.Empty)
                 {
-                    rulesPath = Trinity.Settings.Loot.ItemRules.ItemRuleSetPath.ToString();
+                    rulesPath = TrinityPlugin.Settings.Loot.ItemRules.ItemRuleSetPath.ToString();
                 }
                 else
                 {
-                    rulesPath = Path.Combine(FileManager.ItemRulePath, "Rules", Trinity.Settings.Loot.ItemRules.ItemRuleType.ToString().ToLower());
+                    rulesPath = Path.Combine(FileManager.ItemRulePath, "Rules", TrinityPlugin.Settings.Loot.ItemRules.ItemRuleType.ToString().ToLower());
                 }
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "RULEPATH = {0} ", rulesPath);
                 if (!Directory.Exists(rulesPath))
@@ -249,7 +249,7 @@ namespace Trinity.ItemRules
                 }
 
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "... loaded: {0} Macros", macroDic.Count);
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ItemRules loaded a total of {0} {1} rules!", keepRuleSet.Count, Trinity.Settings.Loot.ItemRules.ItemRuleType.ToString());
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ItemRules loaded a total of {0} {1} rules!", keepRuleSet.Count, TrinityPlugin.Settings.Loot.ItemRules.ItemRuleType.ToString());
             }
             catch (Exception ex)
             {
@@ -289,7 +289,7 @@ namespace Trinity.ItemRules
                 // - stop macro transformation
 
                 // do simple translation with name to itemid
-                if (Trinity.Settings.Loot.ItemRules.UseItemIDs && str.Contains("[NAME]"))
+                if (TrinityPlugin.Settings.Loot.ItemRules.UseItemIDs && str.Contains("[NAME]"))
                 {
                     bool foundTranslation = false;
                     foreach (string key in nameToBalanceId.Keys.ToList())
@@ -302,7 +302,7 @@ namespace Trinity.ItemRules
                             break;
                         }
                     }
-                    if (!foundTranslation && Trinity.Settings.Loot.ItemRules.Debug)
+                    if (!foundTranslation && TrinityPlugin.Settings.Loot.ItemRules.Debug)
                         Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "No translation found for rule: {0}", str);
                 }
 
@@ -600,10 +600,10 @@ namespace Trinity.ItemRules
         public void logOut(string str, InterpreterAction action, LogType logType)
         {
             // no debugging when flag set false
-            if (logType == LogType.DEBUG && !Trinity.Settings.Loot.ItemRules.Debug)
+            if (logType == LogType.DEBUG && !TrinityPlugin.Settings.Loot.ItemRules.Debug)
                 return;
 
-            if (!Trinity.Settings.Advanced.ItemRulesLogs)
+            if (!TrinityPlugin.Settings.Advanced.ItemRulesLogs)
                 return;
 
             if (!Directory.Exists(Path.GetDirectoryName(FileManager.LoggingPath)))
@@ -792,7 +792,7 @@ namespace Trinity.ItemRules
             }
 
             // check for missing translations
-            if (Trinity.Settings.Loot.ItemRules.Debug && item.ItemQualityLevel == ItemQuality.Legendary)
+            if (TrinityPlugin.Settings.Loot.ItemRules.Debug && item.ItemQualityLevel == ItemQuality.Legendary)
                 checkItemForMissingTranslation(item);
 
             // add log unique key

@@ -140,18 +140,16 @@ namespace Trinity.DbProvider
                 return false;
 
             double max = equippedItems.Max(i => i.DurabilityPercent);
-            return max <= 1;
+            return max <= 5;
         }
 
         public static bool IsBeingRevived()
         {
-            var headstones = ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true, true).Where(g => g.ActorInfo.GizmoType == GizmoType.Headstone && g.Distance < 8f).ToList();
+            var headstones = ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true, true).Where(g => g != null && g.ActorInfo.GizmoType == GizmoType.Headstone && g.Distance < 8f).ToList();
             if (!headstones.Any())
                 return false;
 
-            var reviver = ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true, true).FirstOrDefault(p =>
-                (DataDictionary.PlayerUseAnimationIds.Contains((int)p.CommonData.CurrentAnimation) || p.CommonData.LoopingAnimationEndTime > 0) &&
-                headstones.Any(h => p.Position.Distance(h.Position) < 8f));
+            var reviver = ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true, true).FirstOrDefault(p => p?.CommonData != null && (DataDictionary.PlayerUseAnimationIds.Contains((int)p.CommonData.CurrentAnimation) || p.CommonData.LoopingAnimationEndTime > 0) && headstones.Any(h => p.Position.Distance(h.Position) < 8f));
 
             return reviver != null;
         }

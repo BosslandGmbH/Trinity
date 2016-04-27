@@ -17,8 +17,11 @@ using TrinityCoroutines;
 using TrinityCoroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
+using Trinity.Framework.Objects.Memory.Debug;
 using Trinity.Framework.Objects.Memory.Items;
+using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Helpers;
 using Trinity.ItemRules;
@@ -105,12 +108,14 @@ namespace Trinity.UI
                         {
                             CreateButton("Find New ActorIds", GetNewActorSNOsEventHandler),
                             CreateButton("Log Invalid Items", LogInvalidHandler),
-                            CreateButton("> Gizmo Test", StartGizmoTestHandler),
-                            CreateButton("> Unit Test", StartUnitTestHandler),
+                            CreateButton("> Gizmo Attribtues", StartGizmoTestHandler),
+                            CreateButton("> Unit Attribtues", StartUnitTestHandler),
+                            CreateButton("> Player Attribtues", StartPlayerTestHandler),
+                            CreateButton("DataTest", StartDataTestHandler),
                             //CreateButton("> Buff Test", StartBuffTestHandler),
-                            CreateButton("> Stop Tests", StopTestHandler),
-                            CreateButton("ItemList Check", btnClick_TestItemList),
-                        });
+                            //CreateButton("> Stop Tests", StopTestHandler),
+
+                });
 
                 CreateGroup("Tools", new List<Control>
                         {
@@ -127,6 +132,7 @@ namespace Trinity.UI
                             //CreateButton("Clsoe Vendor", CloseVendorWindowTest),
 
                             CreateButton("Upgrade Rares", UpgradeBackpackRares),
+                            CreateButton("ItemList Check", btnClick_TestItemList),
 
                             //CreateButton("Stash Test", StashItems),
                             //CreateButton("Test Internals", TestInternals),
@@ -242,7 +248,7 @@ namespace Trinity.UI
             try
             {
                 if (!BotMain.IsRunning)
-                {                    
+                {
                     ActorManager.Start();
                     TaskDispatcher.Start(ret => Coroutines.Town.StashItems.Execute(), o => o == null || (RunStatus)o != RunStatus.Running);
                 }
@@ -299,36 +305,128 @@ namespace Trinity.UI
                 if (!ZetaDia.IsInGame)
                     return;
 
-                Worker.Start(() =>
+                using (ZetaDia.Memory.AcquireFrame())
                 {
-                    using (new Helpers.AquireFrameHelper())
+                    ZetaDia.Actors.Update();
+
+                    Func<DiaObject, bool> isValid = u => u != null && u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.CommonData.IsDisposed;
+                    var testunits = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Where(u => isValid(u) && u.RActorId != ZetaDia.Me.RActorId).ToList();
+                    var testunit = testunits.OrderBy(u => u.Distance).FirstOrDefault();
+                    if (testunit == null || testunit.CommonData == null)
                     {
-                        Func<DiaObject, bool> isValid = u => u != null && u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.CommonData.IsDisposed;
-
-                        var testunits = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Where(u => isValid(u) && u.RActorId != ZetaDia.Me.RActorId).ToList();
-                        //if (!testunits.Any())
-                        //    return false;
-
-                        //testunits = testunits.Where(u => u.ActorSnoId == 340319 || u.ActorSnoId == 325761 || u.ActorSnoId == 316389).ToList();
-                        // testunits = testunits.Where(u => u.ActorSnoId == 4080).ToList();
-
-                        var testunit = testunits.OrderBy(u => u.Distance).FirstOrDefault();
-                        if (testunit == null || testunit.CommonData == null)
-                        {
-                            //return false;
-                            testunit = ZetaDia.Me;
-                        }
-
-                        MonitorActors(testunit, unitAtts);
+                        testunit = ZetaDia.Me;
                     }
-                    return false;
-                });
+
+                    var acd = MemoryWrapper.Create<ActorCommonData>(testunit.CommonData.BaseAddress);
+                    var atts = new Trinity.Framework.Objects.Memory.Attributes.Attributes(acd.FastAttributeGroupId);
+                    Logger.Log($"-- Dumping Attribtues for {acd.Name} (Sno={acd.ActorSnoId} Ann={acd.AnnId}) at {acd.Position} ----");
+                    Logger.Log(atts + "\r\n");
+                }
+
             }
             catch (Exception ex)
             {
                 Logger.LogError("Error Starting LazyCache: " + ex);
             }
         }
+
+        private static void StartPlayerTestHandler(object sender, RoutedEventArgs routedEventArgs)
+        {
+            try
+            {
+                var unitAtts = new Dictionary<int, HashSet<ActorAttributeType>>();
+                var unitLastDamage = new Dictionary<int, float>();
+
+                if (!ZetaDia.IsInGame)
+                    return;
+
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    ZetaDia.Actors.Update();
+                    //var testunit = ZetaDia.Me;
+
+                    Func<DiaObject, bool> isValid = u => u != null && u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.CommonData.IsDisposed;
+                    var testunits = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Where(u => isValid(u) && u.RActorId == ZetaDia.Me.RActorId).ToList();
+                    var testunit = testunits.OrderBy(u => u.Distance).FirstOrDefault();
+
+                    var acd = MemoryWrapper.Create<ActorCommonData>(testunit.CommonData.BaseAddress);
+                    var atts = new Trinity.Framework.Objects.Memory.Attributes.Attributes(acd.FastAttributeGroupId);
+                    Logger.Log($"-- Dumping Attribtues for {acd.Name} (Sno={acd.ActorSnoId} Ann={acd.AnnId}) at {acd.Position} ----");
+                    Logger.Log(atts + "\r\n");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Error Starting LazyCache: " + ex);
+            }
+        }
+
+        private static void StartDataTestHandler(object sender, RoutedEventArgs routedEventArgs)
+        {
+            try
+            {
+                if (!ZetaDia.IsInGame)
+                    return;
+
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    //ZetaDia.Actors.Update();
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Actor.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Monster.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Hero.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.StringList.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Globals.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.GameBalance.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Actor.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.LevelArea.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Power.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.TreasureClass.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Act.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Account.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Scene.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.SceneGroup.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.Worlds.DataType);
+                    //ClassMapper.MapRecursively(SnoManager.Groups.SkillKit.DataType);
+
+                    var powers = SnoManager.Groups.Power;
+                    var skillkits = SnoManager.Groups.SkillKit;
+                    var actors = SnoManager.Groups.Actor;
+                    var GameBalance = SnoManager.Groups.GameBalance;
+                    var monster = SnoManager.Groups.Monster;
+                    var test = SnoManager.StringList.GetStringList(SnoStringListType.Affixes);
+
+                    //StringList = Core.CreateGroup<SnoStringList>(SnoType.StringList);
+                    //Monster = Core.CreateGroup<SnoStringList>(SnoType.Monster);
+                    //Hero = Core.CreateGroup<SnoStringList>(SnoType.Hero);
+                    //GameBalance = Core.CreateGroup<SnoStringList>(SnoType.GameBalance);
+                    //Globals = Core.CreateGroup<SnoStringList>(SnoType.Globals);
+                    //Actor = Core.CreateGroup<SnoStringList>(SnoType.Actor);
+                    //Account = Core.CreateGroup<SnoStringList>(SnoType.Account);
+                    //Globals = Core.CreateGroup<SnoStringList>(SnoType.Globals);
+                    //LevelArea = Core.CreateGroup<SnoStringList>(SnoType.LevelArea);
+                    //Act = Core.CreateGroup<SnoStringList>(SnoType.Act);
+                    //TreasureClass = Core.CreateGroup<SnoStringList>(SnoType.TreasureClass);
+                    //Power = Core.CreateGroup<SnoStringList>(SnoType.Power);
+                    //TimedEvent = Core.CreateGroup<SnoStringList>(SnoType.TimedEvent);
+
+                    //test = SnoManager.Groups.Globals;
+                    //ClassMapper.MapRecursively(test.DataType);
+                    //test = SnoManager.Groups.GameBalance;
+                    //ClassMapper.MapRecursively(test.DataType);
+
+                    //var map = test.DataType.Map;
+                    //var symbols = SymbolManager.Tables;
+                    // SymbolManager.GenerateEnums();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Error Starting LazyCache: " + ex);
+            }
+        }
+
 
         private static void OpenLogFileHandler(object sender, RoutedEventArgs e)
         {
@@ -468,11 +566,11 @@ namespace Trinity.UI
         //            //if (firstItem != null)
         //            //    Logger.Log($"Item: {firstItem.Name}");
 
-        //            foreach (var entry in Sno.GameBalance.Cache)
+        //            foreach (var entry in SnoManager.GameBalance.Cache)
         //            {
         //                var gbId = entry.Key;
         //                var record = entry.Value;
-           
+
         //                if (record is ItemTypeRecord)
         //                {
         //                    var itemTypeRecord = (ItemTypeRecord)record;
@@ -495,8 +593,8 @@ namespace Trinity.UI
         private static void StartInternals(object sender, RoutedEventArgs e)
         {
             try
-            {          
-                ActorManager.Start();              
+            {
+                ActorManager.Start();
             }
             catch (Exception ex)
             {
@@ -562,44 +660,6 @@ namespace Trinity.UI
             return default(ServiceType);
         }
 
-        private static void StartBuffTestHandler(object sender, RoutedEventArgs routedEventArgs)
-        {
-            try
-            {
-                var unitAtts = new Dictionary<int, HashSet<ActorAttributeType>>();
-                var unitLastDamage = new Dictionary<int, float>();
-
-                if (!ZetaDia.IsInGame)
-                    return;
-
-                Worker.Start(() =>
-                {
-                    using (new Helpers.AquireFrameHelper())
-                    {
-                        Func<DiaObject, bool> isValid = u => u != null && u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.CommonData.IsDisposed;
-
-                        if (!isValid(ZetaDia.Me))
-                            return false;
-
-                        //var buff = ZetaDia.Me.GetAllBuffs().FirstOrDefault();
-                        //if (buff == null)
-                        //    return false;
-
-                        //int remainingTime;
-                        //Logger.Log("Remaining Time for {0} is {1}", (SNOPower)buff.SNOId, buff.TryGetRemainingTime(out remainingTime) ? remainingTime.ToString() : "NA");
-
-                    }
-                    return false;
-                });
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError("Error Starting LazyCache: " + ex);
-            }
-        }
-
-
-
         private static void StartGizmoTestHandler(object sender, RoutedEventArgs routedEventArgs)
         {
             try
@@ -610,24 +670,23 @@ namespace Trinity.UI
                 if (!ZetaDia.IsInGame)
                     return;
 
-                Worker.Start(() =>
+                using (ZetaDia.Memory.AcquireFrame())
                 {
-                    using (new Helpers.AquireFrameHelper())
+                    ZetaDia.Actors.Update();
+                    Func<DiaObject, bool> isValid = u => u != null && u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.CommonData.IsDisposed;
+                    var testunits = ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).Where(u => isValid(u) && u.RActorId != ZetaDia.Me.RActorId).ToList();
+                    var testunit = testunits.OrderBy(u => u.Distance).FirstOrDefault();
+                    if (testunit == null || testunit.CommonData == null)
                     {
-                        Func<DiaObject, bool> isValid = u => u != null && u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.CommonData.IsDisposed;
-
-                        var testunits = ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).Where(u => isValid(u) && u.RActorId != ZetaDia.Me.RActorId).ToList();
-
-                        var testunit = testunits.OrderBy(u => u.Distance).FirstOrDefault();
-                        if (testunit == null || testunit.CommonData == null)
-                        {
-                            return false;
-                        }
-
-                        MonitorActors(testunit, unitAtts);
+                        return;
                     }
-                    return false;
-                });
+
+                    var acd = MemoryWrapper.Create<ActorCommonData>(testunit.CommonData.BaseAddress);
+                    var atts = new Trinity.Framework.Objects.Memory.Attributes.Attributes(acd.FastAttributeGroupId);
+                    Logger.Log($"-- Dumping Attribtues for {acd.Name} (Sno={acd.ActorSnoId} Ann={acd.AnnId}) at {acd.Position} ----");
+                    Logger.Log(atts + "\r\n");
+                }
+
             }
             catch (Exception ex)
             {
@@ -645,7 +704,7 @@ namespace Trinity.UI
             //var root = ZetaDia.Me.CommonData.GetAttribute<int>(ActorAttributeType.RootTotalTicks);
             //Logger.Log("Root Ticks {0}", root);
 
-            //[Trinity 2.14.34] Unit FallenGrunt_A-69336 has MonsterAffix_IllusionistCast (PowerBuff0VisualEffectNone)
+            //[TrinityPlugin 2.14.34] Unit FallenGrunt_A-69336 has MonsterAffix_IllusionistCast (PowerBuff0VisualEffectNone)
 
             foreach (var att in atts)
             {
@@ -829,13 +888,13 @@ namespace Trinity.UI
                 Logger.LogError("Exception: " + ex);
             }
         }
-        
+
         private static void UpgradeBackpackRares(object sender, RoutedEventArgs routedEventArgs)
         {
             try
             {
                 ActorManager.Start();
-                var alltypes = Enum.GetValues(typeof(ItemSelectionType)).Cast<ItemSelectionType>().ToList();                
+                var alltypes = Enum.GetValues(typeof(ItemSelectionType)).Cast<ItemSelectionType>().ToList();
                 CoroutineHelper.RunCoroutine(() => CubeRaresToLegendary.Execute(alltypes), result => !CubeRaresToLegendary.CanRun());
             }
             catch (Exception ex)
@@ -878,7 +937,7 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack VeiledCrystals to Magic Dust.");
 
-                if (Trinity.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
+                if (TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
                 {
                     Logger.LogError("Aborting - Dangerous to pull craftin items to backpack when MiscItemQuality setting is set above common");
                     return;
@@ -944,7 +1003,7 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack VeiledCrystals to ReusableParts");
 
-                if (Trinity.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
+                if (TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
                 {
                     Logger.LogError("Aborting - Too dangerous to put crafting items into backpack when MiscItemQuality setting is set above common");
                     return;
@@ -966,7 +1025,7 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack ReusableParts/ArcaneDust to VeiledCrystals");
 
-                if (Trinity.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
+                if (TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
                 {
                     Logger.LogError("Aborting - Too dangerous to put crafting items into backpack when MiscItemQuality setting is set above common");
                     return;
@@ -988,7 +1047,7 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack VeiledCrystals to ArcaneDust");
 
-                if (Trinity.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
+                if (TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
                 {
                     Logger.LogError("Aborting - Too dangerous to put crafting items into backpack when MiscItemQuality setting is set above common");
                     return;
@@ -1148,12 +1207,12 @@ namespace Trinity.UI
         {
             try
             {
-                if (Trinity.StashRule == null)
-                    Trinity.StashRule = new Interpreter();
+                if (TrinityPlugin.StashRule == null)
+                    TrinityPlugin.StashRule = new Interpreter();
 
-                if (Trinity.StashRule != null)
+                if (TrinityPlugin.StashRule != null)
                 {
-                    BotMain.PauseWhile(Trinity.StashRule.reloadFromUI);
+                    BotMain.PauseWhile(TrinityPlugin.StashRule.reloadFromUI);
                 }
             }
             catch (Exception ex)

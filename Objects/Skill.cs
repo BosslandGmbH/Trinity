@@ -346,7 +346,7 @@ namespace Trinity.Objects
         /// </summary>
         public TrinityPower ToPower(float minimumRange, Vector3 targetPosition, int acdGuid, int waitTicksBeforeUse, int waitTicksAfterUse)
         {
-            return new TrinityPower(SNOPower, minimumRange, targetPosition, Trinity.Player.WorldDynamicID, acdGuid, waitTicksBeforeUse, waitTicksAfterUse);
+            return new TrinityPower(SNOPower, minimumRange, targetPosition, TrinityPlugin.Player.WorldDynamicID, acdGuid, waitTicksBeforeUse, waitTicksAfterUse);
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace Trinity.Objects
         /// </summary>
         public bool Cast()
         {
-            return Cast(Trinity.Player.Position, -1);
+            return Cast(TrinityPlugin.Player.Position, -1);
         }
 
         /// <summary>
@@ -414,16 +414,16 @@ namespace Trinity.Objects
             {
                 Logger.LogVerbose(LogCategory.Behavior, "Skill.cs: Using {0}", Name);
 
-                if (ZetaDia.Me.UsePower(SNOPower, clickPosition, Trinity.CurrentWorldDynamicId, targetAcdGuid))
+                if (ZetaDia.Me.UsePower(SNOPower, clickPosition, TrinityPlugin.CurrentWorldDynamicId, targetAcdGuid))
                 {
-                    Trinity.LastPowerUsed = SNOPower;
+                    TrinityPlugin.LastPowerUsed = SNOPower;
                     CacheData.AbilityLastUsed[SNOPower] = DateTime.UtcNow;
                     if (CombatBase.CurrentTarget != null)
                         SpellTracker.TrackSpellOnUnit(CombatBase.CurrentTarget.ACDGuid, SNOPower);
                     SpellHistory.RecordSpell(SNOPower);
                     return true;
                 }
-                Trinity.LastActionTimes.Add(DateTime.UtcNow);
+                TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
             }
 
             return false;
@@ -465,6 +465,14 @@ namespace Trinity.Objects
         public static explicit operator Skill(ActiveSkillEntry x)
         {
             return SkillUtils.ById((SNOPower)x.SNOPower);
+        }
+
+        public SkillUsage GetDefaultSetting()
+        {
+            return new SkillUsage
+            {
+                SnoPower = this.SNOPower,
+            };
         }
 
     }

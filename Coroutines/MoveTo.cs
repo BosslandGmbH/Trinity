@@ -33,7 +33,7 @@ namespace TrinityCoroutines
 
             _startingWorldId = ZetaDia.CurrentWorldSnoId;
 
-            if (Trinity.Trinity.Player.IsInTown)
+            if (Trinity.TrinityPlugin.Player.IsInTown)
             {
                 GameUI.CloseVendorWindow();
             }

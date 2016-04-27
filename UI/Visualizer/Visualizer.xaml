@@ -693,7 +693,7 @@
                     </ScrollViewer>
                 </Expander>-->
                 <Expander Grid.Row="3" Header="Avoidance" Style="{DynamicResource AccordianExpander}" 
-                          Visibility="{Binding Settings.Advanced.UseExperimentalAvoidance, Converter={StaticResource visibleWhenTrueConverter}}" 
+                       
                           IsExpanded="{Binding ExpandedPanel, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Avoidance}">
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Hidden">
                             <StackPanel Margin="10" >

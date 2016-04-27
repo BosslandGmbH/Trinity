@@ -5,6 +5,7 @@ using Trinity.Cache;
 using Trinity.DbProvider;
 using Trinity.Helpers;
 using Trinity.Objects;
+using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Common;
@@ -174,8 +175,8 @@ namespace Trinity
                         WorldDynamicID = ZetaDia.WorldId;
                         WorldID = ZetaDia.CurrentWorldSnoId;
 
-                        Trinity.CurrentWorldDynamicId = WorldDynamicID;
-                        Trinity.CurrentWorldId = WorldID;
+                        TrinityPlugin.CurrentWorldDynamicId = WorldDynamicID;
+                        TrinityPlugin.CurrentWorldId = WorldID;
 
 
                         if (DateTime.UtcNow.Subtract(LastVerySlowUpdate).TotalMilliseconds > 5000)
@@ -303,7 +304,7 @@ namespace Trinity
                 if (CurrentHealthPct > 0)
                     IsGhosted = _me.CommonData.GetAttribute<int>(ActorAttributeType.Ghosted) > 0;
 
-                if (Trinity.Settings.Combat.Misc.UseNavMeshTargeting)
+                if (TrinityPlugin.Settings.Combat.Misc.UseNavMeshTargeting)
                     SceneId = _me.SceneId;
 
 				// Step 13 is used when the player needs to go "Inspect the cursed shrine"
@@ -344,8 +345,9 @@ namespace Trinity
 			    TeamId = _me.CommonData.TeamId;
 			    Radius = _me.CollisionSphere.Radius;
 			    IsRanged = ActorClass == ActorClass.Witchdoctor || ActorClass == ActorClass.Wizard || ActorClass == ActorClass.DemonHunter;
-				LastVerySlowUpdate = DateTime.UtcNow;			    
-			}
+			    ElementImmunity = GetElementImmunity();
+                LastVerySlowUpdate = DateTime.UtcNow;                
+            }
 
             //private float GetMaxPrimaryResource(DiaActivePlayer player)
             //{
@@ -372,6 +374,118 @@ namespace Trinity
                 return -1;
             }
 
+            public HashSet<Element> ElementImmunity = new HashSet<Element>();
+
+            public HashSet<Element> GetElementImmunity()
+            {
+                var elements = new HashSet<Element>();
+
+                if (Legendary.MarasKaleidoscope.IsEquipped)
+                    elements.Add(Element.Poison);
+
+                if (Legendary.TheStarOfAzkaranth.IsEquipped)
+                    elements.Add(Element.Fire);
+
+                if (Legendary.TalismanOfAranoch.IsEquipped)
+                    elements.Add(Element.Cold);
+
+                if (Legendary.XephirianAmulet.IsEquipped)
+                    elements.Add(Element.Lightning);
+
+                if (Legendary.CountessJuliasCameo.IsEquipped)
+                    elements.Add(Element.Arcane);
+
+                if (Sets.BlackthornesBattlegear.IsMaxBonusActive)
+                {
+                    elements.Add(Element.Poison);
+                    elements.Add(Element.Fire);
+                    elements.Add(Element.Physical);
+                }
+                return elements;
+            }
+
+
+            //// Item based immunity
+            //switch (avoidanceType)
+            //{
+            //    case AvoidanceType.PoisonTree:
+            //    case AvoidanceType.PlagueCloud:
+            //    case AvoidanceType.PoisonEnchanted:
+            //    case AvoidanceType.PlagueHand:
+
+            //        if (Legendary.MarasKaleidoscope.IsEquipped)
+            //        {
+            //            Logger.Log(TrinityLogLevel.Debug, LogCategory.Avoidance, "Ignoring Avoidance {0} because MarasKaleidoscope is equipped", avoidanceType);
+            //            minAvoidanceHealth = 0;
+            //        }
+            //        break;
+
+            //    case AvoidanceType.AzmoFireball:
+            //    case AvoidanceType.DiabloRingOfFire:
+            //    case AvoidanceType.DiabloMeteor:
+            //    case AvoidanceType.ButcherFloorPanel:
+            //    case AvoidanceType.Mortar:
+            //    case AvoidanceType.MageFire:
+            //    case AvoidanceType.MoltenTrail:
+            //    case AvoidanceType.MoltenBall:
+            //    case AvoidanceType.ShamanFire:
+
+            //        if (Legendary.TheStarOfAzkaranth.IsEquipped)
+            //        {
+            //            Logger.Log(TrinityLogLevel.Debug, LogCategory.Avoidance, "Ignoring Avoidance {0} because TheStarofAzkaranth is equipped", avoidanceType);
+            //            minAvoidanceHealth = 0;
+            //        }
+            //        break;
+
+            //    case AvoidanceType.FrozenPulse:
+            //    case AvoidanceType.IceBall:
+            //    case AvoidanceType.IceTrail:
+
+            //        // Ignore if both items are equipped
+            //        if (Legendary.TalismanOfAranoch.IsEquipped)
+            //        {
+            //            Logger.Log(TrinityLogLevel.Debug, LogCategory.Avoidance, "Ignoring Avoidance {0} because TalismanofAranoch is equipped", avoidanceType);
+            //            minAvoidanceHealth = 0;
+            //        }
+            //        break;
+
+            //    case AvoidanceType.Orbiter:
+            //    case AvoidanceType.Thunderstorm:
+
+            //        if (Legendary.XephirianAmulet.IsEquipped)
+            //        {
+            //            Logger.Log(TrinityLogLevel.Debug, LogCategory.Avoidance, "Ignoring Avoidance {0} because XephirianAmulet is equipped", avoidanceType);
+            //            minAvoidanceHealth = 0;
+            //        }
+            //        break;
+
+            //    case AvoidanceType.Arcane:
+            //        if (Legendary.CountessJuliasCameo.IsEquipped)
+            //        {
+            //            Logger.Log(TrinityLogLevel.Debug, LogCategory.Avoidance, "Ignoring Avoidance {0} because CountessJuliasCameo is equipped", avoidanceType);
+            //            minAvoidanceHealth = 0;
+            //        }
+            //        break;
+            //}
+
+            //// Set based immunity
+            //if (Sets.BlackthornesBattlegear.IsMaxBonusActive)
+            //{
+            //    var blackthornsImmunity = new HashSet<AvoidanceType>
+            //    {
+            //        AvoidanceType.Desecrator,
+            //        AvoidanceType.MoltenBall,
+            //        AvoidanceType.MoltenCore,
+            //        AvoidanceType.MoltenTrail,
+            //        AvoidanceType.PlagueHand
+            //    };
+
+            //    if (blackthornsImmunity.Contains(avoidanceType))
+            //    {
+            //        Logger.Log(TrinityLogLevel.Debug, LogCategory.Avoidance, "Ignoring Avoidance {0} because BlackthornesBattlegear is equipped", avoidanceType);
+            //        minAvoidanceHealth = 0;
+            //    }
+            //}
 
             public bool IsCastingTownPortalOrTeleport()
             {

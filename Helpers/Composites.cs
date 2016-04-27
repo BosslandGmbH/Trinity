@@ -44,7 +44,7 @@ namespace Trinity.Helpers
         public static Composite CreateUseHoradricCache()
         {
             return
-            new Decorator(ret => Trinity.Settings.Loot.TownRun.OpenHoradricCaches && !BrainBehavior.IsVendoring && !TrinityTownRun.IsTryingToTownPortal() &&
+            new Decorator(ret => TrinityPlugin.Settings.Loot.TownRun.OpenHoradricCaches && !BrainBehavior.IsVendoring && !TrinityTownRun.IsTryingToTownPortal() &&
                     DateTime.UtcNow.Subtract(LastCheckedForHoradricCache).TotalSeconds > 1,
                 new Sequence(
                     new Action(ret => LastCheckedForHoradricCache = DateTime.UtcNow),
@@ -69,7 +69,7 @@ namespace Trinity.Helpers
                 var item = ZetaDia.Me.Inventory.Backpack.FirstOrDefault(i => CacheIds.Contains(i.ActorSnoId));
                 ZetaDia.Me.Inventory.UseItem(item.AnnId);
                 LastFoundHoradricCache = DateTime.UtcNow;
-                Trinity.TotalBountyCachesOpened++;
+                TrinityPlugin.TotalBountyCachesOpened++;
                 return RunStatus.Running;
             }
 

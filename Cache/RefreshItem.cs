@@ -13,7 +13,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity
 {
-    public partial class Trinity
+    public partial class TrinityPlugin
     {
         private static bool RefreshItem()
         {
@@ -174,7 +174,7 @@ namespace Trinity
                     {
                         AddToCache = TrinityItemManager.ItemRulesPickupValidation(pickupItem);
                     }
-                    else // Trinity Scoring Only
+                    else // TrinityPlugin Scoring Only
                     {
                         AddToCache = TrinityItemManager.PickupItemValidation(pickupItem);
                     }

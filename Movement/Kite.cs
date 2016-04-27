@@ -13,7 +13,7 @@ using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity
 {
-    public partial class Trinity : IPlugin
+    public partial class TrinityPlugin : IPlugin
     {
         internal sealed class KitePosition
         {
@@ -111,7 +111,7 @@ namespace Trinity
 
                     if (LastKitePosition == null)
                     {
-                        LastKitePosition = new Trinity.KitePosition()
+                        LastKitePosition = new TrinityPlugin.KitePosition()
                         {
                             PositionFoundTime = DateTime.UtcNow,
                             Position = vAnySafePoint,

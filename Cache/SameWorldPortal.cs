@@ -13,8 +13,8 @@ namespace Trinity.Cache
 
         public SameWorldPortal()
         {
-            StartPosition = Trinity.Player.Position;
-            WorldID = Trinity.Player.WorldID;
+            StartPosition = TrinityPlugin.Player.Position;
+            WorldID = TrinityPlugin.Player.WorldID;
             LastInteract = DateTime.UtcNow;
         }
 

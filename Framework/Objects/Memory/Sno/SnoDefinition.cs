@@ -2,7 +2,7 @@ using System;
 
 namespace Trinity.Framework.Objects.Memory.Sno
 {
-    public class SnoDefinition<T> : MemoryWrapper where T : SnoTable, new()
+    public class SnoDefinition<T> : MemoryWrapper where T : SnoTableEntry, new()
     {
         public const int SizeOf = 16;
         public int Id => ReadOffset<int>(0x00);

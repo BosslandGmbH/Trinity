@@ -31,7 +31,7 @@ namespace Trinity
     /// <summary>
     /// Prototype Weighting System
     /// </summary>
-    public partial class Trinity
+    public partial class TrinityPlugin
     {
         public partial class Weighting
         {
@@ -260,7 +260,7 @@ namespace Trinity
                 var multipler = 500d;
 
                 // DemonHunter is very fragile and should never run past close mobs, so increase distance weighting.
-                if (cacheObject.IsUnit && Trinity.Player.ActorClass == ActorClass.DemonHunter)
+                if (cacheObject.IsUnit && TrinityPlugin.Player.ActorClass == ActorClass.DemonHunter)
                     multipler = 1000d;
 
                 // not units (items etc) shouldnt be impacted by the trash/non-trash slider setting.
@@ -284,7 +284,7 @@ namespace Trinity
 
                 //todo: find out why this formula is being applied to non-unit actors - destructibles, globes etc.
 
-                var pack = Trinity.ObjectCache.Where(
+                var pack = TrinityPlugin.ObjectCache.Where(
                         x => x.Position.Distance(cacheObject.Position) < CombatBase.CombatOverrides.EffectiveTrashRadius && (!Settings.Combat.Misc.IgnoreElites || !x.IsEliteRareUnique))
                         .ToList();
 
@@ -301,7 +301,7 @@ namespace Trinity
                     return result;
 
                 // get all other units within cluster radius of this unit.
-                var pack = Trinity.ObjectCache.Where(x => 
+                var pack = TrinityPlugin.ObjectCache.Where(x => 
                     x.Position.Distance(cacheObject.Position) < CombatBase.CombatOverrides.EffectiveTrashRadius && 
                     (!Settings.Combat.Misc.IgnoreElites || !x.IsEliteRareUnique))
                         .ToList();
@@ -309,7 +309,7 @@ namespace Trinity
                 cacheObject.RiftValueInRadius = pack.Sum(mob => mob.RiftValuePct);
 
                 // Only boost weight of this unit if above the total weight setting.
-                if (cacheObject.RiftValueInRadius > Trinity.Settings.Combat.Misc.RiftValueAlwaysKillClusterValue)
+                if (cacheObject.RiftValueInRadius > TrinityPlugin.Settings.Combat.Misc.RiftValueAlwaysKillClusterValue)
                      result = 100d * ((CombatBase.CombatOverrides.EffectiveTrashRadius - cacheObject.RadiusDistance) / CombatBase.CombatOverrides.EffectiveTrashRadius);
 
 
@@ -715,7 +715,7 @@ namespace Trinity
 
                                 if (cacheObject.IsTreasureGoblin)
                                 {
-                                    // Original Trinity stuff for priority handling now
+                                    // Original TrinityPlugin stuff for priority handling now
                                     switch (Settings.Combat.Misc.GoblinPriority)
                                     {
                                         case GoblinPriority.Normal:
@@ -1874,12 +1874,6 @@ namespace Trinity
 
                         }
 
-
-                        //if (cacheObject.Weight > MaxWeight && !Double.IsNaN(cacheObject.Weight))
-                        //{
-                        //    cacheObject.Weight = Math.Min(cacheObject.Weight, MaxWeight);
-                        //}
-
                         cacheObject.WeightInfo += cacheObject.IsNPC ? " IsNPC" : "";
                         cacheObject.WeightInfo += cacheObject.NPCIsOperable ? " IsOperable" : "";
 
@@ -1897,43 +1891,8 @@ namespace Trinity
                                                cacheObject.Distance < CurrentTarget.Distance));
 
                         if (!pickNewTarget) continue;
-
-                        #region Sets CurrentTarget
-
                         CurrentTarget = cacheObject;
                         HighestWeightFound = cacheObject.Weight;
-
-                        // See if we can try attempting kiting later
-                        NeedToKite = false;
-                        KiteAvoidDestination = Vector3.Zero;
-
-                        // Kiting and Avoidance
-                        if (CurrentTarget.IsUnit)
-                        {
-                            var avoidanceList = CacheData.TimeBoundAvoidance.Where(o =>
-                                // Distance from avoidance to target is less than avoidance radius
-                                o.Position.Distance(CurrentTarget.Position) <= (GetAvoidanceRadius(o.ActorSNO)*1.2) &&
-                                // Distance from obstacle to me is <= cacheObject.RadiusDistance
-                                o.Position.Distance(Player.Position) <= (cacheObject.RadiusDistance - 4f)
-                                );
-
-                            // if there's any obstacle within a specified distance of the avoidance radius *1.2 
-                            if (avoidanceList.Any())
-                            {
-                                foreach (CacheObstacleObject o in avoidanceList)
-                                {
-                                    Logger.Log(TrinityLogLevel.Debug, LogCategory.Targetting,
-                                        "Avoidance: Id={0} Weight={1} Loc={2} Radius={3} Name={4}", o.ActorSNO,
-                                        o.Weight,
-                                        o.Position, o.Radius, o.Name);
-                                }
-
-                                KiteAvoidDestination = CurrentTarget.Position;
-                                NeedToKite = true;
-                            }
-                        }
-
-                        #endregion
                     }
 
                     // Set Record History

@@ -24,7 +24,7 @@ namespace Trinity.Settings.Loot
             {
                 try
                 {
-                    if (Trinity.Settings.Loot.ItemFilterMode != ItemFilterMode.ItemRanks)
+                    if (TrinityPlugin.Settings.Loot.ItemFilterMode != ItemFilterMode.ItemRanks)
                         return "Item ranking is currently disabled.";
 
                     var ird = ItemRanks.GetRankedItemsFromSettings(this);

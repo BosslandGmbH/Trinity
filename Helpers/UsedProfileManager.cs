@@ -29,22 +29,22 @@ namespace Trinity
                         UsedProfiles.Add(currentProfile);
                     }
 
-                    if (currentProfile != Trinity.CurrentProfile)
+                    if (currentProfile != TrinityPlugin.CurrentProfile)
                     {
                         CombatBase.IsQuestingMode = false;
 
                         // See if we appear to have started a new game
-                        if (Trinity.FirstProfile != "" && currentProfile == Trinity.FirstProfile)
+                        if (TrinityPlugin.FirstProfile != "" && currentProfile == TrinityPlugin.FirstProfile)
                         {
-                            Trinity.TotalProfileRecycles++;
+                            TrinityPlugin.TotalProfileRecycles++;
                         }
 
-                        Trinity.ProfileHistory.Add(currentProfile);
-                        Trinity.CurrentProfile = currentProfile;
-                        Trinity.CurrentProfileName = ProfileManager.CurrentProfile.Name;
+                        TrinityPlugin.ProfileHistory.Add(currentProfile);
+                        TrinityPlugin.CurrentProfile = currentProfile;
+                        TrinityPlugin.CurrentProfileName = ProfileManager.CurrentProfile.Name;
 
-                        if (Trinity.FirstProfile == "")
-                            Trinity.FirstProfile = currentProfile;
+                        if (TrinityPlugin.FirstProfile == "")
+                            TrinityPlugin.FirstProfile = currentProfile;
                     }
                 }
                 catch (Exception ex)
@@ -68,17 +68,17 @@ namespace Trinity
 
                 if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.Name != null)
                 {
-                    Trinity.SetWindowTitle(Trinity.CurrentProfileName + " " + fileName);
+                    TrinityPlugin.SetWindowTitle(TrinityPlugin.CurrentProfileName + " " + fileName);
                 }
                 else if (ProfileManager.CurrentProfile != null && string.IsNullOrWhiteSpace(ProfileManager.CurrentProfile.Name))
                 {
-                    Trinity.SetWindowTitle(fileName);
+                    TrinityPlugin.SetWindowTitle(fileName);
                 }
             }
         }
         
         /// <summary>
-        /// Adds profile blacklist entries to the Trinity Blacklist
+        /// Adds profile blacklist entries to the TrinityPlugin Blacklist
         /// </summary>
         internal static void RefreshProfileBlacklists()
         {
@@ -90,7 +90,7 @@ namespace Trinity
                     {
                         if (!DataDictionary.BlackListIds.Contains(b.ActorId))
                         {
-                            Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation, "Adding Profile TargetBlacklist {0} to Trinity Blacklist", b.ActorId);
+                            Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation, "Adding Profile TargetBlacklist {0} to TrinityPlugin Blacklist", b.ActorId);
                             DataDictionary.AddToBlacklist(b.ActorId);
                         }
                     }

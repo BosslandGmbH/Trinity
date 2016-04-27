@@ -49,7 +49,7 @@ namespace Trinity.Framework.Actors
 
         public static bool IsValid
         {
-            get { return ZetaInternals.Objects.ACDManager.IsValid; }
+            get { return Internals.Objects.AcdManager.IsValid; }
         }
 
         private static bool ShouldSkipUpdate
@@ -68,7 +68,7 @@ namespace Trinity.Framework.Actors
                 if (ZetaDia.Service.Party != null && ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None)
                     return true;
 
-                if (ZetaInternals.Objects.ActivePlayerData.IsNotInGame > 0 || ZetaDia.IsLoadingWorld)
+                if (Internals.Objects.ActivePlayerData.IsNotInGame > 0 || ZetaDia.IsLoadingWorld)
                     return true;
 
                 return false;
@@ -167,7 +167,7 @@ namespace Trinity.Framework.Actors
 
                     LastUpdatedFrame = currentFrame;
                     //sw.Stop();
-                    //Logger.Log("Actors Updated in {0:0.000000}ms Frame={1}", sw.Elapsed.TotalMilliseconds, LastUpdatedFrame);
+                    //Logger.Log("Actors Updated in {0:0.000000}ms Frame={1}", sw.Elapsed.TotalMilliseconds, LastUpdatedGridFrame);
                 }
                 catch (Exception ex)
                 {
@@ -198,7 +198,7 @@ namespace Trinity.Framework.Actors
             {
                 if (Actors == null || IsDisposed)
                 {
-                    Actors = MemoryWrapper.Create<ExpandoContainer<ActorCommonData>>(ZetaInternals.Addresses.AcdManager);
+                    Actors = MemoryWrapper.Create<ExpandoContainer<ActorCommonData>>(Internals.Addresses.AcdManager);
                     _currentCachedItems.Clear();
                     Items.Clear();
                     Thread.Sleep(100);

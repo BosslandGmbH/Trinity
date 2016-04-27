@@ -6,7 +6,7 @@
 
 namespace Trinity
 {
-    public partial class Trinity
+    public partial class TrinityPlugin
     {
         // Save Configuration
         private void SaveConfiguration()

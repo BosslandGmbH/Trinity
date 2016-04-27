@@ -33,7 +33,7 @@ namespace Trinity.Coroutines
             // Items that shouldn't be picked up are currently excluded from cache.
             // a pickup evaluation should be added if that changes.            
 
-            foreach(var item in Trinity.ObjectCache)
+            foreach(var item in TrinityPlugin.ObjectCache)
             {
                 var guid = item.ACDGuid;
 

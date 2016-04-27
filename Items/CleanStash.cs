@@ -106,7 +106,7 @@ namespace Trinity.Items
 
                 if (TrinityItemManager.FindValidBackpackLocation(true) == new Vector2(-1, -1))
                 {
-                    Trinity.ForceVendorRunASAP = true;
+                    TrinityPlugin.ForceVendorRunASAP = true;
                     return false;
                 }
                 if (!await ReturnToStash.Execute())
@@ -136,7 +136,7 @@ namespace Trinity.Items
 
                                 if (TrinityItemManager.FindValidBackpackLocation(true) == new Vector2(-1, -1))
                                 {
-                                    Trinity.ForceVendorRunASAP = true;
+                                    TrinityPlugin.ForceVendorRunASAP = true;
                                     return false;
                                 }
                             }
@@ -148,7 +148,7 @@ namespace Trinity.Items
                     }
 
                     _isFinished = true;
-                    Trinity.ForceVendorRunASAP = true;
+                    TrinityPlugin.ForceVendorRunASAP = true;
                     Logger.Log("Waiting 5 seconds...");
                     BotMain.StatusText = "Waiting 5 seconds...";
                     await Coroutine.Sleep(5000);

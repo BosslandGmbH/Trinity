@@ -3,7 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ut="clr-namespace:Trinity.UIComponents"
-             mc:Ignorable="d" Foreground="{DynamicResource TextBrush}" Background="#333333"
+             mc:Ignorable="d" Foreground="{DynamicResource TextBrush}" Background="#434343" Padding="10,0,0,0"
              d:DesignHeight="1002" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -32,7 +32,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
-        <StackPanel>
+        <StackPanel  Margin="0,10,5,0">
             <GroupBox Header="Items to Buy" Height="257">
                 <UniformGrid Margin="15,5,15,4">
                     <StackPanel HorizontalAlignment="Left" Width="153" VerticalAlignment="Top" Margin="0,10,0,-37" Height="140">

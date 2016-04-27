@@ -13,7 +13,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity
 {
-    public partial class Trinity : IPlugin
+    public partial class TrinityPlugin : IPlugin
     {
         private static TrinitySetting _Settings = new TrinitySetting();
 
@@ -29,7 +29,7 @@ namespace Trinity
         }
 
         /// <summary>
-        /// Used for letting noobs know they started the bot without Trinity enabled in the plugins tab.
+        /// Used for letting noobs know they started the bot without TrinityPlugin enabled in the plugins tab.
         /// </summary>
         public static bool IsPluginEnabled
         {
@@ -293,8 +293,8 @@ namespace Trinity
         private static SNOPower lastPowerUsed = SNOPower.None;
         public static SNOPower LastPowerUsed
         {
-            get { return Trinity.lastPowerUsed; }
-            set { Trinity.lastPowerUsed = value; }
+            get { return TrinityPlugin.lastPowerUsed; }
+            set { TrinityPlugin.lastPowerUsed = value; }
         }
 
         public static bool DisableOutofCombatSprint = false;
@@ -401,8 +401,8 @@ namespace Trinity
 
         internal static int TotalDeaths
         {
-            get { return Trinity._totalDeaths; }
-            set { Trinity._totalDeaths = value; }
+            get { return TrinityPlugin._totalDeaths; }
+            set { TrinityPlugin._totalDeaths = value; }
         }
 
         // When did we last send a move-power command?
@@ -480,8 +480,8 @@ namespace Trinity
         private static Vector3 eventStartPosition = Vector3.Zero;
         public static Vector3 EventStartPosition
         {
-            get { return Trinity.eventStartPosition; }
-            set { Trinity.eventStartPosition = value; }
+            get { return TrinityPlugin.eventStartPosition; }
+            set { TrinityPlugin.eventStartPosition = value; }
         }
 
         private static DateTime eventStartTime = DateTime.MinValue;
@@ -489,8 +489,8 @@ namespace Trinity
 
         public static DateTime EventStartTime
         {
-            get { return Trinity.eventStartTime; }
-            set { Trinity.eventStartTime = value; }
+            get { return TrinityPlugin.eventStartTime; }
+            set { TrinityPlugin.eventStartTime = value; }
         }
 
         public static int PlayerOwnedSpiderPetsCount { get; set; }

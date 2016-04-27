@@ -105,13 +105,13 @@ namespace Trinity
             {
                 try
                 {
-                    if (Trinity.CurrentTarget == null)
+                    if (TrinityPlugin.CurrentTarget == null)
                         return null;
-                    else if (Trinity.CurrentTarget.Type != TrinityObjectType.Unit)
+                    else if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Unit)
                         return null;
                     else
                     {
-                        return HotSpot.Serialize(new HotSpot(Trinity.CurrentTarget.Position, Trinity.Player.WorldID));
+                        return HotSpot.Serialize(new HotSpot(TrinityPlugin.CurrentTarget.Position, TrinityPlugin.Player.WorldID));
                     }
                 }
                 catch

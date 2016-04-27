@@ -1,5 +1,5 @@
 ﻿
-//namespace Trinity.DbProvider
+//namespace TrinityPlugin.DbProvider
 //{
 //    [Obsolete("No longer used, use ((MainGridProvider)Navigation.SearchAreaProvider).AddCellWeightingObstacle()")]
 //    internal sealed class SearchAreaProvider : MainGridProvider, ISearchAreaProvider
@@ -65,7 +65,7 @@
 //                                 Dia = o
 //                             }).ToList();
 
-//                        // Trinity avoidances (should allow path finding around AoE)
+//                        // TrinityPlugin avoidances (should allow path finding around AoE)
 //                        objectList.AddRange(
 //                            (from o in diaObjects
 //                             where AvoidanceManager.GetAvoidanceType(o.ActorSnoId) != AvoidanceType.None

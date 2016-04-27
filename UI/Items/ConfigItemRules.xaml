@@ -3,19 +3,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ut="clr-namespace:Trinity.UIComponents"
-             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"  Background="#434343" Padding="10,0,0,0"
              d:DesignHeight="420" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>
             <!-- Don't format this line otherwise Db can't open config window -->
-            <ResourceDictionary.MergedDictionaries><ResourceDictionary Source="..\Template.xaml"/></ResourceDictionary.MergedDictionaries>
-
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
             <ut:FlagsEnumValueConverter x:Key="flagsEnumValueConverter"/>
             <ut:EnumVisibilityConverter x:Key="enumVisibilityConverter" />
             <ut:IntToStringConverter x:Key="intToStringConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="0,10,5,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -25,10 +26,14 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />            
         </Grid.RowDefinitions>
-
         <TextBlock Grid.Row="0"  Text="Item Rules Configuration" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" />
 
+        <TextBlock Grid.Row="8" TextWrapping="Wrap">Notice: Item Rules will not be updated and supported. It will eventually removed.</TextBlock>
+        
         <UniformGrid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Rows="3" Columns="2">
             <TextBlock Text="Use Rule Set: " Margin="0,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
             <ComboBox Width="150" SelectedValuePath="Tag" SelectedValue="{Binding Path=ItemRules.ItemRuleType}">
@@ -70,7 +75,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button Margin="5" Grid.Column="0" HorizontalAlignment="Center" Command="{Binding ResetItemCommand}">Reset Trinity Defaults</Button>
+            <Button Margin="5" Grid.Column="0" HorizontalAlignment="Center" Command="{Binding ResetItemCommand}">Reset TrinityPlugin Defaults</Button>
             <Button Margin="5" Grid.Column="1" HorizontalAlignment="Center" Command="{Binding ReloadScriptRulesCommand}">Reload Script Rules</Button>
         </Grid>
 

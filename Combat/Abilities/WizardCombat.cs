@@ -20,7 +20,7 @@ namespace Trinity.Combat.Abilities
 
         internal static WizardSetting WizardSettings
         {
-            get { return Trinity.Settings.Combat.Wizard; }
+            get { return TrinityPlugin.Settings.Combat.Wizard; }
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace Trinity.Combat.Abilities
             float blackholeRadius = Runes.Wizard.Supermassive.IsActive ? 20f : 15f;
             if (CanCast(SNOPower.X1_Wizard_Wormhole, CanCastFlags.NoTimer) && !ShouldWaitForConventionElement(Skills.Wizard.BlackHole) &&
                 (!(Sets.VyrsAmazingArcana.IsFullyEquipped && Sets.ChantodosResolve.IsFirstBonusActive) || GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021) == 19) &&
-                (TargetUtil.ClusterExists(blackholeRadius, 45f, Trinity.Settings.Combat.Wizard.BlackHoleAoECount) || CurrentTarget.IsBossOrEliteRareUnique))
+                (TargetUtil.ClusterExists(blackholeRadius, 45f, TrinityPlugin.Settings.Combat.Wizard.BlackHoleAoECount) || CurrentTarget.IsBossOrEliteRareUnique))
             {
                 // Botting with 2+ wizards, stagger blackholes.
                 if (ZetaDia.Service.Party.NumPartyMembers > 1)
@@ -515,7 +515,7 @@ namespace Trinity.Combat.Abilities
                 if (CanCast(SNOPower.Wizard_SlowTime) && !Skills.Wizard.Teleport.IsActive)
                 {
                     Logger.LogVerbose("Casting SlowTime as Buff (GetBuffPower)");
-                    return new TrinityPower(SNOPower.Wizard_SlowTime, 100f, Trinity.Player.Position);
+                    return new TrinityPower(SNOPower.Wizard_SlowTime, 100f, TrinityPlugin.Player.Position);
                 }
 
                 // Mirror Image for speed boost
@@ -650,15 +650,15 @@ namespace Trinity.Combat.Abilities
             _lastTargetChange = DateTime.UtcNow;
 
             var currentTarget = CurrentTarget;
-            var lowestHealthTarget = TargetUtil.LowestHealthTarget(60f, Trinity.Me.Position, SNOPower.Wizard_Disintegrate);
+            var lowestHealthTarget = TargetUtil.LowestHealthTarget(60f, TrinityPlugin.Me.Position, SNOPower.Wizard_Disintegrate);
 
             //Logger.LogNormal("Blacklisting {0} {1} - Changing Target", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId);
-            Trinity.Blacklist3Seconds.Add(CurrentTarget.AnnId);
+            TrinityPlugin.Blacklist3Seconds.Add(CurrentTarget.AnnId);
 
             // Would like the new target to be different than the one we just blacklisted, or be very close to dead.
             if (lowestHealthTarget.ACDGuid == currentTarget.ACDGuid && lowestHealthTarget.HitPointsPct < 0.2) return;
 
-            Trinity.CurrentTarget = lowestHealthTarget;
+            TrinityPlugin.CurrentTarget = lowestHealthTarget;
             //Logger.LogNormal("Found lowest health target {0} {1} ({2:0.##}%)", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId, lowestHealthTarget.HitPointsPct * 100);
         }
 
@@ -871,7 +871,7 @@ namespace Trinity.Combat.Abilities
         {
             get
             {
-                double timeSinceDeath = DateTime.UtcNow.Subtract(Trinity.LastDeathTime).TotalMilliseconds;
+                double timeSinceDeath = DateTime.UtcNow.Subtract(TrinityPlugin.LastDeathTime).TotalMilliseconds;
 
                 // We've died, no longer have familiar
                 if (timeSinceDeath < TimeSincePowerUse(SNOPower.Wizard_Familiar))

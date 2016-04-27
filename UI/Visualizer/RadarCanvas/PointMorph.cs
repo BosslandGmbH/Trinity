@@ -125,14 +125,14 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 RawDrawPositionY = (CanvasData.Center.Y + RawDrawDistanceY);
 
                 // Points in Canvas and Grid Scale
-                RawPoint = new Point(RawDrawPositionX , RawDrawPositionY);
+                RawPoint = new Point(RawDrawPositionX, RawDrawPositionY);
                 RawGridPoint = new Point(RawDrawPositionX / CanvasData.GridSquareSize.Width, RawDrawPositionY / CanvasData.GridSquareSize.Height);
 
                 // Switched to manual calculations because WPF transforms are very slow 
                 // (0.0015ms+ each versus 0.0000ms for raw math).
                 Point = RawPoint.Rotate(CanvasData.Center, CanvasData.GobalRotationAngle);
                 Point = Point.FlipX(CanvasData.Center);
-                Point = new Point(Point.X + CanvasData.PanOffset.X,Point.Y + CanvasData.PanOffset.Y);
+                Point = new Point(Point.X + CanvasData.PanOffset.X, Point.Y + CanvasData.PanOffset.Y);
 
                 GridPoint = new Point((int)(Point.X / CanvasData.GridSquareSize.Width), (int)(Point.Y / CanvasData.GridSquareSize.Height));
                 IsBeyondCanvas = Point.X < 0 || Point.X > CanvasData.CanvasSize.Width || Point.Y < 0 || Point.Y > CanvasData.CanvasSize.Height;
@@ -143,6 +143,17 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             }
         }
 
+        public static Vector3 GetWorldPosition(Point canvasPoint, CanvasData canvasData)
+        {
+            var unPannedPoint = new Point(canvasPoint.X - canvasData.PanOffset.X, canvasPoint.Y - canvasData.PanOffset.Y);
+            var unFlippedPoint = unPannedPoint.FlipX(canvasData.Center);
+            var rawPoint = unFlippedPoint.Rotate(canvasData.Center, -canvasData.GobalRotationAngle);
+            var x = Math.Abs(((rawPoint.X - canvasData.Center.X) / (float)canvasData.GridSquareSize.Width) - canvasData.CenterVector.X);
+            var y = Math.Abs(((rawPoint.Y - canvasData.Center.Y) / (float)canvasData.GridSquareSize.Height) - canvasData.CenterVector.Y);
+            return new Vector3((float)x, (float)y, canvasData.CenterVector.Z);
+        }
+
 
     }
 }
+

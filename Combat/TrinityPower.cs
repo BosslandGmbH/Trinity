@@ -107,7 +107,7 @@ namespace Trinity
         {
             get
             {
-                return Trinity.TimeSinceUse(SNOPower);
+                return TrinityPlugin.TimeSinceUse(SNOPower);
             }
         }
 

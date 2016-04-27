@@ -47,7 +47,7 @@ namespace Trinity.Combat.Abilities
             }
 
             // Ignore Pain when near Frozen
-            if ((ZetaDia.Me.IsFrozen || ZetaDia.Me.IsRooted || Trinity.ObjectCache.Any(o => o.AvoidanceType == AvoidanceType.IceBall)) && CanCastIgnorePain)
+            if ((ZetaDia.Me.IsFrozen || ZetaDia.Me.IsRooted) && CanCastIgnorePain)
             {
                 Logger.Log("Used Ignore Pain to prevent Frozen");
                 return PowerIgnorePain;
@@ -195,7 +195,7 @@ namespace Trinity.Combat.Abilities
                 if (Player.CurrentHealthPct <= Settings.Combat.Barbarian.IgnorePainMinHealthPct)
                     return true;
 
-                if (Player.IsFrozen || Player.IsRooted || Player.IsJailed || Trinity.ObjectCache.Any(o => o.AvoidanceType == AvoidanceType.IceBall))
+                if (Player.IsFrozen || Player.IsRooted || Player.IsJailed)
                     return true;
 
                 return Sets.TheLegacyOfRaekor.IsFullyEquipped && ShouldFuryDump;
@@ -213,7 +213,7 @@ namespace Trinity.Combat.Abilities
                     (CurrentTarget.IsEliteRareUnique || TargetUtil.AnyMobsInRange(25f, 3)))
                     return true;
 
-                if (Sets.ImmortalKingsCall.IsFirstBonusActive && Trinity.PlayerOwnedAncientCount < 3)
+                if (Sets.ImmortalKingsCall.IsFirstBonusActive && TrinityPlugin.PlayerOwnedAncientCount < 3)
                     return true;
 
                 return false;
@@ -442,7 +442,7 @@ namespace Trinity.Combat.Abilities
                 if (!CanCast(SNOPower.Barbarian_Rend))
                     return false;
 
-                var mobCountThreshold = Trinity.ObjectCache.Count(o => o.IsUnit && (!o.HasDebuff(SNOPower.Barbarian_Rend)) && o.RadiusDistance <= 12) >= 3 || CurrentTarget.IsEliteRareUnique;
+                var mobCountThreshold = TrinityPlugin.ObjectCache.Count(o => o.IsUnit && (!o.HasDebuff(SNOPower.Barbarian_Rend)) && o.RadiusDistance <= 12) >= 3 || CurrentTarget.IsEliteRareUnique;
                 if (!mobCountThreshold)
                     return false;
 
@@ -485,7 +485,7 @@ namespace Trinity.Combat.Abilities
 
                 return  CurrentTarget.RadiusDistance <= 10 && !overPowerHasBuffEffect &&
                         TargetUtil.AnyMobsInRange(10f) &&
-                        (CurrentTarget.IsEliteRareUnique || CurrentTarget.IsMinion || CurrentTarget.IsBoss || TargetUtil.NumMobsInRangeOfPosition(Trinity.Player.Position, 9) >= 4);
+                        (CurrentTarget.IsEliteRareUnique || CurrentTarget.IsMinion || CurrentTarget.IsBoss || TargetUtil.NumMobsInRangeOfPosition(TrinityPlugin.Player.Position, 9) >= 4);
             }
         }
         public static bool CanUseSeismicSlam
@@ -538,7 +538,7 @@ namespace Trinity.Combat.Abilities
         {
             get
             {
-                if (Trinity.Settings.Combat.Barbarian.SprintMode != BarbarianSprintMode.MovementOnly &&
+                if (TrinityPlugin.Settings.Combat.Barbarian.SprintMode != BarbarianSprintMode.MovementOnly &&
                     !UseOOCBuff && CanCast(SNOPower.Barbarian_Sprint, CanCastFlags.NoTimer) &&
                     !Player.IsIncapacitated && !GetHasBuff(SNOPower.Barbarian_Sprint) && Player.PrimaryResource >= 20)
                     return true;
@@ -731,7 +731,7 @@ namespace Trinity.Combat.Abilities
         {
             get
             {
-                return new TrinityPower(SNOPower.Barbarian_Whirlwind, 20f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 20), Trinity.CurrentWorldDynamicId, -1, 0, 1);
+                return new TrinityPower(SNOPower.Barbarian_Whirlwind, 20f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 20), TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);
             }
         }
 

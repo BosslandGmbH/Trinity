@@ -21,7 +21,7 @@ using BotManager = Trinity.BotManager;
 
 namespace Trinity
 {
-    public partial class Trinity
+    public partial class TrinityPlugin
     {
         // How many total leave games, for stat-tracking?
         public static int TotalGamesJoined = 0;
@@ -111,7 +111,7 @@ namespace Trinity
                 }
             }
 
-            Logger.LogDebug("Trinity BotStart took {0:0}ms", DateTime.UtcNow.Subtract(BotStartTime).TotalMilliseconds);
+            Logger.LogDebug("TrinityPlugin BotStart took {0:0}ms", DateTime.UtcNow.Subtract(BotStartTime).TotalMilliseconds);
         }
 
         private static void GameEvents_OnGameChanged(object sender, EventArgs e)

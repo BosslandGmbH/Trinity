@@ -29,10 +29,6 @@ namespace Trinity.Framework.Objects.Memory.Debug
         /// <summary>
         /// Scan memory range and compare to previous scan
         /// </summary>
-        /// <param name="baseAddress">starting memory address</param>
-        /// <param name="compareTo">collection to store variances in</param>
-        /// <param name="size">size of memory to scan</param>
-        /// <returns></returns>
         public static MemoryVarianceResult<T> MemoryCompare<T>(this IntPtr baseAddress, MemoryVarianceResult<T> compareTo, int size) where T : struct
         {
             if (compareTo == null)

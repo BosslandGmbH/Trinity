@@ -5,7 +5,7 @@
              xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
              xmlns:ut="clr-namespace:Trinity.UIComponents"
              xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop"
-             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" Background="#434343"
              d:DesignHeight="650" d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -87,14 +87,14 @@
 
         </ResourceDictionary>
     </UserControl.Resources>
-    <ScrollViewer Padding="10,0,10,0">
+    <ScrollViewer Padding="10,10,10,0">
         <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <GroupBox.Header>
                 Paragon Spending
             </GroupBox.Header>
             <StackPanel>
 
-                <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">Trinity will spend your paragon points automatically every now and then. Drag the items below within each group to prioritize how they are spent.</TextBlock>
+                <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">TrinityPlugin will spend your paragon points automatically every now and then. Drag the items below within each group to prioritize how they are spent.</TextBlock>
 
                 <CheckBox Margin="3,0,3,10" IsChecked="{Binding Paragon.IsEnabled}">Spend Paragon Points</CheckBox>
 

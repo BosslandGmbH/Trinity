@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Trinity.Movement;
 using Trinity.Reference;
 using Zeta.Bot;
 using Zeta.Common;
@@ -62,11 +63,11 @@ namespace Trinity.Combat.Abilities
 
             if (UseOOCBuff)
             {
-                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && Trinity.PlayerOwnedGargantuanCount < 3)
+                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && TrinityPlugin.PlayerOwnedGargantuanCount < 3)
                     return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
 
                 var dogCount = Passives.WitchDoctor.MidnightFeast.IsActive ? 4 : 3;
-                if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && Trinity.PlayerOwnedZombieDogCount < dogCount)
+                if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && TrinityPlugin.PlayerOwnedZombieDogCount < dogCount)
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
 
                 if (CanCast(SNOPower.Witchdoctor_SpiritWalk) && Settings.Combat.Misc.AllowOOCMovement && !Player.IsInTown)
@@ -76,13 +77,13 @@ namespace Trinity.Combat.Abilities
             if (CurrentTarget != null)
             {
                 // Gargantuan
-                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && (Trinity.PlayerOwnedGargantuanCount < 3
+                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && (TrinityPlugin.PlayerOwnedGargantuanCount < 3
                     || TargetUtil.AnyElitesInRange(30f)))
                     return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
 
                 // Zombie Dogs
                 var dogCount = Passives.WitchDoctor.MidnightFeast.IsActive ? 4 : 3;
-                if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && (Trinity.PlayerOwnedZombieDogCount < dogCount ||
+                if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && (TrinityPlugin.PlayerOwnedZombieDogCount < dogCount ||
                     TargetUtil.AnyElitesInRange(30f)))
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
 
@@ -153,8 +154,8 @@ namespace Trinity.Combat.Abilities
         {
             TrinityPower power = null;
 
-            //Logger.LogNormal("Gargantuan Count = {0}", Trinity.PlayerOwnedGargantuanCount);
-            //Logger.LogNormal("Fetish Count = {0}", Trinity.PlayerOwnedFetishArmyCount);
+            //Logger.LogNormal("Gargantuan Count = {0}", TrinityPlugin.PlayerOwnedGargantuanCount);
+            //Logger.LogNormal("Fetish Count = {0}", TrinityPlugin.PlayerOwnedFetishArmyCount);
 
             if (IsHellToothPetDoc)
             {
@@ -181,8 +182,8 @@ namespace Trinity.Combat.Abilities
 
             // Zombie Dogs should be cast ASAP.
             if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) &&
-            ((Legendary.TheTallMansFinger.IsEquipped && Trinity.PlayerOwnedZombieDogCount < 1) ||
-            (!Legendary.TheTallMansFinger.IsEquipped && Trinity.PlayerOwnedZombieDogCount <= 2)))
+            ((Legendary.TheTallMansFinger.IsEquipped && TrinityPlugin.PlayerOwnedZombieDogCount < 1) ||
+            (!Legendary.TheTallMansFinger.IsEquipped && TrinityPlugin.PlayerOwnedZombieDogCount <= 2)))
             {
                 return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
             }
@@ -192,7 +193,7 @@ namespace Trinity.Combat.Abilities
             bool hasWrathfulProtector = Runes.WitchDoctor.WrathfulProtector.IsActive;
 
             // Gargantuan should be cast ASAP.
-            var hasAllGargs = Trinity.PlayerOwnedGargantuanCount != 0 && (!Legendary.TheShortMansFinger.IsEquipped || Trinity.PlayerOwnedGargantuanCount > 2);
+            var hasAllGargs = TrinityPlugin.PlayerOwnedGargantuanCount != 0 && (!Legendary.TheShortMansFinger.IsEquipped || TrinityPlugin.PlayerOwnedGargantuanCount > 2);
             if (CanCast(SNOPower.Witchdoctor_Gargantuan) && (!hasAllGargs || TargetUtil.AnyElitesInRange(30f)))
             {
 
@@ -212,8 +213,8 @@ namespace Trinity.Combat.Abilities
             // Summon Fetish Army
             var isTikiTorph = Runes.WitchDoctor.TikiTorchers.IsActive;
             var hasEnoughFetishes = isTikiTorph
-                ? Trinity.PlayerOwnedFetishArmyCount >= 7
-                : Trinity.PlayerOwnedFetishArmyCount >= 5;
+                ? TrinityPlugin.PlayerOwnedFetishArmyCount >= 7
+                : TrinityPlugin.PlayerOwnedFetishArmyCount >= 5;
 
             var useFetishWithZumiSet = !hasEnoughFetishes && Sets.ZunimassasHaunt.IsFirstBonusActive || Settings.Combat.WitchDoctor.UseFetishArmyOffCooldown;
             var useFetishNormal = !hasEnoughFetishes && !Sets.ZunimassasHaunt.IsFirstBonusActive && (TargetUtil.EliteOrTrashInRange(30f) || TargetUtil.IsEliteTargetInRange(40f)) || Settings.Combat.WitchDoctor.UseFetishArmyOffCooldown;
@@ -265,7 +266,7 @@ namespace Trinity.Combat.Abilities
 
                 if (_bastianGeneratorWaitTimer.IsFinished && ShouldRefreshBastiansGeneratorBuff)
                 {
-                    if (Hotbar.Contains(SNOPower.Witchdoctor_CorpseSpider) && (!Runes.WitchDoctor.SpiderQueen.IsActive || Trinity.PlayerOwnedSpiderPetsCount == 0))
+                    if (Hotbar.Contains(SNOPower.Witchdoctor_CorpseSpider) && (!Runes.WitchDoctor.SpiderQueen.IsActive || TrinityPlugin.PlayerOwnedSpiderPetsCount == 0))
                     {
                         return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, 50f, CurrentTarget.ACDGuid);
                     }
@@ -285,7 +286,7 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // Summon Corpse Spider Queen
-                if (CanCast(SNOPower.Witchdoctor_CorpseSpider) && Runes.WitchDoctor.SpiderQueen.IsActive && Trinity.PlayerOwnedSpiderPetsCount == 0)
+                if (CanCast(SNOPower.Witchdoctor_CorpseSpider) && Runes.WitchDoctor.SpiderQueen.IsActive && TrinityPlugin.PlayerOwnedSpiderPetsCount == 0)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, 60f, CurrentTarget.ACDGuid);
                 }
@@ -376,7 +377,7 @@ namespace Trinity.Combat.Abilities
                         return new TrinityPower(SNOPower.Witchdoctor_PoisonDart, basicAttackRange, dartTargetACDGuid);
                     }
                     // Corpse Spiders
-                    if (CanCast(SNOPower.Witchdoctor_CorpseSpider) && (!Runes.WitchDoctor.SpiderQueen.IsActive || Trinity.PlayerOwnedSpiderPetsCount == 0))
+                    if (CanCast(SNOPower.Witchdoctor_CorpseSpider) && (!Runes.WitchDoctor.SpiderQueen.IsActive || TrinityPlugin.PlayerOwnedSpiderPetsCount == 0))
                     {
                         VisionQuestRefreshTimer.Restart();
                         return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, basicAttackRange, CurrentTarget.ACDGuid);
@@ -581,7 +582,7 @@ namespace Trinity.Combat.Abilities
                 // END Tiklandian Visage ----------------------------------------------------------------------   
 
                 // Sacrifice
-                if (CanCast(SNOPower.Witchdoctor_Sacrifice) && Trinity.PlayerOwnedZombieDogCount > 0 &&
+                if (CanCast(SNOPower.Witchdoctor_Sacrifice) && TrinityPlugin.PlayerOwnedZombieDogCount > 0 &&
                     (TargetUtil.AnyElitesInRange(15, 1) || (CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.RadiusDistance <= 9f)))
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Sacrifice);
@@ -589,7 +590,7 @@ namespace Trinity.Combat.Abilities
 
                 // Sacrifice for Circle of Life
                 bool hasCircleofLife = CacheData.Hotbar.PassiveSkills.Any(s => s == SNOPower.Witchdoctor_Passive_CircleOfLife);
-                if (CanCast(SNOPower.Witchdoctor_Sacrifice) && Trinity.PlayerOwnedZombieDogCount > 0 && hasCircleofLife && TargetUtil.AnyMobsInRange(15f))
+                if (CanCast(SNOPower.Witchdoctor_Sacrifice) && TrinityPlugin.PlayerOwnedZombieDogCount > 0 && hasCircleofLife && TargetUtil.AnyMobsInRange(15f))
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Sacrifice);
                 }
@@ -606,7 +607,7 @@ namespace Trinity.Combat.Abilities
 
                 // Zombie Dogs for Sacrifice
                 if (hasSacrifice && CanCast(SNOPower.Witchdoctor_SummonZombieDog) &&
-                    (LastPowerUsed == SNOPower.Witchdoctor_Sacrifice || Trinity.PlayerOwnedZombieDogCount <= 2) &&
+                    (LastPowerUsed == SNOPower.Witchdoctor_Sacrifice || TrinityPlugin.PlayerOwnedZombieDogCount <= 2) &&
                     LastPowerUsed != SNOPower.Witchdoctor_SummonZombieDog)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
@@ -768,7 +769,7 @@ namespace Trinity.Combat.Abilities
                 var fireBatsMana = TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) < 125 ? fireBatsChannelCost : 225;
 
                 var firebatsMaintain =
-                  Trinity.ObjectCache.Any(u => u.IsUnit &&
+                  TrinityPlugin.ObjectCache.Any(u => u.IsUnit &&
                       u.IsPlayerFacing(70f) && u.Weight > 0 &&
                       u.Distance <= 35 &&
                       SpellHistory.TimeSinceUse(SNOPower.Witchdoctor_Firebats) <= TimeSpan.FromMilliseconds(250d));
@@ -833,7 +834,7 @@ namespace Trinity.Combat.Abilities
                     return new TrinityPower(SNOPower.Witchdoctor_PoisonDart, basicAttackRange, dartTargetACDGuid);
                 }
                 // Corpse Spiders fast-attacks Spams Spiders when mana is too low (to cast bears) @12yds or @10yds if Bears avialable
-                if (CanCast(SNOPower.Witchdoctor_CorpseSpider) && (!Runes.WitchDoctor.SpiderQueen.IsActive || Trinity.PlayerOwnedSpiderPetsCount == 0))
+                if (CanCast(SNOPower.Witchdoctor_CorpseSpider) && (!Runes.WitchDoctor.SpiderQueen.IsActive || TrinityPlugin.PlayerOwnedSpiderPetsCount == 0))
                 {
                     VisionQuestRefreshTimer.Restart();
                     return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, basicAttackRange, CurrentTarget.ACDGuid);
@@ -894,13 +895,13 @@ namespace Trinity.Combat.Abilities
 
                 // Zombie Dogs non-sacrifice build
                 if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) &&
-                ((Legendary.TheTallMansFinger.IsEquipped && Trinity.PlayerOwnedZombieDogCount < 1) ||
-                (!Legendary.TheTallMansFinger.IsEquipped && Trinity.PlayerOwnedZombieDogCount <= 2)))
+                ((Legendary.TheTallMansFinger.IsEquipped && TrinityPlugin.PlayerOwnedZombieDogCount < 1) ||
+                (!Legendary.TheTallMansFinger.IsEquipped && TrinityPlugin.PlayerOwnedZombieDogCount <= 2)))
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
                 }
 
-                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && !hasRestlessGiant && !hasWrathfulProtector && Trinity.PlayerOwnedGargantuanCount == 0)
+                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && !hasRestlessGiant && !hasWrathfulProtector && TrinityPlugin.PlayerOwnedGargantuanCount == 0)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
                 }
@@ -1081,7 +1082,7 @@ namespace Trinity.Combat.Abilities
                     return new TrinityPower(SNOPower.Witchdoctor_AcidCloud, 12f, CurrentTarget.Position);
 
                 if (Hotbar.Contains(SNOPower.Witchdoctor_Sacrifice) && Hotbar.Contains(SNOPower.Witchdoctor_SummonZombieDog) &&
-                    Trinity.PlayerOwnedZombieDogCount > 0 && Settings.Combat.WitchDoctor.ZeroDogs)
+                    TrinityPlugin.PlayerOwnedZombieDogCount > 0 && Settings.Combat.WitchDoctor.ZeroDogs)
                     return new TrinityPower(SNOPower.Witchdoctor_Sacrifice, 12f, CurrentTarget.Position);
 
                 if (Hotbar.Contains(SNOPower.Witchdoctor_SpiritBarrage) && Player.PrimaryResource > 100)

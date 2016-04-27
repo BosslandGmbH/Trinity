@@ -24,16 +24,16 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         public bool IsAllowed
         {
-            get { return Trinity.Player.CurrentHealthPct <= HealthThresholdPct; }
+            get { return TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct; }
         }
 
-        public void UpdateNodes(AvoidanceGrid grid, Avoidance avoidance)
+        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
         {  
             var actor = avoidance.Actors.FirstOrDefault();
             if (actor == null)
                 return;
 
-            foreach (var otherAvoidance in Core.Avoidance.Current)
+            foreach (var otherAvoidance in Core.Avoidance.CurrentAvoidances)
             {
                 if (otherAvoidance == avoidance)
                     continue;

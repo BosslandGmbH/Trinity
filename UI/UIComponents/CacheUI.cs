@@ -86,7 +86,7 @@ namespace Trinity.UI.UIComponents
                         ZetaDia.Actors.Update();
 
                         if (_dataModel.IsDefaultVisible)
-                            Trinity.RefreshDiaObjectCache();
+                            TrinityPlugin.RefreshDiaObjectCache();
 
                         Update();
 

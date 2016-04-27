@@ -1,0 +1,895 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E1406025-F8D4-4E14-9843-68A248E7FB44}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>Trinity</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x64</PlatformTarget>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>Trinity</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Adventurer">
+      <HintPath>..\Adventurer\Trunk\bin\Debug\Adventurer.dll</HintPath>
+    </Reference>
+    <Reference Include="Demonbuddy">
+      <HintPath>..\..\DB-Current\Demonbuddy.exe</HintPath>
+    </Reference>
+    <Reference Include="GreyMagic, Version=1.1.2972.607, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DB-Current\GreyMagic.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython">
+      <HintPath>..\..\DB-Current\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cache\CacheData.Buffs.cs" />
+    <Compile Include="Cache\CacheData.Hotbar.cs" />
+    <Compile Include="Cache\CacheData.Inventory.cs" />
+    <Compile Include="Cache\CacheData.Player.cs" />
+    <Compile Include="Cache\CacheUIObject.cs" />
+    <Compile Include="Coroutines\Town\DropItems.cs" />
+    <Compile Include="Coroutines\VacuumItems.cs" />
+    <Compile Include="Coroutines\Town\ServiceType.cs" />
+    <Compile Include="Coroutines\Town\TownActor.cs" />
+    <Compile Include="Coroutines\Town\TownActorLibrary.cs" />
+    <Compile Include="Coroutines\Town\IdentifyItems.cs" />
+    <Compile Include="Coroutines\Town\RepairItems.cs" />
+    <Compile Include="Coroutines\Town\SalvageItems.cs" />
+    <Compile Include="Coroutines\Town\StashItems.cs" />
+    <Compile Include="Coroutines\Town\SellItems.cs" />
+    <Compile Include="Coroutines\Town\TrinityTownRun.cs" />
+    <Compile Include="Framework\Actors\ActorManager.cs" />
+    <Compile Include="Framework\Actors\CachedItem.cs" />
+    <Compile Include="Framework\Avoidance\Structures\AvoidanceLayer.cs" />
+    <Compile Include="Framework\Objects\Memory\Globals.cs" />
+    <Compile Include="Framework\Objects\Memory\Hero.cs" />
+    <Compile Include="Framework\Helpers\TypeConversions.cs" />
+    <Compile Include="Framework\Objects\Enums\SnoGameBalanceType.cs" />
+    <Compile Include="Framework\Objects\Enums\RawMonsterType.cs" />
+    <Compile Include="Framework\Objects\Enums\RawQualityType.cs" />
+    <Compile Include="Framework\Objects\Enums\SnoType.cs" />
+    <Compile Include="Framework\Objects\Memory\Attributes\AttributeDescripter.cs" />
+    <Compile Include="Framework\Objects\Memory\Attributes\AttributeKey.cs" />
+    <Compile Include="Framework\Objects\Memory\Attributes\AttributeResult.cs" />
+    <Compile Include="Framework\Objects\Memory\Debug\MemoryScan.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\Marker.cs" />
+    <Compile Include="Framework\Objects\Memory\Debug\ClassMapper.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\ValueTypeDescriptor.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\FieldDescriptor.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\Helpers\GameBalanceHelper.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\Helpers\StringListHelper.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\SnoCore.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\Types\GeneratedTypes.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ActorClass.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ActorState.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ActorType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ActType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\AdjustmentType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\AffixType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\AmbientType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\AnimationTransitionType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\AnimationType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ArmorType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\BonusType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\BountyType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ClothingType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\CollisionResult.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ComparisonType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ConsumableType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ConversationType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\CurrencyType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\CurveType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\DamageType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\DensityType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\DifficultyLevel.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\DifficultyType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ElementType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ItemResult.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ErrorResultType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\EventType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\FollowerType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\GameBalanceType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\GemType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\GizmoType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\HealingType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\IdentifierType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\InventorySlot.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ItemQuality.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\D3ItemType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\KanaiRecipeType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\KeyboardKey.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\LeaveGameResult.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\LightingType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\MaterialType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\MonsterQuality.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\MonsterQuality2.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\MonsterRace.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\MonsterSize.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\MonsterType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\MovementAttributeType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\NodeFlags.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\NpcType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ParagonType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\PathType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\PetType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\PlayerAttribute.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\PlayerStateFlags.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\QuestResult.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\QuestStepType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\QuestType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\RecipeType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ResourceType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\RuneSlot.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ShapeType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\SoundAdjustmentType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\SoundEffectType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\SpecialBonus.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\SpecialItemType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\StuckFlags.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Symbol.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\SymbolManager.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\SnoDefinition.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\SnoDictionary.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\SnoGroup.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\SnoHeader.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\SnoTableEntry.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\Types\SnoStringList.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\SnoManager.cs" />
+    <Compile Include="Framework\Helpers\ActorExtensions.cs" />
+    <Compile Include="Framework\Objects\Enums\SnoStringListType.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\LinkedList.cs" />
+    <Compile Include="Framework\Objects\Memory\Attributes\ItemAttributes.cs" />
+    <Compile Include="Framework\Objects\Memory\Attributes\Attributes.cs" />
+    <Compile Include="Framework\Helpers\ReflectionHelper.cs" />
+    <Compile Include="Framework\Helpers\StaticRouter.cs" />
+    <Compile Include="Framework\Helpers\TypeUtil.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\Container.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\ActorCommonData.cs" />
+    <Compile Include="Framework\Objects\Memory\Attributes\AttributeGroup.cs" />
+    <Compile Include="Framework\Objects\Enums\RawItemType.cs" />
+    <Compile Include="Framework\Objects\Memory\Attributes\AttributeItem.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\ExpandoContainer.cs" />
+    <Compile Include="Framework\Objects\Memory\Attributes\AttributeManager.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\Map.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\Ptr.cs" />
+    <Compile Include="Framework\Objects\Memory\MemoryWrapper.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\Table.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\SymbolTable.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\SymbolTableNames.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\ValueDataType.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\VendorSlot.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\WeaponsComboType.cs" />
+    <Compile Include="Framework\Utilities\Paragon.cs" />
+    <Compile Include="Framework\Avoidance\Structures\AvoidanceAreaStats.cs" />
+    <Compile Include="Framework\Avoidance\DefaultAvoider.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\AnimationAvoidanceHandler.cs" />
+    <Compile Include="Framework\Helpers\GridHelper.cs" />
+    <Compile Include="Helpers\Bitwise.cs" />
+    <Compile Include="Helpers\ExceptionExtensions.cs" />
+    <Compile Include="Framework\Objects\PriorityQueue\FastPriorityQueue.cs" />
+    <Compile Include="Framework\Objects\PriorityQueue\FastPriorityQueueNode.cs" />
+    <Compile Include="Framework\Objects\PriorityQueue\IPriorityQueue.cs" />
+    <Compile Include="Framework\Objects\PriorityQueue\SimplePriorityQueue.cs" />
+    <Compile Include="Helpers\Notifications.cs" />
+    <Compile Include="Helpers\OrderedDictionary.cs" />
+    <Compile Include="Helpers\VectorExt.cs" />
+    <Compile Include="Helpers\WindowMessage.cs" />
+    <Compile Include="Helpers\WindowsVirtualKey.cs" />
+    <Compile Include="Framework\Helpers\Internals.cs" />
+    <Compile Include="Objects\SkillSettings.cs" />
+    <Compile Include="Objects\IFindable.cs" />
+    <Content Include="Framework\Objects\Memory\readme.txt" />
+    <Content Include="Version.xml" />
+    <Compile Include="Framework\Objects\Memory\Misc\ItemTypeRecord.cs" />
+    <Compile Include="Settings\Mock\SkillSettingsMockData.cs" />
+    <Compile Include="Settings\Paragon\ParagonSetting.cs" />
+    <Compile Include="Settings\Paragon\ParagonItem.cs" />
+    <Compile Include="Settings\Paragon\TrinityParagonBonusType.cs" />
+    <Compile Include="UI\Overlays\3D\3DTools\MathUtils.cs" />
+    <Compile Include="UI\Overlays\3D\3DTools\Matrix3DStack.cs" />
+    <Compile Include="UI\Overlays\3D\3DTools\MeshUtils.cs" />
+    <Compile Include="UI\Overlays\3D\3DTools\Spacelines3D.cs" />
+    <Compile Include="UI\Overlays\3D\ModelBase.cs" />
+    <Compile Include="UI\Overlays\3D\3DTools\Inteactive3DVisual.cs" />
+    <Compile Include="UI\Overlays\3D\Models\InteractiveSphere.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Direction.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\GeometryHelper.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Helper3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\BoxSides.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\CoordinateSystemKind.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\GeometryElement3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\IRangeElement.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\MeshBuiltEventArgs.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\Point3DTriplet.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\PolygonalElement3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\RangeElementSelectionManager.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\Sculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\TexturePositions.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Primitives\TriangleSideKind.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\ArrowSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\BarSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\BoxSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\ConicalSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\HouseSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\IsocahedronSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\PieSliceSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\PolygonSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\RingSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\SliceSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\SphericalSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\SquareSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\TruncatedIsocahedronSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Sculptors\XyzAxisSculptor.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Arrow3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Bar3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\BeeBar3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Box3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\CompositeBar3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Conical3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Football3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\House3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Isocahedron3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\PieSlice3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Polygon3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Ring3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Spherical3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\Square3D.cs" />
+    <Compile Include="UI\Overlays\3D\Perspective\Shapes\XyzAxis3D.cs" />
+    <Compile Include="UI\Overlays\3D\ViewPort3DActor.cs" />
+    <Compile Include="UI\Overlays\3D\Viewport3DRadar.cs" />
+    <Compile Include="UI\Overlays\3D\Viewport3DComponent.cs" />
+    <Compile Include="UI\Overlays\3D\ViewPortModel.cs" />
+    <Compile Include="UI\Overlays\OverlayBase.cs" />
+    <Compile Include="UI\Overlays\OverlayLoader.cs" />
+    <Compile Include="UI\Overlays\OverlaySettings.cs" />
+    <Compile Include="UI\Overlays\Toolbar\ToolbarOverlayComponent.cs" />
+    <Compile Include="UI\Overlays\Toolbar\ToolbarOverlayComponent2.cs" />
+    <Compile Include="UI\Overlays\Toolbar\ToolbarOverlayViewModel.cs" />
+    <Compile Include="UI\UIComponents\Behaviors\CaptureTextboxInput.cs" />
+    <Compile Include="Helpers\TypeCrawler.cs" />
+    <Compile Include="UI\UIComponents\Controls\RangeSlider.cs" />
+    <Compile Include="UI\UIComponents\Input\InputExtensions.cs" />
+    <Compile Include="UI\UIComponents\Converters\AxisValueToViewportCameraPosition.cs" />
+    <Compile Include="UI\UIComponents\Converters\ImagePathConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\OffsetWidthConverter.cs" />
+    <Compile Include="Settings\AvoiderSettings.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\PoisonEnchantedAvoidanceHandler.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\FurnaceAvoidanceHandler.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\FireChainsAvoidanceHandler.cs" />
+    <Compile Include="Framework\Avoidance\Structures\Severity.cs" />
+    <Compile Include="Framework\Avoidance\Structures\IAvoidanceSetting.cs" />
+    <Compile Include="Framework\Utilities\Cooldowns.cs" />
+    <Compile Include="Cache\Execution.cs" />
+    <Compile Include="Cache\ItemStashSellAppender.cs" />
+    <Compile Include="Cache\ItemDroppedAppender.cs" />
+    <Compile Include="Cache\Properties.cs" />
+    <Compile Include="Cache\Properties.Monster.cs" />
+    <Compile Include="Cache\Properties.Static.cs" />
+    <Compile Include="Cache\RiftProgression.cs" />
+    <Compile Include="Cache\TrinityBountyInfo.cs" />
+    <Compile Include="Cache\CacheData.cs" />
+    <Compile Include="Cache\GroupHotSpot.cs" />
+    <Compile Include="Cache\TrinityCacheObjectUtils.cs" />
+    <Compile Include="Cache\TrinityQuestInfo.cs" />
+    <Compile Include="Cache\RefreshGizmo.cs" />
+    <Compile Include="Cache\SameWorldPortal.cs" />
+    <Compile Include="Combat\Abilities\BarbarianCombat.cs" />
+    <Compile Include="Combat\Abilities\CombatBase.cs" />
+    <Compile Include="Combat\Abilities\CrusaderCombat.cs" />
+    <Compile Include="Combat\Abilities\DemonHunterCombat.cs" />
+    <Compile Include="Combat\Abilities\MonkCombat.cs" />
+    <Compile Include="Combat\Abilities\SpellHistory.cs" />
+    <Compile Include="Combat\Abilities\SpellHistoryItem.cs" />
+    <Compile Include="Combat\Abilities\WitchDoctorCombat.cs" />
+    <Compile Include="Combat\Abilities\WizardCombat.cs" />
+    <Compile Include="Combat\AvoidanceType.cs" />
+    <Compile Include="Framework\Avoidance\Structures\Avoidance.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\ArcaneAvoidanceHandler.cs" />
+    <Compile Include="Framework\Avoidance\Structures\AvoidancePart.cs" />
+    <Compile Include="Framework\Avoidance\Structures\PartType.cs" />
+    <Compile Include="Framework\Avoidance\Structures\AvoidanceData.cs" />
+    <Compile Include="Framework\Avoidance\AvoidanceDataFactory.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\CircularAvoidanceHandler.cs" />
+    <Compile Include="Framework\Avoidance\AvoidanceManager.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\IAvoidanceHandler.cs" />
+    <Compile Include="Framework\Avoidance\Structures\MovementType.cs" />
+    <Compile Include="Combat\Enemies.cs" />
+    <Compile Include="Combat\Routine\TrinityRoutine.cs" />
+    <Compile Include="Combat\SnapShot.cs" />
+    <Compile Include="Combat\SpellTracker.cs" />
+    <Compile Include="Configuration\Events.cs" />
+    <Compile Include="Coroutines\AutoEquipSkills.cs" />
+    <Compile Include="Coroutines\AutoEquipItems.cs" />
+    <Compile Include="Coroutines\Town\ExtractLegendaryPowers.cs" />
+    <Compile Include="Coroutines\Overrides.cs" />
+    <Compile Include="Coroutines\Town\PutItemsInStash.cs" />
+    <Compile Include="Framework\Core.cs" />
+    <Compile Include="Framework\Avoidance\Structures\AvoidanceFlags.cs" />
+    <Compile Include="Framework\Avoidance\AvoidanceGrid.cs" />
+    <Compile Include="Framework\Avoidance\Structures\AvoidanceNode.cs" />
+    <Compile Include="Framework\Objects\Attributes\UIAttributes.cs" />
+    <Compile Include="Framework\Objects\Enums\ComparisonOperator.cs" />
+    <Compile Include="Framework\Objects\Enums\UpdateSpeed.cs" />
+    <Compile Include="Framework\Objects\Range.cs" />
+    <Compile Include="Framework\Utilities\PlayerHistory.cs" />
+    <Compile Include="Helpers\AttributeExtensions.cs" />
+    <Compile Include="Helpers\CacheField.cs" />
+    <Compile Include="Helpers\DemonBuddyUI.cs" />
+    <Compile Include="Helpers\InterfaceLoader.cs" />
+    <Compile Include="Helpers\Rotator.cs" />
+    <Compile Include="Helpers\TypeMapper.cs" />
+    <Compile Include="Framework\Utility.cs" />
+    <Compile Include="Objects\BaseObject.cs" />
+    <Compile Include="Coroutines\Town\BuyItemsFromVendor.cs" />
+    <Compile Include="Coroutines\Town\ConvertMaterials.cs" />
+    <Compile Include="Coroutines\CoroutineHelper.cs" />
+    <Compile Include="Coroutines\Town\CubeItemsToMaterials.cs" />
+    <Compile Include="Coroutines\EquipBehavior.cs" />
+    <Compile Include="Coroutines\Town\Gamble.cs" />
+    <Compile Include="Coroutines\Town\CubeRaresToLegendary.cs" />
+    <Compile Include="Coroutines\Resources\CoroutineHelper.cs" />
+    <Compile Include="Coroutines\Resources\Inventory.cs" />
+    <Compile Include="Coroutines\Resources\RiftQuest.cs" />
+    <Compile Include="Coroutines\Town\TakeItemsFromStash.cs" />
+    <Compile Include="Coroutines\MoveTo.cs" />
+    <Compile Include="Coroutines\MoveToAndInteract.cs" />
+    <Compile Include="Coroutines\Town\Transmute.cs" />
+    <Compile Include="Coroutines\Town\ReturnToStash.cs" />
+    <Compile Include="DbProvider\ClearArea.cs" />
+    <Compile Include="DbProvider\DeathHandler.cs" />
+    <Compile Include="Coroutines\Town\UseCraftingRecipes.cs" />
+    <Compile Include="DbProvider\KillAllBountyDetector.cs" />
+    <Compile Include="DbProvider\SearchAreaProvider.cs" />
+    <Compile Include="DbProvider\VendorHook.cs" />
+    <Compile Include="Helpers\Attributes\NoCopy.cs" />
+    <Compile Include="Helpers\EnumValue.cs" />
+    <Compile Include="Helpers\ExportHelper.cs" />
+    <Compile Include="Helpers\GetAttributeExtensions.cs" />
+    <Compile Include="Coroutines\Town\TownInfo.cs" />
+    <Compile Include="Helpers\IPluginCommunicator.cs" />
+    <Compile Include="Helpers\JsonSerializer.cs" />
+    <Compile Include="Helpers\PluginCommunicator.cs" />
+    <Compile Include="Helpers\UIElementExtensions.cs" />
+    <Compile Include="Objects\Build.cs" />
+    <Compile Include="Objects\CachedBuff.cs" />
+    <Compile Include="Objects\IActor.cs" />
+    <Compile Include="Objects\IUnique.cs" />
+    <Compile Include="Objects\ItemStatRange.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\ItemRecord.cs" />
+    <Compile Include="Framework\Helpers\MemoryHelper.cs" />
+    <Compile Include="Objects\SkillMeta.cs" />
+    <Compile Include="ProfileTags\EmbedTags\ItemTag.cs" />
+    <Compile Include="ProfileTags\TransmuteTag.cs" />
+    <Compile Include="Reference\Gems.cs" />
+    <Compile Include="Reference\SkillsDefaultMeta.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Resources\Battle.Net API\BNetDataObjects.cs" />
+    <Compile Include="Helpers\Bounties\BountyType.cs" />
+    <Compile Include="Helpers\Bounties\Extensions.cs" />
+    <Compile Include="Helpers\CloneExtension.cs" />
+    <Compile Include="Helpers\Composites.cs" />
+    <Compile Include="Resources\Battle.Net API\BNetDataProvider.cs" />
+    <Compile Include="Helpers\FullyObservableCollection.cs" />
+    <Compile Include="Helpers\LookupList.cs" />
+    <Compile Include="Helpers\AquireFrameHelper.cs" />
+    <Compile Include="Helpers\SystemInformation.cs" />
+    <Compile Include="Helpers\TaskDispatcher.cs" />
+    <Compile Include="Helpers\ToStringReflector.cs" />
+    <Compile Include="Helpers\Worker.cs" />
+    <Compile Include="Helpers\XpInactivity.cs" />
+    <Compile Include="Helpers\DebugUtil.cs" />
+    <Compile Include="Helpers\DoubleInt.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\FieldCollection.cs" />
+    <Compile Include="Helpers\GameEvents.cs" />
+    <Compile Include="Coroutines\Resources\GameUI.cs" />
+    <Compile Include="Helpers\HotSpot.cs" />
+    <Compile Include="Helpers\PluginCheck.cs" />
+    <Compile Include="Helpers\ZetaCacheHelper.cs" />
+    <Compile Include="Items\CleanStash.cs" />
+    <Compile Include="Coroutines\Town\ItemEvents.cs" />
+    <Compile Include="Cache\GenericBlacklist.cs" />
+    <Compile Include="Cache\GenericCache.cs" />
+    <Compile Include="Cache\PickupItem.cs" />
+    <Compile Include="Cache\RefreshItem.cs" />
+    <Compile Include="Cache\RefreshUnit.cs" />
+    <Compile Include="Cache\TrinityItemQuality.cs" />
+    <Compile Include="Cache\CacheObstacleObject.cs" />
+    <Compile Include="Combat\TrinityPower.cs" />
+    <Compile Include="Items\CachedACDItem.cs" />
+    <Compile Include="Cache\GameBalanceDataCache.cs" />
+    <Compile Include="Items\ItemDropStats.cs" />
+    <Compile Include="Items\ItemNames.cs" />
+    <Compile Include="Items\ItemList.cs" />
+    <Compile Include="Items\ItemSort.cs" />
+    <Compile Include="Items\ItemStatsData.cs" />
+    <Compile Include="Items\ItemStatsDataFactory.cs" />
+    <Compile Include="Items\ItemWrapper.cs" />
+    <Compile Include="Helpers\GoldInactivity.cs" />
+    <Compile Include="Cache\HashGenerator.cs" />
+    <Compile Include="Helpers\MathUtil.cs" />
+    <Compile Include="Movement\Kite.cs" />
+    <Compile Include="Movement\NavHelper.cs" />
+    <Compile Include="Movement\PositionCache.cs" />
+    <Compile Include="Movement\SpeedSensor.cs" />
+    <Compile Include="Combat\TargetUtil.cs" />
+    <Compile Include="Items\TrinityItemManager.cs" />
+    <Compile Include="Helpers\UsedProfileManager.cs" />
+    <Compile Include="Configuration\Constants.cs" />
+    <Compile Include="Objects\Item.cs" />
+    <Compile Include="Objects\ItemRank.cs" />
+    <Compile Include="Objects\ItemRankData.cs" />
+    <Compile Include="Objects\Passive.cs" />
+    <Compile Include="Objects\Rune.cs" />
+    <Compile Include="Objects\Set.cs" />
+    <Compile Include="Objects\Skill.cs" />
+    <Compile Include="Reference\ItemRanks.cs" />
+    <Compile Include="Reference\ItemDataUtils.cs" />
+    <Compile Include="Reference\Legendary.cs" />
+    <Compile Include="Reference\Passives.cs" />
+    <Compile Include="Reference\PassiveUtils.cs" />
+    <Compile Include="Reference\RuneUtils.cs" />
+    <Compile Include="Reference\Runes.cs" />
+    <Compile Include="Reference\Sets.cs" />
+    <Compile Include="Reference\Skills.cs" />
+    <Compile Include="Combat\CombatMovement.cs" />
+    <Compile Include="Reference\SkillUtils.cs" />
+    <Compile Include="Settings\Combat\CrusaderSetting.cs" />
+    <Compile Include="Settings\GamblingSetting.cs" />
+    <Compile Include="Settings\ITrinitySettingEvents.cs" />
+    <Compile Include="Settings\KanaisCubeSetting.cs" />
+    <Compile Include="Settings\Loot\PresetLists.cs" />
+    <Compile Include="Settings\Loot\ItemListSettings.cs" />
+    <Compile Include="Settings\Loot\ItemRankSettings.cs" />
+    <Compile Include="Settings\Mock\ItemListMockData.cs" />
+    <Compile Include="Settings\Mock\MockData.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Combat\HandleTarget.cs" />
+    <Compile Include="Combat\AbilitySelector.cs" />
+    <Compile Include="BotManager.cs" />
+    <Compile Include="ItemRules\Core\MaxStats.cs" />
+    <Compile Include="ItemRules\Core\Parser.cs" />
+    <Compile Include="ItemRules\Core\ParseTree.cs" />
+    <Compile Include="ItemRules\Core\Scanner.cs" />
+    <Compile Include="ItemRules\Core\TextHighlighter.cs" />
+    <Compile Include="Items\PersistentStats.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\Loot\ItemEnumOptions.cs" />
+    <Compile Include="Settings\Loot\ItemRuleSetting.cs" />
+    <Compile Include="Helpers\FileManager.cs" />
+    <Compile Include="DbProvider\TownRun.cs" />
+    <Compile Include="Combat\ScheduledPower.cs" />
+    <Compile Include="Helpers\Logger.cs" />
+    <Compile Include="Helpers\LogCategory.cs" />
+    <Compile Include="Helpers\TrinitiyLogLevel.cs" />
+    <Compile Include="Items\ItemValuation.cs" />
+    <Compile Include="DbProvider\TrinityCombatProvider.cs" />
+    <Compile Include="DbProvider\BlankLootProvider.cs" />
+    <Compile Include="DbProvider\BlankObstacleProvider.cs" />
+    <Compile Include="Cache\TrinityCacheObject.cs" />
+    <Compile Include="ItemRules\Interpreter.cs" />
+    <Compile Include="Notifications\NotificationManager.cs" />
+    <Compile Include="Notifications\ProwlNotification.cs" />
+    <Compile Include="Notifications\ProwlNotificationPriority.cs" />
+    <Compile Include="Settings\AdvancedSetting.cs" />
+    <Compile Include="Settings\Combat\AvoidanceRadiusSetting.cs" />
+    <Compile Include="Settings\Combat\BarbarianSetting.cs" />
+    <Compile Include="Settings\Combat\CombatSetting.cs" />
+    <Compile Include="Settings\Combat\DemonHunterSetting.cs" />
+    <Compile Include="Settings\Combat\EnumOptions.cs" />
+    <Compile Include="Settings\Combat\IAvoidanceHealth.cs" />
+    <Compile Include="Settings\Combat\MiscCombatSetting.cs" />
+    <Compile Include="Settings\Combat\MonkSetting.cs" />
+    <Compile Include="Settings\Combat\WitchDoctorSetting.cs" />
+    <Compile Include="Settings\Combat\WizardSetting.cs" />
+    <Compile Include="Settings\ITrinitySetting.cs" />
+    <Compile Include="Settings\Loot\ItemSetting.cs" />
+    <Compile Include="Settings\Loot\PickupSetting.cs" />
+    <Compile Include="Settings\Loot\TownRunSetting.cs" />
+    <Compile Include="Settings\MailServerSetting.cs" />
+    <Compile Include="Settings\NotificationSetting.cs" />
+    <Compile Include="Settings\SettingsMigrator.cs" />
+    <Compile Include="Settings\TrinitySetting.cs" />
+    <Compile Include="Settings\WorldObjectSetting.cs" />
+    <Compile Include="Helpers\PerformanceLogger.cs" />
+    <Compile Include="Helpers\NotifyBase.cs" />
+    <Compile Include="UI\UIComponents\Behaviors\SizeObserver.cs" />
+    <Compile Include="UI\UIComponents\BindingMember.cs" />
+    <Compile Include="UI\UIComponents\BindingProxy.cs" />
+    <Compile Include="UI\UIComponents\CacheUI.cs" />
+    <Compile Include="UI\TabUI.cs" />
+    <Compile Include="UI\UIComponents\Behaviors\ComboAlwaysFireSelection.cs" />
+    <Compile Include="UI\UIComponents\Behaviors\InputBindingBehavior.cs" />
+    <Compile Include="UI\UIComponents\CacheUIDataModel.cs" />
+    <Compile Include="UI\UIComponents\Controls\AutoSizedGridView.cs" />
+    <Compile Include="UI\UIComponents\Controls\ColumnDefinitionExtended.cs" />
+    <Compile Include="UI\UIComponents\Controls\GridViewColumnExtended.cs" />
+    <Compile Include="UI\UIComponents\Converters\BoolInverterConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\BoolMultiValueConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\BoolToMarginConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\BoolToValueConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\DebugDataBindingConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\DisplayNameAttributeConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\EnumBooleanToGridLengthConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\FlagListParentUpdateMultiConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\FlagsEnumValueBasicConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\FlagsToGridLengthConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\IsEnumConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\ObjectTypeToStringConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\PropertyGridConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\PropertyToBindingMemberConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\PropertyValueConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\PropertyValuesDisabledToBoolConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\PropertyValuesDisabledToVisibilityConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\PropertyValueSourceControlTypeConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\PropertyValueToCollectionConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\SliderValueToVisibilityConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\StringFormatConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\TypeToStringConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\UrlToCachedImageConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\UrlToImageConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\ValueToCollectionConverter.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DefaultDragHandler.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DefaultDropHandler.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DragAdorner.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DragDrop.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DragInfo.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DropInfo.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DropTargetAdorner.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DropTargetAdorners.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DropTargetHighlightAdorner.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\DropTargetInsertionAdorner.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\Icons\IconFactory.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\IDragInfo.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\IDragSource.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\IDropInfo.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\IDropTarget.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\Utilities\DragDropExtensions.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\Utilities\HitTestUtilities.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\Utilities\ItemsControlExtensions.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\Utilities\TypeUtilities.cs" />
+    <Compile Include="UI\UIComponents\DragDrop-Gong\Utilities\VisualTreeExtensions.cs" />
+    <Compile Include="UI\UIComponents\Input\InputEventMonitor.cs" />
+    <Compile Include="UI\UIComponents\Input\AllInputSources.cs" />
+    <Compile Include="UI\UIComponents\Input\KeyboardInput.cs" />
+    <Compile Include="UI\UIComponents\Input\Macro.cs" />
+    <Compile Include="UI\UIComponents\Input\MouseInput.cs" />
+    <Compile Include="UI\UIComponents\Input\WindowsHookHelper.cs" />
+    <Compile Include="UI\UIComponents\IntegerStringBinding.cs" />
+    <Compile Include="UI\UIComponents\ItemList\ItemProperty.cs" />
+    <Compile Include="UI\UIComponents\ItemList\LRule.cs" />
+    <Compile Include="UI\UIComponents\Behaviors\CancelMouseBubbling.cs" />
+    <Compile Include="UI\UIComponents\Controls\ModalContentCommands.cs" />
+    <Compile Include="UI\UIComponents\Controls\ModalContentPresenter.cs" />
+    <Compile Include="UI\UIComponents\Behaviors\SelectTextOnFocus.cs" />
+    <Compile Include="UI\UIComponents\Behaviors\SelectionChangedBehaviour.cs" />
+    <Compile Include="UI\UIComponents\ConfigViewModel.cs" />
+    <Compile Include="UI\UIComponents\DeferredAction.cs" />
+    <Compile Include="UI\UIComponents\Converters\EmptyStringToVisibilityConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\EnumVisibilityConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\IntToStringConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\FlagEnumValueConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\PercentConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\EnumBooleanConverter.cs" />
+    <Compile Include="UI\UIComponents\ItemList\RuleType.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\AdaptableDateTimeAxis.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\AdaptableIncrementAxis.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\AutoAxis.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\AxisItem.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\AxisItemCollection.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\AxisStrategy.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\CanonicalSpline.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\DateTimeInterval.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\IncrementAxis.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\ItemPoint.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\ItemPointCollection.cs" />
+    <Compile Include="UI\UIComponents\LineChartLib\LineChartGenerator.cs" />
+    <Compile Include="UI\UIComponents\MarkupExtensions\WidthToColumnCountExtension.cs" />
+    <Compile Include="UI\UIComponents\PropertyValueBindingItem.cs" />
+    <Compile Include="UI\UIComponents\PropertyValueFlagBindingItem.cs" />
+    <Compile Include="UI\UIComponents\RelayCommand.cs" />
+    <Compile Include="UI\UIComponents\ItemList\LItem.cs" />
+    <Compile Include="UI\UIComponents\ThreadedWindow.cs" />
+    <Compile Include="UI\UIComponents\UIControlType.cs" />
+    <Compile Include="UI\UILoader.cs" />
+    <Compile Include="Cache\Weighting.cs" />
+    <Compile Include="Combat\TargetCheck.cs" />
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Configuration\Variables.cs" />
+    <Compile Include="Configuration\Enums.cs" />
+    <Compile Include="Configuration\DataDictionary.cs" />
+    <Compile Include="Movement\StuckHandler.cs" />
+    <Compile Include="Movement\PlayerMover.cs" />
+    <Compile Include="Cache\RefreshObject.cs" />
+    <Compile Include="Cache\RefreshObjects.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\CanvasData.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\DrawExtensions.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\Drawings.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\DrawingUtilities.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\PointMorph.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\RadarCanvas.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\RadarDebug.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\RadarHitTestUtility.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\RadarObject.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\RadarOverlayControl.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\RadarVisibilityFlags.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\RelativeDrawing.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\Resources.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\Shapes.cs" />
+    <Compile Include="UI\Visualizer\RadarCanvas\StaticDrawing.cs" />
+    <Compile Include="UI\Visualizer\VisualizerViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\Combat\SkillSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Paragon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\CacheUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Combat\ConfigMisc.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Combat\ConfigBarb.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Combat\ConfigMonk.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Combat\ConfigDH.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Combat\ConfigWiz.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Combat\ConfigWD.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Combat\Avoidance.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Combat\ConfigCrusader.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\ConfigItems.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Items\Gambling.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Items\KanaisCube.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Overlays\3D\Models\cube.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Overlays\3D\Viewport.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Overlays\Toolbar\ToolbarOverlay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\RadarUI.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\DebugTab.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Items\ConfigItemList.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Items\ConfigItemRules.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Items\ConfigNotification.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\ConfigAdvanced.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Items\ConfigScoring.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Items\ConfigPickup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\ConfigObjects.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\ConfigCombat.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Items\ConfigItemRank.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Template.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Visualizer\Visualizer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ItemRules\Rules\custom\" />
+    <Folder Include="WTV\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ItemRules\ItemRules2.txt" />
+    <Content Include="Profiles\ExploreCowLevel.xml" />
+    <Content Include="Profiles\ExploreGoblinRealm.xml" />
+    <Content Include="Resources\JS Class Generator\create_class_passives.htm" />
+    <Content Include="Resources\JS Class Generator\create_class_runes.htm" />
+    <Content Include="Resources\JS Class Generator\create_class_skills.htm" />
+    <Content Include="Resources\JS Class Generator\create_itemrank.htm" />
+    <Content Include="Resources\JS Class Generator\create_items.htm" />
+    <Content Include="Resources\JS Class Generator\create_items_BountyCacheItems.htm" />
+    <Content Include="Resources\JS Class Generator\create_items_SpecificPage.htm" />
+    <Content Include="Resources\JS Class Generator\handlebars.js" />
+    <Content Include="Resources\JS Class Generator\handlebars_helper.js" />
+    <Content Include="Resources\JS Class Generator\item-parse.js" />
+    <Content Include="Resources\JS Class Generator\item-SpecificPage.js" />
+    <Content Include="Resources\JS Class Generator\itemrank-parse.js" />
+    <Content Include="Resources\JS Class Generator\ItemReference.js" />
+    <Content Include="Resources\JS Class Generator\jquery.xdomainajax.js" />
+    <Content Include="Resources\JS Class Generator\olditemsreference.txt" />
+    <Content Include="Resources\JS Class Generator\skills.js" />
+    <Content Include="UI\UIComponents\DragDrop-Gong\Icons\EffectCopy.png" />
+    <Content Include="UI\UIComponents\DragDrop-Gong\Icons\EffectLink.png" />
+    <Content Include="UI\UIComponents\DragDrop-Gong\Icons\EffectMove.png" />
+    <Content Include="UI\UIComponents\DragDrop-Gong\Icons\EffectNone.png" />
+    <Page Include="UI\Avoidance.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ItemRules\Rules\hard\common.dis" />
+    <None Include="ItemRules\Rules\hard\legendary.dis" />
+    <None Include="ItemRules\Rules\hard\magic.dis" />
+    <None Include="ItemRules\Rules\hard\pickup.dis" />
+    <None Include="ItemRules\Rules\hard\rare.dis" />
+    <None Include="ItemRules\Rules\hard\set.dis" />
+    <None Include="ItemRules\Rules\soft\common.dis" />
+    <None Include="ItemRules\Rules\soft\legendary.dis" />
+    <None Include="ItemRules\Rules\soft\magic.dis" />
+    <None Include="ItemRules\Rules\soft\pickup.dis" />
+    <None Include="ItemRules\Rules\soft\rare.dis" />
+    <None Include="ItemRules\Rules\soft\set.dis" />
+    <None Include="ItemRules\translation.dis" />
+    <Compile Include="Settings\AvoidanceSetting.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
+  <ProjectExtensions>
+    <VisualStudio AllowExistingFolder="true" />
+  </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>"$(ProjectDir)\WTV\WTV.exe"  "$(ProjectDir)\WTV\Version.xml"  "$(ProjectDir)Version.xml"  "C:\Program Files\TortoiseSVN\bin\SubWCRev.exe"  "$(ProjectDir)." 1</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>SET TARGETDIR=C:\DB\DB-Current\Plugins\Trinity\
+
+rd "%25TARGETDIR%25" /S /Q
+xcopy "$(ProjectDir)*" "%25TARGETDIR%25" /Q /E /C /I /R /Y
+rd "%25TARGETDIR%25bin\" /S /Q
+rd "%25TARGETDIR%25obj\" /S /Q
+rd "%25TARGETDIR%25WTV\" /S /Q
+del "%25TARGETDIR%25$(ProjectName).csproj"
+del "%25TARGETDIR%25*.suo"
+del "%25TARGETDIR%25*.user"
+del "%25TARGETDIR%25*.sln"
+del "%25TARGETDIR%25*.DotSettings"
+del "%25TARGETDIR%25packages.config"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

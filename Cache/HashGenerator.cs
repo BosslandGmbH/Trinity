@@ -15,7 +15,7 @@ namespace Trinity
 
         public static string GenerateItemHash(TrinityCacheObject item)
         {
-            return GenerateItemHash(item.Position, item.ActorSNO, item.InternalName, Trinity.Player.WorldID, item.ItemQuality, item.ItemLevel);
+            return GenerateItemHash(item.Position, item.ActorSNO, item.InternalName, TrinityPlugin.Player.WorldID, item.ItemQuality, item.ItemLevel);
         }
 
         /// <summary>
@@ -48,11 +48,11 @@ namespace Trinity
             {
                 string objHashBase;
                 if (obj.Type == TrinityObjectType.Unit)
-                    objHashBase = obj.ActorSNO + obj.InternalName + obj.Position + obj.Type + Trinity.CurrentWorldDynamicId;
+                    objHashBase = obj.ActorSNO + obj.InternalName + obj.Position + obj.Type + TrinityPlugin.CurrentWorldDynamicId;
                 else if (obj.Type == TrinityObjectType.Item)
-                    return GenerateItemHash(obj.Position, obj.ActorSNO, obj.InternalName, Trinity.CurrentWorldId, obj.ItemQuality, obj.ItemLevel);
+                    return GenerateItemHash(obj.Position, obj.ActorSNO, obj.InternalName, TrinityPlugin.CurrentWorldId, obj.ItemQuality, obj.ItemLevel);
                 else
-                    objHashBase = String.Format("{0}{1}{2}{3}", obj.ActorSNO, obj.Position, obj.Type, Trinity.CurrentWorldDynamicId);
+                    objHashBase = String.Format("{0}{1}{2}{3}", obj.ActorSNO, obj.Position, obj.Type, TrinityPlugin.CurrentWorldDynamicId);
 
                 string objHash = GetMd5Hash(md5, objHashBase);
                 return objHash;

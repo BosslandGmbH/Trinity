@@ -29,10 +29,10 @@ namespace Trinity.Coroutines
 
         public async Task<bool> Execute()
         {
-            if (!Trinity.Settings.Loot.Pickup.AutoEquipSkills)
+            if (!TrinityPlugin.Settings.Loot.Pickup.AutoEquipSkills)
                 return false;
 
-            if (!Trinity.Player.IsValid || ZetaDia.Me == null || !ZetaDia.IsInGame || !ZetaDia.Me.IsValid || ZetaDia.Me.CommonData == null || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed)
+            if (!TrinityPlugin.Player.IsValid || ZetaDia.Me == null || !ZetaDia.IsInGame || !ZetaDia.Me.IsValid || ZetaDia.Me.CommonData == null || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed)
                 return false;
 
             var level = ZetaDia.Me.Level;
@@ -44,7 +44,7 @@ namespace Trinity.Coroutines
 
             _lastSkillChange = DateTime.UtcNow;
 
-            if (DateTime.UtcNow.Subtract(Trinity.BotStartTime).TotalSeconds < 10)
+            if (DateTime.UtcNow.Subtract(TrinityPlugin.BotStartTime).TotalSeconds < 10)
                 return false;
        
             if (_lastLevel == level)
@@ -63,8 +63,8 @@ namespace Trinity.Coroutines
 
         private async Task<bool> Equip()
         {           
-            var builds = GetBuildsForClass(Trinity.Player.ActorClass);
-            var build = builds.OrderByDescending(b => b.Level).FirstOrDefault(b => b.Level <= Trinity.Player.Level);
+            var builds = GetBuildsForClass(TrinityPlugin.Player.ActorClass);
+            var build = builds.OrderByDescending(b => b.Level).FirstOrDefault(b => b.Level <= TrinityPlugin.Player.Level);
             if (build == null)
                 return false;
 

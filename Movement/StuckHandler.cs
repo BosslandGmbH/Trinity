@@ -2,28 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Trinity.DbProvider;
-using Trinity.Technicals;
-using Zeta.Bot.Navigation;
-using Zeta.Common;
-using Zeta.Game;
-using Zeta.TreeSharp;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Buddy.Coroutines;
 using Trinity.Combat.Abilities;
+using Trinity.DbProvider;
+using Trinity.Technicals;
 using Zeta.Bot;
-using Zeta.Bot.Coroutines;
+using Zeta.Bot.Navigation;
 using Zeta.Bot.Profile;
 using Zeta.Bot.Profile.Common;
+using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Action = Zeta.TreeSharp.Action;
 using Logger = Trinity.Technicals.Logger;
 
 
 
-namespace Trinity
+namespace Trinity.Movement
 {
     public class StuckHandler : IStuckHandler
     {
@@ -125,7 +120,7 @@ namespace Trinity
 
         private bool IsNotStuck()
         {
-            if (Trinity.Settings.Advanced.DisableAllMovement)
+            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
                 return true;
 
             if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid)
@@ -155,7 +150,7 @@ namespace Trinity
             if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds < 4)
                 return true;
 
-            if (DateTime.UtcNow.Subtract(Trinity.BotStartTime).TotalSeconds < 10)
+            if (DateTime.UtcNow.Subtract(TrinityPlugin.BotStartTime).TotalSeconds < 10)
                 return true;
 
             if (_busyAnimationStates.Contains(ZetaDia.Me.CommonData.AnimationState))
@@ -212,7 +207,6 @@ namespace Trinity
                     return true;
                 }
             }
-
             return false;
         }
 
@@ -272,7 +266,7 @@ namespace Trinity
         {
             var circlePoints = GetCirclePoints(10, 30, ZetaDia.Me.Position);
             //var validatedPoints = circlePoints.Where(p => Navigator.Raycast(ZetaDia.Me.Position, p)).ToList();
-            var validatedPoints = circlePoints.Where(p => Trinity.MainGridProvider.CanStandAt(p)).ToList();
+            var validatedPoints = circlePoints.Where(p => TrinityPlugin.MainGridProvider.CanStandAt(p)).ToList();
             return RandomShuffle(validatedPoints);
         }
 

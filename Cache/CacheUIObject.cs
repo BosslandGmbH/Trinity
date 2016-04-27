@@ -65,7 +65,7 @@ namespace Trinity.Cache
                 }
                 catch {}
 
-                var cacheObject = Trinity.ObjectCache.FirstOrDefault(o => o.RActorGuid == RActorGUID);
+                var cacheObject = TrinityPlugin.ObjectCache.FirstOrDefault(o => o.RActorGuid == RActorGUID);
                 if (cacheObject == null)
                 {
                     Type = obj.ActorType.ToString();

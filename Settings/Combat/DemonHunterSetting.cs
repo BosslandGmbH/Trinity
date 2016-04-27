@@ -68,6 +68,15 @@ namespace Trinity.Config.Combat
         private bool _useShadowPowerWhileAvoiding;
         private bool _useShadowPowerWhenSurrounded;
         private bool _spamShadowPowerWhenElitesNearby;
+        private int _clusterSizeCompanionWolf;
+        private int _clusterSizeChakram;
+        private int _castRangeImpale;
+        private int _castRangeChakram;
+        private int _castRangeClusterArrow;
+        private int _castRangeEvasiveFire;
+        private int _clusterSizeImpale;
+        private bool _alwaysVengeance;
+        private int _clusterSizeEvasiveFire;
 
         #endregion Events
 
@@ -1013,6 +1022,153 @@ namespace Trinity.Config.Combat
                 {
                     _shadowPowerHealth = value;
                     OnPropertyChanged("ShadowPowerHealth");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(8)]
+        public int ClusterSizeCompanionWolf
+        {
+            get
+            {
+                return _clusterSizeCompanionWolf;
+            }
+            set
+            {
+                if (_clusterSizeCompanionWolf != value)
+                {
+                    _clusterSizeCompanionWolf = value;
+                    OnPropertyChanged("ClusterSizeCompanionWolf");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(4)]
+        public int ClusterSizeChakram
+        {
+            get
+            {
+                return _clusterSizeChakram;
+            }
+            set
+            {
+                if (_clusterSizeChakram != value)
+                {
+                    _clusterSizeChakram = value;
+                    OnPropertyChanged("ClusterSizeChakram");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(4)]
+        public int ClusterSizeImpale
+        {
+            get
+            {
+                return _clusterSizeImpale;
+            }
+            set
+            {
+                if (_clusterSizeImpale != value)
+                {
+                    _clusterSizeImpale = value;
+                    OnPropertyChanged("ClusterSizeImpale");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(1)]
+        public int ClusterSizeEvasiveFire
+        {
+            get
+            {
+                return _clusterSizeEvasiveFire;
+            }
+            set
+            {
+                if (_clusterSizeEvasiveFire != value)
+                {
+                    _clusterSizeEvasiveFire = value;
+                    OnPropertyChanged("ClusterSizeEvasiveFire");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(80)]
+        public int CastRangeImpale
+        {
+            get { return _castRangeImpale; }
+            set
+            {
+                if (_castRangeImpale != value)
+                {
+                    _castRangeImpale = value;
+                    OnPropertyChanged("CastRangeImpale");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(50)]
+        public int CastRangeChakram
+        {
+            get { return _castRangeChakram; }
+            set
+            {
+                if (_castRangeChakram != value)
+                {
+                    _castRangeChakram = value;
+                    OnPropertyChanged("CastRangeChakram");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(75)]
+        public int CastRangeClusterArrow
+        {
+            get { return _castRangeClusterArrow; }
+            set
+            {
+                if (_castRangeClusterArrow != value)
+                {
+                    _castRangeClusterArrow = value;
+                    OnPropertyChanged("CastRangeClusterArrow");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(75)]
+        public int CastRangeEvasiveFire
+        {
+            get { return _castRangeEvasiveFire; }
+            set
+            {
+                if (_castRangeEvasiveFire != value)
+                {
+                    _castRangeEvasiveFire = value;
+                    OnPropertyChanged("CastRangeEvasiveFire");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool AlwaysVengeance
+        {
+            get { return _alwaysVengeance; }
+            set
+            {
+                if (_alwaysVengeance != value)
+                {
+                    _alwaysVengeance = value;
+                    OnPropertyChanged("AlwaysVengeance");
                 }
             }
         }

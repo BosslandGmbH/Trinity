@@ -8,8 +8,11 @@ namespace Trinity.Framework.Objects.Enums
 {
     public enum SnoType
     {
+        Code = -2,
+        None = -1,
         Actor = 1,
         Adventure = 2,
+        AiBehavior = 3,
         AmbientSound = 5,
         Anim = 6,
         Anim2D = 7,
@@ -38,6 +41,7 @@ namespace Trinity.Framework.Objects.Enums
         Rope = 32,
         Scene = 33,
         SceneGroup = 34,
+        Script = 35,
         ShaderMap = 36,
         Shaders = 37,
         Shakes = 38,

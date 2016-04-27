@@ -28,261 +28,14 @@ using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Items
 {
-    public class TrinityItemManager //: ItemManager
+    public class TrinityItemManager 
     {
-        //private RuleTypePriority _priority;
-
         static TrinityItemManager()
         {
             ItemEvents.OnItemStashed += TrinityOnItemStashed;
             ItemEvents.OnItemSalvaged += TrinityOnItemSalvaged;
             ItemEvents.OnItemSold += TrinityOnItemSold;
         }
-
-        //public override RuleTypePriority Priority
-        //{
-        //    get
-        //    {               
-        //        if (_priority == null)
-        //        {
-        //            _priority = new RuleTypePriority
-        //            {
-        //                Priority1 = ItemEvaluationType.Keep,
-        //                Priority2 = ItemEvaluationType.Salvage,
-        //                Priority3 = ItemEvaluationType.Sell
-        //            };
-        //        }
-        //        return _priority;
-        //    }
-        //}
-
-        //public override bool EvaluateItem(ACDItem item, ItemEvaluationType evaluationType)
-        //{
-        //    try
-        //    {
-        //        //Logger.LogVerbose(LogCategory.ItemValuation, "EvaluateItem Called Item={0} ({1}) IsUnidentified={2} EvaluationType={3} IsValid={4} IsDisposed={5} ActorType={6} IsInTown={7} IsLoadingWorld={8} FreeBackpackSlots={9} UnidentifiedInBackpack={10}", 
-        //        //    item.InternalName, item.ActorSnoId, item.IsUnidentified, evaluationType, item.IsValid, item.IsDisposed, item.ActorType, ZetaDia.IsInTown, 
-        //        //    ZetaDia.IsLoadingWorld, ZetaDia.Me.Inventory.NumFreeBackpackSlots, ZetaDia.Me.Inventory.Backpack.Count(i => i.IsUnidentified));
-
-        //        // Salvage/Sell/Stashing is disabled during greater rifts
-        //        if (Trinity.Player.IsInventoryLockedForGreaterRift || !Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
-        //            return false;
-
-        //        if (!item.IsValid || item.IsDisposed || item.ActorType != ActorType.Item)
-        //        {
-        //            Logger.LogVerbose(LogCategory.ItemValuation, "ItemManager.EvaluateItem: Bad Item Data Detected: IsValid={0} IsDisposed={1}",
-        //                item.IsValid, item.IsDisposed);
-
-        //            return evaluationType == ItemEvaluationType.Keep;
-        //        }
-
-        //        if (item.IsUnidentified)
-        //        {
-        //            Logger.LogVerbose(LogCategory.ItemValuation, "Item has not been identified yet. {0}", item.Name);
-        //            return evaluationType == ItemEvaluationType.Keep;
-        //        }
-
-        //        if (Trinity.Settings.Loot.ItemFilterMode != ItemFilterMode.DemonBuddy)
-        //        {
-        //            Current.EvaluateItem(item, evaluationType);
-        //        }
-        //        else
-        //        {
-        //            switch (evaluationType)
-        //            {
-        //                case ItemEvaluationType.Keep:
-        //                    return ShouldStashItem(item);
-        //                case ItemEvaluationType.Salvage:
-        //                    return ShouldSalvageItem(item);
-        //                case ItemEvaluationType.Sell:
-        //                    return ShouldSellItem(item);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.LogError("Exception in TrinityItemManager.EvaluateItem {0}", ex);
-        //    }
-        //    return false;
-        //}
-
-        //public override bool ShouldSalvageItem(ACDItem item)
-        //{
-        //    try
-        //    {
-        //        //Logger.Log(LogCategory.ItemValuation, "ShouldSalvageItem Called Item={0} ({1}) IsUnidentified={2} IsValid={3} IsDisposed={4} ActorType={5} IsInTown={6} IsLoadingWorld={7} FreeBackpackSlots={8} UnidentifiedBackpackItems={9}",
-        //        //    item.InternalName, item.ActorSnoId, item.IsUnidentified, item.IsValid, item.IsDisposed, item.ActorType, ZetaDia.IsInTown, 
-        //        //    ZetaDia.IsLoadingWorld, ZetaDia.Me.Inventory.NumFreeBackpackSlots, ZetaDia.Me.Inventory.Backpack.Count(i => i.IsUnidentified));
-
-
-        //        if (Trinity.Player.IsInventoryLockedForGreaterRift || !Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
-        //        {
-        //            Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Salvage=False (Greater Rift / Inventory Locked) Item={item.Name} ({item.ActorSnoId})");
-        //            return false;
-        //        }
-
-        //        if (item.IsUnidentified)
-        //        {
-        //            Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Salvage=False (Unidentified) Item={item.Name} ({item.ActorSnoId})");
-        //            return true;
-        //        }
-
-        //        bool action;
-        //        action = ShouldSalvageItem(item, ItemEvaluationType.Salvage);
-        //        if (action)
-        //            ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetCachedItem(item), "Salvage");
-
-        //        Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Salvage={action} Item={item.Name} ({item.ActorSnoId})");
-        //        return action;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.LogError("Exception in TrinityItemManager.ShouldSalvageItem {0}", ex);
-        //    }
-        //    return false;
-        //}
-
-        //public bool ShouldSalvageItem(ACDItem item, ItemEvaluationType evaluationType)
-        //{
-        //    //ItemEvents.ResetTownRun();
-
-        //    if (Current.ItemIsProtected(item))
-        //        return false;
-
-        //    // Keep any high gems placed in backpack while levelling, so we can socket items with them.
-        //    if (item.IsGem && item.GemQuality >= GemQuality.Marquise && ZetaDia.Me.Level < 70)
-        //    {
-        //        return false;
-        //    }
-
-        //    if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.DemonBuddy)
-        //    {
-        //        return Current.ShouldSalvageItem(item);
-        //    }
-        //    if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
-        //    {
-        //        return ItemRulesSalvageSell(item, evaluationType);
-        //    }
-        //    return TrinitySalvage(new CachedItem(item));
-        //}
-
-        //public override bool ShouldSellItem(ACDItem item)
-        //{
-        //    try
-        //    {
-        //        //Logger.Log(LogCategory.ItemValuation, "ShouldSellItem Called Item={0} ({1}) IsUnidentified={2} IsValid={3} IsDisposed={4} ActorType={5} IsInTown={6} IsLoadingWorld={7} FreeBackpackSlots={8} UnidentifiedBackpackItems={9}",
-        //        //    item.InternalName, item.ActorSnoId, item.IsUnidentified, item.IsValid, item.IsDisposed, item.ActorType, ZetaDia.IsInTown,
-        //        //    ZetaDia.IsLoadingWorld, ZetaDia.Me.Inventory.NumFreeBackpackSlots, ZetaDia.Me.Inventory.Backpack.Count(i => i.IsUnidentified));
-
-        //        if (Trinity.Player.IsInventoryLockedForGreaterRift || !Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
-        //        {
-        //            Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Sell=False (Greater Rift / Inventory Locked) Item={item.Name} ({item.ActorSnoId})");
-        //            return false;
-        //        }
-
-        //        if (item.IsUnidentified)
-        //        {
-        //            Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Sell=False (Unidentified) Item={item.Name} ({item.ActorSnoId})");
-        //            return true;
-        //        }
-
-        //        bool action = ShouldSellItem(item, ItemEvaluationType.Sell);
-
-        //        if (item.IsVendorBought && (action || ShouldSalvageItem(item)))
-        //        {
-        //            Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Sell=True (Vendor Purchased / Can't be Salvaged) Item={item.Name} ({item.ActorSnoId})");
-        //            action = true;
-        //        }
-
-        //        if (action)
-        //            ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetCachedItem(item), "Sell");
-
-        //        Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Sell={action} Item={item.Name} ({item.ActorSnoId})");
-        //        return action;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.LogError("Exception in TrinityItemManager.ShouldSellItem {0}", ex);
-        //    }
-        //    return false;
-        //}
-
-        //public bool ShouldSellItem(ACDItem item, ItemEvaluationType evaluationType)
-        //{
-        //    //ItemEvents.ResetTownRun();
-
-        //    if (Current.ItemIsProtected(item))
-        //        return false;
-
-        //    // Keep any high gems placed in backpack while levelling, so we can socket items with them.
-        //    if (item.IsGem && item.GemQuality >= GemQuality.Marquise && ZetaDia.Me.Level < 70)
-        //    {
-        //        return false;
-        //    }
-
-        //    if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.DemonBuddy)
-        //    {
-        //        return Current.ShouldSellItem(item);
-        //    }
-        //    if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
-        //    {
-        //        return ItemRulesSalvageSell(item, evaluationType);
-        //    }
-
-        //    var cItem = new CachedItem(item);
-
-        //    // Dont sell if we should salvage
-        //    if (TrinitySalvage(cItem))
-        //        return false;
-
-        //    return TrinitySell(cItem);
-        //}
-
-        //public override bool ShouldStashItem(ACDItem item)
-        //{
-        //    try
-        //    {
-        //        if (Trinity.Player.IsInventoryLockedForGreaterRift || !Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
-        //        {
-        //            Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Stash=False (Greater Rift / Inventory Locked) Item={item.Name} ({item.ActorSnoId})");
-        //            return false;
-        //        }
-
-        //        if (item.IsUnidentified)
-        //        {
-        //            Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Stash=False (Unidentified) Item={item.Name} ({item.ActorSnoId})");
-        //            return true;
-        //        }
-
-        //        if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.DemonBuddy)
-        //        {
-        //            return Current.ShouldStashItem(item);
-        //        }
-
-        //        bool action = TrinityStash(new CachedItem(item));
-
-        //        if (action)
-        //            ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetCachedItem(item), "Stash");
-           
-        //        //if (item.ItemQualityLevel >= ItemQuality.Legendary && Trinity.Settings.Loot.TownRun.DropInTownOption == DropInTownOption.All)
-        //        //    ItemDropper.Drop(item);
-
-        //        //if (action && item.ItemQualityLevel >= ItemQuality.Legendary && Trinity.Settings.Loot.TownRun.DropInTownOption == DropInTownOption.Keep)
-        //        //    ItemDropper.Drop(item);
-
-        //        //if (!action && item.ItemQualityLevel >= ItemQuality.Legendary && Trinity.Settings.Loot.TownRun.DropInTownOption == DropInTownOption.Vendor)
-        //        //    ItemDropper.Drop(item);
-
-        //        Logger.LogVerbose(LogCategory.ItemValuation, $"[ItemManager] Stash={action} Item={item.Name} ({item.ActorSnoId})");
-        //        return action;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.LogError("Exception in TrinityItemManager.ShouldStashItem {0}", ex);
-        //    }
-        //    return false;
-        //}
-
         public static bool TrinityDrop(CachedItem item, ItemEvaluationType scheduledAction)
         {
             if (item.IsProtected() || item.IsAccountBound)
@@ -296,9 +49,9 @@ namespace Trinity.Items
 
             if (item.ItemQualityLevel >= ItemQuality.Legendary)
             {
-                if (Trinity.Settings.Loot.TownRun.DropInTownOption == DropInTownOption.All)
+                if (TrinityPlugin.Settings.Loot.TownRun.DropInTownOption == DropInTownOption.All)
                 {
-                    Logger.LogVerbose($"Should Drop {item.Name} - Setting='{Trinity.Settings.Loot.TownRun.DropInTownOption}'");
+                    Logger.LogVerbose($"Should Drop {item.Name} - Setting='{TrinityPlugin.Settings.Loot.TownRun.DropInTownOption}'");
                     return true;
                 }
 
@@ -306,9 +59,9 @@ namespace Trinity.Items
                 {
                     case ItemEvaluationType.Keep:
 
-                        if (Trinity.Settings.Loot.TownRun.DropInTownOption == DropInTownOption.Keep)
+                        if (TrinityPlugin.Settings.Loot.TownRun.DropInTownOption == DropInTownOption.Keep)
                         {
-                            Logger.LogVerbose($"Should Drop {item.Name} - Setting='{Trinity.Settings.Loot.TownRun.DropInTownOption}' and item is scheduled for {scheduledAction}");
+                            Logger.LogVerbose($"Should Drop {item.Name} - Setting='{TrinityPlugin.Settings.Loot.TownRun.DropInTownOption}' and item is scheduled for {scheduledAction}");
                             return true;
                         }
 
@@ -317,9 +70,9 @@ namespace Trinity.Items
                     case ItemEvaluationType.Salvage:
                     case ItemEvaluationType.Sell:
 
-                        if (Trinity.Settings.Loot.TownRun.DropInTownOption == DropInTownOption.Vendor)
+                        if (TrinityPlugin.Settings.Loot.TownRun.DropInTownOption == DropInTownOption.Vendor)
                         {
-                            Logger.LogVerbose($"Should Drop {item.Name} - Setting='{Trinity.Settings.Loot.TownRun.DropInTownOption}' and item is scheduled for {scheduledAction}");
+                            Logger.LogVerbose($"Should Drop {item.Name} - Setting='{TrinityPlugin.Settings.Loot.TownRun.DropInTownOption}' and item is scheduled for {scheduledAction}");
                             return true;
                         }
 
@@ -331,7 +84,7 @@ namespace Trinity.Items
         }
 
         /// <summary>
-        /// Trinity internal stashing checks
+        /// TrinityPlugin internal stashing checks
         /// </summary>
         /// <param name="item">The item.</param>
         /// <param name="evaluationType">Type of the evaluation.</param>
@@ -343,12 +96,12 @@ namespace Trinity.Items
             if (item.IsProtected())
                 return false;
 
-            if (Trinity.Player.IsInventoryLockedForGreaterRift || !Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
+            if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
                 return false;
 
             // Vanity Items
             if (DataDictionary.VanityItems.Any(i => item.InternalName.StartsWith(i)))
-                return Trinity.Settings.Loot.TownRun.StashVanityItems;
+                return TrinityPlugin.Settings.Loot.TownRun.StashVanityItems;
 
             //CachedACDItem cItem = CachedACDItem.GetCachedItem(item);
 
@@ -357,7 +110,7 @@ namespace Trinity.Items
             TrinityItemBaseType tBaseType = item.TrinityItemBaseType; // DetermineBaseType(trinityItemType);
 
             // ItemRules - Always stash ancients setting
-            if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules && Trinity.Settings.Loot.ItemRules.AlwaysStashAncients && item.IsAncient)
+            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules && TrinityPlugin.Settings.Loot.ItemRules.AlwaysStashAncients && item.IsAncient)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (STASHING: ItemRules Option - Always Stash Ancients)", item.Name, item.InternalName);
                 return true;
@@ -370,7 +123,7 @@ namespace Trinity.Items
             }
 
             // ItemList - Always stash ancients setting
-            if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && Trinity.Settings.Loot.ItemList.AlwaysStashAncients && item.IsAncient)
+            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && TrinityPlugin.Settings.Loot.ItemList.AlwaysStashAncients && item.IsAncient)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (STASHING: ItemList Option - Always Stash Ancients)", item.Name, item.InternalName);
                 return true;
@@ -379,7 +132,7 @@ namespace Trinity.Items
             // ItemList - Always sell/salvage non-ancients setting
             var isArmorWeaponOrJewellery = item.ItemBaseType == ItemBaseType.Armor || item.ItemBaseType == ItemBaseType.Jewelry || item.ItemBaseType == ItemBaseType.Weapon;
 
-            if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && Trinity.Settings.Loot.ItemList.AlwaysTrashNonAncients && 
+            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && TrinityPlugin.Settings.Loot.ItemList.AlwaysTrashNonAncients && 
                 !item.IsAncient && item.ItemQualityLevel >= ItemQuality.Legendary && isArmorWeaponOrJewellery)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (TRASHING: ItemList Option - Always Sell/Salvage Non-Ancients) IsAncient={2} IsUnidentified={3}", item.Name, item.InternalName, item.IsAncient, item.IsUnidentified);
@@ -393,7 +146,7 @@ namespace Trinity.Items
                 tBaseType == TrinityItemBaseType.WeaponRange ||
                 tBaseType == TrinityItemBaseType.WeaponTwoHand);
 
-            //if (Trinity.Settings.Loot.TownRun.ApplyPickupValidationToStashing)
+            //if (TrinityPlugin.Settings.Loot.TownRun.ApplyPickupValidationToStashing)
             //{
             //    // Check pickup (in case we accidentally picked it up)
             //    var pItem = new PickupItem(item, tBaseType, tItemType);
@@ -408,14 +161,14 @@ namespace Trinity.Items
 
             if (item.ItemType == ItemType.KeystoneFragment)
             {
-                //if ((Trinity.Settings.Loot.TownRun.KeepTieredLootRunKeysInBackpack && item.TieredLootRunKeyLevel >= 1) ||
-                //(Trinity.Settings.Loot.TownRun.KeepTrialLootRunKeysInBackpack && item.TieredLootRunKeyLevel == 0) ||
-                //(Trinity.Settings.Loot.TownRun.KeepRiftKeysInBackpack && item.TieredLootRunKeyLevel <= -1))
+                //if ((TrinityPlugin.Settings.Loot.TownRun.KeepTieredLootRunKeysInBackpack && item.TieredLootRunKeyLevel >= 1) ||
+                //(TrinityPlugin.Settings.Loot.TownRun.KeepTrialLootRunKeysInBackpack && item.TieredLootRunKeyLevel == 0) ||
+                //(TrinityPlugin.Settings.Loot.TownRun.KeepRiftKeysInBackpack && item.TieredLootRunKeyLevel <= -1))
                 //    return false;
                 return true;
             }
 
-            if (item.TrinityItemType == TrinityItemType.HoradricCache && Trinity.Settings.Loot.TownRun.OpenHoradricCaches)
+            if (item.TrinityItemType == TrinityItemType.HoradricCache && TrinityPlugin.Settings.Loot.TownRun.OpenHoradricCaches)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (ignoring Horadric Cache)", item.Name, item.InternalName);
                 return false;
@@ -441,33 +194,33 @@ namespace Trinity.Items
                 //    // This is really slow, turning it off.
                 //    //var stackCount = GetItemStackCount(item, InventorySlot.SharedStash);
 
-                //    //if (craftMaterialType == InventoryItemType.ArcaneDust && stackCount >= Trinity.Settings.Loot.TownRun.MaxStackArcaneDust)
+                //    //if (craftMaterialType == InventoryItemType.ArcaneDust && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackArcaneDust)
                 //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, Trinity.Settings.Loot.TownRun.MaxStackArcaneDust);
+                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackArcaneDust);
                 //    //    return false;
                 //    //}
 
-                //    //if (craftMaterialType == InventoryItemType.DeathsBreath && stackCount >= Trinity.Settings.Loot.TownRun.MaxStackDeathsBreath)
+                //    //if (craftMaterialType == InventoryItemType.DeathsBreath && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackDeathsBreath)
                 //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, Trinity.Settings.Loot.TownRun.MaxStackDeathsBreath);
+                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackDeathsBreath);
                 //    //    return false;
                 //    //}
 
-                //    //if (craftMaterialType == InventoryItemType.ForgottenSoul && stackCount >= Trinity.Settings.Loot.TownRun.MaxStackForgottenSoul)
+                //    //if (craftMaterialType == InventoryItemType.ForgottenSoul && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackForgottenSoul)
                 //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, Trinity.Settings.Loot.TownRun.MaxStackForgottenSoul);
+                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackForgottenSoul);
                 //    //    return false;
                 //    //}
 
-                //    //if (craftMaterialType == InventoryItemType.ReusableParts && stackCount >= Trinity.Settings.Loot.TownRun.MaxStackReusableParts)
+                //    //if (craftMaterialType == InventoryItemType.ReusableParts && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackReusableParts)
                 //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, Trinity.Settings.Loot.TownRun.MaxStackReusableParts);
+                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackReusableParts);
                 //    //    return false;
                 //    //}
 
-                //    //if (craftMaterialType == InventoryItemType.VeiledCrystal && stackCount >= Trinity.Settings.Loot.TownRun.MaxStackVeiledCrystal)
+                //    //if (craftMaterialType == InventoryItemType.VeiledCrystal && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackVeiledCrystal)
                 //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, Trinity.Settings.Loot.TownRun.MaxStackVeiledCrystal);
+                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackVeiledCrystal);
                 //    //    return false;
                 //    //}
                 //}
@@ -494,7 +247,7 @@ namespace Trinity.Items
 
             if (tItemType == TrinityItemType.HealthPotion && item.ItemQualityLevel >= ItemQuality.Legendary)
             {
-                var shouldStash = Trinity.Settings.Loot.TownRun.StashLegendaryPotions;
+                var shouldStash = TrinityPlugin.Settings.Loot.TownRun.StashLegendaryPotions;
                     Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = ({3} legendary potions)", item.Name, item.InternalName, tItemType,
                         shouldStash ? "stashing" : "ignoring");
                 return shouldStash;
@@ -536,9 +289,9 @@ namespace Trinity.Items
                 return false;
             }
 
-            if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
             {
-                Interpreter.InterpreterAction action = Trinity.StashRule.checkItem(item.GetAcdItem(), ItemEvaluationType.Keep);
+                Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkItem(item.GetAcdItem(), ItemEvaluationType.Keep);
 
                     Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "IR2 {0} [{1}] [{2}] = (" + action + ")", item.Name, item.InternalName, item.ItemType);
                 switch (action)
@@ -560,7 +313,7 @@ namespace Trinity.Items
             }
 
             // Stashing Whites, auto-keep
-            if (Trinity.Settings.Loot.TownRun.StashWhites && isEquipment && item.ItemQualityLevel <= ItemQuality.Superior)
+            if (TrinityPlugin.Settings.Loot.TownRun.StashWhites && isEquipment && item.ItemQualityLevel <= ItemQuality.Superior)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (stashing whites)", item.Name, item.InternalName, tItemType);
                 return true;
@@ -573,7 +326,7 @@ namespace Trinity.Items
             }
 
             // Stashing blues, auto-keep
-            if (Trinity.Settings.Loot.TownRun.StashBlues && isEquipment && item.ItemQualityLevel >= ItemQuality.Magic1 && item.ItemQualityLevel <= ItemQuality.Magic3)
+            if (TrinityPlugin.Settings.Loot.TownRun.StashBlues && isEquipment && item.ItemQualityLevel >= ItemQuality.Magic1 && item.ItemQualityLevel <= ItemQuality.Magic3)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (stashing blues)", item.Name, item.InternalName, tItemType);
                 return true;
@@ -586,14 +339,14 @@ namespace Trinity.Items
             }
 
             // Force salvage Rares
-            if (Trinity.Settings.Loot.TownRun.ForceSalvageRares && item.ItemQualityLevel >= ItemQuality.Rare4 && item.ItemQualityLevel <= ItemQuality.Rare6 && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
+            if (TrinityPlugin.Settings.Loot.TownRun.ForceSalvageRares && item.ItemQualityLevel >= ItemQuality.Rare4 && item.ItemQualityLevel <= ItemQuality.Rare6 && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (force salvage rare)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
             // Item List
-            if (item.ItemQualityLevel >= ItemQuality.Legendary && Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
+            if (item.ItemQualityLevel >= ItemQuality.Legendary && TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
                 var result = ItemList.ShouldStashItem(item);
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, "ItemListCheck=" + (result ? "KEEP" : "TRASH"));
@@ -628,7 +381,7 @@ namespace Trinity.Items
                     evaluationType, item.ItemQualityLevel, item.Level, item.ItemBaseType,
                     item.ItemType, item.IsOneHand ? "1H" : item.IsTwoHand ? "2H" : "NH");
 
-            Interpreter.InterpreterAction action = Trinity.StashRule.checkItem(item, ItemEvaluationType.Salvage);
+            Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkItem(item, ItemEvaluationType.Salvage);
 
             switch (action)
             {
@@ -639,7 +392,7 @@ namespace Trinity.Items
                     Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0}: {1}", evaluationType, (evaluationType == ItemEvaluationType.Sell));
                     return action;
                 default:
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.ScriptRule, "Trinity, item is unhandled by ItemRules (SalvageSell)!");
+                    Logger.Log(TrinityLogLevel.Info, LogCategory.ScriptRule, "TrinityPlugin, item is unhandled by ItemRules (SalvageSell)!");
                     return Interpreter.InterpreterAction.NULL;
             }
         }
@@ -657,7 +410,7 @@ namespace Trinity.Items
             if (item.IsUnidentified)
                 return false;
 
-            if (Trinity.Player.IsInventoryLockedForGreaterRift || !Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
+            if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
                 return false;
 
             if (!item.IsSalvageable)
@@ -670,15 +423,19 @@ namespace Trinity.Items
             if (item.ItemType == ItemType.KeystoneFragment)
                 return false;
 
+            // Unable to savlage starter items.
+            if (item.RequiredLevel <= 1 && item.ItemQualityLevel == ItemQuality.Normal)
+                return false;
+
             // Stashing Whites
-            if (Trinity.Settings.Loot.TownRun.StashWhites && item.ItemQualityLevel < ItemQuality.Magic1)
+            if (TrinityPlugin.Settings.Loot.TownRun.StashWhites && item.ItemQualityLevel < ItemQuality.Magic1)
                 return false;
 
             // Stashing Blues
-            if (Trinity.Settings.Loot.TownRun.StashBlues && item.ItemQualityLevel > ItemQuality.Superior && item.ItemQualityLevel < ItemQuality.Rare4)
+            if (TrinityPlugin.Settings.Loot.TownRun.StashBlues && item.ItemQualityLevel > ItemQuality.Superior && item.ItemQualityLevel < ItemQuality.Rare4)
                 return false;
 
-            if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
             {
                 var result = ItemRulesSalvageSell(item.GetAcdItem(), ItemEvaluationType.Salvage);
                 switch (result)
@@ -734,7 +491,7 @@ namespace Trinity.Items
             if (item.IsUnidentified)
                 return false;
 
-            if (Trinity.Player.IsInventoryLockedForGreaterRift || !Trinity.Settings.Loot.TownRun.KeepLegendaryUnid && Trinity.Player.ParticipatingInTieredLootRun)
+            if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
                 return false;
 
             if (item.IsVendorBought)
@@ -755,7 +512,7 @@ namespace Trinity.Items
             if (item.ItemType == ItemType.HoradricCache)
                 return false;
 
-            //if (Trinity.Settings.Loot.TownRun.ApplyPickupValidationToStashing)
+            //if (TrinityPlugin.Settings.Loot.TownRun.ApplyPickupValidationToStashing)
             //{
             //    var pItem = new PickupItem(item.AcdItem, item.TrinityItemBaseType, item.TrinityItemType);
             //    var pickupCheck = PickupItemValidation(pItem);
@@ -763,7 +520,7 @@ namespace Trinity.Items
             //        return true;
             //}
 
-            if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
             {
                 var result = ItemRulesSalvageSell(item.GetAcdItem(), ItemEvaluationType.Sell);
                 switch (result)
@@ -802,19 +559,19 @@ namespace Trinity.Items
         {
             if (quality >= ItemQuality.Inferior && quality <= ItemQuality.Superior)
             {
-                return Trinity.Settings.Loot.TownRun.SalvageWhiteItemOption;
+                return TrinityPlugin.Settings.Loot.TownRun.SalvageWhiteItemOption;
             }
             if (quality >= ItemQuality.Magic1 && quality <= ItemQuality.Magic3)
             {
-                return Trinity.Settings.Loot.TownRun.SalvageBlueItemOption;
+                return TrinityPlugin.Settings.Loot.TownRun.SalvageBlueItemOption;
             }
             if (quality >= ItemQuality.Rare4 && quality <= ItemQuality.Rare6)
             {
-                return Trinity.Settings.Loot.TownRun.SalvageYellowItemOption;
+                return TrinityPlugin.Settings.Loot.TownRun.SalvageYellowItemOption;
             }
             if (quality >= ItemQuality.Legendary)
             {
-                return Trinity.Settings.Loot.TownRun.SalvageLegendaryItemOption;
+                return TrinityPlugin.Settings.Loot.TownRun.SalvageLegendaryItemOption;
             }
             return SalvageOption.Sell;
         }
@@ -1129,15 +886,15 @@ namespace Trinity.Items
                     int unprotectedSlots = 60 - _lastProtectedSlotsCount;
 
                     // Use count of Unprotected slots if FreeBagSlots is higher than unprotected slots
-                    int minFreeSlots = Trinity.Player.IsInTown ?
-                        Math.Min(Trinity.Settings.Loot.TownRun.FreeBagSlotsInTownA, unprotectedSlots) :
-                        Math.Min(Trinity.Settings.Loot.TownRun.FreeBagSlotsA, unprotectedSlots);
+                    int minFreeSlots = TrinityPlugin.Player.IsInTown ?
+                        Math.Min(TrinityPlugin.Settings.Loot.TownRun.FreeBagSlotsInTownA, unprotectedSlots) :
+                        Math.Min(TrinityPlugin.Settings.Loot.TownRun.FreeBagSlotsA, unprotectedSlots);
 
                     // free bag slots is less than required
                     if (noFreeSlots || freeBagSlots < minFreeSlots && !forceRefresh)
                     {
                         Logger.LogDebug("Free Bag Slots is less than required. FreeSlots={0}, FreeBagSlots={1} FreeBagSlotsInTown={2} IsInTown={3} Protected={4} BackpackCount={5}",
-                            freeBagSlots, Trinity.Settings.Loot.TownRun.FreeBagSlotsA, Trinity.Settings.Loot.TownRun.FreeBagSlotsInTownA, Trinity.Player.IsInTown,
+                            freeBagSlots, TrinityPlugin.Settings.Loot.TownRun.FreeBagSlotsA, TrinityPlugin.Settings.Loot.TownRun.FreeBagSlotsInTownA, TrinityPlugin.Player.IsInTown,
                             _lastProtectedSlotsCount, _lastBackPackCount);
                         _lastBackPackLocation = NoFreeSlot;
                         return _lastBackPackLocation;
@@ -1208,10 +965,10 @@ namespace Trinity.Items
         /// <returns></returns>
         internal static bool ItemRulesPickupValidation(PickupItem item)
         {
-            if (Trinity.StashRule == null)
-                Trinity.StashRule = new Interpreter();
+            if (TrinityPlugin.StashRule == null)
+                TrinityPlugin.StashRule = new Interpreter();
 
-            Interpreter.InterpreterAction action = Trinity.StashRule.checkPickUpItem(item, ItemEvaluationType.PickUp);
+            Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkPickUpItem(item, ItemEvaluationType.PickUp);
 
             switch (action)
             {
@@ -1237,7 +994,7 @@ namespace Trinity.Items
             // Pickup Ramaladni's Gift
             if (itemType == TrinityItemType.ConsumableAddSockets)
             {
-                return Trinity.Settings.Loot.Pickup.RamadalinisGift;
+                return TrinityPlugin.Settings.Loot.Pickup.RamadalinisGift;
             }
 
             // Pickup Deaths Breath
@@ -1247,24 +1004,24 @@ namespace Trinity.Items
             // -605947593 veil
             if (item.BalanceID == 2087837753)
             {               
-                return Trinity.Settings.Loot.Pickup.PickupDeathsBreath;
+                return TrinityPlugin.Settings.Loot.Pickup.PickupDeathsBreath;
             }
             
             // Tiered Rift Keys
             if (itemType == TrinityItemType.TieredLootrunKey)
             {
-                return Trinity.Settings.Loot.Pickup.LootRunKey;
+                return TrinityPlugin.Settings.Loot.Pickup.LootRunKey;
             }
 
             // Pickup Legendary potions
             if (itemType == TrinityItemType.HealthPotion && item.Quality >= ItemQuality.Legendary)
             {
-                return Trinity.Settings.Loot.Pickup.LegendaryPotions;
+                return TrinityPlugin.Settings.Loot.Pickup.LegendaryPotions;
             }
 
             if (itemType == TrinityItemType.InfernalKey || itemType == TrinityItemType.PortalDevice)
             {
-                return Trinity.Settings.Loot.Pickup.InfernalKeys;
+                return TrinityPlugin.Settings.Loot.Pickup.InfernalKeys;
             }
 
             if (itemType == TrinityItemType.UberReagent)
@@ -1275,41 +1032,41 @@ namespace Trinity.Items
             // Rift Keystone Fragments == LootRunkey
             if (itemType == TrinityItemType.LootRunKey)
             {
-                return Trinity.Settings.Loot.Pickup.LootRunKey;
+                return TrinityPlugin.Settings.Loot.Pickup.LootRunKey;
             }
 
             // Blood Shards == HoradricRelic
-            if (itemType == TrinityItemType.HoradricRelic && ZetaDia.PlayerData.BloodshardCount < Trinity.Player.MaxBloodShards)
+            if (itemType == TrinityItemType.HoradricRelic && ZetaDia.PlayerData.BloodshardCount < TrinityPlugin.Player.MaxBloodShards)
             {
-                return Trinity.Settings.Loot.Pickup.BloodShards;
+                return TrinityPlugin.Settings.Loot.Pickup.BloodShards;
             }
 
             if (itemType == TrinityItemType.ProgressionGlobe)
                 return true;
 
-            if (itemType == TrinityItemType.CraftingMaterial && (item.ACDItem.GetTrinityItemQuality() < Trinity.Settings.Loot.Pickup.MiscItemQuality || !Trinity.Settings.Loot.Pickup.CraftMaterials))
+            if (itemType == TrinityItemType.CraftingMaterial && (item.ACDItem.GetTrinityItemQuality() < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality || !TrinityPlugin.Settings.Loot.Pickup.CraftMaterials))
             {
                 return false;
             }
 
             // Plans
-            if (item.InternalName.ToLower().StartsWith("craftingplan_smith") && (item.ACDItem.GetTrinityItemQuality() < Trinity.Settings.Loot.Pickup.MiscItemQuality || !Trinity.Settings.Loot.Pickup.Plans))
+            if (item.InternalName.ToLower().StartsWith("craftingplan_smith") && (item.ACDItem.GetTrinityItemQuality() < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality || !TrinityPlugin.Settings.Loot.Pickup.Plans))
             {
                 return false;
             }
 
             // Designs
-            if (item.InternalName.ToLower().StartsWith("craftingplan_jeweler") && (item.ACDItem.GetTrinityItemQuality() < Trinity.Settings.Loot.Pickup.MiscItemQuality || !Trinity.Settings.Loot.Pickup.Designs))
+            if (item.InternalName.ToLower().StartsWith("craftingplan_jeweler") && (item.ACDItem.GetTrinityItemQuality() < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality || !TrinityPlugin.Settings.Loot.Pickup.Designs))
             {
                 return false;
             }
 
-            if (itemType == TrinityItemType.CraftingPlan && item.Quality >= ItemQuality.Legendary && Trinity.Settings.Loot.Pickup.LegendaryPlans)
+            if (itemType == TrinityItemType.CraftingPlan && item.Quality >= ItemQuality.Legendary && TrinityPlugin.Settings.Loot.Pickup.LegendaryPlans)
             {
                 return true;
             }
 
-            if (item.IsUpgrade && Trinity.Settings.Loot.Pickup.PickupUpgrades)
+            if (item.IsUpgrade && TrinityPlugin.Settings.Loot.Pickup.PickupUpgrades)
             {
                 return true;
             }
@@ -1320,44 +1077,44 @@ namespace Trinity.Items
                 case TrinityItemBaseType.WeaponOneHand:
                 case TrinityItemBaseType.WeaponRange:
                     if (item.Quality >= ItemQuality.Legendary)
-                        return Trinity.Settings.Loot.Pickup.PickupLegendaries;
+                        return TrinityPlugin.Settings.Loot.Pickup.PickupLegendaries;
 
-                    return CheckLevelRequirements(item.Level, item.Quality, Trinity.Settings.Loot.Pickup.PickupBlueWeapons, Trinity.Settings.Loot.Pickup.PickupYellowWeapons);
+                    return CheckLevelRequirements(item.Level, item.Quality, TrinityPlugin.Settings.Loot.Pickup.PickupBlueWeapons, TrinityPlugin.Settings.Loot.Pickup.PickupYellowWeapons);
                 case TrinityItemBaseType.Armor:
                 case TrinityItemBaseType.Offhand:
                     if (item.Quality >= ItemQuality.Legendary)
-                        return Trinity.Settings.Loot.Pickup.PickupLegendaries;
+                        return TrinityPlugin.Settings.Loot.Pickup.PickupLegendaries;
 
-                    return CheckLevelRequirements(item.Level, item.Quality, Trinity.Settings.Loot.Pickup.PickupBlueArmor, Trinity.Settings.Loot.Pickup.PickupYellowArmor);
+                    return CheckLevelRequirements(item.Level, item.Quality, TrinityPlugin.Settings.Loot.Pickup.PickupBlueArmor, TrinityPlugin.Settings.Loot.Pickup.PickupYellowArmor);
                 case TrinityItemBaseType.Jewelry:
                     if (item.Quality >= ItemQuality.Legendary)
-                        return Trinity.Settings.Loot.Pickup.PickupLegendaries;
+                        return TrinityPlugin.Settings.Loot.Pickup.PickupLegendaries;
 
-                    return CheckLevelRequirements(item.Level, item.Quality, Trinity.Settings.Loot.Pickup.PickupBlueJewlery, Trinity.Settings.Loot.Pickup.PickupYellowJewlery);
+                    return CheckLevelRequirements(item.Level, item.Quality, TrinityPlugin.Settings.Loot.Pickup.PickupBlueJewlery, TrinityPlugin.Settings.Loot.Pickup.PickupYellowJewlery);
                 case TrinityItemBaseType.FollowerItem:
                     if (item.Quality >= ItemQuality.Legendary)
-                        return Trinity.Settings.Loot.Pickup.PickupLegendaryFollowerItems;
+                        return TrinityPlugin.Settings.Loot.Pickup.PickupLegendaryFollowerItems;
 
                     if (item.Quality >= ItemQuality.Magic1 && item.Quality <= ItemQuality.Magic3)
-                        return Trinity.Settings.Loot.Pickup.PickupBlueFollowerItems;
+                        return TrinityPlugin.Settings.Loot.Pickup.PickupBlueFollowerItems;
 
                     if (item.Quality >= ItemQuality.Rare4 && item.Quality <= ItemQuality.Rare6)
-                        return Trinity.Settings.Loot.Pickup.PickupYellowFollowerItems;
+                        return TrinityPlugin.Settings.Loot.Pickup.PickupYellowFollowerItems;
                     // not matched above, ignore it
                     return false;
                 case TrinityItemBaseType.Gem:
-                    if (item.Level < Trinity.Settings.Loot.Pickup.GemLevel ||
-                        (itemType == TrinityItemType.Ruby && !Trinity.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Ruby)) ||
-                        (itemType == TrinityItemType.Emerald && !Trinity.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Emerald)) ||
-                        (itemType == TrinityItemType.Amethyst && !Trinity.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Amethyst)) ||
-                        (itemType == TrinityItemType.Topaz && !Trinity.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Topaz)) ||
-                        (itemType == TrinityItemType.Diamond && !Trinity.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Diamond)))
+                    if (item.Level < TrinityPlugin.Settings.Loot.Pickup.GemLevel ||
+                        (itemType == TrinityItemType.Ruby && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Ruby)) ||
+                        (itemType == TrinityItemType.Emerald && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Emerald)) ||
+                        (itemType == TrinityItemType.Amethyst && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Amethyst)) ||
+                        (itemType == TrinityItemType.Topaz && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Topaz)) ||
+                        (itemType == TrinityItemType.Diamond && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Diamond)))
                     {
                         return false;
                     }
                     break;
                 case TrinityItemBaseType.Misc:
-                    if (item.ACDItem.GetTrinityItemQuality() < Trinity.Settings.Loot.Pickup.MiscItemQuality)
+                    if (item.ACDItem.GetTrinityItemQuality() < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality)
                         return false;
 
                     // Potion filtering
@@ -1365,7 +1122,7 @@ namespace Trinity.Items
                     {
                         long potionsInBackPack = ZetaDia.Me.Inventory.Backpack.Where(p => p.ItemType == ItemType.Potion).Sum(p => p.ItemStackQuantity);
 
-                        if (potionsInBackPack >= Trinity.Settings.Loot.Pickup.PotionCount)
+                        if (potionsInBackPack >= TrinityPlugin.Settings.Loot.Pickup.PotionCount)
                             return false;
                         return true;
                     }
@@ -1390,7 +1147,7 @@ namespace Trinity.Items
         /// <returns></returns>
         internal static bool IdentifyItemValidation(PickupItem item)
         {
-            if (Trinity.Settings.Loot.TownRun.KeepLegendaryUnid)
+            if (TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid)
                 return false;
             return true;
         }
@@ -1418,10 +1175,10 @@ namespace Trinity.Items
                 pickupItem.Quality, pickupItem.Level, pickupItem.DBBaseType,
                 pickupItem.DBItemType, pickupItem.IsOneHand ? "1H" : pickupItem.IsTwoHand ? "2H" : "NH");
 
-            if (Trinity.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules && Trinity.StashRule != null)
+            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules && TrinityPlugin.StashRule != null)
             {
                 // using ItemEvaluationType.Identify isn't available so we are abusing Sell for that manner
-                Interpreter.InterpreterAction action = Trinity.StashRule.checkPickUpItem(pickupItem, ItemEvaluationType.Sell);
+                Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkPickUpItem(pickupItem, ItemEvaluationType.Sell);
 
                 Logger.Log(TrinityLogLevel.Debug, LogCategory.ItemValuation, "Action is: {0}", action);
 
@@ -1432,7 +1189,7 @@ namespace Trinity.Items
                     case Interpreter.InterpreterAction.UNIDENT:
                         return false;
                     default:
-                        Logger.Log(TrinityLogLevel.Info, LogCategory.ScriptRule, "Trinity, item is unhandled by ItemRules (Identification)!");
+                        Logger.Log(TrinityLogLevel.Info, LogCategory.ScriptRule, "TrinityPlugin, item is unhandled by ItemRules (Identification)!");
                         return IdentifyItemValidation(pickupItem);
                 }
             }
@@ -1453,7 +1210,7 @@ namespace Trinity.Items
             // Gray Items
             if (quality < ItemQuality.Normal)
             {
-                if (Trinity.Settings.Loot.Pickup.PickupGrayItems)
+                if (TrinityPlugin.Settings.Loot.Pickup.PickupGrayItems)
                     return true;
                 return false;
             }
@@ -1461,31 +1218,31 @@ namespace Trinity.Items
             // White Items
             if (quality == ItemQuality.Normal || quality == ItemQuality.Superior)
             {
-                if (Trinity.Settings.Loot.Pickup.PickupWhiteItems)
+                if (TrinityPlugin.Settings.Loot.Pickup.PickupWhiteItems)
                     return true;
                 return false;
             }
 
-            if (quality < ItemQuality.Normal && Trinity.Player.Level > 5 && !Trinity.Settings.Loot.Pickup.PickupLowLevel)
+            if (quality < ItemQuality.Normal && TrinityPlugin.Player.Level > 5 && !TrinityPlugin.Settings.Loot.Pickup.PickupLowLevel)
             {
                 // Grey item, ignore if we're over level 5
                 return false;
             }
 
             // Ignore Gray/White if player level is <= 5 and we are picking up white
-            if (quality <= ItemQuality.Normal && Trinity.Player.Level <= 5 && !Trinity.Settings.Loot.Pickup.PickupLowLevel)
+            if (quality <= ItemQuality.Normal && TrinityPlugin.Player.Level <= 5 && !TrinityPlugin.Settings.Loot.Pickup.PickupLowLevel)
             {
                 return false;
             }
 
-            if (quality < ItemQuality.Magic1 && Trinity.Player.Level > 10)
+            if (quality < ItemQuality.Magic1 && TrinityPlugin.Player.Level > 10)
             {
                 // White item, ignore if we're over level 10
                 return false;
             }
 
             // PickupLowLevel setting
-            if (quality <= ItemQuality.Magic1 && Trinity.Player.Level <= 10 && !Trinity.Settings.Loot.Pickup.PickupLowLevel)
+            if (quality <= ItemQuality.Magic1 && TrinityPlugin.Player.Level <= 10 && !TrinityPlugin.Settings.Loot.Pickup.PickupLowLevel)
             {
                 // ignore if we don't have the setting enabled
                 return false;
@@ -1972,9 +1729,9 @@ namespace Trinity.Items
     //{
     //    Logger.Log(LogCategory.ItemValuation, "DB is requesting Identification Item={0} IsInTown={1} UseBook={2} ItemMode={3}", 
     //        e.Item.InternalName, ZetaDia.IsInTown, CharacterSettings.Instance.UseBookOfCain, 
-    //        Trinity.Settings.Loot.ItemFilterMode);
+    //        TrinityPlugin.Settings.Loot.ItemFilterMode);
 
-    //    if (Trinity.Settings.Loot.TownRun.DropInTownOption == Settings.Loot.DropInTownOption.All)
+    //    if (TrinityPlugin.Settings.Loot.TownRun.DropInTownOption == Settings.Loot.DropInTownOption.All)
     //    {
     //        ItemDropper.Drop(e.Item);
     //    }                
@@ -1986,8 +1743,8 @@ namespace Trinity.Items
     //{
     //    ItemValuation.ResetValuationStatStrings();
     //    TownRun.TownRunCheckTimer.Reset();
-    //    Trinity.ForceVendorRunASAP = false;
-    //    Trinity.WantToTownRun = false;
+    //    TrinityPlugin.ForceVendorRunASAP = false;
+    //    TrinityPlugin.WantToTownRun = false;
     //}
 
     //internal static void TrinityOnItemDropped(object sender, ItemEventArgs e)

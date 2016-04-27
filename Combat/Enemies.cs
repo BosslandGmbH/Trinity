@@ -27,7 +27,7 @@ namespace Trinity.Combat
             if (!ZetaDia.IsInGame || !ZetaDia.Me.IsValid)
                 return;
 
-            List<TrinityCacheObject> units = Trinity.ObjectCache.Where(o => o.IsUnit && o.CommonDataIsValid || o.IsBossOrEliteRareUnique).ToList();
+            List<TrinityCacheObject> units = TrinityPlugin.ObjectCache.Where(o => o.IsUnit && o.CommonDataIsValid || o.IsBossOrEliteRareUnique).ToList();
             var unitsGuids = new HashSet<int>(units.Select(e => e.ACDGuid));
 
             // Find Newly Dead Units
@@ -82,7 +82,7 @@ namespace Trinity.Combat
         public void Update()
         {
             if (NearMe)
-                Position = Trinity.Player.Position;
+                Position = TrinityPlugin.Player.Position;
 
             if (Position == Vector3.Zero)
                 return;
@@ -138,7 +138,7 @@ namespace Trinity.Combat
             Position = Exists ?
                 TargetUtil.GetClusterPoint(Radius, Size) :
                 TargetUtil.GetBestClusterPoint(Radius);
-                TargetUtil.GetBestRiftValueClusterPoint(Radius, Trinity.Settings.Combat.Misc.RiftValueAlwaysKillUnitsAbove);
+                TargetUtil.GetBestRiftValueClusterPoint(Radius, TrinityPlugin.Settings.Combat.Misc.RiftValueAlwaysKillUnitsAbove);
 
             NearMe = false;
             Range = Radius;

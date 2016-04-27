@@ -35,7 +35,7 @@ namespace Trinity.Cache
         public PickupItem(ACDItem item, TrinityItemBaseType trinityItemBaseType, TrinityItemType trinityItemType)
         {
             Name = item.Name;
-            InternalName = Trinity.NameNumberTrimRegex.Replace(item.InternalName, ""); ;
+            InternalName = TrinityPlugin.NameNumberTrimRegex.Replace(item.InternalName, ""); ;
             Level = item.Level;
             Quality = item.ItemQualityLevel;
             BalanceID = item.GameBalanceId;
@@ -49,14 +49,14 @@ namespace Trinity.Cache
             DynamicID = item.AnnId;
             ActorSNO = item.ActorSnoId;
             ACDGuid = item.ACDId;
-            WorldId = Trinity.Player.WorldID;
+            WorldId = TrinityPlugin.Player.WorldID;
         }
 
         public PickupItem(string name, string internalName, int level, ItemQuality quality, int balanceId, ItemBaseType dbItemBaseType, 
             ItemType dbItemType, bool isOneHand, bool isTwoHand, FollowerType followerType, int acdGuid, int dynamicID = 0)
         {
             Name = name;
-            InternalName = Trinity.NameNumberTrimRegex.Replace(internalName, "");
+            InternalName = TrinityPlugin.NameNumberTrimRegex.Replace(internalName, "");
             Level = level;
             Quality = quality;
             BalanceID = balanceId;
@@ -67,7 +67,7 @@ namespace Trinity.Cache
             ItemFollowerType = followerType;
             ACDGuid = acdGuid;
             DynamicID = dynamicID;
-            WorldId = Trinity.Player.WorldID;
+            WorldId = TrinityPlugin.Player.WorldID;
         }
 
         public virtual bool Equals(PickupItem other)

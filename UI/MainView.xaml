@@ -19,39 +19,43 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TabControl>
-            <TabItem Header="Combat" Foreground="{DynamicResource TextBrush}">
-                <Border Tag="ConfigCombat.xaml"/>
-            </TabItem>
-            <TabItem Header="Objects" Foreground="{DynamicResource TextBrush}">
-                <Border Tag="ConfigObjects.xaml"/>
-            </TabItem>
-            <TabItem Header="Items" Foreground="{DynamicResource TextBrush}">
-                <Border Tag="ConfigItems.xaml"/>
-            </TabItem>
-            <TabItem Header="Advanced" Foreground="{DynamicResource TextBrush}">
-                <Border Tag="ConfigAdvanced.xaml"/>
-            </TabItem>
-            <TabItem Header="Debug" Foreground="{DynamicResource TextBrush}" Visibility="{Binding Path=DebugVisibility}">
-                <Border Tag="DebugTab.xaml"/>
-            </TabItem>
-            <TabItem Header="Avoidance" Foreground="{DynamicResource TextBrush}" Visibility="{Binding Advanced.UseExperimentalAvoidance, Converter={StaticResource VisibleWhenTrueConverter}}">
-                <Border Tag="Avoidance.xaml"/>
-            </TabItem>
-            <TabItem Header="Paragon" Foreground="{DynamicResource TextBrush}">
-                <Border Tag="Paragon.xaml"/>
-            </TabItem>
-        </TabControl>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Command="{Binding ResetAllCommand}" Margin="4">Reset all settings</Button>
-            <Button Grid.Column="3" Command="{Binding SaveCommand}" Margin="4">Save settings</Button>
-        </Grid>
+        <Border Padding="0,0,0,10" Background="#343434">
+            <TabControl Background="#1d1d1d" Foreground="#343434" >
+                <TabItem Header="Combat" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="ConfigCombat.xaml"/>
+                </TabItem>
+                <TabItem Header="Objects" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="ConfigObjects.xaml"/>
+                </TabItem>
+                <TabItem Header="Items" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="ConfigItems.xaml"/>
+                </TabItem>
+                <TabItem Header="Avoidance" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="Avoidance.xaml"/>
+                </TabItem>
+                <TabItem Header="Paragon" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="Paragon.xaml"/>
+                </TabItem>
+                <TabItem Header="Advanced" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="ConfigAdvanced.xaml"/>
+                </TabItem>
+                <TabItem Header="Debug" Foreground="{DynamicResource TextBrush}" Visibility="{Binding Path=DebugVisibility}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="DebugTab.xaml"/>
+                </TabItem>                
+            </TabControl>
+        </Border>
+        <Border Grid.Row="1" Padding="0,0,0,2" Background="#343434">
+            <Grid Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Height="24" Command="{Binding ResetAllCommand}" Margin="4">Reset all settings</Button>
+                <Button Grid.Column="3" Command="{Binding SaveCommand}" Margin="4">Save settings</Button>
+            </Grid>
+         </Border>
     </Grid>
 </UserControl>
