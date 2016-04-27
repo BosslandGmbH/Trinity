@@ -54,18 +54,20 @@
                 <!--<TabItem Header="Monster Abilities">
                     <Border Background="#474747" Padding="10">
                         <StackPanel>
-                            --><!--<UniformGrid Rows="1">
+                            -->
+                <!--<UniformGrid Rows="1">
                                 <Button Command="{Binding SelectAllCommand}" CommandParameter="MonsterAbilities">Select All</Button>
                                 <Button Command="{Binding SelectNoneCommand}" CommandParameter="MonsterAbilities">Select None</Button>
-                            </UniformGrid>-->                        
-                            <!--<ListView 
+                            </UniformGrid>-->
+                <!--<ListView 
                                 ItemContainerStyle="{DynamicResource AvoidanceListViewItemStyle}" 
                                 ItemsSource="{Binding Avoidance.Avoidances}"                          
                                 SelectionMode="Single" 
                                 Height="Auto"
                                 VerticalContentAlignment="Stretch"
                                 Style="{DynamicResource AvoidanceListViewStyle}">
-                            </ListView>--><!--
+                            </ListView>-->
+                <!--
                         </StackPanel>
                     </Border>
                 </TabItem>-->
@@ -97,8 +99,8 @@
                             </UniformGrid>
                         </StackPanel>
                     </Border>
-                </TabItem>
-                <TabItem Header="Misc" >
+                </TabItem>-->
+                <TabItem Header="Misc">
                     <Border Background="#474747" Padding="10">
                         <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                             <GroupBox.Header>
@@ -107,15 +109,15 @@
                             <UniformGrid Columns="2">
                                 <CheckBox IsChecked="{Binding Path=Misc.AvoidanceNavigation}" ToolTip="Do not walk through AoE, even at full health">Path Around AoE</CheckBox>
                                 <CheckBox IsChecked="{Binding Path=Misc.AvoidDeath}" ToolTip="Avoid on low health">Avoid on Low Health</CheckBox>
-                                --><!--<CheckBox IsChecked="{Binding Path=Misc.AvoidAOE}">Attempt to avoid AoE</CheckBox>--><!--
+                                <CheckBox IsChecked="{Binding Path=Misc.AvoidAOE}">Attempt to avoid AoE</CheckBox>
                                 <CheckBox IsChecked="{Binding Path=Misc.KillMonstersInAoE}" ToolTip="Attack units standing in AoE">Attack Mobs in AoE</CheckBox>
-                                --><!--<CheckBox IsChecked="{Binding Path=Misc.UseExperimentalSavageBeastAvoidance}" ToolTip="Use Experimental Savage Beast Charge Avoidance">Avoid Savage Beast Charge</CheckBox>-->
-                                <!--<CheckBox IsChecked="{Binding Path=Misc.UseExperimentalFireChainsAvoidance}" ToolTip="Use Experimental Fire Chains Avoidance">Avoid Fire Chains</CheckBox>--><!--
+                                <CheckBox IsChecked="{Binding Path=Misc.UseExperimentalSavageBeastAvoidance}" ToolTip="Use Experimental Savage Beast Charge Avoidance">Avoid Savage Beast Charge</CheckBox>
+                                <CheckBox IsChecked="{Binding Path=Misc.UseExperimentalFireChainsAvoidance}" ToolTip="Use Experimental Fire Chains Avoidance">Avoid Fire Chains</CheckBox>
                                 <CheckBox IsChecked="{Binding Path=Misc.AvoidAoEOutOfCombat}" ToolTip="Avoid AoE out of combat (Arcane, molten, etc)">Avoid AoE out of combat</CheckBox>
                             </UniformGrid>
                         </GroupBox>
                     </Border>
-                </TabItem>-->
+                </TabItem>
                 <TabItem Header="Advanced" >
                     <Border Background="#474747" Padding="10">
                         <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
@@ -170,7 +172,7 @@
 
 
             </TabControl>
-                    
+
         </Border>
     </ScrollViewer>
 </UserControl>

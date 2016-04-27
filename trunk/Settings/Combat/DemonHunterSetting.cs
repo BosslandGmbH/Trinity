@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Trinity.Config.Combat
@@ -110,7 +111,7 @@ namespace Trinity.Config.Combat
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(0.75f)]
+        [DefaultValue(0.50f)]
         public float PreperationResourcePct
         {
             get
@@ -1209,18 +1210,13 @@ namespace Trinity.Config.Combat
         [OnDeserializing()]
         internal void OnDeserializingMethod(StreamingContext context)
         {
-            this.AvoidGrotesqueHealth = 1;
-            this.AvoidOrbiterHealth = 1;
-            this.AvoidWormholeHealth = 0.50f;
-            PreperationResourcePct = 0.50f;
-            this.StrafeMinHatred = 48;
-            this.VaultMode = DemonHunterVaultMode.Always;
-            this.KiteLimit = 15;
-            this.KiteMaxDistance = 100;
-            this.ShadowPowerHealth = 0.8f;
-            this.SpamShadowPowerWhenElitesNearby = false;
-            this.UseShadowPowerWhenSurrounded = true;
-            this.UseShadowPowerWhileAvoiding = false;
+            foreach (var p in GetType().GetProperties())
+            {
+                foreach (var dv in p.GetCustomAttributes(true).OfType<DefaultValueAttribute>())
+                {
+                    p.SetValue(this, dv.Value);
+                }
+            }
         }
         #endregion Methods
 
