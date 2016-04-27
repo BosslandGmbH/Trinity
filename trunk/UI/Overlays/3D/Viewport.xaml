@@ -1,0 +1,208 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:radarCanvas="clr-namespace:Trinity.UI.UIComponents.RadarCanvas"
+    xmlns:overlays="clr-namespace:Trinity.UI.Overlays"
+    xmlns:ut="clr-namespace:Trinity.UIComponents"
+    mc:Ignorable="d"
+        d:DesignHeight="523" d:DesignWidth="793"
+
+    >        <!--ut:SizeObserver.Observe="True"
+        ut:SizeObserver.ObservedWidth="{Binding OverlayWidth, Mode=OneWayToSource}"
+        ut:SizeObserver.ObservedHeight="{Binding OverlayHeight, Mode=OneWayToSource}"-->
+    <!--Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}, Path=ActualHeight}"
+    Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Canvas}, Mode=FindAncestor}, Path=ActualWidth}"-->
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ut:IntToStringConverter x:Key="IntToStringConverter" Format="0:0.0" />
+            <ControlTemplate x:Key="SliderEditable" TargetType="{x:Type Slider}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition MinWidth="35" MaxWidth="{TemplateBinding Tag}" Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Slider Grid.Row="1" Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}" Delay="{TemplateBinding Delay}" 
+                            Interval="{TemplateBinding Interval}" IsEnabled="{TemplateBinding IsEnabled}" IsMoveToPointEnabled="True" 
+                            IsSnapToTickEnabled="{TemplateBinding IsSnapToTickEnabled}" LargeChange="{TemplateBinding LargeChange}"
+                            Orientation="{TemplateBinding Orientation}" SmallChange="{TemplateBinding SmallChange}" 
+                            TickFrequency="{TemplateBinding TickFrequency}" TickPlacement="{TemplateBinding TickPlacement}" 
+                            Ticks="{TemplateBinding Ticks}" ToolTip="{TemplateBinding ToolTip}" Maximum="{TemplateBinding Maximum}" 
+                            Minimum="{TemplateBinding Minimum}" HorizontalAlignment="Stretch" VerticalAlignment="Center" 
+                            Margin="0,0,2,0" Style="{x:Null}" x:Name="MySlider" />
+                    <TextBox Grid.Column="1" Grid.Row="1" 
+                             
+                             ut:SelectTextOnFocus.Active="True" 
+                             ut:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" 
+                             ut:CaptureTextboxInput.Active="True" 
+                             IsEnabled="True" IsHitTestVisible="True"
+                        Text="{Binding Value, 
+                        Converter={StaticResource IntToStringConverter}, 
+                        UpdateSourceTrigger=Default, 
+                        RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" Margin="0,2,2,2" TextAlignment="Center" IsReadOnly="False" />
+                </Grid>
+            </ControlTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border BorderBrush="Transparent" BorderThickness="0">
+
+        <DockPanel>
+            
+            <Grid DockPanel.Dock="Top" ZIndex="9999999" IsHitTestVisible="True" MinHeight="30">
+                <WrapPanel Margin="5">
+                    <!--<WrapPanel.Resources>
+                        --><!--<ut:AxisValueToViewportCameraPosition x:Key="AxisValueToViewportCameraPosition" />--><!--
+                    </WrapPanel.Resources>
+                    <Label Content="CameraPos"/>
+                    <TextBox Width="100" Text="{Binding ElementName=camMain, Path=Position}"/>
+                    --><!--<Slider Value="{Binding ElementName=camMain, Path=Position.X, Mode=TwoWay, Converter={StaticResource AxisValueToViewportCameraPosition}}" Minimum="0" Maximum="50" />
+                    <Slider Value="{Binding ElementName=camMain, Path=Position.Y, Mode=TwoWay}" Minimum="0" Maximum="50" />
+                    <Slider Value="{Binding ElementName=camMain, Path=Position.Z, Mode=TwoWay}" Minimum="0" Maximum="50" />--><!--
+                    
+                    <Label Content="CameraDirection"/>
+                    <Button>test</Button>
+                    <TextBox Width="100" IsEnabled="True" Text="{Binding ElementName=camMain, Path=LookDirection, Mode=TwoWay}"/>
+                    <Label Content="UpDirection"/>
+                    <TextBox Width="100" Text="{Binding ElementName=camMain, Path=UpDirection}"/>-->
+                    <Label>Field of View:</Label>
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraFieldOfView, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center"  Template="{DynamicResource SliderEditable}" Width="450" Value="{Binding CameraFieldOfView, Mode=TwoWay}" SmallChange="0.05" Minimum="0" Maximum="20"  />
+                    
+                    <Label Margin="5,0,0,0">Position Offset:</Label>
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraPositionX, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="850" Value="{Binding CameraPositionX, Mode=TwoWay}" SmallChange="0.1" LargeChange="0.1" Minimum="-7000" Maximum="7000" />
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraPositionY, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="850" Value="{Binding CameraPositionY, Mode=TwoWay}" SmallChange="0.1" LargeChange="0.1" Minimum="-7000" Maximum="7000" />
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraPositionZ, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="850" Value="{Binding CameraPositionZ, Mode=TwoWay}" SmallChange="0.1" LargeChange="0.1" Minimum="-7000" Maximum="7000" />
+
+                    <Label Margin="5,0,0,0">Look Direction:</Label>
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraLookDirectionX, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="250" Value="{Binding CameraLookDirectionX, Mode=TwoWay}" SmallChange="0.05" LargeChange="0.05" Minimum="-1" Maximum="1" />
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraLookDirectionY, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="250" Value="{Binding CameraLookDirectionY, Mode=TwoWay}" SmallChange="0.05" LargeChange="0.05" Minimum="-1" Maximum="1" />
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraLookDirectionZ, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="250" Value="{Binding CameraLookDirectionZ, Mode=TwoWay}" SmallChange="0.05" LargeChange="0.05" Minimum="-1" Maximum="1" />
+
+                    <Label Margin="5,0,0,0">Up Direction:</Label>
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraLookDirectionX, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="250" Value="{Binding CameraUpDirectionX, Mode=TwoWay}" SmallChange="1" LargeChange="1" Minimum="-1" Maximum="1" />
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraLookDirectionY, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="250" Value="{Binding CameraUpDirectionY, Mode=TwoWay}" SmallChange="1" LargeChange="1" Minimum="-1" Maximum="1" />
+                    <!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraLookDirectionZ, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>-->
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="250" Value="{Binding CameraUpDirectionZ, Mode=TwoWay}" SmallChange="1" LargeChange="1" Minimum="-1" Maximum="1" />
+
+                    <!--<Label Margin="5,0,0,0">Scale:</Label>
+                    --><!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraLookDirectionX, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>--><!--
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="300" Value="{Binding CameraNearPlaneDistance, Mode=TwoWay}" SmallChange="0.05" IsSnapToTickEnabled="False" LargeChange="0.1" Minimum="-10" Maximum="10" />
+                    <Label Margin="5,0,0,0">Scale:</Label>
+                    --><!--<TextBox Width="40" HorizontalContentAlignment="Right" Text="{Binding CameraLookDirectionX, Mode=OneWay, Converter={StaticResource IntToStringConverter}, FallbackValue=0.00}"/>--><!--
+                    <Slider VerticalAlignment="Center" Template="{DynamicResource SliderEditable}" Width="300" Value="{Binding CameraFarPlaneDistance, Mode=TwoWay}" SmallChange="0.05" IsSnapToTickEnabled="False" LargeChange="0.1" Minimum="-10" Maximum="10" />-->
+                    <Button Command="{Binding StartThreadCommand}">Start</Button>
+                </WrapPanel>
+            </Grid>
+
+            <!--
+            ="0 -6 -4.5"
+            Position="{Binding CameraPosition, Mode=TwoWay}" 
+            Position="{Binding CameraPosition, Mode=TwoWay}"
+            Position="0, 27, 20" 
+            -->
+            <Canvas Height="{Binding OverlayHeight, Mode=OneWay}" 
+                    Width="{Binding OverlayWidth, Mode=OneWay}"
+                VerticalAlignment="Top"                                          
+                HorizontalAlignment="Left"                    
+                    >
+            
+                <!-- need to set size because viewport has bugs related to auto dimensions -->
+                
+                <overlays:Viewport3DRadar RenderOptions.EdgeMode="Aliased" 
+                  Height="{Binding OverlayHeight, Mode=OneWay}" 
+                  Width="{Binding OverlayWidth, Mode=OneWay}"
+                VerticalAlignment="Top"                                          
+                HorizontalAlignment="Left"
+                                          >
+                    
+                    <!--<Viewport3D.Camera>
+                        <PerspectiveCamera x:Name="camMain" 
+                            NearPlaneDistance="0.0001"
+                            FieldOfView="{Binding CameraFieldOfView, Mode=TwoWay, FallbackValue=20}"                        
+                            UpDirection="0,0,1" 
+                            LookDirection="{Binding CameraLookDirection, Mode=TwoWay}">
+                        </PerspectiveCamera>
+                    </Viewport3D.Camera>-->
+                    
+                </overlays:Viewport3DRadar>
+            
+            </Canvas>
+            <!--<Canvas CacheMode="BitmapCache" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">-->
+                <!--<overlays:Viewport3DRadar     
+                  
+                ItemsSource="{Binding Objects}"
+                IsHitTestVisible="False" 
+                RenderOptions.EdgeMode="Aliased"
+             
+                DockPanel.Dock="Top" x:Name="ViewPort">-->
+
+                <!--<Viewport3D.Camera>
+                    <PerspectiveCamera x:Name="camMain" 
+                        NearPlaneDistance="0"
+                        FieldOfView="{Binding CameraFieldOfView, Mode=TwoWay, FallbackValue=20}"
+                        
+                        UpDirection="0,0,1" 
+                        LookDirection="{Binding CameraLookDirection, Mode=TwoWay}">
+                    </PerspectiveCamera>
+                </Viewport3D.Camera>-->
+            
+                <!--Position="{Binding CameraPosition, Mode=TwoWay}"-->
+                <!--<ModelVisual3D>
+                    <ModelVisual3D.Content>
+                        <DirectionalLight x:Name="dirLightMain" Direction="-1,-1,-1">
+                            <DirectionalLight.Transform>
+                                <Transform3DGroup>
+                                    <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                                    <ScaleTransform3D ScaleZ="1" ScaleY="1" ScaleX="1"/>
+                                    <RotateTransform3D d:EulerAngles="0,0,33.593">
+                                        <RotateTransform3D.Rotation>
+                                            <AxisAngleRotation3D Axis="0,0,1" Angle="33.593"/>
+                                        </RotateTransform3D.Rotation>
+                                    </RotateTransform3D>
+                                    <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                                    <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                                </Transform3DGroup>
+                            </DirectionalLight.Transform>
+                        </DirectionalLight>
+                    </ModelVisual3D.Content>
+                </ModelVisual3D>
+
+                <ModelVisual3D>
+                    <ModelVisual3D.Content>
+                        <Model3DGroup x:Name="group3d">
+
+                            <SpotLight Position="10,10,10" x:Name="mySpotLight" Color="Yellow"  InnerConeAngle="15" OuterConeAngle="100" Range="100" />
+                        </Model3DGroup>
+                    </ModelVisual3D.Content>
+
+                </ModelVisual3D>-->
+
+                <!--<ModelVisual3D x:Name="light1">
+                    <ModelVisual3D.Content>
+                        <Model3DGroup x:Name="group">
+                            <PointLight Color="Gray" Position="-10, 0, -9"/>
+                            <AmbientLight Color="#FFFFFF" />
+                        </Model3DGroup>
+                    </ModelVisual3D.Content>
+                </ModelVisual3D>-->
+
+            <!--</overlays:Viewport3DRadar>-->
+            <!--</Canvas>-->
+        </DockPanel>
+    </Border>
+</UserControl>

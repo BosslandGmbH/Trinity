@@ -1,0 +1,181 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
+             xmlns:ut="clr-namespace:Trinity.UIComponents"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
+             d:DesignHeight="650" d:DesignWidth="400">
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <ut:BoolInverterConverter x:Key="boolInverterConverter" />
+            <ut:EnumBooleanConverter x:Key="enumBooleanConverter" />
+            <ut:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
+            <ut:PropertyValueConverter x:Key="propertyValueConverter" />
+            <ut:DebugDataBindingConverter  x:Key="DebugDataBindingConverter" />
+
+            <Style TargetType="{x:Type UserControl}">
+                <Style.Triggers>
+                    <Trigger Property="ComponentModel:DesignerProperties.IsInDesignMode" Value="true">
+                        <Setter Property="Background" Value="#333333" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+            <DataTemplate x:Key="DragAdorner">
+                <Border Background="Silver"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="2"
+                        Margin="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding}" Margin="0,0,2,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+
+            <Style x:Key="ParagonListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Focusable" Value="False"/>
+            </Style>
+
+            <DataTemplate  x:Key="ParagonListBoxItemTemplate">
+                <Grid Style="{x:Null}" HorizontalAlignment="Stretch" Margin="0,0,0,0" MinHeight="22" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel Grid.Column="0" VerticalAlignment="Center">
+                        <Path Style="{DynamicResource GrabHandlePath}" Cursor="SizeNS" />
+                        <TextBlock>
+                            <Run Text="{Binding DisplayName, Mode=OneWay}" />
+                        </TextBlock>
+                    </WrapPanel>
+                    <Grid Grid.Column="1" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Background="Transparent" Margin="0,-2,15,-2"
+                              Visibility="{Binding IsLimited, Converter={StaticResource VisibleWhenTrueConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Slider  Grid.Column="0" Template="{DynamicResource SliderEditable}"  
+                                        Margin="0,0,0,0"
+                                        Interval="500" Maximum="{Binding MaxLimit}" Minimum="0" 
+                                        SmallChange="1" LargeChange="5"
+                                        TickPlacement="None" IsMoveToPointEnabled="True"                                       
+                                        Value="{Binding Limit}" 
+                                        HorizontalAlignment="Stretch" />
+                            <Label Grid.Column="1">points</Label>
+                        </Grid>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding IsLimited}"  
+                              VerticalAlignment="Center" VerticalContentAlignment="Center">
+                            <TextBlock Text="Limit" Margin="0,-1,5,0"/>
+                        </CheckBox>
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer Padding="10,0,10,0">
+        <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <GroupBox.Header>
+                Paragon Spending
+            </GroupBox.Header>
+            <StackPanel>
+
+                <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">Trinity will spend your paragon points automatically every now and then. Drag the items below within each group to prioritize how they are spent.</TextBlock>
+
+                <CheckBox Margin="3,0,3,10" IsChecked="{Binding Paragon.IsEnabled}">Spend Paragon Points</CheckBox>
+
+                <StackPanel Visibility="{Binding Paragon.IsEnabled, Converter={StaticResource VisibleWhenTrueConverter}}">
+                    <Label>Core:</Label>
+                    <ListBox Grid.Row="1" Grid.Column="0" Padding="5"
+                        ItemsSource="{Binding Paragon.CoreParagonPriority}"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        SelectedItem="{Binding Paragon.CoreParagonPrioritySelectedItem}"                         
+                        SelectionMode="Single"
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        dd:DragDrop.DragDropContext="Core"
+                        dd:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                        VerticalAlignment="Top"
+                        ItemTemplate="{DynamicResource ParagonListBoxItemTemplate}"
+                        ItemContainerStyle="{DynamicResource ParagonListBoxItemStyle}"
+                        >
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <ItemsPresenter />
+                            </ControlTemplate>
+                        </ListBox.Template>
+                    </ListBox>
+
+                    <Label>Offense:</Label>
+                    <ListBox Padding="5"
+                        ItemsSource="{Binding Paragon.OffenseParagonPriority}"
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        dd:DragDrop.DragDropContext="Offense"
+                        dd:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                        VerticalAlignment="Top"
+                        ItemTemplate="{DynamicResource ParagonListBoxItemTemplate}"
+                        ItemContainerStyle="{DynamicResource ParagonListBoxItemStyle}"
+                        >
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <ItemsPresenter />
+                            </ControlTemplate>
+                        </ListBox.Template>
+                    </ListBox>
+
+                    <Label>Defense:</Label>
+                    <ListBox Padding="5"
+                        ItemsSource="{Binding Paragon.DefenseParagonPriority}"
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        dd:DragDrop.DragDropContext="Offense"
+                        dd:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                        VerticalAlignment="Top"
+                        ItemTemplate="{DynamicResource ParagonListBoxItemTemplate}"
+                        ItemContainerStyle="{DynamicResource ParagonListBoxItemStyle}"
+                        >
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <ItemsPresenter />
+                            </ControlTemplate>
+                        </ListBox.Template>
+                    </ListBox>
+
+                    <Label>Utility:</Label>
+                    <ListBox Padding="5"
+                        ItemsSource="{Binding Paragon.UtilityParagonPriority}"
+                        dd:DragDrop.IsDragSource="True"
+                        dd:DragDrop.IsDropTarget="True"
+                        dd:DragDrop.DragDropContext="Offense"
+                        dd:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                        VerticalAlignment="Top"
+                        ItemTemplate="{DynamicResource ParagonListBoxItemTemplate}"
+                        ItemContainerStyle="{DynamicResource ParagonListBoxItemStyle}"
+                        >
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <ItemsPresenter />
+                            </ControlTemplate>
+                        </ListBox.Template>
+                    </ListBox>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+    </ScrollViewer>
+</UserControl>

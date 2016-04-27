@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <title>Legendary Items</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="jquery.xdomainajax.js"></script>
+        <script src="handlebars.js"></script>
+        <script src="handlebars_helper.js"></script>
+        <script src="item-SpecificPage.js"></script>    
+		<script src="ItemReference.js"></script>    
+        <style>            
+             span, .class, .skill, .rune, .passive { padding-left: 25px; display: block }
+             .template { display: none; }
+        </style>
+    </head>
+    <body>
+        
+        <div class="template">
+                            
+<div>                    
+
+<br/>// AUTO-GENERATED on {{timestamp}}<br/><br/>
+
+        {{#each All}} 
+        <br/>
+        /// &lt;summary&gt;<br/>
+        /// {{Name}} {{LegendaryText}}<br/>
+        /// &lt;/summary&gt;<br/>
+        public static Item {{Strip Name }} = new Item<br/>
+        {<br/>
+        <span>
+            Id = {{ActorSNO}},<br/>
+            Name = "{{Name}}",<br/>
+            Quality = ItemQuality.{{Quality}},<br/>             
+            Slug = "{{Slug}}",<br/>
+            ItemType = ItemType.{{ZetaType}},<br/>
+            GItemType = GItemType.{{GItemType}},<br/>
+            IsTwoHanded = {{Bool IsTwoHanded}},<br/>
+            BaseType = ItemBaseType.{{BaseType}},<br/>
+            InternalName = "{{InternalName}}",<br/>
+            DataUrl = "{{DataUrl}}",<br/>
+            Url = "{{Url}}",<br/>
+            IconUrl = "{{IconUrl}}",<br/>
+            RelativeUrl = "{{RelativeUrl}}",<br/>
+            IsCrafted = {{Bool IsCrafted}},<br/>
+            LegendaryAffix = "{{LegendaryText}}",<br/>
+            SetName = "{{SetName}}",<br/>
+        </span>
+        };<br/>
+                    
+        {{/each}}
+ 
+
+</div> 
+       
+        </div>
+        
+        <div class="container">
+            
+        </div>
+
+        <script>
+            
+            $(document).ready(function () {
+				
+				// Bounty Cache Items
+                Items.GetItemPages([				
+				"http://us.battle.net/d3/en/item/ring-of-royal-grandeur-3qRFop",
+				"http://us.battle.net/d3/en/item/sanguinary-vambraces-1385JU",
+				"http://us.battle.net/d3/en/item/avarice-band-3qROK2",
+				"http://us.battle.net/d3/en/item/gloves-of-worship-FA37P",
+				"http://us.battle.net/d3/en/item/golden-gorget-of-leoric-1I0CCL",
+				"http://us.battle.net/d3/en/item/helltrapper-3tfdaj",
+				"http://us.battle.net/d3/en/item/illusory-boots-29WYI0",
+				"http://us.battle.net/d3/en/item/pauldrons-of-the-skeleton-king-2AGH0r",
+				"http://us.battle.net/d3/en/item/prides-fall-pgClp"				
+				],function (data) {
+                    var container = $(".container");
+                    var template = $(".template").html();
+                    var compiledTemplate = Handlebars.compile(template);
+                    var renderedElement = $(compiledTemplate(data));
+                    container.append(renderedElement);
+                });
+
+            });
+			
+			
+
+        </script>        
+    </body>    
+</html>

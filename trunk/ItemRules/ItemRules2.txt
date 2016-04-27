@@ -1,0 +1,472 @@
+// +---------------------------------------------------------------------------+
+// | _______ __                     ______         __                   ______ 
+// ||_     _|  |_.-----.--------.  |   __ \.--.--.|  |.-----.-----.    |__    |
+// | _|   |_|   _|  -__|        |  |      <|  |  ||  ||  -__|__ --|    |    __|
+// ||_______|____|_____|__|__|__|  |___|__||_____||__||_____|_____|    |______|
+// |+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+// +---------------------------------------------------------------------------+
+// | - Created by darkfriend77
+// +---------------------------------------------------------------------------+
+// +---------------------------------------------------------------------------+
+// | _______               __          __ __         __   __              
+// ||_     _|.-----.-----.|  |_.---.-.|  |  |.---.-.|  |_|__|.-----.-----.
+// | _|   |_ |     |__ --||   _|  _  ||  |  ||  _  ||   _|  ||  _  |     |
+// ||_______||__|__|_____||____|___._||__|__||___._||____|__||_____|__|__|
+// |                                                                                             
+// +---------------------------------------------------------------------------+                                                                 
+// | 
+// | 1. Copy Trinity folder into your Demonbuddy Plugin folder. That's it.
+// | 2. Choose a rule set in config dis (soft,medium,hard,custom)
+// | 3. Check the rule set u choosed to fit your needs.
+// | 4. Check pickup.dis to fit your needs.
+// | 5. That's it. Have fun.
+// | 
+// | actualLog.txt   - contains all logs from itemrules
+// | config.dis      - contains configuration like rule sets and debug stuff
+// | pickup.dis      - contains pickup rules
+// | identify.dis    - contains which items to identify and which not to
+// | salvageSell.dis - contains salvage or sell rules
+// | legendary.dis   - contains legendary rules
+// | set.dis         - contains set rules
+// | magic.dis       - contains magic rules
+// | rare.dis        - contains rare rules
+// | common.dis      - contains common rules
+// | 
+// +---------------------------------------------------------------------------+
+// +---------------------------------------------------------------------------+
+// | _______ __                    __                    
+// ||     __|  |_.----.--.--.----.|  |_.--.--.----.-----.
+// ||__     |   _|   _|  |  |  __||   _|  |  |   _|  -__|
+// ||_______|____|__| |_____|____||____|_____|__| |_____|
+// |                                                                                             
+// +---------------------------------------------------------------------------+
+// | 
+// | A Item rule is structured in three parts. The first part is separated by
+// | a '#' sign from the second one and the third part which is optional is
+// | separated by a '->'.
+// |
+// | 'PART1' # 'PART2'             ex. [QUALITY] == "Legendary" # True
+// | or
+// | 'PART1' # 'PART2' -> 'PART3'  ex. [QUALITY] == "Legendary" # True -> [KEEP]
+// | 
+// | PART1
+// | -----
+// | PART1 is intended to hold values from an item that are already known before
+// | the item is identified. (exception: Legendary Names)
+// |
+// | This qualifies following Attributes:
+// | - [NAME] (exception legenderys)
+// | - [BASETYPE]
+// | - [TYPE]
+// | - [ONEHAND]
+// | - [TWOHAND]
+// | - [QUALITY]
+// | - [LEVEL]
+// |
+// | (This is maybee in a later implementation used to trigger if an item should
+// | be picked up or not. For example if u check on a jewelry level 50 and higher
+// | all jewelrys will be picked up and checked that are level 50 and higher.
+// | This isn't implemented in Trinity right now.)
+// | 
+// | PART2
+// | -----
+// | PART2 is intended to hold values from an item that are only known after
+// | the item is identified.
+// |
+// | This qualifies following Attributes:
+// | - [STR]
+// | - [CRIT%]
+// | - ...
+// | 
+// | PART3
+// | -----
+// | PART3 is intended to hold the action that is done when the rule has a
+// | positive outcome. It is optional because the default action is [KEEP].
+// |
+// | Rules must be writen by a one liner rules over multiple lines are not
+// | supported. The structure of the parts in it self isn't important.
+// | [STR] > 10 is the same as 10 < [STR].
+// +---------------------------------------------------------------------------+
+// +---------------------------------------------------------------------------+
+// | _______                              __              
+// ||    ___|.--.--.---.-.--------.-----.|  |.-----.-----.
+// ||    ___||_   _|  _  |        |  _  ||  ||  -__|__ --|
+// ||_______||__.__|___._|__|__|__|   __||__||_____|_____|
+// |                              |__|                                             
+// +---------------------------------------------------------------------------+ 
+// |
+// | This rule will multiply attackspeed, critchance & critdmg an every rare item
+// | and if the result is bigger then 0 it will keep that item. This qualifys
+// | every item that has all three stats on it.
+// | 
+// | - [QUALITY] == "Rare" # [AS%] * [CRIT%] * [CRITDMG%] > 0 -> [KEEP]
+// |
+// | Maybee an implementation of an EHP calculation like on www.d3rawr.com/ehp
+// | would be possible:
+// | - +1 Strength	+0.14 EHP
+// | - +1 Dexterity	+0.44 EHP
+// | - +1 Intelligence	+0.14 EHP
+// | - +1 Vitality	+50 EHP
+// | - +1 Armor	        +0.14 EHP
+// | - +1 Resist All	+1.41 EHP
+// | - +1 Life Bonus %	+4.44 EHP
+// | Rule:
+// | - ([STR]*0.14+[DEX]*0.44+[INT]*0.14+[VIT]*50
+// |    +[ARMORTOT]*0.14+[ALLRES]*1.41+[LIFE%]*4.44) > x EHP
+// +---------------------------------------------------------------------------+
+// +---------------------------------------------------------------------------+
+// | _______        __   __                    
+// ||   _   |.----.|  |_|__|.-----.-----.-----.
+// ||       ||  __||   _|  ||  _  |     |__ --|
+// ||___|___||____||____|__||_____|__|__|_____|
+// |                                           
+// +---------------------------------------------------------------------------+
+// |
+// | Actions for pickup rules:
+// |  -> [PICKUP] pickup item  
+// |  -> [IGNORE] ignore item
+// | 
+// | Actions for identify rules:
+// |  -> [IDENTIFY] identify item  
+// |  -> [UNIDENT]  unidentify item
+// |
+// | Actions for stashing rules:
+// |  -> [KEEP]   keep item  
+// |  -> [TRASH]  trash item
+// |  -> [SCORE]  use score to evaluate item
+// |
+// | Actions for salvage rules:
+// |  -> [SALVAGE] salvage item  
+// |  -> [SELL]    sell item
+// |
+// +---------------------------------------------------------------------------+
+// | _______                          __                    
+// ||       |.-----.-----.----.---.-.|  |_.-----.----.-----.
+// ||   -   ||  _  |  -__|   _|  _  ||   _|  _  |   _|__ --|
+// ||_______||   __|_____|__| |___._||____|_____|__| |_____|
+// |         |__|                                           
+// +---------------------------------------------------------------------------+
+// |  LOGICAL OPERATOR:
+// |  -----------------
+// |  AND         "&&"       true && false   -> false
+// |  OR          "||"       true || false   -> true
+// |  EQUAL       "=="         10 == 11      -> false
+// |  NOTEQUAL    "!="         10 != 11      -> true
+// |  LESSEREQUAL "<="         10 <= 10      -> true
+// |  BIGGEREQUAL ">="         10 >= 10      -> true
+// |  LESSTHEN    "<"          10 <  10      -> false
+// |  BIGGERTHEN  ">"          10 >  10      -> false
+// |  BRACKETS    "()"    (5+5)*2 == 5+(5*2) -> false
+// |  PLUS/MINUS  "+-"          1 +  2       -> 3
+// |  MULT/DIV    "*/"          1 *  2       -> 2
+// +---------------------------------------------------------------------------+
+// +---------------------------------------------------------------------------+
+// | _______                        
+// ||   |   |.---.-.----.----.-----.
+// ||       ||  _  |  __|   _|  _  |
+// ||__|_|__||___._|____|__| |_____|
+// |                                                                 
+// +---------------------------------------------------------------------------+
+// |  MACRO:
+// |  ------
+// |  Macros can be used to reuse predefinated rules and logic.
+// |  They have to be defined before they are used.
+// | 
+// |  For example an implementation of EHP:
+// |  
+// |  @EHP :=  ((1000+[VIT])*(1+[LIFE%]/100)*35)/
+// |           (1-(1-(1-([ARMORBONUS]/((50*63)+[ARMORBONUS])))*
+// |           (1-(([ALLRES]+[MAXONERES]/7)/((5*63)+([ARMORTOT]/
+// |           ((50*63)+[ARMORTOT])))))))
+// |
+// |  after this definition we can use [@EHP] as a existing attribute for every
+// |  item.
+// |
+// |  [QUALITY] == "Rare" && [BASETYPE] == "Armor" # [@EHP] > 60000
+// |
+// +---------------------------------------------------------------------------+
+// +---------------------------------------------------------------------------+
+// | _______                    __   __                    
+// ||    ___|.--.--.-----.----.|  |_|__|.-----.-----.-----.
+// ||    ___||  |  |     |  __||   _|  ||  _  |     |__ --|
+// ||___|    |_____|__|__|____||____|__||_____|__|__|_____|
+// |                                                                  
+// +---------------------------------------------------------------------------+
+// |  FUNCTIONS:
+// |  ----------
+// |  .dual		converting into a binary value 0 and 1
+// |  			ex. [VIT].dual (item with vitality 123) -> 1
+// |   			ex. [VIT].dual (item with vitality 0)   -> 0
+// |                    ex. @OFFSTAT:=[AS%].dual+[CRIT%].dual+[CRITDMG%].dual
+// |                  
+// |  .max		returning a percentage of the max value possible on that
+// |                    item.
+// |                    ex. [VIT].max (gloves with 100 VIT, max is 200) -> 0.5 
+// |                    not implmented right now !!!
+// +---------------------------------------------------------------------------+
+// +---------------------------------------------------------------------------+
+// | _______ __   __         __ __           __               
+// ||   _   |  |_|  |_.----.|__|  |--.--.--.|  |_.-----.-----.
+// ||       |   _|   _|   _||  |  _  |  |  ||   _|  -__|__ --|
+// ||___|___|____|____|__|  |__|_____|_____||____|_____|_____|
+// |                                                              
+// +------------------+--------------------------------------------------------+
+// |    -CODE-        |  -PICKUP-     |        -Attribute-          | -Example-                                                 
+// +------------------+---------------+-----------------------------+----------+
+// |  [BASETYPE]      |     YES       | ItemBaseType                | Weapon 
+// |  [QUALITY]       |     YES       | ItemQuality                 | Rare						 
+// |  [D3QUALITY]     |     YES       | D3 Quality                  | Rare6
+// |  [ROLL]          |     YES       | Attribute rolls             | 6
+// |  [TYPE]          |     YES       | ItemType                    | Axe							 
+// |  [LEVEL]         |     YES       | Level                       | 60
+// |  [ONEHAND]       |     YES       | OneHand                     | true							
+// |  [TWOHAND]       |     YES       | TwoHand                     | false							 
+// +------------------+---------------+-----------------------------+----------+
+// |  [STR]                           | Strength                    | 100							 
+// |  [DEX]                           | Dexterity                   | 100							 
+// |  [INT]                           | Intelligence                | 100						 
+// |  [VIT]                           | Vitality                    | 100							 
+// +----------------------------------+-----------------------------+----------+
+// |  [REGEN]                         | HealthPerSecond             | 254					 
+// |  [LIFE%]                         | LifePercent                 | 12						 
+// |  [LS%]                           | LifeSteal                   | 3							 
+// |  [LOH]                           | LifeOnHit                   | 655
+// |  [LOK]                           | LifeOnKill                  | 1256
+// |  [MS%]                           | MovementSpeed               | 12						 
+// |  [AS%]                           | AttackSpeedPercent          | 6				 
+// +----------------------------------+-----------------------------+----------+
+// |  [CRIT%]                         | CritPercent                 | 4.5						 
+// |  [CRITDMG%]                      | CritDamagePercent           | 59					 
+// |  [BLOCK%]                        | BlockChance                 | 8
+// |  [TOTBLOCK%]                     | Total BlockChance           | 23					 
+// +----------------------------------+-----------------------------+----------+
+// |  [ALLRES]                        | ResistAll                   | 80							 
+// |  [RESPHYSICAL]                   | ResistPhysical              | 60					 
+// |  [RESFIRE]                       | ResistFire                  | 60						 
+// |  [RESCOLD]                       | ResistCold                  | 60						 
+// |  [RESLIGHTNING]                  | ResistLightning             | 60					 
+// |  [RESARCAN]                      | ResistArcane                | 60						 
+// |  [RESPOISON]                     | ResistPoison                | 60						 
+// |  [RESHOLY]                       | ResistHoly                  | 60						 
+// +----------------------------------+-----------------------------+----------+
+// |  [ARMOR]                         | Armor                       | 345								 
+// |  [ARMORBONUS]                    | ArmorBonus                  | 200						 
+// |  [ARMORTOT]                      | ArmorTotal                  | 1300					 
+// +----------------------------------+-----------------------------+----------+
+// |  [SKILLDMG%]                     | SkillDamagePercentBonus     | 3			
+// |  [FIREDMG%]                      | FireDamagePercentBonus      | 3					 
+// |  [LIGHTNINGDMG%]                 | LightningDamagePercentBonus | 3			 
+// |  [COLDDMG%]                      | ColdDamagePercentBonus      | 3					 
+// |  [POISONDMG%]                    | PoisonDamagePercentBonus    | 3				 
+// |  [ARCANEDMG%]                    | ArcaneDamagePercentBonus    | 3				 
+// |  [HOLYDMG%]                      | HolyDamagePercentBonus      | 3	
+// +----------------------------------+-----------------------------+----------+	
+// |  [SLOWPROC%]                     | WeaponOnHitSlowProcChance   | 3	
+// |  [BLINDPROC%]                    | WeaponOnHitBlindProcChance  | 3	
+// |  [CHILLPROC%]                    | WeaponOnHitChillProcChance  | 3	
+// |  [FEARPROC%]                     | WeaponOnHitFearProcChance   | 3	
+// |  [FREEZEPROC%]                   | WeaponOnHitFreezeProcChance | 3	
+// |  [IMMOPROC%]                     | WeaponOnHitImmobilizeProcC. | 3	
+// |  [KNOCKPROC%]                    | WeaponOnHitKnockbackProcC.  | 3	
+// |  [BLEEDPROC%]                    | WeaponOnHitBleedProcChance  | 3		
+// |  [AREADMGPROC%]                  | OnHitAreaDamageProcChance   | 3	
+// |  [CDRED%]                        | PowerCooldownReductionPerc. | 3	
+// |  [RESRED%]                       | ResourceCostReductionPer.   | 3	 				 
+// +----------------------------------+-----------------------------+----------+
+// |  [DPS]                           | WeaponDamagePerSecond       | 1100				 
+// |  [WEAPAS]                        | WeaponAttacksPerSecond      | 1.5
+// |  [WEAPDMG%]                      | WeaponDamagePer             | 48			
+// |  [WEAPMAXDMG]                    | WeaponMaxDamage             | 560					 
+// |  [WEAPMINDMG]                    | WeaponMinDamage             | 255
+// |  [WEAPDMGTYPE]                   | WeaponDamageType            | Fire					 
+// |  [MINDMG]                        | MinDamage                   | 100							 
+// |  [MAXDMG]                        | MaxDamage                   | 200							 
+// +----------------------------------+-----------------------------+----------+
+// |  [THORNS]                        | Thorns                      | 2345							 
+// |  [DMGVSELITE%]                   | Damage vs. Elite            | 5	
+// |  [DMGREDELITE%]                  | Damage Red. vs. Elite       | 2	
+// |  [DMGREDPHYSICAL]                | Damage Red. vs. Physicaldmg.| 2		 
+// +----------------------------------+-----------------------------+----------+
+// |  [MAXARCPOWER]                   | MaxArcanePower              | 15					 
+// |  [ARCONCRIT]                     | ArcaneOnCrit                | 10						 
+// |  [MAXMANA]                       | MaxMana                     | 5							 
+// |  [MANAREG]                       | ManaRegen                   | 5							 
+// |  [MAXFURY]                       | MaxFury                     | 5							 
+// |  [HEALTHSPIRIT]                  | HealthPerSpiritSpent        | 245				 
+// |  [MAXSPIRIT]                     | MaxSpirit                   | 10							 
+// |  [SPIRITREG]                     | SpiritRegen                 | 5						 
+// |  [HATREDREG]                     | HatredRegen                 | 5						 
+// |  [MAXDISCIP]                     | MaxDiscipline               | 5						 
+// +----------------------------------+-----------------------------+----------+
+// |  [GF%]                           | GoldFind                    | 25							 
+// |  [MF%]                           | MagicFind                   | 20							 
+// |  [PICKRAD]                       | PickUpRadius                | 5						 
+// |  [GLOBEBONUS]                    | HealthGlobeBonus            | 5468	
+// |  [EXPBONUS]                      | Experiencebonus             | 14
+// +----------------------------------+-----------------------------+----------+
+// |  [LEVELRED]                      | Level Requirement Reduced   | 18	
+// |  [REQLEVEL]                      | Required Lev                | 60	
+// +----------------------------------+-----------------------------+----------+
+// |  [SOCKETS]                       | Sockets                     | 1	
+// +----------------------------------+-----------------------------+----------+
+// |  [MAXSTAT]                       | highest class specific stat | 200	
+// |                                  | (str,int,dex)		    |
+// |  [MAXSTATVIT]                    | highest class specific stat | 250		
+// |                                  | (str,int,dex) + vit         |				
+// |  [MAXONERES]                     | highest single resist       | 60				
+// |                                  | (arcane,cold,fire,holy,     |
+// |                                  |  lightning,physical,poison) |
+// |  [TOTRES]                        | total resistance            | 140					
+// |                                  | (allres,arcane,cold,fire,holy,
+// |                                  |  lightning,physical,poison) |
+// |  [DMGFACTOR]                     | dmg factor                  | 12						
+// |                                  | = as% + crit%*2 + critdmg%/5|
+// |                                  |   + average/20              |
+// |  [STRVIT],[DEXVIT],[INTVIT]      | primary attribut vitality   | 200			
+// |  [AVGDMG]                        | average dmg                 | 200						
+// |                                  | = (mindmg + maxdmg) / 2	    |
+// |  [OFFSTATS]                      | offensiv stats              | 3					
+// |                                  | = as%,crit%,critdmg%,avgdmg |
+// |                                  | counting each as one if it is
+// |                                  | bigger then 0	            |
+// |  [DEFSTATS]                      | defensiv stats              | 3					
+// |                                  | = vit,allres,armorbonus,    |
+// |                                  |   block%,life%,regen        |
+// |                                  | counting each as one if it is
+// |                                  | bigger then 0               |
+// +----------------------------------+----------------------------------------+			
+// +---------------------------------------------------------------------------+
+// | ___ ___         __                    
+// ||   |   |.---.-.|  |.--.--.-----.-----.
+// ||   |   ||  _  ||  ||  |  |  -__|__ --|
+// | \_____/ |___._||__||_____|_____|_____|
+// |                                       
+// +---------------------------------------------------------------------------+
+// |  ItemType:
+// |  ---------
+// |  - Axe
+// |  - Sword
+// |  - Mace
+// |  - Dagger
+// |  - Bow
+// |  - Crossbow
+// |  - Staff
+// |  - Spear
+// |  - Shield
+// |  - Gloves
+// |  - Boots
+// |  - Chest
+// |  - Ring
+// |  - Amulet
+// |  - Quiver
+// |  - Shoulder
+// |  - Legs
+// |  - FistWeapon
+// |  - Mojo
+// |  - CeremonialDagger
+// |  - WizardHat
+// |  - Helm
+// |  - Belt
+// |  - Bracer
+// |  - Orb
+// |  - MightyWeapon
+// |  - MightyBelt
+// |  - Polearm
+// |  - Cloak
+// |  - Wand
+// |  - SpiritStone
+// |  - Daibo
+// |  - HandCrossbow
+// |  - VoodooMask
+// |  - FollowerSpecial
+// |  - CraftingPlan
+// +---------------------------------------------------------------------------+
+// |  ItemBaseType
+// |  ------------
+// |  - Armor
+// |  - Weapon
+// |  - Jewelry
+// |  - Misc
+// |  - Gem
+// +---------------------------------------------------------------------------+
+// |  ItemQuality
+// |  -----------
+// |  - Inferior
+// |  - Normal
+// |  - Superior
+// |  - Rare
+// |  - Magic
+// |  - Legendary
+// |  - Special
+// |
+// |  - Rare4,Rare5,Rare6 & Legendary (for craftingPlan)
+// +---------------------------------------------------------------------------+                                
+// +---------------------------------------------------------------------------+
+// | _______                     __         
+// ||    ___|.--.--.-----.-----.|  |_.-----.
+// ||    ___||  |  |  -__|     ||   _|__ --|
+// ||_______| \___/|_____|__|__||____|_____|
+// | 
+// +---------------------------------------------------------------------------+
+// |
+// |      +-------------------------+
+// |      |         EVENT           |
+// |      |       Item Drop         |
+// |      | FileBasedScriptingRules |
+// |      +-----------+-------------+
+// |                  |
+// |                  V
+// |           +--------------+
+// |           |  pickup.dis  +--> <matching rule>
+// |           +------+-------+          |
+// |                  |                  +-> PICKUP
+// |                  V                  +-> IGNORE
+// |          <no matching rule>
+// |                  |
+// |                  |
+// |                  |
+// |                  V
+// |         +--------+---------+
+// |         | trinity setting  |
+// |         | decide if item   |
+// |         |     pickup       |
+// |         +------------------+
+// |
+// +---------------------------------------------------------------------------+ 
+// |       
+// |      +-------------------------+
+// |      |         EVENT           |
+// |      |      Item Stash\Trash   |
+// |      | FileBasedScriptingRules |
+// |      +-----------+-------------+
+// |                  |
+// |                  V        
+// |           +--------------+
+// |           | legendary.dis|
+// |           |  rare.dis    +--> <matching rule>
+// |           |  magic.dis   |          |
+// |           | special.dis  |          +-> KEEP
+// |           +------+-------+          +-> TRASH
+// |                  |                  |
+// |                  V                  V
+// |          <no matching rule>       SCORE
+// |                  |                  |
+// |                  |<-----------------+
+// |                  |
+// |                  V
+// |         +------------------+
+// |         | trinity scoring  |
+// |         |  decide if item  |
+// |         |  stashed/trashed |
+// |         +------------------+
+// |
+// +---------------------------------------------------------------------------+
+// +---------------------------------------------------------------------------+
+// | __  __                                    ______                    
+// ||  |/  |.-----.-----.--.--.--.-----.______|   __ \.--.--.-----.-----.
+// ||     < |     |  _  |  |  |  |     |______|   __ <|  |  |  _  |__ --|
+// ||__|\__||__|__|_____|________|__|__|      |______/|_____|___  |_____|
+// |                                                        |_____|      
+// +---------------------------------------------------------------------------+
+// | - no more bugs at the moment.
+// +---------------------------------------------------------------------------+

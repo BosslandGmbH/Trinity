@@ -1,0 +1,45 @@
+﻿
+namespace Trinity
+{
+    public enum AvoidanceType
+    {
+        None = 0,
+        Arcane,
+        AzmoFireball,
+        AzmodanBody,
+        AzmodanPool,
+        BeastCharge,
+        BeeWasp,
+        Belial,
+        ButcherFloorPanel,
+        Desecrator,
+        DiabloMeteor,
+        DiabloPrison,
+        DiabloRingOfFire,
+        FireChains,
+        FrozenPulse,
+        GhomGas,
+        Grotesque,
+        IceBall,
+        IceTrail,
+        Orbiter,
+        MageFire,
+        MaghdaProjectille,
+        MoltenBall,
+        MoltenCore,
+        MoltenTrail,
+        Mortar,
+        PlagueCloud,
+        PlagueHand,
+        PoisonEnchanted,
+        PoisonTree,
+        ShamanFire,
+        Thunderstorm,
+        Wormhole,
+        ZoltBubble,
+        ZoltTwister,
+        RimeCold,
+        MorluMeteor,
+        DiabloLightning
+    }
+}
