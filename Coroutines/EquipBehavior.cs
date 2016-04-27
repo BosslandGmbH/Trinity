@@ -7,6 +7,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Reference;
 using Zeta.Bot;
@@ -78,7 +79,7 @@ namespace Trinity.Coroutines
 
                     // Only 'IsPrimary' flagged skills can be assigned to slots 0 and 1
 
-                    KnownSkills = ZetaDia.Me.KnownSkills.ToDictionary(s => s.SNOPower, v => v);
+                    KnownSkills = ZetaDia.Me.KnownSkills.ToList().DistinctBy(s => s.SNOPower).ToDictionary(s => s.SNOPower, v => v);
 
                     CacheData.Hotbar.UpdateHotbarCache();
 
