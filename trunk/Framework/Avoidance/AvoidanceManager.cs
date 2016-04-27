@@ -147,7 +147,7 @@ namespace Trinity.Framework.Avoidance
                 Structures.Avoidance avoidance;
                 if (AvoidanceDataFactory.TryCreateAvoidance(source, actor, out avoidance))
                 {
-                    Logger.Log("Created new Avoidance from {0} RActorId={1} ({2})", actor.InternalName, actor.RActorGuid, avoidance.Data.Name);
+                    Logger.Log(LogCategory.Avoidance, "Created new Avoidance from {0} RActorId={1} ({2})", actor.InternalName, actor.RActorGuid, avoidance.Data.Name);
                     _cachedActors.Add(rActorId, actor);
                     CurrentAvoidances.Add(avoidance);
                 }

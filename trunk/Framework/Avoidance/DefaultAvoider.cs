@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Technicals;
 using TrinityCoroutines;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
@@ -87,7 +88,7 @@ namespace Trinity.Framework.Avoidance
 
             if (Core.Grids.Avoidance.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance))
             {
-                Logger.Log("IsPathingOverFlags... CriticalAvoidance");
+                Logger.Log(LogCategory.Avoidance, "IsPathingOverFlags... CriticalAvoidance");
                 return true;
             }
 
@@ -101,7 +102,7 @@ namespace Trinity.Framework.Avoidance
                 Core.Avoidance.NearbyStats.WeightPctTotal >= TrinityPlugin.Settings.Avoidance.MinimumNearbyWeightPctTotalTrigger &&
                 Core.Avoidance.NearbyStats.WeightPctAvg >= TrinityPlugin.Settings.Avoidance.AvoiderNearbyPctAvgTrigger)
             {
-                Logger.Log("Avoidance Local PctAvg: {0:0.00} / {1:0.00} PctTotal={2:0.00} / {3:0.00} Highest={4} / {5} ({6} Nodes, AbsHighest={7})",
+                Logger.Log(LogCategory.Avoidance, "Avoidance Local PctAvg: {0:0.00} / {1:0.00} PctTotal={2:0.00} / {3:0.00} Highest={4} / {5} ({6} Nodes, AbsHighest={7})",
                     Core.Avoidance.NearbyStats.WeightPctAvg,
                     TrinityPlugin.Settings.Avoidance.AvoiderNearbyPctAvgTrigger,
                     Core.Avoidance.NearbyStats.WeightPctTotal,
@@ -165,8 +166,7 @@ namespace Trinity.Framework.Avoidance
                     return true;
                 }
 
-                Logger.LogVerbose
-                    ("Moving (PathFinder) to Avoidance Position {0} Distance={1}", CurrentDestination.NavigableCenter, CurrentDestination.Distance);
+                Logger.LogVerbose("Moving (PathFinder) to Avoidance Position {0} Distance={1}", CurrentDestination.NavigableCenter, CurrentDestination.Distance);
                 var result = await CommonCoroutines.MoveTo(CurrentDestination.NavigableCenter, "AvoidPosition");
                 switch (result)
                 {
