@@ -37,7 +37,7 @@ namespace Trinity.Coroutines.Town
             if (Cache.ContainsKey(i.AnnId))
                 return Cache[i.AnnId];
 
-            var decision = TrinityItemManager.TrinitySalvage(i);
+            var decision = TrinityItemManager.TrinitySalvage(i) && !StashItems.ShouldStash(i);
             Cache.Add(i.AnnId, decision);
             return decision;
         }
