@@ -1152,6 +1152,8 @@ namespace Trinity
 
             354407, // X1_Angel_Common_Event_GreatWeapon
 
+
+
         };
 
         public static HashSet<int> HighPriorityInteractables { get { return highPriorityInteractables; } }

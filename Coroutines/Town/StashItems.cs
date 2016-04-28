@@ -84,6 +84,8 @@ namespace Trinity.Coroutines.Town
                 await StackRamaladnisGift();
                 await StackCraftingMaterials();
 
+                var isStashFull = false;
+
                 // Get items again to make sure they are valid and current this tick           
                 var freshItems = Inventory.Backpack.Items.Where(ShouldStash).Where(i => AllowedToStash(dontStashCraftingMaterials, i)).ToList();
                 if (!freshItems.Any())
@@ -91,7 +93,7 @@ namespace Trinity.Coroutines.Town
                     Logger.LogVerbose($"[StashItems] No items to stash");
                 }
                 else
-                {
+                {                    
                     foreach (var item in freshItems)
                     {
                         try
@@ -104,7 +106,8 @@ namespace Trinity.Coroutines.Town
                             {
                                 Logger.LogVerbose($"[StashItems] No place to put item, stash is probably full ({item.Name} [{col},{row}] Page={page})");
                                 HandleFullStash();
-                                return false;
+                                isStashFull = true;
+                                continue;
                             }
 
                             if (page != ZetaDia.Me.Inventory.CurrentStashPage)
@@ -122,13 +125,16 @@ namespace Trinity.Coroutines.Town
                         catch (Exception ex)
                         {
                             Logger.Log($"Exception Stashing Item: {ex}");
-                            throw;
                         }
                     }
                 }
 
                 await Coroutine.Sleep(1000);
                 await RepairItems.Execute();
+
+                if (isStashFull)
+                    return false;
+
                 return true;
             }
 
