@@ -29,7 +29,7 @@
                         <CheckBox ToolTip="Trash all Rares" IsChecked="{Binding Path=TownRun.ForceSalvageRares}" HorizontalAlignment="Left" Content="Sell/Salvage All Rares" />
                         <CheckBox ToolTip="Gems will be stashed on the second to last page if possible" IsChecked="{Binding Path=TownRun.StashGemsOnSecondToLastPage}" HorizontalAlignment="Left" Content="Stash Gems on 2nd to Last Page" />
                         <CheckBox ToolTip="Item list needs items to be identified to check their properties." IsChecked="{Binding Path=TownRun.KeepLegendaryUnid}" HorizontalAlignment="Left" Content="Keep Legendaries Unidentified" />
-                        <CheckBox ToolTip="Bot will organize the material stash pages after a town run" IsChecked="{Binding TownRun.SortStashPages}" HorizontalAlignment="Left" Content="Sort Stash pages" />
+                        <!--<CheckBox ToolTip="Bot will organize the material stash pages after a town run" IsChecked="{Binding TownRun.SortStashPages}" HorizontalAlignment="Left" Content="Sort Stash pages" />-->
                     </UniformGrid>
                     <WrapPanel HorizontalAlignment="Center" Margin="0,10,0,0">
                         <TextBlock Margin="2" Text="Drop Legendaries in Town: " VerticalAlignment="Center"/>

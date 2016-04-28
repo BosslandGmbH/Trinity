@@ -17,6 +17,17 @@ namespace Trinity
     internal partial class DataDictionary
     {
 
+        public static HashSet<int> SlowTimeSNO = new HashSet<int>()
+        {
+            5422, //slowTime_model_01
+            5423, //slowTime_model_02
+        };
+
+        public static HashSet<int> ArchonSkillIds = new HashSet<int>
+        {
+            135166, 135238, 135663, 166616, 167355, 167648, 392883, 392884, 392885, 392886, 392887, 392888, 392889, 392890, 392891,
+        };
+
         public static HashSet<int> SpiderPetIds = new HashSet<int>
         {
             //witchDoctor_CorpseSpider_crimsonRune, 
@@ -49,12 +60,6 @@ namespace Trinity
 
             return result ?? string.Empty;
         }
-
-        public static HashSet<int> ArchonSkillIds = new HashSet<int>
-        {
-            135166, 135238, 135663, 166616, 167355, 167648, 392883, 392884, 392885, 392886, 392887, 392888, 392889, 392890, 392891,
-        };
-
 
 
         /// <summary>
