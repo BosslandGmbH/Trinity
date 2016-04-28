@@ -131,7 +131,7 @@ namespace Trinity.Coroutines.Town
                 }
 
                 await StashItems.Execute();                
-                await StashItems.SortStashPages();
+                //await StashItems.SortStashPages();
                 await UseCraftingRecipes.Execute();
                 await RepairItems.Execute();
 

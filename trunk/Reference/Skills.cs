@@ -6,11 +6,313 @@ using Trinity.Objects;
 using System.Collections.Generic;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Trinity.Technicals;
 
 namespace Trinity.Reference
 {
     public static class Skills
     {
+        public static class Archon
+        {
+
+            //Line 532:         Wizard_Archon = 134872,
+            //Line 533:         Wizard_Archon_ArcaneStrike = 135166,
+            //Line 534:         Wizard_Archon_DisintegrationWave = 135238,
+            //Line 536:         Wizard_Archon_SlowTime = 135663,
+            //Line 638:         Wizard_Archon_Cancel = 166616,
+            //Line 639:         Wizard_Archon_ArcaneBlast = 167355,
+            //Line 641:         Wizard_Archon_Teleport = 167648,
+            //Line 1862:         Wizard_Archon_ArcaneBlast_Cold = 392883,
+            //Line 1863:         Wizard_Archon_ArcaneBlast_Fire = 392884,
+            //Line 1864:         Wizard_Archon_ArcaneBlast_Lightning = 392885,
+            //Line 1865:         Wizard_Archon_ArcaneStrike_Cold = 392886,
+            //Line 1866:         Wizard_Archon_ArcaneStrike_Fire = 392887,
+            //Line 1867:         Wizard_Archon_ArcaneStrike_Lightning = 392888,
+            //Line 1868:         Wizard_Archon_DisintegrationWave_Cold = 392889,
+            //Line 1869:         Wizard_Archon_DisintegrationWave_Fire = 392890,
+            //Line 1870:         Wizard_Archon_DisintegrationWave_Lightning = 392891,
+
+            public static bool CancelArchonMode()
+            {
+                try
+                {
+                    return ZetaDia.Me.UsePower(SNOPower.Wizard_Archon_Cancel, CacheData.Player.Position);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError("Exception Cancelling Archon Mode {0}", ex);
+                }
+
+                return false;
+            }
+
+            private static Skill _disintegrationWave;
+            public static Skill DisintegrationWave
+            {
+                get
+                {
+                    if (_disintegrationWave == null)
+                    {
+                        _disintegrationWave = new Skill
+                        {
+                            Index = 0,
+                            Name = "DisintegrationWave",
+                            SNOPower = 0,
+                            RequiredLevel = 30,
+                            Category = SpellCategory.Archon,
+                            IsPrimary = false,
+                            Class = ActorClass.Wizard,
+                            Duration = TimeSpan.Zero,
+                            Cost = 0,
+                            Cooldown = TimeSpan.Zero,
+                            Element = Element.Unknown,
+                            Resource = Resource.None,
+                            IsDamaging = true,
+                            AreaEffectRadius = 6f,
+                            ResourceEffect = ResourceEffectType.Spender,
+                            Runes = new List<Rune>(),
+                        };
+
+                        _disintegrationWave.Meta = new SkillMeta(_disintegrationWave)
+                        {
+                            Defaults = (skill, meta) =>
+                            {
+                                //meta.IsChannelled = true;
+                                meta.MaxTargetDistance = 45f;
+                                meta.IsOffensiveSkill = true;
+                                meta.IsAreaEffectSkill = true;
+                                meta.AreaEffectShape = AreaEffectShapeType.Beam;
+                                meta.CastRange = 40f;
+                                meta.IsDestructableSkill = true;
+                            }
+                        };
+
+                        _strike.Meta.ApplyDefaults();
+                    }
+
+                    var power = CacheData.HotbarCache.Instance.ActiveSkills
+                        .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_DisintegrationWave ||
+                            p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Cold ||
+                            p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Fire ||
+                            p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Lightning);
+
+                    if (power == null)
+                        return _disintegrationWave;
+
+                    _disintegrationWave.SNOPower = power.Power;
+                    return _disintegrationWave;
+                }
+            }
+
+            private static Skill _strike;
+            public static Skill Strike
+            {
+                get
+                {
+                    if (_strike == null)
+                    {
+                        _strike = new Skill
+                        {
+                            Index = 1,
+                            Name = "Strike",
+                            SNOPower = 0,
+                            RequiredLevel = 30,
+                            Category = SpellCategory.Archon,
+                            IsPrimary = false,
+                            Class = ActorClass.Wizard,
+                            Duration = TimeSpan.FromSeconds(3),
+                            Cost = 0,
+                            Cooldown = TimeSpan.Zero,
+                            Element = Element.Unknown,
+                            Resource = Resource.None,
+                            IsDamaging = true,
+                            AreaEffectRadius = 9f,
+                            ResourceEffect = ResourceEffectType.Spender,
+                            Runes = new List<Rune>(),
+                        };
+
+                        _strike.Meta = new SkillMeta(_strike)
+                        {
+                            Defaults = (skill, meta) =>
+                            {
+                                meta.MaxTargetDistance = 10f;
+                                meta.IsOffensiveSkill = true;
+                                meta.IsAreaEffectSkill = true;
+                                meta.AreaEffectShape = AreaEffectShapeType.Circle;
+                                meta.CastRange = 9f;
+                            }
+                        };
+
+                        _strike.Meta.ApplyDefaults();
+                    }
+
+                    var power = CacheData.HotbarCache.Instance.ActiveSkills
+                        .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneStrike ||
+                            p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Fire ||
+                            p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Cold ||
+                            p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Lightning);
+
+                    if (power == null)
+                        return _strike;
+
+                    _strike.SNOPower = power.Power;
+                    return _strike;
+                }
+            }
+
+            private static Skill _blast;
+            public static Skill Blast
+            {
+                get
+                {
+                    if (_blast == null)
+                    {
+                        _blast = new Skill
+                        {
+                            Index = 2,
+                            Name = "Blast",
+                            SNOPower = 0,
+                            RequiredLevel = 30,
+                            Category = SpellCategory.Archon,
+                            IsPrimary = false,
+                            Class = ActorClass.Wizard,
+                            Duration = TimeSpan.Zero,
+                            Cost = 0,
+                            Cooldown = TimeSpan.FromSeconds(2),
+                            Element = Element.Unknown,
+                            Resource = Resource.None,
+                            IsDamaging = true,
+                            AreaEffectRadius = 15f,
+                            ResourceEffect = ResourceEffectType.Spender,
+                            Runes = new List<Rune>(),
+                        };
+
+                        _blast.Meta = new SkillMeta(_blast)
+                        {
+                            Defaults = (skill, meta) =>
+                            {
+                                meta.MaxTargetDistance = 15f;
+                                meta.IsOffensiveSkill = true;
+                                meta.IsAreaEffectSkill = true;
+                                meta.AreaEffectShape = AreaEffectShapeType.Circle;
+                                meta.CastRange = 15f;
+                            }
+                        };
+
+                        _blast.Meta.ApplyDefaults();
+                    }
+
+                    var power = CacheData.HotbarCache.Instance.ActiveSkills
+                        .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneBlast ||
+                            p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Cold ||
+                            p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Fire ||
+                            p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Lightning);
+
+                    if (power == null)
+                        return _blast;
+
+                    _blast.SNOPower = power.Power;
+                    return _blast;
+                }
+            }
+
+            private static Skill _teleport;
+            public static Skill Teleport
+            {
+                get
+                {
+                    if (_teleport != null)
+                        return _teleport;
+
+                    _teleport = new Skill
+                    {
+                        Index = 3,
+                        Name = "Teleport",
+                        SNOPower = SNOPower.Wizard_Archon_Teleport,
+                        RequiredLevel = 30,
+                        Category = SpellCategory.Archon,
+                        IsPrimary = false,
+                        Class = ActorClass.Wizard,
+                        Duration = TimeSpan.Zero,
+                        Cost = 0,
+                        Cooldown = TimeSpan.FromSeconds(3),
+                        Element = Element.Unknown,
+                        Resource = Resource.None,
+                        IsDamaging = false,
+                        AreaEffectRadius = 0f,
+                        ResourceEffect = ResourceEffectType.Spender,
+                        Runes = new List<Rune>(),
+                    };
+
+                    _teleport.Meta = new SkillMeta(_teleport)
+                    {
+                        Defaults = (skill, meta) =>
+                        {
+                            meta.IsMovementSkill = true;
+                            meta.IsAvoidanceSkill = true;
+                            meta.CastRange = 40f;
+                        }
+                    };
+
+                    _teleport.Meta.ApplyDefaults();
+
+                    return _teleport;
+                }
+            }
+
+            private static Skill _slowTime;
+            public static Skill SlowTime
+            {
+                get
+                {
+                    if (_slowTime != null)
+                        return _slowTime;
+
+                    _slowTime = new Skill
+                    {
+                        Index = 4,
+                        Name = "Slow Time",
+                        SNOPower = SNOPower.Wizard_Archon_SlowTime,
+                        Category = SpellCategory.Archon,
+                        IsPrimary = false,
+                        Class = ActorClass.Wizard,
+                        Duration = TimeSpan.Zero,
+                        Cost = 0,
+                        Cooldown = TimeSpan.Zero,
+                        Element = Element.Unknown,
+                        Resource = Resource.None,
+                        IsDamaging = false,
+                        AreaEffectRadius = 18f,
+                        ResourceEffect = ResourceEffectType.Spender,
+                        Runes = new List<Rune>(),
+                    };
+
+                    _slowTime.Meta = new SkillMeta(_slowTime)
+                    {
+                        Defaults = (skill, meta) =>
+                        {
+                            meta.ReUseDelay = 500;
+
+                        }
+                    };
+
+                    _slowTime.Meta.ApplyDefaults();
+
+                    return _slowTime;
+                }
+            }
+
+            public static bool IsArchonActive()
+            {
+                return CacheData.HotbarCache.Instance.ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int)p));
+            }
+
+            public static bool IsSlowTimeActive()
+            {
+                return ZetaDia.Actors.GetActorsOfType<DiaObject>().Any(a => DataDictionary.SlowTimeSNO.Contains(a.ActorSnoId));
+            }
+        }
+
         #region Imported Skill Data
 
         // AUTO-GENERATED on Mon, 18 Jan 2016 04:49:34 GMT

@@ -86,30 +86,45 @@ namespace Trinity.Coroutines.Town
 
                 // Get items again to make sure they are valid and current this tick           
                 var freshItems = Inventory.Backpack.Items.Where(ShouldStash).Where(i => AllowedToStash(dontStashCraftingMaterials, i)).ToList();
-
-                foreach (var item in freshItems)
+                if (!freshItems.Any())
                 {
-                    int col;
-                    int row;
-
-                    var page = GetBestStashLocation(item, out col, out row);
-                    if (page == -1)
+                    Logger.LogVerbose($"[StashItems] No items to stash");
+                }
+                else
+                {
+                    foreach (var item in freshItems)
                     {
-                        HandleFullStash();
-                        return false;
-                    }
+                        try
+                        {
+                            int col;
+                            int row;
 
-                    if (page != ZetaDia.Me.Inventory.CurrentStashPage)
-                    {
-                        Logger.LogVerbose($"[StashItems] Changing to stash page: {page}");
-                        ZetaDia.Me.Inventory.SwitchStashPage(page);
-                        await Coroutine.Sleep(500);
-                    }
+                            var page = GetBestStashLocation(item, out col, out row);
+                            if (page == -1)
+                            {
+                                Logger.LogVerbose($"[StashItems] No place to put item, stash is probably full ({item.Name} [{col},{row}] Page={page})");
+                                HandleFullStash();
+                                return false;
+                            }
 
-                    Logger.LogVerbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
-                    ZetaDia.Me.Inventory.MoveItem(item.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
-                    ItemEvents.FireItemStashed(item);
-                    await Coroutine.Sleep(250);
+                            if (page != ZetaDia.Me.Inventory.CurrentStashPage)
+                            {
+                                Logger.LogVerbose($"[StashItems] Changing to stash page: {page}");
+                                ZetaDia.Me.Inventory.SwitchStashPage(page);
+                                await Coroutine.Sleep(500);
+                            }
+
+                            Logger.LogVerbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
+                            ZetaDia.Me.Inventory.MoveItem(item.AnnId, TrinityPlugin.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
+                            ItemEvents.FireItemStashed(item);
+                            await Coroutine.Sleep(250);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log($"Exception Stashing Item: {ex}");
+                            throw;
+                        }
+                    }
                 }
 
                 await Coroutine.Sleep(1000);

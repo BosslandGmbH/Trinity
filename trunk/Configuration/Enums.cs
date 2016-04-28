@@ -311,6 +311,7 @@ namespace Trinity
         Conjuration,
         Mastery,
         Force,
+        Archon,
     }
 
     public enum Resource
