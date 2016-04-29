@@ -11,15 +11,6 @@ namespace Trinity.Settings
         private double _weightPctTotal;
         private double _highestWeight;
         private double _measurementRadius;
-        private AvoidanceMode _mode;
-
-        [DataMember]
-        [DefaultValue(AvoidanceMode.StayClose)]
-        public AvoidanceMode Mode
-        {
-            get { return _mode; }
-            set { SetField(ref _mode, value); }
-        }
 
         [DataMember]
         [DefaultValue(15f)]

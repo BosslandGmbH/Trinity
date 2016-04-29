@@ -99,6 +99,16 @@ namespace Trinity.Config
         private int _minimumHighestNodeWeightTrigger;
         private float _minimumNearbyWeightPctTotalTrigger;
         private int _selectedTabIndex;
+        private WeightingOptions _weightingOptions;
+        private float _kiteDistance;
+        private int _kiteWeight;
+        private KiteMode _kiteMode;
+        private int _kiteStutterDelay;
+        private int _kiteHealth;
+        private int _kiteStutterDuration;
+        private bool _pathAroundAvoidance;
+        private bool _avoidOutsideCombat;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public AvoidanceSetting()
@@ -134,7 +144,7 @@ namespace Trinity.Config
         }
 
         [DataMember]
-        [DefaultValue(0.1f)]
+        [DefaultValue(0.2f)]
         public float AvoiderNearbyPctAvgTrigger
         {
             get { return _avoiderNearbyPctAvgTrigger; }
@@ -164,6 +174,78 @@ namespace Trinity.Config
             set { SetField(ref _minimumNearbyWeightPctTotalTrigger, value); }
         }
 
+        [DataMember]
+        [DefaultValue(WeightingOptions.All)]
+        public WeightingOptions WeightingOptions
+        {
+            get { return _weightingOptions; }
+            set { SetField(ref _weightingOptions, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(15f)]
+        public float KiteDistance
+        {
+            get { return _kiteDistance; }
+            set { SetField(ref _kiteDistance, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(KiteMode.Never)]
+        public KiteMode KiteMode
+        {
+            get { return _kiteMode; }
+            set { SetField(ref _kiteMode, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(1)]
+        public int KiteWeight
+        {
+            get { return _kiteWeight; }
+            set { SetField(ref _kiteWeight, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(100)]
+        public int KiteHealth
+        {
+            get { return _kiteHealth; }
+            set { SetField(ref _kiteHealth, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(1000)]
+        public int KiteStutterDelay
+        {
+            get { return _kiteStutterDelay; }
+            set { SetField(ref _kiteStutterDelay, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(550)]
+        public int KiteStutterDuration
+        {
+            get { return _kiteStutterDuration; }
+            set { SetField(ref _kiteStutterDuration, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(true)]
+        public bool PathAroundAvoidance
+        {
+            get { return _pathAroundAvoidance; }
+            set { SetField(ref _pathAroundAvoidance, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(true)]
+        public bool AvoidOutsideCombat
+        {
+            get { return _avoidOutsideCombat; }
+            set { SetField(ref _avoidOutsideCombat, value); }
+        }
+
         public void OnSave()
         {
             Logger.Log("Saving Avoidance Data");
@@ -180,12 +262,16 @@ namespace Trinity.Config
         {
             var data = AvoidanceDataFactory.AvoidanceData.ToDictionary(k => k.Name, v => v);
 
-            foreach (var avoidanceSetting in Avoidances)
+            foreach (var avoidanceSetting in Avoidances.ToList())
             {
                 AvoidanceData def;
-                if (avoidanceSetting?.Name != null && avoidanceSetting .Handler != null && data.TryGetValue(avoidanceSetting.Name, out def))
+                if (avoidanceSetting?.Name != null && avoidanceSetting.Handler != null && data.TryGetValue(avoidanceSetting.Name, out def))
                 {
                     avoidanceSetting.CopyTo(def);
+                }
+                else
+                {
+                    Avoidances.Remove(avoidanceSetting);
                 }
             }
         }

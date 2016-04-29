@@ -4,11 +4,16 @@ using System.Diagnostics;
 using System.Linq;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
+using Trinity.Framework;
+using Trinity.Framework.Avoidance.Structures;
 using Trinity.Helpers;
 using Trinity.Technicals;
 using Zeta.Bot;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Zeta.TreeSharp;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity
 {
@@ -56,6 +61,23 @@ namespace Trinity
                 {
                     _shouldPickNewAbilities = true;
                     return TargetCheckResult(true, "Current Target is not null");
+                }
+
+                if (Core.Avoidance.Avoider.ShouldAvoid && (Settings.Avoidance.AvoidOutsideCombat || Core.Avoidance.Grid.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance)))
+                {
+                    Vector3 safespot;
+                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot))
+                    {
+                        CurrentTarget = new TrinityCacheObject()
+                        {
+                            Position = safespot,
+                            Type = TrinityObjectType.Avoidance,
+                            Distance = safespot.Distance(Player.Position),
+                            Radius = 3.5f,
+                            InternalName = "Avoidance Safespot",
+                            IsSafeSpot = true
+                        };
+                    }
                 }
 
                 MonkCombat.RunOngoingPowers();
@@ -122,7 +144,7 @@ namespace Trinity
                         }
                     }
                 }
-                CurrentTarget = null;
+                TargetUtil.ClearCurrentTarget("Target Check Failed to have Valid Target.");
 
                 if ((ForceVendorRunASAP || WantToTownRun) && TownRun.TownRunTimerRunning())
                 {

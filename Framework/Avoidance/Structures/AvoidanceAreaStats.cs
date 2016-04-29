@@ -30,7 +30,7 @@ namespace Trinity.Framework.Avoidance.Structures
             }
 
             WeightPctTotal = weightPctSum;
-            HighestWeight = highestWeight;
+            HighestWeight = highestWeight;            
 
             WeightPctAvg = NodesTotal > 0 ? WeightPctTotal / (double)NodesTotal : 0;
         }

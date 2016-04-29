@@ -562,6 +562,11 @@ namespace Trinity.Combat.Abilities
                     return new TrinityPower(SNOPower.X1_Crusader_Bombardment, 16f, bestPoint);
                 }
 
+                if (PlayerMover.IsBlocked && !IsSteedCharging && CanCast(SNOPower.X1_Crusader_SteedCharge))
+                {
+                    return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
+                }
+
                 // Provoke
                 if (!IsSteedCharging && CanCastProvoke())
                 {

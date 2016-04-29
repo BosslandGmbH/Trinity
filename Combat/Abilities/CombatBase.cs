@@ -363,8 +363,9 @@ namespace Trinity.Combat.Abilities
                 if (CurrentTarget == null)
                     return false;
 
-                if (CurrentTarget.Type == TrinityObjectType.Avoidance)
+                if (CurrentTarget.Type == TrinityObjectType.Avoidance || CurrentTarget.IsSafeSpot)
                     return true;
+
                 return false;
             }
         }

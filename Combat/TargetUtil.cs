@@ -20,6 +20,115 @@ namespace Trinity
 {
     class TargetUtil
     {
+        public static void ClearCurrentTarget(string reason)
+        {
+            var clearString = "Clearing CURRENT TARGET: " + reason;
+            if (TrinityPlugin.CurrentTarget != null)
+            {
+                clearString +=
+                    string.Format(
+                        $"{Environment.NewLine} Name: {CurrentTarget.InternalName} Type: {CurrentTarget.Type} SNO: {CurrentTarget.ActorSNO} Distance: {CurrentTarget.Distance} " +
+                        $"{Environment.NewLine} Weight: {CurrentTarget.Weight} Info: {CurrentTarget.WeightInfo}");
+            }
+
+            Logger.LogVerbose(clearString);
+            TrinityPlugin.CurrentTarget = null;
+        }
+
+        internal static bool UnitInAoe(CacheData.PlayerCache u)
+        {
+            if (u == null)
+                return false;
+
+            return CacheData.TimeBoundAvoidance.Any(aoe => aoe.Position.Distance2D(u.Position) <= aoe.Radius);
+        }
+
+        internal static TrinityCacheObject ClosestHealthGlobe(float distance = 45)
+        {
+            return (from u in ObjectCache
+                    where u.Type == TrinityObjectType.HealthGlobe && !UnitOrPathInAoE(u) &&
+                          u.RadiusDistance <= distance
+                    select u).FirstOrDefault();
+        }
+
+        internal static bool WithInDistance(TrinityCacheObject actor, TrinityCacheObject actor2, float distance)
+        {
+            return
+                TrinityPlugin.ObjectCache.Any(
+                    m => m.ActorSNO == actor.ActorSNO && m.Position.Distance(actor2.Position) <= distance);
+        }
+
+        internal static bool WithInDistance(TrinityCacheObject actor, Vector3 unitLocation, float distance)
+        {
+            return
+                TrinityPlugin.ObjectCache.Any(
+                    m => m.ActorSNO == actor.ActorSNO && m.Position.Distance(unitLocation) <= distance);
+        }
+
+        internal static List<TrinityCacheObject> GetDiaObjects(uint actorSNO, float range = 25f)
+        {
+            return
+                (from u in ObjectCache
+                 where u.RadiusDistance <= range &&
+                       u.ActorSNO == actorSNO
+                 orderby u.Distance
+                 select u).ToList();
+        }
+
+        internal static Vector3 GetDiaObjectBestClusterPoint(uint actorSNO, float radius = 15f, float maxRange = 45f,
+            bool useWeights = true, bool includeUnitsInAoe = true)
+        {
+            var clusterUnits =
+                (from u in ObjectCache
+                 where u.ActorSNO == actorSNO &&
+                       u.RadiusDistance <= maxRange
+                 orderby u.NearbyUnitsWithinDistance(radius),
+                     u.Distance descending
+                 select u.Position).ToList();
+
+            return clusterUnits.Any() ? clusterUnits.FirstOrDefault() : Vector3.Zero;
+        }
+
+        internal static List<TrinityCacheObject> GetTwisterDiaObjects(float range = 25f)
+        {
+            return
+                (from u in ObjectCache
+                 where u.RadiusDistance <= range &&
+                       u.ActorSNO == 322236
+                 orderby u.Distance
+                 select u).ToList();
+        }
+
+        internal static Vector3 GetBestTwsiterClusterPoint(float radius = 15f, float maxRange = 45f,
+            bool useWeights = true, bool includeUnitsInAoe = true)
+        {
+            if (radius < 5f)
+                radius = 5f;
+            if (maxRange > 75f)
+                maxRange = 75f;
+
+            var clusterUnits =
+                (from u in ObjectCache
+                 where u.ActorSNO == 322236 &&
+                       u.RadiusDistance <= maxRange
+                 orderby u.NearbyUnitsWithinDistance(radius),
+                     u.Distance descending
+                 select u.Position).ToList();
+
+            return clusterUnits.Any() ? clusterUnits.FirstOrDefault() : Vector3.Zero;
+        }
+
+        internal static List<TrinityCacheObject> GetOculusBuffDiaObjects(float range = 25f)
+        {
+            return
+                (from u in ObjectCache
+                 where !UnitInAoe(u) &&
+                       u.RadiusDistance <= range &&
+                       u.ActorSNO == 433966
+                 orderby u.Distance
+                 select u).ToList();
+        }
+
         #region Helper fields
 
         private static List<TrinityCacheObject> ObjectCache
@@ -138,8 +247,8 @@ namespace Trinity
         /// </summary>
         internal static bool ClusterExists(float radius = 15f, float maxRange = 90f, int minCount = 2, bool forceElites = true)
         {
-            if (radius < 5f)
-                radius = 5f;
+            if (radius < 2f)
+                radius = 2f;
             if (maxRange > 300f)
                 maxRange = 300f;
             if (minCount < 1)
@@ -152,7 +261,7 @@ namespace Trinity
                 (from u in ObjectCache
                  where u.IsUnit && u.IsFullyValid() &&
                  u.RadiusDistance <= maxRange &&
-                 u.NearbyUnitsWithinDistance(radius) >= minCount
+                 u.NearbyUnitsWithinDistance(radius)-1 >= minCount
                  select u).Any();
 
             return clusterCheck;
@@ -431,15 +540,10 @@ namespace Trinity
             if (maxRange > 300f)
                 maxRange = 300f;
 
-            bool includeHealthGlobes = false;
-            switch (TrinityPlugin.Player.ActorClass)
-            {
-                case ActorClass.Barbarian:
-                    includeHealthGlobes = CombatBase.Hotbar.Contains(SNOPower.Barbarian_Whirlwind) &&
-                                          TrinityPlugin.Settings.Combat.Misc.CollectHealthGlobe &&
-                                          ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0);
-                    break;
-            }
+            bool includeHealthGlobes = TrinityPlugin.Settings.Combat.Misc.CollectHealthGlobe &&
+                                       ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0) &&
+                                       (PlayerMover.IsSpecialMovementReady || !PlayerMover.IsBlocked);
+
 
             Vector3 bestClusterPoint;
             var clusterUnits =
@@ -1170,35 +1274,39 @@ namespace Trinity
             return result;
         }
 
-        internal static Vector3 GetDashStrikeBestClusterPoint(float radius = 15f, float maxRange = 65f, float procDistance = 33f, bool useWeights = true, bool includeUnitsInAoe = true)
+        internal static Vector3 GetDashStrikeBestClusterPoint(float radius = 15f, float maxRange = 65f,
+            float procDistance = 33f, bool useWeights = true, bool includeUnitsInAoe = true)
         {
             if (radius < 5f)
                 radius = 5f;
             if (maxRange > 300f)
                 maxRange = 300f;
 
-            bool includeHealthGlobes = false;
-            switch (TrinityPlugin.Player.ActorClass)
-            {
-                case ActorClass.Barbarian:
-                    includeHealthGlobes = CombatBase.Hotbar.Contains(SNOPower.Barbarian_Whirlwind) &&
-                                          TrinityPlugin.Settings.Combat.Misc.CollectHealthGlobe &&
-                                          ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0);
-                    break;
-            }
+            bool includeHealthGlobes = TrinityPlugin.Settings.Combat.Misc.CollectHealthGlobe &&
+                                       ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0) &&
+                                       (PlayerMover.IsSpecialMovementReady || !PlayerMover.IsBlocked);
+            //switch (TrinityPlugin.Player.ActorClass)
+            //{
+            //    case ActorClass.Barbarian:
+            //        includeHealthGlobes = CombatBase.Hotbar.Contains(SNOPower.Barbarian_Whirlwind) &&
+            //                              TrinityPlugin.Settings.Combat.Misc.CollectHealthGlobe &&
+            //                              ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0);
+            //        break;
+            //}
 
             Vector3 bestClusterPoint;
             var clusterUnits =
                 (from u in ObjectCache
                  where (u.IsUnit || (includeHealthGlobes && u.Type == TrinityObjectType.HealthGlobe)) &&
-                 ((useWeights && u.Weight > 0) || !useWeights) &&
-                 (includeUnitsInAoe || !UnitOrPathInAoE(u)) &&
-                 u.RadiusDistance <= maxRange && u.Distance >= procDistance
-                 orderby u.Type != TrinityObjectType.HealthGlobe, // if it's a globe this will be false and sorted at the top
-                  !u.IsBossOrEliteRareUnique,
-                  u.NearbyUnitsWithinDistance(radius) descending,
-                  u.Distance,
-                  u.HitPointsPct descending
+                       ((useWeights && u.Weight > 0) || !useWeights) &&
+                       (includeUnitsInAoe || !UnitOrPathInAoE(u)) &&
+                       u.RadiusDistance <= maxRange && u.Distance >= procDistance
+                 orderby u.Type != TrinityObjectType.HealthGlobe,
+                     // if it's a globe this will be false and sorted at the top
+                     !u.IsBossOrEliteRareUnique,
+                     u.NearbyUnitsWithinDistance(radius) descending,
+                     u.Distance,
+                     u.HitPointsPct descending
                  select u.Position).ToList();
 
             if (clusterUnits.Any())

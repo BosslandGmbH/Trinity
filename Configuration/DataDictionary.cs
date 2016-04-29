@@ -1389,6 +1389,8 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            //209133, //TentacleLord
+            (int)SNOActor.trDun_Cath_Gate_D_UdderChaos, // Door that is locked until you talk to cow king
 
             (int)SNOActor.x1_BogCave_Breakable_Stalagmites_A,
             (int)SNOActor.x1_BogCave_Breakable_Stalagmites_B,
@@ -1405,7 +1407,7 @@ namespace Trinity
 
             165415, //ActorId: 165415, Type: Gizmo, Name: a2dun_Zolt_SandBridgeBase_BossFight-529, Distance2d: 41.01208, CollisionRadius: 18.31754, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
             165415, //ActorId: 165415, Type: Gizmo, Name: a2dun_Zolt_SandBridgeBase_BossFight-921, Distance2d: 41.67792, CollisionRadius: 18.31754, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
-            //156328, //ActorId: 156328, Type: Gizmo, Name: a2dun_Zolt_black_soulstone-515, Distance2d: 41.42352, CollisionRadius: 20.39608, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
+            //156328, //ActorId: 156328, Type: Gizmo, Name: a2dun_Zolt_black_soulstone-515, Distance2d: 41.42352, CollisionRadius: 20.39608, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0            
 
             5674, //trDun_book_pile_b ActorSnoId=5674 
             362323, // x1_WestmHub_GuardNoHelmUnarmed
@@ -1425,7 +1427,7 @@ namespace Trinity
             111456, 5013, 5014, 205756, 205746, 4182, 4183, 4644, 4062, 4538, 52693, 162575, 2928, 51291, 51292,
             96132, 90958, 90959, 80980, 51292, 51291, 2928, 3546, 129345, 81857, 138428, 81857, 60583, 170038, 174854, 190390,
             194263, 87189, 90072, 107031, 106584, 186130, 187265,
-            108012, 103279, 74004, 84531, 84538,  190492, 209133, 6318, 107705, 105681, 89934,
+            108012, 103279, 74004, 84531, 84538,  190492, 6318, 107705, 105681, 89934,
             89933, 182276, 117574, 182271, 182283, 182278, 128895, 81980, 82111, 81226, 81227, 107067, 106749,
             107107, 107112, 106731, 107752, 107829, 90321, 107828, 121327, 249320, 81232, 81231, 81239, 81515, 210433, 195414,
             80758, 80757, 80745, 81229, 81230, 82109, 83024, 83025, 82972, 83959, 249190, 251396, 138472, 118260, 200226, 192654, 245828,
@@ -2397,11 +2399,11 @@ namespace Trinity
             343300,
         };
 
-        public static readonly HashSet<SNOAnim> SteedChargeAnimations = new HashSet<SNOAnim>
-        {
-            SNOAnim.x1_Crusader_Male_SteedCharge,
-            SNOAnim.x1_Crusader_Female_SteedCharge
-        };
+        //public static readonly HashSet<SNOAnim> SteedChargeAnimations = new HashSet<SNOAnim>
+        //{
+        //    SNOAnim.x1_Crusader_Male_SteedCharge,
+        //    SNOAnim.x1_Crusader_Female_SteedCharge
+        //};
 
         public static readonly HashSet<int> PlayerUseAnimationIds = new HashSet<int>
         {
@@ -2632,6 +2634,67 @@ namespace Trinity
             434843,
             //x1_Bog_Bear_Trap
             237062
+        };
+
+        public static readonly HashSet<SNOAnim> SteedChargeAnimations = new HashSet<SNOAnim>
+        {
+            SNOAnim.x1_Crusader_Male_1HS_Shield_attack_ShieldBash_Charge_01, //308091,
+            SNOAnim.x1_Crusader_Male_1HS_Shield_attack_ShieldBash_Charge_Outtro_01, //308092,
+            SNOAnim.x1_Crusader_Female_1HS_Shield_attack_ShieldBash_Charge_Outro, //311186,
+            SNOAnim.x1_Crusader_Female_1HS_Shield_attack_ShieldBash_Charge, //311187,
+            SNOAnim.x1_Crusader_Female_SteedCharge, //311892,
+            SNOAnim.x1_Crusader_Male_cast_Phalanx_ShieldCharge_01, //339946,
+            SNOAnim.x1_Crusader_Male_2HT_Shield_attack_ShieldBash_Charge_01, //357447,
+            SNOAnim.x1_Crusader_Male_2HT_Shield_attack_ShieldBash_Charge_Outtro_01, //357448,
+            SNOAnim.x1_Crusader_Female_2HT_Shield_attack_ShieldBash_Charge, //358735,
+            SNOAnim.x1_Crusader_Female_2HT_Shield_attack_ShieldBash_Charge_Outro, //358736,
+        };
+
+        public static readonly HashSet<SNOAnim> LeapAnimations = new HashSet<SNOAnim>
+        {
+             SNOAnim.Barbarian_Female_DW_Leap_Attack_Air, //7411
+             SNOAnim.Barbarian_Female_DW_Leap_Attack_ContactEnd, //7412
+             SNOAnim.barbarian_male_1HT_LeapAttack_Air, //7521
+             SNOAnim.barbarian_male_1HT_LeapAttack_ContactEnd, //7522
+             SNOAnim.barbarian_male_1HT_LeapAttack_Start, //7523
+             SNOAnim.barbarian_male_2HS_Leap_Attack_Air, //7546
+             SNOAnim.barbarian_male_2HS_Leap_Attack_ContactEnd, //7547
+             SNOAnim.barbarian_male_2HS_Leap_Attack_Start, //7548
+             SNOAnim.barbarian_male_2HT_LeapAttack_Air, //7569
+             SNOAnim.barbarian_male_2HT_LeapAttack_ContactEnd, //7570
+             SNOAnim.barbarian_male_2HT_LeapAttack_Start, //7571
+             SNOAnim.barbarian_male_DW_LeapAttack_Air, //7632
+             SNOAnim.barbarian_male_DW_LeapAttack_ContactEnd, //7633
+             SNOAnim.barbarian_male_DW_LeapAttack_Start, //7634
+             SNOAnim.barbarian_male_Leap_Attack_Air, //7701
+             SNOAnim.barbarian_male_Leap_Attack_ContactEnd, //7702
+             SNOAnim.barbarian_male_Leap_Attack_Start, //7703
+             SNOAnim.barbarian_male_STF_LeapAttack_Air, //7718
+             SNOAnim.barbarian_male_STF_LeapAttack_ContactEnd, //7719
+             SNOAnim.barbarian_male_STF_LeapAttack_Start, //7720
+             SNOAnim.barbarian_male_Leap_Attack_Air_Cannibal //437875,
+        };
+
+        public static readonly HashSet<SNOAnim> ChargeAnimations = new HashSet<SNOAnim>
+        {
+            SNOAnim.barbarian_male_groundStomp_chargeTest, //7661,
+            SNOAnim.barbarian_male_groundStomp_chargeTestEnd, //7662,
+            SNOAnim.barbarian_male_1HS_Furious_Charge_End, //115910,
+            SNOAnim.barbarian_male_1HS_Furious_Charge_Loop, //115911,
+            SNOAnim.barbarian_male_STF_Furious_Charge_End, //115912,
+            SNOAnim.barbarian_male_STF_Furious_Charge_loop, //115913,
+            SNOAnim.barbarian_male_2HT_Furious_Charge_End, //115914,
+            SNOAnim.barbarian_male_2HT_Furious_Charge_loop, //115915,
+            SNOAnim.barbarian_male_1HT_Furious_Charge_End, //115926,
+            SNOAnim.barbarian_male_1HT_Furious_Charge_loop, //115927,
+            SNOAnim.Barbarian_Female_1HS_Furious_Charge_End, //116117,
+            SNOAnim.Barbarian_Female_1HS_Furious_Charge_Loop, //116118,
+            SNOAnim.Barbarian_Female_1HT_Furious_Charge_End, //116119,
+            SNOAnim.Barbarian_Female_1HT_Furious_Charge_Loop, //116120,
+            SNOAnim.Barbarian_Female_2HT_Furious_Charge_End, //116121,
+            SNOAnim.Barbarian_Female_2HT_Furious_Charge_Loop, //116122,
+            SNOAnim.Barbarian_Female_1HS_Furious_Charge_Loop_Cannibal, //437861,
+            SNOAnim.Barbarian_Female_1HS_Furious_Charge_End_Cannibal, //437862,
         };
 
 

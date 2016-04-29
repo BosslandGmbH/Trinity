@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Combat.Abilities;
+using Trinity.Config;
+using Trinity.Config.Combat;
 using Trinity.DbProvider;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Technicals;
@@ -21,8 +23,9 @@ namespace Trinity.Framework.Avoidance
     {
         bool IsAvoiding { get; }
         bool ShouldAvoid { get; }
-        Task<bool> Avoid();
-        bool TryGetSafeSpot(out Vector3 position, Func<AvoidanceNode, bool> condition = null);
+        //Task<bool> Avoid();
+        bool TryGetSafeSpot(out Vector3 position, float minDistance = 10f, Func<AvoidanceNode, bool> condition = null);
+        TimeSpan TimeSinceLastAvoid { get; }
     }
 
     /// <summary>
@@ -30,121 +33,135 @@ namespace Trinity.Framework.Avoidance
     /// </summary>
     public class DefaultAvoider : IAvoider
     {
-        public AvoidanceMode Mode;
-
-        public double DestinationChangeLimitMs = 25;
-
-        public double AvoidCooldownMs = 25;
-
-        public AvoidanceNode CurrentDestination;
-
         public bool IsAvoiding { get; set; }
 
-        bool IAvoider.ShouldAvoid => ShouldAvoid();
+        public DateTime KiteStutterDelay = DateTime.MinValue;
+        public DateTime KiteStutterDuration = DateTime.MinValue;
 
-        public async Task<bool> Avoid()
+        public DateTime LastAvoidTime = DateTime.MinValue;
+
+        public TimeSpan TimeSinceLastAvoid => DateTime.UtcNow.Subtract(LastAvoidTime);
+
+        public AvoidanceSetting Settings => TrinityPlugin.Settings.Avoidance;
+
+        public bool ShouldAvoid
         {
-            if (ShouldAvoid())
+            get
             {
-                Vector3 safespot;
-                if (!TryGetSafeSpot(out safespot))
+                if (TrinityPlugin.Player.IsInTown)
+                    return false;
+
+                if (!TrinityPlugin.Settings.Combat.Misc.AvoidAoEOutOfCombat && !CombatBase.IsInCombat)
+                    return false;
+
+                // todo, allow a way of disabling avoidance for monk with serentiy, barb with ironskin, ghost walking WD
+                // todo animations
+                // todo element immunity
+
+                if (ShouldAvoidCritical)
+                    return true;
+
+                if (ShouldKite)
+                    return true;
+
+                if (Core.Avoidance.NearbyNodes.Any(n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Gizmo)) && PlayerMover.IsBlocked)
+                    return false;
+
+                if (Core.Avoidance.HighestNodeWeight >= 2 &&
+                    Core.Avoidance.NearbyStats.HighestWeight >= Settings.MinimumHighestNodeWeightTrigger &&
+                    Core.Avoidance.NearbyStats.WeightPctTotal >= Settings.MinimumNearbyWeightPctTotalTrigger &&
+                    Core.Avoidance.NearbyStats.WeightPctAvg >= Settings.AvoiderNearbyPctAvgTrigger)
                 {
-                    IsAvoiding = false;
+
+                    Logger.Log(LogCategory.Avoidance, "Avoidance Local PctAvg: {0:0.00} / {1:0.00} PctTotal={2:0.00} / {3:0.00} Highest={4} / {5} ({6} Nodes, AbsHighest={7})",
+                        Core.Avoidance.NearbyStats.WeightPctAvg,
+                        Settings.AvoiderNearbyPctAvgTrigger,
+                        Core.Avoidance.NearbyStats.WeightPctTotal,
+                        Settings.MinimumNearbyWeightPctTotalTrigger,
+                        Core.Avoidance.NearbyStats.HighestWeight,
+                        Settings.MinimumHighestNodeWeightTrigger,
+                        Core.Avoidance.NearbyStats.NodesTotal,
+                        Core.Avoidance.HighestNodeWeight);
+
+                    LastAvoidTime = DateTime.UtcNow;
+                    return true;
+                }
+
+                return false;
+
+            }
+        }
+
+        private bool ShouldAvoidCritical
+        {
+            get
+            {
+                if (TargetZDif < 8 && Settings.Avoidances.Any(a => a.IsEnabled))
+                {
+                    if (Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance))
+                    {
+                        Logger.Log(LogCategory.Avoidance, "IsStandingInFlags... CriticalAvoidance");
+                        LastAvoidTime = DateTime.UtcNow;
+                        return true;
+                    }
+
+                    if (Core.Grids.Avoidance.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance))
+                    {
+                        Logger.Log(LogCategory.Avoidance, "IsPathingOverFlags... CriticalAvoidance");
+                        Navigator.Clear();
+                        LastAvoidTime = DateTime.UtcNow;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        private bool ShouldKite
+        {
+            get
+            {
+                if (DateTime.UtcNow < KiteStutterDuration)
+                {
+                    Logger.Log(LogCategory.Avoidance, "Kite On Cooldown");
                     return false;
                 }
 
-                await AddToSafeSpotToCache(safespot);
-                IsAvoiding = true;
+                var isAtKiteHealth = TrinityPlugin.Player.CurrentHealthPct * 100 <= Settings.KiteHealth;
+                if (isAtKiteHealth && TargetZDif < 4 && Settings.KiteMode != KiteMode.Never)
+                {
+                    var canSeeTarget = CombatBase.CurrentTarget == null || Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, CombatBase.CurrentTarget.Position);
+                    if (canSeeTarget && Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.KiteFrom))
+                    {
+                        if (KiteStutterDelay < DateTime.UtcNow)
+                        {
+                            Logger.Log(LogCategory.Avoidance, "Kite Shutter Triggered");
+                            KiteStutterDelay = DateTime.UtcNow.AddMilliseconds(Settings.KiteStutterDelay);
+                            KiteStutterDuration = DateTime.UtcNow.AddMilliseconds(Settings.KiteStutterDuration);
+                            return true;
+                        }
+
+                        Logger.Log(LogCategory.Avoidance, "IsStandingInFlags... KiteFromNode");
+                        LastAvoidTime = DateTime.UtcNow;
+                        {
+                            return true;
+                        }
+                    }
+                }
                 return false;
             }
-
-            IsAvoiding = false;
-            return false;
         }
 
-        public bool ShouldAvoid()
+
+
+        private static float TargetZDif
         {
-            if (!TrinityPlugin.Settings.Avoidance.Avoidances.Any(a => a.IsEnabled))
-                return false;
-
-            if (TrinityPlugin.Player.IsInTown)
-                return false;
-
-            if (TrinityPlugin.Settings.Combat.Misc.AvoidAoEOutOfCombat && !CombatBase.IsInCombat)
-                return false;
-
-            // todo, allow a way of disabling avoidance for monk with serentiy, barb with ironskin, ghost walking WD
-
-            // todo animations
-          //  if (c_diaObject is DiaUnit && Settings.Combat.Misc.AvoidAOE &&
-        //    DataDictionary.AvoidanceAnimations.Contains(new DoubleInt(CurrentCacheObject.ActorSNO, (int)c_diaObject.CommonData.CurrentAnimation)))
-
-
-                if (Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance))
-            {
-                Logger.Log("IsStandingInFlags... CriticalAvoidance");
-                return true;
-            }
-
-            if (Core.Grids.Avoidance.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance))
-            {
-                Logger.Log(LogCategory.Avoidance, "IsPathingOverFlags... CriticalAvoidance");
-                return true;
-            }
-
-            if (Core.Avoidance.NearbyNodes.Any(n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Gizmo)) && PlayerMover.IsBlocked)
-            {
-                return false;
-            }
-
-            if (Core.Avoidance.HighestNodeWeight >= 2 &&
-                Core.Avoidance.NearbyStats.HighestWeight >= TrinityPlugin.Settings.Avoidance.MinimumHighestNodeWeightTrigger &&
-                Core.Avoidance.NearbyStats.WeightPctTotal >= TrinityPlugin.Settings.Avoidance.MinimumNearbyWeightPctTotalTrigger &&
-                Core.Avoidance.NearbyStats.WeightPctAvg >= TrinityPlugin.Settings.Avoidance.AvoiderNearbyPctAvgTrigger)
-            {
-                Logger.Log(LogCategory.Avoidance, "Avoidance Local PctAvg: {0:0.00} / {1:0.00} PctTotal={2:0.00} / {3:0.00} Highest={4} / {5} ({6} Nodes, AbsHighest={7})",
-                    Core.Avoidance.NearbyStats.WeightPctAvg,
-                    TrinityPlugin.Settings.Avoidance.AvoiderNearbyPctAvgTrigger,
-                    Core.Avoidance.NearbyStats.WeightPctTotal,
-                    TrinityPlugin.Settings.Avoidance.MinimumNearbyWeightPctTotalTrigger,
-                    Core.Avoidance.NearbyStats.HighestWeight,
-                    TrinityPlugin.Settings.Avoidance.MinimumHighestNodeWeightTrigger,
-                    Core.Avoidance.NearbyStats.NodesTotal,
-                    Core.Avoidance.HighestNodeWeight);
-
-                return true;
-            }
-
-            return false;
+            get { return CombatBase.CurrentTarget == null ? 0 : Math.Abs(CombatBase.CurrentTarget.Position.Z - ZetaDia.Me.Position.Z); }
         }
 
-        public async Task<bool> AddToSafeSpotToCache(Vector3 safespot)
+        public bool TryGetSafeSpot(out Vector3 safeSpot, float minDistance = 10f, Func<AvoidanceNode, bool> condition = null)
         {
-            var highestPriorityObject = TrinityPlugin.ObjectCache.Where(o => o.Weight > TrinityPlugin.Weighting.MaxWeight * 0.8 && (CombatBase.IsDoingGoblinKamakazi && o.IsTreasureGoblin || o.ActorType == ActorType.Gizmo)).OrderByDescending(o => o.Weight).FirstOrDefault();
-            var weight = highestPriorityObject?.Weight ?? TrinityPlugin.Weighting.MaxWeight;
-
-            var t = TrinityPlugin.ObjectCache.OrderByDescending(o => o.Weight).FirstOrDefault();
-            if (t != null && CombatBase.IsDoingGoblinKamakazi && t.IsTreasureGoblin || t.Type == TrinityObjectType.Door && t.Distance < 10f)
-            {
-                return false;
-            }
-
-            TrinityPlugin.ObjectCache.RemoveAll(o => o.IsSafeSpot);
-            TrinityPlugin.ObjectCache.Add(new TrinityCacheObject()
-            {
-                InternalName = "Avoidance Safe Spot",
-                Position = safespot,
-                Weight = weight,
-                Type = TrinityObjectType.Avoidance,
-                IsSafeSpot = true,
-            });
-
-            return false;
-        }
-
-        public bool TryGetSafeSpot(out Vector3 safeSpot, Func<AvoidanceNode, bool> condition = null)
-        {
-            var nodes = Core.Avoidance.SafeNodesByDistance;
+            var nodes = Core.Avoidance.SafeNodesByDistance.Where(p => p.Distance > minDistance);
             var safeSpotNode = condition == null ? nodes.FirstOrDefault() : nodes.FirstOrDefault(condition);
             if (safeSpotNode != null)
             {
@@ -155,47 +172,8 @@ namespace Trinity.Framework.Avoidance
             return false;
         }
 
-        private async Task<bool> MoveToDestination()
-        {
-            if (CurrentDestination.Distance >= 4f)
-            {
-                if (CurrentDestination.Distance < 10f)
-                {
-                    Logger.LogVerbose("Moving (Basic) to Avoidance Position {0} Distance={1}", CurrentDestination.NavigableCenter, CurrentDestination.Distance);
-                    Navigator.PlayerMover.MoveTowards(CurrentDestination.NavigableCenter);
-                    return true;
-                }
-
-                Logger.LogVerbose("Moving (PathFinder) to Avoidance Position {0} Distance={1}", CurrentDestination.NavigableCenter, CurrentDestination.Distance);
-                var result = await CommonCoroutines.MoveTo(CurrentDestination.NavigableCenter, "AvoidPosition");
-                switch (result)
-                {
-                    case MoveResult.PathGenerationFailed:
-                    case MoveResult.UnstuckAttempt:
-                        Logger.LogVerbose("PathFinding Failed", CurrentDestination.NavigableCenter, CurrentDestination.Distance);
-                        CurrentDestination = null;
-                        return true;
-                }
-            }
-            return false;
-        }
-
-        private bool IsCurrentPathAvoidanceDestination()
-        {
-            if (CurrentDestination == null || PlayerMover.NavigationProvider == null || PlayerMover.NavigationProvider.CurrentPath == null)
-                return false;
-
-            return CurrentDestination.NavigableCenter == PlayerMover.NavigationProvider.CurrentPathDest;
-        }
-
     }
 
-    public enum AvoidanceMode
-    {
-        None = 0,
-        StayClose,
-        Meander
-    }
 }
 
 

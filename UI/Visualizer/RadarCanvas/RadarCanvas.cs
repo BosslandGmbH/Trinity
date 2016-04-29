@@ -624,6 +624,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     {
                         DrawKiteNodes(dc, CanvasData);
                     }
+                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.KiteFromNodes))
+                    {
+                        DrawKiteFromNodes(dc, CanvasData);
+                    }
 
                     //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache))
                     //{
@@ -805,7 +809,26 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Logger.Log("Exception in RadarUI.DrawKiteNodes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+            }
+        }
+
+        private void DrawKiteFromNodes(DrawingContext dc, CanvasData canvas)
+        {
+            try
+            {
+                if (!Core.Avoidance.KiteFromLayer.Any())
+                    return;
+
+                foreach (var pos in Core.Avoidance.KiteFromLayer)
+                {
+                    dc.DrawEllipse(null, new Pen(RadarResources.LabelBrush, 1 * Scale), pos.NavigableCenter.ToCanvasPoint(), 4 * Scale, 4 * Scale);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Exception in RadarUI.DrawKiteFromNodes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 

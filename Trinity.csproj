@@ -115,6 +115,7 @@
     <Compile Include="Framework\Actors\ActorManager.cs" />
     <Compile Include="Framework\Actors\CachedItem.cs" />
     <Compile Include="Framework\Avoidance\Structures\AvoidanceLayer.cs" />
+    <Compile Include="Framework\Avoidance\Structures\WeightingOptions.cs" />
     <Compile Include="Framework\Objects\Memory\Globals.cs" />
     <Compile Include="Framework\Objects\Memory\Hero.cs" />
     <Compile Include="Framework\Helpers\TypeConversions.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Helpers\WindowMessage.cs" />
     <Compile Include="Helpers\WindowsVirtualKey.cs" />
     <Compile Include="Framework\Helpers\Internals.cs" />
+    <Compile Include="Movement\ClassMover.cs" />
     <Compile Include="Objects\SkillSettings.cs" />
     <Compile Include="Objects\IFindable.cs" />
     <Content Include="Framework\Objects\Memory\readme.txt" />
