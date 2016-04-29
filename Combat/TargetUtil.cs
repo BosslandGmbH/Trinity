@@ -22,17 +22,14 @@ namespace Trinity
     {
         public static void ClearCurrentTarget(string reason)
         {
-            var clearString = "Clearing CURRENT TARGET: " + reason;
             if (TrinityPlugin.CurrentTarget != null)
             {
-                clearString +=
-                    string.Format(
+                var clearString = "Clearing CURRENT TARGET: " + reason +
                         $"{Environment.NewLine} Name: {CurrentTarget.InternalName} Type: {CurrentTarget.Type} SNO: {CurrentTarget.ActorSNO} Distance: {CurrentTarget.Distance} " +
-                        $"{Environment.NewLine} Weight: {CurrentTarget.Weight} Info: {CurrentTarget.WeightInfo}");
+                        $"{Environment.NewLine} Weight: {CurrentTarget.Weight} Info: {CurrentTarget.WeightInfo}";
+                Logger.LogVerbose(clearString);
+                TrinityPlugin.CurrentTarget = null;
             }
-
-            Logger.LogVerbose(clearString);
-            TrinityPlugin.CurrentTarget = null;
         }
 
         internal static bool UnitInAoe(CacheData.PlayerCache u)
@@ -542,7 +539,7 @@ namespace Trinity
 
             bool includeHealthGlobes = TrinityPlugin.Settings.Combat.Misc.CollectHealthGlobe &&
                                        ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0) &&
-                                       (PlayerMover.IsSpecialMovementReady || !PlayerMover.IsBlocked);
+                                       (ClassMover.IsSpecialMovementReady || !PlayerMover.IsBlocked);
 
 
             Vector3 bestClusterPoint;
@@ -1284,7 +1281,7 @@ namespace Trinity
 
             bool includeHealthGlobes = TrinityPlugin.Settings.Combat.Misc.CollectHealthGlobe &&
                                        ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0) &&
-                                       (PlayerMover.IsSpecialMovementReady || !PlayerMover.IsBlocked);
+                                       (ClassMover.IsSpecialMovementReady || !PlayerMover.IsBlocked);
             //switch (TrinityPlugin.Player.ActorClass)
             //{
             //    case ActorClass.Barbarian:

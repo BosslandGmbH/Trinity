@@ -69,9 +69,6 @@ namespace Trinity.Combat.Abilities
                 var dogCount = Passives.WitchDoctor.MidnightFeast.IsActive ? 4 : 3;
                 if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && TrinityPlugin.PlayerOwnedZombieDogCount < dogCount)
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
-
-                if (CanCast(SNOPower.Witchdoctor_SpiritWalk) && Settings.Combat.Misc.AllowOOCMovement && !Player.IsInTown)
-                    return new TrinityPower(SNOPower.Witchdoctor_SpiritWalk);
             }
 
             if (CurrentTarget != null)
@@ -873,13 +870,6 @@ namespace Trinity.Combat.Abilities
             // Buffs
             if (UseOOCBuff)
             {
-                // Spirit Walk OOC 
-                if (CanCast(SNOPower.Witchdoctor_SpiritWalk) && Settings.Combat.Misc.AllowOOCMovement && !ZetaDia.IsInTown)
-                {
-                    return new TrinityPower(SNOPower.Witchdoctor_SpiritWalk);
-                }
-
-
                 //Spam fear at all times if Tiklandian Visage is ewquipped and fear spam is selected to keep fear buff active
                 if (CanCast(SNOPower.Witchdoctor_Horrify) && Settings.Combat.WitchDoctor.SpamHorrify && Legendary.TiklandianVisage.IsEquipped)
                 {

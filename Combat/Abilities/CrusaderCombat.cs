@@ -81,12 +81,6 @@ namespace Trinity.Combat.Abilities
 
             if (CurrentTarget == null)
             {
-                // SteedCharge
-                if (CanCast(SNOPower.X1_Crusader_SteedCharge) && ZetaDia.Me.Movement.SpeedXY > 0 && !Player.IsInTown && (CrusaderSettings.SteedChargeOOC || CrusaderSettings.SpamSteedCharge))
-                {
-                    return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
-                }
-
                 // LawsOfJustice
                 if (CanCast(SNOPower.X1_Crusader_LawsOfJustice2) && !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfJustice2, 6) &&
                     (TargetUtil.EliteOrTrashInRange(16f) ||
@@ -502,12 +496,6 @@ namespace Trinity.Combat.Abilities
                     }
                 }
 
-                // SteedCharge
-                if (CanCastSteedChargeOutOfCombat())
-                {
-                    return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
-                }
-
                 // LawsOfHope
                 if (CanCast(SNOPower.X1_Crusader_LawsOfHope2) && !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfHope2, 6) &&
                     !IsSteedCharging && (TargetUtil.EliteOrTrashInRange(16f) ||
@@ -659,11 +647,6 @@ namespace Trinity.Combat.Abilities
             // Buffs
             if (UseOOCBuff)
             {
-                if (CanCastSteedChargeOutOfCombat() && !IsSteedCharging)
-                {
-                    return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
-                }
-
                 // Laws of Hope2
                 if (!IsSteedCharging && CanCast(SNOPower.X1_Crusader_LawsOfHope2) &&
                     Player.CurrentHealthPct <= CrusaderSettings.LawsOfHopeHpPct
@@ -730,22 +713,9 @@ namespace Trinity.Combat.Abilities
 
             if (Player.IsCastingPortal)
                 return null;
-
-            if (Settings.Combat.Crusader.SteedChargeOOC && (Skills.Crusader.SteedCharge.IsActive || IsBombardmentBuild))
-            {
-                if (CanCastSteedCharge())
-                {
-                    return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
-                }
-            }
-
+            
             if (UseOOCBuff)
             {
-                if (CanCastSteedChargeOutOfCombat())
-                {
-                    return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
-                }
-
                 if (Gems.Taeguk.IsEquipped && CanCast(SNOPower.X1_Crusader_BlessedHammer) && !Player.IsIncapacitated &&
                     !Player.IsInTown &&
                     Player.PrimaryResource >= 10 && TimeSincePowerUse(SNOPower.X1_Crusader_BlessedHammer) >= 2500)
@@ -985,11 +955,6 @@ namespace Trinity.Combat.Abilities
             // Buffs
             if (UseOOCBuff)
             {
-                if (CanCast(SNOPower.X1_Crusader_SteedCharge) && CrusaderSettings.SteedChargeOOC && ZetaDia.Me.Movement.SpeedXY != 0)
-                {
-                    return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
-                }
-
                 /*
                  *  Laws
                  */
@@ -1156,11 +1121,6 @@ namespace Trinity.Combat.Abilities
         private static bool CanCastPhalanxStampede()
         {
             return (Legendary.UnrelentingPhalanx.IsEquipped && CanCast(SNOPower.x1_Crusader_Phalanx3) && TargetUtil.AnyMobsInRange(45f, 1) && Runes.Crusader.Stampede.IsActive) && Player.PrimaryResource >= 30 * (1 - Player.ResourceCostReductionPct);
-        }
-
-        private static bool CanCastSteedChargeOutOfCombat()
-        {
-            return CanCast(SNOPower.X1_Crusader_SteedCharge) && CrusaderSettings.SteedChargeOOC && !Player.IsInTown && ZetaDia.Me.LoopingAnimationEndTime == 0 && ZetaDia.Me.Movement.SpeedXY != 0;
         }
 
         private static bool CanCastSteedCharge()

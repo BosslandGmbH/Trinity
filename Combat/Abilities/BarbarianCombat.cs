@@ -28,10 +28,6 @@ namespace Trinity.Combat.Abilities
                 // Call of The Ancients
                 if (CanUseCallOfTheAncients && Sets.ImmortalKingsCall.IsFullyEquipped)
                     return PowerCallOfTheAncients;
-
-                // Sprint OOC
-                if (CanUseSprintOOC)
-                    return PowerSprint;
             }
             else
             {
