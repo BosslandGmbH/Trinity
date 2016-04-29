@@ -213,215 +213,256 @@ namespace Trinity
                         cacheObject.Weight = MinWeight;
                         switch (cacheObject.Type)
                         {
-                                #region Unit
+                            #region Unit
 
                             case TrinityObjectType.Unit:
-                            {
-                                #region Unit Variables
-
-                                var riftBoost = RiftValueFormula(cacheObject);
-
-                                var isInsideHighRiftValueCluster = riftBoost > 0;
-
-                                var isInHotSpot = GroupHotSpots.CacheObjectIsInHotSpot(cacheObject) ||
-                                                  cacheObject.IsNavBlocking();
-                                var elitesInRangeOfUnit = !CombatBase.IgnoringElites &&
-                                                          ObjectCache.Any(
-                                                              u =>
-                                                                  u.ACDGuid != cacheObject.ACDGuid &&
-                                                                  u.IsEliteRareUnique &&
-                                                                  u.Position.Distance2D(cacheObject.Position) <= 15f);
-
-                                var nearbyTrashCount =
-                                    ObjectCache.Count(u => u.IsUnit && u.HitPoints > 0 && u.IsTrashMob &&
-                                                           cacheObject.Position.Distance2D(u.Position) <=
-                                                           CombatBase.CombatOverrides.EffectiveTrashRadius);
-
-                                var ignoreSummoner = cacheObject.IsSummoner && !Settings.Combat.Misc.ForceKillSummoners;
-
-
-                                var isBoss = cacheObject.CommonData.MonsterQualityLevel ==
-                                             Zeta.Game.Internals.Actors.MonsterQuality.Boss;
-                                var isUnique = cacheObject.CommonData.MonsterQualityLevel ==
-                                               Zeta.Game.Internals.Actors.MonsterQuality.Unique;
-                                var isRare = cacheObject.CommonData.MonsterQualityLevel ==
-                                             Zeta.Game.Internals.Actors.MonsterQuality.Rare;
-                                var isMinion = cacheObject.CommonData.MonsterQualityLevel ==
-                                               Zeta.Game.Internals.Actors.MonsterQuality.Minion;
-                                var isChampion = cacheObject.CommonData.MonsterQualityLevel ==
-                                                 Zeta.Game.Internals.Actors.MonsterQuality.Champion;
-
-                                #endregion
-
-                                if (CombatBase.CombatMode == CombatMode.KillAll)
                                 {
-                                    //Dist:                160     140     120     100      80     60     40      20      0
-                                    //Weight (25k Max):    -77400  -53400  -32600  -15000  -600   10600  18600   23400   25000
-                                    //
-                                    //Formula:   MaxWeight-(Distance * Distance * RangeFactor)
-                                    //           RangeFactor effects how quickly weights go into negatives on far distances.                                                                    
+                                    #region Unit Variables
 
-                                    var ignoreTrashTooFarAway = cacheObject.IsTrashMob && cacheObject.Distance > Settings.Combat.Misc.NonEliteRange;
-                                    var ignoreElitesTooFarAway = cacheObject.IsEliteRareUnique && cacheObject.Distance > Settings.Combat.Misc.EliteRange;
-                                    if (ignoreTrashTooFarAway || ignoreElitesTooFarAway)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignore Far Away Stuff TrashRange={Settings.Combat.Misc.NonEliteRange} EliteRange={Settings.Combat.Misc.EliteRange}";
-                                        cacheObject.Weight = 0;
-                                        break;
-                                    }
+                                    bool isInHotSpot = GroupHotSpots.CacheObjectIsInHotSpot(cacheObject) ||
+                                                       cacheObject.IsNavBlocking();
+                                    bool elitesInRangeOfUnit = !CombatBase.IgnoringElites &&
+                                                               ObjectCache.Any(
+                                                                   u =>
+                                                                       u.ACDGuid != cacheObject.ACDGuid &&
+                                                                       u.IsEliteRareUnique &&
+                                                                       u.Position.Distance2D(cacheObject.Position) <= 15f);
 
-                                    cacheObject.Weight = 25000 - (cacheObject.Distance*cacheObject.Distance*4);
-                                    cacheObject.WeightInfo += "Kill All Mode";
-                                    break;
-                                }
+                                    int nearbyTrashCount =
+                                        ObjectCache.Count(u => u.IsUnit && u.HitPoints > 0 && u.IsTrashMob &&
+                                                               cacheObject.Position.Distance2D(u.Position) <=
+                                                               CombatBase.CombatOverrides.EffectiveTrashRadius);
+
+                                    bool ignoreSummoner = cacheObject.IsSummoner && !Settings.Combat.Misc.ForceKillSummoners;
 
 
-                                // Only ignore monsters we have a rift value for and below the settings threshold.
-                                if (RiftProgression.IsInRift && cacheObject.RiftValuePct > 0 && cacheObject.RiftValuePct < Settings.Combat.Misc.RiftValueIgnoreUnitsBelow &&
-                                    !cacheObject.IsBossOrEliteRareUnique && !PlayerMover.IsBlocked)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - low rift value ({cacheObject.RiftValuePct} / Setting={Settings.Combat.Misc.RiftValueIgnoreUnitsBelow}) ";
-
-                                    break;
-                                }
-
-
-                                cacheObject.WeightInfo =
-                                    string.Format(
-                                        "ShouldIgnore={3} nearbyCount={0} radiusDistance={1:0} hotspot={2} elitesInRange={4} hitPointsPc={5:0.0} summoner={6} quest={7} minimap={8} bounty={9} ",
-                                        nearbyTrashCount, cacheObject.RadiusDistance, isInHotSpot,
-                                        usingTownPortal, elitesInRangeOfUnit, cacheObject.HitPointsPct,
-                                        ignoreSummoner, cacheObject.IsQuestMonster, cacheObject.IsMinimapActive,
-                                        cacheObject.IsBountyObjective);
-
-                                #region Basic Checks
-
-                                if (cacheObject.HitPointsPct <= 0)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - is dead";
-                                    break;
-                                }
-                                if (healthGlobeEmergency && cacheObject.Type != TrinityObjectType.HealthGlobe)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for Priority Health Globe";
-                                    break;
-                                }
-                                if (getHiPriorityShrine && cacheObject.Type != TrinityObjectType.Shrine)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for Priority Shrine ";
-                                    break;
-                                }
-                                if (getHiPriorityContainer && cacheObject.Type != TrinityObjectType.Container)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for Priority Container";
-                                    break;
-                                }
-
-                                //Monster is in cache but not within kill range
-                                if (!cacheObject.IsBoss && !cacheObject.IsTreasureGoblin &&
-                                    LastTargetRactorGUID != cacheObject.RActorGuid &&
-                                    !cacheObject.IsQuestMonster && !cacheObject.IsBountyObjective &&
-                                    cacheObject.RadiusDistance > DistanceForObjectType(cacheObject))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - out of Kill Range ";
-                                    break;
-                                }
-
-                                if (cacheObject.IsTreasureGoblin)
-                                {
-                                    // Original TrinityPlugin stuff for priority handling now
-                                    switch (Settings.Combat.Misc.GoblinPriority)
-                                    {
-                                        case GoblinPriority.Normal:
-                                            // Treating goblins as "normal monsters". Ok so I lied a little in the config, they get a little extra weight really! ;)
-                                            cacheObject.WeightInfo += "GoblinNormal ";
-                                            cacheObject.Weight += 500d;
-                                            break;
-                                        case GoblinPriority.Prioritize:
-                                            // Super-high priority option below... 
-                                            cacheObject.WeightInfo += "GoblinPrioritize ";
-                                            cacheObject.Weight = 1000d;
-                                            break;
-                                        case GoblinPriority.Kamikaze:
-                                            // KAMIKAZE SUICIDAL TREASURE GOBLIN RAPE AHOY!
-                                            cacheObject.WeightInfo += "GoblinKamikaze ";
-                                            cacheObject.Weight = MaxWeight;
-                                            break;
-                                    }
-                                }
+                                    var isBoss = cacheObject.CommonData.MonsterQualityLevel ==
+                                                 Zeta.Game.Internals.Actors.MonsterQuality.Boss;
+                                    var isUnique = cacheObject.CommonData.MonsterQualityLevel ==
+                                                   Zeta.Game.Internals.Actors.MonsterQuality.Unique;
+                                    var isRare = cacheObject.CommonData.MonsterQualityLevel ==
+                                                 Zeta.Game.Internals.Actors.MonsterQuality.Rare;
+                                    var isMinion = cacheObject.CommonData.MonsterQualityLevel ==
+                                                   Zeta.Game.Internals.Actors.MonsterQuality.Minion;
+                                    var isChampion = cacheObject.CommonData.MonsterQualityLevel ==
+                                                     Zeta.Game.Internals.Actors.MonsterQuality.Champion;
 
                                     #endregion
 
-                                if (isInsideHighRiftValueCluster)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $" [Inside Rift Value Cluster: {cacheObject.RiftValueInRadius:0.0}, Threshold={Settings.Combat.Misc.RiftValueAlwaysKillClusterValue:0.0}] ";
-                                }
 
-                                if (deadPlayer)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Adding {cacheObject.InternalName} because we have a dead party member.";
-                                    cacheObject.Weight = MaxWeight;
-                                }
-                                else if (cacheObject.IsInvulnerable && Settings.Combat.Misc.IgnoreMonstersWhileReflectingDamage)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Ignoring {cacheObject.InternalName} because of Invulnerability ";
-                                    cacheObject.Weight = MinWeight;
-                                    break;
-                                }
-                                else if (Player.CurrentHealthPct <= 0.25 && ZetaDia.Service.Party.NumPartyMembers < 1)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Adding {cacheObject.InternalName} Below Health Threshold ";
-                                }
-                                else if (cacheObject.IsQuestMonster || cacheObject.IsEventObject ||
-                                         cacheObject.IsBountyObjective)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Adding {cacheObject.InternalName} Quest Monster | Bounty | Event Objective ";
-                                    //cacheObject.Weight += 1000d;
-                                }
-                                else if (cacheObject.Distance < 25 && Player.IsCastingTownPortalOrTeleport() && !Legendary.HomingPads.IsEquipped)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Adding {cacheObject.InternalName} because of Town Portal";
-                                }
-                                //else if (isInHotSpot)
-                                //{
-                                //    cacheObject.WeightInfo +=
-                                //        string.Format("Adding {0} due to being in Path or Hotspot ",
-                                //            cacheObject.InternalName);
-                                //}
-                                else if (prioritizeCloseRangeUnits)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Adding {cacheObject.InternalName} because we seem to be stuck *OR* if not ranged and currently rooted ";
-                                }
-                                else if (DataDictionary.MonsterCustomWeights.ContainsKey(cacheObject.ActorSNO) && !isHighLevelGrift)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Adding {cacheObject.InternalName} because monsters from the dictionary/hashlist set at the top of the code ";
-                                }
-                                else if ((cacheObject.ActorSNO == 210120 || cacheObject.ActorSNO == 210268) && cacheObject.Distance <= 25f)
-                                {
-                                    cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} because of Blocking ";
-                                }
-
-                                    #region Trash Mob         
-
-                                else if (cacheObject.IsTrashMob)
-                                {
-                                    var isAlwaysKillByValue = RiftProgression.IsInRift && cacheObject.RiftValuePct > 0 && cacheObject.RiftValuePct > Settings.Combat.Misc.RiftValueAlwaysKillUnitsAbove && cacheObject.IsTrashMob;
-                                    if (isAlwaysKillByValue)
+                                    if (CombatBase.CombatMode == CombatMode.KillAll)
                                     {
-                                        cacheObject.WeightInfo += $"IsHighRiftValue {cacheObject.RiftValuePct}";
+                                        //Dist:                160     140     120     100      80     60     40      20      0
+                                        //Weight (25k Max):    -77400  -53400  -32600  -15000  -600   10600  18600   23400   25000
+                                        //
+                                        //Formula:   MaxWeight-(Distance * Distance * RangeFactor)
+                                        //           RangeFactor effects how quickly weights go into negatives on far distances.                                                                    
+
+                                        var ignoreTrashTooFarAway = cacheObject.IsTrashMob &&
+                                                                    cacheObject.Distance >
+                                                                    Settings.Combat.Misc.NonEliteRange;
+                                        var ignoreElitesTooFarAway = cacheObject.IsEliteRareUnique &&
+                                                                     cacheObject.Distance > Settings.Combat.Misc.EliteRange;
+                                        if (ignoreTrashTooFarAway || ignoreElitesTooFarAway)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                string.Format("Ignore Far Away Stuff TrashRange={0} EliteRange={1}",
+                                                    Settings.Combat.Misc.NonEliteRange, Settings.Combat.Misc.EliteRange);
+                                            cacheObject.Weight = 0;
+                                            break;
+                                        }
+
+                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.WeightInfo += "Kill All Mode";
+                                        break;
                                     }
 
-                                    if (Settings.Combat.Misc.IgnoreHighHitePointTrash && !isAlwaysKillByValue)
+
+                                    // Only ignore monsters we have a rift value for and below the settings threshold.
+                                    //if (RiftProgression.IsInRift && cacheObject.RiftValuePct > 0 &&
+                                    //    cacheObject.RiftValuePct < Settings.Combat.Misc.RiftValueIgnoreUnitsBelow &&
+                                    //    !cacheObject.IsBossOrEliteRareUnique && !PlayerMover.IsBlocked)
+                                    //{
+                                    //    cacheObject.WeightInfo +=
+                                    //        string.Format("Ignoring {0} - low rift value ({1} / Setting={2})",
+                                    //            cacheObject.InternalName, cacheObject.RiftValuePct,
+                                    //            Settings.Combat.Misc.RiftValueIgnoreUnitsBelow);
+
+                                    //    break;
+                                    //}
+
+
+                                    cacheObject.WeightInfo =
+                                        string.Format(
+                                            "ShouldIgnore={3} nearbyCount={0} radiusDistance={1:0} hotspot={2} elitesInRange={4} hitPointsPc={5:0.0} summoner={6} quest={7} minimap={8} bounty={9} ",
+                                            nearbyTrashCount, cacheObject.RadiusDistance, isInHotSpot,
+                                            usingTownPortal, elitesInRangeOfUnit, cacheObject.HitPointsPct,
+                                            ignoreSummoner, cacheObject.IsQuestMonster, cacheObject.IsMinimapActive,
+                                            cacheObject.IsBountyObjective);
+
+                                    #region Basic Checks
+
+                                    if (cacheObject.HitPointsPct <= 0)
                                     {
-                                        var highHitPointTrashMobNames = new HashSet<string>
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Ignoring {0} - is dead", cacheObject.InternalName);
+                                        break;
+                                    }
+
+                                    if (Player.InActiveEvent && ObjectCache.Any(o => o.IsEventObject))
+                                    {
+                                        Vector3 eventObjectPosition =
+                                            ObjectCache.FirstOrDefault(o => o.IsEventObject).Position;
+
+                                        if (!cacheObject.IsQuestMonster &&
+                                            cacheObject.Position.Distance(eventObjectPosition) > 35)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                string.Format("Ignoring {0} - Too Far From Event",
+                                                    cacheObject.InternalName);
+                                            break;
+                                        }
+                                    }
+
+                                    if (healthGlobeEmergency && cacheObject.Type != TrinityObjectType.HealthGlobe)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Ignoring {0} for Priority Health Globe",
+                                                cacheObject.InternalName);
+                                        break;
+                                    }
+
+                                    if (getHiPriorityShrine && cacheObject.Type != TrinityObjectType.Shrine)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Ignoring {0} for Priority Shrine ",
+                                                cacheObject.InternalName);
+                                        break;
+                                    }
+
+                                    if (getHiPriorityContainer && cacheObject.Type != TrinityObjectType.Container)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Ignoring {0} for Priority Container",
+                                                cacheObject.InternalName);
+                                        break;
+                                    }
+                                    //Monster is in cache but not within kill range
+                                    if (!cacheObject.IsBoss && !cacheObject.IsTreasureGoblin &&
+                                        LastTargetRactorGUID != cacheObject.RActorGuid &&
+                                        !cacheObject.IsQuestMonster && !cacheObject.IsBountyObjective &&
+                                        cacheObject.RadiusDistance > DistanceForObjectType(cacheObject))
+                                    {
+                                        cacheObject.WeightInfo += string.Format("Ignoring {0} - out of Kill Range ",
+                                            cacheObject.InternalName);
+                                        break;
+                                    }
+
+                                    if (cacheObject.IsTreasureGoblin)
+                                    {
+                                        // Original Trinity stuff for priority handling now
+                                        switch (Settings.Combat.Misc.GoblinPriority)
+                                        {
+                                            case GoblinPriority.Normal:
+                                                // Treating goblins as "normal monsters". Ok so I lied a little in the config, they get a little extra weight really! ;)
+                                                cacheObject.WeightInfo += "GoblinNormal ";
+                                                cacheObject.Weight += 500d;
+                                                break;
+                                            case GoblinPriority.Prioritize:
+                                                // Super-high priority option below... 
+                                                cacheObject.WeightInfo += "GoblinPrioritize ";
+                                                cacheObject.Weight = 1000d;
+                                                break;
+                                            case GoblinPriority.Kamikaze:
+                                                // KAMIKAZE SUICIDAL TREASURE GOBLIN RAPE AHOY!
+                                                cacheObject.WeightInfo += "GoblinKamikaze ";
+                                                cacheObject.Weight = MaxWeight;
+                                                break;
+                                        }
+                                    }
+
+                                    #endregion
+
+                                    if (deadPlayer)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Adding {0} because we have a dead party member.",
+                                                cacheObject.InternalName);
+                                        cacheObject.Weight = MaxWeight;
+                                    }
+                                    else if (cacheObject.IsInvulnerable &&
+                                             Settings.Combat.Misc.IgnoreMonstersWhileReflectingDamage)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Ignoring {0} because of Invulnerability ",
+                                                cacheObject.InternalName);
+                                        cacheObject.Weight = MinWeight;
+                                        break;
+                                    }
+                                    else if (Player.CurrentHealthPct <= 0.25 && ZetaDia.Service.Party.NumPartyMembers < 1)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Adding {0} Below Health Threshold ",
+                                                cacheObject.InternalName);
+                                    }
+                                    else if (cacheObject.IsQuestMonster || cacheObject.IsEventObject ||
+                                             cacheObject.IsBountyObjective)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Adding {0} Quest Monster | Bounty | Event Objective ",
+                                                cacheObject.InternalName);
+                                    }
+                                    else if (cacheObject.Distance < 25 && Player.IsCastingTownPortalOrTeleport() &&
+                                             !Legendary.HomingPads.IsEquipped)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Adding {0} because of Town Portal",
+                                                cacheObject.InternalName);
+                                    }
+                                    //else if (isInHotSpot && PlayerMover.IsBlocked)
+                                    //{
+                                    //    cacheObject.WeightInfo +=
+                                    //        string.Format("Adding {0} due to being in Path or Hotspot ",
+                                    //            cacheObject.InternalName);
+                                    //}
+                                    else if (prioritizeCloseRangeUnits)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format(
+                                                "Adding {0} because we seem to be stuck *OR* if not ranged and currently rooted ",
+                                                cacheObject.InternalName);
+                                    }
+                                    else if (DataDictionary.MonsterCustomWeights.ContainsKey(cacheObject.ActorSNO))
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format(
+                                                "Adding {0} because monsters from the dictionary/hashlist set at the top of the code ",
+                                                cacheObject.InternalName);
+                                    }
+                                    else if ((cacheObject.ActorSNO == 210120 || cacheObject.ActorSNO == 210268) &&
+                                             cacheObject.Distance <= 25f)
+                                    {
+                                        cacheObject.WeightInfo += string.Format("Adding {0} because of Blocking",
+                                            cacheObject.InternalName);
+                                    }
+
+                                    #region Trash Mob
+
+                                    else if (cacheObject.IsTrashMob)
+                                    {
+                                        var isAlwaysKillByValue = RiftProgression.IsInRift &&
+                                                                  cacheObject.RiftValuePct > 0 &&
+                                                                  cacheObject.RiftValuePct >
+                                                                  Settings.Combat.Misc.RiftValueAlwaysKillUnitsAbove;
+                                        //if (isAlwaysKillByValue)
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("IsHighRiftValue {0}", cacheObject.RiftValuePct);
+                                        //}
+
+                                        if (Settings.Combat.Misc.IgnoreHighHitePointTrash && !isAlwaysKillByValue)
+                                        {
+                                            HashSet<string> highHitPointTrashMobNames = new HashSet<string>
                                         {
                                             "mallet", //
                                             "monstrosity", //
@@ -432,95 +473,137 @@ namespace Trinity
                                             "unburied" //6359
                                         };
 
-                                        var unitName = cacheObject.InternalName.ToLower();
-                                        if (highHitPointTrashMobNames.Any(name => unitName.Contains(name)) && !PlayerMover.IsBlocked)
+                                            var unitName = cacheObject.InternalName.ToLower();
+                                            if (highHitPointTrashMobNames.Any(name => unitName.Contains(name)) &&
+                                                !PlayerMover.IsBlocked)
+                                            {
+                                                cacheObject.WeightInfo +=
+                                                    string.Format("Ignoring {0} for High Hp Mob.",
+                                                        cacheObject.InternalName);
+                                                break;
+                                            }
+                                        }
+                                        else if (cacheObject.HitPointsPct <=
+                                                 Settings.Combat.Misc.ForceKillTrashBelowHealth)
                                         {
-                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for High Hp Mob.";
+                                            cacheObject.WeightInfo +=
+                                                string.Format(
+                                                    "Adding {0} because it is below the minimum trash mob health",
+                                                    cacheObject.InternalName);
+                                        }
+                                        else if (cacheObject.IsSummoner && Settings.Combat.Misc.ForceKillSummoners)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                string.Format("Adding {0} because he is a summoner",
+                                                    cacheObject.InternalName);
+                                            //cacheObject.Weight += 500d;
+                                        }
+                                        else if (cacheObject.HitPointsPct <
+                                                 Settings.Combat.Misc.IgnoreTrashBelowHealthDoT &&
+                                                 cacheObject.HasDotDPS)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                string.Format(
+                                                    "Ignoring {0} - Hitpoints below Health/DoT Threshold ",
+                                                    cacheObject.InternalName);
                                             break;
                                         }
+                                        else if (nearbyTrashCount < Settings.Combat.Misc.TrashPackSize)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                string.Format("Ignoring {0} below TrashPackSize",
+                                                    cacheObject.InternalName);
+                                            break;
+                                        }
+                                        else
+                                            cacheObject.WeightInfo += string.Format(" All Filters Passed: Adding {0} by Default.",
+                                                cacheObject.InternalName);
                                     }
-                                    else if (cacheObject.HitPointsPct < Settings.Combat.Misc.ForceKillTrashBelowHealth)
-                                    {
-                                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} because it is below the minimum trash mob health ";
-                                    }
-                                    else if (cacheObject.IsSummoner && Settings.Combat.Misc.ForceKillSummoners)
-                                    {
-                                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} because he is a summoner ";
-                                    }
-                                    else if ((cacheObject.HitPointsPct < Settings.Combat.Misc.IgnoreTrashBelowHealthDoT) && cacheObject.HasDotDPS && !PlayerMover.IsBlocked)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Hitpoints below Health/DoT Threshold ";
-                                        break;
-                                    }
-                                    else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize && !isAlwaysKillByValue && !PlayerMover.IsBlocked && !isInsideHighRiftValueCluster)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} below TrashPackSize";
-                                        break;
-                                    }
-                                    else
-                                    {
-                                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} by Default.";
-                                    }
-                                }
+
                                     #endregion
 
                                     #region Elite / Rares / Uniques
 
-                                else if (isUnique || isBoss || isRare || isMinion || isChampion)
-                                {
-                                    //XZ - Please add Ignore below health for elite.
-                                    //if ((cacheObject.HitPointsPct <
-                                    //     Settings.Combat.Misc.IgnoreEliteBelowHealthDoT) &&
-                                    //    cacheObject.HasDotDPS)
-                                    //{
-                                    //    cacheObject.WeightInfo +=
-                                    //        string.Format("Ignoring {0} - Hitpoints below Health/DoT Threshold ", cacheObject.InternalName);
-                                    //    break;
-                                    //}
-                                    if (cacheObject.HitPointsPct <= Settings.Combat.Misc.ForceKillElitesHealth && !cacheObject.IsMinion)
+                                    else if (isUnique || isBoss || isRare || isMinion || isChampion)
                                     {
-                                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} for Elite Under Health Threshold.";
-                                        cacheObject.Weight += MaxWeight;
+                                        //XZ - Please add Ignore below health for elite.
+                                        //if ((cacheObject.HitPointsPct <
+                                        //     Settings.Combat.Misc.IgnoreEliteBelowHealthDoT) &&
+                                        //    cacheObject.HasDotDPS)
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} - Hitpoints below Health/DoT Threshold ", cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        if (cacheObject.HitPointsPct <=
+                                            Settings.Combat.Misc.ForceKillElitesHealth && !cacheObject.IsMinion)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                string.Format("Adding {0} for Elite Under Health Threshold.",
+                                                    cacheObject.InternalName);
+                                            cacheObject.Weight += MaxWeight;
+                                        }
+                                        if (TargetUtil.NumMobsInRangeOfPosition(cacheObject.Position,
+                                            CombatBase.CombatOverrides.EffectiveTrashRadius) >=
+                                            CombatBase.CombatOverrides.EffectiveTrashSize &&
+                                            Settings.Combat.Misc.ForceKillClusterElites)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                string.Format("Adding {0} for Elite Inside Cluster.",
+                                                    cacheObject.InternalName);
+
+                                        }
+                                        else if ((TrinityPlugin.Settings.Combat.Misc.IgnoreElites ||
+                                                  TrinityPlugin.Settings.Combat.Misc.IgnoreRares && isRare ||
+                                                  TrinityPlugin.Settings.Combat.Misc.IgnoreMinions && isMinion ||
+                                                  TrinityPlugin.Settings.Combat.Misc.IgnoreChampions && isChampion) &&
+                                                 !cacheObject.IsBoss)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                string.Format(
+                                                    "Ignoring {0} for Ignore Elite/Minion cThreshold.",
+                                                    cacheObject.InternalName);
+                                            break;
+                                        }
+                                        else if (Settings.Combat.Misc.IgnoreMonstersWhileReflectingDamage &&
+                                                 monstersWithReflectActive.Any(
+                                                     u => u.RActorGuid == cacheObject.RActorGuid))
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                string.Format("Ignoring {0} due to reflect damage buff ",
+                                                    cacheObject.InternalName);
+                                            break;
+                                        }
+                                        cacheObject.WeightInfo += string.Format("Adding {0} default Elite ",
+                                            cacheObject.InternalName);
+                                        cacheObject.Weight += EliteFormula(cacheObject);
                                     }
-                                    else if (TargetUtil.NumMobsInRangeOfPosition(cacheObject.Position, CombatBase.CombatOverrides.EffectiveTrashRadius) >= CombatBase.CombatOverrides.EffectiveTrashSize && Settings.Combat.Misc.ForceKillClusterElites)
-                                    {
-                                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} for Elite Inside Cluster.";
-                                    }
-                                    else if ((Settings.Combat.Misc.IgnoreElites || Settings.Combat.Misc.IgnoreRares && isRare || Settings.Combat.Misc.IgnoreMinions && isMinion || Settings.Combat.Misc.IgnoreChampions && isChampion) && !cacheObject.IsBoss)
-                                    {
-                                        cacheObject.WeightInfo += string.Format($"Ignoring {cacheObject.InternalName} for Ignore Elite/Minion cThreshold.");
-                                        break;
-                                    }
-                                    else if (Settings.Combat.Misc.IgnoreMonstersWhileReflectingDamage && monstersWithReflectActive.Any(u => u.RActorGuid == cacheObject.RActorGuid))
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} due to reflect damage buff ";
-                                        break;
-                                    }
-                                    cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} default Elite ";
-                                    cacheObject.Weight += EliteFormula(cacheObject);
+
+                                    #endregion
+
+                                    var dist = ObjectDistanceFormula(cacheObject);
+                                    var last = LastTargetFormula(cacheObject);
+                                    var pack = PackDensityFormula(cacheObject);
+                                    var health = UnitHealthFormula(cacheObject);
+                                    var path = PathBlockedFormula(cacheObject);
+                                    var reflect = ReflectiveMonsterNearFormula(cacheObject, monstersWithReflectActive);
+                                    var elite = EliteMonsterNearFormula(cacheObject, elites);
+                                    var aoe = AoENearFormula(cacheObject) + AoEInPathFormula(cacheObject);
+
+                                    cacheObject.Weight += dist + last + pack + health + path + reflect + elite + aoe;
+
+                                    cacheObject.WeightInfo +=
+                                        string.Format(
+                                            " dist={0:0.0} last={1:0.0} pack={2:0.0} health={3:0.0} path={4:0.0} reflect={5:0.0} elite={6:0.0} aoe={7:0.0}",
+                                            dist, last, pack, health, path, reflect, elite, aoe);
+
+                                    break;
                                 }
 
-                                #endregion
 
-                                var dist = ObjectDistanceFormula(cacheObject);
-                                var last = LastTargetFormula(cacheObject);
-                                var pack = PackDensityFormula(cacheObject);
-                                var health = UnitHealthFormula(cacheObject);
-                                var path = PathBlockedFormula(cacheObject);
-                                var reflect = ReflectiveMonsterNearFormula(cacheObject, monstersWithReflectActive);
-                                var elite = EliteMonsterNearFormula(cacheObject, elites);
-                                var aoe = AoENearFormula(cacheObject) + AoEInPathFormula(cacheObject);
+                            #endregion
 
-                                cacheObject.Weight += dist + last + pack + health + path + reflect + elite + aoe + riftBoost;
-
-                                cacheObject.WeightInfo += $" dist={dist:0.0} last={last:0.0} pack={pack:0.0} health={health:0.0} path={path:0.0} reflect={reflect:0.0} elite={elite:0.0} aoe={aoe:0.0} riftBoost={riftBoost:0.0} (riftValue={cacheObject.RiftValuePct:0.0})";
-
-                                break;
-                            }
-
-                                #endregion
-
-                                #region Item
+                            #region Item
 
                             case TrinityObjectType.Item:
                             {
@@ -1369,9 +1452,10 @@ namespace Trinity
                         }
                         return;
                     }
+                    TargetUtil.ClearCurrentTarget("No good target's found in Weighting.");
                     //var text = bestTarget != null ? bestTarget.Weight : 0;
                     //Logger.Log(" CACHE COUNT: " + ObjectCache.Count(x => !x.IsPlayer) + " Weight: " + text);
-                   
+
                 }
             }
 

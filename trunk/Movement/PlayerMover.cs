@@ -80,73 +80,6 @@ namespace Trinity.DbProvider
         private const int TimeToCheckBlockingMs = 25;
         public static bool IsBlocked = false;
 
-        public static bool OutOfCombatMovementAllowed
-        {
-            get
-            {
-                var Player = CacheData.Player;
-                switch (CacheData.Player.ActorClass)
-                {
-                    case ActorClass.Barbarian:
-                        return TrinityPlugin.Settings.Combat.Barbarian.WWMoveAlways ||
-                               TrinityPlugin.Settings.Combat.Barbarian.UseLeapOOC ||
-                               TrinityPlugin.Settings.Combat.Barbarian.SprintMode != BarbarianSprintMode.CombatOnly ||
-                               TrinityPlugin.Settings.Combat.Barbarian.UseChargeOOC;
-                    case ActorClass.Crusader:
-                        return TrinityPlugin.Settings.Combat.Crusader.SteedChargeOOC;
-                    case ActorClass.DemonHunter:
-                        return TrinityPlugin.Settings.Combat.DemonHunter.VaultMode != DemonHunterVaultMode.CombatOnly;
-                    case ActorClass.Monk:
-                        return TrinityPlugin.Settings.Combat.Monk.TROption == TempestRushOption.MovementOnly ||
-                               TrinityPlugin.Settings.Combat.Monk.TROption == TempestRushOption.Always ||
-                               TrinityPlugin.Settings.Combat.Monk.UseDashingStrikeOOC;
-                    case ActorClass.Witchdoctor:
-                        return TrinityPlugin.Settings.Combat.WitchDoctor.UseSpiritWalkOffCooldown;
-                    case ActorClass.Wizard:
-                        return TrinityPlugin.Settings.Combat.Wizard.TeleportOOC;
-                    default:
-                        return false;
-                }
-            }
-        }
-
-        public static bool IsSpecialMovementReady
-        {
-            get
-            {
-                var Player = CacheData.Player;
-                switch (CacheData.Player.ActorClass)
-                {
-                    case ActorClass.Barbarian:
-                        return Player.PrimaryResource > 10 && CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) ||
-                               CombatBase.CanCast(SNOPower.Barbarian_Leap) ||
-                               CombatBase.CanCast(SNOPower.Barbarian_Sprint) &&
-                               (Runes.Barbarian.Gangway.IsActive || !IsBlocked) ||
-                               CombatBase.CanCast(SNOPower.Barbarian_FuriousCharge);
-                    case ActorClass.Crusader:
-                        return CombatBase.CanCast(SNOPower.X1_Crusader_SteedCharge);
-                    case ActorClass.DemonHunter:
-                        return TrinityPlugin.Player.PrimaryResource > 12 && CombatBase.CanCast(SNOPower.DemonHunter_Strafe) ||
-                               CombatBase.CanCast(SNOPower.DemonHunter_Vault) ||
-                               Skills.DemonHunter.Vault.IsActive && Player.PrimaryResource > 20 &&
-                               Legendary.ChainOfShadows.IsEquipped &&
-                               CombatBase.CanCast(SNOPower.DemonHunter_Impale);
-                    case ActorClass.Monk:
-                        return CombatBase.CanCast(SNOPower.Monk_TempestRush) ||
-                               CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike);
-                    case ActorClass.Witchdoctor:
-                        return CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk);
-                    case ActorClass.Wizard:
-                        return CombatBase.CanCast(SNOPower.Wizard_Teleport) &&
-                               (!Legendary.AetherWalker.IsEquipped ||
-                                Legendary.AetherWalker.IsEquipped && Player.PrimaryResource > 25) ||
-                               CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport);
-                    default:
-                        return false;
-                }
-            }
-        }
-
         internal static bool GetIsBlocked()
         {
             if (ZetaDia.Me == null || !ZetaDia.Me.IsValid || ZetaDia.Me.IsDead)
@@ -716,14 +649,14 @@ namespace Trinity.DbProvider
             // Store distance to current moveto target
             float destinationDistance = MyPosition.Distance(destination);
 
-            if (!ZetaDia.IsInTown && IsSpecialMovementReady && !TrinityPlugin.ShouldWaitForLootDrop &&
+            if (!ZetaDia.IsInTown && ClassMover.IsSpecialMovementReady && !TrinityPlugin.ShouldWaitForLootDrop &&
                 (IsBlocked && TrinityPlugin.Settings.Combat.Misc.AllowOOCMovement ||
-                CombatBase.IsCurrentlyAvoiding || OutOfCombatMovementAllowed))
+                CombatBase.IsCurrentlyAvoiding || ClassMover.OutOfCombatMovementAllowed))
             {
                 if (NavigationProvider == null)
                     NavigationProvider = Navigator.GetNavigationProviderAs<DefaultNavigationProvider>();
 
-                if (ClassMover.SpecialMovement(destination))
+                if (ClassMover.SpecialMovement(destination) && destinationDistance > 7)
                 {
                     Navigator.Clear();
                     NavigationProvider.CurrentPath.Clear();
@@ -731,7 +664,7 @@ namespace Trinity.DbProvider
                     return;
                 }
             }
-            if (MyPosition.Distance(destination) > 3f)
+            if (destinationDistance > 5f)
             {
                 // Default movement
                 ZetaDia.Me.UsePower(SNOPower.Walk, destination, TrinityPlugin.CurrentWorldDynamicId, -1);
@@ -741,8 +674,7 @@ namespace Trinity.DbProvider
                         NavHelper.PrettyPrintVector3(destination), MathUtil.GetHeadingToPoint(destination), MovementSpeed, MyPosition.Distance(destination),
                         Math.Abs(MyPosition.Z - destination.Z),
                         TrinityPlugin.MainGridProvider.CanStandAt(TrinityPlugin.MainGridProvider.WorldToGrid(destination.ToVector2())),
-                        !Navigator.Raycast(MyPosition, destination)
-                        );
+                        !Navigator.Raycast(MyPosition, destination));
 
             }
             else
@@ -754,41 +686,30 @@ namespace Trinity.DbProvider
             //Trinity.IsMoveRequested = false;
         }
 
-        public static HashSet<SNOAnim> VaultAnimations = new HashSet<SNOAnim>
-        {
-            SNOAnim.Demonhunter_Male_Cast_BackFlip_mid,
-            SNOAnim.Demonhunter_Female_Cast_BackFlip_mid,
-            SNOAnim.Demonhunter_Male_Cast_BackFlip_out,
-            SNOAnim.Demonhunter_Female_Cast_BackFlip_out,
-            SNOAnim.Demonhunter_Male_Cast_BackFlip_in,
-            SNOAnim.Demonhunter_Female_Cast_BackFlip_in,
-        };
-
-        public static Vector3 VaultDestination { get; set; }
-
-        //private static Vector3 _currentPathDestination;
-        //public static bool IsPathChanged()
-        //{
-        //    var currentPathDestination = NavigationProvider.CurrentPath.CurrentOrDefault;
-        //    if (currentPathDestination != _currentPathDestination)
-        //    {
-        //        _currentPathDestination = currentPathDestination;
-        //        return true;
-        //    }
-        //    return false;
-        //}
         public static Vector3 GetCurrentPathFarthestPoint(float minDistance, float maxDistance)
         {
             var remaining = GetCurrentPathPointsRemaining();
             var points =
                 NavigationProvider.CurrentPath.Where(
                     x =>
-                        remaining.Contains(x) &&
+                        remaining.Contains(x) && NavHelper.CanRayCast(x) &&
                         x.Distance(CacheData.Player.Position) <= maxDistance &&
-                        x.Distance(CacheData.Player.Position) >= minDistance &&
-                        NavHelper.CanRayCast(x))
+                        x.Distance(CacheData.Player.Position) >= minDistance)
                     .OrderByDescending(y => y.Distance(CacheData.Player.Position))
                     .ToList();
+            //Add some redundancy to find a spot that isn't ray cast
+            if (!points.Any())
+            {
+                points =
+                NavigationProvider.CurrentPath.Where(
+                    x =>
+                        remaining.Contains(x) && //NavHelper.CanRayCast(x) &&
+                        x.Distance(CacheData.Player.Position) <= maxDistance &&
+                        x.Distance(CacheData.Player.Position) >= minDistance)
+                    .OrderByDescending(y => y.Distance(CacheData.Player.Position))
+                    .ToList();
+            }
+
             return points.Any() ? points.FirstOrDefault() : Vector3.Zero;
         }
 

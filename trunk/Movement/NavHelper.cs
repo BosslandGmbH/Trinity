@@ -7,6 +7,7 @@ using Adventurer.Game.Exploration;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Helpers;
+using Trinity.Movement;
 using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
@@ -158,7 +159,7 @@ namespace Trinity
                 {
                     return lastSafeZonePosition;
                 }
-                hasEmergencyTeleportUp = PlayerMover.IsSpecialMovementReady;
+                hasEmergencyTeleportUp = ClassMover.IsSpecialMovementReady;
                 //hasEmergencyTeleportUp = (!Player.IsIncapacitated && (
                 //    // Leap is available
                 //    (CombatBase.CanCast(SNOPower.Barbarian_Leap)) ||

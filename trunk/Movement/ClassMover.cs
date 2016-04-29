@@ -43,11 +43,85 @@ namespace Trinity.Movement
             }
         }
 
+        private const int _interactDistance = 7;
+
         private static bool HasInGeomBuff = CacheData.Buffs.HasBuff(SNOPower.ItemPassive_Unique_Ring_919_x1);
-        private static float MinDistance = PlayerMover.IsBlocked || CombatBase.IsCurrentlyAvoiding ? 0 :
-            TrinityPlugin.CurrentTarget != null &&
+
+        private static float MinDistance = PlayerMover.IsBlocked || CombatBase.IsCurrentlyAvoiding
+            ? 0
+            : TrinityPlugin.CurrentTarget != null &&
               (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNPC ||
-               TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine) ? 10 : 20;
+               TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine)
+                ? 10
+                : HasInGeomBuff ? 15 : 25;
+
+        public static bool OutOfCombatMovementAllowed
+        {
+            get
+            {
+                var Player = CacheData.Player;
+                switch (CacheData.Player.ActorClass)
+                {
+                    case ActorClass.Barbarian:
+                        return TrinityPlugin.Settings.Combat.Barbarian.WWMoveAlways ||
+                               TrinityPlugin.Settings.Combat.Barbarian.UseLeapOOC ||
+                               TrinityPlugin.Settings.Combat.Barbarian.SprintMode != BarbarianSprintMode.CombatOnly ||
+                               TrinityPlugin.Settings.Combat.Barbarian.UseChargeOOC;
+                    case ActorClass.Crusader:
+                        return TrinityPlugin.Settings.Combat.Crusader.SteedChargeOOC;
+                    case ActorClass.DemonHunter:
+                        return TrinityPlugin.Settings.Combat.DemonHunter.VaultMode != DemonHunterVaultMode.CombatOnly;
+                    case ActorClass.Monk:
+                        return TrinityPlugin.Settings.Combat.Monk.TROption == TempestRushOption.MovementOnly ||
+                               TrinityPlugin.Settings.Combat.Monk.TROption == TempestRushOption.Always ||
+                               TrinityPlugin.Settings.Combat.Monk.UseDashingStrikeOOC;
+                    case ActorClass.Witchdoctor:
+                        return TrinityPlugin.Settings.Combat.WitchDoctor.UseSpiritWalkOffCooldown;
+                    case ActorClass.Wizard:
+                        return TrinityPlugin.Settings.Combat.Wizard.TeleportOOC;
+                    default:
+                        return false;
+                }
+            }
+        }
+
+        public static bool IsSpecialMovementReady
+        {
+            get
+            {
+                var Player = CacheData.Player;
+                switch (CacheData.Player.ActorClass)
+                {
+                    case ActorClass.Barbarian:
+                        return Player.PrimaryResource > 10 && CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) ||
+                               CombatBase.CanCast(SNOPower.Barbarian_Leap) ||
+                               CombatBase.CanCast(SNOPower.Barbarian_Sprint) &&
+                               (Runes.Barbarian.Gangway.IsActive || !PlayerMover.IsBlocked) ||
+                               CombatBase.CanCast(SNOPower.Barbarian_FuriousCharge);
+                    case ActorClass.Crusader:
+                        return CombatBase.CanCast(SNOPower.X1_Crusader_SteedCharge);
+                    case ActorClass.DemonHunter:
+                        return TrinityPlugin.Player.PrimaryResource > 12 && CombatBase.CanCast(SNOPower.DemonHunter_Strafe) ||
+                               CombatBase.CanCast(SNOPower.DemonHunter_Vault) ||
+                               Skills.DemonHunter.Vault.IsActive && Player.PrimaryResource > 20 &&
+                               Legendary.ChainOfShadows.IsEquipped &&
+                               CombatBase.CanCast(SNOPower.DemonHunter_Impale);
+                    case ActorClass.Monk:
+                        return CombatBase.CanCast(SNOPower.Monk_TempestRush) ||
+                               CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike);
+                    case ActorClass.Witchdoctor:
+                        return CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk);
+                    case ActorClass.Wizard:
+                        return CombatBase.CanCast(SNOPower.Wizard_Teleport) &&
+                               (!Legendary.AetherWalker.IsEquipped ||
+                                Legendary.AetherWalker.IsEquipped && Player.PrimaryResource > 25) ||
+                               CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport);
+                    default:
+                        return false;
+                }
+            }
+        }
+
         private static void LogMovement(SNOPower power, Vector3 destination)
         {
             if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
@@ -60,7 +134,7 @@ namespace Trinity.Movement
         public static bool BarbMover(Vector3 destination)
         {
             float destinationDistance = PlayerMover.MyPosition.Distance(destination);
-            if (destinationDistance < MinDistance) return false;
+
             if (DataDictionary.ChargeAnimations.Contains(CacheData.Player.CurrentAnimation) &&
                 DataDictionary.LeapAnimations.Contains(CacheData.Player.CurrentAnimation))
                 return false;
@@ -72,8 +146,9 @@ namespace Trinity.Movement
 
             if (destinationDistance >= MinDistance)
             {
-                if (destinationDistance > 45f)
-                    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, 45f);
+                var movementRange = 45f;
+                if (destinationDistance > movementRange)
+                    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
 
                 if (destination == Vector3.Zero)
                     return false;
@@ -83,8 +158,9 @@ namespace Trinity.Movement
                     (TrinityPlugin.ObjectCache.Count(
                         u =>
                             u.IsUnit &&
-                            MathUtil.IntersectsPath(u.Position, u.Radius + 5f, TrinityPlugin.Player.Position, destination)) * 2 >
-                            Skills.Barbarian.FuriousCharge.CooldownRemaining / 1000))
+                            MathUtil.IntersectsPath(u.Position, u.Radius + 5f, TrinityPlugin.Player.Position,
+                                destination))*2 >
+                     Skills.Barbarian.FuriousCharge.CooldownRemaining/1000))
                 {
                     Skills.Barbarian.FuriousCharge.Cast(destination);
                     LogMovement(SNOPower.Barbarian_FuriousCharge, destination);
@@ -98,12 +174,22 @@ namespace Trinity.Movement
                     return true;
                 }
             }
+
             //Sprint
-            if (CombatBase.CanCast(SNOPower.Barbarian_Sprint) && TrinityPlugin.Player.PrimaryResource > 20)
+            if (CombatBase.CanCast(SNOPower.Barbarian_Sprint) && !CombatBase.GetHasBuff(SNOPower.Barbarian_Sprint) && 
+                (TrinityPlugin.Player.PrimaryResource > 20 && !Sets.BulKathossOath.IsFullyEquipped ||
+                Sets.BulKathossOath.IsFullyEquipped && TrinityPlugin.Player.PrimaryResourcePct > 0.90))
             {
                 Skills.Barbarian.Sprint.Cast(destination);
                 LogMovement(SNOPower.Barbarian_Sprint, destination);
             }
+
+            //Don't Channel if Item Shrine or isNPC is near.
+            if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.Distance < _interactDistance &&
+                (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNPC ||
+                 TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine))
+                return false;
+
             // Whirlwind
             if (CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) && TrinityPlugin.Player.PrimaryResource > 10 &&
                 (Sets.BulKathossOath.IsFullyEquipped || TrinityPlugin.Settings.Combat.Barbarian.WWMoveAlways))
@@ -141,6 +227,12 @@ namespace Trinity.Movement
             var destinationDistance = destination.Distance(CacheData.Player.Position);
             if (destinationDistance < MinDistance) return false;
 
+            var movementRange = 35f;
+            if (destinationDistance > movementRange)
+                destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
+            if (destination == Vector3.Zero)
+                return false;
+
             int vaultDelay = TrinityPlugin.Settings.Combat.DemonHunter.VaultMovementDelay;
             var timeSinceUse = CombatBase.TimeSincePowerUse(SNOPower.DemonHunter_Vault);
             var isfree = DemonHunterCombat.IsVaultFree;
@@ -148,14 +240,15 @@ namespace Trinity.Movement
             var vaultCost = Runes.DemonHunter.Acrobatics.IsActive || isfree
                 ? 0
                 : Runes.DemonHunter.Tumble.IsActive && Skills.DemonHunter.Vault.TimeSinceUse < 6000
-                    ? Math.Round(vaultBaseCost * 0.5)
+                    ? Math.Round(vaultBaseCost*0.5)
                     : vaultBaseCost;
             if (TrinityPlugin.Player.SecondaryResource < vaultCost) return false;
 
             if (DemonHunterCombat.CanAcquireFreeVaultBuff && TrinityPlugin.Player.PrimaryResource > 20)
             {
                 Logger.LogVerbose(LogCategory.Movement, "Casting Impale for free Vault. (DemonHunterMover)");
-                Skills.DemonHunter.Impale.Cast(MathEx.GetPointAt(TrinityPlugin.Player.Position, 5f, TrinityPlugin.Player.Rotation));
+                Skills.DemonHunter.Impale.Cast(MathEx.GetPointAt(TrinityPlugin.Player.Position, 5f,
+                    TrinityPlugin.Player.Rotation));
             }
 
             if ((timeSinceUse > vaultDelay || isfree && timeSinceUse > 250) &&
@@ -167,16 +260,10 @@ namespace Trinity.Movement
                        a => MathEx.IntersectsPath(a.Position, a.Radius, TrinityPlugin.Player.Position, destination)) ||
                    !CacheData.MonsterObstacles.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance)))))
             {
-                
+
                 // Prevent the bot from vaulting back and forth over and item without being able to pick it up.
                 if (CombatBase.CurrentTarget?.Type == TrinityObjectType.Item && destinationDistance < 20f)
                     return false;
-
-                if (destinationDistance > 35)
-                {
-                    PlayerMover.VaultDestination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, 35f);
-                    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, 35f);
-                }
 
                 if (destination == Vector3.Zero)
                     return false;
@@ -191,6 +278,7 @@ namespace Trinity.Movement
         #endregion
 
         #region Monk
+
         //For Tempest Rush Monks
         private static bool _canChannelTempestRush;
 
@@ -199,11 +287,16 @@ namespace Trinity.Movement
         public static bool MonkMover(Vector3 destination)
         {
             float destinationDistance = PlayerMover.MyPosition.Distance(destination);
-            if (destinationDistance < MinDistance) return false;
 
             // Dashing Strike OOC
             if (CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike))
             {
+                var movementRange = 35f;
+                if (destinationDistance > movementRange)
+                    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
+                if (destination == Vector3.Zero)
+                    return false;
+
                 var charges = Skills.Monk.DashingStrike.Charges;
                 if (charges <= 0) return false;
 
@@ -216,6 +309,13 @@ namespace Trinity.Movement
                     return true;
                 }
             }
+            //Don't Channel if Item Shrine or isNPC is near.
+            if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.Distance < _interactDistance &&
+                (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNPC ||
+                 TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine))
+                return false;
+
+            //todo: This will have to be re-done if Tempest Rush ever becomes a thing again
             // Tempest rush for a monk
             if (CombatBase.CanCast(SNOPower.Monk_TempestRush))
             {
@@ -225,8 +325,9 @@ namespace Trinity.Movement
 
                 if (!_canChannelTempestRush &&
                     ((TrinityPlugin.Player.PrimaryResource >= TrinityPlugin.Settings.Combat.Monk.TR_MinSpirit &&
-                    destinationDistance >= TrinityPlugin.Settings.Combat.Monk.TR_MinDist) ||
-                     DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush]).TotalMilliseconds <= 150) && PowerManager.CanCast(SNOPower.Monk_TempestRush))
+                      destinationDistance >= TrinityPlugin.Settings.Combat.Monk.TR_MinDist) ||
+                     DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush]).TotalMilliseconds <=
+                     150) && PowerManager.CanCast(SNOPower.Monk_TempestRush))
                 {
                     _canChannelTempestRush = true;
                 }
@@ -235,7 +336,8 @@ namespace Trinity.Movement
                     _canChannelTempestRush = false;
                 }
 
-                double lastUse = DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush]).TotalMilliseconds;
+                double lastUse =
+                    DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush]).TotalMilliseconds;
 
                 if (_canChannelTempestRush)
                 {
@@ -245,7 +347,8 @@ namespace Trinity.Movement
                     SpellHistory.RecordSpell(SNOPower.Monk_TempestRush);
 
                     // simulate movement speed of 30
-                    SpeedSensor lastSensor = PlayerMover.SpeedSensors.OrderByDescending(s => s.Timestamp).FirstOrDefault();
+                    SpeedSensor lastSensor =
+                        PlayerMover.SpeedSensors.OrderByDescending(s => s.Timestamp).FirstOrDefault();
                     PlayerMover.SpeedSensors.Add(new SpeedSensor()
                     {
                         Location = PlayerMover.MyPosition,
@@ -255,21 +358,23 @@ namespace Trinity.Movement
                     });
 
                     if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
-                        Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Using Tempest Rush for OOC movement, distance={0:0} spirit={1:0} cd={2} lastUse={3:0} V3={4} vAim={5}",
-                            destinationDistance, TrinityPlugin.Player.PrimaryResource, PowerManager.CanCast(SNOPower.Monk_TempestRush), lastUse, destination, vTargetAimPoint);
+                        Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement,
+                            "Using Tempest Rush for OOC movement, distance={0:0} spirit={1:0} cd={2} lastUse={3:0} V3={4} vAim={5}",
+                            destinationDistance, TrinityPlugin.Player.PrimaryResource,
+                            PowerManager.CanCast(SNOPower.Monk_TempestRush), lastUse, destination, vTargetAimPoint);
                     return true;
                 }
                 else
                 {
                     if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement,
-                        "Tempest rush failed!: {0:00.0} / {1} distance: {2:00.0} / {3}  MS: {4:0.0} lastUse={5:0}",
-                        TrinityPlugin.Player.PrimaryResource,
-                        TrinityPlugin.Settings.Combat.Monk.TR_MinSpirit,
-                        destinationDistance,
-                        TrinityPlugin.Settings.Combat.Monk.TR_MinDist,
-                        PlayerMover.GetMovementSpeed(),
-                        lastUse);
+                            "Tempest rush failed!: {0:00.0} / {1} distance: {2:00.0} / {3}  MS: {4:0.0} lastUse={5:0}",
+                            TrinityPlugin.Player.PrimaryResource,
+                            TrinityPlugin.Settings.Combat.Monk.TR_MinSpirit,
+                            destinationDistance,
+                            TrinityPlugin.Settings.Combat.Monk.TR_MinDist,
+                            PlayerMover.GetMovementSpeed(),
+                            lastUse);
 
                     TrinityPlugin.MaintainTempestRush = false;
                 }
@@ -284,9 +389,11 @@ namespace Trinity.Movement
         #endregion
 
         #region Witchdoctor
+
         public static bool WitchdoctorMover(Vector3 destination)
         {
-            if (CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk))
+            if (CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk) &&
+                !CombatBase.GetHasBuff(SNOPower.Witchdoctor_SpiritWalk))
             {
                 Skills.Crusader.SteedCharge.Cast(destination);
                 LogMovement(SNOPower.Witchdoctor_SpiritWalk, destination);
@@ -297,18 +404,22 @@ namespace Trinity.Movement
         #endregion
 
         #region Wizard
+
         public static bool WizardMover(Vector3 destination)
         {
             var destinationDistance = destination.Distance(CacheData.Player.Position);
             if (destinationDistance < MinDistance) return false;
-            const float maxTeleportRange = 50f;
+            const float movementRange = 50f;
 
-            if (destinationDistance > maxTeleportRange)
-                destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, maxTeleportRange);
+            if (destinationDistance > movementRange)
+                destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
+            if (destination == Vector3.Zero)
+                return false;
 
             // Teleport for a wizard 
             if (CombatBase.CanCast(SNOPower.Wizard_Teleport, CombatBase.CanCastFlags.NoTimer) &&
-                SpellHistory.TimeSinceUse(SNOPower.Wizard_Teleport) >= new TimeSpan(0, 0, 0, 0, (int)TrinityPlugin.Settings.Combat.Wizard.TeleportDelay))
+                SpellHistory.TimeSinceUse(SNOPower.Wizard_Teleport) >=
+                new TimeSpan(0, 0, 0, 0, (int) TrinityPlugin.Settings.Combat.Wizard.TeleportDelay))
             {
                 Skills.Wizard.Teleport.Cast(destination);
                 LogMovement(SNOPower.Wizard_Teleport, destination);

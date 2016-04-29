@@ -17,6 +17,16 @@ namespace Trinity
     internal partial class DataDictionary
     {
 
+        public static HashSet<SNOAnim> VaultAnimations = new HashSet<SNOAnim>
+        {
+            SNOAnim.Demonhunter_Male_Cast_BackFlip_mid,
+            SNOAnim.Demonhunter_Female_Cast_BackFlip_mid,
+            SNOAnim.Demonhunter_Male_Cast_BackFlip_out,
+            SNOAnim.Demonhunter_Female_Cast_BackFlip_out,
+            SNOAnim.Demonhunter_Male_Cast_BackFlip_in,
+            SNOAnim.Demonhunter_Female_Cast_BackFlip_in,
+        };
+
         public static HashSet<int> SlowTimeSNO = new HashSet<int>()
         {
             5422, //slowTime_model_01
