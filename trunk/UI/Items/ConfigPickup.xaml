@@ -207,6 +207,9 @@
 
                     <CheckBox Content="Ignore Gold in AoE" ToolTip="Ignore Legendary Items in AoE" IsChecked="{Binding Path=Pickup.IgnoreGoldInAoE}" />
                     <CheckBox Content="Ignore Gold near Elites" ToolTip="Includes all non-legendaries" IsChecked="{Binding Path=Pickup.IgnoreGoldNearElites}" />
+
+                    <CheckBox Content="Ignore Progression Globes in Aoe" ToolTip="Includes all progression globes when they're positioned in an avoidance" IsChecked="{Binding Path=Pickup.IgnoreProgressionGlobesInAoE}" />
+                    <CheckBox Content="Ignore Health Globes in Aoe" ToolTip="Includes all health globes when they're positioned in an avoidance" IsChecked="{Binding Path=Pickup.IgnoreHealthGlobesInAoE}" />
                 </UniformGrid>
             </GroupBox>
             <GroupBox Header="Reset">

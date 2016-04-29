@@ -271,28 +271,28 @@ namespace Trinity.Reference
             SetName = "",
         };
 
-        /// <summary>
-        /// Deadly Rebirth
-        /// </summary>
-        public static Item DeadlyRebirth = new Item
-        {
-            Id = 193433,
-            Name = "Deadly Rebirth",
-            Quality = ItemQuality.Legendary,
-            Slug = "deadly-rebirth-1WLDQt",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "",
-            Url = "",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_003_x1_demonhunter_male.png",
-            RelativeUrl = "",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-        };
+        ///// <summary>
+        ///// Deadly Rebirth
+        ///// </summary>
+        //public static Item DeadlyRebirth = new Item
+        //{
+        //    Id = 193433,
+        //    Name = "Deadly Rebirth",
+        //    Quality = ItemQuality.Legendary,
+        //    Slug = "deadly-rebirth-1WLDQt",
+        //    ItemType = ItemType.CeremonialDagger,
+        //    TrinityItemType = TrinityItemType.CeremonialKnife,
+        //    IsTwoHanded = false,
+        //    BaseType = ItemBaseType.Weapon,
+        //    InternalName = "",
+        //    DataUrl = "",
+        //    Url = "",
+        //    IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_003_x1_demonhunter_male.png",
+        //    RelativeUrl = "",
+        //    IsCrafted = false,
+        //    LegendaryAffix = "",
+        //    SetName = "",
+        //};
 
         #endregion
 
@@ -346,41 +346,8 @@ namespace Trinity.Reference
 
         #endregion
 
-        #region Imported Item Data
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // AUTO-GENERATED on Tue, 19 Jan 2016 08:36:37 GMT
+        // AUTO-GENERATED on Fri, 29 Apr 2016 04:02:46 GMT
 
 
         /// <summary>
@@ -388,7 +355,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item CrownOfThePrimus = new Item
         {
-
             Id = 349951,
             Name = "Crown of the Primus",
             Quality = ItemQuality.Legendary,
@@ -405,7 +371,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Slow Time gains the effect of every rune.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -413,7 +378,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheSwami = new Item
         {
-
             Id = 218681,
             Name = "The Swami",
             Quality = ItemQuality.Legendary,
@@ -430,7 +394,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "The bonuses from Archon stacks now last for 15–20 seconds after Archon expires.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -438,7 +401,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DarkMagesShade = new Item
         {
-
             Id = 224908,
             Name = "Dark Mage's Shade",
             Quality = ItemQuality.Legendary,
@@ -455,7 +417,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Automatically cast Diamond Skin when you fall below 35% Life. This effect may occur once every 15–20 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -463,7 +424,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ArchmagesVicalyke = new Item
         {
-
             Id = 299471,
             Name = "Archmage's Vicalyke",
             Quality = ItemQuality.Legendary,
@@ -480,7 +440,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your Mirror Images have a chance to multiply when killed by enemies.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -488,7 +447,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheMagistrate = new Item
         {
-
             Id = 325579,
             Name = "The Magistrate",
             Quality = ItemQuality.Legendary,
@@ -505,7 +463,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Frost Hydra now periodically casts Frost Nova.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -513,7 +470,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VelvetCamaral = new Item
         {
-
             Id = 299472,
             Name = "Velvet Camaral",
             Quality = ItemQuality.Legendary,
@@ -530,7 +486,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Double the number of enemies your Electrocute jumps to.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -538,7 +493,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item StormCrow = new Item
         {
-
             Id = 220694,
             Name = "Storm Crow",
             Quality = ItemQuality.Legendary,
@@ -555,7 +509,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "20–40% chance to cast a fiery ball when attacking.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -563,7 +516,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SplitTusk = new Item
         {
-
             Id = 221167,
             Name = "Split Tusk",
             Quality = ItemQuality.Legendary,
@@ -580,7 +532,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -588,7 +539,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Quetzalcoatl = new Item
         {
-
             Id = 204136,
             Name = "Quetzalcoatl",
             Quality = ItemQuality.Legendary,
@@ -605,7 +555,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Locust Swarm and Haunt now deal their damage in half of the normal duration.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -613,7 +562,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Carnevil = new Item
         {
-
             Id = 299442,
             Name = "Carnevil",
             Quality = ItemQuality.Legendary,
@@ -630,15 +578,13 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "The 5 Fetishes closest to you will shoot a powerful Poison Dart every time you do.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Mask of Jeram Pets deal 75–100% more damage.
+        /// Mask of Jeram Pets deal 75–100% increased damage.
         /// </summary>
         public static Item MaskOfJeram = new Item
         {
-
             Id = 299443,
             Name = "Mask of Jeram",
             Quality = ItemQuality.Legendary,
@@ -653,9 +599,8 @@ namespace Trinity.Reference
             IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_voodoomask_102_x1_demonhunter_male.png",
             RelativeUrl = "/d3/en/item/mask-of-jeram",
             IsCrafted = false,
-            LegendaryAffix = "Pets deal 75–100% more damage.",
+            LegendaryAffix = "Pets deal 75–100% increased damage.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -663,7 +608,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheGrinReaper = new Item
         {
-
             Id = 221166,
             Name = "The Grin Reaper",
             Quality = ItemQuality.Legendary,
@@ -680,7 +624,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance when attacking to summon horrific Mimics that cast some of your equipped skills.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -688,7 +631,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TiklandianVisage = new Item
         {
-
             Id = 221382,
             Name = "Tiklandian Visage",
             Quality = ItemQuality.Legendary,
@@ -705,7 +647,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Horrify causes you to Fear and Root enemies around you for 6–8 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -713,7 +654,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VisageOfGiyua = new Item
         {
-
             Id = 221168,
             Name = "Visage of Giyua",
             Quality = ItemQuality.Legendary,
@@ -730,7 +670,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Summon a Fetish Army after you kill 2 Elites.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -738,7 +677,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ZunimassasVision = new Item
         {
-
             Id = 221202,
             Name = "Zunimassa's Vision",
             Quality = ItemQuality.Legendary,
@@ -755,7 +693,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Zunimassa's Haunt",
-
         };
 
         /// <summary>
@@ -763,7 +700,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SeeNoEvil = new Item
         {
-
             Id = 222171,
             Name = "See No Evil",
             Quality = ItemQuality.Legendary,
@@ -780,7 +716,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -788,7 +723,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GyanaNaKashu = new Item
         {
-
             Id = 222169,
             Name = "Gyana Na Kashu",
             Quality = ItemQuality.Legendary,
@@ -805,7 +739,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Lashing Tail Kick releases a piercing fireball that deals 525–700% weapon damage as Fire to enemies within 10 yards on impact.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -813,7 +746,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ErlangShen = new Item
         {
-
             Id = 222173,
             Name = "Erlang Shen",
             Quality = ItemQuality.Legendary,
@@ -830,7 +762,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -838,7 +769,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheMindsEye = new Item
         {
-
             Id = 222172,
             Name = "The Mind's Eye",
             Quality = ItemQuality.Legendary,
@@ -855,7 +785,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Inner Sanctuary increases Spirit Regeneration per second by 10–15.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -863,7 +792,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item EyeOfPeshkov = new Item
         {
-
             Id = 299464,
             Name = "Eye of Peshkov",
             Quality = ItemQuality.Legendary,
@@ -880,7 +808,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Reduce the cooldown of Breath of Heaven by 38–50%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -888,7 +815,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item KekegisUnbreakableSpirit = new Item
         {
-
             Id = 299461,
             Name = "Kekegi's Unbreakable Spirit",
             Quality = ItemQuality.Legendary,
@@ -905,7 +831,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Damaging enemies has a chance to grant you an effect that removes the Spirit cost of your abilities for 2–4 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -913,7 +838,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheLawsOfSeph = new Item
         {
-
             Id = 299454,
             Name = "The Laws of Seph",
             Quality = ItemQuality.Legendary,
@@ -930,7 +854,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Using Blinding Flash restores 125–165 Spirit.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -938,7 +861,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BezoarStone = new Item
         {
-
             Id = 222306,
             Name = "Bezoar Stone",
             Quality = ItemQuality.Legendary,
@@ -955,7 +877,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -963,7 +884,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheEyeOfTheStorm = new Item
         {
-
             Id = 222170,
             Name = "The Eye of the Storm",
             Quality = ItemQuality.Legendary,
@@ -980,7 +900,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -988,7 +907,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Madstone = new Item
         {
-
             Id = 221572,
             Name = "Madstone",
             Quality = ItemQuality.Legendary,
@@ -1005,7 +923,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your Seven-Sided Strike applies Exploding Palm.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1013,7 +930,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TzoKrinsGaze = new Item
         {
-
             Id = 222305,
             Name = "Tzo Krin's Gaze",
             Quality = ItemQuality.Legendary,
@@ -1030,7 +946,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Wave of Light is now cast at your enemy.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1038,7 +953,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item InnasRadiance = new Item
         {
-
             Id = 222307,
             Name = "Inna's Radiance",
             Quality = ItemQuality.Legendary,
@@ -1055,181 +969,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Inna's Mantra",
-
-        };
-
-        /// <summary>
-        /// Cloak of Deception Enemy missiles sometimes pass through you harmlessly.
-        /// </summary>
-        public static Item CloakOfDeception = new Item
-        {
-            Id = 332208,
-            Name = "Cloak of Deception",
-            Quality = ItemQuality.Legendary,
-            Slug = "cloak-of-deception",
-            ItemType = ItemType.Chest,
-            TrinityItemType = TrinityItemType.Cloak,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/cloak-of-deception",
-            Url = "https://us.battle.net/d3/en/item/cloak-of-deception",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/cloak-of-deception",
-            IsCrafted = false,
-            LegendaryAffix = "Enemy missiles sometimes pass through you harmlessly.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Beckon Sail When receiving fatal damage, you instead automatically cast Smoke Screen and are healed to 25% Life. This effect may occur once every 120 seconds.
-        /// </summary>
-        public static Item BeckonSail = new Item
-        {
-
-            Id = 223150,
-            Name = "Beckon Sail",
-            Quality = ItemQuality.Legendary,
-            Slug = "beckon-sail",
-            ItemType = ItemType.Chest,
-            TrinityItemType = TrinityItemType.Chest,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Cloak_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/beckon-sail",
-            Url = "https://us.battle.net/d3/en/item/beckon-sail",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_005_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/beckon-sail",
-            IsCrafted = false,
-            LegendaryAffix = "When receiving fatal damage, you instead automatically cast Smoke Screen and are healed to 25% Life. This effect may occur once every 120 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Blackfeather Dodging or getting hit by a ranged attack automatically shoots a homing rocket back at the attacker for 600–800% weapon damage as Physical.
-        /// </summary>
-        public static Item Blackfeather = new Item
-        {
-
-            Id = 332206,
-            Name = "Blackfeather",
-            Quality = ItemQuality.Legendary,
-            Slug = "blackfeather",
-            ItemType = ItemType.Chest,
-            TrinityItemType = TrinityItemType.Chest,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "cloak_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/blackfeather",
-            Url = "https://us.battle.net/d3/en/item/blackfeather",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/blackfeather",
-            IsCrafted = false,
-            LegendaryAffix = "Dodging or getting hit by a ranged attack automatically shoots a homing rocket back at the attacker for 600–800% weapon damage as Physical.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Cape of the Dark Night Automatically drop Caltrops when you are hit. This effect may only occur once every 6 seconds.
-        /// </summary>
-        public static Item CapeOfTheDarkNight = new Item
-        {
-
-            Id = 223149,
-            Name = "Cape of the Dark Night",
-            Quality = ItemQuality.Legendary,
-            Slug = "cape-of-the-dark-night",
-            ItemType = ItemType.Chest,
-            TrinityItemType = TrinityItemType.Chest,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Cloak_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/cape-of-the-dark-night",
-            Url = "https://us.battle.net/d3/en/item/cape-of-the-dark-night",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/cape-of-the-dark-night",
-            IsCrafted = false,
-            LegendaryAffix = "Automatically drop Caltrops when you are hit. This effect may only occur once every 6 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Cloak of the Garwulf Companion - Wolf Companion now summons 3 wolves.
-        /// </summary>
-        public static Item TheCloakOfTheGarwulf = new Item
-        {
-
-            Id = 223151,
-            Name = "The Cloak of the Garwulf",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-cloak-of-the-garwulf",
-            ItemType = ItemType.Chest,
-            TrinityItemType = TrinityItemType.Chest,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Cloak_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-cloak-of-the-garwulf",
-            Url = "https://us.battle.net/d3/en/item/the-cloak-of-the-garwulf",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_002_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-cloak-of-the-garwulf",
-            IsCrafted = false,
-            LegendaryAffix = "Companion - Wolf Companion now summons 3 wolves.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Natalya's Embrace 
-        /// </summary>
-        public static Item NatalyasEmbrace = new Item
-        {
-
-            Id = 208934,
-            Name = "Natalya's Embrace",
-            Quality = ItemQuality.Legendary,
-            Slug = "natalyas-embrace",
-            ItemType = ItemType.Chest,
-            TrinityItemType = TrinityItemType.Chest,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Cloak_norm_set_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/natalyas-embrace",
-            Url = "https://us.battle.net/d3/en/item/natalyas-embrace",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_006_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/natalyas-embrace",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Natalya's Vengeance",
-
-        };
-
-        /// <summary>
-        /// Cage of the Hellborn 
-        /// </summary>
-        public static Item CageOfTheHellborn = new Item
-        {
-
-            Id = 408871,
-            Name = "Cage of the Hellborn",
-            Quality = ItemQuality.Legendary,
-            Slug = "cage-of-the-hellborn",
-            ItemType = ItemType.Chest,
-            TrinityItemType = TrinityItemType.Chest,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/cage-of-the-hellborn",
-            Url = "https://us.battle.net/d3/en/item/cage-of-the-hellborn",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_chest_set_03_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/cage-of-the-hellborn",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Unhallowed Essence",
-
         };
 
         /// <summary>
@@ -1237,7 +976,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HomingPads = new Item
         {
-
             Id = 198573,
             Name = "Homing Pads",
             Quality = ItemQuality.Legendary,
@@ -1254,7 +992,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your Town Portal is no longer interrupted by taking damage. While casting Town Portal you gain a protective bubble that reduces damage taken by 50–65%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1262,7 +999,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PauldronsOfTheSkeletonKing = new Item
         {
-
             Id = 298164,
             Name = "Pauldrons of the Skeleton King",
             Quality = ItemQuality.Legendary,
@@ -1279,7 +1015,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "When receiving fatal damage, there is a chance that you are instead restored to 25% of maximum Life and cause nearby enemies to flee in fear.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1287,7 +1022,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DeathWatchMantle = new Item
         {
-
             Id = 200310,
             Name = "Death Watch Mantle",
             Quality = ItemQuality.Legendary,
@@ -1304,7 +1038,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "25–35% chance to explode in a fan of knives for 750-950% weapon damage when hit.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1312,7 +1045,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FuryOfTheAncients = new Item
         {
-
             Id = 426817,
             Name = "Fury of the Ancients",
             Quality = ItemQuality.Legendary,
@@ -1329,7 +1061,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Call of the Ancients gains the effect of the Ancients' Fury rune.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1337,7 +1068,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LefebvresSoliloquy = new Item
         {
-
             Id = 298158,
             Name = "Lefebvre’s Soliloquy",
             Quality = ItemQuality.Legendary,
@@ -1354,7 +1084,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Cyclone Strike reduces your damage taken by 40–50% for 5 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1362,7 +1091,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MantleOfChanneling = new Item
         {
-
             Id = 429681,
             Name = "Mantle of Channeling",
             Quality = ItemQuality.Legendary,
@@ -1379,7 +1107,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "While channeling Whirlwind, Rapid Fire, Strafe, Tempest Rush, Firebats, Arcane Torrent, Disintegrate, or Ray of Frost, you deal 20–25% increased damage and take 25% reduced damage.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1387,7 +1114,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SpauldersOfZakara = new Item
         {
-
             Id = 298163,
             Name = "Spaulders of Zakara",
             Quality = ItemQuality.Legendary,
@@ -1404,7 +1130,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your items become indestructible.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1412,7 +1137,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VileWard = new Item
         {
-
             Id = 201325,
             Name = "Vile Ward",
             Quality = ItemQuality.Legendary,
@@ -1429,7 +1153,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Furious Charge deals 30–35% increased damage for every enemy hit while charging.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1437,7 +1160,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ArachyrsMantle = new Item
         {
-
             Id = 440420,
             Name = "Arachyr’s Mantle",
             Quality = ItemQuality.Legendary,
@@ -1454,7 +1176,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Spirit of Arachyr",
-
         };
 
         /// <summary>
@@ -1462,7 +1183,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BurdenOfTheInvoker = new Item
         {
-
             Id = 335029,
             Name = "Burden of the Invoker",
             Quality = ItemQuality.Legendary,
@@ -1479,7 +1199,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Thorns of the Invoker",
-
         };
 
         /// <summary>
@@ -1487,7 +1206,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DashingPauldronsOfDespair = new Item
         {
-
             Id = 414922,
             Name = "Dashing Pauldrons of Despair",
             Quality = ItemQuality.Legendary,
@@ -1504,7 +1222,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Delsere's Magnum Opus",
-
         };
 
         /// <summary>
@@ -1512,7 +1229,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FirebirdsPinions = new Item
         {
-
             Id = 358792,
             Name = "Firebird's Pinions",
             Quality = ItemQuality.Legendary,
@@ -1529,7 +1245,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Firebird's Finery",
-
         };
 
         /// <summary>
@@ -1537,7 +1252,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HelltoothMantle = new Item
         {
-
             Id = 340525,
             Name = "Helltooth Mantle",
             Quality = ItemQuality.Legendary,
@@ -1554,7 +1268,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Helltooth Harness",
-
         };
 
         /// <summary>
@@ -1562,7 +1275,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item JadeHarvestersJoy = new Item
         {
-
             Id = 338042,
             Name = "Jade Harvester's Joy",
             Quality = ItemQuality.Legendary,
@@ -1579,7 +1291,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of the Jade Harvester",
-
         };
 
         /// <summary>
@@ -1587,7 +1298,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MantleOfTheUpsidedownSinners = new Item
         {
-
             Id = 338036,
             Name = "Mantle of the Upside-Down Sinners",
             Quality = ItemQuality.Legendary,
@@ -1604,7 +1314,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of a Thousand Storms",
-
         };
 
         /// <summary>
@@ -1612,7 +1321,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MaraudersSpines = new Item
         {
-
             Id = 336996,
             Name = "Marauder's Spines",
             Quality = ItemQuality.Legendary,
@@ -1629,7 +1337,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Embodiment of the Marauder",
-
         };
 
         /// <summary>
@@ -1637,7 +1344,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MountainOfTheLight = new Item
         {
-
             Id = 414925,
             Name = "Mountain of the Light",
             Quality = ItemQuality.Legendary,
@@ -1654,7 +1360,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Seeker of the Light",
-
         };
 
         /// <summary>
@@ -1662,7 +1367,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PauldronsOfAkkhan = new Item
         {
-
             Id = 358801,
             Name = "Pauldrons of Akkhan",
             Quality = ItemQuality.Legendary,
@@ -1679,7 +1383,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Armor of Akkhan",
-
         };
 
         /// <summary>
@@ -1687,7 +1390,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PauldronsOfTheWastes = new Item
         {
-
             Id = 414921,
             Name = "Pauldrons of the Wastes",
             Quality = ItemQuality.Legendary,
@@ -1704,7 +1406,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Wrath of the Wastes",
-
         };
 
         /// <summary>
@@ -1712,7 +1413,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RaekorsBurden = new Item
         {
-
             Id = 336989,
             Name = "Raekor's Burden",
             Quality = ItemQuality.Legendary,
@@ -1729,7 +1429,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Legacy of Raekor",
-
         };
 
         /// <summary>
@@ -1737,7 +1436,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RolandsMantle = new Item
         {
-
             Id = 404699,
             Name = "Roland's Mantle",
             Quality = ItemQuality.Legendary,
@@ -1754,7 +1452,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Roland's Legacy",
-
         };
 
         /// <summary>
@@ -1762,7 +1459,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SpiresOfTheEarth = new Item
         {
-
             Id = 340526,
             Name = "Spires of the Earth",
             Quality = ItemQuality.Legendary,
@@ -1779,7 +1475,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Might of the Earth",
-
         };
 
         /// <summary>
@@ -1787,7 +1482,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SunwukosBalance = new Item
         {
-
             Id = 336175,
             Name = "Sunwuko's Balance",
             Quality = ItemQuality.Legendary,
@@ -1804,7 +1498,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Monkey King's Garb",
-
         };
 
         /// <summary>
@@ -1812,7 +1505,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheShadowsBurden = new Item
         {
-
             Id = 444527,
             Name = "The Shadow's Burden",
             Quality = ItemQuality.Legendary,
@@ -1829,7 +1521,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Shadow’s Mantle",
-
         };
 
         /// <summary>
@@ -1837,7 +1528,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item UlianasStrength = new Item
         {
-
             Id = 414923,
             Name = "Uliana's Strength",
             Quality = ItemQuality.Legendary,
@@ -1854,7 +1544,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Uliana's Stratagem",
-
         };
 
         /// <summary>
@@ -1862,7 +1551,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item UnsanctifiedShoulders = new Item
         {
-
             Id = 414760,
             Name = "Unsanctified Shoulders",
             Quality = ItemQuality.Legendary,
@@ -1879,7 +1567,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Unhallowed Essence",
-
         };
 
         /// <summary>
@@ -1887,7 +1574,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VyrsProudPauldrons = new Item
         {
-
             Id = 439186,
             Name = "Vyr's Proud Pauldrons",
             Quality = ItemQuality.Legendary,
@@ -1904,7 +1590,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Vyr's Amazing Arcana",
-
         };
 
         /// <summary>
@@ -1912,7 +1597,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LeoricsCrown = new Item
         {
-
             Id = 196024,
             Name = "Leoric's Crown",
             Quality = ItemQuality.Legendary,
@@ -1929,7 +1613,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Increase the effect of any gem socketed into this item by 75–100%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1937,7 +1620,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PridesFall = new Item
         {
-
             Id = 298147,
             Name = "Pride's Fall",
             Quality = ItemQuality.Legendary,
@@ -1954,7 +1636,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your resource costs are reduced by 30% after not taking damage for 5 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1962,7 +1643,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BrokenCrown = new Item
         {
-
             Id = 220630,
             Name = "Broken Crown",
             Quality = ItemQuality.Legendary,
@@ -1979,7 +1659,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Whenever a gem drops, a gem of the type socketed into your helmet also drops.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -1987,7 +1666,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BlindFaith = new Item
         {
-
             Id = 197037,
             Name = "Blind Faith",
             Quality = ItemQuality.Legendary,
@@ -2004,7 +1682,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2012,7 +1689,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DeathseersCowl = new Item
         {
-
             Id = 298146,
             Name = "Deathseer's Cowl",
             Quality = ItemQuality.Legendary,
@@ -2029,7 +1705,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "15–20% chance on being hit by an Undead enemy to charm it for 2 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2037,7 +1712,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VisageOfGunes = new Item
         {
-
             Id = 429266,
             Name = "Visage of Gunes",
             Quality = ItemQuality.Legendary,
@@ -2054,7 +1728,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Vengeance gains the effect of the Dark Heart rune.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2062,7 +1735,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item WarhelmOfKassar = new Item
         {
-
             Id = 426784,
             Name = "Warhelm of Kassar",
             Quality = ItemQuality.Legendary,
@@ -2079,7 +1751,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Reduce the cooldown and increase the damage of Phalanx by 45–60%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2087,7 +1758,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SkullOfResonance = new Item
         {
-
             Id = 220549,
             Name = "Skull of Resonance",
             Quality = ItemQuality.Legendary,
@@ -2104,7 +1774,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Threatening Shout has a chance to Charm enemies and cause them to join your side.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2112,7 +1781,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AndarielsVisage = new Item
         {
-
             Id = 198014,
             Name = "Andariel's Visage",
             Quality = ItemQuality.Legendary,
@@ -2129,7 +1797,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Attacks release a Poison Nova that deals 350–450% weapon damage as Poison to enemies within 10 yards.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2137,7 +1804,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MempoOfTwilight = new Item
         {
-
             Id = 223577,
             Name = "Mempo of Twilight",
             Quality = ItemQuality.Legendary,
@@ -2154,7 +1820,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2162,7 +1827,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ImmortalKingsTriumph = new Item
         {
-
             Id = 210265,
             Name = "Immortal King's Triumph",
             Quality = ItemQuality.Legendary,
@@ -2179,7 +1843,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Immortal King's Call",
-
         };
 
         /// <summary>
@@ -2187,7 +1850,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item NatalyasSight = new Item
         {
-
             Id = 210851,
             Name = "Natalya's Sight",
             Quality = ItemQuality.Legendary,
@@ -2204,7 +1866,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Natalya's Vengeance",
-
         };
 
         /// <summary>
@@ -2212,7 +1873,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TalRashasGuiseOfWisdom = new Item
         {
-
             Id = 211531,
             Name = "Tal Rasha's Guise of Wisdom",
             Quality = ItemQuality.Legendary,
@@ -2229,7 +1889,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Tal Rasha's Elements",
-
         };
 
         /// <summary>
@@ -2237,7 +1896,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AccursedVisage = new Item
         {
-
             Id = 414753,
             Name = "Accursed Visage",
             Quality = ItemQuality.Legendary,
@@ -2254,7 +1912,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Unhallowed Essence",
-
         };
 
         /// <summary>
@@ -2262,7 +1919,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ArachyrsVisage = new Item
         {
-
             Id = 441178,
             Name = "Arachyr’s Visage",
             Quality = ItemQuality.Legendary,
@@ -2279,7 +1935,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Spirit of Arachyr",
-
         };
 
         /// <summary>
@@ -2287,7 +1942,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item CrownOfTheInvoker = new Item
         {
-
             Id = 335028,
             Name = "Crown of the Invoker",
             Quality = ItemQuality.Legendary,
@@ -2304,7 +1958,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Thorns of the Invoker",
-
         };
 
         /// <summary>
@@ -2312,7 +1965,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item CrownOfTheLight = new Item
         {
-
             Id = 414930,
             Name = "Crown of the Light",
             Quality = ItemQuality.Legendary,
@@ -2329,7 +1981,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Seeker of the Light",
-
         };
 
         /// <summary>
@@ -2337,7 +1988,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item EyesOfTheEarth = new Item
         {
-
             Id = 340528,
             Name = "Eyes of the Earth",
             Quality = ItemQuality.Legendary,
@@ -2354,7 +2004,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Might of the Earth",
-
         };
 
         /// <summary>
@@ -2362,7 +2011,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FirebirdsPlume = new Item
         {
-
             Id = 358791,
             Name = "Firebird's Plume",
             Quality = ItemQuality.Legendary,
@@ -2379,7 +2027,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Firebird's Finery",
-
         };
 
         /// <summary>
@@ -2387,7 +2034,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HelltoothMask = new Item
         {
-
             Id = 369016,
             Name = "Helltooth Mask",
             Quality = ItemQuality.Legendary,
@@ -2404,7 +2050,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Helltooth Harness",
-
         };
 
         /// <summary>
@@ -2412,7 +2057,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HelmOfAkkhan = new Item
         {
-
             Id = 358799,
             Name = "Helm of Akkhan",
             Quality = ItemQuality.Legendary,
@@ -2429,7 +2073,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Armor of Akkhan",
-
         };
 
         /// <summary>
@@ -2437,7 +2080,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HelmOfTheWastes = new Item
         {
-
             Id = 414926,
             Name = "Helm of the Wastes",
             Quality = ItemQuality.Legendary,
@@ -2454,7 +2096,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Wrath of the Wastes",
-
         };
 
         /// <summary>
@@ -2462,7 +2103,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item JadeHarvestersWisdom = new Item
         {
-
             Id = 338040,
             Name = "Jade Harvester's Wisdom",
             Quality = ItemQuality.Legendary,
@@ -2479,7 +2119,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of the Jade Harvester",
-
         };
 
         /// <summary>
@@ -2487,7 +2126,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MaraudersVisage = new Item
         {
-
             Id = 336994,
             Name = "Marauder's Visage",
             Quality = ItemQuality.Legendary,
@@ -2504,7 +2142,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Embodiment of the Marauder",
-
         };
 
         /// <summary>
@@ -2512,7 +2149,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MaskOfTheSearingSky = new Item
         {
-
             Id = 338034,
             Name = "Mask of the Searing Sky",
             Quality = ItemQuality.Legendary,
@@ -2529,7 +2165,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of a Thousand Storms",
-
         };
 
         /// <summary>
@@ -2537,7 +2172,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RaekorsWill = new Item
         {
-
             Id = 336988,
             Name = "Raekor's Will",
             Quality = ItemQuality.Legendary,
@@ -2554,7 +2188,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Legacy of Raekor",
-
         };
 
         /// <summary>
@@ -2562,7 +2195,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RolandsVisage = new Item
         {
-
             Id = 404700,
             Name = "Roland's Visage",
             Quality = ItemQuality.Legendary,
@@ -2579,7 +2211,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Roland's Legacy",
-
         };
 
         /// <summary>
@@ -2587,7 +2218,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ShroudedMask = new Item
         {
-
             Id = 414927,
             Name = "Shrouded Mask",
             Quality = ItemQuality.Legendary,
@@ -2604,7 +2234,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Delsere's Magnum Opus",
-
         };
 
         /// <summary>
@@ -2612,7 +2241,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SunwukosCrown = new Item
         {
-
             Id = 336173,
             Name = "Sunwuko's Crown",
             Quality = ItemQuality.Legendary,
@@ -2629,7 +2257,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Monkey King's Garb",
-
         };
 
         /// <summary>
@@ -2637,7 +2264,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheShadowsMask = new Item
         {
-
             Id = 443602,
             Name = "The Shadow's Mask",
             Quality = ItemQuality.Legendary,
@@ -2654,7 +2280,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Shadow’s Mantle",
-
         };
 
         /// <summary>
@@ -2662,7 +2287,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item UlianasSpirit = new Item
         {
-
             Id = 414928,
             Name = "Uliana's Spirit",
             Quality = ItemQuality.Legendary,
@@ -2679,7 +2303,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Uliana's Stratagem",
-
         };
 
         /// <summary>
@@ -2687,7 +2310,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VyrsSightlessSkull = new Item
         {
-
             Id = 439183,
             Name = "Vyr's Sightless Skull",
             Quality = ItemQuality.Legendary,
@@ -2704,7 +2326,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Vyr's Amazing Arcana",
-
         };
 
         /// <summary>
@@ -2712,7 +2333,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HeartOfIron = new Item
         {
-
             Id = 205607,
             Name = "Heart of Iron",
             Quality = ItemQuality.Legendary,
@@ -2729,7 +2349,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Gain Thorns equal to 250–300% of your Vitality.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2737,7 +2356,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AquilaCuirass = new Item
         {
-
             Id = 197203,
             Name = "Aquila Cuirass",
             Quality = ItemQuality.Legendary,
@@ -2754,7 +2372,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "While above 90–95% primary resource, all damage taken is reduced by 50%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2762,7 +2379,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Chaingmail = new Item
         {
-
             Id = 197204,
             Name = "Chaingmail",
             Quality = ItemQuality.Legendary,
@@ -2779,7 +2395,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "After earning a survival bonus, quickly heal to full Life.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2787,7 +2402,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Cindercoat = new Item
         {
-
             Id = 222455,
             Name = "Cindercoat",
             Quality = ItemQuality.Legendary,
@@ -2804,7 +2418,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Reduces the resource cost of Fire skills by 23–30%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2812,7 +2425,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ShiMizusHaori = new Item
         {
-
             Id = 332200,
             Name = "Shi Mizu's Haori",
             Quality = ItemQuality.Legendary,
@@ -2829,7 +2441,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "While below 20–25% Life, all attacks are guaranteed Critical Hits.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2837,7 +2448,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Goldskin = new Item
         {
-
             Id = 205616,
             Name = "Goldskin",
             Quality = ItemQuality.Legendary,
@@ -2854,7 +2464,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance for enemies to drop gold when you hit them.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2862,7 +2471,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TyraelsMight = new Item
         {
-
             Id = 205608,
             Name = "Tyrael's Might",
             Quality = ItemQuality.Legendary,
@@ -2879,7 +2487,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -2887,7 +2494,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BlackthornesSurcoat = new Item
         {
-
             Id = 222456,
             Name = "Blackthorne's Surcoat",
             Quality = ItemQuality.Legendary,
@@ -2904,7 +2510,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Blackthorne's Battlegear",
-
         };
 
         /// <summary>
@@ -2912,7 +2517,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ImmortalKingsEternalReign = new Item
         {
-
             Id = 205613,
             Name = "Immortal King's Eternal Reign",
             Quality = ItemQuality.Legendary,
@@ -2929,7 +2533,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Immortal King's Call",
-
         };
 
         /// <summary>
@@ -2937,7 +2540,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item InnasVastExpanse = new Item
         {
-
             Id = 205614,
             Name = "Inna's Vast Expanse",
             Quality = ItemQuality.Legendary,
@@ -2954,7 +2556,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Inna's Mantra",
-
         };
 
         /// <summary>
@@ -2962,7 +2563,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TalRashasRelentlessPursuit = new Item
         {
-
             Id = 211626,
             Name = "Tal Rasha's Relentless Pursuit",
             Quality = ItemQuality.Legendary,
@@ -2979,7 +2579,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Tal Rasha's Elements",
-
         };
 
         /// <summary>
@@ -2987,7 +2586,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ZunimassasMarrow = new Item
         {
-
             Id = 205615,
             Name = "Zunimassa's Marrow",
             Quality = ItemQuality.Legendary,
@@ -3004,7 +2602,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Zunimassa's Haunt",
-
         };
 
         /// <summary>
@@ -3012,7 +2609,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ArmorOfTheKindRegent = new Item
         {
-
             Id = 332202,
             Name = "Armor of the Kind Regent",
             Quality = ItemQuality.Legendary,
@@ -3029,7 +2625,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Smite will now also be cast at a second nearby enemy.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3037,7 +2632,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ArachyrsCarapace = new Item
         {
-
             Id = 441191,
             Name = "Arachyr’s Carapace",
             Quality = ItemQuality.Legendary,
@@ -3054,7 +2648,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Spirit of Arachyr",
-
         };
 
         /// <summary>
@@ -3062,7 +2655,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BreastplateOfAkkhan = new Item
         {
-
             Id = 358796,
             Name = "Breastplate of Akkhan",
             Quality = ItemQuality.Legendary,
@@ -3079,7 +2671,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Armor of Akkhan",
-
         };
 
         /// <summary>
@@ -3087,7 +2678,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item CuirassOfTheWastes = new Item
         {
-
             Id = 408860,
             Name = "Cuirass of the Wastes",
             Quality = ItemQuality.Legendary,
@@ -3104,7 +2694,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Wrath of the Wastes",
-
         };
 
         /// <summary>
@@ -3112,7 +2701,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FirebirdsBreast = new Item
         {
-
             Id = 358788,
             Name = "Firebird's Breast",
             Quality = ItemQuality.Legendary,
@@ -3129,7 +2717,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Firebird's Finery",
-
         };
 
         /// <summary>
@@ -3137,7 +2724,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HarnessOfTruth = new Item
         {
-
             Id = 408868,
             Name = "Harness of Truth",
             Quality = ItemQuality.Legendary,
@@ -3154,7 +2740,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Delsere's Magnum Opus",
-
         };
 
         /// <summary>
@@ -3162,7 +2747,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HeartOfTheCrashingWave = new Item
         {
-
             Id = 338032,
             Name = "Heart of the Crashing Wave",
             Quality = ItemQuality.Legendary,
@@ -3179,7 +2763,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of a Thousand Storms",
-
         };
 
         /// <summary>
@@ -3187,7 +2770,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HeartOfTheLight = new Item
         {
-
             Id = 408872,
             Name = "Heart of the Light",
             Quality = ItemQuality.Legendary,
@@ -3204,7 +2786,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Seeker of the Light",
-
         };
 
         /// <summary>
@@ -3212,7 +2793,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HelltoothTunic = new Item
         {
-
             Id = 363088,
             Name = "Helltooth Tunic",
             Quality = ItemQuality.Legendary,
@@ -3229,7 +2809,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Helltooth Harness",
-
         };
 
         /// <summary>
@@ -3237,7 +2816,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item JadeHarvestersPeace = new Item
         {
-
             Id = 338038,
             Name = "Jade Harvester's Peace",
             Quality = ItemQuality.Legendary,
@@ -3254,7 +2832,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of the Jade Harvester",
-
         };
 
         /// <summary>
@@ -3262,7 +2839,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MaraudersCarapace = new Item
         {
-
             Id = 363803,
             Name = "Marauder's Carapace",
             Quality = ItemQuality.Legendary,
@@ -3279,7 +2855,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Embodiment of the Marauder",
-
         };
 
         /// <summary>
@@ -3287,7 +2862,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RaekorsHeart = new Item
         {
-
             Id = 336984,
             Name = "Raekor's Heart",
             Quality = ItemQuality.Legendary,
@@ -3304,7 +2878,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Legacy of Raekor",
-
         };
 
         /// <summary>
@@ -3312,7 +2885,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RolandsBearing = new Item
         {
-
             Id = 404095,
             Name = "Roland's Bearing",
             Quality = ItemQuality.Legendary,
@@ -3329,7 +2901,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Roland's Legacy",
-
         };
 
         /// <summary>
@@ -3337,7 +2908,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SpiritOfTheEarth = new Item
         {
-
             Id = 442474,
             Name = "Spirit of the Earth",
             Quality = ItemQuality.Legendary,
@@ -3354,7 +2924,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Might of the Earth",
-
         };
 
         /// <summary>
@@ -3362,8 +2931,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SunwukosSoul = new Item
         {
-
-            Id = 429167,
+            Id = 0,
             Name = "Sunwuko's Soul",
             Quality = ItemQuality.Legendary,
             Slug = "sunwukos-soul",
@@ -3379,7 +2947,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Monkey King's Garb",
-
         };
 
         /// <summary>
@@ -3387,7 +2954,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheShadowsBane = new Item
         {
-
             Id = 332359,
             Name = "The Shadow's Bane",
             Quality = ItemQuality.Legendary,
@@ -3404,7 +2970,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Shadow’s Mantle",
-
         };
 
         /// <summary>
@@ -3412,7 +2977,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item UlianasHeart = new Item
         {
-
             Id = 408869,
             Name = "Uliana's Heart",
             Quality = ItemQuality.Legendary,
@@ -3429,7 +2993,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Uliana's Stratagem",
-
         };
 
         /// <summary>
@@ -3437,7 +3000,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VyrsAstonishingAura = new Item
         {
-
             Id = 332357,
             Name = "Vyr's Astonishing Aura",
             Quality = ItemQuality.Legendary,
@@ -3454,207 +3016,167 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Vyr's Amazing Arcana",
-
         };
 
         /// <summary>
-        /// Girdle of Giants 
+        /// Cloak of Deception Enemy missiles sometimes pass through you harmlessly.
         /// </summary>
-        public static Item GirdleOfGiants = new Item
+        public static Item CloakOfDeception = new Item
         {
-
-            Id = 212232,
-            Name = "Girdle of Giants",
+            Id = 332208,
+            Name = "Cloak of Deception",
             Quality = ItemQuality.Legendary,
-            Slug = "girdle-of-giants",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
+            Slug = "cloak-of-deception",
+            ItemType = ItemType.Cloak,
+            TrinityItemType = TrinityItemType.Cloak,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Armor,
-            InternalName = "BarbBelt_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/girdle-of-giants",
-            Url = "https://us.battle.net/d3/en/item/girdle-of-giants",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_004_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/girdle-of-giants",
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/cloak-of-deception",
+            Url = "https://us.battle.net/d3/en/item/cloak-of-deception",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/cloak-of-deception",
+            IsCrafted = false,
+            LegendaryAffix = "Enemy missiles sometimes pass through you harmlessly.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Beckon Sail When receiving fatal damage, you instead automatically cast Smoke Screen and are healed to 25% Life. This effect may occur once every 120 seconds.
+        /// </summary>
+        public static Item BeckonSail = new Item
+        {
+            Id = 223150,
+            Name = "Beckon Sail",
+            Quality = ItemQuality.Legendary,
+            Slug = "beckon-sail",
+            ItemType = ItemType.Cloak,
+            TrinityItemType = TrinityItemType.Cloak,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Cloak_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/beckon-sail",
+            Url = "https://us.battle.net/d3/en/item/beckon-sail",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_005_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/beckon-sail",
+            IsCrafted = false,
+            LegendaryAffix = "When receiving fatal damage, you instead automatically cast Smoke Screen and are healed to 25% Life. This effect may occur once every 120 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Blackfeather Dodging or getting hit by a ranged attack automatically shoots a homing rocket back at the attacker for 600–800% weapon damage as Physical.
+        /// </summary>
+        public static Item Blackfeather = new Item
+        {
+            Id = 332206,
+            Name = "Blackfeather",
+            Quality = ItemQuality.Legendary,
+            Slug = "blackfeather",
+            ItemType = ItemType.Cloak,
+            TrinityItemType = TrinityItemType.Cloak,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "cloak_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/blackfeather",
+            Url = "https://us.battle.net/d3/en/item/blackfeather",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/blackfeather",
+            IsCrafted = false,
+            LegendaryAffix = "Dodging or getting hit by a ranged attack automatically shoots a homing rocket back at the attacker for 600–800% weapon damage as Physical.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Cape of the Dark Night Automatically drop Caltrops when you are hit. This effect may only occur once every 6 seconds.
+        /// </summary>
+        public static Item CapeOfTheDarkNight = new Item
+        {
+            Id = 223149,
+            Name = "Cape of the Dark Night",
+            Quality = ItemQuality.Legendary,
+            Slug = "cape-of-the-dark-night",
+            ItemType = ItemType.Cloak,
+            TrinityItemType = TrinityItemType.Cloak,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Cloak_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/cape-of-the-dark-night",
+            Url = "https://us.battle.net/d3/en/item/cape-of-the-dark-night",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/cape-of-the-dark-night",
+            IsCrafted = false,
+            LegendaryAffix = "Automatically drop Caltrops when you are hit. This effect may only occur once every 6 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Cloak of the Garwulf Companion - Wolf Companion now summons 3 wolves.
+        /// </summary>
+        public static Item TheCloakOfTheGarwulf = new Item
+        {
+            Id = 223151,
+            Name = "The Cloak of the Garwulf",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-cloak-of-the-garwulf",
+            ItemType = ItemType.Cloak,
+            TrinityItemType = TrinityItemType.Cloak,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Cloak_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-cloak-of-the-garwulf",
+            Url = "https://us.battle.net/d3/en/item/the-cloak-of-the-garwulf",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_002_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-cloak-of-the-garwulf",
+            IsCrafted = false,
+            LegendaryAffix = "Companion - Wolf Companion now summons 3 wolves.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Natalya's Embrace 
+        /// </summary>
+        public static Item NatalyasEmbrace = new Item
+        {
+            Id = 208934,
+            Name = "Natalya's Embrace",
+            Quality = ItemQuality.Legendary,
+            Slug = "natalyas-embrace",
+            ItemType = ItemType.Cloak,
+            TrinityItemType = TrinityItemType.Cloak,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Cloak_norm_set_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/natalyas-embrace",
+            Url = "https://us.battle.net/d3/en/item/natalyas-embrace",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_cloak_006_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/natalyas-embrace",
             IsCrafted = false,
             LegendaryAffix = "",
-            SetName = "",
-
+            SetName = "Natalya's Vengeance",
         };
 
         /// <summary>
-        /// The Undisputed Champion Frenzy gains the effect of every rune.
+        /// Cage of the Hellborn 
         /// </summary>
-        public static Item TheUndisputedChampion = new Item
+        public static Item CageOfTheHellborn = new Item
         {
-
-            Id = 193676,
-            Name = "The Undisputed Champion",
+            Id = 408871,
+            Name = "Cage of the Hellborn",
             Quality = ItemQuality.Legendary,
-            Slug = "the-undisputed-champion",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
+            Slug = "cage-of-the-hellborn",
+            ItemType = ItemType.Cloak,
+            TrinityItemType = TrinityItemType.Cloak,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Armor,
-            InternalName = "BarbBelt_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-undisputed-champion",
-            Url = "https://us.battle.net/d3/en/item/the-undisputed-champion",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_barbbelt_006_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-undisputed-champion",
-            IsCrafted = false,
-            LegendaryAffix = "Frenzy gains the effect of every rune.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Kotuur's Brace 
-        /// </summary>
-        public static Item KotuursBrace = new Item
-        {
-
-            Id = 193674,
-            Name = "Kotuur's Brace",
-            Quality = ItemQuality.Legendary,
-            Slug = "kotuurs-brace",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "BarbBelt_norm_unique_07",
-            DataUrl = "https://us.battle.net/api/d3/data/item/kotuurs-brace",
-            Url = "https://us.battle.net/d3/en/item/kotuurs-brace",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_007_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/kotuurs-brace",
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/cage-of-the-hellborn",
+            Url = "https://us.battle.net/d3/en/item/cage-of-the-hellborn",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_chest_set_03_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/cage-of-the-hellborn",
             IsCrafted = false,
             LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Pride of Cassius Increases the duration of Ignore Pain by 4–6 seconds.
-        /// </summary>
-        public static Item PrideOfCassius = new Item
-        {
-
-            Id = 193673,
-            Name = "Pride of Cassius",
-            Quality = ItemQuality.Legendary,
-            Slug = "pride-of-cassius",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "BarbBelt_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/pride-of-cassius",
-            Url = "https://us.battle.net/d3/en/item/pride-of-cassius",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_002_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/pride-of-cassius",
-            IsCrafted = false,
-            LegendaryAffix = "Increases the duration of Ignore Pain by 4–6 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Chilanik's Chain Using War Cry increases the movement speed for you and all allies affected by 30–40% for 10 seconds.
-        /// </summary>
-        public static Item ChilaniksChain = new Item
-        {
-
-            Id = 298133,
-            Name = "Chilanik's Chain",
-            Quality = ItemQuality.Legendary,
-            Slug = "chilaniks-chain",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "barbbelt_norm_unique_10",
-            DataUrl = "https://us.battle.net/api/d3/data/item/chilaniks-chain",
-            Url = "https://us.battle.net/d3/en/item/chilaniks-chain",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/chilaniks-chain",
-            IsCrafted = false,
-            LegendaryAffix = "Using War Cry increases the movement speed for you and all allies affected by 30–40% for 10 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Lamentation Rend can now stack up to 2 times on an enemy.
-        /// </summary>
-        public static Item Lamentation = new Item
-        {
-
-            Id = 212234,
-            Name = "Lamentation",
-            Quality = ItemQuality.Legendary,
-            Slug = "lamentation",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "barbbelt_norm_unique_05",
-            DataUrl = "https://us.battle.net/api/d3/data/item/lamentation",
-            Url = "https://us.battle.net/d3/en/item/lamentation",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_005_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/lamentation",
-            IsCrafted = false,
-            LegendaryAffix = "Rend can now stack up to 2 times on an enemy.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Immortal King's Tribal Binding 
-        /// </summary>
-        public static Item ImmortalKingsTribalBinding = new Item
-        {
-
-            Id = 212235,
-            Name = "Immortal King's Tribal Binding",
-            Quality = ItemQuality.Legendary,
-            Slug = "immortal-kings-tribal-binding",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "BarbBelt_norm_unique_09",
-            DataUrl = "https://us.battle.net/api/d3/data/item/immortal-kings-tribal-binding",
-            Url = "https://us.battle.net/d3/en/item/immortal-kings-tribal-binding",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_009_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/immortal-kings-tribal-binding",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Immortal King's Call",
-
-        };
-
-        /// <summary>
-        /// Dread Iron Ground Stomp causes an Avalanche.
-        /// </summary>
-        public static Item DreadIron = new Item
-        {
-
-            Id = 193672,
-            Name = "Dread Iron",
-            Quality = ItemQuality.Legendary,
-            Slug = "dread-iron",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "BarbBelt_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/dread-iron",
-            Url = "https://us.battle.net/d3/en/item/dread-iron",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_barbbelt_001_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/dread-iron",
-            IsCrafted = false,
-            LegendaryAffix = "Ground Stomp causes an Avalanche.",
-            SetName = "",
-
+            SetName = "Unhallowed Essence",
         };
 
         /// <summary>
@@ -3662,7 +3184,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AshnagarrsBloodBracer = new Item
         {
-
             Id = 193686,
             Name = "Ashnagarr’s Blood Bracer",
             Quality = ItemQuality.Legendary,
@@ -3679,7 +3200,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Increases the potency of your shields by 75–100%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3687,7 +3207,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item CesarsMemento = new Item
         {
-
             Id = 449038,
             Name = "Cesar’s Memento",
             Quality = ItemQuality.Legendary,
@@ -3704,7 +3223,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Enemies take 300–400% increased damage from your Tempest Rush for 5 seconds after you hit them with a Blind, Freeze, or Stun.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3712,7 +3230,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GungdoGear = new Item
         {
-
             Id = 193688,
             Name = "Gungdo Gear",
             Quality = ItemQuality.Legendary,
@@ -3729,7 +3246,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Exploding Palm's on-death explosion applies Exploding Palm.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3737,7 +3253,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BracersOfDestruction = new Item
         {
-
             Id = 440429,
             Name = "Bracers of Destruction",
             Quality = ItemQuality.Legendary,
@@ -3754,7 +3269,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Seismic Slam deals 300–400% increased damage to the first 5 enemies it hits.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3762,7 +3276,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BracersOfTheFirstMen = new Item
         {
-
             Id = 440430,
             Name = "Bracers of the First Men",
             Quality = ItemQuality.Legendary,
@@ -3779,7 +3292,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Hammer of the Ancients attacks 50% faster and deals 150–200% increased damage.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3787,7 +3299,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GabrielsVambraces = new Item
         {
-
             Id = 436469,
             Name = "Gabriel's Vambraces",
             Quality = ItemQuality.Legendary,
@@ -3804,7 +3315,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "When your Blessed Hammer hits 3 or fewer enemies, 75–100% of its Wrath Cost is refunded.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3812,7 +3322,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item JeramsBracers = new Item
         {
-
             Id = 440431,
             Name = "Jeram's Bracers",
             Quality = ItemQuality.Legendary,
@@ -3829,7 +3338,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Wall of Death deals 75–100% increased damage and can be cast up to three times within 2 seconds before the cooldown begins.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3837,7 +3345,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PintosPride = new Item
         {
-
             Id = 447294,
             Name = "Pinto's Pride",
             Quality = ItemQuality.Legendary,
@@ -3854,7 +3361,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Wave of Light also Slows enemies by 80% for 3 seconds and deals 125–150% increased damage.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3862,7 +3368,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SanguinaryVambraces = new Item
         {
-
             Id = 298120,
             Name = "Sanguinary Vambraces",
             Quality = ItemQuality.Legendary,
@@ -3879,7 +3384,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance on being hit to deal 1000% of your Thorns damage to nearby enemies.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3887,7 +3391,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item WrapsOfClarity = new Item
         {
-
             Id = 440428,
             Name = "Wraps of Clarity",
             Quality = ItemQuality.Legendary,
@@ -3904,15 +3407,13 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your Hatred Generators reduce your damage taken by 30–35% for 5 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Bindings of the Lesser Gods Enemies hit by your Cyclone Strike take 150–200% more damage from your Mystic Ally for 5 seconds.
+        /// Bindings of the Lesser Gods Enemies hit by your Cyclone Strike take 150–200% increased damage from your Mystic Ally for 5 seconds.
         /// </summary>
         public static Item BindingsOfTheLesserGods = new Item
         {
-
             Id = 440427,
             Name = "Bindings of the Lesser Gods",
             Quality = ItemQuality.Legendary,
@@ -3927,9 +3428,8 @@ namespace Trinity.Reference
             IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_bracer_108_demonhunter_male.png",
             RelativeUrl = "/d3/en/item/bindings-of-the-lesser-gods",
             IsCrafted = false,
-            LegendaryAffix = "Enemies hit by your Cyclone Strike take 150–200% more damage from your Mystic Ally for 5 seconds.",
+            LegendaryAffix = "Enemies hit by your Cyclone Strike take 150–200% increased damage from your Mystic Ally for 5 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3937,7 +3437,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AkkhansManacles = new Item
         {
-
             Id = 446057,
             Name = "Akkhan’s Manacles",
             Quality = ItemQuality.Legendary,
@@ -3954,7 +3453,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Blessed Shield damage is increased by 400–500% for the first enemy it hits.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3962,7 +3460,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BracerOfFury = new Item
         {
-
             Id = 446161,
             Name = "Bracer of Fury",
             Quality = ItemQuality.Legendary,
@@ -3979,7 +3476,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Heaven's Fury deals 150–200% increased damage to enemies that are Blinded, Immobilized, or Stunned.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -3987,7 +3483,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VambracesOfSescheron = new Item
         {
-
             Id = 447838,
             Name = "Vambraces of Sescheron",
             Quality = ItemQuality.Legendary,
@@ -4004,7 +3499,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your primary skills heal you for 5.0–6.0% of your missing Life.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4012,7 +3506,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AncientParthanDefenders = new Item
         {
-
             Id = 298116,
             Name = "Ancient Parthan Defenders",
             Quality = ItemQuality.Legendary,
@@ -4029,7 +3522,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Each stunned enemy within 25 yards reduces your damage taken by 9–12%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4037,7 +3529,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item CusterianWristguards = new Item
         {
-
             Id = 298122,
             Name = "Custerian Wristguards",
             Quality = ItemQuality.Legendary,
@@ -4054,7 +3545,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Picking up gold grants experience.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4062,7 +3552,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item NemesisBracers = new Item
         {
-
             Id = 298121,
             Name = "Nemesis Bracers",
             Quality = ItemQuality.Legendary,
@@ -4079,7 +3568,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Shrines and Pylons will spawn an enemy champion.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4087,7 +3575,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item WarzechianArmguards = new Item
         {
-
             Id = 298115,
             Name = "Warzechian Armguards",
             Quality = ItemQuality.Legendary,
@@ -4104,7 +3591,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Every time you destroy a wreckable object, you gain a short burst of speed.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4112,7 +3598,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PromiseOfGlory = new Item
         {
-
             Id = 193684,
             Name = "Promise of Glory",
             Quality = ItemQuality.Legendary,
@@ -4129,7 +3614,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "4–6% chance to spawn a Nephalem Glory globe when you Blind an enemy.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4137,7 +3621,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LacuniProwlers = new Item
         {
-
             Id = 193687,
             Name = "Lacuni Prowlers",
             Quality = ItemQuality.Legendary,
@@ -4154,15 +3637,13 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Strongarm Bracers Enemies hit by knockbacks suffer 20–30% more damage for 5 seconds when they land.
+        /// Strongarm Bracers Enemies hit by knockbacks suffer 20–30% increased damage for 5 seconds when they land.
         /// </summary>
         public static Item StrongarmBracers = new Item
         {
-
             Id = 193692,
             Name = "Strongarm Bracers",
             Quality = ItemQuality.Legendary,
@@ -4177,9 +3658,8 @@ namespace Trinity.Reference
             IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bracer_007_x1_demonhunter_male.png",
             RelativeUrl = "/d3/en/item/strongarm-bracers",
             IsCrafted = false,
-            LegendaryAffix = "Enemies hit by knockbacks suffer 20–30% more damage for 5 seconds when they land.",
+            LegendaryAffix = "Enemies hit by knockbacks suffer 20–30% increased damage for 5 seconds when they land.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4187,7 +3667,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item CoilsOfTheFirstSpider = new Item
         {
-
             Id = 440432,
             Name = "Coils of the First Spider",
             Quality = ItemQuality.Legendary,
@@ -4204,7 +3683,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "While channeling Firebats, you gain 30% damage reduction and 60000–80000 Life per Hit.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4212,7 +3690,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DrakonsLesson = new Item
         {
-
             Id = 432833,
             Name = "Drakon's Lesson",
             Quality = ItemQuality.Legendary,
@@ -4229,7 +3706,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "When your Shield Bash hits 3 or fewer enemies, its damage is increased by 300–400% and 25% of its Wrath Cost is refunded.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4237,7 +3713,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LakumbasOrnament = new Item
         {
-
             Id = 445265,
             Name = "Lakumba’s Ornament",
             Quality = ItemQuality.Legendary,
@@ -4254,7 +3729,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Reduce all damage taken by 6% for each stack of Soul Harvest you have.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4262,7 +3736,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RanslorsFolly = new Item
         {
-
             Id = 298123,
             Name = "Ranslor's Folly",
             Quality = ItemQuality.Legendary,
@@ -4279,7 +3752,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Energy Twister periodically pulls in lesser enemies within 30 yards.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4287,7 +3759,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SkularsSalvation = new Item
         {
-
             Id = 444928,
             Name = "Skular's Salvation",
             Quality = ItemQuality.Legendary,
@@ -4304,7 +3775,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Increase the damage of Ancient Spear - Boulder Toss by 100%. When your Boulder Toss hits 5 or fewer enemies, the damage is increased by 120–150%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4312,7 +3782,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SpiritGuards = new Item
         {
-
             Id = 430290,
             Name = "Spirit Guards",
             Quality = ItemQuality.Legendary,
@@ -4329,7 +3798,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your Spirit Generators reduce your damage taken by 30–40% for 3 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4337,7 +3805,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TragoulCoils = new Item
         {
-
             Id = 298119,
             Name = "Trag'Oul Coils",
             Quality = ItemQuality.Legendary,
@@ -4354,7 +3821,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Healing wells replenish all resources and reduce all cooldowns by 45–60 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -4362,7 +3828,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item KrelmsBuffBracers = new Item
         {
-
             Id = 336185,
             Name = "Krelm's Buff Bracers",
             Quality = ItemQuality.Legendary,
@@ -4379,7 +3844,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "You are immune to Knockback and Stun effects.",
             SetName = "Krelm’s Buff Bulwark",
-
         };
 
         /// <summary>
@@ -4387,7 +3851,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ShacklesOfTheInvoker = new Item
         {
-
             Id = 335030,
             Name = "Shackles of the Invoker",
             Quality = ItemQuality.Legendary,
@@ -4404,1682 +3867,167 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Thorns of the Invoker",
-
         };
 
         /// <summary>
-        /// Pox Faulds When 3 or more enemies are within 12 yards, you release a vile stench that deals 450–550% weapon damage as Poison every second for 5 seconds to enemies within 15 yards.
+        /// Girdle of Giants 
         /// </summary>
-        public static Item PoxFaulds = new Item
+        public static Item GirdleOfGiants = new Item
         {
-
-            Id = 197220,
-            Name = "Pox Faulds",
+            Id = 212232,
+            Name = "Girdle of Giants",
             Quality = ItemQuality.Legendary,
-            Slug = "pox-faulds",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
+            Slug = "girdle-of-giants",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_unique_048",
-            DataUrl = "https://us.battle.net/api/d3/data/item/pox-faulds",
-            Url = "https://us.battle.net/d3/en/item/pox-faulds",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_007_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/pox-faulds",
-            IsCrafted = false,
-            LegendaryAffix = "When 3 or more enemies are within 12 yards, you release a vile stench that deals 450–550% weapon damage as Poison every second for 5 seconds to enemies within 15 yards.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Death's Bargain Gain an aura of death that deals 750–1000% of your Life per Second as Physical damage to enemies within 16 yards. You no longer regenerate Life.
-        /// </summary>
-        public static Item DeathsBargain = new Item
-        {
-
-            Id = 332205,
-            Name = "Death's Bargain",
-            Quality = ItemQuality.Legendary,
-            Slug = "deaths-bargain",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/deaths-bargain",
-            Url = "https://us.battle.net/d3/en/item/deaths-bargain",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/deaths-bargain",
-            IsCrafted = false,
-            LegendaryAffix = "Gain an aura of death that deals 750–1000% of your Life per Second as Physical damage to enemies within 16 yards. You no longer regenerate Life.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Hammer Jammers Enemies take 300–400% increased damage from your Blessed Hammers for 10 seconds after you hit them with a Blind, Immobilize, or Stun.
-        /// </summary>
-        public static Item HammerJammers = new Item
-        {
-
-            Id = 209059,
-            Name = "Hammer Jammers",
-            Quality = ItemQuality.Legendary,
-            Slug = "hammer-jammers",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_unique_077",
-            DataUrl = "https://us.battle.net/api/d3/data/item/hammer-jammers",
-            Url = "https://us.battle.net/d3/en/item/hammer-jammers",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_pants_002_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/hammer-jammers",
-            IsCrafted = false,
-            LegendaryAffix = "Enemies take 300–400% increased damage from your Blessed Hammers for 10 seconds after you hit them with a Blind, Immobilize, or Stun.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Hexing Pants of Mr. Yan Your resource generation and damage is increased by 25% while moving and decreased by 20–25% while standing still.
-        /// </summary>
-        public static Item HexingPantsOfMrYan = new Item
-        {
-
-            Id = 332204,
-            Name = "Hexing Pants of Mr. Yan",
-            Quality = ItemQuality.Legendary,
-            Slug = "hexing-pants-of-mr-yan",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/hexing-pants-of-mr-yan",
-            Url = "https://us.battle.net/d3/en/item/hexing-pants-of-mr-yan",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/hexing-pants-of-mr-yan",
-            IsCrafted = false,
-            LegendaryAffix = "Your resource generation and damage is increased by 25% while moving and decreased by 20–25% while standing still.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Swamp Land Waders 
-        /// </summary>
-        public static Item SwampLandWaders = new Item
-        {
-
-            Id = 209057,
-            Name = "Swamp Land Waders",
-            Quality = ItemQuality.Legendary,
-            Slug = "swamp-land-waders",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/swamp-land-waders",
-            Url = "https://us.battle.net/d3/en/item/swamp-land-waders",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/swamp-land-waders",
+            InternalName = "BarbBelt_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/girdle-of-giants",
+            Url = "https://us.battle.net/d3/en/item/girdle-of-giants",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_004_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/girdle-of-giants",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Depth Diggers Primary skills that generate resource deal 80–100% additional damage.
+        /// The Undisputed Champion Frenzy gains the effect of every rune.
         /// </summary>
-        public static Item DepthDiggers = new Item
+        public static Item TheUndisputedChampion = new Item
         {
-
-            Id = 197216,
-            Name = "Depth Diggers",
+            Id = 193676,
+            Name = "The Undisputed Champion",
             Quality = ItemQuality.Legendary,
-            Slug = "depth-diggers",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
+            Slug = "the-undisputed-champion",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_unique_044",
-            DataUrl = "https://us.battle.net/api/d3/data/item/depth-diggers",
-            Url = "https://us.battle.net/d3/en/item/depth-diggers",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_006_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/depth-diggers",
+            InternalName = "BarbBelt_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-undisputed-champion",
+            Url = "https://us.battle.net/d3/en/item/the-undisputed-champion",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_barbbelt_006_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-undisputed-champion",
             IsCrafted = false,
-            LegendaryAffix = "Primary skills that generate resource deal 80–100% additional damage.",
+            LegendaryAffix = "Frenzy gains the effect of every rune.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Blackthorne's Jousting Mail 
+        /// Pride of Cassius Increases the duration of Ignore Pain by 4–6 seconds.
         /// </summary>
-        public static Item BlackthornesJoustingMail = new Item
+        public static Item PrideOfCassius = new Item
         {
-
-            Id = 222477,
-            Name = "Blackthorne's Jousting Mail",
+            Id = 193673,
+            Name = "Pride of Cassius",
             Quality = ItemQuality.Legendary,
-            Slug = "blackthornes-jousting-mail",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
+            Slug = "pride-of-cassius",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_unique_050",
-            DataUrl = "https://us.battle.net/api/d3/data/item/blackthornes-jousting-mail",
-            Url = "https://us.battle.net/d3/en/item/blackthornes-jousting-mail",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_013_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/blackthornes-jousting-mail",
+            InternalName = "BarbBelt_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/pride-of-cassius",
+            Url = "https://us.battle.net/d3/en/item/pride-of-cassius",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_002_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/pride-of-cassius",
             IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Blackthorne's Battlegear",
-
+            LegendaryAffix = "Increases the duration of Ignore Pain by 4–6 seconds.",
+            SetName = "",
         };
 
         /// <summary>
-        /// Immortal King's Stature 
+        /// Chilanik's Chain Using War Cry increases the movement speed for you and all allies affected by 30–40% for 10 seconds.
         /// </summary>
-        public static Item ImmortalKingsStature = new Item
+        public static Item ChilaniksChain = new Item
         {
-
-            Id = 205645,
-            Name = "Immortal King's Stature",
+            Id = 298133,
+            Name = "Chilanik's Chain",
             Quality = ItemQuality.Legendary,
-            Slug = "immortal-kings-stature",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
+            Slug = "chilaniks-chain",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/immortal-kings-stature",
-            Url = "https://us.battle.net/d3/en/item/immortal-kings-stature",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_pants_02_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/immortal-kings-stature",
+            InternalName = "barbbelt_norm_unique_10",
+            DataUrl = "https://us.battle.net/api/d3/data/item/chilaniks-chain",
+            Url = "https://us.battle.net/d3/en/item/chilaniks-chain",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/chilaniks-chain",
+            IsCrafted = false,
+            LegendaryAffix = "Using War Cry increases the movement speed for you and all allies affected by 30–40% for 10 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Lamentation Rend can now stack up to 2 times on an enemy.
+        /// </summary>
+        public static Item Lamentation = new Item
+        {
+            Id = 212234,
+            Name = "Lamentation",
+            Quality = ItemQuality.Legendary,
+            Slug = "lamentation",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "barbbelt_norm_unique_05",
+            DataUrl = "https://us.battle.net/api/d3/data/item/lamentation",
+            Url = "https://us.battle.net/d3/en/item/lamentation",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_005_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/lamentation",
+            IsCrafted = false,
+            LegendaryAffix = "Rend can now stack up to 2 times on an enemy.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Immortal King's Tribal Binding 
+        /// </summary>
+        public static Item ImmortalKingsTribalBinding = new Item
+        {
+            Id = 212235,
+            Name = "Immortal King's Tribal Binding",
+            Quality = ItemQuality.Legendary,
+            Slug = "immortal-kings-tribal-binding",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "BarbBelt_norm_unique_09",
+            DataUrl = "https://us.battle.net/api/d3/data/item/immortal-kings-tribal-binding",
+            Url = "https://us.battle.net/d3/en/item/immortal-kings-tribal-binding",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_009_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/immortal-kings-tribal-binding",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Immortal King's Call",
-
         };
 
         /// <summary>
-        /// Inna's Temperance 
+        /// Dread Iron Ground Stomp causes an Avalanche.
         /// </summary>
-        public static Item InnasTemperance = new Item
+        public static Item DreadIron = new Item
         {
-
-            Id = 205646,
-            Name = "Inna's Temperance",
+            Id = 193672,
+            Name = "Dread Iron",
             Quality = ItemQuality.Legendary,
-            Slug = "innas-temperance",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_unique_087",
-            DataUrl = "https://us.battle.net/api/d3/data/item/innas-temperance",
-            Url = "https://us.battle.net/d3/en/item/innas-temperance",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_008_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/innas-temperance",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Inna's Mantra",
-
-        };
-
-        /// <summary>
-        /// Natalya's Leggings 
-        /// </summary>
-        public static Item NatalyasLeggings = new Item
-        {
-
-            Id = 415282,
-            Name = "Natalya's Leggings",
-            Quality = ItemQuality.Legendary,
-            Slug = "natalyas-leggings",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/natalyas-leggings",
-            Url = "https://us.battle.net/d3/en/item/natalyas-leggings",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_pants_01_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/natalyas-leggings",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Natalya's Vengeance",
-
-        };
-
-        /// <summary>
-        /// Tal Rasha's Stride 
-        /// </summary>
-        public static Item TalRashasStride = new Item
-        {
-
-            Id = 415049,
-            Name = "Tal Rasha's Stride",
-            Quality = ItemQuality.Legendary,
-            Slug = "tal-rashas-stride",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/tal-rashas-stride",
-            Url = "https://us.battle.net/d3/en/item/tal-rashas-stride",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_pants_03_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/tal-rashas-stride",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Tal Rasha's Elements",
-
-        };
-
-        /// <summary>
-        /// Zunimassa's Cloth 
-        /// </summary>
-        public static Item ZunimassasCloth = new Item
-        {
-
-            Id = 205647,
-            Name = "Zunimassa's Cloth",
-            Quality = ItemQuality.Legendary,
-            Slug = "zunimassas-cloth",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/zunimassas-cloth",
-            Url = "https://us.battle.net/d3/en/item/zunimassas-cloth",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_pants_04_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/zunimassas-cloth",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Zunimassa's Haunt",
-
-        };
-
-        /// <summary>
-        /// Arachyr’s Legs 
-        /// </summary>
-        public static Item ArachyrsLegs = new Item
-        {
-
-            Id = 441194,
-            Name = "Arachyr’s Legs",
-            Quality = ItemQuality.Legendary,
-            Slug = "arachyrs-legs",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/arachyrs-legs",
-            Url = "https://us.battle.net/d3/en/item/arachyrs-legs",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_02_p3_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/arachyrs-legs",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Spirit of Arachyr",
-
-        };
-
-        /// <summary>
-        /// Cuisses of Akkhan 
-        /// </summary>
-        public static Item CuissesOfAkkhan = new Item
-        {
-
-            Id = 358800,
-            Name = "Cuisses of Akkhan",
-            Quality = ItemQuality.Legendary,
-            Slug = "cuisses-of-akkhan",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_set_10",
-            DataUrl = "https://us.battle.net/api/d3/data/item/cuisses-of-akkhan",
-            Url = "https://us.battle.net/d3/en/item/cuisses-of-akkhan",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_10_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/cuisses-of-akkhan",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Armor of Akkhan",
-
-        };
-
-        /// <summary>
-        /// Firebird's Down 
-        /// </summary>
-        public static Item FirebirdsDown = new Item
-        {
-
-            Id = 358790,
-            Name = "Firebird's Down",
-            Quality = ItemQuality.Legendary,
-            Slug = "firebirds-down",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_set_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/firebirds-down",
-            Url = "https://us.battle.net/d3/en/item/firebirds-down",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_06_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/firebirds-down",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Firebird's Finery",
-
-        };
-
-        /// <summary>
-        /// Helltooth Leg Guards 
-        /// </summary>
-        public static Item HelltoothLegGuards = new Item
-        {
-
-            Id = 340522,
-            Name = "Helltooth Leg Guards",
-            Quality = ItemQuality.Legendary,
-            Slug = "helltooth-leg-guards",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_set_16",
-            DataUrl = "https://us.battle.net/api/d3/data/item/helltooth-leg-guards",
-            Url = "https://us.battle.net/d3/en/item/helltooth-leg-guards",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_16_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/helltooth-leg-guards",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Helltooth Harness",
-
-        };
-
-        /// <summary>
-        /// Jade Harvester's Courage 
-        /// </summary>
-        public static Item JadeHarvestersCourage = new Item
-        {
-
-            Id = 338041,
-            Name = "Jade Harvester's Courage",
-            Quality = ItemQuality.Legendary,
-            Slug = "jade-harvesters-courage",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_set_09",
-            DataUrl = "https://us.battle.net/api/d3/data/item/jade-harvesters-courage",
-            Url = "https://us.battle.net/d3/en/item/jade-harvesters-courage",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_09_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/jade-harvesters-courage",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Raiment of the Jade Harvester",
-
-        };
-
-        /// <summary>
-        /// Leg Guards of Mystery 
-        /// </summary>
-        public static Item LegGuardsOfMystery = new Item
-        {
-
-            Id = 408878,
-            Name = "Leg Guards of Mystery",
-            Quality = ItemQuality.Legendary,
-            Slug = "leg-guards-of-mystery",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/leg-guards-of-mystery",
-            Url = "https://us.battle.net/d3/en/item/leg-guards-of-mystery",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_02_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/leg-guards-of-mystery",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Delsere's Magnum Opus",
-
-        };
-
-        /// <summary>
-        /// Marauder's Encasement 
-        /// </summary>
-        public static Item MaraudersEncasement = new Item
-        {
-
-            Id = 336993,
-            Name = "Marauder's Encasement",
-            Quality = ItemQuality.Legendary,
-            Slug = "marauders-encasement",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/marauders-encasement",
-            Url = "https://us.battle.net/d3/en/item/marauders-encasement",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_07_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/marauders-encasement",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Embodiment of the Marauder",
-
-        };
-
-        /// <summary>
-        /// Raekor's Breeches 
-        /// </summary>
-        public static Item RaekorsBreeches = new Item
-        {
-
-            Id = 336986,
-            Name = "Raekor's Breeches",
-            Quality = ItemQuality.Legendary,
-            Slug = "raekors-breeches",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_set_05",
-            DataUrl = "https://us.battle.net/api/d3/data/item/raekors-breeches",
-            Url = "https://us.battle.net/d3/en/item/raekors-breeches",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_05_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/raekors-breeches",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "The Legacy of Raekor",
-
-        };
-
-        /// <summary>
-        /// Renewal of the Invoker 
-        /// </summary>
-        public static Item RenewalOfTheInvoker = new Item
-        {
-
-            Id = 442732,
-            Name = "Renewal of the Invoker",
-            Quality = ItemQuality.Legendary,
-            Slug = "renewal-of-the-invoker",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/renewal-of-the-invoker",
-            Url = "https://us.battle.net/d3/en/item/renewal-of-the-invoker",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_12_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/renewal-of-the-invoker",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Thorns of the Invoker",
-
-        };
-
-        /// <summary>
-        /// Roland's Determination 
-        /// </summary>
-        public static Item RolandsDetermination = new Item
-        {
-
-            Id = 404097,
-            Name = "Roland's Determination",
-            Quality = ItemQuality.Legendary,
-            Slug = "rolands-determination",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "p1_Pants_norm_set_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/rolands-determination",
-            Url = "https://us.battle.net/d3/en/item/rolands-determination",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_01_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/rolands-determination",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Roland's Legacy",
-
-        };
-
-        /// <summary>
-        /// Scales of the Dancing Serpent 
-        /// </summary>
-        public static Item ScalesOfTheDancingSerpent = new Item
-        {
-
-            Id = 338035,
-            Name = "Scales of the Dancing Serpent",
-            Quality = ItemQuality.Legendary,
-            Slug = "scales-of-the-dancing-serpent",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_set_08",
-            DataUrl = "https://us.battle.net/api/d3/data/item/scales-of-the-dancing-serpent",
-            Url = "https://us.battle.net/d3/en/item/scales-of-the-dancing-serpent",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_08_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/scales-of-the-dancing-serpent",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Raiment of a Thousand Storms",
-
-        };
-
-        /// <summary>
-        /// Sunwuko's Leggings 
-        /// </summary>
-        public static Item SunwukosLeggings = new Item
-        {
-
-            Id = 429075,
-            Name = "Sunwuko's Leggings",
-            Quality = ItemQuality.Legendary,
-            Slug = "sunwukos-leggings",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/sunwukos-leggings",
-            Url = "https://us.battle.net/d3/en/item/sunwukos-leggings",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_11_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/sunwukos-leggings",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Monkey King's Garb",
-
-        };
-
-        /// <summary>
-        /// Tasset of the Wastes 
-        /// </summary>
-        public static Item TassetOfTheWastes = new Item
-        {
-
-            Id = 408862,
-            Name = "Tasset of the Wastes",
-            Quality = ItemQuality.Legendary,
-            Slug = "tasset-of-the-wastes",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/tasset-of-the-wastes",
-            Url = "https://us.battle.net/d3/en/item/tasset-of-the-wastes",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_01_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/tasset-of-the-wastes",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Wrath of the Wastes",
-
-        };
-
-        /// <summary>
-        /// The Shadow's Coil 
-        /// </summary>
-        public static Item TheShadowsCoil = new Item
-        {
-
-            Id = 332361,
-            Name = "The Shadow's Coil",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-shadows-coil",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_set_14",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-shadows-coil",
-            Url = "https://us.battle.net/d3/en/item/the-shadows-coil",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_14_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-shadows-coil",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "The Shadow’s Mantle",
-
-        };
-
-        /// <summary>
-        /// Towers of the Light 
-        /// </summary>
-        public static Item TowersOfTheLight = new Item
-        {
-
-            Id = 408882,
-            Name = "Towers of the Light",
-            Quality = ItemQuality.Legendary,
-            Slug = "towers-of-the-light",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/towers-of-the-light",
-            Url = "https://us.battle.net/d3/en/item/towers-of-the-light",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_03_p3_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/towers-of-the-light",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Seeker of the Light",
-
-        };
-
-        /// <summary>
-        /// Uliana's Burden 
-        /// </summary>
-        public static Item UlianasBurden = new Item
-        {
-
-            Id = 408879,
-            Name = "Uliana's Burden",
-            Quality = ItemQuality.Legendary,
-            Slug = "ulianas-burden",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/ulianas-burden",
-            Url = "https://us.battle.net/d3/en/item/ulianas-burden",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_01_p3_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/ulianas-burden",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Uliana's Stratagem",
-
-        };
-
-        /// <summary>
-        /// Unholy Plates 
-        /// </summary>
-        public static Item UnholyPlates = new Item
-        {
-
-            Id = 408881,
-            Name = "Unholy Plates",
-            Quality = ItemQuality.Legendary,
-            Slug = "unholy-plates",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/unholy-plates",
-            Url = "https://us.battle.net/d3/en/item/unholy-plates",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_03_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/unholy-plates",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Unhallowed Essence",
-
-        };
-
-        /// <summary>
-        /// Vyr's Fantastic Finery 
-        /// </summary>
-        public static Item VyrsFantasticFinery = new Item
-        {
-
-            Id = 332360,
-            Name = "Vyr's Fantastic Finery",
-            Quality = ItemQuality.Legendary,
-            Slug = "vyrs-fantastic-finery",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_set_13",
-            DataUrl = "https://us.battle.net/api/d3/data/item/vyrs-fantastic-finery",
-            Url = "https://us.battle.net/d3/en/item/vyrs-fantastic-finery",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_13_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/vyrs-fantastic-finery",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Vyr's Amazing Arcana",
-
-        };
-
-        /// <summary>
-        /// Weight of the Earth 
-        /// </summary>
-        public static Item WeightOfTheEarth = new Item
-        {
-
-            Id = 340521,
-            Name = "Weight of the Earth",
-            Quality = ItemQuality.Legendary,
-            Slug = "weight-of-the-earth",
-            ItemType = ItemType.Legs,
-            TrinityItemType = TrinityItemType.Legs,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "pants_norm_set_15",
-            DataUrl = "https://us.battle.net/api/d3/data/item/weight-of-the-earth",
-            Url = "https://us.battle.net/d3/en/item/weight-of-the-earth",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_15_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/weight-of-the-earth",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Might of the Earth",
-
-        };
-
-        /// <summary>
-        /// Goldwrap On gold pickup: Gain armor for 5 seconds equal to the amount picked up.
-        /// </summary>
-        public static Item Goldwrap = new Item
-        {
-
-            Id = 193671,
-            Name = "Goldwrap",
-            Quality = ItemQuality.Legendary,
-            Slug = "goldwrap",
+            Slug = "dread-iron",
             ItemType = ItemType.Belt,
             TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Armor,
-            InternalName = "belt_norm_unique_08",
-            DataUrl = "https://us.battle.net/api/d3/data/item/goldwrap",
-            Url = "https://us.battle.net/d3/en/item/goldwrap",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_010_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/goldwrap",
+            InternalName = "BarbBelt_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/dread-iron",
+            Url = "https://us.battle.net/d3/en/item/dread-iron",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_barbbelt_001_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/dread-iron",
             IsCrafted = false,
-            LegendaryAffix = "On gold pickup: Gain armor for 5 seconds equal to the amount picked up.",
+            LegendaryAffix = "Ground Stomp causes an Avalanche.",
             SetName = "",
-
-        };
-
-        /// <summary>
-        /// Vigilante Belt 
-        /// </summary>
-        public static Item VigilanteBelt = new Item
-        {
-
-            Id = 193665,
-            Name = "Vigilante Belt",
-            Quality = ItemQuality.Legendary,
-            Slug = "vigilante-belt",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Belt_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/vigilante-belt",
-            Url = "https://us.battle.net/d3/en/item/vigilante-belt",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_002_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/vigilante-belt",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Insatiable Belt Picking up a Health Globe increases your maximum Life by 5% for 15 seconds, stacking up to 5 times.
-        /// </summary>
-        public static Item InsatiableBelt = new Item
-        {
-
-            Id = 298126,
-            Name = "Insatiable Belt",
-            Quality = ItemQuality.Legendary,
-            Slug = "insatiable-belt",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/insatiable-belt",
-            Url = "https://us.battle.net/d3/en/item/insatiable-belt",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/insatiable-belt",
-            IsCrafted = false,
-            LegendaryAffix = "Picking up a Health Globe increases your maximum Life by 5% for 15 seconds, stacking up to 5 times.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Binding of the Lost Each hit with Seven-Sided Strike grants 3.0–3.5% damage reduction for 7 seconds.
-        /// </summary>
-        public static Item BindingOfTheLost = new Item
-        {
-
-            Id = 440425,
-            Name = "Binding of the Lost",
-            Quality = ItemQuality.Legendary,
-            Slug = "binding-of-the-lost",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/binding-of-the-lost",
-            Url = "https://us.battle.net/d3/en/item/binding-of-the-lost",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_belt_03_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/binding-of-the-lost",
-            IsCrafted = false,
-            LegendaryAffix = "Each hit with Seven-Sided Strike grants 3.0–3.5% damage reduction for 7 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Shame of Delsere Your Signature Spells attack 50% faster and restore 9–12 Arcane Power.
-        /// </summary>
-        public static Item TheShameOfDelsere = new Item
-        {
-
-            Id = 440426,
-            Name = "The Shame of Delsere",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-shame-of-delsere",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-shame-of-delsere",
-            Url = "https://us.battle.net/d3/en/item/the-shame-of-delsere",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_02_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-shame-of-delsere",
-            IsCrafted = false,
-            LegendaryAffix = "Your Signature Spells attack 50% faster and restore 9–12 Arcane Power.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Kyoshiro's Soul Sweeping Wind gains 2 stacks every second it does not deal damage to any enemies.
-        /// </summary>
-        public static Item KyoshirosSoul = new Item
-        {
-
-            Id = 298136,
-            Name = "Kyoshiro's Soul",
-            Quality = ItemQuality.Legendary,
-            Slug = "kyoshiros-soul",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/kyoshiros-soul",
-            Url = "https://us.battle.net/d3/en/item/kyoshiros-soul",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_05_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/kyoshiros-soul",
-            IsCrafted = false,
-            LegendaryAffix = "Sweeping Wind gains 2 stacks every second it does not deal damage to any enemies.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Sacred Harness Judgment gains the effect of the Debilitate rune and is cast at your landing location when casting Falling Sword.
-        /// </summary>
-        public static Item SacredHarness = new Item
-        {
-
-            Id = 440423,
-            Name = "Sacred Harness",
-            Quality = ItemQuality.Legendary,
-            Slug = "sacred-harness",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/sacred-harness",
-            Url = "https://us.battle.net/d3/en/item/sacred-harness",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_belt_01_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/sacred-harness",
-            IsCrafted = false,
-            LegendaryAffix = "Judgment gains the effect of the Debilitate rune and is cast at your landing location when casting Falling Sword.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Saffron Wrap 
-        /// </summary>
-        public static Item SaffronWrap = new Item
-        {
-
-            Id = 193664,
-            Name = "Saffron Wrap",
-            Quality = ItemQuality.Legendary,
-            Slug = "saffron-wrap",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Belt_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/saffron-wrap",
-            Url = "https://us.battle.net/d3/en/item/saffron-wrap",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/saffron-wrap",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// String of Ears Reduces damage from melee attacks by 25–30%.
-        /// </summary>
-        public static Item StringOfEars = new Item
-        {
-
-            Id = 193669,
-            Name = "String of Ears",
-            Quality = ItemQuality.Legendary,
-            Slug = "string-of-ears",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Belt_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/string-of-ears",
-            Url = "https://us.battle.net/d3/en/item/string-of-ears",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_03_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/string-of-ears",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Fazula’s Improbable Chain You automatically start with 40–50 Archon stacks when entering Archon form.
-        /// </summary>
-        public static Item FazulasImprobableChain = new Item
-        {
-
-            Id = 440424,
-            Name = "Fazula’s Improbable Chain",
-            Quality = ItemQuality.Legendary,
-            Slug = "fazulas-improbable-chain",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/fazulas-improbable-chain",
-            Url = "https://us.battle.net/d3/en/item/fazulas-improbable-chain",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_07_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/fazulas-improbable-chain",
-            IsCrafted = false,
-            LegendaryAffix = "You automatically start with 40–50 Archon stacks when entering Archon form.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Hergbrash’s Binding Reduces the Arcane Power cost of Arcane Torrent, Disintegrate, and Ray of Frost by 50–65%.
-        /// </summary>
-        public static Item HergbrashsBinding = new Item
-        {
-
-            Id = 449047,
-            Name = "Hergbrash’s Binding",
-            Quality = ItemQuality.Legendary,
-            Slug = "hergbrashs-binding",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/hergbrashs-binding",
-            Url = "https://us.battle.net/d3/en/item/hergbrashs-binding",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_06_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/hergbrashs-binding",
-            IsCrafted = false,
-            LegendaryAffix = "Reduces the Arcane Power cost of Arcane Torrent, Disintegrate, and Ray of Frost by 50–65%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Belt of Transcendence Summon a Fetish Sycophant when you hit with a Mana spender.
-        /// </summary>
-        public static Item BeltOfTranscendence = new Item
-        {
-
-            Id = 423248,
-            Name = "Belt of Transcendence",
-            Quality = ItemQuality.Legendary,
-            Slug = "belt-of-transcendence",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/belt-of-transcendence",
-            Url = "https://us.battle.net/d3/en/item/belt-of-transcendence",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_02_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/belt-of-transcendence",
-            IsCrafted = false,
-            LegendaryAffix = "Summon a Fetish Sycophant when you hit with a Mana spender.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Blessed of Haull Justice spawns a Blessed Hammer when it hits an enemy.
-        /// </summary>
-        public static Item BlessedOfHaull = new Item
-        {
-
-            Id = 423251,
-            Name = "Blessed of Haull",
-            Quality = ItemQuality.Legendary,
-            Slug = "blessed-of-haull",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/blessed-of-haull",
-            Url = "https://us.battle.net/d3/en/item/blessed-of-haull",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_05_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/blessed-of-haull",
-            IsCrafted = false,
-            LegendaryAffix = "Justice spawns a Blessed Hammer when it hits an enemy.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Chain of Shadows After using Impale, Vault costs no resource for 2 seconds.
-        /// </summary>
-        public static Item ChainOfShadows = new Item
-        {
-
-            Id = 445497,
-            Name = "Chain of Shadows",
-            Quality = ItemQuality.Legendary,
-            Slug = "chain-of-shadows",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/chain-of-shadows",
-            Url = "https://us.battle.net/d3/en/item/chain-of-shadows",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_01_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/chain-of-shadows",
-            IsCrafted = false,
-            LegendaryAffix = "After using Impale, Vault costs no resource for 2 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Cord of the Sherma Chance on hit to create a chaos field that Blinds and Slows enemies inside for 3–4 seconds.
-        /// </summary>
-        public static Item CordOfTheSherma = new Item
-        {
-
-            Id = 298127,
-            Name = "Cord of the Sherma",
-            Quality = ItemQuality.Legendary,
-            Slug = "cord-of-the-sherma",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "belt_norm_unique_18",
-            DataUrl = "https://us.battle.net/api/d3/data/item/cord-of-the-sherma",
-            Url = "https://us.battle.net/d3/en/item/cord-of-the-sherma",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_104_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/cord-of-the-sherma",
-            IsCrafted = false,
-            LegendaryAffix = "Chance on hit to create a chaos field that Blinds and Slows enemies inside for 3–4 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Crashing Rain Rain of Vengeance also summons a crashing beast that deals 3000–4000% weapon damage.
-        /// </summary>
-        public static Item CrashingRain = new Item
-        {
-
-            Id = 423247,
-            Name = "Crashing Rain",
-            Quality = ItemQuality.Legendary,
-            Slug = "crashing-rain",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/crashing-rain",
-            Url = "https://us.battle.net/d3/en/item/crashing-rain",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_01_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/crashing-rain",
-            IsCrafted = false,
-            LegendaryAffix = "Rain of Vengeance also summons a crashing beast that deals 3000–4000% weapon damage.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Harrington Waistguard Opening a chest grants 100–135% increased damage for 10 seconds.
-        /// </summary>
-        public static Item HarringtonWaistguard = new Item
-        {
-
-            Id = 298129,
-            Name = "Harrington Waistguard",
-            Quality = ItemQuality.Legendary,
-            Slug = "harrington-waistguard",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "StaffOfCow",
-            DataUrl = "https://us.battle.net/api/d3/data/item/harrington-waistguard",
-            Url = "https://us.battle.net/d3/en/item/harrington-waistguard",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_105_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/harrington-waistguard",
-            IsCrafted = false,
-            LegendaryAffix = "Opening a chest grants 100–135% increased damage for 10 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Haunting Girdle Haunt releases 1 extra spirit.
-        /// </summary>
-        public static Item HauntingGirdle = new Item
-        {
-
-            Id = 423249,
-            Name = "Haunting Girdle",
-            Quality = ItemQuality.Legendary,
-            Slug = "haunting-girdle",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/haunting-girdle",
-            Url = "https://us.battle.net/d3/en/item/haunting-girdle",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_03_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/haunting-girdle",
-            IsCrafted = false,
-            LegendaryAffix = "Haunt releases 1 extra spirit.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Hwoj Wrap Locust Swarm also Slows enemies by 60–80%.
-        /// </summary>
-        public static Item HwojWrap = new Item
-        {
-
-            Id = 298131,
-            Name = "Hwoj Wrap",
-            Quality = ItemQuality.Legendary,
-            Slug = "hwoj-wrap",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/hwoj-wrap",
-            Url = "https://us.battle.net/d3/en/item/hwoj-wrap",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_107_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/hwoj-wrap",
-            IsCrafted = false,
-            LegendaryAffix = "Locust Swarm also Slows enemies by 60–80%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Omnislash Slash attacks in all directions.
-        /// </summary>
-        public static Item Omnislash = new Item
-        {
-
-            Id = 423250,
-            Name = "Omnislash",
-            Quality = ItemQuality.Legendary,
-            Slug = "omnislash",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/omnislash",
-            Url = "https://us.battle.net/d3/en/item/omnislash",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_04_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/omnislash",
-            IsCrafted = false,
-            LegendaryAffix = "Slash attacks in all directions.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Omryn's Chain Drop Caltrops when using Vault.
-        /// </summary>
-        public static Item OmrynsChain = new Item
-        {
-
-            Id = 423261,
-            Name = "Omryn's Chain",
-            Quality = ItemQuality.Legendary,
-            Slug = "omryns-chain",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/omryns-chain",
-            Url = "https://us.battle.net/d3/en/item/omryns-chain",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_06_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/omryns-chain",
-            IsCrafted = false,
-            LegendaryAffix = "Drop Caltrops when using Vault.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Razor Strop Picking up a Health Globe releases an explosion that deals 300–400% weapon damage as Fire to enemies within 20 yards.
-        /// </summary>
-        public static Item RazorStrop = new Item
-        {
-
-            Id = 298124,
-            Name = "Razor Strop",
-            Quality = ItemQuality.Legendary,
-            Slug = "razor-strop",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "belt_norm_unique_15",
-            DataUrl = "https://us.battle.net/api/d3/data/item/razor-strop",
-            Url = "https://us.battle.net/d3/en/item/razor-strop",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/razor-strop",
-            IsCrafted = false,
-            LegendaryAffix = "Picking up a Health Globe releases an explosion that deals 300–400% weapon damage as Fire to enemies within 20 yards.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Sash of Knives With every attack, you throw a dagger at a nearby enemy for 500–650% weapon damage as Physical.
-        /// </summary>
-        public static Item SashOfKnives = new Item
-        {
-
-            Id = 298125,
-            Name = "Sash of Knives",
-            Quality = ItemQuality.Legendary,
-            Slug = "sash-of-knives",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "belt_norm_unique_16",
-            DataUrl = "https://us.battle.net/api/d3/data/item/sash-of-knives",
-            Url = "https://us.battle.net/d3/en/item/sash-of-knives",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_102_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/sash-of-knives",
-            IsCrafted = false,
-            LegendaryAffix = "With every attack, you throw a dagger at a nearby enemy for 500–650% weapon damage as Physical.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Sebor's Nightmare Haunt is cast on all nearby enemies when you open a chest.
-        /// </summary>
-        public static Item SeborsNightmare = new Item
-        {
-
-            Id = 299381,
-            Name = "Sebor's Nightmare",
-            Quality = ItemQuality.Legendary,
-            Slug = "sebors-nightmare",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "belt_norm_unique_22",
-            DataUrl = "https://us.battle.net/api/d3/data/item/sebors-nightmare",
-            Url = "https://us.battle.net/d3/en/item/sebors-nightmare",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_108_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/sebors-nightmare",
-            IsCrafted = false,
-            LegendaryAffix = "Haunt is cast on all nearby enemies when you open a chest.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Angel Hair Braid Punish gains the effect of every rune.
-        /// </summary>
-        public static Item AngelHairBraid = new Item
-        {
-
-            Id = 193666,
-            Name = "Angel Hair Braid",
-            Quality = ItemQuality.Legendary,
-            Slug = "angel-hair-braid",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "belt_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/angel-hair-braid",
-            Url = "https://us.battle.net/d3/en/item/angel-hair-braid",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_003_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/angel-hair-braid",
-            IsCrafted = false,
-            LegendaryAffix = "Punish gains the effect of every rune.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Thundergod's Vigor Blocking, dodging or being hit causes you to discharge bolts of electricity that deal 100–130% weapon damage as Lightning.
-        /// </summary>
-        public static Item ThundergodsVigor = new Item
-        {
-
-            Id = 212230,
-            Name = "Thundergod's Vigor",
-            Quality = ItemQuality.Legendary,
-            Slug = "thundergods-vigor",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "BarbBelt_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/thundergods-vigor",
-            Url = "https://us.battle.net/d3/en/item/thundergods-vigor",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_003_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/thundergods-vigor",
-            IsCrafted = false,
-            LegendaryAffix = "Blocking, dodging or being hit causes you to discharge bolts of electricity that deal 100–130% weapon damage as Lightning.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Belt of the Trove Every 6–8 seconds, call down Bombardment on a random nearby enemy.
-        /// </summary>
-        public static Item BeltOfTheTrove = new Item
-        {
-
-            Id = 193675,
-            Name = "Belt of the Trove",
-            Quality = ItemQuality.Legendary,
-            Slug = "belt-of-the-trove",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/belt-of-the-trove",
-            Url = "https://us.battle.net/d3/en/item/belt-of-the-trove",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_008_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/belt-of-the-trove",
-            IsCrafted = false,
-            LegendaryAffix = "Every 6–8 seconds, call down Bombardment on a random nearby enemy.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Hellcat Waistguard 
-        /// </summary>
-        public static Item HellcatWaistguard = new Item
-        {
-
-            Id = 193668,
-            Name = "Hellcat Waistguard",
-            Quality = ItemQuality.Legendary,
-            Slug = "hellcat-waistguard",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/hellcat-waistguard",
-            Url = "https://us.battle.net/d3/en/item/hellcat-waistguard",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_005_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/hellcat-waistguard",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Witching Hour 
-        /// </summary>
-        public static Item TheWitchingHour = new Item
-        {
-
-            Id = 193670,
-            Name = "The Witching Hour",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-witching-hour",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-witching-hour",
-            Url = "https://us.battle.net/d3/en/item/the-witching-hour",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_009_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-witching-hour",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Blackthorne's Notched Belt 
-        /// </summary>
-        public static Item BlackthornesNotchedBelt = new Item
-        {
-
-            Id = 224191,
-            Name = "Blackthorne's Notched Belt",
-            Quality = ItemQuality.Legendary,
-            Slug = "blackthornes-notched-belt",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Belt_norm_unique_14",
-            DataUrl = "https://us.battle.net/api/d3/data/item/blackthornes-notched-belt",
-            Url = "https://us.battle.net/d3/en/item/blackthornes-notched-belt",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_015_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/blackthornes-notched-belt",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Blackthorne's Battlegear",
-
-        };
-
-        /// <summary>
-        /// Inna's Favor 
-        /// </summary>
-        public static Item InnasFavor = new Item
-        {
-
-            Id = 222487,
-            Name = "Inna's Favor",
-            Quality = ItemQuality.Legendary,
-            Slug = "innas-favor",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Belt_norm_unique_10",
-            DataUrl = "https://us.battle.net/api/d3/data/item/innas-favor",
-            Url = "https://us.battle.net/d3/en/item/innas-favor",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_007_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/innas-favor",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Inna's Mantra",
-
-        };
-
-        /// <summary>
-        /// Tal Rasha's Brace 
-        /// </summary>
-        public static Item TalRashasBrace = new Item
-        {
-
-            Id = 212657,
-            Name = "Tal Rasha's Brace",
-            Quality = ItemQuality.Legendary,
-            Slug = "tal-rashas-brace",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "Belt_norm_unique_09",
-            DataUrl = "https://us.battle.net/api/d3/data/item/tal-rashas-brace",
-            Url = "https://us.battle.net/d3/en/item/tal-rashas-brace",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_006_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/tal-rashas-brace",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Tal Rasha's Elements",
-
-        };
-
-        /// <summary>
-        /// Jang's Envelopment Enemies damaged by Black Hole are also slowed by 60–80% for 3 seconds.
-        /// </summary>
-        public static Item JangsEnvelopment = new Item
-        {
-
-            Id = 298130,
-            Name = "Jang's Envelopment",
-            Quality = ItemQuality.Legendary,
-            Slug = "jangs-envelopment",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/jangs-envelopment",
-            Url = "https://us.battle.net/d3/en/item/jangs-envelopment",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_106_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/jangs-envelopment",
-            IsCrafted = false,
-            LegendaryAffix = "Enemies damaged by Black Hole are also slowed by 60–80% for 3 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Hunter's Wrath Your primary skills attack 30% faster and deal 45–60% increased damage.
-        /// </summary>
-        public static Item HuntersWrath = new Item
-        {
-
-            Id = 440742,
-            Name = "Hunter's Wrath",
-            Quality = ItemQuality.Legendary,
-            Slug = "hunters-wrath",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/hunters-wrath",
-            Url = "https://us.battle.net/d3/en/item/hunters-wrath",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_belt_005_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/hunters-wrath",
-            IsCrafted = false,
-            LegendaryAffix = "Your primary skills attack 30% faster and deal 45–60% increased damage.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Zoey's Secret You take 8.0–9.0% less damage for every Companion you have active.
-        /// </summary>
-        public static Item ZoeysSecret = new Item
-        {
-
-            Id = 298137,
-            Name = "Zoey's Secret",
-            Quality = ItemQuality.Legendary,
-            Slug = "zoeys-secret",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/zoeys-secret",
-            Url = "https://us.battle.net/d3/en/item/zoeys-secret",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_04_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/zoeys-secret",
-            IsCrafted = false,
-            LegendaryAffix = "You take 8.0–9.0% less damage for every Companion you have active.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Krelm's Buff Belt Gain 25% run speed. This effect is lost for 5 seconds after taking damage.
-        /// </summary>
-        public static Item KrelmsBuffBelt = new Item
-        {
-
-            Id = 336184,
-            Name = "Krelm's Buff Belt",
-            Quality = ItemQuality.Legendary,
-            Slug = "krelms-buff-belt",
-            ItemType = ItemType.Belt,
-            TrinityItemType = TrinityItemType.Belt,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Armor,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/krelms-buff-belt",
-            Url = "https://us.battle.net/d3/en/item/krelms-buff-belt",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_set_02_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/krelms-buff-belt",
-            IsCrafted = false,
-            LegendaryAffix = "Gain 25% run speed. This effect is lost for 5 seconds after taking damage.",
-            SetName = "Krelm’s Buff Bulwark",
-
         };
 
         /// <summary>
@@ -6087,7 +4035,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GlovesOfWorship = new Item
         {
-
             Id = 332344,
             Name = "Gloves of Worship",
             Quality = ItemQuality.Legendary,
@@ -6104,7 +4051,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Shrine effects last for 10 minutes.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -6112,7 +4058,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item StoneGauntlets = new Item
         {
-
             Id = 205640,
             Name = "Stone Gauntlets",
             Quality = ItemQuality.Legendary,
@@ -6129,15 +4074,13 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Magefist 
+        /// Magefist Fire skills deal 15–20% increased damage.
         /// </summary>
         public static Item Magefist = new Item
         {
-
             Id = 197206,
             Name = "Magefist",
             Quality = ItemQuality.Legendary,
@@ -6149,12 +4092,11 @@ namespace Trinity.Reference
             InternalName = "Gloves_norm_unique_044",
             DataUrl = "https://us.battle.net/api/d3/data/item/magefist",
             Url = "https://us.battle.net/d3/en/item/magefist",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_gloves_014_x1_demonhunter_male.png",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_gloves_014_demonhunter_male.png",
             RelativeUrl = "/d3/en/item/magefist",
             IsCrafted = false,
-            LegendaryAffix = "",
+            LegendaryAffix = "Fire skills deal 15–20% increased damage.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -6162,7 +4104,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item StArchewsGage = new Item
         {
-
             Id = 332172,
             Name = "St. Archew's Gage",
             Quality = ItemQuality.Legendary,
@@ -6179,7 +4120,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "The first time an elite pack damages you, gain an absorb shield equal to 120–150% of your maximum Life for 10 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -6187,7 +4127,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GladiatorGauntlets = new Item
         {
-
             Id = 205635,
             Name = "Gladiator Gauntlets",
             Quality = ItemQuality.Legendary,
@@ -6204,15 +4143,13 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "After earning a massacre bonus, gold rains from sky.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Frostburn Your Cold damage has up to a 34–45% chance to Freeze enemies.
+        /// Frostburn Cold skills deal 15–20% increased damage and have a 50% chance to Freeze enemies.
         /// </summary>
         public static Item Frostburn = new Item
         {
-
             Id = 197205,
             Name = "Frostburn",
             Quality = ItemQuality.Legendary,
@@ -6224,12 +4161,11 @@ namespace Trinity.Reference
             InternalName = "Gloves_norm_unique_043",
             DataUrl = "https://us.battle.net/api/d3/data/item/frostburn",
             Url = "https://us.battle.net/d3/en/item/frostburn",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_gloves_002_x1_demonhunter_male.png",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_gloves_002_demonhunter_male.png",
             RelativeUrl = "/d3/en/item/frostburn",
             IsCrafted = false,
-            LegendaryAffix = "Your Cold damage has up to a 34–45% chance to Freeze enemies.",
+            LegendaryAffix = "Cold skills deal 15–20% increased damage and have a 50% chance to Freeze enemies.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -6237,7 +4173,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TaskerAndTheo = new Item
         {
-
             Id = 205642,
             Name = "Tasker and Theo",
             Quality = ItemQuality.Legendary,
@@ -6254,7 +4189,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Increase attack speed of your pets by 40–50%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -6262,7 +4196,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ImmortalKingsIrons = new Item
         {
-
             Id = 205631,
             Name = "Immortal King's Irons",
             Quality = ItemQuality.Legendary,
@@ -6279,7 +4212,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Immortal King's Call",
-
         };
 
         /// <summary>
@@ -6287,7 +4219,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item InnasHold = new Item
         {
-
             Id = 415197,
             Name = "Inna's Hold",
             Quality = ItemQuality.Legendary,
@@ -6304,7 +4235,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Inna's Mantra",
-
         };
 
         /// <summary>
@@ -6312,7 +4242,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item NatalyasTouch = new Item
         {
-
             Id = 415190,
             Name = "Natalya's Touch",
             Quality = ItemQuality.Legendary,
@@ -6329,7 +4258,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Natalya's Vengeance",
-
         };
 
         /// <summary>
@@ -6337,7 +4265,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TalRashasGrasp = new Item
         {
-
             Id = 415051,
             Name = "Tal Rasha's Grasp",
             Quality = ItemQuality.Legendary,
@@ -6354,7 +4281,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Tal Rasha's Elements",
-
         };
 
         /// <summary>
@@ -6362,7 +4288,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ZunimassasFingerWraps = new Item
         {
-
             Id = 205633,
             Name = "Zunimassa's Finger Wraps",
             Quality = ItemQuality.Legendary,
@@ -6379,7 +4304,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Zunimassa's Haunt",
-
         };
 
         /// <summary>
@@ -6387,7 +4311,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ArachyrsClaws = new Item
         {
-
             Id = 441196,
             Name = "Arachyr’s Claws",
             Quality = ItemQuality.Legendary,
@@ -6404,7 +4327,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Spirit of Arachyr",
-
         };
 
         /// <summary>
@@ -6412,7 +4334,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FiendishGrips = new Item
         {
-
             Id = 408876,
             Name = "Fiendish Grips",
             Quality = ItemQuality.Legendary,
@@ -6429,7 +4350,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Unhallowed Essence",
-
         };
 
         /// <summary>
@@ -6437,7 +4357,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FierceGauntlets = new Item
         {
-
             Id = 408873,
             Name = "Fierce Gauntlets",
             Quality = ItemQuality.Legendary,
@@ -6454,7 +4373,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Delsere's Magnum Opus",
-
         };
 
         /// <summary>
@@ -6462,7 +4380,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FirebirdsTalons = new Item
         {
-
             Id = 358789,
             Name = "Firebird's Talons",
             Quality = ItemQuality.Legendary,
@@ -6479,7 +4396,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Firebird's Finery",
-
         };
 
         /// <summary>
@@ -6487,7 +4403,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FistsOfThunder = new Item
         {
-
             Id = 338033,
             Name = "Fists of Thunder",
             Quality = ItemQuality.Legendary,
@@ -6504,7 +4419,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of a Thousand Storms",
-
         };
 
         /// <summary>
@@ -6512,7 +4426,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GauntletOfTheWastes = new Item
         {
-
             Id = 408861,
             Name = "Gauntlet of the Wastes",
             Quality = ItemQuality.Legendary,
@@ -6529,7 +4442,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Wrath of the Wastes",
-
         };
 
         /// <summary>
@@ -6537,7 +4449,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GauntletsOfAkkhan = new Item
         {
-
             Id = 358798,
             Name = "Gauntlets of Akkhan",
             Quality = ItemQuality.Legendary,
@@ -6554,7 +4465,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Armor of Akkhan",
-
         };
 
         /// <summary>
@@ -6562,7 +4472,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HelltoothGauntlets = new Item
         {
-
             Id = 363094,
             Name = "Helltooth Gauntlets",
             Quality = ItemQuality.Legendary,
@@ -6579,7 +4488,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Helltooth Harness",
-
         };
 
         /// <summary>
@@ -6587,7 +4495,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item JadeHarvestersMercy = new Item
         {
-
             Id = 338039,
             Name = "Jade Harvester's Mercy",
             Quality = ItemQuality.Legendary,
@@ -6604,7 +4511,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of the Jade Harvester",
-
         };
 
         /// <summary>
@@ -6612,7 +4518,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MaraudersGloves = new Item
         {
-
             Id = 336992,
             Name = "Marauder's Gloves",
             Quality = ItemQuality.Legendary,
@@ -6629,7 +4534,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Embodiment of the Marauder",
-
         };
 
         /// <summary>
@@ -6637,7 +4541,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PrideOfTheInvoker = new Item
         {
-
             Id = 335027,
             Name = "Pride of the Invoker",
             Quality = ItemQuality.Legendary,
@@ -6654,7 +4557,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Thorns of the Invoker",
-
         };
 
         /// <summary>
@@ -6662,7 +4564,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PullOfTheEarth = new Item
         {
-
             Id = 340523,
             Name = "Pull of the Earth",
             Quality = ItemQuality.Legendary,
@@ -6679,7 +4580,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Might of the Earth",
-
         };
 
         /// <summary>
@@ -6687,7 +4587,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RaekorsWraps = new Item
         {
-
             Id = 336985,
             Name = "Raekor's Wraps",
             Quality = ItemQuality.Legendary,
@@ -6704,7 +4603,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Legacy of Raekor",
-
         };
 
         /// <summary>
@@ -6712,7 +4610,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RolandsGrasp = new Item
         {
-
             Id = 404096,
             Name = "Roland's Grasp",
             Quality = ItemQuality.Legendary,
@@ -6729,7 +4626,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Roland's Legacy",
-
         };
 
         /// <summary>
@@ -6737,7 +4633,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SunwukosPaws = new Item
         {
-
             Id = 336172,
             Name = "Sunwuko's Paws",
             Quality = ItemQuality.Legendary,
@@ -6754,7 +4649,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Monkey King's Garb",
-
         };
 
         /// <summary>
@@ -6762,7 +4656,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheShadowsGrasp = new Item
         {
-
             Id = 332362,
             Name = "The Shadow's Grasp",
             Quality = ItemQuality.Legendary,
@@ -6779,7 +4672,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Shadow’s Mantle",
-
         };
 
         /// <summary>
@@ -6787,7 +4679,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item UlianasFury = new Item
         {
-
             Id = 408874,
             Name = "Uliana's Fury",
             Quality = ItemQuality.Legendary,
@@ -6804,7 +4695,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Uliana's Stratagem",
-
         };
 
         /// <summary>
@@ -6812,7 +4702,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VyrsGraspingGauntlets = new Item
         {
-
             Id = 346210,
             Name = "Vyr's Grasping Gauntlets",
             Quality = ItemQuality.Legendary,
@@ -6829,7 +4718,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Vyr's Amazing Arcana",
-
         };
 
         /// <summary>
@@ -6837,7 +4725,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item WillOfTheLight = new Item
         {
-
             Id = 408877,
             Name = "Will of the Light",
             Quality = ItemQuality.Legendary,
@@ -6854,2082 +4741,1570 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Seeker of the Light",
-
         };
 
         /// <summary>
-        /// Moonlight Ward Hitting an enemy within 15 yards has a chance to ward you with shards of Arcane energy that explode when enemies get close, dealing 240–320% weapon damage as Arcane to enemies within 15 yards.
+        /// Goldwrap On gold pickup: Gain armor for 5 seconds equal to the amount picked up.
         /// </summary>
-        public static Item MoonlightWard = new Item
+        public static Item Goldwrap = new Item
         {
-
-            Id = 197813,
-            Name = "Moonlight Ward",
+            Id = 193671,
+            Name = "Goldwrap",
             Quality = ItemQuality.Legendary,
-            Slug = "moonlight-ward",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "goldwrap",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Amulet_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/moonlight-ward",
-            Url = "https://us.battle.net/d3/en/item/moonlight-ward",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_003_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/moonlight-ward",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "belt_norm_unique_08",
+            DataUrl = "https://us.battle.net/api/d3/data/item/goldwrap",
+            Url = "https://us.battle.net/d3/en/item/goldwrap",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_010_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/goldwrap",
             IsCrafted = false,
-            LegendaryAffix = "Hitting an enemy within 15 yards has a chance to ward you with shards of Arcane energy that explode when enemies get close, dealing 240–320% weapon damage as Arcane to enemies within 15 yards.",
+            LegendaryAffix = "On gold pickup: Gain armor for 5 seconds equal to the amount picked up.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Squirt's Necklace 
+        /// Vigilante Belt 
         /// </summary>
-        public static Item SquirtsNecklace = new Item
+        public static Item VigilanteBelt = new Item
         {
-
-            Id = 197819,
-            Name = "Squirt's Necklace",
+            Id = 193665,
+            Name = "Vigilante Belt",
             Quality = ItemQuality.Legendary,
-            Slug = "squirts-necklace",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "vigilante-belt",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "amulet_norm_unique_08",
-            DataUrl = "https://us.battle.net/api/d3/data/item/squirts-necklace",
-            Url = "https://us.battle.net/d3/en/item/squirts-necklace",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_010_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/squirts-necklace",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Belt_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/vigilante-belt",
+            Url = "https://us.battle.net/d3/en/item/vigilante-belt",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_002_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/vigilante-belt",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Golden Gorget of Leoric After earning a massacre bonus, 4–6 Skeletons are summoned to fight by your side for 10 seconds.
+        /// Insatiable Belt Picking up a Health Globe increases your maximum Life by 5% for 15 seconds, stacking up to 5 times.
         /// </summary>
-        public static Item GoldenGorgetOfLeoric = new Item
+        public static Item InsatiableBelt = new Item
         {
-
-            Id = 298052,
-            Name = "Golden Gorget of Leoric",
+            Id = 298126,
+            Name = "Insatiable Belt",
             Quality = ItemQuality.Legendary,
-            Slug = "golden-gorget-of-leoric",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "insatiable-belt",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
+            BaseType = ItemBaseType.Armor,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/golden-gorget-of-leoric",
-            Url = "https://us.battle.net/d3/en/item/golden-gorget-of-leoric",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_105_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/golden-gorget-of-leoric",
+            DataUrl = "https://us.battle.net/api/d3/data/item/insatiable-belt",
+            Url = "https://us.battle.net/d3/en/item/insatiable-belt",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/insatiable-belt",
             IsCrafted = false,
-            LegendaryAffix = "After earning a massacre bonus, 4–6 Skeletons are summoned to fight by your side for 10 seconds.",
+            LegendaryAffix = "Picking up a Health Globe increases your maximum Life by 5% for 15 seconds, stacking up to 5 times.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Overwhelming Desire Chance on hit to charm the enemy. While charmed, the enemy takes 35% more damage.
+        /// Binding of the Lost Each hit with Seven-Sided Strike grants 3.0–3.5% damage reduction for 7 seconds.
         /// </summary>
-        public static Item OverwhelmingDesire = new Item
+        public static Item BindingOfTheLost = new Item
         {
-
-            Id = 298053,
-            Name = "Overwhelming Desire",
+            Id = 440425,
+            Name = "Binding of the Lost",
             Quality = ItemQuality.Legendary,
-            Slug = "overwhelming-desire",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "binding-of-the-lost",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
+            BaseType = ItemBaseType.Armor,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/overwhelming-desire",
-            Url = "https://us.battle.net/d3/en/item/overwhelming-desire",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_106_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/overwhelming-desire",
+            DataUrl = "https://us.battle.net/api/d3/data/item/binding-of-the-lost",
+            Url = "https://us.battle.net/d3/en/item/binding-of-the-lost",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_belt_03_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/binding-of-the-lost",
             IsCrafted = false,
-            LegendaryAffix = "Chance on hit to charm the enemy. While charmed, the enemy takes 35% more damage.",
+            LegendaryAffix = "Each hit with Seven-Sided Strike grants 3.0–3.5% damage reduction for 7 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Eye of Etlich 
+        /// The Shame of Delsere Your Signature Spells attack 50% faster and restore 9–12 Arcane Power.
         /// </summary>
-        public static Item EyeOfEtlich = new Item
+        public static Item TheShameOfDelsere = new Item
         {
-
-            Id = 197823,
-            Name = "Eye of Etlich",
+            Id = 440426,
+            Name = "The Shame of Delsere",
             Quality = ItemQuality.Legendary,
-            Slug = "eye-of-etlich",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "the-shame-of-delsere",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Amulet_norm_unique_12",
-            DataUrl = "https://us.battle.net/api/d3/data/item/eye-of-etlich",
-            Url = "https://us.battle.net/d3/en/item/eye-of-etlich",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_014_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/eye-of-etlich",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Rondal's Locket 
-        /// </summary>
-        public static Item RondalsLocket = new Item
-        {
-
-            Id = 197818,
-            Name = "Rondal's Locket",
-            Quality = ItemQuality.Legendary,
-            Slug = "rondals-locket",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Amulet_norm_unique_07",
-            DataUrl = "https://us.battle.net/api/d3/data/item/rondals-locket",
-            Url = "https://us.battle.net/d3/en/item/rondals-locket",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_009_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/rondals-locket",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Talisman of Aranoch Prevent all Cold damage taken and heal yourself for 10–15% of the amount prevented.
-        /// </summary>
-        public static Item TalismanOfAranoch = new Item
-        {
-
-            Id = 197821,
-            Name = "Talisman of Aranoch",
-            Quality = ItemQuality.Legendary,
-            Slug = "talisman-of-aranoch",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
+            BaseType = ItemBaseType.Armor,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/talisman-of-aranoch",
-            Url = "https://us.battle.net/d3/en/item/talisman-of-aranoch",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_012_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/talisman-of-aranoch",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-shame-of-delsere",
+            Url = "https://us.battle.net/d3/en/item/the-shame-of-delsere",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_02_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-shame-of-delsere",
             IsCrafted = false,
-            LegendaryAffix = "Prevent all Cold damage taken and heal yourself for 10–15% of the amount prevented.",
+            LegendaryAffix = "Your Signature Spells attack 50% faster and restore 9–12 Arcane Power.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Ancestors' Grace When receiving fatal damage, you are instead restored to 100% of maximum Life and resources. This item is destroyed in the process.
+        /// Kyoshiro's Soul Sweeping Wind gains 2 stacks every second it does not deal damage to any enemies.
         /// </summary>
-        public static Item AncestorsGrace = new Item
+        public static Item KyoshirosSoul = new Item
         {
-
-            Id = 298049,
-            Name = "Ancestors' Grace",
+            Id = 298136,
+            Name = "Kyoshiro's Soul",
             Quality = ItemQuality.Legendary,
-            Slug = "ancestors-grace",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "kyoshiros-soul",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
+            BaseType = ItemBaseType.Armor,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/ancestors-grace",
-            Url = "https://us.battle.net/d3/en/item/ancestors-grace",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/ancestors-grace",
+            DataUrl = "https://us.battle.net/api/d3/data/item/kyoshiros-soul",
+            Url = "https://us.battle.net/d3/en/item/kyoshiros-soul",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_05_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/kyoshiros-soul",
             IsCrafted = false,
-            LegendaryAffix = "When receiving fatal damage, you are instead restored to 100% of maximum Life and resources. This item is destroyed in the process.",
+            LegendaryAffix = "Sweeping Wind gains 2 stacks every second it does not deal damage to any enemies.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Countess Julia's Cameo Prevent all Arcane damage taken and heal yourself for 20–25% of the amount prevented.
+        /// Sacred Harness Judgment gains the effect of the Debilitate rune and is cast at your landing location when casting Falling Sword.
         /// </summary>
-        public static Item CountessJuliasCameo = new Item
+        public static Item SacredHarness = new Item
         {
-
-            Id = 298050,
-            Name = "Countess Julia's Cameo",
+            Id = 440423,
+            Name = "Sacred Harness",
             Quality = ItemQuality.Legendary,
-            Slug = "countess-julias-cameo",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "sacred-harness",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Mojo_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/countess-julias-cameo",
-            Url = "https://us.battle.net/d3/en/item/countess-julias-cameo",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/countess-julias-cameo",
-            IsCrafted = false,
-            LegendaryAffix = "Prevent all Arcane damage taken and heal yourself for 20–25% of the amount prevented.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Dovu Energy Trap Increases duration of Stun effects by 20–25%.
-        /// </summary>
-        public static Item DovuEnergyTrap = new Item
-        {
-
-            Id = 298054,
-            Name = "Dovu Energy Trap",
-            Quality = ItemQuality.Legendary,
-            Slug = "dovu-energy-trap",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "amulet_norm_unique_23",
-            DataUrl = "https://us.battle.net/api/d3/data/item/dovu-energy-trap",
-            Url = "https://us.battle.net/d3/en/item/dovu-energy-trap",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_107_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/dovu-energy-trap",
-            IsCrafted = false,
-            LegendaryAffix = "Increases duration of Stun effects by 20–25%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Haunt of Vaxo Summons shadow clones to your aid when you Stun an enemy. This effect may occur once every 30 seconds.
-        /// </summary>
-        public static Item HauntOfVaxo = new Item
-        {
-
-            Id = 297806,
-            Name = "Haunt of Vaxo",
-            Quality = ItemQuality.Legendary,
-            Slug = "haunt-of-vaxo",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Boots_norm_unique_051",
-            DataUrl = "https://us.battle.net/api/d3/data/item/haunt-of-vaxo",
-            Url = "https://us.battle.net/d3/en/item/haunt-of-vaxo",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/haunt-of-vaxo",
-            IsCrafted = false,
-            LegendaryAffix = "Summons shadow clones to your aid when you Stun an enemy. This effect may occur once every 30 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Rakoff's Glass of Life Enemies you kill have a 3–4% additional chance to drop a health globe.
-        /// </summary>
-        public static Item RakoffsGlassOfLife = new Item
-        {
-
-            Id = 298055,
-            Name = "Rakoff's Glass of Life",
-            Quality = ItemQuality.Legendary,
-            Slug = "rakoffs-glass-of-life",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "amulet_norm_unique_24",
-            DataUrl = "https://us.battle.net/api/d3/data/item/rakoffs-glass-of-life",
-            Url = "https://us.battle.net/d3/en/item/rakoffs-glass-of-life",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_108_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/rakoffs-glass-of-life",
-            IsCrafted = false,
-            LegendaryAffix = "Enemies you kill have a 3–4% additional chance to drop a health globe.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Ess of Johan Chance on hit to pull in enemies toward your target and Slow them by 60–80%.
-        /// </summary>
-        public static Item TheEssOfJohan = new Item
-        {
-
-            Id = 298051,
-            Name = "The Ess of Johan",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-ess-of-johan",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "amulet_norm_unique_20",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-ess-of-johan",
-            Url = "https://us.battle.net/d3/en/item/the-ess-of-johan",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_104_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-ess-of-johan",
-            IsCrafted = false,
-            LegendaryAffix = "Chance on hit to pull in enemies toward your target and Slow them by 60–80%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Holy Beacon 
-        /// </summary>
-        public static Item HolyBeacon = new Item
-        {
-
-            Id = 197822,
-            Name = "Holy Beacon",
-            Quality = ItemQuality.Legendary,
-            Slug = "holy-beacon",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "amulet_norm_unique_11",
-            DataUrl = "https://us.battle.net/api/d3/data/item/holy-beacon",
-            Url = "https://us.battle.net/d3/en/item/holy-beacon",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_013_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/holy-beacon",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Kymbo's Gold Picking up gold heals you for an amount equal to the gold that was picked up.
-        /// </summary>
-        public static Item KymbosGold = new Item
-        {
-
-            Id = 197812,
-            Name = "Kymbo's Gold",
-            Quality = ItemQuality.Legendary,
-            Slug = "kymbos-gold",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Mojo_norm_unique_07",
-            DataUrl = "https://us.battle.net/api/d3/data/item/kymbos-gold",
-            Url = "https://us.battle.net/d3/en/item/kymbos-gold",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_002_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/kymbos-gold",
-            IsCrafted = false,
-            LegendaryAffix = "Picking up gold heals you for an amount equal to the gold that was picked up.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Flavor of Time 
-        /// </summary>
-        public static Item TheFlavorOfTime = new Item
-        {
-
-            Id = 193659,
-            Name = "The Flavor of Time",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-flavor-of-time",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Amulet_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-flavor-of-time",
-            Url = "https://us.battle.net/d3/en/item/the-flavor-of-time",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-flavor-of-time",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Mara's Kaleidoscope Prevent all Poison damage taken and heal yourself for 10–15% of the amount prevented.
-        /// </summary>
-        public static Item MarasKaleidoscope = new Item
-        {
-
-            Id = 197824,
-            Name = "Mara's Kaleidoscope",
-            Quality = ItemQuality.Legendary,
-            Slug = "maras-kaleidoscope",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
+            BaseType = ItemBaseType.Armor,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/maras-kaleidoscope",
-            Url = "https://us.battle.net/d3/en/item/maras-kaleidoscope",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_015_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/maras-kaleidoscope",
+            DataUrl = "https://us.battle.net/api/d3/data/item/sacred-harness",
+            Url = "https://us.battle.net/d3/en/item/sacred-harness",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_belt_01_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/sacred-harness",
             IsCrafted = false,
-            LegendaryAffix = "Prevent all Poison damage taken and heal yourself for 10–15% of the amount prevented.",
+            LegendaryAffix = "Judgment gains the effect of the Debilitate rune and is cast at your landing location when casting Falling Sword.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Ouroboros 
+        /// Bakuli Jungle Wraps Firebats deals 150–200% increased damage to enemies affected by Locust Swarm or Piranhas.
         /// </summary>
-        public static Item Ouroboros = new Item
+        public static Item BakuliJungleWraps = new Item
         {
-
-            Id = 197815,
-            Name = "Ouroboros",
+            Id = 0,
+            Name = "Bakuli Jungle Wraps",
             Quality = ItemQuality.Legendary,
-            Slug = "ouroboros",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "bakuli-jungle-wraps",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Amulet_norm_unique_05",
-            DataUrl = "https://us.battle.net/api/d3/data/item/ouroboros",
-            Url = "https://us.battle.net/d3/en/item/ouroboros",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_005_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/ouroboros",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bakuli-jungle-wraps",
+            Url = "https://us.battle.net/d3/en/item/bakuli-jungle-wraps",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_belt_007_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/bakuli-jungle-wraps",
+            IsCrafted = false,
+            LegendaryAffix = "Firebats deals 150–200% increased damage to enemies affected by Locust Swarm or Piranhas.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Saffron Wrap 
+        /// </summary>
+        public static Item SaffronWrap = new Item
+        {
+            Id = 193664,
+            Name = "Saffron Wrap",
+            Quality = ItemQuality.Legendary,
+            Slug = "saffron-wrap",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Belt_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/saffron-wrap",
+            Url = "https://us.battle.net/d3/en/item/saffron-wrap",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/saffron-wrap",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
-        /// The Star of Azkaranth Prevent all Fire damage taken and heal yourself for 10–15% of the amount prevented.
+        /// String of Ears Reduces damage from melee attacks by 25–30%.
         /// </summary>
-        public static Item TheStarOfAzkaranth = new Item
+        public static Item StringOfEars = new Item
         {
-
-            Id = 197817,
-            Name = "The Star of Azkaranth",
+            Id = 193669,
+            Name = "String of Ears",
             Quality = ItemQuality.Legendary,
-            Slug = "the-star-of-azkaranth",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "string-of-ears",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "amulet_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-star-of-azkaranth",
-            Url = "https://us.battle.net/d3/en/item/the-star-of-azkaranth",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_006_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-star-of-azkaranth",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Belt_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/string-of-ears",
+            Url = "https://us.battle.net/d3/en/item/string-of-ears",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_03_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/string-of-ears",
             IsCrafted = false,
-            LegendaryAffix = "Prevent all Fire damage taken and heal yourself for 10–15% of the amount prevented.",
+            LegendaryAffix = "Reduces damage from melee attacks by 25–30%.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Xephirian Amulet Prevent all Lightning damage taken and heal yourself for 10–15% of the amount prevented.
+        /// Fazula’s Improbable Chain You automatically start with 40–50 Archon stacks when entering Archon form.
         /// </summary>
-        public static Item XephirianAmulet = new Item
+        public static Item FazulasImprobableChain = new Item
         {
-
-            Id = 197814,
-            Name = "Xephirian Amulet",
+            Id = 440424,
+            Name = "Fazula’s Improbable Chain",
             Quality = ItemQuality.Legendary,
-            Slug = "xephirian-amulet",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "fazulas-improbable-chain",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Amulet_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/xephirian-amulet",
-            Url = "https://us.battle.net/d3/en/item/xephirian-amulet",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_004_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/xephirian-amulet",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/fazulas-improbable-chain",
+            Url = "https://us.battle.net/d3/en/item/fazulas-improbable-chain",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_07_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/fazulas-improbable-chain",
             IsCrafted = false,
-            LegendaryAffix = "Prevent all Lightning damage taken and heal yourself for 10–15% of the amount prevented.",
+            LegendaryAffix = "You automatically start with 40–50 Archon stacks when entering Archon form.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Blackthorne's Duncraig Cross 
+        /// Hergbrash’s Binding Reduces the Arcane Power cost of Arcane Torrent, Disintegrate, and Ray of Frost by 50–65%.
         /// </summary>
-        public static Item BlackthornesDuncraigCross = new Item
+        public static Item HergbrashsBinding = new Item
         {
-
-            Id = 224189,
-            Name = "Blackthorne's Duncraig Cross",
+            Id = 449047,
+            Name = "Hergbrash’s Binding",
             Quality = ItemQuality.Legendary,
-            Slug = "blackthornes-duncraig-cross",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "hergbrashs-binding",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "amulet_norm_unique_19",
-            DataUrl = "https://us.battle.net/api/d3/data/item/blackthornes-duncraig-cross",
-            Url = "https://us.battle.net/d3/en/item/blackthornes-duncraig-cross",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_016_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/blackthornes-duncraig-cross",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/hergbrashs-binding",
+            Url = "https://us.battle.net/d3/en/item/hergbrashs-binding",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_06_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/hergbrashs-binding",
+            IsCrafted = false,
+            LegendaryAffix = "Reduces the Arcane Power cost of Arcane Torrent, Disintegrate, and Ray of Frost by 50–65%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Belt of Transcendence Summon a Fetish Sycophant when you hit with a Mana spender.
+        /// </summary>
+        public static Item BeltOfTranscendence = new Item
+        {
+            Id = 423248,
+            Name = "Belt of Transcendence",
+            Quality = ItemQuality.Legendary,
+            Slug = "belt-of-transcendence",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/belt-of-transcendence",
+            Url = "https://us.battle.net/d3/en/item/belt-of-transcendence",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_02_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/belt-of-transcendence",
+            IsCrafted = false,
+            LegendaryAffix = "Summon a Fetish Sycophant when you hit with a Mana spender.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Blessed of Haull Justice spawns a Blessed Hammer when it hits an enemy.
+        /// </summary>
+        public static Item BlessedOfHaull = new Item
+        {
+            Id = 423251,
+            Name = "Blessed of Haull",
+            Quality = ItemQuality.Legendary,
+            Slug = "blessed-of-haull",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/blessed-of-haull",
+            Url = "https://us.battle.net/d3/en/item/blessed-of-haull",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_05_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/blessed-of-haull",
+            IsCrafted = false,
+            LegendaryAffix = "Justice spawns a Blessed Hammer when it hits an enemy.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Chain of Shadows After using Impale, Vault costs no resource for 2 seconds.
+        /// </summary>
+        public static Item ChainOfShadows = new Item
+        {
+            Id = 445497,
+            Name = "Chain of Shadows",
+            Quality = ItemQuality.Legendary,
+            Slug = "chain-of-shadows",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/chain-of-shadows",
+            Url = "https://us.battle.net/d3/en/item/chain-of-shadows",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_01_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/chain-of-shadows",
+            IsCrafted = false,
+            LegendaryAffix = "After using Impale, Vault costs no resource for 2 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Cord of the Sherma Chance on hit to create a chaos field that Blinds and Slows enemies inside for 3–4 seconds.
+        /// </summary>
+        public static Item CordOfTheSherma = new Item
+        {
+            Id = 298127,
+            Name = "Cord of the Sherma",
+            Quality = ItemQuality.Legendary,
+            Slug = "cord-of-the-sherma",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "belt_norm_unique_18",
+            DataUrl = "https://us.battle.net/api/d3/data/item/cord-of-the-sherma",
+            Url = "https://us.battle.net/d3/en/item/cord-of-the-sherma",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_104_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/cord-of-the-sherma",
+            IsCrafted = false,
+            LegendaryAffix = "Chance on hit to create a chaos field that Blinds and Slows enemies inside for 3–4 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Crashing Rain Rain of Vengeance also summons a crashing beast that deals 3000–4000% weapon damage.
+        /// </summary>
+        public static Item CrashingRain = new Item
+        {
+            Id = 423247,
+            Name = "Crashing Rain",
+            Quality = ItemQuality.Legendary,
+            Slug = "crashing-rain",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/crashing-rain",
+            Url = "https://us.battle.net/d3/en/item/crashing-rain",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_01_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/crashing-rain",
+            IsCrafted = false,
+            LegendaryAffix = "Rain of Vengeance also summons a crashing beast that deals 3000–4000% weapon damage.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Harrington Waistguard Opening a chest grants 100–135% increased damage for 10 seconds.
+        /// </summary>
+        public static Item HarringtonWaistguard = new Item
+        {
+            Id = 298129,
+            Name = "Harrington Waistguard",
+            Quality = ItemQuality.Legendary,
+            Slug = "harrington-waistguard",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "StaffOfCow",
+            DataUrl = "https://us.battle.net/api/d3/data/item/harrington-waistguard",
+            Url = "https://us.battle.net/d3/en/item/harrington-waistguard",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_105_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/harrington-waistguard",
+            IsCrafted = false,
+            LegendaryAffix = "Opening a chest grants 100–135% increased damage for 10 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Haunting Girdle Haunt releases 1 extra spirit.
+        /// </summary>
+        public static Item HauntingGirdle = new Item
+        {
+            Id = 423249,
+            Name = "Haunting Girdle",
+            Quality = ItemQuality.Legendary,
+            Slug = "haunting-girdle",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/haunting-girdle",
+            Url = "https://us.battle.net/d3/en/item/haunting-girdle",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_03_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/haunting-girdle",
+            IsCrafted = false,
+            LegendaryAffix = "Haunt releases 1 extra spirit.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Hwoj Wrap Locust Swarm also Slows enemies by 60–80%.
+        /// </summary>
+        public static Item HwojWrap = new Item
+        {
+            Id = 298131,
+            Name = "Hwoj Wrap",
+            Quality = ItemQuality.Legendary,
+            Slug = "hwoj-wrap",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/hwoj-wrap",
+            Url = "https://us.battle.net/d3/en/item/hwoj-wrap",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_107_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/hwoj-wrap",
+            IsCrafted = false,
+            LegendaryAffix = "Locust Swarm also Slows enemies by 60–80%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Omnislash Slash attacks in all directions.
+        /// </summary>
+        public static Item Omnislash = new Item
+        {
+            Id = 423250,
+            Name = "Omnislash",
+            Quality = ItemQuality.Legendary,
+            Slug = "omnislash",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/omnislash",
+            Url = "https://us.battle.net/d3/en/item/omnislash",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_04_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/omnislash",
+            IsCrafted = false,
+            LegendaryAffix = "Slash attacks in all directions.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Omryn's Chain Drop Caltrops when using Vault.
+        /// </summary>
+        public static Item OmrynsChain = new Item
+        {
+            Id = 423261,
+            Name = "Omryn's Chain",
+            Quality = ItemQuality.Legendary,
+            Slug = "omryns-chain",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/omryns-chain",
+            Url = "https://us.battle.net/d3/en/item/omryns-chain",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_06_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/omryns-chain",
+            IsCrafted = false,
+            LegendaryAffix = "Drop Caltrops when using Vault.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Razor Strop Picking up a Health Globe releases an explosion that deals 300–400% weapon damage as Fire to enemies within 20 yards.
+        /// </summary>
+        public static Item RazorStrop = new Item
+        {
+            Id = 298124,
+            Name = "Razor Strop",
+            Quality = ItemQuality.Legendary,
+            Slug = "razor-strop",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "belt_norm_unique_15",
+            DataUrl = "https://us.battle.net/api/d3/data/item/razor-strop",
+            Url = "https://us.battle.net/d3/en/item/razor-strop",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/razor-strop",
+            IsCrafted = false,
+            LegendaryAffix = "Picking up a Health Globe releases an explosion that deals 300–400% weapon damage as Fire to enemies within 20 yards.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Sash of Knives With every attack, you throw a dagger at a nearby enemy for 500–650% weapon damage as Physical.
+        /// </summary>
+        public static Item SashOfKnives = new Item
+        {
+            Id = 298125,
+            Name = "Sash of Knives",
+            Quality = ItemQuality.Legendary,
+            Slug = "sash-of-knives",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "belt_norm_unique_16",
+            DataUrl = "https://us.battle.net/api/d3/data/item/sash-of-knives",
+            Url = "https://us.battle.net/d3/en/item/sash-of-knives",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_102_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/sash-of-knives",
+            IsCrafted = false,
+            LegendaryAffix = "With every attack, you throw a dagger at a nearby enemy for 500–650% weapon damage as Physical.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Sebor's Nightmare Haunt is cast on all nearby enemies when you open a chest.
+        /// </summary>
+        public static Item SeborsNightmare = new Item
+        {
+            Id = 299381,
+            Name = "Sebor's Nightmare",
+            Quality = ItemQuality.Legendary,
+            Slug = "sebors-nightmare",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "belt_norm_unique_22",
+            DataUrl = "https://us.battle.net/api/d3/data/item/sebors-nightmare",
+            Url = "https://us.battle.net/d3/en/item/sebors-nightmare",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_108_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/sebors-nightmare",
+            IsCrafted = false,
+            LegendaryAffix = "Haunt is cast on all nearby enemies when you open a chest.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Angel Hair Braid Punish gains the effect of every rune.
+        /// </summary>
+        public static Item AngelHairBraid = new Item
+        {
+            Id = 193666,
+            Name = "Angel Hair Braid",
+            Quality = ItemQuality.Legendary,
+            Slug = "angel-hair-braid",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "belt_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/angel-hair-braid",
+            Url = "https://us.battle.net/d3/en/item/angel-hair-braid",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_003_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/angel-hair-braid",
+            IsCrafted = false,
+            LegendaryAffix = "Punish gains the effect of every rune.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Thundergod's Vigor Blocking, dodging or being hit causes you to discharge bolts of electricity that deal 100–130% weapon damage as Lightning.
+        /// </summary>
+        public static Item ThundergodsVigor = new Item
+        {
+            Id = 212230,
+            Name = "Thundergod's Vigor",
+            Quality = ItemQuality.Legendary,
+            Slug = "thundergods-vigor",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "BarbBelt_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/thundergods-vigor",
+            Url = "https://us.battle.net/d3/en/item/thundergods-vigor",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_barbbelt_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/thundergods-vigor",
+            IsCrafted = false,
+            LegendaryAffix = "Blocking, dodging or being hit causes you to discharge bolts of electricity that deal 100–130% weapon damage as Lightning.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Belt of the Trove Every 6–8 seconds, call down Bombardment on a random nearby enemy.
+        /// </summary>
+        public static Item BeltOfTheTrove = new Item
+        {
+            Id = 193675,
+            Name = "Belt of the Trove",
+            Quality = ItemQuality.Legendary,
+            Slug = "belt-of-the-trove",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/belt-of-the-trove",
+            Url = "https://us.battle.net/d3/en/item/belt-of-the-trove",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_belt_008_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/belt-of-the-trove",
+            IsCrafted = false,
+            LegendaryAffix = "Every 6–8 seconds, call down Bombardment on a random nearby enemy.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Hellcat Waistguard 
+        /// </summary>
+        public static Item HellcatWaistguard = new Item
+        {
+            Id = 193668,
+            Name = "Hellcat Waistguard",
+            Quality = ItemQuality.Legendary,
+            Slug = "hellcat-waistguard",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/hellcat-waistguard",
+            Url = "https://us.battle.net/d3/en/item/hellcat-waistguard",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_005_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/hellcat-waistguard",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Witching Hour 
+        /// </summary>
+        public static Item TheWitchingHour = new Item
+        {
+            Id = 193670,
+            Name = "The Witching Hour",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-witching-hour",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-witching-hour",
+            Url = "https://us.battle.net/d3/en/item/the-witching-hour",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_009_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-witching-hour",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Blackthorne's Notched Belt 
+        /// </summary>
+        public static Item BlackthornesNotchedBelt = new Item
+        {
+            Id = 224191,
+            Name = "Blackthorne's Notched Belt",
+            Quality = ItemQuality.Legendary,
+            Slug = "blackthornes-notched-belt",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Belt_norm_unique_14",
+            DataUrl = "https://us.battle.net/api/d3/data/item/blackthornes-notched-belt",
+            Url = "https://us.battle.net/d3/en/item/blackthornes-notched-belt",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_015_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/blackthornes-notched-belt",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Blackthorne's Battlegear",
-
         };
 
         /// <summary>
-        /// Tal Rasha's Allegiance 
+        /// Inna's Favor 
         /// </summary>
-        public static Item TalRashasAllegiance = new Item
+        public static Item InnasFavor = new Item
         {
-
-            Id = 222486,
-            Name = "Tal Rasha's Allegiance",
+            Id = 222487,
+            Name = "Inna's Favor",
             Quality = ItemQuality.Legendary,
-            Slug = "tal-rashas-allegiance",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "innas-favor",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Amulet_norm_unique_14",
-            DataUrl = "https://us.battle.net/api/d3/data/item/tal-rashas-allegiance",
-            Url = "https://us.battle.net/d3/en/item/tal-rashas-allegiance",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_007_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/tal-rashas-allegiance",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Belt_norm_unique_10",
+            DataUrl = "https://us.battle.net/api/d3/data/item/innas-favor",
+            Url = "https://us.battle.net/d3/en/item/innas-favor",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_007_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/innas-favor",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Inna's Mantra",
+        };
+
+        /// <summary>
+        /// Tal Rasha's Brace 
+        /// </summary>
+        public static Item TalRashasBrace = new Item
+        {
+            Id = 212657,
+            Name = "Tal Rasha's Brace",
+            Quality = ItemQuality.Legendary,
+            Slug = "tal-rashas-brace",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "Belt_norm_unique_09",
+            DataUrl = "https://us.battle.net/api/d3/data/item/tal-rashas-brace",
+            Url = "https://us.battle.net/d3/en/item/tal-rashas-brace",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_006_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/tal-rashas-brace",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Tal Rasha's Elements",
-
         };
 
         /// <summary>
-        /// The Traveler's Pledge 
+        /// Jang's Envelopment Enemies damaged by Black Hole are also slowed by 60–80% for 3 seconds.
         /// </summary>
-        public static Item TheTravelersPledge = new Item
+        public static Item JangsEnvelopment = new Item
         {
-
-            Id = 222490,
-            Name = "The Traveler's Pledge",
+            Id = 298130,
+            Name = "Jang's Envelopment",
             Quality = ItemQuality.Legendary,
-            Slug = "the-travelers-pledge",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "jangs-envelopment",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Amulet_norm_unique_15",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-travelers-pledge",
-            Url = "https://us.battle.net/d3/en/item/the-travelers-pledge",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_008_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-travelers-pledge",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/jangs-envelopment",
+            Url = "https://us.battle.net/d3/en/item/jangs-envelopment",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_106_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/jangs-envelopment",
+            IsCrafted = false,
+            LegendaryAffix = "Enemies damaged by Black Hole are also slowed by 60–80% for 3 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Hunter's Wrath Your primary skills attack 30% faster and deal 45–60% increased damage.
+        /// </summary>
+        public static Item HuntersWrath = new Item
+        {
+            Id = 440742,
+            Name = "Hunter's Wrath",
+            Quality = ItemQuality.Legendary,
+            Slug = "hunters-wrath",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/hunters-wrath",
+            Url = "https://us.battle.net/d3/en/item/hunters-wrath",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_belt_005_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/hunters-wrath",
+            IsCrafted = false,
+            LegendaryAffix = "Your primary skills attack 30% faster and deal 45–60% increased damage.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Zoey's Secret You take 8.0–9.0% less damage for every Companion you have active.
+        /// </summary>
+        public static Item ZoeysSecret = new Item
+        {
+            Id = 298137,
+            Name = "Zoey's Secret",
+            Quality = ItemQuality.Legendary,
+            Slug = "zoeys-secret",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/zoeys-secret",
+            Url = "https://us.battle.net/d3/en/item/zoeys-secret",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_belt_04_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/zoeys-secret",
+            IsCrafted = false,
+            LegendaryAffix = "You take 8.0–9.0% less damage for every Companion you have active.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Krelm's Buff Belt Gain 25% run speed. This effect is lost for 5 seconds after taking damage.
+        /// </summary>
+        public static Item KrelmsBuffBelt = new Item
+        {
+            Id = 336184,
+            Name = "Krelm's Buff Belt",
+            Quality = ItemQuality.Legendary,
+            Slug = "krelms-buff-belt",
+            ItemType = ItemType.Belt,
+            TrinityItemType = TrinityItemType.Belt,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/krelms-buff-belt",
+            Url = "https://us.battle.net/d3/en/item/krelms-buff-belt",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_belt_set_02_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/krelms-buff-belt",
+            IsCrafted = false,
+            LegendaryAffix = "Gain 25% run speed. This effect is lost for 5 seconds after taking damage.",
+            SetName = "Krelm’s Buff Bulwark",
+        };
+
+        /// <summary>
+        /// Pox Faulds When 3 or more enemies are within 12 yards, you release a vile stench that deals 450–550% weapon damage as Poison every second for 5 seconds to enemies within 15 yards.
+        /// </summary>
+        public static Item PoxFaulds = new Item
+        {
+            Id = 197220,
+            Name = "Pox Faulds",
+            Quality = ItemQuality.Legendary,
+            Slug = "pox-faulds",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_unique_048",
+            DataUrl = "https://us.battle.net/api/d3/data/item/pox-faulds",
+            Url = "https://us.battle.net/d3/en/item/pox-faulds",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_007_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/pox-faulds",
+            IsCrafted = false,
+            LegendaryAffix = "When 3 or more enemies are within 12 yards, you release a vile stench that deals 450–550% weapon damage as Poison every second for 5 seconds to enemies within 15 yards.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Death's Bargain Gain an aura of death that deals 750–1000% of your Life per Second as Physical damage to enemies within 16 yards. You no longer regenerate Life.
+        /// </summary>
+        public static Item DeathsBargain = new Item
+        {
+            Id = 332205,
+            Name = "Death's Bargain",
+            Quality = ItemQuality.Legendary,
+            Slug = "deaths-bargain",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/deaths-bargain",
+            Url = "https://us.battle.net/d3/en/item/deaths-bargain",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/deaths-bargain",
+            IsCrafted = false,
+            LegendaryAffix = "Gain an aura of death that deals 750–1000% of your Life per Second as Physical damage to enemies within 16 yards. You no longer regenerate Life.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Hammer Jammers Enemies take 300–400% increased damage from your Blessed Hammers for 10 seconds after you hit them with a Blind, Immobilize, or Stun.
+        /// </summary>
+        public static Item HammerJammers = new Item
+        {
+            Id = 209059,
+            Name = "Hammer Jammers",
+            Quality = ItemQuality.Legendary,
+            Slug = "hammer-jammers",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_unique_077",
+            DataUrl = "https://us.battle.net/api/d3/data/item/hammer-jammers",
+            Url = "https://us.battle.net/d3/en/item/hammer-jammers",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_pants_002_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/hammer-jammers",
+            IsCrafted = false,
+            LegendaryAffix = "Enemies take 300–400% increased damage from your Blessed Hammers for 10 seconds after you hit them with a Blind, Immobilize, or Stun.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Hexing Pants of Mr. Yan Your resource generation and damage is increased by 25% while moving and decreased by 20–25% while standing still.
+        /// </summary>
+        public static Item HexingPantsOfMrYan = new Item
+        {
+            Id = 332204,
+            Name = "Hexing Pants of Mr. Yan",
+            Quality = ItemQuality.Legendary,
+            Slug = "hexing-pants-of-mr-yan",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/hexing-pants-of-mr-yan",
+            Url = "https://us.battle.net/d3/en/item/hexing-pants-of-mr-yan",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/hexing-pants-of-mr-yan",
+            IsCrafted = false,
+            LegendaryAffix = "Your resource generation and damage is increased by 25% while moving and decreased by 20–25% while standing still.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Swamp Land Waders Sacrifice deals 300–400% additional damage against enemies affected by Locust Swarm or Grasp of the Dead.
+        /// </summary>
+        public static Item SwampLandWaders = new Item
+        {
+            Id = 209057,
+            Name = "Swamp Land Waders",
+            Quality = ItemQuality.Legendary,
+            Slug = "swamp-land-waders",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/swamp-land-waders",
+            Url = "https://us.battle.net/d3/en/item/swamp-land-waders",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_pants_001_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/swamp-land-waders",
+            IsCrafted = false,
+            LegendaryAffix = "Sacrifice deals 300–400% additional damage against enemies affected by Locust Swarm or Grasp of the Dead.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Depth Diggers Primary skills that generate resource deal 80–100% additional damage.
+        /// </summary>
+        public static Item DepthDiggers = new Item
+        {
+            Id = 197216,
+            Name = "Depth Diggers",
+            Quality = ItemQuality.Legendary,
+            Slug = "depth-diggers",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_unique_044",
+            DataUrl = "https://us.battle.net/api/d3/data/item/depth-diggers",
+            Url = "https://us.battle.net/d3/en/item/depth-diggers",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_006_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/depth-diggers",
+            IsCrafted = false,
+            LegendaryAffix = "Primary skills that generate resource deal 80–100% additional damage.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Blackthorne's Jousting Mail 
+        /// </summary>
+        public static Item BlackthornesJoustingMail = new Item
+        {
+            Id = 222477,
+            Name = "Blackthorne's Jousting Mail",
+            Quality = ItemQuality.Legendary,
+            Slug = "blackthornes-jousting-mail",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_unique_050",
+            DataUrl = "https://us.battle.net/api/d3/data/item/blackthornes-jousting-mail",
+            Url = "https://us.battle.net/d3/en/item/blackthornes-jousting-mail",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_013_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/blackthornes-jousting-mail",
             IsCrafted = false,
             LegendaryAffix = "",
-            SetName = "Endless Walk",
-
+            SetName = "Blackthorne's Battlegear",
         };
 
         /// <summary>
-        /// Halcyon's Ascent 
+        /// Immortal King's Stature 
         /// </summary>
-        public static Item HalcyonsAscent = new Item
+        public static Item ImmortalKingsStature = new Item
         {
-
-            Id = 298056,
-            Name = "Halcyon's Ascent",
+            Id = 205645,
+            Name = "Immortal King's Stature",
             Quality = ItemQuality.Legendary,
-            Slug = "halcyons-ascent",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "immortal-kings-stature",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "amulet_norm_unique_25",
-            DataUrl = "https://us.battle.net/api/d3/data/item/halcyons-ascent",
-            Url = "https://us.battle.net/d3/en/item/halcyons-ascent",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_109_x1_210_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/halcyons-ascent",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/immortal-kings-stature",
+            Url = "https://us.battle.net/d3/en/item/immortal-kings-stature",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_pants_02_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/immortal-kings-stature",
             IsCrafted = false,
             LegendaryAffix = "",
-            SetName = "",
-
+            SetName = "Immortal King's Call",
         };
 
         /// <summary>
-        /// Sunwuko's Shines 
+        /// Inna's Temperance 
         /// </summary>
-        public static Item SunwukosShines = new Item
+        public static Item InnasTemperance = new Item
         {
-
-            Id = 336174,
-            Name = "Sunwuko's Shines",
+            Id = 205646,
+            Name = "Inna's Temperance",
             Quality = ItemQuality.Legendary,
-            Slug = "sunwukos-shines",
-            ItemType = ItemType.Amulet,
-            TrinityItemType = TrinityItemType.Amulet,
+            Slug = "innas-temperance",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "amulet_norm_set_11",
-            DataUrl = "https://us.battle.net/api/d3/data/item/sunwukos-shines",
-            Url = "https://us.battle.net/d3/en/item/sunwukos-shines",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_set_11_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/sunwukos-shines",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_unique_087",
+            DataUrl = "https://us.battle.net/api/d3/data/item/innas-temperance",
+            Url = "https://us.battle.net/d3/en/item/innas-temperance",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_008_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/innas-temperance",
             IsCrafted = false,
             LegendaryAffix = "",
-            SetName = "Monkey King's Garb",
-
+            SetName = "Inna's Mantra",
         };
 
         /// <summary>
-        /// Coven's Criterion You take 45–60% less damage from blocked attacks.
+        /// Natalya's Leggings 
         /// </summary>
-        public static Item CovensCriterion = new Item
+        public static Item NatalyasLeggings = new Item
         {
-
-            Id = 298191,
-            Name = "Coven's Criterion",
+            Id = 415282,
+            Name = "Natalya's Leggings",
             Quality = ItemQuality.Legendary,
-            Slug = "covens-criterion",
-            ItemType = ItemType.Shield,
-            TrinityItemType = TrinityItemType.Shield,
+            Slug = "natalyas-leggings",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
+            BaseType = ItemBaseType.Armor,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/covens-criterion",
-            Url = "https://us.battle.net/d3/en/item/covens-criterion",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_107_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/covens-criterion",
-            IsCrafted = false,
-            LegendaryAffix = "You take 45–60% less damage from blocked attacks.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Denial Each enemy hit by your Sweep Attack increases the damage of your next Sweep Attack by 30–40%, stacking up to 5 times.
-        /// </summary>
-        public static Item Denial = new Item
-        {
-
-            Id = 152666,
-            Name = "Denial",
-            Quality = ItemQuality.Legendary,
-            Slug = "denial",
-            ItemType = ItemType.Shield,
-            TrinityItemType = TrinityItemType.Shield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "Shield_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/denial",
-            Url = "https://us.battle.net/d3/en/item/denial",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_shield_007_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/denial",
-            IsCrafted = false,
-            LegendaryAffix = "Each enemy hit by your Sweep Attack increases the damage of your next Sweep Attack by 30–40%, stacking up to 5 times.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Defender of Westmarch Blocks have a chance of summoning a charging wolf that deals 800–1000% weapon damage to all enemies it passes through.
-        /// </summary>
-        public static Item DefenderOfWestmarch = new Item
-        {
-
-            Id = 298182,
-            Name = "Defender of Westmarch",
-            Quality = ItemQuality.Legendary,
-            Slug = "defender-of-westmarch",
-            ItemType = ItemType.Shield,
-            TrinityItemType = TrinityItemType.Shield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "shield_norm_unique_09",
-            DataUrl = "https://us.battle.net/api/d3/data/item/defender-of-westmarch",
-            Url = "https://us.battle.net/d3/en/item/defender-of-westmarch",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_101_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/defender-of-westmarch",
-            IsCrafted = false,
-            LegendaryAffix = "Blocks have a chance of summoning a charging wolf that deals 800–1000% weapon damage to all enemies it passes through.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Eberli Charo Reduces the cooldown of Heaven's Fury by 45–50%.
-        /// </summary>
-        public static Item EberliCharo = new Item
-        {
-
-            Id = 298186,
-            Name = "Eberli Charo",
-            Quality = ItemQuality.Legendary,
-            Slug = "eberli-charo",
-            ItemType = ItemType.Shield,
-            TrinityItemType = TrinityItemType.Shield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "shield_norm_unique_10",
-            DataUrl = "https://us.battle.net/api/d3/data/item/eberli-charo",
-            Url = "https://us.battle.net/d3/en/item/eberli-charo",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/eberli-charo",
-            IsCrafted = false,
-            LegendaryAffix = "Reduces the cooldown of Heaven's Fury by 45–50%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Freeze of Deflection Blocking an attack has a chance to Freeze the attacker for 0.5–1.5 seconds.
-        /// </summary>
-        public static Item FreezeOfDeflection = new Item
-        {
-
-            Id = 61550,
-            Name = "Freeze of Deflection",
-            Quality = ItemQuality.Legendary,
-            Slug = "freeze-of-deflection",
-            ItemType = ItemType.Shield,
-            TrinityItemType = TrinityItemType.Shield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "Shield_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/freeze-of-deflection",
-            Url = "https://us.battle.net/d3/en/item/freeze-of-deflection",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_004_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/freeze-of-deflection",
-            IsCrafted = false,
-            LegendaryAffix = "Blocking an attack has a chance to Freeze the attacker for 0.5–1.5 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Vo'Toyias Spiker Enemies affected by Provoke take double damage from Thorns.
-        /// </summary>
-        public static Item VotoyiasSpiker = new Item
-        {
-
-            Id = 298188,
-            Name = "Vo'Toyias Spiker",
-            Quality = ItemQuality.Legendary,
-            Slug = "votoyias-spiker",
-            ItemType = ItemType.Shield,
-            TrinityItemType = TrinityItemType.Shield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "shield_norm_unique_12",
-            DataUrl = "https://us.battle.net/api/d3/data/item/votoyias-spiker",
-            Url = "https://us.battle.net/d3/en/item/votoyias-spiker",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_104_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/votoyias-spiker",
-            IsCrafted = false,
-            LegendaryAffix = "Enemies affected by Provoke take double damage from Thorns.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Lidless Wall 
-        /// </summary>
-        public static Item LidlessWall = new Item
-        {
-
-            Id = 195389,
-            Name = "Lidless Wall",
-            Quality = ItemQuality.Legendary,
-            Slug = "lidless-wall",
-            ItemType = ItemType.Shield,
-            TrinityItemType = TrinityItemType.Shield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "Shield_norm_unique_07",
-            DataUrl = "https://us.battle.net/api/d3/data/item/lidless-wall",
-            Url = "https://us.battle.net/d3/en/item/lidless-wall",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_008_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/lidless-wall",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Ivory Tower Blocks release forward a Fires of Heaven.
-        /// </summary>
-        public static Item IvoryTower = new Item
-        {
-
-            Id = 197478,
-            Name = "Ivory Tower",
-            Quality = ItemQuality.Legendary,
-            Slug = "ivory-tower",
-            ItemType = ItemType.Shield,
-            TrinityItemType = TrinityItemType.Shield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "Shield_norm_unique_08",
-            DataUrl = "https://us.battle.net/api/d3/data/item/ivory-tower",
-            Url = "https://us.battle.net/d3/en/item/ivory-tower",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_shield_002_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/ivory-tower",
-            IsCrafted = false,
-            LegendaryAffix = "Blocks release forward a Fires of Heaven.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Stormshield 
-        /// </summary>
-        public static Item Stormshield = new Item
-        {
-
-            Id = 192484,
-            Name = "Stormshield",
-            Quality = ItemQuality.Legendary,
-            Slug = "stormshield",
-            ItemType = ItemType.Shield,
-            TrinityItemType = TrinityItemType.Shield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "Shield_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/stormshield",
-            Url = "https://us.battle.net/d3/en/item/stormshield",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_009_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/stormshield",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Guard of Johanna Blessed Hammer damage is increased by 200–250% for the first 3 enemies it hits.
-        /// </summary>
-        public static Item GuardOfJohanna = new Item
-        {
-
-            Id = 298187,
-            Name = "Guard of Johanna",
-            Quality = ItemQuality.Legendary,
-            Slug = "guard-of-johanna",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.Shield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/guard-of-johanna",
-            Url = "https://us.battle.net/d3/en/item/guard-of-johanna",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/guard-of-johanna",
-            IsCrafted = false,
-            LegendaryAffix = "Blessed Hammer damage is increased by 200–250% for the first 3 enemies it hits.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Salvation Blocked attacks heal you and your allies for 20–30% of the amount blocked.
-        /// </summary>
-        public static Item Salvation = new Item
-        {
-
-            Id = 299418,
-            Name = "Salvation",
-            Quality = ItemQuality.Legendary,
-            Slug = "salvation",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/salvation",
-            Url = "https://us.battle.net/d3/en/item/salvation",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_108_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/salvation",
-            IsCrafted = false,
-            LegendaryAffix = "Blocked attacks heal you and your allies for 20–30% of the amount blocked.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Shield of Fury Each time an enemy takes damage from your Heaven's Fury, it increases the damage they take from your Heaven&#39;s Fury by 15–20%.
-        /// </summary>
-        public static Item ShieldOfFury = new Item
-        {
-
-            Id = 298190,
-            Name = "Shield of Fury",
-            Quality = ItemQuality.Legendary,
-            Slug = "shield-of-fury",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/shield-of-fury",
-            Url = "https://us.battle.net/d3/en/item/shield-of-fury",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_106_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/shield-of-fury",
-            IsCrafted = false,
-            LegendaryAffix = "Each time an enemy takes damage from your Heaven's Fury, it increases the damage they take from your Heaven&#39;s Fury by 15–20%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Akarat's Awakening Every successful block has a 20–25% chance to reduce all cooldowns by 1 second.
-        /// </summary>
-        public static Item AkaratsAwakening = new Item
-        {
-
-            Id = 299414,
-            Name = "Akarat's Awakening",
-            Quality = ItemQuality.Legendary,
-            Slug = "akarats-awakening",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "crushield_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/akarats-awakening",
-            Url = "https://us.battle.net/d3/en/item/akarats-awakening",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_104_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/akarats-awakening",
-            IsCrafted = false,
-            LegendaryAffix = "Every successful block has a 20–25% chance to reduce all cooldowns by 1 second.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Hallowed Bulwark Iron Skin also increases your Block Amount by 45–60%.
-        /// </summary>
-        public static Item HallowedBulwark = new Item
-        {
-
-            Id = 299413,
-            Name = "Hallowed Bulwark",
-            Quality = ItemQuality.Legendary,
-            Slug = "hallowed-bulwark",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "crushield_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/hallowed-bulwark",
-            Url = "https://us.battle.net/d3/en/item/hallowed-bulwark",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/hallowed-bulwark",
-            IsCrafted = false,
-            LegendaryAffix = "Iron Skin also increases your Block Amount by 45–60%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Hellskull Gain 10% increased damage while wielding a two-handed weapon.
-        /// </summary>
-        public static Item Hellskull = new Item
-        {
-
-            Id = 299415,
-            Name = "Hellskull",
-            Quality = ItemQuality.Legendary,
-            Slug = "hellskull",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "crushield_norm_unique_05",
-            DataUrl = "https://us.battle.net/api/d3/data/item/hellskull",
-            Url = "https://us.battle.net/d3/en/item/hellskull",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_105_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/hellskull",
-            IsCrafted = false,
-            LegendaryAffix = "Gain 10% increased damage while wielding a two-handed weapon.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Jekangbord Blessed Shield ricochets to 4–6 additional enemies.
-        /// </summary>
-        public static Item Jekangbord = new Item
-        {
-
-            Id = 299412,
-            Name = "Jekangbord",
-            Quality = ItemQuality.Legendary,
-            Slug = "jekangbord",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "crushield_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/jekangbord",
-            Url = "https://us.battle.net/d3/en/item/jekangbord",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/jekangbord",
-            IsCrafted = false,
-            LegendaryAffix = "Blessed Shield ricochets to 4–6 additional enemies.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Sublime Conviction When you block, you have up to a 15–20% chance to Stun the attacker for 1.5 seconds based on your current Wrath.
-        /// </summary>
-        public static Item SublimeConviction = new Item
-        {
-
-            Id = 299416,
-            Name = "Sublime Conviction",
-            Quality = ItemQuality.Legendary,
-            Slug = "sublime-conviction",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "crushield_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/sublime-conviction",
-            Url = "https://us.battle.net/d3/en/item/sublime-conviction",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_106_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/sublime-conviction",
-            IsCrafted = false,
-            LegendaryAffix = "When you block, you have up to a 15–20% chance to Stun the attacker for 1.5 seconds based on your current Wrath.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Final Witness Shield Glare now hits all enemies around you.
-        /// </summary>
-        public static Item TheFinalWitness = new Item
-        {
-
-            Id = 299417,
-            Name = "The Final Witness",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-final-witness",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "crushield_norm_unique_07",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-final-witness",
-            Url = "https://us.battle.net/d3/en/item/the-final-witness",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_107_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-final-witness",
-            IsCrafted = false,
-            LegendaryAffix = "Shield Glare now hits all enemies around you.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Frydehr's Wrath Condemn has no cooldown but instead costs 40 Wrath.
-        /// </summary>
-        public static Item FrydehrsWrath = new Item
-        {
-
-            Id = 405429,
-            Name = "Frydehr's Wrath",
-            Quality = ItemQuality.Legendary,
-            Slug = "frydehrs-wrath",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/frydehrs-wrath",
-            Url = "https://us.battle.net/d3/en/item/frydehrs-wrath",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_crushield_norm_unique_01_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/frydehrs-wrath",
-            IsCrafted = false,
-            LegendaryAffix = "Condemn has no cooldown but instead costs 40 Wrath.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Unrelenting Phalanx Phalanx now casts twice.
-        /// </summary>
-        public static Item UnrelentingPhalanx = new Item
-        {
-
-            Id = 405514,
-            Name = "Unrelenting Phalanx",
-            Quality = ItemQuality.Legendary,
-            Slug = "unrelenting-phalanx",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/unrelenting-phalanx",
-            Url = "https://us.battle.net/d3/en/item/unrelenting-phalanx",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_crushield_norm_unique_02_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/unrelenting-phalanx",
-            IsCrafted = false,
-            LegendaryAffix = "Phalanx now casts twice.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Shield of the Steed 
-        /// </summary>
-        public static Item ShieldOfTheSteed = new Item
-        {
-
-            Id = 298189,
-            Name = "Shield of the Steed",
-            Quality = ItemQuality.Legendary,
-            Slug = "shield-of-the-steed",
-            ItemType = ItemType.CrusaderShield,
-            TrinityItemType = TrinityItemType.CrusaderShield,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.None,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/shield-of-the-steed",
-            Url = "https://us.battle.net/d3/en/item/shield-of-the-steed",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_shield_set_01_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/shield-of-the-steed",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Norvald's Fervor",
-
-        };
-
-        /// <summary>
-        /// Band of Might After casting Furious Charge, Ground Stomp, or Leap, take 50–60% reduced damage for 8 seconds.
-        /// </summary>
-        public static Item BandOfMight = new Item
-        {
-
-            Id = 197839,
-            Name = "Band of Might",
-            Quality = ItemQuality.Legendary,
-            Slug = "band-of-might",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/band-of-might",
-            Url = "https://us.battle.net/d3/en/item/band-of-might",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ring_05_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/band-of-might",
-            IsCrafted = false,
-            LegendaryAffix = "After casting Furious Charge, Ground Stomp, or Leap, take 50–60% reduced damage for 8 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Manald Heal 
-        /// </summary>
-        public static Item ManaldHeal = new Item
-        {
-
-            Id = 212546,
-            Name = "Manald Heal",
-            Quality = ItemQuality.Legendary,
-            Slug = "manald-heal",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_021",
-            DataUrl = "https://us.battle.net/api/d3/data/item/manald-heal",
-            Url = "https://us.battle.net/d3/en/item/manald-heal",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_021_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/manald-heal",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Avarice Band Each time you pick up gold, increase your Gold and Health Pickup radius by 1 yard for 10 seconds, stacking up to 30 times.
-        /// </summary>
-        public static Item AvariceBand = new Item
-        {
-
-            Id = 298095,
-            Name = "Avarice Band",
-            Quality = ItemQuality.Legendary,
-            Slug = "avarice-band",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/avarice-band",
-            Url = "https://us.battle.net/d3/en/item/avarice-band",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_108_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/avarice-band",
-            IsCrafted = false,
-            LegendaryAffix = "Each time you pick up gold, increase your Gold and Health Pickup radius by 1 yard for 10 seconds, stacking up to 30 times.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Leoric's Signet 
-        /// </summary>
-        public static Item LeoricsSignet = new Item
-        {
-
-            Id = 197835,
-            Name = "Leoric's Signet",
-            Quality = ItemQuality.Legendary,
-            Slug = "leorics-signet",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_002",
-            DataUrl = "https://us.battle.net/api/d3/data/item/leorics-signet",
-            Url = "https://us.battle.net/d3/en/item/leorics-signet",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_002_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/leorics-signet",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Pandemonium Loop Enemies slain while Feared die in a bloody explosion and cause other nearby enemies to flee in Fear.
-        /// </summary>
-        public static Item PandemoniumLoop = new Item
-        {
-
-            Id = 298096,
-            Name = "Pandemonium Loop",
-            Quality = ItemQuality.Legendary,
-            Slug = "pandemonium-loop",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/pandemonium-loop",
-            Url = "https://us.battle.net/d3/en/item/pandemonium-loop",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_109_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/pandemonium-loop",
-            IsCrafted = false,
-            LegendaryAffix = "Enemies slain while Feared die in a bloody explosion and cause other nearby enemies to flee in Fear.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Ring of Royal Grandeur Reduces the number of items needed for set bonuses by 1 (to a minimum of 2).
-        /// </summary>
-        public static Item RingOfRoyalGrandeur = new Item
-        {
-
-            Id = 298094,
-            Name = "Ring of Royal Grandeur",
-            Quality = ItemQuality.Legendary,
-            Slug = "ring-of-royal-grandeur",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/ring-of-royal-grandeur",
-            Url = "https://us.battle.net/d3/en/item/ring-of-royal-grandeur",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_107_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/ring-of-royal-grandeur",
-            IsCrafted = false,
-            LegendaryAffix = "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2).",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Broken Promises After 5 consecutive non-critical hits, your chance to critically hit is increased to 100% for 3 seconds.
-        /// </summary>
-        public static Item BrokenPromises = new Item
-        {
-
-            Id = 212589,
-            Name = "Broken Promises",
-            Quality = ItemQuality.Legendary,
-            Slug = "broken-promises",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_006",
-            DataUrl = "https://us.battle.net/api/d3/data/item/broken-promises",
-            Url = "https://us.battle.net/d3/en/item/broken-promises",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_006_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/broken-promises",
-            IsCrafted = false,
-            LegendaryAffix = "After 5 consecutive non-critical hits, your chance to critically hit is increased to 100% for 3 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Puzzle Ring Summon a treasure goblin who picks up normal-quality items for you. After picking up 12–16 items, he drops a rare item with a chance for a legendary.
-        /// </summary>
-        public static Item PuzzleRing = new Item
-        {
-
-            Id = 197837,
-            Name = "Puzzle Ring",
-            Quality = ItemQuality.Legendary,
-            Slug = "puzzle-ring",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_004",
-            DataUrl = "https://us.battle.net/api/d3/data/item/puzzle-ring",
-            Url = "https://us.battle.net/d3/en/item/puzzle-ring",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_004_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/puzzle-ring",
-            IsCrafted = false,
-            LegendaryAffix = "Summon a treasure goblin who picks up normal-quality items for you. After picking up 12–16 items, he drops a rare item with a chance for a legendary.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Arcstone Lightning pulses periodically between all wearers of this item, dealing 1000–1500% weapon damage.
-        /// </summary>
-        public static Item Arcstone = new Item
-        {
-
-            Id = 433313,
-            Name = "Arcstone",
-            Quality = ItemQuality.Legendary,
-            Slug = "arcstone",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/arcstone",
-            Url = "https://us.battle.net/d3/en/item/arcstone",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_ring_03_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/arcstone",
-            IsCrafted = false,
-            LegendaryAffix = "Lightning pulses periodically between all wearers of this item, dealing 1000–1500% weapon damage.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Band of the Rue Chambers Your Spirit Generators generate 40–50% more Spirit.
-        /// </summary>
-        public static Item BandOfTheRueChambers = new Item
-        {
-
-            Id = 298093,
-            Name = "Band of the Rue Chambers",
-            Quality = ItemQuality.Legendary,
-            Slug = "band-of-the-rue-chambers",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_unique_030",
-            DataUrl = "https://us.battle.net/api/d3/data/item/band-of-the-rue-chambers",
-            Url = "https://us.battle.net/d3/en/item/band-of-the-rue-chambers",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_106_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/band-of-the-rue-chambers",
-            IsCrafted = false,
-            LegendaryAffix = "Your Spirit Generators generate 40–50% more Spirit.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Rechel's Ring of Larceny Gain 45–60% increased movement speed for 4 seconds after Fearing an enemy.
-        /// </summary>
-        public static Item RechelsRingOfLarceny = new Item
-        {
-
-            Id = 298091,
-            Name = "Rechel's Ring of Larceny",
-            Quality = ItemQuality.Legendary,
-            Slug = "rechels-ring-of-larceny",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_unique_028",
-            DataUrl = "https://us.battle.net/api/d3/data/item/rechels-ring-of-larceny",
-            Url = "https://us.battle.net/d3/en/item/rechels-ring-of-larceny",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_104_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/rechels-ring-of-larceny",
-            IsCrafted = false,
-            LegendaryAffix = "Gain 45–60% increased movement speed for 4 seconds after Fearing an enemy.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Rogar's Huge Stone Increase your Life per Second by up to 75–100% based on your missing Life.
-        /// </summary>
-        public static Item RogarsHugeStone = new Item
-        {
-
-            Id = 298090,
-            Name = "Rogar's Huge Stone",
-            Quality = ItemQuality.Legendary,
-            Slug = "rogars-huge-stone",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_unique_027",
-            DataUrl = "https://us.battle.net/api/d3/data/item/rogars-huge-stone",
-            Url = "https://us.battle.net/d3/en/item/rogars-huge-stone",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/rogars-huge-stone",
-            IsCrafted = false,
-            LegendaryAffix = "Increase your Life per Second by up to 75–100% based on your missing Life.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Short Man's Finger Gargantuan instead summons three smaller gargantuans each more powerful than before.
-        /// </summary>
-        public static Item TheShortMansFinger = new Item
-        {
-
-            Id = 432666,
-            Name = "The Short Man's Finger",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-short-mans-finger",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-short-mans-finger",
-            Url = "https://us.battle.net/d3/en/item/the-short-mans-finger",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_ring_02_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-short-mans-finger",
-            IsCrafted = false,
-            LegendaryAffix = "Gargantuan instead summons three smaller gargantuans each more powerful than before.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Tall Man's Finger Zombie Dogs instead summons a single gargantuan dog with more damage and health than all other dogs combined.
-        /// </summary>
-        public static Item TheTallMansFinger = new Item
-        {
-
-            Id = 298088,
-            Name = "The Tall Man's Finger",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-tall-mans-finger",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-tall-mans-finger",
-            Url = "https://us.battle.net/d3/en/item/the-tall-mans-finger",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-tall-mans-finger",
-            IsCrafted = false,
-            LegendaryAffix = "Zombie Dogs instead summons a single gargantuan dog with more damage and health than all other dogs combined.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Wyrdward Lightning damage has a 25–35% chance to Stun for 1.5 seconds.
-        /// </summary>
-        public static Item Wyrdward = new Item
-        {
-
-            Id = 298089,
-            Name = "Wyrdward",
-            Quality = ItemQuality.Legendary,
-            Slug = "wyrdward",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_unique_026",
-            DataUrl = "https://us.battle.net/api/d3/data/item/wyrdward",
-            Url = "https://us.battle.net/d3/en/item/wyrdward",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_102_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/wyrdward",
-            IsCrafted = false,
-            LegendaryAffix = "Lightning damage has a 25–35% chance to Stun for 1.5 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Nagelring Summons a Fallen Lunatic to your side every 10–12 seconds.
-        /// </summary>
-        public static Item Nagelring = new Item
-        {
-
-            Id = 212586,
-            Name = "Nagelring",
-            Quality = ItemQuality.Legendary,
-            Slug = "nagelring",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_018",
-            DataUrl = "https://us.battle.net/api/d3/data/item/nagelring",
-            Url = "https://us.battle.net/d3/en/item/nagelring",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_018_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/nagelring",
-            IsCrafted = false,
-            LegendaryAffix = "Summons a Fallen Lunatic to your side every 10–12 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Bul-Kathos's Wedding Band You drain life from enemies around you.
-        /// </summary>
-        public static Item BulkathossWeddingBand = new Item
-        {
-
-            Id = 212603,
-            Name = "Bul-Kathos's Wedding Band",
-            Quality = ItemQuality.Legendary,
-            Slug = "bulkathoss-wedding-band",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/bulkathoss-wedding-band",
-            Url = "https://us.battle.net/d3/en/item/bulkathoss-wedding-band",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_020_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/bulkathoss-wedding-band",
-            IsCrafted = false,
-            LegendaryAffix = "You drain life from enemies around you.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Eternal Union Increases the duration of Phalanx avatars by 200%.
-        /// </summary>
-        public static Item EternalUnion = new Item
-        {
-
-            Id = 212601,
-            Name = "Eternal Union",
-            Quality = ItemQuality.Legendary,
-            Slug = "eternal-union",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_007",
-            DataUrl = "https://us.battle.net/api/d3/data/item/eternal-union",
-            Url = "https://us.battle.net/d3/en/item/eternal-union",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_007_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/eternal-union",
-            IsCrafted = false,
-            LegendaryAffix = "Increases the duration of Phalanx avatars by 200%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Justice Lantern Gain damage reduction equal to 45–55% of your Block Chance.
-        /// </summary>
-        public static Item JusticeLantern = new Item
-        {
-
-            Id = 212590,
-            Name = "Justice Lantern",
-            Quality = ItemQuality.Legendary,
-            Slug = "justice-lantern",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_unique_008",
-            DataUrl = "https://us.battle.net/api/d3/data/item/justice-lantern",
-            Url = "https://us.battle.net/d3/en/item/justice-lantern",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ring_03_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/justice-lantern",
-            IsCrafted = false,
-            LegendaryAffix = "Gain damage reduction equal to 45–55% of your Block Chance.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Obsidian Ring of the Zodiac Reduce the remaining cooldown of one of your skills by 1 seconds when you hit with a resource-spending attack.
-        /// </summary>
-        public static Item ObsidianRingOfTheZodiac = new Item
-        {
-
-            Id = 212588,
-            Name = "Obsidian Ring of the Zodiac",
-            Quality = ItemQuality.Legendary,
-            Slug = "obsidian-ring-of-the-zodiac",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_unique_023",
-            DataUrl = "https://us.battle.net/api/d3/data/item/obsidian-ring-of-the-zodiac",
-            Url = "https://us.battle.net/d3/en/item/obsidian-ring-of-the-zodiac",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_023_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/obsidian-ring-of-the-zodiac",
-            IsCrafted = false,
-            LegendaryAffix = "Reduce the remaining cooldown of one of your skills by 1 seconds when you hit with a resource-spending attack.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Convention of Elements Gain 150–200% increased damage to a single element for 4 seconds. This effect rotates through the elements available to your class in the following order: Arcane, Cold, Fire, Holy, Lightning, Physical, Poison.
-        /// </summary>
-        public static Item ConventionOfElements = new Item
-        {
-
-            Id = 433496,
-            Name = "Convention of Elements",
-            Quality = ItemQuality.Legendary,
-            Slug = "convention-of-elements",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/convention-of-elements",
-            Url = "https://us.battle.net/d3/en/item/convention-of-elements",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_ring_04_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/convention-of-elements",
-            IsCrafted = false,
-            LegendaryAffix = "Gain 150–200% increased damage to a single element for 4 seconds. This effect rotates through the elements available to your class in the following order: Arcane, Cold, Fire, Holy, Lightning, Physical, Poison.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Elusive Ring After casting Shadow Power, Smoke Screen, or Vault, take 50–60% reduced damage for 8 seconds.
-        /// </summary>
-        public static Item ElusiveRing = new Item
-        {
-
-            Id = 446188,
-            Name = "Elusive Ring",
-            Quality = ItemQuality.Legendary,
-            Slug = "elusive-ring",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/elusive-ring",
-            Url = "https://us.battle.net/d3/en/item/elusive-ring",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ring_02_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/elusive-ring",
-            IsCrafted = false,
-            LegendaryAffix = "After casting Shadow Power, Smoke Screen, or Vault, take 50–60% reduced damage for 8 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Halo of Arlyse Your Ice Armor now reduces damage from melee attacks by 50–60% and automatically casts Frost Nova whenever you take 10% of your Life in damage.
-        /// </summary>
-        public static Item HaloOfArlyse = new Item
-        {
-
-            Id = 212602,
-            Name = "Halo of Arlyse",
-            Quality = ItemQuality.Legendary,
-            Slug = "halo-of-arlyse",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/halo-of-arlyse",
-            Url = "https://us.battle.net/d3/en/item/halo-of-arlyse",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_ring_wizard_001_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/halo-of-arlyse",
-            IsCrafted = false,
-            LegendaryAffix = "Your Ice Armor now reduces damage from melee attacks by 50–60% and automatically casts Frost Nova whenever you take 10% of your Life in damage.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Ring of Emptiness You deal 75–100% increased damage to enemies affected by both your Haunt and Locust Swarm.
-        /// </summary>
-        public static Item RingOfEmptiness = new Item
-        {
-
-            Id = 445697,
-            Name = "Ring of Emptiness ",
-            Quality = ItemQuality.Legendary,
-            Slug = "ring-of-emptiness",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/ring-of-emptiness",
-            Url = "https://us.battle.net/d3/en/item/ring-of-emptiness",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ring_01_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/ring-of-emptiness",
-            IsCrafted = false,
-            LegendaryAffix = "You deal 75–100% increased damage to enemies affected by both your Haunt and Locust Swarm.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Band of Hollow Whispers This ring occasionally haunts nearby enemies.
-        /// </summary>
-        public static Item BandOfHollowWhispers = new Item
-        {
-
-            Id = 197834,
-            Name = "Band of Hollow Whispers",
-            Quality = ItemQuality.Legendary,
-            Slug = "band-of-hollow-whispers",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_unique_001",
-            DataUrl = "https://us.battle.net/api/d3/data/item/band-of-hollow-whispers",
-            Url = "https://us.battle.net/d3/en/item/band-of-hollow-whispers",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/band-of-hollow-whispers",
-            IsCrafted = false,
-            LegendaryAffix = "This ring occasionally haunts nearby enemies.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Krede's Flame Taking Fire damage restores your primary resource.
-        /// </summary>
-        public static Item KredesFlame = new Item
-        {
-
-            Id = 197836,
-            Name = "Krede's Flame",
-            Quality = ItemQuality.Legendary,
-            Slug = "kredes-flame",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_003",
-            DataUrl = "https://us.battle.net/api/d3/data/item/kredes-flame",
-            Url = "https://us.battle.net/d3/en/item/kredes-flame",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_003_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/kredes-flame",
-            IsCrafted = false,
-            LegendaryAffix = "Taking Fire damage restores your primary resource.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Oculus Ring Chance to create an area of focused power on killing a monster. Damage is increased by 70–85% while standing in the area.
-        /// </summary>
-        public static Item OculusRing = new Item
-        {
-
-            Id = 212648,
-            Name = "Oculus Ring",
-            Quality = ItemQuality.Legendary,
-            Slug = "oculus-ring",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_017",
-            DataUrl = "https://us.battle.net/api/d3/data/item/oculus-ring",
-            Url = "https://us.battle.net/d3/en/item/oculus-ring",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_017_p4_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/oculus-ring",
-            IsCrafted = false,
-            LegendaryAffix = "Chance to create an area of focused power on killing a monster. Damage is increased by 70–85% while standing in the area.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Skull Grasp Increase the damage of Whirlwind by 300–400% weapon damage.
-        /// </summary>
-        public static Item SkullGrasp = new Item
-        {
-
-            Id = 212618,
-            Name = "Skull Grasp",
-            Quality = ItemQuality.Legendary,
-            Slug = "skull-grasp",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_022",
-            DataUrl = "https://us.battle.net/api/d3/data/item/skull-grasp",
-            Url = "https://us.battle.net/d3/en/item/skull-grasp",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_ring_01_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/skull-grasp",
-            IsCrafted = false,
-            LegendaryAffix = "Increase the damage of Whirlwind by 300–400% weapon damage.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Stone of Jordan 
-        /// </summary>
-        public static Item StoneOfJordan = new Item
-        {
-
-            Id = 212582,
-            Name = "Stone of Jordan",
-            Quality = ItemQuality.Legendary,
-            Slug = "stone-of-jordan",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/stone-of-jordan",
-            Url = "https://us.battle.net/d3/en/item/stone-of-jordan",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_019_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/stone-of-jordan",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Unity All damage taken is split between wearers of this item.
-        /// </summary>
-        public static Item Unity = new Item
-        {
-
-            Id = 212581,
-            Name = "Unity",
-            Quality = ItemQuality.Legendary,
-            Slug = "unity",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/unity",
-            Url = "https://us.battle.net/d3/en/item/unity",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_010_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/unity",
-            IsCrafted = false,
-            LegendaryAffix = "All damage taken is split between wearers of this item.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Litany of the Undaunted 
-        /// </summary>
-        public static Item LitanyOfTheUndaunted = new Item
-        {
-
-            Id = 212651,
-            Name = "Litany of the Undaunted",
-            Quality = ItemQuality.Legendary,
-            Slug = "litany-of-the-undaunted",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_015",
-            DataUrl = "https://us.battle.net/api/d3/data/item/litany-of-the-undaunted",
-            Url = "https://us.battle.net/d3/en/item/litany-of-the-undaunted",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_015_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/litany-of-the-undaunted",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Legacy of Nightmares",
-
-        };
-
-        /// <summary>
-        /// Natalya's Reflection 
-        /// </summary>
-        public static Item NatalyasReflection = new Item
-        {
-
-            Id = 212545,
-            Name = "Natalya's Reflection",
-            Quality = ItemQuality.Legendary,
-            Slug = "natalyas-reflection",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_011",
-            DataUrl = "https://us.battle.net/api/d3/data/item/natalyas-reflection",
-            Url = "https://us.battle.net/d3/en/item/natalyas-reflection",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_011_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/natalyas-reflection",
+            DataUrl = "https://us.battle.net/api/d3/data/item/natalyas-leggings",
+            Url = "https://us.battle.net/d3/en/item/natalyas-leggings",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_pants_01_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/natalyas-leggings",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Natalya's Vengeance",
-
         };
 
         /// <summary>
-        /// The Compass Rose 
+        /// Tal Rasha's Stride 
         /// </summary>
-        public static Item TheCompassRose = new Item
+        public static Item TalRashasStride = new Item
         {
-
-            Id = 212587,
-            Name = "The Compass Rose",
+            Id = 415049,
+            Name = "Tal Rasha's Stride",
             Quality = ItemQuality.Legendary,
-            Slug = "the-compass-rose",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
+            Slug = "tal-rashas-stride",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_013",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-compass-rose",
-            Url = "https://us.battle.net/d3/en/item/the-compass-rose",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_013_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-compass-rose",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/tal-rashas-stride",
+            Url = "https://us.battle.net/d3/en/item/tal-rashas-stride",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_pants_03_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/tal-rashas-stride",
             IsCrafted = false,
             LegendaryAffix = "",
-            SetName = "Endless Walk",
-
+            SetName = "Tal Rasha's Elements",
         };
 
         /// <summary>
-        /// The Wailing Host 
+        /// Zunimassa's Cloth 
         /// </summary>
-        public static Item TheWailingHost = new Item
+        public static Item ZunimassasCloth = new Item
         {
-
-            Id = 212650,
-            Name = "The Wailing Host",
+            Id = 205647,
+            Name = "Zunimassa's Cloth",
             Quality = ItemQuality.Legendary,
-            Slug = "the-wailing-host",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
+            Slug = "zunimassas-cloth",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_unique_014",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-wailing-host",
-            Url = "https://us.battle.net/d3/en/item/the-wailing-host",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_014_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-wailing-host",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Legacy of Nightmares",
-
-        };
-
-        /// <summary>
-        /// Zunimassa's Pox 
-        /// </summary>
-        public static Item ZunimassasPox = new Item
-        {
-
-            Id = 212579,
-            Name = "Zunimassa's Pox",
-            Quality = ItemQuality.Legendary,
-            Slug = "zunimassas-pox",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "Ring_norm_unique_012",
-            DataUrl = "https://us.battle.net/api/d3/data/item/zunimassas-pox",
-            Url = "https://us.battle.net/d3/en/item/zunimassas-pox",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_012_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/zunimassas-pox",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/zunimassas-cloth",
+            Url = "https://us.battle.net/d3/en/item/zunimassas-cloth",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_pants_04_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/zunimassas-cloth",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Zunimassa's Haunt",
-
         };
 
         /// <summary>
-        /// Focus 
+        /// Arachyr’s Legs 
         /// </summary>
-        public static Item Focus = new Item
+        public static Item ArachyrsLegs = new Item
         {
-
-            Id = 332209,
-            Name = "Focus",
+            Id = 441194,
+            Name = "Arachyr’s Legs",
             Quality = ItemQuality.Legendary,
-            Slug = "focus",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
+            Slug = "arachyrs-legs",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_set_001",
-            DataUrl = "https://us.battle.net/api/d3/data/item/focus",
-            Url = "https://us.battle.net/d3/en/item/focus",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_set_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/focus",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/arachyrs-legs",
+            Url = "https://us.battle.net/d3/en/item/arachyrs-legs",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_02_p3_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/arachyrs-legs",
             IsCrafted = false,
             LegendaryAffix = "",
-            SetName = "Bastions of Will",
-
+            SetName = "Spirit of Arachyr",
         };
 
         /// <summary>
-        /// Restraint 
+        /// Cuisses of Akkhan 
         /// </summary>
-        public static Item Restraint = new Item
+        public static Item CuissesOfAkkhan = new Item
         {
-
-            Id = 332210,
-            Name = "Restraint",
+            Id = 358800,
+            Name = "Cuisses of Akkhan",
             Quality = ItemQuality.Legendary,
-            Slug = "restraint",
-            ItemType = ItemType.Ring,
-            TrinityItemType = TrinityItemType.Ring,
+            Slug = "cuisses-of-akkhan",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Jewelry,
-            InternalName = "ring_norm_set_002",
-            DataUrl = "https://us.battle.net/api/d3/data/item/restraint",
-            Url = "https://us.battle.net/d3/en/item/restraint",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_set_002_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/restraint",
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_set_10",
+            DataUrl = "https://us.battle.net/api/d3/data/item/cuisses-of-akkhan",
+            Url = "https://us.battle.net/d3/en/item/cuisses-of-akkhan",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_10_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/cuisses-of-akkhan",
             IsCrafted = false,
             LegendaryAffix = "",
-            SetName = "Bastions of Will",
+            SetName = "Armor of Akkhan",
+        };
 
+        /// <summary>
+        /// Firebird's Down 
+        /// </summary>
+        public static Item FirebirdsDown = new Item
+        {
+            Id = 358790,
+            Name = "Firebird's Down",
+            Quality = ItemQuality.Legendary,
+            Slug = "firebirds-down",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_set_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/firebirds-down",
+            Url = "https://us.battle.net/d3/en/item/firebirds-down",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_06_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/firebirds-down",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Firebird's Finery",
+        };
+
+        /// <summary>
+        /// Helltooth Leg Guards 
+        /// </summary>
+        public static Item HelltoothLegGuards = new Item
+        {
+            Id = 340522,
+            Name = "Helltooth Leg Guards",
+            Quality = ItemQuality.Legendary,
+            Slug = "helltooth-leg-guards",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_set_16",
+            DataUrl = "https://us.battle.net/api/d3/data/item/helltooth-leg-guards",
+            Url = "https://us.battle.net/d3/en/item/helltooth-leg-guards",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_16_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/helltooth-leg-guards",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Helltooth Harness",
+        };
+
+        /// <summary>
+        /// Jade Harvester's Courage 
+        /// </summary>
+        public static Item JadeHarvestersCourage = new Item
+        {
+            Id = 338041,
+            Name = "Jade Harvester's Courage",
+            Quality = ItemQuality.Legendary,
+            Slug = "jade-harvesters-courage",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_set_09",
+            DataUrl = "https://us.battle.net/api/d3/data/item/jade-harvesters-courage",
+            Url = "https://us.battle.net/d3/en/item/jade-harvesters-courage",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_09_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/jade-harvesters-courage",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Raiment of the Jade Harvester",
+        };
+
+        /// <summary>
+        /// Leg Guards of Mystery 
+        /// </summary>
+        public static Item LegGuardsOfMystery = new Item
+        {
+            Id = 408878,
+            Name = "Leg Guards of Mystery",
+            Quality = ItemQuality.Legendary,
+            Slug = "leg-guards-of-mystery",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/leg-guards-of-mystery",
+            Url = "https://us.battle.net/d3/en/item/leg-guards-of-mystery",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_02_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/leg-guards-of-mystery",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Delsere's Magnum Opus",
+        };
+
+        /// <summary>
+        /// Marauder's Encasement 
+        /// </summary>
+        public static Item MaraudersEncasement = new Item
+        {
+            Id = 336993,
+            Name = "Marauder's Encasement",
+            Quality = ItemQuality.Legendary,
+            Slug = "marauders-encasement",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/marauders-encasement",
+            Url = "https://us.battle.net/d3/en/item/marauders-encasement",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_07_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/marauders-encasement",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Embodiment of the Marauder",
+        };
+
+        /// <summary>
+        /// Raekor's Breeches 
+        /// </summary>
+        public static Item RaekorsBreeches = new Item
+        {
+            Id = 336986,
+            Name = "Raekor's Breeches",
+            Quality = ItemQuality.Legendary,
+            Slug = "raekors-breeches",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_set_05",
+            DataUrl = "https://us.battle.net/api/d3/data/item/raekors-breeches",
+            Url = "https://us.battle.net/d3/en/item/raekors-breeches",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_05_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/raekors-breeches",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "The Legacy of Raekor",
+        };
+
+        /// <summary>
+        /// Renewal of the Invoker 
+        /// </summary>
+        public static Item RenewalOfTheInvoker = new Item
+        {
+            Id = 442732,
+            Name = "Renewal of the Invoker",
+            Quality = ItemQuality.Legendary,
+            Slug = "renewal-of-the-invoker",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/renewal-of-the-invoker",
+            Url = "https://us.battle.net/d3/en/item/renewal-of-the-invoker",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_12_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/renewal-of-the-invoker",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Thorns of the Invoker",
+        };
+
+        /// <summary>
+        /// Roland's Determination 
+        /// </summary>
+        public static Item RolandsDetermination = new Item
+        {
+            Id = 404097,
+            Name = "Roland's Determination",
+            Quality = ItemQuality.Legendary,
+            Slug = "rolands-determination",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "p1_Pants_norm_set_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/rolands-determination",
+            Url = "https://us.battle.net/d3/en/item/rolands-determination",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_01_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/rolands-determination",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Roland's Legacy",
+        };
+
+        /// <summary>
+        /// Scales of the Dancing Serpent 
+        /// </summary>
+        public static Item ScalesOfTheDancingSerpent = new Item
+        {
+            Id = 338035,
+            Name = "Scales of the Dancing Serpent",
+            Quality = ItemQuality.Legendary,
+            Slug = "scales-of-the-dancing-serpent",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_set_08",
+            DataUrl = "https://us.battle.net/api/d3/data/item/scales-of-the-dancing-serpent",
+            Url = "https://us.battle.net/d3/en/item/scales-of-the-dancing-serpent",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_08_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/scales-of-the-dancing-serpent",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Raiment of a Thousand Storms",
+        };
+
+        /// <summary>
+        /// Sunwuko's Leggings 
+        /// </summary>
+        public static Item SunwukosLeggings = new Item
+        {
+            Id = 0,
+            Name = "Sunwuko's Leggings",
+            Quality = ItemQuality.Legendary,
+            Slug = "sunwukos-leggings",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/sunwukos-leggings",
+            Url = "https://us.battle.net/d3/en/item/sunwukos-leggings",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_11_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/sunwukos-leggings",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Monkey King's Garb",
+        };
+
+        /// <summary>
+        /// Tasset of the Wastes 
+        /// </summary>
+        public static Item TassetOfTheWastes = new Item
+        {
+            Id = 408862,
+            Name = "Tasset of the Wastes",
+            Quality = ItemQuality.Legendary,
+            Slug = "tasset-of-the-wastes",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/tasset-of-the-wastes",
+            Url = "https://us.battle.net/d3/en/item/tasset-of-the-wastes",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_01_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/tasset-of-the-wastes",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Wrath of the Wastes",
+        };
+
+        /// <summary>
+        /// The Shadow's Coil 
+        /// </summary>
+        public static Item TheShadowsCoil = new Item
+        {
+            Id = 332361,
+            Name = "The Shadow's Coil",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-shadows-coil",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_set_14",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-shadows-coil",
+            Url = "https://us.battle.net/d3/en/item/the-shadows-coil",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_14_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-shadows-coil",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "The Shadow’s Mantle",
+        };
+
+        /// <summary>
+        /// Towers of the Light 
+        /// </summary>
+        public static Item TowersOfTheLight = new Item
+        {
+            Id = 408882,
+            Name = "Towers of the Light",
+            Quality = ItemQuality.Legendary,
+            Slug = "towers-of-the-light",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/towers-of-the-light",
+            Url = "https://us.battle.net/d3/en/item/towers-of-the-light",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_03_p3_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/towers-of-the-light",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Seeker of the Light",
+        };
+
+        /// <summary>
+        /// Uliana's Burden 
+        /// </summary>
+        public static Item UlianasBurden = new Item
+        {
+            Id = 408879,
+            Name = "Uliana's Burden",
+            Quality = ItemQuality.Legendary,
+            Slug = "ulianas-burden",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/ulianas-burden",
+            Url = "https://us.battle.net/d3/en/item/ulianas-burden",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_01_p3_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/ulianas-burden",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Uliana's Stratagem",
+        };
+
+        /// <summary>
+        /// Unholy Plates 
+        /// </summary>
+        public static Item UnholyPlates = new Item
+        {
+            Id = 408881,
+            Name = "Unholy Plates",
+            Quality = ItemQuality.Legendary,
+            Slug = "unholy-plates",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/unholy-plates",
+            Url = "https://us.battle.net/d3/en/item/unholy-plates",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_03_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/unholy-plates",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Unhallowed Essence",
+        };
+
+        /// <summary>
+        /// Vyr's Fantastic Finery 
+        /// </summary>
+        public static Item VyrsFantasticFinery = new Item
+        {
+            Id = 332360,
+            Name = "Vyr's Fantastic Finery",
+            Quality = ItemQuality.Legendary,
+            Slug = "vyrs-fantastic-finery",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_set_13",
+            DataUrl = "https://us.battle.net/api/d3/data/item/vyrs-fantastic-finery",
+            Url = "https://us.battle.net/d3/en/item/vyrs-fantastic-finery",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_13_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/vyrs-fantastic-finery",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Vyr's Amazing Arcana",
+        };
+
+        /// <summary>
+        /// Weight of the Earth 
+        /// </summary>
+        public static Item WeightOfTheEarth = new Item
+        {
+            Id = 340521,
+            Name = "Weight of the Earth",
+            Quality = ItemQuality.Legendary,
+            Slug = "weight-of-the-earth",
+            ItemType = ItemType.Legs,
+            TrinityItemType = TrinityItemType.Legs,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Armor,
+            InternalName = "pants_norm_set_15",
+            DataUrl = "https://us.battle.net/api/d3/data/item/weight-of-the-earth",
+            Url = "https://us.battle.net/d3/en/item/weight-of-the-earth",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_pants_set_15_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/weight-of-the-earth",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Might of the Earth",
         };
 
         /// <summary>
@@ -8937,7 +6312,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LutSocks = new Item
         {
-
             Id = 205622,
             Name = "Lut Socks",
             Quality = ItemQuality.Legendary,
@@ -8954,7 +6328,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Leap can be cast up to three times within 2 seconds before the cooldown begins.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -8962,7 +6335,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RiveraDancers = new Item
         {
-
             Id = 197224,
             Name = "Rivera Dancers",
             Quality = ItemQuality.Legendary,
@@ -8979,7 +6351,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Lashing Tail Kick attacks 50% faster and deals 250–300% increased damage.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -8987,7 +6358,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheCrudestBoots = new Item
         {
-
             Id = 205620,
             Name = "The Crudest Boots",
             Quality = ItemQuality.Legendary,
@@ -9004,7 +6374,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Mystic Ally summons two Mystic Allies that fight by your side.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9012,7 +6381,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BootsOfDisregard = new Item
         {
-
             Id = 322905,
             Name = "Boots of Disregard",
             Quality = ItemQuality.Legendary,
@@ -9029,7 +6397,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Gain 10000 Life regeneration per Second for each second you stand still. This effect stacks up to 4 times.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9037,7 +6404,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item IllusoryBoots = new Item
         {
-
             Id = 332342,
             Name = "Illusory Boots",
             Quality = ItemQuality.Legendary,
@@ -9054,7 +6420,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "You may move unhindered through enemies.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9062,7 +6427,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item IrontoeMudsputters = new Item
         {
-
             Id = 339125,
             Name = "Irontoe Mudsputters",
             Quality = ItemQuality.Legendary,
@@ -9079,7 +6443,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Gain up to 25–30% increased movement speed based on amount of Life missing.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9087,7 +6450,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FireWalkers = new Item
         {
-
             Id = 205624,
             Name = "Fire Walkers",
             Quality = ItemQuality.Legendary,
@@ -9104,7 +6466,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Burn the ground you walk on, dealing 300–400% weapon damage each second.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9112,7 +6473,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item IceClimbers = new Item
         {
-
             Id = 222464,
             Name = "Ice Climbers",
             Quality = ItemQuality.Legendary,
@@ -9129,15 +6489,13 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Gain immunity to Freeze and Immobilize effects.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Nilfur's Boast Increase the damage of Meteor by 100%. When your Meteor hits 3 or fewer enemies, the damage is increased by 150–200%.
+        /// Nilfur's Boast Increase the damage of Meteor by 200%. When your Meteor hits 3 or fewer enemies, the damage is increased by 275–350%.
         /// </summary>
         public static Item NilfursBoast = new Item
         {
-
             Id = 415050,
             Name = "Nilfur's Boast",
             Quality = ItemQuality.Legendary,
@@ -9149,12 +6507,11 @@ namespace Trinity.Reference
             InternalName = "",
             DataUrl = "https://us.battle.net/api/d3/data/item/nilfurs-boast",
             Url = "https://us.battle.net/d3/en/item/nilfurs-boast",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_boots_01_demonhunter_male.png",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_boots_01_demonhunter_male.png",
             RelativeUrl = "/d3/en/item/nilfurs-boast",
             IsCrafted = false,
-            LegendaryAffix = "Increase the damage of Meteor by 100%. When your Meteor hits 3 or fewer enemies, the damage is increased by 150–200%.",
+            LegendaryAffix = "Increase the damage of Meteor by 200%. When your Meteor hits 3 or fewer enemies, the damage is increased by 275–350%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9162,7 +6519,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BlackthornesSpurs = new Item
         {
-
             Id = 222463,
             Name = "Blackthorne's Spurs",
             Quality = ItemQuality.Legendary,
@@ -9179,7 +6535,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Blackthorne's Battlegear",
-
         };
 
         /// <summary>
@@ -9187,7 +6542,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ImmortalKingsStride = new Item
         {
-
             Id = 205625,
             Name = "Immortal King's Stride",
             Quality = ItemQuality.Legendary,
@@ -9204,7 +6558,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Immortal King's Call",
-
         };
 
         /// <summary>
@@ -9212,7 +6565,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item InnasSandals = new Item
         {
-
             Id = 415264,
             Name = "Inna's Sandals",
             Quality = ItemQuality.Legendary,
@@ -9229,7 +6581,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Inna's Mantra",
-
         };
 
         /// <summary>
@@ -9237,7 +6588,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item NatalyasBloodyFootprints = new Item
         {
-
             Id = 197223,
             Name = "Natalya's Bloody Footprints",
             Quality = ItemQuality.Legendary,
@@ -9254,7 +6604,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Natalya's Vengeance",
-
         };
 
         /// <summary>
@@ -9262,7 +6611,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ZunimassasTrail = new Item
         {
-
             Id = 205627,
             Name = "Zunimassa's Trail",
             Quality = ItemQuality.Legendary,
@@ -9279,7 +6627,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Zunimassa's Haunt",
-
         };
 
         /// <summary>
@@ -9287,7 +6634,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ArachyrsStride = new Item
         {
-
             Id = 441195,
             Name = "Arachyr’s Stride",
             Quality = ItemQuality.Legendary,
@@ -9304,7 +6650,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Spirit of Arachyr",
-
         };
 
         /// <summary>
@@ -9312,7 +6657,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item EightdemonBoots = new Item
         {
-
             Id = 338031,
             Name = "Eight-Demon Boots",
             Quality = ItemQuality.Legendary,
@@ -9329,7 +6673,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of a Thousand Storms",
-
         };
 
         /// <summary>
@@ -9337,7 +6680,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FirebirdsTarsi = new Item
         {
-
             Id = 358793,
             Name = "Firebird's Tarsi",
             Quality = ItemQuality.Legendary,
@@ -9354,7 +6696,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Firebird's Finery",
-
         };
 
         /// <summary>
@@ -9362,7 +6703,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FoundationOfTheEarth = new Item
         {
-
             Id = 366888,
             Name = "Foundation of the Earth",
             Quality = ItemQuality.Legendary,
@@ -9379,7 +6719,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Might of the Earth",
-
         };
 
         /// <summary>
@@ -9387,7 +6726,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FoundationOfTheLight = new Item
         {
-
             Id = 408867,
             Name = "Foundation of the Light",
             Quality = ItemQuality.Legendary,
@@ -9404,7 +6742,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Seeker of the Light",
-
         };
 
         /// <summary>
@@ -9412,7 +6749,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HellWalkers = new Item
         {
-
             Id = 408866,
             Name = "Hell Walkers",
             Quality = ItemQuality.Legendary,
@@ -9429,7 +6765,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Unhallowed Essence",
-
         };
 
         /// <summary>
@@ -9437,7 +6772,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HelltoothGreaves = new Item
         {
-
             Id = 340524,
             Name = "Helltooth Greaves",
             Quality = ItemQuality.Legendary,
@@ -9454,7 +6788,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Helltooth Harness",
-
         };
 
         /// <summary>
@@ -9462,7 +6795,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item JadeHarvestersSwiftness = new Item
         {
-
             Id = 338037,
             Name = "Jade Harvester's Swiftness",
             Quality = ItemQuality.Legendary,
@@ -9479,7 +6811,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Raiment of the Jade Harvester",
-
         };
 
         /// <summary>
@@ -9487,7 +6818,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MaraudersTreads = new Item
         {
-
             Id = 336995,
             Name = "Marauder's Treads",
             Quality = ItemQuality.Legendary,
@@ -9504,7 +6834,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Embodiment of the Marauder",
-
         };
 
         /// <summary>
@@ -9512,7 +6841,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RaekorsStriders = new Item
         {
-
             Id = 336987,
             Name = "Raekor's Striders",
             Quality = ItemQuality.Legendary,
@@ -9529,7 +6857,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Legacy of Raekor",
-
         };
 
         /// <summary>
@@ -9537,7 +6864,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RolandsStride = new Item
         {
-
             Id = 404094,
             Name = "Roland's Stride",
             Quality = ItemQuality.Legendary,
@@ -9554,7 +6880,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Roland's Legacy",
-
         };
 
         /// <summary>
@@ -9562,7 +6887,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SabatonOfTheWastes = new Item
         {
-
             Id = 408859,
             Name = "Sabaton of the Wastes",
             Quality = ItemQuality.Legendary,
@@ -9579,7 +6903,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Wrath of the Wastes",
-
         };
 
         /// <summary>
@@ -9587,7 +6910,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SabatonsOfAkkhan = new Item
         {
-
             Id = 358795,
             Name = "Sabatons of Akkhan",
             Quality = ItemQuality.Legendary,
@@ -9604,7 +6926,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Armor of Akkhan",
-
         };
 
         /// <summary>
@@ -9612,7 +6933,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item StridersOfDestiny = new Item
         {
-
             Id = 408863,
             Name = "Striders of Destiny",
             Quality = ItemQuality.Legendary,
@@ -9629,7 +6949,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Delsere's Magnum Opus",
-
         };
 
         /// <summary>
@@ -9637,7 +6956,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheShadowsHeels = new Item
         {
-
             Id = 332364,
             Name = "The Shadow's Heels",
             Quality = ItemQuality.Legendary,
@@ -9654,7 +6972,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "The Shadow’s Mantle",
-
         };
 
         /// <summary>
@@ -9662,7 +6979,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item UlianasDestiny = new Item
         {
-
             Id = 408864,
             Name = "Uliana's Destiny",
             Quality = ItemQuality.Legendary,
@@ -9679,7 +6995,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Uliana's Stratagem",
-
         };
 
         /// <summary>
@@ -9687,7 +7002,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VyrsSwaggeringStance = new Item
         {
-
             Id = 332363,
             Name = "Vyr's Swaggering Stance",
             Quality = ItemQuality.Legendary,
@@ -9704,7 +7018,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Vyr's Amazing Arcana",
-
         };
 
         /// <summary>
@@ -9712,7 +7025,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ZealOfTheInvoker = new Item
         {
-
             Id = 442731,
             Name = "Zeal of the Invoker",
             Quality = ItemQuality.Legendary,
@@ -9729,7 +7041,581 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Thorns of the Invoker",
+        };
 
+        /// <summary>
+        /// Moonlight Ward Hitting an enemy within 15 yards has a chance to ward you with shards of Arcane energy that explode when enemies get close, dealing 240–320% weapon damage as Arcane to enemies within 15 yards.
+        /// </summary>
+        public static Item MoonlightWard = new Item
+        {
+            Id = 197813,
+            Name = "Moonlight Ward",
+            Quality = ItemQuality.Legendary,
+            Slug = "moonlight-ward",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Amulet_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/moonlight-ward",
+            Url = "https://us.battle.net/d3/en/item/moonlight-ward",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/moonlight-ward",
+            IsCrafted = false,
+            LegendaryAffix = "Hitting an enemy within 15 yards has a chance to ward you with shards of Arcane energy that explode when enemies get close, dealing 240–320% weapon damage as Arcane to enemies within 15 yards.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Squirt's Necklace 
+        /// </summary>
+        public static Item SquirtsNecklace = new Item
+        {
+            Id = 197819,
+            Name = "Squirt's Necklace",
+            Quality = ItemQuality.Legendary,
+            Slug = "squirts-necklace",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "amulet_norm_unique_08",
+            DataUrl = "https://us.battle.net/api/d3/data/item/squirts-necklace",
+            Url = "https://us.battle.net/d3/en/item/squirts-necklace",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_010_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/squirts-necklace",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Golden Gorget of Leoric After earning a massacre bonus, 4–6 Skeletons are summoned to fight by your side for 10 seconds.
+        /// </summary>
+        public static Item GoldenGorgetOfLeoric = new Item
+        {
+            Id = 298052,
+            Name = "Golden Gorget of Leoric",
+            Quality = ItemQuality.Legendary,
+            Slug = "golden-gorget-of-leoric",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/golden-gorget-of-leoric",
+            Url = "https://us.battle.net/d3/en/item/golden-gorget-of-leoric",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_105_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/golden-gorget-of-leoric",
+            IsCrafted = false,
+            LegendaryAffix = "After earning a massacre bonus, 4–6 Skeletons are summoned to fight by your side for 10 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Overwhelming Desire Chance on hit to charm the enemy. While charmed, the enemy takes 35% increased damage.
+        /// </summary>
+        public static Item OverwhelmingDesire = new Item
+        {
+            Id = 298053,
+            Name = "Overwhelming Desire",
+            Quality = ItemQuality.Legendary,
+            Slug = "overwhelming-desire",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/overwhelming-desire",
+            Url = "https://us.battle.net/d3/en/item/overwhelming-desire",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_106_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/overwhelming-desire",
+            IsCrafted = false,
+            LegendaryAffix = "Chance on hit to charm the enemy. While charmed, the enemy takes 35% increased damage.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Eye of Etlich 
+        /// </summary>
+        public static Item EyeOfEtlich = new Item
+        {
+            Id = 197823,
+            Name = "Eye of Etlich",
+            Quality = ItemQuality.Legendary,
+            Slug = "eye-of-etlich",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Amulet_norm_unique_12",
+            DataUrl = "https://us.battle.net/api/d3/data/item/eye-of-etlich",
+            Url = "https://us.battle.net/d3/en/item/eye-of-etlich",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_014_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/eye-of-etlich",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Rondal's Locket 
+        /// </summary>
+        public static Item RondalsLocket = new Item
+        {
+            Id = 197818,
+            Name = "Rondal's Locket",
+            Quality = ItemQuality.Legendary,
+            Slug = "rondals-locket",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Amulet_norm_unique_07",
+            DataUrl = "https://us.battle.net/api/d3/data/item/rondals-locket",
+            Url = "https://us.battle.net/d3/en/item/rondals-locket",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_009_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/rondals-locket",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Talisman of Aranoch Prevent all Cold damage taken and heal yourself for 10–15% of the amount prevented.
+        /// </summary>
+        public static Item TalismanOfAranoch = new Item
+        {
+            Id = 197821,
+            Name = "Talisman of Aranoch",
+            Quality = ItemQuality.Legendary,
+            Slug = "talisman-of-aranoch",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/talisman-of-aranoch",
+            Url = "https://us.battle.net/d3/en/item/talisman-of-aranoch",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_012_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/talisman-of-aranoch",
+            IsCrafted = false,
+            LegendaryAffix = "Prevent all Cold damage taken and heal yourself for 10–15% of the amount prevented.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Ancestors' Grace When receiving fatal damage, you are instead restored to 100% of maximum Life and resources. This item is destroyed in the process.
+        /// </summary>
+        public static Item AncestorsGrace = new Item
+        {
+            Id = 298049,
+            Name = "Ancestors' Grace",
+            Quality = ItemQuality.Legendary,
+            Slug = "ancestors-grace",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/ancestors-grace",
+            Url = "https://us.battle.net/d3/en/item/ancestors-grace",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/ancestors-grace",
+            IsCrafted = false,
+            LegendaryAffix = "When receiving fatal damage, you are instead restored to 100% of maximum Life and resources. This item is destroyed in the process.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Countess Julia's Cameo Prevent all Arcane damage taken and heal yourself for 20–25% of the amount prevented.
+        /// </summary>
+        public static Item CountessJuliasCameo = new Item
+        {
+            Id = 298050,
+            Name = "Countess Julia's Cameo",
+            Quality = ItemQuality.Legendary,
+            Slug = "countess-julias-cameo",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Mojo_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/countess-julias-cameo",
+            Url = "https://us.battle.net/d3/en/item/countess-julias-cameo",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/countess-julias-cameo",
+            IsCrafted = false,
+            LegendaryAffix = "Prevent all Arcane damage taken and heal yourself for 20–25% of the amount prevented.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Dovu Energy Trap Increases duration of Stun effects by 20–25%.
+        /// </summary>
+        public static Item DovuEnergyTrap = new Item
+        {
+            Id = 298054,
+            Name = "Dovu Energy Trap",
+            Quality = ItemQuality.Legendary,
+            Slug = "dovu-energy-trap",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "amulet_norm_unique_23",
+            DataUrl = "https://us.battle.net/api/d3/data/item/dovu-energy-trap",
+            Url = "https://us.battle.net/d3/en/item/dovu-energy-trap",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_107_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/dovu-energy-trap",
+            IsCrafted = false,
+            LegendaryAffix = "Increases duration of Stun effects by 20–25%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Haunt of Vaxo Summons shadow clones to your aid when you Stun an enemy. This effect may occur once every 30 seconds.
+        /// </summary>
+        public static Item HauntOfVaxo = new Item
+        {
+            Id = 297806,
+            Name = "Haunt of Vaxo",
+            Quality = ItemQuality.Legendary,
+            Slug = "haunt-of-vaxo",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Boots_norm_unique_051",
+            DataUrl = "https://us.battle.net/api/d3/data/item/haunt-of-vaxo",
+            Url = "https://us.battle.net/d3/en/item/haunt-of-vaxo",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/haunt-of-vaxo",
+            IsCrafted = false,
+            LegendaryAffix = "Summons shadow clones to your aid when you Stun an enemy. This effect may occur once every 30 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Rakoff's Glass of Life Enemies you kill have a 3–4% additional chance to drop a health globe.
+        /// </summary>
+        public static Item RakoffsGlassOfLife = new Item
+        {
+            Id = 298055,
+            Name = "Rakoff's Glass of Life",
+            Quality = ItemQuality.Legendary,
+            Slug = "rakoffs-glass-of-life",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "amulet_norm_unique_24",
+            DataUrl = "https://us.battle.net/api/d3/data/item/rakoffs-glass-of-life",
+            Url = "https://us.battle.net/d3/en/item/rakoffs-glass-of-life",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_108_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/rakoffs-glass-of-life",
+            IsCrafted = false,
+            LegendaryAffix = "Enemies you kill have a 3–4% additional chance to drop a health globe.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Ess of Johan Chance on hit to pull in enemies toward your target and Slow them by 60–80%.
+        /// </summary>
+        public static Item TheEssOfJohan = new Item
+        {
+            Id = 298051,
+            Name = "The Ess of Johan",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-ess-of-johan",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "amulet_norm_unique_20",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-ess-of-johan",
+            Url = "https://us.battle.net/d3/en/item/the-ess-of-johan",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_104_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-ess-of-johan",
+            IsCrafted = false,
+            LegendaryAffix = "Chance on hit to pull in enemies toward your target and Slow them by 60–80%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Holy Beacon 
+        /// </summary>
+        public static Item HolyBeacon = new Item
+        {
+            Id = 197822,
+            Name = "Holy Beacon",
+            Quality = ItemQuality.Legendary,
+            Slug = "holy-beacon",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "amulet_norm_unique_11",
+            DataUrl = "https://us.battle.net/api/d3/data/item/holy-beacon",
+            Url = "https://us.battle.net/d3/en/item/holy-beacon",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_013_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/holy-beacon",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Kymbo's Gold Picking up gold heals you for an amount equal to the gold that was picked up.
+        /// </summary>
+        public static Item KymbosGold = new Item
+        {
+            Id = 197812,
+            Name = "Kymbo's Gold",
+            Quality = ItemQuality.Legendary,
+            Slug = "kymbos-gold",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Mojo_norm_unique_07",
+            DataUrl = "https://us.battle.net/api/d3/data/item/kymbos-gold",
+            Url = "https://us.battle.net/d3/en/item/kymbos-gold",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_002_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/kymbos-gold",
+            IsCrafted = false,
+            LegendaryAffix = "Picking up gold heals you for an amount equal to the gold that was picked up.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Flavor of Time 
+        /// </summary>
+        public static Item TheFlavorOfTime = new Item
+        {
+            Id = 193659,
+            Name = "The Flavor of Time",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-flavor-of-time",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Amulet_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-flavor-of-time",
+            Url = "https://us.battle.net/d3/en/item/the-flavor-of-time",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-flavor-of-time",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Mara's Kaleidoscope Prevent all Poison damage taken and heal yourself for 10–15% of the amount prevented.
+        /// </summary>
+        public static Item MarasKaleidoscope = new Item
+        {
+            Id = 197824,
+            Name = "Mara's Kaleidoscope",
+            Quality = ItemQuality.Legendary,
+            Slug = "maras-kaleidoscope",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/maras-kaleidoscope",
+            Url = "https://us.battle.net/d3/en/item/maras-kaleidoscope",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_015_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/maras-kaleidoscope",
+            IsCrafted = false,
+            LegendaryAffix = "Prevent all Poison damage taken and heal yourself for 10–15% of the amount prevented.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Ouroboros 
+        /// </summary>
+        public static Item Ouroboros = new Item
+        {
+            Id = 197815,
+            Name = "Ouroboros",
+            Quality = ItemQuality.Legendary,
+            Slug = "ouroboros",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Amulet_norm_unique_05",
+            DataUrl = "https://us.battle.net/api/d3/data/item/ouroboros",
+            Url = "https://us.battle.net/d3/en/item/ouroboros",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_005_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/ouroboros",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Star of Azkaranth Prevent all Fire damage taken and heal yourself for 10–15% of the amount prevented.
+        /// </summary>
+        public static Item TheStarOfAzkaranth = new Item
+        {
+            Id = 197817,
+            Name = "The Star of Azkaranth",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-star-of-azkaranth",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "amulet_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-star-of-azkaranth",
+            Url = "https://us.battle.net/d3/en/item/the-star-of-azkaranth",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_006_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-star-of-azkaranth",
+            IsCrafted = false,
+            LegendaryAffix = "Prevent all Fire damage taken and heal yourself for 10–15% of the amount prevented.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Xephirian Amulet Prevent all Lightning damage taken and heal yourself for 10–15% of the amount prevented.
+        /// </summary>
+        public static Item XephirianAmulet = new Item
+        {
+            Id = 197814,
+            Name = "Xephirian Amulet",
+            Quality = ItemQuality.Legendary,
+            Slug = "xephirian-amulet",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Amulet_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/xephirian-amulet",
+            Url = "https://us.battle.net/d3/en/item/xephirian-amulet",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_004_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/xephirian-amulet",
+            IsCrafted = false,
+            LegendaryAffix = "Prevent all Lightning damage taken and heal yourself for 10–15% of the amount prevented.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Blackthorne's Duncraig Cross 
+        /// </summary>
+        public static Item BlackthornesDuncraigCross = new Item
+        {
+            Id = 224189,
+            Name = "Blackthorne's Duncraig Cross",
+            Quality = ItemQuality.Legendary,
+            Slug = "blackthornes-duncraig-cross",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "amulet_norm_unique_19",
+            DataUrl = "https://us.battle.net/api/d3/data/item/blackthornes-duncraig-cross",
+            Url = "https://us.battle.net/d3/en/item/blackthornes-duncraig-cross",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_016_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/blackthornes-duncraig-cross",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Blackthorne's Battlegear",
+        };
+
+        /// <summary>
+        /// Tal Rasha's Allegiance 
+        /// </summary>
+        public static Item TalRashasAllegiance = new Item
+        {
+            Id = 222486,
+            Name = "Tal Rasha's Allegiance",
+            Quality = ItemQuality.Legendary,
+            Slug = "tal-rashas-allegiance",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Amulet_norm_unique_14",
+            DataUrl = "https://us.battle.net/api/d3/data/item/tal-rashas-allegiance",
+            Url = "https://us.battle.net/d3/en/item/tal-rashas-allegiance",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_007_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/tal-rashas-allegiance",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Tal Rasha's Elements",
+        };
+
+        /// <summary>
+        /// The Traveler's Pledge 
+        /// </summary>
+        public static Item TheTravelersPledge = new Item
+        {
+            Id = 222490,
+            Name = "The Traveler's Pledge",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-travelers-pledge",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Amulet_norm_unique_15",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-travelers-pledge",
+            Url = "https://us.battle.net/d3/en/item/the-travelers-pledge",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_008_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-travelers-pledge",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Endless Walk",
+        };
+
+        /// <summary>
+        /// Halcyon's Ascent 
+        /// </summary>
+        public static Item HalcyonsAscent = new Item
+        {
+            Id = 298056,
+            Name = "Halcyon's Ascent",
+            Quality = ItemQuality.Legendary,
+            Slug = "halcyons-ascent",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "amulet_norm_unique_25",
+            DataUrl = "https://us.battle.net/api/d3/data/item/halcyons-ascent",
+            Url = "https://us.battle.net/d3/en/item/halcyons-ascent",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_109_x1_210_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/halcyons-ascent",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Sunwuko's Shines 
+        /// </summary>
+        public static Item SunwukosShines = new Item
+        {
+            Id = 336174,
+            Name = "Sunwuko's Shines",
+            Quality = ItemQuality.Legendary,
+            Slug = "sunwukos-shines",
+            ItemType = ItemType.Amulet,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "amulet_norm_set_11",
+            DataUrl = "https://us.battle.net/api/d3/data/item/sunwukos-shines",
+            Url = "https://us.battle.net/d3/en/item/sunwukos-shines",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_amulet_set_11_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/sunwukos-shines",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Monkey King's Garb",
         };
 
         /// <summary>
@@ -9737,7 +7623,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item WinterFlurry = new Item
         {
-
             Id = 184199,
             Name = "Winter Flurry",
             Quality = ItemQuality.Legendary,
@@ -9754,7 +7639,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Enemies killed by Cold damage have a 15–20% chance to release a Frost Nova.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9762,7 +7646,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item EtchedSigil = new Item
         {
-
             Id = 399318,
             Name = "Etched Sigil",
             Quality = ItemQuality.Legendary,
@@ -9779,7 +7662,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your Arcane Torrent, Disintegrate, and Ray of Frost also cast one of your other damaging Arcane Power Spenders every second.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9787,7 +7669,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LightOfGrace = new Item
         {
-
             Id = 272038,
             Name = "Light of Grace",
             Quality = ItemQuality.Legendary,
@@ -9804,7 +7685,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Ray of Frost now pierces.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9812,7 +7692,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Mirrorball = new Item
         {
-
             Id = 272022,
             Name = "Mirrorball",
             Quality = ItemQuality.Legendary,
@@ -9829,7 +7708,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Magic Missile fires 1–2 extra missiles.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9837,7 +7715,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MykensBallOfHate = new Item
         {
-
             Id = 272037,
             Name = "Myken's Ball of Hate",
             Quality = ItemQuality.Legendary,
@@ -9854,7 +7731,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Electrocute can chain to enemies that have already been hit.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9862,7 +7738,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheOculus = new Item
         {
-
             Id = 192320,
             Name = "The Oculus",
             Quality = ItemQuality.Legendary,
@@ -9879,7 +7754,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Taking damage has up to a 15–20% chance to reset the cooldown on Teleport.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9887,7 +7761,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Triumvirate = new Item
         {
-
             Id = 195325,
             Name = "Triumvirate",
             Quality = ItemQuality.Legendary,
@@ -9904,7 +7777,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your Signature Spells increase the damage of Arcane Orb by 150–200% for 6 seconds, stacking up to 3 times.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9912,7 +7784,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ChantodosForce = new Item
         {
-
             Id = 212277,
             Name = "Chantodo's Force",
             Quality = ItemQuality.Legendary,
@@ -9929,7 +7800,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Chantodo's Resolve",
-
         };
 
         /// <summary>
@@ -9937,7 +7807,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TalRashasUnwaveringGlare = new Item
         {
-
             Id = 212780,
             Name = "Tal Rasha's Unwavering Glare",
             Quality = ItemQuality.Legendary,
@@ -9954,7 +7823,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Tal Rasha's Elements",
-
         };
 
         /// <summary>
@@ -9962,7 +7830,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PrimordialSoul = new Item
         {
-
             Id = 399317,
             Name = "Primordial Soul",
             Quality = ItemQuality.Legendary,
@@ -9979,7 +7846,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Elemental Exposure's damage bonus per stack is increased to 10%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -9987,7 +7853,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item OrbOfInfiniteDepth = new Item
         {
-
             Id = 399319,
             Name = "Orb of Infinite Depth",
             Quality = ItemQuality.Legendary,
@@ -10004,7 +7869,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Each time you hit an enemy with Explosive Blast your damage is increased by 4% and your damage reduction is increased by 15% for 6 seconds. This effect can stack up to 4 times.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10012,7 +7876,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FirebirdsEye = new Item
         {
-
             Id = 358819,
             Name = "Firebird's Eye",
             Quality = ItemQuality.Legendary,
@@ -10029,7 +7892,1156 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Firebird's Finery",
+        };
 
+        /// <summary>
+        /// Guard of Johanna Blessed Hammer damage is increased by 200–250% for the first 3 enemies it hits.
+        /// </summary>
+        public static Item GuardOfJohanna = new Item
+        {
+            Id = 298187,
+            Name = "Guard of Johanna",
+            Quality = ItemQuality.Legendary,
+            Slug = "guard-of-johanna",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/guard-of-johanna",
+            Url = "https://us.battle.net/d3/en/item/guard-of-johanna",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/guard-of-johanna",
+            IsCrafted = false,
+            LegendaryAffix = "Blessed Hammer damage is increased by 200–250% for the first 3 enemies it hits.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Salvation Blocked attacks heal you and your allies for 20–30% of the amount blocked.
+        /// </summary>
+        public static Item Salvation = new Item
+        {
+            Id = 299418,
+            Name = "Salvation",
+            Quality = ItemQuality.Legendary,
+            Slug = "salvation",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/salvation",
+            Url = "https://us.battle.net/d3/en/item/salvation",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_108_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/salvation",
+            IsCrafted = false,
+            LegendaryAffix = "Blocked attacks heal you and your allies for 20–30% of the amount blocked.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Shield of Fury Each time an enemy takes damage from your Heaven's Fury, it increases the damage they take from your Heaven&#39;s Fury by 15–20%.
+        /// </summary>
+        public static Item ShieldOfFury = new Item
+        {
+            Id = 0,
+            Name = "Shield of Fury",
+            Quality = ItemQuality.Legendary,
+            Slug = "shield-of-fury",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/shield-of-fury",
+            Url = "https://us.battle.net/d3/en/item/shield-of-fury",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_106_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/shield-of-fury",
+            IsCrafted = false,
+            LegendaryAffix = "Each time an enemy takes damage from your Heaven's Fury, it increases the damage they take from your Heaven&#39;s Fury by 15–20%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Akarat's Awakening Every successful block has a 20–25% chance to reduce all cooldowns by 1 second.
+        /// </summary>
+        public static Item AkaratsAwakening = new Item
+        {
+            Id = 299414,
+            Name = "Akarat's Awakening",
+            Quality = ItemQuality.Legendary,
+            Slug = "akarats-awakening",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "crushield_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/akarats-awakening",
+            Url = "https://us.battle.net/d3/en/item/akarats-awakening",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_104_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/akarats-awakening",
+            IsCrafted = false,
+            LegendaryAffix = "Every successful block has a 20–25% chance to reduce all cooldowns by 1 second.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Hallowed Bulwark Iron Skin also increases your Block Amount by 45–60%.
+        /// </summary>
+        public static Item HallowedBulwark = new Item
+        {
+            Id = 299413,
+            Name = "Hallowed Bulwark",
+            Quality = ItemQuality.Legendary,
+            Slug = "hallowed-bulwark",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "crushield_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/hallowed-bulwark",
+            Url = "https://us.battle.net/d3/en/item/hallowed-bulwark",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/hallowed-bulwark",
+            IsCrafted = false,
+            LegendaryAffix = "Iron Skin also increases your Block Amount by 45–60%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Hellskull Gain 10% increased damage while wielding a two-handed weapon.
+        /// </summary>
+        public static Item Hellskull = new Item
+        {
+            Id = 299415,
+            Name = "Hellskull",
+            Quality = ItemQuality.Legendary,
+            Slug = "hellskull",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "crushield_norm_unique_05",
+            DataUrl = "https://us.battle.net/api/d3/data/item/hellskull",
+            Url = "https://us.battle.net/d3/en/item/hellskull",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_105_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/hellskull",
+            IsCrafted = false,
+            LegendaryAffix = "Gain 10% increased damage while wielding a two-handed weapon.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Jekangbord Blessed Shield ricochets to 4–6 additional enemies.
+        /// </summary>
+        public static Item Jekangbord = new Item
+        {
+            Id = 299412,
+            Name = "Jekangbord",
+            Quality = ItemQuality.Legendary,
+            Slug = "jekangbord",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "crushield_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/jekangbord",
+            Url = "https://us.battle.net/d3/en/item/jekangbord",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/jekangbord",
+            IsCrafted = false,
+            LegendaryAffix = "Blessed Shield ricochets to 4–6 additional enemies.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Sublime Conviction When you block, you have up to a 15–20% chance to Stun the attacker for 1.5 seconds based on your current Wrath.
+        /// </summary>
+        public static Item SublimeConviction = new Item
+        {
+            Id = 299416,
+            Name = "Sublime Conviction",
+            Quality = ItemQuality.Legendary,
+            Slug = "sublime-conviction",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "crushield_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/sublime-conviction",
+            Url = "https://us.battle.net/d3/en/item/sublime-conviction",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_106_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/sublime-conviction",
+            IsCrafted = false,
+            LegendaryAffix = "When you block, you have up to a 15–20% chance to Stun the attacker for 1.5 seconds based on your current Wrath.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Final Witness Shield Glare now hits all enemies around you.
+        /// </summary>
+        public static Item TheFinalWitness = new Item
+        {
+            Id = 299417,
+            Name = "The Final Witness",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-final-witness",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "crushield_norm_unique_07",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-final-witness",
+            Url = "https://us.battle.net/d3/en/item/the-final-witness",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_crushield_107_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-final-witness",
+            IsCrafted = false,
+            LegendaryAffix = "Shield Glare now hits all enemies around you.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Frydehr's Wrath Condemn has no cooldown but instead costs 40 Wrath.
+        /// </summary>
+        public static Item FrydehrsWrath = new Item
+        {
+            Id = 405429,
+            Name = "Frydehr's Wrath",
+            Quality = ItemQuality.Legendary,
+            Slug = "frydehrs-wrath",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/frydehrs-wrath",
+            Url = "https://us.battle.net/d3/en/item/frydehrs-wrath",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_crushield_norm_unique_01_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/frydehrs-wrath",
+            IsCrafted = false,
+            LegendaryAffix = "Condemn has no cooldown but instead costs 40 Wrath.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Unrelenting Phalanx Phalanx now casts twice.
+        /// </summary>
+        public static Item UnrelentingPhalanx = new Item
+        {
+            Id = 405514,
+            Name = "Unrelenting Phalanx",
+            Quality = ItemQuality.Legendary,
+            Slug = "unrelenting-phalanx",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/unrelenting-phalanx",
+            Url = "https://us.battle.net/d3/en/item/unrelenting-phalanx",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_crushield_norm_unique_02_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/unrelenting-phalanx",
+            IsCrafted = false,
+            LegendaryAffix = "Phalanx now casts twice.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Shield of the Steed 
+        /// </summary>
+        public static Item ShieldOfTheSteed = new Item
+        {
+            Id = 298190,
+            Name = "Shield of the Steed",
+            Quality = ItemQuality.Legendary,
+            Slug = "shield-of-the-steed",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/shield-of-the-steed",
+            Url = "https://us.battle.net/d3/en/item/shield-of-the-steed",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_shield_set_01_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/shield-of-the-steed",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Norvald's Fervor",
+        };
+
+        /// <summary>
+        /// Band of Might After casting Furious Charge, Ground Stomp, or Leap, take 50–60% reduced damage for 8 seconds.
+        /// </summary>
+        public static Item BandOfMight = new Item
+        {
+            Id = 197839,
+            Name = "Band of Might",
+            Quality = ItemQuality.Legendary,
+            Slug = "band-of-might",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/band-of-might",
+            Url = "https://us.battle.net/d3/en/item/band-of-might",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ring_05_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/band-of-might",
+            IsCrafted = false,
+            LegendaryAffix = "After casting Furious Charge, Ground Stomp, or Leap, take 50–60% reduced damage for 8 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Manald Heal 
+        /// </summary>
+        public static Item ManaldHeal = new Item
+        {
+            Id = 212546,
+            Name = "Manald Heal",
+            Quality = ItemQuality.Legendary,
+            Slug = "manald-heal",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_021",
+            DataUrl = "https://us.battle.net/api/d3/data/item/manald-heal",
+            Url = "https://us.battle.net/d3/en/item/manald-heal",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_021_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/manald-heal",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Avarice Band Each time you pick up gold, increase your Gold and Health Pickup radius by 1 yard for 10 seconds, stacking up to 30 times.
+        /// </summary>
+        public static Item AvariceBand = new Item
+        {
+            Id = 298095,
+            Name = "Avarice Band",
+            Quality = ItemQuality.Legendary,
+            Slug = "avarice-band",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/avarice-band",
+            Url = "https://us.battle.net/d3/en/item/avarice-band",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_108_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/avarice-band",
+            IsCrafted = false,
+            LegendaryAffix = "Each time you pick up gold, increase your Gold and Health Pickup radius by 1 yard for 10 seconds, stacking up to 30 times.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Leoric's Signet 
+        /// </summary>
+        public static Item LeoricsSignet = new Item
+        {
+            Id = 197835,
+            Name = "Leoric's Signet",
+            Quality = ItemQuality.Legendary,
+            Slug = "leorics-signet",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_002",
+            DataUrl = "https://us.battle.net/api/d3/data/item/leorics-signet",
+            Url = "https://us.battle.net/d3/en/item/leorics-signet",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_002_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/leorics-signet",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Pandemonium Loop Enemies slain while Feared die in a bloody explosion and cause other nearby enemies to flee in Fear.
+        /// </summary>
+        public static Item PandemoniumLoop = new Item
+        {
+            Id = 298096,
+            Name = "Pandemonium Loop",
+            Quality = ItemQuality.Legendary,
+            Slug = "pandemonium-loop",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/pandemonium-loop",
+            Url = "https://us.battle.net/d3/en/item/pandemonium-loop",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_109_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/pandemonium-loop",
+            IsCrafted = false,
+            LegendaryAffix = "Enemies slain while Feared die in a bloody explosion and cause other nearby enemies to flee in Fear.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Ring of Royal Grandeur Reduces the number of items needed for set bonuses by 1 (to a minimum of 2).
+        /// </summary>
+        public static Item RingOfRoyalGrandeur = new Item
+        {
+            Id = 298094,
+            Name = "Ring of Royal Grandeur",
+            Quality = ItemQuality.Legendary,
+            Slug = "ring-of-royal-grandeur",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/ring-of-royal-grandeur",
+            Url = "https://us.battle.net/d3/en/item/ring-of-royal-grandeur",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_107_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/ring-of-royal-grandeur",
+            IsCrafted = false,
+            LegendaryAffix = "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2).",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Broken Promises After 5 consecutive non-critical hits, your chance to critically hit is increased to 100% for 3 seconds.
+        /// </summary>
+        public static Item BrokenPromises = new Item
+        {
+            Id = 212589,
+            Name = "Broken Promises",
+            Quality = ItemQuality.Legendary,
+            Slug = "broken-promises",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_006",
+            DataUrl = "https://us.battle.net/api/d3/data/item/broken-promises",
+            Url = "https://us.battle.net/d3/en/item/broken-promises",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_006_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/broken-promises",
+            IsCrafted = false,
+            LegendaryAffix = "After 5 consecutive non-critical hits, your chance to critically hit is increased to 100% for 3 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Puzzle Ring Summon a treasure goblin who picks up normal-quality items for you. After picking up 12–16 items, he drops a rare item with a chance for a legendary.
+        /// </summary>
+        public static Item PuzzleRing = new Item
+        {
+            Id = 197837,
+            Name = "Puzzle Ring",
+            Quality = ItemQuality.Legendary,
+            Slug = "puzzle-ring",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_004",
+            DataUrl = "https://us.battle.net/api/d3/data/item/puzzle-ring",
+            Url = "https://us.battle.net/d3/en/item/puzzle-ring",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_004_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/puzzle-ring",
+            IsCrafted = false,
+            LegendaryAffix = "Summon a treasure goblin who picks up normal-quality items for you. After picking up 12–16 items, he drops a rare item with a chance for a legendary.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Arcstone Lightning pulses periodically between all wearers of this item, dealing 1000–1500% weapon damage.
+        /// </summary>
+        public static Item Arcstone = new Item
+        {
+            Id = 433313,
+            Name = "Arcstone",
+            Quality = ItemQuality.Legendary,
+            Slug = "arcstone",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/arcstone",
+            Url = "https://us.battle.net/d3/en/item/arcstone",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_ring_03_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/arcstone",
+            IsCrafted = false,
+            LegendaryAffix = "Lightning pulses periodically between all wearers of this item, dealing 1000–1500% weapon damage.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Band of the Rue Chambers Your Spirit Generators generate 40–50% more Spirit.
+        /// </summary>
+        public static Item BandOfTheRueChambers = new Item
+        {
+            Id = 298093,
+            Name = "Band of the Rue Chambers",
+            Quality = ItemQuality.Legendary,
+            Slug = "band-of-the-rue-chambers",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_unique_030",
+            DataUrl = "https://us.battle.net/api/d3/data/item/band-of-the-rue-chambers",
+            Url = "https://us.battle.net/d3/en/item/band-of-the-rue-chambers",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_106_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/band-of-the-rue-chambers",
+            IsCrafted = false,
+            LegendaryAffix = "Your Spirit Generators generate 40–50% more Spirit.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Halo of Karini You take 45–60% less damage for 3 seconds after your Storm Armor electrocutes an enemy more than 30 yards away.
+        /// </summary>
+        public static Item HaloOfKarini = new Item
+        {
+            Id = 0,
+            Name = "Halo of Karini",
+            Quality = ItemQuality.Legendary,
+            Slug = "halo-of-karini",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/halo-of-karini",
+            Url = "https://us.battle.net/d3/en/item/halo-of-karini",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_ring_01_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/halo-of-karini",
+            IsCrafted = false,
+            LegendaryAffix = "You take 45–60% less damage for 3 seconds after your Storm Armor electrocutes an enemy more than 30 yards away.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Rechel's Ring of Larceny Gain 45–60% increased movement speed for 4 seconds after Fearing an enemy.
+        /// </summary>
+        public static Item RechelsRingOfLarceny = new Item
+        {
+            Id = 298091,
+            Name = "Rechel's Ring of Larceny",
+            Quality = ItemQuality.Legendary,
+            Slug = "rechels-ring-of-larceny",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_unique_028",
+            DataUrl = "https://us.battle.net/api/d3/data/item/rechels-ring-of-larceny",
+            Url = "https://us.battle.net/d3/en/item/rechels-ring-of-larceny",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_104_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/rechels-ring-of-larceny",
+            IsCrafted = false,
+            LegendaryAffix = "Gain 45–60% increased movement speed for 4 seconds after Fearing an enemy.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Rogar's Huge Stone Increase your Life per Second by up to 75–100% based on your missing Life.
+        /// </summary>
+        public static Item RogarsHugeStone = new Item
+        {
+            Id = 298090,
+            Name = "Rogar's Huge Stone",
+            Quality = ItemQuality.Legendary,
+            Slug = "rogars-huge-stone",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_unique_027",
+            DataUrl = "https://us.battle.net/api/d3/data/item/rogars-huge-stone",
+            Url = "https://us.battle.net/d3/en/item/rogars-huge-stone",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/rogars-huge-stone",
+            IsCrafted = false,
+            LegendaryAffix = "Increase your Life per Second by up to 75–100% based on your missing Life.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Short Man's Finger Gargantuan instead summons three smaller gargantuans each more powerful than before.
+        /// </summary>
+        public static Item TheShortMansFinger = new Item
+        {
+            Id = 432666,
+            Name = "The Short Man's Finger",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-short-mans-finger",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-short-mans-finger",
+            Url = "https://us.battle.net/d3/en/item/the-short-mans-finger",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_ring_02_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-short-mans-finger",
+            IsCrafted = false,
+            LegendaryAffix = "Gargantuan instead summons three smaller gargantuans each more powerful than before.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Tall Man's Finger Zombie Dogs instead summons a single gargantuan dog with more damage and health than all other dogs combined.
+        /// </summary>
+        public static Item TheTallMansFinger = new Item
+        {
+            Id = 298088,
+            Name = "The Tall Man's Finger",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-tall-mans-finger",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-tall-mans-finger",
+            Url = "https://us.battle.net/d3/en/item/the-tall-mans-finger",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-tall-mans-finger",
+            IsCrafted = false,
+            LegendaryAffix = "Zombie Dogs instead summons a single gargantuan dog with more damage and health than all other dogs combined.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Wyrdward Lightning damage has a 25–35% chance to Stun for 1.5 seconds.
+        /// </summary>
+        public static Item Wyrdward = new Item
+        {
+            Id = 298089,
+            Name = "Wyrdward",
+            Quality = ItemQuality.Legendary,
+            Slug = "wyrdward",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_unique_026",
+            DataUrl = "https://us.battle.net/api/d3/data/item/wyrdward",
+            Url = "https://us.battle.net/d3/en/item/wyrdward",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_102_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/wyrdward",
+            IsCrafted = false,
+            LegendaryAffix = "Lightning damage has a 25–35% chance to Stun for 1.5 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Nagelring Summons a Fallen Lunatic to your side every 10–12 seconds.
+        /// </summary>
+        public static Item Nagelring = new Item
+        {
+            Id = 212586,
+            Name = "Nagelring",
+            Quality = ItemQuality.Legendary,
+            Slug = "nagelring",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_018",
+            DataUrl = "https://us.battle.net/api/d3/data/item/nagelring",
+            Url = "https://us.battle.net/d3/en/item/nagelring",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_018_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/nagelring",
+            IsCrafted = false,
+            LegendaryAffix = "Summons a Fallen Lunatic to your side every 10–12 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Bul-Kathos's Wedding Band You drain life from enemies around you.
+        /// </summary>
+        public static Item BulkathossWeddingBand = new Item
+        {
+            Id = 212603,
+            Name = "Bul-Kathos's Wedding Band",
+            Quality = ItemQuality.Legendary,
+            Slug = "bulkathoss-wedding-band",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bulkathoss-wedding-band",
+            Url = "https://us.battle.net/d3/en/item/bulkathoss-wedding-band",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_020_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/bulkathoss-wedding-band",
+            IsCrafted = false,
+            LegendaryAffix = "You drain life from enemies around you.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Eternal Union Increases the duration of Phalanx avatars by 200%.
+        /// </summary>
+        public static Item EternalUnion = new Item
+        {
+            Id = 212601,
+            Name = "Eternal Union",
+            Quality = ItemQuality.Legendary,
+            Slug = "eternal-union",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_007",
+            DataUrl = "https://us.battle.net/api/d3/data/item/eternal-union",
+            Url = "https://us.battle.net/d3/en/item/eternal-union",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_007_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/eternal-union",
+            IsCrafted = false,
+            LegendaryAffix = "Increases the duration of Phalanx avatars by 200%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Justice Lantern Gain damage reduction equal to 45–55% of your Block Chance.
+        /// </summary>
+        public static Item JusticeLantern = new Item
+        {
+            Id = 212590,
+            Name = "Justice Lantern",
+            Quality = ItemQuality.Legendary,
+            Slug = "justice-lantern",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_unique_008",
+            DataUrl = "https://us.battle.net/api/d3/data/item/justice-lantern",
+            Url = "https://us.battle.net/d3/en/item/justice-lantern",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ring_03_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/justice-lantern",
+            IsCrafted = false,
+            LegendaryAffix = "Gain damage reduction equal to 45–55% of your Block Chance.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Obsidian Ring of the Zodiac Reduce the remaining cooldown of one of your skills by 1 seconds when you hit with a resource-spending attack.
+        /// </summary>
+        public static Item ObsidianRingOfTheZodiac = new Item
+        {
+            Id = 212588,
+            Name = "Obsidian Ring of the Zodiac",
+            Quality = ItemQuality.Legendary,
+            Slug = "obsidian-ring-of-the-zodiac",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_unique_023",
+            DataUrl = "https://us.battle.net/api/d3/data/item/obsidian-ring-of-the-zodiac",
+            Url = "https://us.battle.net/d3/en/item/obsidian-ring-of-the-zodiac",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_023_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/obsidian-ring-of-the-zodiac",
+            IsCrafted = false,
+            LegendaryAffix = "Reduce the remaining cooldown of one of your skills by 1 seconds when you hit with a resource-spending attack.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Convention of Elements Gain 150–200% increased damage to a single element for 4 seconds. This effect rotates through the elements available to your class in the following order: Arcane, Cold, Fire, Holy, Lightning, Physical, Poison.
+        /// </summary>
+        public static Item ConventionOfElements = new Item
+        {
+            Id = 433496,
+            Name = "Convention of Elements",
+            Quality = ItemQuality.Legendary,
+            Slug = "convention-of-elements",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/convention-of-elements",
+            Url = "https://us.battle.net/d3/en/item/convention-of-elements",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_ring_04_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/convention-of-elements",
+            IsCrafted = false,
+            LegendaryAffix = "Gain 150–200% increased damage to a single element for 4 seconds. This effect rotates through the elements available to your class in the following order: Arcane, Cold, Fire, Holy, Lightning, Physical, Poison.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Elusive Ring After casting Shadow Power, Smoke Screen, or Vault, take 50–60% reduced damage for 8 seconds.
+        /// </summary>
+        public static Item ElusiveRing = new Item
+        {
+            Id = 446188,
+            Name = "Elusive Ring",
+            Quality = ItemQuality.Legendary,
+            Slug = "elusive-ring",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/elusive-ring",
+            Url = "https://us.battle.net/d3/en/item/elusive-ring",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ring_02_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/elusive-ring",
+            IsCrafted = false,
+            LegendaryAffix = "After casting Shadow Power, Smoke Screen, or Vault, take 50–60% reduced damage for 8 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Halo of Arlyse Your Ice Armor now reduces damage from melee attacks by 50–60% and automatically casts Frost Nova whenever you take 10% of your Life in damage.
+        /// </summary>
+        public static Item HaloOfArlyse = new Item
+        {
+            Id = 212602,
+            Name = "Halo of Arlyse",
+            Quality = ItemQuality.Legendary,
+            Slug = "halo-of-arlyse",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/halo-of-arlyse",
+            Url = "https://us.battle.net/d3/en/item/halo-of-arlyse",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_ring_wizard_001_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/halo-of-arlyse",
+            IsCrafted = false,
+            LegendaryAffix = "Your Ice Armor now reduces damage from melee attacks by 50–60% and automatically casts Frost Nova whenever you take 10% of your Life in damage.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Ring of Emptiness You deal 75–100% increased damage to enemies affected by both your Haunt and Locust Swarm.
+        /// </summary>
+        public static Item RingOfEmptiness = new Item
+        {
+            Id = 445697,
+            Name = "Ring of Emptiness",
+            Quality = ItemQuality.Legendary,
+            Slug = "ring-of-emptiness",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/ring-of-emptiness",
+            Url = "https://us.battle.net/d3/en/item/ring-of-emptiness",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ring_01_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/ring-of-emptiness",
+            IsCrafted = false,
+            LegendaryAffix = "You deal 75–100% increased damage to enemies affected by both your Haunt and Locust Swarm.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Band of Hollow Whispers This ring occasionally haunts nearby enemies.
+        /// </summary>
+        public static Item BandOfHollowWhispers = new Item
+        {
+            Id = 197834,
+            Name = "Band of Hollow Whispers",
+            Quality = ItemQuality.Legendary,
+            Slug = "band-of-hollow-whispers",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_unique_001",
+            DataUrl = "https://us.battle.net/api/d3/data/item/band-of-hollow-whispers",
+            Url = "https://us.battle.net/d3/en/item/band-of-hollow-whispers",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/band-of-hollow-whispers",
+            IsCrafted = false,
+            LegendaryAffix = "This ring occasionally haunts nearby enemies.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Krede's Flame Taking Fire damage restores your primary resource.
+        /// </summary>
+        public static Item KredesFlame = new Item
+        {
+            Id = 197836,
+            Name = "Krede's Flame",
+            Quality = ItemQuality.Legendary,
+            Slug = "kredes-flame",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_003",
+            DataUrl = "https://us.battle.net/api/d3/data/item/kredes-flame",
+            Url = "https://us.battle.net/d3/en/item/kredes-flame",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/kredes-flame",
+            IsCrafted = false,
+            LegendaryAffix = "Taking Fire damage restores your primary resource.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Oculus Ring Chance to create an area of focused power on killing a monster. Damage is increased by 70–85% while standing in the area.
+        /// </summary>
+        public static Item OculusRing = new Item
+        {
+            Id = 212648,
+            Name = "Oculus Ring",
+            Quality = ItemQuality.Legendary,
+            Slug = "oculus-ring",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_017",
+            DataUrl = "https://us.battle.net/api/d3/data/item/oculus-ring",
+            Url = "https://us.battle.net/d3/en/item/oculus-ring",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_017_p4_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/oculus-ring",
+            IsCrafted = false,
+            LegendaryAffix = "Chance to create an area of focused power on killing a monster. Damage is increased by 70–85% while standing in the area.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Skull Grasp Increase the damage of Whirlwind by 250–300%
+        /// </summary>
+        public static Item SkullGrasp = new Item
+        {
+            Id = 212618,
+            Name = "Skull Grasp",
+            Quality = ItemQuality.Legendary,
+            Slug = "skull-grasp",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_022",
+            DataUrl = "https://us.battle.net/api/d3/data/item/skull-grasp",
+            Url = "https://us.battle.net/d3/en/item/skull-grasp",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_ring_02_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/skull-grasp",
+            IsCrafted = false,
+            LegendaryAffix = "Increase the damage of Whirlwind by 250–300%",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Stone of Jordan 
+        /// </summary>
+        public static Item StoneOfJordan = new Item
+        {
+            Id = 212582,
+            Name = "Stone of Jordan",
+            Quality = ItemQuality.Legendary,
+            Slug = "stone-of-jordan",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/stone-of-jordan",
+            Url = "https://us.battle.net/d3/en/item/stone-of-jordan",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_019_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/stone-of-jordan",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Unity All damage taken is split between wearers of this item.
+        /// </summary>
+        public static Item Unity = new Item
+        {
+            Id = 212581,
+            Name = "Unity",
+            Quality = ItemQuality.Legendary,
+            Slug = "unity",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/unity",
+            Url = "https://us.battle.net/d3/en/item/unity",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_010_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/unity",
+            IsCrafted = false,
+            LegendaryAffix = "All damage taken is split between wearers of this item.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Litany of the Undaunted 
+        /// </summary>
+        public static Item LitanyOfTheUndaunted = new Item
+        {
+            Id = 212651,
+            Name = "Litany of the Undaunted",
+            Quality = ItemQuality.Legendary,
+            Slug = "litany-of-the-undaunted",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_015",
+            DataUrl = "https://us.battle.net/api/d3/data/item/litany-of-the-undaunted",
+            Url = "https://us.battle.net/d3/en/item/litany-of-the-undaunted",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_015_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/litany-of-the-undaunted",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Legacy of Nightmares",
+        };
+
+        /// <summary>
+        /// Natalya's Reflection 
+        /// </summary>
+        public static Item NatalyasReflection = new Item
+        {
+            Id = 212545,
+            Name = "Natalya's Reflection",
+            Quality = ItemQuality.Legendary,
+            Slug = "natalyas-reflection",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_011",
+            DataUrl = "https://us.battle.net/api/d3/data/item/natalyas-reflection",
+            Url = "https://us.battle.net/d3/en/item/natalyas-reflection",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_011_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/natalyas-reflection",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Natalya's Vengeance",
+        };
+
+        /// <summary>
+        /// The Compass Rose 
+        /// </summary>
+        public static Item TheCompassRose = new Item
+        {
+            Id = 212587,
+            Name = "The Compass Rose",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-compass-rose",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_013",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-compass-rose",
+            Url = "https://us.battle.net/d3/en/item/the-compass-rose",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_013_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-compass-rose",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Endless Walk",
+        };
+
+        /// <summary>
+        /// The Wailing Host 
+        /// </summary>
+        public static Item TheWailingHost = new Item
+        {
+            Id = 212650,
+            Name = "The Wailing Host",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-wailing-host",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_unique_014",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-wailing-host",
+            Url = "https://us.battle.net/d3/en/item/the-wailing-host",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_014_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-wailing-host",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Legacy of Nightmares",
+        };
+
+        /// <summary>
+        /// Zunimassa's Pox 
+        /// </summary>
+        public static Item ZunimassasPox = new Item
+        {
+            Id = 212579,
+            Name = "Zunimassa's Pox",
+            Quality = ItemQuality.Legendary,
+            Slug = "zunimassas-pox",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "Ring_norm_unique_012",
+            DataUrl = "https://us.battle.net/api/d3/data/item/zunimassas-pox",
+            Url = "https://us.battle.net/d3/en/item/zunimassas-pox",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_012_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/zunimassas-pox",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Zunimassa's Haunt",
+        };
+
+        /// <summary>
+        /// Focus 
+        /// </summary>
+        public static Item Focus = new Item
+        {
+            Id = 332209,
+            Name = "Focus",
+            Quality = ItemQuality.Legendary,
+            Slug = "focus",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_set_001",
+            DataUrl = "https://us.battle.net/api/d3/data/item/focus",
+            Url = "https://us.battle.net/d3/en/item/focus",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_set_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/focus",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Bastions of Will",
+        };
+
+        /// <summary>
+        /// Restraint 
+        /// </summary>
+        public static Item Restraint = new Item
+        {
+            Id = 332210,
+            Name = "Restraint",
+            Quality = ItemQuality.Legendary,
+            Slug = "restraint",
+            ItemType = ItemType.Ring,
+            TrinityItemType = TrinityItemType.Ring,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "ring_norm_set_002",
+            DataUrl = "https://us.battle.net/api/d3/data/item/restraint",
+            Url = "https://us.battle.net/d3/en/item/restraint",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ring_set_002_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/restraint",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Bastions of Will",
         };
 
         /// <summary>
@@ -10037,7 +9049,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GazingDemise = new Item
         {
-
             Id = 194995,
             Name = "Gazing Demise",
             Quality = ItemQuality.Legendary,
@@ -10054,7 +9065,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10062,7 +9072,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Homunculus = new Item
         {
-
             Id = 194991,
             Name = "Homunculus",
             Quality = ItemQuality.Legendary,
@@ -10079,7 +9088,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "A Zombie Dog is automatically summoned to your side every 2 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10087,7 +9095,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ShukranisTriumph = new Item
         {
-
             Id = 272070,
             Name = "Shukrani's Triumph",
             Quality = ItemQuality.Legendary,
@@ -10104,7 +9111,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Spirit Walk lasts until you attack or until an enemy is within 30 yards of you.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10112,7 +9118,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ThingOfTheDeep = new Item
         {
-
             Id = 192468,
             Name = "Thing of the Deep",
             Quality = ItemQuality.Legendary,
@@ -10129,7 +9134,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Increases Gold and Health Pickup by 20 yards.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10137,7 +9141,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item UhkapianSerpent = new Item
         {
-
             Id = 191278,
             Name = "Uhkapian Serpent",
             Quality = ItemQuality.Legendary,
@@ -10154,7 +9157,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "25–30% of the damage you take is redirected to your Zombie Dogs.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10162,7 +9164,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ManajumasGoryFetch = new Item
         {
-
             Id = 210993,
             Name = "Manajuma's Gory Fetch",
             Quality = ItemQuality.Legendary,
@@ -10179,7 +9180,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Manajuma's Way",
-
         };
 
         /// <summary>
@@ -10187,7 +9187,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ZunimassasStringOfSkulls = new Item
         {
-
             Id = 216525,
             Name = "Zunimassa's String of Skulls",
             Quality = ItemQuality.Legendary,
@@ -10204,7 +9203,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Zunimassa's Haunt",
-
         };
 
         /// <summary>
@@ -10212,7 +9210,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HenrisPerquisition = new Item
         {
-
             Id = 395199,
             Name = "Henri’s Perquisition",
             Quality = ItemQuality.Legendary,
@@ -10229,7 +9226,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "The first time an enemy deals damage to you, reduce that damage by 60–80% and Charm the enemy for 3 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10237,7 +9233,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VileHive = new Item
         {
-
             Id = 220326,
             Name = "Vile Hive",
             Quality = ItemQuality.Legendary,
@@ -10254,7 +9249,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Locust Swarm gains the effect of the Pestilence rune and deals 45–60% increased damage.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10262,7 +9256,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item WilkensReach = new Item
         {
-
             Id = 395198,
             Name = "Wilken's Reach",
             Quality = ItemQuality.Legendary,
@@ -10279,7 +9272,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Grasp of the Dead no longer has a cooldown.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10287,7 +9279,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FletchersPride = new Item
         {
-
             Id = 197629,
             Name = "Fletcher's Pride",
             Quality = ItemQuality.Legendary,
@@ -10304,7 +9295,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10312,7 +9302,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SinSeekers = new Item
         {
-
             Id = 197625,
             Name = "Sin Seekers",
             Quality = ItemQuality.Legendary,
@@ -10329,7 +9318,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Rapid Fire no longer has a channel cost.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10337,7 +9325,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HolyPointShot = new Item
         {
-
             Id = 197627,
             Name = "Holy Point Shot",
             Quality = ItemQuality.Legendary,
@@ -10354,7 +9341,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10362,7 +9348,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SpinesOfSeethingHatred = new Item
         {
-
             Id = 197628,
             Name = "Spines of Seething Hatred",
             Quality = ItemQuality.Legendary,
@@ -10379,7 +9364,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chakram now generates 3–4 Hatred.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10387,7 +9371,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BombardiersRucksack = new Item
         {
-
             Id = 298171,
             Name = "Bombardier's Rucksack",
             Quality = ItemQuality.Legendary,
@@ -10404,7 +9387,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "You may have 2 additional Sentries.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10412,7 +9394,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item EmimeisDuffel = new Item
         {
-
             Id = 298172,
             Name = "Emimei's Duffel",
             Quality = ItemQuality.Legendary,
@@ -10429,7 +9410,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Bolas now explode instantly.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10437,7 +9417,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheNinthCirriSatchel = new Item
         {
-
             Id = 298170,
             Name = "The Ninth Cirri Satchel",
             Quality = ItemQuality.Legendary,
@@ -10454,32 +9433,29 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Hungering Arrow has 20–25% additional chance to pierce.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Meticulous Bolts Elemental Arrow - Ball Lightning now travels at 30–40% speed.
+        /// Augustine's Panacea Elemental Arrow gains an effect based on the rune: Ball Lightning now travels at 30% speed. Frost Arrow damage and Chilled duration increased by 200–250%. Immolation Arrow ground damage over time increased by 200–250%. Lightning Bolts damage and Stun duration increased by 200–250%. Nether Tentacles damage and healing amount increased by 200–250%.
         /// </summary>
-        public static Item MeticulousBolts = new Item
+        public static Item AugustinesPanacea = new Item
         {
-
-            Id = 197624,
-            Name = "Meticulous Bolts",
+            Id = 0,
+            Name = "Augustine's Panacea",
             Quality = ItemQuality.Legendary,
-            Slug = "meticulous-bolts",
+            Slug = "augustines-panacea",
             ItemType = ItemType.Quiver,
             TrinityItemType = TrinityItemType.Quiver,
             IsTwoHanded = false,
             BaseType = ItemBaseType.None,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/meticulous-bolts",
-            Url = "https://us.battle.net/d3/en/item/meticulous-bolts",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_quiver_001_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/meticulous-bolts",
+            DataUrl = "https://us.battle.net/api/d3/data/item/augustines-panacea",
+            Url = "https://us.battle.net/d3/en/item/augustines-panacea",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_quiver_001_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/augustines-panacea",
             IsCrafted = false,
-            LegendaryAffix = "Elemental Arrow - Ball Lightning now travels at 30–40% speed.",
+            LegendaryAffix = "Elemental Arrow gains an effect based on the rune: Ball Lightning now travels at 30% speed. Frost Arrow damage and Chilled duration increased by 200–250%. Immolation Arrow ground damage over time increased by 200–250%. Lightning Bolts damage and Stun duration increased by 200–250%. Nether Tentacles damage and healing amount increased by 200–250%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -10487,7 +9463,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DeadMansLegacy = new Item
         {
-
             Id = 197630,
             Name = "Dead Man's Legacy",
             Quality = ItemQuality.Legendary,
@@ -10504,582 +9479,213 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Multishot hits enemies below 50–60% health twice.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Arreat's Law Weapon Throw generates up to 15–20 additional Fury based on how far away the enemy hit is. Maximum benefit when the enemy hit is 20 or more yards away.
+        /// Coven's Criterion You take 45–60% less damage from blocked attacks.
         /// </summary>
-        public static Item ArreatsLaw = new Item
+        public static Item CovensCriterion = new Item
         {
-
-            Id = 191446,
-            Name = "Arreat's Law",
+            Id = 298191,
+            Name = "Coven's Criterion",
             Quality = ItemQuality.Legendary,
-            Slug = "arreats-law",
-            ItemType = ItemType.Spear,
-            TrinityItemType = TrinityItemType.Spear,
+            Slug = "covens-criterion",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Spear_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/arreats-law",
-            Url = "https://us.battle.net/d3/en/item/arreats-law",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_spear_001_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/arreats-law",
+            BaseType = ItemBaseType.None,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/covens-criterion",
+            Url = "https://us.battle.net/d3/en/item/covens-criterion",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_107_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/covens-criterion",
             IsCrafted = false,
-            LegendaryAffix = "Weapon Throw generates up to 15–20 additional Fury based on how far away the enemy hit is. Maximum benefit when the enemy hit is 20 or more yards away.",
+            LegendaryAffix = "You take 45–60% less damage from blocked attacks.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Scrimshaw Reduces the Mana cost of Zombie Charger by 40–50%.
+        /// Denial Each enemy hit by your Sweep Attack increases the damage of your next Sweep Attack by 30–40%, stacking up to 5 times.
         /// </summary>
-        public static Item Scrimshaw = new Item
+        public static Item Denial = new Item
         {
-
-            Id = 197095,
-            Name = "Scrimshaw",
+            Id = 152666,
+            Name = "Denial",
             Quality = ItemQuality.Legendary,
-            Slug = "scrimshaw",
-            ItemType = ItemType.Spear,
-            TrinityItemType = TrinityItemType.Spear,
+            Slug = "denial",
+            ItemType = ItemType.Shield,
+            TrinityItemType = TrinityItemType.Shield,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Spear_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/scrimshaw",
-            Url = "https://us.battle.net/d3/en/item/scrimshaw",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_spear_004_p3_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/scrimshaw",
+            BaseType = ItemBaseType.None,
+            InternalName = "Shield_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/denial",
+            Url = "https://us.battle.net/d3/en/item/denial",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_shield_007_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/denial",
             IsCrafted = false,
-            LegendaryAffix = "Reduces the Mana cost of Zombie Charger by 40–50%.",
+            LegendaryAffix = "Each enemy hit by your Sweep Attack increases the damage of your next Sweep Attack by 30–40%, stacking up to 5 times.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// The Three Hundredth Spear Increase the damage of Weapon Throw and Ancient Spear by 45–60%.
+        /// Defender of Westmarch Blocks have a chance of summoning a charging wolf that deals 800–1000% weapon damage to all enemies it passes through.
         /// </summary>
-        public static Item TheThreeHundredthSpear = new Item
+        public static Item DefenderOfWestmarch = new Item
         {
-
-            Id = 196638,
-            Name = "The Three Hundredth Spear",
+            Id = 298182,
+            Name = "Defender of Westmarch",
             Quality = ItemQuality.Legendary,
-            Slug = "the-three-hundredth-spear",
-            ItemType = ItemType.Spear,
-            TrinityItemType = TrinityItemType.Spear,
+            Slug = "defender-of-westmarch",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Spear_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-three-hundredth-spear",
-            Url = "https://us.battle.net/d3/en/item/the-three-hundredth-spear",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_spear_002_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-three-hundredth-spear",
+            BaseType = ItemBaseType.None,
+            InternalName = "shield_norm_unique_09",
+            DataUrl = "https://us.battle.net/api/d3/data/item/defender-of-westmarch",
+            Url = "https://us.battle.net/d3/en/item/defender-of-westmarch",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_101_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/defender-of-westmarch",
             IsCrafted = false,
-            LegendaryAffix = "Increase the damage of Weapon Throw and Ancient Spear by 45–60%.",
+            LegendaryAffix = "Blocks have a chance of summoning a charging wolf that deals 800–1000% weapon damage to all enemies it passes through.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Empyrean Messenger 
+        /// Eberli Charo Reduces the cooldown of Heaven's Fury by 45–50%.
         /// </summary>
-        public static Item EmpyreanMessenger = new Item
+        public static Item EberliCharo = new Item
         {
-
-            Id = 194241,
-            Name = "Empyrean Messenger",
+            Id = 298186,
+            Name = "Eberli Charo",
             Quality = ItemQuality.Legendary,
-            Slug = "empyrean-messenger",
-            ItemType = ItemType.Spear,
-            TrinityItemType = TrinityItemType.Spear,
+            Slug = "eberli-charo",
+            ItemType = ItemType.CrusaderShield,
+            TrinityItemType = TrinityItemType.CrusaderShield,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "spear_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/empyrean-messenger",
-            Url = "https://us.battle.net/d3/en/item/empyrean-messenger",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_spear_003_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/empyrean-messenger",
+            BaseType = ItemBaseType.None,
+            InternalName = "shield_norm_unique_10",
+            DataUrl = "https://us.battle.net/api/d3/data/item/eberli-charo",
+            Url = "https://us.battle.net/d3/en/item/eberli-charo",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/eberli-charo",
+            IsCrafted = false,
+            LegendaryAffix = "Reduces the cooldown of Heaven's Fury by 45–50%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Freeze of Deflection Blocking an attack has a chance to Freeze the attacker for 0.5–1.5 seconds.
+        /// </summary>
+        public static Item FreezeOfDeflection = new Item
+        {
+            Id = 61550,
+            Name = "Freeze of Deflection",
+            Quality = ItemQuality.Legendary,
+            Slug = "freeze-of-deflection",
+            ItemType = ItemType.Shield,
+            TrinityItemType = TrinityItemType.Shield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "Shield_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/freeze-of-deflection",
+            Url = "https://us.battle.net/d3/en/item/freeze-of-deflection",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_004_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/freeze-of-deflection",
+            IsCrafted = false,
+            LegendaryAffix = "Blocking an attack has a chance to Freeze the attacker for 0.5–1.5 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Vo'Toyias Spiker Enemies affected by Provoke take double damage from Thorns.
+        /// </summary>
+        public static Item VotoyiasSpiker = new Item
+        {
+            Id = 298188,
+            Name = "Vo'Toyias Spiker",
+            Quality = ItemQuality.Legendary,
+            Slug = "votoyias-spiker",
+            ItemType = ItemType.Shield,
+            TrinityItemType = TrinityItemType.Shield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "shield_norm_unique_12",
+            DataUrl = "https://us.battle.net/api/d3/data/item/votoyias-spiker",
+            Url = "https://us.battle.net/d3/en/item/votoyias-spiker",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_104_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/votoyias-spiker",
+            IsCrafted = false,
+            LegendaryAffix = "Enemies affected by Provoke take double damage from Thorns.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Lidless Wall 
+        /// </summary>
+        public static Item LidlessWall = new Item
+        {
+            Id = 195389,
+            Name = "Lidless Wall",
+            Quality = ItemQuality.Legendary,
+            Slug = "lidless-wall",
+            ItemType = ItemType.Shield,
+            TrinityItemType = TrinityItemType.Shield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "Shield_norm_unique_07",
+            DataUrl = "https://us.battle.net/api/d3/data/item/lidless-wall",
+            Url = "https://us.battle.net/d3/en/item/lidless-wall",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_008_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/lidless-wall",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Akanesh, the Herald of Righteousness 
+        /// Ivory Tower Blocks release forward a Fires of Heaven.
         /// </summary>
-        public static Item AkaneshTheHeraldOfRighteousness = new Item
+        public static Item IvoryTower = new Item
         {
-
-            Id = 272043,
-            Name = "Akanesh, the Herald of Righteousness",
+            Id = 197478,
+            Name = "Ivory Tower",
             Quality = ItemQuality.Legendary,
-            Slug = "akanesh-the-herald-of-righteousness",
-            ItemType = ItemType.Spear,
-            TrinityItemType = TrinityItemType.Spear,
+            Slug = "ivory-tower",
+            ItemType = ItemType.Shield,
+            TrinityItemType = TrinityItemType.Shield,
             IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "spear_norm_unique_05",
-            DataUrl = "https://us.battle.net/api/d3/data/item/akanesh-the-herald-of-righteousness",
-            Url = "https://us.battle.net/d3/en/item/akanesh-the-herald-of-righteousness",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_spear_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/akanesh-the-herald-of-righteousness",
+            BaseType = ItemBaseType.None,
+            InternalName = "Shield_norm_unique_08",
+            DataUrl = "https://us.battle.net/api/d3/data/item/ivory-tower",
+            Url = "https://us.battle.net/d3/en/item/ivory-tower",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_shield_002_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/ivory-tower",
+            IsCrafted = false,
+            LegendaryAffix = "Blocks release forward a Fires of Heaven.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Stormshield 
+        /// </summary>
+        public static Item Stormshield = new Item
+        {
+            Id = 192484,
+            Name = "Stormshield",
+            Quality = ItemQuality.Legendary,
+            Slug = "stormshield",
+            ItemType = ItemType.Shield,
+            TrinityItemType = TrinityItemType.Shield,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.None,
+            InternalName = "Shield_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/stormshield",
+            Url = "https://us.battle.net/d3/en/item/stormshield",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_shield_009_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/stormshield",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Barber 
-        /// </summary>
-        public static Item TheBarber = new Item
-        {
-
-            Id = 195174,
-            Name = "The Barber",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-barber",
-            ItemType = ItemType.Dagger,
-            TrinityItemType = TrinityItemType.Dagger,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Dagger_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-barber",
-            Url = "https://us.battle.net/d3/en/item/the-barber",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_003_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-barber",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Envious Blade Gain 100% Critical Hit Chance against enemies at full health.
-        /// </summary>
-        public static Item EnviousBlade = new Item
-        {
-
-            Id = 271732,
-            Name = "Envious Blade",
-            Quality = ItemQuality.Legendary,
-            Slug = "envious-blade",
-            ItemType = ItemType.Dagger,
-            TrinityItemType = TrinityItemType.Dagger,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/envious-blade",
-            Url = "https://us.battle.net/d3/en/item/envious-blade",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/envious-blade",
-            IsCrafted = false,
-            LegendaryAffix = "Gain 100% Critical Hit Chance against enemies at full health.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Pig Sticker Squeal!
-        /// </summary>
-        public static Item PigSticker = new Item
-        {
-
-            Id = 221313,
-            Name = "Pig Sticker",
-            Quality = ItemQuality.Legendary,
-            Slug = "pig-sticker",
-            ItemType = ItemType.Dagger,
-            TrinityItemType = TrinityItemType.Dagger,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "dagger_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/pig-sticker",
-            Url = "https://us.battle.net/d3/en/item/pig-sticker",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_007_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/pig-sticker",
-            IsCrafted = false,
-            LegendaryAffix = "Squeal!",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Wizardspike Performing an attack has a 20–25% chance to hurl a Frozen Orb.
-        /// </summary>
-        public static Item Wizardspike = new Item
-        {
-
-            Id = 219329,
-            Name = "Wizardspike",
-            Quality = ItemQuality.Legendary,
-            Slug = "wizardspike",
-            ItemType = ItemType.Dagger,
-            TrinityItemType = TrinityItemType.Dagger,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Dagger_norm_unique_05",
-            DataUrl = "https://us.battle.net/api/d3/data/item/wizardspike",
-            Url = "https://us.battle.net/d3/en/item/wizardspike",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_010_x1_210_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/wizardspike",
-            IsCrafted = false,
-            LegendaryAffix = "Performing an attack has a 20–25% chance to hurl a Frozen Orb.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Eun-jang-do Attacking enemies below 17–20% Life freezes them for 3 seconds.
-        /// </summary>
-        public static Item Eunjangdo = new Item
-        {
-
-            Id = 410960,
-            Name = "Eun-jang-do",
-            Quality = ItemQuality.Legendary,
-            Slug = "eunjangdo",
-            ItemType = ItemType.Dagger,
-            TrinityItemType = TrinityItemType.Dagger,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/eunjangdo",
-            Url = "https://us.battle.net/d3/en/item/eunjangdo",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_104_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/eunjangdo",
-            IsCrafted = false,
-            LegendaryAffix = "Attacking enemies below 17–20% Life freezes them for 3 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Karlei's Point Impale returns 10–15 Hatred if it hits an enemy already Impaled.
-        /// </summary>
-        public static Item KarleisPoint = new Item
-        {
-
-            Id = 271728,
-            Name = "Karlei's Point",
-            Quality = ItemQuality.Legendary,
-            Slug = "karleis-point",
-            ItemType = ItemType.Dagger,
-            TrinityItemType = TrinityItemType.Dagger,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/karleis-point",
-            Url = "https://us.battle.net/d3/en/item/karleis-point",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/karleis-point",
-            IsCrafted = false,
-            LegendaryAffix = "Impale returns 10–15 Hatred if it hits an enemy already Impaled.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Lord Greenstone's Fan Every second, gain 80–100% increased damage for your next Fan of Knives. Stacks up to 30 times.
-        /// </summary>
-        public static Item LordGreenstonesFan = new Item
-        {
-
-            Id = 271731,
-            Name = "Lord Greenstone's Fan",
-            Quality = ItemQuality.Legendary,
-            Slug = "lord-greenstones-fan",
-            ItemType = ItemType.Dagger,
-            TrinityItemType = TrinityItemType.Dagger,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/lord-greenstones-fan",
-            Url = "https://us.battle.net/d3/en/item/lord-greenstones-fan",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/lord-greenstones-fan",
-            IsCrafted = false,
-            LegendaryAffix = "Every second, gain 80–100% increased damage for your next Fan of Knives. Stacks up to 30 times.",
-            SetName = "",
-
-        };
-
-        ///// <summary>
-        ///// Deadly Rebirth Grasp of the Dead gains the effect of the Rain of Corpses rune.
-        ///// </summary>
-        //public static Item DeadlyRebirth = new Item
-        //{
-
-        //    Id = 193433,
-        //    Name = "Deadly Rebirth",
-        //    Quality = ItemQuality.Legendary,
-        //    Slug = "deadly-rebirth",
-        //    ItemType = ItemType.CeremonialDagger,
-        //    TrinityItemType = TrinityItemType.CeremonialKnife,
-        //    IsTwoHanded = false,
-        //    BaseType = ItemBaseType.Weapon,
-        //    InternalName = "",
-        //    DataUrl = "https://us.battle.net/api/d3/data/item/deadly-rebirth",
-        //    Url = "https://us.battle.net/d3/en/item/deadly-rebirth",
-        //    IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_003_x1_demonhunter_male.png",
-        //    RelativeUrl = "/d3/en/item/deadly-rebirth",
-        //    IsCrafted = false,
-        //    LegendaryAffix = "Grasp of the Dead gains the effect of the Rain of Corpses rune.",
-        //    SetName = "",
-
-        //};
-
-        /// <summary>
-        /// Rhen'ho Flayer Plague of Toads now seek out enemies and can explode twice.
-        /// </summary>
-        public static Item RhenhoFlayer = new Item
-        {
-
-            Id = 271745,
-            Name = "Rhen'ho Flayer",
-            Quality = ItemQuality.Legendary,
-            Slug = "rhenho-flayer",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/rhenho-flayer",
-            Url = "https://us.battle.net/d3/en/item/rhenho-flayer",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/rhenho-flayer",
-            IsCrafted = false,
-            LegendaryAffix = "Plague of Toads now seek out enemies and can explode twice.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Sacred Harvester Soul Harvest now stacks up to 10 times.
-        /// </summary>
-        public static Item SacredHarvester = new Item
-        {
-
-            Id = 403748,
-            Name = "Sacred Harvester",
-            Quality = ItemQuality.Legendary,
-            Slug = "sacred-harvester",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "p1_ceremonialDagger_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/sacred-harvester",
-            Url = "https://us.battle.net/d3/en/item/sacred-harvester",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_ceremonialdagger_norm_unique_01_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/sacred-harvester",
-            IsCrafted = false,
-            LegendaryAffix = "Soul Harvest now stacks up to 10 times.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Dagger of Darts Your Poison Darts and your Fetishes' Poison Darts now pierce.
-        /// </summary>
-        public static Item TheDaggerOfDarts = new Item
-        {
-
-            Id = 403767,
-            Name = "The Dagger of Darts",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-dagger-of-darts",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "p1_ceremonialDagger_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-dagger-of-darts",
-            Url = "https://us.battle.net/d3/en/item/the-dagger-of-darts",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_ceremonialdagger_norm_unique_02_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-dagger-of-darts",
-            IsCrafted = false,
-            LegendaryAffix = "Your Poison Darts and your Fetishes' Poison Darts now pierce.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Last Breath Reduces cooldown of Mass Confusion by 15–20 seconds.
-        /// </summary>
-        public static Item LastBreath = new Item
-        {
-
-            Id = 195370,
-            Name = "Last Breath",
-            Quality = ItemQuality.Legendary,
-            Slug = "last-breath",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "ceremonialDagger_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/last-breath",
-            Url = "https://us.battle.net/d3/en/item/last-breath",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ceremonialdagger_008_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/last-breath",
-            IsCrafted = false,
-            LegendaryAffix = "Reduces cooldown of Mass Confusion by 15–20 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Spider Queen's Grasp Corpse Spiders releases a web on impact that Slows enemies by 60–80%.
-        /// </summary>
-        public static Item TheSpiderQueensGrasp = new Item
-        {
-
-            Id = 222978,
-            Name = "The Spider Queen's Grasp",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-spider-queens-grasp",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "ceremonialDagger_norm_unique_05",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-spider-queens-grasp",
-            Url = "https://us.battle.net/d3/en/item/the-spider-queens-grasp",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_004_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-spider-queens-grasp",
-            IsCrafted = false,
-            LegendaryAffix = "Corpse Spiders releases a web on impact that Slows enemies by 60–80%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Starmetal Kukri Reduce the cooldown of Fetish Army and Big Bad Voodoo by 1 second each time your fetishes deal damage.
-        /// </summary>
-        public static Item StarmetalKukri = new Item
-        {
-
-            Id = 271738,
-            Name = "Starmetal Kukri",
-            Quality = ItemQuality.Legendary,
-            Slug = "starmetal-kukri",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "ceremonialdagger_norm_unique_10",
-            DataUrl = "https://us.battle.net/api/d3/data/item/starmetal-kukri",
-            Url = "https://us.battle.net/d3/en/item/starmetal-kukri",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/starmetal-kukri",
-            IsCrafted = false,
-            LegendaryAffix = "Reduce the cooldown of Fetish Army and Big Bad Voodoo by 1 second each time your fetishes deal damage.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Anessazi Edge Zombie Dogs stuns enemies around them for 1.5 seconds when summoned.
-        /// </summary>
-        public static Item AnessaziEdge = new Item
-        {
-
-            Id = 196250,
-            Name = "Anessazi Edge",
-            Quality = ItemQuality.Legendary,
-            Slug = "anessazi-edge",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "ceremonialDagger_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/anessazi-edge",
-            Url = "https://us.battle.net/d3/en/item/anessazi-edge",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/anessazi-edge",
-            IsCrafted = false,
-            LegendaryAffix = "Zombie Dogs stuns enemies around them for 1.5 seconds when summoned.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Voo's Juicer Spirit Barrage gains the effects of the Phlebotomize and The Spirit is Willing runes.
-        /// </summary>
-        public static Item VoosJuicer = new Item
-        {
-
-            Id = 192579,
-            Name = "Voo's Juicer",
-            Quality = ItemQuality.Legendary,
-            Slug = "voos-juicer",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/voos-juicer",
-            Url = "https://us.battle.net/d3/en/item/voos-juicer",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_dagger_002_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/voos-juicer",
-            IsCrafted = false,
-            LegendaryAffix = "Spirit Barrage gains the effects of the Phlebotomize and The Spirit is Willing runes.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Gidbinn Chance to summon a Fetish when attacking.
-        /// </summary>
-        public static Item TheGidbinn = new Item
-        {
-
-            Id = 209246,
-            Name = "The Gidbinn",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-gidbinn",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "ceremonialDagger_norm_unique_09",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-gidbinn",
-            Url = "https://us.battle.net/d3/en/item/the-gidbinn",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_002_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-gidbinn",
-            IsCrafted = false,
-            LegendaryAffix = "Chance to summon a Fetish when attacking.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Manajuma's Carving Knife 
-        /// </summary>
-        public static Item ManajumasCarvingKnife = new Item
-        {
-
-            Id = 223365,
-            Name = "Manajuma's Carving Knife",
-            Quality = ItemQuality.Legendary,
-            Slug = "manajumas-carving-knife",
-            ItemType = ItemType.CeremonialDagger,
-            TrinityItemType = TrinityItemType.CeremonialKnife,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "ceremonialDagger_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/manajumas-carving-knife",
-            Url = "https://us.battle.net/d3/en/item/manajumas-carving-knife",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_009_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/manajumas-carving-knife",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Manajuma's Way",
-
         };
 
         /// <summary>
@@ -11087,7 +9693,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Genzaniku = new Item
         {
-
             Id = 116386,
             Name = "Genzaniku",
             Quality = ItemQuality.Legendary,
@@ -11104,7 +9709,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance to summon a ghostly Fallen Champion when attacking.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11112,7 +9716,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FleshTearer = new Item
         {
-
             Id = 116388,
             Name = "Flesh Tearer",
             Quality = ItemQuality.Legendary,
@@ -11129,7 +9732,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11137,7 +9739,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Hack = new Item
         {
-
             Id = 271598,
             Name = "Hack",
             Quality = ItemQuality.Legendary,
@@ -11154,7 +9755,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "75–100% of your Thorns damage is applied on every attack.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11162,7 +9762,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheButchersSickle = new Item
         {
-
             Id = 189973,
             Name = "The Butcher's Sickle",
             Quality = ItemQuality.Legendary,
@@ -11179,7 +9778,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "20–25% chance to drag enemies to you when attacking.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11187,7 +9785,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SkySplitter = new Item
         {
-
             Id = 116389,
             Name = "Sky Splitter",
             Quality = ItemQuality.Legendary,
@@ -11204,7 +9801,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "15–20% chance to Smite enemies for 600-750% weapon damage as Lightning when you hit them.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11212,7 +9808,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheBurningAxeOfSankis = new Item
         {
-
             Id = 181484,
             Name = "The Burning Axe of Sankis",
             Quality = ItemQuality.Legendary,
@@ -11229,7 +9824,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance to fight through the pain when enemies hit you.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11237,7 +9831,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MordullusPromise = new Item
         {
-
             Id = 271597,
             Name = "Mordullu's Promise",
             Quality = ItemQuality.Legendary,
@@ -11254,432 +9847,282 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Firebomb generates 100–125 Mana.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Odyn Son 20–40% chance to Chain Lightning enemies when you hit them.
+        /// The Barber 
         /// </summary>
-        public static Item OdynSon = new Item
+        public static Item TheBarber = new Item
         {
-
-            Id = 188185,
-            Name = "Odyn Son",
+            Id = 195174,
+            Name = "The Barber",
             Quality = ItemQuality.Legendary,
-            Slug = "odyn-son",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
+            Slug = "the-barber",
+            ItemType = ItemType.Dagger,
+            TrinityItemType = TrinityItemType.Dagger,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "Mace_norm_unique_08",
-            DataUrl = "https://us.battle.net/api/d3/data/item/odyn-son",
-            Url = "https://us.battle.net/d3/en/item/odyn-son",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_002_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/odyn-son",
+            InternalName = "Dagger_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-barber",
+            Url = "https://us.battle.net/d3/en/item/the-barber",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-barber",
             IsCrafted = false,
-            LegendaryAffix = "20–40% chance to Chain Lightning enemies when you hit them.",
+            LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Mad Monarch's Scepter After killing 10 enemies, you release a Poison Nova that deals 1050–1400% weapon damage as Poison to enemies within 30 yards.
+        /// Envious Blade Gain 100% Critical Hit Chance against enemies at full health.
         /// </summary>
-        public static Item MadMonarchsScepter = new Item
+        public static Item EnviousBlade = new Item
         {
-
-            Id = 271663,
-            Name = "Mad Monarch's Scepter",
+            Id = 271732,
+            Name = "Envious Blade",
             Quality = ItemQuality.Legendary,
-            Slug = "mad-monarchs-scepter",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
+            Slug = "envious-blade",
+            ItemType = ItemType.Dagger,
+            TrinityItemType = TrinityItemType.Dagger,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/mad-monarchs-scepter",
-            Url = "https://us.battle.net/d3/en/item/mad-monarchs-scepter",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/mad-monarchs-scepter",
+            DataUrl = "https://us.battle.net/api/d3/data/item/envious-blade",
+            Url = "https://us.battle.net/d3/en/item/envious-blade",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/envious-blade",
             IsCrafted = false,
-            LegendaryAffix = "After killing 10 enemies, you release a Poison Nova that deals 1050–1400% weapon damage as Poison to enemies within 30 yards.",
+            LegendaryAffix = "Gain 100% Critical Hit Chance against enemies at full health.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Nutcracker 
+        /// Pig Sticker Squeal!
         /// </summary>
-        public static Item Nutcracker = new Item
+        public static Item PigSticker = new Item
         {
-
-            Id = 188169,
-            Name = "Nutcracker",
+            Id = 221313,
+            Name = "Pig Sticker",
             Quality = ItemQuality.Legendary,
-            Slug = "nutcracker",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
+            Slug = "pig-sticker",
+            ItemType = ItemType.Dagger,
+            TrinityItemType = TrinityItemType.Dagger,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "Mace_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/nutcracker",
-            Url = "https://us.battle.net/d3/en/item/nutcracker",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_005_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/nutcracker",
+            InternalName = "dagger_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/pig-sticker",
+            Url = "https://us.battle.net/d3/en/item/pig-sticker",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_007_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/pig-sticker",
             IsCrafted = false,
-            LegendaryAffix = "",
+            LegendaryAffix = "Squeal!",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Telranden's Hand 
+        /// Wizardspike Performing an attack has a 20–25% chance to hurl a Frozen Orb.
         /// </summary>
-        public static Item TelrandensHand = new Item
+        public static Item Wizardspike = new Item
         {
-
-            Id = 188189,
-            Name = "Telranden's Hand",
+            Id = 219329,
+            Name = "Wizardspike",
             Quality = ItemQuality.Legendary,
-            Slug = "telrandens-hand",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
+            Slug = "wizardspike",
+            ItemType = ItemType.Dagger,
+            TrinityItemType = TrinityItemType.Dagger,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "Mace_norm_unique_09",
-            DataUrl = "https://us.battle.net/api/d3/data/item/telrandens-hand",
-            Url = "https://us.battle.net/d3/en/item/telrandens-hand",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_007_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/telrandens-hand",
+            InternalName = "Dagger_norm_unique_05",
+            DataUrl = "https://us.battle.net/api/d3/data/item/wizardspike",
+            Url = "https://us.battle.net/d3/en/item/wizardspike",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_010_x1_210_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/wizardspike",
             IsCrafted = false,
-            LegendaryAffix = "",
+            LegendaryAffix = "Performing an attack has a 20–25% chance to hurl a Frozen Orb.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Jace's Hammer of Vigilance Increase the size of your Blessed Hammers.
+        /// Eun-jang-do Attacking enemies below 17–20% Life freezes them for 3 seconds.
         /// </summary>
-        public static Item JacesHammerOfVigilance = new Item
+        public static Item Eunjangdo = new Item
         {
-
-            Id = 271648,
-            Name = "Jace's Hammer of Vigilance",
+            Id = 410960,
+            Name = "Eun-jang-do",
             Quality = ItemQuality.Legendary,
-            Slug = "jaces-hammer-of-vigilance",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "mace_norm_unique_10",
-            DataUrl = "https://us.battle.net/api/d3/data/item/jaces-hammer-of-vigilance",
-            Url = "https://us.battle.net/d3/en/item/jaces-hammer-of-vigilance",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/jaces-hammer-of-vigilance",
-            IsCrafted = false,
-            LegendaryAffix = "Increase the size of your Blessed Hammers.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Solanium Critical Hits have a 3–4% chance to spawn a health globe.
-        /// </summary>
-        public static Item Solanium = new Item
-        {
-
-            Id = 271662,
-            Name = "Solanium",
-            Quality = ItemQuality.Legendary,
-            Slug = "solanium",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "mace_norm_unique_11",
-            DataUrl = "https://us.battle.net/api/d3/data/item/solanium",
-            Url = "https://us.battle.net/d3/en/item/solanium",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/solanium",
-            IsCrafted = false,
-            LegendaryAffix = "Critical Hits have a 3–4% chance to spawn a health globe.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Nailbiter 
-        /// </summary>
-        public static Item Nailbiter = new Item
-        {
-
-            Id = 188158,
-            Name = "Nailbiter",
-            Quality = ItemQuality.Legendary,
-            Slug = "nailbiter",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Mace_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/nailbiter",
-            Url = "https://us.battle.net/d3/en/item/nailbiter",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_008_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/nailbiter",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Neanderthal 
-        /// </summary>
-        public static Item Neanderthal = new Item
-        {
-
-            Id = 102665,
-            Name = "Neanderthal",
-            Quality = ItemQuality.Legendary,
-            Slug = "neanderthal",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Mace_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/neanderthal",
-            Url = "https://us.battle.net/d3/en/item/neanderthal",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_003_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/neanderthal",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Echoing Fury 
-        /// </summary>
-        public static Item EchoingFury = new Item
-        {
-
-            Id = 188181,
-            Name = "Echoing Fury",
-            Quality = ItemQuality.Legendary,
-            Slug = "echoing-fury",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Mace_norm_unique_07",
-            DataUrl = "https://us.battle.net/api/d3/data/item/echoing-fury",
-            Url = "https://us.battle.net/d3/en/item/echoing-fury",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/echoing-fury",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Sun Keeper 
-        /// </summary>
-        public static Item SunKeeper = new Item
-        {
-
-            Id = 188173,
-            Name = "Sun Keeper",
-            Quality = ItemQuality.Legendary,
-            Slug = "sun-keeper",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.Mace,
+            Slug = "eunjangdo",
+            ItemType = ItemType.Dagger,
+            TrinityItemType = TrinityItemType.Dagger,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/sun-keeper",
-            Url = "https://us.battle.net/d3/en/item/sun-keeper",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_011_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/sun-keeper",
+            DataUrl = "https://us.battle.net/api/d3/data/item/eunjangdo",
+            Url = "https://us.battle.net/d3/en/item/eunjangdo",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_104_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/eunjangdo",
             IsCrafted = false,
-            LegendaryAffix = "",
+            LegendaryAffix = "Attacking enemies below 17–20% Life freezes them for 3 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Johanna's Argument Increase the attack speed of Blessed Hammer by 100%.
+        /// Karlei's Point Impale returns 10–15 Hatred if it hits an enemy already Impaled.
         /// </summary>
-        public static Item JohannasArgument = new Item
+        public static Item KarleisPoint = new Item
         {
-
-            Id = 403812,
-            Name = "Johanna's Argument",
+            Id = 271728,
+            Name = "Karlei's Point",
             Quality = ItemQuality.Legendary,
-            Slug = "johannas-argument",
-            ItemType = ItemType.Flail,
-            TrinityItemType = TrinityItemType.Flail,
+            Slug = "karleis-point",
+            ItemType = ItemType.Dagger,
+            TrinityItemType = TrinityItemType.Dagger,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/johannas-argument",
-            Url = "https://us.battle.net/d3/en/item/johannas-argument",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_flail1h_norm_unique_01_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/johannas-argument",
+            DataUrl = "https://us.battle.net/api/d3/data/item/karleis-point",
+            Url = "https://us.battle.net/d3/en/item/karleis-point",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_dagger_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/karleis-point",
             IsCrafted = false,
-            LegendaryAffix = "Increase the attack speed of Blessed Hammer by 100%.",
+            LegendaryAffix = "Impale returns 10–15 Hatred if it hits an enemy already Impaled.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Darklight Fist of the Heavens has a 45–60% chance to also be cast at your location.
+        /// Lord Greenstone's Fan Every second, gain 160–200% increased damage for your next Fan of Knives. Stacks up to 30 times.
         /// </summary>
-        public static Item Darklight = new Item
+        public static Item LordGreenstonesFan = new Item
         {
-
-            Id = 299428,
-            Name = "Darklight",
+            Id = 271731,
+            Name = "Lord Greenstone's Fan",
             Quality = ItemQuality.Legendary,
-            Slug = "darklight",
-            ItemType = ItemType.Flail,
-            TrinityItemType = TrinityItemType.Flail,
+            Slug = "lord-greenstones-fan",
+            ItemType = ItemType.Dagger,
+            TrinityItemType = TrinityItemType.Dagger,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "flail1h_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/darklight",
-            Url = "https://us.battle.net/d3/en/item/darklight",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_106_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/darklight",
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/lord-greenstones-fan",
+            Url = "https://us.battle.net/d3/en/item/lord-greenstones-fan",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_dagger_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/lord-greenstones-fan",
             IsCrafted = false,
-            LegendaryAffix = "Fist of the Heavens has a 45–60% chance to also be cast at your location.",
+            LegendaryAffix = "Every second, gain 160–200% increased damage for your next Fan of Knives. Stacks up to 30 times.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Gyrfalcon's Foote Removes the resource cost of Blessed Shield.
+        /// Arreat's Law Weapon Throw generates up to 15–20 additional Fury based on how far away the enemy hit is. Maximum benefit when the enemy hit is 20 or more yards away.
         /// </summary>
-        public static Item GyrfalconsFoote = new Item
+        public static Item ArreatsLaw = new Item
         {
-
-            Id = 299427,
-            Name = "Gyrfalcon's Foote",
+            Id = 191446,
+            Name = "Arreat's Law",
             Quality = ItemQuality.Legendary,
-            Slug = "gyrfalcons-foote",
-            ItemType = ItemType.Flail,
-            TrinityItemType = TrinityItemType.Flail,
+            Slug = "arreats-law",
+            ItemType = ItemType.Spear,
+            TrinityItemType = TrinityItemType.Spear,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "flail1h_norm_unique_05",
-            DataUrl = "https://us.battle.net/api/d3/data/item/gyrfalcons-foote",
-            Url = "https://us.battle.net/d3/en/item/gyrfalcons-foote",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_105_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/gyrfalcons-foote",
+            InternalName = "Spear_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/arreats-law",
+            Url = "https://us.battle.net/d3/en/item/arreats-law",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_spear_001_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/arreats-law",
             IsCrafted = false,
-            LegendaryAffix = "Removes the resource cost of Blessed Shield.",
+            LegendaryAffix = "Weapon Throw generates up to 15–20 additional Fury based on how far away the enemy hit is. Maximum benefit when the enemy hit is 20 or more yards away.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Inviolable Faith Casting Consecration also casts Consecration beneath all of your allies.
+        /// Scrimshaw Reduces the Mana cost of Zombie Charger by 40–50%.
         /// </summary>
-        public static Item InviolableFaith = new Item
+        public static Item Scrimshaw = new Item
         {
-
-            Id = 299429,
-            Name = "Inviolable Faith",
+            Id = 197095,
+            Name = "Scrimshaw",
             Quality = ItemQuality.Legendary,
-            Slug = "inviolable-faith",
-            ItemType = ItemType.Flail,
-            TrinityItemType = TrinityItemType.Flail,
+            Slug = "scrimshaw",
+            ItemType = ItemType.Spear,
+            TrinityItemType = TrinityItemType.Spear,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "flail1h_norm_unique_07",
-            DataUrl = "https://us.battle.net/api/d3/data/item/inviolable-faith",
-            Url = "https://us.battle.net/d3/en/item/inviolable-faith",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_107_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/inviolable-faith",
+            InternalName = "Spear_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/scrimshaw",
+            Url = "https://us.battle.net/d3/en/item/scrimshaw",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_spear_004_p3_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/scrimshaw",
             IsCrafted = false,
-            LegendaryAffix = "Casting Consecration also casts Consecration beneath all of your allies.",
+            LegendaryAffix = "Reduces the Mana cost of Zombie Charger by 40–50%.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Justinian's Mercy Blessed Hammer gains the effect of the Dominion rune.
+        /// The Three Hundredth Spear Increase the damage of Weapon Throw and Ancient Spear by 45–60%.
         /// </summary>
-        public static Item JustiniansMercy = new Item
+        public static Item TheThreeHundredthSpear = new Item
         {
-
-            Id = 299424,
-            Name = "Justinian's Mercy",
+            Id = 196638,
+            Name = "The Three Hundredth Spear",
             Quality = ItemQuality.Legendary,
-            Slug = "justinians-mercy",
-            ItemType = ItemType.Flail,
-            TrinityItemType = TrinityItemType.Flail,
+            Slug = "the-three-hundredth-spear",
+            ItemType = ItemType.Spear,
+            TrinityItemType = TrinityItemType.Spear,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "flail1h_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/justinians-mercy",
-            Url = "https://us.battle.net/d3/en/item/justinians-mercy",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/justinians-mercy",
+            InternalName = "Spear_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-three-hundredth-spear",
+            Url = "https://us.battle.net/d3/en/item/the-three-hundredth-spear",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_spear_002_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-three-hundredth-spear",
             IsCrafted = false,
-            LegendaryAffix = "Blessed Hammer gains the effect of the Dominion rune.",
+            LegendaryAffix = "Increase the damage of Weapon Throw and Ancient Spear by 45–60%.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Kassar's Retribution Casting Justice increases your movement speed by 15–20% for 2 seconds.
+        /// Empyrean Messenger 
         /// </summary>
-        public static Item KassarsRetribution = new Item
+        public static Item EmpyreanMessenger = new Item
         {
-
-            Id = 299426,
-            Name = "Kassar's Retribution",
+            Id = 194241,
+            Name = "Empyrean Messenger",
             Quality = ItemQuality.Legendary,
-            Slug = "kassars-retribution",
-            ItemType = ItemType.Flail,
-            TrinityItemType = TrinityItemType.Flail,
+            Slug = "empyrean-messenger",
+            ItemType = ItemType.Spear,
+            TrinityItemType = TrinityItemType.Spear,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "flail1h_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/kassars-retribution",
-            Url = "https://us.battle.net/d3/en/item/kassars-retribution",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_104_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/kassars-retribution",
+            InternalName = "spear_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/empyrean-messenger",
+            Url = "https://us.battle.net/d3/en/item/empyrean-messenger",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_spear_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/empyrean-messenger",
             IsCrafted = false,
-            LegendaryAffix = "Casting Justice increases your movement speed by 15–20% for 2 seconds.",
+            LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Swiftmount Doubles the duration of Steed Charge.
+        /// Akanesh, the Herald of Righteousness 
         /// </summary>
-        public static Item Swiftmount = new Item
+        public static Item AkaneshTheHeraldOfRighteousness = new Item
         {
-
-            Id = 299425,
-            Name = "Swiftmount",
+            Id = 272043,
+            Name = "Akanesh, the Herald of Righteousness",
             Quality = ItemQuality.Legendary,
-            Slug = "swiftmount",
-            ItemType = ItemType.Flail,
-            TrinityItemType = TrinityItemType.Flail,
+            Slug = "akanesh-the-herald-of-righteousness",
+            ItemType = ItemType.Spear,
+            TrinityItemType = TrinityItemType.Spear,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "flail1h_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/swiftmount",
-            Url = "https://us.battle.net/d3/en/item/swiftmount",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/swiftmount",
+            InternalName = "spear_norm_unique_05",
+            DataUrl = "https://us.battle.net/api/d3/data/item/akanesh-the-herald-of-righteousness",
+            Url = "https://us.battle.net/d3/en/item/akanesh-the-herald-of-righteousness",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_spear_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/akanesh-the-herald-of-righteousness",
             IsCrafted = false,
-            LegendaryAffix = "Doubles the duration of Steed Charge.",
+            LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11687,7 +10130,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MonsterHunter = new Item
         {
-
             Id = 115140,
             Name = "Monster Hunter",
             Quality = ItemQuality.Legendary,
@@ -11704,7 +10146,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11712,7 +10153,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Wildwood = new Item
         {
-
             Id = 270978,
             Name = "Wildwood",
             Quality = ItemQuality.Legendary,
@@ -11729,7 +10169,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11737,7 +10176,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Doombringer = new Item
         {
-
             Id = 185397,
             Name = "Doombringer",
             Quality = ItemQuality.Legendary,
@@ -11754,7 +10192,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11762,7 +10199,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheAncientBonesaberOfZumakalis = new Item
         {
-
             Id = 194481,
             Name = "The Ancient Bonesaber of Zumakalis",
             Quality = ItemQuality.Legendary,
@@ -11779,7 +10215,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11787,7 +10222,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Exarian = new Item
         {
-
             Id = 271617,
             Name = "Exarian",
             Quality = ItemQuality.Legendary,
@@ -11804,7 +10238,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11812,7 +10245,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Fulminator = new Item
         {
-
             Id = 271631,
             Name = "Fulminator",
             Quality = ItemQuality.Legendary,
@@ -11829,7 +10261,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Lightning damage has a chance to turn enemies into lightning rods, causing them to pulse 444–555% weapon damage as Lightning every second to nearby enemies for 6 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11837,7 +10268,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GiftOfSilaria = new Item
         {
-
             Id = 271630,
             Name = "Gift of Silaria",
             Quality = ItemQuality.Legendary,
@@ -11854,7 +10284,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11862,7 +10291,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Rimeheart = new Item
         {
-
             Id = 271636,
             Name = "Rimeheart",
             Quality = ItemQuality.Legendary,
@@ -11879,7 +10307,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "10% chance on hit to instantly deal 10000% weapon damage as Cold to enemies that are Frozen.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11887,7 +10314,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ThunderfuryBlessedBladeOfTheWindseeker = new Item
         {
-
             Id = 229716,
             Name = "Thunderfury, Blessed Blade of the Windseeker",
             Quality = ItemQuality.Legendary,
@@ -11904,7 +10330,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance on hit to blast your enemy with Lightning, dealing 279–372% weapon damage as Lightning and then jumping to additional nearby enemies. Each enemy hit has their attack speed and movement speed reduced by 30% for 3 seconds. Jumps up to 5 targets.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11912,7 +10337,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Sever = new Item
         {
-
             Id = 115141,
             Name = "Sever",
             Quality = ItemQuality.Legendary,
@@ -11929,7 +10353,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Slain enemies rest in pieces.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11937,7 +10360,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Skycutter = new Item
         {
-
             Id = 182347,
             Name = "Skycutter",
             Quality = ItemQuality.Legendary,
@@ -11954,7 +10376,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance to summon angelic assistance when attacking.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11962,7 +10383,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Azurewrath = new Item
         {
-
             Id = 192511,
             Name = "Azurewrath",
             Quality = ItemQuality.Legendary,
@@ -11979,7 +10399,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Undead and Demon enemies within 25 yards take 500–650% weapon damage as Holy every second and are sometimes knocked into the air.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -11987,7 +10406,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DevilTongue = new Item
         {
-
             Id = 189552,
             Name = "Devil Tongue",
             Quality = ItemQuality.Legendary,
@@ -12004,7 +10422,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -12012,7 +10429,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Deathwish = new Item
         {
-
             Id = 331908,
             Name = "Deathwish",
             Quality = ItemQuality.Legendary,
@@ -12029,7 +10445,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "While channeling Arcane Torrent, Disintegrate, or Ray of Frost, all damage is increased by 30–35%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -12037,7 +10452,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Ingeom = new Item
         {
-
             Id = 410946,
             Name = "In-geom",
             Quality = ItemQuality.Legendary,
@@ -12054,7 +10468,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your skill cooldowns are reduced by 8–10 seconds for 15 seconds after killing an elite pack.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -12062,7 +10475,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ShardOfHate = new Item
         {
-
             Id = 376463,
             Name = "Shard of Hate",
             Quality = ItemQuality.Legendary,
@@ -12079,7 +10491,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Elemental skills have a chance to trigger a powerful attack that deals 200–250% weapon damage: Cold skills trigger Freezing Skull Poison skills trigger Poison Nova Lightning skills trigger Charged Bolt",
             SetName = "",
-
         };
 
         /// <summary>
@@ -12087,7 +10498,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SwordOfIllWill = new Item
         {
-
             Id = 328591,
             Name = "Sword of Ill Will",
             Quality = ItemQuality.Legendary,
@@ -12104,15 +10514,13 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chakram deals 1.0–1.4% increased damage for every point of Hatred you have.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// The Twisted Sword Energy Twister damage is increased by 125–150% for each Energy Twister you have out.
+        /// The Twisted Sword Energy Twister damage is increased by 125–150% for each Energy Twister you have out up to a maximum of 8.
         /// </summary>
         public static Item TheTwistedSword = new Item
         {
-
             Id = 271634,
             Name = "The Twisted Sword",
             Quality = ItemQuality.Legendary,
@@ -12127,9 +10535,8 @@ namespace Trinity.Reference
             IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_sword_1h_107_x1_demonhunter_male.png",
             RelativeUrl = "/d3/en/item/the-twisted-sword",
             IsCrafted = false,
-            LegendaryAffix = "Energy Twister damage is increased by 125–150% for each Energy Twister you have out.",
+            LegendaryAffix = "Energy Twister damage is increased by 125–150% for each Energy Twister you have out up to a maximum of 8.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -12137,7 +10544,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LittleRogue = new Item
         {
-
             Id = 313291,
             Name = "Little Rogue",
             Quality = ItemQuality.Legendary,
@@ -12154,7 +10560,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Istvan's Paired Blades",
-
         };
 
         /// <summary>
@@ -12162,7 +10567,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheSlanderer = new Item
         {
-
             Id = 313290,
             Name = "The Slanderer",
             Quality = ItemQuality.Legendary,
@@ -12179,757 +10583,236 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Istvan's Paired Blades",
-
         };
 
         /// <summary>
-        /// The Executioner 
+        /// Odyn Son 20–40% chance to Chain Lightning enemies when you hit them.
         /// </summary>
-        public static Item TheExecutioner = new Item
+        public static Item OdynSon = new Item
         {
-
-            Id = 186560,
-            Name = "The Executioner",
+            Id = 188185,
+            Name = "Odyn Son",
             Quality = ItemQuality.Legendary,
-            Slug = "the-executioner",
-            ItemType = ItemType.Axe,
-            TrinityItemType = TrinityItemType.TwoHandAxe,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twoHandedAxe_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-executioner",
-            Url = "https://us.battle.net/d3/en/item/the-executioner",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_003_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-executioner",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Burst of Wrath Killing enemies and destroying objects has a chance to grant 20% of your maximum primary resource.
-        /// </summary>
-        public static Item BurstOfWrath = new Item
-        {
-
-            Id = 271601,
-            Name = "Burst of Wrath",
-            Quality = ItemQuality.Legendary,
-            Slug = "burst-of-wrath",
-            ItemType = ItemType.Axe,
-            TrinityItemType = TrinityItemType.TwoHandAxe,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/burst-of-wrath",
-            Url = "https://us.battle.net/d3/en/item/burst-of-wrath",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/burst-of-wrath",
-            IsCrafted = false,
-            LegendaryAffix = "Killing enemies and destroying objects has a chance to grant 20% of your maximum primary resource.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Butcher's Carver The Butcher still inhabits his carver.
-        /// </summary>
-        public static Item ButchersCarver = new Item
-        {
-
-            Id = 186494,
-            Name = "Butcher's Carver",
-            Quality = ItemQuality.Legendary,
-            Slug = "butchers-carver",
-            ItemType = ItemType.Axe,
-            TrinityItemType = TrinityItemType.TwoHandAxe,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twoHandedAxe_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/butchers-carver",
-            Url = "https://us.battle.net/d3/en/item/butchers-carver",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/butchers-carver",
-            IsCrafted = false,
-            LegendaryAffix = "The Butcher still inhabits his carver.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Messerschmidt's Reaver 
-        /// </summary>
-        public static Item MesserschmidtsReaver = new Item
-        {
-
-            Id = 191065,
-            Name = "Messerschmidt's Reaver",
-            Quality = ItemQuality.Legendary,
-            Slug = "messerschmidts-reaver",
-            ItemType = ItemType.Axe,
-            TrinityItemType = TrinityItemType.TwoHandAxe,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twoHandedAxe_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/messerschmidts-reaver",
-            Url = "https://us.battle.net/d3/en/item/messerschmidts-reaver",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_011_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/messerschmidts-reaver",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Skorn 
-        /// </summary>
-        public static Item Skorn = new Item
-        {
-
-            Id = 192887,
-            Name = "Skorn",
-            Quality = ItemQuality.Legendary,
-            Slug = "skorn",
-            ItemType = ItemType.Axe,
-            TrinityItemType = TrinityItemType.TwoHandAxe,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twoHandedAxe_norm_unique_05",
-            DataUrl = "https://us.battle.net/api/d3/data/item/skorn",
-            Url = "https://us.battle.net/d3/en/item/skorn",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_009_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/skorn",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Arthef's Spark of Life Heal for 3–4% of your missing Life when you kill an Undead enemy.
-        /// </summary>
-        public static Item ArthefsSparkOfLife = new Item
-        {
-
-            Id = 59633,
-            Name = "Arthef's Spark of Life",
-            Quality = ItemQuality.Legendary,
-            Slug = "arthefs-spark-of-life",
+            Slug = "odyn-son",
             ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.TwoHandMace,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twoHandedMace_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/arthefs-spark-of-life",
-            Url = "https://us.battle.net/d3/en/item/arthefs-spark-of-life",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_003_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/arthefs-spark-of-life",
-            IsCrafted = false,
-            LegendaryAffix = "Heal for 3–4% of your missing Life when you kill an Undead enemy.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Crushbane 
-        /// </summary>
-        public static Item Crushbane = new Item
-        {
-
-            Id = 99227,
-            Name = "Crushbane",
-            Quality = ItemQuality.Legendary,
-            Slug = "crushbane",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.TwoHandMace,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twoHandedMace_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/crushbane",
-            Url = "https://us.battle.net/d3/en/item/crushbane",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/crushbane",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Soulsmasher When you kill an enemy, it explodes for 450–600% of your Life per Kill as damage to all enemies within 20 yards. You no longer benefit from your Life per Kill.
-        /// </summary>
-        public static Item Soulsmasher = new Item
-        {
-
-            Id = 271671,
-            Name = "Soulsmasher",
-            Quality = ItemQuality.Legendary,
-            Slug = "soulsmasher",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.TwoHandMace,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/soulsmasher",
-            Url = "https://us.battle.net/d3/en/item/soulsmasher",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_104_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/soulsmasher",
-            IsCrafted = false,
-            LegendaryAffix = "When you kill an enemy, it explodes for 450–600% of your Life per Kill as damage to all enemies within 20 yards. You no longer benefit from your Life per Kill.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Skywarden Every 60 seconds, gain a random Law for 60 seconds.
-        /// </summary>
-        public static Item Skywarden = new Item
-        {
-
-            Id = 190840,
-            Name = "Skywarden",
-            Quality = ItemQuality.Legendary,
-            Slug = "skywarden",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.TwoHandMace,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twohandedmace_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/skywarden",
-            Url = "https://us.battle.net/d3/en/item/skywarden",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_010_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/skywarden",
-            IsCrafted = false,
-            LegendaryAffix = "Every 60 seconds, gain a random Law for 60 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Wrath of the Bone King 
-        /// </summary>
-        public static Item WrathOfTheBoneKing = new Item
-        {
-
-            Id = 191584,
-            Name = "Wrath of the Bone King",
-            Quality = ItemQuality.Legendary,
-            Slug = "wrath-of-the-bone-king",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.TwoHandMace,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twoHandedMace_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/wrath-of-the-bone-king",
-            Url = "https://us.battle.net/d3/en/item/wrath-of-the-bone-king",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_012_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/wrath-of-the-bone-king",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Furnace Increases damage against elites by 40–50%.
-        /// </summary>
-        public static Item TheFurnace = new Item
-        {
-
-            Id = 271666,
-            Name = "The Furnace",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-furnace",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.TwoHandMace,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twohandedmace_norm_unique_08",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-furnace",
-            Url = "https://us.battle.net/d3/en/item/the-furnace",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-furnace",
-            IsCrafted = false,
-            LegendaryAffix = "Increases damage against elites by 40–50%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Schaefer's Hammer Casting a Lightning skill charges you with Lightning, causing you to deal 650–850% weapon damage as Lightning every second for 5 seconds to nearby enemies.
-        /// </summary>
-        public static Item SchaefersHammer = new Item
-        {
-
-            Id = 197717,
-            Name = "Schaefer's Hammer",
-            Quality = ItemQuality.Legendary,
-            Slug = "schaefers-hammer",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.TwoHandMace,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twoHandedMace_norm_unique_07",
-            DataUrl = "https://us.battle.net/api/d3/data/item/schaefers-hammer",
-            Url = "https://us.battle.net/d3/en/item/schaefers-hammer",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_009_p2_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/schaefers-hammer",
-            IsCrafted = false,
-            LegendaryAffix = "Casting a Lightning skill charges you with Lightning, causing you to deal 650–850% weapon damage as Lightning every second for 5 seconds to nearby enemies.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Sledge of Athskeleng 
-        /// </summary>
-        public static Item SledgeOfAthskeleng = new Item
-        {
-
-            Id = 190866,
-            Name = "Sledge of Athskeleng",
-            Quality = ItemQuality.Legendary,
-            Slug = "sledge-of-athskeleng",
-            ItemType = ItemType.Mace,
-            TrinityItemType = TrinityItemType.TwoHandMace,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "twoHandedMace_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/sledge-of-athskeleng",
-            Url = "https://us.battle.net/d3/en/item/sledge-of-athskeleng",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_002_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/sledge-of-athskeleng",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Fjord Cutter You are surrounded by a Chilling Aura when attacking.
-        /// </summary>
-        public static Item FjordCutter = new Item
-        {
-
-            Id = 192105,
-            Name = "Fjord Cutter",
-            Quality = ItemQuality.Legendary,
-            Slug = "fjord-cutter",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.Mace,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "mightyWeapon_1H_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/fjord-cutter",
-            Url = "https://us.battle.net/d3/en/item/fjord-cutter",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_mighty_1h_006_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/fjord-cutter",
+            InternalName = "Mace_norm_unique_08",
+            DataUrl = "https://us.battle.net/api/d3/data/item/odyn-son",
+            Url = "https://us.battle.net/d3/en/item/odyn-son",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_002_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/odyn-son",
             IsCrafted = false,
-            LegendaryAffix = "You are surrounded by a Chilling Aura when attacking.",
+            LegendaryAffix = "20–40% chance to Chain Lightning enemies when you hit them.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Ambo's Pride 
+        /// Mad Monarch's Scepter After killing 10 enemies, you release a Poison Nova that deals 1050–1400% weapon damage as Poison to enemies within 30 yards.
         /// </summary>
-        public static Item AmbosPride = new Item
+        public static Item MadMonarchsScepter = new Item
         {
-
-            Id = 193486,
-            Name = "Ambo's Pride",
+            Id = 271663,
+            Name = "Mad Monarch's Scepter",
             Quality = ItemQuality.Legendary,
-            Slug = "ambos-pride",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.MightyWeapon,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "mightyweapon_1h_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/ambos-pride",
-            Url = "https://us.battle.net/d3/en/item/ambos-pride",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_012_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/ambos-pride",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Blade of the Warlord Bash consumes up to 40 Fury to deal up to 400–500% increased damage.
-        /// </summary>
-        public static Item BladeOfTheWarlord = new Item
-        {
-
-            Id = 193611,
-            Name = "Blade of the Warlord",
-            Quality = ItemQuality.Legendary,
-            Slug = "blade-of-the-warlord",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.MightyWeapon,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "mightyweapon_1h_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/blade-of-the-warlord",
-            Url = "https://us.battle.net/d3/en/item/blade-of-the-warlord",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_mighty_1h_005_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/blade-of-the-warlord",
-            IsCrafted = false,
-            LegendaryAffix = "Bash consumes up to 40 Fury to deal up to 400–500% increased damage.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Bul-Kathos's Solemn Vow 
-        /// </summary>
-        public static Item BulkathossSolemnVow = new Item
-        {
-
-            Id = 208771,
-            Name = "Bul-Kathos's Solemn Vow",
-            Quality = ItemQuality.Legendary,
-            Slug = "bulkathoss-solemn-vow",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.MightyWeapon,
+            Slug = "mad-monarchs-scepter",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.Mace,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/bulkathoss-solemn-vow",
-            Url = "https://us.battle.net/d3/en/item/bulkathoss-solemn-vow",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_010_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/bulkathoss-solemn-vow",
+            DataUrl = "https://us.battle.net/api/d3/data/item/mad-monarchs-scepter",
+            Url = "https://us.battle.net/d3/en/item/mad-monarchs-scepter",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/mad-monarchs-scepter",
             IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Bul-Kathos's Oath",
-
+            LegendaryAffix = "After killing 10 enemies, you release a Poison Nova that deals 1050–1400% weapon damage as Poison to enemies within 30 yards.",
+            SetName = "",
         };
 
         /// <summary>
-        /// Bul-Kathos's Warrior Blood 
+        /// Nutcracker 
         /// </summary>
-        public static Item BulkathossWarriorBlood = new Item
+        public static Item Nutcracker = new Item
         {
-
-            Id = 208775,
-            Name = "Bul-Kathos's Warrior Blood",
+            Id = 188169,
+            Name = "Nutcracker",
             Quality = ItemQuality.Legendary,
-            Slug = "bulkathoss-warrior-blood",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.MightyWeapon,
+            Slug = "nutcracker",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.Mace,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "Mace_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/nutcracker",
+            Url = "https://us.battle.net/d3/en/item/nutcracker",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_005_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/nutcracker",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Telranden's Hand 
+        /// </summary>
+        public static Item TelrandensHand = new Item
+        {
+            Id = 188189,
+            Name = "Telranden's Hand",
+            Quality = ItemQuality.Legendary,
+            Slug = "telrandens-hand",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.Mace,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "Mace_norm_unique_09",
+            DataUrl = "https://us.battle.net/api/d3/data/item/telrandens-hand",
+            Url = "https://us.battle.net/d3/en/item/telrandens-hand",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_007_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/telrandens-hand",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Jace's Hammer of Vigilance Increase the size of your Blessed Hammers.
+        /// </summary>
+        public static Item JacesHammerOfVigilance = new Item
+        {
+            Id = 271648,
+            Name = "Jace's Hammer of Vigilance",
+            Quality = ItemQuality.Legendary,
+            Slug = "jaces-hammer-of-vigilance",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.Mace,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "mace_norm_unique_10",
+            DataUrl = "https://us.battle.net/api/d3/data/item/jaces-hammer-of-vigilance",
+            Url = "https://us.battle.net/d3/en/item/jaces-hammer-of-vigilance",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/jaces-hammer-of-vigilance",
+            IsCrafted = false,
+            LegendaryAffix = "Increase the size of your Blessed Hammers.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Solanium Critical Hits have a 3–4% chance to spawn a health globe.
+        /// </summary>
+        public static Item Solanium = new Item
+        {
+            Id = 271662,
+            Name = "Solanium",
+            Quality = ItemQuality.Legendary,
+            Slug = "solanium",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.Mace,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "mace_norm_unique_11",
+            DataUrl = "https://us.battle.net/api/d3/data/item/solanium",
+            Url = "https://us.battle.net/d3/en/item/solanium",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/solanium",
+            IsCrafted = false,
+            LegendaryAffix = "Critical Hits have a 3–4% chance to spawn a health globe.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Nailbiter 
+        /// </summary>
+        public static Item Nailbiter = new Item
+        {
+            Id = 188158,
+            Name = "Nailbiter",
+            Quality = ItemQuality.Legendary,
+            Slug = "nailbiter",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.Mace,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "Mace_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/nailbiter",
+            Url = "https://us.battle.net/d3/en/item/nailbiter",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_008_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/nailbiter",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Neanderthal 
+        /// </summary>
+        public static Item Neanderthal = new Item
+        {
+            Id = 102665,
+            Name = "Neanderthal",
+            Quality = ItemQuality.Legendary,
+            Slug = "neanderthal",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.Mace,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "Mace_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/neanderthal",
+            Url = "https://us.battle.net/d3/en/item/neanderthal",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/neanderthal",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Echoing Fury 
+        /// </summary>
+        public static Item EchoingFury = new Item
+        {
+            Id = 188181,
+            Name = "Echoing Fury",
+            Quality = ItemQuality.Legendary,
+            Slug = "echoing-fury",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.Mace,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "Mace_norm_unique_07",
+            DataUrl = "https://us.battle.net/api/d3/data/item/echoing-fury",
+            Url = "https://us.battle.net/d3/en/item/echoing-fury",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/echoing-fury",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Sun Keeper 
+        /// </summary>
+        public static Item SunKeeper = new Item
+        {
+            Id = 188173,
+            Name = "Sun Keeper",
+            Quality = ItemQuality.Legendary,
+            Slug = "sun-keeper",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.Mace,
             IsTwoHanded = false,
             BaseType = ItemBaseType.Weapon,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/bulkathoss-warrior-blood",
-            Url = "https://us.battle.net/d3/en/item/bulkathoss-warrior-blood",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_011_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/bulkathoss-warrior-blood",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Bul-Kathos's Oath",
-
-        };
-
-        /// <summary>
-        /// Dishonored Legacy Cleave deals up to 300–400% increased damage based on percentage of missing Fury.
-        /// </summary>
-        public static Item DishonoredLegacy = new Item
-        {
-
-            Id = 272008,
-            Name = "Dishonored Legacy",
-            Quality = ItemQuality.Legendary,
-            Slug = "dishonored-legacy",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.MightyWeapon,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/dishonored-legacy",
-            Url = "https://us.battle.net/d3/en/item/dishonored-legacy",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/dishonored-legacy",
-            IsCrafted = false,
-            LegendaryAffix = "Cleave deals up to 300–400% increased damage based on percentage of missing Fury.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Oathkeeper Your primary skills attack 50% faster and deal 150–200% increased damage.
-        /// </summary>
-        public static Item Oathkeeper = new Item
-        {
-
-            Id = 272009,
-            Name = "Oathkeeper",
-            Quality = ItemQuality.Legendary,
-            Slug = "oathkeeper",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.MightyWeapon,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/oathkeeper",
-            Url = "https://us.battle.net/d3/en/item/oathkeeper",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_mighty_1h_104_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/oathkeeper",
-            IsCrafted = false,
-            LegendaryAffix = "Your primary skills attack 50% faster and deal 150–200% increased damage.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Remorseless Hammer of the Ancients has a 25–30% chance to summon an Ancient for 20 seconds.
-        /// </summary>
-        public static Item Remorseless = new Item
-        {
-
-            Id = 271979,
-            Name = "Remorseless",
-            Quality = ItemQuality.Legendary,
-            Slug = "remorseless",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.MightyWeapon,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/remorseless",
-            Url = "https://us.battle.net/d3/en/item/remorseless",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/remorseless",
-            IsCrafted = false,
-            LegendaryAffix = "Hammer of the Ancients has a 25–30% chance to summon an Ancient for 20 seconds.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Balance When your Tempest Rush hits 3 or fewer enemies, it gains 100% Critical Hit Chance.
-        /// </summary>
-        public static Item Balance = new Item
-        {
-
-            Id = 195145,
-            Name = "Balance",
-            Quality = ItemQuality.Legendary,
-            Slug = "balance",
-            ItemType = ItemType.Daibo,
-            TrinityItemType = TrinityItemType.TwoHandDaibo,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "combatstaff_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/balance",
-            Url = "https://us.battle.net/d3/en/item/balance",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_combatstaff_2h_001_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/balance",
-            IsCrafted = false,
-            LegendaryAffix = "When your Tempest Rush hits 3 or fewer enemies, it gains 100% Critical Hit Chance.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Flow of Eternity Reduces the cooldown of Seven-Sided Strike by 45–60%.
-        /// </summary>
-        public static Item TheFlowOfEternity = new Item
-        {
-
-            Id = 197072,
-            Name = "The Flow of Eternity",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-flow-of-eternity",
-            ItemType = ItemType.Daibo,
-            TrinityItemType = TrinityItemType.TwoHandDaibo,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "combatStaff_norm_unique_06",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-flow-of-eternity",
-            Url = "https://us.battle.net/d3/en/item/the-flow-of-eternity",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_005_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-flow-of-eternity",
-            IsCrafted = false,
-            LegendaryAffix = "Reduces the cooldown of Seven-Sided Strike by 45–60%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Paddle Slap!
-        /// </summary>
-        public static Item ThePaddle = new Item
-        {
-
-            Id = 197068,
-            Name = "The Paddle",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-paddle",
-            ItemType = ItemType.Daibo,
-            TrinityItemType = TrinityItemType.TwoHandDaibo,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "combatStaff_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-paddle",
-            Url = "https://us.battle.net/d3/en/item/the-paddle",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_007_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-paddle",
-            IsCrafted = false,
-            LegendaryAffix = "Slap!",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Staff of Kyro 
-        /// </summary>
-        public static Item StaffOfKyro = new Item
-        {
-
-            Id = 271749,
-            Name = "Staff of Kyro",
-            Quality = ItemQuality.Legendary,
-            Slug = "staff-of-kyro",
-            ItemType = ItemType.Daibo,
-            TrinityItemType = TrinityItemType.TwoHandDaibo,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "combatstaff_norm_unique_09",
-            DataUrl = "https://us.battle.net/api/d3/data/item/staff-of-kyro",
-            Url = "https://us.battle.net/d3/en/item/staff-of-kyro",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/staff-of-kyro",
+            DataUrl = "https://us.battle.net/api/d3/data/item/sun-keeper",
+            Url = "https://us.battle.net/d3/en/item/sun-keeper",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_1h_011_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/sun-keeper",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
-        };
-
-        /// <summary>
-        /// Warstaff of General Quang Tempest Rush gains the effect of the Tailwind rune.
-        /// </summary>
-        public static Item WarstaffOfGeneralQuang = new Item
-        {
-
-            Id = 271765,
-            Name = "Warstaff of General Quang",
-            Quality = ItemQuality.Legendary,
-            Slug = "warstaff-of-general-quang",
-            ItemType = ItemType.Daibo,
-            TrinityItemType = TrinityItemType.TwoHandDaibo,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "combatstaff_norm_unique_10",
-            DataUrl = "https://us.battle.net/api/d3/data/item/warstaff-of-general-quang",
-            Url = "https://us.battle.net/d3/en/item/warstaff-of-general-quang",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/warstaff-of-general-quang",
-            IsCrafted = false,
-            LegendaryAffix = "Tempest Rush gains the effect of the Tailwind rune.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Incense Torch of the Grand Temple Reduces the Spirit cost of Wave of Light by 40–50%.
-        /// </summary>
-        public static Item IncenseTorchOfTheGrandTemple = new Item
-        {
-
-            Id = 192342,
-            Name = "Incense Torch of the Grand Temple",
-            Quality = ItemQuality.Legendary,
-            Slug = "incense-torch-of-the-grand-temple",
-            ItemType = ItemType.Daibo,
-            TrinityItemType = TrinityItemType.TwoHandDaibo,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "combatStaff_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/incense-torch-of-the-grand-temple",
-            Url = "https://us.battle.net/d3/en/item/incense-torch-of-the-grand-temple",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_003_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/incense-torch-of-the-grand-temple",
-            IsCrafted = false,
-            LegendaryAffix = "Reduces the Spirit cost of Wave of Light by 40–50%.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Flying Dragon Chance to double your attack speed when attacking.
-        /// </summary>
-        public static Item FlyingDragon = new Item
-        {
-
-            Id = 197065,
-            Name = "Flying Dragon",
-            Quality = ItemQuality.Legendary,
-            Slug = "flying-dragon",
-            ItemType = ItemType.Daibo,
-            TrinityItemType = TrinityItemType.TwoHandDaibo,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "combatStaff_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/flying-dragon",
-            Url = "https://us.battle.net/d3/en/item/flying-dragon",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_009_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/flying-dragon",
-            IsCrafted = false,
-            LegendaryAffix = "Chance to double your attack speed when attacking.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Inna's Reach 
-        /// </summary>
-        public static Item InnasReach = new Item
-        {
-
-            Id = 212208,
-            Name = "Inna's Reach",
-            Quality = ItemQuality.Legendary,
-            Slug = "innas-reach",
-            ItemType = ItemType.Daibo,
-            TrinityItemType = TrinityItemType.TwoHandDaibo,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "combatStaff_norm_unique_08",
-            DataUrl = "https://us.battle.net/api/d3/data/item/innas-reach",
-            Url = "https://us.battle.net/d3/en/item/innas-reach",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_001_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/innas-reach",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "Inna's Mantra",
-
-        };
-
-        /// <summary>
-        /// Fleshrake 
-        /// </summary>
-        public static Item Fleshrake = new Item
-        {
-
-            Id = 145850,
-            Name = "Fleshrake",
-            Quality = ItemQuality.Legendary,
-            Slug = "fleshrake",
-            ItemType = ItemType.FistWeapon,
-            TrinityItemType = TrinityItemType.FistWeapon,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "fistWeapon_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/fleshrake",
-            Url = "https://us.battle.net/d3/en/item/fleshrake",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_fist_007_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/fleshrake",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
         };
 
         /// <summary>
@@ -12937,7 +10820,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item RabidStrike = new Item
         {
-
             Id = 196472,
             Name = "Rabid Strike",
             Quality = ItemQuality.Legendary,
@@ -12954,7 +10836,52 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
+        };
 
+        /// <summary>
+        /// Crystal Fist Dashing Strike reduces your damage taken by 40–50% for 6 seconds.
+        /// </summary>
+        public static Item CrystalFist = new Item
+        {
+            Id = 175939,
+            Name = "Crystal Fist",
+            Quality = ItemQuality.Legendary,
+            Slug = "crystal-fist",
+            ItemType = ItemType.FistWeapon,
+            TrinityItemType = TrinityItemType.FistWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "fistWeapon_norm_unique_08",
+            DataUrl = "https://us.battle.net/api/d3/data/item/crystal-fist",
+            Url = "https://us.battle.net/d3/en/item/crystal-fist",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_fist_008_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/crystal-fist",
+            IsCrafted = false,
+            LegendaryAffix = "Dashing Strike reduces your damage taken by 40–50% for 6 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Fleshrake Dashing Strike increases the damage of Dashing Strike by 75–100% for 1 second, stacking up to 5 times.
+        /// </summary>
+        public static Item Fleshrake = new Item
+        {
+            Id = 145850,
+            Name = "Fleshrake",
+            Quality = ItemQuality.Legendary,
+            Slug = "fleshrake",
+            ItemType = ItemType.FistWeapon,
+            TrinityItemType = TrinityItemType.FistWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "fistWeapon_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/fleshrake",
+            Url = "https://us.battle.net/d3/en/item/fleshrake",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_fist_007_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/fleshrake",
+            IsCrafted = false,
+            LegendaryAffix = "Dashing Strike increases the damage of Dashing Strike by 75–100% for 1 second, stacking up to 5 times.",
+            SetName = "",
         };
 
         /// <summary>
@@ -12962,7 +10889,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Scarbringer = new Item
         {
-
             Id = 130557,
             Name = "Scarbringer",
             Quality = ItemQuality.Legendary,
@@ -12979,7 +10905,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -12987,7 +10912,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SledgeFist = new Item
         {
-
             Id = 175938,
             Name = "Sledge Fist",
             Quality = ItemQuality.Legendary,
@@ -13004,7 +10928,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13012,7 +10935,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Jawbreaker = new Item
         {
-
             Id = 271957,
             Name = "Jawbreaker",
             Quality = ItemQuality.Legendary,
@@ -13029,7 +10951,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "When Dashing Strike hits an enemy more than 30–35 yards away, its Charge cost is refunded.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13037,7 +10958,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LogansClaw = new Item
         {
-
             Id = 145849,
             Name = "Logan's Claw",
             Quality = ItemQuality.Legendary,
@@ -13054,32 +10974,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
-        };
-
-        /// <summary>
-        /// Crystal Fist 
-        /// </summary>
-        public static Item CrystalFist = new Item
-        {
-
-            Id = 175939,
-            Name = "Crystal Fist",
-            Quality = ItemQuality.Legendary,
-            Slug = "crystal-fist",
-            ItemType = ItemType.FistWeapon,
-            TrinityItemType = TrinityItemType.FistWeapon,
-            IsTwoHanded = false,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "fistWeapon_norm_unique_08",
-            DataUrl = "https://us.battle.net/api/d3/data/item/crystal-fist",
-            Url = "https://us.battle.net/d3/en/item/crystal-fist",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_fist_008_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/crystal-fist",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
         };
 
         /// <summary>
@@ -13087,7 +10981,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheFistOfAzturrasq = new Item
         {
-
             Id = 175937,
             Name = "The Fist of Az'Turrasq",
             Quality = ItemQuality.Legendary,
@@ -13104,7 +10997,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Exploding Palm's on-death explosion damage is increased by 250–300%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13112,7 +11004,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item WonKhimLau = new Item
         {
-
             Id = 145851,
             Name = "Won Khim Lau",
             Quality = ItemQuality.Legendary,
@@ -13129,7 +11020,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13137,7 +11027,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ShenlongsFistOfLegend = new Item
         {
-
             Id = 208996,
             Name = "Shenlong's Fist of Legend",
             Quality = ItemQuality.Legendary,
@@ -13154,7 +11043,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Shenlong's Spirit",
-
         };
 
         /// <summary>
@@ -13162,7 +11050,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ShenlongsRelentlessAssault = new Item
         {
-
             Id = 208898,
             Name = "Shenlong's Relentless Assault",
             Quality = ItemQuality.Legendary,
@@ -13179,7 +11066,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Shenlong's Spirit",
-
         };
 
         /// <summary>
@@ -13187,7 +11073,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item KyoshirosBlade = new Item
         {
-
             Id = 271963,
             Name = "Kyoshiro's Blade",
             Quality = ItemQuality.Legendary,
@@ -13204,7 +11089,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Increase the damage of Wave of Light by 150%. When the initial impact of your Wave of Light hits 3 or fewer enemies, the damage is increased by 200–250%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13212,7 +11096,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LionsClaw = new Item
         {
-
             Id = 403772,
             Name = "Lion’s Claw",
             Quality = ItemQuality.Legendary,
@@ -13229,7 +11112,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Seven-Sided Strike performs an additional 7 strikes.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13237,7 +11119,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VengefulWind = new Item
         {
-
             Id = 403775,
             Name = "Vengeful Wind",
             Quality = ItemQuality.Legendary,
@@ -13254,7 +11135,604 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Increases the maximum stack count of Sweeping Wind by 6–7.",
             SetName = "",
+        };
 
+        /// <summary>
+        /// Fjord Cutter You are surrounded by a Chilling Aura when attacking.
+        /// </summary>
+        public static Item FjordCutter = new Item
+        {
+            Id = 192105,
+            Name = "Fjord Cutter",
+            Quality = ItemQuality.Legendary,
+            Slug = "fjord-cutter",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.MightyWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "mightyWeapon_1H_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/fjord-cutter",
+            Url = "https://us.battle.net/d3/en/item/fjord-cutter",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p3_unique_mighty_1h_006_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/fjord-cutter",
+            IsCrafted = false,
+            LegendaryAffix = "You are surrounded by a Chilling Aura when attacking.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Ambo's Pride 
+        /// </summary>
+        public static Item AmbosPride = new Item
+        {
+            Id = 193486,
+            Name = "Ambo's Pride",
+            Quality = ItemQuality.Legendary,
+            Slug = "ambos-pride",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.MightyWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "mightyweapon_1h_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/ambos-pride",
+            Url = "https://us.battle.net/d3/en/item/ambos-pride",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_012_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/ambos-pride",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Blade of the Warlord Bash consumes up to 40 Fury to deal up to 400–500% increased damage.
+        /// </summary>
+        public static Item BladeOfTheWarlord = new Item
+        {
+            Id = 193611,
+            Name = "Blade of the Warlord",
+            Quality = ItemQuality.Legendary,
+            Slug = "blade-of-the-warlord",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.MightyWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "mightyweapon_1h_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/blade-of-the-warlord",
+            Url = "https://us.battle.net/d3/en/item/blade-of-the-warlord",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_mighty_1h_005_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/blade-of-the-warlord",
+            IsCrafted = false,
+            LegendaryAffix = "Bash consumes up to 40 Fury to deal up to 400–500% increased damage.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Bul-Kathos's Solemn Vow 
+        /// </summary>
+        public static Item BulkathossSolemnVow = new Item
+        {
+            Id = 208771,
+            Name = "Bul-Kathos's Solemn Vow",
+            Quality = ItemQuality.Legendary,
+            Slug = "bulkathoss-solemn-vow",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.MightyWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bulkathoss-solemn-vow",
+            Url = "https://us.battle.net/d3/en/item/bulkathoss-solemn-vow",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_010_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/bulkathoss-solemn-vow",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Bul-Kathos's Oath",
+        };
+
+        /// <summary>
+        /// Bul-Kathos's Warrior Blood 
+        /// </summary>
+        public static Item BulkathossWarriorBlood = new Item
+        {
+            Id = 208775,
+            Name = "Bul-Kathos's Warrior Blood",
+            Quality = ItemQuality.Legendary,
+            Slug = "bulkathoss-warrior-blood",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.MightyWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bulkathoss-warrior-blood",
+            Url = "https://us.battle.net/d3/en/item/bulkathoss-warrior-blood",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_011_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/bulkathoss-warrior-blood",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Bul-Kathos's Oath",
+        };
+
+        /// <summary>
+        /// Dishonored Legacy Cleave deals up to 300–400% increased damage based on percentage of missing Fury.
+        /// </summary>
+        public static Item DishonoredLegacy = new Item
+        {
+            Id = 272008,
+            Name = "Dishonored Legacy",
+            Quality = ItemQuality.Legendary,
+            Slug = "dishonored-legacy",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.MightyWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/dishonored-legacy",
+            Url = "https://us.battle.net/d3/en/item/dishonored-legacy",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/dishonored-legacy",
+            IsCrafted = false,
+            LegendaryAffix = "Cleave deals up to 300–400% increased damage based on percentage of missing Fury.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Oathkeeper Your primary skills attack 50% faster and deal 150–200% increased damage.
+        /// </summary>
+        public static Item Oathkeeper = new Item
+        {
+            Id = 272009,
+            Name = "Oathkeeper",
+            Quality = ItemQuality.Legendary,
+            Slug = "oathkeeper",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.MightyWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/oathkeeper",
+            Url = "https://us.battle.net/d3/en/item/oathkeeper",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_mighty_1h_104_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/oathkeeper",
+            IsCrafted = false,
+            LegendaryAffix = "Your primary skills attack 50% faster and deal 150–200% increased damage.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Remorseless Hammer of the Ancients has a 25–30% chance to summon an Ancient for 20 seconds.
+        /// </summary>
+        public static Item Remorseless = new Item
+        {
+            Id = 271979,
+            Name = "Remorseless",
+            Quality = ItemQuality.Legendary,
+            Slug = "remorseless",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.MightyWeapon,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/remorseless",
+            Url = "https://us.battle.net/d3/en/item/remorseless",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_1h_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/remorseless",
+            IsCrafted = false,
+            LegendaryAffix = "Hammer of the Ancients has a 25–30% chance to summon an Ancient for 20 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Deadly Rebirth Grasp of the Dead gains the effect of the Rain of Corpses rune.
+        /// </summary>
+        public static Item DeadlyRebirth = new Item
+        {
+            Id = 193433,
+            Name = "Deadly Rebirth",
+            Quality = ItemQuality.Legendary,
+            Slug = "deadly-rebirth",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/deadly-rebirth",
+            Url = "https://us.battle.net/d3/en/item/deadly-rebirth",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/deadly-rebirth",
+            IsCrafted = false,
+            LegendaryAffix = "Grasp of the Dead gains the effect of the Rain of Corpses rune.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Rhen'ho Flayer Plague of Toads now seek out enemies and can explode twice.
+        /// </summary>
+        public static Item RhenhoFlayer = new Item
+        {
+            Id = 271745,
+            Name = "Rhen'ho Flayer",
+            Quality = ItemQuality.Legendary,
+            Slug = "rhenho-flayer",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/rhenho-flayer",
+            Url = "https://us.battle.net/d3/en/item/rhenho-flayer",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/rhenho-flayer",
+            IsCrafted = false,
+            LegendaryAffix = "Plague of Toads now seek out enemies and can explode twice.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Sacred Harvester Soul Harvest now stacks up to 10 times.
+        /// </summary>
+        public static Item SacredHarvester = new Item
+        {
+            Id = 403748,
+            Name = "Sacred Harvester",
+            Quality = ItemQuality.Legendary,
+            Slug = "sacred-harvester",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "p1_ceremonialDagger_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/sacred-harvester",
+            Url = "https://us.battle.net/d3/en/item/sacred-harvester",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_ceremonialdagger_norm_unique_01_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/sacred-harvester",
+            IsCrafted = false,
+            LegendaryAffix = "Soul Harvest now stacks up to 10 times.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Dagger of Darts Your Poison Darts and your Fetishes' Poison Darts now pierce.
+        /// </summary>
+        public static Item TheDaggerOfDarts = new Item
+        {
+            Id = 403767,
+            Name = "The Dagger of Darts",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-dagger-of-darts",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "p1_ceremonialDagger_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-dagger-of-darts",
+            Url = "https://us.battle.net/d3/en/item/the-dagger-of-darts",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_ceremonialdagger_norm_unique_02_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-dagger-of-darts",
+            IsCrafted = false,
+            LegendaryAffix = "Your Poison Darts and your Fetishes' Poison Darts now pierce.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Last Breath Reduces cooldown of Mass Confusion by 15–20 seconds.
+        /// </summary>
+        public static Item LastBreath = new Item
+        {
+            Id = 195370,
+            Name = "Last Breath",
+            Quality = ItemQuality.Legendary,
+            Slug = "last-breath",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "ceremonialDagger_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/last-breath",
+            Url = "https://us.battle.net/d3/en/item/last-breath",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_ceremonialdagger_008_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/last-breath",
+            IsCrafted = false,
+            LegendaryAffix = "Reduces cooldown of Mass Confusion by 15–20 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Spider Queen's Grasp Corpse Spiders releases a web on impact that Slows enemies by 60–80%.
+        /// </summary>
+        public static Item TheSpiderQueensGrasp = new Item
+        {
+            Id = 222978,
+            Name = "The Spider Queen's Grasp",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-spider-queens-grasp",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "ceremonialDagger_norm_unique_05",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-spider-queens-grasp",
+            Url = "https://us.battle.net/d3/en/item/the-spider-queens-grasp",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_004_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-spider-queens-grasp",
+            IsCrafted = false,
+            LegendaryAffix = "Corpse Spiders releases a web on impact that Slows enemies by 60–80%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Starmetal Kukri Reduce the cooldown of Fetish Army and Big Bad Voodoo by 1 second each time your fetishes deal damage.
+        /// </summary>
+        public static Item StarmetalKukri = new Item
+        {
+            Id = 271738,
+            Name = "Starmetal Kukri",
+            Quality = ItemQuality.Legendary,
+            Slug = "starmetal-kukri",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "ceremonialdagger_norm_unique_10",
+            DataUrl = "https://us.battle.net/api/d3/data/item/starmetal-kukri",
+            Url = "https://us.battle.net/d3/en/item/starmetal-kukri",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/starmetal-kukri",
+            IsCrafted = false,
+            LegendaryAffix = "Reduce the cooldown of Fetish Army and Big Bad Voodoo by 1 second each time your fetishes deal damage.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Anessazi Edge Zombie Dogs stuns enemies around them for 1.5 seconds when summoned.
+        /// </summary>
+        public static Item AnessaziEdge = new Item
+        {
+            Id = 196250,
+            Name = "Anessazi Edge",
+            Quality = ItemQuality.Legendary,
+            Slug = "anessazi-edge",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "ceremonialDagger_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/anessazi-edge",
+            Url = "https://us.battle.net/d3/en/item/anessazi-edge",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/anessazi-edge",
+            IsCrafted = false,
+            LegendaryAffix = "Zombie Dogs stuns enemies around them for 1.5 seconds when summoned.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Voo's Juicer Spirit Barrage gains the effects of the Phlebotomize and The Spirit is Willing runes.
+        /// </summary>
+        public static Item VoosJuicer = new Item
+        {
+            Id = 192579,
+            Name = "Voo's Juicer",
+            Quality = ItemQuality.Legendary,
+            Slug = "voos-juicer",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/voos-juicer",
+            Url = "https://us.battle.net/d3/en/item/voos-juicer",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_dagger_002_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/voos-juicer",
+            IsCrafted = false,
+            LegendaryAffix = "Spirit Barrage gains the effects of the Phlebotomize and The Spirit is Willing runes.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Gidbinn Chance to summon a Fetish when attacking.
+        /// </summary>
+        public static Item TheGidbinn = new Item
+        {
+            Id = 209246,
+            Name = "The Gidbinn",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-gidbinn",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "ceremonialDagger_norm_unique_09",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-gidbinn",
+            Url = "https://us.battle.net/d3/en/item/the-gidbinn",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_002_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-gidbinn",
+            IsCrafted = false,
+            LegendaryAffix = "Chance to summon a Fetish when attacking.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Manajuma's Carving Knife 
+        /// </summary>
+        public static Item ManajumasCarvingKnife = new Item
+        {
+            Id = 223365,
+            Name = "Manajuma's Carving Knife",
+            Quality = ItemQuality.Legendary,
+            Slug = "manajumas-carving-knife",
+            ItemType = ItemType.CeremonialDagger,
+            TrinityItemType = TrinityItemType.CeremonialKnife,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "ceremonialDagger_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/manajumas-carving-knife",
+            Url = "https://us.battle.net/d3/en/item/manajumas-carving-knife",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_ceremonialdagger_009_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/manajumas-carving-knife",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Manajuma's Way",
+        };
+
+        /// <summary>
+        /// Johanna's Argument Increase the attack speed and damage of Blessed Hammer by 100%.
+        /// </summary>
+        public static Item JohannasArgument = new Item
+        {
+            Id = 403812,
+            Name = "Johanna's Argument",
+            Quality = ItemQuality.Legendary,
+            Slug = "johannas-argument",
+            ItemType = ItemType.Flail,
+            TrinityItemType = TrinityItemType.Flail,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/johannas-argument",
+            Url = "https://us.battle.net/d3/en/item/johannas-argument",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p1_flail1h_norm_unique_01_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/johannas-argument",
+            IsCrafted = false,
+            LegendaryAffix = "Increase the attack speed and damage of Blessed Hammer by 100%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Darklight Fist of the Heavens has a 45–60% chance to also be cast at your location.
+        /// </summary>
+        public static Item Darklight = new Item
+        {
+            Id = 299428,
+            Name = "Darklight",
+            Quality = ItemQuality.Legendary,
+            Slug = "darklight",
+            ItemType = ItemType.Flail,
+            TrinityItemType = TrinityItemType.Flail,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "flail1h_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/darklight",
+            Url = "https://us.battle.net/d3/en/item/darklight",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_106_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/darklight",
+            IsCrafted = false,
+            LegendaryAffix = "Fist of the Heavens has a 45–60% chance to also be cast at your location.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Gyrfalcon's Foote Removes the resource cost of Blessed Shield.
+        /// </summary>
+        public static Item GyrfalconsFoote = new Item
+        {
+            Id = 299427,
+            Name = "Gyrfalcon's Foote",
+            Quality = ItemQuality.Legendary,
+            Slug = "gyrfalcons-foote",
+            ItemType = ItemType.Flail,
+            TrinityItemType = TrinityItemType.Flail,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "flail1h_norm_unique_05",
+            DataUrl = "https://us.battle.net/api/d3/data/item/gyrfalcons-foote",
+            Url = "https://us.battle.net/d3/en/item/gyrfalcons-foote",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_105_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/gyrfalcons-foote",
+            IsCrafted = false,
+            LegendaryAffix = "Removes the resource cost of Blessed Shield.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Inviolable Faith Casting Consecration also casts Consecration beneath all of your allies.
+        /// </summary>
+        public static Item InviolableFaith = new Item
+        {
+            Id = 299429,
+            Name = "Inviolable Faith",
+            Quality = ItemQuality.Legendary,
+            Slug = "inviolable-faith",
+            ItemType = ItemType.Flail,
+            TrinityItemType = TrinityItemType.Flail,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "flail1h_norm_unique_07",
+            DataUrl = "https://us.battle.net/api/d3/data/item/inviolable-faith",
+            Url = "https://us.battle.net/d3/en/item/inviolable-faith",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_107_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/inviolable-faith",
+            IsCrafted = false,
+            LegendaryAffix = "Casting Consecration also casts Consecration beneath all of your allies.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Justinian's Mercy Blessed Hammer gains the effect of the Dominion rune.
+        /// </summary>
+        public static Item JustiniansMercy = new Item
+        {
+            Id = 299424,
+            Name = "Justinian's Mercy",
+            Quality = ItemQuality.Legendary,
+            Slug = "justinians-mercy",
+            ItemType = ItemType.Flail,
+            TrinityItemType = TrinityItemType.Flail,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "flail1h_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/justinians-mercy",
+            Url = "https://us.battle.net/d3/en/item/justinians-mercy",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/justinians-mercy",
+            IsCrafted = false,
+            LegendaryAffix = "Blessed Hammer gains the effect of the Dominion rune.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Kassar's Retribution Casting Justice increases your movement speed by 15–20% for 2 seconds.
+        /// </summary>
+        public static Item KassarsRetribution = new Item
+        {
+            Id = 299426,
+            Name = "Kassar's Retribution",
+            Quality = ItemQuality.Legendary,
+            Slug = "kassars-retribution",
+            ItemType = ItemType.Flail,
+            TrinityItemType = TrinityItemType.Flail,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "flail1h_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/kassars-retribution",
+            Url = "https://us.battle.net/d3/en/item/kassars-retribution",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_104_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/kassars-retribution",
+            IsCrafted = false,
+            LegendaryAffix = "Casting Justice increases your movement speed by 15–20% for 2 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Swiftmount Doubles the duration of Steed Charge.
+        /// </summary>
+        public static Item Swiftmount = new Item
+        {
+            Id = 299425,
+            Name = "Swiftmount",
+            Quality = ItemQuality.Legendary,
+            Slug = "swiftmount",
+            ItemType = ItemType.Flail,
+            TrinityItemType = TrinityItemType.Flail,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "flail1h_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/swiftmount",
+            Url = "https://us.battle.net/d3/en/item/swiftmount",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_flail_1h_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/swiftmount",
+            IsCrafted = false,
+            LegendaryAffix = "Doubles the duration of Steed Charge.",
+            SetName = "",
         };
 
         /// <summary>
@@ -13262,7 +11740,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PledgeOfCaldeum = new Item
         {
-
             Id = 196570,
             Name = "Pledge of Caldeum",
             Quality = ItemQuality.Legendary,
@@ -13279,7 +11756,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13287,7 +11763,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Standoff = new Item
         {
-
             Id = 191570,
             Name = "Standoff",
             Quality = ItemQuality.Legendary,
@@ -13304,7 +11779,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Furious Charge deals increased damage equal to 200–250% of your bonus movement speed.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13312,7 +11786,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BovineBardiche = new Item
         {
-
             Id = 272056,
             Name = "Bovine Bardiche",
             Quality = ItemQuality.Legendary,
@@ -13329,7 +11802,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance on hit to summon a herd of murderous cows.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13337,7 +11809,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HeartSlaughter = new Item
         {
-
             Id = 192569,
             Name = "Heart Slaughter",
             Quality = ItemQuality.Legendary,
@@ -13354,7 +11825,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13362,7 +11832,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Vigilance = new Item
         {
-
             Id = 195491,
             Name = "Vigilance",
             Quality = ItemQuality.Legendary,
@@ -13379,232 +11848,328 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Getting hit has a chance to automatically cast Inner Sanctuary.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Uskang 
+        /// The Executioner 
         /// </summary>
-        public static Item Uskang = new Item
+        public static Item TheExecutioner = new Item
         {
-
-            Id = 175580,
-            Name = "Uskang",
+            Id = 186560,
+            Name = "The Executioner",
             Quality = ItemQuality.Legendary,
-            Slug = "uskang",
-            ItemType = ItemType.Bow,
-            TrinityItemType = TrinityItemType.TwoHandBow,
+            Slug = "the-executioner",
+            ItemType = ItemType.Axe,
+            TrinityItemType = TrinityItemType.TwoHandAxe,
             IsTwoHanded = true,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "bow_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/uskang",
-            Url = "https://us.battle.net/d3/en/item/uskang",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_005_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/uskang",
+            InternalName = "twoHandedAxe_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-executioner",
+            Url = "https://us.battle.net/d3/en/item/the-executioner",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-executioner",
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Etrayu 
+        /// Burst of Wrath Killing enemies and destroying objects has a chance to grant 20% of your maximum primary resource.
         /// </summary>
-        public static Item Etrayu = new Item
+        public static Item BurstOfWrath = new Item
         {
-
-            Id = 175581,
-            Name = "Etrayu",
+            Id = 271601,
+            Name = "Burst of Wrath",
             Quality = ItemQuality.Legendary,
-            Slug = "etrayu",
-            ItemType = ItemType.Bow,
-            TrinityItemType = TrinityItemType.TwoHandBow,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Bow_norm_unique_02",
-            DataUrl = "https://us.battle.net/api/d3/data/item/etrayu",
-            Url = "https://us.battle.net/d3/en/item/etrayu",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_001_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/etrayu",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// The Raven's Wing A raven flies to your side.
-        /// </summary>
-        public static Item TheRavensWing = new Item
-        {
-
-            Id = 221938,
-            Name = "The Raven's Wing",
-            Quality = ItemQuality.Legendary,
-            Slug = "the-ravens-wing",
-            ItemType = ItemType.Bow,
-            TrinityItemType = TrinityItemType.TwoHandBow,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Bow_norm_unique_07",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-ravens-wing",
-            Url = "https://us.battle.net/d3/en/item/the-ravens-wing",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_008_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-ravens-wing",
-            IsCrafted = false,
-            LegendaryAffix = "A raven flies to your side.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Kridershot Elemental Arrow now generates 3–4 Hatred.
-        /// </summary>
-        public static Item Kridershot = new Item
-        {
-
-            Id = 271875,
-            Name = "Kridershot",
-            Quality = ItemQuality.Legendary,
-            Slug = "kridershot",
-            ItemType = ItemType.Bow,
-            TrinityItemType = TrinityItemType.TwoHandBow,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "bow_norm_unique_09",
-            DataUrl = "https://us.battle.net/api/d3/data/item/kridershot",
-            Url = "https://us.battle.net/d3/en/item/kridershot",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/kridershot",
-            IsCrafted = false,
-            LegendaryAffix = "Elemental Arrow now generates 3–4 Hatred.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Cluckeye 25–50% chance to cluck when attacking.
-        /// </summary>
-        public static Item Cluckeye = new Item
-        {
-
-            Id = 175582,
-            Name = "Cluckeye",
-            Quality = ItemQuality.Legendary,
-            Slug = "cluckeye",
-            ItemType = ItemType.Bow,
-            TrinityItemType = TrinityItemType.TwoHandBow,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "Bow_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/cluckeye",
-            Url = "https://us.battle.net/d3/en/item/cluckeye",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_015_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/cluckeye",
-            IsCrafted = false,
-            LegendaryAffix = "25–50% chance to cluck when attacking.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Windforce 
-        /// </summary>
-        public static Item Windforce = new Item
-        {
-
-            Id = 192602,
-            Name = "Windforce",
-            Quality = ItemQuality.Legendary,
-            Slug = "windforce",
-            ItemType = ItemType.Bow,
-            TrinityItemType = TrinityItemType.TwoHandBow,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "bow_norm_unique_04",
-            DataUrl = "https://us.battle.net/api/d3/data/item/windforce",
-            Url = "https://us.battle.net/d3/en/item/windforce",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_009_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/windforce",
-            IsCrafted = false,
-            LegendaryAffix = "",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Leonine Bow of Hashir Bolas have a 15–20% chance on explosion to pull in all enemies within 24 yards.
-        /// </summary>
-        public static Item LeonineBowOfHashir = new Item
-        {
-
-            Id = 271882,
-            Name = "Leonine Bow of Hashir",
-            Quality = ItemQuality.Legendary,
-            Slug = "leonine-bow-of-hashir",
-            ItemType = ItemType.Bow,
-            TrinityItemType = TrinityItemType.TwoHandBow,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "bow_norm_unique_11",
-            DataUrl = "https://us.battle.net/api/d3/data/item/leonine-bow-of-hashir",
-            Url = "https://us.battle.net/d3/en/item/leonine-bow-of-hashir",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_103_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/leonine-bow-of-hashir",
-            IsCrafted = false,
-            LegendaryAffix = "Bolas have a 15–20% chance on explosion to pull in all enemies within 24 yards.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Odyssey's End Enemies snared by your Entangling Shot take 20–25% increased damage from all sources.
-        /// </summary>
-        public static Item OdysseysEnd = new Item
-        {
-
-            Id = 271880,
-            Name = "Odyssey's End",
-            Quality = ItemQuality.Legendary,
-            Slug = "odysseys-end",
-            ItemType = ItemType.Bow,
-            TrinityItemType = TrinityItemType.TwoHandBow,
+            Slug = "burst-of-wrath",
+            ItemType = ItemType.Axe,
+            TrinityItemType = TrinityItemType.TwoHandAxe,
             IsTwoHanded = true,
             BaseType = ItemBaseType.Weapon,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/odysseys-end",
-            Url = "https://us.battle.net/d3/en/item/odysseys-end",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_102_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/odysseys-end",
+            DataUrl = "https://us.battle.net/api/d3/data/item/burst-of-wrath",
+            Url = "https://us.battle.net/d3/en/item/burst-of-wrath",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/burst-of-wrath",
             IsCrafted = false,
-            LegendaryAffix = "Enemies snared by your Entangling Shot take 20–25% increased damage from all sources.",
+            LegendaryAffix = "Killing enemies and destroying objects has a chance to grant 20% of your maximum primary resource.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Yang's Recurve Multishot attacks 50% faster.
+        /// Butcher's Carver The Butcher still inhabits his carver.
         /// </summary>
-        public static Item YangsRecurve = new Item
+        public static Item ButchersCarver = new Item
         {
-
-            Id = 319407,
-            Name = "Yang's Recurve",
+            Id = 186494,
+            Name = "Butcher's Carver",
             Quality = ItemQuality.Legendary,
-            Slug = "yangs-recurve",
-            ItemType = ItemType.Bow,
-            TrinityItemType = TrinityItemType.TwoHandBow,
+            Slug = "butchers-carver",
+            ItemType = ItemType.Axe,
+            TrinityItemType = TrinityItemType.TwoHandAxe,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twoHandedAxe_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/butchers-carver",
+            Url = "https://us.battle.net/d3/en/item/butchers-carver",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/butchers-carver",
+            IsCrafted = false,
+            LegendaryAffix = "The Butcher still inhabits his carver.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Messerschmidt's Reaver 
+        /// </summary>
+        public static Item MesserschmidtsReaver = new Item
+        {
+            Id = 191065,
+            Name = "Messerschmidt's Reaver",
+            Quality = ItemQuality.Legendary,
+            Slug = "messerschmidts-reaver",
+            ItemType = ItemType.Axe,
+            TrinityItemType = TrinityItemType.TwoHandAxe,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twoHandedAxe_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/messerschmidts-reaver",
+            Url = "https://us.battle.net/d3/en/item/messerschmidts-reaver",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_011_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/messerschmidts-reaver",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Skorn 
+        /// </summary>
+        public static Item Skorn = new Item
+        {
+            Id = 192887,
+            Name = "Skorn",
+            Quality = ItemQuality.Legendary,
+            Slug = "skorn",
+            ItemType = ItemType.Axe,
+            TrinityItemType = TrinityItemType.TwoHandAxe,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twoHandedAxe_norm_unique_05",
+            DataUrl = "https://us.battle.net/api/d3/data/item/skorn",
+            Url = "https://us.battle.net/d3/en/item/skorn",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_axe_2h_009_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/skorn",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Arthef's Spark of Life Heal for 3–4% of your missing Life when you kill an Undead enemy.
+        /// </summary>
+        public static Item ArthefsSparkOfLife = new Item
+        {
+            Id = 59633,
+            Name = "Arthef's Spark of Life",
+            Quality = ItemQuality.Legendary,
+            Slug = "arthefs-spark-of-life",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.TwoHandMace,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twoHandedMace_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/arthefs-spark-of-life",
+            Url = "https://us.battle.net/d3/en/item/arthefs-spark-of-life",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/arthefs-spark-of-life",
+            IsCrafted = false,
+            LegendaryAffix = "Heal for 3–4% of your missing Life when you kill an Undead enemy.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Crushbane 
+        /// </summary>
+        public static Item Crushbane = new Item
+        {
+            Id = 99227,
+            Name = "Crushbane",
+            Quality = ItemQuality.Legendary,
+            Slug = "crushbane",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.TwoHandMace,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twoHandedMace_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/crushbane",
+            Url = "https://us.battle.net/d3/en/item/crushbane",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/crushbane",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Soulsmasher When you kill an enemy, it explodes for 450–600% of your Life per Kill as damage to all enemies within 20 yards. You no longer benefit from your Life per Kill.
+        /// </summary>
+        public static Item Soulsmasher = new Item
+        {
+            Id = 271671,
+            Name = "Soulsmasher",
+            Quality = ItemQuality.Legendary,
+            Slug = "soulsmasher",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.TwoHandMace,
             IsTwoHanded = true,
             BaseType = ItemBaseType.Weapon,
             InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/yangs-recurve",
-            Url = "https://us.battle.net/d3/en/item/yangs-recurve",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_104_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/yangs-recurve",
+            DataUrl = "https://us.battle.net/api/d3/data/item/soulsmasher",
+            Url = "https://us.battle.net/d3/en/item/soulsmasher",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_104_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/soulsmasher",
             IsCrafted = false,
-            LegendaryAffix = "Multishot attacks 50% faster.",
+            LegendaryAffix = "When you kill an enemy, it explodes for 450–600% of your Life per Kill as damage to all enemies within 20 yards. You no longer benefit from your Life per Kill.",
             SetName = "",
+        };
 
+        /// <summary>
+        /// Skywarden Every 60 seconds, gain a random Law for 60 seconds.
+        /// </summary>
+        public static Item Skywarden = new Item
+        {
+            Id = 190840,
+            Name = "Skywarden",
+            Quality = ItemQuality.Legendary,
+            Slug = "skywarden",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.TwoHandMace,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twohandedmace_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/skywarden",
+            Url = "https://us.battle.net/d3/en/item/skywarden",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_010_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/skywarden",
+            IsCrafted = false,
+            LegendaryAffix = "Every 60 seconds, gain a random Law for 60 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Wrath of the Bone King 
+        /// </summary>
+        public static Item WrathOfTheBoneKing = new Item
+        {
+            Id = 191584,
+            Name = "Wrath of the Bone King",
+            Quality = ItemQuality.Legendary,
+            Slug = "wrath-of-the-bone-king",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.TwoHandMace,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twoHandedMace_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/wrath-of-the-bone-king",
+            Url = "https://us.battle.net/d3/en/item/wrath-of-the-bone-king",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_012_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/wrath-of-the-bone-king",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Furnace Increases damage against elites by 40–50%.
+        /// </summary>
+        public static Item TheFurnace = new Item
+        {
+            Id = 271666,
+            Name = "The Furnace",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-furnace",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.TwoHandMace,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twohandedmace_norm_unique_08",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-furnace",
+            Url = "https://us.battle.net/d3/en/item/the-furnace",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-furnace",
+            IsCrafted = false,
+            LegendaryAffix = "Increases damage against elites by 40–50%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Schaefer's Hammer Casting a Lightning skill charges you with Lightning, causing you to deal 650–850% weapon damage as Lightning every second for 5 seconds to nearby enemies.
+        /// </summary>
+        public static Item SchaefersHammer = new Item
+        {
+            Id = 197717,
+            Name = "Schaefer's Hammer",
+            Quality = ItemQuality.Legendary,
+            Slug = "schaefers-hammer",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.TwoHandMace,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twoHandedMace_norm_unique_07",
+            DataUrl = "https://us.battle.net/api/d3/data/item/schaefers-hammer",
+            Url = "https://us.battle.net/d3/en/item/schaefers-hammer",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_009_p2_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/schaefers-hammer",
+            IsCrafted = false,
+            LegendaryAffix = "Casting a Lightning skill charges you with Lightning, causing you to deal 650–850% weapon damage as Lightning every second for 5 seconds to nearby enemies.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Sledge of Athskeleng 
+        /// </summary>
+        public static Item SledgeOfAthskeleng = new Item
+        {
+            Id = 190866,
+            Name = "Sledge of Athskeleng",
+            Quality = ItemQuality.Legendary,
+            Slug = "sledge-of-athskeleng",
+            ItemType = ItemType.Mace,
+            TrinityItemType = TrinityItemType.TwoHandMace,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "twoHandedMace_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/sledge-of-athskeleng",
+            Url = "https://us.battle.net/d3/en/item/sledge-of-athskeleng",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mace_2h_002_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/sledge-of-athskeleng",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Flail of the Ascended Your Shield Glare deals damage equal to up to your last 5 Shield Bash casts.
+        /// </summary>
+        public static Item FlailOfTheAscended = new Item
+        {
+            Id = 0,
+            Name = "Flail of the Ascended",
+            Quality = ItemQuality.Legendary,
+            Slug = "flail-of-the-ascended",
+            ItemType = ItemType.Flail,
+            TrinityItemType = TrinityItemType.TwoHandFlail,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/flail-of-the-ascended",
+            Url = "https://us.battle.net/d3/en/item/flail-of-the-ascended",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_flail_2h_002_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/flail-of-the-ascended",
+            IsCrafted = false,
+            LegendaryAffix = "Your Shield Glare deals damage equal to up to your last 5 Shield Bash casts.",
+            SetName = "",
         };
 
         /// <summary>
@@ -13612,7 +12177,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AkkhansAddendum = new Item
         {
-
             Id = 395228,
             Name = "Akkhan's Addendum",
             Quality = ItemQuality.Legendary,
@@ -13629,7 +12193,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Akarat's Champion gains the effects of the Prophet and Embodiment of Power runes.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13637,7 +12200,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BalefulRemnant = new Item
         {
-
             Id = 299435,
             Name = "Baleful Remnant",
             Quality = ItemQuality.Legendary,
@@ -13654,7 +12216,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Enemies killed while Akarat's Champion is active turn into Phalanx Avatars for 10 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13662,7 +12223,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FateOfTheFell = new Item
         {
-
             Id = 299436,
             Name = "Fate of the Fell",
             Quality = ItemQuality.Legendary,
@@ -13679,7 +12239,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Gain two additional rays of Heaven’s Fury.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13687,7 +12246,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GoldenFlense = new Item
         {
-
             Id = 299437,
             Name = "Golden Flense",
             Quality = ItemQuality.Legendary,
@@ -13704,7 +12262,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Sweep Attack restores 4–6 Wrath for each enemy hit.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13712,7 +12269,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheMortalDrama = new Item
         {
-
             Id = 299431,
             Name = "The Mortal Drama",
             Quality = ItemQuality.Legendary,
@@ -13729,7 +12285,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Double the number of Bombardment impacts.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13737,7 +12292,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AkkhansLeniency = new Item
         {
-
             Id = 403846,
             Name = "Akkhan’s Leniency",
             Quality = ItemQuality.Legendary,
@@ -13754,7 +12308,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Each enemy hit by your Blessed Shield increases the damage of your Blessed Shield by 15–20% for 3 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13762,7 +12315,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FlailOfTheCharge = new Item
         {
-
             Id = 395227,
             Name = "Flail of the Charge",
             Quality = ItemQuality.Legendary,
@@ -13779,157 +12331,190 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Norvald's Fervor",
-
         };
 
         /// <summary>
-        /// Bastion's Revered Frenzy now stacks up to 10 times.
+        /// Balance When your Tempest Rush hits 3 or fewer enemies, it gains 100% Critical Hit Chance.
         /// </summary>
-        public static Item BastionsRevered = new Item
+        public static Item Balance = new Item
         {
-
-            Id = 195690,
-            Name = "Bastion's Revered",
+            Id = 195145,
+            Name = "Balance",
             Quality = ItemQuality.Legendary,
-            Slug = "bastions-revered",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.TwoHandMighty,
+            Slug = "balance",
+            ItemType = ItemType.Daibo,
+            TrinityItemType = TrinityItemType.TwoHandDaibo,
             IsTwoHanded = true,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "mightyWeapon_2H_norm_unique_03",
-            DataUrl = "https://us.battle.net/api/d3/data/item/bastions-revered",
-            Url = "https://us.battle.net/d3/en/item/bastions-revered",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_2h_004_p1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/bastions-revered",
+            InternalName = "combatstaff_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/balance",
+            Url = "https://us.battle.net/d3/en/item/balance",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_combatstaff_2h_001_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/balance",
             IsCrafted = false,
-            LegendaryAffix = "Frenzy now stacks up to 10 times.",
+            LegendaryAffix = "When your Tempest Rush hits 3 or fewer enemies, it gains 100% Critical Hit Chance.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Fury of the Vanished Peak Reduces the Fury cost of Seismic Slam by 40–50%.
+        /// The Flow of Eternity Increase the damage of Seven-Sided Strike by 100% and reduce the cooldown of Seven-Sided Strike by 45–60%.
         /// </summary>
-        public static Item FuryOfTheVanishedPeak = new Item
+        public static Item TheFlowOfEternity = new Item
         {
-
-            Id = 195138,
-            Name = "Fury of the Vanished Peak",
+            Id = 197072,
+            Name = "The Flow of Eternity",
             Quality = ItemQuality.Legendary,
-            Slug = "fury-of-the-vanished-peak",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.TwoHandMighty,
+            Slug = "the-flow-of-eternity",
+            ItemType = ItemType.Daibo,
+            TrinityItemType = TrinityItemType.TwoHandDaibo,
             IsTwoHanded = true,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/fury-of-the-vanished-peak",
-            Url = "https://us.battle.net/d3/en/item/fury-of-the-vanished-peak",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_mighty_2h_006_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/fury-of-the-vanished-peak",
+            InternalName = "combatStaff_norm_unique_06",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-flow-of-eternity",
+            Url = "https://us.battle.net/d3/en/item/the-flow-of-eternity",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_combatstaff_2h_005_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-flow-of-eternity",
             IsCrafted = false,
-            LegendaryAffix = "Reduces the Fury cost of Seismic Slam by 40–50%.",
+            LegendaryAffix = "Increase the damage of Seven-Sided Strike by 100% and reduce the cooldown of Seven-Sided Strike by 45–60%.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Madawc's Sorrow Stun enemies for 2 seconds the first time you hit them.
+        /// The Paddle Slap!
         /// </summary>
-        public static Item MadawcsSorrow = new Item
+        public static Item ThePaddle = new Item
         {
-
-            Id = 272012,
-            Name = "Madawc's Sorrow",
+            Id = 197068,
+            Name = "The Paddle",
             Quality = ItemQuality.Legendary,
-            Slug = "madawcs-sorrow",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.TwoHandMighty,
+            Slug = "the-paddle",
+            ItemType = ItemType.Daibo,
+            TrinityItemType = TrinityItemType.TwoHandDaibo,
             IsTwoHanded = true,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "mightyweapon_2h_norm_unique_11",
-            DataUrl = "https://us.battle.net/api/d3/data/item/madawcs-sorrow",
-            Url = "https://us.battle.net/d3/en/item/madawcs-sorrow",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_2h_101_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/madawcs-sorrow",
+            InternalName = "combatStaff_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-paddle",
+            Url = "https://us.battle.net/d3/en/item/the-paddle",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_007_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-paddle",
             IsCrafted = false,
-            LegendaryAffix = "Stun enemies for 2 seconds the first time you hit them.",
+            LegendaryAffix = "Slap!",
             SetName = "",
-
         };
 
         /// <summary>
-        /// The Gavel of Judgment Hammer of the Ancients returns 20–25 Fury if it hits 3 or fewer enemies.
+        /// Staff of Kyro 
         /// </summary>
-        public static Item TheGavelOfJudgment = new Item
+        public static Item StaffOfKyro = new Item
         {
-
-            Id = 193657,
-            Name = "The Gavel of Judgment",
+            Id = 271749,
+            Name = "Staff of Kyro",
             Quality = ItemQuality.Legendary,
-            Slug = "the-gavel-of-judgment",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.TwoHandMighty,
+            Slug = "staff-of-kyro",
+            ItemType = ItemType.Daibo,
+            TrinityItemType = TrinityItemType.TwoHandDaibo,
             IsTwoHanded = true,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "mightyWeapon_2H_norm_unique_01",
-            DataUrl = "https://us.battle.net/api/d3/data/item/the-gavel-of-judgment",
-            Url = "https://us.battle.net/d3/en/item/the-gavel-of-judgment",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_mighty_2h_001_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/the-gavel-of-judgment",
-            IsCrafted = false,
-            LegendaryAffix = "Hammer of the Ancients returns 20–25 Fury if it hits 3 or fewer enemies.",
-            SetName = "",
-
-        };
-
-        /// <summary>
-        /// Immortal King's Boulder Breaker 
-        /// </summary>
-        public static Item ImmortalKingsBoulderBreaker = new Item
-        {
-
-            Id = 210678,
-            Name = "Immortal King's Boulder Breaker",
-            Quality = ItemQuality.Legendary,
-            Slug = "immortal-kings-boulder-breaker",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.TwoHandMighty,
-            IsTwoHanded = true,
-            BaseType = ItemBaseType.Weapon,
-            InternalName = "mightyWeapon_2H_norm_unique_10",
-            DataUrl = "https://us.battle.net/api/d3/data/item/immortal-kings-boulder-breaker",
-            Url = "https://us.battle.net/d3/en/item/immortal-kings-boulder-breaker",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_2h_010_x1_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/immortal-kings-boulder-breaker",
+            InternalName = "combatstaff_norm_unique_09",
+            DataUrl = "https://us.battle.net/api/d3/data/item/staff-of-kyro",
+            Url = "https://us.battle.net/d3/en/item/staff-of-kyro",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/staff-of-kyro",
             IsCrafted = false,
             LegendaryAffix = "",
-            SetName = "Immortal King's Call",
-
+            SetName = "",
         };
 
         /// <summary>
-        /// Blade of the Tribes War Cry and Threatening Shout cause an Avalanche and Earthquake.
+        /// Warstaff of General Quang Tempest Rush gains the effect of the Tailwind rune.
         /// </summary>
-        public static Item BladeOfTheTribes = new Item
+        public static Item WarstaffOfGeneralQuang = new Item
         {
-
-            Id = 322776,
-            Name = "Blade of the Tribes",
+            Id = 271765,
+            Name = "Warstaff of General Quang",
             Quality = ItemQuality.Legendary,
-            Slug = "blade-of-the-tribes",
-            ItemType = ItemType.MightyWeapon,
-            TrinityItemType = TrinityItemType.TwoHandMighty,
+            Slug = "warstaff-of-general-quang",
+            ItemType = ItemType.Daibo,
+            TrinityItemType = TrinityItemType.TwoHandDaibo,
             IsTwoHanded = true,
             BaseType = ItemBaseType.Weapon,
-            InternalName = "",
-            DataUrl = "https://us.battle.net/api/d3/data/item/blade-of-the-tribes",
-            Url = "https://us.battle.net/d3/en/item/blade-of-the-tribes",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_mighty_2h_101_demonhunter_male.png",
-            RelativeUrl = "/d3/en/item/blade-of-the-tribes",
+            InternalName = "combatstaff_norm_unique_10",
+            DataUrl = "https://us.battle.net/api/d3/data/item/warstaff-of-general-quang",
+            Url = "https://us.battle.net/d3/en/item/warstaff-of-general-quang",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/warstaff-of-general-quang",
             IsCrafted = false,
-            LegendaryAffix = "War Cry and Threatening Shout cause an Avalanche and Earthquake.",
+            LegendaryAffix = "Tempest Rush gains the effect of the Tailwind rune.",
             SetName = "",
+        };
 
+        /// <summary>
+        /// Incense Torch of the Grand Temple Reduces the Spirit cost of Wave of Light by 40–50%.
+        /// </summary>
+        public static Item IncenseTorchOfTheGrandTemple = new Item
+        {
+            Id = 192342,
+            Name = "Incense Torch of the Grand Temple",
+            Quality = ItemQuality.Legendary,
+            Slug = "incense-torch-of-the-grand-temple",
+            ItemType = ItemType.Daibo,
+            TrinityItemType = TrinityItemType.TwoHandDaibo,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "combatStaff_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/incense-torch-of-the-grand-temple",
+            Url = "https://us.battle.net/d3/en/item/incense-torch-of-the-grand-temple",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_003_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/incense-torch-of-the-grand-temple",
+            IsCrafted = false,
+            LegendaryAffix = "Reduces the Spirit cost of Wave of Light by 40–50%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Flying Dragon Chance to double your attack speed when attacking.
+        /// </summary>
+        public static Item FlyingDragon = new Item
+        {
+            Id = 197065,
+            Name = "Flying Dragon",
+            Quality = ItemQuality.Legendary,
+            Slug = "flying-dragon",
+            ItemType = ItemType.Daibo,
+            TrinityItemType = TrinityItemType.TwoHandDaibo,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "combatStaff_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/flying-dragon",
+            Url = "https://us.battle.net/d3/en/item/flying-dragon",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_009_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/flying-dragon",
+            IsCrafted = false,
+            LegendaryAffix = "Chance to double your attack speed when attacking.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Inna's Reach 
+        /// </summary>
+        public static Item InnasReach = new Item
+        {
+            Id = 212208,
+            Name = "Inna's Reach",
+            Quality = ItemQuality.Legendary,
+            Slug = "innas-reach",
+            ItemType = ItemType.Daibo,
+            TrinityItemType = TrinityItemType.TwoHandDaibo,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "combatStaff_norm_unique_08",
+            DataUrl = "https://us.battle.net/api/d3/data/item/innas-reach",
+            Url = "https://us.battle.net/d3/en/item/innas-reach",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_combatstaff_2h_001_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/innas-reach",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Inna's Mantra",
         };
 
         /// <summary>
@@ -13937,7 +12522,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FaithfulMemory = new Item
         {
-
             Id = 198960,
             Name = "Faithful Memory",
             Quality = ItemQuality.Legendary,
@@ -13954,7 +12538,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13962,7 +12545,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheZweihander = new Item
         {
-
             Id = 59665,
             Name = "The Zweihander",
             Quality = ItemQuality.Legendary,
@@ -13979,7 +12561,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -13987,7 +12568,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Blackguard = new Item
         {
-
             Id = 270979,
             Name = "Blackguard",
             Quality = ItemQuality.Legendary,
@@ -14004,7 +12584,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14012,7 +12591,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Scourge = new Item
         {
-
             Id = 181511,
             Name = "Scourge",
             Quality = ItemQuality.Legendary,
@@ -14029,7 +12607,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "20–45% chance when attacking to explode with demonic fury for 1800-2000% weapon damage as Fire.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14037,7 +12614,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item StalgardsDecimator = new Item
         {
-
             Id = 271639,
             Name = "Stalgard's Decimator",
             Quality = ItemQuality.Legendary,
@@ -14054,7 +12630,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your melee attacks throw a piercing axe at a nearby enemy, dealing 550–700% weapon damage as Physical.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14062,7 +12637,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BladeOfProphecy = new Item
         {
-
             Id = 184184,
             Name = "Blade of Prophecy",
             Quality = ItemQuality.Legendary,
@@ -14079,7 +12653,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Two Condemned enemies also trigger Condemn's explosion.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14087,7 +12660,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheSultanOfBlindingSand = new Item
         {
-
             Id = 184190,
             Name = "The Sultan of Blinding Sand",
             Quality = ItemQuality.Legendary,
@@ -14104,7 +12676,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14112,7 +12683,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Maximus = new Item
         {
-
             Id = 184187,
             Name = "Maximus",
             Quality = ItemQuality.Legendary,
@@ -14129,7 +12699,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance on hit to summon a Demonic Slave.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14137,7 +12706,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheGrandfather = new Item
         {
-
             Id = 190360,
             Name = "The Grandfather",
             Quality = ItemQuality.Legendary,
@@ -14154,7 +12722,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14162,7 +12729,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Warmonger = new Item
         {
-
             Id = 181495,
             Name = "Warmonger",
             Quality = ItemQuality.Legendary,
@@ -14179,7 +12745,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14187,7 +12752,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item CamsRebuttal = new Item
         {
-
             Id = 271644,
             Name = "Cam's Rebuttal",
             Quality = ItemQuality.Legendary,
@@ -14204,7 +12768,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Falling Sword can be used again within 4 seconds before the cooldown is triggered.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14212,7 +12775,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BloodBrother = new Item
         {
-
             Id = 271645,
             Name = "Blood Brother",
             Quality = ItemQuality.Legendary,
@@ -14229,7 +12791,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Grants a 15–20% chance to block attacks. Blocked attacks inflict 30% less damage. After blocking an attack, your next attack inflicts 30% additional damage.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14237,7 +12798,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item CorruptedAshbringer = new Item
         {
-
             Id = 430567,
             Name = "Corrupted Ashbringer",
             Quality = ItemQuality.Legendary,
@@ -14254,7 +12814,144 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance on kill to raise a skeleton to fight for you. Upon accumulating 5 skeletons, they each explode for 1000% weapon damage and the sword transforms into Ashbringer for a short time. Attacking with Ashbringer burns your enemy for 5000–6000% weapon damage as Holy.",
             SetName = "",
+        };
 
+        /// <summary>
+        /// Bastion's Revered Frenzy now stacks up to 10 times.
+        /// </summary>
+        public static Item BastionsRevered = new Item
+        {
+            Id = 195690,
+            Name = "Bastion's Revered",
+            Quality = ItemQuality.Legendary,
+            Slug = "bastions-revered",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.TwoHandMighty,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "mightyWeapon_2H_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bastions-revered",
+            Url = "https://us.battle.net/d3/en/item/bastions-revered",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_2h_004_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/bastions-revered",
+            IsCrafted = false,
+            LegendaryAffix = "Frenzy now stacks up to 10 times.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Fury of the Vanished Peak Reduces the Fury cost of Seismic Slam by 40–50%.
+        /// </summary>
+        public static Item FuryOfTheVanishedPeak = new Item
+        {
+            Id = 195138,
+            Name = "Fury of the Vanished Peak",
+            Quality = ItemQuality.Legendary,
+            Slug = "fury-of-the-vanished-peak",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.TwoHandMighty,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/fury-of-the-vanished-peak",
+            Url = "https://us.battle.net/d3/en/item/fury-of-the-vanished-peak",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_mighty_2h_006_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/fury-of-the-vanished-peak",
+            IsCrafted = false,
+            LegendaryAffix = "Reduces the Fury cost of Seismic Slam by 40–50%.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Madawc's Sorrow Stun enemies for 2 seconds the first time you hit them.
+        /// </summary>
+        public static Item MadawcsSorrow = new Item
+        {
+            Id = 272012,
+            Name = "Madawc's Sorrow",
+            Quality = ItemQuality.Legendary,
+            Slug = "madawcs-sorrow",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.TwoHandMighty,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "mightyweapon_2h_norm_unique_11",
+            DataUrl = "https://us.battle.net/api/d3/data/item/madawcs-sorrow",
+            Url = "https://us.battle.net/d3/en/item/madawcs-sorrow",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_2h_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/madawcs-sorrow",
+            IsCrafted = false,
+            LegendaryAffix = "Stun enemies for 2 seconds the first time you hit them.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Gavel of Judgment Hammer of the Ancients returns 20–25 Fury if it hits 3 or fewer enemies.
+        /// </summary>
+        public static Item TheGavelOfJudgment = new Item
+        {
+            Id = 193657,
+            Name = "The Gavel of Judgment",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-gavel-of-judgment",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.TwoHandMighty,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "mightyWeapon_2H_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-gavel-of-judgment",
+            Url = "https://us.battle.net/d3/en/item/the-gavel-of-judgment",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_unique_mighty_2h_001_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-gavel-of-judgment",
+            IsCrafted = false,
+            LegendaryAffix = "Hammer of the Ancients returns 20–25 Fury if it hits 3 or fewer enemies.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Immortal King's Boulder Breaker 
+        /// </summary>
+        public static Item ImmortalKingsBoulderBreaker = new Item
+        {
+            Id = 210678,
+            Name = "Immortal King's Boulder Breaker",
+            Quality = ItemQuality.Legendary,
+            Slug = "immortal-kings-boulder-breaker",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.TwoHandMighty,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "mightyWeapon_2H_norm_unique_10",
+            DataUrl = "https://us.battle.net/api/d3/data/item/immortal-kings-boulder-breaker",
+            Url = "https://us.battle.net/d3/en/item/immortal-kings-boulder-breaker",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_mighty_2h_010_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/immortal-kings-boulder-breaker",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Immortal King's Call",
+        };
+
+        /// <summary>
+        /// Blade of the Tribes War Cry and Threatening Shout cause an Avalanche and Earthquake.
+        /// </summary>
+        public static Item BladeOfTheTribes = new Item
+        {
+            Id = 322776,
+            Name = "Blade of the Tribes",
+            Quality = ItemQuality.Legendary,
+            Slug = "blade-of-the-tribes",
+            ItemType = ItemType.MightyWeapon,
+            TrinityItemType = TrinityItemType.TwoHandMighty,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/blade-of-the-tribes",
+            Url = "https://us.battle.net/d3/en/item/blade-of-the-tribes",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p4_unique_mighty_2h_101_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/blade-of-the-tribes",
+            IsCrafted = false,
+            LegendaryAffix = "War Cry and Threatening Shout cause an Avalanche and Earthquake.",
+            SetName = "",
         };
 
         /// <summary>
@@ -14262,7 +12959,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item StaffOfChiroptera = new Item
         {
-
             Id = 184228,
             Name = "Staff of Chiroptera",
             Quality = ItemQuality.Legendary,
@@ -14279,7 +12975,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Firebats attacks 100% faster and costs 70–75% less Mana.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14287,7 +12982,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheBrokenStaff = new Item
         {
-
             Id = 59601,
             Name = "The Broken Staff",
             Quality = ItemQuality.Legendary,
@@ -14304,7 +12998,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14312,7 +13005,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AhavarionSpearOfLycander = new Item
         {
-
             Id = 271768,
             Name = "Ahavarion, Spear of Lycander",
             Quality = ItemQuality.Legendary,
@@ -14329,7 +13021,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance on killing a demon to gain a random Shrine effect.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14337,7 +13028,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SuwongDiviner = new Item
         {
-
             Id = 271775,
             Name = "SuWong Diviner",
             Quality = ItemQuality.Legendary,
@@ -14354,7 +13044,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Acid Cloud gains the effect of the Lob Blob Bomb rune.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14362,7 +13051,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheSmolderingCore = new Item
         {
-
             Id = 271774,
             Name = "The Smoldering Core",
             Quality = ItemQuality.Legendary,
@@ -14379,7 +13067,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Lesser enemies are now lured to your Meteor impact areas.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14387,7 +13074,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ValtheksRebuke = new Item
         {
-
             Id = 271773,
             Name = "Valthek's Rebuke",
             Quality = ItemQuality.Legendary,
@@ -14404,7 +13090,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Energy Twister now travels in a straight path.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14412,7 +13097,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item MalothsFocus = new Item
         {
-
             Id = 193832,
             Name = "Maloth's Focus",
             Quality = ItemQuality.Legendary,
@@ -14429,7 +13113,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Enemies occasionally flee at the sight of this staff.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14437,7 +13120,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Wormwood = new Item
         {
-
             Id = 195407,
             Name = "Wormwood",
             Quality = ItemQuality.Legendary,
@@ -14454,7 +13136,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Locust Swarm continuously plagues enemies around you.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14462,7 +13143,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheGrandVizier = new Item
         {
-
             Id = 192167,
             Name = "The Grand Vizier",
             Quality = ItemQuality.Legendary,
@@ -14479,7 +13159,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Reduces the Arcane Power cost of Meteor by 40–50%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14487,7 +13166,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheTormentor = new Item
         {
-
             Id = 193066,
             Name = "The Tormentor",
             Quality = ItemQuality.Legendary,
@@ -14504,7 +13182,213 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance to charm enemies when you hit them.",
             SetName = "",
+        };
 
+        /// <summary>
+        /// Uskang 
+        /// </summary>
+        public static Item Uskang = new Item
+        {
+            Id = 175580,
+            Name = "Uskang",
+            Quality = ItemQuality.Legendary,
+            Slug = "uskang",
+            ItemType = ItemType.Bow,
+            TrinityItemType = TrinityItemType.TwoHandBow,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "bow_norm_unique_01",
+            DataUrl = "https://us.battle.net/api/d3/data/item/uskang",
+            Url = "https://us.battle.net/d3/en/item/uskang",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_005_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/uskang",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Etrayu 
+        /// </summary>
+        public static Item Etrayu = new Item
+        {
+            Id = 175581,
+            Name = "Etrayu",
+            Quality = ItemQuality.Legendary,
+            Slug = "etrayu",
+            ItemType = ItemType.Bow,
+            TrinityItemType = TrinityItemType.TwoHandBow,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "Bow_norm_unique_02",
+            DataUrl = "https://us.battle.net/api/d3/data/item/etrayu",
+            Url = "https://us.battle.net/d3/en/item/etrayu",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_001_p1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/etrayu",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// The Raven's Wing A raven flies to your side.
+        /// </summary>
+        public static Item TheRavensWing = new Item
+        {
+            Id = 221938,
+            Name = "The Raven's Wing",
+            Quality = ItemQuality.Legendary,
+            Slug = "the-ravens-wing",
+            ItemType = ItemType.Bow,
+            TrinityItemType = TrinityItemType.TwoHandBow,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "Bow_norm_unique_07",
+            DataUrl = "https://us.battle.net/api/d3/data/item/the-ravens-wing",
+            Url = "https://us.battle.net/d3/en/item/the-ravens-wing",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_008_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/the-ravens-wing",
+            IsCrafted = false,
+            LegendaryAffix = "A raven flies to your side.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Kridershot Elemental Arrow now generates 3–4 Hatred.
+        /// </summary>
+        public static Item Kridershot = new Item
+        {
+            Id = 271875,
+            Name = "Kridershot",
+            Quality = ItemQuality.Legendary,
+            Slug = "kridershot",
+            ItemType = ItemType.Bow,
+            TrinityItemType = TrinityItemType.TwoHandBow,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "bow_norm_unique_09",
+            DataUrl = "https://us.battle.net/api/d3/data/item/kridershot",
+            Url = "https://us.battle.net/d3/en/item/kridershot",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_101_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/kridershot",
+            IsCrafted = false,
+            LegendaryAffix = "Elemental Arrow now generates 3–4 Hatred.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Cluckeye 25–50% chance to cluck when attacking.
+        /// </summary>
+        public static Item Cluckeye = new Item
+        {
+            Id = 175582,
+            Name = "Cluckeye",
+            Quality = ItemQuality.Legendary,
+            Slug = "cluckeye",
+            ItemType = ItemType.Bow,
+            TrinityItemType = TrinityItemType.TwoHandBow,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "Bow_norm_unique_03",
+            DataUrl = "https://us.battle.net/api/d3/data/item/cluckeye",
+            Url = "https://us.battle.net/d3/en/item/cluckeye",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_015_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/cluckeye",
+            IsCrafted = false,
+            LegendaryAffix = "25–50% chance to cluck when attacking.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Windforce 
+        /// </summary>
+        public static Item Windforce = new Item
+        {
+            Id = 192602,
+            Name = "Windforce",
+            Quality = ItemQuality.Legendary,
+            Slug = "windforce",
+            ItemType = ItemType.Bow,
+            TrinityItemType = TrinityItemType.TwoHandBow,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "bow_norm_unique_04",
+            DataUrl = "https://us.battle.net/api/d3/data/item/windforce",
+            Url = "https://us.battle.net/d3/en/item/windforce",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_009_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/windforce",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Leonine Bow of Hashir Bolas have a 15–20% chance on explosion to pull in all enemies within 24 yards.
+        /// </summary>
+        public static Item LeonineBowOfHashir = new Item
+        {
+            Id = 271882,
+            Name = "Leonine Bow of Hashir",
+            Quality = ItemQuality.Legendary,
+            Slug = "leonine-bow-of-hashir",
+            ItemType = ItemType.Bow,
+            TrinityItemType = TrinityItemType.TwoHandBow,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "bow_norm_unique_11",
+            DataUrl = "https://us.battle.net/api/d3/data/item/leonine-bow-of-hashir",
+            Url = "https://us.battle.net/d3/en/item/leonine-bow-of-hashir",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_103_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/leonine-bow-of-hashir",
+            IsCrafted = false,
+            LegendaryAffix = "Bolas have a 15–20% chance on explosion to pull in all enemies within 24 yards.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Odyssey's End Enemies snared by your Entangling Shot take 20–25% increased damage from all sources.
+        /// </summary>
+        public static Item OdysseysEnd = new Item
+        {
+            Id = 271880,
+            Name = "Odyssey's End",
+            Quality = ItemQuality.Legendary,
+            Slug = "odysseys-end",
+            ItemType = ItemType.Bow,
+            TrinityItemType = TrinityItemType.TwoHandBow,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/odysseys-end",
+            Url = "https://us.battle.net/d3/en/item/odysseys-end",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_102_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/odysseys-end",
+            IsCrafted = false,
+            LegendaryAffix = "Enemies snared by your Entangling Shot take 20–25% increased damage from all sources.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Yang's Recurve Multishot attacks 50% faster.
+        /// </summary>
+        public static Item YangsRecurve = new Item
+        {
+            Id = 319407,
+            Name = "Yang's Recurve",
+            Quality = ItemQuality.Legendary,
+            Slug = "yangs-recurve",
+            ItemType = ItemType.Bow,
+            TrinityItemType = TrinityItemType.TwoHandBow,
+            IsTwoHanded = true,
+            BaseType = ItemBaseType.Weapon,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/yangs-recurve",
+            Url = "https://us.battle.net/d3/en/item/yangs-recurve",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_bow_104_x1_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/yangs-recurve",
+            IsCrafted = false,
+            LegendaryAffix = "Multishot attacks 50% faster.",
+            SetName = "",
         };
 
         /// <summary>
@@ -14512,7 +13396,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DemonMachine = new Item
         {
-
             Id = 222286,
             Name = "Demon Machine",
             Quality = ItemQuality.Legendary,
@@ -14529,7 +13412,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "35–65% chance to shoot explosive bolts when attacking.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14537,7 +13419,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BurizadoKyanon = new Item
         {
-
             Id = 194219,
             Name = "Buriza-Do Kyanon",
             Quality = ItemQuality.Legendary,
@@ -14554,7 +13435,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your projectiles pierce 1–2 additional times.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14562,7 +13442,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BakkanCaster = new Item
         {
-
             Id = 98163,
             Name = "Bakkan Caster",
             Quality = ItemQuality.Legendary,
@@ -14579,7 +13458,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14587,7 +13465,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item PusSpitter = new Item
         {
-
             Id = 204874,
             Name = "Pus Spitter",
             Quality = ItemQuality.Legendary,
@@ -14604,7 +13481,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "25–50% chance to lob an acid blob when attacking.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14612,7 +13488,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Hellrack = new Item
         {
-
             Id = 192836,
             Name = "Hellrack",
             Quality = ItemQuality.Legendary,
@@ -14629,7 +13504,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Chance to root enemies to the ground when you hit them.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14637,7 +13511,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Manticore = new Item
         {
-
             Id = 221760,
             Name = "Manticore",
             Quality = ItemQuality.Legendary,
@@ -14654,7 +13527,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Reduces the Hatred cost of Cluster Arrow by 40–50%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14662,7 +13534,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ChanonBolter = new Item
         {
-
             Id = 271884,
             Name = "Chanon Bolter",
             Quality = ItemQuality.Legendary,
@@ -14679,15 +13550,13 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Your Spike Traps lure enemies to them. Enemies may be taunted once every 12–16 seconds.",
             SetName = "",
-
         };
 
         /// <summary>
-        /// Wojahnni Assaulter Rapid Fire deals 30–40% more damage for every second that you channel. Stacks up to 4 times.
+        /// Wojahnni Assaulter Rapid Fire deals 60–75% increased damage for every half second that you channel. Stacks up to 4 times.
         /// </summary>
         public static Item WojahnniAssaulter = new Item
         {
-
             Id = 271889,
             Name = "Wojahnni Assaulter",
             Quality = ItemQuality.Legendary,
@@ -14699,12 +13568,11 @@ namespace Trinity.Reference
             InternalName = "xbow_norm_unique_09",
             DataUrl = "https://us.battle.net/api/d3/data/item/wojahnni-assaulter",
             Url = "https://us.battle.net/d3/en/item/wojahnni-assaulter",
-            IconUrl = "http://media.blizzard.com/d3/icons/items/large/unique_xbow_102_x1_demonhunter_male.png",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p41_unique_xbow_102_demonhunter_male.png",
             RelativeUrl = "/d3/en/item/wojahnni-assaulter",
             IsCrafted = false,
-            LegendaryAffix = "Rapid Fire deals 30–40% more damage for every second that you channel. Stacks up to 4 times.",
+            LegendaryAffix = "Rapid Fire deals 60–75% increased damage for every half second that you channel. Stacks up to 4 times.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14712,7 +13580,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item VallasBequest = new Item
         {
-
             Id = 192467,
             Name = "Valla's Bequest",
             Quality = ItemQuality.Legendary,
@@ -14729,7 +13596,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Strafe projectiles pierce.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14737,7 +13603,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Helltrapper = new Item
         {
-
             Id = 271914,
             Name = "Helltrapper",
             Quality = ItemQuality.Legendary,
@@ -14754,7 +13619,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "7–10% chance on hit to summon a Spike Trap, Caltrops or Sentry.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14762,7 +13626,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BalefireCaster = new Item
         {
-
             Id = 192528,
             Name = "Balefire Caster",
             Quality = ItemQuality.Legendary,
@@ -14779,7 +13642,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14787,7 +13649,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item KmarTenclip = new Item
         {
-
             Id = 271892,
             Name = "K'mar Tenclip",
             Quality = ItemQuality.Legendary,
@@ -14804,7 +13665,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Strafe gains the effect of the Drifting Shadow rune.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14812,7 +13672,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Dawn = new Item
         {
-
             Id = 196409,
             Name = "Dawn",
             Quality = ItemQuality.Legendary,
@@ -14829,7 +13688,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Reduce the cooldown of Vengeance by 50–65%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14837,7 +13695,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Calamity = new Item
         {
-
             Id = 225181,
             Name = "Calamity",
             Quality = ItemQuality.Legendary,
@@ -14854,7 +13711,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Enemies you hit become Marked for Death.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14862,7 +13718,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DanettasRevenge = new Item
         {
-
             Id = 211749,
             Name = "Danetta's Revenge",
             Quality = ItemQuality.Legendary,
@@ -14879,7 +13734,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Vault gains the effect of the Rattling Roll rune.",
             SetName = "Danetta's Hatred",
-
         };
 
         /// <summary>
@@ -14887,7 +13741,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item DanettasSpite = new Item
         {
-
             Id = 211745,
             Name = "Danetta's Spite",
             Quality = ItemQuality.Legendary,
@@ -14904,7 +13757,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Leave a clone of yourself behind after using Vault.",
             SetName = "Danetta's Hatred",
-
         };
 
         /// <summary>
@@ -14912,7 +13764,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item NatalyasSlayer = new Item
         {
-
             Id = 210874,
             Name = "Natalya's Slayer",
             Quality = ItemQuality.Legendary,
@@ -14929,7 +13780,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Natalya's Vengeance",
-
         };
 
         /// <summary>
@@ -14937,7 +13787,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FortressBallista = new Item
         {
-
             Id = 395304,
             Name = "Fortress Ballista",
             Quality = ItemQuality.Legendary,
@@ -14954,7 +13803,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Attacks grant you an absorb shield for 2.0–3.0% of your maximum Life. Stacks up to 10 times.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14962,7 +13810,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item LiannasWings = new Item
         {
-
             Id = 395303,
             Name = "Lianna's Wings",
             Quality = ItemQuality.Legendary,
@@ -14979,7 +13826,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Shadow Power also triggers Smoke Screen.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -14987,7 +13833,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item TheDemonsDemise = new Item
         {
-
             Id = 395305,
             Name = "The Demon's Demise",
             Quality = ItemQuality.Legendary,
@@ -15004,7 +13849,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Spike Trap - Sticky Trap spreads to nearby enemies when it explodes.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -15012,7 +13856,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Starfire = new Item
         {
-
             Id = 182074,
             Name = "Starfire",
             Quality = ItemQuality.Legendary,
@@ -15029,7 +13872,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -15037,7 +13879,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item UnstableScepter = new Item
         {
-
             Id = 380733,
             Name = "Unstable Scepter",
             Quality = ItemQuality.Legendary,
@@ -15054,7 +13895,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Arcane Orb's explosion triggers an additional time.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -15062,7 +13902,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BlackhandKey = new Item
         {
-
             Id = 193355,
             Name = "Blackhand Key",
             Quality = ItemQuality.Legendary,
@@ -15079,7 +13918,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "",
-
         };
 
         /// <summary>
@@ -15087,7 +13925,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SerpentsSparker = new Item
         {
-
             Id = 272084,
             Name = "Serpent's Sparker",
             Quality = ItemQuality.Legendary,
@@ -15104,7 +13941,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "You may have one extra Hydra active at a time.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -15112,7 +13948,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item WandOfWoh = new Item
         {
-
             Id = 272086,
             Name = "Wand of Woh",
             Quality = ItemQuality.Legendary,
@@ -15129,7 +13964,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "3 additional Explosive Blasts are triggered after casting Explosive Blast.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -15137,7 +13971,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FragmentOfDestiny = new Item
         {
-
             Id = 181995,
             Name = "Fragment of Destiny",
             Quality = ItemQuality.Legendary,
@@ -15154,7 +13987,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Spectral Blade attacks 50% faster and deals 150–200% increased damage.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -15162,7 +13994,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item GestureOfOrpheus = new Item
         {
-
             Id = 182071,
             Name = "Gesture of Orpheus",
             Quality = ItemQuality.Legendary,
@@ -15179,7 +14010,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Reduces the cooldown of Slow Time by 30–40%.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -15187,7 +14017,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SloraksMadness = new Item
         {
-
             Id = 181982,
             Name = "Slorak's Madness",
             Quality = ItemQuality.Legendary,
@@ -15204,7 +14033,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "This wand finds your death humorous.",
             SetName = "",
-
         };
 
         /// <summary>
@@ -15212,7 +14040,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ChantodosWill = new Item
         {
-
             Id = 210479,
             Name = "Chantodo's Will",
             Quality = ItemQuality.Legendary,
@@ -15229,7 +14056,6 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "",
             SetName = "Chantodo's Resolve",
-
         };
 
         /// <summary>
@@ -15237,7 +14063,6 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AetherWalker = new Item
         {
-
             Id = 403781,
             Name = "Aether Walker",
             Quality = ItemQuality.Legendary,
@@ -15254,11 +14079,7 @@ namespace Trinity.Reference
             IsCrafted = false,
             LegendaryAffix = "Teleport no longer has a cooldown but costs 25 Arcane Power.",
             SetName = "",
-
         };
-
-
-        #endregion
 
         #region Methods
 

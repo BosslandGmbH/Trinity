@@ -29,9 +29,11 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         CombatRadius = 1 << 20,
         NotInCache = 1 << 21,
         RadarDebug = 1 << 22,
-        All = ~(1 << 23),        
+        KiteFromNodes = 1 << 23,
+        All = ~(1 << 24),        
     }
 }
+
 
 
 

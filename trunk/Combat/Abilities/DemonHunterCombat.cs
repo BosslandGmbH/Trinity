@@ -44,9 +44,12 @@ namespace Trinity.Combat.Abilities
                 return power;
             }
 
-            if (IsCurrentlyAvoiding && TryGetPower(GetAvoidanceSkill(), out power))
+            if (IsCurrentlyAvoiding)
             {
-                Logger.LogVerbose("Using General Avoidance Skill: {0}", power.SNOPower);
+                if (TryGetPower(GetAvoidanceSkill(), out power))
+                {
+                    Logger.LogVerbose("Using General Avoidance Skill: {0}", power.SNOPower);
+                }
                 return power;
             }
 
@@ -423,8 +426,8 @@ namespace Trinity.Combat.Abilities
                 return true;
 
             // Monsters nearby
-            if (TargetUtil.ClusterExists(meta.CastRange, Settings.Combat.DemonHunter.ClusterSizeChakram))
-                return true;       
+            if (TargetUtil.NumMobsInRange(meta.CastRange) >= Settings.Combat.DemonHunter.ClusterSizeChakram)
+                return true;
 
             return false;
         }
@@ -466,7 +469,7 @@ namespace Trinity.Combat.Abilities
                 return false;
 
             // Lightning DH
-            if (Runes.DemonHunter.BallLightning.IsActive && Legendary.MeticulousBolts.IsEquipped)
+            if (Runes.DemonHunter.BallLightning.IsActive && Legendary.AugustinesPanacea.IsEquipped)
                 meta.CastRange = 15f;
 
             // Kridershot
@@ -846,7 +849,7 @@ namespace Trinity.Combat.Abilities
                 return false;
 
             // Mobs in range
-            if (TargetUtil.AnyMobsInRange(15) || (Legendary.MeticulousBolts.IsEquipped && TargetUtil.AnyMobsInRange(60)))
+            if (TargetUtil.AnyMobsInRange(15) || (Legendary.AugustinesPanacea.IsEquipped && TargetUtil.AnyMobsInRange(60)))
                 return true;
 
             // Defensive Cast

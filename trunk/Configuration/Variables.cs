@@ -494,6 +494,7 @@ namespace Trinity
         }
 
         public static int PlayerOwnedSpiderPetsCount { get; set; }
+        public static bool LastTargetIsSafeSpot { get; set; }
 
         public static DateTime LastWorldChangeTime = DateTime.MinValue;
     }

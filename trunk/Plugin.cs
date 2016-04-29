@@ -198,7 +198,7 @@ namespace Trinity
             }
             catch (Exception ex)
             {
-                Logger.Log(LogCategory.UserInformation, "Exception in Pulse: {0}", ex.ToString());
+                Logger.Log(LogCategory.UserInformation, $"Exception in Pulse: {ex}");
             }
         }
 

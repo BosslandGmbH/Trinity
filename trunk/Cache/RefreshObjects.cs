@@ -434,9 +434,10 @@ namespace Trinity
                 // store last target GUID
                 LastTargetRactorGUID = CurrentTarget != null ? CurrentTarget.RActorGuid : -1;
                 LastTargetACDGuid = CurrentTarget != null ? CurrentTarget.ACDGuid : -1;
+                LastTargetIsSafeSpot = CurrentTarget != null ? CurrentTarget.IsSafeSpot : false;
 
                 //reset current target
-                CurrentTarget = null;
+                //CurrentTarget = null;
                 // Reset all variables for target-weight finding
                 CurrentBotKillRange = Settings.Combat.Misc.NonEliteRange;
 

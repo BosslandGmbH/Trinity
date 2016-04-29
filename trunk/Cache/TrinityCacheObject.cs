@@ -401,6 +401,9 @@ namespace Trinity
         public bool IsNPC { get; set; }
 
         [DataMember]
+        public bool IsPlayer { get { return this.Type == TrinityObjectType.Player || this.ObjectType == ObjectType.Player; } }
+
+        [DataMember]
         public bool NPCIsOperable { get; set; }
 
         [DataMember]
@@ -1065,75 +1068,99 @@ namespace Trinity
             get { return ActorSNO; }
         }
 
-        public static bool GetIsGizmoUsed(IActor gizmo)
+        public static bool GetIsGizmoUsed(IActor actor)
         {
-            int endAnimation;
-            if (gizmo.Type == ObjectType.Interactable &&
-                DataDictionary.InteractEndAnimations.TryGetValue(gizmo.ActorSNO, out endAnimation) &&
-                endAnimation == (int)gizmo.CurrentAnimation)
-                return true;
-
-            if (gizmo.GizmoType == GizmoType.None)
-                return true;
-
-            var commonData = gizmo.CommonData;
-            if (commonData != null && commonData.IsValid && !commonData.IsDisposed)
+            try
             {
-                if (commonData.GizmoState == 1)
+                if (RiftProgression.IsInRift && actor.IsNPC && actor.CommonData != null && actor.CommonData.GetAttribute<int>(ActorAttributeType.NPCIsOperatable) > 0)
+                {
+                    /* Cow lord
+                     480: NPCIsOperatable (-3616) i:1 f:0 Value=1 IsValid=True 
+                     479: IsNPC (-3617) i:1 f:0 Value=1 IsValid=True 
+                     124: HitpointsMaxTotal (-3972) i:0 f:2.053896E+09 Value=2053896000 IsValid=True 
+                     122: HitpointsMax (-3974) i:0 f:2.053896E+09 Value=2053896000 IsValid=True 
+                     119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 IsValid=True 
+                     115: HitpointsCur (-3981) i:0 f:2.053896E+09 Value=2053896000 IsValid=True 
+                     103: TeamId (-3993) i:1 f:0 Value=1 IsValid=True 
+                     57: Level (-4039) i:70 f:0 Value=70 IsValid=True 
+                     482: NPCHasInteractOptions (-3614) i:1 f:0 Value=1 IsValid=True 
+                     483: ConversationIcon (-3613) i:1 f:0 Value=1 IsValid=True 
+                    */
+
+                    return false;
+                }
+
+                int endAnimation;
+                if (actor.Type == ObjectType.Interactable &&
+                    DataDictionary.InteractEndAnimations.TryGetValue(actor.ActorSNO, out endAnimation) &&
+                    endAnimation == (int)actor.CurrentAnimation)
                     return true;
 
-                if (commonData.GizmoOperatorACDId > 0)
+                if (actor.GizmoType == GizmoType.None)
                     return true;
 
-                if (commonData.GizmoHasBeenOperated > 0)
-                    return true;
-            }
-            else
-            {
-                return true;
-            }
-
-            switch (gizmo.GizmoType)
-            {
-                case GizmoType.BreakableChest:
-                case GizmoType.LoreChest:
-                case GizmoType.Chest:
-
-                    if (gizmo.GizmoType == GizmoType.Chest && gizmo.CommonData.ChestOpen > 0)
+                var commonData = actor.CommonData;
+                if (commonData != null && commonData.IsValid && !commonData.IsDisposed)
+                {
+                    if (commonData.GizmoState == 1)
                         return true;
 
-                    break;
+                    if (commonData.GizmoOperatorACDId > 0)
+                        return true;
+
+                    if (commonData.GizmoHasBeenOperated > 0)
+                        return true;
+                }
+                else
+                {
+                    return true;
+                }
+
+                switch (actor.GizmoType)
+                {
+                    case GizmoType.BreakableChest:
+                    case GizmoType.LoreChest:
+                    case GizmoType.Chest:
+
+                        if (actor.GizmoType == GizmoType.Chest && actor.CommonData.ChestOpen > 0)
+                            return true;
+
+                        break;
+                }
+
+                var lootContainer = actor.DiaGizmo as GizmoLootContainer;
+                if (lootContainer != null && lootContainer.IsOpen)
+                    return true;
+
+                var gizmoDestructible = actor.DiaGizmo as GizmoDestructible;
+                if (gizmoDestructible != null && gizmoDestructible.HitpointsCurrent <= 0)
+                    return true;
+
+                var destructibleContainer = actor.DiaGizmo as GizmoDestructibleLootContainer;
+                if (destructibleContainer != null && destructibleContainer.HitpointsCurrent <= 0)
+                    return true;
+
+                if (actor.Type == ObjectType.Door || actor.Type == ObjectType.Container || actor.Type == ObjectType.Interactable)
+                {
+                    var currentAnimation = actor.CurrentAnimation.ToString().ToLower();
+
+                    if (currentAnimation.Contains("irongate") && currentAnimation.Contains("open"))
+                        return false;
+
+                    if (currentAnimation.Contains("_dead"))
+                        return true;
+
+                    if (currentAnimation.Contains("irongate") && currentAnimation.Contains("idle"))
+                        return true;
+
+                    if (currentAnimation.EndsWith("open") || currentAnimation.EndsWith("opening"))
+                        return true;
+                }
             }
-
-            var lootContainer = gizmo.DiaGizmo as GizmoLootContainer;
-            if (lootContainer != null && lootContainer.IsOpen)
-                return true;
-
-            var gizmoDestructible = gizmo.DiaGizmo as GizmoDestructible;
-            if (gizmoDestructible != null && gizmoDestructible.HitpointsCurrent <= 0)
-                return true;
-
-            var destructibleContainer = gizmo.DiaGizmo as GizmoDestructibleLootContainer;
-            if (destructibleContainer != null && destructibleContainer.HitpointsCurrent <= 0)
-                return true;
-
-            if (gizmo.Type == ObjectType.Door || gizmo.Type == ObjectType.Container || gizmo.Type == ObjectType.Interactable)
+            catch (Exception)
             {
-                var currentAnimation = gizmo.CurrentAnimation.ToString().ToLower();
-
-                if (currentAnimation.Contains("irongate") && currentAnimation.Contains("open"))
-                    return false;
-
-                if (currentAnimation.Contains("_dead"))
-                    return true;
-
-                if (currentAnimation.Contains("irongate") && currentAnimation.Contains("idle"))
-                    return true;
-
-                if (currentAnimation.EndsWith("open") || currentAnimation.EndsWith("opening"))
-                    return true;
+                Logger.Log("Exception in GetIsGizmoUsed");
             }
-
             return false;
         }
 

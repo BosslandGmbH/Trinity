@@ -244,7 +244,8 @@ namespace Trinity.Framework.Avoidance
 
         public bool IsStandingInFlags(params AvoidanceFlags[] flags)
         {
-            return Core.Avoidance.NearbyNodes.Any(n => flags.Any(f => n.AvoidanceFlags.HasFlag(f)));
+            return IsLocationInFlags(ZetaDia.Me.Position, flags);
+            //return Core.Avoidance.NearbyNodes.Any(n => flags.Any(f => n.AvoidanceFlags.HasFlag(f)));
         }
 
         public bool IsLocationInFlags(Vector3 location, params AvoidanceFlags[] flags)
@@ -267,7 +268,7 @@ namespace Trinity.Framework.Avoidance
             if (currentPath.Count <= 0)
                 return false;
 
-            var overFlags = currentPath.Any(p => Core.Avoidance.Grid.IsIntersectedByFlags(TrinityPlugin.Player.Position, p, flags));
+            var overFlags = currentPath.Any(p => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, p, flags));
             return overFlags;
         }
 

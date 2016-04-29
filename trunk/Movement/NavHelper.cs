@@ -158,29 +158,30 @@ namespace Trinity
                 {
                     return lastSafeZonePosition;
                 }
-                hasEmergencyTeleportUp = (!Player.IsIncapacitated && (
-                    // Leap is available
-                    (CombatBase.CanCast(SNOPower.Barbarian_Leap)) ||
-                    // Whirlwind is available
-                    (CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) &&
-                        ((Player.PrimaryResource >= 10))) ||
-                    // Tempest rush is available
-                    (CombatBase.CanCast(SNOPower.Monk_TempestRush) &&
-                        ((Player.PrimaryResource >= 20))) ||
-                    // Teleport is available
-                    (CombatBase.CanCast(SNOPower.Wizard_Teleport) && Player.PrimaryResource >= 15) ||
-                    // Archon Teleport is available
-                    (CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport))
-                    ));
-                // Wizards can look for bee stings in range and try a wave of force to dispel them
-                if (!shouldKite && Player.ActorClass == ActorClass.Wizard && CombatBase.CanCast(SNOPower.Wizard_WaveOfForce) &&
-                    !Player.IsIncapacitated && CacheData.TimeBoundAvoidance.Count(u => u.ActorSNO == 5212 && u.Position.Distance(Player.Position) <= 15f) >= 2 &&
-                    (
-                    //HotbarSkills.PassiveSkills.Contains(SNOPower.Wizard_Passive_CriticalMass) || 
-                    PowerManager.CanCast(SNOPower.Wizard_WaveOfForce)))
-                {
-                    ZetaDia.Me.UsePower(SNOPower.Wizard_WaveOfForce, Vector3.Zero, Player.WorldDynamicID, -1);
-                }
+                hasEmergencyTeleportUp = PlayerMover.IsSpecialMovementReady;
+                //hasEmergencyTeleportUp = (!Player.IsIncapacitated && (
+                //    // Leap is available
+                //    (CombatBase.CanCast(SNOPower.Barbarian_Leap)) ||
+                //    // Whirlwind is available
+                //    (CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) &&
+                //        ((Player.PrimaryResource >= 10))) ||
+                //    // Tempest rush is available
+                //    (CombatBase.CanCast(SNOPower.Monk_TempestRush) &&
+                //        ((Player.PrimaryResource >= 20))) ||
+                //    // Teleport is available
+                //    (CombatBase.CanCast(SNOPower.Wizard_Teleport) && Player.PrimaryResource >= 15) ||
+                //    // Archon Teleport is available
+                //    (CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport))
+                //    ));
+                //// Wizards can look for bee stings in range and try a wave of force to dispel them
+                //if (!shouldKite && Player.ActorClass == ActorClass.Wizard && CombatBase.CanCast(SNOPower.Wizard_WaveOfForce) &&
+                //    !Player.IsIncapacitated && CacheData.TimeBoundAvoidance.Count(u => u.ActorSNO == 5212 && u.Position.Distance(Player.Position) <= 15f) >= 2 &&
+                //    (
+                //    //HotbarSkills.PassiveSkills.Contains(SNOPower.Wizard_Passive_CriticalMass) || 
+                //    PowerManager.CanCast(SNOPower.Wizard_WaveOfForce)))
+                //{
+                //    ZetaDia.Me.UsePower(SNOPower.Wizard_WaveOfForce, Vector3.Zero, Player.WorldDynamicID, -1);
+                //}
             }
 
 

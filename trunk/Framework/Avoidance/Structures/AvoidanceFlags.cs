@@ -29,7 +29,7 @@ namespace Trinity.Framework.Avoidance.Structures
         NoAvoid = 0x00100000,
         Blacklisted = 0x00200000,
         AdjacentSafe = 0x00400000,
-        Unused24 = 0x00800000,
+        KiteFrom = 0x00800000,
         Unused25 = 0x01000000,
         Unused26 = 0x02000000,
         Unused27 = 0x04000000,
@@ -72,3 +72,4 @@ namespace Trinity.Framework.Avoidance.Structures
         Unused64 = 0x8000000000000000,
     }
 }
+
