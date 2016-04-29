@@ -60,6 +60,11 @@
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Behavior}">Log Behavior System</CheckBox>
                     </UniformGrid>
                 </GroupBox>
+                <GroupBox Header="Experimental Features">
+                    <UniformGrid Columns="2">
+                        <CheckBox IsChecked="{Binding Advanced.PhelonsPlayground}" Content="Enable Phelons' Playground"/>
+                    </UniformGrid>
+                </GroupBox>                    
                 <GroupBox Header="Misc Settings">
                     <UniformGrid Columns="2">
                         <CheckBox IsChecked="{Binding Advanced.ShowBattleTag}" Content="Show BattleTag in Title bar"/>

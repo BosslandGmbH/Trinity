@@ -38,6 +38,7 @@ namespace Trinity.Config
         private bool _useTrinityDeathHandler;
         private bool _useExperimentalAvoidance;
         private bool _useExperimentalTownRun;
+        private bool _phelonsPlayground;
 
         #endregion Fields
 
@@ -73,6 +74,24 @@ namespace Trinity.Config
                 {
                     _LogCategories = value;
                     OnPropertyChanged("LogCategories");
+                }
+            }
+        }
+        
+        [DataMember(IsRequired = false)]
+        [DefaultValue(true)]
+        public bool PhelonsPlayground
+        {
+            get
+            {
+                return _phelonsPlayground;
+            }
+            set
+            {
+                if (_phelonsPlayground != value)
+                {
+                    _phelonsPlayground = value;
+                    OnPropertyChanged("PhelonsPlayground");
                 }
             }
         }
