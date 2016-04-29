@@ -2931,7 +2931,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SunwukosSoul = new Item
         {
-            Id = 0,
+            Id = 429167,
             Name = "Sunwuko's Soul",
             Quality = ItemQuality.Legendary,
             Slug = "sunwukos-soul",
@@ -6128,7 +6128,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item SunwukosLeggings = new Item
         {
-            Id = 0,
+            Id = 429075,
             Name = "Sunwuko's Leggings",
             Quality = ItemQuality.Legendary,
             Slug = "sunwukos-leggings",
@@ -7945,7 +7945,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ShieldOfFury = new Item
         {
-            Id = 0,
+            Id = 298190,
             Name = "Shield of Fury",
             Quality = ItemQuality.Legendary,
             Slug = "shield-of-fury",
@@ -8152,7 +8152,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item ShieldOfTheSteed = new Item
         {
-            Id = 298190,
+            Id = 298189, //298190,
             Name = "Shield of the Steed",
             Quality = ItemQuality.Legendary,
             Slug = "shield-of-the-steed",
@@ -8405,7 +8405,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item HaloOfKarini = new Item
         {
-            Id = 0,
+            Id = 449039,
             Name = "Halo of Karini",
             Quality = ItemQuality.Legendary,
             Slug = "halo-of-karini",
