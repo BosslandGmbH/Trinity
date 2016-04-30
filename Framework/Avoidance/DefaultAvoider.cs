@@ -67,6 +67,13 @@ namespace Trinity.Framework.Avoidance
                 if (Core.Avoidance.NearbyNodes.Any(n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Gizmo)) && PlayerMover.IsBlocked)
                     return false;
 
+
+                if (PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 3000)
+                {
+                    Logger.Log(LogCategory.Avoidance, "Not Avoiding because blocked");
+                    return false;
+                }
+
                 if (Core.Avoidance.HighestNodeWeight >= 2 &&
                     Core.Avoidance.NearbyStats.HighestWeight >= Settings.MinimumHighestNodeWeightTrigger &&
                     Core.Avoidance.NearbyStats.WeightPctTotal >= Settings.MinimumNearbyWeightPctTotalTrigger &&
@@ -124,6 +131,12 @@ namespace Trinity.Framework.Avoidance
                 if (DateTime.UtcNow < KiteStutterDuration)
                 {
                     Logger.Log(LogCategory.Avoidance, "Kite On Cooldown");
+                    return false;
+                }
+
+                if (PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 3000)
+                {
+                    Logger.Log(LogCategory.Avoidance, "Not kiting because blocked");
                     return false;
                 }
 

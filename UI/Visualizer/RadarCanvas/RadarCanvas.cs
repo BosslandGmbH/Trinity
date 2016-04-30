@@ -629,10 +629,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                         DrawKiteFromNodes(dc, CanvasData);
                     }
 
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache))
-                    //{
-                    //    DrawNotInCacheObjects(dc, CanvasData);
-                    //}
+                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache))
+                    {
+                        DrawNotInCacheObjects(dc, CanvasData);
+                    }
 
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.CombatRadius))
                     {

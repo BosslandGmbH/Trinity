@@ -194,6 +194,7 @@ namespace Trinity
                         if (PlayerMover.IsBlocked && Settings.Combat.Misc.AttackWhenBlocked)
                         {
                             cacheObject.WeightInfo += "Player is blocked ";
+                            Logger.Log($"Weighting Blocked Handler! AttackWhenBlocked");
 
                             if (cacheObject.Distance > 15f && !cacheObject.IsBossOrEliteRareUnique && cacheObject.Type != TrinityObjectType.ProgressionGlobe)
                             {
@@ -324,7 +325,7 @@ namespace Trinity
                                         }
                                     }
 
-                                    if (healthGlobeEmergency && cacheObject.Type != TrinityObjectType.HealthGlobe)
+                                    if (healthGlobeEmergency && cacheObject.Type != TrinityObjectType.HealthGlobe && !PlayerMover.IsBlocked)
                                     {
                                         cacheObject.WeightInfo +=
                                             string.Format("Ignoring {0} for Priority Health Globe",
@@ -332,7 +333,7 @@ namespace Trinity
                                         break;
                                     }
 
-                                    if (getHiPriorityShrine && cacheObject.Type != TrinityObjectType.Shrine)
+                                    if (getHiPriorityShrine && cacheObject.Type != TrinityObjectType.Shrine && !PlayerMover.IsBlocked)
                                     {
                                         cacheObject.WeightInfo +=
                                             string.Format("Ignoring {0} for Priority Shrine ",
@@ -340,7 +341,7 @@ namespace Trinity
                                         break;
                                     }
 
-                                    if (getHiPriorityContainer && cacheObject.Type != TrinityObjectType.Container)
+                                    if (getHiPriorityContainer && cacheObject.Type != TrinityObjectType.Container && !PlayerMover.IsBlocked)
                                     {
                                         cacheObject.WeightInfo +=
                                             string.Format("Ignoring {0} for Priority Container",
@@ -500,7 +501,7 @@ namespace Trinity
                                         }
                                         else if (cacheObject.HitPointsPct <
                                                  Settings.Combat.Misc.IgnoreTrashBelowHealthDoT &&
-                                                 cacheObject.HasDotDPS)
+                                                 cacheObject.HasDotDPS && !PlayerMover.IsBlocked)
                                         {
                                             cacheObject.WeightInfo +=
                                                 string.Format(
@@ -508,7 +509,7 @@ namespace Trinity
                                                     cacheObject.InternalName);
                                             break;
                                         }
-                                        else if (nearbyTrashCount < Settings.Combat.Misc.TrashPackSize)
+                                        else if (nearbyTrashCount < Settings.Combat.Misc.TrashPackSize && (!Settings.Combat.Misc.AttackWhenBlocked || !PlayerMover.IsBlocked))
                                         {
                                             cacheObject.WeightInfo +=
                                                 string.Format("Ignoring {0} below TrashPackSize",
