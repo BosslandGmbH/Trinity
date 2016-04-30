@@ -145,6 +145,11 @@ namespace Trinity
                         return GetRunStatus(RunStatus.Failure, "PlayerDead");
                     }
 
+                    if (UsePotionIfNeededTask())
+                    {
+                        return GetRunStatus(RunStatus.Running, "UsePotionTask");
+                    }
+
                     if (Core.Avoidance.Avoider.ShouldAvoid)
                     {
                         Vector3 safespot;
@@ -255,39 +260,6 @@ namespace Trinity
                             _isWaitingForPower, _isWaitingBeforePower, CombatBase.CurrentPower, CurrentTarget);
                     }                    
 
-                    //// Change to close range target when blocked
-                    //if (PlayerMover.IsBlocked && CurrentTarget != null && CurrentTarget.Distance >= 12f && !CombatBase.IsDoingGoblinKamakazi && !CurrentTarget.IsBoss)
-                    //{
-                    //    var units = ObjectCache.Where(u => u.IsUnit && u.Distance < 14f && u.Weight > 0 && !u.IsSafeSpot).OrderBy(u => u.Distance).ToList();
-                    //    if (units.Count > 1 && units.First().RActorId != CurrentTarget.RActorId)
-                    //    {
-                    //        Blacklist3Seconds.Add(CurrentTarget.ACDId);
-                    //        CurrentTarget = units.First();
-
-                    //        if(CombatBase.CurrentPower == null)
-                    //            CombatBase.CurrentPower = AbilitySelector();
-
-                    //        if (CombatBase.CurrentPower.MinimumRange >= CurrentTarget.Distance)
-                    //        {
-                    //            // Its an ACDId targetted spell, change target.
-                    //            if (CombatBase.CurrentPower.TargetACDGUID > 0)
-                    //                CombatBase.CurrentPower.TargetACDGUID = CurrentTarget.ACDId;
-
-                    //            // Its a position based spell that is targetted too far away, change target position.
-                    //            if (CombatBase.CurrentPower.TargetPosition.Distance(ZetaDia.Me.Position) > CurrentTarget.Distance)
-                    //                CombatBase.CurrentPower.TargetPosition = CurrentTarget.Position;
-                    //        }
-                    //        else
-                    //        {
-                    //             // Try to find a new skill to use.
-                    //        }
-
-                    //        Logger.LogVerbose(LogCategory.Behavior, "Blocked! Forcing close range target {0} ({1}) Distance={2} ({3}) @ {4}", 
-                    //            CurrentTarget.InternalName, CurrentTarget.ActorSnoId, CurrentTarget.Distance, CombatBase.CurrentPower.SNOPower, 
-                    //            CombatBase.CurrentPower.TargetACDGUID > 0 ? "ACDId" : CombatBase.CurrentPower.TargetPosition != Vector3.Zero ? "Position" : "Self");
-                    //    }
-                    //}
-
                     // Some skills we need to wait to finish (like cyclone strike while epiphany is active)
                     if (WaitForAttackToFinish)
                     {
@@ -361,10 +333,7 @@ namespace Trinity
 
                     // Pop a potion when necessary
 
-                    if (UsePotionIfNeededTask())
-                    {
-                        return GetRunStatus(RunStatus.Running, "UsePotionTask");
-                    }
+
 
                     using (new PerformanceLogger("HandleTarget.CheckAvoidanceBuffs"))
                     {

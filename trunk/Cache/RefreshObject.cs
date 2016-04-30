@@ -889,8 +889,14 @@ namespace Trinity
                             // Get whether or not this RActor has ever been in "Line of Sight" (as determined by Demonbuddy). If it hasn't, don't add to cache and keep rechecking
                             if (!CacheData.HasBeenInLoS.TryGetValue(CurrentCacheObject.RActorGuid, out c_HasBeenInLoS) || DataDictionary.AlwaysRaycastWorlds.Contains(Player.WorldID))
                             {
+                                var alwaysLoSCheckTypes = new HashSet<TrinityObjectType>
+                                {
+                                    TrinityObjectType.ProgressionGlobe,
+                                    TrinityObjectType.Shrine,
+                                };
+
                                 // Ignore units not in LoS except bosses
-                                if (!CurrentCacheObject.IsBoss && !c_diaObject.InLineOfSight)
+                                if (!CurrentCacheObject.IsBoss && !c_diaObject.InLineOfSight && !alwaysLoSCheckTypes.Contains(CurrentCacheObject.Type))
                                 {
                                     AddToCache = false;
                                     c_IgnoreSubStep = "NotInLoS";

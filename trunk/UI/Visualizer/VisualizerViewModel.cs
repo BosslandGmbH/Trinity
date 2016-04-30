@@ -41,6 +41,7 @@ using Zeta.Common.Xml;
 using Zeta.Game;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.SNO;
 using Expression = System.Linq.Expressions.Expression;
 using Logger = Trinity.Technicals.Logger;
 
@@ -180,32 +181,32 @@ namespace Trinity.UI.RadarUI
                 var queryableObjects = ApplySort(objects.AsQueryable());
                 Objects = new ObservableCollection<IActor>(queryableObjects);
 
-                //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache) && DateTime.UtcNow.Subtract(LastUpdatedNotInCacheObjects).TotalSeconds > 1)
-                //{
-                //    var objectsByRActorGuid = Objects.ToDictionary(k => k.RActorGuid, v => v);
+                if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache) && DateTime.UtcNow.Subtract(LastUpdatedNotInCacheObjects).TotalSeconds > 1)
+                {
+                    var objectsByRActorGuid = Objects.ToDictionary(k => k.RActorGuid, v => v);
 
-                //    var allObjects = ZetaDia.Actors.GetActorsOfType<DiaObject>(true);
+                    var allObjects = ZetaDia.Actors.GetActorsOfType<DiaObject>(true);
 
-                //    NotInCacheObjects.Clear();
+                    NotInCacheObjects.Clear();
 
-                //    foreach (var obj in allObjects)
-                //    {
-                //        if (objectsByRActorGuid.ContainsKey(obj.RActorId))
-                //            continue;
+                    foreach (var obj in allObjects)
+                    {
+                        if (objectsByRActorGuid.ContainsKey(obj.RActorId) || obj.ActorType == ActorType.ClientEffect)
+                            continue;
 
-                //        var newObj = new TrinityCacheObject(obj);
+                        var newObj = new TrinityCacheObject(obj);
 
-                //        if (CacheData.IgnoreReasons.ContainsKey(obj.RActorId))
-                //            newObj.IgnoreReason = CacheData.IgnoreReasons[obj.RActorId];
+                        if (CacheData.IgnoreReasons.ContainsKey(obj.RActorId))
+                            newObj.IgnoreReason = CacheData.IgnoreReasons[obj.RActorId];
 
-                //        NotInCacheObjects.Add(newObj);
+                        NotInCacheObjects.Add(newObj);
 
-                //    }
+                    }
 
-                //    LastUpdatedNotInCacheObjects = DateTime.UtcNow;
-                //}
+                    LastUpdatedNotInCacheObjects = DateTime.UtcNow;
+                }
 
-                //CurrentTarget = CombatBase.CurrentTarget;
+                CurrentTarget = CombatBase.CurrentTarget;
 
                 Player = TrinityPlugin.Player.IActor;
                 PlayerPositionX = Player.Position.X;
@@ -215,16 +216,16 @@ namespace Trinity.UI.RadarUI
                 LevelAreaSnoId = TrinityPlugin.Player.LevelAreaId;
                 PlayerRotation = MathUtil.RadianToDegree(Player.RotationRadians);
 
-                //IsStuck = Navigator.StuckHandler.IsStuck;
-                //IsAvoiding = Core.Avoidance.Avoider.IsAvoiding;
-                //IsBlocked = PlayerMover.IsBlocked;
-                //OnPropertyChanged(nameof(Player));
+                IsStuck = Navigator.StuckHandler.IsStuck;
+                IsAvoiding = Core.Avoidance.Avoider.IsAvoiding;
+                IsBlocked = PlayerMover.IsBlocked;
+                OnPropertyChanged(nameof(Player));
 
-                //if (!_listeningForStatChanges)
-                //    AddStatChangerListeners();
+                if (!_listeningForStatChanges)
+                    AddStatChangerListeners();
 
-                // OnPropertyChanged("CurrentTarget");
-                // OnPropertyChanged("SelectedObject");
+                OnPropertyChanged("CurrentTarget");
+                OnPropertyChanged("SelectedObject");
             }
         }
 
