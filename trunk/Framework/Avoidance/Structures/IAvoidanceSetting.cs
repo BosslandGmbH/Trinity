@@ -6,6 +6,7 @@ namespace Trinity.Framework.Avoidance.Structures
     {
         string Name { get; set; }
         bool IsEnabled { get; set; }
+        bool IsEnabledByDefault { get; set; }
         IAvoidanceHandler Handler { get; set; }
     }
 }

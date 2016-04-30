@@ -25,6 +25,8 @@ namespace Trinity.Framework.Avoidance.Structures
         /// </summary>
         public int AffixGbId { get; set; }
 
+        public bool IsEnabledByDefault { get; set; }
+
         /// <summary>
         /// Distance from center to boundary
         /// </summary>

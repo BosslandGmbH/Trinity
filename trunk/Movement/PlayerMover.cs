@@ -724,7 +724,7 @@ namespace Trinity.DbProvider
         {
             var points = new IndexedList<Vector3>();
 
-            if (!NavigationProvider.CurrentPath.Any())
+            if (NavigationProvider == null || !NavigationProvider.CurrentPath.Any())
                 return points;
 
             var current = NavigationProvider.CurrentPath.CurrentOrDefault;
