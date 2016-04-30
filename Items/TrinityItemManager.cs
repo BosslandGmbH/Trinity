@@ -423,10 +423,6 @@ namespace Trinity.Items
             if (item.ItemType == ItemType.KeystoneFragment)
                 return false;
 
-            // Unable to savlage starter items.
-            if (item.RequiredLevel <= 1 && item.ItemQualityLevel == ItemQuality.Normal)
-                return false;
-
             // Stashing Whites
             if (TrinityPlugin.Settings.Loot.TownRun.StashWhites && item.ItemQualityLevel < ItemQuality.Magic1)
                 return false;
@@ -490,6 +486,10 @@ namespace Trinity.Items
 
             if (item.IsUnidentified)
                 return false;
+
+            // Unable to savlage starter items.
+            if (item.IsEquipment && item.RequiredLevel <= 1)
+                return true;
 
             if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
                 return false;

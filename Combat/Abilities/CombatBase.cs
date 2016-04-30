@@ -67,38 +67,41 @@ namespace Trinity.Combat.Abilities
             EmergencyHealthGlobeLimit = Settings.Combat.Misc.HealthGlobeLevel;
             HealthGlobeResource = Settings.Combat.Misc.HealthGlobeLevelResource;
 
-            switch (Player.ActorClass)
-            {
-                case ActorClass.Barbarian:
-                    KiteDistance = Settings.Combat.Barbarian.KiteLimit;
-                    KiteMode = KiteMode.Never;
-                    break;
+            KiteMode = Settings.Avoidance.KiteMode;
+            KiteDistance = (int)Settings.Avoidance.KiteDistance;
 
-                case ActorClass.Crusader:
-                    KiteDistance = 0;
-                    KiteMode = KiteMode.Never;
-                    break;
+            //switch (Player.ActorClass)
+            //{
+            //    case ActorClass.Barbarian:
+            //        KiteDistance = Settings.Combat.Barbarian.KiteLimit;
+            //        KiteMode = KiteMode.Never;
+            //        break;
 
-                case ActorClass.Monk:
-                    KiteDistance = 0;
-                    KiteMode = KiteMode.Never;
-                    break;
+            //    case ActorClass.Crusader:
+            //        KiteDistance = 0;
+            //        KiteMode = KiteMode.Never;
+            //        break;
 
-                case ActorClass.Wizard:
-                    KiteDistance = Settings.Combat.Wizard.KiteLimit;
-                    KiteMode = KiteMode.Always;
-                    break;
+            //    case ActorClass.Monk:
+            //        KiteDistance = 0;
+            //        KiteMode = KiteMode.Never;
+            //        break;
 
-                case ActorClass.Witchdoctor:
-                    KiteDistance = Settings.Combat.WitchDoctor.KiteLimit;
-                    KiteMode = KiteMode.Always;
-                    break;
+            //    case ActorClass.Wizard:
+            //        KiteDistance = Settings.Combat.Wizard.KiteLimit;
+            //        KiteMode = KiteMode.Always;
+            //        break;
 
-                case ActorClass.DemonHunter:
-                    KiteDistance = Settings.Combat.DemonHunter.KiteLimit;
-                    KiteMode = Settings.Combat.DemonHunter.KiteMode;
-                    break;
-            }
+            //    case ActorClass.Witchdoctor:
+            //        KiteDistance = Settings.Combat.WitchDoctor.KiteLimit;
+            //        KiteMode = KiteMode.Always;
+            //        break;
+
+            //    case ActorClass.DemonHunter:
+            //        KiteDistance = Settings.Combat.DemonHunter.KiteLimit;
+            //        KiteMode = Settings.Combat.DemonHunter.KiteMode;
+            //        break;
+            //}
 
             // Monk Seven Sided Strike: Sustained Attack
             if (Player.ActorClass == ActorClass.Monk && CacheData.Hotbar.ActiveSkills.Any(s => s.Power == SNOPower.Monk_SevenSidedStrike && s.RuneIndex == 3))
@@ -222,6 +225,9 @@ namespace Trinity.Combat.Abilities
             {
                 // Conduit Pylon buff is active, no kite distance
                 if (CacheData.Buffs.HasConduitPylon)
+                    return 0;
+
+                if (KiteMode == KiteMode.Never)
                     return 0;
 
                 return _kiteDistance;

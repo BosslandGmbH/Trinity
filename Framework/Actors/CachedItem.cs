@@ -166,7 +166,7 @@ namespace Trinity.Framework.Actors
             IsCraftingReagent = RawItemType == RawItemType.CraftingReagent || RawItemType == RawItemType.CraftingReagentBound;
             IsGold = RawItemType == RawItemType.Gold;
             IsEquipment = TypeConversions.GetIsEquipment(TrinityItemBaseType);
-            IsSalvageable = IsEquipment && !IsVendorBought;
+            IsSalvageable = IsEquipment && !IsVendorBought && RequiredLevel > 1;
             IsClassItem = TypeConversions.GetIsClassItem(ItemType);
             IsOffHand = TypeConversions.GetIsOffhand(ItemType);
             IsPotion = RawItemType == RawItemType.Potion;

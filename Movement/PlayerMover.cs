@@ -9,6 +9,7 @@ using Buddy.Coroutines;
 using Trinity.Combat.Abilities;
 using Trinity.Config.Combat;
 using Trinity.Framework;
+using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Utilities;
 using Trinity.Movement;
 using Trinity.Reference;
@@ -694,7 +695,8 @@ namespace Trinity.DbProvider
                     x =>
                         remaining.Contains(x) && NavHelper.CanRayCast(x) &&
                         x.Distance(CacheData.Player.Position) <= maxDistance &&
-                        x.Distance(CacheData.Player.Position) >= minDistance)
+                        x.Distance(CacheData.Player.Position) >= minDistance && 
+                        !Core.Avoidance.Grid.IsLocationInFlags(x, AvoidanceFlags.CriticalAvoidance))
                     .OrderByDescending(y => y.Distance(CacheData.Player.Position))
                     .ToList();
             //Add some redundancy to find a spot that isn't ray cast

@@ -317,6 +317,8 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
+        public IEnumerable<IActor> ActiveAvoidanceActors => CurrentAvoidances.SelectMany(a => a.Actors);
+
         public HashSet<int> ActiveAvoidanceIds { get; set; }
 
         private void UpdateGizmoFlags(IActor actor)

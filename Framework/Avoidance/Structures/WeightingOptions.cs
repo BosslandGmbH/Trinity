@@ -19,6 +19,6 @@ namespace Trinity.Framework.Avoidance.Structures
         [EnumMember] AvoidanceCentroid = 1 << 5,
         [EnumMember] MonsterCentroid = 1 << 6,
         [EnumMember] Kiting = 1 << 7,
-        [EnumMember] All = ~(1 << 8),
+        //[EnumMember] All = ~(1 << 8),
     }
 }
