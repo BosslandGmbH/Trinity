@@ -62,17 +62,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Adventurer">
-      <HintPath>..\Adventurer\Trunk\bin\Debug\Adventurer.dll</HintPath>
+      <HintPath>..\..\Demonbuddy3\Plugins\Adventurer\bin\Debug\Adventurer.dll</HintPath>
     </Reference>
     <Reference Include="Demonbuddy">
-      <HintPath>..\..\DB-Current\Demonbuddy.exe</HintPath>
+      <HintPath>..\..\Demonbuddy3\Demonbuddy.exe</HintPath>
     </Reference>
-    <Reference Include="GreyMagic, Version=1.1.2972.607, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DB-Current\GreyMagic.dll</HintPath>
+    <Reference Include="GreyMagic">
+      <HintPath>..\..\Demonbuddy3\GreyMagic.dll</HintPath>
     </Reference>
     <Reference Include="IronPython">
-      <HintPath>..\..\DB-Current\IronPython.dll</HintPath>
+      <HintPath>..\..\Demonbuddy3\IronPython.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />

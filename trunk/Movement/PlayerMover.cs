@@ -689,7 +689,12 @@ namespace Trinity.DbProvider
 
         public static Vector3 GetCurrentPathFarthestPoint(float minDistance, float maxDistance)
         {
+
             var remaining = GetCurrentPathPointsRemaining();
+
+            if (!remaining.Any())
+                return Vector3.Zero;
+
             var points =
                 NavigationProvider.CurrentPath.Where(
                     x =>
@@ -718,7 +723,12 @@ namespace Trinity.DbProvider
         public static List<Vector3> GetCurrentPathPointsRemaining()
         {
             var points = new IndexedList<Vector3>();
+
+            if (!NavigationProvider.CurrentPath.Any())
+                return points;
+
             var current = NavigationProvider.CurrentPath.CurrentOrDefault;
+
             if (current == Vector3.Zero)
                 return points;
 
