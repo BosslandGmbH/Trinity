@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ut="clr-namespace:Trinity.UIComponents"
+             xmlns:demonbuddy="clr-namespace:Demonbuddy;assembly=Demonbuddy"
              mc:Ignorable="d" Foreground="{DynamicResource TextBrush}" Background="#434343"
              MinHeight="470" MinWidth="432">
     <UserControl.Resources>
@@ -44,17 +45,25 @@
                 </TabItem>                
             </TabControl>
         </Border>
-        <Border Grid.Row="1" Padding="0,0,0,2" Background="#343434">
+        <Border Grid.Row="1" Padding="6,0,6,4" Background="#343434">
             <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="2*"/>
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" Height="24" Command="{Binding ResetAllCommand}" Margin="4">Reset all settings</Button>
-                <Button Grid.Column="3" Command="{Binding SaveCommand}" Margin="4">Save settings</Button>
+                <WrapPanel Grid.Column="0">
+                    <!--<Button Height="26" Command="{Binding LoadCommand}" Margin="4" Width="65">Load</Button>
+                    <Button Height="26" Command="{Binding ResetAllCommand}" Margin="4" Width="65">Save As</Button>-->
+                    <Button Height="26" Command="{Binding ResetAllCommand}" Margin="4" Width="65">Reset</Button>
+                </WrapPanel>
+
+                <!--<demonbuddy:SplitButton Grid.Column="1" Height="26" HorizontalAlignment="Right" Content="Save" Margin="4" Width="120">
+                    <demonbuddy:SplitButton.ButtonMenuItemsSource>
+                        <MenuItem Width="124" Header="Save As" Command="{Binding SaveAsCommand}"/>
+                    </demonbuddy:SplitButton.ButtonMenuItemsSource>
+                </demonbuddy:SplitButton>-->
+
+                <Button Grid.Column="1" HorizontalAlignment="Right" Command="{Binding SaveCommand}" Width="120" Margin="4">Save</Button>
             </Grid>
          </Border>
     </Grid>
