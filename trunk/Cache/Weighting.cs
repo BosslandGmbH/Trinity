@@ -927,22 +927,16 @@ namespace Trinity
                                 }
 
                                 // do not collect health globes if we are kiting and health globe is too close to monster or avoidance
-                                if (CombatBase.KiteDistance > 0)
+                                if (CombatBase.KiteMode != KiteMode.Never)
                                 {
-                                    if (
-                                        CacheData.MonsterObstacles.Any(
-                                            m => m.Position.Distance(cacheObject.Position) < CombatBase.KiteDistance))
+                                    if (Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, Player.Position, AvoidanceFlags.Avoidance))
                                     {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Kiting with Monster Obstacles.";
+                                        cacheObject.WeightInfo +=  $"Ignoring {cacheObject.InternalName} - Kiting with Monster Obstacles.";
                                         break;
                                     }
-                                    if (
-                                        CacheData.TimeBoundAvoidance.Any(
-                                            m => m.Position.Distance(cacheObject.Position) < CombatBase.KiteDistance))
+                                    if (Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
                                     {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Kiting with Time Bound Avoidance.";
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Kiting with Time Bound Avoidance.";
                                         break;
                                     }
                                 }

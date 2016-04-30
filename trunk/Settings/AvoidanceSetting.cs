@@ -175,7 +175,9 @@ namespace Trinity.Config
         }
 
         [DataMember]
-        [DefaultValue(WeightingOptions.All)]
+        [DefaultValue(WeightingOptions.Backtrack | WeightingOptions.Globes | WeightingOptions.AdjacentSafe | 
+            WeightingOptions.AvoidanceCentroid | WeightingOptions.Kiting | WeightingOptions.MonsterCentroid | 
+            WeightingOptions.Monsters | WeightingOptions.Obstacles)]
         public WeightingOptions WeightingOptions
         {
             get { return _weightingOptions; }
