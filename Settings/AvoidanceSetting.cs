@@ -304,7 +304,10 @@ namespace Trinity.Config
                     else 
                     {
                         (def.Handler as NotifyBase)?.LoadDefaults();
-                        Avoidances.Add(new AvoidanceDataSettingViewModel(def));
+                        var newAvoidance = new AvoidanceDataSettingViewModel(def);
+                        if (def.IsEnabledByDefault)
+                            newAvoidance.IsEnabled = true;
+                        Avoidances.Add(newAvoidance);
                     }
                 }
 
@@ -345,10 +348,8 @@ namespace Trinity.Config
             {
                 return new RelayCommand(param =>
                 {
-                    foreach (var item in Avoidances)
-                    {
-                        item.LoadDefaults();
-                    }
+                    Avoidances.Clear();
+                    LoadSettingsFromDataFactory();
                 });
             }
         }

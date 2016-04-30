@@ -19,7 +19,7 @@ namespace Trinity.Combat.Abilities
 {
     public class MonkCombat : CombatBase
     {
-        private const float MaxDashingStrikeRange = 55f;
+        private const float MaxDashingStrikeRange = 50f;
         internal static Vector3 LastTempestRushLocation = Vector3.Zero;
         private static DateTime _lastTargetChange = DateTime.MinValue;
         internal static string LastConditionFailureReason = string.Empty;
@@ -448,19 +448,24 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // Raiment set, dash costs 75 spirit and refunds a charge when it's used
-                if (Sets.ThousandStorms.IsSecondBonusActive && ((Player.PrimaryResource >= 75 && Skills.Monk.DashingStrike.Charges >= 1) ||
-                    CacheData.Buffs.HasCastingShrine && Sets.ThousandStorms.IsFullyEquipped))
+                if (Sets.ThousandStorms.IsSecondBonusActive)
                 {
-                    if (CurrentTarget.IsBossOrEliteRareUnique)
-                        return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, CurrentTarget.Position);
+                    if ((Player.PrimaryResource >= 75 && Skills.Monk.DashingStrike.Charges >= 1) || CacheData.Buffs.HasCastingShrine && Sets.ThousandStorms.IsFullyEquipped) {
+                        if (CurrentTarget.IsBossOrEliteRareUnique)
+                            return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, CurrentTarget.Position);
 
-                    if (!Sets.ThousandStorms.IsFullyEquipped)
-                        return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, TargetUtil.GetBestClusterPoint());
+                        if (!Sets.ThousandStorms.IsFullyEquipped)
+                            return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, TargetUtil.GetBestClusterPoint());
 
-                    if (!Sets.ThousandStorms.IsSecondBonusActive)
-                        return new  TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, CurrentTarget.ACDGuid);
+                        if (!Sets.ThousandStorms.IsSecondBonusActive)
+                            return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, CurrentTarget.ACDGuid);
 
-                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, TargetUtil.GetBestPierceTarget(50f, true).Position);
+                        return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, TargetUtil.GetBestPierceTarget(50f, true).Position);
+                    }
+                }
+                else if (TargetUtil.ClusterExists(12f, MaxDashingStrikeRange, 3))
+                {
+                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, TargetUtil.GetDashStrikeBestClusterPoint(12f, 50f));
                 }
             }
 

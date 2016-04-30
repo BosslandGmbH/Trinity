@@ -706,7 +706,7 @@ namespace Trinity.Config.Loot
             }
         }
         [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool IgnoreLegendaryInAoE
         {
             get
@@ -723,7 +723,7 @@ namespace Trinity.Config.Loot
             }
         }
         [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool IgnoreNonLegendaryInAoE
         {
             get
@@ -774,7 +774,7 @@ namespace Trinity.Config.Loot
             }
         }
         [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
+        [DefaultValue(true)]
         public bool IgnoreGoldInAoE
         {
             get
@@ -946,6 +946,11 @@ namespace Trinity.Config.Loot
             AutoEquipItems = true;
             AutoEquipSkills = true;
             DisableAutoEquipAtMaxLevel = true;
+            IgnoreProgressionGlobesInAoE = true;
+            IgnoreGoldInAoE = true;
+            IgnoreLegendaryInAoE = true;
+            IgnoreNonLegendaryInAoE = true;
+            IgnoreHealthGlobesInAoE = true;
         }
         #endregion Methods
     }

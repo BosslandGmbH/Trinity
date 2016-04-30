@@ -49,6 +49,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Molten Core",
+                IsEnabledByDefault = true,
                 AffixGbId = (int) TrinityMonsterAffix.Molten,
                 Handler = new CircularAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
@@ -335,6 +336,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Arcane Sentry",
+                IsEnabledByDefault = true,
                 AffixGbId = (int) TrinityMonsterAffix.ArcaneEnchanted,
                 Handler = new ArcaneAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
@@ -398,6 +400,7 @@ namespace Trinity.Framework.Avoidance
             {
                 Name = "Orbiter",
                 AffixGbId = 0,
+                IsEnabledByDefault = true,
                 Handler = new CircularAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
                 {
