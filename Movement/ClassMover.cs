@@ -208,7 +208,7 @@ namespace Trinity.Movement
         public static bool CrusaderMover(Vector3 destination)
         {
             if (CombatBase.CanCast(SNOPower.X1_Crusader_SteedCharge) &&
-                DataDictionary.SteedChargeAnimations.Contains(CacheData.Player.CurrentAnimation))
+                !DataDictionary.SteedChargeAnimations.Contains(CacheData.Player.CurrentAnimation))
             {
                 Skills.Crusader.SteedCharge.Cast(destination);
                 LogMovement(SNOPower.X1_Crusader_SteedCharge, destination);
