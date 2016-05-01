@@ -23,8 +23,7 @@ namespace Trinity.Framework.Avoidance
     {
         bool IsAvoiding { get; }
         bool ShouldAvoid { get; }
-        //Task<bool> Avoid();
-        bool TryGetSafeSpot(out Vector3 position, float minDistance = 10f, Func<AvoidanceNode, bool> condition = null);
+        bool TryGetSafeSpot(out Vector3 position, float minDistance = 10f, float maxDistance = 100f, Func<AvoidanceNode, bool> condition = null);
         TimeSpan TimeSinceLastAvoid { get; }
     }
 
@@ -64,14 +63,27 @@ namespace Trinity.Framework.Avoidance
                 if (ShouldKite)
                     return true;
 
+                if (ShouldAvoidNormal)
+                    return true;
+
+                return false;
+
+            }
+        }
+
+        private bool ShouldAvoidNormal
+        {
+            get
+            {
                 if (Core.Avoidance.NearbyNodes.Any(n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Gizmo)) && PlayerMover.IsBlocked)
+                {
                     return false;
+                }
 
-
-                if (PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 3000)
+                if (Settings.DontAvoidWhenBlocked && PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 5000)
                 {
                     Logger.Log(LogCategory.Avoidance, "Not Avoiding because blocked");
-                    return false;
+                    return false;                  
                 }
 
                 if (Core.Avoidance.HighestNodeWeight >= 2 &&
@@ -79,7 +91,6 @@ namespace Trinity.Framework.Avoidance
                     Core.Avoidance.NearbyStats.WeightPctTotal >= Settings.MinimumNearbyWeightPctTotalTrigger &&
                     Core.Avoidance.NearbyStats.WeightPctAvg >= Settings.AvoiderNearbyPctAvgTrigger)
                 {
-
                     Logger.Log(LogCategory.Avoidance, "Avoidance Local PctAvg: {0:0.00} / {1:0.00} PctTotal={2:0.00} / {3:0.00} Highest={4} / {5} ({6} Nodes, AbsHighest={7})",
                         Core.Avoidance.NearbyStats.WeightPctAvg,
                         Settings.AvoiderNearbyPctAvgTrigger,
@@ -91,12 +102,13 @@ namespace Trinity.Framework.Avoidance
                         Core.Avoidance.HighestNodeWeight);
 
                     LastAvoidTime = DateTime.UtcNow;
-                    return true;
+                    {                       
+                        return true;
+                    }
                 }
-
                 return false;
-
             }
+
         }
 
         private bool ShouldAvoidCritical
@@ -134,7 +146,12 @@ namespace Trinity.Framework.Avoidance
                     return false;
                 }
 
-                if (PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 3000)
+                if (!TrinityPlugin.ObjectCache.Any(o => o.Weight > 0) && TrinityPlugin.Player.CurrentHealthPct > 0.6)
+                {
+                    return false;
+                }
+
+                if (Settings.DontAvoidWhenBlocked && PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 5000)
                 {
                     Logger.Log(LogCategory.Avoidance, "Not kiting because blocked");
                     return false;
@@ -165,16 +182,14 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-
-
         private static float TargetZDif
         {
             get { return CombatBase.CurrentTarget == null ? 0 : Math.Abs(CombatBase.CurrentTarget.Position.Z - ZetaDia.Me.Position.Z); }
         }
 
-        public bool TryGetSafeSpot(out Vector3 safeSpot, float minDistance = 10f, Func<AvoidanceNode, bool> condition = null)
+        public bool TryGetSafeSpot(out Vector3 safeSpot, float minDistance = 10f, float maxDistance = 100f, Func<AvoidanceNode, bool> condition = null)
         {
-            var nodes = Core.Avoidance.SafeNodesByDistance.Where(p => p.Distance > minDistance);
+            var nodes = Core.Avoidance.SafeNodesByDistance.Where(p => p.Distance >= minDistance && p.Distance <= maxDistance);
             var safeSpotNode = condition == null ? nodes.FirstOrDefault() : nodes.FirstOrDefault(condition);
             if (safeSpotNode != null)
             {
@@ -188,5 +203,6 @@ namespace Trinity.Framework.Avoidance
     }
 
 }
+
 
 

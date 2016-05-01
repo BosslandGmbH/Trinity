@@ -95,7 +95,7 @@ namespace Trinity.Settings.Loot
         public void CreateView()
         {
             Collection = new CollectionViewSource();
-            Collection.Source = DisplayItems; 
+            Collection.Source = DisplayItems;
 
             ChangeGrouping(Grouping);
             ChangeSorting(SortingType.Name);
@@ -129,14 +129,14 @@ namespace Trinity.Settings.Loot
                     item = new LItem
                     {
                         Name = itemType.ToString(),
-                        Id = (int) itemType,
+                        Id = (int)itemType,
                         Type = LItem.ILType.Slot,
                         TrinityItemType = itemType,
                         ItemSelectionType = itemType.ToItemSelectionType(),
                         IconUrl = itemTypeImages[itemType]
                     };
                     item.LoadCommands();
-                    ItemTypes.Add(item);                    
+                    ItemTypes.Add(item);
                     continue;
                 }
 
@@ -439,7 +439,7 @@ namespace Trinity.Settings.Loot
         public enum Tab
         {
             Legendary,
-            ItemType    
+            ItemType
         }
 
         /// <summary>
@@ -632,15 +632,16 @@ namespace Trinity.Settings.Loot
                             using (ZetaDia.Memory.AcquireFrame())
                             {
                                 ZetaDia.Actors.Update();
-                                Logger.Log("Scanning Character for Stashed Items");
-                                SelectItems(ZetaDia.Me.Inventory.Backpack);
+                                Logger.Log("Scanning Character for Equipped Items");
+                                SelectItems(ZetaDia.Me.Inventory.Equipped);
                             }
                         }
                     }
                     else
                     {
-                        Logger.Log("Scanning Character for Stashed Items");
-                        SelectItems(ZetaDia.Me.Inventory.Backpack);
+                        ZetaDia.Actors.Update();
+                        Logger.Log("Scanning Character for Equipped Items");
+                        SelectItems(ZetaDia.Me.Inventory.Equipped);
                     }
                 }
                 catch (Exception ex)
@@ -671,6 +672,7 @@ namespace Trinity.Settings.Loot
                     }
                     else
                     {
+                        ZetaDia.Actors.Update();
                         Logger.Log("Scanning Character for Stashed Items");
                         SelectItems(ZetaDia.Me.Inventory.StashItems);
                     }

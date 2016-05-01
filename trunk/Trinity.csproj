@@ -100,6 +100,7 @@
     <Compile Include="Cache\CacheData.Inventory.cs" />
     <Compile Include="Cache\CacheData.Player.cs" />
     <Compile Include="Cache\CacheUIObject.cs" />
+    <Compile Include="Helpers\GameBalanceTable.cs" />
     <Compile Include="Coroutines\Town\DropItems.cs" />
     <Compile Include="Coroutines\VacuumItems.cs" />
     <Compile Include="Coroutines\Town\ServiceType.cs" />

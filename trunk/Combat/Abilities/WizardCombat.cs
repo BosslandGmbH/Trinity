@@ -169,9 +169,13 @@ namespace Trinity.Combat.Abilities
                 return new TrinityPower(SNOPower.Wizard_DiamondSkin);
             }
 
+            if (Settings.Combat.Wizard.AlwaysExplosiveBlast && CanCast(SNOPower.Wizard_ExplosiveBlast) && Player.PrimaryResource > 20)
+            {
+                return new TrinityPower(SNOPower.Wizard_ExplosiveBlast);
+            }
+
             // Explosive Blast
-            if (CanCastExplosiveBlast() &&
-                (!Legendary.EtchedSigil.IsEquipped || Sets.TalRashasElements.IsFullyEquipped))
+            if (CanCastExplosiveBlast() && (!Legendary.EtchedSigil.IsEquipped || Sets.TalRashasElements.IsFullyEquipped))
             {
                 return new TrinityPower(SNOPower.Wizard_ExplosiveBlast);
             }
@@ -957,8 +961,7 @@ namespace Trinity.Combat.Abilities
             if (!TargetUtil.AnyMobsInRange(range))
                 return false;
 
-            if (IsDmoWiz &&
-                !IsInsideCoeTimeSpan(Element.Arcane, 2000, 0))
+            if (IsDmoWiz && !IsInsideCoeTimeSpan(Element.Arcane, 2000, 0))
                 return true;
 
             return true;

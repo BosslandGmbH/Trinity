@@ -106,10 +106,11 @@ namespace Trinity.Framework.Avoidance
 
         private void UpdateAvoidances()
         {
+            _currentRActorIds.Clear();
+
             if (!TrinityPlugin.Settings.Avoidance.Avoidances.Any(a => a.IsEnabled))
                 return;
 
-            _currentRActorIds.Clear();
 
             var source = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Select(a => new TrinityCacheObject(a) as IActor).ToList();
 
@@ -149,7 +150,7 @@ namespace Trinity.Framework.Avoidance
                 Structures.Avoidance avoidance;
                 if (AvoidanceDataFactory.TryCreateAvoidance(source, actor, out avoidance))
                 {
-                    Logger.Log(LogCategory.Avoidance, "Created new Avoidance from {0} RActorId={1} ({2})", actor.InternalName, actor.RActorGuid, avoidance.Data.Name);
+                    Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorGuid} ({avoidance.Data.Name}, Immune: {avoidance.IsImmune})");
                     _cachedActors.Add(rActorId, actor);
                     CurrentAvoidances.Add(avoidance);
                 }
@@ -167,7 +168,7 @@ namespace Trinity.Framework.Avoidance
             {
                 avoidance.Actors.RemoveAll(a => !_currentRActorIds.Contains(a.RActorGuid));
             }
-            CurrentAvoidances.RemoveAll(a => !a.Actors.Any());
+            CurrentAvoidances.RemoveAll(a => !a.Actors.Any(actor => actor.IsValid));
         }
 
         public void UpdateGrid()
@@ -223,7 +224,7 @@ namespace Trinity.Framework.Avoidance
                     
                     foreach (var avoidance in Core.Avoidance.CurrentAvoidances)
                     {
-                        if (!avoidance.Data.IsEnabled)
+                        if (!avoidance.Data.IsEnabled || avoidance.IsImmune)
                             continue;
 
                         var handler = avoidance.Data.Handler;

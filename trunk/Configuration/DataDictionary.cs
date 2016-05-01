@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Windows.Media.Media3D;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Helpers;
 using Trinity.Objects;
@@ -16,6 +18,84 @@ namespace Trinity
     /// </summary>
     internal partial class DataDictionary
     {
+        public static GameBalanceTable CosmeticPetAndTransmogTable = new GameBalanceTable
+        {
+            { 0, 224691469, 327053421, "Console_Wings_SetDngn_Basic" },
+            { 1, 1197521008, 1000537040, "Console_Wings_SetDngn_Mastery" },
+            { 2, 95923716, -1080354364, "Cosmetic_Pet_gluttony_01" },
+            { 3, 703053224, 1957183816, "P5_Cosmetic_Pet_gluttony_01" },
+            { 4, -529993811, -2093357235, "P5_Cosmetic_Pet_babysiege_01" },
+            { 5, 909568905, 747097929, "Cosmetic_Pet_babysiege_01" },
+            { 6, 291388177, 1463579313, "Cosmetic_Pet_fallenHound_04" },
+            { 7, 270653493, 584358837, "P5_Cosmetic_Pet_fallenHound_04" },
+            { 8, -210446749, -1284908509, "Cosmetic_Pet_ghost_01" },
+            { 9, 2057463943, 1567133735, "P5_Cosmetic_Pet_ghost_01" },
+            { 10, 402823953, 600203953, "P5_Cosmetic_Pet_goatman_melee_02" },
+            { 11, 1508058349, 293595309, "Cosmetic_Pet_goatman_melee_02" },
+            { 12, -661725708, -463270508, "P5_Cosmetic_Pet_hoodednightmare_01" },
+            { 13, 347688656, 647365264, "Cosmetic_Pet_hoodednightmare_01" },
+            { 14, 1270811089, 780480881, "P5_Cosmetic_Pet_mimic_01" },
+            { 15, -997099603, -2071561363, "Cosmetic_Pet_mimic_01" },
+            { 16, -968523326, 1763080546, "P5_Cosmetic_Pet_nightmare_02" },
+            { 17, 471039390, 308568414, "Cosmetic_Pet_nightmare_02" },
+            { 18, 1336361309, -127619875, "Cosmetic_Pet_FloatingSkull_01" },
+            { 19, 231126913, 178988769, "P5_Cosmetic_Pet_FloatingSkull_01" },
+            { 20, 231126914, 178988770, "P5_Cosmetic_Pet_FloatingSkull_02" },
+            { 21, 1336361310, -127619874, "Cosmetic_Pet_FloatingSkull_02" },
+            { 22, 1209305989, 111806277, "Cosmetic_Pet_spider_01" },
+            { 23, -1259052503, -260080183, "P5_Cosmetic_Pet_spider_01" },
+            { 24, 719029307, 951272411, "P5_Cosmetic_Pet_squire" },
+            { 25, 1967180567, -660480297, "Cosmetic_Pet_squire" },
+            { 26, -593309777, 660820815, "P5_Cosmetic_Pet_succubus_01" },
+            { 27, -1200439285, 1918249931, "Cosmetic_Pet_succubus_01" },
+            { 28, 1327895705, 1387230233, "P5_Cosmetic_Pet_teddyBear_04" },
+            { 29, -1527508875, -67281899, "Cosmetic_Pet_teddyBear_04" },
+            { 30, -1125588669, 783287459, "P5_Cosmetic_Pet_VoodooDoll_01" },
+            { 31, -864659297, 29027359, "Cosmetic_Pet_VoodooDoll_01" },
+            { 32, -1358268778, 140259862, "P5_Cosmetic_Pet_crawlingHand_03" },
+            { 33, -674024206, -910235502, "Cosmetic_Pet_crawlingHand_03" },
+            { 34, -1526517200, 910697968, "Cosmetic_Pet_cowking_01" },
+            { 35, -1377968812, 1523346676, "P5_Cosmetic_Pet_cowking_01" },
+            { 36, -1967557379, 1260835005, "Cosmetic_Pet_bladedsoul_01" },
+            { 37, 2066480545, 2015095105, "P5_Cosmetic_Pet_bladedsoul_01" },
+            { 38, -819510535, -1632973127, "Cosmetic_Pet_yeti_01" },
+            { 39, 941170845, 15258685, "P5_Cosmetic_Pet_yeti_01" },
+            { 40, -1162235772, 2035231812, "Cosmetic_Pet_zombie_01" },
+            { 41, 664373032, 1663345352, "P5_Cosmetic_Pet_zombie_01" },
+            { 42, -1915655614, 2129793538, "TransmogHelm_002" },
+            { 43, 1268253959, -1471771449, "TransmogMace_241_001" },
+            { 44, 1905890384, 808390672, "Cosmetic_Wings_bfly_07" },
+            { 45, -1901213639, -2127738887, "TransmogFlail_241_001" },
+            { 46, -1901213638, -2127738886, "TransmogFlail_241_002" },
+            { 47, 868864647, -1871160761, "TransmogFist_241_001" },
+            { 48, 1460786533, 1234261285, "TransmogStaff_241_001" },
+            { 49, -1901213637, -2127738885, "TransmogFlail_241_003" },
+            { 50, -1901213636, -2127738884, "TransmogFlail_241_004" },
+            { 51, 868864648, -1871160760, "TransmogFist_241_002" },
+            { 52, 1286110481, -1453914927, "TransmogXbow_241_001" },
+            { 53, 1345846545, -1990947631, "TransmogAxe_241_003" },
+            { 54, 1081297790, -1546363074, "Cosmetic_Wings_bird" },
+            { 55, -562468108, 436504212, "P5_Cosmetic_Wings_bfly_07" },
+            { 56, -166853470, 65389634, "P5_Cosmetic_Wings_bird" },
+            { 57, 2089009826, 1862484578, "TransmogSword_241_003" },
+            { 58, 1905890380, 808390668, "Cosmetic_Wings_bfly_03" },
+            { 59, 702834906, -371626854, "Cosmetic_Wings_bat_07" },
+            { 60, 1742926680, -1597887752, "P5_cos_Pennant_Harvest_01" },
+            { 61, 1714382, -1306242962, "P41_Unique_Dagger_102_x1" },
+            { 62, -1324221698, -1304179010, "P5_Cosmetic_wings_bat_07" },
+            { 63, 702834903, -371626857, "Cosmetic_Wings_bat_04" },
+            { 64, -1324221701, -1814551909, "P5_Cosmetic_Wings_bat_04" },
+            { 65, 1905890378, -1863878678, "Cosmetic_Wings_Bfly_01" },
+            { 66, -562468114, 436504206, "P5_Cosmetic_Wings_bfly_01" },
+            { 67, -562468112, 436504208, "P5_Cosmetic_Wings_bfly_03" },
+            { 68, -83682124, -83682124, "cos_pennant_harvest_01" },
+            { 69, 2036418836, -34240396, "Cosmetic_Wings_SetDngn_Mastery" },
+            { 70, 671128753, 1237156881, "Cosmetic_Wings_SetDngn_Basic" },
+            { 71, 1159896909, 42569453, "TransmogHelm_Illidan" },
+            { 72, -692981644, -919506892, "TransmogShoulders_001" },
+            { 73, -1915655615, 2129793537, "TransmogHelm_001" },
+    };
+
 
         public static HashSet<SNOAnim> VaultAnimations = new HashSet<SNOAnim>
         {
@@ -1399,6 +1479,9 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.a3dun_Keep_BucketMetal_A_Breakable,
+            (int)SNOActor.x1_Catacombs_Breakable_Half_Bridge_Walkway_A,
+
             //209133, //TentacleLord
             (int)SNOActor.trDun_Cath_Gate_D_UdderChaos, // Door that is locked until you talk to cow king
 
@@ -2727,4 +2810,6 @@ namespace Trinity
         }
         #endregion
     }
+
+
 }

@@ -108,6 +108,7 @@ namespace Trinity.Config
         private int _kiteStutterDuration;
         private bool _pathAroundAvoidance;
         private bool _avoidOutsideCombat;
+        private bool _dontAvoidWhenBlocked;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -248,6 +249,15 @@ namespace Trinity.Config
             set { SetField(ref _avoidOutsideCombat, value); }
         }
 
+        [DataMember]
+        [DefaultValue(true)]
+        public bool DontAvoidWhenBlocked
+        {
+            get { return _dontAvoidWhenBlocked; }
+            set { SetField(ref _dontAvoidWhenBlocked, value); }
+        }
+
+        
         public void OnSave()
         {
             Logger.Log("Saving Avoidance Data");

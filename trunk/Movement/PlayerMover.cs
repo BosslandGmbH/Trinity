@@ -12,6 +12,7 @@ using Trinity.Framework;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Utilities;
 using Trinity.Movement;
+using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Trinity.UI.UIComponents.RadarCanvas;
@@ -41,9 +42,6 @@ namespace Trinity.DbProvider
 
         private static void Pulsator_OnPulse(object sender, EventArgs e)
         {
-            //if (BotMain.IsRunning && Navigator.SearchGridProvider != null && Navigator.SearchGridProvider.Width == 0 || Navigator.SearchGridProvider.SearchArea.Count == 0)
-            //    Logger.Log("Waiting for Navigation Server...");
-
             GetIsBlocked();
 
             try
@@ -86,7 +84,7 @@ namespace Trinity.DbProvider
             if (ZetaDia.Me == null || !ZetaDia.Me.IsValid || ZetaDia.Me.IsDead)
                 return false;
 
-            if (Legendary.IllusoryBoots.IsEquipped)
+            if (CanMoveUnhindered)
                 return false;
 
             if (!BlockedCheckTimer.IsRunning)
@@ -107,32 +105,7 @@ namespace Trinity.DbProvider
                 return IsBlocked;
             }
 
-            //if (ZetaDia.Me.Movement != null && ZetaDia.Me.Movement.IsValid && ZetaDia.Me.Movement.SpeedXY > 0.8)
-            //{
-            //    IsBlocked = false;
-            //    BlockedTimer.Stop();
-            //    BlockedTimer.Reset();
-            //    return false;
-            //}                
-
             var testObjects = TrinityPlugin.ObjectCache.Where(o => !o.IsMe && ((o.IsTrashMob || o.IsBossOrEliteRareUnique || o.IsMinion) && o.HitPoints > 0) && o.Distance <= 12f).ToList();
-
-            //testObjects.ForEach(o => Logger.Log("testObject: {0}",o.InternalName));
-
-            //if (testObjects.Count < 3)
-            //{
-            //    IsBlocked = false;
-            //    BlockedTimer.Stop();
-            //    BlockedTimer.Reset();
-            //    return false;
-            //}
-
-            //if (testObjects.Count > 10)
-            //{
-            //    IsBlocked = true;
-            //    return false;
-            //}
-
             var surrounded = false;
             var testPoints = MathUtil.GetCirclePoints(8, 10f, ZetaDia.Me.Position).Where(p => NavHelper.CanRayCast(p) && TrinityPlugin.MainGridProvider.CanStandAt(p)).ToList();
             var halfPoints = Math.Round(testPoints.Count * 0.60, 0, MidpointRounding.AwayFromZero);
@@ -143,41 +116,16 @@ namespace Trinity.DbProvider
                 surrounded = true;
             }
 
-            //var pointInFacingDirection0 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 10f, TrinityPlugin.Player.Rotation);
-
-            //var pointInFacingDirectionPlus60 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 15f, TrinityPlugin.Player.Rotation + (float)(Math.PI / 3));
-
-            //var pointInFacingDirecitonMinus60 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 15f, TrinityPlugin.Player.Rotation + (float)(Math.PI / 3));
-
-            //RadarDebug.Draw(new List<Vector3>
-            //{
-            //    pointInFacingDirection0,
-            //    pointInFacingDirectionPlus60,
-            //    pointInFacingDirecitonMinus60,
-            //});
-
             var blocked = false;
             if (CurrentTarget != null && CurrentTarget.Distance > 10f)
             {
-                //testPoints.RemoveAll(p => !MathUtil.PositionIsInsideArc(p, TrinityPlugin.Player.Position, 12f, TrinityPlugin.Player.Rotation, 65f));
-                //testObjects.RemoveAll(obj => !MathUtil.PositionIsInsideArc(obj.Position, TrinityPlugin.Player.Position, 12f, TrinityPlugin.Player.Rotation, 65f));
-                //RadarDebug.Draw(testObjects.Select(o => o.Position), 50);
-                //RadarDebug.Draw(testPoints, 50, RadarDebug.DrawType.Elipse, RadarDebug.DrawColor.Green);
-                //blocked = testPoints.All(p => testObjects.Any(o => MathUtil.PositionIsInCircle(p, o.Position, o.Radius / 2)));
-
                 var pointInFacingDirection0 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 8f, TrinityPlugin.Player.Rotation);
-
                 var numMonstersInFront = (from u in TrinityPlugin.ObjectCache
                                           where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, TrinityPlugin.Player.Position, pointInFacingDirection0)
                                           select u).Count();
 
                 blocked = numMonstersInFront > 0;
-
-                //blocked = TargetUtil.TargetsInFrontOfMe(10).Count > 2;
             }
-
-
-            //var pathBlocked = testObjects.
 
             if (BlockedTimer.IsRunning && (surrounded || blocked) && BlockedTimer.ElapsedMilliseconds > TimeToBlockMs)
             {
@@ -206,14 +154,6 @@ namespace Trinity.DbProvider
             return IsBlocked;
         }
 
-        //public static float Wrap(float value, float lower, float upper)
-        //{
-        //    float distance = upper - lower;
-        //    float times = (float)System.Math.Floor((value - lower) / distance);
-
-        //    return value - (times * distance);
-        //}
-
         public static long BlockedTimeMs
         {
             get { return BlockedTimer.ElapsedMilliseconds; }
@@ -225,6 +165,21 @@ namespace Trinity.DbProvider
         // 138989 = health pool, 176074 = protection, 176076 = fortune, 176077 = frenzied, 176536 = portal in leorics, 260330 = cooldown shrine, 330695 to 330699 = pylons
         // Exp shrines = ???? Other shrines ????
 
+        public static bool CanMoveUnhindered
+        {
+            get
+            {
+                if (Legendary.IllusoryBoots.IsEquipped)
+                    return true;
+
+                switch (TrinityPlugin.Player.ActorClass)
+                {
+                    case ActorClass.Witchdoctor:
+                        return CacheData.Buffs.HasBuff(SNOPower.Witchdoctor_SpiritWalk);
+                }                
+                return false;
+            }
+        }
 
         private static bool ShrinesInArea(Vector3 targetpos)
         {

@@ -20,19 +20,6 @@
                 <GroupBox.Header>General</GroupBox.Header>
                 <StackPanel>
                     <UniformGrid Columns="2">
-                        <TextBlock Text="Min-Distance before Kite" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
-                        <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
-                            Interval="500" Maximum="80" Minimum="0" 
-                            SmallChange="1" LargeChange="5" 
-                            TickPlacement="BottomRight" TickFrequency="1"
-                            Value="{Binding Path=Wiz.KiteLimit}" 
-                            HorizontalAlignment="Stretch" Margin="2"/>
-                        <TextBlock Text="When to Kite" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
-                        <ComboBox Grid.Column="1" Grid.Row="0"  Width="150" SelectedValuePath="Tag" SelectedValue="{Binding Path=Wiz.KiteOption}" Margin="15,0,0,0">
-                            <ComboBoxItem Content="Anytime" Tag="Anytime" ToolTip="Always Kite" />
-                            <ComboBoxItem Content="Archon Form Only" Tag="ArchonOnly" IsSelected="True" ToolTip="Kite in Archon Form Only" />
-                            <ComboBoxItem Content="Normal Form Only" Tag="NormalOnly" ToolTip="Kite in Normal Form Only" />
-                        </ComboBox>
                         <CheckBox IsChecked="{Binding Path=Wiz.NoEnergyTwister}">Disable Energy Twister</CheckBox>
                     </UniformGrid>
                 </StackPanel>
@@ -41,14 +28,23 @@
                 <GroupBox.Header>Cluster Size</GroupBox.Header>
                 <StackPanel>
                     <TextBlock TextWrapping="Wrap" Margin="-3,-3,0,10">The amount of monsters grouped up, before spell cast</TextBlock>
-                    <UniformGrid Columns="2">
-                        <TextBlock Grid.Column="0" Text="Black Hole" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
-                        <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
+                    <StackPanel>
+                        <Slider Grid.Column="1" Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Black Hole"
                             Interval="1" Maximum="10" Minimum="1"
                             SmallChange="1" LargeChange="10"
                             TickPlacement="BottomRight"  IsSnapToTickEnabled="True"
                             Value="{Binding Path=Wiz.BlackHoleAoECount}" 
                             HorizontalAlignment="Stretch" Margin="2,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox>
+                <GroupBox.Header>Always Use</GroupBox.Header>
+                <StackPanel>
+                    <TextBlock TextWrapping="Wrap" Margin="-3,-3,0,10">If skills should be used immediately when 'off cooldown'</TextBlock>
+                    <UniformGrid Columns="2">
+                        <CheckBox IsChecked="{Binding Path=Wiz.AlwaysExplosiveBlast}" Content="Explosive Blast" />
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>

@@ -58,6 +58,7 @@
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Weight}">Log Target Weight System</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=CacheManagement}">Log Cache System</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Behavior}">Log Behavior System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Routine}">Log Routine</CheckBox>
                     </UniformGrid>
                 </GroupBox>
                 <GroupBox Header="Experimental Features">

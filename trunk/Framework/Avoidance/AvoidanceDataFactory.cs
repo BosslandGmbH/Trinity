@@ -4,6 +4,7 @@ using System.Linq;
 using Trinity.Framework.Avoidance.Handlers;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Objects;
+using Trinity.Technicals;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Technicals.Logger;
@@ -32,7 +33,8 @@ namespace Trinity.Framework.Avoidance
                 Data = data,
                 CreationTime = DateTime.UtcNow,
                 StartPosition = actor.Position,
-                Actors = new List<IActor>() { actor }
+                Actors = new List<IActor> { actor },
+                IsImmune = TrinityPlugin.Player.ElementImmunity.Contains(data.Element)
             };
 
             return true;
@@ -51,6 +53,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Molten Core",
                 IsEnabledByDefault = true,
                 AffixGbId = (int) TrinityMonsterAffix.Molten,
+                Element = Element.Fire,
                 Handler = new CircularAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
                 {
@@ -94,6 +97,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Fire Chains",
                 AffixGbId = (int) TrinityMonsterAffix.FireChains,
                 Handler = new FireChainsAvoidanceHandler(),
+                Element = Element.Fire,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
@@ -117,13 +121,14 @@ namespace Trinity.Framework.Avoidance
                 Name = "Rift Boss: Tethrys",
                 AffixGbId = (int) TrinityMonsterAffix.Frozen,
                 Handler = new CircularAvoidanceHandler(),
+                Element = Element.Cold,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
                     {
                         Name = "Projectile",
                         ActorSnoId = 4176,
-                        Radius = 5f,
+                        Radius = 5f,                        
                         Severity = Severity.Minor,
                         Type = PartType.Projectile,
                     },
@@ -153,6 +158,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Frozen",
                 AffixGbId = (int) TrinityMonsterAffix.Frozen,
                 Handler = new CircularAvoidanceHandler(),
+                Element = Element.Cold,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
@@ -174,6 +180,7 @@ namespace Trinity.Framework.Avoidance
             {
                 Name = "Furnace",
                 Handler = new FurnaceAvoidanceHandler(),
+                Element = Element.Fire,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
@@ -212,6 +219,7 @@ namespace Trinity.Framework.Avoidance
             {
                 Name = "Corpulent",
                 Handler = new AnimationAvoidanceHandler(),
+                Element = Element.Physical,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
@@ -241,6 +249,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Plagued",
                 AffixGbId = (int) TrinityMonsterAffix.Plagued,
                 Handler = new CircularAvoidanceHandler(),
+                Element = Element.Poison,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
@@ -268,6 +277,7 @@ namespace Trinity.Framework.Avoidance
             {
                 Name = "FrozenPulse",
                 AffixGbId = (int) TrinityMonsterAffix.FrozenPulse,
+                Element = Element.Cold,
                 Handler = new CircularAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
                 {
@@ -317,6 +327,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Molten Trail",
                 AffixGbId = 95868,
                 Handler = new CircularAvoidanceHandler(),
+                Element = Element.Fire,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
@@ -338,6 +349,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Arcane Sentry",
                 IsEnabledByDefault = true,
                 AffixGbId = (int) TrinityMonsterAffix.ArcaneEnchanted,
+                Element = Element.Arcane,
                 Handler = new ArcaneAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
                 {
@@ -375,6 +387,7 @@ namespace Trinity.Framework.Avoidance
             {
                 Name = "Maghda Projectile",
                 AffixGbId = 0,
+                Element = Element.Physical,
                 Handler = new CircularAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
                 {
@@ -401,6 +414,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Orbiter",
                 AffixGbId = 0,
                 IsEnabledByDefault = true,
+                Element = Element.Lightning,
                 Handler = new CircularAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
                 {
@@ -433,6 +447,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Mage Fire",
                 AffixGbId = 0,
                 Handler = new CircularAvoidanceHandler(),
+                Element = Element.Fire,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
@@ -494,6 +509,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Poison Enchanted",
                 AffixGbId = (int) TrinityMonsterAffix.PoisonEnchanted,
                 Handler = new PoisonEnchantedAvoidanceHandler(),
+                Element = Element.Poison,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
@@ -528,6 +544,7 @@ namespace Trinity.Framework.Avoidance
                 Name = "Mortar",
                 AffixGbId = (int) TrinityMonsterAffix.Mortar,
                 Handler = new CircularAvoidanceHandler(),
+                Element = Element.Fire,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
@@ -541,7 +558,6 @@ namespace Trinity.Framework.Avoidance
 
             });
         }
-
 
         private static void CreateUtils()
         {            

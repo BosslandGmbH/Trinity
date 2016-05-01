@@ -11,5 +11,6 @@ namespace Trinity.Framework.Avoidance.Structures
         public AvoidanceData Data;
         public List<IActor> Actors = new List<IActor>();
         public Vector3 StartPosition;
+        public bool IsImmune;
     }
 }

@@ -29,7 +29,7 @@ namespace Trinity.Technicals
         ActiveBuffs = 0x00020000,
         SkillSelection = 0x00040000,
         Cooldowns = 0x00080000,
-        Unused21 = 0x00100000,
+        Routine = 0x00100000,
         Unused22 = 0x00200000,
         Unused23 = 0x00400000,
         Unused24 = 0x00800000,

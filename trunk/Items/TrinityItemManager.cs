@@ -101,9 +101,15 @@ namespace Trinity.Items
 
             // Vanity Items
             if (DataDictionary.VanityItems.Any(i => item.InternalName.StartsWith(i)))
+            {
                 return TrinityPlugin.Settings.Loot.TownRun.StashVanityItems;
+            }
 
-            //CachedACDItem cItem = CachedACDItem.GetCachedItem(item);
+            if (DataDictionary.CosmeticPetAndTransmogTable.Contains(item.GameBalanceId))
+            {
+                Logger.Log($"Cosmetic, Pet or Transmog Found - Auto Stashing. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                return true;
+            }
 
             // Now look for Misc items we might want to keep
             TrinityItemType tItemType = item.TrinityItemType; // DetermineItemType(cItem.InternalName, cItem.DBItemType, cItem.FollowerType);
@@ -445,7 +451,6 @@ namespace Trinity.Items
 
             // Take Salvage Option corresponding to ItemLevel
             SalvageOption salvageOption = GetSalvageOption(item.ItemQualityLevel);
-
             if (salvageOption == SalvageOption.Salvage)
                 return true;
 
@@ -1006,7 +1011,13 @@ namespace Trinity.Items
             {               
                 return TrinityPlugin.Settings.Loot.Pickup.PickupDeathsBreath;
             }
-            
+
+            if (DataDictionary.CosmeticPetAndTransmogTable.Contains(item.BalanceID))
+            {
+                Logger.Log($"Cosmetic, Pet or Transmog Found - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
+                return true;
+            }
+
             // Tiered Rift Keys
             if (itemType == TrinityItemType.TieredLootrunKey)
             {
