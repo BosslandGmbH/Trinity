@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Trinity.Movement;
 using Trinity.Reference;
+using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Common.Helpers;
@@ -99,7 +100,7 @@ namespace Trinity.Combat.Abilities
 
                 // Soul Harvest
                 if (CanCast(SNOPower.Witchdoctor_SoulHarvest) &&
-                    (TargetUtil.AnyElitesInRange(16) || TargetUtil.AnyMobsInRange(16, 2) || TargetUtil.IsEliteTargetInRange(16f)))
+                    (TargetUtil.AnyElitesInRange(12) || TargetUtil.AnyMobsInRange(12, 2) || TargetUtil.IsEliteTargetInRange(12f)))
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_SoulHarvest);
                 }
@@ -128,11 +129,11 @@ namespace Trinity.Combat.Abilities
                 var safeWalkPoint = GetSafeSpotPosition(45f);
                 if (CanCast(SNOPower.Witchdoctor_SpiritWalk))
                 {
-                    Logger.Log("Tryna get to safe point!");
+                    Logger.Log(LogCategory.Routine, "Tryna get to safe point!");
                     return new TrinityPower(SNOPower.Witchdoctor_SpiritWalk, 45f, safeWalkPoint);
                 }
 
-                Logger.Log("Tryna get to safe point!");
+                Logger.Log(LogCategory.Routine, "Tryna get to safe point!");
                 return new TrinityPower(SNOPower.Walk, 45f, safeWalkPoint);
             }
 
@@ -231,7 +232,7 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // Soul harvest at current location while avoiding
-                if (Sets.RaimentOfTheJadeHarvester.IsMaxBonusActive && MinimumSoulHarvestCriteria(Enemies.BestCluster))
+                if (Sets.RaimentOfTheJadeHarvester.IsMaxBonusActive && MinimumSoulHarvestCriteria(Enemies.CloseNearby))
                 {
                     Skills.WitchDoctor.SoulHarvest.Cast();
                 }

@@ -779,7 +779,6 @@
                                       ut:ComboAlwaysFireSelection.Active="False" ut:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}" 
                                        Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False" 
                                       Template="{DynamicResource ActionsComboBoxControlTemplate}" Tag="More Options..." Grid.Column="1" Margin="0,2">
-
                                     <ComboBoxItem Content="Select None" Tag="SelectNoneCommand" Foreground="White" Background="Black" />
                                     <ComboBoxItem Content="Select All" Tag="SelectAllCommand" Foreground="White" Background="Black" />
                                     <ComboBoxItem Content="Add 2.4 Items" Tag="Add24ItemsCommand" Foreground="White" Background="Black" />

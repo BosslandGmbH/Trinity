@@ -81,7 +81,7 @@
             </GroupBox>
 
 
-            <!--<GroupBox Grid.Row="2" Header="Sell/Salvage Options when item is not stashed">
+            <GroupBox Grid.Row="2" Header="Sell/Salvage Options when item is not stashed">
                 <StackPanel>
                     <UniformGrid Columns="3">
                         <TextBlock Margin="2" Text="White Items" VerticalAlignment="Center"/>
@@ -109,9 +109,9 @@
                              IsChecked="{Binding Path=TownRun.SalvageLegendaryItemOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Salvage}" VerticalAlignment="Center"/>
 
                     </UniformGrid>
-                    <TextBlock Text="** When using Custom Item Rules or otherwise not stashing Legendaries. Trinity Scoring will always keep Legendaries" TextWrapping="Wrap" />
+                    <TextBlock Text="** Trinity Scoring will always keep Legendaries" TextWrapping="Wrap" />
                 </StackPanel>
-            </GroupBox>-->
+            </GroupBox>
 
             <GroupBox Header="Max Item Stack Counts">
                 <!-- TownRun Settings -->

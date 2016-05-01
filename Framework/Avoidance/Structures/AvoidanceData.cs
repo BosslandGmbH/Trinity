@@ -58,6 +58,8 @@ namespace Trinity.Framework.Avoidance.Structures
         /// </summary>
         public bool IsEnabled { get; set; }
 
+        public Element Element { get; set; }
+
         /// <summary>
         /// Retrieve a part by ActorSnoId
         /// </summary>

@@ -60,6 +60,8 @@ namespace Trinity.Config.Combat
         private float _AvoidWormholeHealth;
         private float _AvoidZoltBubbleHealth;
         private float _AvoidZoltTwisterHealth;
+        private bool _alwaysExplosiveBlast;
+
         #endregion Fields
 
         #region Events
@@ -1016,6 +1018,23 @@ namespace Trinity.Config.Combat
             }
         }
 
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool AlwaysExplosiveBlast
+        {
+            get
+            {
+                return _alwaysExplosiveBlast;
+            }
+            set
+            {
+                if (_alwaysExplosiveBlast != value)
+                {
+                    _alwaysExplosiveBlast = value;
+                    OnPropertyChanged(nameof(AlwaysExplosiveBlast));
+                }
+            }
+        }
 
         #endregion Properties
 
@@ -1068,7 +1087,7 @@ namespace Trinity.Config.Combat
             TeleportDelay = 500f;
             TeleportUseOOCDelay = false;
             SafePassageHealthPct = 1f;
-            NoEnergyTwister = false;
+            NoEnergyTwister = false;            
         }
 
         [OnDeserialized]

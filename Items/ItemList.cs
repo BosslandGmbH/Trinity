@@ -187,6 +187,7 @@ namespace Trinity.Items
                     itemValue = item.IsAncient ? 1 : 0;
                     ruleValue = value;
                     result = item.IsAncient && Math.Abs(value - 1) < double.Epsilon;
+                    returnValue = ruleValue;
                     break;
 
                 case ItemProperty.PrimaryStat:
@@ -242,6 +243,7 @@ namespace Trinity.Items
                     itemValue = item.Attributes.Sockets;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
+                    returnValue = ruleValue;
                     break;
 
                 case ItemProperty.Vitality:

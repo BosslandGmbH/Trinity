@@ -194,7 +194,6 @@ namespace Trinity
                         if (PlayerMover.IsBlocked && Settings.Combat.Misc.AttackWhenBlocked)
                         {
                             cacheObject.WeightInfo += "Player is blocked ";
-                            Logger.Log($"Weighting Blocked Handler! AttackWhenBlocked");
 
                             if (cacheObject.Distance > 15f && !cacheObject.IsBossOrEliteRareUnique && cacheObject.Type != TrinityObjectType.ProgressionGlobe)
                             {
@@ -1481,9 +1480,8 @@ namespace Trinity
                     var isHoradricRelic = ((CurrentTarget.InternalName.ToLower().Contains("horadricrelic") || CurrentTarget.TrinityItemType == TrinityItemType.HoradricRelic) &&
                                            CurrentTarget.TimesBeenPrimaryTarget > 15);
 
-                    if ((!CurrentTarget.IsBoss && CurrentTarget.TimesBeenPrimaryTarget > 50 && !isEliteLowHealth &&
-                         !isLegendaryItem) || isHoradricRelic || CurrentTarget.Type != TrinityObjectType.ProgressionGlobe &&
-                        (CurrentTarget.TimesBeenPrimaryTarget > 200 && isLegendaryItem))
+                    if ((!CurrentTarget.IsBoss && CurrentTarget.TimesBeenPrimaryTarget > 50 && !isEliteLowHealth && !isLegendaryItem && CurrentTarget.Type != TrinityObjectType.ProgressionGlobe) || 
+                        isHoradricRelic || CurrentTarget.TimesBeenPrimaryTarget > 200 && isLegendaryItem)
                     {
                         Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation,
                             "Blacklisting target {0} ActorSnoId={1} RActorGUID={2} due to possible stuck/flipflop!",

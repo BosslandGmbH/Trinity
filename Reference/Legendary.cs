@@ -9440,7 +9440,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item AugustinesPanacea = new Item
         {
-            Id = 0,
+            Id = 197624,
             Name = "Augustine's Panacea",
             Quality = ItemQuality.Legendary,
             Slug = "augustines-panacea",

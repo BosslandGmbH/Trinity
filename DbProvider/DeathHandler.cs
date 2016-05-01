@@ -4,17 +4,20 @@ using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Technicals;
+using Trinity.Framework;
 using TrinityCoroutines.Resources;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
+using Zeta.Bot.Navigation;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Zeta.TreeSharp;
 using Action = Zeta.TreeSharp.Action;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.DbProvider
 {
@@ -27,6 +30,7 @@ namespace Trinity.DbProvider
         private static DateTime _resButtonsVisibleStart;
         private static bool _resurrectButtonsVisible;
         private static DateTime _corpseReviveAvailableTime;
+        private static Vector3 _deathLocation;
 
         public static async Task<bool> Execute()
         {
@@ -40,20 +44,30 @@ namespace Trinity.DbProvider
                     _deathTime = DateTime.UtcNow;
                     _resButtonsVisibleStart = DateTime.MinValue;
                     _resurrectButtonsVisible = false;
+                    _deathLocation = ZetaDia.Me.Position;
 
-                    Logger.Log("[Death] You died lol! RecentDeaths={0} RecentDeathsNeedingRepair={1}", 
-                        _deathCounter, _deathNeedRepairCounter);
+                    Logger.Log("[Death] You died lol! RecentDeaths={0} RecentDeathsNeedingRepair={1}", _deathCounter, _deathNeedRepairCounter);
+                  
                 }
                 else
                 {
+                    Logger.Log("[Death] No Longer Dead");
+
+                    if(TrinityPlugin.Settings.Combat.Misc.FleeInGhostMode)
+                        await MoveWhileGhosted();
+
                     if (EquipmentNeedsEmergencyRepair())
+                    {
                         BrainBehavior.ForceTownrun("[Death] Item Durability - Need to Repair");
+                    }
                 }
                 _isDead = isDead;
             }
 
             if (!isDead)
+            {
                 return false;
+            }
 
             var reviveAtCorpseButton = UIElement.FromHash(0xE3CBD66296A39588);
             var reviveAtCheckPointButton = UIElement.FromHash(0xBFAAF48BA9316742);
@@ -130,6 +144,30 @@ namespace Trinity.DbProvider
             }
 
             await Coroutine.Sleep(250);
+            return true;
+        }
+
+        public async static Task<bool> MoveWhileGhosted()
+        {
+            var safespot = Core.Avoidance.SafeNodeLayer.Positions.OrderBy(d =>
+                d.Distance(Core.Avoidance.MonsterCentroid) + 
+                d.Distance(Core.Avoidance.AvoidanceCentroid)).FirstOrDefault();
+
+            if (safespot == Vector3.Zero)
+            {
+                Logger.Log("[Death] Unable to find safe spot to escape to :(");
+                return false;
+            }
+
+            Logger.Log("[Death] Moving away from revive position");
+
+            var timeout = DateTime.UtcNow.AddSeconds(5);
+            while (DateTime.UtcNow < timeout && ZetaDia.Me.IsGhosted && !ZetaDia.Me.IsDead)
+            {
+                Logger.Log($"[Death] Moving away... Distance={_deathLocation.Distance(ZetaDia.Me.Position)}");
+                await Navigator.MoveTo(safespot);
+                await Coroutine.Yield();
+            }
             return true;
         }
 

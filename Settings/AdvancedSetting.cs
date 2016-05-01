@@ -62,7 +62,7 @@ namespace Trinity.Config
         #region Properties
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool PhelonsPlayground
         {
             get
@@ -671,6 +671,7 @@ namespace Trinity.Config
             IsDBInactivityEnabled = false;
             UseTrinityDeathHandler = false;
             UseExperimentalAvoidance = false;
+            PhelonsPlayground = false;
         }
         #endregion Methods
     }
