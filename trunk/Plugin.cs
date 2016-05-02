@@ -128,7 +128,7 @@ namespace Trinity
                             RefreshDiaObjectCache();
                         }
 
-                        Core.Avoidance.UpdateGrid();
+                        //Core.Avoidance.UpdateGrid();
                         VisualizerViewModel.Instance.UpdateVisualizer();
 
                         if (ZetaDia.Me.IsDead)
@@ -377,7 +377,7 @@ namespace Trinity
                 Process.GetCurrentProcess().Id, Thread.CurrentThread.ManagedThreadId,
                 Thread.CurrentThread.Name, Application.Current.CheckAccess());
 
-            ActorManager.Initialize();
+            //ActorManager.Initialize();
 
         }
 

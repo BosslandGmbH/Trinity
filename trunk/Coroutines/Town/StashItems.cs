@@ -18,10 +18,12 @@ using TrinityCoroutines.Resources;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
+using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.Actors.Gizmos;
 using ActorManager = Trinity.Framework.Actors.ActorManager;
 using Extensions = Zeta.Common.Extensions;
 
@@ -76,8 +78,28 @@ namespace Trinity.Coroutines.Town
                 ZetaDia.Me.Inventory.BuySharedStashSlots();
             }
 
-            if (!await MoveToStash())
-                return false;
+            await MoveToStash();
+
+            if (!UIElements.StashWindow.IsVisible)
+            {
+                var stash = ZetaDia.Actors.GetActorsOfType<GizmoPlayerSharedStash>().FirstOrDefault();
+                if (stash == null)
+                    return false;
+
+                if (!await MoveTo.Execute(stash.Position))
+                {
+                    Logger.LogError($"[SalvageItems] Failed to move to stash interact position ({stash.Name}) to stash items :(");
+                    return false;
+                };
+                Navigator.PlayerMover.MoveTowards(stash.Position);
+                if (!await MoveToAndInteract.Execute(stash, 5f))
+                {
+                    Logger.LogError($"[SalvageItems] Failed to move to blacksmith ({stash.Name}) to stash items :(");
+                    return false;
+                };
+                await Coroutine.Sleep(750);
+                stash.Interact();
+            }
 
             if (UIElements.StashWindow.IsVisible)
             {
