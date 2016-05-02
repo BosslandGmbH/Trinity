@@ -1,5 +1,7 @@
 ﻿using System;
 using Trinity.Combat.Abilities;
+using Trinity.Combat.Abilities.PhelonsPlayground;
+using Trinity.Combat.Abilities.PhelonsPlayground.Barbarian;
 using Trinity.Technicals;
 using Zeta.Common.Plugins;
 using Zeta.Game;
@@ -82,6 +84,12 @@ namespace Trinity
                     {
                         // Barbs
                         case ActorClass.Barbarian:
+                            if (Settings.Advanced.PhelonsPlayground)
+                            {
+                                power = Barbarian.GetPower();
+                                if (power != null)
+                                    break;
+                            }
                             power = BarbarianCombat.GetPower();
                             break;
                         // Crusader

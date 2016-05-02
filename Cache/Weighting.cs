@@ -302,6 +302,13 @@ namespace Trinity
 
                                     #region Basic Checks
 
+                                    if (Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            string.Format("Ignoring {0} - is Critical Avoidance.", cacheObject.InternalName);
+                                        break;
+                                    }
+
                                     if (cacheObject.HitPointsPct <= 0)
                                     {
                                         cacheObject.WeightInfo +=
@@ -1656,7 +1663,7 @@ namespace Trinity
                 var avoidances = CacheData.TimeBoundAvoidance.Where(u => u.Position.Distance(cacheObject.Position) < 15);
                 foreach (var avoidance in avoidances)
                 {
-                    weight -= 25*(Math.Max(0, 15 - avoidance.Radius))/15;
+                    weight -= 25*Math.Max(1, 15 - avoidance.Radius);
                 }
 
                 return weight;

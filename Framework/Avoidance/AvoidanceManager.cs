@@ -32,7 +32,12 @@ namespace Trinity.Framework.Avoidance
         public bool InAvoidance(Vector3 position)
         {
             return Grid.IsLocationInFlags(position, AvoidanceFlags.Avoidance);
-        } 
+        }
+
+        public bool InCriticalAvoidance(Vector3 position)
+        {
+            return Grid.IsLocationInFlags(position, AvoidanceFlags.CriticalAvoidance);
+        }
 
         public IAvoider Avoider { get; set; }
         public const float GlobeWeightRadiusFactor = 1f;

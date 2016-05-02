@@ -32,100 +32,6 @@ namespace Trinity
             }
         }
 
-        internal static bool UnitInAoe(CacheData.PlayerCache u)
-        {
-            if (u == null)
-                return false;
-
-            return CacheData.TimeBoundAvoidance.Any(aoe => aoe.Position.Distance2D(u.Position) <= aoe.Radius);
-        }
-
-        internal static TrinityCacheObject ClosestHealthGlobe(float distance = 45)
-        {
-            return (from u in ObjectCache
-                    where u.Type == TrinityObjectType.HealthGlobe && !UnitOrPathInAoE(u) &&
-                          u.RadiusDistance <= distance
-                    select u).FirstOrDefault();
-        }
-
-        internal static bool WithInDistance(TrinityCacheObject actor, TrinityCacheObject actor2, float distance)
-        {
-            return
-                TrinityPlugin.ObjectCache.Any(
-                    m => m.ActorSNO == actor.ActorSNO && m.Position.Distance(actor2.Position) <= distance);
-        }
-
-        internal static bool WithInDistance(TrinityCacheObject actor, Vector3 unitLocation, float distance)
-        {
-            return
-                TrinityPlugin.ObjectCache.Any(
-                    m => m.ActorSNO == actor.ActorSNO && m.Position.Distance(unitLocation) <= distance);
-        }
-
-        internal static List<TrinityCacheObject> GetDiaObjects(uint actorSNO, float range = 25f)
-        {
-            return
-                (from u in ObjectCache
-                 where u.RadiusDistance <= range &&
-                       u.ActorSNO == actorSNO
-                 orderby u.Distance
-                 select u).ToList();
-        }
-
-        internal static Vector3 GetDiaObjectBestClusterPoint(uint actorSNO, float radius = 15f, float maxRange = 45f,
-            bool useWeights = true, bool includeUnitsInAoe = true)
-        {
-            var clusterUnits =
-                (from u in ObjectCache
-                 where u.ActorSNO == actorSNO &&
-                       u.RadiusDistance <= maxRange
-                 orderby u.NearbyUnitsWithinDistance(radius),
-                     u.Distance descending
-                 select u.Position).ToList();
-
-            return clusterUnits.Any() ? clusterUnits.FirstOrDefault() : Vector3.Zero;
-        }
-
-        internal static List<TrinityCacheObject> GetTwisterDiaObjects(float range = 25f)
-        {
-            return
-                (from u in ObjectCache
-                 where u.RadiusDistance <= range &&
-                       u.ActorSNO == 322236
-                 orderby u.Distance
-                 select u).ToList();
-        }
-
-        internal static Vector3 GetBestTwsiterClusterPoint(float radius = 15f, float maxRange = 45f,
-            bool useWeights = true, bool includeUnitsInAoe = true)
-        {
-            if (radius < 5f)
-                radius = 5f;
-            if (maxRange > 75f)
-                maxRange = 75f;
-
-            var clusterUnits =
-                (from u in ObjectCache
-                 where u.ActorSNO == 322236 &&
-                       u.RadiusDistance <= maxRange
-                 orderby u.NearbyUnitsWithinDistance(radius),
-                     u.Distance descending
-                 select u.Position).ToList();
-
-            return clusterUnits.Any() ? clusterUnits.FirstOrDefault() : Vector3.Zero;
-        }
-
-        internal static List<TrinityCacheObject> GetOculusBuffDiaObjects(float range = 25f)
-        {
-            return
-                (from u in ObjectCache
-                 where !UnitInAoe(u) &&
-                       u.RadiusDistance <= range &&
-                       u.ActorSNO == 433966
-                 orderby u.Distance
-                 select u).ToList();
-        }
-
         #region Helper fields
 
         private static List<TrinityCacheObject> ObjectCache
@@ -166,6 +72,7 @@ namespace Trinity
                 return CacheData.Hotbar.ActivePowers;
             }
         }
+
         #endregion
 
         /// <summary>
@@ -934,28 +841,7 @@ namespace Trinity
         /// <returns></returns>
         internal static bool UnitOrPathInAoE(TrinityCacheObject u)
         {
-            return UnitInAoe(u) && PathToActorIntersectsAoe(u);
-        }
-
-        /// <summary>
-        /// Checks to see if a given Unit is standing in AoE
-        /// </summary>
-        /// <param name="u"></param>
-        /// <returns></returns>
-        internal static bool UnitInAoe(TrinityCacheObject u)
-        {
-            if (u == null)
-                return false;
-
-            return CacheData.TimeBoundAvoidance.Any(aoe => aoe.Position.Distance(u.Position) <= aoe.Radius);
-        }
-
-        internal static bool IsPositionInAoe(Vector3 position)
-        {
-            if (position == Vector3.Zero)
-                return false;
-
-            return CacheData.TimeBoundAvoidance.Any(aoe => aoe.Position.Distance(position) <= aoe.Radius);
+            return Core.Avoidance.InAvoidance(u.Position) && PathToActorIntersectsAoe(u);
         }
 
         internal static bool IsPositionOnMonster(Vector3 position, bool useWeights = true)
@@ -1558,7 +1444,6 @@ namespace Trinity
         //    result /= points.Count();
         //    return result;
         //}
-
     }
 
 }
