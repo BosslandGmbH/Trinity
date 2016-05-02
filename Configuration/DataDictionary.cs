@@ -1492,6 +1492,7 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.a1dun_Leor_Jail_Door_SuperLocked_A_Fake,
             (int)SNOActor.a3dun_Keep_BucketMetal_A_Breakable,
             (int)SNOActor.x1_Catacombs_Breakable_Half_Bridge_Walkway_A,
 

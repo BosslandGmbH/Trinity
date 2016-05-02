@@ -83,7 +83,7 @@ namespace Trinity.Coroutines.Town
 
                         if (!ActorManager.IsStarted)
                         {
-                            ActorManager.Start();
+                            //ActorManager.Start();
                         }
                     }
 

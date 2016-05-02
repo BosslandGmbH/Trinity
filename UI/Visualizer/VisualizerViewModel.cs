@@ -1008,6 +1008,7 @@ namespace Trinity.UI.RadarUI
         }
 
         public static Window Window { get; set; }
+        public static bool IsWindowOpen { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
