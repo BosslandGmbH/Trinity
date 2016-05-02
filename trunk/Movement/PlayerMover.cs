@@ -653,10 +653,10 @@ namespace Trinity.DbProvider
             var points =
                 NavigationProvider.CurrentPath.Where(
                     x =>
-                        remaining.Contains(x) && NavHelper.CanRayCast(x) &&
+                        remaining.Contains(x) && NavHelper.CanRayCast(x) && 
+                        !Core.Avoidance.InCriticalAvoidance(x) &&
                         x.Distance(CacheData.Player.Position) <= maxDistance &&
-                        x.Distance(CacheData.Player.Position) >= minDistance && 
-                        !Core.Avoidance.Grid.IsLocationInFlags(x, AvoidanceFlags.CriticalAvoidance))
+                        x.Distance(CacheData.Player.Position) >= minDistance)
                     .OrderByDescending(y => y.Distance(CacheData.Player.Position))
                     .ToList();
             //Add some redundancy to find a spot that isn't ray cast

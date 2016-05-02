@@ -62,16 +62,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Adventurer">
-      <HintPath>..\Adventurer\Trunk\bin\Debug\Adventurer.dll</HintPath>
+      <HintPath>..\..\Demonbuddy3\Plugins\Adventurer\bin\Debug\Adventurer.dll</HintPath>
     </Reference>
     <Reference Include="Demonbuddy">
-      <HintPath>..\..\DB-Current\Demonbuddy.exe</HintPath>
+      <HintPath>..\..\Demonbuddy3\Demonbuddy.exe</HintPath>
     </Reference>
     <Reference Include="GreyMagic">
-      <HintPath>..\..\DB-Current\GreyMagic.dll</HintPath>
+      <HintPath>..\..\Demonbuddy3\GreyMagic.dll</HintPath>
     </Reference>
     <Reference Include="IronPython">
-      <HintPath>..\..\DB-Current\IronPython.dll</HintPath>
+      <HintPath>..\..\Demonbuddy3\IronPython.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
@@ -100,7 +100,15 @@
     <Compile Include="Cache\CacheData.Inventory.cs" />
     <Compile Include="Cache\CacheData.Player.cs" />
     <Compile Include="Cache\CacheUIObject.cs" />
-    <Compile Include="Helpers\GameBalanceTable.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Earth.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.ImmortalKings.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.LegacyOfNightmares.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Raekor.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Unconditional.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Wastes.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\PhelonTargeting.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\PhelonUtils.cs" />
     <Compile Include="Coroutines\Town\DropItems.cs" />
     <Compile Include="Coroutines\VacuumItems.cs" />
     <Compile Include="Coroutines\Town\ServiceType.cs" />
@@ -245,6 +253,7 @@
     <Compile Include="Framework\Objects\PriorityQueue\FastPriorityQueueNode.cs" />
     <Compile Include="Framework\Objects\PriorityQueue\IPriorityQueue.cs" />
     <Compile Include="Framework\Objects\PriorityQueue\SimplePriorityQueue.cs" />
+    <Compile Include="Helpers\GameBalanceTable.cs" />
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\OrderedDictionary.cs" />
     <Compile Include="Helpers\VectorExt.cs" />
@@ -257,11 +266,11 @@
     <Content Include="Framework\Objects\Memory\readme.txt" />
     <Content Include="Version.xml" />
     <Compile Include="Framework\Objects\Memory\Misc\ItemTypeRecord.cs" />
-    <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\Mock\SkillSettingsMockData.cs" />
     <Compile Include="Settings\Paragon\ParagonSetting.cs" />
     <Compile Include="Settings\Paragon\ParagonItem.cs" />
     <Compile Include="Settings\Paragon\TrinityParagonBonusType.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="UI\Overlays\3D\3DTools\MathUtils.cs" />
     <Compile Include="UI\Overlays\3D\3DTools\Matrix3DStack.cs" />
     <Compile Include="UI\Overlays\3D\3DTools\MeshUtils.cs" />

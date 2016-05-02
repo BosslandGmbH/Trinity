@@ -53,7 +53,7 @@ namespace Trinity.Movement
               (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNPC ||
                TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine)
                 ? 10
-                : HasInGeomBuff ? 15 : 25;
+                : HasInGeomBuff ? 10 : 15;
 
         public static bool OutOfCombatMovementAllowed
         {
