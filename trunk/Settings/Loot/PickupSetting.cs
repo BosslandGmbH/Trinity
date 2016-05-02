@@ -55,6 +55,9 @@ namespace Trinity.Config.Loot
         private bool _disableAutoEquipAtMaxLevel;
         private bool _ignoreProgressionGlobesInAoE;
         private bool _ignoreHealthGlobesInAoE;
+        private bool _pickupTransmog;
+        private bool _stashWings;
+        private bool _stashPets;
 
         #endregion Fields
 
@@ -880,6 +883,60 @@ namespace Trinity.Config.Loot
             }
         }
 
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool PickupTransmog
+        {
+            get
+            {
+                return _pickupTransmog;
+            }
+            set
+            {
+                if (_pickupTransmog != value)
+                {
+                    _pickupTransmog = value;
+                    OnPropertyChanged(nameof(PickupTransmog));
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(true)]
+        public bool StashPets
+        {
+            get
+            {
+                return _stashPets;
+            }
+            set
+            {
+                if (_stashPets != value)
+                {
+                    _stashPets = value;
+                    OnPropertyChanged(nameof(StashPets));
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(true)]
+        public bool StashWings
+        {
+            get
+            {
+                return _stashWings;
+            }
+            set
+            {
+                if (_stashWings != value)
+                {
+                    _stashWings = value;
+                    OnPropertyChanged(nameof(StashWings));
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -951,6 +1008,8 @@ namespace Trinity.Config.Loot
             IgnoreLegendaryInAoE = true;
             IgnoreNonLegendaryInAoE = true;
             IgnoreHealthGlobesInAoE = true;
+            StashWings = true;
+            StashPets = true;
         }
         #endregion Methods
     }

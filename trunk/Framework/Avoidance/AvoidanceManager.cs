@@ -26,7 +26,12 @@ namespace Trinity.Framework.Avoidance
         {
             Avoider = new DefaultAvoider();
         }
-    
+
+        public bool InAvoidance(Vector3 position)
+        {
+            return Grid.IsLocationInFlags(position, AvoidanceFlags.Avoidance);
+        } 
+
         public IAvoider Avoider { get; set; }
 
         public const float GlobeWeightRadiusFactor = 1f;

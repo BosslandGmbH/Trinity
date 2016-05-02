@@ -264,8 +264,9 @@ namespace Trinity.Framework.Avoidance
             if (PlayerMover.NavigationProvider == null || PlayerMover.NavigationProvider.CurrentPath == null)
                 return false;
 
-            var currentPath = PlayerMover.NavigationProvider.CurrentPath;
-            if (currentPath.Count <= 0)
+            var playerPosition = ZetaDia.Me.Position;
+            var currentPath = PlayerMover.NavigationProvider.CurrentPath.TakeWhile(p => p.Distance(playerPosition) < AvoidanceManager.MaxDistance);
+            if (!currentPath.Any())
                 return false;
 
             var overFlags = currentPath.Any(p => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, p, flags));
