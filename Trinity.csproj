@@ -257,6 +257,7 @@
     <Content Include="Framework\Objects\Memory\readme.txt" />
     <Content Include="Version.xml" />
     <Compile Include="Framework\Objects\Memory\Misc\ItemTypeRecord.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\Mock\SkillSettingsMockData.cs" />
     <Compile Include="Settings\Paragon\ParagonSetting.cs" />
     <Compile Include="Settings\Paragon\ParagonItem.cs" />

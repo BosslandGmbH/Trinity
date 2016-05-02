@@ -1,12 +1,16 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using Trinity.Config;
 using Trinity.Config.Loot;
+using Trinity.Technicals;
 
 namespace Trinity.Settings.Loot
 {
     [DataContract(Namespace = "")]
-    public class ItemSetting : ITrinitySetting<ItemSetting>, INotifyPropertyChanged
+    public class ItemSetting : ITrinitySetting<ItemSetting>, INotifyPropertyChanged, ITrinitySettingEvents
     {
         #region Fields
         private ItemFilterMode _itemFilterMode;
@@ -175,5 +179,53 @@ namespace Trinity.Settings.Loot
         }
 
         #endregion Methods
+
+        #region ITrinitySettingEvents
+
+        public void OnSave()
+        {
+            Logger.Log("ItemSetting OnSave called");
+            FireOnSaveEvents();
+        }
+
+        public void OnLoaded()
+        {
+            Logger.Log("ItemSetting OnLoaded called");
+            FireOnLoadedEvents();
+        }
+
+        public void FireOnSaveEvents()
+        {
+            var eventSupporters = GetInterfaceMembers<ITrinitySettingEvents>(this);
+            foreach (var eventSupporter in eventSupporters)
+            {
+                eventSupporter.OnSave();
+            }
+        }
+
+        public void FireOnLoadedEvents()
+        {
+            var eventSupporters = GetInterfaceMembers<ITrinitySettingEvents>(this);
+            foreach (var eventSupporter in eventSupporters)
+            {
+                eventSupporter.OnLoaded();
+            }
+        }
+
+        private IEnumerable<T> GetInterfaceMembers<T>(object obj)
+        {
+            var type = obj.GetType();
+            return from property in type.GetProperties()
+                   where typeof(T).IsAssignableFrom(property.PropertyType)
+                   select GetValue<T>(obj, property);
+        }
+
+        private static T GetValue<T>(object obj, PropertyInfo propertyInfo)
+        {
+            return (T)propertyInfo.GetValue(obj, null);
+        }
+
+        #endregion
+
     }
 }

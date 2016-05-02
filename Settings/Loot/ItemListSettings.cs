@@ -31,7 +31,7 @@ namespace Trinity.Settings.Loot
     ///     Settings for ItemList looting
     /// </summary>
     [DataContract(Namespace = "")]
-    public class ItemListSettings : ITrinitySetting<ItemListSettings>, INotifyPropertyChanged
+    public class ItemListSettings : ITrinitySetting<ItemListSettings>, INotifyPropertyChanged, ITrinitySettingEvents
     {
         #region Fields
 
@@ -96,7 +96,6 @@ namespace Trinity.Settings.Loot
         {
             Collection = new CollectionViewSource();
             Collection.Source = DisplayItems;
-
             ChangeGrouping(Grouping);
             ChangeSorting(SortingType.Name);
             CreateItemTypes();
@@ -1211,5 +1210,18 @@ namespace Trinity.Settings.Loot
         }
 
         #endregion
+
+        public void OnSave()
+        {
+            Logger.Log("Saving ItemList Data");
+        }
+
+        public void OnLoaded()
+        {
+            Logger.Log("Loading ItemList Data");
+            CreateView();
+            UpdateSelectedItems();
+            OnPropertyChanged(nameof(Collection));
+        }
     }
 }

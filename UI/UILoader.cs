@@ -63,7 +63,7 @@ namespace Trinity.UI
                         ConfigWindow = new Window();
                     }
                     Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Load Context");
-                    var viewmodel= new ConfigViewModel(TrinityPlugin.Settings);
+                    var viewmodel = new ConfigViewModel(TrinityPlugin.Settings);
                     DataContext = viewmodel;
                     ConfigWindow.DataContext = viewmodel;
 
@@ -185,7 +185,7 @@ namespace Trinity.UI
                     ResourceDictionary resource = LoadAndTransformXamlFile<ResourceDictionary>(filename);
                     foreach (System.Collections.DictionaryEntry res in resource)
                     {
-                        if(!control.Resources.Contains(res.Key))
+                        if (!control.Resources.Contains(res.Key))
                             control.Resources.Add(res.Key, res.Value);
                     }
                 }
@@ -197,7 +197,7 @@ namespace Trinity.UI
         }
 
         /// <summary>Loads the and transform xaml file.</summary>
-        /// <param name="filename">The filename to load.</param>
+        /// <param name="filename">The absolute path to xaml file.</param>
         /// <returns><see cref="Stream"/> which contains transformed XAML file.</returns>
         internal static T LoadAndTransformXamlFile<T>(string filename)
         {
@@ -210,18 +210,19 @@ namespace Trinity.UI
                 filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UIComponents;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:objects=\"clr-namespace:Trinity.Objects\"", "xmlns:objects=\"clr-namespace:Trinity.Objects;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:mock=\"clr-namespace:Trinity.Settings.Mock\"", "xmlns:mock=\"clr-namespace:Trinity.Settings.Mock;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                filecontent = filecontent.Replace("xmlns:settings=\"clr-namespace:Trinity.Settings\"", "xmlns:settings=\"clr-namespace:Trinity.Settings;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:charts=\"clr-namespace:LineChartLib\"", "xmlns:charts=\"clr-namespace:LineChartLib;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas\"", "xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays\"", "xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop\"", "xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:cc=\"clr-namespace:CustomControls\"", "xmlns:cc=\"clr-namespace:CustomControls;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                
-                 // Remove Template designer reference
-                 //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"..\\Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
-                 //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
 
-                 filecontent = Regex.Replace(filecontent, "<ResourceDictionary.MergedDictionaries>.*</ResourceDictionary.MergedDictionaries>", string.Empty, RegexOptions.Singleline | RegexOptions.Compiled);
+                // Remove Template designer reference
+                //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"..\\Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
+                //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
+
+                filecontent = Regex.Replace(filecontent, "<ResourceDictionary.MergedDictionaries>.*</ResourceDictionary.MergedDictionaries>", string.Empty, RegexOptions.Singleline | RegexOptions.Compiled);
 
                 return (T)XamlReader.Load(new MemoryStream(Encoding.UTF8.GetBytes(filecontent)));
             }
@@ -353,7 +354,7 @@ namespace Trinity.UI
                 window.Height = height + offset.Height;
                 window.Width = width + offset.Width;
                 window.Top = Math.Max(30, (ownerWindow.Top + ownerWindow.Height / 2) - (window.Height / 2));
-                window.Left = Math.Max(30,(ownerWindow.Left + ownerWindow.Width / 2) - (window.Width / 2));
+                window.Left = Math.Max(30, (ownerWindow.Left + ownerWindow.Width / 2) - (window.Width / 2));
 
                 window.Closed += (s, e) =>
                 {
@@ -389,7 +390,7 @@ namespace Trinity.UI
         public static Size GetBorderFrameOffset(Window window)
         {
             var result = new Size();
-  
+
             if (window.ResizeMode == ResizeMode.CanResize || window.ResizeMode == ResizeMode.CanResizeWithGrip)
             {
                 result.Height += System.Windows.Forms.SystemInformation.FrameBorderSize.Height * 2;

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ut="clr-namespace:Trinity.UIComponents"
              xmlns:demonbuddy="clr-namespace:Demonbuddy;assembly=Demonbuddy"
+             xmlns:settings="clr-namespace:Trinity.Settings"
              mc:Ignorable="d" Foreground="{DynamicResource TextBrush}" Background="#434343"
              MinHeight="470" MinWidth="432">
     <UserControl.Resources>
@@ -13,6 +14,7 @@
                 <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <ut:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
+            <settings:SettingsManager x:Key="SettingsManager" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -52,8 +54,8 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <WrapPanel Grid.Column="0">
-                    <!--<Button Height="26" Command="{Binding LoadCommand}" Margin="4" Width="65">Load</Button>
-                    <Button Height="26" Command="{Binding ResetAllCommand}" Margin="4" Width="65">Save As</Button>-->
+                    <Button Height="26" DataContext="{StaticResource SettingsManager}" Command="{Binding LoadSettingsCommand}" Margin="4" Width="65">Load</Button>
+                    <Button Height="26" DataContext="{StaticResource SettingsManager}" Command="{Binding SaveAsSettingsCommand}" Margin="4" Width="65">Save As</Button>
                     <Button Height="26" Command="{Binding ResetAllCommand}" Margin="4" Width="65">Reset</Button>
                 </WrapPanel>
 

@@ -370,12 +370,7 @@ namespace Trinity.Config
                         loadSuccessful = settings != null;
                     }
 
-                    var eventSupporters = GetInterfaceMembers<ITrinitySettingEvents>(this);
-                    foreach (var eventSupporter in eventSupporters)
-                    {
-                        eventSupporter.OnLoaded();
-                    }
-
+                    FireOnLoadedEvents();
                 }
                 catch (Exception ex)
                 {
@@ -394,7 +389,16 @@ namespace Trinity.Config
             }            
         }
 
-        private TrinitySetting LoadSettingsFromFile(string filename, bool applyToThis = true)
+        public void FireOnLoadedEvents()
+        {
+            var eventSupporters = GetInterfaceMembers<ITrinitySettingEvents>(this);
+            foreach (var eventSupporter in eventSupporters)
+            {
+                eventSupporter.OnLoaded();
+            }
+        }
+
+        public TrinitySetting LoadSettingsFromFile(string filename, bool applyToThis = true)
         {
             TrinitySetting loadedSettings = null;
 
@@ -463,7 +467,6 @@ namespace Trinity.Config
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     OnSave();
-
                     GlobalSettings.Instance.Save();
                     CharacterSettings.Instance.Save();
 
@@ -489,20 +492,28 @@ namespace Trinity.Config
                         SaveToFile(filename, this);
                     }
 
-                    var eventSupporters = GetInterfaceMembers<ITrinitySettingEvents>(this);
-                    foreach (var eventSupporter in eventSupporters)
-                    {
-                        eventSupporter.OnSave();
-                    }
+                    FireOnSaveEvents();
                 });
 
             }
         }
 
-        private void SaveToFile(string filePath, TrinitySetting settings)
+        public void FireOnSaveEvents()
+        {
+            var eventSupporters = GetInterfaceMembers<ITrinitySettingEvents>(this);
+            foreach (var eventSupporter in eventSupporters)
+            {
+                eventSupporter.OnSave();
+            }
+        }
+
+        public void SaveToFile(string filePath, TrinitySetting settings = null)
         {
             try
             {
+                if (settings == null)
+                    settings = this;
+
                 if (filePath == null)
                 {
                     throw new ArgumentNullException(nameof(filePath));

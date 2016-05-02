@@ -29,6 +29,42 @@ namespace Trinity.UI.UIComponents
         private readonly TrinitySetting _Model;
         private readonly TrinitySetting _OriginalModel;
 
+        public TrinitySetting ViewModel => _Model;
+
+        /// <summary>
+        /// Copies settings to the current/active set in TrinityPlugin.Settings.
+        /// Allows settings only be actually applied when save button has been clicked.
+        /// </summary>
+        private void SaveSettings(TrinitySetting model)
+        {
+            if (TrinityPlugin.StashRule == null && model.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+            {
+                // Load interpreter for the first time if needed
+                TrinityPlugin.StashRule = new Interpreter();
+            }
+
+            model.CopyTo(_OriginalModel);
+            _OriginalModel.Save();
+
+            if (model.Advanced.TPSEnabled != _OriginalModel.Advanced.TPSEnabled ||
+                model.Advanced.TPSEnabled && _OriginalModel.Advanced.TPSLimit != BotMain.TicksPerSecond)
+                BotManager.SetBotTicksPerSecond();
+
+            Logger.Log("TPSActual={0}", BotMain.TicksPerSecond);
+
+            CacheData.FullClear();
+            UsedProfileManager.SetProfileInWindowTitle();
+        }
+
+        /// <summary>
+        /// Copies settings to the current settings viewmodel, will still not be saved until save button is clicked.
+        /// </summary>
+        public void LoadSettings(TrinitySetting model)
+        {
+            model.CopyTo(_Model);
+            _Model.FireOnLoadedEvents();
+        }
+    
         /// <summary>
         ///     Initializes a new instance of the <see cref="ConfigViewModel" /> class.
         /// </summary>
@@ -47,24 +83,7 @@ namespace Trinity.UI.UIComponents
                     {
                         try
                         {
-                            if (TrinityPlugin.StashRule == null && _Model.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
-                            {
-                                // Load interpreter for the first time if needed
-                                TrinityPlugin.StashRule = new Interpreter();
-                            }
-
-                            _Model.CopyTo(_OriginalModel);
-                            _OriginalModel.Save();
-
-                            if (_Model.Advanced.TPSEnabled != _OriginalModel.Advanced.TPSEnabled ||
-                                _Model.Advanced.TPSEnabled && _OriginalModel.Advanced.TPSLimit != BotMain.TicksPerSecond)
-                                BotManager.SetBotTicksPerSecond();
-
-                            Logger.Log("TPSActual={0}", BotMain.TicksPerSecond);
-
-                            CacheData.FullClear();
-                            UsedProfileManager.SetProfileInWindowTitle();
-
+                            SaveSettings(_Model);
                             UILoader.CloseWindow();
                         }
                         catch (Exception ex)
@@ -307,6 +326,7 @@ namespace Trinity.UI.UIComponents
                 Logger.LogError("Error creating TrinityPlugin View Model {0}", ex);
             }
         }
+
 
         /// <summary>
         ///     Dumps Skills
