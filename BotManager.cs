@@ -127,7 +127,7 @@ namespace Trinity
                 Logger.LogDebug(LogCategory.GlobalHandler, "Recently died, durability zero");
                 return true;
             }
-
+            
             await AutoEquipSkills.Instance.Execute();
             await AutoEquipItems.Instance.Execute();
 
@@ -174,7 +174,6 @@ namespace Trinity
             //}
 
             StoreAndReplaceHook("VendorRun", new ActionRunCoroutine(ret => TrinityTownRun.Execute()));
-
         }
 
         //private static async Task<bool> TownRunSelector(Decorator originalTownRun)

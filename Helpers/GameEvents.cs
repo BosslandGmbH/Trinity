@@ -165,9 +165,9 @@ namespace Trinity
                 PlayerMover.vSafeMovementLocation = Vector3.Zero;
 
                 // Reset pre-townrun position if we die
-                TownRun.PreTownRunPosition = Vector3.Zero;
-                TownRun.PreTownRunWorldId = -1;
-                TownRun.LastCheckBackpackDurability = DateTime.MinValue;
+                //TownRun.PreTownRunPosition = Vector3.Zero;
+                //TownRun.PreTownRunWorldId = -1;
+                //TownRun.LastCheckBackpackDurability = DateTime.MinValue;
                 SpellHistory.History.Clear();
                 TrinityItemManager.ResetBackPackCheck();
             }
@@ -200,11 +200,11 @@ namespace Trinity
                 TrinityItemManager.ResetBackPackCheck();
                 WantToTownRun = false;
                 ForceVendorRunASAP = false;
-                TownRun.TownRunCheckTimer.Reset();
+                //TownRun.TownRunCheckTimer.Reset();
                 Helpers.Notifications.SendEmailNotification();
-                TownRun.PreTownRunPosition = Vector3.Zero;
-                TownRun.PreTownRunWorldId = -1;
-                TownRun.WasVendoring = false;
+                //TownRun.PreTownRunPosition = Vector3.Zero;
+                //TownRun.PreTownRunWorldId = -1;
+                //TownRun.WasVendoring = false;
 
                 CacheData.AbilityLastUsed.Clear();
                 SpellHistory.History.Clear();

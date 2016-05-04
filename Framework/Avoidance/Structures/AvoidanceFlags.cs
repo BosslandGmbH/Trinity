@@ -6,11 +6,11 @@ namespace Trinity.Framework.Avoidance.Structures
     public enum AvoidanceFlags : ulong
     {
         None = 0x00000000,
-        NavigationBlocking = 0x00000001,
+        AllowWalk = 0x00000001,
         AllowFlier = 0x00000002,
         AllowProjectile = 0x00000004,
-        RayCast = 0x00000008,
-        Navigation = 0x00000010,
+        NearWall = 0x00000008,
+        NavigationBlocking = 0x00000010,
         Combat = 0x00000020,
         Avoidance = 0x00000040,
         Melee = 0x00000080,
@@ -71,5 +71,6 @@ namespace Trinity.Framework.Avoidance.Structures
         Unused63 = 0x4000000000000000,
         Unused64 = 0x8000000000000000,
     }
+
 }
 

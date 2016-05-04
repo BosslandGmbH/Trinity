@@ -68,6 +68,7 @@ namespace Trinity.Coroutines.Town
             }
 
             Logger.LogVerbose($"[StashItems] Now to stash {stashItems.Count} items");
+            stashItems.ForEach(i => Logger.LogDebug($"[StashItems] Stashing: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
 
             GameUI.CloseVendorWindow();
 

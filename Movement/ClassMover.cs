@@ -291,19 +291,36 @@ namespace Trinity.Movement
             // Dashing Strike OOC
             if (CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike))
             {
-                var movementRange = 35f;
-                if (destinationDistance > movementRange)
-                    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
-                if (destination == Vector3.Zero)
-                    return false;
+                //var movementRange = 35f;
+                //if (destinationDistance > movementRange)
+                //    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
+                //if (destination == Vector3.Zero)
+                //    return false;
 
-                var charges = Skills.Monk.DashingStrike.Charges;
-                if (charges <= 0) return false;
+                //var charges = Skills.Monk.DashingStrike.Charges;
+                //if (charges <= 0) return false;
 
-                if (HasInGeomBuff || Sets.ThousandStorms.IsSecondBonusActive &&
-                    ((TrinityPlugin.Player.PrimaryResource >= 75) ||
-                     CacheData.BuffsCache.Instance.HasCastingShrine))
+                //if (HasInGeomBuff || Sets.ThousandStorms.IsSecondBonusActive && (TrinityPlugin.Player.PrimaryResource >= 75 || CacheData.BuffsCache.Instance.HasCastingShrine))
+                //{
+                //    Skills.Monk.DashingStrike.Cast(destination);
+                //    LogMovement(SNOPower.X1_Monk_DashingStrike, destination);
+                //    return true;
+                //}
+
+                // Dashing Strike OOC
+                if (CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike))
                 {
+                    const float movementRange = 50f;
+
+                    if (destinationDistance > movementRange)
+                        destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
+
+                    if (destination == Vector3.Zero || PlayerMover.MyPosition.Distance(destination) < 20)
+                        return false;
+
+                    var charges = Skills.Monk.DashingStrike.Charges;
+                    if (charges <= 0) return false;
+
                     Skills.Monk.DashingStrike.Cast(destination);
                     LogMovement(SNOPower.X1_Monk_DashingStrike, destination);
                     return true;

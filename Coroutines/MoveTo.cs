@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity;
 using Trinity.DbProvider;
@@ -26,7 +27,7 @@ namespace TrinityCoroutines
         /// <param name="location">where to move to</param>
         /// <param name="destinationName">name of location for debugging purposes</param>
         /// <param name="range">how close it should get</param>
-        public static async Task<bool> Execute(Vector3 location, string destinationName = "", float range = 10f)
+        public static async Task<bool> Execute(Vector3 location, string destinationName = "", float range = 10f, Func<bool> stopCondition = null)
         {
             if (string.IsNullOrEmpty(destinationName))
                 destinationName = location.ToString();
@@ -49,6 +50,12 @@ namespace TrinityCoroutines
             {           
                 if (Navigator.StuckHandler.IsStuck)
                     await Navigator.StuckHandler.DoUnstick();
+
+                if (stopCondition != null && stopCondition())
+                {
+                    Logger.LogVerbose("MoveTo Finished. (Stop Condition)", _startingWorldId, ZetaDia.CurrentWorldSnoId);
+                    return false;
+                }
 
                 if (_startingWorldId != ZetaDia.CurrentWorldSnoId)
                 {

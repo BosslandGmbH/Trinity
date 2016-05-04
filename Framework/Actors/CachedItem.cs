@@ -144,7 +144,7 @@ namespace Trinity.Framework.Actors
             IsAncient = Attributes.IsAncient;
             ItemQualityLevel = Attributes.ItemQualityLevel;
             //ItemStackQuantity = Attributes.ItemStackQuantity;
-            RequiredLevel = Attributes.RequiredLevel;
+            RequiredLevel = Math.Max(Attributes.RequiredLevel, Attributes.ItemLegendaryItemLevelOverride);
             IsCrafted = Attributes.IsCrafted;
             IsVendorBought = Attributes.IsVendorBought;
             IsAccountBound = Attributes.ItemBoundToACD > 0;

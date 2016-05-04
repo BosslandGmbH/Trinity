@@ -75,7 +75,7 @@ namespace Trinity.Config
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(1)]
+        [DefaultValue(4)]
         public int DestructibleRange
         {
             get

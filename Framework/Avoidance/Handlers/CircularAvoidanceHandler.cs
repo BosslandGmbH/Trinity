@@ -39,7 +39,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 {
                     TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(actor.ActorSNO, finalRadius);
 
-                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.NavigationBlocking)))
+                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk)))
                     {
                         node.Weight += 50;
                         node.AddNodeFlags(AvoidanceFlags.CriticalAvoidance);
@@ -48,7 +48,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 }
                 else
                 {
-                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.NavigationBlocking)))
+                    foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk)))
                     {
                         node.Weight += 10;
                         node.AddNodeFlags(AvoidanceFlags.Avoidance);

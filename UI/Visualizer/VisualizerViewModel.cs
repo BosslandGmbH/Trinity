@@ -148,7 +148,7 @@ namespace Trinity.UI.RadarUI
                 TrinityPlugin.Player.UpdatePlayerCache();
                 TrinityPlugin.RefreshDiaObjectCache();
                 ScenesStorage.Update();
-                Core.Avoidance.Update();
+                Core.Update();
                 UpdateVisualizer();
                 return false;
             }
@@ -599,7 +599,17 @@ namespace Trinity.UI.RadarUI
         }
 
         [Zeta.XmlEngine.XmlElement("VisibilityFlags")]
-        [Setting, DefaultValue(RadarVisibilityFlags.Terrain | RadarVisibilityFlags.CurrentPath | RadarVisibilityFlags.CurrentTarget | RadarVisibilityFlags.Monsters | RadarVisibilityFlags.ActivePlayer | RadarVisibilityFlags.RangeGuide)]
+        [Setting, DefaultValue(
+            RadarVisibilityFlags.Terrain | 
+            RadarVisibilityFlags.CurrentPath | 
+            RadarVisibilityFlags.CurrentTarget | 
+            RadarVisibilityFlags.Monsters | 
+            RadarVisibilityFlags.ActivePlayer |
+            RadarVisibilityFlags.WalkableNodes |
+            RadarVisibilityFlags.SafeNodes |
+            RadarVisibilityFlags.Avoidance |
+            RadarVisibilityFlags.KiteFromNodes |
+            RadarVisibilityFlags.RangeGuide)]
         [UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]
         public RadarVisibilityFlags VisibilityFlags
         {

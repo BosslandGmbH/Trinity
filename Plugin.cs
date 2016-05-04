@@ -284,7 +284,7 @@ namespace Trinity
 
                     //OverlayLoader.Enable();
 
-                    ClearArea.Enable();
+                    //ClearArea.Enable();
 
                     Core.Enable();
 
@@ -346,7 +346,7 @@ namespace Trinity
             Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "");
             GenericCache.Shutdown();
             GenericBlacklist.Shutdown();
-            ClearArea.Disable();
+            //ClearArea.Disable();
             OverlayLoader.Disable();
             Core.Disable();
 

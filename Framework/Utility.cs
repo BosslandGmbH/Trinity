@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Trinity.Coroutines.Town;
 using Trinity.Technicals;
 using Zeta.Bot;
 
@@ -7,6 +10,11 @@ namespace Trinity.Framework
     public class Utility
     {
         public DateTime LastUpdated = DateTime.MinValue;
+
+        public Utility()
+        {
+            Utilities.Add(new WeakReference<Utility>(this));
+        }
 
         public void Enable()
         {
@@ -20,7 +28,7 @@ namespace Trinity.Framework
             GameEvents.OnWorldChanged -= FireWorldChanged;
         }
 
-        protected TimeSpan UpdateInterval { get; set; } = TimeSpan.FromMilliseconds(100);
+        protected TimeSpan UpdateInterval { get; set; } = TimeSpan.FromMilliseconds(80);
 
         internal void FirePulse(object sender, EventArgs eventArgs)
         {
@@ -45,6 +53,57 @@ namespace Trinity.Framework
         {
 
         }
+
+        public static List<WeakReference<Utility>> Utilities = new List<WeakReference<Utility>>();
+
+        public static void PulseAll()
+        {
+            foreach (var utilReference in Utilities.ToList())
+            {
+                Utility util;
+                if (utilReference.TryGetTarget(out util))
+                {
+                    util.FirePulse(null, EventArgs.Empty);
+                }
+                else
+                {
+                    Utilities.Remove(utilReference);
+                }
+            }
+        }
+
+        public static void EnableAll()
+        {
+            foreach (var utilReference in Utilities.ToList())
+            {
+                Utility util;
+                if (utilReference.TryGetTarget(out util))
+                {
+                    util.Enable();
+                }
+                else
+                {
+                    Utilities.Remove(utilReference);
+                }
+            }
+        }
+
+        public static void DisableAll()
+        {
+            foreach (var utilReference in Utilities.ToList())
+            {
+                Utility util;
+                if (utilReference.TryGetTarget(out util))
+                {
+                    util.Enable();
+                }
+                else
+                {
+                    Utilities.Remove(utilReference);
+                }
+            }
+        }
+
     }
 }
 

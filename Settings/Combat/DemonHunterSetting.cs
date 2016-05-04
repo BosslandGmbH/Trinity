@@ -1046,7 +1046,7 @@ namespace Trinity.Config.Combat
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(4)]
+        [DefaultValue(1)]
         public int ClusterSizeChakram
         {
             get
@@ -1064,7 +1064,7 @@ namespace Trinity.Config.Combat
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(4)]
+        [DefaultValue(1)]
         public int ClusterSizeImpale
         {
             get

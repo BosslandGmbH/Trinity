@@ -77,6 +77,8 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         public int Loot20Drop => GetCachedAttribute<int>(ActorAttributeType.Loot20Drop); // Loot20Drop (-3694) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1 
         public int Seed => GetCachedAttribute<int>(ActorAttributeType.Seed); // Seed (-3698) = i:-180189030 f:-2.466006E+32 v:-1.80189E+08 ModifierType=None Modifier=-1 
         public int RequiredLevel => GetCachedAttribute<int>(new AttributeKey((int)ActorAttributeType.Requirement, (int)RequirementType.EquipItem)); // ItemLegendaryItemLevelOverride (-3706) = i:70 f:9.809089E-44 v:70 ModifierType=None Modifier=-1 
+
+        public int ItemLegendaryItemLevelOverride => GetCachedAttribute<int>(ActorAttributeType.ItemLegendaryItemLevelOverride);
         public int ItemBindingLevelOverride => GetCachedAttribute<int>(ActorAttributeType.ItemBindingLevelOverride); // ItemBindingLevelOverride (-3707) = i:2 f:2.802597E-45 v:2 ModifierType=None Modifier=-1 
         public int ItemBoundToACD => GetCachedAttribute<int>(ActorAttributeType.ItemBoundToACD); // ItemBoundToACD (-3709) = i:2014707801 f:1.216956E+34 v:2.014708E+09 ModifierType=None Modifier=-1 
         public int Sockets => GetCachedAttribute<int>(ActorAttributeType.Sockets); // Sockets (-3712) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1 

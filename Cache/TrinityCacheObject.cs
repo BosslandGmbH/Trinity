@@ -4,10 +4,12 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web.UI;
+using Adventurer.Game.Exploration;
 using Trinity.Cache;
 using Trinity.Config.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Avoidance;
+using Trinity.Framework.Avoidance.Structures;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Technicals;
@@ -516,23 +518,15 @@ namespace Trinity
                 this.RActorGuid = diaObject.RActorId;
                 this.ACDGuid = diaObject.ACDId;
 
-                var unit = diaObject as DiaUnit;
-                if (unit != null && !unit.IsEnvironmentRActor)
+                CommonData = diaObject.CommonData;
+                if (CommonData != null && CommonData.IsValid && !CommonData.IsDisposed)
                 {
-                    try
+                    var unit = diaObject as DiaUnit;
+                    if (unit != null)
                     {
                         this.HitPoints = unit.HitpointsCurrent;
                     }
-                    catch (Exception ex)
-                    {
-                        Logger.LogError("Exception in TrinityCacheObject C'tor {0}", ex);
-                    }
-                }
 
-                CommonData = diaObject.CommonData;
-
-                if (CommonData != null && CommonData.IsValid && !CommonData.IsDisposed)
-                {
                     this.IsACDBased = true;
                     this.IsElite = CommonData.IsElite;
                     this.Animation = CommonData.CurrentAnimation;
@@ -1185,5 +1179,7 @@ namespace Trinity
             return affixes;
         }
 
+
+        public string Flags => string.Join(", ", Core.Avoidance.Grid.GetAvoidanceFlags(Position));
     }
 }

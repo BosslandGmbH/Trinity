@@ -107,7 +107,8 @@ namespace Trinity.Items
                 return false;
             }
 
-            Logger.LogVerbose($"  >>  {cItem.Name} ({itemSetting.Id}) is a selected {itemSetting.Type} with {itemSetting.Rules.Count} rules.");
+            var typeName = itemSetting.Type == LItem.ILType.Slot ? $"({itemSetting.Name}) " : string.Empty;
+            Logger.LogVerbose($"  >>  {cItem.Name} ({itemSetting.Id}) is a selected {itemSetting.Type} {typeName}with {itemSetting.Rules.Count} rules.");
 
             if (itemSetting.RequiredRules.Any())
             {
@@ -125,7 +126,11 @@ namespace Trinity.Items
                     Logger.LogVerbose($"  >>  Not stashing because of required rule failure: {itemRule.Name}");
                     return false;
                 }
-                ruleUpgrades.Add(itemRule, newValue);
+
+                if (itemSetting.Type != LItem.ILType.Slot)
+                {
+                    ruleUpgrades.Add(itemRule, newValue);
+                }
             }
 
             if (!itemSetting.OptionalRules.Any())
@@ -143,7 +148,11 @@ namespace Trinity.Items
                 if (EvaluateProperty(itemRule, cItem, out newValue))
                 {
                     trueOptionals++;
-                    ruleUpgrades.Add(itemRule, newValue);
+
+                    if (itemSetting.Type != LItem.ILType.Slot)
+                    {
+                        ruleUpgrades.Add(itemRule, newValue);
+                    }
                 }                
             }
 

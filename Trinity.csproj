@@ -62,16 +62,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Adventurer">
-      <HintPath>..\..\Demonbuddy3\Plugins\Adventurer\bin\Debug\Adventurer.dll</HintPath>
+      <HintPath>..\Adventurer\Trunk\bin\Debug\Adventurer.dll</HintPath>
     </Reference>
     <Reference Include="Demonbuddy">
-      <HintPath>..\..\Demonbuddy3\Demonbuddy.exe</HintPath>
+      <HintPath>..\..\DB-Current\Demonbuddy.exe</HintPath>
     </Reference>
     <Reference Include="GreyMagic">
-      <HintPath>..\..\Demonbuddy3\GreyMagic.dll</HintPath>
+      <HintPath>..\..\DB-Current\GreyMagic.dll</HintPath>
     </Reference>
     <Reference Include="IronPython">
-      <HintPath>..\..\Demonbuddy3\IronPython.dll</HintPath>
+      <HintPath>..\..\DB-Current\IronPython.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
@@ -242,6 +242,7 @@
     <Compile Include="Framework\Objects\Memory\Symbols\Types\ValueDataType.cs" />
     <Compile Include="Framework\Objects\Memory\Symbols\Types\VendorSlot.cs" />
     <Compile Include="Framework\Objects\Memory\Symbols\Types\WeaponsComboType.cs" />
+    <Compile Include="Framework\Utilities\CastStatus.cs" />
     <Compile Include="Framework\Utilities\Paragon.cs" />
     <Compile Include="Framework\Avoidance\Structures\AvoidanceAreaStats.cs" />
     <Compile Include="Framework\Avoidance\DefaultAvoider.cs" />

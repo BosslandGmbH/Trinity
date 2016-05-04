@@ -4,6 +4,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Cache;
 using Trinity.Framework;
 using TrinityCoroutines.Resources;
 using Zeta.Bot;
@@ -53,8 +54,10 @@ namespace Trinity.DbProvider
                 {
                     Logger.Log("[Death] No Longer Dead");
 
-                    if(TrinityPlugin.Settings.Combat.Misc.FleeInGhostMode)
+                    if (TrinityPlugin.Settings.Combat.Misc.FleeInGhostMode)
+                    {
                         await MoveWhileGhosted();
+                    }
 
                     if (EquipmentNeedsEmergencyRepair())
                     {
@@ -117,6 +120,10 @@ namespace Trinity.DbProvider
             else if (IsBeingRevived())
             {
                 Logger.Log("[Death] Waiting while being resurrected");
+            }
+            else if (ZetaDia.Me.IsInBossEncounter && !RiftProgression.IsInRift && TrinityPlugin.Settings.Combat.Misc.WaitForResInBossEncounters)
+            {
+                Logger.Log("[Death] Waiting because of wait for resurrect in boss encounter setting");
             }
             else if (corpseButtonReady && !needRepair && !waitingForCorpseResurrect && !noMoreCorpseRevives && !corpseResurrectDisabled)
             {

@@ -146,11 +146,11 @@ namespace Trinity
                 }
                 TargetUtil.ClearCurrentTarget("Target Check Failed to have Valid Target.");
 
-                if ((ForceVendorRunASAP || WantToTownRun) && TownRun.TownRunTimerRunning())
-                {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Waiting for town run timer (Target Check)", true);
-                    return TargetCheckResult(true, "Waiting for TownRunTimer");
-                }
+                //if ((ForceVendorRunASAP || WantToTownRun) && TownRun.TownRunTimerRunning())
+                //{
+                //    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Waiting for town run timer (Target Check)", true);
+                //    return TargetCheckResult(true, "Waiting for TownRunTimer");
+                //}
 
                 return TargetCheckResult(false, "End of TargetCheck");
             }

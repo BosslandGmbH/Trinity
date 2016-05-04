@@ -1233,7 +1233,7 @@ namespace Trinity
         private static readonly HashSet<int> interactWhiteListIds = new HashSet<int>
         {
             //328830//x1_Fortress_Portal_Switch (328830)
-
+            309432, // x1_westm_Bridge
             209133, // TentacleLord (209133)  QuestSnoId: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!
             363725, // Special Event Chest
 
@@ -1414,8 +1414,9 @@ namespace Trinity
         public static HashSet<int> LineOfSightWhitelist { get { return lineOfSightWhitelist; } }
         private static readonly HashSet<int> lineOfSightWhitelist = new HashSet<int>
         {
-            410366, // Siege_wallMonster_C = 410366, Bounty to kill wall monsters, failing los checks.
 
+            410366, // Siege_wallMonster_C = 410366, Bounty to kill wall monsters, failing los checks.
+            309432, // x1_westm_Bridge
             116807, // Butcher Health Well
             180575, // Diablo arena Health Well
             129031, // A3 Skycrown Catapults
@@ -1447,6 +1448,7 @@ namespace Trinity
         public static HashSet<int> ContainerWhiteListIds { get { return containerWhiteListIds; } }
         private static readonly HashSet<int> containerWhiteListIds = new HashSet<int>
         {
+            
             (int)SNOActor.x1_Catacombs_Weapon_Rack_Raise,
             62859,  // TrOut_Fields_Chest
             62865,  // TrOut_Highlands_Chest

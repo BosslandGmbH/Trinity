@@ -43,10 +43,9 @@ namespace TrinityRoutine
                     foreach (PluginContainer plugin in PluginManager.Plugins)
                     {
                         if (plugin.Plugin.Name == "Trinity")
-                            if (plugin.Plugin.Name == "TrinityPlugin")
-                            {
-                                return plugin.Plugin.DisplayWindow;
-                            }
+                        {
+                            return plugin.Plugin.DisplayWindow;
+                        }                         
                     }
                 }
                 catch (Exception ex)

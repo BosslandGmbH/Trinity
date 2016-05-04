@@ -67,6 +67,7 @@ namespace Trinity.Coroutines.Town
             }
 
             Logger.LogVerbose("[SalvageItems] Starting salvage for {0} items", salvageItems.Count);
+            salvageItems.ForEach(i => Logger.LogDebug($"[SalvageItems] Salvaging: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
 
             GameUI.CloseVendorWindow();
 

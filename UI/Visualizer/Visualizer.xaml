@@ -452,7 +452,7 @@
                 <Expander Grid.Row="0" Header="Selected Item" Style="{DynamicResource AccordianExpander}" 
                           IsExpanded="{Binding ExpandedPanel, Converter={StaticResource enumBooleanConverter}, ConverterParameter=SelectedItem}">
 
-                    <ScrollViewer Padding="10" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <ScrollViewer Padding="10" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 
                                 <Grid Visibility="{Binding SelectedObject, Converter={StaticResource NullToVisibilityConverter}}">
                             <Grid.RowDefinitions>
@@ -463,6 +463,8 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -471,7 +473,7 @@
                                     <Grid Grid.Row="0">
                                         <Button Command="{Binding CopySelected}" CommandParameter="{Binding SelectedObject}">Copy to Clipboard</Button> 
                                     </Grid>
-                                    
+
                                     <Grid Grid.Row="1" HorizontalAlignment="Stretch" Margin="1,1,0,0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="110"  />
@@ -520,8 +522,7 @@
                                                 <SolidColorBrush Color="DarkBlue" Opacity="0.2" />
                                             </Label.Background>
                                         </Label>
-                                        <TextBlock Grid.Column="1" Margin="5,3,0,0" MinHeight="22" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" 
-                                                 
+                                        <TextBlock Grid.Column="1" Margin="5,3,0,0" MinHeight="22" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"                                                  
                                                  Text="{Binding SelectedObject.RiftValueInRadius}">
                                             <TextBlock.Background>
                                                 <SolidColorBrush Color="DarkBlue" Opacity="0.05" />
@@ -529,33 +530,33 @@
                                         </TextBlock>
                                     </Grid>
 
-                                    <Grid Grid.Row="4" Width="Auto" HorizontalAlignment="Stretch" Margin="1,1,0,0" Visibility="{Binding SelectedObject.WeightInfo, Converter={StaticResource EmptyStringToVisibilityConverter}}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Converter={StaticResource OffsetWidthConverter}, ConverterParameter=40}" />
-                                        </Grid.ColumnDefinitions>
-                                        <Border Padding="10" Background="#555555">
-                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="0" >
-                                                <Label>WeightInfo</Label>
-                                                <TextBlock TextWrapping="Wrap" TextTrimming="CharacterEllipsis" 
-                                                        Text="{Binding SelectedObject.WeightInfo}"  >
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </Border>
+                                    <Grid Grid.Row="4" HorizontalAlignment="Stretch" Margin="1,1,0,0" Background="DarkSlateGray"
+                                               Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Converter={StaticResource OffsetWidthConverter}, ConverterParameter=40}"
+                                               Visibility="{Binding SelectedObject.WeightInfo, Converter={StaticResource EmptyStringToVisibilityConverter}}">
+                                        <TextBlock TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Margin="10">
+                                            <Run>WeightInfo:</Run>
+                                            <Run Text="{Binding SelectedObject.WeightInfo, Mode=OneWay}"></Run>
+                                        </TextBlock>
                                     </Grid>
 
-                                    <Grid Grid.Row="5" Width="Auto" HorizontalAlignment="Stretch" Margin="1,1,0,0" Visibility="{Binding SelectedObject.IgnoreReason, Converter={StaticResource EmptyStringToVisibilityConverter}}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Converter={StaticResource OffsetWidthConverter}, ConverterParameter=40}" />
-                                        </Grid.ColumnDefinitions>
-                                        <Border Padding="10" Background="#555555">
-                                        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MinHeight="0" >
-                                            <Label>CacheInfo</Label>
-                                                <TextBlock TextWrapping="Wrap" TextTrimming="CharacterEllipsis" 
-                                                        Text="{Binding SelectedObject.IgnoreReason}"  >
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </Border>
+                                    <Grid Grid.Row="5" HorizontalAlignment="Stretch" Margin="1,1,0,0"  Background="DarkSlateGray"
+                                               Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Converter={StaticResource OffsetWidthConverter}, ConverterParameter=40}"
+                                               Visibility="{Binding SelectedObject.IgnoreReason, Converter={StaticResource EmptyStringToVisibilityConverter}}">
+                                        <TextBlock TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Margin="10">
+                                            <Run>CacheInfo:</Run>
+                                            <Run Text="{Binding SelectedObject.IgnoreReason, Mode=OneWay}"></Run>
+                                        </TextBlock>
                                     </Grid>
+
+                                    <Grid Grid.Row="6" HorizontalAlignment="Stretch" Margin="1,1,0,0"  Background="DarkSlateGray"
+                                               Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Converter={StaticResource OffsetWidthConverter}, ConverterParameter=40}"
+                                               Visibility="{Binding SelectedObject.Flags, Converter={StaticResource EmptyStringToVisibilityConverter}}">
+                                        <TextBlock TextWrapping="Wrap" TextTrimming="CharacterEllipsis" Margin="10">
+                                            <Run>Flags:</Run>
+                                            <Run Text="{Binding SelectedObject.Flags, Mode=OneWay}"></Run>
+                                        </TextBlock>
+                                    </Grid>
+
 
                                     <!--<Border Grid.Row="2" Margin="0,0,25,0" Padding="10">
                                         <TextBlock TextWrapping="Wrap"   TextTrimming="CharacterEllipsis" 
@@ -582,7 +583,7 @@
                                         </TextBlock>
                                     </Grid>-->
 
-                                    <ItemsControl  Grid.Row="6" ItemsSource="{Binding SelectedObject,  
+                                    <ItemsControl  Grid.Row="7" ItemsSource="{Binding SelectedObject,  
                                         Converter={StaticResource propertyGridConverter}}" 
                                         ItemContainerStyle="{DynamicResource PropertyGridItemsSelector}" />
 

@@ -313,7 +313,7 @@ namespace Trinity.Combat.Abilities
         /// </summary>
         private static bool BolasCondition(SkillMeta meta)
         {
-            meta.CastRange = 50f;
+            meta.CastRange = 40f;
             return true;
         }
 

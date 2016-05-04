@@ -68,10 +68,10 @@ namespace Trinity
                 extras += " IsWaitingForPotion";
             if (TrinityTownRun.IsTryingToTownPortal())
                 extras += " IsTryingToTownPortal";
-            if (TownRun.TownRunTimerRunning())
-                extras += " TownRunTimerRunning";
-            if (TownRun.TownRunTimerFinished())
-                extras += " TownRunTimerFinished";
+            //if (TownRun.TownRunTimerRunning())
+            //    extras += " TownRunTimerRunning";
+            //if (TownRun.TownRunTimerFinished())
+            //    extras += " TownRunTimerFinished";
             if (_forceTargetUpdate)
                 extras += " ForceTargetUpdate";
             if (CurrentTarget == null)
@@ -189,7 +189,7 @@ namespace Trinity
                         }
                     }
 
-                    if (Player.IsCasting && CurrentTarget.GizmoType == GizmoType.Headstone)
+                    if (Player.IsCasting && CurrentTarget != null && CurrentTarget.GizmoType == GizmoType.Headstone)
                     {
                         Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Player is casting revive ({0})", Player.CurrentAnimation);
                         return GetRunStatus(RunStatus.Success, "RevivingPlayer");
@@ -236,8 +236,8 @@ namespace Trinity
                         Logger.LogVerbose("CurrentTarget == null");
                     }
 
-                    if (ClearArea.ShouldMoveToPortalPosition)
-                        return RunStatus.Success;
+                    //if (ClearArea.ShouldMoveToPortalPosition)
+                    //    return RunStatus.Success;
 
                     _waitedTicks = 0;
                     _isWaitingAfterPower = false;
@@ -295,10 +295,10 @@ namespace Trinity
                         return RunStatus.Failure;
                     }
 
-                    while (CurrentTarget == null && (ForceVendorRunASAP || WantToTownRun) && !BrainBehavior.IsVendoring && TownRun.TownRunTimerRunning())
+                    if (CurrentTarget == null && TrinityTownRun.IsWantingTownRun)
                     {
-                        Logger.Log(TrinityLogLevel.Info, LogCategory.Behavior, "CurrentTarget is null but we are ready to to Town Run, waiting... ");
-                        return GetRunStatus(RunStatus.Running, "CurrentTargetNull");
+                        Logger.Log(TrinityLogLevel.Info, LogCategory.Behavior, "CurrentTarget is null, need to town run, returning ");
+                        return GetRunStatus(RunStatus.Success, "CurrentTargetNull");
                     }
 
                     //while (CurrentTarget == null && TownRun.IsTryingToTownPortal() && TownRun.TownRunTimerRunning())
@@ -621,10 +621,10 @@ namespace Trinity
                         if (validLocation.X < 0 || validLocation.Y < 0)
                         {
                             Logger.Log("No more space to pickup item, town-run requested at next free moment. (HandleTarget)");
-                            ForceVendorRunASAP = true;
+                            //ForceVendorRunASAP = true;
 
-                            // Record the first position when we run out of bag space, so we can return later
-                            TownRun.SetPreTownRunPosition();
+                            //// Record the first position when we run out of bag space, so we can return later
+                            //TownRun.SetPreTownRunPosition();
                         }
                         else
                         {
