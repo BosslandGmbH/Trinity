@@ -1454,7 +1454,9 @@ namespace Trinity
                         TargetUtil.ClearCurrentTarget("Clearing for Weight");
                         LastTargetIsSafeSpot = bestTarget != null && CurrentTarget != null && CurrentTarget.IsSafeSpot;
                         CurrentTarget = bestTarget;
-                        Logger.Log($"Last Guid = {LastTargetRactorGUID}");
+                        
+                        //Logger.Log($"Last Guid = {LastTargetRactorGUID}");
+
                         if (bestTarget.RActorGuid != LastTargetRactorGUID || bestTarget != null && bestTarget.IsMarker)
                         {
                             var timesTargetted = RecordTargetHistory();

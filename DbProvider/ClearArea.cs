@@ -69,12 +69,12 @@ namespace Trinity.DbProvider
             if (!IsClearing)
                 return false;
 
-            Logger.Log("Clear task executed");
+            Logger.LogDebug("Clear task executed");
 
             var noMonsters = !ZetaDia.Actors.GetActorsOfType<DiaUnit>().Any(u => u?.CommonData != null && u.CommonData.IsValid && u.IsAlive && u.IsHostile && u.Distance < 70f);
             if (noMonsters)
             {
-                Logger.Log($"No Monsters nearby, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
+                Logger.LogDebug($"No Monsters nearby, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
                 await MoveTo.Execute(StartPosition, "Town Portal Position", 5f, () => ZetaDia.CurrentWorldSnoId != StartWorld);
                 Stop();
                 return false;
@@ -83,7 +83,7 @@ namespace Trinity.DbProvider
             var clearFinished = DateTime.UtcNow.Subtract(ClearStarted).TotalSeconds > ClearTimeSeconds;
             if (clearFinished)
             {
-                Logger.Log("Clear timer finished, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
+                Logger.LogDebug("Clear timer finished, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
                 await MoveTo.Execute(StartPosition, "Town Portal Position", 5f, () => ZetaDia.CurrentWorldSnoId != StartWorld);
                 Stop();
                 return false;
@@ -92,7 +92,7 @@ namespace Trinity.DbProvider
             var worldChanged = ZetaDia.CurrentWorldSnoId != StartWorld;
             if (worldChanged)
             {
-                Logger.Log("World Changed, Stop Clearing");
+                Logger.LogDebug("World Changed, Stop Clearing");
                 Stop();
                 return false;
             }

@@ -426,7 +426,6 @@
     <Compile Include="DbProvider\DeathHandler.cs" />
     <Compile Include="Coroutines\Town\UseCraftingRecipes.cs" />
     <Compile Include="DbProvider\KillAllBountyDetector.cs" />
-    <Compile Include="DbProvider\SearchAreaProvider.cs" />
     <Compile Include="DbProvider\VendorHook.cs" />
     <Compile Include="Helpers\Attributes\NoCopy.cs" />
     <Compile Include="Helpers\EnumValue.cs" />
@@ -545,7 +544,6 @@
     <Compile Include="Settings\Loot\ItemEnumOptions.cs" />
     <Compile Include="Settings\Loot\ItemRuleSetting.cs" />
     <Compile Include="Helpers\FileManager.cs" />
-    <Compile Include="DbProvider\TownRun.cs" />
     <Compile Include="Combat\ScheduledPower.cs" />
     <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\LogCategory.cs" />
