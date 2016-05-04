@@ -187,7 +187,20 @@ namespace Trinity.Framework.Avoidance
             get { return CombatBase.CurrentTarget == null ? 0 : Math.Abs(CombatBase.CurrentTarget.Position.Z - ZetaDia.Me.Position.Z); }
         }
 
-        public bool TryGetSafeSpot(out Vector3 safeSpot, float minDistance = 10f, float maxDistance = 100f, Func<AvoidanceNode, bool> condition = null)
+        private Vector3 _safeSpot;
+        public Vector3 SafeSpot 
+        {
+            get
+            {
+                if (!Core.Avoidance.Grid.IsLocationInFlags(_safeSpot) && _safeSpot.Distance(ZetaDia.Me.Position) < 5f)
+                    return _safeSpot;
+
+                TryGetSafeSpot(out _safeSpot);                
+                return _safeSpot;
+            }
+        }
+
+        public bool TryGetSafeSpot(out Vector3 safeSpot, float minDistance = 0f, float maxDistance = 100f, Func<AvoidanceNode, bool> condition = null)
         {
             var nodes = Core.Avoidance.SafeNodesByDistance.Where(p => p.Distance >= minDistance && p.Distance <= maxDistance);
             var safeSpotNode = condition == null ? nodes.FirstOrDefault() : nodes.FirstOrDefault(condition);

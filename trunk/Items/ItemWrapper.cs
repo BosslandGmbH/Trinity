@@ -9,7 +9,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Items
 {
-    public class ItemWrapper : IComparable<ItemWrapper>, IEquatable<ItemWrapper>
+    public class ItemWrapper : IEquatable<ItemWrapper>
     {
         public int ActorSNO { get; set; }
         public int GameBalanceId { get; set; }
@@ -189,10 +189,10 @@ namespace Trinity.Items
 
 
 
-        public int CompareTo(ItemWrapper other)
-        {
-            return this.Compare(other);
-        }
+        //public int CompareTo(ItemWrapper other)
+        //{
+        //    return this.Compare(other);
+        //}
 
         public bool Equals(ItemWrapper other)
         {
@@ -213,47 +213,47 @@ namespace Trinity.Items
             return Item.GetHashCode();
         }
 
-        public static bool operator ==(ItemWrapper a, ItemWrapper b)
-        {
-            if (ReferenceEquals(a, b))
-            {
-                return true;
-            }
-            // If one is null, but not both, return false.
-            if (((object)a == null) || ((object)b == null))
-            {
-                return false;
-            }
+        //public static bool operator ==(ItemWrapper a, ItemWrapper b)
+        //{
+        //    if (ReferenceEquals(a, b))
+        //    {
+        //        return true;
+        //    }
+        //    // If one is null, but not both, return false.
+        //    if (((object)a == null) || ((object)b == null))
+        //    {
+        //        return false;
+        //    }
 
-            // Return true if the fields match:
-            return a.ItemType == b.ItemType &&
-                a.ItemBaseType == b.ItemBaseType &&
-                a.Item.ItemQualityLevel == b.Item.ItemQualityLevel &&
-                a.Item.Name == b.Name;
-        }
+        //    // Return true if the fields match:
+        //    return a.ItemType == b.ItemType &&
+        //        a.ItemBaseType == b.ItemBaseType &&
+        //        a.Item.ItemQualityLevel == b.Item.ItemQualityLevel &&
+        //        a.Item.Name == b.Name;
+        //}
 
-        public static bool operator !=(ItemWrapper item, ItemWrapper other)
-        {
-            return !(item == other);
-        }
+        //public static bool operator !=(ItemWrapper item, ItemWrapper other)
+        //{
+        //    return !(item == other);
+        //}
 
-        public static bool operator <(ItemWrapper item, ItemWrapper other)
-        {
-            return item.Compare(other) < 0;
-        }
+        //public static bool operator <(ItemWrapper item, ItemWrapper other)
+        //{
+        //    return item.Compare(other) < 0;
+        //}
 
-        public static bool operator >(ItemWrapper item, ItemWrapper other)
-        {
-            return item.CompareTo(other) > 0;
-        }
-        public static bool operator >=(ItemWrapper item, ItemWrapper other)
-        {
-            return item.CompareTo(other) >= 0;
-        }
+        //public static bool operator >(ItemWrapper item, ItemWrapper other)
+        //{
+        //    return item.CompareTo(other) > 0;
+        //}
+        //public static bool operator >=(ItemWrapper item, ItemWrapper other)
+        //{
+        //    return item.CompareTo(other) >= 0;
+        //}
 
-        public static bool operator <=(ItemWrapper item, ItemWrapper other)
-        {
-            return item.CompareTo(other) <= 0;
-        }
+        //public static bool operator <=(ItemWrapper item, ItemWrapper other)
+        //{
+        //    return item.CompareTo(other) <= 0;
+        //}
     }
 }

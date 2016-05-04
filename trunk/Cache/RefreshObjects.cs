@@ -431,10 +431,12 @@ namespace Trinity
                 // Blank current/last/next targets
                 LastPrimaryTargetPosition = CurrentTarget != null ? CurrentTarget.Position : Vector3.Zero;
                 KiteAvoidDestination = Vector3.Zero;
+
                 // store last target GUID
-                LastTargetRactorGUID = CurrentTarget != null ? CurrentTarget.RActorGuid : -1;
+                if(CurrentTarget != null)
+                    LastTargetRactorGUID = CurrentTarget.RActorGuid;
+
                 LastTargetACDGuid = CurrentTarget != null ? CurrentTarget.ACDGuid : -1;
-                LastTargetIsSafeSpot = CurrentTarget != null ? CurrentTarget.IsSafeSpot : false;
 
                 //reset current target
                 //CurrentTarget = null;

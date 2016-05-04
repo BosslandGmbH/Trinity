@@ -28,15 +28,7 @@ namespace Trinity.Framework.Avoidance.Structures
             ResetFlags();
         }
 
-        public int QueryId;
-        public bool IsOpen;
-        public bool IsClosed;
         public bool IsWalkable;
-        public float GScore;
-        public float HScore;
-        public float FScore;
-        public AvoidanceNode Parent;
-
         public AvoidanceFlags AvoidanceFlags { get; set; }
         public byte AStarValue { get; set; }
         public IGroupNode ExplorationNode { get; set; }
@@ -79,7 +71,11 @@ namespace Trinity.Framework.Avoidance.Structures
 
             if (NodeFlags.HasFlag(NodeFlags.AllowWalk))
             {
-                AvoidanceFlags |= AvoidanceFlags.NavigationBlocking;
+                AvoidanceFlags |= AvoidanceFlags.AllowWalk;
+            }
+            if (NodeFlags.HasFlag(NodeFlags.NearWall))
+            {
+                AvoidanceFlags |= AvoidanceFlags.NearWall;
             }
             if (NodeFlags.HasFlag(NodeFlags.AllowFlier))
             {

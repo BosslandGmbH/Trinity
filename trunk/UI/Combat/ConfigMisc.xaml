@@ -255,8 +255,18 @@
                     <CheckBox IsChecked="{Binding Path=Misc.FleeInGhostMode}">Flee In Ghost Mode</CheckBox>
                 </StackPanel>
             </GroupBox>
-     
-                        <!-- Misc -->
+
+            <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <GroupBox.Header>
+                    Death
+                </GroupBox.Header>
+                <StackPanel>
+                    <CheckBox IsChecked="{Binding Path=Misc.WaitForResInBossEncounters}" ToolTip="Attack Mobs When Blocked">Wait for ally to revive in boss fights</CheckBox>
+                    <CheckBox IsChecked="{Binding Path=Misc.FleeInGhostMode}">Run away from death position after revive</CheckBox>
+                </StackPanel>
+            </GroupBox>
+            
+            <!-- Misc -->
             <StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0">
                 <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                     <GroupBox.Header>

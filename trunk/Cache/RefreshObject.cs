@@ -303,7 +303,12 @@ namespace Trinity
                 }
             }
 
-
+            if (DataDictionary.AvoidanceSNO.Contains(CurrentCacheObject.ActorSNO))
+            {
+                // Avoidance is handled elsewhere, exclude avoidance actors from this cache so 
+                // they dont get targetted with spells. (frozen pulse monster etc)
+                c_IgnoreReason = "Avoidance";
+            }
 
             // Always Refresh ZDiff for every object
             AddToCache = RefreshStepObjectTypeZDiff(AddToCache);
@@ -896,7 +901,7 @@ namespace Trinity
                                 };
 
                                 // Ignore units not in LoS except bosses
-                                if (!CurrentCacheObject.IsBoss && !c_diaObject.InLineOfSight && !alwaysLoSCheckTypes.Contains(CurrentCacheObject.Type))
+                                if (!CurrentCacheObject.IsBoss && !c_diaObject.InLineOfSight && !alwaysLoSCheckTypes.Contains(CurrentCacheObject.Type) && !DataDictionary.LineOfSightWhitelist.Contains(CurrentCacheObject.ActorSNO))
                                 {
                                     AddToCache = false;
                                     c_IgnoreSubStep = "NotInLoS";

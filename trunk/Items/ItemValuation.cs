@@ -58,8 +58,8 @@ namespace Trinity
             AmountHighestScoringPrimary = 0;
             TotalRequirements = 0;
             GlobalMultiplier = 1;
-            TownRun.JunkItemStatString = "";
-            TownRun.ValueItemStatString = "";
+            JunkItemStatString = "";
+            ValueItemStatString = "";
 
             // Checks for Invalid Item Types
             CheckForInvalidItemType(itemType);
@@ -836,12 +836,12 @@ namespace Trinity
                     // For item logs
                     if (i != Constants.DEXTERITY && i != Constants.STRENGTH && i != Constants.INTELLIGENCE)
                     {
-                        if (TownRun.ValueItemStatString != "")
-                            TownRun.ValueItemStatString += ". ";
-                        TownRun.ValueItemStatString += Constants.StatNames[i] + "=" + Math.Round(TempStatistic).ToString();
-                        if (TownRun.JunkItemStatString != "")
-                            TownRun.JunkItemStatString += ". ";
-                        TownRun.JunkItemStatString += Constants.StatNames[i] + "=" + Math.Round(TempStatistic).ToString();
+                        if (ValueItemStatString != "")
+                            ValueItemStatString += ". ";
+                        ValueItemStatString += Constants.StatNames[i] + "=" + Math.Round(TempStatistic).ToString();
+                        if (JunkItemStatString != "")
+                            JunkItemStatString += ". ";
+                        JunkItemStatString += Constants.StatNames[i] + "=" + Math.Round(TempStatistic).ToString();
                     }
                 }
             }
@@ -859,8 +859,8 @@ namespace Trinity
                     HighestScoringPrimary *= 0.8;
                 TotalItemPoints += HighestScoringPrimary;
 
-                TownRun.ValueItemStatString = Constants.StatNames[WhichPrimaryIsHighest] + "=" + Math.Round(AmountHighestScoringPrimary).ToString() + ". " + TownRun.ValueItemStatString;
-                TownRun.JunkItemStatString = Constants.StatNames[WhichPrimaryIsHighest] + "=" + Math.Round(AmountHighestScoringPrimary).ToString() + ". " + TownRun.JunkItemStatString;
+                ValueItemStatString = Constants.StatNames[WhichPrimaryIsHighest] + "=" + Math.Round(AmountHighestScoringPrimary).ToString() + ". " + ValueItemStatString;
+                JunkItemStatString = Constants.StatNames[WhichPrimaryIsHighest] + "=" + Math.Round(AmountHighestScoringPrimary).ToString() + ". " + JunkItemStatString;
 
             }
             Logger.Log(TrinityLogLevel.Verbose, LogCategory.ItemValuation, "--- +" + TotalItemPoints.ToString("0") + " total score pre-special reductions. (GlobalMultiplier=" + GlobalMultiplier.ToString("0.000") + ")", true);
@@ -1051,11 +1051,15 @@ namespace Trinity
             return Math.Round(TotalItemPoints);
         }
 
+        public static string ValueItemStatString { get; set; }
+
         internal static void ResetValuationStatStrings()
         {
-            TownRun.ValueItemStatString = "";
-            TownRun.JunkItemStatString = "";
+            ValueItemStatString = "";
+            JunkItemStatString = "";
         }
+
+        public static string JunkItemStatString { get; set; }
 
         private static void CheckForInvalidItemType(TrinityItemType itemType)
         {
@@ -1323,51 +1327,51 @@ namespace Trinity
         /// </summary>
         internal static void TestScoring()
         {
-            using (new PerformanceLogger("TestScoring"))
-            {
-                using (new ZetaCacheHelper())
-                {
-                    try
-                    {
-                        if (TownRun.TestingBackpack)
-                            return;
-                        TownRun.TestingBackpack = true;
-                        //ZetaDia.Actors.Update();
-                        if (ZetaDia.Actors.Me == null)
-                        {
-                            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Error testing scores - not in game world?");
-                            return;
-                        }
-                        if (ZetaDia.IsInGame && !ZetaDia.IsLoadingWorld)
-                        {
-                            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "===== Outputting Test Scores =====");
-                            foreach (ACDItem item in ZetaDia.Me.Inventory.Backpack)
-                            {
-                                if (item.BaseAddress == IntPtr.Zero)
-                                {
-                                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "GSError: Diablo 3 memory read error, or item became invalid [TestScore-1]");
-                                }
-                                else
-                                {
-                                    bool shouldStash = ItemManager.Current.ShouldStashItem(item);
-                                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, shouldStash ? "* KEEP *" : "-- TRASH --");
-                                }
-                            }
-                            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "===== Finished Test Score Outputs =====");
-                        }
-                        else
-                        {
-                            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Error testing scores - not in game world?");
-                        }
-                        TownRun.TestingBackpack = false;
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogNormal("Exception in TestScoring(): {0}", ex);
-                        TownRun.TestingBackpack = false;
-                    }
-                }
-            }
+            //using (new PerformanceLogger("TestScoring"))
+            //{
+            //    using (new ZetaCacheHelper())
+            //    {
+            //        try
+            //        {
+            //            if (TownRun.TestingBackpack)
+            //                return;
+            //            TownRun.TestingBackpack = true;
+            //            //ZetaDia.Actors.Update();
+            //            if (ZetaDia.Actors.Me == null)
+            //            {
+            //                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Error testing scores - not in game world?");
+            //                return;
+            //            }
+            //            if (ZetaDia.IsInGame && !ZetaDia.IsLoadingWorld)
+            //            {
+            //                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "===== Outputting Test Scores =====");
+            //                foreach (ACDItem item in ZetaDia.Me.Inventory.Backpack)
+            //                {
+            //                    if (item.BaseAddress == IntPtr.Zero)
+            //                    {
+            //                        Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "GSError: Diablo 3 memory read error, or item became invalid [TestScore-1]");
+            //                    }
+            //                    else
+            //                    {
+            //                        bool shouldStash = ItemManager.Current.ShouldStashItem(item);
+            //                        Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, shouldStash ? "* KEEP *" : "-- TRASH --");
+            //                    }
+            //                }
+            //                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "===== Finished Test Score Outputs =====");
+            //            }
+            //            else
+            //            {
+            //                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Error testing scores - not in game world?");
+            //            }
+            //            TownRun.TestingBackpack = false;
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            Logger.LogNormal("Exception in TestScoring(): {0}", ex);
+            //            TownRun.TestingBackpack = false;
+            //        }
+            //    }
+            //}
         }
 
         /// <summary>Return the score needed to keep something by the item type</summary>

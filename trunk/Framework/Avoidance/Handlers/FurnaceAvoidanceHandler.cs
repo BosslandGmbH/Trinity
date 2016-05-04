@@ -50,7 +50,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 else
                 {
                     var obstacleNodes = grid.GetNodesInRadius(actor.Position, part.Radius);
-                    grid.FlagNodes(obstacleNodes, AvoidanceFlags.Avoidance, 5);
+                    grid.FlagNodes(obstacleNodes, AvoidanceFlags.NavigationBlocking, 5);
                 }
             }
 

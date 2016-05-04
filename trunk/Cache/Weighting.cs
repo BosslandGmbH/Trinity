@@ -98,7 +98,7 @@ namespace Trinity
                         }
                     }
 
-                    var usingTownPortal = Player.IsCastingTownPortalOrTeleport();
+                    var usingTownPortal = TrinityTownRun.IsWantingTownRun;
 
                     // Highest weight found as we progress through, so we can pick the best target at the end (the one with the highest weight)
                     HighestWeightFound = 0;
@@ -670,6 +670,15 @@ namespace Trinity
                                 // Death's Breath Priority
                                 if (cacheObject.ActorSNO == 361989 || cacheObject.ActorSNO == 449044)
                                 {
+                                    // Ignore Non-Legendaries in AoE
+                                    if (Settings.Loot.Pickup.IgnoreNonLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
+                                            Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
+                                        break;
+                                    }
+
                                     if (!Settings.Loot.Pickup.PickupDeathsBreath)
                                     {
                                         cacheObject.WeightInfo +=
@@ -686,8 +695,9 @@ namespace Trinity
                                 if (cacheObject.ItemQuality >= ItemQuality.Legendary)
                                 {
                                     // Ignore Legendaries in AoE
-                                    if (Settings.Loot.Pickup.IgnoreLegendaryInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
-                                    {
+                                    if (Settings.Loot.Pickup.IgnoreLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
+                                            Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                        {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
                                         break;
                                     }
@@ -712,8 +722,9 @@ namespace Trinity
                                 if (cacheObject.ItemQuality < ItemQuality.Legendary)
                                 {
                                     // Ignore Non-Legendaries in AoE
-                                    if (Settings.Loot.Pickup.IgnoreNonLegendaryInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
-                                    {
+                                    if (Settings.Loot.Pickup.IgnoreNonLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
+                                            Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                        {
                                         cacheObject.WeightInfo +=
                                             $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
                                         break;
@@ -921,7 +932,7 @@ namespace Trinity
                                 }
 
                                 //Ignore because we are TownPortaling
-                                if (Player.IsCastingPortal)
+                                if (usingTownPortal)
                                 {
                                     cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
                                     break;
@@ -1441,15 +1452,15 @@ namespace Trinity
                     if (bestTarget?.InternalName != null && bestTarget.ActorSNO > 0 && bestTarget.Weight > 0)
                     {
                         TargetUtil.ClearCurrentTarget("Clearing for Weight");
+                        LastTargetIsSafeSpot = bestTarget != null && CurrentTarget != null && CurrentTarget.IsSafeSpot;
                         CurrentTarget = bestTarget;
-                        if (bestTarget.RActorGuid != LastTargetRactorGUID ||
-                            bestTarget != null && bestTarget.IsMarker)
+                        Logger.Log($"Last Guid = {LastTargetRactorGUID}");
+                        if (bestTarget.RActorGuid != LastTargetRactorGUID || bestTarget != null && bestTarget.IsMarker)
                         {
-                            RecordTargetHistory();
+                            var timesTargetted = RecordTargetHistory();
                             Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation,
-                                "Target changed to {0} // {1} ({2}) {3}", CurrentTarget.ActorSNO,
-                                CurrentTarget.InternalName,
-                                CurrentTarget.Type, CurrentTarget.WeightInfo);
+                                $"Target changed to {CurrentTarget.ActorSNO} // {CurrentTarget.InternalName} RActorGuid={CurrentTarget.RActorGuid} " +
+                                $"({CurrentTarget.Type}) {CurrentTarget.WeightInfo} TargetTimes={timesTargetted}");
                         }
                         return;
                     }
@@ -1460,59 +1471,77 @@ namespace Trinity
                 }
             }
 
-            public static void RecordTargetHistory()
+            public static int RecordTargetHistory()
             {
-                int timesBeenPrimaryTarget;
+                int targetted;
 
                 var objectKey = CurrentTarget.Type.ToString() + CurrentTarget.Position + CurrentTarget.InternalName +
                                 CurrentTarget.ItemLevel + CurrentTarget.ItemQuality + CurrentTarget.HitPoints;
 
-                if (CacheData.PrimaryTargetCount.TryGetValue(objectKey, out timesBeenPrimaryTarget))
+                if (CacheData.PrimaryTargetCount.TryGetValue(objectKey, out targetted))
                 {
-                    if (!LastTargetIsSafeSpot)
+                    if (!LastTargetIsSafeSpot && LastTargetRactorGUID > 0)
                     {
                         // Targeted time is used primarily for blacklisting, 
                         // exclude avoidance triggered target switches or things get blacklisted too fast while kiting.                    
-                        timesBeenPrimaryTarget++;
+                        targetted++;
                     }
 
-                    CacheData.PrimaryTargetCount[objectKey] = timesBeenPrimaryTarget;
-                    CurrentTarget.TimesBeenPrimaryTarget = timesBeenPrimaryTarget;
+                    CacheData.PrimaryTargetCount[objectKey] = targetted;
+                    CurrentTarget.TimesBeenPrimaryTarget = targetted;
                     CurrentTarget.HasBeenPrimaryTarget = true;
 
                     var isEliteLowHealth = CurrentTarget.HitPointsPct <= 0.75 && CurrentTarget.IsBossOrEliteRareUnique;
-                    var isLegendaryItem = CurrentTarget.Type == TrinityObjectType.Item &&
-                                          CurrentTarget.ItemQuality >= ItemQuality.Legendary;
+                    if (isEliteLowHealth)
+                        return targetted;
 
-                    var isHoradricRelic = ((CurrentTarget.InternalName.ToLower().Contains("horadricrelic") || CurrentTarget.TrinityItemType == TrinityItemType.HoradricRelic) &&
-                                           CurrentTarget.TimesBeenPrimaryTarget > 15);
+                    if (CurrentTarget.IsBoss || CurrentTarget.IsSafeSpot || CurrentTarget.IsWaitSpot)
+                        return targetted;
 
-                    if ((!CurrentTarget.IsBoss && CurrentTarget.TimesBeenPrimaryTarget > 50 && !isEliteLowHealth && !isLegendaryItem && CurrentTarget.Type != TrinityObjectType.ProgressionGlobe) || 
-                        isHoradricRelic || CurrentTarget.TimesBeenPrimaryTarget > 200 && isLegendaryItem)
-                    {
-                        Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation,
-                            "Blacklisting target {0} ActorSnoId={1} RActorGUID={2} due to possible stuck/flipflop!",
-                            CurrentTarget.InternalName, CurrentTarget.ActorSNO, CurrentTarget.RActorGuid);
+                    if(targetted > GetBlacklistTargetTimes(CurrentTarget))
+                        Blacklist(objectKey);
 
-                        var expires = CurrentTarget.IsMarker
-                            ? DateTime.UtcNow.AddSeconds(60)
-                            : DateTime.UtcNow.AddSeconds(30);
-
-                        // Add to generic blacklist for safety, as the RActorGUID on items and gold can change as we move away and get closer to the items (while walking around corners)
-                        // So we can't use any ID's but rather have to use some data which never changes (actorSNO, position, type, worldID)
-                        GenericBlacklist.AddToBlacklist(new GenericCacheObject
-                        {
-                            Key = CurrentTarget.ObjectHash,
-                            Value = null,
-                            Expires = expires
-                        });
-                    }
+                    return targetted;
                 }
-                else
+
+                // Add to Primary Target Cache Count
+                CacheData.PrimaryTargetCount.Add(objectKey, 1);         
+                return 1;
+            }
+
+            private static int GetBlacklistTargetTimes(TrinityCacheObject currentTarget)
+            {
+                switch (currentTarget.Type)
                 {
-                    // Add to Primary Target Cache Count
-                    CacheData.PrimaryTargetCount.Add(objectKey, 1);
+                    case TrinityObjectType.Item:
+                        return currentTarget.ItemQuality >= ItemQuality.Legendary ? 400 : 75;
+                    case TrinityObjectType.Door:
+                    case TrinityObjectType.ProgressionGlobe:
+                        return 300;
                 }
+                return 150;
+            }
+
+            private static void Blacklist(string objectKey)
+            {
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation,
+                    "Blacklisting target (Weighting) {0} ActorSnoId={1} RActorGUID={2} due to possible stuck/flipflop!",
+                    CurrentTarget.InternalName, CurrentTarget.ActorSNO, CurrentTarget.RActorGuid);
+
+                var expires = CurrentTarget.IsMarker
+                    ? DateTime.UtcNow.AddSeconds(60)
+                    : DateTime.UtcNow.AddSeconds(30);
+
+                // Add to generic blacklist for safety, as the RActorGUID on items and gold can change as we move away and get closer to the items (while walking around corners)
+                // So we can't use any ID's but rather have to use some data which never changes (actorSNO, position, type, worldID)
+                GenericBlacklist.AddToBlacklist(new GenericCacheObject
+                {
+                    Key = CurrentTarget.ObjectHash,
+                    Value = null,
+                    Expires = expires
+                });
+
+                CacheData.PrimaryTargetCount.Remove(objectKey);
             }
 
             #region Shrines

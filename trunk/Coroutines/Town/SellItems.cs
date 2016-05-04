@@ -58,6 +58,7 @@ namespace Trinity.Coroutines.Town
             }
 
             Logger.LogVerbose("[SellItems] Now to sell {0} items", sellItems.Count);
+            sellItems.ForEach(i => Logger.LogDebug($"[SellItems] Selling: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
 
             GameUI.CloseVendorWindow();
 

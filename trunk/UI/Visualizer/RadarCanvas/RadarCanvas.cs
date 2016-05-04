@@ -77,7 +77,17 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             {
                 var actor = hit.RadarObject.Actor;
                 ClickCommand.Execute(actor);
-            }                                                
+                return;
+            }
+
+            var node = Core.Avoidance.Grid.GetNearestNode(clickedWorldPosition);
+            SelectedItem = new TrinityCacheObject
+            {
+                InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int)clickedWorldPosition.X},{(int)clickedWorldPosition.Y}]",
+                Distance = clickedWorldPosition.Distance(ZetaDia.Me.Position),
+                Position = clickedWorldPosition,
+            };
+                                                      
         }
 
         private RadarHitTestUtility.HitContainer FindElementUnderClick(object sender, MouseEventArgs e)
@@ -615,19 +625,19 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                         DrawKiteDirection(dc, CanvasData);
                     }
 
-                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.SafeNodes))
-                    {
-                        DrawSafeNodes(dc, CanvasData);
-                    }
+                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.SafeNodes))
+                    //{
+                    //    DrawSafeNodes(dc, CanvasData);
+                    //}
 
-                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.KiteNodes))
-                    {
-                        DrawKiteNodes(dc, CanvasData);
-                    }
-                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.KiteFromNodes))
-                    {
-                        DrawKiteFromNodes(dc, CanvasData);
-                    }
+                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.KiteNodes))
+                    //{
+                    //    DrawKiteNodes(dc, CanvasData);
+                    //}
+                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.KiteFromNodes))
+                    //{
+                    //    DrawKiteFromNodes(dc, CanvasData);
+                    //}
 
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache))
                     {
@@ -639,10 +649,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                         DrawCombatRadius(dc, CanvasData);
                     }
 
-                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.UnwalkableNodes))
-                    {
-                        DrawObstacles(dc, CanvasData);
-                    }
+                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.UnwalkableNodes))
+                    //{
+                    //    DrawObstacles(dc, CanvasData);
+                    //}
 
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.ActivePlayer))
                     {
@@ -824,7 +834,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 {
                     dc.DrawEllipse(null, new Pen(RadarResources.LabelBrush, 1 * Scale), pos.NavigableCenter.ToCanvasPoint(), 4 * Scale, 4 * Scale);
                 }
-
             }
             catch (Exception ex)
             {
@@ -865,13 +874,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 {
                     DrawNavNode(dc, canvas, node);
                 }
-
-                if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Avoidance))
-                {
-                    var r = TrinityPlugin.Settings.Avoidance.AvoiderLocalRadius*GridSize;
-                    dc.DrawEllipse(null, RadarResources.AvoidanceLightPen, Player.Point, r, r);
-                }
-
             }
             catch (Exception ex)
             {
@@ -882,10 +884,12 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         // I dont know what they're doing in the Brushes resource but its probably returning a new object from a color.
         // This is bad, very bad for performance. Use a fixed resource like these brushes below.
         internal static readonly SolidColorBrush BlueBrush = Brushes.Blue;
+        internal static readonly SolidColorBrush SkyBlueBrush = Brushes.DeepSkyBlue;
         internal static readonly SolidColorBrush OrangeRedBrush = Brushes.OrangeRed;
         internal static readonly SolidColorBrush RedBrush = Brushes.DarkRed;
         internal static readonly SolidColorBrush GreenBrush = Brushes.Green;
         internal static readonly SolidColorBrush BlackBrush = Brushes.Black;
+        internal static readonly SolidColorBrush DarkGrayBrush = Brushes.DarkGray;
         internal static readonly SolidColorBrush LineGreenBrush = Brushes.LimeGreen;
         internal static readonly SolidColorBrush HotPinkBrush = Brushes.HotPink;
         internal static readonly SolidColorBrush OrangeBrush = Brushes.Orange;
@@ -896,22 +900,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             if (node == null)
                 return;
 
-            var size = Math.Max(2,GridSize/3);
-
-            SolidColorBrush nodeBrush;
-
-            if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.NavigationBlocking))
-            {
-                if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Avoidance))
-                {                
-                    var weightedBrush = RadarResources.GetWeightedBrush(node.Weight, node.WeightPct);
-
-                    if(node.Weight > 2 && Core.Avoidance.HighestNodeWeight > 2)
-                        DrawNodeArea(dc, canvas, node, weightedBrush);
-
-                    dc.DrawEllipse(weightedBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
-                }
-            }
+            var size = Math.Max(2, GridSize / 3);
 
             // Draw Layer 1
             if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.Backtrack))
@@ -921,38 +910,46 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             }
 
             // Draw Layer 2
-            if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.Avoidance))
+            if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.Avoidance) && VisibilityFlags.HasFlag(RadarVisibilityFlags.Avoidance))
             {
-                if (!VisibilityFlags.HasFlag(RadarVisibilityFlags.Monsters))
-                    return;
+                var weightedBrush = RadarResources.GetWeightedBrush(node.Weight, node.WeightPct);
 
-                nodeBrush = OrangeRedBrush;
-                size = GridSize;
-            }
-            else if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.Monster))
-            {
-                if (!VisibilityFlags.HasFlag(RadarVisibilityFlags.Monsters))
-                    return;
-
-                nodeBrush = BlueBrush;
-            }
-            else if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.NavigationBlocking))
-            {
-                if (!VisibilityFlags.HasFlag(RadarVisibilityFlags.WalkableNodes))
-                    return;
-
-                nodeBrush = GreenBrush;
-            }
-            else
-            {
-                if (!VisibilityFlags.HasFlag(RadarVisibilityFlags.UnwalkableNodes))
-                    return;
-
-                nodeBrush = BlackBrush;
-            }
+                if (node.Weight > 2 && Core.Avoidance.HighestNodeWeight > 2)
+                {
+                    dc.DrawEllipse(weightedBrush, null, node.NavigableCenter.ToCanvasPoint(), size * 1.5, size * 1.5);
+                }
                 
-            //var pen = node.Weight <= 2 ? RadarResources.SafeBrushLightPen : null;
-            dc.DrawEllipse(nodeBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
+                dc.DrawEllipse(weightedBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
+                return;
+            }
+
+            if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.Monster) && VisibilityFlags.HasFlag(RadarVisibilityFlags.Monsters))
+            {
+                dc.DrawEllipse(BlueBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
+                return;
+            }
+
+            if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.KiteFrom) && VisibilityFlags.HasFlag(RadarVisibilityFlags.KiteFromNodes))
+            {
+                dc.DrawEllipse(SkyBlueBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
+                return;
+            }
+
+            if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.AdjacentSafe) && VisibilityFlags.HasFlag(RadarVisibilityFlags.SafeNodes))
+            {
+                dc.DrawEllipse(GreenBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
+                return;
+            }
+
+            if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk) && VisibilityFlags.HasFlag(RadarVisibilityFlags.WalkableNodes))
+            {
+                dc.DrawEllipse(DarkGrayBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
+            }
+
+            if (!node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk) && VisibilityFlags.HasFlag(RadarVisibilityFlags.UnwalkableNodes))
+            {
+                dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
+            }
         }
 
         ///// <summary>

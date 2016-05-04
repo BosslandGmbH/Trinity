@@ -54,8 +54,8 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <WrapPanel Grid.Column="0">
-                    <Button Height="26" DataContext="{StaticResource SettingsManager}" Command="{Binding LoadSettingsCommand}" Margin="4" Width="65">Load</Button>
-                    <Button Height="26" DataContext="{StaticResource SettingsManager}" Command="{Binding SaveAsSettingsCommand}" Margin="4" Width="65">Save As</Button>
+                    <Button Height="26" ToolTip="Replace all current settings with the settings from an XML file." DataContext="{StaticResource SettingsManager}" Command="{Binding LoadSettingsCommand}" Margin="4" Width="65">Import</Button>
+                    <Button Height="26" ToolTip="Copy all the current settings to a different file; it is an export - the current settings for this hero will NOT point to / be linked to the new file." DataContext="{StaticResource SettingsManager}" Command="{Binding SaveAsSettingsCommand}" Margin="4" Width="65">Export</Button>
                     <Button Height="26" Command="{Binding ResetAllCommand}" Margin="4" Width="65">Reset</Button>
                 </WrapPanel>
 

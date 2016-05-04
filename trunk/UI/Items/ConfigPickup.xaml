@@ -23,7 +23,7 @@
                 <StackPanel>
                     <Border BorderBrush="White" BorderThickness="1" Margin="5">
                         <ComboBox FontSize="14" HorizontalAlignment="Stretch" SelectedValuePath="Tag" SelectedValue="{Binding Path=Loot.ItemFilterMode, Mode=TwoWay}">
-                            <ComboBoxItem Content="TrinityPlugin (Not Recommended)" Tag="TrinityOnly" IsSelected="True" ToolTip="Uses TrinityPlugin Scoring Only (see TrinityPlugin Town-Runs Tab)" />
+                            <ComboBoxItem Content="Simple Scoring (Default)" Tag="TrinityOnly" IsSelected="True" ToolTip="Uses TrinityPlugin Scoring Only (see TrinityPlugin Town-Runs Tab)" />
                             <ComboBoxItem Content="File Based Rules (Obsolete)" Tag="TrinityWithItemRules" ToolTip="This is outdated and not supported" />
                             <ComboBoxItem Content="Item List" Tag="ItemList" ToolTip="Use custom list of items" />
                         </ComboBox>
