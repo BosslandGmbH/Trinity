@@ -48,11 +48,11 @@ namespace Trinity.Coroutines.Town
         {
             try
             {
-                Logger.Log("VendorRun Hook Executing");
+                //Logger.Log("VendorRun Hook Executing");
 
                 if (await ClearArea.Execute())
                 {
-                    Logger.Log("Clearing");
+                    Logger.LogDebug("Clearing");
                     return false;  
                 }
 
@@ -60,26 +60,26 @@ namespace Trinity.Coroutines.Town
 
                 if (DateTime.UtcNow < DontAttemptTownRunUntil)
                 {
-                    Logger.Log("Town run cooldown");
+                    Logger.LogDebug("Town run cooldown");
                     IsVendoring = false;
                     return false;
                 }
 
                 if (Core.CastStatus.StoneOfRecall.LastResult == CastResult.Casting)
                 {
-                    Logger.Log("Casting");
+                    Logger.LogDebug("Casting");
                     return true;
                 }
 
                 if (!ShouldStartTownRun())
                 {
-                    Logger.Log("Don't town run");
+                    //Logger.LogDebug("Don't town run");
                     IsVendoring = false;
                     return false;
                 }
 
                 IsWantingTownRun = true;
-                Logger.Log("Town run started");
+                Logger.LogDebug("Town run started");
                 //IsVendoring = true;
 
                 if (ZetaDia.IsLoadingWorld)
@@ -89,7 +89,7 @@ namespace Trinity.Coroutines.Town
 
                 if (!ZetaDia.IsInTown)
                 {
-                    Logger.Log("Pre Go to town");
+                    Logger.LogDebug("Pre Go to town");
 
                     await GoToTown();
 
@@ -97,11 +97,11 @@ namespace Trinity.Coroutines.Town
                     {
                         if (Core.CastStatus.StoneOfRecall.LastResult == CastResult.Failed)
                         {
-                            Logger.Log("Setting Town Run Cooldown because of cast failure");
+                            Logger.LogDebug("Setting Town Run Cooldown because of cast failure");
                             DontAttemptTownRunUntil = DateTime.UtcNow.AddSeconds(5);
                         }
 
-                        Logger.Log("Not in town yet..");
+                        Logger.LogDebug("Not in town yet..");
                         return true;
                     }
                 }
