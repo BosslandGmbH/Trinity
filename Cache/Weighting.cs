@@ -230,7 +230,7 @@ namespace Trinity
 
                                     int nearbyTrashCount =
                                         ObjectCache.Count(u => u.IsUnit && u.HitPoints > 0 && u.IsTrashMob &&
-                                                               cacheObject.Position.Distance2D(u.Position) <=
+                                                               cacheObject.Position.Distance(u.Position) <=
                                                                CombatBase.CombatOverrides.EffectiveTrashRadius);
 
                                     bool ignoreSummoner = cacheObject.IsSummoner && !Settings.Combat.Misc.ForceKillSummoners;
@@ -439,19 +439,19 @@ namespace Trinity
                                                 "Adding {0} because we seem to be stuck *OR* if not ranged and currently rooted ",
                                                 cacheObject.InternalName);
                                     }
-                                    else if (DataDictionary.MonsterCustomWeights.ContainsKey(cacheObject.ActorSNO))
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            string.Format(
-                                                "Adding {0} because monsters from the dictionary/hashlist set at the top of the code ",
-                                                cacheObject.InternalName);
-                                    }
-                                    else if ((cacheObject.ActorSNO == 210120 || cacheObject.ActorSNO == 210268) &&
-                                             cacheObject.Distance <= 25f)
-                                    {
-                                        cacheObject.WeightInfo += string.Format("Adding {0} because of Blocking",
-                                            cacheObject.InternalName);
-                                    }
+                                    //else if (DataDictionary.MonsterCustomWeights.ContainsKey(cacheObject.ActorSNO))
+                                    //{
+                                    //    cacheObject.WeightInfo +=
+                                    //        string.Format(
+                                    //            "Adding {0} because monsters from the dictionary/hashlist set at the top of the code ",
+                                    //            cacheObject.InternalName);
+                                    //}
+                                    //else if ((cacheObject.ActorSNO == 210120 || cacheObject.ActorSNO == 210268) &&
+                                    //         cacheObject.Distance <= 25f)
+                                    //{
+                                    //    cacheObject.WeightInfo += string.Format("Adding {0} because of Blocking",
+                                    //        cacheObject.InternalName);
+                                    //}
 
                                     #region Trash Mob
 
@@ -520,11 +520,9 @@ namespace Trinity
                                                     cacheObject.InternalName);
                                             break;
                                         }
-                                        else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize && (!Settings.Combat.Misc.AttackWhenBlocked || !PlayerMover.IsBlocked))
+                                        else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize )
                                         {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} below TrashPackSize",
-                                                    cacheObject.InternalName);
+                                            cacheObject.WeightInfo += $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {CombatBase.CombatOverrides.EffectiveTrashSize})";
                                             break;
                                         }
                                         else
