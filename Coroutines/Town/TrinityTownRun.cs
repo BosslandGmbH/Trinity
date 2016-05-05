@@ -221,13 +221,13 @@ namespace Trinity.Coroutines.Town
 
             if (!CanTownRun())
             {
-                Logger.Log("Can't town run.");
+                Logger.LogDebug("Can't town run.");
                 return false;
             }
 
             if (IsWantingTownRun)
             {
-                Logger.Log("Is wanting to town run.");
+                Logger.LogDebug("Is wanting to town run.");
                 return true;
             }
 

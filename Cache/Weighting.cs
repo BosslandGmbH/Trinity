@@ -467,6 +467,11 @@ namespace Trinity
                                         //        string.Format("IsHighRiftValue {0}", cacheObject.RiftValuePct);
                                         //}
 
+                                        if (PlayerMover.IsBlocked)
+                                        {
+                                            cacheObject.WeightInfo += "PlayerBlocked";
+                                        }
+
                                         if (Settings.Combat.Misc.IgnoreHighHitePointTrash && !isAlwaysKillByValue)
                                         {
                                             HashSet<string> highHitPointTrashMobNames = new HashSet<string>
@@ -515,7 +520,7 @@ namespace Trinity
                                                     cacheObject.InternalName);
                                             break;
                                         }
-                                        else if (nearbyTrashCount < Settings.Combat.Misc.TrashPackSize && (!Settings.Combat.Misc.AttackWhenBlocked || !PlayerMover.IsBlocked))
+                                        else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize && (!Settings.Combat.Misc.AttackWhenBlocked || !PlayerMover.IsBlocked))
                                         {
                                             cacheObject.WeightInfo +=
                                                 string.Format("Ignoring {0} below TrashPackSize",

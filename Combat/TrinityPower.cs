@@ -43,14 +43,16 @@ namespace Trinity
         /// The Unit RActorGUID that we want to target
         /// </summary>
         public int TargetACDGUID { get; set; }
+
         /// <summary>
         /// The number of 1/10th second intervals we should wait before casting this power
         /// </summary>
-        public float WaitTicksBeforeUse { get; set; }
+        public float WaitTicksBeforeUse { get; set; } = 1;
+
         /// <summary>
         /// The number of 1/10th second intervals we should wait after casting this power
         /// </summary>
-        public float WaitTicksAfterUse { get; set; }
+        public float WaitTicksAfterUse { get; set; } = 3;
 
         /// <summary>
         /// The DateTime when the power was assigned
@@ -145,8 +147,6 @@ namespace Trinity
             TargetPosition = Vector3.Zero;
             TargetDynamicWorldId = -1;
             TargetACDGUID = -1;
-            WaitTicksBeforeUse = 1;
-            WaitTicksAfterUse = 2;
             IsCastOnSelf = false;
         }
 
@@ -162,8 +162,6 @@ namespace Trinity
             TargetPosition = Vector3.Zero;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
             TargetACDGUID = -1;
-            WaitTicksBeforeUse = 1;
-            WaitTicksAfterUse = 2;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
@@ -200,8 +198,6 @@ namespace Trinity
             TargetPosition = Vector3.Zero;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
             TargetACDGUID = targetAcdGuid;
-            WaitTicksBeforeUse = 1;
-            WaitTicksAfterUse = 2;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
@@ -219,7 +215,7 @@ namespace Trinity
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
             TargetACDGUID = -1;
             WaitTicksBeforeUse = 1;
-            WaitTicksAfterUse = 2;
+            WaitTicksAfterUse = 3;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
@@ -238,7 +234,7 @@ namespace Trinity
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
             TargetACDGUID = -1;
             WaitTicksBeforeUse = 1;
-            WaitTicksAfterUse = 2;
+            WaitTicksAfterUse = 3;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 

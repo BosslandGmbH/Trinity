@@ -45,6 +45,7 @@
                     <TextBlock TextWrapping="Wrap" Margin="-3,-3,0,10">If skills should be used immediately when 'off cooldown'</TextBlock>
                     <UniformGrid Columns="2">
                         <CheckBox IsChecked="{Binding Path=Wiz.AlwaysExplosiveBlast}" Content="Explosive Blast" />
+                        <CheckBox ToolTip="Use Archon when at 20 stacks of chantodos" IsChecked="{Binding Path=Wiz.AlwaysArchon}" Content="Archon (20 Stacks)" />
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>
@@ -72,6 +73,7 @@
             </GroupBox>
             <GroupBox>
                 <GroupBox.Header>Archon</GroupBox.Header>
+                <StackPanel>
                 <UniformGrid Columns="2">
                     <!-- Archon Mob Count / Range Sliders -->
 
@@ -107,6 +109,8 @@
                     <CheckBox Margin="2" IsChecked="{Binding Path=Wiz.NoArcaneStrike}">Disable Arcane Strike</CheckBox>
                     <CheckBox Margin="2" IsChecked="{Binding Path=Wiz.NoArcaneBlast}">Disable Arcane Blast</CheckBox>
                 </UniformGrid>
+                <CheckBox Margin="2" IsChecked="{Binding Path=Wiz.FindClustersWhenNotArchon}">Find Clusters when not in archon</CheckBox>
+                </StackPanel>
             </GroupBox>
             <Button Grid.Row="10" Margin="5" HorizontalAlignment="Center" Command="{Binding ResetWizardCommand}">Reset</Button>
         </StackPanel>

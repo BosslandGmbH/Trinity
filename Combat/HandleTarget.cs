@@ -559,7 +559,7 @@ namespace Trinity
             }
 
             using (new PerformanceLogger("HandleTarget.TrySpecialMovement"))
-            {
+            { 
                 if (ClassMover.SpecialMovement(CurrentDestination) && Player.Position.Distance(CurrentDestination) > 10)
                 {
                     // Try to ensure the bot isn't navigating to somewhere behind us.
@@ -1063,6 +1063,11 @@ namespace Trinity
         {
             using (new PerformanceLogger("HandleTarget.AssignMonsterTargetPower"))
             {
+                if (CombatBase.CurrentPower.TimeSinceAssignedMs > 500)
+                {
+                    _shouldPickNewAbilities = true;
+                }
+
                 // Find a valid ability if the target is a monster
                 if (_shouldPickNewAbilities && !_isWaitingForPower && !_isWaitingForPotion && !_isWaitingBeforePower)
                 {
@@ -1555,9 +1560,10 @@ namespace Trinity
                     return;
                 }
 
-                if (targetPosition.Distance(Player.Position) > 120)
+                var d = targetPosition.Distance(Player.Position);
+                if (d > 120)
                 {
-                    Logger.LogVerbose(LogCategory.Targetting, "Target position is too far away!");
+                    Logger.LogVerbose(LogCategory.Targetting, $"Target position is too far away! {d}");
                     return;
                 }
 

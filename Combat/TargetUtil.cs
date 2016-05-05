@@ -502,7 +502,7 @@ namespace Trinity
             if (minCount < 1)
                 minCount = 1;
             return (from o in ObjectCache
-                    where o.IsUnit &&
+                where o.IsUnit && o.HitPoints > 0 &&
                      ((useWeights && o.Weight > 0) || !useWeights) &&
                     o.RadiusDistance <= range
                     select o).Count() >= minCount;

@@ -19,28 +19,53 @@ namespace Trinity.Movement
 {
     public class ClassMover
     {
+        public static DateTime LastSpecialMovement = DateTime.MinValue;
+        private const int MinimumTimeBetweenSpecialMovement = 50;
+
         public static bool SpecialMovement(Vector3 destination)
         {
             if (destination == Vector3.Zero)
                 return false;
 
+            if (DateTime.UtcNow.Subtract(LastSpecialMovement).TotalMilliseconds < MinimumTimeBetweenSpecialMovement)
+                return false;
+
+            bool result;
             switch (CacheData.Player.ActorClass)
             {
                 case ActorClass.Barbarian:
-                    return BarbMover(destination);
+                    result = BarbMover(destination);
+                    break;
+
                 case ActorClass.Crusader:
-                    return CrusaderMover(destination);
+                    result = CrusaderMover(destination);
+                    break;
+
                 case ActorClass.DemonHunter:
-                    return DemonHunterMover(destination);
+                    result = DemonHunterMover(destination);
+                    break;
+
                 case ActorClass.Monk:
-                    return MonkMover(destination);
+                    result = MonkMover(destination);
+                    break;
+
                 case ActorClass.Witchdoctor:
-                    return WitchdoctorMover(destination);
+                    result = WitchdoctorMover(destination);
+                    break;
+
                 case ActorClass.Wizard:
-                    return WizardMover(destination);
+                    result = WizardMover(destination);
+                    break;
                 default:
                     return false;
             }
+
+            if (result)
+            {
+                LastSpecialMovement = DateTime.UtcNow;
+            }
+
+            return result;
         }
 
         private const int _interactDistance = 7;
@@ -89,11 +114,11 @@ namespace Trinity.Movement
         {
             get
             {
-                var Player = CacheData.Player;
+                var player = CacheData.Player;
                 switch (CacheData.Player.ActorClass)
                 {
                     case ActorClass.Barbarian:
-                        return Player.PrimaryResource > 10 && CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) ||
+                        return player.PrimaryResource > 10 && CombatBase.CanCast(SNOPower.Barbarian_Whirlwind) ||
                                CombatBase.CanCast(SNOPower.Barbarian_Leap) ||
                                CombatBase.CanCast(SNOPower.Barbarian_Sprint) &&
                                (Runes.Barbarian.Gangway.IsActive || !PlayerMover.IsBlocked) ||
@@ -103,7 +128,7 @@ namespace Trinity.Movement
                     case ActorClass.DemonHunter:
                         return TrinityPlugin.Player.PrimaryResource > 12 && CombatBase.CanCast(SNOPower.DemonHunter_Strafe) ||
                                CombatBase.CanCast(SNOPower.DemonHunter_Vault) ||
-                               Skills.DemonHunter.Vault.IsActive && Player.PrimaryResource > 20 &&
+                               Skills.DemonHunter.Vault.IsActive && player.PrimaryResource > 20 &&
                                Legendary.ChainOfShadows.IsEquipped &&
                                CombatBase.CanCast(SNOPower.DemonHunter_Impale);
                     case ActorClass.Monk:
@@ -114,7 +139,7 @@ namespace Trinity.Movement
                     case ActorClass.Wizard:
                         return CombatBase.CanCast(SNOPower.Wizard_Teleport) &&
                                (!Legendary.AetherWalker.IsEquipped ||
-                                Legendary.AetherWalker.IsEquipped && Player.PrimaryResource > 25) ||
+                                Legendary.AetherWalker.IsEquipped && player.PrimaryResource > 25) ||
                                CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport);
                     default:
                         return false;
@@ -430,8 +455,12 @@ namespace Trinity.Movement
 
             if (destinationDistance > movementRange)
                 destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
+
             if (destination == Vector3.Zero)
+            {
+                Logger.LogDebug("Wizard Mover Invalid Destination");
                 return false;
+            }
 
             // Teleport for a wizard 
             if (CombatBase.CanCast(SNOPower.Wizard_Teleport, CombatBase.CanCastFlags.NoTimer) &&
@@ -442,7 +471,7 @@ namespace Trinity.Movement
                 LogMovement(SNOPower.Wizard_Teleport, destination);
                 return true;
             }
-            if (CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport))
+            if (Skills.Wizard.ArchonTeleport.CanCast())
             {
                 Skills.Wizard.ArchonTeleport.Cast(destination);
                 LogMovement(SNOPower.Wizard_Archon_Teleport, destination);

@@ -362,6 +362,8 @@ namespace Trinity.Combat.Abilities
             }
         }
 
+        public static readonly Func<bool> BigClusterOrElitesInRange = () => TargetUtil.AnyElitesInRange(20f) || TargetUtil.NumMobsInRange(30f) >= 10;
+
         public static bool IsCurrentlyAvoiding
         {
             get
@@ -511,7 +513,7 @@ namespace Trinity.Combat.Abilities
             if (!hasPower)
                 return false;
 
-            var isTimerCheckClass = Player.ActorClass == ActorClass.Wizard || Player.ActorClass == ActorClass.DemonHunter;
+            var isTimerCheckClass = Player.ActorClass == ActorClass.DemonHunter;
             if ((isTimerCheckClass || flags.HasFlag(CanCastFlags.Timer)) && !flags.HasFlag(CanCastFlags.NoTimer))
             {
                 var skill = SkillUtils.Active.FirstOrDefault(s => s.SNOPower == power);

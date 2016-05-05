@@ -25,6 +25,8 @@ namespace Trinity.Framework.Avoidance
         bool ShouldAvoid { get; }
         bool TryGetSafeSpot(out Vector3 position, float minDistance = 10f, float maxDistance = 100f, Func<AvoidanceNode, bool> condition = null);
         TimeSpan TimeSinceLastAvoid { get; }
+
+        Vector3 SafeSpot { get; }
     }
 
     /// <summary>
@@ -32,6 +34,7 @@ namespace Trinity.Framework.Avoidance
     /// </summary>
     public class DefaultAvoider : IAvoider
     {
+        public bool IsKiting { get; set; }
         public bool IsAvoiding { get; set; }
 
         public DateTime KiteStutterDelay = DateTime.MinValue;
@@ -47,6 +50,9 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
+                IsKiting = false;
+                IsAvoiding = false;
+
                 if (TrinityPlugin.Player.IsInTown)
                     return false;
 
@@ -58,16 +64,24 @@ namespace Trinity.Framework.Avoidance
                 // todo element immunity
 
                 if (ShouldAvoidCritical)
+                {
+                    IsAvoiding = true;
                     return true;
+                }
 
                 if (ShouldKite)
+                {
+                    IsKiting = true;
+                    IsAvoiding = true;
                     return true;
+                }
 
                 if (ShouldAvoidNormal)
+                {
+                    IsAvoiding = true;
                     return true;
-
+                }
                 return false;
-
             }
         }
 
@@ -154,6 +168,12 @@ namespace Trinity.Framework.Avoidance
                 if (Settings.DontAvoidWhenBlocked && PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 5000)
                 {
                     Logger.Log(LogCategory.Avoidance, "Not kiting because blocked");
+                    return false;
+                }
+
+                if (CombatBase.CurrentTarget?.Type == TrinityObjectType.ProgressionGlobe && CombatBase.CurrentTarget?.Distance < 80f)
+                {
+                    Logger.Log(LogCategory.Avoidance, "Not kiting because current target is a close progression globe");
                     return false;
                 }
 
