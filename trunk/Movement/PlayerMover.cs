@@ -105,7 +105,7 @@ namespace Trinity.DbProvider
                 return IsBlocked;
             }
 
-            var testObjects = TrinityPlugin.ObjectCache.Where(o => !o.IsMe && ((o.IsTrashMob || o.IsBossOrEliteRareUnique || o.IsMinion) && o.HitPoints > 0) && o.Distance <= 12f).ToList();
+            var testObjects = TrinityPlugin.ObjectCache.Where(o => (o.IsTrashMob || o.IsBossOrEliteRareUnique || o.IsMinion) && o.HitPoints > 0 && o.Distance <= 12f).ToList();
             var surrounded = false;
             var testPoints = MathUtil.GetCirclePoints(8, 10f, ZetaDia.Me.Position).Where(p => NavHelper.CanRayCast(p) && TrinityPlugin.MainGridProvider.CanStandAt(p)).ToList();
             var halfPoints = Math.Round(testPoints.Count * 0.60, 0, MidpointRounding.AwayFromZero);
@@ -124,7 +124,7 @@ namespace Trinity.DbProvider
                                           where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, TrinityPlugin.Player.Position, pointInFacingDirection0)
                                           select u).Count();
 
-                blocked = numMonstersInFront > 0;
+                blocked = numMonstersInFront > 3;
             }
 
             if (BlockedTimer.IsRunning && (surrounded || blocked) && BlockedTimer.ElapsedMilliseconds > TimeToBlockMs)

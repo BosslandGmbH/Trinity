@@ -2,6 +2,7 @@
 using Trinity.Combat.Abilities;
 using Trinity.Combat.Abilities.PhelonsPlayground;
 using Trinity.Combat.Abilities.PhelonsPlayground.Barbarian;
+using Trinity.Combat.Abilities.PhelonsPlayground.Wizard;
 using Trinity.Technicals;
 using Zeta.Common.Plugins;
 using Zeta.Game;
@@ -104,6 +105,12 @@ namespace Trinity
                             break;
                         // Wizards
                         case ActorClass.Wizard:
+                            if (Settings.Advanced.PhelonsPlayground)
+                            {
+                                power = Wizard.GetPower();
+                                if (power != null)
+                                    break;
+                            }
                             power = WizardCombat.GetPower();
                             break;
                         // Witch Doctors

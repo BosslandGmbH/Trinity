@@ -10,16 +10,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 {
     class PhelonTargeting : CombatBase
     {
-        public static TrinityCacheObject PhelonCurrentTarget = BestAoeUnit;
-        public static TrinityCacheObject BestAoeUnit
+        public static TrinityCacheObject BestAoeUnit(bool includeInAoE = false)
             => CurrentTarget.Type == TrinityObjectType.Shrine || CurrentTarget.IsTreasureGoblin ||
                CurrentTarget.Type == TrinityObjectType.HealthGlobe || CurrentTarget.IsBoss
                 ? CurrentTarget
-                : TargetUtil.BestEliteInRange(35)
-                  ??
-                  TargetUtil.GetBestClusterUnit(10,
-                      Math.Max(Settings.Combat.Misc.EliteRange, Settings.Combat.Misc.NonEliteRange), 5, false)
-                      //?? TargetUtil.GetClosestUnit()
-                  ?? CurrentTarget;
+                : PhelonUtils.BestEliteInRange(35, includeInAoE) ?? (PhelonUtils.GetBestClusterUnit(10, 45, false, includeInAoE) ?? CurrentTarget);
     }
 }

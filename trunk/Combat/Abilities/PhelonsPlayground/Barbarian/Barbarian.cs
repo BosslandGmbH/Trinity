@@ -1,4 +1,6 @@
 using Trinity.Reference;
+using Trinity.Technicals;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
 {
@@ -8,24 +10,30 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
         private static int ImmortalKingsCount = Sets.ImmortalKingsCall.CurrentBonuses;
         private static int EarthCount = Sets.MightOfTheEarth.CurrentBonuses;
         private static int WastesCount = Sets.WrathOfTheWastes.CurrentBonuses;
+        public static bool zDPS = RaekorCount == 2 && Sets.BulKathossOath.IsEquipped ||
+                                  Sets.IstvansPairedBlades.IsEquipped && Legendary.IllusoryBoots.IsEquipped;
 
         public static TrinityPower GetPower()
         {
             if (Player.IsInTown)
                 return null;
-            TrinityPower power = UnconditionalPower();
-            if (power == null && CurrentTarget != null)
+            TrinityPower power = Unconditional.PowerSelector();
+            if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
             {
-                if (RaekorCount > 3)
-                    return Raekor.PowerSelector();
-                if (ImmortalKingsCount > 3)
-                    return ImmortalKingsCall.PowerSelector();
-                if (EarthCount > 3)
-                    return MightOfTheEarth.PowerSelector();
-                if (WastesCount > 3)
-                    return WrathOfTheWastes.PowerSelector();
+                if (RaekorCount == 3)
+                    power = Raekor.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+
+                if (zDPS)
+                    power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+
+                if (ImmortalKingsCount == 3)
+                    power = ImmortalKingsCall.PowerSelector();
+                if (EarthCount == 3)
+                    power = MightOfTheEarth.PowerSelector();
+                if (WastesCount == 3)
+                    power = WrathOfTheWastes.PowerSelector();
                 if (RaekorCount < 1 && ImmortalKingsCount < 1 && EarthCount < 1 && WastesCount < 1)
-                    return LegacyOfNightmares.PowerSelector();
+                    power = LegacyOfNightmares.PowerSelector();
             }
             return power;
         }

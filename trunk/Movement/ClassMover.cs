@@ -91,7 +91,8 @@ namespace Trinity.Movement
                         return TrinityPlugin.Settings.Combat.Barbarian.WWMoveAlways ||
                                TrinityPlugin.Settings.Combat.Barbarian.UseLeapOOC ||
                                TrinityPlugin.Settings.Combat.Barbarian.SprintMode != BarbarianSprintMode.CombatOnly ||
-                               TrinityPlugin.Settings.Combat.Barbarian.UseChargeOOC;
+                               TrinityPlugin.Settings.Combat.Barbarian.UseChargeOOC || Player.IsFrozen ||
+                               Player.IsRooted || Player.IsJailed;
                     case ActorClass.Crusader:
                         return TrinityPlugin.Settings.Combat.Crusader.SteedChargeOOC;
                     case ActorClass.DemonHunter:
@@ -99,11 +100,13 @@ namespace Trinity.Movement
                     case ActorClass.Monk:
                         return TrinityPlugin.Settings.Combat.Monk.TROption == TempestRushOption.MovementOnly ||
                                TrinityPlugin.Settings.Combat.Monk.TROption == TempestRushOption.Always ||
-                               TrinityPlugin.Settings.Combat.Monk.UseDashingStrikeOOC;
+                               TrinityPlugin.Settings.Combat.Monk.UseDashingStrikeOOC || Player.IsFrozen ||
+                               Player.IsRooted || Player.IsJailed;
                     case ActorClass.Witchdoctor:
                         return TrinityPlugin.Settings.Combat.WitchDoctor.UseSpiritWalkOffCooldown;
                     case ActorClass.Wizard:
-                        return TrinityPlugin.Settings.Combat.Wizard.TeleportOOC;
+                        return TrinityPlugin.Settings.Combat.Wizard.TeleportOOC || Player.IsFrozen || Player.IsRooted ||
+                               Player.IsJailed;
                     default:
                         return false;
                 }
