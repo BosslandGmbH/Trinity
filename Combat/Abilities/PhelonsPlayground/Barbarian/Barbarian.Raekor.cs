@@ -6,7 +6,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
 {
     partial class Barbarian
     {
-        public class Raekor
+        private class Raekor
         {
             public static TrinityPower PowerSelector()
             {
@@ -19,7 +19,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return null;
             }
 
-            public static bool ShouldUseFuriousCharge(out TrinityCacheObject target)
+            private static bool ShouldUseFuriousCharge(out TrinityCacheObject target)
             {
                 target = null;
 
@@ -31,13 +31,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return target != null;
             }
 
-            public static TrinityPower CastFuriousCharge(TrinityCacheObject target)
+            private static TrinityPower CastFuriousCharge(TrinityCacheObject target)
             {
                 return new TrinityPower(SNOPower.Barbarian_FuriousCharge, 38,
                         PhelonUtils.PointBehind(target.Position));
             }
 
-            public static bool ShouldAncientSpear(out TrinityCacheObject target)
+            private static bool ShouldAncientSpear(out TrinityCacheObject target)
             {
                 target = null;
 
@@ -56,7 +56,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                         GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026) >= 5);
             }
 
-            public static TrinityPower CastAncientSpear(TrinityCacheObject target)
+            private static TrinityPower CastAncientSpear(TrinityCacheObject target)
             {
                     return new TrinityPower(SNOPower.X1_Barbarian_AncientSpear, 60f,
                         target.Position);

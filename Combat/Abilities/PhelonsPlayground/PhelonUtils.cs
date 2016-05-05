@@ -18,7 +18,15 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             return
                 TrinityPlugin.ObjectCache.Where(x => objectsInAoe || !Core.Avoidance.InAvoidance(x.Position)).ToList();
         }
-        
+        internal static List<TrinityCacheObject> MobsBetweenRange(float startRange = 15f, float endRange = 25)
+        {
+            return (from u in SafeList(true)
+                    where u.IsUnit && u.IsFullyValid() &&
+                            u.Position.Distance(TrinityPlugin.Player.Position) <= endRange &&
+                            u.Position.Distance(TrinityPlugin.Player.Position) >= startRange
+                    select u).ToList();
+        }
+
         internal static TrinityCacheObject GetFarthestClusterUnit(float aoe_radius = 25f, float maxRange = 65f, int count = 1, bool useWeights = true, bool includeUnitsInAoe = true)
         {
             using (new PerformanceLogger("TargetUtil.GetFarthestClusterUnit"))
@@ -26,13 +34,23 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                 return 
                     (from u in SafeList(includeUnitsInAoe)
                      where ((useWeights && u.Weight > 0) || !useWeights) &&
-                     u.IsUnit &&
+                     u.IsUnit && u.HasBeenInLoS &&
                      u.RadiusDistance <= maxRange &&
                      u.NearbyUnitsWithinDistance(aoe_radius) >= count
                      orderby u.NearbyUnitsWithinDistance(aoe_radius),
                      u.Distance descending
                      select u).FirstOrDefault();
             }
+        }
+
+        internal static TrinityCacheObject BestAuraUnit(SNOPower aura, float maxSearchRange = 65f, bool addUnitsInAoE = false)
+        {
+            return (from u in SafeList(addUnitsInAoE)
+                    where u.IsUnit &&
+                    u.RadiusDistance <= maxSearchRange &&
+                    u.HasBeenInLoS
+                    orderby u.CountUnitsInFront() descending
+                    select u).FirstOrDefault();
         }
 
         internal static TrinityCacheObject BestPierceOrClusterUnit(float clusterRadius = 15f, float maxSearchRange = 65f,
@@ -112,7 +130,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
             var clusterUnits =
                 (from u in SafeList(includeUnitsInAoe)
-                    where u.IsUnit &&
+                    where u.IsUnit && //u.HasBeenInLoS &&
                           ((useWeights && u.Weight > 0) || !useWeights) &&
                           !(ignoreElites && u.IsEliteRareUnique) &&
                           (!inLineOfSight || u.IsInLineOfSight()) &&

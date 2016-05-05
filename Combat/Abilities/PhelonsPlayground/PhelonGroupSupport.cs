@@ -31,7 +31,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                        u.Position.Distance(pullLocation) <= searchRange &&
                        u.NearbyUnitsWithinDistance(groupRadius) >= groupCount
                  orderby u.NearbyUnitsWithinDistance(groupRadius),
-                     u.Distance descending
+                     u.Distance 
                  select u).ToList();
         }
     }
