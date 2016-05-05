@@ -11,45 +11,56 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             public static TrinityPower PowerSelector()
             {
                 if (Player.IsIncapacitated) return null;
-                if (ShouldAncientSpear)
-                    return CastAncientSpear;
-                if (ShouldUseFuriousCharge)
-                    return CastFuriousCharge;
+                TrinityCacheObject target = null;
+                if (ShouldAncientSpear(out target))
+                    return CastAncientSpear(target);
+                if (ShouldUseFuriousCharge(out target))
+                    return CastFuriousCharge(target);
                 return null;
             }
 
-            public static bool ShouldUseFuriousCharge
+            public static bool ShouldUseFuriousCharge(out TrinityCacheObject target)
             {
-                get
-                {
-                    if (!CanCast(SNOPower.Barbarian_FuriousCharge))
+                target = null;
+
+                if (!CanCast(SNOPower.Barbarian_FuriousCharge))
                         return false;
 
-                    return TargetUtil.AnyMobsInRange(45f);
-                }
+                target = PhelonUtils.BestPierceOrClusterUnit(10, 38);
+
+                return target != null;
             }
 
-            public static TrinityPower CastFuriousCharge
-                =>
-                    new TrinityPower(SNOPower.Barbarian_FuriousCharge, 45f,
-                        PhelonUtils.PointBehind(PhelonTargeting.PhelonCurrentTarget.Position));
-
-            public static bool ShouldAncientSpear
+            public static TrinityPower CastFuriousCharge(TrinityCacheObject target)
             {
-                get
-                {
-                    if (!CanCast(SNOPower.X1_Barbarian_AncientSpear))
-                        return false;
-
-                    return Player.PrimaryResourcePct > 0.95 || Sets.TheLegacyOfRaekor.IsFullyEquipped &&
-                           GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026) >= 5;
-                }
+                return new TrinityPower(SNOPower.Barbarian_FuriousCharge, 38,
+                        PhelonUtils.PointBehind(target.Position));
             }
 
-            public static TrinityPower CastAncientSpear
-                =>
-                    new TrinityPower(SNOPower.X1_Barbarian_AncientSpear, 60f,
-                        PhelonTargeting.PhelonCurrentTarget.Position);
+            public static bool ShouldAncientSpear(out TrinityCacheObject target)
+            {
+                target = null;
+
+                if (!CanCast(SNOPower.X1_Barbarian_AncientSpear))
+                    return false;
+
+                target = PhelonTargeting.BestAoeUnit(true).IsInLineOfSight()
+                    ? PhelonTargeting.BestAoeUnit(true)
+                    : PhelonUtils.GetBestClusterUnit(10, 60, false, true, false, true);
+
+                if (target == null)
+                    return false;
+
+                return target.Distance <= 60 &&
+                       (Player.PrimaryResourcePct > 0.95 || Sets.TheLegacyOfRaekor.IsFullyEquipped &&
+                        GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026) >= 5);
+            }
+
+            public static TrinityPower CastAncientSpear(TrinityCacheObject target)
+            {
+                    return new TrinityPower(SNOPower.X1_Barbarian_AncientSpear, 60f,
+                        target.Position);
+            }
         }
     }
 }

@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Trinity.Framework;
+using Trinity.Technicals;
 using Zeta.Common;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground
 {
@@ -15,6 +17,136 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             return
                 TrinityPlugin.ObjectCache.Where(x => objectsInAoe || !Core.Avoidance.InAvoidance(x.Position)).ToList();
+        }
+        
+        internal static TrinityCacheObject GetFarthestClusterUnit(float aoe_radius = 25f, float maxRange = 65f, int count = 1, bool useWeights = true, bool includeUnitsInAoe = true)
+        {
+            using (new PerformanceLogger("TargetUtil.GetFarthestClusterUnit"))
+            {
+                return 
+                    (from u in SafeList(includeUnitsInAoe)
+                     where ((useWeights && u.Weight > 0) || !useWeights) &&
+                     u.IsUnit &&
+                     u.RadiusDistance <= maxRange &&
+                     u.NearbyUnitsWithinDistance(aoe_radius) >= count
+                     orderby u.NearbyUnitsWithinDistance(aoe_radius),
+                     u.Distance descending
+                     select u).FirstOrDefault();
+            }
+        }
+
+        internal static TrinityCacheObject BestPierceOrClusterUnit(float clusterRadius = 15f, float maxSearchRange = 65f,
+            bool includeInAoE = true)
+        {
+            var clusterUnit = GetBestClusterUnit(clusterRadius, maxSearchRange, !
+                includeInAoE);
+            var pierceUnit = GetBestPierceTarget(maxSearchRange, !includeInAoE);
+
+            if (clusterUnit == null && pierceUnit == null)
+                return null;
+
+            if (clusterUnit == null)
+                return pierceUnit;
+
+            if (pierceUnit == null)
+                return clusterUnit;
+
+            return clusterUnit.NearbyUnitsWithinDistance(10) > pierceUnit.CountUnitsInFront()
+                ? clusterUnit
+                : pierceUnit;
+        }
+
+        internal static Vector3 BestWalkLocation
+        {
+            get
+            {
+                if (ClosestHealthGlobe(35) != null)
+                    return  ClosestHealthGlobe(35).Position;
+
+                // Prevent Default Attack
+                if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Destructible)
+                {
+                    //Logger.Log("Prevent Primary Attack ");
+                    var targetPosition = TargetUtil.GetLoiterPosition(TrinityPlugin.CurrentTarget, 20f);
+                    // return new TrinityPower(SNOPower.Walk, 7f, targetPosition);
+                    return targetPosition;
+                }
+                return TrinityPlugin.CurrentTarget.Position;
+            }
+        }
+
+        internal static List<TrinityCacheObject> TargetsInFrontOfMe(float maxRange, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
+        {
+            return (from u in SafeList(ignoreElites)
+                    where u.IsUnit &&
+                    u.RadiusDistance <= maxRange && u.HasBeenInLoS &&
+                    !(ignoreUnitsInAoE && u.IsStandingInAvoidance) &&
+                    !(ignoreElites && u.IsEliteRareUnique)
+                    orderby u.CountUnitsInFront() descending
+                    select u).ToList();
+        }
+        internal static TrinityCacheObject GetBestPierceTarget(float maxRange, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
+        {
+            var result = TargetsInFrontOfMe(maxRange, ignoreUnitsInAoE, ignoreElites).FirstOrDefault();
+            return result ?? PhelonTargeting.BestAoeUnit(!ignoreUnitsInAoE);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="radius">Cluster Radius</param>
+        /// <param name="maxRange">Unit Max Distance</param>
+        /// <param name="count">Minimum number of mobs</param>
+        /// <param name="useWeights">Include Mobs with Weight or not</param>
+        /// <param name="includeUnitsInAoe">Include mobs in AoE or not</param>
+        /// <param name="ignoreElites">Ingore elites or not/param>
+        /// <returns></returns>
+        internal static TrinityCacheObject GetBestClusterUnit(
+            float clusterRadius = 15f, float maxSearchRange = 65f, bool useWeights = true, bool includeUnitsInAoe = true,
+            bool ignoreElites = false, bool inLineOfSight = false)
+        {
+            if (clusterRadius < 1f)
+                clusterRadius = 1f;
+            if (maxSearchRange > 60f)
+                maxSearchRange = 60;
+
+            var clusterUnits =
+                (from u in SafeList(includeUnitsInAoe)
+                    where u.IsUnit &&
+                          ((useWeights && u.Weight > 0) || !useWeights) &&
+                          !(ignoreElites && u.IsEliteRareUnique) &&
+                          (!inLineOfSight || u.IsInLineOfSight()) &&
+                          u.RadiusDistance <= maxSearchRange && !u.IsSafeSpot
+                    orderby
+                        u.NearbyUnitsWithinDistance(clusterRadius) descending,
+                        u.Distance,
+                        u.HitPointsPct descending
+                    select u).ToList();
+
+            return clusterUnits.FirstOrDefault();
+        }
+
+        public static TrinityCacheObject BestEliteInRange(float range, bool objectsInAoe = false)
+        {
+            return (from u in SafeList(objectsInAoe)
+                    where u.IsUnit &&
+                    u.IsBossOrEliteRareUnique &&
+                    u.Distance <= range
+                    orderby
+                     u.NearbyUnitsWithinDistance(range) descending,
+                     u.Distance,
+                     u.HitPointsPct descending
+                    select u).FirstOrDefault();
+
+        }
+
+        internal static Vector3 ClosestOcculous
+        {
+            get
+            {
+                var trinityCacheObject = GetOculusBuffDiaObjects(35f).FirstOrDefault();
+                return trinityCacheObject?.Position ?? Vector3.Zero;
+            }
         }
 
         internal static TrinityCacheObject ClosestHealthGlobe(float distance = 45, bool objectsInAoe = false)
@@ -103,7 +235,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
         public static Vector3 PointBehind(Vector3 point, bool objectsInAoe = false)
         {
-            return MathEx.GetPointAt(point, -5f, TrinityPlugin.Player.Rotation);
+            return MathEx.GetPointAt(point, -7f, TrinityPlugin.Player.Rotation);
         }
     }
 }

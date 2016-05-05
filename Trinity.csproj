@@ -107,8 +107,14 @@
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Raekor.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Unconditional.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Wastes.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.ZDps.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\PhelonGroupSupport.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\PhelonTargeting.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\PhelonUtils.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Archon.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Unconditional.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Firebirds.cs" />
     <Compile Include="Coroutines\Town\DropItems.cs" />
     <Compile Include="Coroutines\VacuumItems.cs" />
     <Compile Include="Coroutines\Town\ServiceType.cs" />
