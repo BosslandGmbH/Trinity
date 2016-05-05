@@ -108,9 +108,15 @@
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Unconditional.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Wastes.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.ZDps.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Monk\Monk.Unconditional.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Monk\Monk.ZDps.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Monk\Monk.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\PhelonGroupSupport.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\PhelonTargeting.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\PhelonUtils.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.Unconditional.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.ZDps.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Archon.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Unconditional.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.cs" />

@@ -93,17 +93,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         PhelonTargeting.BestAoeUnit().Position);
                 }
             }
-
-            //todo: Using this as a reference for what spells are available in Archon
-            public IndexedList<SNOPower> powers = new IndexedList<SNOPower>
-            {
-                SNOPower.Wizard_Archon_Teleport,
-                SNOPower.Wizard_Archon_ArcaneBlast,
-                SNOPower.Wizard_Archon_ArcaneStrike,
-                SNOPower.Wizard_Archon_SlowTime,
-                SNOPower.Wizard_Archon_DisintegrationWave,
-                SNOPower.Wizard_Archon
-            };
         }
     }
 }

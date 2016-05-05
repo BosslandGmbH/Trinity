@@ -25,14 +25,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (ShouldAncientSpear(out target))
                     return CastAncientSpear(target);
 
-                if (ShouldWhirlWind(out target))
-                    CastWhirlWind(target);
-
                 if (ShouldRend(out target))
                     CastRend(target);
 
                 if (ShouldBash(out target))
                     return CastBash(target);
+
+                if (ShouldWhirlWind(out target))
+                    CastWhirlWind(target);
 
                 return null;
             }
@@ -48,7 +48,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     PhelonUtils.SafeList()
                         .OrderBy(y => y.Distance)
                         .FirstOrDefault(x => x.IsUnit && !GetHasBuff(SNOPower.Barbarian_Rend));
-                return target != null && target.Distance <= 7;
+                return target != null && target.Distance <= 7 && Player.PrimaryResourcePct > 0.50;
             }
 
             public static TrinityPower CastRend(TrinityCacheObject target)
@@ -60,7 +60,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             {
                 target = null;
 
-                if (!CanCast(SNOPower.Barbarian_Bash))
+                if (!CanCast(SNOPower.Barbarian_Bash) ||
+                    PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault() != null)
                     return false;
 
                 target =
@@ -94,7 +95,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     return false;
 
                 target = PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault() ??
-                         PhelonTargeting.BestAoeUnit();
+                         PhelonTargeting.BestAoeUnit(true);
 
                 return target != null && target.Distance <= 75 && Player.PrimaryResource > 25;
             }

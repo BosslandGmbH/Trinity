@@ -73,7 +73,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 // Ports to Closest HealthGlobe
                 if (TrinityPlugin.Player.CurrentHealthPct < Settings.Combat.Wizard.HealthGlobeLevel)
                 {
-                    var safePoint = TargetUtil.GetBestHealthGlobeClusterPoint(5, 45);
+                    var safePoint = TargetUtil.GetBestHealthGlobeClusterPoint(5, 40);
                     if (safePoint != Vector3.Zero)
                     {
                         position = safePoint;
@@ -90,19 +90,23 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 }
                 //Ports out Avoidance
                 if (Core.Avoidance.InCriticalAvoidance(Player.Position) ||
-                    CanCast(SNOPower.Wizard_Archon) && !GetHasBuff(SNOPower.Wizard_Archon) &&
+                    !CanCast(SNOPower.Wizard_Archon) && !GetHasBuff(SNOPower.Wizard_Archon) &&
                     Core.Avoidance.InAvoidance(Player.Position))
                 {
-                    position = NavHelper.FindSafeZone(false, 1, PhelonTargeting.BestAoeUnit().Position, true);
+                    position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
                     return true;
                 }
 
                 if (Runes.Wizard.Calamity.IsActive ||
                     Runes.Wizard.SafePassage.IsActive && TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500)
                 {
-                    position = CanCast(SNOPower.Wizard_Archon) || GetHasBuff(SNOPower.Wizard_Archon)
-                        ? PhelonTargeting.BestAoeUnit().Position
-                        : NavHelper.FindSafeZone(false, 1, PhelonTargeting.BestAoeUnit().Position, true);
+                    if (CanCast(SNOPower.Wizard_Archon) || GetHasBuff(SNOPower.Wizard_Archon) &&
+                        PhelonTargeting.BestAoeUnit() != null)
+                    {
+                        position = PhelonTargeting.BestAoeUnit().Position;
+                        return true;
+                    }
+                    position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
                     return true;
                 }
                 position = Vector3.Zero;
@@ -112,8 +116,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             private static TrinityPower CastTeleport(Vector3 position)
             {
                 return GetHasBuff(SNOPower.Wizard_Archon)
-                    ? new TrinityPower(SNOPower.Wizard_Archon_Teleport, 45f, position)
-                    : new TrinityPower(SNOPower.Wizard_Teleport, 45f, position);
+                    ? new TrinityPower(SNOPower.Wizard_Archon_Teleport, 40f, position)
+                    : new TrinityPower(SNOPower.Wizard_Teleport, 40f, position);
             }
 
             private static bool ShouldHydra()
