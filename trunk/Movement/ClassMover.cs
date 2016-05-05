@@ -459,11 +459,8 @@ namespace Trinity.Movement
             if (destinationDistance > movementRange)
                 destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
 
-            if (destination == Vector3.Zero)
-            {
-                Logger.LogDebug("Wizard Mover Invalid Destination");
+            if (destination == Vector3.Zero || PlayerMover.MyPosition.Distance(destination) < 20)
                 return false;
-            }
 
             // Teleport for a wizard 
             if (CombatBase.CanCast(SNOPower.Wizard_Teleport, CombatBase.CanCastFlags.NoTimer) &&
