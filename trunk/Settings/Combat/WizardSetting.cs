@@ -61,6 +61,8 @@ namespace Trinity.Config.Combat
         private float _AvoidZoltBubbleHealth;
         private float _AvoidZoltTwisterHealth;
         private bool _alwaysExplosiveBlast;
+        private bool _findClustersWhenNotArchon;
+        private bool _alwaysArchon;
 
         #endregion Fields
 
@@ -1032,6 +1034,44 @@ namespace Trinity.Config.Combat
                 {
                     _alwaysExplosiveBlast = value;
                     OnPropertyChanged(nameof(AlwaysExplosiveBlast));
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool AlwaysArchon
+        {
+            get
+            {
+                return _alwaysArchon;
+            }
+            set
+            {
+                if (_alwaysArchon != value)
+                {
+                    _alwaysArchon = value;
+                    OnPropertyChanged(nameof(AlwaysArchon));
+                }
+            }
+        }
+
+        
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool FindClustersWhenNotArchon
+        {
+            get
+            {
+                return _findClustersWhenNotArchon;
+            }
+            set
+            {
+                if (_findClustersWhenNotArchon != value)
+                {
+                    _findClustersWhenNotArchon = value;
+                    OnPropertyChanged(nameof(FindClustersWhenNotArchon));
                 }
             }
         }

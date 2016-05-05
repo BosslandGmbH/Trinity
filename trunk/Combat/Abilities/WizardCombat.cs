@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Config.Combat;
+using Trinity.Framework;
+using Trinity.Framework.Avoidance.Structures;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Common;
@@ -23,12 +25,19 @@ namespace Trinity.Combat.Abilities
             get { return TrinityPlugin.Settings.Combat.Wizard; }
         }
 
+        public static bool IsFirebirdArchonBuild => Sets.ChantodosResolve.IsFullyEquipped && Sets.FirebirdsFinery.IsFullyEquipped && Skills.Wizard.Archon.IsActive;
+
         /// <summary>
         /// Checks and casts Buffs, Avoidance powers, and Combat Powers
         /// </summary>
         /// <returns></returns>
         internal static TrinityPower GetPower()
         {
+            if (Skills.Wizard.IsArchonActive())
+            {                
+                return GetArchonPower();
+            }
+
             // Buffs
             if (UseOOCBuff)
             {
@@ -63,9 +72,7 @@ namespace Trinity.Combat.Abilities
             // Defensive Teleport: SafePassage
             if (CanCastTeleport())
             {
-                // Teleporting exactly on top of targets prevents them from taking damage
-                var target = NavHelper.FindSafeZone(false, 1, CurrentTarget.Position, true);
-                var slightlyForwardPosition = MathEx.GetPointAt(target, 4f, Player.Rotation);                
+                var slightlyForwardPosition = MathEx.GetPointAt(Core.Avoidance.Avoider.SafeSpot, 4f, Player.Rotation);                
                 return new TrinityPower(SNOPower.Wizard_Teleport, 65f, slightlyForwardPosition);
             }
 
@@ -83,13 +90,12 @@ namespace Trinity.Combat.Abilities
             }
 
             // Frost Nova
-            if (CanCast(SNOPower.Wizard_FrostNova) && !Player.IsIncapacitated &&
+            if (CanCast(SNOPower.Wizard_FrostNova) && !Player.IsIncapacitated && !IsFirebirdArchonBuild &&
                 ((Runes.Wizard.DeepFreeze.IsActive && TargetUtil.AnyMobsInRange(25, 5)) || TargetUtil.AnyMobsInRange(25, 1) || Player.CurrentHealthPct <= 0.7) &&
                 CurrentTarget.RadiusDistance <= 25f)
             {
                 return new TrinityPower(SNOPower.Wizard_FrostNova, 20f);
             }
-
 
             return null;
         }
@@ -101,12 +107,6 @@ namespace Trinity.Combat.Abilities
         private static TrinityPower GetCombatPower()
         {
             TrinityPower power = null;
-            if (GetHasBuff(SNOPower.Wizard_Archon))
-            {
-                power = GetArchonPower();
-                if (power != null)
-                    return power;
-            }
 
             if (ShouldRefreshBastiansGeneratorBuff)
             {
@@ -127,31 +127,57 @@ namespace Trinity.Combat.Abilities
                 MoveToOrbitPoint(clusterPoint);
             }*/
 
-            // Offensive Teleport: Calamity
-            if (CanCastTeleport())
+            // Offensive Teleport
+            if (IsFirebirdArchonBuild)
             {
-                var bestClusterPoint = TargetUtil.GetBestClusterUnit(Settings.Combat.Misc.TrashPackClusterRadius);
-                // Teleporting exactly on top of targets prevents them from taking damage
-                var slightlyForwardPosition = MathEx.GetPointAt(bestClusterPoint.Position, 4f, Player.Rotation);
-                var eliteInRange = TargetUtil.BestEliteInRange(50f);
-                if (eliteInRange != null && slightlyForwardPosition.Distance(eliteInRange.Position) > 30f)
-                    slightlyForwardPosition = MathEx.GetPointAt(CurrentTarget.Position, 4f, Player.Rotation);
-                if (TargetUtil.AnyBossesInRange(50f))
-                    slightlyForwardPosition = MathEx.GetPointAt(CurrentTarget.Position, 4f, Player.Rotation);
-                return new TrinityPower(SNOPower.Wizard_Teleport, 65f, slightlyForwardPosition);
+                // Use Teleport to stay close-ish to monsters so they take our AOE pulse and blast damage.
+                var monstersWithinKiteRange = TargetUtil.AnyMobsInRange(CurrentTarget.CollisionRadius + KiteDistance);
+                var recentlyAvoiding = Core.Avoidance.Avoider.TimeSinceLastAvoid.TotalMilliseconds < 500;
+                if (Skills.Wizard.ArchonTeleport.CanCast() && (!monstersWithinKiteRange && !recentlyAvoiding || CurrentTarget.IsSafeSpot))
+                {
+                    Logger.Log(LogCategory.Routine, $"Casting Teleport ({Skills.Wizard.ArchonTeleport.SNOPower}) on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
+
+                    // Teleport within kite distance of target to prevent porting ontop of people and then just kiting back away again.                
+                    var offsetDistance = CurrentTarget.Distance - KiteDistance - CurrentTarget.CollisionRadius;
+                    if (offsetDistance > 10f && offsetDistance < 120f)
+                    {
+                        var position = MathEx.CalculatePointFrom(CurrentTarget.Position, ZetaDia.Me.Position, offsetDistance);
+                        return new TrinityPower(SNOPower.Wizard_Teleport, 50f, position);
+                    }
+                }
+            }
+            else
+            {
+                if (CanCastTeleport())
+                {
+                    Logger.Log(LogCategory.Routine, "Offensive Normal Teleport");
+                    var bestClusterPoint = TargetUtil.GetBestClusterUnit(Settings.Combat.Misc.TrashPackClusterRadius);
+                    // Teleporting exactly on top of targets prevents them from taking damage
+                    var slightlyForwardPosition = MathEx.GetPointAt(bestClusterPoint.Position, 4f, Player.Rotation);
+                    var eliteInRange = TargetUtil.BestEliteInRange(50f);
+                    if (eliteInRange != null && slightlyForwardPosition.Distance(eliteInRange.Position) > 30f)
+                        slightlyForwardPosition = MathEx.GetPointAt(CurrentTarget.Position, 4f, Player.Rotation);
+                    if (TargetUtil.AnyBossesInRange(50f))
+                        slightlyForwardPosition = MathEx.GetPointAt(CurrentTarget.Position, 4f, Player.Rotation);
+                    return new TrinityPower(SNOPower.Wizard_Teleport, 65f, slightlyForwardPosition);
+                }
             }
 
             // Defensive Teleport: SafePassage
             if (CanCastTeleport())
             {
-                var bestClusterPoint = TargetUtil.GetBestClusterUnit(Settings.Combat.Misc.TrashPackClusterRadius);
-                var target = KiteDistance == 0 ? bestClusterPoint.Position : NavHelper.FindSafeZone(false, 1, CurrentTarget.Position, true);
-                // Teleporting exactly on top of targets prevents them from taking damage
-                var slightlyForwardPosition = MathEx.GetPointAt(target, 4f, Player.Rotation);
-                var eliteInRange = TargetUtil.BestEliteInRange(50f);
-                if (eliteInRange != null && slightlyForwardPosition.Distance(eliteInRange.Position) > 30f)
-                        slightlyForwardPosition = MathEx.GetPointAt(CurrentTarget.Position, 4f, Player.Rotation);
-                return new TrinityPower(SNOPower.Wizard_Teleport, 65f, slightlyForwardPosition);
+                Logger.Log(LogCategory.Routine, "Defensive Normal Teleport");
+                var targetPosition = Core.Avoidance.Avoider.SafeSpot;
+                if (targetPosition != Vector3.Zero)
+                {
+                    // Don't teleport exactly on top of targets or it prevents them from taking damage
+                    var slightlyForwardPosition = MathEx.GetPointAt(targetPosition, 4f, Player.Rotation);
+                    var distance = slightlyForwardPosition.Distance(ZetaDia.Me.Position);
+                    if (distance > 20f && distance < 80f)
+                    {
+                        return new TrinityPower(SNOPower.Wizard_Teleport, 65f, slightlyForwardPosition);
+                    }
+                }                    
             }
 
             // Magic Weapon (10 minutes)                 
@@ -672,99 +698,180 @@ namespace Trinity.Combat.Abilities
         /// <returns></returns>
         private static TrinityPower GetArchonPower()
         {
-            if (!Player.IsIncapacitated && 
-                  CanCast(SNOPower.Wizard_Archon_SlowTime, CanCastFlags.NoTimer) &&
-                 !IsSlowTimeActive())
+            if (CurrentTarget == null)
+                return null;
+            
+            if (Settings.Combat.Wizard.AlwaysArchon && Skills.Wizard.Archon.CanCast() && Sets.ChantodosResolve.IsFullyEquipped)
             {
-                return new TrinityPower(SNOPower.Wizard_Archon_SlowTime);
+                if (CacheData.Buffs.HasBuff(SNOPower.P3_ItemPassive_Unique_Ring_021) && GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021) > 19)
+                {
+                    Skills.Wizard.Archon.Cast();
+                }                         
             }
 
-            // Archon Teleport in combat for kiting
-            if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_Archon_Teleport, CanCastFlags.NoTimer) &&
-                Player.CurrentHealthPct <= 0.40 &&
-                Settings.Combat.Wizard.KiteLimit > 0 &&
-                TimeSincePowerUse(SNOPower.Wizard_Teleport) >= Settings.Combat.Wizard.TeleportDelay &&
-                // Try and teleport-retreat from 1 elite or 3+ greys or a boss at 15 foot range
-                (TargetUtil.AnyElitesInRange(15, 1) || TargetUtil.AnyMobsInRange(15, 3) || (CurrentTarget.IsBoss && CurrentTarget.RadiusDistance <= 15f)))
+            if (!Skills.Wizard.IsArchonActive() && Settings.Combat.Wizard.FindClustersWhenNotArchon)
             {
-                Vector3 vNewTarget = MathEx.CalculatePointFrom(CurrentTarget.Position, Player.Position, -20f);
-                return new TrinityPower(SNOPower.Wizard_Archon_Teleport, 35f, vNewTarget);
+                if (Settings.Combat.Wizard.FindClustersWhenNotArchon)
+                {
+                    // Double trash range up to max of 10 for 8 seconds or until archon starts or there is a big cluster in range.
+                    CombatOverrides.ModifyTrashSizeForDuration(2d, TimeSpan.FromSeconds(8), 4, 10, () => BigClusterOrElitesInRange() || Skills.Wizard.IsArchonActive());
+                }
+                return null;
+            }
+            
+            // Use Teleport to stay close-ish to monsters so they take our AOE pulse and blast damage.
+            var monstersWithinKiteRange = TargetUtil.AnyMobsInRange(CurrentTarget.CollisionRadius + KiteDistance);
+            var recentlyAvoiding = Core.Avoidance.Avoider.TimeSinceLastAvoid.TotalMilliseconds < 500;
+            if (Skills.Wizard.ArchonTeleport.CanCast() && (!monstersWithinKiteRange && !recentlyAvoiding || CurrentTarget.IsSafeSpot))
+            {
+                Logger.Log(LogCategory.Routine, $"Casting ArchonTeleport ({Skills.Wizard.ArchonTeleport.SNOPower}) on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
+
+                // Teleport within kite distance of target to prevent porting ontop of people and then just kiting back away again.                
+                var offsetDistance = CurrentTarget.Distance - KiteDistance - CurrentTarget.CollisionRadius;
+                if (offsetDistance > 10f)
+                {
+                    var position = MathEx.CalculatePointFrom(CurrentTarget.Position, ZetaDia.Me.Position, offsetDistance);
+                    return new TrinityPower(Skills.Wizard.ArchonTeleport.SNOPower, 50f, position);
+                }             
             }
 
-            // Archon teleport in combat for no-kite
-            if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_Archon_Teleport, CanCastFlags.NoTimer) &&
-                Settings.Combat.Wizard.KiteLimit == 0 && CurrentTarget.RadiusDistance >= 10f &&
-                TimeSincePowerUse(SNOPower.Wizard_Teleport) >= Settings.Combat.Wizard.TeleportDelay)
+            // Cast Strike if densely surrounded
+            if (!Settings.Combat.Wizard.NoArcaneStrike && CurrentTarget.Distance < 12f && TargetUtil.NumMobsInRange(12f) > 6 && Skills.Wizard.ArchonStrike.CanCast())
             {
-                return new TrinityPower(SNOPower.Wizard_Archon_Teleport, 35f, CurrentTarget.Position);
+                return new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 12f, CurrentTarget.Position);
             }
 
-            // 2.0.5 Archon elemental runes
-            // This needs some checking on range i think
-
-            //392694, 392695, 392696 == Arcane Strike,
-            //392697, 392699, 392698 == Disintegration Wave
-            //392692, 392693, 392691 == Arcane Blast, Ice Blast 
-
-            SNOPower
-                beamPower = SNOPower.Wizard_Archon_ArcaneBlast,
-                strikePower = SNOPower.Wizard_Archon_ArcaneStrike,
-                blastPower = SNOPower.Wizard_Archon_DisintegrationWave;
-
-            var beamSkill = CacheData.Hotbar.ActiveSkills
-                .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_DisintegrationWave ||
-                    p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Cold ||
-                    p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Fire ||
-                    p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Lightning);
-
-            var strikeSkill = CacheData.Hotbar.ActiveSkills
-                .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneStrike ||
-                    p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Fire ||
-                    p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Cold ||
-                    p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Lightning);
-
-            var blastSkill = CacheData.Hotbar.ActiveSkills
-                .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneBlast ||
-                    p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Cold ||
-                    p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Fire ||
-                    p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Lightning);
-
-            if (beamSkill != null && beamSkill.Power != default(SNOPower))
-                beamPower = beamSkill.Power;
-
-            if (strikeSkill != null && strikeSkill.Power != default(SNOPower))
-                strikePower = strikeSkill.Power;
-
-            if (blastSkill != null && blastSkill.Power != default(SNOPower))
-                blastPower = blastSkill.Power;
-
-            // Arcane Blast - 2 second cooldown, big AoE
-            if (!Player.IsIncapacitated && CanCast(blastPower, CanCastFlags.NoTimer) && !Settings.Combat.Wizard.NoArcaneBlast)
+            // Arcane Blast
+            if (!Settings.Combat.Wizard.NoArcaneBlast && TargetUtil.AnyMobsInRange(15f) && Skills.Wizard.ArchonBlast.CanCast())
             {
-                return new TrinityPower(blastPower, 10f, CurrentTarget.Position);
+                Logger.Log(LogCategory.Routine, $"Casting ArchonBlast ({Skills.Wizard.ArchonBlast.SNOPower}) on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
+                return new TrinityPower(Skills.Wizard.ArchonBlast.SNOPower, 50f, CurrentTarget.Position);
             }
 
-            // Disintegrate
-            if (!Player.IsIncapacitated && !Settings.Combat.Wizard.DisableDisintegrationWave && CanCast(beamPower, CanCastFlags.NoTimer) &&
-                (CurrentTarget.CountUnitsBehind(25f) > 2 || Settings.Combat.Wizard.NoArcaneStrike || Settings.Combat.Wizard.KiteLimit > 0))
+            // Disintegration
+            if (!Settings.Combat.Wizard.DisableDisintegrationWave && CurrentTarget.IsPlayerFacing(60) && TargetUtil.AnyMobsInRange(40f) && Skills.Wizard.ArchonDisintegrationWave.CanCast())
             {
-                return new TrinityPower(beamPower, 49f, CurrentTarget.ACDGuid);
+                Logger.Log(LogCategory.Routine, $"Casting ArchonDisintegrationWave {Skills.Wizard.ArchonDisintegrationWave.SNOPower} on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
+                var position = MathEx.CalculatePointFrom(CurrentTarget.Position, ZetaDia.Me.Position, 45f);
+                return new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 45f, position);
             }
 
-            // Arcane Strike Rapid Spam at close-range only, and no AoE inbetween us and target
-            if (!Player.IsIncapacitated && !Settings.Combat.Wizard.NoArcaneStrike && CanCast(strikePower, CanCastFlags.NoTimer) &&
-                !CacheData.TimeBoundAvoidance.Any(aoe => MathUtil.IntersectsPath(aoe.Position, aoe.Radius, Player.Position, CurrentTarget.Position)))
+            // ArchonStrike
+            if (!Settings.Combat.Wizard.NoArcaneStrike && TargetUtil.AnyMobsInRange(12f) && Skills.Wizard.ArchonStrike.CanCast())
             {
-                return new TrinityPower(strikePower, 7f, CurrentTarget.ACDGuid);
+                Logger.Log(LogCategory.Routine, $"Casting ArchonStrike {Skills.Wizard.ArchonStrike.SNOPower} on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
+                return new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 12f, CurrentTarget.Position);
             }
 
-            // Disintegrate as final option just in case
-            if (!Player.IsIncapacitated && CanCast(beamPower, CanCastFlags.NoTimer))
+            // Teleport if nothing nearby
+            if (!TargetUtil.AnyMobsInRange(60f) && Skills.Wizard.ArchonTeleport.CanCast())
             {
-                return new TrinityPower(beamPower, 49f, CurrentTarget.ACDGuid);
+                return new TrinityPower(Skills.Wizard.ArchonTeleport.SNOPower, 50f, CurrentTarget.Position);
             }
 
-            return null;
+            // Disintegration last resort (mostly to move into range of a distant target)
+            if (CurrentTarget.IsPlayerFacing(60))
+            {
+                var position = MathEx.CalculatePointFrom(CurrentTarget.Position, ZetaDia.Me.Position, 45f);
+                return new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 45f, position);
+            }
+
+            // Turn to face target
+            return new TrinityPower(SNOPower.Walk, 100f, CurrentTarget.Position);
+
+            //if (!Player.IsIncapacitated && 
+            //      CanCast(SNOPower.Wizard_Archon_SlowTime, CanCastFlags.NoTimer) &&
+            //     !IsSlowTimeActive())
+            //{
+            //    return new TrinityPower(SNOPower.Wizard_Archon_SlowTime);
+            //}
+
+            //// Archon Teleport in combat for kiting
+            //if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_Archon_Teleport, CanCastFlags.NoTimer) &&
+            //    Player.CurrentHealthPct <= 0.40 &&
+            //    Settings.Combat.Wizard.KiteLimit > 0 &&
+            //    TimeSincePowerUse(SNOPower.Wizard_Teleport) >= Settings.Combat.Wizard.TeleportDelay &&
+            //    // Try and teleport-retreat from 1 elite or 3+ greys or a boss at 15 foot range
+            //    (TargetUtil.AnyElitesInRange(15, 1) || TargetUtil.AnyMobsInRange(15, 3) || (CurrentTarget.IsBoss && CurrentTarget.RadiusDistance <= 15f)))
+            //{
+            //    Vector3 vNewTarget = MathEx.CalculatePointFrom(CurrentTarget.Position, Player.Position, -20f);
+            //    return new TrinityPower(SNOPower.Wizard_Archon_Teleport, 35f, vNewTarget);
+            //}
+
+            //// Archon teleport in combat for no-kite
+            //if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_Archon_Teleport, CanCastFlags.NoTimer) &&
+            //    Settings.Combat.Wizard.KiteLimit == 0 && CurrentTarget.RadiusDistance >= 10f &&
+            //    TimeSincePowerUse(SNOPower.Wizard_Teleport) >= Settings.Combat.Wizard.TeleportDelay)
+            //{
+            //    return new TrinityPower(SNOPower.Wizard_Archon_Teleport, 35f, CurrentTarget.Position);
+            //}
+
+            //// 2.0.5 Archon elemental runes
+            //// This needs some checking on range i think
+
+            ////392694, 392695, 392696 == Arcane Strike,
+            ////392697, 392699, 392698 == Disintegration Wave
+            ////392692, 392693, 392691 == Arcane Blast, Ice Blast 
+
+            //SNOPower
+            //    beamPower = SNOPower.Wizard_Archon_ArcaneBlast,
+            //    strikePower = SNOPower.Wizard_Archon_ArcaneStrike,
+            //    blastPower = SNOPower.Wizard_Archon_DisintegrationWave;
+
+            //var beamSkill = CacheData.Hotbar.ActiveSkills
+            //    .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_DisintegrationWave ||
+            //        p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Cold ||
+            //        p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Fire ||
+            //        p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Lightning);
+
+            //var strikeSkill = CacheData.Hotbar.ActiveSkills
+            //    .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneStrike ||
+            //        p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Fire ||
+            //        p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Cold ||
+            //        p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Lightning);
+
+            //var blastSkill = CacheData.Hotbar.ActiveSkills
+            //    .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneBlast ||
+            //        p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Cold ||
+            //        p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Fire ||
+            //        p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Lightning);
+
+            //if (beamSkill != null && beamSkill.Power != default(SNOPower))
+            //    beamPower = beamSkill.Power;
+
+            //if (strikeSkill != null && strikeSkill.Power != default(SNOPower))
+            //    strikePower = strikeSkill.Power;
+
+            //if (blastSkill != null && blastSkill.Power != default(SNOPower))
+            //    blastPower = blastSkill.Power;
+
+            //// Arcane Blast - 2 second cooldown, big AoE
+            //if (!Player.IsIncapacitated && CanCast(blastPower, CanCastFlags.NoTimer) && !Settings.Combat.Wizard.NoArcaneBlast)
+            //{
+            //    return new TrinityPower(blastPower, 10f, CurrentTarget.Position);
+            //}
+
+            //// Disintegrate
+            //if (!Player.IsIncapacitated && !Settings.Combat.Wizard.DisableDisintegrationWave && CanCast(beamPower, CanCastFlags.NoTimer) &&
+            //    (CurrentTarget.CountUnitsBehind(25f) > 2 || Settings.Combat.Wizard.NoArcaneStrike || Settings.Combat.Wizard.KiteLimit > 0))
+            //{
+            //    return new TrinityPower(beamPower, 49f, CurrentTarget.ACDGuid);
+            //}
+
+            //// Arcane Strike Rapid Spam at close-range only, and no AoE inbetween us and target
+            //if (!Player.IsIncapacitated && !Settings.Combat.Wizard.NoArcaneStrike && CanCast(strikePower, CanCastFlags.NoTimer) &&
+            //    !CacheData.TimeBoundAvoidance.Any(aoe => MathUtil.IntersectsPath(aoe.Position, aoe.Radius, Player.Position, CurrentTarget.Position)))
+            //{
+            //    return new TrinityPower(strikePower, 7f, CurrentTarget.ACDGuid);
+            //}
+
+            //// Disintegrate as final option just in case
+            //if (!Player.IsIncapacitated && CanCast(beamPower, CanCastFlags.NoTimer))
+            //{
+            //    return new TrinityPower(beamPower, 49f, CurrentTarget.ACDGuid);
+            //}
+
+            //return null;
         }
 
         /// <summary>

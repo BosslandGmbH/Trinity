@@ -115,19 +115,19 @@ namespace Trinity.Items
 
             if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.GameBalanceId))
             {
-                Logger.Log($"Pet found! - Auto Stashing. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Logger.Log($"Pet found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.PickupTransmog && DataDictionary.TransmogTable.Contains(item.GameBalanceId))
+            if (TrinityPlugin.Settings.Loot.Pickup.StashTransmog && DataDictionary.TransmogTable.Contains(item.GameBalanceId))
             {
-                Logger.Log($"Transmog found! - Not Stashing. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
-                return false;
+                Logger.Log($"Transmog found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                return true;
             }
 
             if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.GameBalanceId))
             {
-                Logger.Log($"Wings found! - Auto Stashing. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Logger.Log($"Wings found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
             }
 
@@ -1113,7 +1113,7 @@ namespace Trinity.Items
                 return true;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.PickupTransmog && DataDictionary.TransmogTable.Contains(item.BalanceID))
+            if (DataDictionary.TransmogTable.Contains(item.BalanceID))
             {
                 Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
                 return true;

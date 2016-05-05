@@ -61,8 +61,6 @@ namespace Trinity.Combat.Abilities
 
         public static float _invPunSteedTargetDist = 25f;
 
-        private static readonly Func<bool> BigClusterOrElitesInRange = () => TargetUtil.AnyElitesInRange(20f) || TargetUtil.NumMobsInRange(30f) >= 10;
-
         /// <summary>
         /// DarkFiend's Invoker Behavior
         /// </summary>

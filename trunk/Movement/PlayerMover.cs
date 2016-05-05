@@ -606,7 +606,7 @@ namespace Trinity.DbProvider
             float destinationDistance = MyPosition.Distance(destination);
 
             if (!ZetaDia.IsInTown && ClassMover.IsSpecialMovementReady && !TrinityPlugin.ShouldWaitForLootDrop &&
-                (IsBlocked && TrinityPlugin.Settings.Combat.Misc.AllowOOCMovement ||
+                (TrinityPlugin.Settings.Combat.Misc.AllowOOCMovement ||
                 CombatBase.IsCurrentlyAvoiding || ClassMover.OutOfCombatMovementAllowed))
             {
                 if (NavigationProvider == null)

@@ -1107,6 +1107,7 @@ namespace Trinity.Config.Combat
             IgnoreMinions = false;
             AttackWhenBlocked = true;
             IgnoreNormalProgressionGlobes = false;
+            WaitForResInBossEncounters = false;
         }
         #endregion Methods
 

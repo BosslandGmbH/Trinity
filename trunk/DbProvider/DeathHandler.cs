@@ -121,7 +121,7 @@ namespace Trinity.DbProvider
             {
                 Logger.Log("[Death] Waiting while being resurrected");
             }
-            else if (ZetaDia.Me.IsInBossEncounter && !RiftProgression.IsInRift && TrinityPlugin.Settings.Combat.Misc.WaitForResInBossEncounters)
+            else if (ZetaDia.Me.IsInBossEncounter && !RiftProgression.IsInRift && TrinityPlugin.Settings.Combat.Misc.WaitForResInBossEncounters && IsAlivePlayerNearby)
             {
                 Logger.Log("[Death] Waiting because of wait for resurrect in boss encounter setting");
             }
@@ -198,6 +198,13 @@ namespace Trinity.DbProvider
 
             return reviver != null;
         }
+
+        public static bool IsAlivePlayerNearby
+        {
+            get { return ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).FirstOrDefault(p => p?.CommonData != null && p.Distance < 100f) != null; }
+        }
+
+
 
     }
 }

@@ -55,9 +55,9 @@ namespace Trinity.Config.Loot
         private bool _disableAutoEquipAtMaxLevel;
         private bool _ignoreProgressionGlobesInAoE;
         private bool _ignoreHealthGlobesInAoE;
-        private bool _pickupTransmog;
         private bool _stashWings;
         private bool _stashPets;
+        private bool _stashTransmog;
 
         #endregion Fields
 
@@ -885,18 +885,18 @@ namespace Trinity.Config.Loot
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
-        public bool PickupTransmog
+        public bool StashTransmog
         {
             get
             {
-                return _pickupTransmog;
+                return _stashTransmog;
             }
             set
             {
-                if (_pickupTransmog != value)
+                if (_stashTransmog != value)
                 {
-                    _pickupTransmog = value;
-                    OnPropertyChanged(nameof(PickupTransmog));
+                    _stashTransmog = value;
+                    OnPropertyChanged(nameof(StashTransmog));
                 }
             }
         }
