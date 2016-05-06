@@ -872,13 +872,14 @@ namespace Trinity.Items
             }
         }
 
-        public static bool IsValidTwoSlotBackpackLocation
+        private static readonly CacheField<bool> _isValidTwoSlotBackpackLocation = new CacheField<bool>(UpdateSpeed.Fast);
+
+        public static bool CachedIsValidTwoSlotBackpackLocation => _isValidTwoSlotBackpackLocation.GetValue(IsValidTwoSlotBackpackLocation);
+
+        public static bool IsValidTwoSlotBackpackLocation()
         {
-            get
-            {
-                var validLocation = FindValidBackpackLocation(true);
-                return validLocation.X >= 0 && validLocation.Y >= 0;               
-            }
+            var validLocation = FindValidBackpackLocation(true);
+            return validLocation.X >= 0 && validLocation.Y >= 0;
         }
 
         /// <summary>

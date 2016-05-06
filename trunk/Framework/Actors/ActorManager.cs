@@ -29,25 +29,24 @@ namespace Trinity.Framework.Actors
         private static Dictionary<int, CachedItem> _currentCachedItems = new Dictionary<int, CachedItem>();
         private static Dictionary<int, short> _annToAcdIndex = new Dictionary<int, short>();
         private static readonly HashSet<int> IgnoreAcdIds = new HashSet<int>();
-        private static ExpandoContainer<ActorCommonData> Actors;
+        private static ExpandoContainer<ActorCommonData> _actors;
         public static int TickDelayMs;
         private static int _currentWorldSnoId;
-
+        
         static ActorManager()
         {
             Pulsator.OnPulse += (sender, args) => Update();        
         }
 
-        private static int[] AnnToAcd => MemoryWrapper.ReadArray<int>(Actors.BaseAddress + 0x04, 8764);
+        private static int[] AnnToAcd => MemoryWrapper.ReadArray<int>(_actors.BaseAddress + 0x04, 8764);
         public static List<CachedItem> Items { get; private set; } = new List<CachedItem>();
         public static HashSet<int> AnnIds { get; private set; } = new HashSet<int>();
-        public static bool IsDisposed => ZetaDia.Memory.Read<int>(Actors.BaseAddress + 0x130 + 0x18) != 1611526157;
+        public static bool IsDisposed => ZetaDia.Memory.Read<int>(_actors.BaseAddress + 0x130 + 0x18) != 1611526157;
 
         public static void Update()
         {
             try
             {
-
                 var currentFrame = ZetaDia.Memory.Executor.FrameCount;
                 if (LastUpdatedFrame == currentFrame)
                     return;
@@ -80,9 +79,9 @@ namespace Trinity.Framework.Actors
                 _currentWorldSnoId = worldSnoId;
             }
 
-            if (Actors == null || IsDisposed)
+            if (_actors == null || IsDisposed)
             {
-                Actors = MemoryWrapper.Create<ExpandoContainer<ActorCommonData>>(Internals.Addresses.AcdManager);
+                _actors = MemoryWrapper.Create<ExpandoContainer<ActorCommonData>>(Internals.Addresses.AcdManager);
                 _currentCachedItems.Clear();
                 Items.Clear();
                 Thread.Sleep(100);
@@ -91,7 +90,7 @@ namespace Trinity.Framework.Actors
 
             var inTown = ZetaDia.IsInTown;
 
-            foreach (var acd in Actors)
+            foreach (var acd in _actors)
             {
                 if (acd == null)
                     continue;
@@ -165,7 +164,7 @@ namespace Trinity.Framework.Actors
             short index;
             if (_annToAcdIndex.TryGetValue(annId, out index))
             {
-                return Actors[index];
+                return _actors[index];
             }
             Logger.LogVerbose("Lookup AnnToAcd failed");
             return null;
@@ -176,7 +175,7 @@ namespace Trinity.Framework.Actors
             short index;
             if (_annToAcdIndex.TryGetValue(annId, out index))
             {
-                var acd = Actors[index];
+                var acd = _actors[index];
                 CachedItem item;
 
                 if (_currentCachedItems.TryGetValue(acd.AcdId, out item))
@@ -185,7 +184,7 @@ namespace Trinity.Framework.Actors
                 }
 
                 Logger.LogVerbose("Failed to find existing CachedItem");
-                return new CachedItem(Actors[index]);
+                return new CachedItem(_actors[index]);
             }
 
             //todo figure out AnnToAcd table - result isn't a pointer, can't find the number it produces anywhere.
@@ -203,7 +202,7 @@ namespace Trinity.Framework.Actors
             short index;
             if (_annToAcdIndex.TryGetValue(annId, out index))
             {
-                var acd = Actors[index];
+                var acd = _actors[index];
                 if (acd != null && acd.IsValid)
                 {
                     return acd.BaseAddress.UnsafeCreate<ACDItem>();
@@ -220,10 +219,22 @@ namespace Trinity.Framework.Actors
             if (!_annToAcdIndex.TryGetValue(annId, out index))
                 return false;
 
-            var acd = Actors[index];
+            var acd = _actors[index];
             return acd != null && acd.IsValid;
         }
 
+        public static void Reset()
+        {
+            ZetaDia.Actors.Clear();
+            ZetaDia.Actors.Update();
+            Items.Clear();
+            LastUpdatedFrame = 0;
+            IgnoreAcdIds.Clear();
+            _currentCachedItems.Clear();
+            _annToAcdIndex.Clear();
+            _currentWorldSnoId = 0;
+            _actors = null;
+        }
 
     }
 }

@@ -19,11 +19,9 @@ namespace Trinity.Framework.Avoidance
 
         private static List<AvoidanceFlags> Flags { get; set; }
 
-        private const float NodeBoxSize = 2.5f;
-
         private const int Bounds = 2500;        
 
-        public override float BoxSize => NodeBoxSize;
+        public override float BoxSize => 2.5f;
         public override int GridBounds => Bounds;
         public static AvoidanceGrid Instance => GetWorldGrid();
 
@@ -120,8 +118,8 @@ namespace Trinity.Framework.Avoidance
             if (startNode == null)
                 return nodes;
 
-            var gridRadiusMax = Math.Round(maxDistance / NodeBoxSize, 0, MidpointRounding.AwayFromZero);
-            var gridRadiusMin = Math.Round(minDistance / NodeBoxSize, 0, MidpointRounding.AwayFromZero);
+            var gridRadiusMax = Math.Round(maxDistance / 2.5, 0, MidpointRounding.AwayFromZero);
+            var gridRadiusMin = Math.Round(minDistance / 2.5, 0, MidpointRounding.AwayFromZero);
 
             if (includeThisNode && condition(startNode))
                 nodes.Add(startNode);
@@ -180,8 +178,8 @@ namespace Trinity.Framework.Avoidance
             if (startNode == null)
                 return null;
 
-            var gridRadiusMax = Math.Round(maxDistance / NodeBoxSize, 0, MidpointRounding.AwayFromZero);
-            var gridRadiusMin = Math.Round(minDistance / NodeBoxSize, 0, MidpointRounding.AwayFromZero);
+            var gridRadiusMax = Math.Round(maxDistance / 2.5, 0, MidpointRounding.AwayFromZero);
+            var gridRadiusMin = Math.Round(minDistance / 2.5, 0, MidpointRounding.AwayFromZero);
 
             if (includeThisNode && condition(startNode))
                 nodes.Add(startNode);

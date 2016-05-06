@@ -32,20 +32,17 @@ namespace Trinity.Framework
         public static readonly StuckHandler StuckHandler = new StuckHandler();
 
         public static void Enable()
-        {
-            Avoidance.Enable();            
+        {      
             Utility.EnableAll();
         }
 
         public static void Disable()
         {
-            Avoidance.Disable();
             Utility.DisableAll();
         }
 
         public static void Update()
         {
-            Avoidance.Update();
             Utility.PulseAll();
         }  
           

@@ -7,13 +7,13 @@ namespace Trinity.Framework.Avoidance.Structures
 {
     public class AvoidanceLayer : ICollection<AvoidanceNode>
     {
-        public HashSet<AvoidanceNode> Nodes = new HashSet<AvoidanceNode>();
+        public List<AvoidanceNode> Nodes = new List<AvoidanceNode>();
         public List<Vector3> Positions = new List<Vector3>();
 
         public AvoidanceLayer(IEnumerable<AvoidanceNode> list)
         {
             var avoidanceNodes = list as IList<AvoidanceNode> ?? list.ToList();
-            Nodes = new HashSet<AvoidanceNode>(avoidanceNodes);
+            Nodes = new List<AvoidanceNode>(avoidanceNodes);
             Positions = avoidanceNodes.Select(n => n.NavigableCenter).ToList();
         }
 
