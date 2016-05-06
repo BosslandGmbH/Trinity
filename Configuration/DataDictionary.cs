@@ -62,6 +62,168 @@ namespace Trinity
             { 2429, 664373032, 1663345352, "P5_Cosmetic_Pet_zombie_01" },
         };
 
+        public static HashSet<int> PetSnoIds = new HashSet<int>()
+        {
+            (int) SNOActor.x1_promoPet_fallenHound_skeletal, // 360090,
+            (int) SNOActor.Cosmetic_Pet_FallenHound_Skeletal, // 410448,
+            (int) SNOActor.cos_pet_teddybear_01, // 430903,
+            (int) SNOActor.cos_pet_thousandPounder_01, // 430905,
+            (int) SNOActor.cos_pet_teddybear_02, // 430906,
+            (int) SNOActor.cos_pet_teddybear_03, // 430908,
+            (int) SNOActor.cos_pet_teddybear_04, // 430910,
+            (int) SNOActor.cos_pet_fallenHound_01, // 433063,
+            (int) SNOActor.cos_pet_protossProbe_01, // 434428,
+            (int) SNOActor.cos_pet_crawlingHand_01, // 436532,
+            (int) SNOActor.cos_pet_crawlingHand_02, // 436534,
+            (int) SNOActor.cos_pet_crawlingHand_03, // 436961,
+            (int) SNOActor.cos_pet_teddybear_05, // 437119,
+            (int) SNOActor.cos_pet_fallenHound_02, // 437807,
+            (int) SNOActor.cos_pet_fallenHound_03, // 439196,
+            (int) SNOActor.cos_pet_fallenHound_04, // 439221,
+            (int) SNOActor.cos_pet_fallenHound_05, // 439233,
+            (int) SNOActor.cos_pet_fallenHound_06, // 439237,
+            (int) SNOActor.cos_pet_goatman_melee_01, // 439337,
+            (int) SNOActor.p3_cos_pet_Murkgoblin_A, // 441208,
+            (int) SNOActor.cos_pet_goatman_melee_02, // 441214,
+            (int) SNOActor.p3_cos_pet_jadeSerpent, // 441437,
+        };
+
+        public static HashSet<int> WingsSnoIds = new HashSet<int>
+        {
+            (int) SNOActor.AngelWings_common_model, //150054
+            (int) SNOActor.Fate_angelWings_model, //159931
+            (int) SNOActor.AngelWings_corrupt_model, //170563
+            (int) SNOActor.Hope_angelWings_model, //174571
+            (int) SNOActor.Hope_angelWings_model_Dim, //195016
+            (int) SNOActor.hero_angelWings_model, //198230
+            (int) SNOActor.angel_death_wings_dissipate_emitter, //199650
+            (int) SNOActor.AngelWings_Blue, //210787
+            (int) SNOActor.BugWings, //255315
+            (int) SNOActor.hero_bugWings_barbF, //255316
+            (int) SNOActor.hero_bugWings_barbM, //255718
+            (int) SNOActor.hero_bugWings_DHF, //255719
+            (int) SNOActor.hero_bugWings_DHM, //255720
+            (int) SNOActor.hero_bugWings_monkF, //255721
+            (int) SNOActor.hero_bugWings_monkM, //255722
+            (int) SNOActor.hero_bugWings_WDF, //255723
+            (int) SNOActor.hero_bugWings_WDM, //255724
+            (int) SNOActor.hero_bugWings_wizF, //255725
+            (int) SNOActor.hero_bugWings_wizM, //255726
+            (int) SNOActor.hero_bugWings_cdrF, //261498
+            (int) SNOActor.hero_bugWings_cdrM, //261499
+            (int) SNOActor.x1_AngelWings_dark_TEST_model, //301144
+            (int) SNOActor.AngelWings_Red, //317018
+            (int) SNOActor.hero_redWings_model, //317119
+            (int) SNOActor.x1_AngelWings_Short_Cool_model, //328514
+            (int) SNOActor.x1_Dark_Angel_Wings, //348370
+            (int) SNOActor.x1_Urzael_Wings_flameSweep, //363632
+            (int) SNOActor.x1_Urzael_Wings_transform_midway, //363657
+            (int) SNOActor.x1_Malthael_Death_Short_Wings_model, //370161
+            (int) SNOActor.AngelWings_common_model_noRagdoll, //377926
+            (int) SNOActor.hero_angelWings_Imperius_model, //378320
+            (int) SNOActor.x1_AngelWings_Imperius, //378342
+            (int) SNOActor.hero_angelWings_model_gold, //378978
+            (int) SNOActor.Cosmetic_Wings_Blue, //409078
+            (int) SNOActor.Cosmetic_Wings_Red, //409079
+            (int) SNOActor.Cosmetic_Wings_Bug, //409080
+            (int) SNOActor.Cosmetic_Wings_Imperius, //409081
+            (int) SNOActor.cos_wings_angel_twoTone_purple_01, //429082
+            (int) SNOActor.cos_wings_demonic_blackBlue_01, //429085
+            (int) SNOActor.cos_wings_demonic_blackYellow_01, //429087
+            (int) SNOActor.cos_wings_angel_twoTone_gold_01, //429091
+            (int) SNOActor.cos_wings_demonic_blackRed_01, //429094
+            (int) SNOActor.cos_wings_angel_twoTone_greyscale_01, //429103
+            (int) SNOActor.cos_wings_angel_flame_cyan_01, //429110
+            (int) SNOActor.cos_wings_demonic_blackCyan_01, //429114
+            (int) SNOActor.cos_wings_angel_flame_orange_01, //429181
+            (int) SNOActor.cos_wings_bat, //429863
+            (int) SNOActor.cos_wings_bat_DHM, //431031
+            (int) SNOActor.cos_wings_bat_DHF, //431033
+            (int) SNOActor.cos_wings_bat_barbM, //431036
+            (int) SNOActor.cos_wings_bat_barbF, //431038
+            (int) SNOActor.cos_wings_bat_wizM, //431041
+            (int) SNOActor.cos_wings_bat_wizF, //431043
+            (int) SNOActor.cos_wings_bat_WDM, //431046
+            (int) SNOActor.cos_wings_bat_WDF, //431048
+            (int) SNOActor.cos_wings_bat_monkM, //431056
+            (int) SNOActor.cos_wings_bat_monkF, //431058
+            (int) SNOActor.cos_wings_bat_cdrM, //431061
+            (int) SNOActor.cos_wings_bat_cdrF, //431063
+            (int) SNOActor.cos_wings_bat_02_barbM, //435216
+            (int) SNOActor.cos_wings_bat_02_barbF, //435218
+            (int) SNOActor.cos_wings_bat_02_wizM, //435222
+            (int) SNOActor.cos_wings_bat_02_wizF, //435224
+            (int) SNOActor.cos_wings_bat_02_WDM, //435227
+            (int) SNOActor.cos_wings_bat_02_WDF, //435229
+            (int) SNOActor.cos_wings_bat_02_monkM, //435232
+            (int) SNOActor.cos_wings_bat_02_monkF, //435234
+            (int) SNOActor.cos_wings_bat_02_cdrM, //435237
+            (int) SNOActor.cos_wings_bat_02_cdrF, //435239
+            (int) SNOActor.cos_wings_bat_02_DHF, //435240
+            (int) SNOActor.cos_wings_bat_02_DHM, //435241
+            (int) SNOActor.cos_wings_bat_03_DHM, //435245
+            (int) SNOActor.cos_wings_bat_03_DHF, //435247
+            (int) SNOActor.cos_wings_bat_03_barbM, //435250
+            (int) SNOActor.cos_wings_bat_03_barbF, //435252
+            (int) SNOActor.cos_wings_bat_03_wizM, //435255
+            (int) SNOActor.cos_wings_bat_03_wizF, //435257
+            (int) SNOActor.cos_wings_bat_03_WDM, //435260
+            (int) SNOActor.cos_wings_bat_03_WDF, //435262
+            (int) SNOActor.cos_wings_bat_03_monkM, //435265
+            (int) SNOActor.cos_wings_bat_03_monkF, //435267
+            (int) SNOActor.cos_wings_bat_03_cdrM, //435270
+            (int) SNOActor.cos_wings_bat_03_cdrF, //435272
+            (int) SNOActor.cos_wings_bat_04_DHM, //436085
+            (int) SNOActor.cos_wings_bat_04_DHF, //436087
+            (int) SNOActor.cos_wings_bat_04_barbM, //436090
+            (int) SNOActor.cos_wings_bat_04_barbF, //436092
+            (int) SNOActor.cos_wings_bat_04_wizM, //436095
+            (int) SNOActor.cos_wings_bat_04_wizF, //436097
+            (int) SNOActor.cos_wings_bat_04_WDM, //436100
+            (int) SNOActor.cos_wings_bat_04_WDF, //436102
+            (int) SNOActor.cos_wings_bat_04_monkM, //436105
+            (int) SNOActor.cos_wings_bat_04_monkF, //436107
+            (int) SNOActor.cos_wings_bat_04_cdrM, //436110
+            (int) SNOActor.cos_wings_bat_04_cdrF, //436112
+            (int) SNOActor.cos_wings_bat_05_DHM, //436203
+            (int) SNOActor.cos_wings_bat_05_DHF, //436206
+            (int) SNOActor.cos_wings_bat_05_barbM, //436209
+            (int) SNOActor.cos_wings_bat_05_barbF, //436211
+            (int) SNOActor.cos_wings_bat_05_wizM, //436214
+            (int) SNOActor.cos_wings_bat_05_wizF, //436216
+            (int) SNOActor.cos_wings_bat_05_WDM, //436219
+            (int) SNOActor.cos_wings_bat_05_WDF, //436221
+            (int) SNOActor.cos_wings_bat_05_monkM, //436224
+            (int) SNOActor.cos_wings_bat_05_monkF, //436226
+            (int) SNOActor.cos_wings_bat_05_cdrM, //436229
+            (int) SNOActor.cos_wings_bat_05_cdrF, //436231
+            (int) SNOActor.cos_wings_bat_06_DHM, //436236
+            (int) SNOActor.cos_wings_bat_06_DHF, //436239
+            (int) SNOActor.cos_wings_bat_06_barbM, //436242
+            (int) SNOActor.cos_wings_bat_06_barbF, //436244
+            (int) SNOActor.cos_wings_bat_06_wizM, //436247
+            (int) SNOActor.cos_wings_bat_06_wizF, //436249
+            (int) SNOActor.cos_wings_bat_06_WDM, //436252
+            (int) SNOActor.cos_wings_bat_06_WDF, //436254
+            (int) SNOActor.cos_wings_bat_06_monkM, //436257
+            (int) SNOActor.cos_wings_bat_06_monkF, //436259
+            (int) SNOActor.cos_wings_bat_06_cdrM, //436262
+            (int) SNOActor.cos_wings_bat_06_cdrF, //436264
+            (int) SNOActor.cos_wings_bat_07_DHM, //437351
+            (int) SNOActor.cos_wings_bat_07_DHF, //437353
+            (int) SNOActor.cos_wings_bat_07_barbM, //437356
+            (int) SNOActor.cos_wings_bat_07_barbF, //437359
+            (int) SNOActor.cos_wings_bat_07_wizM, //437362
+            (int) SNOActor.cos_wings_bat_07_wizF, //437364
+            (int) SNOActor.cos_wings_bat_07_WDM, //437368
+            (int) SNOActor.cos_wings_bat_07_WDF, //437370
+            (int) SNOActor.cos_wings_bat_07_monkM, //437373
+            (int) SNOActor.cos_wings_bat_07_monkF, //437375
+            (int) SNOActor.cos_wings_bat_07_cdrM, //437378
+            (int) SNOActor.cos_wings_bat_07_cdrF, //437380
+            (int) SNOActor.cos_wings_angel_twoTone_blue_01, //437586            
+        };
+
         public static GameBalanceTable WingsTable = new GameBalanceTable
         {
             { 217, 237118774, 600882390, "AngelWings_Blue" },
