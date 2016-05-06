@@ -1181,5 +1181,6 @@ namespace Trinity
 
 
         public string Flags => string.Join(", ", Core.Avoidance.Grid.GetAvoidanceFlags(Position));
+        public int TeamId { get; set; }
     }
 }

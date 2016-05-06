@@ -664,7 +664,7 @@ namespace Trinity
                                 }
 
                                 // Don't pickup items if we're doing a TownRun
-                                if (TrinityItemManager.FindValidBackpackLocation(isTwoSquare) == new Vector2(-1, -1))
+                                if (!TrinityItemManager.CachedIsValidTwoSlotBackpackLocation)
                                 {
                                     cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for TownRun";
                                     break;

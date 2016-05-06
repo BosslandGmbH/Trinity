@@ -48,7 +48,7 @@ namespace Trinity
             {
                 if (CurrentCacheObject.Unit.Movement.IsValid)
                 {
-                    c_IsFacingPlayer = CurrentCacheObject.Unit.IsFacingPlayer;
+                    //c_IsFacingPlayer = CurrentCacheObject.Unit.IsFacingPlayer;
                     CurrentCacheObject.Rotation = CurrentCacheObject.Unit.Movement.Rotation;
                     CurrentCacheObject.DirectionVector = CurrentCacheObject.Unit.Movement.DirectionVector;
                 }
@@ -58,27 +58,25 @@ namespace Trinity
                 Logger.LogDebug(LogCategory.CacheManagement, "Error while reading Rotation/Facing: {0}", ex.ToString());
             }
 
-            /*
-            *  TeamID  - check once for all units except bosses (which can potentially change teams - Belial, Cydea)
-            */
-            string teamIdHash = "teamId.RActorId=" + CurrentCacheObject.RActorGuid + ".ActorSnoId=" + CurrentCacheObject.ActorSNO + ".WorldId=" + Player.WorldID;
 
-            int teamId;
-            if (!CurrentCacheObject.IsBoss && GenericCache.ContainsKey(teamIdHash))
-            {
-                teamId = (int)GenericCache.GetObject(teamIdHash).Value;
-            }
-            else
-            {
-                teamId = CurrentCacheObject.Unit.TeamId;
+            //string teamIdHash = "teamId.RActorId=" + CurrentCacheObject.RActorGuid + ".ActorSnoId=" + CurrentCacheObject.ActorSNO + ".WorldId=" + Player.WorldID;
 
-                GenericCache.AddToCache(new GenericCacheObject
-                {
-                    Key = teamIdHash,
-                    Value = teamId,
-                    Expires = DateTime.UtcNow.AddMinutes(60)
-                });
-            }
+            //int teamId;
+            //if (!CurrentCacheObject.IsBoss && GenericCache.ContainsKey(teamIdHash))
+            //{
+            //    teamId = (int)GenericCache.GetObject(teamIdHash).Value;
+            //}
+            //else
+            //{
+            //    teamId = CurrentCacheObject.Unit.TeamId;
+
+            //    GenericCache.AddToCache(new GenericCacheObject
+            //    {
+            //        Key = teamIdHash,
+            //        Value = teamId,
+            //        Expires = DateTime.UtcNow.AddMinutes(60)
+            //    });
+            //}
 
             CacheObjectIsBountyObjective();
 
@@ -136,6 +134,7 @@ namespace Trinity
                 Logger.LogDebug("Error refreshing IsQuestGiver");
             }
 
+            var teamId = CurrentCacheObject.TeamId;
             if ((teamId == 1 || teamId == 2 || teamId == 17))
             {
                 addToCache = false;
@@ -301,7 +300,7 @@ namespace Trinity
         {
 
 
-            if (!DataDictionary.IgnoreUntargettableAttribute.Contains(CurrentCacheObject.ActorSNO) && unit.IsUntargetable)
+            if (unit.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(CurrentCacheObject.ActorSNO))
             {
                 AddToCache = false;
                 c_IgnoreSubStep = "IsUntargetable";
@@ -445,32 +444,43 @@ namespace Trinity
             return monsterType;
         }
 
-        private static bool RefreshStepCachedSummons()
+        private static bool RefreshStepCachedSummons(DiaUnit unit)
         {
-            if (CurrentCacheObject.Unit.IsFullyValid())
-            {
+            var sno = CurrentCacheObject.ActorSNO;
+            var actorClass = Player.ActorClass;
+
+            if (!CurrentCacheObject.IsUnit || CurrentCacheObject.IsMe)
+                return true;
+
+                var isHostile = CurrentCacheObject.TeamId != Player.TeamId && CurrentCacheObject.IsHostile;
+
                 try
                 {
-                    
-                    var team = CurrentCacheObject.Object.CommonData.TeamId;
-                    if (team == Player.TeamId)
+                    if (!isHostile) // Phalanx Avatars are ActorType.ClientEffect
                     {
-                        // 0.3ms
-                        CurrentCacheObject.SummonedByACDId = CurrentCacheObject.Unit.SummonedByACDId;
+                        // 0.3ms very slow
+                        CurrentCacheObject.SummonedByACDId = unit.SummonedByACDId;
                     }
                 }
                 catch
                 {
                     // Only part of a ReadProcessMemory or WriteProcessMemory request was completed
                 }
+
                 try
                 {
-                    CurrentCacheObject.IsSummoner = CurrentCacheObject.Unit.SummonerId > 0;
+                    if (isHostile)
+                    {
+                        CurrentCacheObject.IsSummoner = unit.SummonerId > 0;
+                    }
                 }
                 catch
                 {
                     // Only part of a ReadProcessMemory or WriteProcessMemory request was completed 
                 }
+
+                if (CurrentCacheObject.SummonedByACDId <= 0)
+                    return true;
 
                 // SummonedByACDId is not ACDId, it's DynamicID
                 if (CurrentCacheObject.SummonedByACDId == Player.MyDynamicID)
@@ -479,9 +489,9 @@ namespace Trinity
                 }
 
                 // Count up Mystic Allys, gargantuans, and zombies - if the player has those skills
-                if (Player.ActorClass == ActorClass.Monk)
+                if (actorClass == ActorClass.Monk)
                 {
-                    if (DataDictionary.MysticAllyIds.Contains(CurrentCacheObject.ActorSNO))
+                    if (DataDictionary.MysticAllyIds.Contains(sno))
                     {
                         if (CurrentCacheObject.IsSummonedByPlayer)
                         {
@@ -491,10 +501,11 @@ namespace Trinity
                         return false;
                     }
                 }
+                
                 // Count up Demon Hunter pets
-                if (Player.ActorClass == ActorClass.DemonHunter)
+                else if (actorClass == ActorClass.DemonHunter)
                 {
-                    if (DataDictionary.DemonHunterPetIds.Contains(CurrentCacheObject.ActorSNO))
+                    if (DataDictionary.DemonHunterPetIds.Contains(sno))
                     {
                         if (CurrentCacheObject.IsSummonedByPlayer)
                         {
@@ -504,10 +515,11 @@ namespace Trinity
                         return false;
                     }
                 }
+                
                 // Count up Demon Hunter sentries
-                if (Player.ActorClass == ActorClass.DemonHunter)
+                else if (actorClass == ActorClass.DemonHunter)
                 {
-                    if (DataDictionary.DemonHunterSentryIds.Contains(CurrentCacheObject.ActorSNO))
+                    if (DataDictionary.DemonHunterSentryIds.Contains(sno))
                     {
                         if (CurrentCacheObject.IsSummonedByPlayer && CurrentCacheObject.Distance < 60f)
                         {
@@ -518,9 +530,9 @@ namespace Trinity
                     }
                 }
                 // Count up Wiz hydras
-                if (Player.ActorClass == ActorClass.Wizard)
+                else if (actorClass == ActorClass.Wizard)
                 {
-                    if (DataDictionary.WizardHydraIds.Contains(CurrentCacheObject.ActorSNO))
+                    if (DataDictionary.WizardHydraIds.Contains(sno))
                     {
                         if (CurrentCacheObject.IsSummonedByPlayer && CurrentCacheObject.Distance < 60f)
                         {
@@ -532,9 +544,9 @@ namespace Trinity
                 }
 
                 // Count up Wiz hydras
-                if (Player.ActorClass == ActorClass.Witchdoctor)
+                else if (actorClass == ActorClass.Witchdoctor)
                 {
-                    if (DataDictionary.SpiderPetIds.Contains(CurrentCacheObject.ActorSNO))
+                    if (DataDictionary.SpiderPetIds.Contains(sno))
                     {
                         if (CurrentCacheObject.IsSummonedByPlayer && CurrentCacheObject.Distance < 100f)
                         {
@@ -546,9 +558,9 @@ namespace Trinity
                 }                                
 
                 // Count up zombie dogs and gargantuans next
-                if (Player.ActorClass == ActorClass.Witchdoctor)
+                else if (actorClass == ActorClass.Witchdoctor)
                 {
-                    if (DataDictionary.GargantuanIds.Contains(CurrentCacheObject.ActorSNO))
+                    if (DataDictionary.GargantuanIds.Contains(sno))
                     {
                         if (CurrentCacheObject.IsSummonedByPlayer)
                         {
@@ -558,7 +570,7 @@ namespace Trinity
                         return false;
                     }
 
-                    if (DataDictionary.ZombieDogIds.Contains(CurrentCacheObject.ActorSNO))
+                    if (DataDictionary.ZombieDogIds.Contains(sno))
                     {
                         if (CurrentCacheObject.IsSummonedByPlayer)
                         {
@@ -568,7 +580,7 @@ namespace Trinity
                         return false;
                     }
 
-                    if (DataDictionary.FetishArmyIds.Contains(CurrentCacheObject.ActorSNO))
+                    if (DataDictionary.FetishArmyIds.Contains(sno))
                     {
                         if (CurrentCacheObject.IsSummonedByPlayer)
                         {
@@ -580,9 +592,9 @@ namespace Trinity
                 }
                 
                 // Count up Barb ancients
-                if (Player.ActorClass == ActorClass.Barbarian)
+                else if (actorClass == ActorClass.Barbarian)
                 {
-                    if (DataDictionary.AncientIds.Contains(CurrentCacheObject.ActorSNO))
+                    if (DataDictionary.AncientIds.Contains(sno))
                     {
                         if (CurrentCacheObject.IsSummonedByPlayer)
                         {
@@ -592,7 +604,7 @@ namespace Trinity
                         return false;
                     }
                 }
-            }
+    
             return true;
         }
 

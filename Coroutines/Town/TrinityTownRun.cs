@@ -39,9 +39,11 @@ namespace Trinity.Coroutines.Town
 
         public static DateTime DontAttemptTownRunUntil = DateTime.MinValue;
 
+        private static int _catastrophicErrorCount;
+
         static TrinityTownRun()
         {
-            
+            GameEvents.OnGameJoined += (sender, args) => _catastrophicErrorCount = 0;
         }
 
         public static async Task<bool> Execute()
@@ -124,11 +126,16 @@ namespace Trinity.Coroutines.Town
                     if (!ActorManager.Items.Any())
                     {
                         Logger.LogError("Something went terribly wrong, no items found");
-
-                        if (!ActorManager.IsStarted)
+                        _catastrophicErrorCount++;
+                        ActorManager.Reset();
+                        
+                        if (_catastrophicErrorCount > 2)
                         {
-                            //ActorManager.Start();
-                        }
+                            Logger.LogError("Unable to recover from error state, still cant read items properly");
+                            ZetaDia.Service.Party.LeaveGame(true);
+                            return false;
+                        }     
+                        continue;                   
                     }
 
                     await Coroutine.Yield();
@@ -200,6 +207,8 @@ namespace Trinity.Coroutines.Town
             }
             return false;
         }
+
+
 
         public static async Task<bool> Any(params Func<Task<bool>>[] taskProducers)
         {

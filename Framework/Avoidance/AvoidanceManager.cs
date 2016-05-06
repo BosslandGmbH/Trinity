@@ -98,11 +98,6 @@ namespace Trinity.Framework.Avoidance
 
         protected override void OnPulse()
         {
-            Update();
-        }
-
-        public void Update()
-        {
             if (!TrinityPlugin.IsPluginEnabled || ZetaDia.IsLoadingWorld)
                 return;
 
@@ -203,8 +198,8 @@ namespace Trinity.Framework.Avoidance
                 var activeAvoidanceIds = new HashSet<int>();
                 var kiteFromNodes = new AvoidanceLayer();
 
-                var nodePool = Grid.GetNodesInRadius(TrinityPlugin.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), MaxDistance).Select(n => n.Reset()).ToList();
-                var allNodes = Grid.GetNodesInRadius(TrinityPlugin.Player.Position, node => node != null, MaxDistance).ToList();
+                var nodePool = Grid.GetNodesInRadius(TrinityPlugin.Player.Position, node => node.IsWalkable, MaxDistance).Select(n => n.Reset()).ToList();
+                //var allNodes = Grid.GetNodesInRadius(TrinityPlugin.Player.Position, node => node != null, MaxDistance).ToList();
                 var nearestNodes = Grid.GetNodesInRadius(TrinityPlugin.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), TrinityPlugin.Settings.Avoidance.AvoiderLocalRadius);
                 var weightSettings = TrinityPlugin.Settings.Avoidance.WeightingOptions;
 
@@ -232,7 +227,7 @@ namespace Trinity.Framework.Avoidance
                         UpdateObstacleFlags(obstacle, obstacleNodes);
                     }
 
-                    UpdateBacktrackFlags();
+                    //UpdateBacktrackFlags();
                     
                     foreach (var avoidance in Core.Avoidance.CurrentAvoidances)
                     {
@@ -320,7 +315,7 @@ namespace Trinity.Framework.Avoidance
                         throw;
                 }
 
-                AllNodes = allNodes;
+                //AllNodes = allNodes;
                 CurrentNodes = nodePool; //.OrderBy(n => n.Weight).ThenByDescending(n => n.Distance).ToList();
                 SafeNodesByWeight = safeNodes.Nodes.OrderBy(n => n.Weight).ThenByDescending(n => n.Distance);
                 SafeNodesByDistance = safeNodes.Nodes.OrderBy(n => n.Distance);
