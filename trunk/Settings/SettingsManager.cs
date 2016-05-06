@@ -28,7 +28,13 @@ namespace Trinity.Settings
                     return;
 
                 Logger.LogNormal($"Saving file to {filePath}");
-                UILoader.DataContext.ViewModel.SaveToFile(filePath);
+
+                // Disable notification section because of sensitive information.
+                var exportModel = new TrinitySetting();
+                UILoader.DataContext.ViewModel.CopyTo(exportModel);
+                exportModel.Notification = null;
+
+                exportModel.SaveToFile(filePath);
             }
             catch (Exception ex)
             {
@@ -75,6 +81,10 @@ namespace Trinity.Settings
                 // User still has to click save for it to actually be applied.                
                 var newSettings = new TrinitySetting();
                 newSettings.LoadSettingsFromFile(filePath);
+
+                // Disable notification section because of sensitive information.
+                newSettings.Notification = null;
+
                 UILoader.DataContext.LoadSettings(newSettings);
                 
             }

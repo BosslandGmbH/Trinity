@@ -55,8 +55,8 @@ namespace Trinity.Helpers
         {
             if (IsCacheValid) 
                 return CachedValue;
-
-            return retriever();
+                        
+            return CachedValue = retriever();
         }
 
         internal void SetValueOverride(T value)
