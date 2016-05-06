@@ -107,13 +107,7 @@ namespace Trinity.Items
                 return TrinityPlugin.Settings.Loot.TownRun.StashVanityItems;
             }
 
-            if (DataDictionary.PetTable.Contains(item.GameBalanceId))
-            {
-                Logger.Log($"Cosmetic, Pet or Transmog Found - Auto Stashing. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
-                return true;
-            }
-
-            if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.GameBalanceId))
+            if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.GameBalanceId) || DataDictionary.PetSnoIds.Contains(item.ActorSnoId))
             {
                 Logger.Log($"Pet found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
@@ -125,7 +119,7 @@ namespace Trinity.Items
                 return true;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.GameBalanceId))
+            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.GameBalanceId) || DataDictionary.WingsSnoIds.Contains(item.ActorSnoId))
             {
                 Logger.Log($"Wings found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
@@ -1107,7 +1101,7 @@ namespace Trinity.Items
                 return TrinityPlugin.Settings.Loot.Pickup.PickupDeathsBreath;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.BalanceID))
+            if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.BalanceID) || DataDictionary.PetSnoIds.Contains(item.ActorSNO))
             {
                 Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
                 return true;
@@ -1119,7 +1113,7 @@ namespace Trinity.Items
                 return true;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.BalanceID))
+            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.BalanceID) || DataDictionary.WingsSnoIds.Contains(item.ActorSNO))
             {
                 Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
                 return true;
