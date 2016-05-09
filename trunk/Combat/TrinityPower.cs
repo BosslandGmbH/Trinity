@@ -20,11 +20,11 @@ namespace Trinity
         // 20 == 50 tps or 1/50th a second
         private static int TickTimeMs
         {
-            get { return 1 / BotMain.TicksPerSecond * 1000; }
+            get { return (int)(1 / (double)BotMain.TicksPerSecond * 1000); }
         }
 
-        private double? _WaitBeforeUseDelay;
-        private double? _WaitAfterUseDelay;
+        private double? _waitBeforeUseDelay;
+        private double? _waitAfterUseDelay;
 
         public SNOPower SNOPower { get; set; }
         /// <summary>
@@ -52,7 +52,7 @@ namespace Trinity
         /// <summary>
         /// The number of 1/10th second intervals we should wait after casting this power
         /// </summary>
-        public float WaitTicksAfterUse { get; set; } = 3;
+        public float WaitTicksAfterUse { get; set; } = 1;
 
         /// <summary>
         /// The DateTime when the power was assigned
@@ -76,8 +76,8 @@ namespace Trinity
         /// </summary>        
         public double WaitBeforeUseDelay
         {
-            get { return _WaitBeforeUseDelay ?? (_WaitBeforeUseDelay = WaitTicksBeforeUse * TickTimeMs).Value; }
-            set { _WaitBeforeUseDelay  = value; }
+            get { return _waitBeforeUseDelay ?? (_waitBeforeUseDelay = WaitTicksBeforeUse * TickTimeMs).Value; }
+            set { _waitBeforeUseDelay = value; }
         }
 
         /// <summary>
@@ -85,8 +85,8 @@ namespace Trinity
         /// </summary>
         public double WaitAfterUseDelay
         {
-            get { return _WaitAfterUseDelay ?? (_WaitAfterUseDelay = WaitTicksAfterUse * TickTimeMs).Value; }
-            set { _WaitAfterUseDelay = value; }
+            get { return _waitAfterUseDelay ?? (_waitAfterUseDelay = WaitTicksAfterUse * TickTimeMs).Value; }
+            set { _waitAfterUseDelay = value; }
         }
 
         /// <summary>
@@ -109,7 +109,8 @@ namespace Trinity
         {
             get
             {
-                return TrinityPlugin.TimeSinceUse(SNOPower);
+                return SpellHistory.TimeSinceUse(SNOPower).TotalMilliseconds;
+                //return TrinityPlugin.TimeSinceUse(SNOPower);
             }
         }
 
@@ -214,8 +215,6 @@ namespace Trinity
             TargetPosition = Vector3.Zero;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
             TargetACDGUID = -1;
-            WaitTicksBeforeUse = 1;
-            WaitTicksAfterUse = 3;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
@@ -233,8 +232,6 @@ namespace Trinity
             TargetPosition = position;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
             TargetACDGUID = -1;
-            WaitTicksBeforeUse = 1;
-            WaitTicksAfterUse = 3;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
@@ -279,7 +276,7 @@ namespace Trinity
             WaitTicksAfterUse = waitTicksAfterUse;
             PowerAssignmentTime = DateTime.UtcNow;
         }
-      
+
         public bool Equals(TrinityPower other)
         {
             return SNOPower == other.SNOPower &&
@@ -344,7 +341,7 @@ namespace Trinity
 
         public int MaxFailedCastReTryAttempts { get; set; }
 
-        public bool WaitForAttackToFinish
+        public bool ShouldWaitForAttackToFinish
         {
             get { return _waitForAttackToFinishPowers.Contains(this.SNOPower); }
         }

@@ -183,12 +183,14 @@ namespace Trinity
                     PlayerMover.TimeLastRecordedPosition = DateTime.UtcNow;
 
                     // Time based wait delay for certain powers with animations
-                    if (CombatBase.CurrentPower != null && (CombatBase.CurrentPower.ShouldWaitAfterUse && _isWaitingAfterPower || _isWaitingBeforePower && CombatBase.CurrentPower.ShouldWaitBeforeUse))
+                    if (CombatBase.CurrentPower != null)
                     {
-                        var type = _isWaitingAfterPower ? "IsWaitingAfterPower" : "IsWaitingBeforePower";
-                        _waitedTicks++;
-                        Logger.LogVerbose("Waiting... {0} TicksWaited={1}", type, _waitedTicks);
-                        return GetRunStatus(RunStatus.Running, type);
+                        if (CombatBase.CurrentPower.ShouldWaitAfterUse && _isWaitingAfterPower || _isWaitingBeforePower && CombatBase.CurrentPower.ShouldWaitBeforeUse) {
+                            var type = _isWaitingAfterPower ? "IsWaitingAfterPower" : "IsWaitingBeforePower";
+                            _waitedTicks++;
+                            Logger.LogVerbose($"Waiting... {type} Power={CombatBase.CurrentPower.SNOPower} TicksWaited={_waitedTicks}");
+                            return GetRunStatus(RunStatus.Running, type);
+                        }
                     }
 
                     if (ShouldWaitForLootDrop)
@@ -196,14 +198,19 @@ namespace Trinity
                         Logger.LogVerbose("Wait for loot drop");
                     }
 
-                    if (WaitForAttackToFinish)
+                    if (_isWaitingForAttackToFinish)
                     {
                         Logger.LogVerbose("Wait for Attack to finish");
                     }
 
                     if (_isWaitingBeforePower)
                     {
-                        Logger.LogVerbose("Wait for Power");
+                        Logger.LogVerbose("Wait Before Power Finished");
+                    }
+
+                    if (_isWaitingAfterPower)
+                    {
+                        Logger.LogVerbose("Wait After Power Finished");
                     }
 
                     if (_isWaitingForPotion)
@@ -241,14 +248,14 @@ namespace Trinity
                     }                    
 
                     // Some skills we need to wait to finish (like cyclone strike while epiphany is active)
-                    if (WaitForAttackToFinish)
+                    if (_isWaitingForAttackToFinish)
                     {
                         if (ZetaDia.Me.LoopingAnimationEndTime > 0 || ZetaDia.Me.CommonData.AnimationState == AnimationState.Attacking || ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting || ZetaDia.Me.CommonData.AnimationState == AnimationState.Transform)
                         {
                             Logger.LogVerbose(LogCategory.Behavior, $"Waiting for Attack to Finish CurrentPower={CombatBase.CurrentPower}");
                             return GetRunStatus(RunStatus.Running, "WaitForAttackToFinish");
                         }
-                        WaitForAttackToFinish = false;
+                        _isWaitingForAttackToFinish = false;
                     }
 
                     // See if we have been "newly rooted", to force target updates
@@ -499,7 +506,7 @@ namespace Trinity
         /// </summary>
         private static bool ThrottleActionPerSecond(out RunStatus runStatus)
         {            
-            const int measureTimeMs = 200;
+            const int measureTimeMs = 500;
             const int actionLimit = 4;
             DateTime actionLimitTime;
 
@@ -517,8 +524,16 @@ namespace Trinity
                 LastActionTimes.RemoveAt(0);
             }
 
-            var target = ZetaDia.Actors.GetActorByACDId(CurrentTarget.ACDGuid) as DiaUnit;
-            Logger.Log($"CurrentTarget={CurrentTarget?.InternalName} SNO={CurrentTarget?.ActorSNO} Distance={CurrentTarget?.Distance} CurrentPower={CombatBase.CurrentPower} TargetAcd={CurrentTarget?.ACDGuid} TargetValid={target.IsFullyValid()} TargetAlive={target?.IsAlive} TargetHealth={CurrentTarget.HitPoints} PowerTargetDistance={CombatBase.CurrentPower.TargetPosition.Distance(ZetaDia.Me.Position)} TargetDistance={target?.Distance} TimeSinceLastUse={SpellHistory.TimeSinceUse(CombatBase.CurrentPower.SNOPower)}");
+            //if (CurrentTarget != null)
+            //{
+            //    var target = ZetaDia.Actors.GetActorByACDId(CurrentTarget.ACDGuid) as DiaUnit;
+
+            //    Logger.Log($"CurrentTarget={CurrentTarget?.InternalName} SNO={CurrentTarget?.ActorSNO} Distance={CurrentTarget?.Distance} " +
+            //               $"CurrentPower={CombatBase.CurrentPower} TargetAcd={CurrentTarget?.ACDGuid} TargetValid={target.IsFullyValid()} " +
+            //               $"TargetAlive={target?.IsAlive} TargetHealth={CurrentTarget.HitPoints} " +
+            //               $"PowerTargetDistance={CombatBase.CurrentPower.TargetPosition.Distance(ZetaDia.Me.Position)} " +
+            //               $"TargetDistance={target?.Distance} TimeSinceLastUse={SpellHistory.TimeSinceUse(CombatBase.CurrentPower.SNOPower)}");
+            //}
 
             // Wait until NTh action happend more than than half the measure time ago          
             var timeSince = DateTime.UtcNow.Subtract(actionLimitTime).TotalMilliseconds;
@@ -1593,12 +1608,12 @@ namespace Trinity
 
                     if (PowerManager.CanCast(CombatBase.CurrentPower.SNOPower, out flags))
                     {                       
-                        Logger.Log(LogCategory.Targetting, "Casting {0} at {1} WorldId={2} ACDId={3} CastOnSelf={4} Flags={5} IsDeadZeta={6} DeadPlayers={7}",
-                            CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, 
-                            targetACDGuid, CombatBase.CurrentPower.IsCastOnSelf, flags, ZetaDia.Me.IsDead, ZetaDia.Actors.GetActorsOfType<DiaPlayer>().Any(x => x.IsDead));
+                        //Logger.Log(LogCategory.Targetting, "Casting {0} at {1} WorldId={2} ACDId={3} CastOnSelf={4} Flags={5} IsDeadZeta={6} DeadPlayers={7}",
+                        //    CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, 
+                        //    targetACDGuid, CombatBase.CurrentPower.IsCastOnSelf, flags, ZetaDia.Me.IsDead, ZetaDia.Actors.GetActorsOfType<DiaPlayer>().Any(x => x.IsDead));
 
-                        if (powerBuff != null && powerBuff.WaitForAttackToFinish)
-                            WaitForAttackToFinish = true;
+                        if (powerBuff != null && powerBuff.ShouldWaitForAttackToFinish)
+                            _isWaitingForAttackToFinish = true;
 
                         usePowerResult = ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, targetACDGuid);
 
@@ -1861,6 +1876,6 @@ namespace Trinity
             }
         }
 
-        public static bool WaitForAttackToFinish { get; set; }
+        public static bool _isWaitingForAttackToFinish { get; set; }
     }
 }
