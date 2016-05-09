@@ -518,8 +518,7 @@ namespace Trinity
             }
 
             var target = ZetaDia.Actors.GetActorByACDId(CurrentTarget.ACDGuid) as DiaUnit;
-
-            Logger.Log($"CurrentTarget={CurrentTarget.InternalName} SNO={CurrentTarget.ActorSNO} Distance={CurrentTarget.Distance} CurrentPower={CombatBase.CurrentPower} TargetAcd={CurrentTarget.ACDGuid} TargetValid={target.IsFullyValid()} TargetAlive={target?.IsAlive} TargetHealth={CurrentTarget.HitPoints} PowerTargetDistance={CombatBase.CurrentPower.TargetPosition.Distance(ZetaDia.Me.Position)} TargetDistance={target?.Distance} TimeSinceLastUse={SpellHistory.TimeSinceUse(CombatBase.CurrentPower.SNOPower)}");
+            Logger.Log($"CurrentTarget={CurrentTarget?.InternalName} SNO={CurrentTarget?.ActorSNO} Distance={CurrentTarget?.Distance} CurrentPower={CombatBase.CurrentPower} TargetAcd={CurrentTarget?.ACDGuid} TargetValid={target.IsFullyValid()} TargetAlive={target?.IsAlive} TargetHealth={CurrentTarget.HitPoints} PowerTargetDistance={CombatBase.CurrentPower.TargetPosition.Distance(ZetaDia.Me.Position)} TargetDistance={target?.Distance} TimeSinceLastUse={SpellHistory.TimeSinceUse(CombatBase.CurrentPower.SNOPower)}");
 
             // Wait until NTh action happend more than than half the measure time ago          
             var timeSince = DateTime.UtcNow.Subtract(actionLimitTime).TotalMilliseconds;

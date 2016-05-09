@@ -171,7 +171,7 @@ namespace Trinity.Framework.Avoidance
                     return false;
                 }
 
-                if (Settings.DontAvoidWhenBlocked && PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 5000)
+                if (Settings.DontAvoidWhenBlocked && PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 5000 && !Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position))
                 {
                     Logger.Log(LogCategory.Avoidance, "Not kiting because blocked");
                     return false;
