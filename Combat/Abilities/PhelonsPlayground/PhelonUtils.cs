@@ -211,11 +211,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             get
             {
-                foreach (var item in GetInnerSanctuaryDiaObjects(35).ToList().Where(item => GetOculusBuffDiaObjects(35).OrderBy(x => x.Distance)
-                    .Select(y => y.Position)
-                    .Any(z => z.Distance(item.Position) < 7)))
+                foreach (var item in GetInnerSanctuaryDiaObjects(35).Select(x => x.Position).ToList())
                 {
-                    return item.Position;
+                    var occPoint = GetOculusBuffDiaObjects(35).OrderBy(x => x.Distance)
+                        .Select(y => y.Position)
+                        .FirstOrDefault(z => z.Distance2D(item) < 7);
+                    if (occPoint != Vector3.Zero)
+                        return MathEx.CalculatePointFrom(item, occPoint, item.Distance2D(occPoint)/2);
                 }
                 return Vector3.Zero;
             }
