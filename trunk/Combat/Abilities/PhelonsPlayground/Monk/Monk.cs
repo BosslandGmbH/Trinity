@@ -20,7 +20,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             }
         }
 
-        public static TrinityPower GetPower  ()
+        public static TrinityPower GetPower()
         {
             if (Player.IsInTown)
                 return null;

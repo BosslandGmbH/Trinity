@@ -1,3 +1,4 @@
+using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 
@@ -29,7 +30,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 {
                     return
                         Player.PrimaryResource >= 25 &&
-                        CanCast(SNOPower.Wizard_MagicWeapon, CanCastFlags.NoTimer) &&
+                        Skills.Wizard.MagicWeapon.CanCast() &&
                         !GetHasBuff(SNOPower.Wizard_MagicWeapon);
                 }
             }
@@ -43,7 +44,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 get
                 {
-                    if (!CanCast(SNOPower.Wizard_Familiar) || Player.PrimaryResource < 25)
+                    if (!Skills.Wizard.Familiar.CanCast() || Player.PrimaryResource < 25)
                         return false;
 
                     return !GetHasBuff(SNOPower.Wizard_Familiar);
@@ -60,47 +61,32 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (Player.PrimaryResource >= 25)
                 {
                     // Energy armor as priority cast if available and not buffed
-                    if (Hotbar.Contains(SNOPower.Wizard_EnergyArmor))
+                    if (Skills.Wizard.EnergyArmor.CanCast() && !GetHasBuff(SNOPower.Wizard_EnergyArmor))
                     {
-                        if (!GetHasBuff(SNOPower.Wizard_EnergyArmor))
-                        {
-                            {
-                                buffPower = new TrinityPower(SNOPower.Wizard_EnergyArmor);
-                                return true;
-                            }
-                        }
+                        buffPower = new TrinityPower(SNOPower.Wizard_EnergyArmor);
+                        return true;
                     }
                     // Ice Armor
-                    else if (Hotbar.Contains(SNOPower.Wizard_IceArmor))
+                    if (Skills.Wizard.IceArmor.CanCast() && !GetHasBuff(SNOPower.Wizard_IceArmor))
                     {
-                        if (!GetHasBuff(SNOPower.Wizard_IceArmor) &&
-                            CanCast(SNOPower.Wizard_IceArmor, CanCastFlags.NoTimer))
-                        {
-                            {
-                                buffPower = new TrinityPower(SNOPower.Wizard_IceArmor);
-                                return true;
-                            }
-                        }
+                        buffPower = new TrinityPower(SNOPower.Wizard_IceArmor);
+                        return true;
                     }
                     // Storm Armor
-                    else if (Hotbar.Contains(SNOPower.Wizard_StormArmor))
+                    if (Skills.Wizard.StormArmor.CanCast() && !GetHasBuff(SNOPower.Wizard_StormArmor))
                     {
-                        if (!GetHasBuff(SNOPower.Wizard_StormArmor) &&
-                            CanCast(SNOPower.Wizard_StormArmor, CanCastFlags.NoTimer))
-                        {
-                            {
-                                buffPower = new TrinityPower(SNOPower.Wizard_StormArmor);
-                                return true;
-                            }
-                        }
+                        buffPower = new TrinityPower(SNOPower.Wizard_StormArmor);
+                        return true;
                     }
                 }
+
                 buffPower = null;
                 return false;
             }
         }
     }
 }
+
 //private static bool CanTeleport => CanCast(SNOPower.Wizard_Teleport, CanCastFlags.NoTimer) ||
 //                                   CanCast(SNOPower.Wizard_Archon_Teleport);
 

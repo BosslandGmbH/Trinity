@@ -4,34 +4,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Reference;
+using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
 {
     partial class Monk
     {
+        internal static float cycloneStrikeRange = Runes.Monk.Implosion.IsActive ? 34f : 24f;
+        internal static float cycloneStrikeSpirit = Runes.Monk.EyeOfTheStorm.IsActive ? 80f : 100f;
         internal class Unconditional
         {
             public static TrinityPower PowerSelector()
             {
-                if (ShouldSpiritWalk)
-                    return CastSpiritWalk;
+                if (ShouldCycloneStrike)
+                    return CastCycloneStrike;
 
                 return null;
             }
+            private static Vector3 LastPullLocation = Vector3.Zero;
 
-            private static bool ShouldSpiritWalk
+            private static bool ShouldCycloneStrike
             {
                 get
                 {
-                    return Skills.WitchDoctor.SpiritWalk.CanCast() &&
-                           (PhelonUtils.ClosestHealthGlobe() != null || Player.CurrentHealthPct < 0.5);
+                    return IszDPS && CurrentTarget == null && Skills.Monk.CycloneStrike.CanCast() &&
+                           Player.PrimaryResource > cycloneStrikeSpirit && LastPullLocation.Distance(Player.Position) > 20;
                 }
             }
 
-            private static TrinityPower CastSpiritWalk
+            private static TrinityPower CastCycloneStrike
             {
-                get { return new TrinityPower(SNOPower.Witchdoctor_SpiritWalk, 0f, Player.Position); }
+                get
+                {
+                    LastPullLocation = Player.Position;
+                    return new TrinityPower(SNOPower.Monk_CycloneStrike);
+                }
+
             }
         }
     }

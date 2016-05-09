@@ -11,6 +11,7 @@ using Trinity.Framework.Actors;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Helpers;
 using Trinity.Items;
+using Trinity.Movement;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
@@ -89,8 +90,8 @@ namespace Trinity
                         var behaviorType = ProfileManager.CurrentProfileBehavior.GetType();
                         behaviorName = behaviorType.Name;
                         if (!Settings.Combat.Misc.ProfileTagOverride && CombatBase.IsQuestingMode ||
-                            behaviorType == typeof (WaitTimerTag) ||
-                            behaviorType == typeof (UseTownPortalTag) ||
+                            behaviorType == typeof(WaitTimerTag) ||
+                            behaviorType == typeof(UseTownPortalTag) ||
                             behaviorName.ToLower().Contains("townrun") ||
                             behaviorName.ToLower().Contains("townportal"))
                         {
@@ -103,7 +104,6 @@ namespace Trinity
                     // Highest weight found as we progress through, so we can pick the best target at the end (the one with the highest weight)
                     HighestWeightFound = 0;
 
-                    var isBlockedByMonsters = ObjectCache.Count(u => u.HitPoints > 0 && u.Distance <= 8f) >= 3;
                     var isStuck = Navigator.StuckHandler.IsStuck;
 
                     var monstersWithReflectActive = new List<TrinityCacheObject>();
@@ -132,7 +132,7 @@ namespace Trinity
                     if (Settings.Combat.Misc.GoblinPriority == GoblinPriority.Kamikaze)
                     {
                         var goblin = ObjectCache.FirstOrDefault(u => u.IsTreasureGoblin && u.Distance <= 200f);
-                        if (goblin != null && !isStuck && !isBlockedByMonsters)
+                        if (goblin != null && !isStuck && !PlayerMover.IsCompletelyBlocked)
                         {
                             CombatBase.IsDoingGoblinKamakazi = true;
                             CombatBase.KamakaziGoblin = goblin;
@@ -180,28 +180,41 @@ namespace Trinity
                         cacheObject.Weight = 0;
                         cacheObject.WeightInfo = string.Empty;
 
+                        if (PlayerMover.IsCompletelyBlocked)
+                        {
+                            cacheObject.WeightInfo += "PlayerBlocked";
+
+                            if (Settings.Combat.Misc.AttackWhenBlocked)
+                            {
+                                if (!cacheObject.IsUnit)
+                                {
+                                    cacheObject.Weight = 0;
+                                    cacheObject.WeightInfo += "Ignoring because we are blocked. ";
+                                    break;
+                                }
+                                if (cacheObject.Distance > 12f)
+                                {
+                                    cacheObject.Weight = 0;
+                                    cacheObject.WeightInfo += "Ignoring Blocked Far Away ";
+                                    break;
+                                }
+                                cacheObject.WeightInfo +=
+                                    string.Format("Adding {0} because we are Blocked.",
+                                        cacheObject.InternalName);
+                                cacheObject.Weight = MaxWeight + ObjectDistanceFormula(cacheObject);
+                                break;
+                            }
+                        }
+
                         if (CombatBase.IsDoingGoblinKamakazi)
                         {
-                            if (cacheObject.RActorGuid == CombatBase.KamakaziGoblin.RActorGuid && !isStuck && !isBlockedByMonsters)
+                            if (cacheObject.RActorGuid == CombatBase.KamakaziGoblin.RActorGuid && !isStuck)
                             {
                                 cacheObject.Weight = MaxWeight;
                                 cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Goblin Kamakazi Run ";
                                 break;
                             }
                             continue;
-                        }
-
-                        if (PlayerMover.IsBlocked && Settings.Combat.Misc.AttackWhenBlocked)
-                        {
-                            cacheObject.WeightInfo += "Player is blocked ";
-
-                            if (cacheObject.Distance > 15f && !cacheObject.IsBossOrEliteRareUnique && 
-                                cacheObject.Type != TrinityObjectType.ProgressionGlobe && !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSNO))
-                            {
-                                cacheObject.Weight = 0;
-                                cacheObject.WeightInfo += "Ignoring Blocked Far Away ";
-                                continue;
-                            }
                         }
 
                         if (cacheObject.TrinityItemType == TrinityItemType.HoradricRelic && Player.BloodShards >= Player.MaxBloodShards)
@@ -211,7 +224,7 @@ namespace Trinity
                             continue;
                         }
 
-                        if (Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
+                        if (Core.Avoidance.InCriticalAvoidance(cacheObject.Position) || Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
                         {
                             cacheObject.Weight = 0;
                             cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Intersected by Critical Avoidance.";
@@ -258,6 +271,30 @@ namespace Trinity
                                     #endregion
 
 
+                                    // Only ignore monsters we have a rift value for and below the settings threshold.
+                                    //if (RiftProgression.IsInRift && cacheObject.RiftValuePct > 0 &&
+                                    //    cacheObject.RiftValuePct < Settings.Combat.Misc.RiftValueIgnoreUnitsBelow &&
+                                    //    !cacheObject.IsBossOrEliteRareUnique && !PlayerMover.IsCompletelyBlocked)
+                                    //{
+                                    //    cacheObject.WeightInfo +=
+                                    //        string.Format("Ignoring {0} - low rift value ({1} / Setting={2})",
+                                    //            cacheObject.InternalName, cacheObject.RiftValuePct,
+                                    //            Settings.Combat.Misc.RiftValueIgnoreUnitsBelow);
+
+                                    //    break;
+                                    //}
+
+
+                                    cacheObject.WeightInfo =
+                                        string.Format(
+                                            "ShouldIgnore={3} nearbyCount={0} radiusDistance={1:0} hotspot={2} elitesInRange={4} hitPointsPc={5:0.0} summoner={6} quest={7} minimap={8} bounty={9} ",
+                                            nearbyTrashCount, cacheObject.RadiusDistance, isInHotSpot,
+                                            usingTownPortal, elitesInRangeOfUnit, cacheObject.HitPointsPct,
+                                            ignoreSummoner, cacheObject.IsQuestMonster, cacheObject.IsMinimapActive,
+                                            cacheObject.IsBountyObjective);
+
+                                    #region Basic Checks
+
                                     if (CombatBase.CombatMode == CombatMode.KillAll)
                                     {
                                         //Dist:                160     140     120     100      80     60     40      20      0
@@ -284,31 +321,6 @@ namespace Trinity
                                         cacheObject.WeightInfo += "Kill All Mode";
                                         break;
                                     }
-
-
-                                    // Only ignore monsters we have a rift value for and below the settings threshold.
-                                    //if (RiftProgression.IsInRift && cacheObject.RiftValuePct > 0 &&
-                                    //    cacheObject.RiftValuePct < Settings.Combat.Misc.RiftValueIgnoreUnitsBelow &&
-                                    //    !cacheObject.IsBossOrEliteRareUnique && !PlayerMover.IsBlocked)
-                                    //{
-                                    //    cacheObject.WeightInfo +=
-                                    //        string.Format("Ignoring {0} - low rift value ({1} / Setting={2})",
-                                    //            cacheObject.InternalName, cacheObject.RiftValuePct,
-                                    //            Settings.Combat.Misc.RiftValueIgnoreUnitsBelow);
-
-                                    //    break;
-                                    //}
-
-
-                                    cacheObject.WeightInfo =
-                                        string.Format(
-                                            "ShouldIgnore={3} nearbyCount={0} radiusDistance={1:0} hotspot={2} elitesInRange={4} hitPointsPc={5:0.0} summoner={6} quest={7} minimap={8} bounty={9} ",
-                                            nearbyTrashCount, cacheObject.RadiusDistance, isInHotSpot,
-                                            usingTownPortal, elitesInRangeOfUnit, cacheObject.HitPointsPct,
-                                            ignoreSummoner, cacheObject.IsQuestMonster, cacheObject.IsMinimapActive,
-                                            cacheObject.IsBountyObjective);
-
-                                    #region Basic Checks
 
                                     if (Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
                                     {
@@ -339,7 +351,7 @@ namespace Trinity
                                         }
                                     }
 
-                                    if (healthGlobeEmergency && cacheObject.Type != TrinityObjectType.HealthGlobe && !PlayerMover.IsBlocked)
+                                    if (healthGlobeEmergency && cacheObject.Type != TrinityObjectType.HealthGlobe)// && !PlayerMover.IsCompletelyBlocked)
                                     {
                                         cacheObject.WeightInfo +=
                                             string.Format("Ignoring {0} for Priority Health Globe",
@@ -347,7 +359,7 @@ namespace Trinity
                                         break;
                                     }
 
-                                    if (getHiPriorityShrine && cacheObject.Type != TrinityObjectType.Shrine && !PlayerMover.IsBlocked)
+                                    if (getHiPriorityShrine && cacheObject.Type != TrinityObjectType.Shrine)// && !PlayerMover.IsCompletelyBlocked)
                                     {
                                         cacheObject.WeightInfo +=
                                             string.Format("Ignoring {0} for Priority Shrine ",
@@ -355,7 +367,7 @@ namespace Trinity
                                         break;
                                     }
 
-                                    if (getHiPriorityContainer && cacheObject.Type != TrinityObjectType.Container && !PlayerMover.IsBlocked)
+                                    if (getHiPriorityContainer && cacheObject.Type != TrinityObjectType.Container)// && !PlayerMover.IsCompletelyBlocked)
                                     {
                                         cacheObject.WeightInfo +=
                                             string.Format("Ignoring {0} for Priority Container",
@@ -386,12 +398,12 @@ namespace Trinity
                                             case GoblinPriority.Prioritize:
                                                 // Super-high priority option below... 
                                                 cacheObject.WeightInfo += "GoblinPrioritize ";
-                                                cacheObject.Weight = 1000d;
+                                                cacheObject.Weight += 1000d;
                                                 break;
                                             case GoblinPriority.Kamikaze:
                                                 // KAMIKAZE SUICIDAL TREASURE GOBLIN RAPE AHOY!
                                                 cacheObject.WeightInfo += "GoblinKamikaze ";
-                                                cacheObject.Weight = MaxWeight;
+                                                cacheObject.Weight += MaxWeight;
                                                 break;
                                         }
                                     }
@@ -403,7 +415,8 @@ namespace Trinity
                                         cacheObject.WeightInfo +=
                                             string.Format("Adding {0} because we have a dead party member.",
                                                 cacheObject.InternalName);
-                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.Weight += MaxWeight;
+                                        break;
                                     }
                                     else if (cacheObject.IsInvulnerable &&
                                              Settings.Combat.Misc.IgnoreMonstersWhileReflectingDamage)
@@ -434,7 +447,7 @@ namespace Trinity
                                             string.Format("Adding {0} because of Town Portal",
                                                 cacheObject.InternalName);
                                     }
-                                    //else if (isInHotSpot && PlayerMover.IsBlocked)
+                                    //else if (isInHotSpot && PlayerMover.IsCompletelyBlocked)
                                     //{
                                     //    cacheObject.WeightInfo +=
                                     //        string.Format("Adding {0} due to being in Path or Hotspot ",
@@ -475,11 +488,6 @@ namespace Trinity
                                         //        string.Format("IsHighRiftValue {0}", cacheObject.RiftValuePct);
                                         //}
 
-                                        if (PlayerMover.IsBlocked)
-                                        {
-                                            cacheObject.WeightInfo += "PlayerBlocked";
-                                        }
-
                                         if (Settings.Combat.Misc.IgnoreHighHitePointTrash && !isAlwaysKillByValue)
                                         {
                                             HashSet<string> highHitPointTrashMobNames = new HashSet<string>
@@ -494,8 +502,7 @@ namespace Trinity
                                         };
 
                                             var unitName = cacheObject.InternalName.ToLower();
-                                            if (highHitPointTrashMobNames.Any(name => unitName.Contains(name)) &&
-                                                !PlayerMover.IsBlocked)
+                                            if (highHitPointTrashMobNames.Any(name => unitName.Contains(name)))
                                             {
                                                 cacheObject.WeightInfo +=
                                                     string.Format("Ignoring {0} for High Hp Mob.",
@@ -520,7 +527,7 @@ namespace Trinity
                                         }
                                         else if (cacheObject.HitPointsPct <
                                                  Settings.Combat.Misc.IgnoreTrashBelowHealthDoT &&
-                                                 cacheObject.HasDotDPS && !PlayerMover.IsBlocked)
+                                                 cacheObject.HasDotDPS)
                                         {
                                             cacheObject.WeightInfo +=
                                                 string.Format(
@@ -560,6 +567,7 @@ namespace Trinity
                                                 string.Format("Adding {0} for Elite Under Health Threshold.",
                                                     cacheObject.InternalName);
                                             cacheObject.Weight += MaxWeight;
+                                            break;
                                         }
                                         if (TargetUtil.NumMobsInRangeOfPosition(cacheObject.Position,
                                             CombatBase.CombatOverrides.EffectiveTrashRadius) >=
@@ -600,7 +608,7 @@ namespace Trinity
                                     #endregion
 
                                     var dist = ObjectDistanceFormula(cacheObject);
-                                    var last = LastTargetFormula(cacheObject);
+                                    var last = 0; //LastTargetFormula(cacheObject);
                                     var pack = PackDensityFormula(cacheObject);
                                     var health = UnitHealthFormula(cacheObject);
                                     var path = PathBlockedFormula(cacheObject);
@@ -624,258 +632,258 @@ namespace Trinity
                             #region Item
 
                             case TrinityObjectType.Item:
-                            {
-                                var isTwoSquare = true;
-                                var item = cacheObject.Item;
-                                if (item != null)
                                 {
-                                    var commonData = item.CommonData;
-                                    if (commonData != null && commonData.IsValid)
-                                        isTwoSquare = commonData.IsTwoSquareItem;
-                                }
-
-
-                                // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
-                                // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
-                                if (Player.WorldType != Act.OpenWorld && Player.CurrentQuestSNO == 257120 &&
-                                    Player.CurrentQuestStep == 108)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} For Quest";
-                                    break;
-                                }
-
-                                if (Player.ParticipatingInTieredLootRun && ObjectCache.Any(m => m.IsUnit && m.IsBoss))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} Loot Run Boss";
-                                    break;
-                                }
-
-                                if (Player.IsInTown)
-                                {
-                                    if (Settings.Loot.Pickup.DontPickupInTown)
+                                    var isTwoSquare = true;
+                                    var item = cacheObject.Item;
+                                    if (item != null)
                                     {
-                                        cacheObject.WeightInfo += $"Ignoring DontPickUpInTown Setting.";
+                                        var commonData = item.CommonData;
+                                        if (commonData != null && commonData.IsValid)
+                                            isTwoSquare = commonData.IsTwoSquareItem;
+                                    }
+
+
+                                    // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
+                                    // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
+                                    if (Player.WorldType != Act.OpenWorld && Player.CurrentQuestSNO == 257120 &&
+                                        Player.CurrentQuestStep == 108)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} For Quest";
                                         break;
                                     }
 
-                                    var testItem = ActorManager.GetItemByAnnId(cacheObject.AnnId);
-                                    if (testItem == null || !testItem.CanPickupItem())
+                                    if (Player.ParticipatingInTieredLootRun && ObjectCache.Any(m => m.IsUnit && m.IsBoss))
                                     {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - unable to pickup.";
-                                        break;
-                                    }
-                                }
-
-                                if (DropItems.DroppedItemAnnIds.Contains(cacheObject.AnnId))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring previously dropped item";
-                                }
-
-                                // Don't pickup items if we're doing a TownRun
-                                if (!TrinityItemManager.CachedIsValidTwoSlotBackpackLocation)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for TownRun";
-                                    break;
-                                }
-
-                                // Death's Breath Priority
-                                if (cacheObject.ActorSNO == 361989 || cacheObject.ActorSNO == 449044)
-                                {
-                                    // Ignore Non-Legendaries in AoE
-                                    if (Settings.Loot.Pickup.IgnoreNonLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
-                                            Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} Loot Run Boss";
                                         break;
                                     }
 
-                                    if (!Settings.Loot.Pickup.PickupDeathsBreath)
+                                    if (Player.IsInTown)
                                     {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} due to settings";
-                                        break;
-                                    }
-
-                                    cacheObject.Weight = MaxWeight;
-                                    cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - Death's Breath";
-                                    break;
-                                }
-
-                                // Give legendaries max weight, always
-                                if (cacheObject.ItemQuality >= ItemQuality.Legendary)
-                                {
-                                    // Ignore Legendaries in AoE
-                                    if (Settings.Loot.Pickup.IgnoreLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
-                                            Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                        if (Settings.Loot.Pickup.DontPickupInTown)
                                         {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
-                                        break;
-                                    }
+                                            cacheObject.WeightInfo += $"Ignoring DontPickUpInTown Setting.";
+                                            break;
+                                        }
 
-                                    // Ignore Legendaries near Elites
-                                    if (Settings.Loot.Pickup.IgnoreLegendaryNearElites &&
-                                        ObjectCache.Any(
-                                            u =>
-                                                u.IsEliteRareUnique &&
-                                                u.Position.Distance(cacheObject.Position) <= 15f))
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Legendary near Elite";
-                                        break;
-                                    }
-                                    cacheObject.Weight = MaxWeight;
-                                    cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - Legendary";
-                                    break;
-                                }
-
-                                //Non Legendaries
-                                if (cacheObject.ItemQuality < ItemQuality.Legendary)
-                                {
-                                    // Ignore Non-Legendaries in AoE
-                                    if (Settings.Loot.Pickup.IgnoreNonLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
-                                            Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                        var testItem = ActorManager.GetItemByAnnId(cacheObject.AnnId);
+                                        if (testItem == null || !testItem.CanPickupItem())
                                         {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
-                                        break;
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - unable to pickup.";
+                                            break;
+                                        }
                                     }
-                                    // Ignore Non-Legendaries near Elites
-                                    if (Settings.Loot.Pickup.IgnoreNonLegendaryNearElites &&
-                                        ObjectCache.Any(
-                                            u =>
-                                                u.IsEliteRareUnique &&
-                                                u.Position.Distance(cacheObject.Position) <= 15f))
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Non Legendary near Elite";
-                                        break;
-                                    }
-                                }
 
-                                if (cacheObject.ItemQuality == ItemQuality.Normal)
-                                {
-                                    cacheObject.Weight = MaxWeight;
-                                    cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - White Item";
+                                    if (DropItems.DroppedItemAnnIds.Contains(cacheObject.AnnId))
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring previously dropped item";
+                                    }
+
+                                    // Don't pickup items if we're doing a TownRun
+                                    if (!TrinityItemManager.CachedIsValidTwoSlotBackpackLocation)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for TownRun";
+                                        break;
+                                    }
+
+                                    // Death's Breath Priority
+                                    if (cacheObject.ActorSNO == 361989 || cacheObject.ActorSNO == 449044)
+                                    {
+                                        // Ignore Non-Legendaries in AoE
+                                        if (Settings.Loot.Pickup.IgnoreNonLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
+                                                Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
+                                            break;
+                                        }
+
+                                        if (!Settings.Loot.Pickup.PickupDeathsBreath)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} due to settings";
+                                            break;
+                                        }
+
+                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - Death's Breath";
+                                        break;
+                                    }
+
+                                    // Give legendaries max weight, always
+                                    if (cacheObject.ItemQuality >= ItemQuality.Legendary)
+                                    {
+                                        // Ignore Legendaries in AoE
+                                        if (Settings.Loot.Pickup.IgnoreLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
+                                                Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                        {
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
+                                            break;
+                                        }
+
+                                        // Ignore Legendaries near Elites
+                                        if (Settings.Loot.Pickup.IgnoreLegendaryNearElites &&
+                                            ObjectCache.Any(
+                                                u =>
+                                                    u.IsEliteRareUnique &&
+                                                    u.Position.Distance(cacheObject.Position) <= 15f))
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Legendary near Elite";
+                                            break;
+                                        }
+                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - Legendary";
+                                        break;
+                                    }
+
+                                    //Non Legendaries
+                                    if (cacheObject.ItemQuality < ItemQuality.Legendary)
+                                    {
+                                        // Ignore Non-Legendaries in AoE
+                                        if (Settings.Loot.Pickup.IgnoreNonLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
+                                                Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
+                                            break;
+                                        }
+                                        // Ignore Non-Legendaries near Elites
+                                        if (Settings.Loot.Pickup.IgnoreNonLegendaryNearElites &&
+                                            ObjectCache.Any(
+                                                u =>
+                                                    u.IsEliteRareUnique &&
+                                                    u.Position.Distance(cacheObject.Position) <= 15f))
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Non Legendary near Elite";
+                                            break;
+                                        }
+                                    }
+
+                                    if (cacheObject.ItemQuality == ItemQuality.Normal)
+                                    {
+                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - White Item";
+                                        break;
+                                    }
+
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                          //LastTargetFormula(cacheObject) +
+                                                          EliteMonsterNearFormula(cacheObject, elites) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
+
                                     break;
                                 }
 
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      EliteMonsterNearFormula(cacheObject, elites) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
+                            #endregion
 
-                                break;
-                            }
-
-                                #endregion
-
-                                #region Gold
+                            #region Gold
 
                             case TrinityObjectType.Gold:
-                            {
-                                if (!Settings.Loot.Pickup.PickupGold)
                                 {
-                                    cacheObject.WeightInfo +=
-                                        $"Ignoring {cacheObject.InternalName} - Pick Up Gold Setting.";
+                                    if (!Settings.Loot.Pickup.PickupGold)
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            $"Ignoring {cacheObject.InternalName} - Pick Up Gold Setting.";
+                                        break;
+                                    }
+                                    //Ignore because we are blocked by objects or mobs.
+                                    if (PlayerMover.IsCompletelyBlocked)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                        break;
+                                    }
+
+                                    //Ignore because we are TownPortaling
+                                    if (usingTownPortal)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                        break;
+                                    }
+                                    // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
+                                    // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
+                                    if (Player.WorldType != Act.OpenWorld && Player.CurrentQuestSNO == 257120 &&
+                                        Player.CurrentQuestStep == 108)
+                                    {
+                                        cacheObject.Weight = 0;
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - DisableForQuest";
+                                        break;
+                                    }
+
+                                    // Ignore gold near Elites
+                                    if (Settings.Loot.Pickup.IgnoreGoldNearElites &&
+                                        ObjectCache.Any(
+                                            u =>
+                                                u.IsEliteRareUnique &&
+                                                u.Position.Distance(cacheObject.Position) <= 15f))
+                                    {
+                                        break;
+                                    }
+
+                                    // Ignore gold in AoE
+                                    if (Settings.Loot.Pickup.IgnoreGoldInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
+                                    {
+                                        break;
+                                    }
+
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                          //LastTargetFormula(cacheObject) +
+                                                          EliteMonsterNearFormula(cacheObject, elites) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
+
                                     break;
                                 }
-                                //Ignore because we are blocked by objects or mobs.
-                                if (IsNavBlocked(cacheObject))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
-                                    break;
-                                }
 
-                                //Ignore because we are TownPortaling
-                                if (usingTownPortal)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
-                                    break;
-                                }
-                                // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
-                                // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
-                                if (Player.WorldType != Act.OpenWorld && Player.CurrentQuestSNO == 257120 &&
-                                    Player.CurrentQuestStep == 108)
-                                {
-                                    cacheObject.Weight = 0;
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - DisableForQuest";
-                                    break;
-                                }
+                            #endregion
 
-                                // Ignore gold near Elites
-                                if (Settings.Loot.Pickup.IgnoreGoldNearElites &&
-                                    ObjectCache.Any(
-                                        u =>
-                                            u.IsEliteRareUnique &&
-                                            u.Position.Distance(cacheObject.Position) <= 15f))
-                                {
-                                    break;
-                                }
-
-                                // Ignore gold in AoE
-                                if (Settings.Loot.Pickup.IgnoreGoldInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
-                                {
-                                    break;
-                                }
-
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      EliteMonsterNearFormula(cacheObject, elites) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
-
-                                break;
-                            }
-
-                                #endregion
-
-                                #region Power Globe
+                            #region Power Globe
 
                             case TrinityObjectType.PowerGlobe:
-                            {
-                                if (Settings.Combat.Misc.IgnorePowerGlobes)
                                 {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Power Globe Setting.";
+                                    if (Settings.Combat.Misc.IgnorePowerGlobes)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Power Globe Setting.";
+                                        break;
+                                    }
+
+                                    //Ignore because we are blocked by objects or mobs.
+                                    if (PlayerMover.IsCompletelyBlocked)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                        break;
+                                    }
+                                    //Ignore because we are TownPortaling
+                                    if (usingTownPortal)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                        break;
+                                    }
+
+                                    if (Settings.Loot.Pickup.IgnoreNonLegendaryInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - In Avoidance.";
+                                        break;
+                                    }
+
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                          //LastTargetFormula(cacheObject) +
+                                                          EliteMonsterNearFormula(cacheObject, elites) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
                                     break;
                                 }
 
-                                //Ignore because we are blocked by objects or mobs.
-                                if (IsNavBlocked(cacheObject))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
-                                    break;
-                                }
-                                //Ignore because we are TownPortaling
-                                if (usingTownPortal)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
-                                    break;
-                                }
+                            #endregion
 
-                                if (Settings.Loot.Pickup.IgnoreNonLegendaryInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - In Avoidance.";
-                                    break;
-                                }
-
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      EliteMonsterNearFormula(cacheObject, elites) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
-                                break;
-                            }
-
-                                #endregion
-
-                                #region Progression Globe
+                            #region Progression Globe
 
                             case TrinityObjectType.ProgressionGlobe:
-                            {
+                                {
                                     ////Ignore because we are blocked by objects or mobs.
-                                    //if (IsNavBlocked(cacheObject))
+                                    //if (PlayerMover.IsCompletelyBlocked)
                                     //{
                                     //    cacheObject.WeightInfo += string.Format("Ignoring {0} - Nav Blocked.",
                                     //        cacheObject.InternalName);
@@ -889,25 +897,25 @@ namespace Trinity
                                     //    break;
                                     //}
 
-                                if (Settings.Loot.Pickup.IgnoreProgressionGlobesInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - In Avoidance.";
-                                    break;
-                                }
+                                    if (Settings.Loot.Pickup.IgnoreProgressionGlobesInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - In Avoidance.";
+                                        break;
+                                    }
 
-                                if (Settings.Combat.Misc.IgnoreNormalProgressionGlobes && DataDictionary.NormalProgressionGlobeSNO.Contains(cacheObject.ActorSNO))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} because of settings.";
-                                    break;
-                                }
+                                    if (Settings.Combat.Misc.IgnoreNormalProgressionGlobes && DataDictionary.NormalProgressionGlobeSNO.Contains(cacheObject.ActorSNO))
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} because of settings.";
+                                        break;
+                                    }
 
-                                if (Settings.Combat.Misc.IgnoreGreaterProgressionGlobes && DataDictionary.GreaterProgressionGlobeSNO.Contains(cacheObject.ActorSNO))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} because of settings.";
-                                    break;
-                                }
+                                    if (Settings.Combat.Misc.IgnoreGreaterProgressionGlobes && DataDictionary.GreaterProgressionGlobeSNO.Contains(cacheObject.ActorSNO))
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} because of settings.";
+                                        break;
+                                    }
 
-                                    if (cacheObject.Distance <= 200f)
+                                    if (cacheObject.Distance <= 150f)
                                     {
                                         cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Progression Globe.";
                                         cacheObject.Weight += MaxWeight;
@@ -915,182 +923,28 @@ namespace Trinity
                                     }
 
                                     cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      EliteMonsterNearFormula(cacheObject, elites) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
-                                break;
-                            }
+                                                          //LastTargetFormula(cacheObject) +
+                                                          EliteMonsterNearFormula(cacheObject, elites) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
+                                    break;
+                                }
 
-                                #endregion
+                            #endregion
 
-                                #region Health Globe && Health Wells
+                            #region Health Globe && Health Wells
 
                             case TrinityObjectType.HealthWell:
                             case TrinityObjectType.HealthGlobe:
-                            {
-                                if (!Settings.Combat.Misc.CollectHealthGlobe)
                                 {
-                                    cacheObject.WeightInfo +=
-                                        $"Ignoring {cacheObject.InternalName} - Collect Health Globe Setting.";
-                                }
-
-                                //Ignore because we are blocked by objects or mobs.
-                                if (IsNavBlocked(cacheObject))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
-                                    break;
-                                }
-
-                                //Ignore because we are TownPortaling
-                                if (usingTownPortal)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
-                                    break;
-                                }
-
-                                if (Settings.Loot.Pickup.IgnoreHealthGlobesInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - In Avoidance.";
-                                    break;
-                                }
-
-                                // do not collect health globes if we are kiting and health globe is too close to monster or avoidance
-                                if (CombatBase.KiteMode != KiteMode.Never)
-                                {
-                                    if (Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, Player.Position, AvoidanceFlags.Avoidance))
-                                    {
-                                        cacheObject.WeightInfo +=  $"Ignoring {cacheObject.InternalName} - Kiting with Monster Obstacles.";
-                                        break;
-                                    }
-                                    if (Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Kiting with Time Bound Avoidance.";
-                                        break;
-                                    }
-                                }
-
-                                if (Player.CurrentHealthPct > CombatBase.EmergencyHealthGlobeLimit)
-                                {
-                                    //XZ - Add gui Variable for Party MemberHealth
-                                    if (
-                                        ObjectCache.Any(
-                                            p => p.Type == TrinityObjectType.Player && p.RActorGuid != Player.RActorGuid))
-                                    {
-                                        var minPartyHealth =
-                                            ObjectCache.Where(
-                                                p =>
-                                                    p.Type == TrinityObjectType.Player &&
-                                                    p.RActorGuid != Player.RActorGuid)
-                                                .Min(p => p.HitPointsPct);
-                                        if (minPartyHealth <= 25)
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                $"Adding {cacheObject.InternalName} - Party Health Below Threshold";
-                                            cacheObject.Weight += hiPriorityHealthGlobes
-                                                ? MaxWeight
-                                                : (1d - minPartyHealth)*5000d +
-                                                  EliteMonsterNearFormula(cacheObject, elites) -
-                                                  PackDensityFormula(cacheObject);
-                                            break;
-                                        }
-                                    }
-                                    var myHealth = Player.CurrentHealthPct;
-                                    // DH's logic with Blood Vengeance passive
-                                    if (Player.ActorClass == ActorClass.DemonHunter &&
-                                        Player.PrimaryResource <= 10 &&
-                                        CacheData.Hotbar.PassiveSkills.Contains(
-                                            SNOPower.DemonHunter_Passive_Vengeance))
+                                    if (!Settings.Combat.Misc.CollectHealthGlobe)
                                     {
                                         cacheObject.WeightInfo +=
-                                            $"Adding {cacheObject.InternalName} - Reapes Wraps.";
-                                        cacheObject.Weight += hiPriorityHealthGlobes
-                                            ? MaxWeight
-                                            : (1d - Player.PrimaryResource)*5000d +
-                                              EliteMonsterNearFormula(cacheObject, elites) -
-                                              PackDensityFormula(cacheObject);
-                                        break;
+                                            $"Ignoring {cacheObject.InternalName} - Collect Health Globe Setting.";
                                     }
-
-                                    // WD's logic with Gruesome Feast passive
-                                    if (Player.ActorClass == ActorClass.Witchdoctor &&
-                                        Player.PrimaryResource <= 1200 &&
-                                        CacheData.Hotbar.PassiveSkills.Contains(
-                                            SNOPower.Witchdoctor_Passive_GruesomeFeast))
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Adding {cacheObject.InternalName} - Reapes Wraps.";
-                                        cacheObject.Weight += hiPriorityHealthGlobes
-                                            ? MaxWeight
-                                            : (1d - Player.PrimaryResource)*5000d +
-                                              EliteMonsterNearFormula(cacheObject, elites) -
-                                              PackDensityFormula(cacheObject);
-                                        break;
-                                    }
-
-                                    //Reapers Wraps Equipped
-                                    if (Legendary.ReapersWraps.IsEquipped && Player.PrimaryResource <= 50)
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Adding {cacheObject.InternalName} - Reapes Wraps.";
-                                        cacheObject.Weight += hiPriorityHealthGlobes
-                                            ? MaxWeight
-                                            : (1d - Player.PrimaryResource)*5000d +
-                                              EliteMonsterNearFormula(cacheObject, elites) -
-                                              PackDensityFormula(cacheObject);
-                                        break;
-                                    }
-                                    //XZ - Set this to be a value to ignore globes above certain health.
-                                    if (ZetaDia.Me.HitpointsCurrentPct > 0.80)
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Over 80% health.";
-                                        break;
-                                    }
-                                }
-                                else
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Maxxing {cacheObject.InternalName} - Player.CurrentHealthPct < CombatBase.EmergencyHealthGlobeLimit.";
-                                    cacheObject.Weight = MaxWeight;
-                                    break;
-                                }
-
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      EliteMonsterNearFormula(cacheObject, elites) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
-                                break;
-                            }
-
-                                #endregion
-
-                                #region Shrine
-
-                            case TrinityObjectType.CursedShrine:
-                            case TrinityObjectType.Shrine:
-                            {
-                                if (cacheObject.IsUsed)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Used.";
-                                    break;
-                                }
-
-                                if (!cacheObject.IsQuestMonster)
-                                {
-                                    if (!Settings.WorldObject.UseShrine)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Dont use shrines setting.";
-                                        break;
-                                    }
-
-                                    //XZ - Please Add this.
-                                    //if (!Settings.WorldObject.UseCursedShrine && cacheObject.Type == TrinityObjectType.CursedShrine)
-                                    //    break;
 
                                     //Ignore because we are blocked by objects or mobs.
-                                    if (IsNavBlocked(cacheObject))
+                                    if (PlayerMover.IsCompletelyBlocked)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
                                         break;
@@ -1102,334 +956,488 @@ namespace Trinity
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
                                         break;
                                     }
-                                }
-                                // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
-                                // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
-                                if (Player.WorldType != Act.OpenWorld && Player.CurrentQuestSNO == 257120 &&
-                                    Player.CurrentQuestStep == 108)
-                                {
-                                    cacheObject.Weight = 0;
-                                    cacheObject.WeightInfo +=
-                                        $"Ignoring {cacheObject.InternalName} - Disable for Quest";
+
+                                    if (Settings.Loot.Pickup.IgnoreHealthGlobesInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - In Avoidance.";
+                                        break;
+                                    }
+
+                                    // do not collect health globes if we are kiting and health globe is too close to monster or avoidance
+                                    if (CombatBase.KiteMode != KiteMode.Never)
+                                    {
+                                        if (Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, Player.Position, AvoidanceFlags.Avoidance))
+                                        {
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Kiting with Monster Obstacles.";
+                                            break;
+                                        }
+                                        if (Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
+                                        {
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Kiting with Time Bound Avoidance.";
+                                            break;
+                                        }
+                                    }
+
+                                    if (Player.CurrentHealthPct > CombatBase.EmergencyHealthGlobeLimit)
+                                    {
+                                        //XZ - Add gui Variable for Party MemberHealth
+                                        if (
+                                            ObjectCache.Any(
+                                                p => p.Type == TrinityObjectType.Player && p.RActorGuid != Player.RActorGuid))
+                                        {
+                                            var minPartyHealth =
+                                                ObjectCache.Where(
+                                                    p =>
+                                                        p.Type == TrinityObjectType.Player &&
+                                                        p.RActorGuid != Player.RActorGuid)
+                                                    .Min(p => p.HitPointsPct);
+                                            if (minPartyHealth <= 25)
+                                            {
+                                                cacheObject.WeightInfo +=
+                                                    $"Adding {cacheObject.InternalName} - Party Health Below Threshold";
+                                                cacheObject.Weight += hiPriorityHealthGlobes
+                                                    ? MaxWeight
+                                                    : (1d - minPartyHealth) * 5000d +
+                                                      EliteMonsterNearFormula(cacheObject, elites) -
+                                                      PackDensityFormula(cacheObject);
+                                                break;
+                                            }
+                                        }
+                                        var myHealth = Player.CurrentHealthPct;
+                                        // DH's logic with Blood Vengeance passive
+                                        if (Player.ActorClass == ActorClass.DemonHunter &&
+                                            Player.PrimaryResource <= 10 &&
+                                            CacheData.Hotbar.PassiveSkills.Contains(
+                                                SNOPower.DemonHunter_Passive_Vengeance))
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Adding {cacheObject.InternalName} - Reapes Wraps.";
+                                            cacheObject.Weight += hiPriorityHealthGlobes
+                                                ? MaxWeight
+                                                : (1d - Player.PrimaryResource) * 5000d +
+                                                  EliteMonsterNearFormula(cacheObject, elites) -
+                                                  PackDensityFormula(cacheObject);
+                                            break;
+                                        }
+
+                                        // WD's logic with Gruesome Feast passive
+                                        if (Player.ActorClass == ActorClass.Witchdoctor &&
+                                            Player.PrimaryResource <= 1200 &&
+                                            CacheData.Hotbar.PassiveSkills.Contains(
+                                                SNOPower.Witchdoctor_Passive_GruesomeFeast))
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Adding {cacheObject.InternalName} - Reapes Wraps.";
+                                            cacheObject.Weight += hiPriorityHealthGlobes
+                                                ? MaxWeight
+                                                : (1d - Player.PrimaryResource) * 5000d +
+                                                  EliteMonsterNearFormula(cacheObject, elites) -
+                                                  PackDensityFormula(cacheObject);
+                                            break;
+                                        }
+
+                                        //Reapers Wraps Equipped
+                                        if (Legendary.ReapersWraps.IsEquipped && Player.PrimaryResource <= 50)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Adding {cacheObject.InternalName} - Reapes Wraps.";
+                                            cacheObject.Weight += hiPriorityHealthGlobes
+                                                ? MaxWeight
+                                                : (1d - Player.PrimaryResource) * 5000d +
+                                                  EliteMonsterNearFormula(cacheObject, elites) -
+                                                  PackDensityFormula(cacheObject);
+                                            break;
+                                        }
+                                        //XZ - Set this to be a value to ignore globes above certain health.
+                                        if (ZetaDia.Me.HitpointsCurrentPct > 0.80)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Over 80% health.";
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        cacheObject.WeightInfo +=
+                                            $"Maxxing {cacheObject.InternalName} - Player.CurrentHealthPct < CombatBase.EmergencyHealthGlobeLimit.";
+                                        cacheObject.Weight = MaxWeight;
+                                        break;
+                                    }
+
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                          //LastTargetFormula(cacheObject) +
+                                                          EliteMonsterNearFormula(cacheObject, elites) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
                                     break;
                                 }
-                                if (GetShrineType(cacheObject) != ShrineTypes.RunSpeed &&
-                                    GetShrineType(cacheObject) != ShrineTypes.Speed &&
-                                    GetShrineType(cacheObject) != ShrineTypes.Fortune)
+
+                            #endregion
+
+                            #region Shrine
+
+                            case TrinityObjectType.CursedShrine:
+                            case TrinityObjectType.Shrine:
                                 {
-                                    var priorityMultiplier = 1;
-                                    if (Settings.WorldObject.HiPriorityShrines)
+                                    if (cacheObject.IsUsed)
                                     {
-                                        cacheObject.WeightInfo +=
-                                            $"Adding {cacheObject.InternalName} - High Priority Shrine";
-                                        priorityMultiplier = 100;
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Used.";
+                                        break;
                                     }
-                                    if (Legendary.NemesisBracers.IsEquipped)
+
+                                    if (!cacheObject.IsQuestMonster)
                                     {
+                                        if (!Settings.WorldObject.UseShrine)
+                                        {
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Dont use shrines setting.";
+                                            break;
+                                        }
+
+                                        //XZ - Please Add this.
+                                        //if (!Settings.WorldObject.UseCursedShrine && cacheObject.Type == TrinityObjectType.CursedShrine)
+                                        //    break;
+
+                                        //Ignore because we are blocked by objects or mobs.
+                                        if (PlayerMover.IsCompletelyBlocked)
+                                        {
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                            break;
+                                        }
+
+                                        //Ignore because we are TownPortaling
+                                        if (usingTownPortal)
+                                        {
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                            break;
+                                        }
+                                    }
+                                    // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
+                                    // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
+                                    if (Player.WorldType != Act.OpenWorld && Player.CurrentQuestSNO == 257120 &&
+                                        Player.CurrentQuestStep == 108)
+                                    {
+                                        cacheObject.Weight = 0;
+                                        cacheObject.WeightInfo +=
+                                            $"Ignoring {cacheObject.InternalName} - Disable for Quest";
+                                        break;
+                                    }
+                                    if (GetShrineType(cacheObject) != ShrineTypes.RunSpeed &&
+                                        GetShrineType(cacheObject) != ShrineTypes.Speed &&
+                                        GetShrineType(cacheObject) != ShrineTypes.Fortune)
+                                    {
+                                        var priorityMultiplier = 1;
+                                        if (Settings.WorldObject.HiPriorityShrines)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Adding {cacheObject.InternalName} - High Priority Shrine";
+                                            priorityMultiplier = 100;
+                                        }
+                                        if (Legendary.NemesisBracers.IsEquipped)
+                                        {
+                                            if (elites.Any())
+                                            {
+                                                var eliteMultiplier = -1000;
+                                                if (GetShrineType(cacheObject) == ShrineTypes.Shield)
+                                                    eliteMultiplier = 1000;
+                                                cacheObject.Weight -= elites.Count * eliteMultiplier;
+                                            }
+                                            else
+                                                cacheObject.Weight += 1000d;
+                                        }
+
                                         if (elites.Any())
                                         {
-                                            var eliteMultiplier = -1000;
-                                            if (GetShrineType(cacheObject) == ShrineTypes.Shield)
-                                                eliteMultiplier = 1000;
-                                            cacheObject.Weight -= elites.Count*eliteMultiplier;
+                                            cacheObject.Weight += elites.Count * 1000;
+                                            cacheObject.WeightInfo +=
+                                                $"Adding {cacheObject.InternalName} - Higher Priority Shrine for Elites";
                                         }
-                                        else
-                                            cacheObject.Weight += 1000d;
+                                        cacheObject.Weight += PackDensityFormula(cacheObject) * priorityMultiplier;
                                     }
 
-                                    if (elites.Any())
-                                    {
-                                        cacheObject.Weight += elites.Count*1000;
-                                        cacheObject.WeightInfo +=
-                                            $"Adding {cacheObject.InternalName} - Higher Priority Shrine for Elites";
-                                    }
-                                    cacheObject.Weight += PackDensityFormula(cacheObject)*priorityMultiplier;
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                          //LastTargetFormula(cacheObject) +
+                                                          //EliteMonsterNearFormula(cacheObject, elites) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
+                                    break;
                                 }
 
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      //EliteMonsterNearFormula(cacheObject, elites) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
-                                break;
-                            }
+                            #endregion
 
-                                #endregion
-
-                                #region Door and Barricade
+                            #region Door and Barricade
 
                             case TrinityObjectType.Barricade:
                             case TrinityObjectType.Door:
-                            {
-                                if (cacheObject.IsUsed)
                                 {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Used.";
+                                    if (cacheObject.IsUsed)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Used.";
+                                        break;
+                                    }
+
+                                    if (!cacheObject.IsQuestMonster)
+                                    {
+                                        //Ignore because we are blocked by objects or mobs.
+                                        if (PlayerMover.IsCompletelyBlocked)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                            break;
+                                        }
+
+                                        //Ignore because we are TownPortaling
+                                        if (usingTownPortal && cacheObject.Distance > 25f)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                            break;
+                                        }
+
+                                        // Need to Prioritize, forget it!
+                                        if (prioritizeCloseRangeUnits)
+                                        {
+                                            if (prioritizeCloseRangeUnits)
+                                            {
+                                                cacheObject.WeightInfo +=
+                                                    $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";
+                                            }
+                                            break;
+                                        }
+                                    }
+                                    // We're standing on the damn thing... open it!!
+                                    if (cacheObject.RadiusDistance <= 10f)
+                                    {
+                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.WeightInfo +=
+                                            $"Maxxing {cacheObject.InternalName} - Door in Close Distance.";
+                                    }
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                          //LastTargetFormula(cacheObject) +
+                                                          EliteMonsterNearFormula(cacheObject, elites) +
+                                                          PackDensityFormula(cacheObject) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
                                     break;
                                 }
 
-                                if (!cacheObject.IsQuestMonster)
-                                {
-                                    //Ignore because we are blocked by objects or mobs.
-                                    if (IsNavBlocked(cacheObject))
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
-                                        break;
-                                    }
+                            #endregion
 
-                                    //Ignore because we are TownPortaling
-                                    if (usingTownPortal && cacheObject.Distance > 25f)
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Town Portal.";
-                                        break;
-                                    }
-
-                                    // Need to Prioritize, forget it!
-                                    if (prioritizeCloseRangeUnits)
-                                    {
-                                        if (prioritizeCloseRangeUnits)
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";
-                                        }
-                                        break;
-                                    }
-                                }
-                                // We're standing on the damn thing... open it!!
-                                if (cacheObject.RadiusDistance <= 10f)
-                                {
-                                    cacheObject.Weight = MaxWeight;
-                                    cacheObject.WeightInfo +=
-                                        $"Maxxing {cacheObject.InternalName} - Door in Close Distance.";
-                                }
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      EliteMonsterNearFormula(cacheObject, elites) +
-                                                      PackDensityFormula(cacheObject) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
-                                break;
-                            }
-
-                                #endregion
-
-                                #region Destructible
+                            #region Destructible
 
                             case TrinityObjectType.Destructible:
-                            {
-                                if (!cacheObject.IsQuestMonster)
                                 {
-                                    //Ignore because we are blocked by objects or mobs.
-                                    if (IsNavBlocked(cacheObject))
+                                    if (!cacheObject.IsQuestMonster)
                                     {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                        //Ignore because we are blocked by objects or mobs.
+                                        if (PlayerMover.IsCompletelyBlocked)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                            break;
+                                        }
+
+                                        //Ignore because we are TownPortaling
+                                        if (usingTownPortal && cacheObject.Distance > 25f)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                            break;
+                                        }
+
+                                        // Need to Prioritize, forget it!
+                                        if (prioritizeCloseRangeUnits)
+                                        {
+                                            if (prioritizeCloseRangeUnits)
+                                            {
+                                                cacheObject.WeightInfo +=
+                                                    $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";
+                                            }
+                                            break;
+                                        }
+                                    }
+                                    if (DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSNO))
+                                    {
+                                        cacheObject.Weight = 100d;
                                         break;
                                     }
 
-                                    //Ignore because we are TownPortaling
-                                    if (usingTownPortal && cacheObject.Distance > 25f)
+                                    // Not Stuck, skip!
+                                    if (Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.OnlyIfStuck &&
+                                        cacheObject.RadiusDistance > 0 &&
+                                        (DateTime.UtcNow.Subtract(PlayerMover.LastGeneratedStuckPosition).TotalSeconds > 3))
                                     {
                                         cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                            $"Ignoring {cacheObject.InternalName} - Destructible Settings.";
                                         break;
                                     }
 
-                                    // Need to Prioritize, forget it!
-                                    if (prioritizeCloseRangeUnits)
+                                    //// We're standing on the damn thing... break it
+                                    if (cacheObject.Distance < 3f)
                                     {
+                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.WeightInfo +=
+                                            $"Maxxing {cacheObject.InternalName} - Close Distance.";
+                                    }
+
+                                    //// Fix for WhimsyShire Pinata
+                                    if (DataDictionary.ResplendentChestIds.Contains(cacheObject.ActorSNO))
+                                        cacheObject.Weight += 500d;
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                          //LastTargetFormula(cacheObject) +
+                                                          EliteMonsterNearFormula(cacheObject, elites) -
+                                                          PackDensityFormula(cacheObject) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
+                                    break;
+                                }
+
+                            #endregion
+
+                            #region Interactables
+
+                            case TrinityObjectType.Interactable:
+                                {
+                                    if (cacheObject.IsUsed)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Used.";
+                                        break;
+                                    }
+
+                                    if (!cacheObject.IsQuestMonster)
+                                    {
+                                        //Ignore because we are blocked by objects or mobs.
+                                        if (PlayerMover.IsCompletelyBlocked)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                            break;
+                                        }
+
+                                        //Ignore because we are TownPortaling
+                                        if (usingTownPortal && cacheObject.Distance > 25f)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                            break;
+                                        }
+
+                                        // Need to Prioritize, forget it!
                                         if (prioritizeCloseRangeUnits)
                                         {
                                             cacheObject.WeightInfo +=
                                                 $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";
+                                            break;
                                         }
+                                    }
+                                    // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
+                                    // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
+                                    if (Player.WorldType != Act.OpenWorld && Player.CurrentQuestSNO == 257120 &&
+                                        Player.CurrentQuestStep == 108)
+                                    {
+                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.WeightInfo +=
+                                            $"Adding {cacheObject.InternalName} - Campaign A5 Quest Lost Treasure of the Nephalem";
                                         break;
                                     }
-                                }
-                                if (DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSNO))
-                                {
-                                    cacheObject.Weight = 100d;
-                                    break;
-                                }
 
-                                // Not Stuck, skip!
-                                if (Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.OnlyIfStuck &&
-                                    cacheObject.RadiusDistance > 0 &&
-                                    (DateTime.UtcNow.Subtract(PlayerMover.LastGeneratedStuckPosition).TotalSeconds > 3))
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Ignoring {cacheObject.InternalName} - Destructible Settings.";
-                                    break;
-                                }
-
-                                //// We're standing on the damn thing... break it
-                                if (cacheObject.Distance < 3f)
-                                {
-                                    cacheObject.Weight = MaxWeight;
-                                    cacheObject.WeightInfo +=
-                                        $"Maxxing {cacheObject.InternalName} - Close Distance.";
-                                }
-
-                                //// Fix for WhimsyShire Pinata
-                                if (DataDictionary.ResplendentChestIds.Contains(cacheObject.ActorSNO))
-                                    cacheObject.Weight += 500d;
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      EliteMonsterNearFormula(cacheObject, elites) -
-                                                      PackDensityFormula(cacheObject) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
-                                break;
-                            }
-
-                                #endregion
-
-                                #region Interactables
-
-                            case TrinityObjectType.Interactable:
-                            {
-                                if (cacheObject.IsUsed)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Used.";
-                                    break;
-                                }
-
-                                if (!cacheObject.IsQuestMonster)
-                                {
-                                    //Ignore because we are blocked by objects or mobs.
-                                    if (IsNavBlocked(cacheObject))
+                                    // nearby monsters attacking us - don't try to use headtone
+                                    if (cacheObject.Object is DiaGizmo && cacheObject.Gizmo != null &&
+                                        cacheObject.Gizmo.CommonData != null &&
+                                        cacheObject.Gizmo.CommonData.ActorInfo != null &&
+                                        cacheObject.Gizmo.CommonData.ActorInfo.GizmoType == GizmoType.Headstone &&
+                                        ObjectCache.Any(u => u.IsUnit && u.RadiusDistance < 25f && u.IsFacingPlayer))
                                     {
                                         cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                            $"Ignoring {cacheObject.InternalName} - Units Near Headstone. ";
                                         break;
                                     }
 
-                                    //Ignore because we are TownPortaling
-                                    if (usingTownPortal && cacheObject.Distance > 25f)
+                                    if (DataDictionary.HighPriorityInteractables.Contains(cacheObject.ActorSNO) &&
+                                        cacheObject.RadiusDistance <= 30f)
                                     {
                                         cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                            $"Maxxing {cacheObject.InternalName} - High Priority Interactable.. ";
+                                        cacheObject.Weight = MaxWeight;
                                         break;
                                     }
 
-                                    // Need to Prioritize, forget it!
-                                    if (prioritizeCloseRangeUnits)
+                                    if (cacheObject.IsQuestMonster)
                                     {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";
-                                        break;
+                                        cacheObject.Weight += 5000d;
                                     }
-                                }
-                                // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
-                                // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
-                                if (Player.WorldType != Act.OpenWorld && Player.CurrentQuestSNO == 257120 &&
-                                    Player.CurrentQuestStep == 108)
-                                {
-                                    cacheObject.Weight = MaxWeight;
-                                    cacheObject.WeightInfo +=
-                                        $"Adding {cacheObject.InternalName} - Campaign A5 Quest Lost Treasure of the Nephalem";
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                          ////LastTargetFormula(cacheObject) +
+                                                          EliteMonsterNearFormula(cacheObject, elites) -
+                                                          PackDensityFormula(cacheObject) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
+
                                     break;
                                 }
 
-                                // nearby monsters attacking us - don't try to use headtone
-                                if (cacheObject.Object is DiaGizmo && cacheObject.Gizmo != null &&
-                                    cacheObject.Gizmo.CommonData != null &&
-                                    cacheObject.Gizmo.CommonData.ActorInfo != null &&
-                                    cacheObject.Gizmo.CommonData.ActorInfo.GizmoType == GizmoType.Headstone &&
-                                    ObjectCache.Any(u => u.IsUnit && u.RadiusDistance < 25f && u.IsFacingPlayer))
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Ignoring {cacheObject.InternalName} - Units Near Headstone. ";
-                                    break;
-                                }
+                            #endregion
 
-                                if (DataDictionary.HighPriorityInteractables.Contains(cacheObject.ActorSNO) &&
-                                    cacheObject.RadiusDistance <= 30f)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Maxxing {cacheObject.InternalName} - High Priority Interactable.. ";
-                                    cacheObject.Weight = MaxWeight;
-                                    break;
-                                }
-
-                                if (cacheObject.IsQuestMonster)
-                                {
-                                    cacheObject.Weight += 5000d;
-                                }
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      EliteMonsterNearFormula(cacheObject, elites) -
-                                                      PackDensityFormula(cacheObject) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
-
-                                break;
-                            }
-
-                                #endregion
-
-                                #region Container
+                            #region Container
 
                             case TrinityObjectType.Container:
-                            {
-                                if (!cacheObject.IsQuestMonster)
                                 {
-                                    //Ignore because we are blocked by objects or mobs.
-                                    if (IsNavBlocked(cacheObject))
+                                    if (!cacheObject.IsQuestMonster)
+                                    {
+                                        //Ignore because we are blocked by objects or mobs.
+                                        if (PlayerMover.IsCompletelyBlocked)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                            break;
+                                        }
+
+                                        //Ignore because we are TownPortaling
+                                        if (usingTownPortal)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                            break;
+                                        }
+
+                                        // Need to Prioritize, forget it!
+                                        if (prioritizeCloseRangeUnits)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";
+                                            break;
+                                        }
+                                    }
+
+                                    float maxRange = Settings.WorldObject.ContainerOpenRange;
+                                    var isRare = cacheObject.InternalName.ToLower().Contains("chest_rare") ||
+                                                 DataDictionary.ResplendentChestIds.Contains(cacheObject.ActorSNO);
+                                    if (isRare)
+                                        maxRange = 250f;
+                                    if (cacheObject.Distance > maxRange)
                                     {
                                         cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                            $"Ignoring {cacheObject.InternalName} - Too Far away. ";
                                         break;
                                     }
 
-                                    //Ignore because we are TownPortaling
-                                    if (usingTownPortal)
+                                    if (Legendary.HarringtonWaistguard.IsEquipped)
                                     {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Town Portal.";
-                                        break;
+                                        if (Legendary.HarringtonWaistguard.IsBuffActive)
+                                        {
+                                            cacheObject.WeightInfo +=
+                                                $"Ignoring {cacheObject.InternalName} - Harring Buff is Already up. ";
+                                            break;
+                                        }
+                                        cacheObject.Weight += 1000d;
                                     }
-
-                                    // Need to Prioritize, forget it!
-                                    if (prioritizeCloseRangeUnits)
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";
-                                        break;
-                                    }
-                                }
-
-                                float maxRange = Settings.WorldObject.ContainerOpenRange;
-                                var isRare = cacheObject.InternalName.ToLower().Contains("chest_rare") ||
-                                             DataDictionary.ResplendentChestIds.Contains(cacheObject.ActorSNO);
-                                if (isRare)
-                                    maxRange = 250f;
-                                if (cacheObject.Distance > maxRange)
-                                {
-                                    cacheObject.WeightInfo +=
-                                        $"Ignoring {cacheObject.InternalName} - Too Far away. ";
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                          ////LastTargetFormula(cacheObject) +
+                                                          EliteMonsterNearFormula(cacheObject, elites) -
+                                                          PackDensityFormula(cacheObject) +
+                                                          AoENearFormula(cacheObject) +
+                                                          AoEInPathFormula(cacheObject);
                                     break;
                                 }
-
-                                if (Legendary.HarringtonWaistguard.IsEquipped)
-                                {
-                                    if (Legendary.HarringtonWaistguard.IsBuffActive)
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Harring Buff is Already up. ";
-                                        break;
-                                    }
-                                    cacheObject.Weight += 1000d;
-                                }
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                      LastTargetFormula(cacheObject) +
-                                                      EliteMonsterNearFormula(cacheObject, elites) -
-                                                      PackDensityFormula(cacheObject) +
-                                                      AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
-                                break;
-                            }
 
                                 #endregion
                         }
@@ -1465,7 +1473,7 @@ namespace Trinity
                         //TargetUtil.ClearCurrentTarget("Clearing for Weight");
                         LastTargetIsSafeSpot = bestTarget != null && CurrentTarget != null && CurrentTarget.IsSafeSpot;
                         CurrentTarget = bestTarget;
-                        
+
                         //Logger.Log($"Last Guid = {LastTargetRactorGUID}");
 
                         if (bestTarget.RActorGuid != LastTargetRactorGUID || bestTarget != null && bestTarget.IsMarker)
@@ -1477,13 +1485,10 @@ namespace Trinity
                         }
                         return;
                     }
-
-                    if (CurrentTarget != null && !CurrentTarget.IsSafeSpot)
-                    {
-                        TargetUtil.ClearCurrentTarget("No good target's found in Weighting.");
-                    }
+                    TargetUtil.ClearCurrentTarget("No good target's found in Weighting.");
                     //var text = bestTarget != null ? bestTarget.Weight : 0;
                     //Logger.Log(" CACHE COUNT: " + ObjectCache.Count(x => !x.IsPlayer) + " Weight: " + text);
+
                 }
             }
 
@@ -1514,14 +1519,14 @@ namespace Trinity
                     if (CurrentTarget.IsBoss || CurrentTarget.IsSafeSpot || CurrentTarget.IsWaitSpot)
                         return targetted;
 
-                    if(targetted > GetBlacklistTargetTimes(CurrentTarget))
+                    if (targetted > GetBlacklistTargetTimes(CurrentTarget))
                         Blacklist(objectKey);
 
                     return targetted;
                 }
 
                 // Add to Primary Target Cache Count
-                CacheData.PrimaryTargetCount.Add(objectKey, 1);         
+                CacheData.PrimaryTargetCount.Add(objectKey, 1);
                 return 1;
             }
 
@@ -1586,43 +1591,43 @@ namespace Trinity
             {
                 switch (cacheObject.ActorSNO)
                 {
-                    case (int) SNOActor.a4_Heaven_Shrine_Global_Fortune:
-                    case (int) SNOActor.Shrine_Global_Fortune:
+                    case (int)SNOActor.a4_Heaven_Shrine_Global_Fortune:
+                    case (int)SNOActor.Shrine_Global_Fortune:
                         return ShrineTypes.Fortune;
 
-                    case (int) SNOActor.a4_Heaven_Shrine_Global_Frenzied:
-                    case (int) SNOActor.Shrine_Global_Frenzied:
+                    case (int)SNOActor.a4_Heaven_Shrine_Global_Frenzied:
+                    case (int)SNOActor.Shrine_Global_Frenzied:
                         return ShrineTypes.Frenzied;
 
-                    case (int) SNOActor.a4_Heaven_Shrine_Global_Reloaded:
-                    case (int) SNOActor.Shrine_Global_Reloaded:
+                    case (int)SNOActor.a4_Heaven_Shrine_Global_Reloaded:
+                    case (int)SNOActor.Shrine_Global_Reloaded:
                         return ShrineTypes.RunSpeed;
 
-                    case (int) SNOActor.a4_Heaven_Shrine_Global_Enlightened:
-                    case (int) SNOActor.Shrine_Global_Enlightened:
+                    case (int)SNOActor.a4_Heaven_Shrine_Global_Enlightened:
+                    case (int)SNOActor.Shrine_Global_Enlightened:
                         return ShrineTypes.Enlightened;
 
-                    case (int) SNOActor.Shrine_Global_Glow:
+                    case (int)SNOActor.Shrine_Global_Glow:
                         return ShrineTypes.Glow;
 
-                    case (int) SNOActor.a4_Heaven_Shrine_Global_Hoarder:
-                    case (int) SNOActor.Shrine_Global_Hoarder:
+                    case (int)SNOActor.a4_Heaven_Shrine_Global_Hoarder:
+                    case (int)SNOActor.Shrine_Global_Hoarder:
                         return ShrineTypes.Hoarder;
 
-                    case (int) SNOActor.x1_LR_Shrine_Infinite_Casting:
+                    case (int)SNOActor.x1_LR_Shrine_Infinite_Casting:
                         return ShrineTypes.Casting;
 
-                    case (int) SNOActor.x1_LR_Shrine_Electrified_TieredRift:
-                    case (int) SNOActor.x1_LR_Shrine_Electrified:
+                    case (int)SNOActor.x1_LR_Shrine_Electrified_TieredRift:
+                    case (int)SNOActor.x1_LR_Shrine_Electrified:
                         return ShrineTypes.Conduit;
 
-                    case (int) SNOActor.x1_LR_Shrine_Invulnerable:
+                    case (int)SNOActor.x1_LR_Shrine_Invulnerable:
                         return ShrineTypes.Shield;
 
-                    case (int) SNOActor.x1_LR_Shrine_Run_Speed:
+                    case (int)SNOActor.x1_LR_Shrine_Run_Speed:
                         return ShrineTypes.Shield;
 
-                    case (int) SNOActor.x1_LR_Shrine_Damage:
+                    case (int)SNOActor.x1_LR_Shrine_Damage:
                         return ShrineTypes.Damage;
                     default:
                         return ShrineTypes.Unknown;
@@ -1666,7 +1671,7 @@ namespace Trinity
 
             public static double GoldFormula(TrinityCacheObject cacheObject)
             {
-                return cacheObject.GoldAmount*0.05;
+                return cacheObject.GoldAmount * 0.05;
             }
 
             /// <summary>
@@ -1708,7 +1713,7 @@ namespace Trinity
                 var avoidances = CacheData.TimeBoundAvoidance.Where(u => u.Position.Distance(cacheObject.Position) < 15);
                 foreach (var avoidance in avoidances)
                 {
-                    weight -= 25*Math.Max(1, 15 - avoidance.Radius);
+                    weight -= 25 * Math.Max(1, 15 - avoidance.Radius);
                 }
 
                 return weight;
@@ -1730,7 +1735,7 @@ namespace Trinity
                             cacheObject.Position));
                 foreach (var avoidance in avoidances)
                 {
-                    weight -= 10*(Math.Max(0, 15 - avoidance.Radius))/15;
+                    weight -= 10 * (Math.Max(0, 15 - avoidance.Radius)) / 15;
                 }
                 return weight;
             }
@@ -1750,7 +1755,7 @@ namespace Trinity
                 var monsters = monstersWithReflectActive.Where(u => u.Position.Distance(cacheObject.Position) < 10f);
                 foreach (var monster in monsters)
                 {
-                    weight -= 50*(Math.Max(0, 10 - monster.RadiusDistance))/10;
+                    weight -= 50 * (Math.Max(0, 10 - monster.RadiusDistance)) / 10;
                 }
                 return weight;
             }
@@ -1771,7 +1776,7 @@ namespace Trinity
                 var monsters = eliteMonsters.Where(u => u.Position.Distance(cacheObject.Position) < 10f);
                 foreach (var monster in monsters)
                 {
-                    weight -= 50*(Math.Max(0, 10 - monster.RadiusDistance))/10;
+                    weight -= 50 * (Math.Max(0, 10 - monster.RadiusDistance)) / 10;
                 }
                 return weight;
             }
@@ -1799,7 +1804,7 @@ namespace Trinity
                         : Settings.Combat.Misc.NonEliteRange;
                 }
 
-                return multipler*((range - cacheObject.RadiusDistance)/range);
+                return multipler * ((range - cacheObject.RadiusDistance) / range);
             }
 
             public static double PackDensityFormula(TrinityCacheObject cacheObject)
@@ -1814,7 +1819,7 @@ namespace Trinity
                     x => x.Position.Distance(cacheObject.Position) < CombatBase.CombatOverrides.EffectiveTrashRadius && (!Settings.Combat.Misc.IgnoreElites || !x.IsEliteRareUnique))
                     .ToList();
 
-                var packDistanceValue = pack.Sum(mob => 100d*((CombatBase.CombatOverrides.EffectiveTrashRadius - cacheObject.RadiusDistance)/CombatBase.CombatOverrides.EffectiveTrashRadius));
+                var packDistanceValue = pack.Sum(mob => 100d * ((CombatBase.CombatOverrides.EffectiveTrashRadius - cacheObject.RadiusDistance) / CombatBase.CombatOverrides.EffectiveTrashRadius));
 
                 return packDistanceValue < 0 ? 0 : packDistanceValue;
             }
@@ -1836,7 +1841,7 @@ namespace Trinity
 
                 // Only boost weight of this unit if above the total weight setting.
                 if (cacheObject.RiftValueInRadius > Settings.Combat.Misc.RiftValueAlwaysKillClusterValue)
-                    result = 100d*((CombatBase.CombatOverrides.EffectiveTrashRadius - cacheObject.RadiusDistance)/CombatBase.CombatOverrides.EffectiveTrashRadius);
+                    result = 100d * ((CombatBase.CombatOverrides.EffectiveTrashRadius - cacheObject.RadiusDistance) / CombatBase.CombatOverrides.EffectiveTrashRadius);
 
 
                 return result <= 0 ? 0 : result;
@@ -1857,7 +1862,7 @@ namespace Trinity
                 if (Math.Abs(cacheObject.HitPointsPct - 1) < double.Epsilon)
                     return 0;
 
-                return 200d*((1 - cacheObject.HitPointsPct)/100);
+                return 200d * ((1 - cacheObject.HitPointsPct) / 100);
             }
 
             /// <summary>
@@ -1870,7 +1875,7 @@ namespace Trinity
                 if (cacheObject.ActorSNO == 3349) // Belial, can't be pathed to.
                     return 0;
 
-                if (Player.ActorClass == ActorClass.Monk || Player.ActorClass == ActorClass.Barbarian && Skills.Barbarian.Whirlwind.IsActive)
+                if (!PlayerMover.IsCompletelyBlocked)
                     return 0;
 
                 if (BlockingObjects(cacheObject) > 0)
@@ -1880,7 +1885,7 @@ namespace Trinity
                 //if(!cacheObject.IsUnit)
                 //    return BlockingMonsterObjects(cacheObject) * -100d;
 
-                if (!cacheObject.IsUnit || PlayerMover.IsBlocked && cacheObject.Distance > 15f && !cacheObject.IsEliteRareUnique && Settings.Combat.Misc.AttackWhenBlocked)
+                if (!cacheObject.IsUnit || PlayerMover.IsCompletelyBlocked && cacheObject.Distance > 15f && !cacheObject.IsEliteRareUnique && Settings.Combat.Misc.AttackWhenBlocked)
                     return -MaxWeight;
 
                 return 0;
@@ -1912,19 +1917,13 @@ namespace Trinity
 
                 return navigationCount;
             }
+            //public static double LastTargetFormula(TrinityCacheObject cacheObject)
+            //{
+            //    if (PlayerMover.IsCompletelyBlocked)
+            //        return 0;
 
-            public static bool IsNavBlocked(TrinityCacheObject cacheObject)
-            {
-                return PlayerMover.IsBlocked || BlockingMonsterObjects(cacheObject) >= 5;
-            }
-
-            public static double LastTargetFormula(TrinityCacheObject cacheObject)
-            {
-                if (PlayerMover.IsBlocked)
-                    return 0;
-
-                return cacheObject.RActorGuid == LastTargetRactorGUID ? 250d : 0d;
-            }
+            //    return cacheObject.RActorGuid == LastTargetRactorGUID ? 250d : 0d;
+            //}
 
             #endregion
         }

@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using Trinity.Framework;
 using Trinity.Technicals;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground
@@ -16,8 +17,55 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         internal static List<TrinityCacheObject> SafeList(bool objectsInAoe = false)
         {
             return
-                TrinityPlugin.ObjectCache.Where(x => objectsInAoe || !Core.Avoidance.InAvoidance(x.Position)).ToList();
+                TrinityPlugin.ObjectCache.Where(x => (!x.IsUnit || x.IsUnit && x.HitPoints > 0) &&
+                (objectsInAoe || !Core.Avoidance.InAvoidance(x.Position))).ToList();
         }
+
+        internal static Vector3 BestBuffPosition
+        {
+            get
+            {
+                if (ClosestSancAndOcc != Vector3.Zero && ClosestSancAndOcc.Distance(TrinityPlugin.Player.Position) < 12)
+                    return ClosestSancAndOcc;
+
+                if (ClosestSanctuary != Vector3.Zero && ClosestSanctuary.Distance(TrinityPlugin.Player.Position) < 12)
+                    return ClosestSanctuary;
+
+                return ClosestOcculous != Vector3.Zero && ClosestOcculous.Distance(TrinityPlugin.Player.Position) < 12
+                    ? ClosestOcculous
+                    : Vector3.Zero;
+            }
+        }
+
+        internal static Vector3 BestDpsPosition
+        {
+            get
+            {
+                return BestBuffPosition != Vector3.Zero
+                    ? BestBuffPosition
+                    : PhelonTargeting.BestAoeUnit().Position;
+            }
+        }
+
+        internal static Vector3 BestWalkLocation
+        {
+            get
+            {
+                if (ClosestHealthGlobe() != null)
+                    return ClosestHealthGlobe().Position;
+
+                // Prevent Default Attack
+                if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Destructible)
+                {
+                    //Logger.Log("Prevent Primary Attack ");
+                    var targetPosition = TargetUtil.GetLoiterPosition(PhelonTargeting.BestAoeUnit(), 20f);
+                    // return new TrinityPower(SNOPower.Walk, 7f, targetPosition);
+                    return targetPosition;
+                }
+                return TrinityPlugin.CurrentTarget.Position;
+            }
+        }
+
         internal static List<TrinityCacheObject> MobsBetweenRange(float startRange = 15f, float endRange = 25)
         {
             return (from u in SafeList(true)
@@ -48,8 +96,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             return (from u in SafeList(addUnitsInAoE)
                     where u.IsUnit &&
                     u.RadiusDistance <= maxSearchRange &&
-                    u.HasBeenInLoS
-                    orderby u.CountUnitsInFront() descending
+                    u.HasBeenInLoS && !u.HasDebuff(aura)
+                    orderby u.NearbyUnitsWithinDistance(10),
+                     u.Distance descending
                     select u).FirstOrDefault();
         }
 
@@ -72,25 +121,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             return clusterUnit.NearbyUnitsWithinDistance(10) > pierceUnit.CountUnitsInFront()
                 ? clusterUnit
                 : pierceUnit;
-        }
-
-        internal static Vector3 BestWalkLocation
-        {
-            get
-            {
-                if (ClosestHealthGlobe(35) != null)
-                    return  ClosestHealthGlobe(35).Position;
-
-                // Prevent Default Attack
-                if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Destructible)
-                {
-                    //Logger.Log("Prevent Primary Attack ");
-                    var targetPosition = TargetUtil.GetLoiterPosition(TrinityPlugin.CurrentTarget, 20f);
-                    // return new TrinityPower(SNOPower.Walk, 7f, targetPosition);
-                    return targetPosition;
-                }
-                return TrinityPlugin.CurrentTarget.Position;
-            }
         }
 
         internal static List<TrinityCacheObject> TargetsInFrontOfMe(float maxRange, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
@@ -167,6 +197,49 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             }
         }
 
+        internal static List<TrinityCacheObject> GetOculusBuffDiaObjects(float range = 25f, bool objectsInAoe = false)
+        {
+            return
+                (from u in SafeList(objectsInAoe)
+                 where u.RadiusDistance <= range &&
+                       u.ActorSNO == 433966
+                 orderby u.Distance
+                 select u).ToList();
+        }
+
+        internal static Vector3 ClosestSancAndOcc
+        {
+            get
+            {
+                foreach (var item in GetInnerSanctuaryDiaObjects(35).ToList().Where(item => GetOculusBuffDiaObjects(35).OrderBy(x => x.Distance)
+                    .Select(y => y.Position)
+                    .Any(z => z.Distance(item.Position) < 7)))
+                {
+                    return item.Position;
+                }
+                return Vector3.Zero;
+            }
+        }
+
+        internal static Vector3 ClosestSanctuary
+        {
+            get
+            {
+                var trinityCacheObject = GetInnerSanctuaryDiaObjects(35f).FirstOrDefault();
+                return trinityCacheObject?.Position ?? Vector3.Zero;
+            }
+        }
+
+        internal static List<TrinityCacheObject> GetInnerSanctuaryDiaObjects(float range = 25f, bool objectsInAoe = false)
+        {
+            return
+                (from u in SafeList(objectsInAoe)
+                 where u.RadiusDistance <= range &&
+                       u.ActorSNO == 320136
+                 orderby u.Distance
+                 select u).ToList();
+        }
+
         internal static TrinityCacheObject ClosestHealthGlobe(float distance = 45, bool objectsInAoe = false)
         {
             return (from u in SafeList(objectsInAoe)
@@ -239,16 +312,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                     select u.Position).ToList();
 
             return clusterUnits.Any() ? clusterUnits.FirstOrDefault() : Vector3.Zero;
-        }
-
-        internal static List<TrinityCacheObject> GetOculusBuffDiaObjects(float range = 25f, bool objectsInAoe = false)
-        {
-            return
-                (from u in SafeList(objectsInAoe)
-                    where u.RadiusDistance <= range &&
-                          u.ActorSNO == 433966
-                    orderby u.Distance
-                    select u).ToList();
         }
 
         public static Vector3 PointBehind(Vector3 point, bool objectsInAoe = false)

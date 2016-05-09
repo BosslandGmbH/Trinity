@@ -34,11 +34,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
 
                 if (ShouldBlindingFlash)
                     return CastBlindingFlash;
-                if (ShouldCripplingWave(out target))
-                    return CastCripplingWave(target);
 
                 if (ShouldCycloneStrike)
                     return CastCycloneStrike;
+
+                if (ShouldCripplingWave(out target))
+                    return CastCripplingWave(target);
 
                 return null;
             }
@@ -182,11 +183,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             {
                 get
                 {
-                    var cycloneStrikeRange = Runes.Monk.Implosion.IsActive ? 34f : 24f;
-                    var cycloneStrikeSpirit = Runes.Monk.EyeOfTheStorm.IsActive ? 80 : 100;
                     return Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResource > cycloneStrikeSpirit &&
-                            (PhelonUtils.MobsBetweenRange(13, cycloneStrikeRange).Count > 3 ||
-                             TimeSincePowerUse(SNOPower.Monk_CycloneStrike) > Settings.Combat.Monk.CycloneStrikeDelay);
+                           (PhelonUtils.MobsBetweenRange(13, cycloneStrikeRange).Count > 3 ||
+                            CurrentTarget != null && CurrentTarget.IsBoss ||
+                            TimeSincePowerUse(SNOPower.Monk_CycloneStrike) > Settings.Combat.Monk.CycloneStrikeDelay);
                 }
             }
 
@@ -199,8 +199,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             private static bool ShouldCripplingWave(out TrinityCacheObject target)
             {
                 target = null;
+
                 if (!Skills.Monk.CripplingWave.CanCast())
                     return false;
+
+                target = TargetUtil.GetClosestUnit(12);
+                if (target != null && Player.PrimaryResource < 20)
+                    return true;
+
                 target = PhelonUtils.BestAuraUnit(SNOPower.Monk_CripplingWave, 12, true);
                 return target != null;
             }
