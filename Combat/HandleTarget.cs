@@ -547,7 +547,7 @@ namespace Trinity
 
             using (new PerformanceLogger("HandleTarget.TrySpecialMovement"))
             { 
-                if (ClassMover.SpecialMovement(CurrentDestination) && Player.Position.Distance(CurrentDestination) > 10)
+                if (ClassMover.SpecialMovement(CurrentDestination))
                 {
                     // Try to ensure the bot isn't navigating to somewhere behind us.
                     Navigator.Clear();

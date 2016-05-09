@@ -26,6 +26,25 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return null;
             }
 
+            public static bool ShouldAncientSpear(out TrinityCacheObject target)
+            {
+                target = null;
+
+                if (!Skills.Barbarian.AncientSpear.CanCast())
+                    return false;
+
+                target = PhelonUtils.GetFarthestClusterUnit(25, 60);
+
+                return target != null && target.Distance <= 60 && Player.PrimaryResourcePct > 0.50 &&
+                       TimeSincePowerUse(SNOPower.X1_Barbarian_AncientSpear) > 1500;
+            }
+
+            public static TrinityPower CastAncientSpear(TrinityCacheObject target)
+            {
+                return new TrinityPower(SNOPower.X1_Barbarian_AncientSpear, 60f,
+                    target.ACDGuid);
+            }
+
             public static bool ShouldIgnorePain
             {
                 get
@@ -81,7 +100,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                         return true;
 
                     if (CurrentTarget != null)
-                        return !Legendary.BladeOfTheTribes.IsEquipped || TargetUtil.AnyMobsInRange(20f);
+                        return Legendary.BladeOfTheTribes.IsEquipped && TargetUtil.AnyMobsInRange(20f);
 
                     return !GetHasBuff(SNOPower.X1_Barbarian_WarCry_v2);
                 }

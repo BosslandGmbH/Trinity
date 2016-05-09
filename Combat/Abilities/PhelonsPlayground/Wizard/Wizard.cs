@@ -20,8 +20,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (FirebirdsCount == 3 || VyrsCount == 3)
                 {
                     power = Firebirds.PowerSelector();
-                    if (power == null)
-                        power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+                    //if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+                    if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, Player.Position);
                 }
             }
             return power;

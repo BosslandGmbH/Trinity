@@ -17,6 +17,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
         {
             public static TrinityPower PowerSelector()
             {
+                if (!Skills.Wizard.ArchonStrike.IsActive)
+                    return null;
+
                 if (ShouldArcaneBlast)
                     return CastArcaneBlast;
 
@@ -25,7 +28,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 var bestAoeUnit = PhelonTargeting.BestAoeUnit();
 
-                if ((ShouldArcaneBlast || ShouldArcaneStrike) && !Core.Avoidance.InCriticalAvoidance(bestAoeUnit.Position))
+                if (Skills.Wizard.ArchonStrike.IsActive && !Core.Avoidance.InCriticalAvoidance(bestAoeUnit.Position))
                     return new TrinityPower(SNOPower.Walk, 3f, bestAoeUnit.Position);
 
                 if (ShouldDisentegrate)
@@ -38,7 +41,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 get
                 {
                     return Skills.Wizard.ArchonDisintegrationWave.CanCast() &&
-                           PhelonTargeting.BestAoeUnit(true).Distance < 45;
+                           PhelonUtils.GetBestPierceTarget(45).Distance < 45;
                 }
             }
 
@@ -49,8 +52,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     //Logger.Log(
                     //    $"Casting {Skills.Wizard.ArchonDisintegrationWave.SNOPower} on " +
                     //    $"{CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
-                    return new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 7f,
-                        PhelonTargeting.BestAoeUnit(true).Position);
+                    return new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 45f,
+                        PhelonUtils.PointBehind(PhelonUtils.GetBestPierceTarget(45).Position));
                 }
             }
 

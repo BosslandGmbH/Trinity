@@ -78,6 +78,7 @@ namespace Trinity.DbProvider
         private const int TimeToBlockMs = 1000;
         private const int TimeToCheckBlockingMs = 25;
         public static bool IsBlocked = false;
+        public static bool IsCompletelyBlocked = IsBlocked && !ClassMover.IsSpecialMovementReady;
 
         internal static bool GetIsBlocked()
         {
@@ -124,7 +125,7 @@ namespace Trinity.DbProvider
                                           where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, TrinityPlugin.Player.Position, pointInFacingDirection0)
                                           select u).Count();
 
-                blocked = numMonstersInFront > 3;
+                blocked = numMonstersInFront > 0;
             }
 
             if (BlockedTimer.IsRunning && (surrounded || blocked) && BlockedTimer.ElapsedMilliseconds > TimeToBlockMs)
@@ -176,6 +177,10 @@ namespace Trinity.DbProvider
                 {
                     case ActorClass.Witchdoctor:
                         return CacheData.Buffs.HasBuff(SNOPower.Witchdoctor_SpiritWalk);
+                    case ActorClass.Barbarian:
+                        return CacheData.Buffs.HasBuff(SNOPower.Barbarian_Sprint) && Runes.Barbarian.Gangway.IsActive;
+                    case ActorClass.Monk:
+                        return CacheData.Buffs.HasBuff(SNOPower.Monk_TempestRush);
                 }                
                 return false;
             }
@@ -612,7 +617,7 @@ namespace Trinity.DbProvider
                 if (NavigationProvider == null)
                     NavigationProvider = Navigator.GetNavigationProviderAs<DefaultNavigationProvider>();
 
-                if (ClassMover.SpecialMovement(destination) && destinationDistance > 7)
+                if (ClassMover.SpecialMovement(destination))
                 {
                     Navigator.Clear();
                     NavigationProvider.CurrentPath.Clear();

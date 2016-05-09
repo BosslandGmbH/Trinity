@@ -72,13 +72,14 @@ namespace Trinity.Movement
 
         private static bool HasInGeomBuff = CacheData.Buffs.HasBuff(SNOPower.ItemPassive_Unique_Ring_919_x1);
 
-        private static float MinDistance = PlayerMover.IsBlocked || CombatBase.IsCurrentlyAvoiding
+        private static float MinDistance = PlayerMover.IsBlocked || CombatBase.IsCurrentlyAvoiding || HasInGeomBuff ||
+                                           CombatBase.GetHasBuff(SNOPower.Pages_Buff_Infinite_Casting)
             ? 0
             : TrinityPlugin.CurrentTarget != null &&
               (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNPC ||
                TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine)
-                ? 10
-                : HasInGeomBuff ? 10 : 15;
+                ? 5
+                : 10;
 
         public static bool OutOfCombatMovementAllowed
         {
@@ -129,7 +130,8 @@ namespace Trinity.Movement
                     case ActorClass.Crusader:
                         return CombatBase.CanCast(SNOPower.X1_Crusader_SteedCharge);
                     case ActorClass.DemonHunter:
-                        return TrinityPlugin.Player.PrimaryResource > 12 && CombatBase.CanCast(SNOPower.DemonHunter_Strafe) ||
+                        return TrinityPlugin.Player.PrimaryResource > 12 &&
+                               CombatBase.CanCast(SNOPower.DemonHunter_Strafe) ||
                                CombatBase.CanCast(SNOPower.DemonHunter_Vault) ||
                                Skills.DemonHunter.Vault.IsActive && player.PrimaryResource > 20 &&
                                Legendary.ChainOfShadows.IsEquipped &&
@@ -143,7 +145,9 @@ namespace Trinity.Movement
                         return CombatBase.CanCast(SNOPower.Wizard_Teleport) &&
                                (!Legendary.AetherWalker.IsEquipped ||
                                 Legendary.AetherWalker.IsEquipped && player.PrimaryResource > 25) ||
-                               CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport);
+                               CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport) || 
+                               CombatBase.GetHasBuff(SNOPower.Wizard_Archon) &&
+                               CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport, CombatBase.CanCastFlags.NoTimer);
                     default:
                         return false;
                 }
@@ -204,9 +208,9 @@ namespace Trinity.Movement
             }
 
             //Sprint
-            if (CombatBase.CanCast(SNOPower.Barbarian_Sprint) && !CombatBase.GetHasBuff(SNOPower.Barbarian_Sprint) && 
+            if (CombatBase.CanCast(SNOPower.Barbarian_Sprint) && !CombatBase.GetHasBuff(SNOPower.Barbarian_Sprint) &&
                 (TrinityPlugin.Player.PrimaryResource > 20 && !Sets.BulKathossOath.IsFullyEquipped ||
-                Sets.BulKathossOath.IsFullyEquipped && TrinityPlugin.Player.PrimaryResourcePct > 0.90))
+                 Sets.BulKathossOath.IsFullyEquipped && TrinityPlugin.Player.PrimaryResourcePct > 0.90))
             {
                 Skills.Barbarian.Sprint.Cast(destination);
                 LogMovement(SNOPower.Barbarian_Sprint, destination);
@@ -388,7 +392,8 @@ namespace Trinity.Movement
                 {
                     LastTempestRushPosition = vTargetAimPoint;
 
-                    ZetaDia.Me.UsePower(SNOPower.Monk_TempestRush, vTargetAimPoint, TrinityPlugin.CurrentWorldDynamicId, -1);
+                    ZetaDia.Me.UsePower(SNOPower.Monk_TempestRush, vTargetAimPoint, TrinityPlugin.CurrentWorldDynamicId,
+                        -1);
                     SpellHistory.RecordSpell(SNOPower.Monk_TempestRush);
 
                     // simulate movement speed of 30
