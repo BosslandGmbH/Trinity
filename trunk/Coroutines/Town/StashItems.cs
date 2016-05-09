@@ -545,6 +545,10 @@ namespace Trinity.Coroutines.Town
 
         private static bool CanStackOnPage(IItem item, int stashPageNumber, ref int col, ref int row, InventoryMap itemsOnStashPage)
         {
+
+            if (item.IsUnidentified)
+                return false;
+
             if (item.MaxStackCount > 0 && !item.IsTradeable && !_specialCaseNonStackableItems.Contains(item.RawItemType))
             {
                 for (int i = 0; i < 10; i++)

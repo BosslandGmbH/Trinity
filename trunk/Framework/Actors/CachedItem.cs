@@ -172,7 +172,7 @@ namespace Trinity.Framework.Actors
             IsPotion = RawItemType == RawItemType.Potion;
             IsLegendaryGem = RawItemType == RawItemType.UpgradeableJewel;
             IsMiscItem = ItemBaseType == ItemBaseType.Misc;
-            IsTwoSquareItem = TypeConversions.GetIsTwoSlot(ItemBaseType, ItemType);
+            IsTwoSquareItem = TypeConversions.GetIsTwoSlot(ItemBaseType, ItemType, RawItemType);
             LastRefreshTime = DateTime.UtcNow;
         }
 
@@ -351,7 +351,17 @@ namespace Trinity.Framework.Actors
                 return true;
             }
 
-            return Attributes.IsTradeable && Attributes.ItemTradePlayerLow.Contains(Core.Hero.PlayerTradeId);
+            if (ItemQualityLevel >= ItemQuality.Legendary || IsCraftingReagent)
+            {
+                return Attributes.IsTradeable && Attributes.ItemTradePlayerLow.Contains(Core.Hero.PlayerTradeId);
+            }
+
+            if (IsEquipment && ItemQualityLevel <= ItemQuality.Rare6)
+            {
+                return true;
+            }
+
+            return false;
         }
 
     }

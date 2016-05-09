@@ -11,6 +11,7 @@ using Trinity.Framework;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Utilities;
 using Trinity.Helpers;
+using Trinity.Movement;
 using Trinity.Reference;
 using Trinity.Technicals;
 using TrinityCoroutines;
@@ -75,7 +76,7 @@ namespace Trinity.DbProvider
             if (noMonsters)
             {
                 Logger.LogDebug($"No Monsters nearby, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
-                await MoveTo.Execute(StartPosition, "Town Portal Position", 5f, () => ZetaDia.CurrentWorldSnoId != StartWorld);
+                await MoveTo.Execute(StartPosition, "Town Portal Position", 15f, () => ZetaDia.CurrentWorldSnoId != StartWorld || Navigator.StuckHandler.IsStuck);
                 Stop();
                 return false;
             }
@@ -84,7 +85,7 @@ namespace Trinity.DbProvider
             if (clearFinished)
             {
                 Logger.LogDebug("Clear timer finished, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
-                await MoveTo.Execute(StartPosition, "Town Portal Position", 5f, () => ZetaDia.CurrentWorldSnoId != StartWorld);
+                await MoveTo.Execute(StartPosition, "Town Portal Position", 15f, () => ZetaDia.CurrentWorldSnoId != StartWorld || Navigator.StuckHandler.IsStuck);
                 Stop();
                 return false;
             }

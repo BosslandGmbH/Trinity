@@ -107,6 +107,12 @@ namespace Trinity.Items
                 return TrinityPlugin.Settings.Loot.TownRun.StashVanityItems;
             }
 
+            if (!TrinityPlugin.Settings.Loot.TownRun.OpenHoradricCaches && item.RawItemType == RawItemType.TreasureBag)
+            {
+                Logger.Log($"Auto-Stashing Horadric Cache. Opening caches setting is disabled. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                return true;
+            }
+
             if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.GameBalanceId) || DataDictionary.PetSnoIds.Contains(item.ActorSnoId))
             {
                 Logger.Log($"Pet found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");

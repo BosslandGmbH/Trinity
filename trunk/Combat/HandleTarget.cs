@@ -13,6 +13,7 @@ using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Movement;
 using Trinity.Reference;
@@ -90,33 +91,6 @@ namespace Trinity
 
         private static int _waitedTicks = 0;
 
-        //public static void VacuumItems()
-        //{
-        //    var count = 0;
-
-        //    if (Player.IsCasting)
-        //        return;
-
-        //    // Items that shouldn't be picked up are currently excluded from cache.
-        //    // a pickup evaluation should be added if that changes.            
-
-        //    foreach (var item in TrinityPlugin.ObjectCache.Where(i => i.Item != null && i.Distance < 8f))
-        //    {
-        //        if (ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, item.ACDGuid))
-        //        {
-        //            count++;
-        //            SpellHistory.RecordSpell(SNOPower.Axe_Operate_Gizmo);
-        //        };
-        //    }
-
-        //    if (count > 0)
-        //    {
-        //        Logger.LogVerbose($"Vacuumed {count} items");
-        //    }
-        //}
-
-
-
         /// <summary>
         /// Handles all aspects of moving to and attacking the current target
         /// </summary>
@@ -168,7 +142,8 @@ namespace Trinity
                                         Distance = safespot.Distance(Player.Position),
                                         Radius = 3.5f,
                                         InternalName = "Avoidance Safespot",
-                                        IsSafeSpot = true
+                                        IsSafeSpot = true,
+                                        Weight = Weighting.MaxWeight
                                     };
                                 }
                             }
@@ -194,6 +169,11 @@ namespace Trinity
                         Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Player is casting revive ({0})", Player.CurrentAnimation);
                         return GetRunStatus(RunStatus.Success, "RevivingPlayer");
                     }
+
+
+                    RunStatus runStatus;
+                    if (ThrottleActionPerSecond(out runStatus)) //Settings.Advanced.ThrottleAPS && 
+                        return runStatus;
 
                     VacuumItems.Execute();               
 
@@ -263,8 +243,9 @@ namespace Trinity
                     // Some skills we need to wait to finish (like cyclone strike while epiphany is active)
                     if (WaitForAttackToFinish)
                     {
-                        if (ZetaDia.Me.LoopingAnimationEndTime > 0 || ZetaDia.Me.CommonData.AnimationState == AnimationState.Attacking || ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting)
+                        if (ZetaDia.Me.LoopingAnimationEndTime > 0 || ZetaDia.Me.CommonData.AnimationState == AnimationState.Attacking || ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting || ZetaDia.Me.CommonData.AnimationState == AnimationState.Transform)
                         {
+                            Logger.LogVerbose(LogCategory.Behavior, $"Waiting for Attack to Finish CurrentPower={CombatBase.CurrentPower}");
                             return GetRunStatus(RunStatus.Running, "WaitForAttackToFinish");
                         }
                         WaitForAttackToFinish = false;
@@ -338,7 +319,7 @@ namespace Trinity
                     using (new PerformanceLogger("HandleTarget.CheckAvoidanceBuffs"))
                     {
                         // See if we can use any special buffs etc. while in avoidance
-                        if (CurrentTarget.Type == TrinityObjectType.Avoidance && !CurrentTarget.IsWaitSpot)
+                        if ((CurrentTarget.Type == TrinityObjectType.Avoidance || CurrentTarget.IsSafeSpot) && !CurrentTarget.IsWaitSpot )
                         {
                             powerBuff = AbilitySelector(true);
                             if (powerBuff.SNOPower != SNOPower.None)
@@ -350,6 +331,7 @@ namespace Trinity
                                     LastPowerUsed = powerBuff.SNOPower;
                                     CacheData.AbilityLastUsed[powerBuff.SNOPower] = DateTime.UtcNow;
                                     SpellHistory.RecordSpell(powerBuff.SNOPower);
+                                    return GetRunStatus(RunStatus.Running, "Cast Avoidance Spell");
                                 }
                                 else
                                 {
@@ -516,11 +498,11 @@ namespace Trinity
         /// This checks a collection of recorded actions and waits if too much has happened too fast.
         /// </summary>
         private static bool ThrottleActionPerSecond(out RunStatus runStatus)
-        {
-            const int measureTimeMs = 1000;
-            var actionLimit = Math.Max(Settings.Advanced.ThrottleAPSActionCount, 2);
-
+        {            
+            const int measureTimeMs = 200;
+            const int actionLimit = 4;
             DateTime actionLimitTime;
+
             if (LastActionTimes.Count >= actionLimit)
             {
                 actionLimitTime = LastActionTimes.ElementAt(LastActionTimes.Count - actionLimit);
@@ -531,18 +513,24 @@ namespace Trinity
             }
 
             while (LastActionTimes.Count > 25)
+            {
                 LastActionTimes.RemoveAt(0);
+            }
+
+            var target = ZetaDia.Actors.GetActorByACDId(CurrentTarget.ACDGuid) as DiaUnit;
+
+            Logger.Log($"CurrentTarget={CurrentTarget.InternalName} SNO={CurrentTarget.ActorSNO} Distance={CurrentTarget.Distance} CurrentPower={CombatBase.CurrentPower} TargetAcd={CurrentTarget.ACDGuid} TargetValid={target.IsFullyValid()} TargetAlive={target?.IsAlive} TargetHealth={CurrentTarget.HitPoints} PowerTargetDistance={CombatBase.CurrentPower.TargetPosition.Distance(ZetaDia.Me.Position)} TargetDistance={target?.Distance} TimeSinceLastUse={SpellHistory.TimeSinceUse(CombatBase.CurrentPower.SNOPower)}");
 
             // Wait until NTh action happend more than than half the measure time ago          
             var timeSince = DateTime.UtcNow.Subtract(actionLimitTime).TotalMilliseconds;
             if (timeSince < measureTimeMs / 2) 
             {
-                Logger.Log(LogCategory.Behavior, "Throttling - Actions Per Second Limit Reached! {0} actions were taken within {1}ms",
-                    actionLimit, timeSince);
-               
+                Logger.Log(LogCategory.Behavior, "Throttling - Actions Per Second Limit Reached! {0} actions were taken within {1}ms", actionLimit, timeSince);               
+                //Logger.Warn($"Throttling - Actions Per Second Limit Reached! {actionLimit} actions were taken within {timeSince}ms");               
                 runStatus = RunStatus.Running;
                 return true;                
             }
+
             runStatus = default(RunStatus);
             return false;
         }
@@ -1560,6 +1548,23 @@ namespace Trinity
                     return;
                 }
 
+                if (targetACDGuid > 0)
+                {
+                    var targetAcd = ZetaDia.Actors.GetActorByACDId(targetACDGuid);
+                    if (!targetAcd.IsFullyValid())
+                    {
+                        Logger.LogVerbose("Invalid target Acd, probably dead");
+                        return;
+                    }
+                    var unit = targetAcd as DiaUnit;
+                    if (unit == null || unit.HitpointsCurrentPct <= 0 || unit.HitpointsCurrentPct > 1)
+                    {
+                        Logger.LogVerbose("Invalid target hitpoints, probably dead");
+                        return;
+                    }
+                }
+
+
                 var d = targetPosition.Distance(Player.Position);
                 if (d > 120)
                 {
@@ -1575,6 +1580,7 @@ namespace Trinity
                     return;
                 }
                     
+
                 // For "no-attack" logic
                 if (CombatBase.CurrentPower.SNOPower == SNOPower.Walk && CombatBase.CurrentPower.TargetPosition == Vector3.Zero)
                 {
@@ -1587,9 +1593,10 @@ namespace Trinity
                     PowerManager.CanCastFlags flags;
 
                     if (PowerManager.CanCast(CombatBase.CurrentPower.SNOPower, out flags))
-                    {
-                        Logger.Log(LogCategory.Targetting, "Casting {0} at {1} WorldId={2} ACDId={3} CastOnSelf={4} Flags={5}",
-                            CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, targetACDGuid, CombatBase.CurrentPower.IsCastOnSelf, flags);
+                    {                       
+                        Logger.Log(LogCategory.Targetting, "Casting {0} at {1} WorldId={2} ACDId={3} CastOnSelf={4} Flags={5} IsDeadZeta={6} DeadPlayers={7}",
+                            CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, 
+                            targetACDGuid, CombatBase.CurrentPower.IsCastOnSelf, flags, ZetaDia.Me.IsDead, ZetaDia.Actors.GetActorsOfType<DiaPlayer>().Any(x => x.IsDead));
 
                         if (powerBuff != null && powerBuff.WaitForAttackToFinish)
                             WaitForAttackToFinish = true;

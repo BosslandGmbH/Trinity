@@ -174,7 +174,7 @@
                         <CheckBox IsChecked="{Binding Path=DH.CompanionOffCooldown}">Companion</CheckBox>
                         <CheckBox IsChecked="{Binding Path=DH.RainOfVengeanceOffCD}">Rain of Vengeance</CheckBox>
                         <CheckBox IsChecked="{Binding Path=DH.SpamSmokeScreen}" ToolTip="For use with Displacement rune">Smoke Screen</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=DH.AlwaysVengeance}" ToolTip="For use with Displacement rune">Smoke Screen</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=DH.AlwaysVengeance}">Vengeance</CheckBox>
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>

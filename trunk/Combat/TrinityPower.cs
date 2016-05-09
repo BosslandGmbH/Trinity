@@ -310,6 +310,20 @@ namespace Trinity
             SNOPower.Monk_WayOfTheHundredFists,
             SNOPower.Monk_CycloneStrike,
             SNOPower.X1_Crusader_Bombardment,
+            SNOPower.Wizard_Archon_ArcaneStrike_Lightning,
+            SNOPower.Wizard_Archon_ArcaneStrike_Cold,
+            SNOPower.Wizard_Archon_ArcaneStrike_Fire,
+            SNOPower.Wizard_Archon_ArcaneStrike,
+            SNOPower.Wizard_Archon_ArcaneBlast_Lightning,
+            SNOPower.Wizard_Archon_ArcaneBlast_Fire,
+            SNOPower.Wizard_Archon_ArcaneBlast_Cold,
+            SNOPower.Wizard_Archon_ArcaneBlast,
+            SNOPower.Wizard_Archon_DisintegrationWave,
+            SNOPower.Wizard_Archon_DisintegrationWave_Cold,
+            SNOPower.Wizard_Archon_DisintegrationWave_Fire,
+            SNOPower.Wizard_Archon_DisintegrationWave_Lightning,
+            SNOPower.Wizard_ArcaneTorrent,
+            SNOPower.Wizard_Archon_Teleport,
         };
 
         public static int MillisecondsToTickDelay(int milliseconds)

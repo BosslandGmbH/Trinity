@@ -148,7 +148,7 @@ namespace Trinity.UI.RadarUI
                 TrinityPlugin.Player.UpdatePlayerCache();
                 TrinityPlugin.RefreshDiaObjectCache();
                 ScenesStorage.Update();
-                Core.Update();
+                Core.ForcedUpdate();
                 UpdateVisualizer();
                 return false;
             }

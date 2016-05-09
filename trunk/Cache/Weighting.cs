@@ -195,7 +195,8 @@ namespace Trinity
                         {
                             cacheObject.WeightInfo += "Player is blocked ";
 
-                            if (cacheObject.Distance > 15f && !cacheObject.IsBossOrEliteRareUnique && cacheObject.Type != TrinityObjectType.ProgressionGlobe)
+                            if (cacheObject.Distance > 15f && !cacheObject.IsBossOrEliteRareUnique && 
+                                cacheObject.Type != TrinityObjectType.ProgressionGlobe && !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSNO))
                             {
                                 cacheObject.Weight = 0;
                                 cacheObject.WeightInfo += "Ignoring Blocked Far Away ";
@@ -208,6 +209,13 @@ namespace Trinity
                             cacheObject.Weight = 0;
                             cacheObject.WeightInfo += string.Format("Max BloodShards ", cacheObject.InternalName);
                             continue;
+                        }
+
+                        if (Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
+                        {
+                            cacheObject.Weight = 0;
+                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Intersected by Critical Avoidance.";
+                            break;
                         }
 
                         cacheObject.Weight = MinWeight;
@@ -520,7 +528,7 @@ namespace Trinity
                                                     cacheObject.InternalName);
                                             break;
                                         }
-                                        else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize )
+                                        else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize)
                                         {
                                             cacheObject.WeightInfo += $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {CombatBase.CombatOverrides.EffectiveTrashSize})";
                                             break;
@@ -866,20 +874,20 @@ namespace Trinity
 
                             case TrinityObjectType.ProgressionGlobe:
                             {
-                                ////Ignore because we are blocked by objects or mobs.
-                                //if (IsNavBlocked(cacheObject))
-                                //{
-                                //    cacheObject.WeightInfo += string.Format("Ignoring {0} - Nav Blocked.",
-                                //        cacheObject.InternalName);
-                                //    break;
-                                //}
-                                ////Ignore because we are TownPortaling
-                                //if (TownRun.IsTryingToTownPortal())
-                                //{
-                                //    cacheObject.WeightInfo += string.Format("Ignoring {0} - Town Portal.",
-                                //        cacheObject.InternalName);
-                                //    break;
-                                //}
+                                    ////Ignore because we are blocked by objects or mobs.
+                                    //if (IsNavBlocked(cacheObject))
+                                    //{
+                                    //    cacheObject.WeightInfo += string.Format("Ignoring {0} - Nav Blocked.",
+                                    //        cacheObject.InternalName);
+                                    //    break;
+                                    //}
+                                    ////Ignore because we are TownPortaling
+                                    //if (TownRun.IsTryingToTownPortal())
+                                    //{
+                                    //    cacheObject.WeightInfo += string.Format("Ignoring {0} - Town Portal.",
+                                    //        cacheObject.InternalName);
+                                    //    break;
+                                    //}
 
                                 if (Settings.Loot.Pickup.IgnoreProgressionGlobesInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
                                 {
@@ -899,14 +907,14 @@ namespace Trinity
                                     break;
                                 }
 
-                                if (cacheObject.Distance <= 150f)
-                                {
-                                    cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Progression Globe.";
-                                    cacheObject.Weight += MaxWeight;
-                                    break;
-                                }
+                                    if (cacheObject.Distance <= 200f)
+                                    {
+                                        cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Progression Globe.";
+                                        cacheObject.Weight += MaxWeight;
+                                        break;
+                                    }
 
-                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
                                                       LastTargetFormula(cacheObject) +
                                                       EliteMonsterNearFormula(cacheObject, elites) +
                                                       AoENearFormula(cacheObject) +
@@ -1454,7 +1462,7 @@ namespace Trinity
                     // Set Record History
                     if (bestTarget?.InternalName != null && bestTarget.ActorSNO > 0 && bestTarget.Weight > 0)
                     {
-                        TargetUtil.ClearCurrentTarget("Clearing for Weight");
+                        //TargetUtil.ClearCurrentTarget("Clearing for Weight");
                         LastTargetIsSafeSpot = bestTarget != null && CurrentTarget != null && CurrentTarget.IsSafeSpot;
                         CurrentTarget = bestTarget;
                         
@@ -1469,10 +1477,13 @@ namespace Trinity
                         }
                         return;
                     }
-                    TargetUtil.ClearCurrentTarget("No good target's found in Weighting.");
+
+                    if (CurrentTarget != null && !CurrentTarget.IsSafeSpot)
+                    {
+                        TargetUtil.ClearCurrentTarget("No good target's found in Weighting.");
+                    }
                     //var text = bestTarget != null ? bestTarget.Weight : 0;
                     //Logger.Log(" CACHE COUNT: " + ObjectCache.Count(x => !x.IsPlayer) + " Weight: " + text);
-
                 }
             }
 

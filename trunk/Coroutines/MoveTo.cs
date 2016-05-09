@@ -46,10 +46,14 @@ namespace TrinityCoroutines
 
             Navigator.PlayerMover.MoveTowards(location);
 
-            while (ZetaDia.IsInGame && location.Distance(ZetaDia.Me.Position) >= range)
-            {           
+            while (ZetaDia.IsInGame && location.Distance2D(ZetaDia.Me.Position) >= range && !ZetaDia.Me.IsDead)
+            {
                 if (Navigator.StuckHandler.IsStuck)
+                {
                     await Navigator.StuckHandler.DoUnstick();
+                    Logger.LogVerbose("MoveTo Finished. (Stuck)", _startingWorldId, ZetaDia.CurrentWorldSnoId);
+                    break;
+                }
 
                 if (stopCondition != null && stopCondition())
                 {

@@ -327,6 +327,11 @@ namespace Trinity
 
                 foreach (DiaObject currentObject in refreshSource)
                 {
+                    //if (currentObject.ActorType == ActorType.Projectile)
+                    //{
+                    //    Logger.Log($"Projectile: {currentObject.Name} at {currentObject.Position}");
+                    //}
+
                     try
                     {
                         if (!Settings.Advanced.LogCategories.HasFlag(LogCategory.CacheManagement))
