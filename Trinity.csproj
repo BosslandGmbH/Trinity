@@ -64,7 +64,8 @@
     <Reference Include="Adventurer">
       <HintPath>..\Adventurer\Trunk\bin\Debug\Adventurer.dll</HintPath>
     </Reference>
-    <Reference Include="Demonbuddy">
+    <Reference Include="Demonbuddy, Version=1.1.3036.624, Culture=neutral, PublicKeyToken=eff32ccf253d66d4, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DB-Current\Demonbuddy.exe</HintPath>
     </Reference>
     <Reference Include="GreyMagic">

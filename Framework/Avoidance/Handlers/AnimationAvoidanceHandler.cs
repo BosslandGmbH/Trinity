@@ -24,17 +24,15 @@ namespace Trinity.Framework.Avoidance.Handlers
     {
         private int _healthThresholdPct;
         private float _distanceMultiplier;
+        private bool _prioritize;
 
-        public bool IsAllowed
-        {
-            get { return TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct; }
-        }
+        public bool IsAllowed => TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct;
 
         public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
         {
             foreach (var actor in avoidance.Actors)
             {
-                var part = avoidance.Data.GetPart(actor.ActorSNO);
+                var part = avoidance.Data.GetPart(actor.CurrentAnimation);
                 var radius = Math.Max(part.Radius, actor.Radius);
                 var finalRadius = radius*DistanceMultiplier;
                 var nodes = grid.GetNodesInRadius(actor.Position, finalRadius);
@@ -42,7 +40,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 if (actor.CurrentAnimation != part.Animation)
                     continue;
 
-                if (part.Severity == Severity.Extreme)
+                if (Prioritize)
                 {
                     TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(actor.ActorSNO, finalRadius);
 
@@ -83,6 +81,16 @@ namespace Trinity.Framework.Avoidance.Handlers
         {
             get { return _distanceMultiplier; }
             set { SetField(ref _distanceMultiplier, value); }
+        }
+
+        [DataMember]
+        [Setting, DefaultValue(true)]
+        [UIControl(UIControlType.Checkbox)]
+        [Description("Avoidance will be flagged as a 'critical' avoidance; it will always be avoided if possible")]
+        public bool Prioritize
+        {
+            get { return _prioritize; }
+            set { SetField(ref _prioritize, value); }
         }
 
     }

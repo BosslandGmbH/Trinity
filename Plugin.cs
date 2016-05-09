@@ -377,6 +377,7 @@ namespace Trinity
                 Process.GetCurrentProcess().Id, Thread.CurrentThread.ManagedThreadId,
                 Thread.CurrentThread.Name, Application.Current.CheckAccess());
 
+            Core.Init();
             //ActorManager.Initialize();
 
         }

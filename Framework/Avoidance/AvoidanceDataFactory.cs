@@ -18,6 +18,8 @@ namespace Trinity.Framework.Avoidance
     {
         internal static List<AvoidanceData> AvoidanceData = new List<AvoidanceData>();
 
+        internal static ILookup<SNOAnim, AvoidancePart> LookupPartByAnimation { get; set; }
+
         public static readonly Dictionary<int, AvoidancePart> AvoidanceDataDictionary = new Dictionary<int, AvoidancePart>();
 
         public static bool TryCreateAvoidance(List<IActor> actors, IActor actor, out Structures.Avoidance avoidance)
@@ -202,6 +204,35 @@ namespace Trinity.Framework.Avoidance
                 }
             });
 
+            //Line 8: [1F490598] Type: ServerProp Name: X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot-211250 ActorSnoId: 359693, Distance: 26.54131
+            //Line 259: [1F4A52DC] Type: ClientEffect Name: X1_Unique_Monster_Generic_AOE_Sphere_Distortion-211338 ActorSnoId: 358917, Distance: 2.384186E-07
+            //Line 260: [1F472980] Type: ServerProp Name: X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot-211337 ActorSnoId: 359693, Distance: 2.384186E-07
+            //Line 271: [1F490598] Type: ServerProp Name: X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot-211250 ActorSnoId: 359693, Distance: 29.45315
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Pentagram",
+                Handler = new CircularAvoidanceHandler(),
+                Element = Element.Fire,
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Butcher Pentagram",
+                        ActorSnoId = (int)SNOActor.X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot, //359693,    
+                        Radius = 12f,
+                        Type = PartType.Main,
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Butcher Pentagram Telegraph", // ClientEffect
+                        ActorSnoId = (int)SNOActor.X1_Unique_Monster_Generic_AOE_Sphere_Distortion, //359693,    
+                        Radius = 12f,
+                        Type = PartType.Telegraph,
+                    },
+                }
+            });
+
             //// Fat guys that explode into worms
             //// Stitch_Suicide_Bomb State=Transform By: Corpulent_C (3849)
             //new DoubleInt((int)SNOActor.Corpulent_A, (int)SNOAnim.Stitch_Suicide_Bomb),
@@ -217,17 +248,37 @@ namespace Trinity.Framework.Avoidance
 
             AvoidanceData.Add(new AvoidanceData
             {
-                Name = "Corpulent",
+                Name = "Corpulent / Grotesque",
                 Handler = new AnimationAvoidanceHandler(),
                 Element = Element.Physical,
                 Parts = new List<AvoidancePart>
                 {
                     new AvoidancePart
                     {
-                        Name = "Corpulent_A",
-                        ActorSnoId = (int) SNOActor.Corpulent_A,
+                        Name = "Death Explosion",
                         Animation = SNOAnim.Stitch_Suicide_Bomb,
-                        Type = PartType.ActorAnimation,
+                        Type = PartType.ActorAnimation,      
+                        Radius = 26f
+                    },
+                }
+            });
+
+            //[19147660] Type: ClientEffect Name: p4_ratKing_ratBall_model-47703 ActorSnoId: 427100, Distance: 19.72662
+            //p4_RatKing_RatBallMonster, Type=Unit Dist=24.44967 IsBossOrEliteRareUnique=False IsAttackable=True
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Rat King",
+                Handler = new CircularAvoidanceHandler(),
+                Element = Element.Poison,
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Rat Ball",
+                        ActorSnoId = (int)SNOActor.p4_RatKing_RatBallMonster,
+                        Radius = 10f,
+                        Type = PartType.Main,
                     },
                 }
             });
@@ -560,23 +611,31 @@ namespace Trinity.Framework.Avoidance
         }
 
         private static void CreateUtils()
-        {            
+        {
+            var allParts = new List<AvoidancePart>();
+                                
             foreach (var avoidanceDatum in AvoidanceData)
             {
-                foreach (var component in avoidanceDatum.Parts)
+                foreach (var part in avoidanceDatum.Parts)
                 {
-                    component.Parent = avoidanceDatum;
-
+                    part.Parent = avoidanceDatum;
+                    allParts.Add(part);
+                    
                     try
-                    {        
-                        AvoidanceDataDictionary.Add(component.ActorSnoId, component);
+                    {
+                        if (part.ActorSnoId > 0)
+                        {
+                            AvoidanceDataDictionary.Add(part.ActorSnoId, part);
+                        }
                     }
                     catch(Exception ex)                   
                     {
-                        Logger.LogError("Failed to add AvoidanceData for {0} > {1}. Probably a duplicate ActorSnoId ({2})", avoidanceDatum.Name, component.Name, component.ActorSnoId);
+                        Logger.LogError("Failed to add AvoidanceData for {0} > {1}. Probably a duplicate ActorSnoId ({2})", avoidanceDatum.Name, part.Name, part.ActorSnoId);
                     }
                 }
             }
+
+            LookupPartByAnimation = allParts.Where(o => o.Animation != default(SNOAnim)).ToLookup(k => k.Animation, v => v);
         }
 
         public static AvoidanceData GetAvoidanceData(IActor actor)
@@ -590,6 +649,9 @@ namespace Trinity.Framework.Avoidance
                 return data;
 
             if (TryFindPartByAffix(actor, out data))
+                return data;
+
+            if (TryFindPartByAnimation(actor, out data))
                 return data;
 
             return null;
@@ -632,6 +694,23 @@ namespace Trinity.Framework.Avoidance
             return false;
         }
 
+        private static bool TryFindPartByAnimation(IActor actor, out AvoidanceData data)
+        {
+            data = null;
+
+            if (actor.CurrentAnimation == default(SNOAnim))
+                return false;
+
+            var part = GetAvoidancePart(actor.CurrentAnimation);
+            if (part != null)
+            {
+                data = part.Parent;
+                return true;
+            }
+
+            return false;
+        }
+
         public static AvoidancePart GetAvoidancePart(int actorId)
         {
             return AvoidanceDataDictionary.ContainsKey(actorId) ? AvoidanceDataDictionary[actorId] : null;
@@ -641,6 +720,12 @@ namespace Trinity.Framework.Avoidance
         {
             return AvoidanceDataDictionary.Values.FirstOrDefault(a => a.Affix == affix);
         }
+
+        public static AvoidancePart GetAvoidancePart(SNOAnim actorAnimation)
+        {
+            return LookupPartByAnimation.Contains(actorAnimation) ? LookupPartByAnimation[actorAnimation].FirstOrDefault() : null;
+        }
+
     }
 }
 

@@ -1366,11 +1366,12 @@ namespace Trinity.Combat.Abilities
                     percentage = min / (double)Settings.Combat.Misc.TrashPackSize;
 
                 TrashSizeModifierPct = percentage;
-
+                
                 if (Math.Abs(beforeApply - _trashSizeModifierPct) > double.Epsilon)
                 {
                     _trashSizeRevertConditions.Add(revertCondition);
                     _revertTrashSizeTime = DateTime.UtcNow.Add(duration);
+                    Logger.LogVerbose($"Trash Size Changed by ModifyTrashSizeForDuration");
                     return true;
                 }
                 return false;

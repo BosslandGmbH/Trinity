@@ -18,6 +18,7 @@ using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Service;
 using Zeta.Game.Internals.SNO;
+using static Trinity.Framework.Actors.ActorManager;
 using ThreadState = System.Threading.ThreadState;
 
 namespace Trinity.Framework.Actors
@@ -33,15 +34,21 @@ namespace Trinity.Framework.Actors
         public static int TickDelayMs;
         private static int _currentWorldSnoId;
         
-        static ActorManager()
-        {
-            Pulsator.OnPulse += (sender, args) => Update();        
-        }
-
         private static int[] AnnToAcd => MemoryWrapper.ReadArray<int>(_actors.BaseAddress + 0x04, 8764);
         public static List<CachedItem> Items { get; private set; } = new List<CachedItem>();
         public static HashSet<int> AnnIds { get; private set; } = new HashSet<int>();
         public static bool IsDisposed => ZetaDia.Memory.Read<int>(_actors.BaseAddress + 0x130 + 0x18) != 1611526157;
+
+        static ActorManager()
+        {
+            GameEvents.OnGameJoined += GameEventsOnGameJoined;
+        }
+
+        private static void GameEventsOnGameJoined(object sender, EventArgs eventArgs)
+        {
+            Reset();
+            Update();
+        }
 
         public static void Update()
         {

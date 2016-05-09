@@ -6,6 +6,7 @@ using Trinity.Framework;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Reference;
 using Trinity.Technicals;
+using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -33,10 +34,10 @@ namespace Trinity.Combat.Abilities
         /// <returns></returns>
         internal static TrinityPower GetPower()
         {
-            if (Skills.Wizard.IsArchonActive())
-            {                
-                return GetArchonPower();
-            }
+            TrinityPower power;
+
+            if (TryGetArchonPower(out power))
+                return power;            
 
             // Buffs
             if (UseOOCBuff)
@@ -53,6 +54,7 @@ namespace Trinity.Combat.Abilities
             {
                 return GetCombatAvoidancePower();
             }
+
             // In combat, Not Avoiding
             if (CurrentTarget != null)
             {
@@ -448,7 +450,7 @@ namespace Trinity.Combat.Abilities
 
             // Arcane Torrent
             if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_ArcaneTorrent) && !ShouldWaitForConventionElement(Skills.Wizard.ArcaneTorrent) &&
-                (Player.PrimaryResource >= 16 || Legendary.HergbrashsBinding.IsEquipped))
+                (Player.PrimaryResource >= 20 || Legendary.HergbrashsBinding.IsEquipped && Player.PrimaryResource >= 16))
             {
                 return new TrinityPower(SNOPower.Wizard_ArcaneTorrent, 40f, CurrentTarget.ACDGuid);
             }
@@ -696,10 +698,12 @@ namespace Trinity.Combat.Abilities
         /// Gets the best Archon power for the current conditions
         /// </summary>
         /// <returns></returns>
-        private static TrinityPower GetArchonPower()
+        private static bool TryGetArchonPower(out TrinityPower power)
         {
+            power = default(TrinityPower);
+
             if (CurrentTarget == null)
-                return null;
+                return false;
             
             if (Settings.Combat.Wizard.AlwaysArchon && Skills.Wizard.Archon.CanCast() && Sets.ChantodosResolve.IsFullyEquipped)
             {
@@ -709,16 +713,32 @@ namespace Trinity.Combat.Abilities
                 }                         
             }
 
+            if (!Skills.Wizard.IsArchonActive())
+                return false;
+
+            if (IsCurrentlyAvoiding)
+            {
+                if (CurrentTarget.IsSafeSpot &&  CurrentTarget.Distance > 20f && Skills.Wizard.ArchonTeleport.CanCast())
+                {
+                    Logger.LogVerbose($"Avoidance Teleport Distance={CurrentTarget.Distance}");
+                    power = new TrinityPower(Skills.Wizard.ArchonTeleport.SNOPower, 50f, CurrentTarget.Position);
+                    return true;
+                }
+                return false;
+            }
+
             if (!Skills.Wizard.IsArchonActive() && Settings.Combat.Wizard.FindClustersWhenNotArchon)
             {
                 if (Settings.Combat.Wizard.FindClustersWhenNotArchon)
                 {
+                    
+
                     // Double trash range up to max of 10 for 8 seconds or until archon starts or there is a big cluster in range.
                     CombatOverrides.ModifyTrashSizeForDuration(2d, TimeSpan.FromSeconds(8), 4, 10, () => BigClusterOrElitesInRange() || Skills.Wizard.IsArchonActive());
                 }
-                return null;
+                return false;
             }
-            
+
             // Use Teleport to stay close-ish to monsters so they take our AOE pulse and blast damage.
             var monstersWithinKiteRange = TargetUtil.AnyMobsInRange(CurrentTarget.CollisionRadius + KiteDistance);
             var recentlyAvoiding = Core.Avoidance.Avoider.TimeSinceLastAvoid.TotalMilliseconds < 500;
@@ -728,56 +748,97 @@ namespace Trinity.Combat.Abilities
 
                 // Teleport within kite distance of target to prevent porting ontop of people and then just kiting back away again.                
                 var offsetDistance = CurrentTarget.Distance - KiteDistance - CurrentTarget.CollisionRadius;
-                if (offsetDistance > 10f)
+                if (offsetDistance > 15f)
                 {
                     var position = MathEx.CalculatePointFrom(CurrentTarget.Position, ZetaDia.Me.Position, offsetDistance);
-                    return new TrinityPower(Skills.Wizard.ArchonTeleport.SNOPower, 50f, position);
+                    power = new TrinityPower(Skills.Wizard.ArchonTeleport.SNOPower, 50f, position);
+                    return true;
                 }             
             }
 
+            //392694, 392695, 392696 == Arcane Strike,
+            //392697, 392699, 392698 == Disintegration Wave
+            //392692, 392693, 392691 == Arcane Blast, Ice Blast 
+
+            //SNOPower
+            //    beamPower = SNOPower.Wizard_Archon_ArcaneBlast,
+            //    strikePower = SNOPower.Wizard_Archon_ArcaneStrike,
+            //    blastPower = SNOPower.Wizard_Archon_DisintegrationWave;
+
+            var beam = CacheData.Hotbar.ActiveSkills
+                .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_DisintegrationWave ||
+                    p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Cold ||
+                    p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Fire ||
+                    p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Lightning);
+
+            var strike = CacheData.Hotbar.ActiveSkills
+                .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneStrike ||
+                    p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Fire ||
+                    p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Cold ||
+                    p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Lightning);
+
+            var blast = CacheData.Hotbar.ActiveSkills
+                .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneBlast ||
+                    p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Cold ||
+                    p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Fire ||
+                    p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Lightning);
+
             // Cast Strike if densely surrounded
-            if (!Settings.Combat.Wizard.NoArcaneStrike && CurrentTarget.Distance < 12f && TargetUtil.NumMobsInRange(12f) > 6 && Skills.Wizard.ArchonStrike.CanCast())
+            if (!Settings.Combat.Wizard.NoArcaneStrike && CurrentTarget.Distance < 12f && TargetUtil.NumMobsInRange(12f) > 6 && strike != null && PowerManager.CanCast(strike.Power))
             {
-                return new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 12f, CurrentTarget.Position);
+                power = new TrinityPower(strike.Power, 12f, CurrentTarget.Position);
+                return true;
             }
 
             // Arcane Blast
-            if (!Settings.Combat.Wizard.NoArcaneBlast && TargetUtil.AnyMobsInRange(15f) && Skills.Wizard.ArchonBlast.CanCast())
+            if (!Settings.Combat.Wizard.NoArcaneBlast && TargetUtil.AnyMobsInRange(15f) && beam != null && PowerManager.CanCast(blast.Power))
             {
                 Logger.Log(LogCategory.Routine, $"Casting ArchonBlast ({Skills.Wizard.ArchonBlast.SNOPower}) on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
-                return new TrinityPower(Skills.Wizard.ArchonBlast.SNOPower, 50f, CurrentTarget.Position);
+                power = new TrinityPower(blast.Power, 50f, CurrentTarget.Position);
+                return true;
             }
 
             // Disintegration
-            if (!Settings.Combat.Wizard.DisableDisintegrationWave && CurrentTarget.IsPlayerFacing(60) && TargetUtil.AnyMobsInRange(40f) && Skills.Wizard.ArchonDisintegrationWave.CanCast())
+            if (!Settings.Combat.Wizard.DisableDisintegrationWave && CurrentTarget.IsPlayerFacing(60) && TargetUtil.AnyMobsInRange(40f) && beam != null && PowerManager.CanCast(beam.Power))
             {
                 Logger.Log(LogCategory.Routine, $"Casting ArchonDisintegrationWave {Skills.Wizard.ArchonDisintegrationWave.SNOPower} on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
                 var position = MathEx.CalculatePointFrom(CurrentTarget.Position, ZetaDia.Me.Position, 45f);
-                return new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 45f, position);
+                power = new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 45f, position);
+                return true;
             }
 
             // ArchonStrike
-            if (!Settings.Combat.Wizard.NoArcaneStrike && TargetUtil.AnyMobsInRange(12f) && Skills.Wizard.ArchonStrike.CanCast())
+            if (!Settings.Combat.Wizard.NoArcaneStrike && TargetUtil.AnyMobsInRange(12f) && PowerManager.CanCast(strike.Power))
             {
                 Logger.Log(LogCategory.Routine, $"Casting ArchonStrike {Skills.Wizard.ArchonStrike.SNOPower} on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
-                return new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 12f, CurrentTarget.Position);
+                power = new TrinityPower(strike.Power, 12f, CurrentTarget.Position);
+                return true;
             }
 
             // Teleport if nothing nearby
-            if (!TargetUtil.AnyMobsInRange(60f) && Skills.Wizard.ArchonTeleport.CanCast())
+            if (!TargetUtil.AnyMobsInRange(60f) && Skills.Wizard.ArchonTeleport.CanCast() && CurrentTarget.Distance > 25f)
             {
-                return new TrinityPower(Skills.Wizard.ArchonTeleport.SNOPower, 50f, CurrentTarget.Position);
+                power = new TrinityPower(Skills.Wizard.ArchonTeleport.SNOPower, 50f, CurrentTarget.Position);
+                return true;
             }
 
-            // Disintegration last resort (mostly to move into range of a distant target)
-            if (CurrentTarget.IsPlayerFacing(60))
+            // Disintegration last resort
+            if (!Settings.Combat.Wizard.DisableDisintegrationWave && CurrentTarget.IsPlayerFacing(60) && beam != null && PowerManager.CanCast(beam.Power))
             {
                 var position = MathEx.CalculatePointFrom(CurrentTarget.Position, ZetaDia.Me.Position, 45f);
-                return new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 45f, position);
+                power = new TrinityPower(beam.Power, 45f, position);
+                return true;
             }
 
-            // Turn to face target
-            return new TrinityPower(SNOPower.Walk, 100f, CurrentTarget.Position);
+            // ArchonStrike last resort 
+            if (!Settings.Combat.Wizard.NoArcaneStrike && strike != null && PowerManager.CanCast(strike.Power))
+            {
+                Logger.Log(LogCategory.Routine, $"Casting ArchonStrike {Skills.Wizard.ArchonStrike.SNOPower} on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
+                power = new TrinityPower(strike.Power, 12f, CurrentTarget.Position);
+                return true;
+            }
+
+            return false;
 
             //if (!Player.IsIncapacitated && 
             //      CanCast(SNOPower.Wizard_Archon_SlowTime, CanCastFlags.NoTimer) &&
@@ -902,7 +963,7 @@ namespace Trinity.Combat.Abilities
             if (CanCast(SNOPower.Wizard_Electrocute))
                 return new TrinityPower(SNOPower.Wizard_Electrocute, 9f);
 
-            if (CanCast(SNOPower.Wizard_ArcaneTorrent))
+            if (CanCast(SNOPower.Wizard_ArcaneTorrent) && Player.PrimaryResource > GetAdjustedCost(16))
                 return new TrinityPower(SNOPower.Wizard_ArcaneTorrent, 9f);
 
             if (CanCast(SNOPower.Wizard_Blizzard))

@@ -761,8 +761,13 @@ namespace Trinity.Framework.Helpers
             return false;
         }
 
-        public static bool GetIsTwoSlot(ItemBaseType baseType, ItemType itemType)
+        public static bool GetIsTwoSlot(ItemBaseType baseType, ItemType itemType, RawItemType rawType)
         {
+            switch (rawType)
+            {
+                case RawItemType.TreasureBag:
+                    return true;
+            }
             switch (itemType)
             {
                 case ItemType.Belt:

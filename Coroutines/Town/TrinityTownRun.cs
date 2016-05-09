@@ -255,6 +255,12 @@ namespace Trinity.Coroutines.Town
                 }
             }
 
+            if (RepairItems.EquipmentNeedsRepair())
+            {
+                Logger.LogDebug("Townrun for repair.");
+                return true;
+            }
+
             var validLocation = TrinityItemManager.FindValidBackpackLocation(true);
             if (validLocation.X < 0 || validLocation.Y < 0)
             {
@@ -278,7 +284,7 @@ namespace Trinity.Coroutines.Town
             if (TrinityPlugin.Player.IsDead)
                 return false;
 
-            if (!DeathHandler.EquipmentNeedsEmergencyRepair())
+            if (!RepairItems.EquipmentNeedsRepair())
             {
                 if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift)
                 {

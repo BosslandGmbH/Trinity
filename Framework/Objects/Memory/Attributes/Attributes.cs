@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using IronPython.Compiler.Ast;
+using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Items;
@@ -42,8 +43,9 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             }
 
             Map = (Group.Flags & 4) != 0 ? Group.PtrMap : Group.Map;
-            if (!Map.IsValid || Map.Count == 0)
+            if (!Map.IsValid)
             {
+                ActorManager.Reset();
                 Logger.LogVerbose($"Attribute Map Invalid for groupId: {groupId}");
                 return;
             }

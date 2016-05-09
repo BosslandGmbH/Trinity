@@ -238,7 +238,7 @@ namespace Trinity
         public float RadiusDistance { get { return Math.Max(Distance - Radius, 0f); } }
 
         [DataMember]
-        public string InternalName { get; set; }
+        public string InternalName { get; set; } = string.Empty;
 
         public SNOAnim Animation { get; set; }
 

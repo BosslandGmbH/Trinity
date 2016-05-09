@@ -41,7 +41,7 @@ namespace Trinity.DbProvider
                 if (isDead)
                 {                    
                     _deathCounter = _deathTime.Subtract(DateTime.UtcNow).TotalSeconds > 60 ? 0 : _deathCounter +1;
-                    _deathNeedRepairCounter = _deathTime.Subtract(DateTime.UtcNow).TotalSeconds < 60 && EquipmentNeedsEmergencyRepair() ? _deathNeedRepairCounter + 1 : 0;
+                    _deathNeedRepairCounter = _deathTime.Subtract(DateTime.UtcNow).TotalSeconds < 60 && EquipmentNeedsEmergencyRepair(5) ? _deathNeedRepairCounter + 1 : 0;
                     _deathTime = DateTime.UtcNow;
                     _resButtonsVisibleStart = DateTime.MinValue;
                     _resurrectButtonsVisible = false;
@@ -59,7 +59,7 @@ namespace Trinity.DbProvider
                         await MoveWhileGhosted();
                     }
 
-                    if (EquipmentNeedsEmergencyRepair())
+                    if (EquipmentNeedsEmergencyRepair(5))
                     {
                         BrainBehavior.ForceTownrun("[Death] Item Durability - Need to Repair");
                     }
@@ -76,7 +76,7 @@ namespace Trinity.DbProvider
             var reviveAtCheckPointButton = UIElement.FromHash(0xBFAAF48BA9316742);
             var acceptRessurectionButton = UIElement.FromHash(0x712D458486D6F062);
             var reviveInTownButton = UIElement.FromHash(0x7A2AF9C0F3045ADA);
-            var needRepair = EquipmentNeedsEmergencyRepair();
+            var needRepair = EquipmentNeedsEmergencyRepair(5);
             var checkpointButtonReady = reviveAtCheckPointButton.IsVisible && reviveAtCheckPointButton.IsEnabled;
             var corpseButtonReady = reviveAtCorpseButton.IsVisible && reviveAtCorpseButton.IsEnabled;
             var townButtonReady = reviveInTownButton.IsVisible && reviveInTownButton.IsEnabled;
@@ -178,14 +178,14 @@ namespace Trinity.DbProvider
             return true;
         }
 
-        public static bool EquipmentNeedsEmergencyRepair()
+        public static bool EquipmentNeedsEmergencyRepair(int durabilityPct)
         {
             var equippedItems = ZetaDia.Me.Inventory.Equipped.Where(i => i.DurabilityCurrent < i.DurabilityMax).ToList();
             if (!equippedItems.Any())
                 return false;
 
             double max = equippedItems.Max(i => i.DurabilityPercent);
-            return max <= 5;
+            return max <= durabilityPct;
         }
 
         public static bool IsBeingRevived()

@@ -131,11 +131,17 @@ namespace Trinity.Framework.Avoidance
             {
                 if (TargetZDif < 8 && Settings.Avoidances.Any(a => a.IsEnabled))
                 {
-                    if (Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance))
+                    var standingInCritical = Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance);
+                    if (standingInCritical)
                     {
                         Logger.Log(LogCategory.Avoidance, "IsStandingInFlags... CriticalAvoidance");
                         LastAvoidTime = DateTime.UtcNow;
                         return true;
+                    }
+
+                    if (CombatBase.CurrentTarget != null && Core.Grids.Avoidance.IsIntersectedByFlags(ZetaDia.Me.Position, CombatBase.CurrentTarget.Position, AvoidanceFlags.CriticalAvoidance))
+                    {
+                        TargetUtil.ClearCurrentTarget("Current Target Intersects Critical Avoidance.");
                     }
 
                     if (Core.Grids.Avoidance.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance))
@@ -171,11 +177,11 @@ namespace Trinity.Framework.Avoidance
                     return false;
                 }
 
-                if (CombatBase.CurrentTarget?.Type == TrinityObjectType.ProgressionGlobe && CombatBase.CurrentTarget?.Distance < 80f)
-                {
-                    Logger.Log(LogCategory.Avoidance, "Not kiting because current target is a close progression globe");
-                    return false;
-                }
+                //if (CombatBase.CurrentTarget?.Type == TrinityObjectType.ProgressionGlobe && CombatBase.CurrentTarget?.Distance < 80f)
+                //{
+                //    Logger.Log(LogCategory.Avoidance, "Not kiting because current target is a close progression globe");
+                //    return false;
+                //}
 
                 var isAtKiteHealth = TrinityPlugin.Player.CurrentHealthPct * 100 <= Settings.KiteHealth;
                 if (isAtKiteHealth && TargetZDif < 4 && Settings.KiteMode != KiteMode.Never)

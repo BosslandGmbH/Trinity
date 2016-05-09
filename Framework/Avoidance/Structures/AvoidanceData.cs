@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Avoidance.Handlers;
+using Zeta.Game;
 
 namespace Trinity.Framework.Avoidance.Structures
 {
@@ -66,6 +67,11 @@ namespace Trinity.Framework.Avoidance.Structures
         public AvoidancePart GetPart(int actorSnoId)
         {
             return Parts.FirstOrDefault(p => p.ActorSnoId == actorSnoId);
+        }
+
+        public AvoidancePart GetPart(SNOAnim actorAnimation)
+        {
+            return Parts.FirstOrDefault(p => p.Animation == actorAnimation);
         }
 
     }

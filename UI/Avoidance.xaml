@@ -190,7 +190,7 @@
                                 <CheckBox IsChecked="{Binding Path=Avoidance.PathAroundAvoidance}" ToolTip="Do not walk through Avoidances, even at full health">Path Around Avoidance</CheckBox>
                                 <!--<CheckBox IsChecked="{Binding Path=Misc.KillMonstersInAoE}" ToolTip="Attack units standing in Avoidances">Attack Mobs in Avoidances</CheckBox>-->
                                     <CheckBox IsChecked="{Binding Path=Avoidance.AvoidOutsideCombat}" ToolTip="Avoid AoE out of combat (Arcane, molten, etc)">Avoid when out of combat</CheckBox>
-                                    <CheckBox IsChecked="{Binding Path=Avoidance.DontAvoidWhenBlocked}" ToolTip="When blocked with monsters and unable to move, stop trying to avoid.">Don't Avoid/Kite when Blocked</CheckBox>
+                                    <!--<CheckBox IsChecked="{Binding Path=Avoidance.DontAvoidWhenBlocked}" ToolTip="When blocked with monsters and unable to move, stop trying to avoid.">Don't Avoid/Kite when Blocked</CheckBox>-->
                                 </UniformGrid>
                         </GroupBox>
                         <!--<GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
