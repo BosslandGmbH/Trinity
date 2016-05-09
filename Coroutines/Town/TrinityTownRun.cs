@@ -24,6 +24,7 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.SNO;
 using ActorManager = Trinity.Framework.Actors.ActorManager;
 using Logger = Trinity.Technicals.Logger;
 
@@ -91,6 +92,11 @@ namespace Trinity.Coroutines.Town
 
                 if (!ZetaDia.IsInTown)
                 {
+                    if(ZetaDia.Me.IsInCombat && !ClearArea.IsClearing && ZetaDia.Actors.GetActorsOfType<DiaUnit>().Any(u => u.IsAlive && u.IsHostile && u.Distance < 16f))                   
+                    {
+                        ClearArea.Start();
+                    }
+
                     Logger.LogDebug("Pre Go to town");
 
                     await GoToTown();
@@ -431,15 +437,38 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (!await MoveToAndInteract.Execute(portal))
+            Logger.Log("Found a hearth portal, lets use it.");
+
+            if (!await MoveToAndInteract.Execute(portal, 2f, 10))
             {
                 Logger.Log("Failed to move to return portal :(");
                 return false;
             }
 
-            portal.GetActor()?.Interact();
+            var actor = portal.GetActor();
+            if (actor != null)
+            {
+                if (!actor.Interact())
+                {
+                    Logger.Log("Failed to interact with return portal.");
+                }
+            }
 
             await Coroutine.Sleep(1000);
+
+            if (ZetaDia.IsInTown && !ZetaDia.IsLoadingWorld)
+            {
+                Logger.Log("Trying again to use return portal.");
+                var gizmo = ZetaDia.Actors.GetActorsOfType<DiaGizmo>().FirstOrDefault(g => g.ActorInfo.GizmoType == GizmoType.HearthPortal);
+                if (gizmo != null)
+                {
+                    await CommonCoroutines.MoveAndStop(gizmo.Position, 2f, "Portal Position");
+                    await Coroutine.Sleep(1000);
+                    gizmo.Interact();
+                    gizmo.Interact();
+                }
+            }
+
             await Coroutine.Wait(5000, () => !ZetaDia.IsLoadingWorld);
 
             return true;
