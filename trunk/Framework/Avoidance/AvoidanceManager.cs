@@ -127,14 +127,6 @@ namespace Trinity.Framework.Avoidance
                 if (actor == null)
                     continue;
 
-                //if (actor.InternalName.Contains("Corpulent"))
-                //{
-                //    Logger.Log($"Animation Actor {actor.Name} ({actor.ActorSNO}) Anim={actor.CurrentAnimation}");
-                //}
-
-                //if (!AvoidanceDataFactory.AvoidanceDataDictionary.ContainsKey(actor.ActorSNO) && !actor.IsElite)
-                //    continue;
-
                 var rActorId = actor.RActorGuid;
 
                 IActor existingActor;

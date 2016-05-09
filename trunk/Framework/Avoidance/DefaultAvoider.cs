@@ -50,6 +50,9 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
+                if (CacheData.BuffsCache.Instance.HasInvulnerableShrine)
+                    return false;
+
                 IsKiting = false;
                 IsAvoiding = false;
 

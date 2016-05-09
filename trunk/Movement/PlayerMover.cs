@@ -166,6 +166,7 @@ namespace Trinity.DbProvider
         // 138989 = health pool, 176074 = protection, 176076 = fortune, 176077 = frenzied, 176536 = portal in leorics, 260330 = cooldown shrine, 330695 to 330699 = pylons
         // Exp shrines = ???? Other shrines ????
 
+
         public static bool CanMoveUnhindered
         {
             get
@@ -181,7 +182,9 @@ namespace Trinity.DbProvider
                         return CacheData.Buffs.HasBuff(SNOPower.Barbarian_Sprint) && Runes.Barbarian.Gangway.IsActive;
                     case ActorClass.Monk:
                         return CacheData.Buffs.HasBuff(SNOPower.Monk_TempestRush);
-                }                
+                    case ActorClass.Crusader:
+                        return CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_SteedCharge);
+                }
                 return false;
             }
         }

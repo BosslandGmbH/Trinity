@@ -50,6 +50,113 @@ namespace Trinity.Framework.Avoidance
 
         private static void CreateData()
         {
+
+            //17:43:34.477 INFO  MainWindow [1A6061A4] Type: Monster Name: X1_LR_Boss_westmarchBrute-75354 ActorSnoId: 353874, Distance: 12.13973
+            //17:43:34.477 INFO  MainWindow [1A6058FC] Type: ServerProp Name: p2_westmarchBrute_leap_telegraph-76444 ActorSnoId: 428962, Distance: 12.43738
+            //17:43:34.477 INFO  MainWindow [1A5F9A8C] Type: Monster Name: Generic_Proxy-76443 ActorSnoId: 4176, Distance: 12.43738
+            //17:43:34.478 INFO  MainWindow [1A614708] Type: ClientEffect Name: x1_westmarchBrute_B_leap_trailActor-76453 ActorSnoId: 332634, Distance: 14.03841
+            //17:42:59.069 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_B_attack_06_out State=Transform By: X1_LR_Boss_westmarchBrute (353874)
+            //17:43:00.185 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_B_attack_01 State=Transform By: X1_LR_Boss_westmarchBrute (353874)
+            //17:43:01.539 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_idle_01 State=Idle By: X1_LR_Boss_westmarchBrute (353874)
+            //17:43:01.643 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_run_01 State=Running By: X1_LR_Boss_westmarchBrute (353874)
+            //17:43:03.256 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_taunt State=Transform By: X1_LR_Boss_westmarchBrute (353874)
+            //17:43:04.820 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_B_attack_02_in State=Transform By: X1_LR_Boss_westmarchBrute (353874)
+            //17:43:05.511 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_attack_02_mid State=Running By: X1_LR_Boss_westmarchBrute (353874)
+            //17:43:05.699 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_attack_02_out State=Attacking By: X1_LR_Boss_westmarchBrute (353874)
+            //17:43:16.950 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_B_attack_06_in State=Transform By: X1_LR_Boss_westmarchBrute (353874)
+            //17:43:17.683 INFO  Logger [Trinity 2.41.47][Animation] x1_westmarchBrute_B_attack_06_mid State=Transform By: X1_LR_Boss_westmarchBrute (353874)
+            //[1A603208] Type: ServerProp Name: x1_westmarchBrute_bladeFX_model-75675 ActorSnoId: 291331, Distance: 24.00573
+
+
+
+            // x1_MonsterAffix_Thunderstorm_Impact
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Thunderstorm",
+                AffixGbId = 0,
+                IsEnabledByDefault = true,
+                Element = Element.Lightning,
+                Handler = new CircularAvoidanceHandler(),
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Pulse",
+                        ActorSnoId = (int)SNOActor.x1_MonsterAffix_Thunderstorm_Impact,
+                        Radius = 20f,
+                        Delay = TimeSpan.FromSeconds(1),
+                        Duration = TimeSpan.FromSeconds(4),
+                        Type = PartType.Main,
+                    }
+                }
+            });
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Herald of Pestilence",
+                AffixGbId = 0,
+                IsEnabledByDefault = true,
+                Element = Element.Poison,
+                Handler = new CircularAvoidanceHandler(),
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Hands",
+                        ActorSnoId = (int)SNOActor.creepMobArm,
+                        Radius = 12f,
+                        Type = PartType.Main,
+                    }
+                }
+            });
+
+            // monsterAffix_Desecrator_damage_AOE
+            // monsterAffix_Desecrator_telegraph
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Desecrator",
+                AffixGbId = 0,
+                IsEnabledByDefault = true,
+                Element = Element.Fire,
+                Handler = new CircularAvoidanceHandler(),
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Desecrator AOE",
+                        ActorSnoId = (int)SNOActor.monsterAffix_Desecrator_damage_AOE,
+                        Radius = 6f,
+                        Type = PartType.Main,
+                    }
+                }
+            });
+
+            //ActorId: 159367, Type: ServerProp, Name: MorluSpellcaster_Meteor_afterBurn
+            //ActorId: 159368, Type: ServerProp, Name: MorluSpellcaster_Meteor_Impact
+            //ActorId: 159369, Type: ServerProp, Name: MorluSpellcaster_Meteor_Pending
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Morlu Meteor",
+                AffixGbId = 0,
+                IsEnabledByDefault = true,
+                Element = Element.Fire,
+                Handler = new CircularAvoidanceHandler(),
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Morlu Meteor Pending",
+                        ActorSnoId = (int)SNOActor.MorluSpellcaster_Meteor_Pending,
+                        Radius = 20f,
+                        Type = PartType.Main,
+                    },
+                }
+            });
+
+
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Molten Core",
@@ -282,6 +389,52 @@ namespace Trinity.Framework.Avoidance
                     },
                 }
             });
+
+            ////x1_MonsterAffix_Thunderstorm_Impact 341512,
+
+            //AvoidanceData.Add(new AvoidanceData
+            //{
+            //    Name = "Thunderstorm",
+            //    Handler = new CircularAvoidanceHandler(),
+            //    Element = Element.Fire,
+            //    Parts = new List<AvoidancePart>
+            //    {
+            //        new AvoidancePart
+            //        {
+            //            Name = "Thunderstorm Impact",
+            //            ActorSnoId = (int)SNOActor.MorluSpellcaster_Meteor_Pending,
+            //            Radius = 14f,
+            //            Type = PartType.Main,
+            //        },
+            //        new AvoidancePart
+            //        {
+            //            Name = "Thunderstorm Impact",
+            //            ActorSnoId = (int)SNOActor.MorluSpellcaster_Meteor_Pending,
+            //            Radius = 14f,
+            //            Type = PartType.Telegraph,
+            //        },
+            //    }
+            //});
+
+            ////[1A5FBD2C] Type: ServerProp Name: MorluSpellcaster_Meteor_Pending-17716 ActorSnoId: 159369, Distance: 0
+            ////[1A61DA30] Type: ServerProp Name: MorluSpellcaster_Meteor_afterBurn-31703 ActorSnoId: 159367
+
+            //AvoidanceData.Add(new AvoidanceData
+            //{
+            //    Name = "Meteor",
+            //    Handler = new CircularAvoidanceHandler(),
+            //    Element = Element.Fire,
+            //    Parts = new List<AvoidancePart>
+            //    {
+            //        new AvoidancePart
+            //        {
+            //            Name = "Meteor Telegraph",
+            //            ActorSnoId = (int)SNOActor.MorluSpellcaster_Meteor_Pending,
+            //            Radius = 18f,
+            //            Type = PartType.Telegraph,
+            //        },
+            //    }
+            //});
 
             // monsterAffix_Plagued_endCloud = 108869,
             // Zombie_Plagued_C_Unique = 111321,
