@@ -92,7 +92,7 @@ namespace Trinity.Coroutines.Town
 
                 if (!ZetaDia.IsInTown)
                 {
-                    if(ZetaDia.Me.IsInCombat && !ClearArea.IsClearing && ZetaDia.Actors.GetActorsOfType<DiaUnit>().Any(u => u.IsAlive && u.IsHostile && u.Distance < 16f))                   
+                    if(ZetaDia.Me.IsInCombat && !ClearArea.IsClearing && ZetaDia.Actors.GetActorsOfType<DiaUnit>().Any(u => u?.CommonData != null && u.CommonData.IsValid && u.IsAlive && u.IsHostile && u.Distance < 16f))
                     {
                         ClearArea.Start();
                     }
