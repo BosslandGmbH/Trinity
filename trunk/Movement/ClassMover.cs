@@ -145,9 +145,7 @@ namespace Trinity.Movement
                         return CombatBase.CanCast(SNOPower.Wizard_Teleport) &&
                                (!Legendary.AetherWalker.IsEquipped ||
                                 Legendary.AetherWalker.IsEquipped && player.PrimaryResource > 25) ||
-                               CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport) || 
-                               CombatBase.GetHasBuff(SNOPower.Wizard_Archon) &&
-                               CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport, CombatBase.CanCastFlags.NoTimer);
+                               CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport);
                     default:
                         return false;
                 }
@@ -178,12 +176,15 @@ namespace Trinity.Movement
 
             if (destinationDistance >= MinDistance)
             {
-                var movementRange = 45f;
-                if (destinationDistance > movementRange)
-                    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
+                //var movementRange = 45f;
+                //Vector3 point;
+                //if (destinationDistance > movementRange && PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange, out point))
+                //{
+                //    destination = point;
+                //}
 
-                if (destination == Vector3.Zero)
-                    return false;
+                //if (destination == Vector3.Zero)
+                //    return false;
 
                 // Furious Charge movement for a barb
                 if ((HasInGeomBuff || CombatBase.CanCast(SNOPower.Barbarian_FuriousCharge)) &&
@@ -259,11 +260,11 @@ namespace Trinity.Movement
             var destinationDistance = destination.Distance(CacheData.Player.Position);
             if (destinationDistance < MinDistance) return false;
 
-            var movementRange = 35f;
-            if (destinationDistance > movementRange)
-                destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
-            if (destination == Vector3.Zero)
-                return false;
+            //var movementRange = 35f;
+            //if (destinationDistance > movementRange)
+            //    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
+            //if (destination == Vector3.Zero)
+            //    return false;
 
             int vaultDelay = TrinityPlugin.Settings.Combat.DemonHunter.VaultMovementDelay;
             var timeSinceUse = CombatBase.TimeSincePowerUse(SNOPower.DemonHunter_Vault);
@@ -323,6 +324,7 @@ namespace Trinity.Movement
             // Dashing Strike OOC
             if (CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike))
             {
+                //if (destinationDistance < MinDistance) return false;
                 //var movementRange = 35f;
                 //if (destinationDistance > movementRange)
                 //    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
@@ -339,24 +341,12 @@ namespace Trinity.Movement
                 //    return true;
                 //}
 
-                // Dashing Strike OOC
-                if (CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike))
-                {
-                    const float movementRange = 50f;
+                var charges = Skills.Monk.DashingStrike.Charges;
+                if (charges <= 0) return false;
 
-                    if (destinationDistance > movementRange)
-                        destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
-
-                    if (destination == Vector3.Zero || PlayerMover.MyPosition.Distance(destination) < 20)
-                        return false;
-
-                    var charges = Skills.Monk.DashingStrike.Charges;
-                    if (charges <= 0) return false;
-
-                    Skills.Monk.DashingStrike.Cast(destination);
-                    LogMovement(SNOPower.X1_Monk_DashingStrike, destination);
-                    return true;
-                }
+                Skills.Monk.DashingStrike.Cast(destination);
+                LogMovement(SNOPower.X1_Monk_DashingStrike, destination);
+                return true;
             }
             //Don't Channel if Item Shrine or isNPC is near.
             if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.Distance < _interactDistance &&
@@ -459,13 +449,13 @@ namespace Trinity.Movement
         {
             var destinationDistance = destination.Distance(CacheData.Player.Position);
             if (destinationDistance < MinDistance) return false;
-            const float movementRange = 50f;
 
-            if (destinationDistance > movementRange)
-                destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
+           // const float movementRange = 50f;
+            //if (destinationDistance > movementRange)
+            //    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
 
-            if (destination == Vector3.Zero || PlayerMover.MyPosition.Distance(destination) < 20)
-                return false;
+            //if (destination == Vector3.Zero || PlayerMover.MyPosition.Distance(destination) < 20)
+            //    return false;
 
             // Teleport for a wizard 
             if (CombatBase.CanCast(SNOPower.Wizard_Teleport, CombatBase.CanCastFlags.NoTimer) &&

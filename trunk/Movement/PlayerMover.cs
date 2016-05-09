@@ -647,13 +647,16 @@ namespace Trinity.DbProvider
             //Trinity.IsMoveRequested = false;
         }
 
-        public static Vector3 GetCurrentPathFarthestPoint(float minDistance, float maxDistance)
+        public static bool GetCurrentPathFarthestPoint(float minDistance, float maxDistance, out Vector3 point)
         {
 
             var remaining = GetCurrentPathPointsRemaining();
 
+            point = Vector3.Zero;
             if (!remaining.Any())
-                return Vector3.Zero;
+            {
+                return false;
+            }
 
             var points =
                 NavigationProvider.CurrentPath.Where(
@@ -677,7 +680,12 @@ namespace Trinity.DbProvider
                     .ToList();
             }
 
-            return points.Any() ? points.FirstOrDefault() : Vector3.Zero;
+            if (points.Any())
+            {
+                point = points.FirstOrDefault();
+                return true;
+            }
+            return false;
         }
 
         public static List<Vector3> GetCurrentPathPointsRemaining()

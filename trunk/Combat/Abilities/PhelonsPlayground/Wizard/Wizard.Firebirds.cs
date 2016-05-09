@@ -62,7 +62,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 get
                 {
-                    return Skills.Wizard.ExplosiveBlast.CanCast();
+                    return Skills.Wizard.ExplosiveBlast.CanCast() &&
+                           (GetHasBuff(SNOPower.Wizard_ExplosiveBlast) &&
+                            GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
+                            TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5);
                 }
             }
 
