@@ -953,13 +953,13 @@ namespace Trinity
         float IActor.RotationRadians
         {
             get { return Rotation; }
-            set { }
+            set { Rotation = value; }
         }
 
         DateTime IActor.CreationTime
         {
             get { return CreationTime; }
-            set { }
+            set { CreationTime = value; }
         }
 
         float IActor.MovementSpeed
@@ -1013,7 +1013,7 @@ namespace Trinity
         SNOAnim IActor.CurrentAnimation
         {
             get { return Animation; }
-            set { }
+            set { Animation = value; }
         }
 
         TargetingType IActor.TargetingType

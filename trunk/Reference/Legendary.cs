@@ -12154,7 +12154,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item FlailOfTheAscended = new Item
         {
-            Id = 0,
+            Id = 403860,
             Name = "Flail of the Ascended",
             Quality = ItemQuality.Legendary,
             Slug = "flail-of-the-ascended",

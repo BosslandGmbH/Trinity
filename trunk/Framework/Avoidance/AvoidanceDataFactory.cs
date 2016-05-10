@@ -356,7 +356,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Corpulent / Grotesque",
-                Handler = new AnimationAvoidanceHandler(),
+                Handler = new AnimationCircularAvoidanceHandler(),
                 Element = Element.Physical,
                 Parts = new List<AvoidancePart>
                 {
@@ -369,6 +369,243 @@ namespace Trinity.Framework.Avoidance
                     },
                 }
             });
+
+            // Anims with charge_ in the name without obvious player anims
+            //(int)SNOAnim.AssaultBeast_Land_attack_BullCharge_in, //7287
+            //(int)SNOAnim.AssaultBeast_Land_attack_BullCharge_middle, //7288
+            //(int)SNOAnim.AssaultBeast_Land_attack_BullCharge_out, //7289
+            //(int)SNOAnim.Beast_charge_02, //7755
+            //(int)SNOAnim.Beast_charge_04, //7756
+            //(int)SNOAnim.Beast_start_charge_02, //7782
+            //(int)SNOAnim.DeSoto_Run_Charge_Attack, //8270
+            //(int)SNOAnim.Templar_1HT_sheild_charge_attack, //9537
+            //(int)SNOAnim.Templar_1HT_sheild_charge_run, //9538
+            //(int)SNOAnim.Templar_HTH_sheild_charge_attack, //9562
+            //(int)SNOAnim.Templar_HTH_sheild_charge_run, //9563
+            //(int)SNOAnim.Butcher_Attack_Charge_01_in, //86159
+            //(int)SNOAnim.Templar_1HT_sheild_charge_windup, //87470
+            //(int)SNOAnim.Templar_HTH_sheild_charge_windup, //87471
+            //(int)SNOAnim.BigRed_charge_01, //134869
+            //(int)SNOAnim.Diablo_charge_attack, //194361
+            //(int)SNOAnim.Butcher_Attack_Charge_01_in_knockback, //194439
+            //(int)SNOAnim.TentacleHorse_Charge_Loop_01, //213335
+            //(int)SNOAnim.TentacleHorse_Charge_Loop_Outro_01, //213336
+            //(int)SNOAnim.TentacleHorse_Charge_Intro_01, //213337
+            //(int)SNOAnim.Templar_1HS_sheild_charge_windup, //216104
+            //(int)SNOAnim.Templar_1HS_sheild_charge_attack, //216112
+            //(int)SNOAnim.Templar_1HS_sheild_charge_run, //216113
+            //(int)SNOAnim.x1_BogFamily_brute_charge_end_01, //238829
+            //(int)SNOAnim.x1_BogFamily_brute_charge_intro_01, //238830
+            //(int)SNOAnim.x1_BogFamily_brute_charge_loop_01, //238831
+            //(int)SNOAnim.x1_scaryEyes_attack_charge_in, //255564
+            //(int)SNOAnim.x1_scaryEyes_attack_charge_mid, //255565
+            //(int)SNOAnim.x1_scaryEyes_attack_charge_out, //255566
+            //(int)SNOAnim.x1_Wraith_attack_05_charge_in, //265860
+            //(int)SNOAnim.x1_Wraith_attack_05_charge_mid, //265861
+            //(int)SNOAnim.x1_Wraith_attack_05_charge_out, //265862
+            //(int)SNOAnim.FloaterDemon_attack_charge_01, //302095
+            //(int)SNOAnim.FloaterDemon_attack_charge_out_01, //302097
+            //(int)SNOAnim.FloaterDemon_attack_charge_in_01, //302103
+            //(int)SNOAnim.x1_Skeleton_Westmarch_run_charge_01, //314784
+            //(int)SNOAnim.x1_portalGuardianMinion_attack_charge_01, //321853
+            //(int)SNOAnim.x1_portalGuardianMinion_attack_charge_tumble, //327413
+            //(int)SNOAnim.x1_portalGuardianMinion_attack_charge_recover, //327416
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Barricade_dead, //351028
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Barricade_death, //351029
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Barricade_idle, //351030
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Skybox_B_Rubble_idle, //351408
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Skybox_B_Rubble_opening, //351409
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Skybox_B_Rubble_open, //351410
+            //(int)SNOAnim.x1_TemplarOrder_1HT_sheild_charge_attack, //362401
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Barricade_Client_idle, //362789
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Towers_dead, //363246
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Towers_death, //363247
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Towers_idle, //363248
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Towers_Chain_idle, //364241
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Towers_Chain_dead, //364244
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Towers_Chain_death, //364245
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Towers_Chain_Client_A_idle, //364299
+            //(int)SNOAnim.x1_Pand_Ext_ImperiusCharge_Towers_Chain_Client_B_idle, //364360
+            //(int)SNOAnim.X1_BigRed_charge_01, //365666
+            //(int)SNOAnim.p1_Greed_Attack_Charge_01_in, //382686
+            //(int)SNOAnim.p1_Greed_BreakFree_charge_01, //392700
+            //(int)SNOAnim.p1_Greed_charge_1Frame, //397118
+            //(int)SNOAnim.P4_BigRed_attack_DoublePunch_Charge_in, //431298
+            //(int)SNOAnim.P4_GoatWarrior_attack_03_spear_charge_throw, //437659
+            //(int)SNOAnim.Barbarian_Female_1HS_Furious_Charge_Loop_Cannibal, //437861
+            //(int)SNOAnim.Barbarian_Female_1HS_Furious_Charge_End_Cannibal, //437862
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Charge Animations",
+                Handler = new AnimationBeamAvoidanceHandler(),                
+                Element = Element.Physical,
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Assault Beast Charge",
+                        Animation = SNOAnim.AssaultBeast_Land_attack_BullCharge_in,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Assault Beast Charge",
+                        Animation = SNOAnim.AssaultBeast_Land_attack_BullCharge_middle,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Assault Beast Charge",
+                        Animation = SNOAnim.AssaultBeast_Land_attack_BullCharge_out,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Beast Charge",
+                        Animation = SNOAnim.Beast_start_charge_02,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Beast Charge",
+                        Animation = SNOAnim.Beast_charge_04,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Beast Charge",
+                        Animation = SNOAnim.Beast_charge_02,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Diablo Charge",
+                        Animation = SNOAnim.Diablo_charge_attack,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Diablo Charge",
+                        Animation = SNOAnim.Beast_start_charge_02,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Diablo Charge",
+                        Animation = SNOAnim.Diablo_charge_attack,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Butcher Charge",
+                        Animation = SNOAnim.Butcher_Attack_Charge_01_in_knockback,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Tentacle Horse",
+                        Animation = SNOAnim.TentacleHorse_Charge_Loop_01,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Tentacle Horse",
+                        Animation = SNOAnim.TentacleHorse_Charge_Loop_Outro_01,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Tentacle Horse",
+                        Animation = SNOAnim.TentacleHorse_Charge_Intro_01,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Wraith",
+                        Animation = SNOAnim.x1_Wraith_attack_05_charge_in,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Wraith",
+                        Animation = SNOAnim.x1_Wraith_attack_05_charge_mid,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Wraith",
+                        Animation = SNOAnim.x1_Wraith_attack_05_charge_out,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Floater Demon",
+                        Animation = SNOAnim.FloaterDemon_attack_charge_01,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Floater Demon",
+                        Animation = SNOAnim.FloaterDemon_attack_charge_in_01,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Floater Demon",
+                        Animation = SNOAnim.FloaterDemon_attack_charge_in_01,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Big Red Charge",
+                        Animation = SNOAnim.X1_BigRed_charge_01,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Big Red Charge",
+                        Animation = SNOAnim.BigRed_charge_01,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },                    
+                    new AvoidancePart
+                    {
+                        Name = "Greed Boss Charge",
+                        Animation = SNOAnim.p1_Greed_Attack_Charge_01_in,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                    new AvoidancePart
+                    {
+                        Name = "Greed Boss Charge",
+                        Animation = SNOAnim.p1_Greed_BreakFree_charge_01,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
+                    },
+                }
+            });
+
 
             //[19147660] Type: ClientEffect Name: p4_ratKing_ratBall_model-47703 ActorSnoId: 427100, Distance: 19.72662
             //p4_RatKing_RatBallMonster, Type=Unit Dist=24.44967 IsBossOrEliteRareUnique=False IsAttackable=True

@@ -143,8 +143,10 @@ namespace Trinity.Framework.Avoidance
                     }
                     else
                     {
+                        Logger.Log($"Updating Existing Actor {actor.Name} OldAnim={existingActor.CurrentAnimation} NewAnim={actor.CurrentAnimation}");
                         existingActor.Position = actor.Position;
                         existingActor.Distance = actor.Distance;
+                        existingActor.CurrentAnimation = actor.CurrentAnimation;
                     }
                     continue;
                 }
