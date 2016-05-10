@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using Trinity.Movement;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;
@@ -22,18 +25,59 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             private static bool ShouldUseFuriousCharge(out TrinityCacheObject target)
             {
                 target = null;
+                if (!Skills.Barbarian.FuriousCharge.CanCast())
+                    return false;
+                var targetGoal = Math.Floor(5*TrinityPlugin.Player.CooldownReductionPct);
+                var bestPierce = PhelonUtils.GetBestClusterUnit(45);
+                var bestPierceCount = bestPierce.NearbyUnitsWithinDistance(7);
+                var bestTarget = PhelonTargeting.BestAoeUnit(true);
+                var bestTargetCount = bestTarget.NearbyUnitsWithinDistance(7);
+                var bestCluster = PhelonUtils.GetBestClusterUnit(7, 45);
+                var bestClusterCount = bestCluster.NearbyUnitsWithinDistance(7);
+                if (!ClassMover.HasInfiniteCasting)
+                {
+                    if (bestTargetCount == 1 || bestTargetCount >= targetGoal)
+                    {
+                        target = bestTarget;
+                        return true;
+                    }
+                    if (bestPierceCount == 1 || bestPierceCount >= targetGoal &&
+                        bestClusterCount == 1 || bestClusterCount >= targetGoal)
+                    {
+                        if (bestClusterCount > bestPierceCount)
+                        {
+                            target = bestCluster;
+                            return true;
+                        }
+                        target = bestPierce;
+                        return true;
+                    }
+                    if (bestPierceCount != 1 && bestPierceCount < targetGoal &&
+                        (bestClusterCount == 1 || bestClusterCount >= targetGoal))
+                    {
+                        target = bestCluster;
+                        return true;
+                    }
+                    if (bestClusterCount != 1 && bestClusterCount < targetGoal &&
+                        (bestPierceCount == 1 || bestPierceCount >= targetGoal))
+                    {
+                        target = bestPierce;
+                        return true;
+                    }
+                }
 
-                if (!CanCast(SNOPower.Barbarian_FuriousCharge))
-                        return false;
+                if (PhelonTargeting.BestAoeUnit(true).IsBossOrEliteRareUnique)
+                {
+                    target = PhelonTargeting.BestAoeUnit(true);
+                    return true;
+                }
 
-                target = PhelonUtils.BestPierceOrClusterUnit(10, 38);
-
-                return target != null;
+                return false;
             }
 
             private static TrinityPower CastFuriousCharge(TrinityCacheObject target)
             {
-                return new TrinityPower(SNOPower.Barbarian_FuriousCharge, 38,
+                return new TrinityPower(SNOPower.Barbarian_FuriousCharge, 45,
                         PhelonUtils.PointBehind(target.Position));
             }
 
