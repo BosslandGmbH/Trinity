@@ -70,16 +70,16 @@ namespace Trinity.Movement
 
         private const int _interactDistance = 7;
 
-        private static bool HasInGeomBuff = CacheData.Buffs.HasBuff(SNOPower.ItemPassive_Unique_Ring_919_x1);
+        public static bool HasInfiniteCasting = CombatBase.GetHasBuff(SNOPower.Pages_Buff_Infinite_Casting) ||
+                                                CacheData.Buffs.HasBuff(SNOPower.ItemPassive_Unique_Ring_919_x1);
 
-        private static float MinDistance = PlayerMover.IsBlocked || CombatBase.IsCurrentlyAvoiding || HasInGeomBuff ||
-                                           CombatBase.GetHasBuff(SNOPower.Pages_Buff_Infinite_Casting)
+        private static float MinDistance = PlayerMover.IsBlocked || CombatBase.IsCurrentlyAvoiding || HasInfiniteCasting
             ? 0
             : TrinityPlugin.CurrentTarget != null &&
               (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNPC ||
                TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine)
-                ? 5
-                : 10;
+                ? 10
+                : 15;
 
         public static bool OutOfCombatMovementAllowed
         {
@@ -156,14 +156,14 @@ namespace Trinity.Movement
         {
             if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                 Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement,
-                    $"Using {power} for movement. Distance={0:0}", PlayerMover.MyPosition.Distance(destination));
+                    $"Using {power} for movement. Distance={0:0}", TrinityPlugin.Player.Position.Distance(destination));
         }
 
         #region Barb
 
         public static bool BarbMover(Vector3 destination)
         {
-            float destinationDistance = PlayerMover.MyPosition.Distance(destination);
+            float destinationDistance = TrinityPlugin.Player.Position.Distance(destination);
 
             if (DataDictionary.ChargeAnimations.Contains(CacheData.Player.CurrentAnimation) &&
                 DataDictionary.LeapAnimations.Contains(CacheData.Player.CurrentAnimation))
@@ -185,15 +185,15 @@ namespace Trinity.Movement
 
                 //if (destination == Vector3.Zero)
                 //    return false;
-
                 // Furious Charge movement for a barb
-                if ((HasInGeomBuff || CombatBase.CanCast(SNOPower.Barbarian_FuriousCharge)) &&
-                    (TrinityPlugin.ObjectCache.Count(
-                        u =>
-                            u.IsUnit &&
-                            MathUtil.IntersectsPath(u.Position, u.Radius + 5f, TrinityPlugin.Player.Position,
-                                destination))*2 >
-                     Skills.Barbarian.FuriousCharge.CooldownRemaining/1000))
+                var pierceCount = TrinityPlugin.ObjectCache.Count(
+                    u =>
+                        u.IsUnit &&
+                        MathUtil.IntersectsPath(u.Position, u.Radius + 5f, TrinityPlugin.Player.Position,
+                            destination));
+                if (Skills.Barbarian.FuriousCharge.CanCast() &&
+                    (HasInfiniteCasting || pierceCount == 1 || 
+                      pierceCount >= Math.Floor(5*TrinityPlugin.Player.CooldownReductionPct)))
                 {
                     Skills.Barbarian.FuriousCharge.Cast(destination);
                     LogMovement(SNOPower.Barbarian_FuriousCharge, destination);

@@ -316,9 +316,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             return clusterUnits.Any() ? clusterUnits.FirstOrDefault() : Vector3.Zero;
         }
 
-        public static Vector3 PointBehind(Vector3 point, bool objectsInAoe = false)
+        public static Vector3 PointBehind(Vector3 point, float maxRange = 45, bool objectsInAoe = false)
         {
-            return MathEx.GetPointAt(point, -7f, TrinityPlugin.Player.Rotation);
+            var properDistance = point.Distance2D(TrinityPlugin.Player.Position) - maxRange;
+            return MathEx.GetPointAt(point, properDistance, TrinityPlugin.Player.Rotation);
         }
     }
 }
