@@ -20,7 +20,7 @@ using Logger = Trinity.Technicals.Logger;
 namespace Trinity.Framework.Avoidance.Handlers
 {
     [DataContract(Namespace = "")]
-    public class AnimationAvoidanceHandler : NotifyBase, IAvoidanceHandler
+    public class AnimationCircularAvoidanceHandler : NotifyBase, IAvoidanceHandler
     {
         private int _healthThresholdPct;
         private float _distanceMultiplier;

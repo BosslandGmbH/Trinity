@@ -1577,7 +1577,7 @@ namespace Trinity
                 Enlightened,
                 Glow,
                 RunSpeed,
-                //Goblin
+                Goblin,
                 Hoarder,
                 //Pylon
                 Shield,
@@ -1629,6 +1629,10 @@ namespace Trinity
 
                     case (int)SNOActor.x1_LR_Shrine_Damage:
                         return ShrineTypes.Damage;
+
+                    case (int)SNOActor.Shrine_TreasureGoblin:
+                        return ShrineTypes.Goblin;
+
                     default:
                         return ShrineTypes.Unknown;
                 }

@@ -135,6 +135,7 @@
     <Compile Include="Coroutines\Town\TrinityTownRun.cs" />
     <Compile Include="Framework\Actors\ActorManager.cs" />
     <Compile Include="Framework\Actors\CachedItem.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\AnimationBeamAvoidanceHandler.cs" />
     <Compile Include="Framework\Avoidance\Structures\AvoidanceLayer.cs" />
     <Compile Include="Framework\Avoidance\Structures\WeightingOptions.cs" />
     <Compile Include="Framework\Objects\Memory\Globals.cs" />
@@ -259,7 +260,7 @@
     <Compile Include="Framework\Utilities\Paragon.cs" />
     <Compile Include="Framework\Avoidance\Structures\AvoidanceAreaStats.cs" />
     <Compile Include="Framework\Avoidance\DefaultAvoider.cs" />
-    <Compile Include="Framework\Avoidance\Handlers\AnimationAvoidanceHandler.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\AnimationCircularAvoidanceHandler.cs" />
     <Compile Include="Framework\Helpers\GridHelper.cs" />
     <Compile Include="Helpers\Bitwise.cs" />
     <Compile Include="Helpers\ExceptionExtensions.cs" />

@@ -86,10 +86,35 @@ namespace Trinity
             (int) SNOActor.p3_cos_pet_Murkgoblin_A, // 441208,
             (int) SNOActor.cos_pet_goatman_melee_02, // 441214,
             (int) SNOActor.p3_cos_pet_jadeSerpent, // 441437,
+            
+            451015,  //ActorId:  Type: Item, Name: Haunting Hannah
+            451013, //ActorId:  Type: Item, Name: Buddy
+            451036, //ActorId:  Type: Item, Name: Charlotte
+            451044, //Type: Item, Name: Overseer Lady Josephine
+            451046, //Type: Item, Name: Ms. Madeleine
+            451057, //Type: Item, Name: Liv Moore
+            451015, //Type: Item, Name: Haunting Hannah
+            451031, //Type: Item, Name: Humbart Wessel
+            451042, //Cosmetic_Pet_succubus_01-39125 ActorSnoId: 451042
+            445705, //Monster Name: cos_pet_squire-216 ActorSnoId: 445705,
+            451013, //Type: Item, Name: Buddy
+            450065,  //Name: cos_pet_spider_01-10773 ActorSnoId: 450065, Distance: 545.0016
+            451017, //Lady Morhanlu: ActorId: 451017, Type: Item, Name: ?????
+            430910, //20DFD214] Type: Monster Name: cos_pet_teddybear_04-411489 ActorSnoId: 430910, Distance: 11.76465
+            451031, //ActorId: 451031, Type: Item, Name: Cosmetic_Pet_FloatingSkull_02-22954, Distance2d: 23.11925, CollisionRadius: 0, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
+            //ActorId: 451031, Type: Item, Name: Humbart Wessel
         };
 
         public static HashSet<int> WingsSnoIds = new HashSet<int>
         {
+            
+
+            451114, //ActorId:  Type: Item, Name: Falcon's Wings
+
+            410998, //Type: Item, Name: Whimsyshire
+
+            446796, //cos_wings_Bird_01_wizF-8635 ActorSnoId: 446796,
+
             (int) SNOActor.AngelWings_common_model, //150054
             (int) SNOActor.Fate_angelWings_model, //159931
             (int) SNOActor.AngelWings_corrupt_model, //170563
@@ -1117,104 +1142,192 @@ namespace Trinity
         public static HashSet<int> GoblinIds { get { return goblinIds; } }
         private static readonly HashSet<int> goblinIds = new HashSet<int>
         {
-            //5984, 5985, 5987, 5988, 405186, 380657
+            (int)SNOActor.treasureGoblin_A, //5984
+            (int)SNOActor.treasureGoblin_B, //5985
+            (int)SNOActor.treasureGoblin_backpack, //5986
+            (int)SNOActor.treasureGoblin_C, //5987
+            //(int)SNOActor.treasureGoblin_Portal, //54862
+            //(int)SNOActor.treasureGoblin_Portal_Proxy, //54887
+            //(int)SNOActor.treasureGoblin_portal_emitter, //59948
+            //(int)SNOActor.treasureGoblin_portal_opening, //60549
+            //(int)SNOActor.treasureGoblin_portal_closing, //60558
+            //(int)SNOActor.treasureGoblin_portal_summon_trailActor, //108403
+            //(int)SNOActor.treasureGoblin_stunImmune_trailActor, //129286
+            //(int)SNOActor.Lore_Bestiary_TreasureGoblin, //147316
+            (int)SNOActor.Shrine_TreasureGoblin, //269349
+            //(int)SNOActor.treasureGoblin_A_Slave, //326803
+            (int)SNOActor.X1_Treasure_Goblin_Event_Runner, //330135
+            //(int)SNOActor.treasureGoblin_C_Unique_DevilsHand, //343046
+            //(int)SNOActor.p1_Tgoblin_Chest_Bomb, //382664
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_Gib, //385658
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C, //386274
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C_Gib, //386434
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_C_ribbons, //386558
+            //(int)SNOActor.p1_TGoblin_Gate, //389569
+            //(int)SNOActor.p1_Tgoblin_Gold_Pile_A, //390498
+            //(int)SNOActor.p1_TGoblin_LightBeam_A, //390682
+            //(int)SNOActor.p1_TGoblin_Torch, //391021
+            //(int)SNOActor.p1_TGoblin_Gondola, //391270
+            (int)SNOActor.treasureGoblin_G, //391593
+            //(int)SNOActor.p1_Tgoblin_Vase_A, //391765
+            //(int)SNOActor.p1_Tgoblin_Vault_Door, //392094
+            //(int)SNOActor.p1_TGoblin_Gondola_Vertical, //392098
+            //(int)SNOActor.p1_Tgoblin_Vase_C, //392606
+            //(int)SNOActor.p1_TGoblin_Gondola_Card_Left, //392657
+            //(int)SNOActor.p1_TGoblin_Gondola_Card_Right, //392660
+            (int)SNOActor.p1_treasureGoblin_inBackpack_A, //394196
+            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem, //394555
+            //(int)SNOActor.p1_Tgoblin_Greed_Bait, //403041
+            //(int)SNOActor.p1_Greed_crowds_goblinPortal, //403532
+            //(int)SNOActor.p1_treasureGoblin_jump_trailActor, //403549
+            (int)SNOActor.p1_Tgoblin_basket_goblin, //403843
+            (int)SNOActor.p1_Tgoblin_basket_goblin, //403843
+            //(int)SNOActor.p1_greed_crowds_goblinCoinThrow_2, //404109
+            //(int)SNOActor.p1_Tgoblin_BG_Torch, //404302
+            //(int)SNOActor.p1_TGoblin_Gate_Closed, //404625
+            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_Fogged, //404731
+            //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_INVIS, //404733
+            //(int)SNOActor.p1_Greed_crowds_goblinPortal_no_dist, //404854
+            //(int)SNOActor.p1_treasureGoblin_tentacle_A, //405186
+            //(int)SNOActor.p1_treasureGoblin_tentacle_backpack, //405189
+            //(int)SNOActor.p1_Tgoblin_Chest_Bomb_Chunks, //405308
+            //(int)SNOActor.p1_Tgoblin_Greed_Bait_Chunks, //405339
+            //(int)SNOActor.p1_Portal_Tentacle_goblin, //405590
+            (int)SNOActor.treasureGoblin_D_Splitter, //408354
+            (int)SNOActor.treasureGoblin_E, //408655
+            (int)SNOActor.MarkerLocation_GoblinPortalIn, //408679
+            (int)SNOActor.treasureGoblin_F, //408989
+            (int)SNOActor.treasureGoblin_Portal_Open, //410460
+            (int)SNOActor.treasureGoblin_D_Splitter_02, //410572
+            (int)SNOActor.treasureGoblin_D_Splitter_03, //410574
+            (int)SNOActor.treasureGoblin_H, //413289
+            //(int)SNOActor.P2_Goblin_Spawner_LR, //425478
+            (int)SNOActor.p1_treasureGoblin_teleport_shell, //428094
+            (int)SNOActor.p1_treasureGoblin_backpack_B, //428205
+            (int)SNOActor.p1_treasureGoblin_backpack_F, //428206
+            (int)SNOActor.p1_treasureGoblin_backpack_C, //428211
+            (int)SNOActor.p1_treasureGoblin_backpack_H, //428213
+            (int)SNOActor.p1_treasureGoblin_backpack_D, //428247
+            (int)SNOActor.treasureGoblin_I, //428663
+            (int)SNOActor.treasureGoblin_J, //429161
+            (int)SNOActor.p1_treasureGoblin_backpack_J, //429526
+            (int)SNOActor.treasureGoblin_B_WhatsNew, //429615
+            (int)SNOActor.treasureGoblin_F_WhatsNew, //429619
+            (int)SNOActor.treasureGoblin_C_WhatsNew, //429620
+            (int)SNOActor.treasureGoblin_B_FX_WhatsNew, //429624
+            //(int)SNOActor.MarkerLocation_SpecialGoblinRiftSpawn, //429649
+            (int)SNOActor.p1_treasureGoblin_backpack_E, //429660
+            //(int)SNOActor.Spawner_MarkerLocation_SpecialGoblinRiftSpawn, //429676
+            //(int)SNOActor.treasureGoblin_A_LegacyPuzzleRing, //429689
+            (int)SNOActor.p1_Portal_Tentacle_goblin_NoAccess, //430916
+            (int)SNOActor.p1_treasureGoblin_backpack_I, //433905
+            (int)SNOActor.a4_Heaven_Shrine_TreasureGoblin, //434409
+            (int)SNOActor.treasureGoblin_J_WhatsNew, //434630
+            (int)SNOActor.treasureGoblin_J_FX_WhatsNew, //434631
+            (int)SNOActor.treasureGoblin_E_WhatsNew, //434632
+            (int)SNOActor.treasureGoblin_D_WhatsNew, //434633
+            (int)SNOActor.treasureGoblin_Anniversary_Event, //434745
+            (int)SNOActor.p1_Portal_Anniversary_goblin_NoAccess, //435639
+            (int)SNOActor.p3_cos_pet_Murkgoblin_A, //441208
 
-        // treasureGoblin_A
-        5984,
-        // treasureGoblin_B
-        5985,
-        // treasureGoblin_backpack
-        5986,
-        // treasureGoblin_C
-        5987,
-        // treasureGoblin_Portal
-        //54862,
-        // treasureGoblin_Portal_Proxy
-        //54887,
-        // treasureGoblin_portal_emitter
-        //59948,
-        // treasureGoblin_portal_opening
-        //60549,
-        // treasureGoblin_portal_closing
-        //60558,
-        // treasureGoblin_portal_summon_trailActor
-        //108403,
-        // treasureGoblin_stunImmune_trailActor
-        //129286,
-        // Lore_Bestiary_TreasureGoblin
-        //147316,
-        // treasureGoblin_A_Slave
-        //326803,
-        // treasureGoblin_C_Unique_DevilsHand
-        343046,
-        // p1_treasureGobin_A_Unique_GreedMinion
-        380657,
-        // treasureGoblin_G
-        391593,
-        // p1_treasureGoblin_inBackpack_A
-        394196,
-        // p1_treasureGoblin_jump_trailActor
-        //403549,
-        // p1_treasureGoblin_tentacle_A
-        405186,
-        // p1_treasureGoblin_tentacle_backpack
-        405189,
-        // treasureGoblin_D_Splitter
-        408354,
-        // treasureGoblin_E
-        408655,
-        // treasureGoblin_F
-        408989,
-        // treasureGoblin_Portal_Open
-        //410460,
-        // treasureGoblin_D_Splitter_02
-        410572,
-        // treasureGoblin_D_Splitter_03
-        410574,
-        // treasureGoblin_H
-        413289,
-        // p1_treasureGoblin_teleport_shell
-        //428094,
-        // p1_treasureGoblin_backpack_B
-        428205,
-        // p1_treasureGoblin_backpack_F
-        428206,
-        // p1_treasureGoblin_backpack_C
-        428211,
-        // p1_treasureGoblin_backpack_H
-        428213,
-        // p1_treasureGoblin_backpack_D
-        428247,
-        // treasureGoblin_I
-        428663,
-        // treasureGoblin_J
-        429161,
-        // p1_treasureGoblin_backpack_J
-        429526,
-        // treasureGoblin_B_WhatsNew
-        429615,
-        // treasureGoblin_F_WhatsNew
-        429619,
-        // treasureGoblin_C_WhatsNew
-        429620,
-        // treasureGoblin_B_FX_WhatsNew
-        429624,
-        // p1_treasureGoblin_backpack_E
-        429660,
-        // treasureGoblin_A_LegacyPuzzleRing
-        //429689,
-        // p1_treasureGoblin_backpack_I
-        433905,
-        // treasureGoblin_J_WhatsNew
-        434630,
-        // treasureGoblin_J_FX_WhatsNew
-        434631,
-        // treasureGoblin_E_WhatsNew
-        434632,
-        // treasureGoblin_D_WhatsNew
-        434633,
-        // treasureGoblin_Anniversary_Event
-        434745,
+        ////    //5984, 5985, 5987, 5988, 405186, 380657
+
+        //// treasureGoblin_A
+        //5984,
+        //// treasureGoblin_B
+        //5985,
+        //// treasureGoblin_backpack
+        //5986,
+        //// treasureGoblin_C
+        //5987,
+        //// treasureGoblin_Portal
+        ////54862,
+        //// treasureGoblin_Portal_Proxy
+        ////54887,
+        //// treasureGoblin_portal_emitter
+        ////59948,
+        //// treasureGoblin_portal_opening
+        ////60549,
+        //// treasureGoblin_portal_closing
+        ////60558,
+        //// treasureGoblin_portal_summon_trailActor
+        ////108403,
+        //// treasureGoblin_stunImmune_trailActor
+        ////129286,
+        //// Lore_Bestiary_TreasureGoblin
+        ////147316,
+        //// treasureGoblin_A_Slave
+        ////326803,
+        //// treasureGoblin_C_Unique_DevilsHand
+        //343046,
+        //// p1_treasureGobin_A_Unique_GreedMinion
+        //380657,
+        //// treasureGoblin_G
+        //391593,
+        //// p1_treasureGoblin_inBackpack_A
+        //394196,
+        //// p1_treasureGoblin_jump_trailActor
+        ////403549,
+        //// p1_treasureGoblin_tentacle_A
+        //405186,
+        //// p1_treasureGoblin_tentacle_backpack
+        //405189,
+        //// treasureGoblin_D_Splitter
+        //408354,
+        //// treasureGoblin_E
+        //408655,
+        //// treasureGoblin_F
+        //408989,
+        //// treasureGoblin_Portal_Open
+        ////410460,
+        //// treasureGoblin_D_Splitter_02
+        //410572,
+        //// treasureGoblin_D_Splitter_03
+        //410574,
+        //// treasureGoblin_H
+        //413289,
+        //// p1_treasureGoblin_teleport_shell
+        ////428094,
+        //// p1_treasureGoblin_backpack_B
+        //428205,
+        //// p1_treasureGoblin_backpack_F
+        //428206,
+        //// p1_treasureGoblin_backpack_C
+        //428211,
+        //// p1_treasureGoblin_backpack_H
+        //428213,
+        //// p1_treasureGoblin_backpack_D
+        //428247,
+        //// treasureGoblin_I
+        //428663,
+        //// treasureGoblin_J
+        //429161,
+        //// p1_treasureGoblin_backpack_J
+        //429526,
+        //// treasureGoblin_B_WhatsNew
+        //429615,
+        //// treasureGoblin_F_WhatsNew
+        //429619,
+        //// treasureGoblin_C_WhatsNew
+        //429620,
+        //// treasureGoblin_B_FX_WhatsNew
+        //429624,
+        //// p1_treasureGoblin_backpack_E
+        //429660,
+        //// treasureGoblin_A_LegacyPuzzleRing
+        ////429689,
+        //// p1_treasureGoblin_backpack_I
+        //433905,
+        //// treasureGoblin_J_WhatsNew
+        //434630,
+        //// treasureGoblin_J_FX_WhatsNew
+        //434631,
+        //// treasureGoblin_E_WhatsNew
+        //434632,
+        //// treasureGoblin_D_WhatsNew
+        //434633,
+        //// treasureGoblin_Anniversary_Event
+        //434745,
 
          };
 
@@ -1398,7 +1511,7 @@ namespace Trinity
             309432, // x1_westm_Bridge
             209133, // TentacleLord (209133)  QuestSnoId: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!
             363725, // Special Event Chest
-
+            451047, // Mystical Chest - Falcon's Wings
             56686, // a3dun_Keep_Bridge_Switch 
             211999, // a3dun_Keep_Bridge_Switch_B 
             52685, // a3dun_Keep_Bridge
@@ -1426,6 +1539,7 @@ namespace Trinity
         {
             56686, // a3dun_Keep_Bridge_Switch 
             211999, // a3dun_Keep_Bridge_Switch_B 
+            451047, // Mystical Chest - Falcon's Wings
         };
 
         public static Dictionary<int, int> InteractEndAnimations { get { return interactEndAnimations; } }
