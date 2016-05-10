@@ -135,6 +135,7 @@
     <Compile Include="Coroutines\Town\TrinityTownRun.cs" />
     <Compile Include="Framework\Actors\ActorManager.cs" />
     <Compile Include="Framework\Actors\CachedItem.cs" />
+    <Compile Include="Framework\Avoidance\Handlers\AnimationConeAvoidanceHandler.cs" />
     <Compile Include="Framework\Avoidance\Handlers\AnimationBeamAvoidanceHandler.cs" />
     <Compile Include="Framework\Avoidance\Structures\AvoidanceLayer.cs" />
     <Compile Include="Framework\Avoidance\Structures\WeightingOptions.cs" />

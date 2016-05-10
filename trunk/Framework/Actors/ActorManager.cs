@@ -237,6 +237,7 @@ namespace Trinity.Framework.Actors
             Items.Clear();
             LastUpdatedFrame = 0;
             IgnoreAcdIds.Clear();
+            AnnIds.Clear();
             _currentCachedItems.Clear();
             _annToAcdIndex.Clear();
             _currentWorldSnoId = 0;

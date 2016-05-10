@@ -446,10 +446,16 @@ namespace Trinity.Combat.Abilities
             //    ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 3000)
             //    );
 
-            // AkaratsChampion
-            if (CanCastAkaratsChampion() && !IsSteedCharging)
+            // Sync belt of trove bombardments.
+            // todo UI setting, keep track of snapshot clears and know if its currently aligned.
+            //if (CacheData.Buffs.ConventionElement == Element.Holy)
+            //{
+            //    TrinityPlugin.UsePotion();
+            //}    
+
+            // Defensive AkaratsChampion
+            if ((Player.CurrentHealthPct < 0.5 || CacheData.Buffs.ConventionElement == Element.Lightning) && CanCastAkaratsChampion())
             {
-                //Logger.Log("Akarats Champion");
                 return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
             }
 
@@ -474,10 +480,16 @@ namespace Trinity.Combat.Abilities
                     ZetaDia.Me.Movement.SpeedXY != 0 && (TargetUtil.AnyMobsInRange(60f, CrusaderSettings.BombardmentAoECount) ||
                     TargetUtil.AnyElitesInRange(60f)))
                 {
-                    if (IsBombardmentBuild && Runes.Crusader.Critical.IsActive && CanCast(SNOPower.X1_Crusader_LawsOfValor2))
+                    if (Runes.Crusader.Critical.IsActive && CanCast(SNOPower.X1_Crusader_LawsOfValor2))
                         return new TrinityPower(SNOPower.X1_Crusader_LawsOfValor2);
 
-                    //Logger.Log("Bombardment");
+                    //if (CanCast(SNOPower.X1_Crusader_AkaratsChampion))
+                    //{
+                    //    Logger.Log("AkaratsChampion");
+                    //    Skills.Crusader.AkaratsChampion.Cast();
+                    //}
+               
+                    Logger.Log("Bombardment");
                     return new TrinityPower(SNOPower.X1_Crusader_Bombardment);
                 }
 
@@ -581,13 +593,6 @@ namespace Trinity.Combat.Abilities
                 if (CanCastJudgement())
                 {
                     return new TrinityPower(SNOPower.X1_Crusader_Judgment, 20f, TargetUtil.GetBestClusterPoint(20f));
-                }
-
-                // AkaratsChampion
-                if (CanCastAkaratsChampion() && !IsSteedCharging)
-                {
-                    //Logger.Log("Akarats Champion");
-                    return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
                 }
 
                 // LawsOfJustice
@@ -697,6 +702,11 @@ namespace Trinity.Combat.Abilities
 
         public static TrinityPower GetPower()
         {
+            if (Settings.Combat.Crusader.SpamLaws)
+            {
+                CastLaws();
+            }
+
             if (IsBombardmentBuild)
             {
                 return GetBombardPower();
@@ -985,6 +995,25 @@ namespace Trinity.Combat.Abilities
             return power;
         }
 
+        private static void CastLaws()
+        {
+            if (ZetaDia.IsPlayingCutscene || ZetaDia.IsInTown || Player.IsCastingOrLoading)
+                return;
+
+            if (CanCast(SNOPower.X1_Crusader_LawsOfHope2))
+            {
+                Skills.Crusader.LawsOfHope.Cast();
+            }
+            else if (CanCast(SNOPower.X1_Crusader_LawsOfJustice2))
+            {
+                Skills.Crusader.LawsOfJustice.Cast();
+            }
+            else if (CanCast(SNOPower.X1_Crusader_LawsOfValor2))
+            {
+                Skills.Crusader.LawsOfValor.Cast();
+            }
+        }
+
         private Vector3 _currentLoiterTarget;
         private static bool Loiter(out TrinityPower power, float targetDistance = 14f, bool forceMove = false)
         {
@@ -1207,8 +1236,8 @@ namespace Trinity.Combat.Abilities
 
             // Let's check for Goblins, Current Health, CDR Pylon, movement impaired
             if (CurrentTarget != null && CurrentTarget.IsTreasureGoblin && Settings.Combat.Monk.UseEpiphanyGoblin ||
-                Player.CurrentHealthPct <= 0.39 &&
-                Settings.Combat.Crusader.AkaratsEmergencyHealth || GetHasBuff(SNOPower.Pages_Buff_Infinite_Casting) ||
+                Player.CurrentHealthPct <= 0.39 && Settings.Combat.Crusader.AkaratsEmergencyHealth || 
+                GetHasBuff(SNOPower.Pages_Buff_Infinite_Casting) ||
                 ZetaDia.Me.IsFrozen || ZetaDia.Me.IsRooted || ZetaDia.Me.IsFeared || ZetaDia.Me.IsStunned)
                 return true;
 

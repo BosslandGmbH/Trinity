@@ -67,5 +67,6 @@ namespace Trinity.Framework.Avoidance.Structures
 
         public SNOPower Power { get; set; }
         public SNOAnim Animation { get; set; }
+        public float AngleDegrees { get; set; }
     }
 }

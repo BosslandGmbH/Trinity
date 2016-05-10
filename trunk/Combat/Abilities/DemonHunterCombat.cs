@@ -757,6 +757,7 @@ namespace Trinity.Combat.Abilities
             meta.CastRange = 85f;
             meta.CastFlags = CanCastFlags.NoTimer;
             meta.TargetPositionSelector = ret => GetSentryPosition();
+            meta.ReUseDelay = 250;
 
             if (meta.Skill.Charges == 0)
                 return false;
