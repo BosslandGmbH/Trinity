@@ -110,7 +110,7 @@ namespace Trinity.Config.Combat
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(0.5f)]
+        [DefaultValue(0.70f)]
         public float SerenityHealthPct
         {
             get

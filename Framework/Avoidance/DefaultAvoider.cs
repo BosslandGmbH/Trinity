@@ -50,11 +50,14 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
+                IsKiting = false;
+                IsAvoiding = false;
+
                 if (CacheData.BuffsCache.Instance.HasInvulnerableShrine)
                     return false;
 
-                IsKiting = false;
-                IsAvoiding = false;
+                if (CombatBase.IsDoingGoblinKamakazi)
+                    return false;
 
                 if (TrinityPlugin.Player.IsInTown)
                     return false;

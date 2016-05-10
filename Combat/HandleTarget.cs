@@ -1127,33 +1127,42 @@ namespace Trinity
                     SpellHistory.TimeSinceUse(SNOPower.DrinkHealthPotion) > TimeSpan.FromSeconds(30) &&
                     (Player.CurrentHealthPct <= CombatBase.EmergencyHealthPotionLimit || ShouldSnapshot()))
                 {
-                    var legendaryPotions = CacheData.Inventory.Backpack.Where(i => i.InternalName.ToLower()
-                        .Contains("healthpotion_legendary_")).ToList();
-                    var logEntry = ShouldSnapshot() ? "Using Potion to Snapshot Bane of the Stricken!" : "Using Potion";
-
-                    if (legendaryPotions.Any())
+                    if (UsePotion())
                     {
-                        Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, logEntry, 0);
-                        int dynamicId = legendaryPotions.FirstOrDefault().AnnId;
-                        ZetaDia.Me.Inventory.UseItem(dynamicId);
-                        SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
                         return true;
                     }
-                    var potion = ZetaDia.Me.Inventory.BaseHealthPotion;
-                    if (potion != null)
-                    {
-                        Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, logEntry, 0);
-                        ZetaDia.Me.Inventory.UseItem(potion.AnnId);
-                        SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
-                        return true;
-                    }
-
-                    SnapShot.Record();
-
-                    Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "No Available potions!", 0);
                 }
                 return false;
             }
+        }
+
+        public static bool UsePotion()
+        {
+            var logEntry = ShouldSnapshot() ? "Using Potion to Snapshot Bane of the Stricken!" : "Using Potion";
+
+            var legendaryPotions = CacheData.Inventory.Backpack.Where(i => i.InternalName.ToLower().Contains("healthpotion_legendary_")).ToList();
+            if (legendaryPotions.Any())
+            {
+                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, logEntry, 0);
+                int dynamicId = legendaryPotions.FirstOrDefault().AnnId;
+                ZetaDia.Me.Inventory.UseItem(dynamicId);
+                SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
+                SnapShot.Record();
+                return true;
+            }
+
+            var potion = ZetaDia.Me.Inventory.BaseHealthPotion;
+            if (potion != null)
+            {
+                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, logEntry, 0);
+                ZetaDia.Me.Inventory.UseItem(potion.AnnId);
+                SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
+                SnapShot.Record();
+                return true;
+            }
+                        
+            Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "No Available potions!", 0);
+            return false;
         }
 
         /// <summary>

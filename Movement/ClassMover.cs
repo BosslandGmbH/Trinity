@@ -435,7 +435,7 @@ namespace Trinity.Movement
             if (CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk) &&
                 !CombatBase.GetHasBuff(SNOPower.Witchdoctor_SpiritWalk))
             {
-                Skills.Crusader.SteedCharge.Cast(destination);
+                Skills.WitchDoctor.SpiritWalk.Cast(destination);
                 LogMovement(SNOPower.Witchdoctor_SpiritWalk, destination);
             }
             return false;

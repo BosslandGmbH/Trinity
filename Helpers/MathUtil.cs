@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using Adventurer.Game.Exploration;
+using Org.BouncyCastle.Asn1.Pkcs;
 using Zeta.Common;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.SNO;
@@ -11,6 +13,101 @@ namespace Trinity
 {
     class MathUtil
     {
+
+        //http://totologic.blogspot.co.nz/2014/01/accurate-point-in-triangle-test.html
+
+        const double Epsilon = 0.001;
+        const double EpsilonSquare = Epsilon * Epsilon;
+
+        public bool IsNaivePointInTriangle(Vector3 triPoint1, Vector3 triPoint2, Vector3 triPoint3, GridPoint point)
+        {
+            return IsNaivePointInTriangle(triPoint1.X, triPoint1.Y, triPoint2.X, triPoint2.Y, triPoint3.X, triPoint3.Y, point.X, point.Y);
+        }
+
+        public bool IsNaivePointInTriangle(float x1, float y1, float x2, float y2, float x3, float y3, float x, float y)
+        {
+            var checkSide1 = Side(x1, y1, x2, y2, x, y) >= 0;
+            var checkSide2 = Side(x2, y2, x3, y3, x, y) >= 0;
+            var checkSide3 = Side(x3, y3, x1, y1, x, y) >= 0;
+            return checkSide1 && checkSide2 && checkSide3;
+        }
+
+        public float Side(float x1, float y1, float x2, float y2, float x, float y)
+        {
+            return (y2 - y1) * (x - x1) + (-x2 + x1) * (y - y1);
+        }
+
+        public bool IsPointInTriangleBoundingBox(float x1, float y1, float x2, float y2, float x3, float y3, float x, float y)
+        {
+            var xMin = Math.Min(x1, Math.Min(x2, x3)) - Epsilon;
+            var xMax = Math.Max(x1, Math.Max(x2, x3)) + Epsilon;
+            var yMin = Math.Min(y1, Math.Min(y2, y3)) - Epsilon;
+            var yMax = Math.Max(y1, Math.Max(y2, y3)) + Epsilon;
+            return !(x < xMin) && !(xMax < x) && !(y < yMin) && !(yMax < y);
+        }
+
+
+        //        function side(x1, y1, x2, y2, x, y:Number):Number
+        //{
+        // return (y2 - y1)*(x - x1) + (-x2 + x1)*(y - y1);
+
+        //    function naivePointInTriangle(x1, y1, x2, y2, x3, y3, x, y:Number):Boolean
+        //{
+        // var checkSide1:Boolean = side(x1, y1, x2, y2, x, y) >= 0;
+        // var checkSide2:Boolean = side(x2, y2, x3, y3, x, y) >= 0;
+        // var checkSide3:Boolean = side(x3, y3, x1, y1, x, y) >= 0;
+        // return checkSide1 && checkSide2 && checkSide3;
+        //}
+
+        //function pointInTriangleBoundingBox(x1, y1, x2, y2, x3, y3, x, y:Number):Boolean
+        //{
+        // var xMin:Number = Math.min(x1, Math.min(x2, x3)) - EPSILON;
+        // var xMax:Number = Math.max(x1, Math.max(x2, x3)) + EPSILON;
+        // var yMin:Number = Math.min(y1, Math.min(y2, y3)) - EPSILON;
+        // var yMax:Number = Math.max(y1, Math.max(y2, y3)) + EPSILON;
+
+        // if ( x<xMin || xMax<x || y<yMin || yMax<y )
+        //  return false;
+        // else
+        //  return true;
+        //}
+
+        //function distanceSquarePointToSegment(x1, y1, x2, y2, x, y:Number):Number
+        //{
+        // var p1_p2_squareLength:Number = (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1);
+        // var dotProduct:Number = ((x - x1)*(x2 - x1) + (y - y1)*(y2 - y1)) / p1_p2_squareLength;
+        // if ( dotProduct< 0 )
+        // {
+        //  return (x - x1)*(x - x1) + (y - y1)*(y - y1);
+        // }
+        // else if ( dotProduct <= 1 )
+        // {
+        //  var p_p1_squareLength:Number = (x1 - x)*(x1 - x) + (y1 - y)*(y1 - y);
+        //  return p_p1_squareLength - dotProduct* dotProduct * p1_p2_squareLength;
+        // }
+        // else
+        // {
+        //  return (x - x2)*(x - x2) + (y - y2)*(y - y2);
+        // }
+        //}
+
+        //function accuratePointInTriangle(x1, y1, x2, y2, x3, y3, x, y:Number):Boolean
+        //{
+        // if (! pointInTriangleBoundingBox(x1, y1, x2, y2, x3, y3, x, y))
+        //  return false;
+
+        // if (naivePointInTriangle(x1, y1, x2, y2, x3, y3, x, y))
+        //  return true;
+
+        // if (distanceSquarePointToSegment(x1, y1, x2, y2, x, y) <= EPSILON_SQUARE)
+        //  return true;
+        // if (distanceSquarePointToSegment(x2, y2, x3, y3, x, y) <= EPSILON_SQUARE)
+        //  return true;
+        // if (distanceSquarePointToSegment(x3, y3, x1, y1, x, y) <= EPSILON_SQUARE)
+        //  return true;
+
+        // return false;
+        //}
 
         public static Vector3 Centroid(IEnumerable<Vector3> points)
         {

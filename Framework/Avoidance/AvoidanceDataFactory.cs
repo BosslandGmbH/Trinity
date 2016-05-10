@@ -606,6 +606,42 @@ namespace Trinity.Framework.Avoidance
                 }
             });
 
+            //Line 33558: 15:14:39.491 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_idle_01 State=Idle By: x1_LR_Boss_MalletDemon (343767)
+            //Line 33579: 15:14:40.446 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_run_01 State=Running By: x1_LR_Boss_MalletDemon (343767)
+            //Line 33624: 15:14:42.916 INFO  Logger [Trinity 2.41.51][Animation] coreEliteDemon_spawn_from_pod_01 State=Transform By: CoreEliteDemon_B_LR_Boss (369412)
+            //Line 33634: 15:14:43.170 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_generic_cast State=Transform By: x1_LR_Boss_MalletDemon (343767)
+            //Line 33653: 15:14:43.752 INFO  Logger [Trinity 2.41.51][Animation] coreEliteDemon_idle_01 State=Idle By: CoreEliteDemon_B_LR_Boss (369412)
+            //Line 33669: 15:14:44.254 INFO  Logger [Trinity 2.41.51][Animation] coreEliteDemon_Pod_spawn_01 State=Transform By: CoreEliteDemon_B_LR_Boss (369412)
+            //Line 33813: 15:14:47.874 INFO  Logger [Trinity 2.41.51][Animation] coreEliteDemon_taunt_01 State=Transform By: CoreEliteDemon_B_LR_Boss (369412)
+            //Line 33885: 15:14:49.397 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_taunt_01 State=Transform By: x1_LR_Boss_MalletDemon (343767)
+            //Line 33917: 15:14:50.121 INFO  Logger [Trinity 2.41.51][Animation] coreEliteDemon_run_01 State=Running By: CoreEliteDemon_B_LR_Boss (369412)
+            //Line 33948: 15:14:51.099 INFO  Logger [Trinity 2.41.51][Animation] coreEliteDemon_attack_01 State=Transform By: CoreEliteDemon_B_LR_Boss (369412)
+            //Line 33962: 15:14:51.405 INFO  Logger [Trinity 2.41.51][Animation] coreEliteDemon_walk_01 State=Running By: CoreEliteDemon_B_LR_Boss (369412)
+            //Line 34017: 15:14:52.791 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_attack_01 State=Transform By: x1_LR_Boss_MalletDemon (343767)
+            //Line 34149: 15:14:56.371 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_stunned State=TakingDamage By: x1_LR_Boss_MalletDemon (343767)
+            //x1_LR_Boss_MalletDemon_FallingRocks 368453,
+            //todo Parendi / malletdemon avoidance - he hits like a truck.
+
+
+            // Beast Creatures with a small guy riding on them, stun the player.
+            //[Trinity 2.41.50][Weight] Found New Target MastaBlasta_Combined_A dist=6 IsElite=False Radius=11.0 Weight=1099 ActorSnoId=137856 AnimSnoId=MastaBlasta_Combined_taunt TargetedCount=26 Type=Unit 
+            //MastaBlasta_Combined_attack_stomp 
+
+            //AvoidanceData.Add(new AvoidanceData
+            //{
+            //    Name = "Stun/Paralyse Attacks",
+            //    Handler = new AnimationConeAvoidanceHandler(),                
+            //    Parts = new List<AvoidancePart>
+            //    {
+            //        new AvoidancePart
+            //        {
+            //            Name = "MastaBlasta Stun",
+            //            ActorSnoId = (int)SNOAnim.MastaBlasta_Combined_attack_stomp,
+            //            Radius = 10f,
+            //            Type = PartType.Main,
+            //        },
+            //    }
+            //});
 
             //[19147660] Type: ClientEffect Name: p4_ratKing_ratBall_model-47703 ActorSnoId: 427100, Distance: 19.72662
             //p4_RatKing_RatBallMonster, Type=Unit Dist=24.44967 IsBossOrEliteRareUnique=False IsAttackable=True

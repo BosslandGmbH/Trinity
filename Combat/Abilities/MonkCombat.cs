@@ -258,6 +258,12 @@ namespace Trinity.Combat.Abilities
 
             ParameterSetup();
 
+            // Serenity if health is low
+            if (CanCastSerenityOnLowHealth())
+            {
+                return new TrinityPower(SNOPower.Monk_Serenity);
+            }
+
             if (IsWolMonk)
                 return GetWolPower();
 
@@ -365,12 +371,6 @@ namespace Trinity.Combat.Abilities
             if (CanCastEpiphany())
             {
                 return new TrinityPower(SNOPower.X1_Monk_Epiphany);
-            }
-
-            // Serenity if health is low
-            if (CanCastSerenityOnLowHealth())
-            {
-                return new TrinityPower(SNOPower.Monk_Serenity);
             }
 
             // Mystic ally

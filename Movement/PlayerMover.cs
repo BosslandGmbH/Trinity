@@ -181,7 +181,7 @@ namespace Trinity.DbProvider
                     case ActorClass.Barbarian:
                         return CacheData.Buffs.HasBuff(SNOPower.Barbarian_Sprint) && Runes.Barbarian.Gangway.IsActive;
                     case ActorClass.Monk:
-                        return CacheData.Buffs.HasBuff(SNOPower.Monk_TempestRush);
+                        return CacheData.Buffs.HasBuff(SNOPower.Monk_TempestRush) || Runes.Monk.InstantKarma.IsActive && CacheData.BuffsCache.Instance.HasBuff(SNOPower.Monk_Serenity);
                     case ActorClass.Crusader:
                         return CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_SteedCharge);
                 }

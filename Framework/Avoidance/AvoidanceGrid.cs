@@ -68,6 +68,22 @@ namespace Trinity.Framework.Avoidance
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Where(n => n != null);
         }
 
+        public IEnumerable<AvoidanceNode> GetConeAsNodes(Vector3 position, float arcWidthDegrees, float radius, float rotationRadians)
+        {            
+            //GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Where(n => n != null)
+
+            var rotationDegrees = MathEx.ToDegrees(rotationRadians);
+            var arcStartPosition = MathEx.GetPointAt(position, radius, (float)MathUtil.DegreeToRadian(MathUtil.FixAngleTo360(rotationDegrees - arcWidthDegrees / 2)));
+            var arcEndPosition = MathEx.GetPointAt(position, radius, (float)MathUtil.DegreeToRadian(MathUtil.FixAngleTo360(rotationDegrees + arcWidthDegrees / 2)));
+            return new List<AvoidanceNode>();
+
+            // todo: add method to get adjacent node at angle
+            // todo: write iterator to either spiral and test every point in triangle or possibly:
+            // test nodes at around @ distance starting in direction until non-triangle nodes found at either end
+            // increment distance and repeat until back edge found.
+            // possibly using MathUtil.IsNaivePointInTriangle();
+        }
+
         public override void Reset()
         {
             
@@ -308,7 +324,6 @@ namespace Trinity.Framework.Avoidance
             var node = GetNearestNode(position);
             return node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk) && node.IsWalkable;
         }
-
 
     }
 }

@@ -2349,72 +2349,41 @@ namespace Trinity
 
         public static HashSet<int> ShrineSNO = new HashSet<int>
         {
-            //shrine_fxSphere_corrupt
-            5333,
-            //Shrine_Global
-            135384,
-            //shrine_fxGeo_model_Global
-            139931,
-            //Shrine_Global_Glow
-            156680,
-            //Shrine_Global_Blessed
-            176074,
-            //Shrine_Global_Enlightened
-            176075,
-            //Shrine_Global_Fortune
-            176076,
-            //Shrine_Global_Frenzied
-            176077,
-            //a4_Heaven_Shrine_Global_Blessed
-            225025,
-            //a4_Heaven_Shrine_Global_Fortune
-            225027,
-            //a4_Heaven_Shrine_Global_Frenzied
-            225028,
-            //a4_Heaven_Shrine_Global_Enlightened
-            225030,
-            //a4_Heaven_Shrine_Global_DemonCorrupted_Blessed
-            225261,
-            //a4_Heaven_Shrine_Global_DemonCorrupted_Enlightened
-            225262,
-            //a4_Heaven_Shrine_Global_DemonCorrupted_Fortune
-            225263,
-            //a4_Heaven_Shrine_Global_DemonCorrupted_Frenzied
-            225266,
-            //a4_Heaven_Shrine_Global_DemonCorrupted_Hoarder
-            260342,
-            //a4_Heaven_Shrine_Global_DemonCorrupted_Reloaded
-            260343,
-            //a4_Heaven_Shrine_Global_Hoarder
-            260344,
-            //a4_Heaven_Shrine_Global_Reloaded
-            260345,
-            //Shrine_Global_Hoarder
-            260346,
-            //Shrine_Global_Reloaded
-            260347,
-            //PVP_Shrine_Murderball
-            275729,
-            //x1_LR_Shrine_Damage
-            330695,
-            //x1_LR_Shrine_Electrified
-            330696,
-            //x1_LR_Shrine_Infinite_Casting
-            330697,
-            //x1_LR_Shrine_Invulnerable
-            330698,
-            //x1_LR_Shrine_Run_Speed
-            330699,
-            //x1_Event_CursedShrine
-            364601,
-            //x1_Event_CursedShrine_Heaven
-            368169,
-            //x1_player_isShielded_riftShrine_model
-            369696,
-            //x1_LR_Shrine_Electrified_TieredRift
-            398654,
-            //shrine_Shadow
-            434722,
+            (int)SNOActor.shrine_fxSphere_corrupt, //5333,
+            (int)SNOActor.Shrine_Global, //135384,
+            (int)SNOActor.shrine_fxGeo_model_Global, //139931,
+            (int)SNOActor.Shrine_Global_Glow, //156680,
+            (int)SNOActor.Shrine_Global_Blessed, //176074,
+            (int)SNOActor.Shrine_Global_Enlightened, //176075,
+            (int)SNOActor.Shrine_Global_Fortune, //176076,
+            (int)SNOActor.Shrine_Global_Frenzied, //176077,
+            (int)SNOActor.a4_Heaven_Shrine_Global_Blessed, //225025,
+            (int)SNOActor.a4_Heaven_Shrine_Global_Fortune, //225027,
+            (int)SNOActor.a4_Heaven_Shrine_Global_Frenzied, //225028,
+            (int)SNOActor.a4_Heaven_Shrine_Global_Enlightened, //225030,
+            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Blessed, //225261,
+            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Enlightened, //225262,
+            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Fortune, //225263,
+            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Frenzied, //225266,
+            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Hoarder, //260342,
+            (int)SNOActor.a4_Heaven_Shrine_Global_DemonCorrupted_Reloaded, //260343,
+            (int)SNOActor.a4_Heaven_Shrine_Global_Hoarder, //260344,
+            (int)SNOActor.a4_Heaven_Shrine_Global_Reloaded, //260345,
+            (int)SNOActor.Shrine_Global_Hoarder, //260346,
+            (int)SNOActor.Shrine_Global_Reloaded, //260347,
+            (int)SNOActor.Shrine_TreasureGoblin, //269349,
+            (int)SNOActor.PVP_Shrine_Murderball, //275729,
+            (int)SNOActor.x1_LR_Shrine_Damage, //330695,
+            (int)SNOActor.x1_LR_Shrine_Electrified, //330696,
+            (int)SNOActor.x1_LR_Shrine_Infinite_Casting, //330697,
+            (int)SNOActor.x1_LR_Shrine_Invulnerable, //330698,
+            (int)SNOActor.x1_LR_Shrine_Run_Speed, //330699,
+            (int)SNOActor.x1_Event_CursedShrine, //364601,
+            (int)SNOActor.x1_Event_CursedShrine_Heaven, //368169,
+            (int)SNOActor.x1_player_isShielded_riftShrine_model, //369696,
+            (int)SNOActor.x1_LR_Shrine_Electrified_TieredRift, //398654,
+            (int)SNOActor.a4_Heaven_Shrine_TreasureGoblin, //434409,
+            (int)SNOActor.shrine_Shadow, //434722,
         };
 
         public static HashSet<int> CursedShrineSNO = new HashSet<int>

@@ -21,10 +21,11 @@ using Logger = Trinity.Technicals.Logger;
 namespace Trinity.Framework.Avoidance.Handlers
 {
     [DataContract(Namespace = "")]
-    public class AnimationBeamAvoidanceHandler : NotifyBase, IAvoidanceHandler
+    public class AnimationConeAvoidanceHandler : NotifyBase, IAvoidanceHandler
     {
         private int _healthThresholdPct;
         private float _distanceMultiplier;
+        private float _arcMultiplier;
 
         public bool IsAllowed => TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct;
 
@@ -34,21 +35,21 @@ namespace Trinity.Framework.Avoidance.Handlers
             {
                 try
                 {
-                    //Logger.Log($"[BeamAvoidanceHandler] Actor={actor.Name} ActorCurrentAnimation={actor.CurrentAnimation} DiaAnim={actor.CommonData.CurrentAnimation}");
+                    Logger.Log($"[BeamAvoidanceHandler] Actor={actor.Name} ActorCurrentAnimation={actor.CurrentAnimation} DiaAnim={actor.CommonData.CurrentAnimation}");
 
                     var part = avoidance.Data.GetPart(actor.CurrentAnimation);
                     if (actor.CurrentAnimation != part.Animation)
                         continue;
-
+                    
                     var radius = Math.Max(part.Radius, actor.Radius) * DistanceMultiplier;
                     var nonCachedRotation = actor.DiaUnit.Movement.Rotation;
-                    var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, radius, nonCachedRotation)).SelectMany(n => n.AdjacentNodes);
-
+                    var arcDegrees = Math.Max(15, part.AngleDegrees) * ArcMultiplier;
+                    var nodes = grid.GetConeAsNodes(actor.Position, arcDegrees, radius, nonCachedRotation);
                     grid.FlagNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, 10);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogDebug($"AnimationBeamAvoidanceHandler Exception reading Animation/Rotation for actor: {actor.Name}");
+                    Logger.LogDebug($"AnimationConeAvoidanceHandler Exception for Actor: {actor.Name}. {ex}");
                 }
             }
         }
@@ -61,6 +62,16 @@ namespace Trinity.Framework.Avoidance.Handlers
         {
             get { return _healthThresholdPct; }
             set { SetField(ref _healthThresholdPct, value); }
+        }
+
+        [DataMember]
+        [Setting, DefaultValue(1)]
+        [UIControl(UIControlType.Slider), Limit(0, 2)]
+        [Description("The angle of the cone area arc is multiplied by this value (Default=1)")]
+        public float ArcMultiplier
+        {
+            get { return _arcMultiplier; }
+            set { SetField(ref _arcMultiplier, value); }
         }
 
         [DataMember]

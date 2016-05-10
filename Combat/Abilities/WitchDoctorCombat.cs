@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Movement;
 using Trinity.Reference;
 using Trinity.Technicals;
@@ -48,8 +49,11 @@ namespace Trinity.Combat.Abilities
 
         public static bool IsHellToothPetDoc
         {
-            get { return Sets.HelltoothHarness.IsFullyEquipped && Legendary.TheShortMansFinger.IsEquipped &&
-                    !(Runes.WitchDoctor.AngryChicken.IsActive || CacheData.Hotbar.ActivePowers.Contains(SNOPower.Witchdoctor_Hex_ChickenWalk)); }
+            get
+            {
+                return Sets.HelltoothHarness.IsFullyEquipped && Legendary.TheShortMansFinger.IsEquipped &&
+                  !(Runes.WitchDoctor.AngryChicken.IsActive || CacheData.Hotbar.ActivePowers.Contains(SNOPower.Witchdoctor_Hex_ChickenWalk));
+            }
         }
 
         public static TrinityPower GetPetDocPower()
@@ -64,9 +68,6 @@ namespace Trinity.Combat.Abilities
 
             if (UseOOCBuff)
             {
-                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && TrinityPlugin.PlayerOwnedGargantuanCount < 3)
-                    return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
-
                 var dogCount = Passives.WitchDoctor.MidnightFeast.IsActive ? 4 : 3;
                 if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && TrinityPlugin.PlayerOwnedZombieDogCount < dogCount)
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
@@ -74,11 +75,6 @@ namespace Trinity.Combat.Abilities
 
             if (CurrentTarget != null)
             {
-                // Gargantuan
-                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && (TrinityPlugin.PlayerOwnedGargantuanCount < 3
-                    || TargetUtil.AnyElitesInRange(30f)))
-                    return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
-
                 // Zombie Dogs
                 var dogCount = Passives.WitchDoctor.MidnightFeast.IsActive ? 4 : 3;
                 if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && (TrinityPlugin.PlayerOwnedZombieDogCount < dogCount ||
@@ -155,15 +151,33 @@ namespace Trinity.Combat.Abilities
             //Logger.LogNormal("Gargantuan Count = {0}", TrinityPlugin.PlayerOwnedGargantuanCount);
             //Logger.LogNormal("Fetish Count = {0}", TrinityPlugin.PlayerOwnedFetishArmyCount);
 
-            if (IsHellToothPetDoc)
-            {
-                return GetPetDocPower();
-            }
-
             // Destructible objects
             if (UseDestructiblePower)
             {
                 return DestroyObjectPower;
+            }
+
+            bool hasRestlessGiant = Runes.WitchDoctor.RestlessGiant.IsActive;
+            bool hasWrathfulProtector = Runes.WitchDoctor.WrathfulProtector.IsActive;
+
+            // Gargantuan should be cast ASAP.
+            if (CanCast(SNOPower.Witchdoctor_Gargantuan))
+            {
+                var hasAllGargs = TrinityPlugin.PlayerOwnedGargantuanCount != 0 && (!Legendary.TheShortMansFinger.IsEquipped || TrinityPlugin.PlayerOwnedGargantuanCount > 2);
+                if (!hasAllGargs)
+                {
+                    return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
+                }
+
+                if (TargetUtil.AnyElitesInRange(30f) && hasWrathfulProtector) //|| hasRestlessGiant?
+                {
+                    return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
+                }
+            }
+
+            if (IsHellToothPetDoc)
+            {
+                return GetPetDocPower();
             }
 
             // Spam Spirit Walk
@@ -185,28 +199,6 @@ namespace Trinity.Combat.Abilities
             {
                 return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
             }
-
-
-            bool hasRestlessGiant = Runes.WitchDoctor.RestlessGiant.IsActive;
-            bool hasWrathfulProtector = Runes.WitchDoctor.WrathfulProtector.IsActive;
-
-            // Gargantuan should be cast ASAP.
-            var hasAllGargs = TrinityPlugin.PlayerOwnedGargantuanCount != 0 && (!Legendary.TheShortMansFinger.IsEquipped || TrinityPlugin.PlayerOwnedGargantuanCount > 2);
-            if (CanCast(SNOPower.Witchdoctor_Gargantuan) && (!hasAllGargs || TargetUtil.AnyElitesInRange(30f)))
-            {
-
-                // Gargantuan Wrathful Protector, 15 seconds of smash, use sparingly!
-                if (hasWrathfulProtector && TargetUtil.IsEliteTargetInRange(30f))
-                {
-                    return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
-                }
-
-                // Gargantuan regular
-                if (!hasRestlessGiant && !hasWrathfulProtector)
-                {
-                    return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
-                }
-            }    
 
             // Summon Fetish Army
             var isTikiTorph = Runes.WitchDoctor.TikiTorchers.IsActive;
@@ -973,7 +965,7 @@ namespace Trinity.Combat.Abilities
                     if (MinimumSoulHarvestCriteria(Enemies.CloseNearby))
                     {
                         //LogTargetArea("--- Harvesting (CombatMovement)", area);
-                        Skills.WitchDoctor.SoulHarvest.Cast();                        
+                        Skills.WitchDoctor.SoulHarvest.Cast();
                     }
                 },
                 Options = new CombatMovementOptions
