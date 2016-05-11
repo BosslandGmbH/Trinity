@@ -75,6 +75,12 @@ namespace Trinity.Framework.Avoidance
                     return true;
                 }
 
+                if (CombatBase.IsWaitingForPower())
+                {                    
+                    Logger.Log(LogCategory.Avoidance, "Not Avoiding because routine needs to cast a power");
+                    return false;
+                }
+
                 if (ShouldKite)
                 {
                     IsKiting = true;

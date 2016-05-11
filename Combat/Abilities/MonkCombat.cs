@@ -128,11 +128,12 @@ namespace Trinity.Combat.Abilities
                     return new TrinityPower(SNOPower.Monk_BreathOfHeaven);
 
                 // Wave of Light
+
                 var wolTarget = Player.ParticipatingInTieredLootRun
                     ? TargetUtil.GetBestRiftValueClusterPoint(60f, .1)
                     : TargetUtil.GetBestClusterPoint(60f);
+
                 if (CanCast(SNOPower.Monk_WaveOfLight) && Player.PrimaryResource >= 45 &&
-                    TargetUtil.AnyMobsInRange(60f, Settings.Combat.Monk.MinWoLTrashCount) &&
                     (!Skills.Monk.SweepingWind.IsActive || GetBuffStacks(SNOPower.Monk_SweepingWind) > 1))
                     return new TrinityPower(SNOPower.Monk_WaveOfLight, 60f, wolTarget);
 
@@ -151,7 +152,7 @@ namespace Trinity.Combat.Abilities
                 return new TrinityPower(SNOPower.Walk, 40f, safePoint);
             }
 
-            return DefaultPower;
+            return null;
         }
 
         public static TrinityPower GetInnasPower()

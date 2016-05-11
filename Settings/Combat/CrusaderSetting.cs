@@ -64,6 +64,8 @@ namespace Trinity.Config.Combat
         private bool _useAkaratsGoblin;
         private CrusaderAkaratsMode _akaratsMode;
         private bool _akaratsEmergencyHealth;
+        private bool _akaratsOnStatusEffect;
+        private bool _alignTroveBombardment;
 
         #endregion Fields
 
@@ -104,6 +106,42 @@ namespace Trinity.Config.Combat
             }
         }
 
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool AlignTroveBombardment
+        {
+            get
+            {
+                return _alignTroveBombardment;
+            }
+            set
+            {
+                if (_alignTroveBombardment != value)
+                {
+                    _alignTroveBombardment = value;
+                    OnPropertyChanged("AlignTroveBombardment");
+                }
+            }
+        }        
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(true)]
+        public bool AkaratsOnStatusEffect
+        {
+            get
+            {
+                return _akaratsOnStatusEffect;
+            }
+            set
+            {
+                if (_akaratsOnStatusEffect != value)
+                {
+                    _akaratsOnStatusEffect = value;
+                    OnPropertyChanged("AkaratsOnStatusEffect");
+                }
+            }
+        }
+        
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool AkaratsEmergencyHealth

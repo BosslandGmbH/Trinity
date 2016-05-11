@@ -14,6 +14,7 @@ using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Technicals.Logger;
 using Trinity.Objects;
 using Trinity.UI.UIComponents.RadarCanvas;
+using Zeta.Bot.Navigation;
 
 namespace Trinity.Combat.Abilities
 {
@@ -169,267 +170,8 @@ namespace Trinity.Combat.Abilities
             return power;
         }
 
-        ///// <summary>
-        ///// Newk's Bombard Behavior
-        ///// </summary>
-        //private static TrinityPower GetBombardPower()
-        //{
-        //    TrinityPower power = null;
-
-        //    //Logger.Log(
-        //    //    "cd={0} RemainingMsToElement(Phys/1500)={1} Elapsed={2} ShouldWait(Bomb)={3}",
-        //    //    Skills.Crusader.Bombardment.CooldownRemaining,
-        //    //    TimeToElementStart(Element.Physical),
-        //    //    TimeFromElementStart(Element.Physical),
-        //    //    ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 3000)
-        //    //    );
-
-        //    if (Player.IsCastingTownPortalOrTeleport())
-        //    {
-        //        return null;
-        //    }
-
-        //    if (CurrentTarget == null)
-        //    {
-        //        if (!IsSteedCharging)
-        //        {
-        //            // LawsOfHope
-        //            if (CanCast(SNOPower.X1_Crusader_LawsOfHope2) && !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfHope2, 6) && ZetaDia.Me.Movement.SpeedXY > 0 &&
-        //                (TargetUtil.EliteOrTrashInRange(16f) ||
-        //                 Player.CurrentHealthPct <= CrusaderSettings.LawsOfHopeHpPct ||
-        //                 CrusaderSettings.SpamLaws))
-        //            {
-        //                return new TrinityPower(SNOPower.X1_Crusader_LawsOfHope2);
-        //            }
-
-        //            // AkaratsChampion 100% uptime setup
-        //            if (CanCastAkaratsChampion() && !Runes.Crusader.Rally.IsActive && Legendary.Ingeom.IsEquipped && ZetaDia.Me.Movement.SpeedXY > 0 && !Player.IsInTown)
-        //            {
-        //                return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
-        //            }
-
-        //            // Condemn
-        //            if (CanCast(SNOPower.X1_Crusader_Condemn) && ZetaDia.Me.Movement.SpeedXY > 0 && !Player.IsInTown)
-        //            {
-        //                return new TrinityPower(SNOPower.X1_Crusader_Condemn);
-        //            }
-        //        }
-
-        //        // dont waste coe phase
-        //        if (Settings.Combat.Misc.UseConventionElementOnly && Legendary.ConventionOfElements.IsEquipped && !GetHasBuff(SNOPower.Pages_Buff_Infinite_Casting) &&
-        //            ZetaDia.Me.Movement.SpeedXY > 0 && !Player.IsInTown)
-        //        {
-        //            // AkaratsChampion 100% uptime setup - force
-        //            if (CanCastIronSkin() && CanCastAkaratsChampion() && !Runes.Crusader.Rally.IsActive && Legendary.Ingeom.IsEquipped)
-        //            {
-        //                return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
-        //            }
-
-        //            // Iron Skin
-        //            if (CanCastIronSkin())
-        //            {
-        //                return new TrinityPower(SNOPower.X1_Crusader_IronSkin);
-        //            }
-
-        //            // Bombardment
-        //            if (CanCastBombardment())
-        //            {
-        //                return new TrinityPower(SNOPower.X1_Crusader_Bombardment);
-        //            }
-
-        //            // AkaratsChampion if rally
-        //            if (CanCastAkaratsChampion() && Runes.Crusader.Rally.IsActive)
-        //            {
-        //                if (GetHasBuff(SNOPower.X1_Crusader_IronSkin) && Skills.Crusader.Bombardment.CooldownRemaining > 6000)
-        //                    return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
-        //            }
-        //        }
-
-        //        // SteedCharge
-        //        if (!IsSteedCharging && CanCast(SNOPower.X1_Crusader_SteedCharge) && ZetaDia.Me.Movement.SpeedXY > 0 && !Player.IsInTown && CrusaderSettings.SteedChargeOOC)
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
-        //        }
-        //    }
-
-        //    // Has Target
-        //    if (CurrentTarget != null)
-        //    {
-        //        // AkaratsChampion
-        //        if ((!IsSteedCharging || CanCastIronSkin()) && CanCastAkaratsChampion() && !Runes.Crusader.Rally.IsActive)
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
-        //        }
-
-        //        // Iron Skin
-        //        if (CanCastIronSkin())
-        //        {
-        //            //Logger.Log("IronSkin");
-        //            return new TrinityPower(SNOPower.X1_Crusader_IronSkin);
-        //        }
-
-        //        // Bombardment
-        //        if (CanCastBombardment())
-        //        {
-        //            if (IsBombardmentBuild && Runes.Crusader.Critical.IsActive && CanCast(SNOPower.X1_Crusader_LawsOfValor2))
-        //                return new TrinityPower(SNOPower.X1_Crusader_LawsOfValor2);
-
-        //            var bestPoint = CurrentTarget.IsEliteRareUnique
-        //                ? CurrentTarget.Position
-        //                : TargetUtil.GetBestClusterPoint();
-
-        //            //Logger.Log("Bombardment");
-        //            return new TrinityPower(SNOPower.X1_Crusader_Bombardment, 16f, bestPoint);
-        //        }
-
-        //        // Consecration
-        //        if (CanCastConsecration() && GetHasBuff(SNOPower.X1_Crusader_IronSkin))
-        //        {
-        //            //Logger.Log("Consecration");
-        //            return new TrinityPower(SNOPower.X1_Crusader_Consecration);
-        //        }
-
-        //        // Provoke
-        //        if (!IsSteedCharging && CanCastProvoke())
-        //        {
-        //            //Logger.Log("Provoke");
-        //            return new TrinityPower(SNOPower.X1_Crusader_Provoke);
-        //        }
-
-        //        // Shield Glare
-        //        if (CanCastShieldGlare() && !IsSteedCharging)
-        //        {
-        //            var arcTarget = TargetUtil.GetBestArcTarget(45f, 70f);
-        //            if (arcTarget != null && arcTarget.Position != Vector3.Zero)
-        //            {
-        //                //Logger.Log("Shield Glare");
-        //                return new TrinityPower(SNOPower.X1_Crusader_ShieldGlare, 15f, arcTarget.Position);
-        //            }
-        //        }
-
-        //        // Condemn
-        //        if (CanCastCondemn() && !IsSteedCharging)
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_Condemn);
-        //        }
-
-        //        // LawsOfJustice
-        //        if (CanCast(SNOPower.X1_Crusader_LawsOfJustice2) &&
-        //            !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfJustice_Passive2, 6) &&
-        //            (!IsSteedCharging && TargetUtil.EliteOrTrashInRange(16f) ||
-        //             Player.CurrentHealthPct <= CrusaderSettings.LawsOfJusticeHpPct ||
-        //             !IsSteedCharging && TargetUtil.AnyMobsInRange(15f, 5) ||
-        //             !IsSteedCharging && Settings.Combat.Crusader.SpamLaws))
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_LawsOfJustice2);
-        //        }
-
-        //        // Laws of Hope
-        //        if (!IsSteedCharging && CanCast(SNOPower.X1_Crusader_LawsOfHope2) &&
-        //            (TargetUtil.EliteOrTrashInRange(16f) ||
-        //             TargetUtil.AnyMobsInRange(15f, 5) || Settings.Combat.Crusader.SpamLaws) &&
-        //            !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfHope_Passive2, 6))
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_LawsOfHope2);
-        //        }
-
-        //        // LawsOfValor
-        //        if (!IsSteedCharging && CanCast(SNOPower.X1_Crusader_LawsOfValor2) &&
-        //            !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfValor_Passive2, 6) &&
-        //            (TargetUtil.EliteOrTrashInRange(16f) || TargetUtil.AnyMobsInRange(15f, 5) ||
-        //             Settings.Combat.Crusader.SpamLaws))
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_LawsOfValor2);
-        //        }
-
-        //        // Phalanx
-        //        if (CanCastPhalanx())
-        //        {
-        //            var bestPierceTarget = TargetUtil.GetBestPierceTarget(45f);
-        //            if (!Runes.Crusader.Bowmen.IsActive && bestPierceTarget != null)
-        //                return new TrinityPower(SNOPower.x1_Crusader_Phalanx3, 45f, bestPierceTarget.ACDGuid);
-        //            return new TrinityPower(SNOPower.x1_Crusader_Phalanx3);
-        //        }
-
-        //        // AkaratsChampion if rally
-        //        if (CanCastAkaratsChampion() && Runes.Crusader.Rally.IsActive)
-        //        {
-        //            if (GetHasBuff(SNOPower.X1_Crusader_IronSkin) && Skills.Crusader.Bombardment.CooldownRemaining > 6000)
-        //                return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
-        //        }
-
-        //        // SteedSpam
-        //        if (Settings.Combat.Crusader.SpamSteedCharge && !IsSteedCharging && CanCastSteedCharge())
-        //        {
-        //            //Logger.Log("Steed Charge");
-        //            return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
-        //        }
-
-        //        // SteedSpam DMG MOVE
-        //        if (IsSteedCharging && !IsCurrentlyAvoiding)
-        //        {
-        //            //Logger.Log("Steed Charge Damage");
-        //            return new TrinityPower(SNOPower.Walk, 20f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 35f, true), TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);
-        //        }
-        //    }
-
-        //    // Buffs
-        //    if (UseOOCBuff)
-        //    {
-        //        if (CanCastSteedChargeOutOfCombat() && !IsSteedCharging)
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
-        //        }
-
-        //        // Laws of Hope2
-        //        if (!IsSteedCharging && CanCast(SNOPower.X1_Crusader_LawsOfHope2) &&
-        //            Player.CurrentHealthPct <= CrusaderSettings.LawsOfHopeHpPct
-        //            && !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfHope_Passive2, 6))
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_LawsOfHope2);
-        //        }
-
-        //        // LawsOfJustice2
-        //        if (!IsSteedCharging && CanCast(SNOPower.X1_Crusader_LawsOfJustice2) &&
-        //            !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfJustice2, 6) &&
-        //            (Player.CurrentHealthPct <= CrusaderSettings.LawsOfJusticeHpPct))
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_LawsOfJustice2);
-        //        }
-
-        //        // LawsOfValor2
-        //        if (CanCast(SNOPower.X1_Crusader_LawsOfValor2) && TargetUtil.EliteOrTrashInRange(16f) &&
-        //            !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfValor2, 6) &&
-        //            !IsSteedCharging)
-        //        {
-        //            return new TrinityPower(SNOPower.X1_Crusader_LawsOfValor2);
-        //        }
-
-        //        // Phalanx
-        //        if (IsBombardmentBuild && Runes.Crusader.Bowmen.IsActive && CanCastPhalanx() &&
-        //            !IsSteedCharging && !Player.IsInTown)
-        //        {
-        //            return new TrinityPower(SNOPower.x1_Crusader_Phalanx3);
-        //        }
-        //    }
-
-        //    // Prevent Default Attack
-        //    if (CurrentTarget != null && CurrentTarget.Type != TrinityObjectType.Destructible)
-        //    {
-        //        //Logger.Log("Prevent Primary Attack ");
-        //        var targetPosition = TargetUtil.GetLoiterPosition(CurrentTarget, 5f);
-        //        return new TrinityPower(SNOPower.Walk, 12f, targetPosition);
-        //    }
-
-        //    // Destructibles
-        //    if (UseDestructiblePower)
-        //        return DestroyObjectPower;
-
-        //    // Primary generators
-        //    //Logger.Log("Default / Generator");
-        //    power = GetPrimaryPower();
-        //    return power ?? DefaultPower;
-        //}
+        public static Func<bool> IsBombardmentWindow = () => CanCast(SNOPower.X1_Crusader_Bombardment) && IsInsideCoeTimeSpan(Element.Physical, 1500, 500);
+        public static Func<bool> IsSteedSupressionWindow = () => CanCast(SNOPower.X1_Crusader_Bombardment) && IsInsideCoeTimeSpan(Element.Physical, 2500, 0);
 
         /// <summary>
         /// Newk's Bombard Behavior
@@ -447,14 +189,14 @@ namespace Trinity.Combat.Abilities
             //    );
 
             // Sync belt of trove bombardments.
-            // todo UI setting, keep track of snapshot clears and know if its currently aligned.
-            //if (CacheData.Buffs.ConventionElement == Element.Holy)
-            //{
-            //    TrinityPlugin.UsePotion();
-            //}    
+            // todo UI setting, keep track of snapshot clears and know if its currently aligned. account for belt timing 6-8s.
+            if (!ZetaDia.IsInTown && Settings.Combat.Crusader.AlignTroveBombardment && CacheData.Buffs.ConventionElement == Element.Holy)
+            {
+                TrinityPlugin.UsePotion();
+            }
 
             // Defensive AkaratsChampion
-            if ((Player.CurrentHealthPct < 0.5 || CacheData.Buffs.ConventionElement == Element.Lightning) && CanCastAkaratsChampion())
+            if (ShouldWaitForConventionofElements(Skills.Crusader.AkaratsChampion, Element.Physical, 800, 1000) == false && CanCastAkaratsChampion() && CanCastAkaratsChampion())
             {
                 return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
             }
@@ -463,6 +205,13 @@ namespace Trinity.Combat.Abilities
             {
                 return null;
             }
+
+            // Steed charge causes a 1second global cooldown, need to make sure this doesnt happen right before we need to cast bombard.
+            // todo: steed still causes an issue during casting shrine
+            var supressSteedCharge = TargetUtil.AnyElitesInRange(100f) && IsSteedSupressionWindow();
+
+            // Special delegate that can inform logic elsewhere that we want need control to cast an important spell.
+            IsWaitingForPower = () => TargetUtil.AnyElitesInRange(100f) && IsBombardmentWindow();
 
             if (CurrentTarget == null)
             {
@@ -478,19 +227,12 @@ namespace Trinity.Combat.Abilities
                 if (CanCast(SNOPower.X1_Crusader_Bombardment) && GetHasBuff(SNOPower.X1_Crusader_IronSkin) &&
                     !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000) &&
                     ZetaDia.Me.Movement.SpeedXY != 0 && (TargetUtil.AnyMobsInRange(60f, CrusaderSettings.BombardmentAoECount) ||
-                    TargetUtil.AnyElitesInRange(60f)))
+                                                         TargetUtil.AnyElitesInRange(60f)))
                 {
                     if (Runes.Crusader.Critical.IsActive && CanCast(SNOPower.X1_Crusader_LawsOfValor2))
                         return new TrinityPower(SNOPower.X1_Crusader_LawsOfValor2);
 
-                    //if (CanCast(SNOPower.X1_Crusader_AkaratsChampion))
-                    //{
-                    //    Logger.Log("AkaratsChampion");
-                    //    Skills.Crusader.AkaratsChampion.Cast();
-                    //}
-               
-                    Logger.Log("Bombardment");
-                    return new TrinityPower(SNOPower.X1_Crusader_Bombardment);
+                    return new TrinityPower(SNOPower.X1_Crusader_Bombardment, 0, 0);
                 }
 
                 // Shield Glare
@@ -536,7 +278,7 @@ namespace Trinity.Combat.Abilities
                 if (CanCastIronSkin())
                 {
                     //Logger.Log("IronSkin");
-                    return new TrinityPower(SNOPower.X1_Crusader_IronSkin);
+                    return new TrinityPower(SNOPower.X1_Crusader_IronSkin,0,0);
                 }
 
                 // Consecration
@@ -549,7 +291,9 @@ namespace Trinity.Combat.Abilities
                 // Bombardment
                 if (CanCastBombardment())
                 {
-                    if (IsBombardmentBuild && Runes.Crusader.Critical.IsActive && CanCast(SNOPower.X1_Crusader_LawsOfValor2))
+                    //&& (!Runes.Crusader.Critical.IsActive || ) what is critical buff??
+
+                    if (CanCast(SNOPower.X1_Crusader_LawsOfValor2))
                         return new TrinityPower(SNOPower.X1_Crusader_LawsOfValor2);
 
                     var bestPoint = CurrentTarget.IsEliteRareUnique
@@ -557,7 +301,9 @@ namespace Trinity.Combat.Abilities
                         : TargetUtil.GetBestClusterPoint();
 
                     //Logger.Log("Bombardment");
-                    return new TrinityPower(SNOPower.X1_Crusader_Bombardment, 16f, bestPoint);
+                    //return new TrinityPower(SNOPower.X1_Crusader_Bombardment, 16f, bestPoint, 0,0);
+                    Skills.Crusader.Bombardment.Cast(bestPoint);
+                    return new TrinityPower(SNOPower.X1_Crusader_Bombardment, 0, 0);
                 }
 
                 if (PlayerMover.IsBlocked && !IsSteedCharging && CanCast(SNOPower.X1_Crusader_SteedCharge))
@@ -633,9 +379,9 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // SteedSpam
-                if (Settings.Combat.Crusader.SpamSteedCharge && CanCastSteedCharge() && !IsSteedCharging)
+                if (Settings.Combat.Crusader.SpamSteedCharge && CanCastSteedCharge() && !IsSteedCharging && !supressSteedCharge)
                 {
-                    //Logger.Log("Steed Charge");
+                    //Logger.Log("Steed Charge routine 1");
                     return new TrinityPower(SNOPower.X1_Crusader_SteedCharge);
                 }
 
@@ -1209,13 +955,23 @@ namespace Trinity.Combat.Abilities
             if (IsBombardmentBuild)
             {
                 if (ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000))
+                {
+                    Logger.LogVerbose("Bombardment Waiting for convention element");
                     return false;
+                }
 
-                if (!GetHasBuff(SNOPower.X1_Crusader_IronSkin))
+                if (CanCast(SNOPower.X1_Crusader_IronSkin) && !GetHasBuff(SNOPower.X1_Crusader_IronSkin))
+                {
+                    Logger.LogVerbose("Bombardment Waiting for iron skin");
+                    Skills.Crusader.IronSkin.Cast();
                     return false;
+                }
 
-                if (ZetaDia.Me.Movement.SpeedXY == 0)
+                if (Math.Abs(ZetaDia.Me.Movement.SpeedXY) < float.Epsilon)
+                {
+                    Logger.LogVerbose("Waiting to move for bombard with hexing pants.");
                     return false;
+                }
 
                 return true;
             }
@@ -1238,7 +994,7 @@ namespace Trinity.Combat.Abilities
             if (CurrentTarget != null && CurrentTarget.IsTreasureGoblin && Settings.Combat.Monk.UseEpiphanyGoblin ||
                 Player.CurrentHealthPct <= 0.39 && Settings.Combat.Crusader.AkaratsEmergencyHealth || 
                 GetHasBuff(SNOPower.Pages_Buff_Infinite_Casting) ||
-                ZetaDia.Me.IsFrozen || ZetaDia.Me.IsRooted || ZetaDia.Me.IsFeared || ZetaDia.Me.IsStunned)
+                Settings.Combat.Crusader.AkaratsOnStatusEffect && (ZetaDia.Me.IsFrozen || ZetaDia.Me.IsRooted || ZetaDia.Me.IsFeared || ZetaDia.Me.IsStunned))
                 return true;
 
             // Akarat's mode is 'Whenever in Combat'
@@ -1282,7 +1038,7 @@ namespace Trinity.Combat.Abilities
                 CurrentTarget.RadiusDistance <= 10f && !Settings.Combat.Misc.UseConventionElementOnly)
                 return true;
 
-            if (IsBombardmentBuild && !ShouldWaitForConventionofElements(Skills.Crusader.IronSkin, Element.Physical, 1600, 0))
+            if (IsBombardmentBuild && !ShouldWaitForConventionofElements(Skills.Crusader.IronSkin, Element.Physical, 3200, 0))
                 return true;
 
             return false;

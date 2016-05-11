@@ -128,7 +128,7 @@ namespace Trinity.Movement
                                (Runes.Barbarian.Gangway.IsActive || !PlayerMover.IsBlocked) ||
                                CombatBase.CanCast(SNOPower.Barbarian_FuriousCharge);
                     case ActorClass.Crusader:
-                        return CombatBase.CanCast(SNOPower.X1_Crusader_SteedCharge);
+                        return CombatBase.CanCast(SNOPower.X1_Crusader_SteedCharge) && !CombatBase.IsWaitingForPower();
                     case ActorClass.DemonHunter:
                         return TrinityPlugin.Player.PrimaryResource > 12 &&
                                CombatBase.CanCast(SNOPower.DemonHunter_Strafe) ||
@@ -138,7 +138,7 @@ namespace Trinity.Movement
                                CombatBase.CanCast(SNOPower.DemonHunter_Impale);
                     case ActorClass.Monk:
                         return CombatBase.CanCast(SNOPower.Monk_TempestRush) ||
-                               CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike);
+                               CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike) && Skills.Monk.DashingStrike.Charges > 0;
                     case ActorClass.Witchdoctor:
                         return CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk);
                     case ActorClass.Wizard:
@@ -243,6 +243,7 @@ namespace Trinity.Movement
             if (CombatBase.CanCast(SNOPower.X1_Crusader_SteedCharge) &&
                 !DataDictionary.SteedChargeAnimations.Contains(CacheData.Player.CurrentAnimation))
             {
+                //Logger.LogDebug("Steed Charge out of combat");
                 Skills.Crusader.SteedCharge.Cast(destination);
                 LogMovement(SNOPower.X1_Crusader_SteedCharge, destination);
             }

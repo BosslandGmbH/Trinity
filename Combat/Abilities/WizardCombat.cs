@@ -811,7 +811,7 @@ namespace Trinity.Combat.Abilities
             if (!Settings.Combat.Wizard.NoArcaneStrike && TargetUtil.AnyMobsInRange(12f) && PowerManager.CanCast(strike.Power))
             {
                 Logger.Log(LogCategory.Routine, $"Casting ArchonStrike {Skills.Wizard.ArchonStrike.SNOPower} on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
-                power = new TrinityPower(strike.Power, 12f, CurrentTarget.Position);
+                power = new TrinityPower(strike.Power, 14f, CurrentTarget.Position);
                 return true;
             }
 
@@ -834,7 +834,7 @@ namespace Trinity.Combat.Abilities
             if (!Settings.Combat.Wizard.NoArcaneStrike && strike != null && PowerManager.CanCast(strike.Power))
             {
                 Logger.Log(LogCategory.Routine, $"Casting ArchonStrike {Skills.Wizard.ArchonStrike.SNOPower} on {CurrentTarget.InternalName} {CurrentTarget.Position} Distance={CurrentTarget.Distance}");
-                power = new TrinityPower(strike.Power, 12f, CurrentTarget.Position);
+                power = new TrinityPower(strike.Power, 14f, CurrentTarget.Position);
                 return true;
             }
 
