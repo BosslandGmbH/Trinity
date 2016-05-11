@@ -4909,7 +4909,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item BakuliJungleWraps = new Item
         {
-            Id = 0,
+            Id = 193674,
             Name = "Bakuli Jungle Wraps",
             Quality = ItemQuality.Legendary,
             Slug = "bakuli-jungle-wraps",
