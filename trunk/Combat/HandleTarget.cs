@@ -245,7 +245,25 @@ namespace Trinity
                     {
                         Logger.LogVerbose(LogCategory.Behavior, "Not Selecting Ability WaitingForPower={0} WaitingBeforePower={1} CurrentPower={2} CurrentTarget={3}",
                             _isWaitingForPower, _isWaitingBeforePower, CombatBase.CurrentPower, CurrentTarget);
-                    }                    
+                    }
+
+
+                    // Prevent running away after progression globes spawn if they're in aoe
+                    if (Player.IsInRift && !Core.Avoidance.Avoider.IsAvoiding)
+                    {                       
+                        var globes = ObjectCache.Where(o => o.Type == TrinityObjectType.ProgressionGlobe && o.Distance < 120f).ToList();
+                        var shouldWaitForGlobes = globes.Any(o => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, o.Position, AvoidanceFlags.Avoidance));
+                        if (shouldWaitForGlobes && CurrentTarget == null)
+                        {                          
+                            Logger.Log($"Waiting for progression globe GlobeCount={globes.Count}");
+                            var globe = globes.FirstOrDefault();
+                            if (globe != null)
+                            {
+                                Navigator.PlayerMover.MoveTowards(globe.Position);
+                            }
+                            return RunStatus.Running;
+                        }
+                    }
 
                     // Some skills we need to wait to finish (like cyclone strike while epiphany is active)
                     if (_isWaitingForAttackToFinish)

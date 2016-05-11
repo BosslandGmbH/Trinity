@@ -33,6 +33,8 @@
                     <RadioButton GroupName="AkaratsMode" Content="Use Whenever in Combat" IsChecked="{Binding Path=Crusader.AkaratsMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=WhenInCombat}" />
                     <CheckBox Margin="2" IsChecked="{Binding Path=Crusader.UseAkaratsGoblin}">Use on Goblins</CheckBox>
                     <CheckBox Margin="2" IsChecked="{Binding Path=Crusader.AkaratsEmergencyHealth}" ToolTip="Force use Epiphany if health is below emergency health" Content="Use in emergencies"/>
+                    <CheckBox Margin="2" IsChecked="{Binding Path=Crusader.AkaratsOnStatusEffect}" ToolTip="Allow akarats to be used when stunned/frozen/feared" Content="Use on Status Effect"/>
+
                 </UniformGrid>
             </GroupBox>            
             <GroupBox>
@@ -44,6 +46,15 @@
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>
+            <GroupBox>
+                <GroupBox.Header>Build: LoN Bombardment Crusader</GroupBox.Header>
+                <StackPanel>
+                    <UniformGrid Columns="1">
+                        <CheckBox IsChecked="{Binding Path=Crusader.AlignTroveBombardment}" ToolTip="Use potion at specific convention element to make bombardments from Belt of Trove fall with maximum damage" Content="Align Belt of Trove bombardments with potion" />
+                    </UniformGrid>
+                </StackPanel>
+            </GroupBox>
+            
             <GroupBox>
                 <GroupBox.Header>Always Use</GroupBox.Header>
                 <StackPanel>

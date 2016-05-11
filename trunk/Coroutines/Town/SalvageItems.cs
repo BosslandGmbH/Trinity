@@ -164,7 +164,7 @@ namespace Trinity.Coroutines.Town
                         continue;
                     }
 
-                    Logger.Log("Salvaging");
+                    Logger.Log($"Salvaging: {item.Name} ({item.ActorSnoId}) Ancient={item.IsAncient}");
                     ZetaDia.Me.Inventory.SalvageItem(item.AnnId);
                     Inventory.InvalidItemDynamicIds.Add(item.AnnId);
                     ItemEvents.FireItemSalvaged(item);                    

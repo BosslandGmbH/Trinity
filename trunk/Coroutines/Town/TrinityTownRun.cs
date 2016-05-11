@@ -246,13 +246,8 @@ namespace Trinity.Coroutines.Town
                 return true;
             }
 
-            if (!ZetaDia.IsInTown && RepairItems.EquipmentNeedsRepair())
-            {
-                return true;
-            }
-
             // Close Normal rift before doing a town run.
-            if (ZetaDia.IsInTown && !StartedOutOfTown && ZetaDia.CurrentRift != null && ZetaDia.CurrentRift.IsCompleted && ZetaDia.CurrentRift.IsStarted && ZetaDia.CurrentRift.Type == RiftType.Nephalem)
+            if (ZetaDia.IsInTown && !StartedOutOfTown && ZetaDia.CurrentRift != null && ZetaDia.CurrentRift.IsCompleted && ZetaDia.CurrentRift.IsStarted)
             {
                 var orek = TownInfo.Orek?.GetActor() as DiaUnit;
                 if (orek != null && orek.IsQuestGiver)
@@ -261,16 +256,17 @@ namespace Trinity.Coroutines.Town
                 }
             }
 
-            if (RepairItems.EquipmentNeedsRepair())
-            {
-                Logger.LogDebug("Townrun for repair.");
-                return true;
-            }
-
             var validLocation = TrinityItemManager.FindValidBackpackLocation(true);
             if (validLocation.X < 0 || validLocation.Y < 0)
             {
                 Logger.Log("No more space to pickup a 2-slot item, now running town-run routine. (TownRun)");
+                return true;
+            }
+
+            var needRepair = RepairItems.EquipmentNeedsRepair();
+            if (needRepair)
+            {
+                Logger.LogDebug("Townrun for repair.");
                 return true;
             }
 

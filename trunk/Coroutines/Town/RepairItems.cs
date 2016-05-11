@@ -89,8 +89,7 @@ namespace Trinity.Coroutines.Town
                 return false;
 
             var currentHighestDurItem = equippedItems.Max(i => i.DurabilityPercent);
-
-            if (ZetaDia.IsInTown && currentHighestDurItem < 95)
+            if (ZetaDia.IsInTown && currentHighestDurItem < 95 && !TrinityPlugin.Player.ParticipatingInTieredLootRun)
             {
                 Logger.Log($"Equipment Needs Repair! CurrentMaxDurabillity={currentHighestDurItem} InTownRepairLimit={95}");
                 return true;

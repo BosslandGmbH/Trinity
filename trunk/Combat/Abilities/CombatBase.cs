@@ -1439,6 +1439,7 @@ namespace Trinity.Combat.Abilities
 
         public static bool IsDoingGoblinKamakazi { get; set; }
         public static TrinityCacheObject KamakaziGoblin { get; set; }
+        public static Func<bool> IsWaitingForPower = () => false;
 
         public static HashSet<string> HighHitPointTrashMobNames = new HashSet<string>
         {

@@ -841,7 +841,7 @@ namespace Trinity
         /// <returns></returns>
         internal static bool UnitOrPathInAoE(TrinityCacheObject u)
         {
-            return Core.Avoidance.InAvoidance(u.Position) && PathToActorIntersectsAoe(u);
+            return Core.Avoidance.InAvoidance(u.Position) || PathToActorIntersectsAoe(u);
         }
 
         internal static bool IsPositionOnMonster(Vector3 position, bool useWeights = true)
@@ -870,8 +870,9 @@ namespace Trinity
             if (obj == null)
                 return false;
 
-            return CacheData.TimeBoundAvoidance.Any(aoe =>
-                MathUtil.IntersectsPath(aoe.Position, aoe.Radius, obj.Position, Player.Position));
+            return Core.Avoidance.Grid.IsIntersectedByFlags(obj.Position, Player.Position, AvoidanceFlags.Avoidance);
+            //return CacheData.TimeBoundAvoidance.Any(aoe =>
+            //    MathUtil.IntersectsPath(aoe.Position, aoe.Radius, obj.Position, Player.Position));
         }
 
 
