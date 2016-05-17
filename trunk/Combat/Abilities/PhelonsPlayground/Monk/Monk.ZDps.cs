@@ -54,7 +54,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                     TrinityPlugin.ShouldWaitForLootDrop || charges < 1)
                     return false;
 
-                target = PhelonTargeting.BestAoeUnit(false);
+                target = PhelonTargeting.BestAoeUnit();
                 if ((target == null || target.Distance > 50 || target.Distance < 10) &&
                     TimeSincePowerUse(SNOPower.X1_Monk_DashingStrike) < Settings.Combat.Monk.DashingStrikeDelay)
                     return false;
@@ -80,7 +80,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                 get
                 {
                     return Skills.Monk.InnerSanctuary.CanCast() &&
-                           PhelonTargeting.BestAoeUnit(false).Distance < 20 && Player.CurrentHealthPct <= 0.4;
+                           PhelonTargeting.BestAoeUnit().Distance < 20 && Player.CurrentHealthPct <= 0.4;
                 }
             }
 
@@ -95,7 +95,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                 get
                 {
                     return Skills.Monk.BlindingFlash.CanCast() &&
-                           PhelonTargeting.BestAoeUnit(false).Distance < 20 && Player.CurrentHealthPct <= 0.4;
+                           PhelonTargeting.BestAoeUnit().Distance < 20 && Player.CurrentHealthPct <= 0.4;
                 }
             }
 

@@ -13,13 +13,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
     {
         public class Firebirds
         {
-
             public static TrinityPower PowerSelector()
             {
-                Vector3 portLocation = Vector3.Zero;
 
-                if (ShouldTeleport(out portLocation))
-                    return CastTeleport(portLocation);
+                if (ShouldArchon())
+                    return CastArchon;
 
                 if (Player.IsIncapacitated) return null;
 
@@ -28,9 +26,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 if (ShouldExplosiveBlast)
                     return CastExplosiveBlast;
-
-                if (ShouldArchon())
-                    return CastArchon;
                 
                 var power = Archon.PowerSelector();
                 if (power != null)
@@ -46,7 +41,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 get
                 {
-                    return CanCast(SNOPower.Wizard_ArcaneTorrent) && PhelonTargeting.BestAoeUnit(true).Distance < 45;
+                    return CanCast(SNOPower.Wizard_ArcaneTorrent) && PhelonTargeting.BestAoeUnit(45, true) != null;
                 }
             }
 
@@ -63,6 +58,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 get
                 {
                     return Skills.Wizard.ExplosiveBlast.CanCast() &&
+                           PhelonTargeting.BestAoeUnit().Distance < 7 &&
                            (GetHasBuff(SNOPower.Wizard_ExplosiveBlast) &&
                             GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
                             TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5);
@@ -74,61 +70,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 get
                 {
                     return new TrinityPower(SNOPower.Wizard_ArcaneTorrent, 55f,
-                        PhelonTargeting.BestAoeUnit(true).Position);
+                        PhelonTargeting.BestAoeUnit(45, true).Position);
                 }
-            }
-
-            private static bool CanTeleport
-            {
-                get
-                {
-                    return Skills.Wizard.Teleport.CanCast() ||
-                           Skills.Wizard.ArchonTeleport.CanCast();
-                }
-            }
-
-            private static bool ShouldTeleport(out Vector3 position)
-            {
-                if (!CanTeleport)
-                {
-                    position = Vector3.Zero;
-                    return false;
-                }
-                // Ports to Closest HealthGlobe
-                if (TrinityPlugin.Player.CurrentHealthPct < Settings.Combat.Wizard.HealthGlobeLevel)
-                {
-                    var safePoint = TargetUtil.GetBestHealthGlobeClusterPoint(5, 40);
-                    if (safePoint != Vector3.Zero)
-                    {
-                        position = safePoint;
-                        return true;
-                    }
-                }
-
-                //Ports out Avoidance
-                if (Core.Avoidance.InCriticalAvoidance(Player.Position))
-                {
-                    position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
-                    return true;
-                }
-
-                var bestDpsPosition = PhelonUtils.BestDpsPosition;
-                if (bestDpsPosition != Vector3.Zero &&
-                    (bestDpsPosition.Distance(Player.Position) > 7 || Runes.Wizard.Calamity.IsActive ||
-                     Runes.Wizard.SafePassage.IsActive && TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500))
-                {
-                    position = bestDpsPosition;
-                    return true;
-                }
-                position = Vector3.Zero;
-                return false;
-            }
-
-            private static TrinityPower CastTeleport(Vector3 position)
-            {
-                return Skills.Wizard.ArchonStrike.IsActive
-                    ? new TrinityPower(SNOPower.Wizard_Archon_Teleport, 40f, position)
-                    : new TrinityPower(SNOPower.Wizard_Teleport, 40f, position);
             }
 
             private static bool ShouldHydra()
@@ -142,17 +85,17 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 var lastCast = SpellHistory.History
                     .Where(p => p.Power.SNOPower == SNOPower.Wizard_Hydra && p.TimeSinceUse < TimeSpan.FromSeconds(14))
                     .OrderBy(s => s.TimeSinceUse)
-                    .ThenBy(p => p.Power.TargetPosition.Distance2DSqr(PhelonTargeting.BestAoeUnit(true).Position))
+                    .ThenBy(p => p.Power.TargetPosition.Distance2DSqr(PhelonTargeting.BestAoeUnit(45,true).Position))
                     .FirstOrDefault();
 
-                return lastCast != null && lastCast.TargetPosition.Distance2DSqr(PhelonTargeting.BestAoeUnit(true).Position) > 25;
+                return lastCast != null && lastCast.TargetPosition.Distance2DSqr(PhelonTargeting.BestAoeUnit(45, true).Position) > 25;
             }
 
             private static TrinityPower CastHydra
             {
                 get
                 {
-                    return new TrinityPower(SNOPower.Wizard_Hydra, 55f, PhelonTargeting.BestAoeUnit(true).Position);
+                    return new TrinityPower(SNOPower.Wizard_Hydra, 55f, PhelonTargeting.BestAoeUnit(45, true).Position);
                 }
             }
 
@@ -162,8 +105,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 if (!Skills.Wizard.Archon.CanCast() || GetHasBuff(SNOPower.Wizard_Archon))
                     return false;
+                if (Player.PrimaryResourcePct < 0.10)
+                    return true;
 
-                if (Sets.ChantodosResolve.IsFullyEquipped && Player.PrimaryResourcePct > 0.10)
+                if (Sets.ChantodosResolve.IsFullyEquipped)
                 {
                     return GetHasBuff(SNOPower.P3_ItemPassive_Unique_Ring_021) &&
                            GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021) > 19;
@@ -178,7 +123,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         Settings.Combat.Wizard.ArchonMobCount))
                     return true;
 
-                return PhelonTargeting.BestAoeUnit(true).IsBoss;
+                return PhelonTargeting.BestAoeUnit(45, true).IsBoss;
             }
 
             public static TrinityPower CastArchon
