@@ -30,7 +30,7 @@ using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Items
 {
-    public class TrinityItemManager 
+    public class TrinityItemManager
     {
         static TrinityItemManager()
         {
@@ -42,7 +42,7 @@ namespace Trinity.Items
         {
             if (item.IsProtected() || item.IsAccountBound)
                 return false;
-            
+
             if (item.IsGem || item.IsCraftingReagent || item.TrinityItemType == TrinityItemType.CraftingPlan)
                 return false;
 
@@ -154,11 +154,11 @@ namespace Trinity.Items
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (STASHING: ItemList Option - Always Stash Ancients)", item.Name, item.InternalName);
                 return true;
             }
-                
+
             // ItemList - Always sell/salvage non-ancients setting
             var isArmorWeaponOrJewellery = item.ItemBaseType == ItemBaseType.Armor || item.ItemBaseType == ItemBaseType.Jewelry || item.ItemBaseType == ItemBaseType.Weapon;
 
-            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && TrinityPlugin.Settings.Loot.ItemList.AlwaysTrashNonAncients && 
+            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && TrinityPlugin.Settings.Loot.ItemList.AlwaysTrashNonAncients &&
                 !item.IsAncient && item.ItemQualityLevel >= ItemQuality.Legendary && isArmorWeaponOrJewellery)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (TRASHING: ItemList Option - Always Sell/Salvage Non-Ancients) IsAncient={2} IsUnidentified={3}", item.Name, item.InternalName, item.IsAncient, item.IsUnidentified);
@@ -203,97 +203,90 @@ namespace Trinity.Items
             // Stash all unidentified items - assume we want to keep them since we are using an identifier over-ride
             if (item.IsUnidentified)
             {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (autokeep unidentified items)", item.Name, item.InternalName);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (autokeep unidentified items)", item.Name, item.InternalName);
                 return true;
             }
             if (tItemType == TrinityItemType.StaffOfHerding)
             {
 
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep staff of herding)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep staff of herding)", item.Name, item.InternalName, tItemType);
                 return true;
             }
             if (tItemType == TrinityItemType.CraftingMaterial || item.IsCraftingReagent)
             {
-                //var craftMaterialType = GetCraftingMaterialType(item);
-                //if (craftMaterialType != InventoryItemType.None)
-                //{
-                //    // This is really slow, turning it off.
-                //    //var stackCount = GetItemStackCount(item, InventorySlot.SharedStash);
-
-                //    //if (craftMaterialType == InventoryItemType.ArcaneDust && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackArcaneDust)
-                //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackArcaneDust);
-                //    //    return false;
-                //    //}
-
-                //    //if (craftMaterialType == InventoryItemType.DeathsBreath && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackDeathsBreath)
-                //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackDeathsBreath);
-                //    //    return false;
-                //    //}
-
-                //    //if (craftMaterialType == InventoryItemType.ForgottenSoul && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackForgottenSoul)
-                //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackForgottenSoul);
-                //    //    return false;
-                //    //}
-
-                //    //if (craftMaterialType == InventoryItemType.ReusableParts && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackReusableParts)
-                //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackReusableParts);
-                //    //    return false;
-                //    //}
-
-                //    //if (craftMaterialType == InventoryItemType.VeiledCrystal && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackVeiledCrystal)
-                //    //{
-                //    //    Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackVeiledCrystal);
-                //    //    return false;
-                //    //}
-                //}
-
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep craft materials)", item.Name, item.InternalName, tItemType);
+                var craftMaterialType = GetCraftingMaterialType(item.ActorSnoId);
+                if (craftMaterialType != InventoryItemType.None)
+                {
+                    var stackCount = GetItemStackCount(item, InventorySlot.SharedStash); ;
+                    if (craftMaterialType == InventoryItemType.ArcaneDust && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackArcaneDust)
+                    {
+                        Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackArcaneDust);
+                        return false;
+                    }
+                    if (craftMaterialType == InventoryItemType.DeathsBreath && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackDeathsBreath)
+                    {
+                        Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackDeathsBreath);
+                        return false;
+                    }
+                    if (craftMaterialType == InventoryItemType.ForgottenSoul && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackForgottenSoul)
+                    {
+                        Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackForgottenSoul);
+                        return false;
+                    }
+                    if (craftMaterialType == InventoryItemType.ReusableParts && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackReusableParts)
+                    {
+                        Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackReusableParts);
+                        return false;
+                    }
+                    if (craftMaterialType == InventoryItemType.VeiledCrystal && stackCount >= TrinityPlugin.Settings.Loot.TownRun.MaxStackVeiledCrystal)
+                    {
+                        Logger.Log("Already have {0} of {1}, max {2} (TRASH)", stackCount, craftMaterialType, TrinityPlugin.Settings.Loot.TownRun.MaxStackVeiledCrystal);
+                        return false;
+                    }
+                }
+                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep craft materials)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.Emerald || tItemType == TrinityItemType.Amethyst || tItemType == TrinityItemType.Topaz || tItemType == TrinityItemType.Ruby || tItemType == TrinityItemType.Diamond)
             {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep gems)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep gems)", item.Name, item.InternalName, tItemType);
                 return true;
             }
             if (tItemType == TrinityItemType.CraftTome)
             {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep tomes)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep tomes)", item.Name, item.InternalName, tItemType);
                 return true;
             }
             if (tItemType == TrinityItemType.InfernalKey)
             {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep infernal key)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep infernal key)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.HealthPotion && item.ItemQualityLevel >= ItemQuality.Legendary)
             {
                 var shouldStash = TrinityPlugin.Settings.Loot.TownRun.StashLegendaryPotions;
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = ({3} legendary potions)", item.Name, item.InternalName, tItemType,
-                        shouldStash ? "stashing" : "ignoring");
+                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = ({3} legendary potions)", item.Name, item.InternalName, tItemType,
+                    shouldStash ? "stashing" : "ignoring");
                 return shouldStash;
             }
 
             if (tItemType == TrinityItemType.HealthPotion && item.ItemQualityLevel < ItemQuality.Legendary)
             {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (ignoring potions)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (ignoring potions)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
             if (tItemType == TrinityItemType.CraftingPlan && item.ItemQualityLevel >= ItemQuality.Legendary)
             {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep legendary plans)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep legendary plans)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.ConsumableAddSockets)
             {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep Ramaladni's Gift)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep Ramaladni's Gift)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
@@ -311,7 +304,7 @@ namespace Trinity.Items
 
             if (tItemType == TrinityItemType.TieredLootrunKey)
             {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (ignoring Tiered Rift Keys)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (ignoring Tiered Rift Keys)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
@@ -319,7 +312,7 @@ namespace Trinity.Items
             {
                 Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkItem(item.GetAcdItem(), ItemEvaluationType.Keep);
 
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "IR2 {0} [{1}] [{2}] = (" + action + ")", item.Name, item.InternalName, item.ItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "IR2 {0} [{1}] [{2}] = (" + action + ")", item.Name, item.InternalName, item.ItemType);
                 switch (action)
                 {
                     case Interpreter.InterpreterAction.KEEP:
@@ -334,7 +327,7 @@ namespace Trinity.Items
             if (tItemType == TrinityItemType.CraftingPlan)
             {
 
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep plans)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep plans)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
@@ -382,7 +375,7 @@ namespace Trinity.Items
 
             if (item.ItemQualityLevel >= ItemQuality.Legendary)
             {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep legendaries)", item.Name, item.InternalName, tItemType);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep legendaries)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
@@ -492,7 +485,7 @@ namespace Trinity.Items
                         case Interpreter.InterpreterAction.SALVAGE:
                             return true;
                         case Interpreter.InterpreterAction.SELL:
-                            return false;  
+                            return false;
                     }
                 }
 
@@ -975,7 +968,7 @@ namespace Trinity.Items
                             else
                             {
                                 Logger.LogDebug("Error checking for next slot on item is no longer valid");
-                            }                            
+                            }
                             continue;
                         }
 
@@ -1104,7 +1097,7 @@ namespace Trinity.Items
             // 2087837753 DB
             // -605947593 veil
             if (item.BalanceID == 2087837753)
-            {               
+            {
                 return TrinityPlugin.Settings.Loot.Pickup.PickupDeathsBreath;
             }
 
@@ -1400,7 +1393,7 @@ namespace Trinity.Items
             if (name.StartsWith("p1_")) name = name.Substring(3, name.Length - 3);
             if (name.StartsWith("p2_")) name = name.Substring(3, name.Length - 3);
             if (ItemExpansionRegex.IsMatch(name)) name = name.Substring(3, name.Length - 3);
-            
+
             if (name.StartsWith("demonorgan_")) return TrinityItemType.UberReagent;
             if (name.StartsWith("infernalmachine_")) return TrinityItemType.PortalDevice;
             if (name.StartsWith("a1_")) return TrinityItemType.SpecialItem;
@@ -1465,7 +1458,7 @@ namespace Trinity.Items
             if (name.StartsWith("xbow_")) return TrinityItemType.TwoHandCrossbow;
             if (name.StartsWith("console_powerglobe")) return TrinityItemType.PowerGlobe;
             if (name.StartsWith("tiered_rifts_orb")) return TrinityItemType.ProgressionGlobe;
-            if (name.StartsWith("normal_rifts_orb")) return TrinityItemType.ProgressionGlobe;            
+            if (name.StartsWith("normal_rifts_orb")) return TrinityItemType.ProgressionGlobe;
             if (name.StartsWith("consumable_add_sockets")) return TrinityItemType.ConsumableAddSockets; // Ramaladni's Gift
             if (name.StartsWith("tieredlootrunkey_")) return TrinityItemType.TieredLootrunKey;
             if (name.StartsWith("demonkey_") || name.StartsWith("demontrebuchetkey") || name.StartsWith("quest_")) return TrinityItemType.InfernalKey;
@@ -1555,7 +1548,7 @@ namespace Trinity.Items
                 case TrinityItemType.TwoHandStaff:
                 case TrinityItemType.TwoHandSword:
                 case TrinityItemType.TwoHandAxe:
-                     return TrinityItemBaseType.WeaponTwoHand;
+                    return TrinityItemBaseType.WeaponTwoHand;
                 case TrinityItemType.TwoHandCrossbow:
                 case TrinityItemType.HandCrossbow:
                 case TrinityItemType.TwoHandBow:
@@ -1743,14 +1736,15 @@ namespace Trinity.Items
 
         internal static InventoryItemType GetCraftingMaterialType(int actorSnoId)
         {
-            if(actorSnoId == 361989 || actorSnoId == 449044)
+            if (actorSnoId == 361989 || actorSnoId == 449044)
                 return InventoryItemType.DeathsBreath;
 
             return (InventoryItemType)actorSnoId;
 
         }
 
-        internal static Func<ACDItem, CachedACDItem, bool> StackItemMatchFunc = (item, cItem) => item.IsValid && item.ActorSnoId == cItem.ActorSNO;
+        internal static Func<ACDItem, CachedItem, bool> StackItemMatchFunc = (item, cItem) => item.IsValid && item.ActorSnoId == cItem.ActorSnoId;
+
         /// <summary>
         /// Gets the number of items combined in all stacks
         /// </summary>
@@ -1758,7 +1752,7 @@ namespace Trinity.Items
         /// <param name="inventorySlot">The inventory slot.</param>
         /// <returns>System.Int32.</returns>
         /// <exception cref="System.ArgumentException">InventorySlot  + inventorySlot +  is not supported for GetStackCount method</exception>
-        internal static int GetItemStackCount(CachedACDItem cItem, InventorySlot inventorySlot)
+        internal static int GetItemStackCount(CachedItem cItem, InventorySlot inventorySlot)
         {
             try
             {
@@ -1844,33 +1838,33 @@ namespace Trinity.Items
             }
         }
 
-    //internal static void TrinityOnOnItemIdentificationRequest(object sender, ItemIdentifyRequestEventArgs e)
-    //{
-    //    Logger.Log(LogCategory.ItemValuation, "DB is requesting Identification Item={0} IsInTown={1} UseBook={2} ItemMode={3}", 
-    //        e.Item.InternalName, ZetaDia.IsInTown, CharacterSettings.Instance.UseBookOfCain, 
-    //        TrinityPlugin.Settings.Loot.ItemFilterMode);
+        //internal static void TrinityOnOnItemIdentificationRequest(object sender, ItemIdentifyRequestEventArgs e)
+        //{
+        //    Logger.Log(LogCategory.ItemValuation, "DB is requesting Identification Item={0} IsInTown={1} UseBook={2} ItemMode={3}", 
+        //        e.Item.InternalName, ZetaDia.IsInTown, CharacterSettings.Instance.UseBookOfCain, 
+        //        TrinityPlugin.Settings.Loot.ItemFilterMode);
 
-    //    if (TrinityPlugin.Settings.Loot.TownRun.DropInTownOption == Settings.Loot.DropInTownOption.All)
-    //    {
-    //        ItemDropper.Drop(e.Item);
-    //    }                
+        //    if (TrinityPlugin.Settings.Loot.TownRun.DropInTownOption == Settings.Loot.DropInTownOption.All)
+        //    {
+        //        ItemDropper.Drop(e.Item);
+        //    }                
 
-    //    e.IgnoreIdentification = !TrinityItemManager.ItemRulesIdentifyValidation(e.Item);
-    //}
+        //    e.IgnoreIdentification = !TrinityItemManager.ItemRulesIdentifyValidation(e.Item);
+        //}
 
-    //internal static void ResetTownRun()
-    //{
-    //    ItemValuation.ResetValuationStatStrings();
-    //    TownRun.TownRunCheckTimer.Reset();
-    //    TrinityPlugin.ForceVendorRunASAP = false;
-    //    TrinityPlugin.WantToTownRun = false;
-    //}
+        //internal static void ResetTownRun()
+        //{
+        //    ItemValuation.ResetValuationStatStrings();
+        //    TownRun.TownRunCheckTimer.Reset();
+        //    TrinityPlugin.ForceVendorRunASAP = false;
+        //    TrinityPlugin.WantToTownRun = false;
+        //}
 
-    //internal static void TrinityOnItemDropped(object sender, ItemEventArgs e)
-    //{
-    //    //Logger.Log("Dropped {0} ({1})", e.Item.Name, e.Item.ActorSnoId);          
-    //}
+        //internal static void TrinityOnItemDropped(object sender, ItemEventArgs e)
+        //{
+        //    //Logger.Log("Dropped {0} ({1})", e.Item.Name, e.Item.ActorSnoId);          
+        //}
 
 
-}
+    }
 }
