@@ -18,11 +18,21 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         private static double IgnoreTrashBelowHealthDoT = Settings.Combat.Misc.IgnoreTrashBelowHealthDoT;
         private static int TrashPackSize = Settings.Combat.Misc.TrashPackSize;
         private static int TrashPackSizeMin = Settings.Combat.Misc.TrashPackSizeMin;
-        public static TrinityCacheObject BestAoeUnit(bool includeInAoE = false)
-            => CurrentTarget.Type == TrinityObjectType.Shrine || CurrentTarget.IsTreasureGoblin ||
-               CurrentTarget.Type == TrinityObjectType.HealthGlobe || CurrentTarget.IsBoss
+
+        public static TrinityCacheObject BestAoeUnit(float range = 45, bool includeInAoE = false)
+        {
+            return PhelonUtils.BestEliteInRange(35, includeInAoE) ??
+                   (PhelonUtils.GetBestClusterUnit(7, 45, false, includeInAoE) ?? CurrentTarget);
+        }
+
+        public static TrinityCacheObject BestTarget(bool includeInAoE = false)
+        {
+            return CurrentTarget.Type == TrinityObjectType.Shrine || CurrentTarget.IsTreasureGoblin ||
+                   CurrentTarget.Type == TrinityObjectType.HealthGlobe || CurrentTarget.IsBoss
                 ? CurrentTarget
-                : PhelonUtils.BestEliteInRange(35, includeInAoE) ?? (PhelonUtils.GetBestClusterUnit(10, 45, false, includeInAoE) ?? CurrentTarget);
+                : PhelonUtils.BestEliteInRange(35, includeInAoE) ??
+                  (PhelonUtils.GetBestClusterUnit(10, 45, false, includeInAoE) ?? CurrentTarget);
+        }
 
         public static void CombatToggling()
         {

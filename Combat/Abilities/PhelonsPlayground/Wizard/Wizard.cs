@@ -23,6 +23,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     //if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
                     if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, Player.Position);
                 }
+                if (TalRashasCount == 3)
+                {
+                    if (Legendary.TheTwistedSword.IsEquipped)
+                    {
+                        power = TalRasha.EnergyTwister.PowerSelector();
+                    }
+                }
             }
             return power;
         }

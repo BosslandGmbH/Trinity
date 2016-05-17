@@ -1,3 +1,4 @@
+using Trinity.Framework;
 using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
@@ -11,6 +12,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
             public static TrinityPower PowerSelector()
             {
+                if (CurrentTarget != null && CurrentTarget.IsUnit)
+                {
+
+                    Vector3 portLocation;
+                    if (ShouldTeleport(out portLocation))
+                        return CastTeleport(portLocation);
+                }
                 if (Player.IsIncapacitated) return null;
 
                 TrinityPower buffPower;
@@ -22,6 +30,59 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (ShouldFamiliar)
                     return CastFamiliar;
                 return null;
+            }
+
+            private static bool CanTeleport
+            {
+                get
+                {
+                    return Skills.Wizard.Teleport.CanCast() ||
+                           Skills.Wizard.ArchonTeleport.CanCast();
+                }
+            }
+
+            private static bool ShouldTeleport(out Vector3 position)
+            {
+                if (!CanTeleport)
+                {
+                    position = Vector3.Zero;
+                    return false;
+                }
+                // Ports to Closest HealthGlobe
+                if (TrinityPlugin.Player.CurrentHealthPct < Settings.Combat.Wizard.HealthGlobeLevel)
+                {
+                    var safePoint = TargetUtil.GetBestHealthGlobeClusterPoint(5, 40);
+                    if (safePoint != Vector3.Zero)
+                    {
+                        position = safePoint;
+                        return true;
+                    }
+                }
+
+                //Ports out Avoidance
+                if (Core.Avoidance.InCriticalAvoidance(Player.Position))
+                {
+                    position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
+                    return true;
+                }
+
+                var bestDpsPosition = PhelonUtils.BestDpsPosition;
+                if (bestDpsPosition != Vector3.Zero &&
+                    (bestDpsPosition.Distance(Player.Position) > 7 || Runes.Wizard.Calamity.IsActive ||
+                     Runes.Wizard.SafePassage.IsActive && TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500))
+                {
+                    position = bestDpsPosition;
+                    return true;
+                }
+                position = Vector3.Zero;
+                return false;
+            }
+
+            private static TrinityPower CastTeleport(Vector3 position)
+            {
+                return Skills.Wizard.ArchonStrike.IsActive
+                    ? new TrinityPower(SNOPower.Wizard_Archon_Teleport, 40f, position)
+                    : new TrinityPower(SNOPower.Wizard_Teleport, 40f, position);
             }
 
             private static bool ShouldMagicWeapon

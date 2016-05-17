@@ -98,7 +98,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 target = PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault() ??
                          PhelonUtils.ClosestHealthGlobe() ??
                          PhelonGroupSupport.Monk ??
-                         PhelonTargeting.BestAoeUnit(true);
+                         PhelonTargeting.BestAoeUnit(45, true);
 
                 return target != null && target.Distance <= 90 && Player.PrimaryResource > 25;
             }

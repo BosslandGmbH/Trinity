@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Trinity.Framework;
+using Trinity.Movement;
 using Trinity.Technicals;
 using Zeta.Common;
 using Zeta.Game;
@@ -25,15 +26,16 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             get
             {
-                if (ClosestSancAndOcc != Vector3.Zero && ClosestSancAndOcc.Distance(TrinityPlugin.Player.Position) < 12)
+                var maxRange = ClassMover.IsSpecialMovementReady ? 45 : 12;
+                if (ClosestSancAndOcc != Vector3.Zero && ClosestSancAndOcc.Distance(TrinityPlugin.Player.Position) < maxRange)
                     return ClosestSancAndOcc;
 
-                if (ClosestSanctuary != Vector3.Zero && ClosestSanctuary.Distance(TrinityPlugin.Player.Position) < 12)
+                if (ClosestSanctuary != Vector3.Zero && ClosestSanctuary.Distance(TrinityPlugin.Player.Position) < maxRange)
                     return ClosestSanctuary;
 
-                return ClosestOcculous != Vector3.Zero && ClosestOcculous.Distance(TrinityPlugin.Player.Position) < 12
+                return ClosestOcculous != Vector3.Zero && ClosestOcculous.Distance(TrinityPlugin.Player.Position) < maxRange
                     ? ClosestOcculous
-                    : Vector3.Zero;
+                    : PhelonTargeting.BestAoeUnit().Position;
             }
         }
 
@@ -136,7 +138,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         internal static TrinityCacheObject GetBestPierceTarget(float maxRange, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
         {
             var result = TargetsInFrontOfMe(maxRange, ignoreUnitsInAoE, ignoreElites).FirstOrDefault();
-            return result ?? PhelonTargeting.BestAoeUnit(!ignoreUnitsInAoE);
+            return result ?? PhelonTargeting.BestAoeUnit(maxRange, !ignoreUnitsInAoE);
         }
 
         /// <summary>
@@ -211,7 +213,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             get
             {
-                foreach (var item in GetInnerSanctuaryDiaObjects(35).Select(x => x.Position).ToList())
+                foreach (var item in GetInnerSanctuaryDiaObjects(45).Select(x => x.Position).ToList())
                 {
                     var occPoint = GetOculusBuffDiaObjects(35).OrderBy(x => x.Distance)
                         .Select(y => y.Position)
@@ -319,7 +321,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         public static Vector3 PointBehind(Vector3 point, float maxRange = 45, bool objectsInAoe = false)
         {
             var properDistance = point.Distance2D(TrinityPlugin.Player.Position) - maxRange;
-            return MathEx.GetPointAt(point, properDistance, TrinityPlugin.Player.Rotation);
+            //return MathEx.GetPointAt(point, properDistance, TrinityPlugin.Player.Rotation);
+            return MathEx.CalculatePointFrom(TrinityPlugin.Player.Position, point, properDistance);
         }
     }
 }
