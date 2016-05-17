@@ -160,9 +160,9 @@ namespace Trinity.Movement
             }
 
             var secondsSincePowerUse = DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds;
-            if (!_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && secondsSincePowerUse < 4)
+            if (!_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && secondsSincePowerUse < 4 && CombatBase.IsInCombat)
             {
-                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Recently cast power ({SpellHistory.LastPowerUsed}, {secondsSincePowerUse}s ago)");
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Recently cast power in combat ({SpellHistory.LastPowerUsed}, {secondsSincePowerUse}s ago)");
                 return true;
             }
 
@@ -206,13 +206,37 @@ namespace Trinity.Movement
             SNOPower.Walk,
             SNOPower.Consumable_Potion_Buffs,
             SNOPower.DrinkHealthPotion,
-            SNOPower.X1_Crusader_SteedCharge,
-            SNOPower.X1_Monk_DashingStrike,
-            SNOPower.DemonHunter_Vault,
-            SNOPower.Witchdoctor_SpiritWalk,
-            SNOPower.Barbarian_FuriousCharge,
             SNOPower.Wizard_Teleport,
             SNOPower.Wizard_Archon_Teleport,
+            SNOPower.Wizard_ExplosiveBlast,
+            SNOPower.Wizard_FrostNova,
+            SNOPower.X1_Crusader_LawsOfHope2,
+            SNOPower.X1_Crusader_LawsOfJustice2,
+            SNOPower.X1_Crusader_LawsOfValor2,
+            SNOPower.X1_Crusader_SteedCharge,
+            SNOPower.DemonHunter_ShadowPower,
+            SNOPower.DemonHunter_Vault,
+            SNOPower.DemonHunter_SmokeScreen,
+            SNOPower.X1_DemonHunter_Vengeance,
+            SNOPower.Barbarian_Leap,
+            SNOPower.Barbarian_ThreateningShout,
+            SNOPower.Barbarian_FuriousCharge,
+            SNOPower.Barbarian_Whirlwind,
+            SNOPower.Barbarian_IgnorePain,
+            SNOPower.Monk_BlindingFlash,
+            SNOPower.Monk_SweepingWind,
+            SNOPower.X1_Monk_MantraOfEvasion_v2,
+            SNOPower.X1_Monk_MantraOfConviction_v2,
+            SNOPower.X1_Monk_MantraOfHealing_v2,
+            SNOPower.X1_Monk_MantraOfRetribution_v2,
+            SNOPower.X1_Monk_DashingStrike,
+            SNOPower.Monk_BreathOfHeaven,
+            SNOPower.X1_Monk_InnerSanctuary,
+            SNOPower.Witchdoctor_Horrify,
+            SNOPower.Witchdoctor_BigBadVoodoo,
+            SNOPower.Witchdoctor_SpiritWalk,
+            SNOPower.Witchdoctor_FetishArmy,
+            SNOPower.Witchdoctor_Sacrifice,
         };
 
         private readonly HashSet<AnimationState> _busyAnimationStates = new HashSet<AnimationState>
