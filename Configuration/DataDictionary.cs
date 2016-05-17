@@ -2997,6 +2997,7 @@ namespace Trinity
             SNOAnim.x1_Crusader_Female_1HS_Shield_attack_ShieldBash_Charge_Outro, //311186,
             SNOAnim.x1_Crusader_Female_1HS_Shield_attack_ShieldBash_Charge, //311187,
             SNOAnim.x1_Crusader_Female_SteedCharge, //311892,
+            SNOAnim.x1_Crusader_Male_SteedCharge,
             SNOAnim.x1_Crusader_Male_cast_Phalanx_ShieldCharge_01, //339946,
             SNOAnim.x1_Crusader_Male_2HT_Shield_attack_ShieldBash_Charge_01, //357447,
             SNOAnim.x1_Crusader_Male_2HT_Shield_attack_ShieldBash_Charge_Outtro_01, //357448,

@@ -57,10 +57,10 @@ namespace Trinity.Movement
             if (IsNotStuck())
             {
                 if (_isSuspectedStuck)
-                    Logger.LogVerbose(LogCategory.Movement, "No longer suspected of stuck");
+                    Logger.Log(LogCategory.StuckHandler, "No longer suspected of stuck");
 
                 if (_isStuck)
-                    Logger.LogVerbose(LogCategory.Movement, "No longer stuck!");
+                    Logger.Log(LogCategory.StuckHandler, "No longer stuck!");
 
                 Reset();
                 return _isStuck;
@@ -81,7 +81,7 @@ namespace Trinity.Movement
                     return _isStuck;
                 }
 
-                Logger.Log(LogCategory.Movement, "Suspected Stuck for {0}ms", millisecondsSuspected);
+                Logger.Log(LogCategory.StuckHandler, "Suspected Stuck for {0}ms", millisecondsSuspected);
                 return _isStuck;
             }
 
@@ -94,7 +94,7 @@ namespace Trinity.Movement
 
         private void SetStuck()
         {
-            Logger.LogVerbose(LogCategory.Movement, "Definately Stuck!");
+            Logger.Log(LogCategory.StuckHandler, "Definately Stuck!");
             _isStuck = true;
             _stuckPosition = ZetaDia.Me.Position;
             _isSuspectedStuck = false;
@@ -121,55 +121,99 @@ namespace Trinity.Movement
         private bool IsNotStuck()
         {
             if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
+            {
+                Logger.Log(LogCategory.Movement, $"Not Stuck: Movement is disabled in settings");
                 return true;
+            }
 
             if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid)
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Player data invalid");
                 return true;
+            }
 
             if (ZetaDia.IsInTown && (UIElements.VendorWindow.IsVisible || UIElements.SalvageWindow.IsVisible) && !ZetaDia.Me.Movement.IsMoving)
                 return true;
 
             if (ZetaDia.Me.IsInConversation || ZetaDia.IsPlayingCutscene || ZetaDia.IsLoadingWorld)
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Conversation/CutScene/Loading");
                 return true;
+            }
 
             if (ZetaDia.Me.LoopingAnimationEndTime > 0)
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Casting");
                 return true;
+            }
 
             if (_stuckPosition != Vector3.Zero && _stuckPosition.Distance(ZetaDia.Me.Position) > 20f)
             {
-                Logger.Log(LogCategory.Movement, $"Not Stuck: Moved {_stuckPosition.Distance(ZetaDia.Me.Position)} from stuck position");
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Moved {_stuckPosition.Distance(ZetaDia.Me.Position)} from stuck position");
                 return true;
             }
 
             if (_suspectedStuckPosition != Vector3.Zero && _suspectedStuckPosition.Distance(ZetaDia.Me.Position) > 15f)
             {
-                Logger.Log(LogCategory.Movement, $"Not Stuck: Moved {_suspectedStuckPosition.Distance(ZetaDia.Me.Position)} from suspected stuck position");
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Moved {_suspectedStuckPosition.Distance(ZetaDia.Me.Position)} from suspected stuck position");
                 return true;
             }
 
-            if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds < 4)
+            var secondsSincePowerUse = DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds;
+            if (!_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && secondsSincePowerUse < 4)
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Recently cast power ({SpellHistory.LastPowerUsed}, {secondsSincePowerUse}s ago)");
                 return true;
+            }
 
-            if (DateTime.UtcNow.Subtract(TrinityPlugin.BotStartTime).TotalSeconds < 10)
+            var startTime = DateTime.UtcNow.Subtract(TrinityPlugin.BotStartTime).TotalSeconds;
+            if (startTime < 10)
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Busy Animation State ({startTime})");
                 return true;
+            }
 
-            if (_busyAnimationStates.Contains(ZetaDia.Me.CommonData.AnimationState))
+            var anim = ZetaDia.Me.CommonData.AnimationState;
+            if (_busyAnimationStates.Contains(anim))
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Busy Animation State ({anim})");
                 return true;
+            }
 
             if (PlayerMover.GetMovementSpeed() > 2)
             {
-                Logger.Log(LogCategory.Movement, $"Not Stuck: Moving (Speed: {PlayerMover.GetMovementSpeed()})");
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Moving (Speed: {PlayerMover.GetMovementSpeed()})");
                 return true;
             }
 
             if (ZetaDia.Me.IsDead || UIElements.WaypointMap.IsVisible)
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Dead");
                 return true;
+            }
 
             if (IsProfileBusy())
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Profile is Busy");
                 return true;
+            }
 
             return false;
         }
+
+        private readonly HashSet<SNOPower> _invalidBusyPowers = new HashSet<SNOPower>
+        {
+            SNOPower.Walk,
+            SNOPower.Consumable_Potion_Buffs,
+            SNOPower.DrinkHealthPotion,
+            SNOPower.X1_Crusader_SteedCharge,
+            SNOPower.X1_Monk_DashingStrike,
+            SNOPower.DemonHunter_Vault,
+            SNOPower.Witchdoctor_SpiritWalk,
+            SNOPower.Barbarian_FuriousCharge,
+            SNOPower.Wizard_Teleport,
+            SNOPower.Wizard_Archon_Teleport,
+        };
 
         private readonly HashSet<AnimationState> _busyAnimationStates = new HashSet<AnimationState>
         {
@@ -212,14 +256,14 @@ namespace Trinity.Movement
 
         public async Task<bool> DoUnstick()
         {
-            Logger.LogNormal("Trying to get Unstuck...");
+            Logger.Warn("Trying to get Unstuck...");
             Navigator.Clear();
             Navigator.NavigationProvider.Clear();
             await Navigator.SearchGridProvider.Update();
             var startPosition = ZetaDia.Me.Position;
-            Logger.LogVerbose("Starting Segment 1...");
+            Logger.Log("Starting Segment 1...");
             await MoveAwayFrom(startPosition);
-            Logger.LogVerbose("Starting Segment 2 ...");
+            Logger.Log("Starting Segment 2 ...");
             await MoveAwayFrom(startPosition);
             return true;
         }
@@ -235,7 +279,7 @@ namespace Trinity.Movement
                 return false;
 
             var targetPosition = positions.First();
-            var segmentStartTime = DateTime.UtcNow;        
+            var segmentStartTime = DateTime.UtcNow;
 
             while (DateTime.UtcNow.Subtract(startTime).TotalSeconds < 10)
             {
@@ -244,7 +288,7 @@ namespace Trinity.Movement
 
                 var distance = targetPosition.Distance(ZetaDia.Me.Position);
 
-                Logger.LogVerbose("Moving to {0} Dist={1}", targetPosition, distance);
+                Logger.Log("Moving to {0} Dist={1}", targetPosition, distance);
                 ZetaDia.Me.UsePower(SNOPower.Walk, targetPosition, ZetaDia.WorldId);
                 await Coroutine.Sleep(50);
 
