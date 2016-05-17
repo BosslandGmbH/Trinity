@@ -77,14 +77,13 @@ namespace Trinity.Framework.Avoidance
 
                 if (CombatBase.IsWaitingForPower())
                 {                    
-                    Logger.Log(LogCategory.Avoidance, "Not Avoiding because routine needs to cast a power");
+                    Logger.Log(LogCategory.Avoidance, "Not Avoiding/Kiting because routine needs to cast a power");
                     return false;
                 }
 
                 if (ShouldKite)
                 {
                     IsKiting = true;
-                    IsAvoiding = true;
                     return true;
                 }
 
@@ -101,10 +100,14 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
-                if (Core.Avoidance.NearbyNodes.Any(n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Gizmo)) && PlayerMover.IsBlocked)
-                {
+                if (Settings.Avoidances == null || !Settings.Avoidances.Any(a => a.IsEnabled))
                     return false;
-                }
+
+                if (Core.Avoidance.ActiveAvoidanceIds == null || !Core.Avoidance.ActiveAvoidanceIds.Any())
+                    return false;
+
+                if (Core.Avoidance.NearbyNodes.Any(n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Gizmo)) && PlayerMover.IsBlocked)
+                    return false;
 
                 if (Settings.DontAvoidWhenBlocked && PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 5000)
                 {
@@ -141,7 +144,7 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
-                if (TargetZDif < 8 && Settings.Avoidances.Any(a => a.IsEnabled))
+                if (TargetZDif < 8 && Settings.Avoidances != null && Settings.Avoidances.Any(a => a.IsEnabled))
                 {
                     var standingInCritical = Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance);
                     if (standingInCritical)

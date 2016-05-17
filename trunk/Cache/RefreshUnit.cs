@@ -213,7 +213,7 @@ namespace Trinity
             DebugUtil.LogAnimation(CurrentCacheObject);
 
             // Unit is already dead
-            if ((c_HitPoints <= 0d || c_HitPointsPct > 1) && !CurrentCacheObject.IsBoss)
+            if ((c_HitPoints <= 0d || CurrentCacheObject.HitPointsPct > 1) && !CurrentCacheObject.IsBoss)
             {
                 addToCache = false;
                 c_IgnoreSubStep = "0HitPoints";

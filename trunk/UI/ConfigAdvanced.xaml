@@ -120,7 +120,11 @@
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=UnknownObjects}">Log Unknown Objects</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ActiveBuffs}">Log Active Buffs</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=SkillSelection}">Log Skill Selection</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cooldowns}">Cooldowns</CheckBox>                    </UniformGrid>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cooldowns}">Cooldowns</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=StuckHandler}">Log Stuck Handler</CheckBox>
+
+                    </UniformGrid>
+                    
                 </GroupBox>
                 <!--APS--><!--
                 <GroupBox Header="Actions Per Second">

@@ -30,7 +30,7 @@ namespace Trinity.Technicals
         SkillSelection = 0x00040000,
         Cooldowns = 0x00080000,
         Routine = 0x00100000,
-        Unused22 = 0x00200000,
+        StuckHandler = 0x00200000,
         Unused23 = 0x00400000,
         Unused24 = 0x00800000,
         Unused25 = 0x01000000,
