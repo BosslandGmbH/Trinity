@@ -54,16 +54,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             }
 
             private static bool ShouldExplosiveBlast
-            {
-                get
-                {
-                    return Skills.Wizard.ExplosiveBlast.CanCast() &&
-                           PhelonTargeting.BestAoeUnit().Distance < 7 &&
-                           (GetHasBuff(SNOPower.Wizard_ExplosiveBlast) &&
-                            GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
-                            TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5);
-                }
-            }
+                =>
+                    Skills.Wizard.ExplosiveBlast.CanCast() && TargetUtil.AnyMobsInRange(12f) &&
+                    TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 4;
+
+            //(GetHasBuff(SNOPower.Wizard_ExplosiveBlast) && GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
+            //TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5);
 
             private static TrinityPower CastArcaneTorrent
             {
@@ -103,9 +99,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
             public static bool ShouldArchon()
             {
-                if (!Skills.Wizard.Archon.CanCast() || GetHasBuff(SNOPower.Wizard_Archon))
+                if (!Skills.Wizard.Archon.CanCast() || Skills.Wizard.ArchonBlast.CanCast())
                     return false;
-                if (Player.PrimaryResourcePct < 0.10)
+
+                if (Player.PrimaryResourcePct < 0.20)
                     return true;
 
                 if (Sets.ChantodosResolve.IsFullyEquipped)

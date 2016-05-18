@@ -138,8 +138,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                 return false;
             }
 
-            private static
-                bool ShouldEpiphany
+            private static bool ShouldEpiphany
             {
                 get
                 {
@@ -183,10 +182,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             {
                 get
                 {
-                    return Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResource > cycloneStrikeSpirit &&
-                           (PhelonUtils.MobsBetweenRange(13, cycloneStrikeRange).Count > 3 ||
-                            CurrentTarget != null && CurrentTarget.IsBoss ||
-                            TimeSincePowerUse(SNOPower.Monk_CycloneStrike) > Settings.Combat.Monk.CycloneStrikeDelay);
+                    return Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResource > cycloneStrikeSpirit;
                 }
             }
 
@@ -204,16 +200,16 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                     return false;
 
                 target = TargetUtil.GetClosestUnit(12);
-                if (target != null && Player.PrimaryResource < 20)
+                if (target != null && Player.PrimaryResource < 20f)
                     return true;
 
-                target = PhelonUtils.BestAuraUnit(SNOPower.Monk_CripplingWave, 12, true);
+                target = PhelonUtils.BestAuraUnit(SNOPower.Monk_CripplingWave, 12f, true);
                 return target != null;
             }
 
             private static TrinityPower CastCripplingWave(TrinityCacheObject target)
             {
-                return new TrinityPower(SNOPower.Monk_CripplingWave, 65, target.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_CripplingWave, 12f, target.ACDGuid);
             }
         }
     }

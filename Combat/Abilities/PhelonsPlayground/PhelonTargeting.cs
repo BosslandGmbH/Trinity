@@ -21,8 +21,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
         public static TrinityCacheObject BestAoeUnit(float range = 45, bool includeInAoE = false)
         {
-            return PhelonUtils.BestEliteInRange(35, includeInAoE) ??
-                   (PhelonUtils.GetBestClusterUnit(7, 45, false, includeInAoE) ?? CurrentTarget);
+            return PhelonUtils.BestEliteInRange(range, includeInAoE) ??
+                   PhelonUtils.GetBestClusterUnit(7, range, false, includeInAoE) ?? 
+                   CurrentTarget;
         }
 
         public static TrinityCacheObject BestTarget(bool includeInAoE = false)

@@ -1,4 +1,5 @@
 using Trinity.Reference;
+using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
@@ -21,7 +22,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 {
                     power = Firebirds.PowerSelector();
                     //if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
-                    if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, Player.Position);
                 }
                 if (TalRashasCount == 3)
                 {
@@ -30,6 +30,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         power = TalRasha.EnergyTwister.PowerSelector();
                     }
                 }
+                if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, Player.Position);
             }
             return power;
         }
