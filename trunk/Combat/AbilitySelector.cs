@@ -99,6 +99,12 @@ namespace Trinity
                             break;
                         // Monks
                         case ActorClass.Monk:
+                            if (Settings.Advanced.PhelonsPlayground)
+                            {
+                                power = MonkCombat.GetPower();
+                                if (power != null)
+                                    break;
+                            }
                             power = MonkCombat.GetPower();
                             if (power != null && GetHasBuff(SNOPower.X1_Monk_Epiphany) && power.MinimumRange > 0)
                                 power.MinimumRange = 75f;
@@ -115,6 +121,12 @@ namespace Trinity
                             break;
                         // Witch Doctors
                         case ActorClass.Witchdoctor:
+                            if (Settings.Advanced.PhelonsPlayground)
+                            {
+                                power = WitchDoctorCombat.GetPower();
+                                if (power != null)
+                                    break;
+                            }
                             power = WitchDoctorCombat.GetPower();
                             break;
                         // Demon Hunters

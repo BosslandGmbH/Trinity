@@ -8,12 +8,13 @@ using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 {
     partial class Wizard
     {
-        partial class TalRasha
+        public class TalRasha
         {
             public class EnergyTwister
             {
@@ -25,36 +26,70 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 {
                     if (ShouldFrostNova)
                         return CastFrostNova;
+
+                    if (ShouldBlackHole)
+                        return CastBlackhole;
+
                     if (ShouldExplosiveBlast)
                         return CastExplosiveBlast;
+
                     if (ShouldCastElectrocute)
                         return CastElectrocute;
+
                     if (ShouldCastEnergyTwister)
                         return CastEnergyTwister;
+
                     return null;
                 }
 
                 #region Vectors
 
-                static readonly TrinityCacheObject ClosestTwister = PhelonUtils.GetTwisterDiaObjects(35)
-                    .OrderBy(x => x.Position.Distance(PhelonTargeting.BestAoeUnit().Position))
-                    .FirstOrDefault(x => x.Position.Distance(PhelonTargeting.BestAoeUnit().Position) < 7);
+                private static TrinityCacheObject ClosestTwister()
+                {
+                    return PhelonUtils.GetTwisterDiaObjects(25, true)
+                        .OrderBy(x => x.Position.Distance(PhelonTargeting.BestAoeUnit(45, true).Position))
+                        .FirstOrDefault(
+                            x => x.Position.Distance(PhelonTargeting.BestAoeUnit(45, true).Position) < 7 && x.IsInLineOfSight());
+                }
 
-                static readonly Vector3 ActualLocation = ClosestTwister?.Position ?? PhelonTargeting.BestAoeUnit().Position;
+                private static Vector3 ActualLocation
+                {
+                    get
+                    {
+                        if (ClosestTwister() != null)
+                            return ClosestTwister().Position;
+                        if (PhelonTargeting.BestAoeUnit(45, true) != null)
+                        {
+                            var distance = PhelonTargeting.BestAoeUnit(45, true).Distance - 5;
+                            return MathEx.CalculatePointFrom(Player.Position, PhelonTargeting.BestAoeUnit(45, true).Position,
+                                distance);
+                        }
+                        return Vector3.Zero;
+                    }
+                }
 
                 #endregion
 
                 #region Conditions
 
+                private static bool ShouldBlackHole
+                    => Skills.Wizard.BlackHole.CanCast() && PhelonTargeting.BestAoeUnit(45, true).Distance < 45;
+
                 private static bool ShouldExplosiveBlast
-                    => Skills.Wizard.ExplosiveBlast.CanCast() && TargetUtil.AnyMobsInRange(12f) &&
-                       (GetHasBuff(SNOPower.Wizard_ExplosiveBlast) && GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
-                        TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5);
+                    =>
+                        Skills.Wizard.ExplosiveBlast.CanCast() && TargetUtil.AnyMobsInRange(12f) &&
+                        TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 4;
+
+                //(GetHasBuff(SNOPower.Wizard_ExplosiveBlast) && GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
+                //TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5);
 
                 private static bool ShouldFrostNova
-                    => CanCast(SNOPower.Wizard_FrostNova) && TargetUtil.AnyMobsInRange(12f);
+                    => Skills.Wizard.FrostNova.CanCast() && TargetUtil.AnyMobsInRange(12f);
 
-                private static bool ShouldCastEnergyTwister => Skills.Wizard.EnergyTwister.CanCast();
+                private static bool ShouldCastEnergyTwister
+                    =>
+                        TrinityPlugin.Player.PrimaryResource > 50 && //Skills.Wizard.BlackHole.CanCast() && 
+                        ActualLocation.Distance(Player.Position) < 45;
 
                 private static bool ShouldCastElectrocute
                     => Skills.Wizard.Electrocute.CanCast() && Player.PrimaryResource < 50;
@@ -63,14 +98,18 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 #region Expressions
 
+                private static TrinityPower CastBlackhole
+                    => new TrinityPower(Skills.Wizard.BlackHole.SNOPower, 45, PhelonTargeting.BestAoeUnit().Position);
+
                 private static TrinityPower CastExplosiveBlast => new TrinityPower(SNOPower.Wizard_ExplosiveBlast);
                 private static TrinityPower CastFrostNova => new TrinityPower(SNOPower.Wizard_FrostNova, 20f);
 
                 private static TrinityPower CastEnergyTwister
-                    => new TrinityPower(SNOPower.Wizard_EnergyTwister, 0f, ActualLocation);
+                    => new TrinityPower(SNOPower.Wizard_EnergyTwister, 45f, ActualLocation);
 
                 private static TrinityPower CastElectrocute
-                    => new TrinityPower(SNOPower.Wizard_Electrocute, 45f, PhelonTargeting.BestAoeUnit(45, true).ACDGuid);
+                    => new TrinityPower(SNOPower.Wizard_Electrocute, 45f, PhelonTargeting.BestAoeUnit(45, true).ACDGuid)
+                    ;
 
                 #endregion
             }
