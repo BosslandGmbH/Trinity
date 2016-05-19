@@ -23,13 +23,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     return CastAncientSpear(target);
 
                 if (ShouldRend(out target))
-                    CastRend(target);
+                    return CastRend(target);
 
                 if (ShouldBash(out target))
                     return CastBash(target);
 
                 if (ShouldWhirlWind(out target))
-                    CastWhirlWind(target);
+                    return CastWhirlWind(target);
 
                 if (ShouldFuriousCharge(out target))
                     return CastFuriousCharge(target);

@@ -18,7 +18,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         internal static List<TrinityCacheObject> SafeList(bool objectsInAoe = false)
         {
             return
-                TrinityPlugin.ObjectCache.Where(x => (!x.IsUnit || x.IsUnit && x.HitPoints > 0) &&
+                TrinityPlugin.ObjectCache.Where(x => !x.IsPlayer && (!x.IsUnit || x.IsUnit && x.HitPoints > 0) &&
                 (objectsInAoe || !Core.Avoidance.InAvoidance(x.Position))).ToList();
         }
 

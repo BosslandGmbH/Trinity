@@ -10,21 +10,21 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
         private static int ImmortalKingsCount = Sets.ImmortalKingsCall.CurrentBonuses;
         private static int EarthCount = Sets.MightOfTheEarth.CurrentBonuses;
         private static int WastesCount = Sets.WrathOfTheWastes.CurrentBonuses;
-        public static bool zDPS = RaekorCount == 2 && Sets.BulKathossOath.IsEquipped ||
-                                  Sets.IstvansPairedBlades.IsEquipped && Legendary.IllusoryBoots.IsEquipped;
+        public static bool zDPS = (WastesCount == 2 || RaekorCount == 2) && (Sets.BulKathossOath.IsEquipped ||
+                                  Sets.IstvansPairedBlades.IsEquipped) && Legendary.IllusoryBoots.IsEquipped;
 
         public static TrinityPower GetPower()
         {
             if (Player.IsInTown)
                 return null;
             TrinityPower power = Unconditional.PowerSelector();
-            if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
+            if (power == null && CurrentTarget != null)
             {
                 if (RaekorCount == 3)
                     power = Raekor.PowerSelector();
 
                 if (zDPS)
-                    power = ZDps.PowerSelector();
+                    power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestDpsPosition);
 
                 if (ImmortalKingsCount == 3)
                     power = ImmortalKingsCall.PowerSelector();
@@ -34,8 +34,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     power = WrathOfTheWastes.PowerSelector();
                 if (RaekorCount < 1 && ImmortalKingsCount < 1 && EarthCount < 1 && WastesCount < 1)
                     power = LegacyOfNightmares.PowerSelector();
+
+                if (power == null) power = new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestWalkLocation);
             }
-            return power ?? new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+            return power;
         }
     }
 }
