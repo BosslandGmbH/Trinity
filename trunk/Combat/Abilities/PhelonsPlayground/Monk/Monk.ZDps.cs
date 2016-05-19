@@ -80,7 +80,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                 get
                 {
                     return Skills.Monk.InnerSanctuary.CanCast() &&
-                           PhelonTargeting.BestAoeUnit().Distance < 20 && Player.CurrentHealthPct <= 0.4;
+                           PhelonTargeting.BestAoeUnit().Distance < 20;
                 }
             }
 
@@ -95,7 +95,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                 get
                 {
                     return Skills.Monk.BlindingFlash.CanCast() &&
-                           PhelonTargeting.BestAoeUnit().Distance < 20 && Player.CurrentHealthPct <= 0.4;
+                           PhelonTargeting.BestAoeUnit().Distance < 20;
                 }
             }
 
@@ -108,7 +108,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             private static bool CastMantra(out TrinityPower buffPower)
             {
                 buffPower = null;
-                if (Player.PrimaryResource >= 40)
+                if (Player.PrimaryResource >= cycloneStrikeSpirit)
                 {
                     if (Skills.Monk.MantraOfConviction.CanCast() &&
                         TimeSincePowerUse(SNOPower.X1_Monk_MantraOfConviction_v2) > 3500)
