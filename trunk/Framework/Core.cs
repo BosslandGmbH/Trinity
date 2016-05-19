@@ -1,14 +1,17 @@
 ﻿using System;
 using Trinity.Config;
 using Trinity.DbProvider;
-using Trinity.Framework.Actors;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Grid;
 using Trinity.Framework.Objects.Memory;
+using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Utilities;
 using Trinity.Helpers;
 using Trinity.Movement;
 using Zeta.Bot;
+using Zeta.Game.Internals;
+using Zeta.Game.Internals.Actors;
+using ActorManager = Trinity.Framework.Actors.ActorManager;
 
 namespace Trinity.Framework
 {
@@ -33,6 +36,7 @@ namespace Trinity.Framework
         public static readonly GridHelper Grids = new GridHelper();
         public static readonly PlayerMover PlayerMover = new PlayerMover();
         public static readonly StuckHandler StuckHandler = new StuckHandler();
+
 
         public static bool IsRunning;
 

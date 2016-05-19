@@ -37,6 +37,7 @@ namespace Trinity.Helpers
             public static IntPtr Globals => ObjectManager + 0x790;
             public static IntPtr SnoGroups => (IntPtr)0x1EA0BC8;
             public static IntPtr AttributeDescripters => (IntPtr)0x1EEFE70;
+            public static IntPtr HealthPotion => (IntPtr)0x18B1EBD0;
         }
 
         public static class Pointers 

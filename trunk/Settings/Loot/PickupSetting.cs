@@ -848,7 +848,7 @@ namespace Trinity.Config.Loot
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool IgnoreProgressionGlobesInAoE
         {
             get

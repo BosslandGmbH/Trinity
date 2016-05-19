@@ -897,7 +897,7 @@ namespace Trinity
                                     //    break;
                                     //}
 
-                                    if (Settings.Loot.Pickup.IgnoreProgressionGlobesInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
+                                    if (Settings.Loot.Pickup.IgnoreProgressionGlobesInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.CriticalAvoidance))
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - In Avoidance.";
                                         break;
@@ -915,7 +915,7 @@ namespace Trinity
                                         break;
                                     }
 
-                                    if (cacheObject.Distance <= 150f)
+                                    if (cacheObject.Distance <= 180f)
                                     {
                                         cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Progression Globe.";
                                         cacheObject.Weight += MaxWeight;

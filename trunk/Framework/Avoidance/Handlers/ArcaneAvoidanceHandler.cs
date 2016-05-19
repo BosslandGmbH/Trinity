@@ -78,7 +78,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         private Rotator CreateNewRotator(IActor actor)
         {
-            Logger.Log("Creating New Rotator");
+            //Logger.Log("Creating New Rotator");
 
             return new Rotator
             {

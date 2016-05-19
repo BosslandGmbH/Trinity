@@ -346,6 +346,243 @@ namespace Trinity.Reference
 
         #endregion
 
+        #region Special Potions
+
+
+        // AUTO-GENERATED on Wed, 18 May 2016 21:40:07 GMT
+
+
+        /// <summary>
+        /// Bottomless Potion of Fear Fears enemies within 12 yards for 3–4 seconds.
+        /// </summary>
+        public static Item BottomlessPotionOfFear = new Item
+        {
+            Id = 428805,
+            Name = "Bottomless Potion of Fear",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-fear",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-fear",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-fear",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionlegendary_08_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Fears enemies within 12 yards for 3–4 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Bottomless Potion of Kulle-Aid Drinking Kulle-Aid allows you to burst through walls summoned by Waller elites for 5 seconds.
+        /// </summary>
+        public static Item BottomlessPotionOfKulleaid = new Item
+        {
+            Id = 344093,
+            Name = "Bottomless Potion of Kulle-Aid",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-kulleaid",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-kulleaid",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-kulleaid",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionlegendary_06_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Drinking Kulle-Aid allows you to burst through walls summoned by Waller elites for 5 seconds.",
+            SetName = "",
+        };
+
+        ///// <summary>
+        ///// Health Potion 
+        ///// </summary>
+        //public static Item HealthPotion = new Item
+        //{
+        //    Id = 0,
+        //    Name = "Health Potion",
+        //    Quality = ItemQuality.Normal,
+        //    Slug = "health-potion",
+        //    ItemType = ItemType.Unknown,
+        //    TrinityItemType = TrinityItemType.Unknown,
+        //    IsTwoHanded = false,
+        //    BaseType = ItemBaseType.None,
+        //    InternalName = "",
+        //    DataUrl = "https://us.battle.net/api/d3/data/item/health-potion",
+        //    Url = "http://us.battle.net/d3/en/item/health-potion",
+        //    IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionbottomless_demonhunter_male.png",
+        //    RelativeUrl = "",
+        //    IsCrafted = false,
+        //    LegendaryAffix = "",
+        //    SetName = "",
+        //};
+
+        /// <summary>
+        /// Bottomless Potion of Mutilation Increases Life per Kill by 40000–50000 for 5 seconds.
+        /// </summary>
+        public static Item BottomlessPotionOfMutilation = new Item
+        {
+            Id = 342824,
+            Name = "Bottomless Potion of Mutilation",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-mutilation",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-mutilation",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-mutilation",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionlegendary_05_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Increases Life per Kill by 40000–50000 for 5 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Bottomless Potion of Amplification Increases healing from all sources by 20–25% for 5 seconds.
+        /// </summary>
+        public static Item BottomlessPotionOfAmplification = new Item
+        {
+            Id = 434627,
+            Name = "Bottomless Potion of Amplification",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-amplification",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-amplification",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-amplification",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionlegendary_09_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Increases healing from all sources by 20–25% for 5 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Bottomless Potion of Regeneration Restores an additional 75000–100000 Life over 5 seconds.
+        /// </summary>
+        public static Item BottomlessPotionOfRegeneration = new Item
+        {
+            Id = 341343,
+            Name = "Bottomless Potion of Regeneration",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-regeneration",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-regeneration",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-regeneration",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionlegendary_03_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Restores an additional 75000–100000 Life over 5 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Bottomless Potion of Rejuvenation Restores 20–30% resource when used below 50% health.
+        /// </summary>
+        public static Item BottomlessPotionOfRejuvenation = new Item
+        {
+            Id = 433027,
+            Name = "Bottomless Potion of Rejuvenation",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-rejuvenation",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-rejuvenation",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-rejuvenation",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p2_healthpotionlegendary_07_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Restores 20–30% resource when used below 50% health.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Bottomless Potion of the Leech Increases Life per Hit by 15000–20000 for 5 seconds.
+        /// </summary>
+        public static Item BottomlessPotionOfTheLeech = new Item
+        {
+            Id = 342823,
+            Name = "Bottomless Potion of the Leech",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-the-leech",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-the-leech",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-the-leech",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionlegendary_04_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Increases Life per Hit by 15000–20000 for 5 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Bottomless Potion of the Diamond Increases Resist All by 50–100 for 5 seconds.
+        /// </summary>
+        public static Item BottomlessPotionOfTheDiamond = new Item
+        {
+            Id = 341342,
+            Name = "Bottomless Potion of the Diamond",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-the-diamond",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-the-diamond",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-the-diamond",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionlegendary_02_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Increases Resist All by 50–100 for 5 seconds.",
+            SetName = "",
+        };
+
+        /// <summary>
+        /// Bottomless Potion of the Tower Increases Armor by 10% for 5 seconds.
+        /// </summary>
+        public static Item BottomlessPotionOfTheTower = new Item
+        {
+            Id = 341333,
+            Name = "Bottomless Potion of the Tower",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-the-tower",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-the-tower",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-the-tower",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionlegendary_01_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Increases Armor by 10-20% for 5 seconds.",
+            SetName = "",
+        };
+
+        #endregion
 
         // AUTO-GENERATED on Fri, 29 Apr 2016 04:02:46 GMT
 

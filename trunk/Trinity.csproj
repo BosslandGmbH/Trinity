@@ -273,6 +273,7 @@
     <Compile Include="Helpers\GameBalanceTable.cs" />
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\OrderedDictionary.cs" />
+    <Compile Include="Helpers\RegexExtensions.cs" />
     <Compile Include="Helpers\VectorExt.cs" />
     <Compile Include="Helpers\WindowMessage.cs" />
     <Compile Include="Helpers\WindowsVirtualKey.cs" />

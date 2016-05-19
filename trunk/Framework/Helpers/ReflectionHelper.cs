@@ -1,4 +1,5 @@
-﻿using System;
+﻿//!CompilerOption:AddRef:Microsoft.CSharp.dll
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Technicals;
 using Zeta.Game;
@@ -78,7 +80,21 @@ namespace Trinity.Objects.Native
             return db.ToString();
         }
 
-
+        public static string DumpOffsets<T>(this T obj) where T : NativeObject
+        {
+            var type = typeof(T);
+            var db = new StringBuilder();
+            foreach (var property in type.GetProperties())
+            {
+                dynamic value = Convert.ChangeType(property.GetValue(obj), property.PropertyType);
+                if (property.PropertyType.IsValueType)
+                {
+                    var offset = MemoryHelper.GetOffetOfValue(obj.BaseAddress, value);
+                    db.AppendLine($" public {property.PropertyType.Name} {property.Name} => ReadOffset<{property.PropertyType.Name}>(0x{offset.ToString("x")});");
+                }
+            }
+            return db.ToString();
+        }
 
         public static Func<T, TR> GetInstanceAccessor<T, TR>(string memberName)
         {

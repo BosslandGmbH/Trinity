@@ -134,12 +134,9 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal AttributeItem GetAttributeItem(ActorAttributeType attr)
         {
-            AttributeItem foundAttribute;
-            if (!Items.TryGetValue((int)attr, out foundAttribute))
-                return null;
-
-            foundAttribute.Update();
-            return foundAttribute;
+            var attributePair = Items.FirstOrDefault(a => a.Value.Attribute == attr || a.Value.Key.BaseAttribute == attr);            
+            attributePair.Value?.Update();
+            return attributePair.Value;
         }
 
         public override string ToString()

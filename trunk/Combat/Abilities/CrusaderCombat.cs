@@ -195,10 +195,20 @@ namespace Trinity.Combat.Abilities
                 TrinityPlugin.UsePotion();
             }
 
-            // Defensive AkaratsChampion
-            if (ShouldWaitForConventionofElements(Skills.Crusader.AkaratsChampion, Element.Physical, 800, 1000) == false && CanCastAkaratsChampion() && CanCastAkaratsChampion())
+            if (Skills.Crusader.AkaratsChampion.CanCast())
             {
-                return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
+                if (Settings.Combat.Crusader.AkaratsEmergencyHealth && Player.CurrentHealthPct < 0.3)
+                {
+                    return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
+                }
+                if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.WhenReady)
+                {
+                    return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
+                }
+                if (!ShouldWaitForConventionofElements(Skills.Crusader.AkaratsChampion, Element.Physical, 800, 1000))
+                {
+                    return new TrinityPower(SNOPower.X1_Crusader_AkaratsChampion);
+                }
             }
 
             if (Player.IsCastingTownPortalOrTeleport())

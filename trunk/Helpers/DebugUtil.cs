@@ -512,7 +512,7 @@ namespace Trinity.Helpers
 
             foreach (var acdItem in backpackItems)
             {
-                Logger.Log("{0} ActorSnoId={1} GameBalanceId={2}", acdItem.Name, acdItem.ActorSnoId, acdItem.GameBalanceId);
+                Logger.Log($"{acdItem.Name} ActorSnoId={acdItem.ActorSnoId} GameBalanceId={acdItem.GameBalanceId} ACDId={acdItem.ACDId} AnnId={acdItem.AnnId}");
 
                 var cItem = new CachedItem(acdItem.BaseAddress);
                 Logger.LogVerbose(cItem.Attributes.ToString());

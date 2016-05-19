@@ -252,8 +252,8 @@ namespace Trinity
                     if (Player.IsInRift && !Core.Avoidance.Avoider.IsAvoiding)
                     {                       
                         var globes = ObjectCache.Where(o => o.Type == TrinityObjectType.ProgressionGlobe && o.Distance < 120f).ToList();
-                        var shouldWaitForGlobes = globes.Any(o => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, o.Position, AvoidanceFlags.Avoidance));
-                        if (shouldWaitForGlobes && CurrentTarget == null)
+                        var shouldWaitForGlobes = globes.Any(o => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, o.Position, AvoidanceFlags.CriticalAvoidance));
+                        if (shouldWaitForGlobes)
                         {                          
                             Logger.Log($"Waiting for progression globe GlobeCount={globes.Count}");
                             var globe = globes.FirstOrDefault();
