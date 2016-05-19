@@ -21,10 +21,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
             {
                 if (RaekorCount == 3)
-                    power = Raekor.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+                    power = Raekor.PowerSelector();
 
                 if (zDPS)
-                    power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+                    power = ZDps.PowerSelector();
 
                 if (ImmortalKingsCount == 3)
                     power = ImmortalKingsCall.PowerSelector();
@@ -35,7 +35,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (RaekorCount < 1 && ImmortalKingsCount < 1 && EarthCount < 1 && WastesCount < 1)
                     power = LegacyOfNightmares.PowerSelector();
             }
-            return power;
+            return power ?? new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
         }
     }
 }

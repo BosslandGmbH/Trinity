@@ -58,13 +58,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     {
                         if (ClosestTwister() != null)
                             return ClosestTwister().Position;
-                        if (PhelonTargeting.BestAoeUnit(45, true) != null)
-                        {
-                            var distance = PhelonTargeting.BestAoeUnit(45, true).Distance - 5;
-                            return MathEx.CalculatePointFrom(Player.Position, PhelonTargeting.BestAoeUnit(45, true).Position,
-                                distance);
-                        }
-                        return Vector3.Zero;
+                        if (PhelonTargeting.BestAoeUnit(45, true) == null) return Vector3.Zero;
+                        var distance = PhelonTargeting.BestAoeUnit(45, true).Distance - 5;
+                        return MathEx.CalculatePointFrom(Player.Position, PhelonTargeting.BestAoeUnit(45, true).Position,
+                            distance);
                     }
                 }
 
@@ -78,10 +75,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 private static bool ShouldExplosiveBlast
                     =>
                         Skills.Wizard.ExplosiveBlast.CanCast() && TargetUtil.AnyMobsInRange(12f) &&
-                        TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 4;
-
-                //(GetHasBuff(SNOPower.Wizard_ExplosiveBlast) && GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
-                //TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5);
+                        (GetHasBuff(SNOPower.Wizard_ExplosiveBlast) && GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
+                         TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5000);
 
                 private static bool ShouldFrostNova
                     => Skills.Wizard.FrostNova.CanCast() && TargetUtil.AnyMobsInRange(12f);
