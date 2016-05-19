@@ -20,12 +20,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
             if (Player.IsInTown)
                 return null;
             TrinityPower power = Unconditional.PowerSelector();
-            if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
+            if (power == null && CurrentTarget != null)
             {
                 if (IszDPS)
                     power = ZDps.PowerSelector();
+
+                if (power == null) power = new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestWalkLocation);
             }
-            return power ?? new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+            return power;
         }
     }
 }
