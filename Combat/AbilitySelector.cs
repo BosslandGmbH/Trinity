@@ -2,6 +2,8 @@
 using Trinity.Combat.Abilities;
 using Trinity.Combat.Abilities.PhelonsPlayground;
 using Trinity.Combat.Abilities.PhelonsPlayground.Barbarian;
+using Trinity.Combat.Abilities.PhelonsPlayground.Monk;
+using Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor;
 using Trinity.Combat.Abilities.PhelonsPlayground.Wizard;
 using Trinity.Technicals;
 using Zeta.Common.Plugins;
@@ -100,7 +102,7 @@ namespace Trinity
                         case ActorClass.Monk:
                             if (Settings.Advanced.PhelonsPlayground)
                             {
-                                power = MonkCombat.GetPower();
+                                power = Monk.GetPower();
                                 break;
                             }
                             power = MonkCombat.GetPower();
@@ -122,7 +124,7 @@ namespace Trinity
                         case ActorClass.Witchdoctor:
                             if (Settings.Advanced.PhelonsPlayground)
                             {
-                                power = WitchDoctorCombat.GetPower();
+                                power = WitchDoctor.GetPower();
                                 if (power != null)
                                     break;
                             }
