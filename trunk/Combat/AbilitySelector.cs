@@ -88,8 +88,7 @@ namespace Trinity
                             if (Settings.Advanced.PhelonsPlayground)
                             {
                                 power = Barbarian.GetPower();
-                                if (power != null)
-                                    break;
+                                break;
                             }
                             power = BarbarianCombat.GetPower();
                             break;
@@ -102,20 +101,20 @@ namespace Trinity
                             if (Settings.Advanced.PhelonsPlayground)
                             {
                                 power = MonkCombat.GetPower();
-                                if (power != null)
-                                    break;
+                                break;
                             }
                             power = MonkCombat.GetPower();
-                            if (power != null && GetHasBuff(SNOPower.X1_Monk_Epiphany) && power.MinimumRange > 0)
-                                power.MinimumRange = 75f;
+                            //todo: This causes it to beat the living crap out of nothing while epiphany is active, but the distance portion isn't
+                            //todo: it should also be in Monk Combat
+                            //if (power != null && GetHasBuff(SNOPower.X1_Monk_Epiphany) && power.MinimumRange > 0)
+                            //    power.MinimumRange = 75f;
                             break;
                         // Wizards
                         case ActorClass.Wizard:
                             if (Settings.Advanced.PhelonsPlayground)
                             {
                                 power = Wizard.GetPower();
-                                if (power != null)
-                                    break;
+                                break;
                             }
                             power = WizardCombat.GetPower();
                             break;

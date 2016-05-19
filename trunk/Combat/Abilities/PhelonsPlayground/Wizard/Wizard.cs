@@ -30,7 +30,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         power = TalRasha.EnergyTwister.PowerSelector();
                     }
                 }
-                if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, Player.Position);
+                if (power == null) power = new TrinityPower(SNOPower.Walk, 0f, Player.Position);
             }
             return power;
         }

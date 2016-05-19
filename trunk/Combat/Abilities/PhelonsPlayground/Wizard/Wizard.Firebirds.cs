@@ -26,7 +26,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 if (ShouldExplosiveBlast)
                     return CastExplosiveBlast;
-                
+
                 var power = Archon.PowerSelector();
                 if (power != null)
                     return power;
@@ -39,27 +39,19 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
             private static bool ShouldArcaneTorrent
             {
-                get
-                {
-                    return CanCast(SNOPower.Wizard_ArcaneTorrent) && PhelonTargeting.BestAoeUnit(45, true) != null;
-                }
+                get { return CanCast(SNOPower.Wizard_ArcaneTorrent) && PhelonTargeting.BestAoeUnit(45, true) != null; }
             }
 
             private static TrinityPower CastExplosiveBlast
             {
-                get
-                {
-                    return new TrinityPower(SNOPower.Wizard_ExplosiveBlast);
-                }
+                get { return new TrinityPower(SNOPower.Wizard_ExplosiveBlast); }
             }
 
             private static bool ShouldExplosiveBlast
                 =>
                     Skills.Wizard.ExplosiveBlast.CanCast() && TargetUtil.AnyMobsInRange(12f) &&
-                    TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 4;
-
-            //(GetHasBuff(SNOPower.Wizard_ExplosiveBlast) && GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
-            //TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5);
+                    (GetHasBuff(SNOPower.Wizard_ExplosiveBlast) && GetBuffStacks(SNOPower.Wizard_ExplosiveBlast) < 4 ||
+                     TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 5000);
 
             private static TrinityPower CastArcaneTorrent
             {
@@ -81,10 +73,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 var lastCast = SpellHistory.History
                     .Where(p => p.Power.SNOPower == SNOPower.Wizard_Hydra && p.TimeSinceUse < TimeSpan.FromSeconds(14))
                     .OrderBy(s => s.TimeSinceUse)
-                    .ThenBy(p => p.Power.TargetPosition.Distance2DSqr(PhelonTargeting.BestAoeUnit(45,true).Position))
+                    .ThenBy(p => p.Power.TargetPosition.Distance2DSqr(PhelonTargeting.BestAoeUnit(45, true).Position))
                     .FirstOrDefault();
 
-                return lastCast != null && lastCast.TargetPosition.Distance2DSqr(PhelonTargeting.BestAoeUnit(45, true).Position) > 25;
+                return lastCast != null &&
+                       lastCast.TargetPosition.Distance2DSqr(PhelonTargeting.BestAoeUnit(45, true).Position) > 25;
             }
 
             private static TrinityPower CastHydra

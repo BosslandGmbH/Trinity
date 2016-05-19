@@ -26,7 +26,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             get
             {
-                var maxRange = ClassMover.IsSpecialMovementReady ? 45 : 12;
+                var maxRange = ClassMover.IsSpecialMovementReady ? 45 : 9;
                 if (ClosestSancAndOcc != Vector3.Zero && ClosestSancAndOcc.Distance(TrinityPlugin.Player.Position) < maxRange)
                     return ClosestSancAndOcc;
 
@@ -57,7 +57,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                     return ClosestHealthGlobe().Position;
 
                 // Prevent Default Attack
-                if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Destructible)
+                if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Destructible &&
+                    TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Shrine &&
+                    TrinityPlugin.CurrentTarget.Type != TrinityObjectType.HealthGlobe)
                 {
                     //Logger.Log("Prevent Primary Attack ");
                     var targetPosition = TargetUtil.GetLoiterPosition(PhelonTargeting.BestAoeUnit(), 20f);
