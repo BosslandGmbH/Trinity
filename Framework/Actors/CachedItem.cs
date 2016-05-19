@@ -13,7 +13,9 @@ using Trinity.Framework.Objects.Memory.Items;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Helpers;
+using Trinity.Objects;
 using Trinity.Objects.Native;
+using Trinity.Reference;
 using Zeta.Bot.Settings;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -166,10 +168,10 @@ namespace Trinity.Framework.Actors
             IsCraftingReagent = RawItemType == RawItemType.CraftingReagent || RawItemType == RawItemType.CraftingReagentBound;
             IsGold = RawItemType == RawItemType.Gold;
             IsEquipment = TypeConversions.GetIsEquipment(TrinityItemBaseType);
-            IsSalvageable = IsEquipment && !IsVendorBought && RequiredLevel > 1;
             IsClassItem = TypeConversions.GetIsClassItem(ItemType);
             IsOffHand = TypeConversions.GetIsOffhand(ItemType);
-            IsPotion = RawItemType == RawItemType.Potion;
+            IsPotion = RawItemType == RawItemType.HealthPotion;
+            IsSalvageable = IsEquipment && !IsVendorBought && RequiredLevel > 1 || IsPotion;
             IsLegendaryGem = RawItemType == RawItemType.UpgradeableJewel;
             IsMiscItem = ItemBaseType == ItemBaseType.Misc;
             IsTwoSquareItem = TypeConversions.GetIsTwoSlot(ItemBaseType, ItemType, RawItemType);
@@ -207,6 +209,8 @@ namespace Trinity.Framework.Actors
                 return true;
             }
         }
+       
+        public Item Reference => Legendary.GetItem(this);
 
         public override bool Equals(object obj)
         {

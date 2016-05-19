@@ -87,6 +87,10 @@ namespace Trinity
             (int) SNOActor.cos_pet_goatman_melee_02, // 441214,
             (int) SNOActor.p3_cos_pet_jadeSerpent, // 441437,
             
+
+            // Yahoo !treasureGoblin_K-613 ActorSnoId: 450993, Menagerist Goblin
+		    450993,
+
             451015,  //ActorId:  Type: Item, Name: Haunting Hannah
             451013, //ActorId:  Type: Item, Name: Buddy
             451036, //ActorId:  Type: Item, Name: Charlotte

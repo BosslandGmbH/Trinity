@@ -160,7 +160,7 @@ namespace Trinity.Movement
             }
 
             var secondsSincePowerUse = DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds;
-            if (!_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && secondsSincePowerUse < 4 && CombatBase.IsInCombat)
+            if (secondsSincePowerUse < 4 && !_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && CombatBase.IsInCombat)
             {
                 Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Recently cast power in combat ({SpellHistory.LastPowerUsed}, {secondsSincePowerUse}s ago)");
                 return true;

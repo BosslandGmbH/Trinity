@@ -33,7 +33,7 @@
             Quality = ItemQuality.{{Quality}},<br/>             
             Slug = "{{Slug}}",<br/>
             ItemType = ItemType.{{ZetaType}},<br/>
-            TrinityItemType = TrinityItemType.{{TrinityItemType}},<br/>
+            GItemType = GItemType.{{GItemType}},<br/>
             IsTwoHanded = {{Bool IsTwoHanded}},<br/>
             BaseType = ItemBaseType.{{BaseType}},<br/>
             InternalName = "{{InternalName}}",<br/>
@@ -62,8 +62,7 @@
             
             $(document).ready(function () {
 
-                Items.GetItemPages([
-
+                Items.GetItemPages([				
 				    "http://us.battle.net/d3/en/item/health-potion",
 				    "http://us.battle.net/d3/en/item/bottomless-potion-of-amplification",
 				    "http://us.battle.net/d3/en/item/bottomless-potion-of-fear",
@@ -73,38 +72,7 @@
 				    "http://us.battle.net/d3/en/item/bottomless-potion-of-rejuvenation",
 				    "http://us.battle.net/d3/en/item/bottomless-potion-of-the-diamond",
 				    "http://us.battle.net/d3/en/item/bottomless-potion-of-the-leech",
-                    "http://us.battle.net/d3/en/item/bottomless-potion-of-the-tower",
-"http://us.battle.net/d3/en/item/bottomless-potion-of-the-tower"
-
-                    //"http://us.battle.net/d3/en/item/hand-of-the-prophet",
-                    //"http://us.battle.net/d3/en/item/smoking-thurible",
-                    //"http://us.battle.net/d3/en/item/vadims-surge",
-                    //"http://us.battle.net/d3/en/item/ribald-etchings",
-                    //"http://us.battle.net/d3/en/item/skeleton-key",
-                    //"http://us.battle.net/d3/en/item/slipkas-letter-opener",
-                    //"http://us.battle.net/d3/en/item/enchanting-favor",
-                    //"http://us.battle.net/d3/en/item/hillenbrands-training-sword",
-                    //"http://us.battle.net/d3/en/item/relic-of-akarat",
-
-
-				//"http://us.battle.net/d3/en/item/spectrum-Fa7AX",
-				//"http://us.battle.net/d3/en/item/the-horadric-hamburger-2HDjXe",
-                //    "http://us.battle.net/d3/en/item/mad-monarchs-scepter-2F34bH",
-                //    "http://us.battle.net/d3/en/item/soulsmasher-6EmZ3",
-                //    "http://us.battle.net/d3/en/item/covens-criterion-dzvKS",
-                //    "http://us.battle.net/d3/en/item/salvation-TxMPT",
-                //    "http://us.battle.net/d3/en/item/overwhelming-desire-1I0LYo",
-                //    "http://us.battle.net/d3/en/item/deaths-bargain-3STVps",
-                //    "http://us.battle.net/d3/en/item/insatiable-belt-1Yuo9W",
-                //    "http://us.battle.net/d3/en/item/cloak-of-deception-hEilc"
-				//"http://us.battle.net/d3/en/item/envious-blade-3FoG39",
-				//"http://us.battle.net/d3/en/item/burst-of-wrath-322lv2",
-				//"http://us.battle.net/d3/en/item/nilfurs-boast",
-				//"http://us.battle.net/d3/en/item/pandemonium-loop-3qRY5F",
-				//"http://us.battle.net/d3/en/item/boots-of-disregard-29WPmn",
-				//"http://us.battle.net/d3/en/item/immortal-kings-stature",
-
-
+                    "http://us.battle.net/d3/en/item/bottomless-potion-of-the-tower"                    
 				],function (data) {
                     var container = $(".container");
                     var template = $(".template").html();
@@ -114,6 +82,8 @@
                 });
 
             });
+			
+			
 
         </script>        
     </body>    

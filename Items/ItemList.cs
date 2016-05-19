@@ -192,6 +192,13 @@ namespace Trinity.Items
 
             switch (prop)
             {
+                case ItemProperty.PassivePower:
+                    itemValue = ItemDataUtils.GetPassivePowerValue(item);
+                    ruleValue = value;
+                    result = itemValue >= ruleValue;
+                    returnValue = itemValue;
+                    break;
+
                 case ItemProperty.Ancient:
                     itemValue = item.IsAncient ? 1 : 0;
                     ruleValue = value;

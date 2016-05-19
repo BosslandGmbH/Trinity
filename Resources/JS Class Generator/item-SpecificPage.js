@@ -116,8 +116,8 @@ var Items = function() {
                     }
 
                     // Only record legendary/set items
-                    if (item.Quality != "Legendary")
-                        return;
+                    //if (item.Quality != "Legendary")
+                    //    return;
 
                     item.Type = itemType.text();
                 
@@ -340,7 +340,7 @@ var Items = function() {
     
     var HandleItemData = function (urls, onDataLoadFinished) {
 
-        var todo = urls.length;	
+        var todo = urls.length-1;	
 	
         var data = {
             timestamp: (new Date()).toUTCString(),
@@ -349,7 +349,6 @@ var Items = function() {
 		
 		var process = function (item) {
 			data.All.push(item);					
-
 			todo--;
 			if (todo == 0) {
 				onDataLoadFinished(data);
@@ -362,7 +361,7 @@ var Items = function() {
 			ItemData.GetDetailPageItem(url, process);
 		});
 		
-		onDataLoadFinished(data);		
+		//onDataLoadFinished(data);		
     };
 
     return {

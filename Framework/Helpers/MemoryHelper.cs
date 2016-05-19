@@ -43,13 +43,14 @@ namespace Trinity.Framework.Helpers
             return minArr;
         }
 
-        public static int GetOffetOfValue<T>(IntPtr baseAddress, T valueToFind) where T : struct
+        public static int GetOffetOfValue<T>(IntPtr baseAddress, T valueToFind)
         {
             for (int i = 0; i < 2000; i++)
             {
                 try
                 {
-                    var val = ZetaDia.Memory.Read<T>(baseAddress + i);
+                    //var val = ZetaDia.Memory.Read<T>(baseAddress + i);
+                    var val = Reader.Read<T>(baseAddress + i);
                     if (val.Equals(valueToFind))
                     {
                         return i;
@@ -61,6 +62,51 @@ namespace Trinity.Framework.Helpers
                 }
             }
             return -1;
+        }
+
+        /// <summary>
+        /// Memory reading adapter for GreyMagic.
+        /// Slower but useful when T is a reflected value and so cannot satisfy the GreyMagic struct constraint.
+        /// </summary>
+        public static class Reader
+        {
+            abstract class GenericRead<T>
+            {
+                public abstract T DoStuff(IntPtr ptr);
+            }
+
+            class ValueTypeReadHelper<T> : GenericRead<T> where T : struct
+            {
+                public override T DoStuff(IntPtr ptr)
+                {
+                    return ValueRead<T>(ptr);
+                }
+            }
+            static T ValueRead<T>(IntPtr ptr) where T : struct
+            {
+                return ZetaDia.Memory.Read<T>(ptr);
+            }
+
+            class RefTypeReadHelper<T> : GenericRead<T> where T : class
+            {
+                public override T DoStuff(IntPtr ptr)
+                {
+                    return RefRead<T>(ptr);
+                }
+            }
+
+            static T RefRead<T>(IntPtr ptr)
+            {
+                return default(T);
+            }
+
+            public static T Read<T>(IntPtr ptr)
+            {
+                var helperType = typeof(T).IsValueType ? typeof(ValueTypeReadHelper<>) : typeof(RefTypeReadHelper<>);
+                helperType = helperType.MakeGenericType(typeof(T));
+                var helper = (GenericRead<T>)Activator.CreateInstance(helperType);
+                return helper.DoStuff(ptr);
+            }
         }
 
         static readonly Dictionary<Type, Func<int, IntPtr>> GetRecordPtrMethods = new Dictionary<Type, Func<int, IntPtr>>();

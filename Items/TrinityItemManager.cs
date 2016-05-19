@@ -264,17 +264,9 @@ namespace Trinity.Items
                 return true;
             }
 
-            if (tItemType == TrinityItemType.HealthPotion && item.ItemQualityLevel >= ItemQuality.Legendary)
+            if (tItemType == TrinityItemType.HealthPotion && TrinityPlugin.Player.EquippedHealthPotion.AnnId == item.AnnId)
             {
-                var shouldStash = TrinityPlugin.Settings.Loot.TownRun.StashLegendaryPotions;
-                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = ({3} legendary potions)", item.Name, item.InternalName, tItemType,
-                    shouldStash ? "stashing" : "ignoring");
-                return shouldStash;
-            }
-
-            if (tItemType == TrinityItemType.HealthPotion && item.ItemQualityLevel < ItemQuality.Legendary)
-            {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (ignoring potions)", item.Name, item.InternalName, tItemType);
+                Logger.LogDebug($"{item.Name} [{item.InternalName}] [{tItemType}] = (dont stash equipped potion)");
                 return false;
             }
 
@@ -364,8 +356,14 @@ namespace Trinity.Items
                 return false;
             }
 
+            if (tItemType == TrinityItemType.HealthPotion && TrinityPlugin.Settings.Loot.TownRun.StashLegendaryPotions)
+            {
+                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (Stash all potions)", item.Name, item.InternalName, tItemType);
+                return true;         
+            }
+
             // Item List
-            if (item.ItemQualityLevel >= ItemQuality.Legendary && TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
+            if (item.ItemQualityLevel >= ItemQuality.Legendary && TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem || item.IsPotion))
             {
                 var result = ItemList.ShouldStashItem(item);
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, "ItemListCheck=" + (result ? "KEEP" : "TRASH"));
@@ -458,21 +456,27 @@ namespace Trinity.Items
 
                 if (item.ItemType == ItemType.KeystoneFragment)
                 {
-                    reason = "Reason: Rift Key";
+                    reason = "Rift Key";
                     return false;
                 }
 
                 // Stashing Whites
                 if (TrinityPlugin.Settings.Loot.TownRun.StashWhites && item.ItemQualityLevel < ItemQuality.Magic1)
                 {
-                    reason = "Reason: Stash Whites Setting";
+                    reason = "Stash Whites Setting";
+                    return false;
+                }
+
+                if (item.TrinityItemType == TrinityItemType.HealthPotion && TrinityPlugin.Player.EquippedHealthPotion.AnnId == item.AnnId)
+                {
+                    reason = "Equipped Potion";
                     return false;
                 }
 
                 // Stashing Blues
                 if (TrinityPlugin.Settings.Loot.TownRun.StashBlues && item.ItemQualityLevel > ItemQuality.Superior && item.ItemQualityLevel < ItemQuality.Rare4)
                 {
-                    reason = "Reason: Stash Blues Setting";
+                    reason = "Stash Blues Setting";
                     return false;
                 }
 
@@ -554,6 +558,12 @@ namespace Trinity.Items
                 if (item.IsUnidentified)
                 {
                     reason = "Not Identified";
+                    return false;
+                }
+
+                if (item.TrinityItemType == TrinityItemType.HealthPotion && TrinityPlugin.Player.EquippedHealthPotion.AnnId == item.AnnId)
+                {
+                    reason = "Equipped Potion";
                     return false;
                 }
 

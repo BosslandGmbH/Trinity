@@ -517,6 +517,9 @@
                     <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Thorns">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
                     </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PassivePower">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
+                    </DataTrigger>                    
                 </Style.Triggers>
             </Style>
 
@@ -885,6 +888,8 @@
                                     <TextBlock Margin="0,0,0,10" TextWrapping="Wrap">These settings will override any selections or rules you may have set up.</TextBlock>
                                 <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL ancients to be stashed." Content="Always Keep Ancient Items" IsChecked="{Binding ItemList.AlwaysStashAncients}" />
                                 <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL non-ancients to be trashed." Content="Always Sell/Salvage Non-Ancients" IsChecked="{Binding ItemList.AlwaysTrashNonAncients}" />
+                                
+                                
                             </StackPanel>
                         </GroupBox>
                         <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#474747">

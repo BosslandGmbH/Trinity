@@ -78,6 +78,8 @@
         PrimaryStat = 73,
         ElementalDamage = 74,
         ElementalResist,
-        ChanceToBlockTotal
+        ChanceToBlockTotal,
+        PassivePower
     }
 }
+

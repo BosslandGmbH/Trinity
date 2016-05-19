@@ -156,6 +156,51 @@ namespace Trinity.Framework.Avoidance
                 }
             });
 
+            // Raizeil GR Boss
+            //[206427B0] Type: Monster Name: Generic_Proxy-34948 ActorSnoId: 4176, Distance: 0
+            //[206725C4] Type: ClientEffect Name: � ActorSnoId: 255720, Distance: 6.180007
+            //[2063E270] Type: Monster Name: Generic_Proxy-34955 ActorSnoId: 4176, Distance: 7.551051
+            //[2064B684] Type: Monster Name: Generic_Proxy-34967 ActorSnoId: 4176, Distance: 7.551051
+            //[20654558] Type: ServerProp Name: g_ChargedBolt_Projectile-34975 ActorSnoId: 4394, Distance: 14.51281
+            // Generic proxy probably used for a lot of things, need to find unique id or check only in the presence of this actor. 
+
+            //AvoidanceData.Add(new AvoidanceData
+            //{
+            //    Name = "Raizeil Thunderstorm",
+            //    IsEnabledByDefault = false,
+            //    Element = Element.Poison,
+            //    Handler = new CircularAvoidanceHandler(),
+            //    Parts = new List<AvoidancePart>
+            //    {
+            //        new AvoidancePart
+            //        {
+            //            Name = "Thunderstorm",
+            //            ActorSnoId = (int)SNOActor.Generic_Proxy,
+            //            Radius = 20f,
+            //            Type = PartType.Main,
+            //        },
+            //    }
+            //});
+
+            //[1FACC478] Type: ServerProp Name: Gluttony_gasCloud_proxy-73081 ActorSnoId: 93837, Distance: 42.44696
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Ghom Gas Cloud",
+                IsEnabledByDefault = false,
+                Element = Element.Poison,
+                Handler = new CircularAvoidanceHandler(),
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Gas Cloud",
+                        ActorSnoId = (int)SNOActor.Gluttony_gasCloud_proxy,
+                        Radius = 20f,
+                        Type = PartType.Main,
+                    },
+                }
+            });
 
             AvoidanceData.Add(new AvoidanceData
             {
@@ -233,14 +278,14 @@ namespace Trinity.Framework.Avoidance
                 Element = Element.Cold,
                 Parts = new List<AvoidancePart>
                 {
-                    new AvoidancePart
-                    {
-                        Name = "Projectile",
-                        ActorSnoId = 4176,
-                        Radius = 5f,                        
-                        Severity = Severity.Minor,
-                        Type = PartType.Projectile,
-                    },
+                    //new AvoidancePart
+                    //{
+                    //    Name = "Projectile",
+                    //    ActorSnoId = 4176, // dont use generic proxy
+                    //    Radius = 5f,                        
+                    //    Severity = Severity.Minor,
+                    //    Type = PartType.Projectile,
+                    //},
                     new AvoidancePart
                     {
                         Name = "Satanic Symbol 1",

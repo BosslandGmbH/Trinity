@@ -37,7 +37,7 @@ namespace Trinity.Combat.Abilities
             TrinityPower power;
 
             if (TryGetArchonPower(out power))
-                return power;            
+                return power;
 
             // Buffs
             if (UseOOCBuff)
@@ -74,7 +74,7 @@ namespace Trinity.Combat.Abilities
             // Defensive Teleport: SafePassage
             if (CanCastTeleport())
             {
-                var slightlyForwardPosition = MathEx.GetPointAt(Core.Avoidance.Avoider.SafeSpot, 4f, Player.Rotation);                
+                var slightlyForwardPosition = MathEx.GetPointAt(Core.Avoidance.Avoider.SafeSpot, 4f, Player.Rotation);
                 return new TrinityPower(SNOPower.Wizard_Teleport, 65f, slightlyForwardPosition);
             }
 
@@ -179,7 +179,7 @@ namespace Trinity.Combat.Abilities
                     {
                         return new TrinityPower(SNOPower.Wizard_Teleport, 65f, slightlyForwardPosition);
                     }
-                }                    
+                }
             }
 
             // Magic Weapon (10 minutes)                 
@@ -240,7 +240,7 @@ namespace Trinity.Combat.Abilities
 
             // Slow Time for in combat
             if (!Player.IsIncapacitated && Skills.Wizard.SlowTime.CanCast(CanCastFlags.NoTimer) && TargetUtil.AnyMobsInRange(60))
-            {                
+            {
                 var bubbles = SpellHistory.History.Where(s => s.Power.SNOPower == SNOPower.Wizard_SlowTime && s.TimeSinceUse.TotalSeconds < 12).ToList();
                 var bubblePositions = new HashSet<Vector3>(bubbles.Select(b => b.TargetPosition));
                 var clusterPosition = TargetUtil.GetBestClusterPoint(0f, 50f);
@@ -266,7 +266,7 @@ namespace Trinity.Combat.Abilities
                 {
                     reason = "Bubble for defense";
                     bubblePower = new TrinityPower(SNOPower.Wizard_SlowTime, bubbleMaxRange, slightlyForwardPosition);
-                }                
+                }
 
                 // Then casting on elites
                 else if (CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.Distance < bubbleMaxRange && isValidBubblePosition(CurrentTarget.Position))
@@ -365,14 +365,14 @@ namespace Trinity.Combat.Abilities
             // Archon
             if (CanCast(SNOPower.Wizard_Archon, CanCastFlags.NoTimer) && ShouldStartArchon())
             {
-                return new TrinityPower(SNOPower.Wizard_Archon, 5, 5);
+                return new TrinityPower(SNOPower.Wizard_Archon);
             }
 
             // Blizzard
             float blizzardRadius = Runes.Wizard.Apocalypse.IsActive ? 30f : 12f;
             if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_Blizzard, CanCastFlags.NoTimer) && !ShouldWaitForConventionElement(Skills.Wizard.Blizzard) &&
                 (TargetUtil.ClusterExists(blizzardRadius, 90f, 2, false) || CurrentTarget.IsBossOrEliteRareUnique || !HasPrimarySkill) &&
-                (Player.PrimaryResource >= 40 || (Runes.Wizard.Snowbound.IsActive && Player.PrimaryResource >= 20)) && 
+                (Player.PrimaryResource >= 40 || (Runes.Wizard.Snowbound.IsActive && Player.PrimaryResource >= 20)) &&
                 (!Legendary.EtchedSigil.IsEquipped || Sets.TalRashasElements.IsFullyEquipped))
             {
                 var bestClusterPoint = TargetUtil.GetBestClusterPoint(blizzardRadius, 65f, false);
@@ -433,7 +433,7 @@ namespace Trinity.Combat.Abilities
             }
 
             // Disintegrate
-            if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_Disintegrate) && 
+            if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_Disintegrate) &&
                 Player.PrimaryResource >= 30)
             {
                 var disintegrateRange = Runes.Wizard.Entropy.IsActive ? 10f : 35f;
@@ -704,13 +704,13 @@ namespace Trinity.Combat.Abilities
 
             if (CurrentTarget == null)
                 return false;
-            
+
             if (Settings.Combat.Wizard.AlwaysArchon && Skills.Wizard.Archon.CanCast() && Sets.ChantodosResolve.IsFullyEquipped)
             {
                 if (CacheData.Buffs.HasBuff(SNOPower.P3_ItemPassive_Unique_Ring_021) && GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021) > 19)
                 {
                     Skills.Wizard.Archon.Cast();
-                }                         
+                }
             }
 
             if (!Skills.Wizard.IsArchonActive())
@@ -718,7 +718,7 @@ namespace Trinity.Combat.Abilities
 
             if (IsCurrentlyAvoiding)
             {
-                if (CurrentTarget.IsSafeSpot &&  CurrentTarget.Distance > 20f && Skills.Wizard.ArchonTeleport.CanCast())
+                if (CurrentTarget.IsSafeSpot && CurrentTarget.Distance > 20f && Skills.Wizard.ArchonTeleport.CanCast())
                 {
                     Logger.LogVerbose($"Avoidance Teleport Distance={CurrentTarget.Distance}");
                     power = new TrinityPower(Skills.Wizard.ArchonTeleport.SNOPower, 50f, CurrentTarget.Position);
@@ -731,7 +731,7 @@ namespace Trinity.Combat.Abilities
             {
                 if (Settings.Combat.Wizard.FindClustersWhenNotArchon)
                 {
-                    
+
 
                     // Double trash range up to max of 10 for 8 seconds or until archon starts or there is a big cluster in range.
                     CombatOverrides.ModifyTrashSizeForDuration(2d, TimeSpan.FromSeconds(8), 4, 10, () => BigClusterOrElitesInRange() || Skills.Wizard.IsArchonActive());
@@ -753,7 +753,7 @@ namespace Trinity.Combat.Abilities
                     var position = MathEx.CalculatePointFrom(CurrentTarget.Position, ZetaDia.Me.Position, offsetDistance);
                     power = new TrinityPower(Skills.Wizard.ArchonTeleport.SNOPower, 50f, position);
                     return true;
-                }             
+                }
             }
 
             //392694, 392695, 392696 == Arcane Strike,
@@ -1013,7 +1013,7 @@ namespace Trinity.Combat.Abilities
                 {
                     if (CanCastTeleport() &&
                     ArcaneOrbitCriteria(Enemies.BestRiftValueCluster))
-                            Skills.Wizard.Teleport.Cast(m.Destination);
+                        Skills.Wizard.Teleport.Cast(m.Destination);
                 },
                 Options = new CombatMovementOptions
                 {
