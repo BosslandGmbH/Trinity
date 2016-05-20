@@ -263,7 +263,7 @@ namespace Trinity
                     // Prevent running away after progression globes spawn if they're in aoe
                     if (Player.IsInRift && !Core.Avoidance.Avoider.IsAvoiding)
                     {                       
-                        var globes = ObjectCache.Where(o => o.Type == TrinityObjectType.ProgressionGlobe && o.Distance < 120f).ToList();
+                        var globes = ObjectCache.Where(o => o.Type == TrinityObjectType.ProgressionGlobe && o.Distance < AvoidanceManager.MaxDistance).ToList();
                         var shouldWaitForGlobes = globes.Any(o => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, o.Position, AvoidanceFlags.CriticalAvoidance));
                         if (shouldWaitForGlobes)
                         {                          
