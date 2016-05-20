@@ -2,6 +2,7 @@
 using Trinity.Combat.Abilities;
 using Trinity.Combat.Abilities.PhelonsPlayground;
 using Trinity.Combat.Abilities.PhelonsPlayground.Barbarian;
+using Trinity.Combat.Abilities.PhelonsPlayground.Crusader;
 using Trinity.Combat.Abilities.PhelonsPlayground.Monk;
 using Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor;
 using Trinity.Combat.Abilities.PhelonsPlayground.Wizard;
@@ -96,6 +97,11 @@ namespace Trinity
                             break;
                         // Crusader
                         case ActorClass.Crusader:
+                            if (Settings.Advanced.PhelonsPlayground)
+                            {
+                                power = Crusader.GetPower();
+                                break;
+                            }
                             power = CrusaderCombat.GetPower();
                             break;
                         // Monks

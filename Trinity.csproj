@@ -109,6 +109,9 @@
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Unconditional.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Wastes.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.ZDps.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Crusader\Crusader.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Crusader\Crusader.LegacyOfNightmares.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Crusader\Crusader.Unconditional.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Monk\Monk.Unconditional.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Monk\Monk.ZDps.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Monk\Monk.cs" />

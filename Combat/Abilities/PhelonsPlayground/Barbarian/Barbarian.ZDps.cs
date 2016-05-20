@@ -76,11 +76,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
 
             public static bool ShouldThreateningShout
             {
-                get
-                {
-                    return Skills.Barbarian.ThreateningShout.CanCast() &&
-                           PhelonUtils.BestAuraUnit(SNOPower.Barbarian_ThreateningShout, 10) != null;
-                }
+                get { return Skills.Barbarian.ThreateningShout.CanCast(); }
             }
 
             public static TrinityPower CastThreateningShout
@@ -95,17 +91,21 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (!Skills.Barbarian.Whirlwind.CanCast())
                     return false;
 
-                target = PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault() ??
-                         PhelonUtils.ClosestHealthGlobe() ??
-                         PhelonGroupSupport.Monk ??
-                         PhelonTargeting.BestAoeUnit(45, true);
+                target = CurrentTarget.IsBoss
+                    ? CurrentTarget
+                    : (PhelonGroupSupport.Monk != null
+                        ? PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault()
+                        : PhelonUtils.ClosestHealthGlobe() ??
+                          PhelonGroupSupport.Monk ??
+                          PhelonTargeting.BestAoeUnit(45, true));
 
-                return target != null && target.Distance <= 90 && Player.PrimaryResource > 25;
+                return target != null && Player.PrimaryResource > 10;
             }
 
             public static TrinityPower CastWhirlWind(TrinityCacheObject target)
             {
-                return new TrinityPower(SNOPower.Barbarian_Whirlwind, 75, target.ACDGuid);
+                return new TrinityPower(SNOPower.Barbarian_Whirlwind, 20f, target.Position,
+                    TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);
             }
 
             public static bool ShouldFuriousCharge(out TrinityCacheObject target)
@@ -133,9 +133,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (!Skills.Barbarian.AncientSpear.CanCast())
                     return false;
 
-                target = PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault();
+                target = PhelonGroupSupport.Monk != null
+                    ? PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault()
+                    : PhelonGroupSupport.UnitsToPull(Player.Position).FirstOrDefault();
 
-                return target != null && target.Distance <= 60 && Player.PrimaryResourcePct > 0.90 &&
+                return target != null && target.Distance <= 45 && Player.PrimaryResourcePct > 0.90 &&
                        TimeSincePowerUse(SNOPower.X1_Barbarian_AncientSpear) > 1500;
             }
 

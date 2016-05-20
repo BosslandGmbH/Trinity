@@ -45,13 +45,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         }
 
         internal static List<TrinityCacheObject> UnitsToPull(Vector3 pullLocation, float groupRadius = 15,
-            int groupCount = 1,
-            float searchRange = 90, bool includeUnitsInAoe = true)
+            int groupCount = 1, float searchRange = 45, bool includeUnitsInAoe = true)
         {
 
             return
                 (from u in PhelonUtils.SafeList(includeUnitsInAoe)
-                    where u.IsUnit && 
+                    where u.IsUnit && u.IsInLineOfSight() &&
                           !UnitsAroundPuller(pullLocation, 20, includeUnitsInAoe)
                               .Select(x => x.ACDGuid)
                               .Contains(u.ACDGuid) &&
@@ -60,8 +59,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                               .Contains(u.ACDGuid) &&
                           u.Position.Distance(pullLocation) <= searchRange //&&
                           //u.NearbyUnitsWithinDistance(groupRadius) >= groupCount
-                    orderby u.NearbyUnitsWithinDistance(groupRadius),
-                        u.Distance
+                    orderby //u.NearbyUnitsWithinDistance(groupRadius),
+                        u.Distance descending 
                     select u).ToList();
         }
     }

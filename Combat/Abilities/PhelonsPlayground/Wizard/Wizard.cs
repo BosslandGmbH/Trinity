@@ -16,7 +16,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             if (Player.IsInTown)
                 return null;
             TrinityPower power = Unconditional.PowerSelector();
-            if (power == null && CurrentTarget != null)
+            if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
             {
                 if (FirebirdsCount == 3 || VyrsCount == 3)
                 {

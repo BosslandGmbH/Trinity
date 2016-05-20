@@ -1,8 +1,6 @@
 using System;
-using System.Linq;
 using Trinity.Movement;
 using Trinity.Reference;
-using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
@@ -65,11 +63,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                         return true;
                     }
                 }
-                var bossCheck = PhelonTargeting.BestAoeUnit(45, true);
-                if (bossCheck != null &&
-                    bossCheck.IsBossOrEliteRareUnique)
+                if (CurrentTarget.IsBossOrEliteRareUnique)
                 {
-                    target = bossCheck;
+                    target = CurrentTarget;
                     return true;
                 }
 
@@ -86,22 +82,24 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             {
                 target = null;
 
-                if (!CanCast(SNOPower.X1_Barbarian_AncientSpear))
+                if (!Skills.Barbarian.AncientSpear.CanCast())
                     return false;
 
-                target = PhelonTargeting.BestAoeUnit(60, true).IsInLineOfSight() && PhelonTargeting.BestAoeUnit(60, true).IsUnit
+                if (Skills.Barbarian.FuriousCharge.Charges < 5)
+                    return false;
+
+                target = PhelonTargeting.BestAoeUnit(60, true).IsInLineOfSight()
                     ? PhelonTargeting.BestAoeUnit(60, true)
                     : PhelonUtils.GetBestClusterUnit(10, 60, false, true, false, true);
 
                 if (target == null)
                     return false;
+                //if (Skills.Barbarian.FuriousCharge.Charges > 0 &&
+                //    GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026) <
+                //    Math.Floor(Skills.Barbarian.FuriousCharge.Charges*2.5))
+                //    return false;
 
-                if (Skills.Barbarian.FuriousCharge.Charges > 0 &&
-                    GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026) <
-                    Math.Floor(Skills.Barbarian.FuriousCharge.Charges*2.5))
-                    return false;
-
-                return target.Distance <= 60 &&
+                    return target.Distance <= 60 &&
                        (Player.PrimaryResourcePct > 0.95 || Sets.TheLegacyOfRaekor.IsFullyEquipped &&
                         GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026) >= 5);
             }
