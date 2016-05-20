@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Combat.Abilities;
@@ -23,9 +24,14 @@ namespace Trinity.Framework.Avoidance
     {
         bool IsAvoiding { get; }
         bool ShouldAvoid { get; }
-        bool TryGetSafeSpot(out Vector3 position, float minDistance = 10f, float maxDistance = 100f, Func<AvoidanceNode, bool> condition = null);
-        TimeSpan TimeSinceLastAvoid { get; }
 
+        bool TryGetSafeSpot(out Vector3 position, 
+            float minDistance = 10f, 
+            float maxDistance = 100f, 
+            Vector3 origin = default(Vector3), 
+            Func<AvoidanceNode, bool> condition = null);
+
+        TimeSpan TimeSinceLastAvoid { get; }
         Vector3 SafeSpot { get; }
     }
 
@@ -241,9 +247,23 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        public bool TryGetSafeSpot(out Vector3 safeSpot, float minDistance = 0f, float maxDistance = 100f, Func<AvoidanceNode, bool> condition = null)
+        public bool TryGetSafeSpot(out Vector3 safeSpot, float minDistance = 0f, float maxDistance = 100f, Vector3 origin = default(Vector3), Func<AvoidanceNode, bool> condition = null)
         {
-            var nodes = Core.Avoidance.SafeNodesByDistance.Where(p => p.Distance >= minDistance && p.Distance <= maxDistance);
+            IEnumerable<AvoidanceNode> nodes;
+
+            if (origin == default(Vector3))
+            {
+                nodes = Core.Avoidance.SafeNodesByDistance.Where(p => p.Distance >= minDistance && p.Distance <= maxDistance);
+            }
+            else
+            {
+                nodes = Core.Avoidance.SafeNodesByDistance.Where(p =>
+                {
+                    var distance = p.NavigableCenter.Distance(origin);
+                    return distance >= minDistance && distance <= maxDistance;
+                });
+            }
+
             var safeSpotNode = condition == null ? nodes.FirstOrDefault() : nodes.FirstOrDefault(condition);
             if (safeSpotNode != null)
             {
@@ -253,6 +273,7 @@ namespace Trinity.Framework.Avoidance
             safeSpot = Vector3.Zero;
             return false;
         }
+
 
     }
 

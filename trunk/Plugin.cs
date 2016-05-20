@@ -107,6 +107,14 @@ namespace Trinity
                 using (new PerformanceLogger("TrinityPlugin Pulse"))
                 {
 
+                    if (!_postedWarnings)
+                    {
+                        if (Settings.Advanced.PhelonsPlayground)
+                            PPWarning();
+
+                        _postedWarnings = true;
+                    }
+
                     if (ZetaDia.Me == null)
                         return;
 
@@ -305,6 +313,19 @@ namespace Trinity
             }
         }
 
+        private static void PPWarning()
+        {
+            Logger.Warn("-------------------------------------------------------------------------------");
+            Logger.Warn("---   ");
+            Logger.Warn("---   Phelons Playground mode is Enabled");
+            Logger.Warn("---   This mode is experimental and not yet released or supported ");
+            Logger.Warn("---   DO NOT USE THIS MODE unless you are a developer/tester and know what you're doing");
+            Logger.Warn("---   DO NOT REPORT TRINITY BUGS while in this mode");
+            Logger.Warn("---   To Disable: Uncheck box in Trinity Settings > Advanced Tab > Phelons Playground");
+            Logger.Warn("---   ");
+            Logger.Warn("------------------------------------------------------------------------------");
+        }
+
         /// <summary>
         /// Called when user disable the plugin.
         /// </summary>
@@ -448,6 +469,7 @@ namespace Trinity
         private static DateTime _lastWindowTitleTick = DateTime.MinValue;
         private static Window _mainWindow;
         private static bool HasLoggedCurrentBuild;
+        private bool _postedWarnings;
 
         internal static void SetWindowTitle(string profileName = "")
         {

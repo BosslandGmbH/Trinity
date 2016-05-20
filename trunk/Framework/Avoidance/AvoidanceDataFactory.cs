@@ -156,6 +156,26 @@ namespace Trinity.Framework.Avoidance
                 }
             });
 
+            //[22017F4C] Type: ClientEffect Name: x1_sniperAngel_shardBolt_orb-3273 ActorSnoId: 333688, Distance: 20.05622
+            // 
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Exarch Lightning Storm",
+                IsEnabledByDefault = false,
+                Element = Element.Lightning,
+                Handler = new CircularAvoidanceHandler(),
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Lightning Storm",
+                        ActorSnoId = (int)SNOActor.x1_sniperAngel_shardBolt_orb,
+                        Radius = 18f,
+                        Type = PartType.Main,
+                    },
+                }
+            });
+
             // Raizeil GR Boss
             //[206427B0] Type: Monster Name: Generic_Proxy-34948 ActorSnoId: 4176, Distance: 0
             //[206725C4] Type: ClientEffect Name: � ActorSnoId: 255720, Distance: 6.180007

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Movement;
 using Trinity.Reference;
@@ -73,6 +74,15 @@ namespace Trinity.Combat.Abilities
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
             }
 
+            if (IsCurrentlyAvoiding)
+            {
+                if (CanCast(SNOPower.Witchdoctor_SpiritWalk))
+                    return new TrinityPower(SNOPower.Witchdoctor_SpiritWalk);
+
+                Logger.Log(LogCategory.Routine, "Avoiding, returning no power");
+                return null;
+            }
+
             if (CurrentTarget != null)
             {
                 // Zombie Dogs
@@ -95,10 +105,17 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // Soul Harvest
-                if (CanCast(SNOPower.Witchdoctor_SoulHarvest) &&
-                    (TargetUtil.AnyElitesInRange(12) || TargetUtil.AnyMobsInRange(12, 2) || TargetUtil.IsEliteTargetInRange(12f)))
+                if (CanCast(SNOPower.Witchdoctor_SoulHarvest) && !IsCurrentlyAvoiding)
                 {
-                    return new TrinityPower(SNOPower.Witchdoctor_SoulHarvest);
+                    if (TargetUtil.ClusterExists(3, 12f))
+                    {
+                        Logger.Log(LogCategory.Routine, "Im going in to harvest! 4/12");
+                        MoveToSoulHarvestPoint(Enemies.BestCluster);
+                    }
+                    else if(TargetUtil.AnyElitesInRange(12f) || TargetUtil.AnyMobsInRange(10f, 2))
+                    {
+                        return new TrinityPower(SNOPower.Witchdoctor_SoulHarvest);
+                    }
                 }
 
                 // Wall of Zombies
@@ -122,23 +139,33 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // Spirit walk to a safe spot to cast stuff
-                var safeWalkPoint = GetSafeSpotPosition(45f);
+                var safeWalkPoint = Core.Avoidance.Avoider.SafeSpot; //GetSafeSpotPosition(45f);
                 if (CanCast(SNOPower.Witchdoctor_SpiritWalk))
                 {
-                    Logger.Log(LogCategory.Routine, "Tryna get to safe point!");
+                    Logger.Log(LogCategory.Routine, "Tryna spiritwalk to to safe point!");
                     return new TrinityPower(SNOPower.Witchdoctor_SpiritWalk, 45f, safeWalkPoint);
                 }
 
-                Logger.Log(LogCategory.Routine, "Tryna get to safe point!");
-                return new TrinityPower(SNOPower.Walk, 45f, safeWalkPoint);
-            }
-
-            // If we can't cast we go to a safe spot and stay there
-            if (IsNull(null) && !Player.IsInTown &&
-                 !Player.IsCastingTownPortalOrTeleport() && TargetUtil.AnyMobsInRange(60f))
-            {
-                var safeSpot = GetSafeSpotPosition(45f);
-                power = new TrinityPower(SNOPower.Walk, 45f, safeSpot);
+                if (CurrentTarget.IsUnit)
+                {
+                    // Move to a safespot near the target.
+                    Vector3 safePositionNearTarget;
+                    var maxDistance = Math.Max(60f, CurrentTarget.CollisionRadius + KiteDistance);
+                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out safePositionNearTarget, 10f, maxDistance, CurrentTarget.Position))
+                    {
+                        Logger.Log(LogCategory.Routine, $"Moving to safe point near {CurrentTarget.Unit.Name}");
+                        power = new TrinityPower(SNOPower.Walk, 45f, safePositionNearTarget);
+                    }
+                    else
+                    {
+                        // Move to any safespot
+                        if (TargetUtil.AnyMobsInRange(KiteDistance))
+                        {
+                            Logger.Log(LogCategory.Routine, "Tryna get to safe point!");
+                            return new TrinityPower(SNOPower.Walk, 45f, CurrentTarget.Position);
+                        }
+                    }
+                }
             }
 
             return power;
@@ -951,14 +978,21 @@ namespace Trinity.Combat.Abilities
         {
             CombatMovement.Queue(new CombatMovement
             {
-                Name = "Jade Harvest Position",
-                Destination = area.Position,
+                Name = "Jade Harvest Position",                
+                Destination = area.Position,                
+                StopCondition = m =>
+                {
+                    return !CanCast(SNOPower.Witchdoctor_SoulHarvest) || PlayerMover.IsBlocked;
+                },
                 OnUpdate = m =>
                 {
                     // Only change destination if the new target is way better
                     if (IdealSoulHarvestCriteria(Enemies.BestLargeCluster) &&
                         Enemies.BestLargeCluster.Position.Distance(m.Destination) > 10f)
                         m.Destination = Enemies.BestLargeCluster.Position;
+
+                    if (TargetUtil.NumMobsInRange(12f) >= 4 && Skills.WitchDoctor.SoulHarvest.CanCast())
+                        Skills.WitchDoctor.SoulHarvest.Cast();
                 },
                 OnFinished = m =>
                 {
@@ -969,7 +1003,8 @@ namespace Trinity.Combat.Abilities
                     }
                 },
                 Options = new CombatMovementOptions
-                {
+                {                    
+                    AcceptableDistance = 10f,
                     Logging = LogLevel.Verbose,
                 }
             });

@@ -126,20 +126,26 @@ namespace Trinity
 
                     if (Core.Avoidance.Avoider.ShouldAvoid)
                     {
+                        Logger.Log(LogCategory.Avoidance, $"Avoid now!");
+
                         Vector3 safespot;
                         if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot))
                         {
+                            Logger.Log(LogCategory.Avoidance, $"Safespot found: {safespot}");
+
                             // Don't avoid when we need to goblin kamakazi or interact with a door etc
                             var highPriorityObject = ObjectCache.OrderBy(o => o.Weight).FirstOrDefault();
                             if ((highPriorityObject == null || highPriorityObject.Type != TrinityObjectType.Barricade && highPriorityObject.Type != TrinityObjectType.Door) && !CombatBase.IsDoingGoblinKamakazi)
-                            {
+                            {                                
                                 if (Core.Avoidance.Grid.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance) || Player.CurrentHealthPct < 0.9 || highPriorityObject == null || !highPriorityObject.IsUnit || CombatBase.CurrentPower.MinimumRange > highPriorityObject.Distance)
-                                {
+                                {                                    
+                                    var distance = safespot.Distance(Player.Position);
+                                    Logger.Log(LogCategory.Avoidance, $"Targetted SafeSpot Distance={distance}");
                                     CurrentTarget = new TrinityCacheObject()
                                     {
                                         Position = safespot,
                                         Type = TrinityObjectType.Avoidance,
-                                        Distance = safespot.Distance(Player.Position),
+                                        Distance = distance,
                                         Radius = 3.5f,
                                         InternalName = "Avoidance Safespot",
                                         IsSafeSpot = true,
@@ -170,26 +176,29 @@ namespace Trinity
                         return GetRunStatus(RunStatus.Success, "RevivingPlayer");
                     }
 
-
-                    RunStatus runStatus;
-                    if (ThrottleActionPerSecond(out runStatus)) //Settings.Advanced.ThrottleAPS && 
-                        return runStatus;
-
-                    VacuumItems.Execute();               
-
-                    // Make sure we reset unstucker stuff here
-                    PlayerMover.TimesReachedStuckPoint = 0;
-                    PlayerMover.vSafeMovementLocation = Vector3.Zero;
-                    PlayerMover.TimeLastRecordedPosition = DateTime.UtcNow;
-
-                    // Time based wait delay for certain powers with animations
-                    if (CombatBase.CurrentPower != null)
+                    if (!Core.Avoidance.Avoider.IsAvoiding)
                     {
-                        if (CombatBase.CurrentPower.ShouldWaitAfterUse && _isWaitingAfterPower || _isWaitingBeforePower && CombatBase.CurrentPower.ShouldWaitBeforeUse) {
-                            var type = _isWaitingAfterPower ? "IsWaitingAfterPower" : "IsWaitingBeforePower";
-                            _waitedTicks++;
-                            Logger.LogVerbose($"Waiting... {type} Power={CombatBase.CurrentPower.SNOPower} TicksWaited={_waitedTicks}");
-                            return GetRunStatus(RunStatus.Running, type);
+                        RunStatus runStatus;
+                        if (ThrottleActionPerSecond(out runStatus)) //Settings.Advanced.ThrottleAPS && 
+                            return runStatus;
+
+                        VacuumItems.Execute();
+
+                        // Make sure we reset unstucker stuff here
+                        PlayerMover.TimesReachedStuckPoint = 0;
+                        PlayerMover.vSafeMovementLocation = Vector3.Zero;
+                        PlayerMover.TimeLastRecordedPosition = DateTime.UtcNow;
+
+                        // Time based wait delay for certain powers with animations
+                        if (CombatBase.CurrentPower != null)
+                        {
+                            if (CombatBase.CurrentPower.ShouldWaitAfterUse && _isWaitingAfterPower || _isWaitingBeforePower && CombatBase.CurrentPower.ShouldWaitBeforeUse)
+                            {
+                                var type = _isWaitingAfterPower ? "IsWaitingAfterPower" : "IsWaitingBeforePower";
+                                _waitedTicks++;
+                                Logger.LogVerbose($"Waiting... {type} Power={CombatBase.CurrentPower.SNOPower} TicksWaited={_waitedTicks}");
+                                return GetRunStatus(RunStatus.Running, type);
+                            }
                         }
                     }
 
@@ -230,23 +239,26 @@ namespace Trinity
                     _isWaitingAfterPower = false;
                     _isWaitingBeforePower = false;
 
-                    if (!_isWaitingForPower && !_isWaitingBeforePower && (CombatBase.CurrentPower == null || CombatBase.CurrentPower.SNOPower == SNOPower.None) && CurrentTarget != null)
+                    if (!Core.Avoidance.Avoider.IsAvoiding)
                     {
-                        CombatBase.CurrentPower = AbilitySelector();
 
-                        if (CombatBase.CurrentPower.SNOPower == SNOPower.None)
+                        if (!_isWaitingForPower && !_isWaitingBeforePower && (CombatBase.CurrentPower == null || CombatBase.CurrentPower.SNOPower == SNOPower.None) && CurrentTarget != null)
                         {
-                            Logger.LogVerbose(LogCategory.Behavior, "SNOPower.None selected from combat routine :S");
-                            _shouldPickNewAbilities = true;
-                        }
-                            
-                    }
-                    else
-                    {
-                        Logger.LogVerbose(LogCategory.Behavior, "Not Selecting Ability WaitingForPower={0} WaitingBeforePower={1} CurrentPower={2} CurrentTarget={3}",
-                            _isWaitingForPower, _isWaitingBeforePower, CombatBase.CurrentPower, CurrentTarget);
-                    }
+                            CombatBase.CurrentPower = AbilitySelector();
 
+                            if (CombatBase.CurrentPower.SNOPower == SNOPower.None)
+                            {
+                                Logger.LogVerbose(LogCategory.Behavior, "SNOPower.None selected from combat routine :S");
+                                _shouldPickNewAbilities = true;
+                            }
+
+                        }
+                        else
+                        {
+                            Logger.LogVerbose(LogCategory.Behavior, "Not Selecting Ability WaitingForPower={0} WaitingBeforePower={1} CurrentPower={2} CurrentTarget={3}",
+                                _isWaitingForPower, _isWaitingBeforePower, CombatBase.CurrentPower, CurrentTarget);
+                        }
+                    }
 
                     // Prevent running away after progression globes spawn if they're in aoe
                     if (Player.IsInRift && !Core.Avoidance.Avoider.IsAvoiding)
@@ -347,7 +359,7 @@ namespace Trinity
                         if ((CurrentTarget.Type == TrinityObjectType.Avoidance || CurrentTarget.IsSafeSpot) && !CurrentTarget.IsWaitSpot )
                         {
                             powerBuff = AbilitySelector(true);
-                            if (powerBuff.SNOPower != SNOPower.None)
+                            if (powerBuff != null && powerBuff.SNOPower != SNOPower.None)
                             {
                                 Logger.LogVerbose(LogCategory.Behavior, "HandleTarget: Casting {0} for Avoidance", powerBuff.SNOPower);
 
@@ -1325,9 +1337,12 @@ namespace Trinity
                 // Now for the actual movement request stuff
                 IsAlreadyMoving = true;
                 lastMovementCommand = DateTime.UtcNow;
-
+                
                 if (DateTime.UtcNow.Subtract(lastSentMovePower).TotalMilliseconds >= 250 || Vector3.Distance(LastMoveToTarget, CurrentDestination) >= 2f || bForceNewMovement)
                 {
+
+                    if(CurrentTarget.IsSafeSpot)
+                        Logger.Log(LogCategory.Avoidance, $"Moving to SafeSpot Distance={CurrentTarget.Distance}");
 
                     var distance = CurrentDestination.Distance(Player.Position);
                     var straightLinePathing = !DataDictionary.StraightLinePathingLevelAreaIds.Contains(Player.LevelAreaId) && distance <= 35f && !PlayerMover.IsBlocked && !Navigator.StuckHandler.IsStuck && NavHelper.CanRayCast(CurrentDestination);
@@ -1623,10 +1638,10 @@ namespace Trinity
                     
 
                 // For "no-attack" logic
-                if (CombatBase.CurrentPower.SNOPower == SNOPower.Walk && CombatBase.CurrentPower.TargetPosition == Vector3.Zero)
+                if (CombatBase.CurrentPower.SNOPower == SNOPower.Walk && (CombatBase.CurrentPower.TargetPosition == Vector3.Zero || CombatBase.CurrentPower.TargetPosition.Distance2D(ZetaDia.Me.Position) < 3f))
                 {
                     Logger.LogVerbose(LogCategory.Behavior, "Using no-attack logic");
-                    Navigator.PlayerMover.MoveStop();
+                    //Navigator.PlayerMover.MoveStop();
                     usePowerResult = true;
                 }
                 else

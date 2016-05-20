@@ -265,11 +265,14 @@ namespace Trinity.Combat.Abilities
                 return new TrinityPower(SNOPower.Monk_Serenity);
             }
 
-            if (IsWolMonk)
-                return GetWolPower();
+            if (!IsCurrentlyAvoiding)
+            {
+                if (IsWolMonk)
+                    return GetWolPower();
 
-            if (IsInnasEP)
-                return GetInnasPower();
+                if (IsInnasEP)
+                    return GetInnasPower();
+            }
 
             // Destructible objects
             if (UseDestructiblePower)

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
@@ -109,8 +110,11 @@ namespace Trinity.Movement
             _suspectedStuckPosition = ZetaDia.Me.Position;
         }
 
-        private void Reset()
+        public void Reset(string reason = default(string))
         {
+            if(!string.IsNullOrEmpty(reason))
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: {reason}");
+
             _isStuck = false;
             _isSuspectedStuck = false;
             _stuckPosition = Vector3.Zero;
@@ -159,6 +163,19 @@ namespace Trinity.Movement
                 return true;
             }
 
+            if (Core.Avoidance.Avoider.IsAvoiding)
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Currently Avoiding");
+                return false;
+            }
+
+            var isWaiting = CombatBase.CurrentTarget != null && CombatBase.CurrentPower.SNOPower == SNOPower.Walk && PlayerMover.MovementSpeed < 4 && Core.Grids.CanRayWalk(ZetaDia.Me.Position, CombatBase.CurrentTarget.Position);
+            if (isWaiting)
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Waiting (Routine Walk)");
+                return false;
+            }
+          
             var secondsSincePowerUse = DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds;
             if (secondsSincePowerUse < 4 && !_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && CombatBase.IsInCombat)
             {
