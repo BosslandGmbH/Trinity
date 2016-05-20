@@ -95,7 +95,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (!Skills.Wizard.Archon.CanCast() || Skills.Wizard.ArchonBlast.CanCast())
                     return false;
 
-                if (Player.PrimaryResourcePct < 0.20)
+                if (Player.PrimaryResourcePct < 0.20 ||
+                    CacheData.Buffs.GetBuffTimeRemainingMilliseconds(SNOPower.Wizard_Archon) < 1500)
                     return true;
 
                 if (Sets.ChantodosResolve.IsFullyEquipped)
