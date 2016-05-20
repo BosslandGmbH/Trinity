@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Trinity.Reference;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
+namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
 {
-    partial class Monk : CombatBase
+    partial class Crusader : CombatBase
     {
+        public static bool IsBombardment = Sets.LegacyOfNightmares.IsEquipped && Skills.Crusader.Bombardment.IsActive;
         public static bool IszDPS
         {
             get
@@ -20,6 +21,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             }
         }
 
+        public static bool IsSteedCharging
+        {
+            get { return DataDictionary.SteedChargeAnimations.Contains(Player.CurrentAnimation); }
+        }
+
         public static TrinityPower GetPower()
         {
             if (Player.IsInTown)
@@ -27,8 +33,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             TrinityPower power = Unconditional.PowerSelector();
             if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
             {
-                if (IszDPS)
-                    power = ZDps.PowerSelector();
+                if (IsBombardment)
+                    return LegacyOfNightmares.PowerSelector();
 
                 if (power == null) power = new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestWalkLocation);
             }
