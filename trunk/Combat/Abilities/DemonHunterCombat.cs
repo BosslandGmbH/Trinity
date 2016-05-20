@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Trinity.Config.Combat;
+using Trinity.Framework;
 using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Technicals;
@@ -653,18 +654,19 @@ namespace Trinity.Combat.Abilities
         {           
             var closestUnit = TargetUtil.GetClosestUnit();
             var combatRange = SkillUtils.Active.Where(s => s.IsAttackSpender || s.IsGeneratorOrPrimary).Min(s => s.Meta.CastRange);
-            var closestUnitDistance = closestUnit != null ? closestUnit.Distance : 10;
+            var closestUnitDistance = closestUnit?.Distance ?? 10;
             var maxDistance = combatRange - closestUnitDistance;
             
             // Try not to vault too far away or we'll have to walk back into range to attack.
-            meta.TargetPositionSelector = ret => NavHelper.KitePoint(Player.Position, 10f, maxDistance);
+            meta.TargetPositionSelector = ret => Core.Avoidance.Avoider.SafeSpot; // NavHelper.KitePoint(Player.Position, 10f, maxDistance);
             meta.CastRange = 80f;
+
             // keep a larger reserve if we might need to cast shadowpower             
             meta.RequiredResource = Hotbar.Contains(SNOPower.DemonHunter_ShadowPower) ? 22 : 16; 
             meta.ReUseDelay = Settings.Combat.DemonHunter.VaultMovementDelay;
             
             // Vaulting around with no reason wastes time that could be spent damaging stuff.
-            if ((closestUnitDistance > combatRange || closestUnitDistance > KiteDistance) && Player.CurrentHealthPct > 0.85 && !IsCurrentlyAvoiding)
+            if ((closestUnitDistance > combatRange || closestUnitDistance <= KiteDistance) && Player.CurrentHealthPct > 0.85 && !IsCurrentlyAvoiding)
                 return false;
 
             if (Settings.Combat.DemonHunter.VaultMode == DemonHunterVaultMode.MovementOnly && (IsInCombat || ZetaDia.Me.IsInCombat))

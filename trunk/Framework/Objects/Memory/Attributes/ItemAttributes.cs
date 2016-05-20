@@ -64,6 +64,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         public int Strength => GetCachedAttribute<int>(ActorAttributeType.StrengthItem); // StrengthItem (-2900) = i:1148354560 f:970 v:970 ModifierType=None Modifier=-1 
         public int Intelligence => GetCachedAttribute<int>(ActorAttributeType.IntelligenceItem);
         public int Dexterity => GetCachedAttribute<int>(ActorAttributeType.DexterityItem);
+        public GemQuality GemQuality => GetCachedAttribute<GemQuality>(ActorAttributeType.GemQuality);
         public float BlockAmountItemDelta => GetCachedAttribute<float>(ActorAttributeType.BlockAmountItemDelta); // BlockAmountItemDelta (-3825) = i:1171529728 f:6788 v:6788 ModifierType=None Modifier=-1 
         public float BlockAmountItemMin => GetCachedAttribute<float>(ActorAttributeType.BlockAmountItemMin); // BlockAmountItemMin (-3826) = i:1185865728 f:22384 v:22384 ModifierType=None Modifier=-1 
         public float BlockChanceItemTotal => GetCachedAttribute<float>(ActorAttributeType.BlockChanceItemTotal); // BlockChanceItemTotal (-3833) = i:1047904256 f:0.2399902 v:0.2399902 ModifierType=None Modifier=-1 

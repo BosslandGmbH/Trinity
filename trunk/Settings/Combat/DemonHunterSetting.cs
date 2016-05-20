@@ -992,7 +992,7 @@ namespace Trinity.Config.Combat
         }
         
         [DataMember(IsRequired = false)]
-        [DefaultValue(400)]
+        [DefaultValue(800)]
         public int VaultMovementDelay
         {
             get
