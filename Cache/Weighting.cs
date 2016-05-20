@@ -660,17 +660,19 @@ namespace Trinity
 
                                     if (Player.IsInTown)
                                     {
-                                        if (Settings.Loot.Pickup.DontPickupInTown)
+                                        var cachedItem = ActorManager.GetItemByAnnId(cacheObject.AnnId);                                        
+                                        if (cachedItem != null)
                                         {
-                                            cacheObject.WeightInfo += $"Ignoring DontPickUpInTown Setting.";
-                                            break;
-                                        }
-
-                                        var testItem = ActorManager.GetItemByAnnId(cacheObject.AnnId);
-                                        if (testItem == null || !testItem.CanPickupItem())
-                                        {
-                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - unable to pickup.";
-                                            break;
+                                            if (Settings.Loot.Pickup.DontPickupInTown && !cachedItem.IsItemAssigned)
+                                            {
+                                                cacheObject.WeightInfo += $"Ignoring DontPickUpInTown Setting.";
+                                                break;
+                                            }
+                                            if (!cachedItem.CanPickupItem())
+                                            {
+                                                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - unable to pickup.";
+                                                break;
+                                            }
                                         }
                                     }
 

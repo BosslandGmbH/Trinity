@@ -68,6 +68,11 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             DragInitialPosition = Mouse.GetPosition(this);
             DragInitialPanOffset = CanvasData.PanOffset;
 
+            //HandleMapClicked(sender, e);
+        }
+
+        private void HandleMapClicked(object sender, MouseButtonEventArgs e)
+        {
             var clickedWorldPosition = PointMorph.GetWorldPosition(DragInitialPosition, CanvasData);
 
             Logger.Log($"Clicked World Position = {clickedWorldPosition}, Distance={clickedWorldPosition.Distance(ZetaDia.Me.Position)}");
@@ -83,11 +88,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             var node = Core.Avoidance.Grid.GetNearestNode(clickedWorldPosition);
             SelectedItem = new TrinityCacheObject
             {
-                InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int)clickedWorldPosition.X},{(int)clickedWorldPosition.Y}]",
+                InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int) clickedWorldPosition.X},{(int) clickedWorldPosition.Y}]",
                 Distance = clickedWorldPosition.Distance(ZetaDia.Me.Position),
                 Position = clickedWorldPosition,
             };
-                                                      
         }
 
         private RadarHitTestUtility.HitContainer FindElementUnderClick(object sender, MouseEventArgs e)
@@ -129,6 +133,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             IsMouseDown = false;
             Cursor = Cursors.Arrow;
             CanvasData.PanOffset = DragOffset;
+
+            HandleMapClicked(sender, e);
         }
 
         private void Clear()

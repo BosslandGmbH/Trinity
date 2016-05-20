@@ -160,6 +160,7 @@ namespace Trinity.Framework.Actors
             MaxStackCount = gbi.StackSize;
             GemType = gbi.GemType;
             RawItemType = (RawItemType)gbi.ItemTypesGameBalanceId;
+            GemQuality = Attributes.GemQuality;
             ItemType = TypeConversions.GetItemType(RawItemType);
             ItemBaseType = TypeConversions.GetItemBaseType(ItemType);
             TrinityItemType = TypeConversions.GetTrinityItemType(RawItemType, GemType);
@@ -349,7 +350,6 @@ namespace Trinity.Framework.Actors
                 return Attributes.ItemBoundToACD == ZetaDia.ActivePlayerACDId;
             }
 
-            // Items that are not visible to others - like loot from bounty caches
             if (Attributes.ItemAssignedHero == ZetaDia.Service.Hero.HeroId)
             {
                 return true;
@@ -368,6 +368,10 @@ namespace Trinity.Framework.Actors
             return false;
         }
 
+        /// <summary>
+        /// Items that are not visible to others - like loot from bounty caches
+        /// </summary>
+        public bool IsItemAssigned => Attributes.ItemBoundToACD == 0 && Attributes.ItemAssignedHero == ZetaDia.Service.Hero.HeroId;
     }
 }
 

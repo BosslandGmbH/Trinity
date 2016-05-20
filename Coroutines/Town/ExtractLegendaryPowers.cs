@@ -130,6 +130,9 @@ namespace Trinity.Coroutines.Town
                 if (!item.IsValid)
                     continue;
 
+                if (item.TrinityItemType == TrinityItemType.HealthPotion)
+                    continue;
+
                 if (item.FollowerSpecialType != FollowerType.None)
                     continue;
 

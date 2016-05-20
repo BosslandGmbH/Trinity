@@ -295,11 +295,17 @@ namespace Trinity.Movement
                    !CacheData.MonsterObstacles.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance)))))
             {
 
+                //Logger.Log($"Casting vault OOC timeSinceUse={timeSinceUse} vaultDelay={vaultDelay}");
+
                 // Prevent the bot from vaulting back and forth over and item without being able to pick it up.
                 if (CombatBase.CurrentTarget?.Type == TrinityObjectType.Item && destinationDistance < 20f)
                     return false;
 
-                if (destination == Vector3.Zero)
+                if (destination == Vector3.Zero || destinationDistance < 10f)
+                    return false;
+
+                // Prevent trying to vault up walls; spider man he is not.
+                if (Math.Abs(destination.Z - TrinityPlugin.Player.Position.Z) > 5)
                     return false;
 
                 Skills.DemonHunter.Vault.Cast(destination);
@@ -325,22 +331,10 @@ namespace Trinity.Movement
             // Dashing Strike OOC
             if (CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike))
             {
-                //if (destinationDistance < MinDistance) return false;
-                //var movementRange = 35f;
-                //if (destinationDistance > movementRange)
-                //    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
-                //if (destination == Vector3.Zero)
-                //    return false;
-
-                //var charges = Skills.Monk.DashingStrike.Charges;
-                //if (charges <= 0) return false;
-
-                //if (HasInGeomBuff || Sets.ThousandStorms.IsSecondBonusActive && (TrinityPlugin.Player.PrimaryResource >= 75 || CacheData.BuffsCache.Instance.HasCastingShrine))
-                //{
-                //    Skills.Monk.DashingStrike.Cast(destination);
-                //    LogMovement(SNOPower.X1_Monk_DashingStrike, destination);
-                //    return true;
-                //}
+                var timeSinceUse = SpellHistory.TimeSinceUse(SNOPower.X1_Monk_DashingStrike).TotalMilliseconds;
+                var dashDelaySetting = TrinityPlugin.Settings.Combat.Monk.DashingStrikeDelay;
+                if (timeSinceUse < dashDelaySetting)
+                    return false;
 
                 var charges = Skills.Monk.DashingStrike.Charges;
                 if (charges <= 0) return false;
@@ -451,12 +445,13 @@ namespace Trinity.Movement
             var destinationDistance = destination.Distance(CacheData.Player.Position);
             if (destinationDistance < MinDistance) return false;
 
-           // const float movementRange = 50f;
+            // const float movementRange = 50f;
             //if (destinationDistance > movementRange)
             //    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
 
-            //if (destination == Vector3.Zero || PlayerMover.MyPosition.Distance(destination) < 20)
-            //    return false;
+            // Prevent bot from teleporting very short distance/on top of itself
+            if (destination == Vector3.Zero || PlayerMover.MyPosition.Distance(destination) < 20)
+                return false;
 
             // Teleport for a wizard 
             if (CombatBase.CanCast(SNOPower.Wizard_Teleport, CombatBase.CanCastFlags.NoTimer) &&

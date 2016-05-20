@@ -88,7 +88,7 @@ namespace Trinity.Combat.Abilities
 
         public static DateTime GetSpellLastused(SNOPower power = SNOPower.None)
         {
-            DateTime lastUsed;
+            DateTime lastUsed = DateTime.MinValue;
             if (power == SNOPower.None && CacheData.AbilityLastUsed.Any())
             {
                 var pair = CacheData.AbilityLastUsed.LastOrDefault();

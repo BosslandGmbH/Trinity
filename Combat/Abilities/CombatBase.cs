@@ -641,9 +641,7 @@ namespace Trinity.Combat.Abilities
         /// <returns></returns>
         internal static double TimeSincePowerUse(SNOPower power)
         {
-            if (CacheData.AbilityLastUsed.ContainsKey(power))
-                return DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[power]).TotalMilliseconds;
-            return -1;
+            return SpellHistory.TimeSinceUse(power).TotalMilliseconds;
         }
 
         internal static bool WasUsedWithinMilliseconds(SNOPower power, float timeMs)
