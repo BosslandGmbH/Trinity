@@ -26,6 +26,8 @@ namespace Trinity.Technicals
             set { prefix = value; }
         }
 
+
+
         private static readonly Dictionary<Tuple<LogCategory, TrinityLogLevel>, string> LastLogMessages = new Dictionary<Tuple<LogCategory, TrinityLogLevel>, string>();
 
         /// <summary>Logs the specified level.</summary>
@@ -35,8 +37,10 @@ namespace Trinity.Technicals
         /// <param name="args">The parameters used when format message.</param>
         public static void Log(TrinityLogLevel level, LogCategory category, string formatMessage, params object[] args)
         {
-            if (string.IsNullOrEmpty(prefix))
-                prefix = string.Format("[Trinity {0}]", TrinityPlugin.Instance.Version);
+            if (string.IsNullOrEmpty(prefix) && TrinityPlugin.Settings != null)
+            {
+                UpdatePrefix();
+            }
 
             if (category == LogCategory.UserInformation || level >= TrinityLogLevel.Error || (TrinityPlugin.Settings != null && TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(category)))
             {
@@ -80,6 +84,12 @@ namespace Trinity.Technicals
                     }
                 }
             }
+        }
+
+        public static void UpdatePrefix()
+        {
+            var pluginStamp = TrinityPlugin.Settings.Advanced.PhelonsPlayground ? "Trinity:PP" : "Trinity";
+            prefix = $"[{pluginStamp} {TrinityPlugin.Instance.Version}]";
         }
 
         public static void Log(TrinityLogLevel level, string formatMessage, params object[] args)

@@ -386,7 +386,9 @@ namespace Trinity.Config
                     File.Delete(OldBattleTagSettingsFile);
                 }
 
-            }            
+            }
+
+            Logger.UpdatePrefix();
         }
 
         public void FireOnLoadedEvents()
@@ -496,6 +498,7 @@ namespace Trinity.Config
                 });
 
             }
+            Logger.UpdatePrefix();
         }
 
         public void FireOnSaveEvents()

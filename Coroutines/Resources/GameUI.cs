@@ -1,7 +1,10 @@
 ﻿using System;
 using Trinity.Config.Combat;
+using Trinity.Framework;
+using Trinity.Movement;
 using Trinity.Technicals;
 using Zeta.Bot;
+using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
 
@@ -362,6 +365,7 @@ namespace TrinityCoroutines.Resources
                 GameEvents.FireWorldTransferStart();
 
             Logger.Log("Clicking UI element {0} ({1})", name, element.BaseAddress);
+            Core.StuckHandler.Reset("Clicked UI Element");
             element.Click();
             return true;
         }
