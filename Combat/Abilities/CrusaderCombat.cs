@@ -396,7 +396,7 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // SteedSpam DMG MOVE
-                if (IsSteedCharging && !Core.Avoidance.Avoider.IsAvoiding)
+                if (IsSteedCharging && !IsCurrentlyAvoiding)
                 {
                     //Logger.Log("Steed Charge Damage");
                     return new TrinityPower(SNOPower.Walk, 20f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 35f, true), TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);

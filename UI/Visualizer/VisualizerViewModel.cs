@@ -217,7 +217,6 @@ namespace Trinity.UI.RadarUI
                 PlayerRotation = MathUtil.RadianToDegree(Player.RotationRadians);
 
                 IsStuck = Navigator.StuckHandler.IsStuck;
-                IsAvoiding = Core.Avoidance.Avoider.IsAvoiding;
                 IsBlocked = PlayerMover.IsBlocked;
                 OnPropertyChanged(nameof(Player));
 

@@ -163,9 +163,15 @@ namespace Trinity.Movement
                 return true;
             }
 
-            if (Core.Avoidance.Avoider.IsAvoiding)
+            if (CombatBase.IsCurrentlyAvoiding)
             {
                 Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Currently Avoiding");
+                return false;
+            }
+
+            if (CombatBase.IsCurrentlyKiting)
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Currently Kiting");
                 return false;
             }
 

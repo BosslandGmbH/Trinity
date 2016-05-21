@@ -39,7 +39,12 @@ namespace Trinity.DbProvider
 
         public bool IsAvoiding
         {
-            get { return Core.Avoidance.Avoider.IsAvoiding; }
+            get { return CombatBase.IsCurrentlyAvoiding; }
+        }
+
+        public bool IsKiting
+        {
+            get { return CombatBase.IsCurrentlyKiting; }
         }
     }
 }

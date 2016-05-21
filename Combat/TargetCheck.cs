@@ -56,28 +56,37 @@ namespace Trinity
 
                 ClearBlacklists();
 
+                if (Core.Avoidance.Avoider.ShouldAvoid && (Settings.Avoidance.AvoidOutsideCombat || Core.Avoidance.Grid.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance)))
+                {
+                    Logger.Log(LogCategory.Avoidance, $"Avoid now (Out of Combat)!");
+                    Vector3 safespot;
+                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot) && safespot.Distance(ZetaDia.Me.Position) > 3f)
+                    {
+                        Logger.Log(LogCategory.Avoidance, $"Safespot found: {safespot}");
+
+                        if (CurrentTarget == null || CurrentTarget.Type != TrinityObjectType.Barricade && CurrentTarget.Type != TrinityObjectType.Door || Core.Avoidance.Grid.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance))
+                        {
+                            var distance = safespot.Distance(Player.Position);
+                            Logger.Log(LogCategory.Avoidance, $"Targetted SafeSpot Distance={distance}");
+                            CurrentTarget = new TrinityCacheObject()
+                            {
+                                Position = safespot,
+                                Type = TrinityObjectType.Avoidance,
+                                Distance = distance,
+                                Radius = 3.5f,
+                                InternalName = "Avoidance Safespot",
+                                IsSafeSpot = true,
+                                Weight = Weighting.MaxWeight
+                            };
+                        }
+                    }
+                }
+
                 // We have a target, start the target handler!
                 if (CurrentTarget != null)
                 {
                     _shouldPickNewAbilities = true;
                     return TargetCheckResult(true, "Current Target is not null");
-                }
-
-                if (Core.Avoidance.Avoider.ShouldAvoid && (Settings.Avoidance.AvoidOutsideCombat || Core.Avoidance.Grid.IsPathingOverFlags(AvoidanceFlags.CriticalAvoidance)))
-                {
-                    Vector3 safespot;
-                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot))
-                    {
-                        CurrentTarget = new TrinityCacheObject()
-                        {
-                            Position = safespot,
-                            Type = TrinityObjectType.Avoidance,
-                            Distance = safespot.Distance(Player.Position),
-                            Radius = 3.5f,
-                            InternalName = "Avoidance Safespot",
-                            IsSafeSpot = true
-                        };
-                    }
                 }
 
                 MonkCombat.RunOngoingPowers();

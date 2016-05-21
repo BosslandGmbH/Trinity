@@ -569,6 +569,13 @@ namespace Trinity.Framework.Avoidance
                         Animation = SNOAnim.Diablo_charge_attack,
                         Type = PartType.ActorAnimation,
                         Radius = 40f
+                    },                    
+                    new AvoidancePart
+                    {
+                        Name = "Butcher Charge",
+                        Animation = SNOAnim.Butcher_Attack_Charge_01_in,
+                        Type = PartType.ActorAnimation,
+                        Radius = 40f
                     },
                     new AvoidancePart
                     {

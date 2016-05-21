@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Trinity.Combat.Abilities;
 using Trinity.Config.Combat;
 using Trinity.DbProvider;
+using Trinity.Framework;
+using Trinity.Framework.Avoidance.Structures;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
@@ -29,6 +31,12 @@ namespace Trinity.Movement
 
             if (DateTime.UtcNow.Subtract(LastSpecialMovement).TotalMilliseconds < MinimumTimeBetweenSpecialMovement)
                 return false;
+
+            if (CombatBase.IsCurrentlyKiting)
+            {
+                Logger.Log("Not Special Move Due to Kite");
+                return false;
+            }
 
             bool result;
             switch (CacheData.Player.ActorClass)
@@ -270,7 +278,14 @@ namespace Trinity.Movement
             if (TrinityPlugin.Settings.Combat.DemonHunter.VaultMode == DemonHunterVaultMode.MovementOnly && CombatBase.IsInCombat)
                 return false;
 
-            if (TrinityPlugin.Settings.Combat.DemonHunter.VaultMode == DemonHunterVaultMode.CombatOnly && !CombatBase.IsInCombat)
+            // todo: bring over combat vaulting logic from DemonHunter routine.
+            if (CombatBase.IsInCombat)
+                return false;
+
+            if (destination == Vector3.Zero)
+                return false;
+            
+            if (!Core.Avoidance.InCriticalAvoidance(destination) && Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, destination, AvoidanceFlags.CriticalAvoidance))
                 return false;
 
             int vaultDelay = TrinityPlugin.Settings.Combat.DemonHunter.VaultMovementDelay;
@@ -282,6 +297,7 @@ namespace Trinity.Movement
                 : Runes.DemonHunter.Tumble.IsActive && Skills.DemonHunter.Vault.TimeSinceUse < 6000
                     ? Math.Round(vaultBaseCost*0.5)
                     : vaultBaseCost;
+
             if (TrinityPlugin.Player.SecondaryResource < vaultCost) return false;
 
             if (DemonHunterCombat.CanAcquireFreeVaultBuff && TrinityPlugin.Player.PrimaryResource > 20)
@@ -291,14 +307,14 @@ namespace Trinity.Movement
                     TrinityPlugin.Player.Rotation));
             }
 
-            if ((timeSinceUse > vaultDelay || isfree && timeSinceUse > 250) &&
-                // Don't Vault into aboolance/monsters if we're kiting
-                (CombatBase.KiteDistance <= 0 ||
-                 (CombatBase.KiteDistance > 0 &&
-                  (!CacheData.TimeBoundAvoidance.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance) ||
-                   !CacheData.TimeBoundAvoidance.Any(
-                       a => MathEx.IntersectsPath(a.Position, a.Radius, TrinityPlugin.Player.Position, destination)) ||
-                   !CacheData.MonsterObstacles.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance)))))
+            if (timeSinceUse > vaultDelay || isfree && timeSinceUse > 250) //&&
+                //// Don't Vault into aboolance/monsters if we're kiting
+                //(CombatBase.KiteDistance <= 0 ||
+                // (CombatBase.KiteDistance > 0 &&
+                //  (!CacheData.TimeBoundAvoidance.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance) ||
+                //   !CacheData.TimeBoundAvoidance.Any(
+                //       a => MathEx.IntersectsPath(a.Position, a.Radius, TrinityPlugin.Player.Position, destination)) ||
+                //   !CacheData.MonsterObstacles.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance)))))
             {
 
                 //Logger.Log($"Casting vault OOC timeSinceUse={timeSinceUse} vaultDelay={vaultDelay}");
