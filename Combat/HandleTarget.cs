@@ -790,7 +790,7 @@ namespace Trinity
                                 CacheData.InteractAttempts[CurrentTarget.RActorGuid] += 1;
                             }
 
-                            var attempts = CurrentTarget.Type == TrinityObjectType.Shrine ? 5 : 15;
+                            var attempts = CurrentTarget.Type == TrinityObjectType.Shrine ? 8 : 15;
 
                             // If we've tried interacting too many times, blacklist this for a while
                             if (CacheData.InteractAttempts[CurrentTarget.RActorGuid] > attempts && CurrentTarget.Type != TrinityObjectType.HealthWell)

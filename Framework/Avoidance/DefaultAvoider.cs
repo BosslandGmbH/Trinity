@@ -115,7 +115,7 @@ namespace Trinity.Framework.Avoidance
                 if (Core.Avoidance.NearbyNodes.Any(n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Gizmo)) && PlayerMover.IsBlocked)
                     return false;
 
-                if (Settings.DontAvoidWhenBlocked && PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 5000)
+                if (Settings.DontAvoidWhenBlocked && PlayerMover.IsCompletelyBlocked && PlayerMover.BlockedTimeMs > 5000)
                 {
                     Logger.Log(LogCategory.Avoidance, "Not Avoiding because blocked");
                     return false;                  
@@ -192,7 +192,7 @@ namespace Trinity.Framework.Avoidance
                     return false;
                 }
 
-                if (Settings.DontAvoidWhenBlocked && PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 5000 && !Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position))
+                if (Settings.DontAvoidWhenBlocked && PlayerMover.IsCompletelyBlocked && PlayerMover.BlockedTimeMs > 5000 && !Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position))
                 {
                     Logger.Log(LogCategory.Avoidance, "Not kiting because blocked");
                     return false;

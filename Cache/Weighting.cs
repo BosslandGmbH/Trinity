@@ -351,29 +351,32 @@ namespace Trinity
                                         }
                                     }
 
-                                    if (healthGlobeEmergency && cacheObject.Type != TrinityObjectType.HealthGlobe)// && !PlayerMover.IsCompletelyBlocked)
+                                    if (healthGlobeEmergency && cacheObject.Type != TrinityObjectType.HealthGlobe && !PlayerMover.IsCompletelyBlocked)
                                     {
-                                        cacheObject.WeightInfo +=
-                                            string.Format("Ignoring {0} for Priority Health Globe",
-                                                cacheObject.InternalName);
+                                        // Many 'bot ignored some elites' complaints are due to priority globe aquisition.
+                                        if (cacheObject.IsBossOrEliteRareUnique && Player.CurrentHealthPct < Math.Min(0.35, Settings.Combat.Misc.HealthGlobeLevel))
+                                        {
+                                            Logger.LogDebug($"Health Globe Emergency Ignoring Elite {cacheObject.InternalName} HealthPct={Player.CurrentHealthPct}");
+                                        }
+                                        else
+                                        {
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for Priority Health Globe";
+                                            break;
+                                        }
+                                    }
+
+                                    if (getHiPriorityShrine && cacheObject.Type != TrinityObjectType.Shrine && !PlayerMover.IsCompletelyBlocked)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for Priority Shrine ";
                                         break;
                                     }
 
-                                    if (getHiPriorityShrine && cacheObject.Type != TrinityObjectType.Shrine)// && !PlayerMover.IsCompletelyBlocked)
+                                    if (getHiPriorityContainer && cacheObject.Type != TrinityObjectType.Container && !PlayerMover.IsCompletelyBlocked)
                                     {
-                                        cacheObject.WeightInfo +=
-                                            string.Format("Ignoring {0} for Priority Shrine ",
-                                                cacheObject.InternalName);
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for Priority Container";
                                         break;
                                     }
 
-                                    if (getHiPriorityContainer && cacheObject.Type != TrinityObjectType.Container)// && !PlayerMover.IsCompletelyBlocked)
-                                    {
-                                        cacheObject.WeightInfo +=
-                                            string.Format("Ignoring {0} for Priority Container",
-                                                cacheObject.InternalName);
-                                        break;
-                                    }
                                     //Monster is in cache but not within kill range
                                     if (!cacheObject.IsBoss && !cacheObject.IsTreasureGoblin &&
                                         LastTargetRactorGUID != cacheObject.RActorGuid &&
@@ -535,7 +538,7 @@ namespace Trinity
                                                     cacheObject.InternalName);
                                             break;
                                         }
-                                        else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize)
+                                        else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize && !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSNO))
                                         {
                                             cacheObject.WeightInfo += $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {CombatBase.CombatOverrides.EffectiveTrashSize})";
                                             break;

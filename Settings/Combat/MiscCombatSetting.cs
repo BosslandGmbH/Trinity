@@ -98,7 +98,7 @@ namespace Trinity.Config.Combat
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(0.55f)]
+        [DefaultValue(0.45f)]
         public float HealthGlobeLevel
         {
             get
