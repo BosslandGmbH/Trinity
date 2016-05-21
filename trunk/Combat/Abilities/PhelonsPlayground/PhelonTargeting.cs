@@ -31,8 +31,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             return CurrentTarget.Type == TrinityObjectType.Shrine || CurrentTarget.IsTreasureGoblin ||
                    CurrentTarget.Type == TrinityObjectType.HealthGlobe || CurrentTarget.IsBoss
                 ? CurrentTarget
-                : PhelonUtils.BestEliteInRange(35, includeInAoE) ??
-                  (PhelonUtils.GetBestClusterUnit(10, 45, false, includeInAoE) ?? CurrentTarget);
+                : BestAoeUnit() ?? CurrentTarget;
         }
 
         public static void CombatToggling()
