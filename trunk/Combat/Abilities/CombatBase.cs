@@ -371,7 +371,21 @@ namespace Trinity.Combat.Abilities
                 if (CurrentTarget == null)
                     return false;
 
-                if (CurrentTarget.Type == TrinityObjectType.Avoidance || CurrentTarget.IsSafeSpot)
+                if (CurrentTarget.IsSafeSpot && Core.Avoidance.Avoider.ShouldAvoid)
+                    return true;
+
+                return false;
+            }
+        }
+
+        public static bool IsCurrentlyKiting
+        {
+            get
+            {
+                if (CurrentTarget == null)
+                    return false;
+
+                if (CurrentTarget.IsSafeSpot && Core.Avoidance.Avoider.ShouldKite)
                     return true;
 
                 return false;

@@ -97,6 +97,8 @@ namespace Trinity
         /// <returns></returns>
         internal static RunStatus HandleTarget()
         {
+            RunStatus status;
+
             using (new PerformanceLogger("HandleTarget"))
             {
                 try
@@ -127,48 +129,73 @@ namespace Trinity
                     if (Core.Avoidance.Avoider.ShouldAvoid)
                     {
                         Logger.Log(LogCategory.Avoidance, $"Avoid now!");
-
                         Vector3 safespot;
-                        if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot))
+                        if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot) && safespot.Distance(ZetaDia.Me.Position) > 3f)
                         {
                             Logger.Log(LogCategory.Avoidance, $"Safespot found: {safespot}");
 
-                            // Don't avoid when we need to goblin kamakazi or interact with a door etc
-                            var highPriorityObject = ObjectCache.OrderBy(o => o.Weight).FirstOrDefault();
-                            if ((highPriorityObject == null || highPriorityObject.Type != TrinityObjectType.Barricade && highPriorityObject.Type != TrinityObjectType.Door) && !CombatBase.IsDoingGoblinKamakazi)
+                            if(CurrentTarget == null || CurrentTarget.Type != TrinityObjectType.Barricade && CurrentTarget.Type != TrinityObjectType.Door || Core.Avoidance.Grid.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance))
                             {                                
-                                if (Core.Avoidance.Grid.IsStandingInFlags(AvoidanceFlags.CriticalAvoidance) || Player.CurrentHealthPct < 0.9 || highPriorityObject == null || !highPriorityObject.IsUnit || CombatBase.CurrentPower.MinimumRange > highPriorityObject.Distance)
-                                {                                    
-                                    var distance = safespot.Distance(Player.Position);
-                                    Logger.Log(LogCategory.Avoidance, $"Targetted SafeSpot Distance={distance}");
-                                    CurrentTarget = new TrinityCacheObject()
-                                    {
-                                        Position = safespot,
-                                        Type = TrinityObjectType.Avoidance,
-                                        Distance = distance,
-                                        Radius = 3.5f,
-                                        InternalName = "Avoidance Safespot",
-                                        IsSafeSpot = true,
-                                        Weight = Weighting.MaxWeight
-                                    };
-                                }
+                                var distance = safespot.Distance(Player.Position);
+                                Logger.Log(LogCategory.Avoidance, $"Targetted SafeSpot Distance={distance}");
+                                CurrentTarget = new TrinityCacheObject()
+                                {
+                                    Position = safespot,
+                                    Type = TrinityObjectType.Avoidance,
+                                    Distance = distance,
+                                    Radius = 3.5f,
+                                    InternalName = "Avoidance Safespot",
+                                    IsSafeSpot = true,
+                                    Weight = Weighting.MaxWeight
+                                };
+
+                                TryCastAvoidancePower(out status);
+                                PlayerMover.NavigateTo(safespot, "SafeSpot");
+                                return GetRunStatus(RunStatus.Running, "Movement for Avoidance");
                             }
                         }
                     }
-                    else if (CurrentTarget != null)
-                    {
-                        if (CurrentTarget.IsSafeSpot)
-                        {
-                            TargetUtil.ClearCurrentTarget("Avoidance finished moving to safe spot.");
-                            return GetRunStatus(RunStatus.Failure, "Finished Avoiding");
-                        }
 
-                        if (ObjectCache.All(a => a.AnnId != CurrentTarget.AnnId))
+                    if (Core.Avoidance.Avoider.ShouldKite)
+                    {
+                        Logger.Log(LogCategory.Avoidance, $"Kite now!");
+                        Vector3 safespot;
+                        if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot) && safespot.Distance(ZetaDia.Me.Position) > 3f)
                         {
-                            TargetUtil.ClearCurrentTarget("Target no longer exists.");
-                            return GetRunStatus(RunStatus.Failure, "Target Missing");
+                            Logger.Log(LogCategory.Avoidance, $"KiteSpot found: {safespot}");
+
+                            var distance = safespot.Distance(Player.Position);
+                            Logger.Log(LogCategory.Avoidance, $"Targetted KiteSpot Distance={distance}");
+                            CurrentTarget = new TrinityCacheObject()
+                            {
+                                Position = safespot,
+                                Type = TrinityObjectType.Avoidance,
+                                Distance = distance,
+                                Radius = 3.5f,
+                                InternalName = "Avoidance Safespot",
+                                IsSafeSpot = true,
+                                Weight = Weighting.MaxWeight
+                            };
+
+                            PlayerMover.NavigateTo(safespot, "KiteSpot");
+                            return GetRunStatus(RunStatus.Running, "Movement for Kiting");                          
                         }
                     }
+
+                    //else if (CurrentTarget != null)
+                    //{
+                    //    if (CurrentTarget.IsSafeSpot)
+                    //    {
+                    //        TargetUtil.ClearCurrentTarget("Avoidance finished moving to safe spot.");
+                    //        return GetRunStatus(RunStatus.Failure, "Finished Avoiding");
+                    //    }
+
+                    //    if (ObjectCache.All(a => a.AnnId != CurrentTarget.AnnId))
+                    //    {
+                    //        TargetUtil.ClearCurrentTarget("Target no longer exists.");
+                    //        return GetRunStatus(RunStatus.Failure, "Target Missing");
+                    //    }
+                    //}
 
                     if (Player.IsCasting && CurrentTarget != null && CurrentTarget.GizmoType == GizmoType.Headstone)
                     {
@@ -176,11 +203,10 @@ namespace Trinity
                         return GetRunStatus(RunStatus.Success, "RevivingPlayer");
                     }
 
-                    if (!Core.Avoidance.Avoider.IsAvoiding)
+                    if (!Core.Avoidance.Avoider.ShouldAvoid)
                     {
-                        RunStatus runStatus;
-                        if (ThrottleActionPerSecond(out runStatus)) //Settings.Advanced.ThrottleAPS && 
-                            return runStatus;
+                        if (ThrottleActionPerSecond(out status)) //Settings.Advanced.ThrottleAPS && 
+                            return status;
 
                         VacuumItems.Execute();
 
@@ -239,7 +265,7 @@ namespace Trinity
                     _isWaitingAfterPower = false;
                     _isWaitingBeforePower = false;
 
-                    if (!Core.Avoidance.Avoider.IsAvoiding)
+                    if (!Core.Avoidance.Avoider.ShouldAvoid)
                     {
 
                         if (!_isWaitingForPower && !_isWaitingBeforePower && (CombatBase.CurrentPower == null || CombatBase.CurrentPower.SNOPower == SNOPower.None) && CurrentTarget != null)
@@ -261,7 +287,7 @@ namespace Trinity
                     }
 
                     // Prevent running away after progression globes spawn if they're in aoe
-                    if (Player.IsInRift && !Core.Avoidance.Avoider.IsAvoiding)
+                    if (Player.IsInRift && !Core.Avoidance.Avoider.ShouldAvoid)
                     {                       
                         var globes = ObjectCache.Where(o => o.Type == TrinityObjectType.ProgressionGlobe && o.Distance < AvoidanceManager.MaxDistance).ToList();
                         var shouldWaitForGlobes = globes.Any(o => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, o.Position, AvoidanceFlags.CriticalAvoidance));
@@ -349,35 +375,10 @@ namespace Trinity
                     if (CurrentTarget != null)
                         AssignPower();
 
-                    // Pop a potion when necessary
-
-
-
                     using (new PerformanceLogger("HandleTarget.CheckAvoidanceBuffs"))
                     {
-                        // See if we can use any special buffs etc. while in avoidance
-                        if ((CurrentTarget.Type == TrinityObjectType.Avoidance || CurrentTarget.IsSafeSpot) && !CurrentTarget.IsWaitSpot )
-                        {
-                            powerBuff = AbilitySelector(true);
-                            if (powerBuff != null && powerBuff.SNOPower != SNOPower.None)
-                            {
-                                Logger.LogVerbose(LogCategory.Behavior, "HandleTarget: Casting {0} for Avoidance", powerBuff.SNOPower);
-
-                                if (ZetaDia.Me.UsePower(powerBuff.SNOPower, powerBuff.TargetPosition, powerBuff.TargetDynamicWorldId, powerBuff.TargetACDGUID))
-                                {
-                                    LastPowerUsed = powerBuff.SNOPower;
-                                    CacheData.AbilityLastUsed[powerBuff.SNOPower] = DateTime.UtcNow;
-                                    SpellHistory.RecordSpell(powerBuff.SNOPower);
-                                    return GetRunStatus(RunStatus.Running, "Cast Avoidance Spell");
-                                }
-                                else
-                                {
-                                    TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
-                                }
-
-                                //return GetRunStatus(RunStatus.Running, "UsePowerBuff");
-                            }
-                        }
+                        if (TryCastAvoidancePower(out status))
+                            return status;
                     }
 
                     // Pick the destination point and range of target
@@ -521,6 +522,32 @@ namespace Trinity
                 Logger.LogDebug(LogCategory.Behavior, "End of HandleTarget");
                 return GetRunStatus(RunStatus.Running, "End");
             }
+        }
+
+        public static bool TryCastAvoidancePower(out RunStatus status)
+        {
+            if ((CurrentTarget.Type == TrinityObjectType.Avoidance || CurrentTarget.IsSafeSpot) && !CurrentTarget.IsWaitSpot)
+            {
+                powerBuff = AbilitySelector(true);
+                if (powerBuff != null && powerBuff.SNOPower != SNOPower.None)
+                {
+                    Logger.LogVerbose(LogCategory.Behavior, "HandleTarget: Casting {0} for Avoidance", powerBuff.SNOPower);
+
+                    if (ZetaDia.Me.UsePower(powerBuff.SNOPower, powerBuff.TargetPosition, powerBuff.TargetDynamicWorldId, powerBuff.TargetACDGUID))
+                    {
+                        LastPowerUsed = powerBuff.SNOPower;
+                        CacheData.AbilityLastUsed[powerBuff.SNOPower] = DateTime.UtcNow;
+                        SpellHistory.RecordSpell(powerBuff.SNOPower);
+                        {
+                            status = GetRunStatus(RunStatus.Running, "Cast Avoidance Spell");
+                            return true;
+                        }
+                    }
+                    LastActionTimes.Add(DateTime.UtcNow);
+                }
+            }
+            status = default(RunStatus);
+            return false;
         }
 
         public static List<DateTime> LastActionTimes
@@ -1613,7 +1640,7 @@ namespace Trinity
                         return;
                     }
                     var unit = targetAcd as DiaUnit;
-                    if (unit == null || unit.HitpointsCurrentPct <= 0 || unit.HitpointsCurrentPct > 1)
+                    if (unit == null || unit.HitpointsCurrentPct <= 0 || !unit.IsFullyValid()) // || unit.HitpointsCurrentPct > 1)
                     {
                         Logger.LogVerbose("Invalid target hitpoints, probably dead");
                         return;

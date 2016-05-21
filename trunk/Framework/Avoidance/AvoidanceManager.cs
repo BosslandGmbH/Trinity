@@ -387,6 +387,9 @@ namespace Trinity.Framework.Avoidance
 
             foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius + Settings.KiteDistance))
             {
+                if (!node.IsWalkable)
+                    continue;
+
                 node.Weight = weight;
                 node.AddNodeFlags(AvoidanceFlags.KiteFrom);
                 layer.Add(node);

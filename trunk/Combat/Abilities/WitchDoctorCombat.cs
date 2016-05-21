@@ -107,6 +107,10 @@ namespace Trinity.Combat.Abilities
                 // Soul Harvest
                 if (CanCast(SNOPower.Witchdoctor_SoulHarvest) && !IsCurrentlyAvoiding)
                 {
+                    if (Player.CurrentHealthPct < 0.6 && TargetUtil.AnyMobsInRange(12f))
+                    {
+                        return new TrinityPower(SNOPower.Witchdoctor_SoulHarvest);
+                    }
                     if (TargetUtil.ClusterExists(3, 12f))
                     {
                         Logger.Log(LogCategory.Routine, "Im going in to harvest! 4/12");
