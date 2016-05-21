@@ -175,6 +175,13 @@ namespace Trinity.Coroutines.Town
 
         public static async Task<bool> Execute()
         {
+
+            if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift)
+            {
+                Logger.LogVerbose("Can't extract powers: inventory locked by greater rift");
+                return false;
+            }
+
             var result = await Main();
 
             // Make sure we put back anything we removed. Its possible for example that we ran out of materials
