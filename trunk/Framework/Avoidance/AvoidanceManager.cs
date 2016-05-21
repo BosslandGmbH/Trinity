@@ -63,7 +63,8 @@ namespace Trinity.Framework.Avoidance
             GizmoType.LootRunSwitch,
             GizmoType.LoreChest,
             GizmoType.PoolOfReflection,
-            GizmoType.Switch
+            GizmoType.Switch,
+            GizmoType.Door
         };
 
         private readonly HashSet<GizmoType> _importantGizmoTypes = new HashSet<GizmoType>
@@ -347,6 +348,11 @@ namespace Trinity.Framework.Avoidance
                     if (node.Center.Distance(actor.Position.ToVector2()) < actor.CollisionRadius)
                     {
                         node.AddNodeFlags(AvoidanceFlags.NavigationBlocking);
+                    }
+
+                    if (actor.Type != ObjectType.Door || !actor.IsUsed)
+                    {
+                        node.AddNodeFlags(AvoidanceFlags.ClosedDoor);
                     }
                 }
             }
