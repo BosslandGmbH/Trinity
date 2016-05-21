@@ -548,7 +548,7 @@ namespace Trinity
             Application.Current.Dispatcher.Invoke(action);
         }
 
-
+        public static TimeSpan RunningTime => DateTime.UtcNow.Subtract(BotStartTime);
 
 
     }

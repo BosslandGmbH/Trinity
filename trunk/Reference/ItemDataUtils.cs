@@ -620,9 +620,9 @@ namespace Trinity.Reference
             { new Tuple<Item, ItemProperty>(Legendary.Maximus, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
             { new Tuple<Item, ItemProperty>(Legendary.BalefireCaster, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
             { new Tuple<Item, ItemProperty>(Legendary.Wormwood, ItemProperty.PoisonSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.HeartSlaughter, ItemProperty.PhysicalSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.SchaefersHammer, ItemProperty.LightningSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.WrathOfTheBoneKing, ItemProperty.ColdSkills), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty>(Legendary.HeartSlaughter, ItemProperty.PhysicalSkills), new ItemStatRange { Max = 30, Min = 25 }},
+            { new Tuple<Item, ItemProperty>(Legendary.SchaefersHammer, ItemProperty.LightningSkills), new ItemStatRange { Max = 25, Min = 20 }},
+            { new Tuple<Item, ItemProperty>(Legendary.WrathOfTheBoneKing, ItemProperty.ColdSkills), new ItemStatRange { Max = 30, Min = 25 }},
             { new Tuple<Item, ItemProperty>(Legendary.WonKhimLau, ItemProperty.LightningSkills), new ItemStatRange { Max = 20, Min = 15 }},
             { new Tuple<Item, ItemProperty>(Legendary.Azurewrath, ItemProperty.ColdSkills), new ItemStatRange { Max = 20, Min = 15 }},
             { new Tuple<Item, ItemProperty>(Legendary.Doombringer, ItemProperty.PhysicalSkills), new ItemStatRange { Max = 20, Min = 15 }},
@@ -633,6 +633,8 @@ namespace Trinity.Reference
             { new Tuple<Item, ItemProperty>(Legendary.HolyPointShot, ItemProperty.ColdSkills), new ItemStatRange { Max = 20, Min = 15 }},
             { new Tuple<Item, ItemProperty>(Legendary.HolyPointShot, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
             { new Tuple<Item, ItemProperty>(Legendary.HolyPointShot, ItemProperty.SkillDamage), new ItemStatRange { Max = 60, Min = 80 }},
+            { new Tuple<Item, ItemProperty>(Legendary.FirebirdsEye, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty>(Legendary.TheEyeOfTheStorm, ItemProperty.FireSkills), new ItemStatRange { Max = 30, Min = 15 }},
         };
 
         /// <summary>
