@@ -1,4 +1,5 @@
 using Trinity.Framework;
+using Trinity.Movement;
 using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
@@ -14,12 +15,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 if (CurrentTarget != null && CurrentTarget.IsUnit)
                 {
-
                     Vector3 portLocation;
                     if (ShouldTeleport(out portLocation))
                         return CastTeleport(portLocation);
                 }
                 if (Player.IsIncapacitated) return null;
+
+                if (ShouldDiamondSkin)
+                    return CastDiamondSkin;
 
                 TrinityPower buffPower;
                 if (CastArmorSpell(out buffPower)) return buffPower;
@@ -29,7 +32,25 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 if (ShouldFamiliar)
                     return CastFamiliar;
+
+                if (TalRashasCount == 3 && Legendary.WandOfWoh.IsEquipped)
+                    return TalRasha.Flashfire.PowerSelector();
+
                 return null;
+            }
+
+            private static bool ShouldDiamondSkin
+            {
+                get
+                {
+                    return Skills.Wizard.DiamondSkin.CanCast() &&
+                           (ClassMover.HasInfiniteCasting || Player.CurrentHealthPct < 0.40);
+                }
+            }
+
+            private static TrinityPower CastDiamondSkin
+            {
+                get { return new TrinityPower(Skills.Wizard.DiamondSkin.SNOPower); }
             }
 
             private static bool CanTeleport

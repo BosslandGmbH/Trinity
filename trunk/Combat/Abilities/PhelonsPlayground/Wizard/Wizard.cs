@@ -29,6 +29,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     {
                         power = TalRasha.EnergyTwister.PowerSelector();
                     }
+                    //if (Legendary.WandOfWoh.IsEquipped)
+                    //{
+                    //    power = TalRasha.Flashfire.PowerSelector();
+                    //}
                 }
                 if (power == null) power = new TrinityPower(SNOPower.Walk, 0f, Player.Position);
             }
