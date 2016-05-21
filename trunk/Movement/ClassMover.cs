@@ -267,6 +267,12 @@ namespace Trinity.Movement
             //if (destination == Vector3.Zero)
             //    return false;
 
+            if (TrinityPlugin.Settings.Combat.DemonHunter.VaultMode == DemonHunterVaultMode.MovementOnly && CombatBase.IsInCombat)
+                return false;
+
+            if (TrinityPlugin.Settings.Combat.DemonHunter.VaultMode == DemonHunterVaultMode.CombatOnly && !CombatBase.IsInCombat)
+                return false;
+
             int vaultDelay = TrinityPlugin.Settings.Combat.DemonHunter.VaultMovementDelay;
             var timeSinceUse = CombatBase.TimeSincePowerUse(SNOPower.DemonHunter_Vault);
             var isfree = DemonHunterCombat.IsVaultFree;
