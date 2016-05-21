@@ -14,7 +14,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 {
     partial class Wizard
     {
-        public class TalRasha
+        partial class TalRasha
         {
             public class EnergyTwister
             {
