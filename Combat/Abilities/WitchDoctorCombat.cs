@@ -111,7 +111,7 @@ namespace Trinity.Combat.Abilities
                     {
                         return new TrinityPower(SNOPower.Witchdoctor_SoulHarvest);
                     }
-                    if (TargetUtil.ClusterExists(3, 12f))
+                    if (TargetUtil.ClusterExists(3, 12f) && Skills.WitchDoctor.SoulHarvest.BuffStacks < 10)
                     {
                         Logger.Log(LogCategory.Routine, "Im going in to harvest! 4/12");
                         MoveToSoulHarvestPoint(Enemies.BestCluster);
@@ -995,7 +995,7 @@ namespace Trinity.Combat.Abilities
                         Enemies.BestLargeCluster.Position.Distance(m.Destination) > 10f)
                         m.Destination = Enemies.BestLargeCluster.Position;
 
-                    if (TargetUtil.NumMobsInRange(12f) >= 4 && Skills.WitchDoctor.SoulHarvest.CanCast())
+                    if (TargetUtil.NumMobsInRange(12f) >= 3 && Skills.WitchDoctor.SoulHarvest.CanCast())
                         Skills.WitchDoctor.SoulHarvest.Cast();
                 },
                 OnFinished = m =>

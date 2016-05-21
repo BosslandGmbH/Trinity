@@ -663,7 +663,7 @@ namespace Trinity
 
                                     if (Player.IsInTown)
                                     {
-                                        var cachedItem = ActorManager.GetItemByAnnId(cacheObject.AnnId);                                        
+                                        var cachedItem = ActorManager.GetItemByAnnId(cacheObject.AnnId);
                                         if (cachedItem != null)
                                         {
                                             if (Settings.Loot.Pickup.DontPickupInTown && !cachedItem.IsItemAssigned)
@@ -1884,6 +1884,9 @@ namespace Trinity
                 if (cacheObject.ActorSNO == 3349) // Belial, can't be pathed to.
                     return 0;
 
+                if (cacheObject.IsUnit && Core.Grids.Avoidance.IsIntersectedByFlags(Player.Position, cacheObject.Position, AvoidanceFlags.ClosedDoor))
+                    return -MaxWeight;
+
                 if (!PlayerMover.IsCompletelyBlocked)
                     return 0;
 
@@ -1893,6 +1896,8 @@ namespace Trinity
                 // todo fix this its causing massive bouts of the bot doing nothing while standing in groups of mobs.             
                 //if(!cacheObject.IsUnit)
                 //    return BlockingMonsterObjects(cacheObject) * -100d;
+
+
 
                 if (!cacheObject.IsUnit || PlayerMover.IsCompletelyBlocked && cacheObject.Distance > 15f && !cacheObject.IsEliteRareUnique && Settings.Combat.Misc.AttackWhenBlocked)
                     return -MaxWeight;
