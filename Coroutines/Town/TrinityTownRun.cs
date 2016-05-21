@@ -127,7 +127,7 @@ namespace Trinity.Coroutines.Town
                 await Coroutine.Sleep(1000);
 
                 var checkCycles = 2;
-                while (true)
+                while (!TrinityPlugin.Player.IsInventoryLockedForGreaterRift)
                 {
                     if (!ActorManager.Items.Any())
                     {
