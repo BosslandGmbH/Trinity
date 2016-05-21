@@ -409,7 +409,7 @@ namespace Trinity.Combat.Abilities
             if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_EnergyTwister) && !ShouldWaitForConventionElement(Skills.Wizard.EnergyTwister) &&
                 Player.PrimaryResource >= 25 && !Settings.Combat.Wizard.NoEnergyTwister &&
                 // If using storm chaser, then force a signature spell every 1 stack of the buff, if we have a signature spell
-                (!hasSignatureSpell || GetBuffStacks(SNOPower.Wizard_EnergyTwister) < 1))
+                (!hasSignatureSpell || GetBuffStacks(SNOPower.Wizard_EnergyTwister) < 9))
             {
                 Vector3 bestClusterPoint = TargetUtil.GetBestClusterPoint();
 
