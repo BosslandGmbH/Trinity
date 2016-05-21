@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Config.Combat;
+using Trinity.Movement;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Game;
@@ -17,16 +18,21 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
         {
             public static TrinityPower PowerSelector()
             {
+                if (ShouldAkaratsChampion)
+                    return CastAkaratsChampion;
+
+                if (ShouldLawsOfJustice)
+                    return CastLawsOfJustice;
                 //Wait for CoE to Cast Damage CD's
                 if (!Settings.Combat.Misc.UseConventionElementOnly ||
                     !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000))
                 {
-                    //Make sure we cast Bombardment when IronSkin and CoE is Up.
-                    if (GetHasBuff(SNOPower.X1_Crusader_IronSkin) && ShouldBombardment)
-                        return CastBombardment;
+
+                    if (ShouldIronSkin)
+                        return CastIronSkin;
 
                     //Only Cast if not Steed Charging
-                    if (!IsSteedCharging)
+                    if (GetHasBuff(SNOPower.X1_Crusader_IronSkin))
                     {
                         if (ShouldCondemn)
                             return CastCondemn;
@@ -34,12 +40,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                         if (ShouldShieldGlare)
                             return CastShieldGlare;
 
-                        if (ShouldIronSkin)
-                            return CastIronSkin;
-
                         if (ShouldConsecration)
                             return CastConsecration;
                     }
+
+                    //Make sure we cast Bombardment when IronSkin and CoE is Up.
+                    if (GetHasBuff(SNOPower.X1_Crusader_IronSkin) && ShouldBombardment)
+                        return CastBombardment;
                 }
                 if (ShouldSteedCharge)
                     return CastSteedCharge;
@@ -56,6 +63,67 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                 return null;
             }
 
+
+            private static bool ShouldAkaratsChampion
+            {
+                get
+                {
+                    //Basic checks
+                    if (!Skills.Crusader.AkaratsChampion.CanCast())
+                        return false;
+
+                    // Akarat's mode is 'Off Cooldown'
+                    if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.WhenReady)
+                        return true;
+
+                    // Let's check for Goblins, Current Health, CDR Pylon, movement impaired
+                    if (CurrentTarget != null && CurrentTarget.IsTreasureGoblin &&
+                        Player.CurrentHealthPct <= 0.39 && Settings.Combat.Crusader.AkaratsEmergencyHealth ||
+                        ClassMover.HasInfiniteCasting ||
+                        Settings.Combat.Crusader.AkaratsOnStatusEffect &&
+                        (ZetaDia.Me.IsFrozen || ZetaDia.Me.IsRooted || ZetaDia.Me.IsFeared || ZetaDia.Me.IsStunned))
+                        return true;
+
+                    // Akarat's mode is 'Whenever in Combat'
+                    if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.WhenInCombat &&
+                        TargetUtil.AnyMobsInRange(80f))
+                        return true;
+
+                    // Akarat's mode is 'Use when Elites are nearby'
+                    if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.Normal &&
+                        TargetUtil.AnyElitesInRange(80f))
+                        return true;
+
+                    // Akarat's mode is 'Hard Elites Only'
+                    if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.HardElitesOnly && HardElitesPresent)
+                        return true;
+
+                    return false;
+                }
+            }
+
+            private static TrinityPower CastAkaratsChampion
+            {
+                get { return new TrinityPower(Skills.Crusader.AkaratsChampion.SNOPower); }
+            }
+
+            private static bool ShouldLawsOfJustice
+            {
+                get
+                {
+                    return Skills.Crusader.LawsOfJustice.CanCast() &&
+                            !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfJustice_Passive2, 6) &&
+                            (TargetUtil.EliteOrTrashInRange(16f) ||
+                             Player.CurrentHealthPct <= Settings.Combat.Crusader.LawsOfJusticeHpPct ||
+                             TargetUtil.AnyMobsInRange(15f, 5) ||
+                             Settings.Combat.Crusader.SpamLaws);
+                }
+            }
+
+            private static TrinityPower CastLawsOfJustice
+            {
+                get { return new TrinityPower(Skills.Crusader.LawsOfJustice.SNOPower); }
+            }
             private static bool ShouldCondemn
             {
                 get { return Skills.Crusader.Condemn.CanCast(); }
