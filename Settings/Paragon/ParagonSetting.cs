@@ -52,7 +52,7 @@ namespace Trinity.Config
             _utilityParagonPriority = new ParagonCollection(ParagonCategory.Utility);
             _defenseParagonPriority = new ParagonCollection(ParagonCategory.Defense);
             _offenseParagonPriority = new ParagonCollection(ParagonCategory.Offense);
-        }  
+        }
 
         [DataMember(IsRequired = false)]
         public ParagonCollection CoreParagonPriority
@@ -150,6 +150,7 @@ namespace Trinity.Config
         public void Reset()
         {
             TrinitySetting.Reset(this);
+            LoadDefaults();
         }
 
         public void CopyTo(ParagonSetting setting)

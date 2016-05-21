@@ -1884,7 +1884,7 @@ namespace Trinity
                 if (cacheObject.ActorSNO == 3349) // Belial, can't be pathed to.
                     return 0;
 
-                if (cacheObject.IsUnit && Core.Grids.Avoidance.IsIntersectedByFlags(Player.Position, cacheObject.Position, AvoidanceFlags.ClosedDoor))
+                if (cacheObject.IsUnit && RunningTime.TotalSeconds > 10 && Core.Grids.Avoidance.IsIntersectedByFlags(Player.Position, cacheObject.Position, AvoidanceFlags.ClosedDoor))
                     return -MaxWeight;
 
                 if (!PlayerMover.IsCompletelyBlocked)

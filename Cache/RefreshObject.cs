@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Trinity.Cache;
 using Trinity.Combat.Abilities;
 using Trinity.Coroutines.Town;
+using Trinity.Framework;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Technicals;
@@ -905,7 +906,12 @@ namespace Trinity
                                 };
 
                                 // Ignore units not in LoS except bosses
-                                if (!CurrentCacheObject.IsBoss && !c_diaObject.InLineOfSight && !alwaysLoSCheckTypes.Contains(CurrentCacheObject.Type) && !DataDictionary.LineOfSightWhitelist.Contains(CurrentCacheObject.ActorSNO))
+
+                                // Experiment: Grid RayCast uses AllowProjectile instead of Walk to cast accross unwalkable areas where possible.
+                                //var inLineOfSight = CombatBase.CurrentPower != null && CombatBase.CurrentPower.MinimumRange > CurrentCacheObject.Distance ? Core.Avoidance.Grid.CanRayCast(Player.Position, CurrentCacheObject.Position) : c_diaObject.InLineOfSight;
+                                var inLineOfSight = c_diaObject.InLineOfSight;
+
+                                if (!CurrentCacheObject.IsBoss && !inLineOfSight && !alwaysLoSCheckTypes.Contains(CurrentCacheObject.Type) && !DataDictionary.LineOfSightWhitelist.Contains(CurrentCacheObject.ActorSNO))
                                 {
                                     AddToCache = false;
                                     c_IgnoreSubStep = "NotInLoS";

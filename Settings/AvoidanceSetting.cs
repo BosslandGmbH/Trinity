@@ -115,9 +115,6 @@ namespace Trinity.Config
         public AvoidanceSetting()
         {
             Reset();
-
-            if (Avoidances == null)
-                Avoidances = new FullyObservableCollection<AvoidanceDataSettingViewModel>();
         }
         [IgnoreDataMember]
         public Tab SelectedTab => (Tab)SelectedTabIndex;
@@ -367,6 +364,9 @@ namespace Trinity.Config
         public void Reset()
         {
             TrinitySetting.Reset(this);
+            LoadDefaults();   
+            Avoidances = new FullyObservableCollection<AvoidanceDataSettingViewModel>();
+            LoadSettingsFromDataFactory();          
         }
 
         public void CopyTo(AvoidanceSetting setting)
