@@ -20,7 +20,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 if (FirebirdsCount == 3 || VyrsCount == 3)
                 {
-                    power = Firebirds.PowerSelector();
+                    power = Firebirds.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 0f, Player.Position);
                     //if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
                 }
                 if (TalRashasCount == 3)
@@ -29,12 +29,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     {
                         power = TalRasha.EnergyTwister.PowerSelector();
                     }
-                    //if (Legendary.WandOfWoh.IsEquipped)
-                    //{
-                    //    power = TalRasha.Flashfire.PowerSelector();
-                    //}
+                    if (Legendary.WandOfWoh.IsEquipped)
+                    {
+                        power = new TrinityPower(SNOPower.Walk, 3f, CurrentTarget.Position);
+                    }
                 }
-                if (power == null) power = new TrinityPower(SNOPower.Walk, 0f, Player.Position);
             }
             return power;
         }

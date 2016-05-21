@@ -20,12 +20,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 //public static bool NeedTwister = false;
                 public static TrinityPower PowerSelector()
                 {
-                    if (ShouldSpectralBlade)
-                        return CastSpectralBlade;
                     if (ShouldFrostNova)
                         return CastFrostNova;
                     if (ShouldExplosiveBlast)
                         return CastExplosiveBlast;
+                    if (ShouldSpectralBlade)
+                        return CastSpectralBlade;
                     return null;
                 }
 
@@ -53,8 +53,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 {
                     get
                     {
-                        return Skills.Wizard.SpectralBlade.CanCast() && (Player.PrimaryResourcePct < 0.20 ||
-                               Skills.Wizard.SpectralBlade.TimeSinceUse > 3500) && CurrentTarget != null;
+                        return Skills.Wizard.SpectralBlade.CanCast() && CurrentTarget != null;
                     }
                 }
 
