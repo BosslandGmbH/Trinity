@@ -26,11 +26,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 if (ShouldHex(out target))
                     return CastHex(target);
 
-                if (ShouldMassConfusion(out target))
-                    return CastMassConfusion(target);
+                if (ShouldMassConfusion)
+                    return CastMassConfusion;
 
-                if (ShouldBigBadVoodoo(out target))
-                    return CastBigBadVoodoo(target);
+                if (ShouldBigBadVoodoo)
+                    return CastBigBadVoodoo;
 
                 if (ShouldLocustSwarm(out target))
                     return CastLocustSwarmt(target);
@@ -61,18 +61,20 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 45, target.Position);
             }
 
-            private static bool ShouldBigBadVoodoo(out TrinityCacheObject target)
+            private static bool ShouldBigBadVoodoo
             {
-                target = null;
-                if (!Skills.WitchDoctor.BigBadVoodoo.CanCast())
-                    return false;
-                target = PhelonGroupSupport.Monk;
-                return target != null && target.Distance < 45;
+                get
+                {
+                    if (!Skills.WitchDoctor.BigBadVoodoo.CanCast())
+                        return false;
+                    var target = PhelonGroupSupport.Monk ?? PhelonTargeting.BestAoeUnit(45f, true);
+                    return target != null && target.Distance < 45;
+                }
             }
 
-            private static TrinityPower CastBigBadVoodoo(TrinityCacheObject target)
+            private static TrinityPower CastBigBadVoodoo
             {
-                return new TrinityPower(SNOPower.Witchdoctor_BigBadVoodoo, 45, target.Position);
+                get { return new TrinityPower(SNOPower.Witchdoctor_BigBadVoodoo); }
             }
 
             private static bool ShouldHex(out TrinityCacheObject target)
@@ -80,27 +82,29 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 target = null;
                 if (!Skills.WitchDoctor.Hex.CanCast())
                     return false;
-                target = PhelonGroupSupport.Monk;
-                return target != null && target.Distance < 45;
+                target = PhelonGroupSupport.Monk ?? PhelonTargeting.BestAoeUnit(45f, true);
+                return target != null && target.Distance < 35;
             }
 
             private static TrinityPower CastHex(TrinityCacheObject target)
             {
-                return new TrinityPower(SNOPower.Witchdoctor_Hex, 38, target.Position);
+                return new TrinityPower(SNOPower.Witchdoctor_Hex, 35f, target.Position);
             }
 
-            private static bool ShouldMassConfusion(out TrinityCacheObject target)
+            private static bool ShouldMassConfusion
             {
-                target = null;
-                if (!Skills.WitchDoctor.MassConfusion.CanCast())
-                    return false;
-                target = PhelonGroupSupport.Monk;
-                return target != null && target.Distance < 45;
+                get
+                {
+                    if (!Skills.WitchDoctor.MassConfusion.CanCast())
+                        return false;
+                    var target = PhelonGroupSupport.Monk ?? PhelonTargeting.BestAoeUnit(45f, true);
+                    return target != null && target.Distance < 45;
+                }
             }
 
-            private static TrinityPower CastMassConfusion(TrinityCacheObject target)
+            private static TrinityPower CastMassConfusion
             {
-                return new TrinityPower(SNOPower.Witchdoctor_MassConfusion, 38, target.Position);
+                get { return new TrinityPower(SNOPower.Witchdoctor_MassConfusion); }
             }
 
             private static bool ShouldHaunt(out TrinityCacheObject target)
@@ -108,27 +112,27 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 target = null;
                 if (!Skills.WitchDoctor.Haunt.CanCast())
                     return false;
-                target = PhelonUtils.BestAuraUnit(SNOPower.Witchdoctor_Haunt, 65, true);
+                target = PhelonUtils.BestAuraUnit(SNOPower.Witchdoctor_Haunt, 35, true);
                 return target != null;
             }
 
             private static TrinityPower CastHaunt(TrinityCacheObject target)
             {
-                return new TrinityPower(SNOPower.Witchdoctor_Haunt, 65, target.ACDGuid);
+                return new TrinityPower(SNOPower.Witchdoctor_Haunt, 35f, target.ACDGuid);
             }
 
             private static bool ShouldLocustSwarm(out TrinityCacheObject target)
             {
                 target = null;
-                if (!Skills.WitchDoctor.LocustSwarm.CanCast())
+                if (!Skills.WitchDoctor.LocustSwarm.CanCast() || Legendary.Wormwood.IsEquipped)
                     return false;
-                target = PhelonUtils.BestAuraUnit(SNOPower.Witchdoctor_Locust_Swarm, 65, true);
+                target = PhelonUtils.BestAuraUnit(SNOPower.Witchdoctor_Locust_Swarm, 35f, true);
                 return target != null;
             }
 
             private static TrinityPower CastLocustSwarmt(TrinityCacheObject target)
             {
-                return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 65, target.ACDGuid);
+                return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 35f, target.ACDGuid);
             }
         }
     }
