@@ -122,6 +122,7 @@
     <Compile Include="Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.ZDps.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Archon.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.TalRasha.VyrArchon.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.TalRasha.Flashfire.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.TalRasha.Twister.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Unconditional.cs" />

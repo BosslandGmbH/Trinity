@@ -101,8 +101,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                     where u.IsUnit &&
                     u.RadiusDistance <= maxSearchRange &&
                     u.HasBeenInLoS && !u.HasDebuff(aura)
-                    orderby u.NearbyUnitsWithinDistance(10),
-                     u.Distance descending
+                    orderby u.NearbyUnitsWithinDistance(),
+                     u.Distance
                     select u).FirstOrDefault();
         }
 

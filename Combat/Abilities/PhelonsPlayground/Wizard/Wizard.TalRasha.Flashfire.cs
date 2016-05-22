@@ -26,6 +26,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         return CastExplosiveBlast;
                     if (ShouldSpectralBlade)
                         return CastSpectralBlade;
+                    if (ShouldElectrocute)
+                        return CastElectrocute;
                     return null;
                 }
 
@@ -60,6 +62,19 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 private static TrinityPower CastSpectralBlade
                 {
                     get { return new TrinityPower(Skills.Wizard.SpectralBlade.SNOPower, 12f, CurrentTarget.ACDGuid); }
+                }
+
+                private static bool ShouldElectrocute
+                {
+                    get
+                    {
+                        return Skills.Wizard.Electrocute.CanCast() && CurrentTarget != null;
+                    }
+                }
+
+                private static TrinityPower CastElectrocute
+                {
+                    get { return new TrinityPower(Skills.Wizard.Electrocute.SNOPower, 12f, CurrentTarget.ACDGuid); }
                 }
             }
         }

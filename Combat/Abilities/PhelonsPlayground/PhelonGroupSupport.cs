@@ -13,7 +13,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             get
             {
-                return TrinityPlugin.ObjectCache.FirstOrDefault(x => x.IsPlayer && x.InternalName.Contains("monk_"));
+                return TrinityPlugin.ObjectCache.FirstOrDefault(x => x.IsPlayer && x.InternalName.ToLower().Contains("monk_"));
             }
         }
 

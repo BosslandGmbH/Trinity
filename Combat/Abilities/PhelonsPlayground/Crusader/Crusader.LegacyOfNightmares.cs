@@ -23,6 +23,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
 
                 if (ShouldLawsOfJustice)
                     return CastLawsOfJustice;
+
+                if (ShouldCondemn)
+                    return CastCondemn;
+
                 //Wait for CoE to Cast Damage CD's
                 if (!Settings.Combat.Misc.UseConventionElementOnly ||
                     !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000))
@@ -34,9 +38,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                     //Only Cast if not Steed Charging
                     if (GetHasBuff(SNOPower.X1_Crusader_IronSkin))
                     {
-                        if (ShouldCondemn)
-                            return CastCondemn;
-
                         if (ShouldShieldGlare)
                             return CastShieldGlare;
 
@@ -75,29 +76,36 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                     // Akarat's mode is 'Off Cooldown'
                     if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.WhenReady)
                         return true;
-
-                    // Let's check for Goblins, Current Health, CDR Pylon, movement impaired
-                    if (CurrentTarget != null && CurrentTarget.IsTreasureGoblin &&
-                        Player.CurrentHealthPct <= 0.39 && Settings.Combat.Crusader.AkaratsEmergencyHealth ||
-                        ClassMover.HasInfiniteCasting ||
-                        Settings.Combat.Crusader.AkaratsOnStatusEffect &&
+                    //Use on Low Health
+                    if (Player.CurrentHealthPct <= 0.25 &&
+                        (Settings.Combat.Crusader.AkaratsEmergencyHealth || Runes.Crusader.Prophet.IsActive))
+                        return true;
+                    //Use if Incapacitated
+                    if (Settings.Combat.Crusader.AkaratsOnStatusEffect &&
                         (ZetaDia.Me.IsFrozen || ZetaDia.Me.IsRooted || ZetaDia.Me.IsFeared || ZetaDia.Me.IsStunned))
                         return true;
 
-                    // Akarat's mode is 'Whenever in Combat'
-                    if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.WhenInCombat &&
-                        TargetUtil.AnyMobsInRange(80f))
-                        return true;
+                    if (!IsSteedCharging || ClassMover.HasInfiniteCasting)
+                    {
+                        // Let's check for Goblins, Current Health, CDR Pylon, movement impaired
+                        if (CurrentTarget != null && CurrentTarget.IsTreasureGoblin)
+                            return true;
 
-                    // Akarat's mode is 'Use when Elites are nearby'
-                    if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.Normal &&
-                        TargetUtil.AnyElitesInRange(80f))
-                        return true;
+                        // Akarat's mode is 'Whenever in Combat'
+                        if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.WhenInCombat &&
+                            TargetUtil.AnyMobsInRange(40f))
+                            return true;
 
-                    // Akarat's mode is 'Hard Elites Only'
-                    if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.HardElitesOnly && HardElitesPresent)
-                        return true;
+                        // Akarat's mode is 'Use when Elites are nearby'
+                        if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.Normal &&
+                            TargetUtil.AnyElitesInRange(40f))
+                            return true;
 
+                        // Akarat's mode is 'Hard Elites Only'
+                        if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.HardElitesOnly &&
+                            HardElitesPresent)
+                            return true;
+                    }
                     return false;
                 }
             }
@@ -111,12 +119,21 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
             {
                 get
                 {
-                    return Skills.Crusader.LawsOfJustice.CanCast() &&
-                            !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfJustice_Passive2, 6) &&
-                            (TargetUtil.EliteOrTrashInRange(16f) ||
-                             Player.CurrentHealthPct <= Settings.Combat.Crusader.LawsOfJusticeHpPct ||
-                             TargetUtil.AnyMobsInRange(15f, 5) ||
-                             Settings.Combat.Crusader.SpamLaws);
+                    //Return false if we have buff or can't cast.
+                    if (!Skills.Crusader.LawsOfJustice.CanCast() ||
+                        CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfJustice_Passive2, 6))
+                        return false;
+                    //Use if Low Health
+                    if (Player.CurrentHealthPct <= Settings.Combat.Crusader.LawsOfJusticeHpPct)
+                        return true;
+                    //Use if not steed charging.
+                    if (!IsSteedCharging)
+                    {
+                        return TargetUtil.EliteOrTrashInRange(16f) ||
+                                TargetUtil.AnyMobsInRange(15f, 5) ||
+                                Settings.Combat.Crusader.SpamLaws;
+                    }
+                    return false;
                 }
             }
 
@@ -126,7 +143,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
             }
             private static bool ShouldCondemn
             {
-                get { return Skills.Crusader.Condemn.CanCast(); }
+                get { return Skills.Crusader.Condemn.CanCast() && !IsSteedCharging; }
             }
 
             private static TrinityPower CastCondemn
