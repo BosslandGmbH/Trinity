@@ -150,10 +150,9 @@ namespace Trinity.Movement
                     case ActorClass.Witchdoctor:
                         return CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk);
                     case ActorClass.Wizard:
-                        return CombatBase.CanCast(SNOPower.Wizard_Teleport) &&
-                               (!Legendary.AetherWalker.IsEquipped ||
-                                Legendary.AetherWalker.IsEquipped && player.PrimaryResource > 25) ||
-                               CombatBase.CanCast(SNOPower.Wizard_Archon_Teleport);
+                        return Skills.Wizard.Teleport.CanCast() && (!Legendary.AetherWalker.IsEquipped ||
+                                Legendary.AetherWalker.IsEquipped && player.PrimaryResource > 25) || 
+                                Skills.Wizard.ArchonTeleport.CanCast();
                     default:
                         return false;
                 }

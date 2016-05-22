@@ -19,20 +19,15 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 if (!Skills.Wizard.ArchonStrike.IsActive)
                     return null;
-                Vector3 location;
 
-                if (ShouldSlowTime(out location))
-                    return CastSlowTime(location);
+                if (ShouldSlowTime)
+                    return CastSlowTime;
 
                 if (ShouldArcaneBlast)
                     return CastArcaneBlast;
 
                 if (ShouldArcaneStrike)
                     return CastArcaneStrike;
-
-                var bestAoeUnit = PhelonTargeting.BestAoeUnit();
-                //if (Skills.Wizard.ArchonStrike.IsActive && !Core.Avoidance.InCriticalAvoidance(bestAoeUnit.Position))
-                //    return new TrinityPower(SNOPower.Walk, 3f, bestAoeUnit.Position);
 
                 if (ShouldDisentegrate)
                     return CastDisentegrate;
@@ -85,45 +80,33 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 }
             }
 
-            private static bool ShouldSlowTime(out Vector3 location)
+            private static bool ShouldSlowTime
             {
-                location = Vector3.Zero;
-                if (!Skills.Wizard.ArchonSlowTime.CanCast())
+                get
+                {
+                    if (!Skills.Wizard.ArchonSlowTime.CanCast())
+                        return false;
+                    var bubbles =
+                        SpellHistory.History.Where(
+                            s =>
+                                s.Power.SNOPower == Skills.Wizard.ArchonSlowTime.SNOPower &&
+                                s.TimeSinceUse.TotalSeconds < 12)
+                            .ToList();
+                    var bubblePositions = new HashSet<Vector3>(bubbles.Select(b => b.TargetPosition));
+                    Func<Vector3, bool> isValidBubblePosition =
+                        pos => bubblePositions.Any(b => b.Distance2D(pos) <= 8f);
+
+                    if (!isValidBubblePosition(Player.Position) || !bubbles.Any())
+                    {
+                        return true;
+                    }
                     return false;
-                var bubbles =
-                    SpellHistory.History.Where(
-                        s =>
-                            s.Power.SNOPower == Skills.Wizard.ArchonSlowTime.SNOPower &&
-                            s.TimeSinceUse.TotalSeconds < 12)
-                        .ToList();
-                var bubblePositions = new HashSet<Vector3>(bubbles.Select(b => b.TargetPosition));
-                Func<Vector3, bool> isValidBubblePosition =
-                    pos => bubblePositions.Any(b => b.Distance2D(pos) <= 12f);
-
-                if (!isValidBubblePosition(PhelonTargeting.BestAoeUnit(45f, true).Position) || !bubbles.Any())
-                {
-                    location = PhelonTargeting.BestAoeUnit(45f, true).Position;
-                    return true;
                 }
-                var validTargets =
-                    TrinityPlugin.ObjectCache.OrderBy(y => y.Distance)
-                        .Where(x => x.Distance < 45 && x.IsHostile)
-                        .ToList();
-                foreach (var target in validTargets)
-                {
-                    var castLocation = target.Position;
-                    // Function to check if bubble is already in (or close enough to) a position
-
-                    if (isValidBubblePosition(castLocation) && bubbles.Any()) continue;
-                    location = castLocation;
-                    return true;
-                }
-                return false;
             }
 
-            private static TrinityPower CastSlowTime(Vector3 location)
+            private static TrinityPower CastSlowTime
             {
-                return new TrinityPower(Skills.Wizard.ArchonSlowTime.SNOPower, 45f, location);
+                get { return new TrinityPower(Skills.Wizard.ArchonSlowTime.SNOPower); }
             }
         }
     }
