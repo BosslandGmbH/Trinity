@@ -10,6 +10,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
         private static int VyrsCount = Sets.VyrsAmazingArcana.CurrentBonuses;
         private static int TalRashasCount = Sets.TalRashasElements.CurrentBonuses;
         private static int DMOCount = Sets.DelseresMagnumOpus.CurrentBonuses;
+        private static int TalRashaStackCount = GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_052);
 
         public static TrinityPower GetPower()
         {
@@ -26,7 +27,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (TalRashasCount == 3)
                 {
                     if (VyrsCount > 1)
-                        power = TalRasha.VyrArchon.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 3f, Player.Position);
+                        power = TalRasha.VyrArchon.PowerSelector();
 
                     if (Legendary.TheTwistedSword.IsEquipped)
                         power = TalRasha.EnergyTwister.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 3f, Player.Position);

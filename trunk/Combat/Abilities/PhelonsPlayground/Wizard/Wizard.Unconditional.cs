@@ -86,7 +86,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
                     return true;
                 }
-
                 var bestDpsPosition = PhelonUtils.BestDpsPosition;
                 if (bestDpsPosition != Vector3.Zero &&
                     (bestDpsPosition.Distance(Player.Position) > 7 || Runes.Wizard.Calamity.IsActive ||
