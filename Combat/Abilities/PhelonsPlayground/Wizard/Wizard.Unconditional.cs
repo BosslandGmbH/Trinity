@@ -88,8 +88,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 }
                 var bestDpsPosition = PhelonUtils.BestDpsPosition;
                 if (bestDpsPosition != Vector3.Zero &&
-                    (bestDpsPosition.Distance(Player.Position) > 7 || Runes.Wizard.Calamity.IsActive ||
-                     Runes.Wizard.SafePassage.IsActive && TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500))
+                    (bestDpsPosition.Distance(Player.Position) > 7 || Skills.Wizard.Teleport.CanCast() && (Runes.Wizard.Calamity.IsActive ||
+                     Runes.Wizard.SafePassage.IsActive) && TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500))
                 {
                     position = bestDpsPosition;
                     return true;
