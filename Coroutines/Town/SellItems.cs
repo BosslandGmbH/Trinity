@@ -35,7 +35,7 @@ namespace Trinity.Coroutines.Town
             //    return Cache[i.AnnId];
             
             var decision = TrinityItemManager.TrinitySell(i) && !TrinityItemManager.TrinitySalvage(i) && !TrinityItemManager.TrinityStash(i);
-            Cache.Add(i.AnnId, decision);
+            //Cache.Add(i.AnnId, decision);
             return decision;
         }
 
