@@ -544,7 +544,7 @@ namespace Trinity.Items
             {
                 if (item.IsProtected())
                 {
-                    reason = "Reason: Protected";
+                    reason = $"Protected Slot [col:{item.InventoryColumn}, row:{item.InventoryRow}]";
                     return false;
                 }
 
@@ -553,6 +553,12 @@ namespace Trinity.Items
                 {
                     reason = "Special Case - Griswold's Scribblings";
                     return true;
+                }
+
+                if (item.ActorSnoId == 210432)
+                {
+                    reason = "Special Case - Never sell staff of cow";
+                    return false;
                 }
 
                 if (item.IsUnidentified)

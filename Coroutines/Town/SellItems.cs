@@ -31,10 +31,10 @@ namespace Trinity.Coroutines.Town
 
         public static bool ShouldSell(CachedItem i)
         {
-            if (Cache.ContainsKey(i.AnnId))
-                return Cache[i.AnnId];
-
-            var decision = (i.IsVendorBought || (TrinityItemManager.TrinitySell(i) && !TrinityItemManager.TrinitySalvage(i))) && !TrinityItemManager.TrinityStash(i);
+            //if (Cache.ContainsKey(i.AnnId))
+            //    return Cache[i.AnnId];
+            
+            var decision = TrinityItemManager.TrinitySell(i) && !TrinityItemManager.TrinitySalvage(i) && !TrinityItemManager.TrinityStash(i);
             Cache.Add(i.AnnId, decision);
             return decision;
         }

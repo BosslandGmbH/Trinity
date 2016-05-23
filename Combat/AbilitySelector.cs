@@ -88,7 +88,7 @@ namespace Trinity
                     {
                         // Barbs
                         case ActorClass.Barbarian:
-                            if (Settings.Advanced.PhelonsPlayground)
+                            if (Settings.Advanced.BetaPlayground)
                             {
                                 power = Barbarian.GetPower();
                                 break;
@@ -97,7 +97,7 @@ namespace Trinity
                             break;
                         // Crusader
                         case ActorClass.Crusader:
-                            if (Settings.Advanced.PhelonsPlayground)
+                            if (Settings.Advanced.BetaPlayground)
                             {
                                 power = Crusader.GetPower();
                                 break;
@@ -106,7 +106,7 @@ namespace Trinity
                             break;
                         // Monks
                         case ActorClass.Monk:
-                            if (Settings.Advanced.PhelonsPlayground)
+                            if (Settings.Advanced.BetaPlayground)
                             {
                                 power = Monk.GetPower();
                                 break;
@@ -119,7 +119,7 @@ namespace Trinity
                             break;
                         // Wizards
                         case ActorClass.Wizard:
-                            if (Settings.Advanced.PhelonsPlayground)
+                            if (Settings.Advanced.BetaPlayground)
                             {
                                 power = Wizard.GetPower();
                                 break;
@@ -128,7 +128,7 @@ namespace Trinity
                             break;
                         // Witch Doctors
                         case ActorClass.Witchdoctor:
-                            if (Settings.Advanced.PhelonsPlayground)
+                            if (Settings.Advanced.BetaPlayground)
                             {
                                 power = WitchDoctor.GetPower();
                                 if (power != null)

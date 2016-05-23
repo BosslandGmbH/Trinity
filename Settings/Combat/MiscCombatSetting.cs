@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using Trinity.Helpers;
 
 namespace Trinity.Config.Combat
 {
     [DataContract(Namespace = "")]
-    public class MiscCombatSetting : ITrinitySetting<MiscCombatSetting>, INotifyPropertyChanged
+    public class MiscCombatSetting : NotifyBase, ITrinitySetting<MiscCombatSetting>, INotifyPropertyChanged
     {
         #region Fields
         private GoblinPriority _GoblinPriority;
@@ -1036,6 +1038,13 @@ namespace Trinity.Config.Combat
                     OnPropertyChanged(nameof(WaitForResInBossEncounters));
                 }
             }
+        }
+
+        private HashSet<TrinityMonsterAffix> _ignoreAffixes;
+        public HashSet<TrinityMonsterAffix> IgnoreAffixes
+        {
+            get { return _ignoreAffixes; }
+            set { SetField(ref _ignoreAffixes, value); }
         }
 
         #endregion Properties

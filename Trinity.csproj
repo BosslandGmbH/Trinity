@@ -122,7 +122,6 @@
     <Compile Include="Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.ZDps.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Archon.cs" />
-    <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.TalRasha.VyrArchon.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.TalRasha.Flashfire.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.TalRasha.Twister.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Unconditional.cs" />
@@ -145,6 +144,7 @@
     <Compile Include="Framework\Avoidance\Handlers\AnimationBeamAvoidanceHandler.cs" />
     <Compile Include="Framework\Avoidance\Structures\AvoidanceLayer.cs" />
     <Compile Include="Framework\Avoidance\Structures\WeightingOptions.cs" />
+    <Compile Include="Framework\Objects\Memory\Attributes\GizmoAttributes.cs" />
     <Compile Include="Framework\Objects\Memory\Globals.cs" />
     <Compile Include="Framework\Objects\Memory\Hero.cs" />
     <Compile Include="Framework\Helpers\TypeConversions.cs" />
