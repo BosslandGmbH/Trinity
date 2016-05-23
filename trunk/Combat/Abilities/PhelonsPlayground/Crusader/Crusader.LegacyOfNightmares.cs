@@ -29,7 +29,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
 
                 //Wait for CoE to Cast Damage CD's
                 if (!Settings.Combat.Misc.UseConventionElementOnly ||
-                    !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000))
+                    !ShouldWaitForConventionofElements(Skills.Crusader.IronSkin, Element.Physical, 1500, 1000))
                 {
 
                     if (ShouldIronSkin)
@@ -192,27 +192,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                 {
                     if (!Skills.Crusader.Bombardment.CanCast())
                         return false;
-
-                    if (ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000))
-                    {
-                        Logger.LogVerbose("Bombardment Waiting for convention element");
-                        return false;
-                    }
-
-                    if (CanCast(SNOPower.X1_Crusader_IronSkin) && !GetHasBuff(SNOPower.X1_Crusader_IronSkin))
-                    {
-                        Logger.LogVerbose("Bombardment Waiting for iron skin");
-                        Skills.Crusader.IronSkin.Cast();
-                        return false;
-                    }
-
-                    if (Math.Abs(ZetaDia.Me.Movement.SpeedXY) < Single.Epsilon)
-                    {
-                        Logger.LogVerbose("Waiting to move for bombard with hexing pants.");
-                        return false;
-                    }
-                    return TargetUtil.AnyMobsInRange(60f, Settings.Combat.Crusader.BombardmentAoECount) ||
-                            TargetUtil.AnyElitesInRange(60f);
+                    return TargetUtil.AnyMobsInRange(20f, Settings.Combat.Crusader.BombardmentAoECount) ||
+                            TargetUtil.AnyElitesInRange(20f);
                 }
             }
 
