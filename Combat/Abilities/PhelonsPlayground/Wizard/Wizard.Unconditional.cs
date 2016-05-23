@@ -43,8 +43,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 get
                 {
-                    return Skills.Wizard.DiamondSkin.CanCast() &&
-                           (ClassMover.HasInfiniteCasting || Player.CurrentHealthPct < 0.40);
+                    return Skills.Wizard.DiamondSkin.CanCast();
                 }
             }
 

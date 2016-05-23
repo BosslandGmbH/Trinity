@@ -36,7 +36,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                 if (IsBombardment)
                     return LegacyOfNightmares.PowerSelector();
 
-                if (power == null) power = new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestWalkLocation);
+                 return new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestWalkLocation);
             }
             return power;
         }

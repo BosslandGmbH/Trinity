@@ -85,7 +85,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (!Skills.Barbarian.AncientSpear.CanCast())
                     return false;
 
-                if (Skills.Barbarian.FuriousCharge.Charges < 5)
+                if (Sets.TheLegacyOfRaekor.IsFullyEquipped && GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026) < 5)
                     return false;
 
                 target = PhelonTargeting.BestAoeUnit(60, true).IsInLineOfSight()
@@ -99,9 +99,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 //    Math.Floor(Skills.Barbarian.FuriousCharge.Charges*2.5))
                 //    return false;
 
-                    return target.Distance <= 60 &&
-                       (Player.PrimaryResourcePct > 0.95 || Sets.TheLegacyOfRaekor.IsFullyEquipped &&
-                        GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026) >= 5);
+                return target.Distance <= 60 && Player.PrimaryResourcePct > 0.95;
             }
 
             private static TrinityPower CastAncientSpear(TrinityCacheObject target)

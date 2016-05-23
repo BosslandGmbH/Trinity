@@ -74,7 +74,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     {
                         return Skills.Wizard.BlackHole.CanCast() && PhelonTargeting.BestAoeUnit(45, true) != null &&
                                (Skills.Wizard.Archon.CanCast() ||
-                                TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 15000);
+                                TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 15000 && TalRashasCount < 4);
                     }
                 }
 
