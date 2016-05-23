@@ -18,9 +18,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
         {
             public static TrinityPower PowerSelector()
             {
-                if (ShouldAkaratsChampion)
-                    return CastAkaratsChampion;
-
                 if (ShouldLawsOfJustice)
                     return CastLawsOfJustice;
 
@@ -62,57 +59,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                         : new TrinityPower(SNOPower.Walk, 3f, PhelonTargeting.BestAoeUnit(45, true).Position);
                 }
                 return null;
-            }
-
-
-            private static bool ShouldAkaratsChampion
-            {
-                get
-                {
-                    //Basic checks
-                    if (!Skills.Crusader.AkaratsChampion.CanCast())
-                        return false;
-
-                    // Akarat's mode is 'Off Cooldown'
-                    if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.WhenReady)
-                        return true;
-                    //Use on Low Health
-                    if (Player.CurrentHealthPct <= 0.25 &&
-                        (Settings.Combat.Crusader.AkaratsEmergencyHealth || Runes.Crusader.Prophet.IsActive))
-                        return true;
-                    //Use if Incapacitated
-                    if (Settings.Combat.Crusader.AkaratsOnStatusEffect &&
-                        (ZetaDia.Me.IsFrozen || ZetaDia.Me.IsRooted || ZetaDia.Me.IsFeared || ZetaDia.Me.IsStunned))
-                        return true;
-
-                    if (!IsSteedCharging || ClassMover.HasInfiniteCasting)
-                    {
-                        // Let's check for Goblins, Current Health, CDR Pylon, movement impaired
-                        if (CurrentTarget != null && CurrentTarget.IsTreasureGoblin)
-                            return true;
-
-                        // Akarat's mode is 'Whenever in Combat'
-                        if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.WhenInCombat &&
-                            TargetUtil.AnyMobsInRange(40f))
-                            return true;
-
-                        // Akarat's mode is 'Use when Elites are nearby'
-                        if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.Normal &&
-                            TargetUtil.AnyElitesInRange(40f))
-                            return true;
-
-                        // Akarat's mode is 'Hard Elites Only'
-                        if (Settings.Combat.Crusader.AkaratsMode == CrusaderAkaratsMode.HardElitesOnly &&
-                            HardElitesPresent)
-                            return true;
-                    }
-                    return false;
-                }
-            }
-
-            private static TrinityPower CastAkaratsChampion
-            {
-                get { return new TrinityPower(Skills.Crusader.AkaratsChampion.SNOPower); }
             }
 
             private static bool ShouldLawsOfJustice
