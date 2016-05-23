@@ -29,9 +29,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         public static TrinityCacheObject BestTarget(bool includeInAoE = false)
         {
             return CurrentTarget.Type == TrinityObjectType.Shrine || CurrentTarget.IsTreasureGoblin ||
-                   CurrentTarget.Type == TrinityObjectType.HealthGlobe || CurrentTarget.IsBoss
+                   CurrentTarget.Type == TrinityObjectType.HealthGlobe || CurrentTarget.IsBossOrEliteRareUnique
                 ? CurrentTarget
-                : BestAoeUnit() ?? CurrentTarget;
+                : BestAoeUnit(45, true) ?? CurrentTarget;
         }
 
         public static void CombatToggling()

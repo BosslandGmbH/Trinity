@@ -35,7 +35,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
                 return ClosestOcculous != Vector3.Zero && ClosestOcculous.Distance(TrinityPlugin.Player.Position) < maxRange
                     ? ClosestOcculous
-                    : PhelonTargeting.BestAoeUnit().Position;
+                    : PhelonTargeting.BestAoeUnit(45, true).Position;
             }
         }
 
@@ -63,7 +63,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                     TrinityPlugin.CurrentTarget.Type != TrinityObjectType.HealthGlobe)
                 {
                     //Logger.Log("Prevent Primary Attack ");
-                    var targetPosition = TargetUtil.GetLoiterPosition(PhelonTargeting.BestAoeUnit(), 20f);
+                    var targetPosition = TargetUtil.GetLoiterPosition(PhelonTargeting.BestAoeUnit(45, true), 20f);
                     // return new TrinityPower(SNOPower.Walk, 7f, targetPosition);
                     return targetPosition;
                 }

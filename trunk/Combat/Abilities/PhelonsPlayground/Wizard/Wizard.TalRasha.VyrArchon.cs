@@ -22,11 +22,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     if (ShouldFrostNova)
                         return CastFrostNova;
 
-                    if (ShouldBlackHole)
-                        return CastBlackHole;
-
                     if (ShouldExplosiveBlast)
                         return CastExplosiveBlast;
+
+                    if (ShouldBlackHole)
+                        return CastBlackHole;
 
                     if (ShouldArchon())
                         return CastArchon;
@@ -72,8 +72,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 {
                     get
                     {
-                        return Skills.Wizard.BlackHole.CanCast() && PhelonTargeting.BestAoeUnit(45, true) != null && 
-                            Skills.Wizard.Archon.CanCast();
+                        return Skills.Wizard.BlackHole.CanCast() && PhelonTargeting.BestAoeUnit(45, true) != null &&
+                               (Skills.Wizard.Archon.CanCast() ||
+                                TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 15000);
                     }
                 }
 

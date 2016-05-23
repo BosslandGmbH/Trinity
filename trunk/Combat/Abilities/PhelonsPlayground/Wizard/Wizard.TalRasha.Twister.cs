@@ -94,7 +94,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 #region Expressions
 
                 private static TrinityPower CastBlackhole
-                    => new TrinityPower(Skills.Wizard.BlackHole.SNOPower, 45, PhelonTargeting.BestAoeUnit().Position);
+                    => new TrinityPower(Skills.Wizard.BlackHole.SNOPower, 45, PhelonTargeting.BestAoeUnit(45, true).Position);
 
                 private static TrinityPower CastExplosiveBlast => new TrinityPower(SNOPower.Wizard_ExplosiveBlast);
                 private static TrinityPower CastFrostNova => new TrinityPower(SNOPower.Wizard_FrostNova, 20f);

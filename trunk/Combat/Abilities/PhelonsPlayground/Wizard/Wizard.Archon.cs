@@ -35,61 +35,23 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 return null;
             }
 
-            private static bool ShouldDisentegrate
-            {
-                get
-                {
-                    return Skills.Wizard.ArchonDisintegrationWave.CanCast() &&
-                           PhelonUtils.GetBestPierceTarget(45).Distance < 45;
-                }
-            }
+            private static bool ShouldDisentegrate => Skills.Wizard.ArchonDisintegrationWave.CanCast() &&
+                                                      PhelonUtils.GetBestPierceTarget(45).Distance < 45;
 
-            private static TrinityPower CastDisentegrate
-            {
-                get
-                {
-                    return new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 45f,
-                        PhelonUtils.PointBehind(PhelonUtils.GetBestPierceTarget(45).Position));
-                }
-            }
+            private static TrinityPower CastDisentegrate => new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 45f,
+                PhelonUtils.PointBehind(PhelonUtils.GetBestPierceTarget(45).Position));
 
-            private static bool ShouldArcaneStrike
-            {
-                get { return Skills.Wizard.ArchonStrike.CanCast() && PhelonTargeting.BestAoeUnit().Distance < 10f; }
-            }
+            private static bool ShouldArcaneStrike => Skills.Wizard.ArchonStrike.CanCast() && PhelonTargeting.BestAoeUnit(45, true).Distance < 10f;
 
-            private static TrinityPower CastArcaneStrike
-            {
-                get
-                {
-                    return new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 10f,
-                        PhelonTargeting.BestAoeUnit().Position);
-                }
-            }
+            private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 10f,
+                PhelonTargeting.BestAoeUnit(45, true).Position);
 
-            private static bool ShouldArcaneBlast
-            {
-                get { return Skills.Wizard.ArchonBlast.CanCast() && PhelonTargeting.BestAoeUnit().Distance < 10f; }
-            }
+            private static bool ShouldArcaneBlast => Skills.Wizard.ArchonBlast.CanCast() && PhelonTargeting.BestAoeUnit(45, true).Distance < 10f;
 
-            private static TrinityPower CastArcaneBlast
-            {
-                get
-                {
-                    return new TrinityPower(Skills.Wizard.ArchonBlast.SNOPower, 10f,
-                        PhelonTargeting.BestAoeUnit().Position);
-                }
-            }
+            private static TrinityPower CastArcaneBlast => new TrinityPower(Skills.Wizard.ArchonBlast.SNOPower, 10f,
+                PhelonTargeting.BestAoeUnit(45, true).Position);
 
-            private static bool ShouldSlowTime
-            {
-                get
-                {
-                    if (!Skills.Wizard.ArchonSlowTime.CanCast())
-                        return false;
-                    return NeedSlowTime;
-                }
-            }
+            private static bool ShouldSlowTime => Skills.Wizard.ArchonSlowTime.CanCast() && NeedSlowTime;
 
             private static TrinityPower CastSlowTime
             {
@@ -102,58 +64,3 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
         }
     }
 }
-
-//private static SNOPower GetDisentegratePower
-//{
-//    get
-//    {
-//        var skillPower = CacheData.HotbarCache.Instance.ActiveSkills
-//            .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_DisintegrationWave ||
-//                                 p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Fire ||
-//                                 p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Lightning ||
-//                                 p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Cold);
-//        if (skillPower == null)
-//        {
-//            Logger.LogNormal("************** THERE IS NO DISENTEGRATE POWER **************");
-//            return SNOPower.None;
-//        }
-//        return skillPower.Power;
-//    }
-//}
-
-
-//private static SNOPower GetStrikePower
-//{
-//    get
-//    {
-//        var skillPower = CacheData.HotbarCache.Instance.ActiveSkills
-//            .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneStrike ||
-//                                 p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Fire ||
-//                                 p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Lightning ||
-//                                 p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Cold);
-//        if (skillPower == null)
-//        {
-//            Logger.LogNormal("************** THERE IS NO STRIKE POWER **************");
-//            return SNOPower.None;
-//        }
-//        return skillPower.Power;
-//    }
-//}
-
-//private static SNOPower GetBlastPower
-//{
-//    get
-//    {
-//        var skillPower = CacheData.HotbarCache.Instance.ActiveSkills
-//            .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneBlast ||
-//                                 p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Fire ||
-//                                 p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Lightning ||
-//                                 p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Cold);
-//        if (skillPower == null)
-//        {
-//            Logger.LogNormal("************** THERE IS NO BLAST POWER **************");
-//            return SNOPower.None;
-//        }
-//        return skillPower.Power;
-//    }
-//}
