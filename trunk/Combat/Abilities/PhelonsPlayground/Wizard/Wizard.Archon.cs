@@ -15,6 +15,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
     {
         public class Archon
         {
+            public static bool NeedSlowTime = true;
             public static TrinityPower PowerSelector()
             {
                 if (!Skills.Wizard.ArchonStrike.IsActive)
@@ -86,27 +87,17 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 {
                     if (!Skills.Wizard.ArchonSlowTime.CanCast())
                         return false;
-                    var bubbles =
-                        SpellHistory.History.Where(
-                            s =>
-                                s.Power.SNOPower == Skills.Wizard.ArchonSlowTime.SNOPower &&
-                                s.TimeSinceUse.TotalSeconds < 12)
-                            .ToList();
-                    var bubblePositions = new HashSet<Vector3>(bubbles.Select(b => b.TargetPosition));
-                    Func<Vector3, bool> isValidBubblePosition =
-                        pos => bubblePositions.Any(b => b.Distance2D(pos) <= 8f);
-
-                    if (!isValidBubblePosition(Player.Position) || !bubbles.Any())
-                    {
-                        return true;
-                    }
-                    return false;
+                    return NeedSlowTime;
                 }
             }
 
             private static TrinityPower CastSlowTime
             {
-                get { return new TrinityPower(Skills.Wizard.ArchonSlowTime.SNOPower); }
+                get
+                {
+                    NeedSlowTime = false;
+                    return new TrinityPower(Skills.Wizard.ArchonSlowTime.SNOPower);
+                }
             }
         }
     }
