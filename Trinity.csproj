@@ -124,6 +124,7 @@
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Archon.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.TalRasha.Flashfire.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.TalRasha.Twister.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.TalRasha.VyrArchon.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Unconditional.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Wizard\Wizard.Firebirds.cs" />

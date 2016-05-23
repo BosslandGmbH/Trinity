@@ -26,8 +26,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 }
                 if (TalRashasCount == 3)
                 {
-                    //if (VyrsCount > 1)
-                        //power = TalRasha.VyrArchon.PowerSelector();
+                    if (VyrsCount > 1)
+                        power = TalRasha.VyrArchon.PowerSelector();
 
                     if (Legendary.TheTwistedSword.IsEquipped)
                         power = TalRasha.EnergyTwister.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 3f, Player.Position);

@@ -29,7 +29,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (RaekorCount == 3)
                     power = Raekor.PowerSelector() ??
                             new TrinityPower(SNOPower.Walk, 7f,
-                                TargetUtil.GetLoiterPosition(PhelonTargeting.BestAoeUnit(), 20f));
+                                TargetUtil.GetLoiterPosition(PhelonTargeting.BestAoeUnit(45, true), 20f));
 
                 if (ImmortalKingsCount == 3)
                     power = ImmortalKingsCall.PowerSelector();
