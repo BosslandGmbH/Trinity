@@ -38,7 +38,7 @@ namespace Trinity.Config
         private bool _useTrinityDeathHandler;
         private bool _useExperimentalAvoidance;
         private bool _useExperimentalTownRun;
-        private bool _phelonsPlayground;
+        private bool _betaPlayground;
 
         #endregion Fields
 
@@ -63,18 +63,18 @@ namespace Trinity.Config
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
-        public bool PhelonsPlayground
+        public bool BetaPlayground
         {
             get
             {
-                return _phelonsPlayground;
+                return _betaPlayground;
             }
             set
             {
-                if (_phelonsPlayground != value)
+                if (_betaPlayground != value)
                 {
-                    _phelonsPlayground = value;
-                    OnPropertyChanged("PhelonsPlayground");
+                    _betaPlayground = value;
+                    OnPropertyChanged("BetaPlayground");
                 }
             }
         }
@@ -671,7 +671,7 @@ namespace Trinity.Config
             IsDBInactivityEnabled = false;
             UseTrinityDeathHandler = false;
             UseExperimentalAvoidance = false;
-            PhelonsPlayground = false;
+            BetaPlayground = false;
         }
         #endregion Methods
     }

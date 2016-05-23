@@ -109,7 +109,7 @@ namespace Trinity
 
                     if (!_postedWarnings)
                     {
-                        if (Settings.Advanced.PhelonsPlayground)
+                        if (Settings.Advanced.BetaPlayground)
                             PPWarning();
 
                         _postedWarnings = true;
@@ -317,11 +317,11 @@ namespace Trinity
         {
             Logger.Warn("-------------------------------------------------------------------------------");
             Logger.Warn("---   ");
-            Logger.Warn("---   Phelons Playground mode is Enabled");
-            Logger.Warn("---   This mode is experimental and not yet released or supported ");
-            Logger.Warn("---   DO NOT USE THIS MODE unless you are a developer/tester and know what you're doing");
-            Logger.Warn("---   DO NOT REPORT TRINITY BUGS while in this mode");
-            Logger.Warn("---   To Disable: Uncheck box in Trinity Settings > Advanced Tab > Phelons Playground");
+            Logger.Warn("---   Beta Mode is Enabled");
+            Logger.Warn("---   This is experimental and not yet released and may have issues. ");
+            Logger.Warn("---   Do not use this mode unless you are a developer/tester and are experienced with DB");
+            Logger.Warn("---   If reporting issues please note if you're running in beta mode.");
+            Logger.Warn("---   To Disable: Uncheck box in Trinity Settings > Advanced Tab > Beta Playground");
             Logger.Warn("---   ");
             Logger.Warn("------------------------------------------------------------------------------");
         }

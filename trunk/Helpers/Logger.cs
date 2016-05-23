@@ -88,7 +88,7 @@ namespace Trinity.Technicals
 
         public static void UpdatePrefix()
         {
-            var pluginStamp = TrinityPlugin.Settings.Advanced.PhelonsPlayground ? "Trinity:PP" : "Trinity";
+            var pluginStamp = TrinityPlugin.Settings.Advanced.BetaPlayground ? "Trinity:Beta" : "Trinity";
             prefix = $"[{pluginStamp} {TrinityPlugin.Instance.Version}]";
         }
 

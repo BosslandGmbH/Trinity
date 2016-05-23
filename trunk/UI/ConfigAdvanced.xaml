@@ -61,11 +61,11 @@
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Routine}">Log Routine</CheckBox>
                     </UniformGrid>
                 </GroupBox>
-                <GroupBox Header="Experimental Features">
+                <GroupBox Header="Experimental/Beta Features">
                     <StackPanel>
-                        <TextBlock TextWrapping="Wrap" Foreground="OrangeRed">WARNING: This is currently in devlopment and not intended for general use. Do not report any DB/Trinity issues if you have this setting enabled. See forum sticky thread for more information.</TextBlock>
+                        <TextBlock TextWrapping="Wrap" Foreground="OrangeRed">WARNING: This is a beta setting. It is currently in devlopment and not intended for general use. Do not report any DB/Trinity issues if you have this setting enabled. See forum sticky thread for more information.</TextBlock>
                         <UniformGrid Columns="2" Margin="0,10,0,0">
-                            <CheckBox IsChecked="{Binding Advanced.PhelonsPlayground}" Content="Enable Phelons' Playground"/>
+                            <CheckBox IsChecked="{Binding Advanced.BetaPlayground}" Content="Enable Beta Playground"/>
                         </UniformGrid>
                     </StackPanel>
                 </GroupBox>

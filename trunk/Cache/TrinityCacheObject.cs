@@ -10,6 +10,7 @@ using Trinity.Config.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Objects.Memory.Attributes;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Technicals;
@@ -1062,7 +1063,7 @@ namespace Trinity
             get { return ActorSNO; }
         }
 
-        public static bool GetIsGizmoUsed(IActor actor)
+        public static bool GetIsGizmoUsed(TrinityCacheObject actor)
         {
             try
             {
@@ -1085,9 +1086,9 @@ namespace Trinity
                 }
 
                 int endAnimation;
-                if (actor.Type == ObjectType.Interactable &&
+                if (actor.ObjectType == ObjectType.Interactable &&
                     DataDictionary.InteractEndAnimations.TryGetValue(actor.ActorSNO, out endAnimation) &&
-                    endAnimation == (int)actor.CurrentAnimation)
+                    endAnimation == (int)actor.Animation)
                     return true;
 
                 if (actor.GizmoType == GizmoType.None)
@@ -1097,6 +1098,9 @@ namespace Trinity
                 if (commonData != null && commonData.IsValid && !commonData.IsDisposed)
                 {
                     if (commonData.GizmoState == 1)
+                        return true;
+
+                    if (actor.GizmoAttributes.GizmoState == 1)
                         return true;
 
                     if (commonData.GizmoOperatorACDId > 0)
@@ -1122,21 +1126,21 @@ namespace Trinity
                         break;
                 }
 
-                var lootContainer = actor.DiaGizmo as GizmoLootContainer;
+                var lootContainer = actor.Gizmo as GizmoLootContainer;
                 if (lootContainer != null && lootContainer.IsOpen)
                     return true;
 
-                var gizmoDestructible = actor.DiaGizmo as GizmoDestructible;
+                var gizmoDestructible = actor.Gizmo as GizmoDestructible;
                 if (gizmoDestructible != null && gizmoDestructible.HitpointsCurrent <= 0)
                     return true;
 
-                var destructibleContainer = actor.DiaGizmo as GizmoDestructibleLootContainer;
+                var destructibleContainer = actor.Gizmo as GizmoDestructibleLootContainer;
                 if (destructibleContainer != null && destructibleContainer.HitpointsCurrent <= 0)
                     return true;
 
-                if (actor.Type == ObjectType.Door || actor.Type == ObjectType.Container || actor.Type == ObjectType.Interactable)
+                if (actor.ObjectType == ObjectType.Door || actor.ObjectType == ObjectType.Container || actor.ObjectType == ObjectType.Interactable)
                 {
-                    var currentAnimation = actor.CurrentAnimation.ToString().ToLower();
+                    var currentAnimation = actor.Animation.ToString().ToLower();
 
                     if (currentAnimation.Contains("irongate") && currentAnimation.Contains("open"))
                         return false;
@@ -1178,9 +1182,12 @@ namespace Trinity
 
             return affixes;
         }
-
+        
+        public GizmoAttributes GizmoAttributes => _gizmoAttributes ?? (_gizmoAttributes = new GizmoAttributes(CommonData.FastAttribGroupId));
+        private GizmoAttributes _gizmoAttributes;
 
         public string Flags => string.Join(", ", Core.Avoidance.Grid.GetAvoidanceFlags(Position));
         public int TeamId { get; set; }
+        public bool CanWalkTo { get; set; }
     }
 }
