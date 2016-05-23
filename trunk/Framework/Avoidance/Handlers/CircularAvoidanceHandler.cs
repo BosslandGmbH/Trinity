@@ -30,6 +30,9 @@ namespace Trinity.Framework.Avoidance.Handlers
         {
             foreach (var actor in avoidance.Actors)
             {
+                if (actor == null || !actor.IsValid)
+                    continue;
+
                 var part = avoidance.Data.GetPart(actor.ActorSNO);
                 var radius = Math.Max(part.Radius, actor.Radius);
                 var finalRadius = radius*DistanceMultiplier;
