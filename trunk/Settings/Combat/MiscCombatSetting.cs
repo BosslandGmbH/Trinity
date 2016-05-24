@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
+using System.Linq;
 using System.Runtime.Serialization;
+using Trinity.Framework.Objects.Attributes;
 using Trinity.Helpers;
+using Trinity.UIComponents;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Config.Combat
 {
@@ -10,6 +15,7 @@ namespace Trinity.Config.Combat
     public class MiscCombatSetting : NotifyBase, ITrinitySetting<MiscCombatSetting>, INotifyPropertyChanged
     {
         #region Fields
+        private MonsterAffixes _ignoreAffixes;
         private GoblinPriority _GoblinPriority;
         private int _NonEliteRange;
         private int _EliteRange;
@@ -49,37 +55,7 @@ namespace Trinity.Config.Combat
         private bool _ignoreMonstersWhileReflectingDamage;
         private FollowerBossFightMode _followerBossFightDialogMode;
         private bool _ignoreHighHitPointTrash;
-        #region Elite Affixes
-        private bool _ignoreHighHitPointElites;
-        private bool _ignoreArcaneElites;
-        private bool _ignoreAvengerElites;
-        private bool _ignoreDesecratorElites;
-        private bool _ignoreElectrifiedElites;
-        private bool _ignoreExtraHealthElites;
-        private bool _ignoreFastElites;
-        private bool _ignoreFireChainsElites;
-        private bool _ignoreFrozenElites;
-        private bool _ignoreFrozenPulseElites;
-        private bool _ignoreHealthLinkElites;
-        private bool _ignoreHordeElites;
-        private bool _ignoreIllusionistElites;
-        private bool _ignoreJailerElites;
-        private bool _ignoreKnockbackElites;
-        private bool _ignoreMissileDampeningElites;
-        private bool _ignoreMoltenElites;
-        private bool _ignoreMortarElites;
-        private bool _ignoreNightmarishElites;
-        private bool _ignoreOrbiterElites;
-        private bool _ignorePlaguedElites;
-        private bool _ignorePoisonEnchantedElites;
-        private bool _ignoreShieldingElites;
-        private bool _ignoreTeleporterElites;
-        private bool _ignoreThunderstormElites;
-        private bool _ignoreVampiricElites;
-        private bool _ignoreVortexElites;
-        private bool _ignoreWallerElites;
-        private bool _ignoreWormholeElites;
-        #endregion
+
         private bool _ignoreRares;
         private bool _ignoreChampions;
         private bool _tryToSnapshot;
@@ -100,6 +76,7 @@ namespace Trinity.Config.Combat
         private float _PotionLevel;
         private float _HealthGlobeLevelResource;
         private bool _waitForResInBossEncounters;
+        private bool _ignoreHighHitPointElites;
 
         #endregion Events
 
@@ -973,510 +950,6 @@ namespace Trinity.Config.Combat
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
-        public bool IgnoreArcaneElites
-        {
-            get
-            {
-                return _ignoreArcaneElites;
-            }
-            set
-            {
-                if (_ignoreArcaneElites != value)
-                {
-                    _ignoreArcaneElites = value;
-                    OnPropertyChanged("IgnoreArcaneElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreAvengerElites
-        {
-            get
-            {
-                return _ignoreAvengerElites;
-            }
-            set
-            {
-                if (_ignoreAvengerElites != value)
-                {
-                    _ignoreAvengerElites = value;
-                    OnPropertyChanged("IgnoreAvengerElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreDesecratorElites
-        {
-            get
-            {
-                return _ignoreDesecratorElites;
-            }
-            set
-            {
-                if (_ignoreDesecratorElites != value)
-                {
-                    _ignoreDesecratorElites = value;
-                    OnPropertyChanged("IgnoreDesecratorElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreElectrifiedElites
-        {
-            get
-            {
-                return _ignoreElectrifiedElites;
-            }
-            set
-            {
-                if (_ignoreElectrifiedElites != value)
-                {
-                    _ignoreElectrifiedElites = value;
-                    OnPropertyChanged("IgnoreElectrifiedElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreExtraHealthElites
-        {
-            get
-            {
-                return _ignoreExtraHealthElites;
-            }
-            set
-            {
-                if (_ignoreExtraHealthElites != value)
-                {
-                    _ignoreExtraHealthElites = value;
-                    OnPropertyChanged("IgnoreExtraHealthElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreFastElites
-        {
-            get
-            {
-                return _ignoreFastElites;
-            }
-            set
-            {
-                if (_ignoreFastElites != value)
-                {
-                    _ignoreFastElites = value;
-                    OnPropertyChanged("IgnoreFastElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreFireChainsElites
-        {
-            get
-            {
-                return _ignoreFireChainsElites;
-            }
-            set
-            {
-                if (_ignoreFireChainsElites != value)
-                {
-                    _ignoreFireChainsElites = value;
-                    OnPropertyChanged("IgnoreFireChainsElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreFrozenElites
-        {
-            get
-            {
-                return _ignoreFrozenElites;
-            }
-            set
-            {
-                if (_ignoreFrozenElites != value)
-                {
-                    _ignoreHighHitPointElites = value;
-                    OnPropertyChanged("IgnoreFrozenElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreFrozenPulseElites
-        {
-            get
-            {
-                return _ignoreFrozenPulseElites;
-            }
-            set
-            {
-                if (_ignoreFrozenPulseElites != value)
-                {
-                    _ignoreFrozenPulseElites = value;
-                    OnPropertyChanged("IgnoreHighHitPointElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreHealthLinkElites
-        {
-            get
-            {
-                return _ignoreHealthLinkElites;
-            }
-            set
-            {
-                if (_ignoreHealthLinkElites != value)
-                {
-                    _ignoreHealthLinkElites = value;
-                    OnPropertyChanged("IgnoreHealthLinkElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreHordeElites
-        {
-            get
-            {
-                return _ignoreHordeElites;
-            }
-            set
-            {
-                if (_ignoreHordeElites != value)
-                {
-                    _ignoreHordeElites = value;
-                    OnPropertyChanged("IgnoreHordeElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreIllusionistElites
-        {
-            get
-            {
-                return _ignoreIllusionistElites;
-            }
-            set
-            {
-                if (_ignoreIllusionistElites != value)
-                {
-                    _ignoreIllusionistElites = value;
-                    OnPropertyChanged("IgnoreIllusionistElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreJailerElites
-        {
-            get
-            {
-                return _ignoreJailerElites;
-            }
-            set
-            {
-                if (_ignoreJailerElites != value)
-                {
-                    _ignoreJailerElites = value;
-                    OnPropertyChanged("IgnoreJailerElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreKnockbackElites
-        {
-            get
-            {
-                return _ignoreKnockbackElites;
-            }
-            set
-            {
-                if (_ignoreKnockbackElites != value)
-                {
-                    _ignoreKnockbackElites = value;
-                    OnPropertyChanged("IgnoreKnockbackElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreMissileDampeningElites
-        {
-            get
-            {
-                return _ignoreMissileDampeningElites;
-            }
-            set
-            {
-                if (_ignoreMissileDampeningElites != value)
-                {
-                    _ignoreMissileDampeningElites = value;
-                    OnPropertyChanged("IgnoreMissileDampeningElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreMoltenElites
-        {
-            get
-            {
-                return _ignoreMoltenElites;
-            }
-            set
-            {
-                if (_ignoreMoltenElites != value)
-                {
-                    _ignoreMoltenElites = value;
-                    OnPropertyChanged("IgnoreMoltenElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreMortarElites
-        {
-            get
-            {
-                return _ignoreMortarElites;
-            }
-            set
-            {
-                if (_ignoreMortarElites != value)
-                {
-                    _ignoreMortarElites = value;
-                    OnPropertyChanged("IgnoreMortarElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreNightmarishElites
-        {
-            get
-            {
-                return _ignoreNightmarishElites;
-            }
-            set
-            {
-                if (_ignoreNightmarishElites != value)
-                {
-                    _ignoreNightmarishElites = value;
-                    OnPropertyChanged("IgnoreNightmarishElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreOrbiterElites
-        {
-            get
-            {
-                return _ignoreOrbiterElites;
-            }
-            set
-            {
-                if (_ignoreOrbiterElites != value)
-                {
-                    _ignoreOrbiterElites = value;
-                    OnPropertyChanged("IgnoreOrbiterElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnorePlaguedElites
-        {
-            get
-            {
-                return _ignorePlaguedElites;
-            }
-            set
-            {
-                if (_ignorePlaguedElites != value)
-                {
-                    _ignorePlaguedElites = value;
-                    OnPropertyChanged("IgnorePlaguedElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnorePoisonEnchantedElites
-        {
-            get
-            {
-                return _ignorePoisonEnchantedElites;
-            }
-            set
-            {
-                if (_ignorePoisonEnchantedElites != value)
-                {
-                    _ignorePoisonEnchantedElites = value;
-                    OnPropertyChanged("IgnorePosionEnchantedElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreShieldingElites
-        {
-            get
-            {
-                return _ignoreShieldingElites;
-            }
-            set
-            {
-                if (_ignoreShieldingElites != value)
-                {
-                    _ignoreShieldingElites = value;
-                    OnPropertyChanged("IgnoreShieldingElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreTeleporterElites
-        {
-            get
-            {
-                return _ignoreTeleporterElites;
-            }
-            set
-            {
-                if (_ignoreTeleporterElites != value)
-                {
-                    _ignoreTeleporterElites = value;
-                    OnPropertyChanged("IgnoreTeleporterElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreThunderstormElites
-        {
-            get
-            {
-                return _ignoreThunderstormElites;
-            }
-            set
-            {
-                if (_ignoreThunderstormElites != value)
-                {
-                    _ignoreThunderstormElites = value;
-                    OnPropertyChanged("IgnoreThunderstormElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreVampiricElites
-        {
-            get
-            {
-                return _ignoreVampiricElites;
-            }
-            set
-            {
-                if (_ignoreVampiricElites != value)
-                {
-                    _ignoreVampiricElites = value;
-                    OnPropertyChanged("IgnoreVampiricElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreVortexElites
-        {
-            get
-            {
-                return _ignoreVortexElites;
-            }
-            set
-            {
-                if (_ignoreVortexElites != value)
-                {
-                    _ignoreVortexElites = value;
-                    OnPropertyChanged("IgnoreVortexElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreWallerElites
-        {
-            get
-            {
-                return _ignoreWallerElites;
-            }
-            set
-            {
-                if (_ignoreWallerElites != value)
-                {
-                    _ignoreWallerElites = value;
-                    OnPropertyChanged("IgnoreWallerElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool IgnoreWormholeElites
-        {
-            get
-            {
-                return _ignoreWormholeElites;
-            }
-            set
-            {
-                if (_ignoreWormholeElites != value)
-                {
-                    _ignoreWormholeElites = value;
-                    OnPropertyChanged("IgnoreWormholeElites");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
         public bool IgnoreHighHitPointElites
         {
             get
@@ -1492,7 +965,6 @@ namespace Trinity.Config.Combat
                 }
             }
         }
-
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
@@ -1593,12 +1065,20 @@ namespace Trinity.Config.Combat
             }
         }
 
-        private HashSet<TrinityMonsterAffix> _ignoreAffixes;
-        public HashSet<TrinityMonsterAffix> IgnoreAffixes
+        [DataMember(IsRequired = false)]
+        [Setting, UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]
+        public MonsterAffixes IgnoreAffixes
         {
             get { return _ignoreAffixes; }
             set { SetField(ref _ignoreAffixes, value); }
         }
+
+        //private List<MonsterAffixes> _ignoreAffixes = Enum.GetValues(typeof(MonsterAffixes)).Cast<MonsterAffixes>().ToList();
+        //public List<MonsterAffixes> IgnoreAffixes
+        //{
+        //    get { return _ignoreAffixes; }
+        //    set { SetField(ref _ignoreAffixes, value); }
+        //}
 
         #endregion Properties
 
@@ -1662,7 +1142,7 @@ namespace Trinity.Config.Combat
             TryToSnapshot = true;
 
             ForceKillClusterElites = false;
-            RiftValueAlwaysKillClusterValue = 10;            
+            RiftValueAlwaysKillClusterValue = 10;
             RiftValueAlwaysKillUnitsAbove = 1;
             RiftValueIgnoreUnitsBelow = 0;
             RiftProgressionAlwaysKillPct = 98;

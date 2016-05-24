@@ -1,10 +1,15 @@
 ﻿using System;
+using System.ArrayExtensions;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Adventurer.Util;
 using JetBrains.Annotations;
 using Trinity.UIComponents;
+using UnconstrainedMelody;
+using Trinity.Helpers;
 
 namespace Trinity.UI.UIComponents
 {
@@ -60,19 +65,39 @@ namespace Trinity.UI.UIComponents
     
         }
 
-        private int? _allValues;
-        public int AllValues
+        private static bool IsSignedTypeCode(TypeCode code)
+        {
+            switch (code)
+            {
+                case TypeCode.Byte:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+        private long _allValuesSum;
+        private Enum _allValues;
+        public Enum AllValues
         {
             get
             {
-                if (_allValues.HasValue)
-                    return _allValues.Value;
+                if (_allValues != null) return _allValues;
+                _allValuesSum = GetAllEnumValues()
+                    .Where(value => value == 1 || value % 2 == 0)
+                    .Aggregate<long, long>(0, (current, value) => current | value);
 
-                var enumValues = Enum.GetValues(Type).Cast<int>().Where(e => e == 1 || e % 2 == 0);
-                _allValues = enumValues.Aggregate(0, (current, value) => current | value);
-
-                return _allValues.Value;
+                _allValues = (Enum)Enum.Parse(Type, _allValuesSum.ToString());
+                return _allValues;
             }
+        }
+
+        private IEnumerable<long> GetAllEnumValues()
+        {
+            return Enum.GetValues(Type).Cast<Enum>().Select(Convert.ToInt64);
         }
 
         public void ToggleFlag()
@@ -80,8 +105,8 @@ namespace Trinity.UI.UIComponents
             if (Source == null)
                 return;
 
-            int targetValue = (int)Source.Value;
-            targetValue ^= (int)Enum.Parse(Type, (string)Name);
+            var targetValue = Convert.ToInt64(Source.Value);
+            targetValue ^= Convert.ToInt64(Enum.Parse(Type, (string)Name));
             var result = (Enum)Enum.Parse(Type, targetValue.ToString());
             SetSourceValue(result);
         }
@@ -89,9 +114,7 @@ namespace Trinity.UI.UIComponents
         private void SetSourceValue(Enum result)
         {
             Source.Value = result;
-
-            if (OnSourceChanged != null)
-                OnSourceChanged(Source.Name);
+            OnSourceChanged?.Invoke(Source.Name);
         }
 
         public ICommand FlagCheckboxSetCommand
@@ -108,29 +131,40 @@ namespace Trinity.UI.UIComponents
             }
             set
             {
-                if (_value != value)
+                try
                 {
-                    _value = value;
-                    OnPropertyChanged();
-                    
-                    if ((int)Flag == AllValues)
+                    if (_value != value)
                     {
-                        if ((int) Source.Value == AllValues)
+                        _value = value;
+                        OnPropertyChanged();
+
+                        // Check if this flag is an 'All/None' toggle in enum e.g
+                        // All = ~(1 << 24),  
+
+                        if (_allValuesSum + Convert.ToInt64(Flag) < 0)
                         {
-                            // Set to nothing selected
-                            SetSourceValue((Enum)Enum.Parse(Type, "0"));
+                            if (Equals(Source.Value, AllValues))
+                            {
+                                // Set to nothing selected
+                                SetSourceValue((Enum)Enum.Parse(Type, "0"));
+                            }
+                            else
+                            {
+                                // Set to everything selected
+                                SetSourceValue((Enum)Enum.Parse(Type, AllValues.ToString()));
+                            }
                         }
                         else
                         {
-                            // Set to everything selected
-                            SetSourceValue((Enum)Enum.Parse(Type, AllValues.ToString()));
+                            ToggleFlag();
                         }
                     }
-                    else
-                    {
-                       ToggleFlag(); 
-                    }                    
                 }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Exception in PropertyValueFlagBindingItem: {ex}");
+                }
+
             }
         }
 

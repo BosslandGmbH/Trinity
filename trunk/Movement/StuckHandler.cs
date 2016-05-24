@@ -317,13 +317,15 @@ namespace Trinity.Movement
 
         private static async Task<bool> MoveAwayFrom(Vector3 position)
         {
-            var startTime = DateTime.UtcNow;
-            var playerDistance = position.Distance(ZetaDia.Me.Position);
+            var startTime = DateTime.UtcNow;            
 
-            var positions = GenerateUnstickPositions().Where(p => p.Distance(position) > playerDistance).ToList();
+            var positions = GenerateUnstickPositions(position);
 
             if (!positions.Any())
+            {
+                Logger.LogDebug($"No Unstuck Positions were found. IsMainGridProviderEmpty={TrinityPlugin.MainGridProvider.Width==0}");
                 return false;
+            }
 
             var targetPosition = positions.First();
             var segmentStartTime = DateTime.UtcNow;
@@ -353,12 +355,29 @@ namespace Trinity.Movement
         }
 
 
-        private static List<Vector3> GenerateUnstickPositions()
+        private static List<Vector3> GenerateUnstickPositions(Vector3 avoidPosition)
         {
-            var circlePoints = GetCirclePoints(10, 30, ZetaDia.Me.Position);
-            //var validatedPoints = circlePoints.Where(p => Navigator.Raycast(ZetaDia.Me.Position, p)).ToList();
-            var validatedPoints = circlePoints.Where(p => TrinityPlugin.MainGridProvider.CanStandAt(p)).ToList();
-            return RandomShuffle(validatedPoints);
+            var myPosition = ZetaDia.Me.Position;
+            var distanceToAwayPosition = avoidPosition.Distance(ZetaDia.Me.Position);
+            var circlePoints = GetCirclePoints(10, 65, ZetaDia.Me.Position);
+            if (!circlePoints.Any())
+            {
+                Logger.LogDebug("No circle unstick positions found!");
+                circlePoints = GetCirclePoints(10, 150, ZetaDia.Me.Position);
+            }
+            var directionalPoints = circlePoints.Where(p => p.Distance(myPosition) > distanceToAwayPosition);
+            if (!directionalPoints.Any())
+            {
+                Logger.LogDebug("No directional unstick positions found!");
+                directionalPoints = circlePoints;
+            }
+            var validatedPoints = directionalPoints.Where(p => TrinityPlugin.MainGridProvider.CanStandAt(p));
+            if(!validatedPoints.Any())
+            {
+                Logger.LogDebug("No validated unstick positions found!");
+                validatedPoints = directionalPoints;
+            }
+            return RandomShuffle(validatedPoints.ToList());
         }
 
         public static List<T> RandomShuffle<T>(List<T> list)

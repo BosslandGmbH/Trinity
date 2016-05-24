@@ -50,6 +50,21 @@ namespace Trinity.Helpers
             });
         }
 
+        public static List<T> ToList<T>(this Enum input, bool skipDefault = false)
+        {
+            var defaultValue = default(T);
+            return Enum.GetValues(input.GetType()).Cast<T>().Where(e => !defaultValue.Equals(e)).ToList();
+        }
+
+        public static IEnumerable<T> GetFlags<T>(this Enum input, bool excludeDefault = true) where T : struct
+        {
+            var defaultValue = default(T);
+            foreach (Enum value in Enum.GetValues(input.GetType()))
+                if (input.HasFlag(value) && !defaultValue.Equals(value))
+                    yield return (T)(object)value;
+        }
+
+
         public static void Sort<TSource, TKey>(this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector)
         {
             List<TSource> sortedList = source.OrderBy(keySelector).ToList();
@@ -59,7 +74,7 @@ namespace Trinity.Helpers
                 source.Add(sortedItem);
             }
         }
-  
+
 
         /// <summary>
         /// Fetches value from Dictionary or adds and returns a default value.

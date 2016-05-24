@@ -16,6 +16,7 @@
             <ut:PercentConverter x:Key="percentConverter" />
             <ut:SliderValueToVisibilityConverter x:Key="sliderValueToVisibilityConverter" />
             <ut:BoolToVisibilityConverter x:Key="visibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
+            <ut:PropertyValueConverter x:Key="propertyValueConverter" />
             
         </ResourceDictionary>
     </UserControl.Resources>
@@ -28,7 +29,7 @@
                     Elite Mob Settings
                 </GroupBox.Header>
                 <StackPanel>
-                    
+
                     <Grid Margin="5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
@@ -63,6 +64,13 @@
                         <CheckBox Margin="5,0" IsChecked="{Binding Misc.IgnoreChampions}" Content="Ignore Blue/Champ Packs"/>
                         <CheckBox Margin="5,0" ToolTip="Uses 'Minimum Trash Mob Pack Size'" IsChecked="{Binding Path=Misc.ForceKillClusterElites}">Always Attack Elites in Clusters</CheckBox>
                     </UniformGrid>
+
+                    <Label Margin="0,10,0,-2" FontWeight="Bold">Ignore Elites By Affix:</Label>
+                    <!-- ignore affixes checkboxes are auto-generated based on the MonsterAffixes flags enum -->
+                    <ContentPresenter Margin="0,5,0,0" Content="{Binding Misc,
+                                Converter={StaticResourceExtension propertyValueConverter}, 
+                                ConverterParameter=IgnoreAffixes}" 
+                                Style="{DynamicResource SimpleItemsControlSelector}" />
                 </StackPanel>
             </GroupBox>
 
