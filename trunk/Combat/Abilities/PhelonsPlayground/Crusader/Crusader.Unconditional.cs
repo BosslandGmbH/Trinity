@@ -37,8 +37,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                 {
                     return Skills.Crusader.LawsOfHope.CanCast() &&
                            !CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_LawsOfHope2, 6) &&
-                           (!IsSteedCharging && CurrentTarget == null || !CurrentTarget.IsUnit) &&
-                           Settings.Combat.Crusader.SpamLaws;
+                           !IsSteedCharging && (CurrentTarget == null || Settings.Combat.Crusader.SpamLaws);
                     ;
                 }
             }

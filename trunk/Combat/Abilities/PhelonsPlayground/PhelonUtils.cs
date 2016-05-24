@@ -63,7 +63,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                     TrinityPlugin.CurrentTarget.Type != TrinityObjectType.HealthGlobe)
                 {
                     //Logger.Log("Prevent Primary Attack ");
-                    var targetPosition = TargetUtil.GetLoiterPosition(PhelonTargeting.BestAoeUnit(45, true), 20f);
+                    var targetPosition = TargetUtil.GetLoiterPosition(TrinityPlugin.CurrentTarget, 20f);
                     // return new TrinityPower(SNOPower.Walk, 7f, targetPosition);
                     return targetPosition;
                 }
@@ -172,7 +172,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                           u.RadiusDistance <= maxSearchRange && !u.IsSafeSpot
                     orderby
                         u.NearbyUnitsWithinDistance(clusterRadius) descending,
-                        u.Distance,
                         u.HitPointsPct descending
                     select u).ToList();
 
@@ -187,7 +186,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                     u.Distance <= range
                     orderby
                      u.NearbyUnitsWithinDistance(range) descending,
-                     u.Distance,
                      u.HitPointsPct descending
                     select u).FirstOrDefault();
 

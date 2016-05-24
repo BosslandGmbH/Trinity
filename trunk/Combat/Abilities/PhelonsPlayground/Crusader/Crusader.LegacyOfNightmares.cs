@@ -24,11 +24,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                 if (ShouldCondemn)
                     return CastCondemn;
 
+                //Make sure we cast Bombardment when IronSkin and CoE is Up.
+                if (GetHasBuff(SNOPower.X1_Crusader_IronSkin) && ShouldBombardment)
+                    return CastBombardment;
+
                 //Wait for CoE to Cast Damage CD's
                 if (!Settings.Combat.Misc.UseConventionElementOnly ||
                     !ShouldWaitForConventionofElements(Skills.Crusader.IronSkin, Element.Physical, 1500, 1000))
                 {
-
                     if (ShouldIronSkin)
                         return CastIronSkin;
 
@@ -41,10 +44,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                         if (ShouldConsecration)
                             return CastConsecration;
                     }
-
-                    //Make sure we cast Bombardment when IronSkin and CoE is Up.
-                    if (GetHasBuff(SNOPower.X1_Crusader_IronSkin) && ShouldBombardment)
-                        return CastBombardment;
                 }
                 if (ShouldSteedCharge)
                     return CastSteedCharge;
@@ -52,9 +51,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                 if (!IsCurrentlyAvoiding)
                 {
                     //Logger.Log("Steed Charge Damage");
-                    return PhelonTargeting.BestAoeUnit(45, true).Distance < 10
-                        ? new TrinityPower(SNOPower.Walk, 20f,
-                            TargetUtil.GetZigZagTarget(PhelonTargeting.BestAoeUnit(45, true).Position, 15f, false), TrinityPlugin.CurrentWorldDynamicId,
+                    return PhelonTargeting.BestAoeUnit(45, true).Distance < 15
+                        ? new TrinityPower(SNOPower.Walk, 7f,
+                            TargetUtil.GetZigZagTarget(PhelonTargeting.BestAoeUnit(45, true).Position, 15f, false),
+                            TrinityPlugin.CurrentWorldDynamicId,
                             -1, 0, 1)
                         : new TrinityPower(SNOPower.Walk, 3f, PhelonTargeting.BestAoeUnit(45, true).Position);
                 }
