@@ -22,9 +22,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (!Skills.Wizard.ArchonStrike.IsActive)
                     return null;
 
-                if (ShouldCancelArchon)
-                    return CastCancelArchon;
-
                 if (ShouldSlowTime)
                     return CastSlowTime;
 
@@ -69,12 +66,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 }
             }
 
-            private static bool ShouldCancelArchon
-                =>
-                    CanCast(SNOPower.Wizard_Archon_Cancel) && VyrsCount >= 1 && TalRashasCount >= 3 &&
-                    Skills.Wizard.Archon.TimeSinceUse > 9500;
+            //private static bool ShouldCancelArchon
+            //    => 
+            //        CanCast(SNOPower.Wizard_Archon_Cancel) && VyrsCount >= 1 && TalRashasCount >= 3 &&
+            //        Skills.Wizard.Archon.TimeSinceUse > 9500;
 
-            private static TrinityPower CastCancelArchon => new TrinityPower(SNOPower.Wizard_Archon_Cancel);
+            //private static TrinityPower CastCancelArchon => new TrinityPower(SNOPower.Wizard_Archon_Cancel);
         }
     }
 }
