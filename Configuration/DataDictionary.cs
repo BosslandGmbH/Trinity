@@ -62,6 +62,7 @@ namespace Trinity
             { 2429, 664373032, 1663345352, "P5_Cosmetic_Pet_zombie_01" },
         };
 
+
         public static HashSet<int> PetSnoIds = new HashSet<int>()
         {
             (int) SNOActor.x1_promoPet_fallenHound_skeletal, // 360090,
@@ -87,9 +88,19 @@ namespace Trinity
             (int) SNOActor.cos_pet_goatman_melee_02, // 441214,
             (int) SNOActor.p3_cos_pet_jadeSerpent, // 441437,
             
+            451019, //Pet found! - Picking it up Cosmetic_Pet_hoodednightmare_01 Sno=451019 GbId=347688656
+            451040, //Pet found! - Picking it up Cosmetic_Pet_squire Sno=451040 GbId=1967180567
+            451051, //Pet found! - Picking it up Cosmetic_Pet_cowking_01 Sno=451051 GbId=-1526517200
+            451053, //Pet found! - Picking it up Cosmetic_Pet_bladedsoul_01 Sno=451053 GbId=-1967557379
 
             // Yahoo !treasureGoblin_K-613 ActorSnoId: 450993, Menagerist Goblin
 		    450993,
+
+            451021, //The Mimic ActorId: 451021, Type: Item, Name: ?????
+
+            
+            451002, //sir williams - 451002 (TentacleBear_C_Unique_Cosmetic_02)
+            //portrait - 410998 (Cosmetic_Portrait_Frame_1)
 
             451015,  //ActorId:  Type: Item, Name: Haunting Hannah
             451013, //ActorId:  Type: Item, Name: Buddy
@@ -106,12 +117,17 @@ namespace Trinity
             451017, //Lady Morhanlu: ActorId: 451017, Type: Item, Name: ?????
             430910, //20DFD214] Type: Monster Name: cos_pet_teddybear_04-411489 ActorSnoId: 430910, Distance: 11.76465
             451031, //ActorId: 451031, Type: Item, Name: Cosmetic_Pet_FloatingSkull_02-22954, Distance2d: 23.11925, CollisionRadius: 0, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
+
+            451025, //Blaze ActorId: 451025, Type: Item, Name: ?????
+            451049, //Friendly Gauntlet //ActorId: 451049, Type: Item, Name: ?????? ????
+
             //ActorId: 451031, Type: Item, Name: Humbart Wessel
         };
 
-        public static HashSet<int> WingsSnoIds = new HashSet<int>
+        public static HashSet<int> CosmeticSnoIds = new HashSet<int>
         {
-            
+
+            410998, //portrait - 410998 (Cosmetic_Portrait_Frame_1)
 
             451114, //ActorId:  Type: Item, Name: Falcon's Wings
 
@@ -1233,6 +1249,8 @@ namespace Trinity
             (int)SNOActor.treasureGoblin_Anniversary_Event, //434745
             (int)SNOActor.p1_Portal_Anniversary_goblin_NoAccess, //435639
             (int)SNOActor.p3_cos_pet_Murkgoblin_A, //441208
+                        
+		    450993, // Yahoo !treasureGoblin_K-613 ActorSnoId: 450993, Menagerist Goblin
 
         ////    //5984, 5985, 5987, 5988, 405186, 380657
 
@@ -1768,6 +1786,11 @@ namespace Trinity
 			137125, //FesteringWoods_WarriorsRest_Lore
         };
 
+        public static HashSet<int> ExtendedKillRadiusSceneSnoIds = new HashSet<int>
+        {
+            28768, // trDun_Crypt_NSEW_JarSouls_01
+        };
+
         /// <summary>
         /// Contains ActorSnoId's of world objects that should be blacklisted
         /// </summary>
@@ -1779,7 +1802,7 @@ namespace Trinity
             (int)SNOActor.x1_Catacombs_Breakable_Half_Bridge_Walkway_A,
 
             //209133, //TentacleLord
-            (int)SNOActor.trDun_Cath_Gate_D_UdderChaos, // Door that is locked until you talk to cow king
+            //(int)SNOActor.trDun_Cath_Gate_D_UdderChaos, // Door that is locked until you talk to cow king
 
             (int)SNOActor.x1_BogCave_Breakable_Stalagmites_A,
             (int)SNOActor.x1_BogCave_Breakable_Stalagmites_B,

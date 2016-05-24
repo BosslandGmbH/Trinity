@@ -165,6 +165,8 @@ namespace Trinity
                         }
                     }
 
+                    var ignoredAffixes = Settings.Combat.Misc.IgnoreAffixes.GetFlags<MonsterAffixes>();
+
                     #region Foreach Loop
 
                     TrinityCacheObject bestTarget = null;
@@ -409,6 +411,17 @@ namespace Trinity
 
                                     #endregion
 
+                                    #region Special Case Monsters
+
+                                    if (Player.CurrentSceneSnoId == 28768 && cacheObject.ActorSNO == (int)SNOActor.x1_Tentacle_Goatman_Melee_A && !cacheObject.CommonData.IsVisibleOnMinimap)
+                                    {
+                                        cacheObject.WeightInfo += "Invisible Goat in Cow King rift event ";
+                                        cacheObject.Weight = 0;
+                                        break;
+                                    }
+
+                                    #endregion
+
                                     if (deadPlayer)
                                     {
                                         cacheObject.WeightInfo +=
@@ -616,230 +629,239 @@ namespace Trinity
                                                 break;
                                             }
                                         }
-                                        else if (Settings.Combat.Misc.IgnoreMonstersWhileReflectingDamage &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage)))
+                                        else
                                         {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to ReflectsDamage Affix ",
-                                                    cacheObject.InternalName);
+                                            var ignoredAffixMatches = ignoredAffixes.Where(a => cacheObject.MonsterAffixes.HasFlag(a)).ToList();
+                                            if (ignoredAffixMatches.Any())
+                                            {
+                                                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} due to {ignoredAffixMatches.FirstOrDefault()} Affix ";
+                                            }
                                             break;
                                         }
-                                        else if (Settings.Combat.Misc.IgnoreArcaneElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.ArcaneEnchanted)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to ArcaneEnchanted Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreAvengerElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Avenger)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Avenger Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreDesecratorElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Desecrator)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Desecrator Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreElectrifiedElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Electrified)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Electrified Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreExtraHealthElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.ExtraHealth)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to ExtraHealth Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreFastElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Fast)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Fast Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreFrozenElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Frozen)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Frozen Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreFrozenPulseElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.FrozenPulse)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to FrozenPulse Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreHealthLinkElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.HealthLink)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to HealthLink Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreHordeElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Horde)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Horde Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreIllusionistElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Illusionist)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Illusionist Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreJailerElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Jailer)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Jailer Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreKnockbackElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Knockback)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Knockback Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreMissileDampeningElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.MissileDampening)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to MissileDampening Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreMoltenElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Molten)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Molten Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreMortarElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Mortar)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Mortar Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreNightmarishElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Nightmarish)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Nightmarish Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreOrbiterElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Orbiter)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Orbiter Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnorePlaguedElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Plagued)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Plagued Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnorePoisonEnchantedElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.PoisonEnchanted)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to PoisonEnchanted Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreShieldingElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Shielding)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Shielding Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreTeleporterElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Teleporter)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Teleporter Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreThunderstormElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Thunderstorm)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Thunderstorm Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreVampiricElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Vampiric)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Vampiric Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreVortexElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Vortex)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Vortex Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreWallerElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Waller)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Waller Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
-                                        else if (Settings.Combat.Misc.IgnoreWormholeElites &&
-                                                 elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Wormhole)))
-                                        {
-                                            cacheObject.WeightInfo +=
-                                                string.Format("Ignoring {0} due to Wormhole Affix ",
-                                                    cacheObject.InternalName);
-                                            break;
-                                        }
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.ReflectsDamage) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to ReflectsDamage Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.ArcaneEnchanted) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.ArcaneEnchanted)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to ArcaneEnchanted Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Avenger) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Avenger)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Avenger Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Desecrator) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Desecrator)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Desecrator Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Electrified) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Electrified)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Electrified Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.ExtraHealth) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.ExtraHealth)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to ExtraHealth Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Fast) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Fast)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Fast Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Frozen) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Frozen)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Frozen Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.FrozenPulse) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.FrozenPulse)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to FrozenPulse Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.HealthLink) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.HealthLink)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to HealthLink Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Horde) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Horde)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Horde Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Illusionist) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Illusionist)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Illusionist Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Jailer) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Jailer)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Jailer Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Knockback) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Knockback)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Knockback Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.MissileDampening) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.MissileDampening)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to MissileDampening Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Molten) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Molten)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Molten Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.Mortar) &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Mortar)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Mortar Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreNightmarishElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Nightmarish)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Nightmarish Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreOrbiterElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Orbiter)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Orbiter Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnorePlaguedElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Plagued)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Plagued Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnorePoisonEnchantedElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.PoisonEnchanted)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to PoisonEnchanted Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreShieldingElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Shielding)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Shielding Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreTeleporterElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Teleporter)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Teleporter Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreThunderstormElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Thunderstorm)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Thunderstorm Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreVampiricElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Vampiric)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Vampiric Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreVortexElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Vortex)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Vortex Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreWallerElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Waller)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Waller Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
+                                        //else if (Settings.Combat.Misc.IgnoreWormholeElites &&
+                                        //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.Wormhole)))
+                                        //{
+                                        //    cacheObject.WeightInfo +=
+                                        //        string.Format("Ignoring {0} due to Wormhole Affix ",
+                                        //            cacheObject.InternalName);
+                                        //    break;
+                                        //}
                                         cacheObject.WeightInfo += string.Format("Adding {0} default Elite ",
                                             cacheObject.InternalName);
                                         cacheObject.Weight += EliteFormula(cacheObject);

@@ -125,7 +125,7 @@ namespace Trinity.Items
                 return true;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.GameBalanceId) || DataDictionary.WingsSnoIds.Contains(item.ActorSnoId))
+            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.GameBalanceId) || DataDictionary.CosmeticSnoIds.Contains(item.ActorSnoId))
             {
                 Logger.Log($"Wings found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
@@ -1129,7 +1129,7 @@ namespace Trinity.Items
                 return true;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.BalanceID) || DataDictionary.WingsSnoIds.Contains(item.ActorSNO))
+            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.BalanceID) || DataDictionary.CosmeticSnoIds.Contains(item.ActorSNO))
             {
                 Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
                 return true;

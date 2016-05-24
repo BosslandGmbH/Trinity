@@ -271,6 +271,7 @@
     <Compile Include="Framework\Avoidance\Handlers\AnimationCircularAvoidanceHandler.cs" />
     <Compile Include="Framework\Helpers\GridHelper.cs" />
     <Compile Include="Helpers\Bitwise.cs" />
+    <Compile Include="Helpers\EnumExtensions.cs" />
     <Compile Include="Helpers\ExceptionExtensions.cs" />
     <Compile Include="Framework\Objects\PriorityQueue\FastPriorityQueue.cs" />
     <Compile Include="Framework\Objects\PriorityQueue\FastPriorityQueueNode.cs" />
@@ -280,6 +281,13 @@
     <Compile Include="Helpers\Notifications.cs" />
     <Compile Include="Helpers\OrderedDictionary.cs" />
     <Compile Include="Helpers\RegexExtensions.cs" />
+    <Compile Include="Helpers\UMelody\DelegateConstraint.cs" />
+    <Compile Include="Helpers\UMelody\Delegates.cs" />
+    <Compile Include="Helpers\UMelody\EnumInternals.cs" />
+    <Compile Include="Helpers\UMelody\Enums.cs" />
+    <Compile Include="Helpers\UMelody\Flags.cs" />
+    <Compile Include="Helpers\UMelody\IEnumConstraint.cs" />
+    <Compile Include="Helpers\UMelody\TypeArgumentException.cs" />
     <Compile Include="Helpers\VectorExt.cs" />
     <Compile Include="Helpers\WindowMessage.cs" />
     <Compile Include="Helpers\WindowsVirtualKey.cs" />

@@ -32,7 +32,6 @@ namespace Trinity.Config
 
         public AvoidanceDataSettingViewModel()
         {
-            
         }
 
         public AvoidanceDataSettingViewModel(IAvoidanceSetting a)
@@ -114,8 +113,11 @@ namespace Trinity.Config
 
         public AvoidanceSetting()
         {
-            Reset();
+            TrinitySetting.Reset(this);
+            Avoidances = new FullyObservableCollection<AvoidanceDataSettingViewModel>();
+            LoadSettingsFromDataFactory();
         }
+
         [IgnoreDataMember]
         public Tab SelectedTab => (Tab)SelectedTabIndex;
 
@@ -173,8 +175,8 @@ namespace Trinity.Config
         }
 
         [DataMember]
-        [DefaultValue(WeightingOptions.Backtrack | WeightingOptions.Globes | WeightingOptions.AdjacentSafe | 
-            WeightingOptions.AvoidanceCentroid | WeightingOptions.Kiting | WeightingOptions.MonsterCentroid | 
+        [DefaultValue(WeightingOptions.Backtrack | WeightingOptions.Globes | WeightingOptions.AdjacentSafe |
+            WeightingOptions.AvoidanceCentroid | WeightingOptions.Kiting | WeightingOptions.MonsterCentroid |
             WeightingOptions.Monsters | WeightingOptions.Obstacles)]
         public WeightingOptions WeightingOptions
         {
@@ -254,7 +256,7 @@ namespace Trinity.Config
             set { SetField(ref _dontAvoidWhenBlocked, value); }
         }
 
-        
+
         public void OnSave()
         {
             Logger.Log("Saving Avoidance Data");
@@ -264,7 +266,7 @@ namespace Trinity.Config
         public void OnLoaded()
         {
             Logger.Log("Loading Avoidance Data");
-            LoadSettingsFromDataFactory();             
+            LoadSettingsFromDataFactory();
         }
 
         public void ApplyUserSettingsToDataFactory()
@@ -285,7 +287,7 @@ namespace Trinity.Config
             }
         }
 
-        private void LoadSettingsFromDataFactory()
+        private void LoadSettingsFromDataFactory(bool reset = false)
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
@@ -306,11 +308,12 @@ namespace Trinity.Config
                             setting.Handler = def.Handler;
                             (def.Handler as NotifyBase)?.LoadDefaults();
                         }
-                        setting.CopyTo(def);              
+                        setting.CopyTo(def);
                     }
-                    else 
+                    else
                     {
-                        (def.Handler as NotifyBase)?.LoadDefaults();
+                        if(reset)
+                            (def.Handler as NotifyBase)?.LoadDefaults();
                         var newAvoidance = new AvoidanceDataSettingViewModel(def);
                         if (def.IsEnabledByDefault)
                             newAvoidance.IsEnabled = true;
@@ -356,7 +359,7 @@ namespace Trinity.Config
                 return new RelayCommand(param =>
                 {
                     Avoidances.Clear();
-                    LoadSettingsFromDataFactory();
+                    LoadSettingsFromDataFactory(true);
                 });
             }
         }
@@ -364,9 +367,8 @@ namespace Trinity.Config
         public void Reset()
         {
             TrinitySetting.Reset(this);
-            LoadDefaults();   
             Avoidances = new FullyObservableCollection<AvoidanceDataSettingViewModel>();
-            LoadSettingsFromDataFactory();          
+            LoadSettingsFromDataFactory(true);
         }
 
         public void CopyTo(AvoidanceSetting setting)
@@ -385,7 +387,7 @@ namespace Trinity.Config
         /// <param name="context"></param>
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
-        {            
+        {
             foreach (var p in GetType().GetProperties())
             {
                 foreach (var dv in p.GetCustomAttributes(true).OfType<DefaultValueAttribute>())

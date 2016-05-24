@@ -292,6 +292,7 @@ namespace Trinity
 			{
                 BloodShards = ZetaDia.PlayerData.BloodshardCount;
                 MyDynamicID = _me.CommonData.AnnId;
+			    CurrentSceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
 			    
                 //Zeta.Game.ZetaDia.Me.CommonData.GetAttribute<int>(Zeta.Game.Internals.Actors.ActorAttributeType.TieredLootRunRewardChoiceState) > 0;
 
@@ -567,7 +568,8 @@ namespace Trinity
             public int FreeBackpackSlots { get; set; }
             public int TeamId { get; set; }
             public float Radius { get; set; }
-
+            public int CurrentSceneSnoId { get; set; }
+            
             private float GetMaxSecondaryResource(DiaActivePlayer player)
             {
                 switch (ActorClass)

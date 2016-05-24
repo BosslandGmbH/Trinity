@@ -34,7 +34,7 @@ namespace Trinity.UIComponents
                 if (!isFlags)
                     return enumValues;
 
-                return enumValues.Where(ev => (int)ev != 0).Select(ev => new PropertyValueFlagBindingItem
+                return enumValues.Where(ev => (long)System.Convert.ChangeType(ev, typeof(long)) != 0).Select(ev => new PropertyValueFlagBindingItem
                 {
                     Name = ev.ToString(), 
                     Type = type, 

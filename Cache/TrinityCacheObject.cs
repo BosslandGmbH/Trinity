@@ -1082,6 +1082,48 @@ namespace Trinity
                      483: ConversationIcon (-3613) i:1 f:0 Value=1 IsValid=True 
                     */
 
+
+                    /* Locked gate for cow lord event. closed state.
+                    [Trinity 2.41.95] -- Dumping Attribtues for trDun_Cath_Gate_D_UdderChaos-261211 (Sno=375568 Ann=-1366490265) at <1057.776, 898.3652, 0.3411865> ----
+                    [Trinity 2.41.95] Attributes (9): 
+                     467: GizmoHasBeenOperated (-3629) i:1 f:0 Value=1 IsValid=True 
+                     460: DoorTimer (-3636) i:520283 f:0 Value=520283 IsValid=True 
+                     456: GizmoState (-3640) i:0 f:0 Value=0 IsValid=True 
+                     124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 IsValid=True 
+                     122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 IsValid=True 
+                     119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 IsValid=True 
+                     115: HitpointsCur (-3981) i:0 f:0.001 Value=0 IsValid=True 
+                     103: TeamId (-3993) i:1 f:0 Value=1 IsValid=True 
+                     57: Level (-4039) i:70 f:0 Value=70 IsValid=True */
+
+                    /* A5 gate Closed State
+                    [Trinity 2.41.92] -- Dumping Attribtues for X1_Westm_Door_Giant_Lowering_Wolf-128134 (Sno=308241 Ann=1826030664) at <299.6067, 971.1008, 0.3713183> ----
+                    [Trinity 2.41.92] Attributes (7): 
+                     456: GizmoState (-3640) i:0 f:0 Value=0 IsValid=True 
+                     124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 IsValid=True 
+                     122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 IsValid=True 
+                     119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 IsValid=True 
+                     115: HitpointsCur (-3981) i:0 f:0.001 Value=0 IsValid=True 
+                     103: TeamId (-3993) i:1 f:0 Value=1 IsValid=True 
+                     57: Level (-4039) i:70 f:0 Value=70 IsValid=True                     
+
+                    [Trinity 2.41.92] -- Dumping Attribtues for X1_Westm_Door_Giant_Lowering_Wolf-128134 (Sno=308241 Ann=1826030664) at <299.6067, 971.1008, 0.3713183> ----
+                    [Trinity 2.41.92] Attributes (10): 
+                     467: GizmoHasBeenOperated (-3629) i:1 f:0 Value=1 IsValid=True 
+                     462: GizmoOperatorACDId (-3634) i:2019950762 f:0 Value=2019951000 IsValid=True 
+                     460: DoorTimer (-3636) i:452227 f:0 Value=452227 IsValid=True 
+                     456: GizmoState (-3640) i:1 f:0 Value=1 IsValid=True 
+                     124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 IsValid=True 
+                     122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 IsValid=True 
+                     119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 IsValid=True 
+                     115: HitpointsCur (-3981) i:0 f:0.001 Value=0 IsValid=True 
+                     103: TeamId (-3993) i:1 f:0 Value=1 IsValid=True 
+                     57: Level (-4039) i:70 f:0 Value=70 IsValid=True 
+
+                    */
+
+
+
                     return false;
                 }
 
@@ -1092,7 +1134,7 @@ namespace Trinity
                     return true;
 
                 if (actor.GizmoType == GizmoType.None)
-                    return true;
+                    return true;                
 
                 var commonData = actor.CommonData;
                 if (commonData != null && commonData.IsValid && !commonData.IsDisposed)
