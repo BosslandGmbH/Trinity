@@ -635,8 +635,8 @@ namespace Trinity
                                             if (ignoredAffixMatches.Any())
                                             {
                                                 cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} due to {ignoredAffixMatches.FirstOrDefault()} Affix ";
-                                            }
-                                            break;
+                                                break;
+                                            }                                            
                                         }
                                         //else if (Settings.Combat.Misc.IgnoreAffixes.HasFlag(MonsterAffixes.ReflectsDamage) &&
                                         //         elites.Any(u => u.RActorGuid == cacheObject.RActorGuid && u.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage)))
