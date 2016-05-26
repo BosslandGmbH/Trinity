@@ -87,7 +87,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     ? CurrentTarget
                     : (PhelonGroupSupport.Monk != null
                         ? PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault()
-                        : PhelonGroupSupport.Monk ?? PhelonUtils.ClosestHealthGlobe() ??
+                        : PhelonGroupSupport.Monk ?? PhelonUtils.ClosestGlobe() ??
                           PhelonTargeting.BestAoeUnit(45, true));
 
                 return target != null && Player.PrimaryResource > 10;

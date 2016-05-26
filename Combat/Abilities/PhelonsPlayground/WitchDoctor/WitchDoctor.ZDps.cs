@@ -51,7 +51,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 if (Runes.WitchDoctor.WaveOfMutilation.IsActive)
                     target = PhelonUtils.GetBestPierceTarget(25, true);
                 else
-                    target = PhelonGroupSupport.Monk;
+                    target = PhelonTargeting.BestAoeUnit(35, true);
 
                 return target != null;
             }
