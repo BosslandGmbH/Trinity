@@ -23,9 +23,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
             if (power == null && CurrentTarget != null)
             {
                 if (IszDPS)
-                    power = ZDps.PowerSelector();
-
-                if (power == null) power = new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestWalkLocation);
+                    power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestWalkLocation);
             }
             return power;
         }

@@ -36,7 +36,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 return null;
             }
 
-            private static bool ShouldDisentegrate => Skills.Wizard.ArchonDisintegrationWave.CanCast() &&
+            private static bool ShouldDisentegrate => Skills.Wizard.ArchonDisintegrationWave.IsActive &&
                                                       PhelonUtils.GetBestPierceTarget(45).Distance < 45;
 
             private static TrinityPower CastDisentegrate
@@ -44,18 +44,18 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     PhelonUtils.PointBehind(PhelonUtils.GetBestPierceTarget(45).Position));
 
             private static bool ShouldArcaneStrike
-                => Skills.Wizard.ArchonStrike.CanCast() && PhelonTargeting.BestAoeUnit(45, true).Distance < 10f;
+                => Skills.Wizard.ArchonStrike.IsActive && PhelonTargeting.BestAoeUnit(45, true).Distance < 10f;
 
             private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 10f,
                 PhelonTargeting.BestAoeUnit(45, true).Position);
 
             private static bool ShouldArcaneBlast
-                => Skills.Wizard.ArchonBlast.CanCast() && PhelonTargeting.BestAoeUnit(45, true).Distance < 10f;
+                => Skills.Wizard.ArchonBlast.IsActive && PhelonTargeting.BestAoeUnit(45, true).Distance < 10f;
 
             private static TrinityPower CastArcaneBlast => new TrinityPower(Skills.Wizard.ArchonBlast.SNOPower, 10f,
                 PhelonTargeting.BestAoeUnit(45, true).Position);
 
-            private static bool ShouldSlowTime => Skills.Wizard.ArchonSlowTime.CanCast() && NeedSlowTime;
+            private static bool ShouldSlowTime => Skills.Wizard.ArchonSlowTime.IsActive && NeedSlowTime;
 
             private static TrinityPower CastSlowTime
             {

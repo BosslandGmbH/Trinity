@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Reference;
+using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
@@ -16,21 +17,23 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             {
                 TrinityCacheObject target;
 
-                if (ShouldThreateningShout)
-                    return CastThreateningShout;
-
+                Logger.Log($"ShouldAncientSpear");
                 if (ShouldAncientSpear(out target))
                     return CastAncientSpear(target);
 
+                Logger.Log($"ShouldRend");
                 if (ShouldRend(out target))
                     return CastRend(target);
 
+                Logger.Log($"ShouldBash");
                 if (ShouldBash(out target))
                     return CastBash(target);
 
+                Logger.Log($"ShouldWhirlWind");
                 if (ShouldWhirlWind(out target))
                     return CastWhirlWind(target);
 
+                Logger.Log($"ShouldFuriousCharge");
                 if (ShouldFuriousCharge(out target))
                     return CastFuriousCharge(target);
 
@@ -44,13 +47,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (!Skills.Barbarian.Rend.CanCast())
                     return false;
 
-                target = PhelonUtils.BestAuraUnit(SNOPower.Barbarian_Rend);
+                target = PhelonUtils.BestAuraUnit(Skills.Barbarian.Rend.SNOPower);
                 return target != null && target.Distance <= 12 && Player.PrimaryResourcePct > 0.50;
             }
 
             public static TrinityPower CastRend(TrinityCacheObject target)
             {
-                return new TrinityPower(SNOPower.Barbarian_Rend, 12f, target.ACDGuid);
+                return new TrinityPower(Skills.Barbarian.Rend.SNOPower, 12f, target.ACDGuid);
             }
 
             public static bool ShouldBash(out TrinityCacheObject target)
@@ -72,18 +75,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             {
                 return new TrinityPower(SNOPower.Barbarian_Bash, 12f, target.ACDGuid);
             }
-
-
-            public static bool ShouldThreateningShout
-            {
-                get { return Skills.Barbarian.ThreateningShout.CanCast(); }
-            }
-
-            public static TrinityPower CastThreateningShout
-            {
-                get { return new TrinityPower(SNOPower.Barbarian_ThreateningShout, 25, Player.Position); }
-            }
-
+            
             public static bool ShouldWhirlWind(out TrinityCacheObject target)
             {
                 target = null;
@@ -95,8 +87,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     ? CurrentTarget
                     : (PhelonGroupSupport.Monk != null
                         ? PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault()
-                        : PhelonUtils.ClosestHealthGlobe() ??
-                          PhelonGroupSupport.Monk ??
+                        : PhelonGroupSupport.Monk ?? PhelonUtils.ClosestHealthGlobe() ??
                           PhelonTargeting.BestAoeUnit(45, true));
 
                 return target != null && Player.PrimaryResource > 10;
@@ -104,7 +95,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
 
             public static TrinityPower CastWhirlWind(TrinityCacheObject target)
             {
-                return new TrinityPower(SNOPower.Barbarian_Whirlwind, 20f, target.Position,
+                var targetPosition = target.Distance < 10 ?
+                TargetUtil.GetZigZagTarget(target.Position, 25f, true) : target.Position;
+                return new TrinityPower(Skills.Barbarian.Whirlwind.SNOPower, 25f, targetPosition,
                     TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);
             }
 

@@ -10,6 +10,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
         {
             public static TrinityPower PowerSelector()
             {
+                if (ShouldThreateningShout)
+                    return CastThreateningShout;
                 if (ShouldIgnorePain)
                     return CastIgnorePain;
 
@@ -26,23 +28,19 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return null;
             }
 
-            public static bool ShouldAncientSpear(out TrinityCacheObject target)
+            public static bool ShouldThreateningShout
             {
-                target = null;
-
-                if (!Skills.Barbarian.AncientSpear.CanCast())
-                    return false;
-
-                target = PhelonUtils.GetFarthestClusterUnit(25, 60);
-
-                return target != null && target.Distance <= 60 && Player.PrimaryResourcePct > 0.50 &&
-                       TimeSincePowerUse(SNOPower.X1_Barbarian_AncientSpear) > 1500;
+                get
+                {
+                    return Skills.Barbarian.ThreateningShout.CanCast() &&
+                           (Skills.Barbarian.ThreateningShout.TimeSinceUse > 2000 || Player.PrimaryResourcePct < 0.25 ||
+                            CurrentTarget != null && zDPSEquipped);
+                }
             }
 
-            public static TrinityPower CastAncientSpear(TrinityCacheObject target)
+            public static TrinityPower CastThreateningShout
             {
-                return new TrinityPower(SNOPower.X1_Barbarian_AncientSpear, 60f,
-                    target.ACDGuid);
+                get { return new TrinityPower(Skills.Barbarian.ThreateningShout.SNOPower); }
             }
 
             public static bool ShouldIgnorePain
@@ -58,7 +56,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     if (Player.CurrentHealthPct <= Settings.Combat.Barbarian.IgnorePainMinHealthPct)
                         return true;
 
-                    if (GetHasBuff(SNOPower.Barbarian_IgnorePain))
+                    if (GetHasBuff(SNOPower.Barbarian_IgnorePain) && Skills.Barbarian.IgnorePain.TimeSinceUse < 4500)
                         return false;
 
                     return Player.IsFrozen || Player.IsRooted || Player.IsJailed;
@@ -95,12 +93,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     if (!CanCast(SNOPower.X1_Barbarian_WarCry_v2, CanCastFlags.NoTimer))
                         return false;
 
-                    if (Player.PrimaryResource <= 40 ||
+                    if (Player.PrimaryResource <= 40 || CurrentTarget != null && zDPSEquipped ||
                         Skills.Barbarian.WarCry.TimeSinceUse >= Settings.Combat.Barbarian.WarCryWaitDelay)
                         return true;
 
                     if (CurrentTarget != null)
-                        return Legendary.BladeOfTheTribes.IsEquipped && TargetUtil.AnyMobsInRange(20f);
+                        return Legendary.BladeOfTheTribes.IsEquipped && TargetUtil.AnyMobsInRange(20f) && Barbarian.zDPSEquipped;
 
                     return !GetHasBuff(SNOPower.X1_Barbarian_WarCry_v2);
                 }
