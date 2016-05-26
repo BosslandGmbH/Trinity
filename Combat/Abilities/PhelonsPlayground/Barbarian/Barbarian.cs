@@ -11,7 +11,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
         private static int EarthCount = Sets.MightOfTheEarth.CurrentBonuses;
         private static int WastesCount = Sets.WrathOfTheWastes.CurrentBonuses;
 
-        public static bool zDPS = (WastesCount == 2 || RaekorCount == 2) &&
+        public static bool zDPSEquipped = (WastesCount == 2 || RaekorCount == 2 || Sets.LegacyOfNightmares.IsEquipped) &&
                                   (Sets.BulKathossOath.IsEquipped ||
                                    Sets.IstvansPairedBlades.IsEquipped ||
                                    Legendary.IllusoryBoots.IsEquipped);
@@ -23,13 +23,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             TrinityPower power = Unconditional.PowerSelector();
             if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
             {
-                if (zDPS)
-                    power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestDpsPosition);
+                //Logger.Log($"{zDPSEquipped} | {Sets.LegacyOfNightmares.IsEquipped} | {Legendary.IllusoryBoots.IsEquipped}");
+                if (zDPSEquipped)
+                {
+                    power = ZDps.PowerSelector();
+                }
 
                 if (RaekorCount == 3)
-                    power = Raekor.PowerSelector() ??
-                            new TrinityPower(SNOPower.Walk, 7f,
-                                TargetUtil.GetLoiterPosition(PhelonTargeting.BestAoeUnit(45, true), 20f));
+                    power = Raekor.PowerSelector();
 
                 if (ImmortalKingsCount == 3)
                     power = ImmortalKingsCall.PowerSelector();
@@ -40,11 +41,15 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (WastesCount == 3)
                     power = WrathOfTheWastes.PowerSelector();
 
-                if (RaekorCount < 1 && ImmortalKingsCount < 1 && EarthCount < 1 && WastesCount < 1)
+                if (!zDPSEquipped && RaekorCount < 1 && ImmortalKingsCount < 1 && EarthCount < 1 && WastesCount < 1)
                     power = LegacyOfNightmares.PowerSelector();
 
-                if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+                //if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
             }
+            //if (CurrentTarget != null && CurrentTarget.IsUnit)
+            //    Logger.Log($"{CurrentTarget != null} && {CurrentTarget.IsUnit}");
+            //if (power != null)
+            //    Logger.Log($"Using: {power}");
             return power;
         }
     }
