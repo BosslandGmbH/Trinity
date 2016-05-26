@@ -18,7 +18,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 TrinityCacheObject target;
 
                 if (GetHasBuff(SNOPower.Witchdoctor_SpiritWalk))
-                    return new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+                    return new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation(35f, true));
 
                 if (ShouldPiranhas(out target))
                     return CastPiranhas(target);

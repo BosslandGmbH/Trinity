@@ -86,7 +86,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
                     return true;
                 }
-                var bestDpsPosition = PhelonUtils.BestDpsPosition;
+                var maxRange = DMOCount > 2 || GetHasBuff(Skills.Wizard.Archon.SNOPower)? 12 : 40;
+                var bestDpsPosition = PhelonUtils.BestDpsPosition(maxRange);
                 if (bestDpsPosition != Vector3.Zero &&
                     (bestDpsPosition.Distance(Player.Position) > 12 || Skills.Wizard.Teleport.CanCast() && (Runes.Wizard.Calamity.IsActive ||
                      Runes.Wizard.SafePassage.IsActive) && TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500))
