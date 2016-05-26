@@ -8,6 +8,8 @@ namespace Trinity.Helpers
 {
     public static class EnumExtensions
     {
+        // todo: refactor extension methods with an central 'operate' method that can perform enum operation XOR/OR for two values handling detection/conversion of signed and unsigmed.
+
         private static bool IsSignedTypeCode(TypeCode code)
         {
             switch (code)
@@ -38,7 +40,7 @@ namespace Trinity.Helpers
             }
         }
 
-        public static bool Has<T>(this System.Enum type, T value)
+        public static bool Has<T>(this Enum type, T value)
         {
             try
             {
@@ -50,11 +52,55 @@ namespace Trinity.Helpers
             }
         }
 
-        public static bool Is<T>(this System.Enum type, T value)
+        public static Dictionary<int, string> ToDictionary(this Enum @enum, bool lowerCase = false)
+        {
+            var type = @enum.GetType();
+            return Enum.GetValues(type).Cast<int>().ToDictionary(e => e, e =>
+            {
+                var name = Enum.GetName(type, e);
+                return lowerCase && name != null ? name.ToLower() : Enum.GetName(type, e);
+            });
+        }
+
+        //public static List<T> ToList<T>(this Enum input, bool skipDefault = false)
+        //{
+        //    var defaultValue = default(T);
+        //    return Enum.GetValues(input.GetType()).Cast<T>().Where(e => !defaultValue.Equals(e)).ToList();
+        //}
+
+        public static IEnumerable<T> GetFlags<T>(this Enum input, bool excludeDefault = true) where T : struct
+        {
+            var defaultValue = default(T);
+            foreach (Enum value in Enum.GetValues(input.GetType()))
+                if (input.HasFlag(value) && !defaultValue.Equals(value))
+                    yield return (T)(object)value;
+        }
+
+        public static bool HasAny<T>(this Enum type, T value) where T : struct
         {
             try
             {
-                return (int)(object)type == (int)(object)value;
+                if (!type.Is(value))
+                    return false;
+
+                var findMask = Convert.ToInt64(value);
+                return type.GetFlags<T>().Any(f =>
+                {
+                    var num = Convert.ToInt64(f);
+                    return num > 0 && (findMask & num) == num;
+                });
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static bool Is<T>(this Enum type, T value)
+        {
+            try
+            {
+                return Convert.ToInt64(type) == Convert.ToInt64(value);
             }
             catch
             {
@@ -63,16 +109,16 @@ namespace Trinity.Helpers
         }
 
 
-        public static T Add<T>(this System.Enum type, T value)
+        public static T Add<T>(this Enum type, T value)
         {
             try
             {
-                return (T)(object)(((int)(object)type | (int)(object)value));
+                return (T)(object)(Convert.ToInt64(type) | Convert.ToInt64(value));
             }
             catch (Exception ex)
             {
                 throw new ArgumentException(
-                    string.Format(
+                    String.Format(
                         "Could not append value from enumerated type '{0}'.",
                         typeof(T).Name
                         ), ex);
@@ -80,22 +126,21 @@ namespace Trinity.Helpers
         }
 
 
-        public static T Remove<T>(this System.Enum type, T value)
+        public static T Remove<T>(this Enum type, T value)
         {
             try
             {
-                return (T)(object)(((int)(object)type & ~(int)(object)value));
+                return (T)(object)(Convert.ToInt64(type) & ~Convert.ToInt64(value));
             }
             catch (Exception ex)
             {
                 throw new ArgumentException(
-                    string.Format(
+                    String.Format(
                         "Could not remove value from enumerated type '{0}'.",
                         typeof(T).Name
                         ), ex);
             }
         }
-
     }
 
 }

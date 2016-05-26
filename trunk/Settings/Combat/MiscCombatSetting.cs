@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Framework.Objects.Attributes;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
 using Trinity.UIComponents;
 using Zeta.Game.Internals.Actors;
@@ -12,10 +13,10 @@ using Zeta.Game.Internals.Actors;
 namespace Trinity.Config.Combat
 {
     [DataContract(Namespace = "")]
-    public class MiscCombatSetting : NotifyBase, ITrinitySetting<MiscCombatSetting>, INotifyPropertyChanged
+    public class MiscCombatSetting : NotifyBase, ITrinitySetting<MiscCombatSetting>, INotifyPropertyChanged, ITrinitySettingEvents
     {
         #region Fields
-        private MonsterAffixes _ignoreAffixes;
+        private MonsterAffixes _ignoredAffixes;
         private GoblinPriority _GoblinPriority;
         private int _NonEliteRange;
         private int _EliteRange;
@@ -1066,19 +1067,15 @@ namespace Trinity.Config.Combat
         }
 
         [DataMember(IsRequired = false)]
-        [Setting, UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]
+        [Setting, UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]          
+        [FlagExclusion(IgnoreAffixesExclusions)]
         public MonsterAffixes IgnoreAffixes
         {
-            get { return _ignoreAffixes; }
-            set { SetField(ref _ignoreAffixes, value); }
+            get { return _ignoredAffixes; }
+            set { SetField(ref _ignoredAffixes, value); }
         }
 
-        //private List<MonsterAffixes> _ignoreAffixes = Enum.GetValues(typeof(MonsterAffixes)).Cast<MonsterAffixes>().ToList();
-        //public List<MonsterAffixes> IgnoreAffixes
-        //{
-        //    get { return _ignoreAffixes; }
-        //    set { SetField(ref _ignoreAffixes, value); }
-        //}
+        public const MonsterAffixes IgnoreAffixesExclusions = MonsterAffixes.Elite | MonsterAffixes.Minion | MonsterAffixes.Rare | MonsterAffixes.Unique;
 
         #endregion Properties
 
@@ -1153,5 +1150,14 @@ namespace Trinity.Config.Combat
         }
         #endregion Methods
 
+        public void OnSave()
+        {
+            
+        }
+
+        public void OnLoaded()
+        {
+            IgnoreAffixes.Remove(IgnoreAffixesExclusions);
+        }
     }
 }
