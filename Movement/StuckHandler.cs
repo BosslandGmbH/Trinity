@@ -46,9 +46,15 @@ namespace Trinity.Movement
                     return _isStuck;
 
                 CheckForStuck();
+
+                if(_isStuck)
+                    LastStuckTime = DateTime.UtcNow;                
+
                 return _isStuck;
             }
         }
+
+        public DateTime LastStuckTime { get; set; }
 
         protected bool CheckForStuck()
         {

@@ -40,29 +40,7 @@ namespace Trinity.Helpers
             return queue;
         }
 
-        public static Dictionary<int, string> ToDictionary(this Enum @enum, bool lowerCase = false)
-        {
-            var type = @enum.GetType();
-            return Enum.GetValues(type).Cast<int>().ToDictionary(e => e, e =>
-            {
-                var name = Enum.GetName(type, e);
-                return lowerCase && name != null ? name.ToLower() : Enum.GetName(type, e);
-            });
-        }
 
-        public static List<T> ToList<T>(this Enum input, bool skipDefault = false)
-        {
-            var defaultValue = default(T);
-            return Enum.GetValues(input.GetType()).Cast<T>().Where(e => !defaultValue.Equals(e)).ToList();
-        }
-
-        public static IEnumerable<T> GetFlags<T>(this Enum input, bool excludeDefault = true) where T : struct
-        {
-            var defaultValue = default(T);
-            foreach (Enum value in Enum.GetValues(input.GetType()))
-                if (input.HasFlag(value) && !defaultValue.Equals(value))
-                    yield return (T)(object)value;
-        }
 
 
         public static void Sort<TSource, TKey>(this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector)
@@ -471,7 +449,6 @@ namespace Trinity.Helpers
 
             return null;
         }
-
     }
 }
 

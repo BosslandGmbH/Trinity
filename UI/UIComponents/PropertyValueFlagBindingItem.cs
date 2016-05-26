@@ -3,10 +3,12 @@ using System.ArrayExtensions;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Adventurer.Util;
 using JetBrains.Annotations;
+using Trinity.Framework.Objects.Attributes;
 using Trinity.UIComponents;
 using UnconstrainedMelody;
 using Trinity.Helpers;
@@ -52,7 +54,7 @@ namespace Trinity.UI.UIComponents
         public PropertyValueFlagBindingItem()
         {
             _instancedCommand = new RelayCommand(UIExecute, param => true);
-                        
+
             OnSourceChanged += name =>
             {
                 if (name == Source.Name)
@@ -62,7 +64,7 @@ namespace Trinity.UI.UIComponents
 
         public void UIExecute(object o)
         {
-    
+
         }
 
         private static bool IsSignedTypeCode(TypeCode code)
@@ -90,10 +92,27 @@ namespace Trinity.UI.UIComponents
                     .Where(value => value == 1 || value % 2 == 0)
                     .Aggregate<long, long>(0, (current, value) => current | value);
 
+                _allValuesSum &= ~Source.ExcludeMask;
+
                 _allValues = (Enum)Enum.Parse(Type, _allValuesSum.ToString());
                 return _allValues;
             }
         }
+
+        //private long? _excludeMask;
+        //public long ExcludeMask
+        //{
+        //    get
+        //    {
+        //        if (_excludeMask.HasValue)
+        //            return _excludeMask.Value;
+
+        //        var excludeFlagsAttr = (FlagExclusionAttribute)Source.PropertyInfo.GetCustomAttribute(typeof(FlagExclusionAttribute));
+        //        _excludeMask = excludeFlagsAttr?.Mask ?? 0;
+        //        return _excludeMask.Value;
+        //    }
+        //    set { _excludeMask = value; }
+        //}
 
         private IEnumerable<long> GetAllEnumValues()
         {
@@ -107,13 +126,13 @@ namespace Trinity.UI.UIComponents
 
             var targetValue = Convert.ToInt64(Source.Value);
             targetValue ^= Convert.ToInt64(Enum.Parse(Type, (string)Name));
-            var result = (Enum)Enum.Parse(Type, targetValue.ToString());
-            SetSourceValue(result);
+            SetSourceValue(targetValue);
         }
 
-        private void SetSourceValue(Enum result)
+        private void SetSourceValue(long value)
         {
-            Source.Value = result;
+            value &= ~Source.ExcludeMask;
+            Source.Value = (Enum)Enum.Parse(Type, value.ToString());
             OnSourceChanged?.Invoke(Source.Name);
         }
 
@@ -146,12 +165,12 @@ namespace Trinity.UI.UIComponents
                             if (Equals(Source.Value, AllValues))
                             {
                                 // Set to nothing selected
-                                SetSourceValue((Enum)Enum.Parse(Type, "0"));
+                                SetSourceValue(0);
                             }
                             else
                             {
                                 // Set to everything selected
-                                SetSourceValue((Enum)Enum.Parse(Type, AllValues.ToString()));
+                                SetSourceValue(_allValuesSum);
                             }
                         }
                         else

@@ -156,6 +156,21 @@ namespace Trinity.UI.UIComponents
 
         }
 
+        private long? _excludeMask;
+        public long ExcludeMask
+        {
+            get
+            {
+                if (_excludeMask.HasValue)
+                    return _excludeMask.Value;
+
+                var excludeFlagsAttr = (FlagExclusionAttribute)PropertyInfo.GetCustomAttribute(typeof(FlagExclusionAttribute));
+                _excludeMask = excludeFlagsAttr?.Mask ?? 0;
+                return _excludeMask.Value;
+            }
+            set { _excludeMask = value; }
+        }
+
         public bool IsIndented { get { return IsGroupChild && !IsInline; } }
 
         public bool IsInline { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Trinity.Framework.Objects.Enums;
 using Trinity.UI.UIComponents;
 using Trinity.UIComponents;
@@ -127,8 +128,7 @@ namespace Trinity.Framework.Objects.Attributes
         NoLabel = 1 << 0,
         Unused = 1 << 1,
         Inline = 1 << 2,
-    }
-
+    }    
 
     /// <summary>
         ///     Attribute to set limits to decimal property.
@@ -164,6 +164,39 @@ namespace Trinity.Framework.Objects.Attributes
         public string StorageProperty { get; set; }
 
         public UIControlOptions Options { get; set; }
+    }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    public sealed class FlagExclusionAttribute : Attribute
+    {
+        public FlagExclusionAttribute(object flags)
+        {
+            var type = flags.GetType();
+            if (type.IsEnum)
+            {
+                Flags = (Enum)flags;
+                Mask = Convert.ToInt64(flags);
+            }            
+            else if (type == typeof (int))
+            {
+                Mask = Convert.ToInt64(flags);
+            }
+            else if (type == typeof(long))        
+            {
+                Mask = (long)flags;
+            }
+        }
+        public FlagExclusionAttribute(int flags)
+        {
+            Mask = Convert.ToInt64(flags);
+        }
+        public FlagExclusionAttribute(long flags)
+        {
+            Mask = flags;
+        }
+
+        public Enum Flags { get; set; }
+        public long Mask { get; set; }
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]

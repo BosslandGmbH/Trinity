@@ -82,8 +82,7 @@ namespace Trinity
                 using (new PerformanceLogger("UpdateCachedHotbarData"))
                 {
                     var lastUpdateMs = DateTime.UtcNow.Subtract(LastUpdated).TotalMilliseconds;
-
-                    if (lastUpdateMs <= 250)
+                    if (lastUpdateMs <= 100)
                         return;
 
                     Clear();
@@ -104,7 +103,6 @@ namespace Trinity
                 using (new PerformanceLogger("RefreshHotbar"))
                 {
                     var cPlayer = ZetaDia.PlayerData;
-
                     LastUpdated = DateTime.UtcNow;
 
                     PassiveSkills = new HashSet<SNOPower>(cPlayer.PassiveSkills);
