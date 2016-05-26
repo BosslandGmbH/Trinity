@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 using Trinity.Framework;
 using Trinity.Movement;
 using Trinity.Technicals;
 using Zeta.Common;
-using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Trinity.Config;
+using Trinity.Reference;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground
 {
@@ -39,12 +36,22 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             }
         }
 
+        internal static List<TrinityCacheObject> BestShrine(float range = 25f, bool objectsInAoe = false)
+        {
+            return
+                (from u in SafeList(objectsInAoe)
+                 where u.RadiusDistance <= range &&
+                       u.Type == TrinityObjectType.Shrine
+                 orderby u.Distance
+                 select u).ToList();
+        }
+
         internal static Vector3 BestDpsPosition
         {
             get
             {
                 return BestBuffPosition != Vector3.Zero &&
-                       BestBuffPosition.Distance(PhelonTargeting.BestAoeUnit(45f, true).Position) < 12
+                       BestBuffPosition.Distance(PhelonTargeting.BestAoeUnit(45f, true).Position) < 10
                     ? BestBuffPosition
                     : PhelonTargeting.BestAoeUnit(45f, true).Position;
             }
@@ -54,9 +61,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             get
             {
-                if (ClosestHealthGlobe() != null)
-                    return ClosestHealthGlobe().Position;
-
+                if (ClosestGlobe() != null)
+                    return ClosestGlobe().Position;
+                var shrine = BestShrine(35, true).FirstOrDefault();
+                if (Legendary.NemesisBracers.IsEquipped && shrine != null)
+                    return shrine.Position;
                 // Prevent Default Attack
                 if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Destructible &&
                     TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Shrine &&
@@ -245,10 +254,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                  select u).ToList();
         }
 
-        internal static TrinityCacheObject ClosestHealthGlobe(float distance = 45, bool objectsInAoe = false)
+        internal static TrinityCacheObject ClosestGlobe(float distance = 45, bool objectsInAoe = false)
         {
             return (from u in SafeList(objectsInAoe)
-                where u.Type == TrinityObjectType.HealthGlobe && u.RadiusDistance <= distance
+                where
+                    (u.Type == TrinityObjectType.HealthGlobe || u.Type == TrinityObjectType.PowerGlobe) &&
+                    u.RadiusDistance <= distance
                 select u).FirstOrDefault();
         }
 

@@ -44,15 +44,15 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     PhelonUtils.PointBehind(PhelonUtils.GetBestPierceTarget(45).Position));
 
             private static bool ShouldArcaneStrike
-                => Skills.Wizard.ArchonStrike.IsActive && PhelonTargeting.BestAoeUnit(45, true).Distance < 10f;
+                => Skills.Wizard.ArchonStrike.IsActive && PhelonTargeting.BestAoeUnit(45, true).Distance < 12f;
 
-            private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 10f,
+            private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 12f,
                 PhelonTargeting.BestAoeUnit(45, true).Position);
 
             private static bool ShouldArcaneBlast
-                => Skills.Wizard.ArchonBlast.IsActive && PhelonTargeting.BestAoeUnit(45, true).Distance < 10f;
+                => Skills.Wizard.ArchonBlast.CanCast() && PhelonTargeting.BestAoeUnit(45, true).Distance < 12f;
 
-            private static TrinityPower CastArcaneBlast => new TrinityPower(Skills.Wizard.ArchonBlast.SNOPower, 10f,
+            private static TrinityPower CastArcaneBlast => new TrinityPower(Skills.Wizard.ArchonBlast.SNOPower, 12f,
                 PhelonTargeting.BestAoeUnit(45, true).Position);
 
             private static bool ShouldSlowTime => Skills.Wizard.ArchonSlowTime.IsActive && NeedSlowTime;

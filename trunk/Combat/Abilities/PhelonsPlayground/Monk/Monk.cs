@@ -28,7 +28,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
             {
                 if (IszDPS)
-                    power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestWalkLocation);
+                    power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestDpsPosition);
             }
             return power;
         }

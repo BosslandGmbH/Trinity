@@ -25,7 +25,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 get
                 {
                     return Skills.WitchDoctor.SpiritWalk.CanCast() &&
-                           (PhelonUtils.ClosestHealthGlobe() != null || Player.CurrentHealthPct < 0.5);
+                           (PhelonUtils.ClosestGlobe() != null || Player.CurrentHealthPct < 0.5);
                 }
             }
 

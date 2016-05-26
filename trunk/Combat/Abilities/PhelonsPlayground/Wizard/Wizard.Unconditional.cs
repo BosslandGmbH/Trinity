@@ -2,6 +2,7 @@ using Trinity.Framework;
 using Trinity.Movement;
 using Trinity.Reference;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
@@ -80,14 +81,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 }
 
                 //Ports out Avoidance
-                if (Core.Avoidance.InCriticalAvoidance(Player.Position))
+                if (Core.Avoidance.InCriticalAvoidance(Player.Position) && !IsInParty)
                 {
                     position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
                     return true;
                 }
                 var bestDpsPosition = PhelonUtils.BestDpsPosition;
                 if (bestDpsPosition != Vector3.Zero &&
-                    (bestDpsPosition.Distance(Player.Position) > 7 || Skills.Wizard.Teleport.CanCast() && (Runes.Wizard.Calamity.IsActive ||
+                    (bestDpsPosition.Distance(Player.Position) > 12 || Skills.Wizard.Teleport.CanCast() && (Runes.Wizard.Calamity.IsActive ||
                      Runes.Wizard.SafePassage.IsActive) && TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500))
                 {
                     position = bestDpsPosition;
