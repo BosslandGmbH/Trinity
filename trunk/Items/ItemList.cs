@@ -139,7 +139,7 @@ namespace Trinity.Items
                 return true;
             }
 
-            Logger.LogVerbose($"  >>  item must have {itemSetting.OptionalRules.Count}/{itemSetting.Ops} optional rules:");
+            Logger.LogVerbose($"  >>  item must have {itemSetting.Ops} of {itemSetting.OptionalRules.Count} optional rules:");
 
             // X optional rules must be true.
             var trueOptionals = 0;

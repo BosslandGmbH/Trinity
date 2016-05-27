@@ -1208,11 +1208,11 @@ namespace Trinity
             //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_Fogged, //404731
             //(int)SNOActor.p1_TGoblin_CenterPiece_Gem_INVIS, //404733
             //(int)SNOActor.p1_Greed_crowds_goblinPortal_no_dist, //404854
-            //(int)SNOActor.p1_treasureGoblin_tentacle_A, //405186
-            //(int)SNOActor.p1_treasureGoblin_tentacle_backpack, //405189
+            (int)SNOActor.p1_treasureGoblin_tentacle_A, //405186
+            (int)SNOActor.p1_treasureGoblin_tentacle_backpack, //405189
             //(int)SNOActor.p1_Tgoblin_Chest_Bomb_Chunks, //405308
             //(int)SNOActor.p1_Tgoblin_Greed_Bait_Chunks, //405339
-            //(int)SNOActor.p1_Portal_Tentacle_goblin, //405590
+            (int)SNOActor.p1_Portal_Tentacle_goblin, //405590
             (int)SNOActor.treasureGoblin_D_Splitter, //408354
             (int)SNOActor.treasureGoblin_E, //408655
             (int)SNOActor.MarkerLocation_GoblinPortalIn, //408679

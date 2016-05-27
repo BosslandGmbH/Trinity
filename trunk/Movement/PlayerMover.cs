@@ -9,6 +9,7 @@ using Buddy.Coroutines;
 using Trinity.Combat.Abilities;
 using Trinity.Config.Combat;
 using Trinity.Framework;
+using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Utilities;
 using Trinity.Movement;
@@ -75,10 +76,25 @@ namespace Trinity.DbProvider
         private static readonly Stopwatch BlockedTimer = new Stopwatch();
         private static readonly Stopwatch BlockedCheckTimer = new Stopwatch();
 
-        private const int TimeToBlockMs = 1000;
+        private static int TimeToBlockMs => TrinityPlugin.Settings.Combat.Misc.TimeToBlockMs; //1000;
+
         private const int TimeToCheckBlockingMs = 25;
+
         public static bool IsBlocked = false;
-        public static bool IsCompletelyBlocked = IsBlocked && !ClassMover.IsSpecialMovementReady;
+
+        public static bool IsCompletelyBlocked 
+        {
+            get
+            {
+                // todo move all conditions from class specific mover (MonkMover etc) into IsSpecialMovementReady.                
+                //
+                // this was breaking blocked checks and attack while blocked because ClassMover.IsSpecialMovementReady 
+                // says it can totally special move out of the situation, then the class mover does additional checks
+                // and decides not to cast anything, leaving the bot standing there doing nothing.
+
+                return IsBlocked; //&& !ClassMover.IsSpecialMovementReady;
+            }
+        }
 
         internal static bool GetIsBlocked()
         {
@@ -614,17 +630,21 @@ namespace Trinity.DbProvider
             float destinationDistance = MyPosition.Distance(destination);
 
             if (!ZetaDia.IsInTown && ClassMover.IsSpecialMovementReady && !TrinityPlugin.ShouldWaitForLootDrop &&
-                (TrinityPlugin.Settings.Combat.Misc.AllowOOCMovement ||
-                CombatBase.IsCurrentlyAvoiding || ClassMover.OutOfCombatMovementAllowed))
+                (CombatBase.IsInCombat || CombatBase.IsCurrentlyAvoiding || ClassMover.OutOfCombatMovementAllowed))
             {
                 if (NavigationProvider == null)
                     NavigationProvider = Navigator.GetNavigationProviderAs<DefaultNavigationProvider>();
 
                 if (ClassMover.SpecialMovement(destination))
                 {
-                    Navigator.Clear();
-                    NavigationProvider.CurrentPath.Clear();
-                    AbortCurrentNavigation = true;
+                    BotMain.PauseFor(TimeSpan.FromMilliseconds(100));
+
+                    if (!AvoidanceGrid.Instance.CanRayWalk(ZetaDia.Me.Position, destination))
+                    {                        
+                        Navigator.Clear();
+                        NavigationProvider.CurrentPath.Clear();
+                        AbortCurrentNavigation = true;
+                    }
                     return;
                 }
             }
@@ -646,8 +666,6 @@ namespace Trinity.DbProvider
                 if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                     Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Reached MoveTowards Destination {0} Current Speed: {1:0.0}", destination, MovementSpeed);
             }
-
-            //Trinity.IsMoveRequested = false;
         }
 
         public static bool GetCurrentPathFarthestPoint(float minDistance, float maxDistance, out Vector3 point)
