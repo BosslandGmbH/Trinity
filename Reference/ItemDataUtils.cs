@@ -839,7 +839,7 @@ namespace Trinity.Reference
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.FistWeapon, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandDaibo, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandMighty, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
-            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shield, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.CrusaderShield, ItemProperty.SkillDamage), new ItemStatRange { Max = 15, Min = 10 }},
 
 
             // Base Damage
@@ -1000,7 +1000,6 @@ namespace Trinity.Reference
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Quiver, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Orb, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Mojo, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
-            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.CrusaderShield, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Shoulder, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.MightyWeapon, ItemProperty.AreaDamage), new ItemStatRange {Min = 16, Max = 24 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Wand, ItemProperty.AreaDamage), new ItemStatRange {Min = 16, Max = 24 }},
@@ -1691,20 +1690,20 @@ namespace Trinity.Reference
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Mojo, ActorClass.Witchdoctor), Skills.WitchDoctor.Gargantuan},
 
 
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.FallingSword},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.Condemn},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.Justice},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.FistOfTheHeavens},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.Bombardment},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.HeavensFury},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.Phalanx},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.BlessedShield},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.Slash},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.ShieldBash},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.Smite},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.SweepAttack},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.Punish},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shield, ActorClass.Crusader), Skills.Crusader.BlessedHammer},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.FallingSword},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.Condemn},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.Justice},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.FistOfTheHeavens},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.Bombardment},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.HeavensFury},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.Phalanx},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.BlessedShield},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.Slash},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.ShieldBash},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.Smite},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.SweepAttack},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.Punish},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.CrusaderShield, ActorClass.Crusader), Skills.Crusader.BlessedHammer},
 
             // One Hand Weapon
 

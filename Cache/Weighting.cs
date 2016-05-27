@@ -104,7 +104,7 @@ namespace Trinity
                     HighestWeightFound = 0;
 
                     var isStuck = Navigator.StuckHandler.IsStuck;
-                    
+
                     var elites = new List<TrinityCacheObject>();
 
                     foreach (var unit in ObjectCache.Where(u => u.IsUnit))
@@ -187,19 +187,18 @@ namespace Trinity
                                 {
                                     cacheObject.Weight = 0;
                                     cacheObject.WeightInfo += "Ignoring because we are blocked. ";
-                                    break;
+                                    continue;
                                 }
                                 if (cacheObject.Distance > 12f)
                                 {
                                     cacheObject.Weight = 0;
                                     cacheObject.WeightInfo += "Ignoring Blocked Far Away ";
-                                    break;
+                                    continue;
                                 }
-                                cacheObject.WeightInfo +=
-                                    string.Format("Adding {0} because we are Blocked.",
-                                        cacheObject.InternalName);
+                                cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} because we are Blocked.";
                                 cacheObject.Weight = MaxWeight + ObjectDistanceFormula(cacheObject);
-                                break;
+                                bestTarget = GetNewBestTarget(cacheObject, bestTarget);
+                                continue;
                             }
                         }
 
@@ -225,7 +224,7 @@ namespace Trinity
                         {
                             cacheObject.Weight = 0;
                             cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Intersected by Critical Avoidance.";
-                            break;
+                            continue;
                         }
 
                         cacheObject.Weight = MinWeight;
@@ -1397,10 +1396,19 @@ namespace Trinity
                                         Player.CurrentQuestStep == 108)
                                     {
                                         cacheObject.Weight = 0;
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Disable for Quest";
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Disable for Quest";
                                         break;
                                     }
+
+                                    // todo missing a check for shrine type setting checkboxes ?
+
+                                    if (cacheObject.Distance < 12f)
+                                    {
+                                        cacheObject.Weight = MaxWeight;
+                                        cacheObject.WeightInfo += $"Shrine so close i can touch it {cacheObject.InternalName}";
+                                        break;
+                                    }
+
                                     if (GetShrineType(cacheObject) != ShrineTypes.RunSpeed &&
                                         GetShrineType(cacheObject) != ShrineTypes.Speed &&
                                         GetShrineType(cacheObject) != ShrineTypes.Fortune)
@@ -1472,13 +1480,6 @@ namespace Trinity
                                                 $"Ignoring {cacheObject.InternalName} - Town Portal.";
                                             break;
                                         }
-
-                                        // Need to Prioritize, forget it!
-                                        if (PlayerMover.IsCompletelyBlocked)
-                                        {                       
-                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";                                         
-                                            break;
-                                        }
                                     }
                                     // We're standing on the damn thing... open it!!
                                     if (cacheObject.RadiusDistance <= 10f)
@@ -1507,8 +1508,7 @@ namespace Trinity
                                         //Ignore because we are blocked by objects or mobs.
                                         if (PlayerMover.IsCompletelyBlocked)
                                         {
-                                            cacheObject.WeightInfo +=
-                                                $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
                                             break;
                                         }
 
@@ -1517,13 +1517,6 @@ namespace Trinity
                                         {
                                             cacheObject.WeightInfo +=
                                                 $"Ignoring {cacheObject.InternalName} - Town Portal.";
-                                            break;
-                                        }
-
-                                        // Need to Prioritize, forget it!
-                                        if (PlayerMover.IsCompletelyBlocked)
-                                        {                                   
-                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";                                         
                                             break;
                                         }
                                     }
@@ -1590,13 +1583,6 @@ namespace Trinity
                                         {
                                             cacheObject.WeightInfo +=
                                                 $"Ignoring {cacheObject.InternalName} - Town Portal.";
-                                            break;
-                                        }
-
-                                        // Need to Prioritize, forget it!
-                                        if (PlayerMover.IsCompletelyBlocked)
-                                        {
-                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";
                                             break;
                                         }
                                     }
@@ -1669,13 +1655,6 @@ namespace Trinity
                                                 $"Ignoring {cacheObject.InternalName} - Town Portal.";
                                             break;
                                         }
-
-                                        // Need to Prioritize, forget it!
-                                        if (PlayerMover.IsCompletelyBlocked)
-                                        {
-                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - We seem to be stuck *OR* if not ranged and currently rooted ";
-                                            break;
-                                        }
                                     }
 
                                     float maxRange = Settings.WorldObject.ContainerOpenRange;
@@ -1712,27 +1691,7 @@ namespace Trinity
                                 #endregion
                         }
 
-                        cacheObject.WeightInfo += cacheObject.IsNPC ? " IsNPC" : "";
-                        cacheObject.WeightInfo += cacheObject.NPCIsOperable ? " IsOperable" : "";
-
-                        Logger.Log(TrinityLogLevel.Debug, LogCategory.Weight,
-                            "Weight={0:0} name={1} sno={2} type={3} R-Dist={4:0} IsElite={5} RAGuid={6} {7}",
-                            cacheObject.Weight, cacheObject.InternalName, cacheObject.ActorSNO, cacheObject.Type,
-                            cacheObject.RadiusDistance, cacheObject.IsEliteRareUnique,
-                            cacheObject.RActorGuid, cacheObject.WeightInfo);
-                        cacheObject.WeightInfo = cacheObject.WeightInfo;
-
-                        if (bestTarget == null)
-                            bestTarget = cacheObject;
-
-                        // Use the highest weight, and if at max weight, the closest
-                        var pickNewTarget = cacheObject.Weight > 0 &&
-                                            (cacheObject.Weight > HighestWeightFound ||
-                                             (cacheObject.Weight == HighestWeightFound && (CurrentTarget == null || cacheObject.Distance < CurrentTarget.Distance)));
-
-                        if (!pickNewTarget) continue;
-                        bestTarget = cacheObject;
-                        HighestWeightFound = cacheObject.Weight;
+                        bestTarget = GetNewBestTarget(cacheObject, bestTarget);
                     }
 
                     #endregion Foreach loop
@@ -1760,6 +1719,32 @@ namespace Trinity
                     //Logger.Log(" CACHE COUNT: " + ObjectCache.Count(x => !x.IsPlayer) + " Weight: " + text);
 
                 }
+            }
+
+            private static TrinityCacheObject GetNewBestTarget(TrinityCacheObject cacheObject, TrinityCacheObject bestTarget)
+            {
+                cacheObject.WeightInfo += cacheObject.IsNPC ? " IsNPC" : "";
+                cacheObject.WeightInfo += cacheObject.NPCIsOperable ? " IsOperable" : "";
+
+                Logger.Log(TrinityLogLevel.Debug, LogCategory.Weight,
+                    "Weight={0:0} name={1} sno={2} type={3} R-Dist={4:0} IsElite={5} RAGuid={6} {7}",
+                    cacheObject.Weight, cacheObject.InternalName, cacheObject.ActorSNO, cacheObject.Type,
+                    cacheObject.RadiusDistance, cacheObject.IsEliteRareUnique,
+                    cacheObject.RActorGuid, cacheObject.WeightInfo);
+                cacheObject.WeightInfo = cacheObject.WeightInfo;
+
+                if (bestTarget == null)
+                    bestTarget = cacheObject;
+
+                // Use the highest weight, and if at max weight, the closest
+                var pickNewTarget = cacheObject.Weight > 0 &&
+                                    (cacheObject.Weight > HighestWeightFound ||
+                                     (cacheObject.Weight == HighestWeightFound && (CurrentTarget == null || cacheObject.Distance < CurrentTarget.Distance)));
+
+                if (!pickNewTarget) return bestTarget;
+                bestTarget = cacheObject;
+                HighestWeightFound = cacheObject.Weight;
+                return bestTarget;
             }
 
             public static int RecordTargetHistory()

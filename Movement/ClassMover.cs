@@ -72,6 +72,13 @@ namespace Trinity.Movement
             {
                 LastSpecialMovement = DateTime.UtcNow;
             }
+            else
+            {
+                if (PlayerMover.IsBlocked && IsSpecialMovementReady)
+                {
+                    Logger.LogVerbose("Badness: Blocked, Not 'completely blocked' and unable to cast movement spell");
+                }
+            }
 
             return result;
         }
@@ -93,6 +100,9 @@ namespace Trinity.Movement
         {
             get
             {
+                if (!TrinityPlugin.Settings.Combat.Misc.AllowOOCMovement)
+                    return false;
+
                 var Player = CacheData.Player;
                 switch (CacheData.Player.ActorClass)
                 {

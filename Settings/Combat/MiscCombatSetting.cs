@@ -78,6 +78,7 @@ namespace Trinity.Config.Combat
         private float _HealthGlobeLevelResource;
         private bool _waitForResInBossEncounters;
         private bool _ignoreHighHitPointElites;
+        private int _timeToBlockMs;
 
         #endregion Events
 
@@ -1075,6 +1076,24 @@ namespace Trinity.Config.Combat
             set { SetField(ref _ignoredAffixes, value); }
         }
 
+        [DataMember(IsRequired = false)]
+        [DefaultValue(1000)]
+        public int TimeToBlockMs
+        {
+            get
+            {
+                return _timeToBlockMs;
+            }
+            set
+            {
+                if (_timeToBlockMs != value)
+                {
+                    _timeToBlockMs = value;
+                    OnPropertyChanged(nameof(TimeToBlockMs));
+                }
+            }
+        }
+
         public const MonsterAffixes IgnoreAffixesExclusions = MonsterAffixes.Elite | MonsterAffixes.Minion | MonsterAffixes.Rare | MonsterAffixes.Unique;
 
         #endregion Properties
@@ -1147,6 +1166,7 @@ namespace Trinity.Config.Combat
             AttackWhenBlocked = true;
             IgnoreNormalProgressionGlobes = false;
             WaitForResInBossEncounters = false;
+            TimeToBlockMs = 750;
         }
         #endregion Methods
 
