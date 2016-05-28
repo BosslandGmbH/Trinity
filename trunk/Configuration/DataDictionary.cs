@@ -2834,6 +2834,9 @@ namespace Trinity
 
         public static readonly HashSet<int> AvoidanceSNO = new HashSet<int>
         {
+            // Butcher Floor Panels
+            201454, 201464, 201426, 201438, 200969, 201423, 201242,
+
             //fastMummy_Gibs, Type=Unknown Dist=0 RActorId=-896461776 ACDId=-896461776 ActorSnoId=4108 Weight=0 WeightReasons=
             4108,
             //X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot, Type=Unknown Dist=0 RActorId=-965410672 ACDId=-1665138248 ActorSnoId=359693 Weight=0 WeightReasons=

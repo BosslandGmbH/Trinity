@@ -37,7 +37,7 @@ namespace Trinity.Combat.Abilities
             Pulsator.OnPulse += (sender, args) => Debug();
         }
 
-        public static bool IsInParty = ZetaDia.Service.Party.NumPartyMembers > 1;
+        public static bool IsInParty => ZetaDia.Service?.Party?.NumPartyMembers > 1;
         private static TrinityPower _currentPower = new TrinityPower();
         private static bool _isCombatAllowed = true;
         private static KiteMode _kiteMode = KiteMode.Never;
