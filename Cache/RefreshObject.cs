@@ -89,8 +89,15 @@ namespace Trinity
              *  Get primary reference objects and keys
              */
             CurrentCacheObject.Object = c_diaObject = freshObject;
+            CurrentCacheObject.ActorSNO = freshObject.ActorSnoId;
 
             var commonData = freshObject.CommonData;
+
+            if (DataDictionary.AvoidanceSNO.Contains(CurrentCacheObject.ActorSNO))
+            {
+                c_IgnoreReason = "AvoidanceSNO";
+                return false;
+            }
 
             try
             {
@@ -103,7 +110,7 @@ namespace Trinity
                 CurrentCacheObject.ACDGuid = freshObject.ACDId;
                 CurrentCacheObject.InternalName = NameNumberTrimRegex.Replace(freshObject.Name, "");
                 CurrentCacheObject.InternalNameLowerCase = CurrentCacheObject.InternalName.ToLower();
-                CurrentCacheObject.ActorSNO = freshObject.ActorSnoId;
+                
                 CurrentCacheObject.ActorType = freshObject.ActorType;
                 CurrentCacheObject.ACDGuid = freshObject.ACDId;
                 CurrentCacheObject.CommonData = commonData;
