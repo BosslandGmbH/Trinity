@@ -1195,8 +1195,7 @@ namespace Trinity.UI
         {
             try
             {
-                //ItemSort.SortBackpack();
-                Logger.Log("This feature has been disabled");
+                ItemSort.SortBackpack();
             }
             catch (Exception ex)
             {
@@ -1226,8 +1225,7 @@ namespace Trinity.UI
         {
             try
             {
-                //ItemSort.SortStash();
-                Logger.Log("This feature has been disabled");
+                ItemSort.SortStash();
             }
             catch (Exception ex)
             {
