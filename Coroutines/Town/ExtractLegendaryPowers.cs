@@ -6,6 +6,7 @@ using Buddy.Coroutines;
 using Trinity.Framework.Actors;
 using Trinity.Helpers;
 using Trinity.Items;
+using Trinity.Items.ItemList;
 using Trinity.Reference;
 using Trinity.Settings.Loot;
 using TrinityCoroutines;
@@ -146,7 +147,7 @@ namespace Trinity.Coroutines.Town
                     continue;
 
                 if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed &&
-                    (ItemList.ShouldStashItem(item) || TrinityPlugin.Settings.Loot.ItemFilterMode != ItemFilterMode.ItemList))
+                    (ItemListEvaluator.ShouldStashItem(item) || TrinityPlugin.Settings.Loot.ItemFilterMode != ItemFilterMode.ItemList))
                     continue;
 
                 if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient &&

@@ -15,6 +15,7 @@ using Trinity.Framework.Actors;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
 using Trinity.ItemRules;
+using Trinity.Items.ItemList;
 using Trinity.Reference;
 using Trinity.Settings.Loot;
 using Trinity.Technicals;
@@ -365,7 +366,7 @@ namespace Trinity.Items
             // Item List
             if (item.ItemQualityLevel >= ItemQuality.Legendary && TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem || item.IsPotion))
             {
-                var result = ItemList.ShouldStashItem(item);
+                var result = ItemListEvaluator.ShouldStashItem(item);
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, "ItemListCheck=" + (result ? "KEEP" : "TRASH"));
 
                 return result;

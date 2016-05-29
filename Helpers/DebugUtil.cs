@@ -9,6 +9,7 @@ using Trinity;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Items;
+using Trinity.Items.ItemList;
 using Trinity.Objects;
 using Trinity.Objects.Native;
 using Trinity.Reference;
@@ -517,7 +518,7 @@ namespace Trinity.Helpers
                 var cItem = new CachedItem(acdItem.BaseAddress);
                 Logger.LogVerbose(cItem.Attributes.ToString());
 
-                if (ItemList.ShouldStashItem(cItem, true))
+                if (ItemListEvaluator.ShouldStashItem(cItem, true))
                     stashCount++;
             }
 

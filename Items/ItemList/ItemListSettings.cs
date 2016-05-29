@@ -28,7 +28,7 @@ using Logger = Trinity.Technicals.Logger;
 namespace Trinity.Settings.Loot
 {
     /// <summary>
-    ///     Settings for ItemList looting
+    /// Settings for ItemList looting
     /// </summary>
     [DataContract(Namespace = "")]
     public class ItemListSettings : ITrinitySetting<ItemListSettings>, INotifyPropertyChanged, ITrinitySettingEvents
@@ -68,7 +68,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Setup work called on Construction / Reset
+        /// Setup work called on Construction / Reset
         /// </summary>
         private void Initialization()
         {
@@ -80,8 +80,8 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Selected settings is always available for loot rule processing etc via ItemList.Selected property.
-        ///     But we only care about the UI Control being properly populated if the settings window is open.
+        /// Selected settings is always available for loot rule processing etc via ItemList.Selected property.
+        /// But we only care about the UI Control being properly populated if the settings window is open.
         /// </summary>
         private void SettingsWindowOpened()
         {
@@ -90,7 +90,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Configure the CollectionViewSource
+        /// Configure the CollectionViewSource
         /// </summary>
         public void CreateView()
         {
@@ -275,7 +275,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Convert Legendary items to SettingsItem objects only once to a static collection.
+        /// Convert Legendary items to SettingsItem objects only once to a static collection.
         /// </summary>
         public static void CacheReferenceItems()
         {
@@ -284,7 +284,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Wire up for events
+        /// Wire up for events
         /// </summary>
         public void BindEvents()
         {
@@ -299,9 +299,9 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Reset is called many times for many reasons, we need to only reset selected
-        ///     when the user has clicked the reset button in the settings window
-        ///     because running UpdateSelectedItems() 4-5 times during load is costly.
+        /// Reset is called many times for many reasons, we need to only reset selected
+        /// when the user has clicked the reset button in the settings window
+        /// because running UpdateSelectedItems() 4-5 times during load is costly.
         /// </summary>
         private void OnUserRequestedReset()
         {
@@ -393,8 +393,8 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     The CollectionView runs on top of the DisplayItems and adds additional functionality for grouping, sorting and
-        ///     filtering.
+        /// The CollectionView runs on top of the DisplayItems and adds additional functionality for grouping, sorting and
+        /// filtering.
         /// </summary>
         public CollectionViewSource Collection
         {
@@ -442,7 +442,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Current grouping
+        /// Current grouping
         /// </summary>
         [DataMember]
         public GroupingType Grouping
@@ -460,7 +460,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Filtering text
+        /// Filtering text
         /// </summary>
         [IgnoreDataMember]
         public string FilterText
@@ -479,7 +479,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     If the view is currently filtered
+        /// If the view is currently filtered
         /// </summary>
         [IgnoreDataMember]
         public bool IsFiltered
@@ -488,8 +488,8 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Main collection for all items, underlies CollectionViewSource
-        ///     This is only used for displaying the UI and user interaction.
+        /// Main collection for all items, underlies CollectionViewSource
+        /// This is only used for displaying the UI and user interaction.
         /// </summary>
         [IgnoreDataMember]
         public FullyObservableCollection<LItem> DisplayItems
@@ -506,9 +506,9 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Contains the currently selected items; this is persisted to the settings file.
-        ///     Code elsewhere in trinity (such as loot engien) can check items against it at any time.
-        ///     LItems here have a minimal set of data; only Ids of the items and rules are are saved.
+        /// Contains the currently selected items; this is persisted to the settings file.
+        /// Code elsewhere in trinity (such as loot engien) can check items against it at any time.
+        /// LItems here have a minimal set of data; only Ids of the items and rules are are saved.
         /// </summary>
         [DataMember(IsRequired = false)]
         public List<LItem> SelectedItems
@@ -525,12 +525,12 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Whether the groupings are automatically expanded
+        /// Whether the groupings are automatically expanded
         /// </summary>
         public bool GroupsExpandedByDefault { get; set; }
 
         /// <summary>
-        ///     Compressed/Encoded string of selected items and their rules
+        /// Compressed/Encoded string of selected items and their rules
         /// </summary>
         public string ExportCode
         {
@@ -546,7 +546,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Message for Import/Export user information
+        /// Message for Import/Export user information
         /// </summary>
         public string ValidationMessage
         {
@@ -562,7 +562,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Selected panel for the import/export modal
+        /// Selected panel for the import/export modal
         /// </summary>
         public ModalPage SelectedModalPage
         {
@@ -578,7 +578,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Hides/Shows the modal
+        /// Hides/Shows the modal
         /// </summary>
         public bool IsModalVisible
         {
@@ -933,7 +933,7 @@ namespace Trinity.Settings.Loot
         #region Methods
 
         /// <summary>
-        ///     Generates an export code of the current state
+        /// Generates an export code of the current state
         /// </summary>
         public string CreateExportCode()
         {
@@ -942,7 +942,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Decodes an export code and applies it to the current state.
+        /// Decodes an export code and applies it to the current state.
         /// </summary>
         public ItemListSettings ImportFromCode(string code)
         {
@@ -976,7 +976,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Change the grouping property
+        /// Change the grouping property
         /// </summary>
         /// <param name="groupingType"></param>
         internal void ChangeGrouping(GroupingType groupingType)
@@ -1005,7 +1005,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Change the sorting order
+        /// Change the sorting order
         /// </summary>
         /// <param name="sortingType"></param>
         internal void ChangeSorting(SortingType sortingType)
@@ -1021,7 +1021,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Change the search filter when the user stops typing
+        /// Change the search filter when the user stops typing
         /// </summary>
         /// <param name="property"></param>
         internal void ChangeFilterPending(string property)
@@ -1033,7 +1033,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Rebind the filter to get it to fire
+        /// Rebind the filter to get it to fire
         /// </summary>
         private void ExecuteFilter()
         {
@@ -1042,7 +1042,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Expression that is run against every item in the collection to filter
+        /// Expression that is run against every item in the collection to filter
         /// </summary>
         private void FilterHandler(object sender, FilterEventArgs e)
         {
@@ -1082,7 +1082,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Updates the selected collection whenever an object is set to selected.
+        /// Updates the selected collection whenever an object is set to selected.
         /// </summary>
         /// <param name="args"></param>
         public void SyncSelectedItem(ChildElementPropertyChangedEventArgs args)
@@ -1109,7 +1109,7 @@ namespace Trinity.Settings.Loot
         }
 
         /// <summary>
-        ///     Updates the DisplayItems collection to match the Selected collection.
+        /// Updates the DisplayItems collection to match the Selected collection.
         /// </summary>
         public void UpdateSelectedItems()
         {

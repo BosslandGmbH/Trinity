@@ -1,24 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Ink;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Reference;
-using Trinity.Settings.Loot;
 using Trinity.Technicals;
 using Trinity.UI.UIComponents;
 using Trinity.UIComponents;
-using Zeta.Game;
-using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Items
+namespace Trinity.Items.ItemList
 {
-    public class ItemList
+    public class ItemListEvaluator
     {
         internal static bool ShouldStashItem(CachedItem cItem, bool test = false)
         {
@@ -369,12 +363,6 @@ namespace Trinity.Items
                     break;
 
                 case ItemProperty.ElementalDamage:
-
-                    //if (ruleType == RuleType.Test && variant == 0)
-                    //{
-                    //    variant = (int)Element.Any;
-                    //}
-
                     var elementId = variant;
                     var element = (Element)elementId;
                     if (element != Element.Unknown)
@@ -573,15 +561,7 @@ namespace Trinity.Items
 
             }
 
-            //if (ruleType == RuleType.Test)
-            //{
-            //    Logger.LogVerbose($"  >> {item.Name} -- {prop.ToString().AddSpacesToSentence()}: {itemValue} {friendlyVariant}");
-            //}
-            //else
-            //{
             Logger.LogVerbose($"  >>  Evaluated {item.Name} -- {prop.ToString().AddSpacesToSentence()} {friendlyVariant} (Item: {itemValue} -v- Rule: {ruleValue}) = {result}");
-            //}
-
             newValue = returnValue;
             return result;
         }
