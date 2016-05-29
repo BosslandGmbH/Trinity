@@ -145,6 +145,7 @@
     <Compile Include="Framework\Avoidance\Handlers\AnimationBeamAvoidanceHandler.cs" />
     <Compile Include="Framework\Avoidance\Structures\AvoidanceLayer.cs" />
     <Compile Include="Framework\Avoidance\Structures\WeightingOptions.cs" />
+    <Compile Include="Framework\Helpers\Randomizer.cs" />
     <Compile Include="Framework\Objects\Memory\Attributes\GizmoAttributes.cs" />
     <Compile Include="Framework\Objects\Memory\Globals.cs" />
     <Compile Include="Framework\Objects\Memory\Hero.cs" />
@@ -519,10 +520,10 @@
     <Compile Include="Items\ItemDropStats.cs" />
     <Compile Include="Items\ItemNames.cs" />
     <Compile Include="Items\ItemList.cs" />
-    <Compile Include="Items\ItemSort.cs" />
+    <Compile Include="Items\Sorting\ItemSort.cs" />
     <Compile Include="Items\ItemStatsData.cs" />
     <Compile Include="Items\ItemStatsDataFactory.cs" />
-    <Compile Include="Items\ItemWrapper.cs" />
+    <Compile Include="Items\Sorting\ItemWrapper.cs" />
     <Compile Include="Helpers\GoldInactivity.cs" />
     <Compile Include="Cache\HashGenerator.cs" />
     <Compile Include="Helpers\MathUtil.cs" />

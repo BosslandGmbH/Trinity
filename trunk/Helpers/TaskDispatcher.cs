@@ -5,7 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Navigation;
-using Trinity.Technicals;
+using Adventurer.Util;
+using Buddy.Coroutines;
 using Trinity.Helpers;
 using Trinity.Items;
 using Zeta.Bot;
@@ -13,70 +14,85 @@ using Zeta.Bot.Coroutines;
 using Zeta.Game;
 using Zeta.TreeSharp;
 using Action = Zeta.TreeSharp.Action;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Helpers
 {
-    class TaskDispatcher
+    /// <summary>
+    /// Runs a Task<T> as a Buddy Coroutine (via TreeSharp Composite) in a new thread.    
+    /// </summary>
+    public class TaskDispatcher
     {
-            private static Composite _logic;
+        private static Composite _logic;
 
-            public static void Start(Func<Object,Task<bool>> task, Func<object,bool> stopCondition = null)
-            {
-                var isStarted = false;
+        public static int TickDelayMin = 5;
+        public static int TickDelayMax = 25;
 
-                Worker.Start(() =>
-                {                   
-                    using (new AquireFrameHelper())
-                    {
-                        try
+        public static void Start<T>(Func<object, Task<T>> task, Func<object,bool> stopCondition = null)
+        {
+            var isStarted = false;
+
+            Worker.Start(() =>
+            {                   
+                using (new AquireFrameHelper())
+                {
+                    try
+                    {                        
+                        if (!isStarted)
                         {
-                            if (!isStarted)
-                            {
-                                Logger.Log("Starting new Bot Thread Id={0}", Thread.CurrentThread.ManagedThreadId);
-                                _logic = new ActionRunCoroutine(task);
-                                _logic.Start(null);
-                                isStarted = true;
-                            }
-                            Tick();
+                            Logger.Log("[TaskDispatcher] Starting Task, thread={0}", Thread.CurrentThread.ManagedThreadId);
+                            _logic = new ActionRunCoroutine(task);
+                            _logic.Start(null);
+                            isStarted = true;
                         }
-                        catch (InvalidOperationException ex)
-                        {                            
-                            Logger.LogDebug("CheckInCoroutine() Derp {0}", ex);
-                        }
-
+                        Tick();
                     }
+                    catch (InvalidOperationException ex)
+                    {                            
+                        Logger.LogDebug("[TaskDispatcher] Exception: {0}", ex);
+                    }
+                }
 
-                    if (stopCondition != null && _logic != null && stopCondition.Invoke(_logic?.LastStatus))
+                if (stopCondition != null && _logic != null)
+                {
+                    if (stopCondition.Invoke(_logic?.LastStatus))
                     {
-                        Logger.Log("Bot Thread Finished Id={0}", Thread.CurrentThread.ManagedThreadId);
+                        Logger.Log("[TaskDispatcher] Finished Task, thread={0} (Condition)", Thread.CurrentThread.ManagedThreadId);
                         return true;
                     }
-                        
-                    return false;
-                });
-            }
-
-            private static void Tick()
-            {
-                try
+                }
+                else
                 {
-                    _logic.Tick(null);
-
-                    Logger.Log("Tick LastStatus={0}", _logic.LastStatus);
-
-                    if (_logic.LastStatus != RunStatus.Running)
+                    if (_logic?.LastStatus != RunStatus.Running)
                     {
-                        _logic.Stop(null);
-                        _logic.Start(null);
+                        Logger.Log($"[TaskDispatcher] Finished Task, thread={Thread.CurrentThread.ManagedThreadId} (FinalResult={_logic?.LastStatus})");
+                        return true;
                     }
                 }
-                catch (Exception ex)
+             
+                Thread.Sleep(Randomizer.GetRandomNumber(TickDelayMin, TickDelayMax));
+                return false;
+            });
+        }
+
+        private static void Tick()
+        {
+            try
+            {
+                _logic.Tick(null);
+                if (_logic.LastStatus != RunStatus.Running)
                 {
-                    Logger.Log("Exception in TaskDispatcher.Logic.Tick() - {0}", ex);
                     _logic.Stop(null);
                     _logic.Start(null);
-                    throw;
                 }
             }
+            catch (Exception ex)
+            {
+                Logger.LogDebug("[TaskDispatcher] Exception in Tick: {0}", ex);
+                _logic.Stop(null);
+                _logic.Start(null);
+                throw;
+            }
         }
+    }
 }

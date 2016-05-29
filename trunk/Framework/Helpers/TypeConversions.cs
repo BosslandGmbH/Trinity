@@ -825,6 +825,8 @@ namespace Trinity.Framework.Helpers
             }
         }
 
+
+
         public static bool IsUsableByClass(ActorClass actorClass, TrinityItemType trinityItemType)
         {
             switch (trinityItemType)
@@ -876,6 +878,75 @@ namespace Trinity.Framework.Helpers
 
             return true;
         }
+
+        internal static HashSet<ItemType> OffHandTypes = new HashSet<ItemType>
+        {
+            ItemType.Orb,
+            ItemType.Mojo,
+            ItemType.Quiver,
+            ItemType.Shield,
+            ItemType.CrusaderShield,
+        };
+
+        internal static HashSet<ItemType> ShieldTypes = new HashSet<ItemType>
+        {
+            ItemType.Shield,
+            ItemType.CrusaderShield,
+        };
+
+        internal static HashSet<ItemType> WeaponTypes = new HashSet<ItemType>
+        {
+            ItemType.Axe,
+            ItemType.Bow,
+            ItemType.CeremonialDagger,
+            ItemType.Crossbow,
+            ItemType.Dagger,
+            ItemType.Daibo,
+            ItemType.FistWeapon,
+            ItemType.Flail,
+            ItemType.HandCrossbow,
+            ItemType.Mace,
+            ItemType.MightyWeapon,
+            ItemType.Polearm,
+            ItemType.Spear,
+            ItemType.Staff,
+            ItemType.Sword,
+            ItemType.Wand,
+        };
+
+        internal static HashSet<ItemType> ArmorTypes = new HashSet<ItemType>
+        {
+            ItemType.Belt,
+            ItemType.Boots,
+            ItemType.Bracer,
+            ItemType.Chest,
+            ItemType.Cloak,
+            ItemType.Gloves,
+            ItemType.Helm,
+            ItemType.Legs,
+            ItemType.MightyBelt,
+            ItemType.Shoulder,
+            ItemType.SpiritStone,
+            ItemType.VoodooMask,
+            ItemType.WizardHat,
+        };
+
+        internal static HashSet<ItemType> JewleryTypes = new HashSet<ItemType>
+        {
+            ItemType.Amulet,
+            ItemType.Ring,
+        };
+
+        internal static HashSet<ItemType> MiscTypes = new HashSet<ItemType>
+        {
+            ItemType.CraftingPage,
+            ItemType.CraftingPlan,
+            ItemType.CraftingReagent,
+            ItemType.FollowerSpecial,
+            ItemType.Gem,
+            ItemType.Potion,
+            ItemType.Unknown,
+        };
     }
 }
 

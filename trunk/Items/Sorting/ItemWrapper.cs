@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Trinity.Framework.Helpers;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Technicals;
@@ -9,7 +10,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Items
 {
-    public class ItemWrapper : IEquatable<ItemWrapper>
+    public class ItemWrapper : IComparable<ItemWrapper>, IEquatable<ItemWrapper>
     {
         public int ActorSNO { get; set; }
         public int GameBalanceId { get; set; }
@@ -73,13 +74,13 @@ namespace Trinity.Items
                 InternalName = item.InternalName;
                 ItemType = item.ItemType;
                 ItemBaseType = item.ItemBaseType;
-                IsShield = ShieldTypes.Contains(ItemType);
-                IsOffHand = OffHandTypes.Contains(ItemType);
-                IsArmor = ArmorTypes.Contains(ItemType);
-                IsJewelry = JewleryTypes.Contains(ItemType);
-                IsWeapon = WeaponTypes.Contains(ItemType);
+                IsShield = TypeConversions.ShieldTypes.Contains(ItemType);
+                IsOffHand = TypeConversions.OffHandTypes.Contains(ItemType);
+                IsArmor = TypeConversions.ArmorTypes.Contains(ItemType);
+                IsJewelry = TypeConversions.JewleryTypes.Contains(ItemType);
+                IsWeapon = TypeConversions.WeaponTypes.Contains(ItemType);
                 IsEquipment = item.ItemBaseType == ItemBaseType.Armor || item.ItemBaseType == ItemBaseType.Jewelry || item.ItemBaseType == ItemBaseType.Weapon;
-                IsMisc = MiscTypes.Contains(ItemType);
+                IsMisc = TypeConversions.MiscTypes.Contains(ItemType);
                 IsGem = item.ItemBaseType == ItemBaseType.Gem;
                 IsTwoSquareItem = (item.ItemBaseType == ItemBaseType.Armor || item.ItemBaseType == ItemBaseType.Weapon) && item.IsTwoSquareItem;
                 IsPotion = item.IsPotion;
@@ -89,9 +90,7 @@ namespace Trinity.Items
                 ItemStackQuantity = item.ItemStackQuantity;
                 IsSetItem = item.IsSetItem();
                 ItemSetName = item.ItemSetName();
-
                 HasSingleUseSlot = IsSingleSlotItem();
-
                 Item = item;
                 Stats = item.Stats;
                 StatsData = ItemStatsDataFactory.GetItemStatsDataFromStats(Stats);
@@ -103,10 +102,6 @@ namespace Trinity.Items
             }
         }
 
-        /// <summary>
-        /// Single slot items are things like helms, neck, shoulders, hands, feet, etc. Dual slot items are rings, 1h weapons (dual wield)
-        /// </summary>
-        /// <returns></returns>
         public bool IsSingleSlotItem()
         {
             if (IsOneHand)
@@ -118,81 +113,10 @@ namespace Trinity.Items
             return true;
         }
 
-        internal static HashSet<ItemType> OffHandTypes = new HashSet<ItemType>
+        public int CompareTo(ItemWrapper other)
         {
-            ItemType.Orb,
-            ItemType.Mojo,
-            ItemType.Quiver,
-            ItemType.Shield,
-            ItemType.CrusaderShield,
-        };
-
-        internal static HashSet<ItemType> ShieldTypes = new HashSet<ItemType>
-        {
-            ItemType.Shield,
-            ItemType.CrusaderShield,
-        };
-
-        internal static HashSet<ItemType> WeaponTypes = new HashSet<ItemType>
-        {
-            ItemType.Axe,
-            ItemType.Bow,
-            ItemType.CeremonialDagger,
-            ItemType.Crossbow,
-            ItemType.Dagger,
-            ItemType.Daibo,
-            ItemType.FistWeapon,
-            ItemType.Flail,
-            ItemType.HandCrossbow,
-            ItemType.Mace,
-            ItemType.MightyWeapon,
-            ItemType.Polearm,
-            ItemType.Spear,
-            ItemType.Staff,
-            ItemType.Sword,
-            ItemType.Wand,
-        };
-
-        internal static HashSet<ItemType> ArmorTypes = new HashSet<ItemType>
-        {
-            ItemType.Belt,
-            ItemType.Boots,
-            ItemType.Bracer,
-            ItemType.Chest,
-            ItemType.Cloak,
-            ItemType.Gloves,
-            ItemType.Helm,
-            ItemType.Legs,
-            ItemType.MightyBelt,
-            ItemType.Shoulder,
-            ItemType.SpiritStone,
-            ItemType.VoodooMask,
-            ItemType.WizardHat,
-        };
-
-        internal static HashSet<ItemType> JewleryTypes = new HashSet<ItemType>
-        {
-            ItemType.Amulet,
-            ItemType.Ring,
-        };
-
-        internal static HashSet<ItemType> MiscTypes = new HashSet<ItemType>
-        {
-            ItemType.CraftingPage,
-            ItemType.CraftingPlan,
-            ItemType.CraftingReagent,
-            ItemType.FollowerSpecial,
-            ItemType.Gem,
-            ItemType.Potion,
-            ItemType.Unknown,
-        };
-
-
-
-        //public int CompareTo(ItemWrapper other)
-        //{
-        //    return this.Compare(other);
-        //}
+            return this.Compare(other);
+        }
 
         public bool Equals(ItemWrapper other)
         {
@@ -213,47 +137,48 @@ namespace Trinity.Items
             return Item.GetHashCode();
         }
 
-        //public static bool operator ==(ItemWrapper a, ItemWrapper b)
-        //{
-        //    if (ReferenceEquals(a, b))
-        //    {
-        //        return true;
-        //    }
-        //    // If one is null, but not both, return false.
-        //    if (((object)a == null) || ((object)b == null))
-        //    {
-        //        return false;
-        //    }
+        public static bool operator ==(ItemWrapper a, ItemWrapper b)
+        {
+            if (ReferenceEquals(a, b))
+            {
+                return true;
+            }
+            // If one is null, but not both, return false.
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
 
-        //    // Return true if the fields match:
-        //    return a.ItemType == b.ItemType &&
-        //        a.ItemBaseType == b.ItemBaseType &&
-        //        a.Item.ItemQualityLevel == b.Item.ItemQualityLevel &&
-        //        a.Item.Name == b.Name;
-        //}
+            // Return true if the fields match:
+            return a.ItemType == b.ItemType &&
+                a.ItemBaseType == b.ItemBaseType &&
+                a.Item.ItemQualityLevel == b.Item.ItemQualityLevel &&
+                a.Item.Name == b.Name;
+        }
 
-        //public static bool operator !=(ItemWrapper item, ItemWrapper other)
-        //{
-        //    return !(item == other);
-        //}
+        public static bool operator !=(ItemWrapper item, ItemWrapper other)
+        {
+            return !(item == other);
+        }
 
-        //public static bool operator <(ItemWrapper item, ItemWrapper other)
-        //{
-        //    return item.Compare(other) < 0;
-        //}
+        public static bool operator <(ItemWrapper item, ItemWrapper other)
+        {
+            return item.Compare(other) < 0;
+        }
 
-        //public static bool operator >(ItemWrapper item, ItemWrapper other)
-        //{
-        //    return item.CompareTo(other) > 0;
-        //}
-        //public static bool operator >=(ItemWrapper item, ItemWrapper other)
-        //{
-        //    return item.CompareTo(other) >= 0;
-        //}
+        public static bool operator >(ItemWrapper item, ItemWrapper other)
+        {
+            return item.CompareTo(other) > 0;
+        }
+        public static bool operator >=(ItemWrapper item, ItemWrapper other)
+        {
+            return item.CompareTo(other) >= 0;
+        }
 
-        //public static bool operator <=(ItemWrapper item, ItemWrapper other)
-        //{
-        //    return item.CompareTo(other) <= 0;
-        //}
+        public static bool operator <=(ItemWrapper item, ItemWrapper other)
+        {
+            return item.CompareTo(other) <= 0;
+        }
     }
 }
+
