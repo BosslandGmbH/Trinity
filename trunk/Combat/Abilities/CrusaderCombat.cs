@@ -227,20 +227,26 @@ namespace Trinity.Combat.Abilities
             {
                 // Iron Skin
                 if (CanCast(SNOPower.X1_Crusader_IronSkin) && (Player.CurrentHealthPct <= CrusaderSettings.IronSkinHpPct) ||
-                    !ShouldWaitForConventionofElements(Skills.Crusader.IronSkin, Element.Physical, 1600, 0) && TargetUtil.AnyMobsInRange(60f))
+                    !ShouldWaitForConventionofElements(Skills.Crusader.IronSkin, Element.Physical, 1750, 0) && TargetUtil.AnyMobsInRange(60f))
                 {
-                    //Logger.Log("IronSkin");
+                    Logger.Log($"IronSkin without Target {Player.CurrentHealthPct} {CrusaderSettings.IronSkinHpPct} {CacheData.Buffs.ConventionElement} {CacheData.Buffs.ConventionElementElapsedMs}");
                     return new TrinityPower(SNOPower.X1_Crusader_IronSkin);
                 }
 
                 // Bombardment
-                if (CanCast(SNOPower.X1_Crusader_Bombardment) && GetHasBuff(SNOPower.X1_Crusader_IronSkin) &&
+                if (CanCast(SNOPower.X1_Crusader_Bombardment) && 
                     !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000) &&
                     ZetaDia.Me.Movement.SpeedXY != 0 && (TargetUtil.AnyMobsInRange(60f, CrusaderSettings.BombardmentAoECount) ||
                                                          TargetUtil.AnyElitesInRange(60f)))
                 {
                     if (Runes.Crusader.Critical.IsActive && CanCast(SNOPower.X1_Crusader_LawsOfValor2))
                         return new TrinityPower(SNOPower.X1_Crusader_LawsOfValor2);
+
+                    if (CanCast(SNOPower.X1_Crusader_IronSkin) && !GetHasBuff(SNOPower.X1_Crusader_IronSkin))
+                    {
+                        //Logger.Log("IronSkin before bombard");
+                        Skills.Crusader.IronSkin.Cast();
+                    }
 
                     return new TrinityPower(SNOPower.X1_Crusader_Bombardment, 0, 0);
                 }
@@ -287,7 +293,6 @@ namespace Trinity.Combat.Abilities
                 // Iron Skin
                 if (CanCastIronSkin())
                 {
-                    //Logger.Log("IronSkin");
                     return new TrinityPower(SNOPower.X1_Crusader_IronSkin,0,0);
                 }
 
@@ -970,13 +975,6 @@ namespace Trinity.Combat.Abilities
                     return false;
                 }
 
-                if (CanCast(SNOPower.X1_Crusader_IronSkin) && !GetHasBuff(SNOPower.X1_Crusader_IronSkin))
-                {
-                    Logger.LogVerbose("Bombardment Waiting for iron skin");
-                    Skills.Crusader.IronSkin.Cast();
-                    return false;
-                }
-
                 if (Math.Abs(ZetaDia.Me.Movement.SpeedXY) < float.Epsilon)
                 {
                     Logger.LogVerbose("Waiting to move for bombard with hexing pants.");
@@ -1042,13 +1040,16 @@ namespace Trinity.Combat.Abilities
                 return false;
 
             if (Player.CurrentHealthPct <= CrusaderSettings.IronSkinHpPct)
+            {
+                Logger.Log($"IronSkin at Health Current={Player.CurrentHealthPct}, threshold={CrusaderSettings.IronSkinHpPct}");
                 return true;
+            }
 
             if (!IsBombardmentBuild && CurrentTarget.IsBossOrEliteRareUnique &&
                 CurrentTarget.RadiusDistance <= 10f && !Settings.Combat.Misc.UseConventionElementOnly)
                 return true;
 
-            if (IsBombardmentBuild && !ShouldWaitForConventionofElements(Skills.Crusader.IronSkin, Element.Physical, 3200, 0))
+            if (IsBombardmentBuild && !ShouldWaitForConventionofElements(Skills.Crusader.IronSkin, Element.Physical, 1750, 0))
                 return true;
 
             return false;

@@ -20,7 +20,7 @@ namespace Trinity.Settings.Mock
         public List<LItem> DisplayItems { get; set; }
 
         /// <summary>
-        /// Mock Data for viewing ItemList controls in DesignTime
+        /// Mock Data for viewing ItemList controls in design mode
         /// </summary>
         public ItemListMockData()
         {
@@ -53,18 +53,12 @@ namespace Trinity.Settings.Mock
                         }
                     }
                 },
-                //new LItem(Legendary.BoardWalkers),
                 new LItem(Legendary.LutSocks),
-                //new ItemListItem(Legendary.BreastplateOfAkkhan)
-                //{
-                //    IsSelected = true
-                //},
                 new LItem(Legendary.Cindercoat),
                 new LItem(Legendary.FlyingDragon), 
             };
 
-            Collection = new CollectionViewSource();
-            Collection.Source = DisplayItems;
+            Collection = new CollectionViewSource {Source = DisplayItems};
             Collection.GroupDescriptions.Add(new PropertyGroupDescription("ItemType"));
         }
     }

@@ -2,32 +2,21 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Xml.Serialization;
 using JetBrains.Annotations;
-using Microsoft.Win32.SafeHandles;
-using Trinity;
-using Trinity.Items;
 using Trinity.Objects;
 using Trinity.Reference;
-using Trinity.UIComponents;
-using Zeta.Common;
 using Trinity.Technicals;
-using Logger = Trinity.Technicals.Logger;
+using Trinity.UIComponents;
 
 namespace Trinity.UI.UIComponents
 {
     /// <summary>
-    /// Item Object with wrapped for use in SettingsUI
+    /// Item Object wrapped for use in SettingsUI
     /// </summary>
     [DataContract(Namespace = "")]
     public class LItem : Item, INotifyPropertyChanged, ICloneable
@@ -76,10 +65,7 @@ namespace Trinity.UI.UIComponents
 
         public string InvalidReason { get; set; }
 
-        public string QualityTypeLabel
-        {
-            get { return string.Format("{0} {1}{2}", Quality, IsSetItem ? "Set " : string.Empty, ItemType); }
-        }
+        public string QualityTypeLabel => $"{Quality} {(IsSetItem ? "Set " : string.Empty)}{ItemType}";
 
         public bool IsValid
         {
@@ -194,7 +180,6 @@ namespace Trinity.UI.UIComponents
             return new LItem(_item)
             {
                 IsSelected = IsSelected,
-                //OpCount = OpCount
             };
         }
 
@@ -208,8 +193,8 @@ namespace Trinity.UI.UIComponents
                 {
                     _rules = value;
                     OnPropertyChanged();
-                    OnPropertyChanged("OptionalRules");
-                    OnPropertyChanged("RequiredRules");
+                    OnPropertyChanged(nameof(OptionalRules));
+                    OnPropertyChanged(nameof(RequiredRules));
                 }
             }
         }
@@ -301,7 +286,7 @@ namespace Trinity.UI.UIComponents
 
                     Rules.Remove(lRule);
 
-                    OnPropertyChanged("Rules");
+                    OnPropertyChanged(nameof(Rules));
                     OnPropertyChanged(lRule.RuleType + "Rules");
                 }
                 catch (Exception ex)
@@ -339,8 +324,7 @@ namespace Trinity.UI.UIComponents
                 var statRange = GetItemStatRange(property);
                 if (statRange != null)
                 {
-                    Logger.LogVerbose(string.Format("Stats Min = {0} Max = {1} Step = {2}",
-                        statRange.AbsMin.ToString(), statRange.AbsMax.ToString(), statRange.AbsStep.ToString()));
+                    Logger.LogVerbose($"Stats Min = {statRange.AbsMin.ToString()} Max = {statRange.AbsMax.ToString()} Step = {statRange.AbsStep.ToString()}");
                 }
 
                 Rules.Add(new LRule
@@ -352,7 +336,7 @@ namespace Trinity.UI.UIComponents
                     Value = LRule.GetDefaultValue(property)
                 });
 
-                OnPropertyChanged("Rules");
+                OnPropertyChanged(nameof(Rules));
                 OnPropertyChanged(ruleType + "Rules");
             }
             else

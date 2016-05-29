@@ -19,7 +19,7 @@
                 <Border Tag="Items\ConfigPickup.xaml"/>
             </TabItem>
             <TabItem Header="Item List" Foreground="{DynamicResource TextBrush}">
-                <Border Tag="Items\ConfigItemList.xaml"/>
+                <Border Tag="..\Items\ItemList\ItemList.xaml"/>
             </TabItem>
             <TabItem Header="Kanai's Cube" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\KanaisCube.xaml"/>

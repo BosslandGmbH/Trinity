@@ -257,8 +257,12 @@ namespace Trinity.UI
                     // Tag contains a string end with ".xaml" : It's dymanic content 
                     if (!string.IsNullOrWhiteSpace(contentName) && contentName.EndsWith(".xaml"))
                     {
+                        // combine and handle relative '..\' in path.
+                        var dirtyFullPath = Path.Combine(uiPath, contentName); 
+                        var cleanFullPath = new Uri(dirtyFullPath).LocalPath;
+
                         // Load content from XAML file
-                        LoadDynamicContent(uiPath, ctrl, Path.Combine(uiPath, contentName));
+                        LoadDynamicContent(uiPath, ctrl, cleanFullPath);
                     }
                     else
                     {

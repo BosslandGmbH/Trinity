@@ -14,7 +14,10 @@ using Trinity.Framework.Actors;
 
 namespace Trinity.Reference
 {
-    class ItemDataUtils
+    /// <summary>
+    /// Utilities and info about items and item properties
+    /// </summary>
+    public class ItemDataUtils
     {
 
         public static StatType GetMainStatType(ACDItem item)

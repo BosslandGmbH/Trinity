@@ -519,7 +519,7 @@
     <Compile Include="Cache\GameBalanceDataCache.cs" />
     <Compile Include="Items\ItemDropStats.cs" />
     <Compile Include="Items\ItemNames.cs" />
-    <Compile Include="Items\ItemList.cs" />
+    <Compile Include="Items\ItemList\ItemListEvaluator.cs" />
     <Compile Include="Items\Sorting\ItemSort.cs" />
     <Compile Include="Items\ItemStatsData.cs" />
     <Compile Include="Items\ItemStatsDataFactory.cs" />
@@ -543,7 +543,7 @@
     <Compile Include="Objects\Set.cs" />
     <Compile Include="Objects\Skill.cs" />
     <Compile Include="Reference\ItemRanks.cs" />
-    <Compile Include="Reference\ItemDataUtils.cs" />
+    <Compile Include="Items\ItemList\ItemDataUtils.cs" />
     <Compile Include="Reference\Legendary.cs" />
     <Compile Include="Reference\Passives.cs" />
     <Compile Include="Reference\PassiveUtils.cs" />
@@ -558,9 +558,9 @@
     <Compile Include="Settings\ITrinitySettingEvents.cs" />
     <Compile Include="Settings\KanaisCubeSetting.cs" />
     <Compile Include="Settings\Loot\PresetLists.cs" />
-    <Compile Include="Settings\Loot\ItemListSettings.cs" />
+    <Compile Include="Items\ItemList\ItemListSettings.cs" />
     <Compile Include="Settings\Loot\ItemRankSettings.cs" />
-    <Compile Include="Settings\Mock\ItemListMockData.cs" />
+    <Compile Include="Items\ItemList\ItemListMockData.cs" />
     <Compile Include="Settings\Mock\MockData.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Combat\HandleTarget.cs" />
@@ -675,8 +675,8 @@
     <Compile Include="UI\UIComponents\Input\MouseInput.cs" />
     <Compile Include="UI\UIComponents\Input\WindowsHookHelper.cs" />
     <Compile Include="UI\UIComponents\IntegerStringBinding.cs" />
-    <Compile Include="UI\UIComponents\ItemList\ItemProperty.cs" />
-    <Compile Include="UI\UIComponents\ItemList\LRule.cs" />
+    <Compile Include="Items\ItemList\ItemProperty.cs" />
+    <Compile Include="Items\ItemList\LRule.cs" />
     <Compile Include="UI\UIComponents\Behaviors\CancelMouseBubbling.cs" />
     <Compile Include="UI\UIComponents\Controls\ModalContentCommands.cs" />
     <Compile Include="UI\UIComponents\Controls\ModalContentPresenter.cs" />
@@ -690,7 +690,7 @@
     <Compile Include="UI\UIComponents\Converters\FlagEnumValueConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\PercentConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\EnumBooleanConverter.cs" />
-    <Compile Include="UI\UIComponents\ItemList\RuleType.cs" />
+    <Compile Include="Items\ItemList\RuleType.cs" />
     <Compile Include="UI\UIComponents\LineChartLib\AdaptableDateTimeAxis.cs" />
     <Compile Include="UI\UIComponents\LineChartLib\AdaptableIncrementAxis.cs" />
     <Compile Include="UI\UIComponents\LineChartLib\AutoAxis.cs" />
@@ -707,7 +707,7 @@
     <Compile Include="UI\UIComponents\PropertyValueBindingItem.cs" />
     <Compile Include="UI\UIComponents\PropertyValueFlagBindingItem.cs" />
     <Compile Include="UI\UIComponents\RelayCommand.cs" />
-    <Compile Include="UI\UIComponents\ItemList\LItem.cs" />
+    <Compile Include="Items\ItemList\LItem.cs" />
     <Compile Include="UI\UIComponents\ThreadedWindow.cs" />
     <Compile Include="UI\UIComponents\UIControlType.cs" />
     <Compile Include="UI\UILoader.cs" />
@@ -815,7 +815,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Items\ConfigItemList.xaml">
+    <Page Include="Items\ItemList\ItemList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

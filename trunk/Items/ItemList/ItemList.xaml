@@ -1,0 +1,967 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ut="clr-namespace:Trinity.UIComponents"
+             xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+             xmlns:mock="clr-namespace:Trinity.Settings.Mock"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" Foreground="{DynamicResource TextBrush}"   Background="#434343" Padding="10,0,0,0"
+             d:DesignHeight="800" d:DesignWidth="420">
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\..\UI\Template.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+
+            <ut:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
+            <ut:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
+            <ut:EnumVisibilityConverter x:Key="EnumVisibilityConverter"  />
+            <ut:EnumVisibilityConverter x:Key="EnumTrueToCollapsedConverter" Reverse="True" />
+            <ut:UriToCachedImageConverter x:Key="UrlToCachedImageConverter" />
+
+            <!--<Style TargetType="{x:Type TabItem}" />-->
+
+            <mock:MockData x:Key="DesignViewModel" />
+
+            <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="ItemPropertyProvider">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type TypeName="ut:ItemProperty" />
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <Style x:Key="StatusLabelStyle" TargetType="{x:Type Label}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontWeight" Value="Normal" />
+            </Style>
+
+            <Style x:Key="GroupHeaderPrimaryLabelStyle" TargetType="{x:Type Label}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Padding" Value="0,0,0,0" />
+                <Setter Property="Margin" Value="0" />
+            </Style>
+
+            <Style x:Key="TitleLabelStyle" TargetType="{x:Type Label}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Padding" Value="0,0,0,0" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Height" Value="Auto" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsSetItem}" Value="True">
+                        <Setter Property="Foreground" Value="#8bd442" />
+                    </DataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Path=IsSetItem}" Value="False" />
+                            <Condition Binding="{Binding Path=Quality}" Value="Legendary" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="Foreground" Value="#bf642f" />
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="UnselectedTitleLabelStyle" TargetType="{x:Type Label}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Margin" Value="0,0,0,0" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Padding" Value="0,0,0,0" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="Foreground" Value="#cccccc" />
+            </Style>
+
+            <Style x:Key="SubtleInformationStyle" TargetType="{x:Type Label}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Margin" Value="0,0,0,0" />
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="Padding" Value="0,2,2,0" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="Foreground" Value="#cccccc" />
+            </Style>
+
+            <Style x:Key="TextBlockSubtleInformationStyle" TargetType="{x:Type TextBlock}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Margin" Value="0,0,0,0" />
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="Padding" Value="0,2,2,0" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="Foreground" Value="#cccccc" />
+            </Style>
+
+            <Style x:Key="QualityLabelStyle" TargetType="{x:Type Label}">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="0,0,0,0" />
+                <Setter Property="FontSize" Value="11" />
+                <Setter Property="FontWeight" Value="Normal" />
+                <Setter Property="Height" Value="Auto" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsSetItem}" Value="True">
+                        <Setter Property="Foreground" Value="#8bd442" />
+                    </DataTrigger>
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Path=IsSetItem}" Value="False" />
+                            <Condition Binding="{Binding Path=Quality}" Value="Legendary" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="Foreground" Value="#bf642f" />
+                    </MultiDataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="SelfAdjustingHeightImageStyle" TargetType="{x:Type Image}">
+                <Setter Property="Width" Value="64" />
+                <Setter Property="Height" Value="64" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding BaseType}" Value="Weapon">
+                        <Setter Property="Height" Value="128" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding BaseType}" Value="Armor">
+                        <Setter Property="Height" Value="128" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="ListViewStyle1" TargetType="{x:Type ListView}">
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Visible" />
+                <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+                <Setter Property="ScrollViewer.PanningMode" Value="VerticalOnly" />
+                <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListView}">
+                            <themes:ListBoxChrome x:Name="Bd"
+                                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                                          BorderThickness="{TemplateBinding BorderThickness}"
+                                                          Background="{TemplateBinding Background}"
+                                                          RenderMouseOver="{TemplateBinding IsMouseOver}"
+                                                          RenderFocused="{TemplateBinding IsKeyboardFocusWithin}"
+                                                          SnapsToDevicePixels="False">
+                                <ScrollViewer VerticalScrollBarVisibility="Visible"
+                                                      Padding="{TemplateBinding Padding}" Uid="ScrollViewer_11">
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Uid="ItemsPresenter_6" />
+                                </ScrollViewer>
+                            </themes:ListBoxChrome>
+                            <ControlTemplate.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsGrouping" Value="true" />
+                                        <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping"
+                                                           Value="false" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+
+            <!--<LinearGradientBrush x:Key="LightBrush" StartPoint="0,0" EndPoint="0,1">
+                <GradientBrush.GradientStops>
+                    <GradientStopCollection>
+                        <GradientStop Color="#FFF" Offset="0.0"/>
+                        <GradientStop Color="#EEE" Offset="1.0"/>
+                    </GradientStopCollection>
+                </GradientBrush.GradientStops>
+            </LinearGradientBrush>
+            <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
+            <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFF" />
+            <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
+            <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
+            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />-->
+
+            <DataTemplate x:Key="SelectedRowTemplate">
+                <Border Margin="0" Background="#333333" Padding="5,0,5,2">
+                    <Border Padding="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15" MinWidth="15" />
+                                <ColumnDefinition MinWidth="54" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" Orientation="Vertical">
+                                <CheckBox x:Name="SelectedCheckBox" IsChecked="{Binding Path=IsSelected}"
+                                          Margin="0,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <Border Grid.Column="1" Background="#333333" CornerRadius="3" Padding="10">
+                                <StackPanel Orientation="Vertical" Margin="0,0,1,1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <Border Grid.RowSpan="3" CornerRadius="4" Padding="5" BorderThickness="1"
+                                                BorderBrush="#b07b38">
+                                            <Border.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                    <GradientStop Color="Black" Offset="0" />
+                                                    <GradientStop Color="#FF331F0D" Offset="1" />
+                                                </LinearGradientBrush>
+                                            </Border.Background>
+                                            <Image Style="{StaticResource SelfAdjustingHeightImageStyle}" Height="128"
+                                                   Source="{Binding IconUrl, Mode=OneWay, Converter={StaticResource UrlToCachedImageConverter}, IsAsync=true}" />
+                                        </Border>
+                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,10">
+                                            <DockPanel>
+                                                <Label DockPanel.Dock="Left" Style="{StaticResource TitleLabelStyle}"
+                                                       Content="{Binding Name}" />
+                                                <Label DockPanel.Dock="Right"
+                                                       Style="{StaticResource SubtleInformationStyle}"
+                                                       HorizontalAlignment="Right" Content="{Binding Id}" />
+                                            </DockPanel>
+                                            <Label Style="{StaticResource QualityLabelStyle}"
+                                                   Content="{Binding QualityTypeLabel}" />
+                                            <WrapPanel
+                                                Visibility="{Binding LegendaryAffix, Converter={StaticResource EmptyStringToVisibilityConverter}, Mode=OneWay}">
+                                                <TextBlock ToolTip="{Binding LegendaryAffix}"
+                                                           Style="{StaticResource TextBlockSubtleInformationStyle}"
+                                                           Text="{Binding LegendaryAffix}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                            </WrapPanel>
+                                        </StackPanel>
+                                        <Border Grid.Row="1" Grid.Column="2" Grid.RowSpan="2"
+                                                ut:CancelMouseBubbling.Active="True" Background="#55171717"
+                                                BorderBrush="#55666666" BorderThickness="0,0,1,1" Margin="0,5,0,0">
+                                            <Border Padding="10,5,10,10" Background="Transparent"
+                                                    BorderBrush="#FF222222" BorderThickness="1,1,0,0">
+                                                <StackPanel>
+                                                    <StackPanel>
+                                                        <Grid Background="Transparent">
+                                                            <TextBlock TextWrapping="Wrap" Text="Must have properties:"
+                                                                       Foreground="White" FontWeight="Regular"
+                                                                       HorizontalAlignment="Left">
+                                                                <Run Text="  (" FontWeight="Normal" Foreground="Gray" />
+                                                                <Run
+                                                                    Text="{Binding Mode=OneWay, Path=RequiredRules.Count }"
+                                                                    FontWeight="Normal" Foreground="Gray" />
+                                                                <Run Text=") " FontWeight="Normal" Foreground="Gray" />
+                                                            </TextBlock>
+                                                            <ComboBox
+                                                                Background="Transparent"
+                                                                HorizontalAlignment="Right"
+                                                                Name="AddRuleComboBox"
+                                                                FontWeight="Normal"
+                                                                ut:ComboAlwaysFireSelection.Active="True"
+                                                                ut:SelectionChangedBehaviour.Command="{Binding AddRequiredRuleCommand}"
+                                                                ItemsSource="{Binding ItemProperties}"
+                                                                Width="Auto"
+                                                                Height="23" IsSynchronizedWithCurrentItem="False"
+                                                                Template="{DynamicResource ActionsComboBoxControlTemplate}"
+                                                                Tag="Add" />
+                                                        </Grid>
+                                                        <WrapPanel x:Name="rulesContentContainer"
+                                                                   Background="Transparent" Width="Auto">
+                                                            <ItemsControl
+                                                                Width="{Binding ActualWidth, ElementName=rulesContentContainer}"
+                                                                HorizontalContentAlignment="Stretch"
+                                                                HorizontalAlignment="Stretch"
+                                                                ItemsSource="{Binding RequiredRules}"
+                                                                ItemContainerStyle="{DynamicResource ItemsControlSelector}" />
+                                                        </WrapPanel>
+                                                    </StackPanel>
+                                                    <StackPanel Margin="0,5,0,0">
+                                                        <Grid Background="Transparent">
+                                                            <WrapPanel>
+                                                                <TextBlock TextWrapping="Wrap" Text="And at least "
+                                                                           Margin="0,2,0,0" Foreground="White"
+                                                                           FontWeight="Regular"
+                                                                           HorizontalAlignment="Left" />
+                                                                <ComboBox
+                                                                    Background="Transparent"
+                                                                    HorizontalAlignment="Left"
+                                                                    Name="OptionalCount"
+                                                                    FontWeight="Normal"
+                                                                    MaxHeight="20"
+                                                                    Foreground="White"
+                                                                    Width="Auto" Height="23"
+                                                                    ItemsSource="{Binding OpCountNumbers}"
+                                                                    SelectedValue="{Binding Path=Ops, Mode=TwoWay}"
+                                                                    Tag="Add"
+
+                                                                    ToolTip="The number of optional rules that must be true" />
+                                                                <TextBlock TextWrapping="Wrap" Text=" of:"
+                                                                           Margin="0,2,0,0" Foreground="White"
+                                                                           FontWeight="Regular"
+                                                                           HorizontalAlignment="Left">
+                                                                    <Run Text="  (" FontWeight="Normal"
+                                                                         Foreground="Gray" />
+                                                                    <Run
+                                                                        Text="{Binding Mode=OneWay, Path=OptionalRules.Count }"
+                                                                        FontWeight="Normal" Foreground="Gray" />
+                                                                    <Run Text=") " FontWeight="Normal"
+                                                                         Foreground="Gray" />
+                                                                </TextBlock>
+                                                            </WrapPanel>
+                                                            <ComboBox
+                                                                Background="Transparent"
+                                                                HorizontalAlignment="Right"
+                                                                Name="OptionalAddRuleComboBox"
+                                                                FontWeight="Normal"
+                                                                ut:ComboAlwaysFireSelection.Active="True"
+                                                                ut:SelectionChangedBehaviour.Command="{Binding AddOptionalRuleCommand}"
+                                                                ItemsSource="{Binding ItemProperties}"
+                                                                Width="Auto" Height="23"
+                                                                IsSynchronizedWithCurrentItem="False"
+                                                                Template="{DynamicResource ActionsComboBoxControlTemplate}"
+                                                                Tag="Add" />
+                                                        </Grid>
+                                                        <WrapPanel x:Name="optionalRulesContentContainer"
+                                                                   Background="Transparent" Width="Auto">
+                                                            <ItemsControl
+                                                                Width="{Binding ActualWidth, ElementName=rulesContentContainer}"
+                                                                HorizontalContentAlignment="Stretch"
+                                                                HorizontalAlignment="Stretch"
+                                                                ItemsSource="{Binding OptionalRules}"
+                                                                ItemContainerStyle="{DynamicResource ItemsControlSelector}" />
+                                                        </WrapPanel>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Border>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Border>
+            </DataTemplate>
+
+            <Style x:Key="ItemsControlSelector" TargetType="{x:Type ContentPresenter}">
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="Width" Value="Auto" />
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="ContentTemplate" Value="{DynamicResource DefaultFormTemplate}" />
+                <Setter Property="DockPanel.Dock" Value="Top" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Ancient">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource CheckboxFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PrimaryStat">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="CriticalHitChance">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="CriticalHitDamage">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="SkillDamage">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource DropdownSliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="BaseMaxDamage">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="AttackSpeed">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PercentDamage">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="DamageFromElites">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="DamageAgainstElites">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Vitality">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Sockets">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ResistAll">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Cooldown">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ResourceCost">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ElementalDamage">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource DropdownSliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="FireSkills">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LightningSkills">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="HolySkills">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ColdSkills">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PhysicalSkills">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ArcaneSkills">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PoisonSkills">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="AreaDamage">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <!-- New -->
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="CriticalHitsGrantArcane">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Armor">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToBlock">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Cooldown">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="DamageFromElites">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="HatredRegen">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePercent">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePerFury">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePerSpirit">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePerWrath">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="LifePerHit">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="RegenerateLifePerSecond">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ManaRegen">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MovementSpeed">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="WrathRegen">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="SpiritRegen">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumArcane">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumDiscipline">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumFury">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumMana">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumSpirit">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="MaximumWrath">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToBlind">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToFreeze">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToImmobilize">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="ChanceToStun">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="AttackersTakeDamage">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Thorns">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PassivePower">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
+                    </DataTrigger>                    
+                </Style.Triggers>
+            </Style>
+
+            <DataTemplate x:Key="CheckboxFormTemplate">
+                <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2"
+                        BorderThickness="1,1,0,0">
+                    <Grid Width="Auto" HorizontalAlignment="Stretch">
+                        <WrapPanel HorizontalAlignment="Stretch" Width="Auto">
+                            <CheckBox x:Name="CheckBoxFieldCheckbox" IsChecked="{Binding Path=Value}" Margin="0"
+                                      HorizontalAlignment="Left" VerticalAlignment="Center" />
+                            <CheckBox Style="{DynamicResource TextBlockCheckBox}" FontWeight="Regular"
+                                      IsChecked="{Binding IsChecked, ElementName=CheckBoxFieldCheckbox}"
+                                      Content="{Binding Name}" Margin="0,0,0,0" />
+
+                        </WrapPanel>
+                        <Button HorizontalAlignment="Right" Content=" X " Height="21" Width="25" Margin="10,-1,0,0"
+                                Background="Transparent"
+                                Command="{Binding Path=DataContext.RemoveRuleCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding}"
+                                BorderBrush="Transparent" FontWeight="Heavy" BorderThickness="0" />
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate x:Key="SliderFormTemplate">
+                <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2"
+                        BorderThickness="1,1,0,0">
+                    <Grid Width="Auto" HorizontalAlignment="Stretch">
+                        <Grid Margin="0,0,10,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="37*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Foreground="White" VerticalContentAlignment="Center"
+                                   Style="{StaticResource UnselectedTitleLabelStyle}" Content="{Binding Name}" />
+
+                            <Slider Grid.Row="0" Grid.Column="1" Template="{DynamicResource SliderEditable}"
+                                    Interval="25"
+                                    Maximum="{Binding Max, Mode=OneWay}"
+                                    Minimum="{Binding Min, Mode=OneWay}"
+                                    SmallChange="{Binding Step, Mode=OneWay}"
+                                    TickFrequency="{Binding Step, Mode=OneWay}"
+                                    IsSnapToTickEnabled="True"
+                                    TickPlacement="BottomRight"
+                                    Value="{Binding Value}"
+                                    HorizontalAlignment="Stretch" Margin="5,0,25,0" />
+                        </Grid>
+                        <Button HorizontalAlignment="Right" Content=" X " Height="21" Width="25" Margin="10,-1,0,0"
+                                Background="Transparent"
+                                Command="{Binding Path=DataContext.RemoveRuleCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding}"
+                                BorderBrush="Transparent" FontWeight="Heavy" BorderThickness="0" />
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate x:Key="SliderFormDecimalTemplate">
+                <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2"
+                        BorderThickness="1,1,0,0">
+                    <Grid Width="Auto" HorizontalAlignment="Stretch">
+                        <Grid Margin="0,0,10,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20*" />
+                                <ColumnDefinition Width="37*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Foreground="White" VerticalContentAlignment="Center"
+                                   Style="{StaticResource UnselectedTitleLabelStyle}" Content="{Binding Name}" />
+
+                            <Slider Grid.Row="0" Grid.Column="1" Template="{DynamicResource SliderEditable}"                           
+                                    Maximum="{Binding Max, Mode=OneWay}"
+                                    Minimum="{Binding Min, Mode=OneWay}"
+                                    SmallChange="0.1"
+                                    TickFrequency="0.5"
+                                    IsSnapToTickEnabled="True"
+                                    TickPlacement="BottomRight"
+                                    Value="{Binding Value}"
+                                    HorizontalAlignment="Stretch" Margin="5,0,25,0" />
+                        </Grid>
+                        <Button HorizontalAlignment="Right" Content=" X " Height="21" Width="25" Margin="10,-1,0,0"
+                                Background="Transparent"
+                                Command="{Binding Path=DataContext.RemoveRuleCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding}"
+                                BorderBrush="Transparent" FontWeight="Heavy" BorderThickness="0" />
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate x:Key="DropdownSliderFormTemplate">
+                <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2"
+                        BorderThickness="1,1,0,0">
+                    <Grid Width="Auto" HorizontalAlignment="Stretch">
+                        <Grid Margin="0,0,10,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="27*" />
+                                <ColumnDefinition Width="49*" />
+                            </Grid.ColumnDefinitions>
+                            <ComboBox Grid.Column="0" FontWeight="Normal"
+                                      ItemsSource="{Binding Variants}"
+                                      SelectedValue="{Binding Variant, Mode=TwoWay}"
+                                      SelectedValuePath="Id"
+                                      DisplayMemberPath="Name"
+                                      Margin="0,0,0,0" />
+                            <Slider Grid.Row="0" Grid.Column="1" Template="{DynamicResource SliderEditable}"
+                                    Interval="25"
+                                    Maximum="{Binding Max, Mode=OneWay}"
+                                    Minimum="{Binding Min, Mode=OneWay}"
+                                    SmallChange="{Binding Step, Mode=OneWay}"
+                                    TickFrequency="{Binding Step, Mode=OneWay}"
+                                    IsSnapToTickEnabled="True"
+                                    TickPlacement="BottomRight"
+                                    Value="{Binding Value}"
+                                    HorizontalAlignment="Stretch" Margin="5,0,25,0" />
+                        </Grid>
+                        <Button HorizontalAlignment="Right" Content=" X " Height="21" Width="25" Margin="10,-1,0,0"
+                                Background="Transparent"
+                                Command="{Binding Path=DataContext.RemoveRuleCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding}"
+                                BorderBrush="Transparent" FontWeight="Heavy" BorderThickness="0" />
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate x:Key="DefaultFormTemplate">
+                <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2"
+                        BorderThickness="1,1,0,0">
+                    <Grid Width="Auto" HorizontalAlignment="Stretch">
+                        <WrapPanel HorizontalAlignment="Stretch" Width="Auto">
+                            <Label Foreground="White" Style="{StaticResource UnselectedTitleLabelStyle}"
+                                   Content="{Binding Name}" />
+                        </WrapPanel>
+                        <Button HorizontalAlignment="Right" Content=" X " Height="21" Width="25" Margin="10,-1,0,0"
+                                Background="Transparent"
+                                Command="{Binding Path=DataContext.RemoveRuleCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding}"
+                                BorderBrush="Transparent" FontWeight="Heavy" BorderThickness="0" />
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <DataTemplate x:Key="NormalRowTemplate">
+                <StackPanel Orientation="Horizontal" Margin="5,2,5,2">
+                    <CheckBox x:Name="SelectedCheckBox" IsChecked="{Binding Path=IsSelected}" Margin="0"
+                              HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <Label Style="{StaticResource UnselectedTitleLabelStyle}" Margin="6,0,0,0" Content="{Binding Name}" />
+                </StackPanel>
+            </DataTemplate>
+
+            <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Background" Value="#333333" />
+                <Setter Property="Foreground" Value="Transparent" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource SelectedRowTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsSelected}" Value="False">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource NormalRowTemplate}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+
+    <ut:ModalContentPresenter x:Name="modalPresenter" IsModal="{Binding ItemList.IsModalVisible}"  OpenCommand="{Binding ItemList.LoadModalCommand}">
+
+        <DockPanel LastChildFill="True" VerticalAlignment="Stretch" Margin="0,10,10,0">
+            <StackPanel DockPanel.Dock="Top" Background="DarkRed"  Visibility="{Binding Loot.ItemFilterMode, Converter={StaticResource EnumTrueToCollapsedConverter}, ConverterParameter=ItemList, Mode=TwoWay}">
+                <WrapPanel Margin="10">
+                    <Label VerticalAlignment="Center" Background="Transparent" Foreground="White" Content="Item list is NOT the active Rules Engine!" Margin="0,0,10,0"/>
+                    <Button VerticalAlignment="Center" Style="{DynamicResource LinkButton}" Content="Enable ItemList" Command="{Binding ItemList.EnableItemListCommand}"/>
+                </WrapPanel>
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,0" Orientation="Horizontal" Background="#FF6A6A6A"
+                        Height="38" VerticalAlignment="Center">
+                <Label Style="{StaticResource StatusLabelStyle}" VerticalContentAlignment="Center" Margin="5,0,0,0"
+                       Content="Search:" />
+                <TextBox Width="140" Height="22"
+                         Text="{Binding ItemList.FilterText, UpdateSourceTrigger=PropertyChanged}" Margin="0,8"
+                         ToolTip="Search by Item Name or Id" />
+                <Button Content=" X " Height="21" Width="25" Margin="-27,-1,0,0" Background="Transparent"
+                        Command="{Binding ItemList.ResetFilterCommand}" BorderBrush="Transparent" FontWeight="Heavy"
+                        BorderThickness="1"
+                        Visibility="{Binding ItemList.IsFiltered, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                <Label Style="{StaticResource StatusLabelStyle}" VerticalContentAlignment="Center" Margin="5,0,0,0"
+                       Content="Group By:" />
+                <ComboBox Tag="" SelectedValuePath="Tag" SelectedValue="{Binding ItemList.Grouping}" x:Name="GroupingDropdown" MaxHeight="25" Padding="0,0,15,0">
+                    <ComboBoxItem Content="None" Tag="None" Foreground="White" Background="Black" />
+                    <ComboBoxItem Content="LegendaryAffix" Tag="IsLegendaryAffixed" Foreground="White" Background="Black" />
+                    <ComboBoxItem Content="BaseType" Tag="BaseType" Foreground="White" Background="Black" />
+                    <ComboBoxItem Content="ItemType" Tag="ItemType" Foreground="White" Background="Black" />
+                    <ComboBoxItem Content="Sets" Tag="SetName" Foreground="White" Background="Black" />
+                    <ComboBoxItem Content="Class" Tag="ClassRestriction" Foreground="White" Background="Black" />
+                    <ComboBoxItem Content="Selected" Tag="IsSelected" Foreground="White" Background="Black" />
+                </ComboBox>
+
+                <Button Command="{Binding Source={x:Static ut:ModalContentCommands.ShowModalContent}}"
+                        CommandParameter="Export" Width="Auto" Padding="7,0" Margin="10,7,5,7">
+                    Export
+                </Button>
+                <Button Command="{Binding Source={x:Static ut:ModalContentCommands.ShowModalContent}}"
+                        CommandParameter="Import" Width="Auto" Padding="7,0" Margin="0,7,5,7">
+                    Import
+                </Button>
+
+
+
+            </StackPanel>
+
+            <!-- Override Settings --><!--
+            <StackPanel Height="Auto" DockPanel.Dock="Top" Margin="0,0,0,0">
+                <Grid Background="Transparent">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Border BorderThickness="0" Padding="8,8" Background="#555">
+                        <UniformGrid Columns="2">
+                            <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL ancients to be stashed." Content="Always Keep Ancient Items" IsChecked="{Binding Path=ItemList.AlwaysStashAncients}" />
+                            <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL non-ancients to be trashed." Content="Always Sell/Salvage Non-Ancients" IsChecked="{Binding Path=ItemList.AlwaysTrashNonAncients}" />
+                            <CheckBox ToolTip="Rule sliders will automatically be increased as you find more powerful items." Content="Auto-Upgrade Rules" IsChecked="{Binding Path=ItemList.UpgradeRules}" />
+                        </UniformGrid>
+                    </Border>
+                </Grid>
+            </StackPanel>-->
+
+            <TabControl Margin="0,10,0,0" Padding="0,10,5,2" Background="#434343" SelectedIndex="{Binding ItemList.SelectedTabIndex}">
+
+                <!-- List of Legendary Items -->
+                <TabItem Header="Legendary Item" Style="{DynamicResource TertiaryTabItem}">
+                    <DockPanel Background="#333333">
+                        <Border DockPanel.Dock="Top" Padding="0,0,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="131*"/>
+                                    <ColumnDefinition Width="274*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Margin="4,0,0,0" Grid.ColumnSpan="2">Select the legendary items you want to keep/stash.</Label>
+                                <ComboBox Background="Transparent" HorizontalAlignment="Right" FontWeight="Normal" 
+                                      ut:ComboAlwaysFireSelection.Active="False" ut:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}" 
+                                       Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False" 
+                                      Template="{DynamicResource ActionsComboBoxControlTemplate}" Tag="More Options..." Grid.Column="1" Margin="0,2">
+                                    <ComboBoxItem Content="Select None" Tag="SelectNoneCommand" Foreground="White" Background="Black" />
+                                    <ComboBoxItem Content="Select All" Tag="SelectAllCommand" Foreground="White" Background="Black" />
+                                    <ComboBoxItem Content="Add 2.4 Items" Tag="Add24ItemsCommand" Foreground="White" Background="Black" />
+                                    <ComboBoxItem Content="Add Set Items" Tag="AddAllSetsCommand" Foreground="White" Background="Black" />
+                                    <ComboBoxItem Content="Add Legendary Affix Items" Tag="AddAllLegendaryAffixCommand" Foreground="White" Background="Black" />
+                                    <ComboBoxItem Content="Clear All Rules" Tag="ClearRulesCommand" Foreground="White" Background="Black" />
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+                        <ListView Padding="0,5,0,0" DockPanel.Dock="Top" 
+                              d:DataContext="{Binding Source={StaticResource DesignViewModel}}"
+                              SelectionMode="Multiple"                                
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              ScrollViewer.VerticalScrollBarVisibility="Visible"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Standard"
+                              VirtualizingPanel.IsVirtualizingWhenGrouping="False"
+                              VirtualizingPanel.CacheLengthUnit="Page"
+                              VirtualizingPanel.CacheLength="2"
+                              ScrollViewer.IsDeferredScrollingEnabled="False"
+                              ItemContainerStyle="{DynamicResource ListViewItemStyle}"
+                              Background="#333333"
+                              ItemsSource="{Binding ItemList.Collection.View}"
+                              VerticalContentAlignment="Stretch"
+                              Style="{DynamicResource ListViewStyle1}">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <Expander FontWeight="Bold" Foreground="LightSkyBlue" Header="{Binding Name}" IsExpanded="False">
+                                                            <Expander.HeaderTemplate>
+                                                                <DataTemplate>
+                                                                    <!--<StackPanel Orientation="Horizontal">-->
+                                                                        <Label Style="{StaticResource GroupHeaderPrimaryLabelStyle}" Content="{Binding}" />
+                                                                    <!--</StackPanel>-->
+                                                                </DataTemplate>
+                                                            </Expander.HeaderTemplate>
+                                                            <ItemsPresenter />
+                                                        </Expander>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+                                </GroupStyle>
+                            </ListView.GroupStyle>
+                        </ListView>
+                    </DockPanel>
+                </TabItem>
+
+                <!-- List of Item Slots -->
+                <TabItem Header="Item Type" Style="{DynamicResource TertiaryTabItem}">
+                    <DockPanel Background="#333333">
+                        <Border DockPanel.Dock="Top">
+                            <Grid>
+                                <Label Margin="4,0,0,0">Select the types  you want to keep/stash.</Label>
+                                <ComboBox Background="Transparent" HorizontalAlignment="Right" FontWeight="Normal" 
+                                      ut:ComboAlwaysFireSelection.Active="False" ut:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}" 
+                                       Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False" 
+                                      Template="{DynamicResource ActionsComboBoxControlTemplate}" Tag="More Options...">
+
+                                    <ComboBoxItem Content="Select None" Tag="SelectNoneCommand" Foreground="White" Background="Black" />
+                                    <ComboBoxItem Content="Select All" Tag="SelectAllCommand" Foreground="White" Background="Black" />
+                                    <ComboBoxItem Content="Clear All Rules" Tag="ClearRulesCommand" Foreground="White" Background="Black" />
+                                </ComboBox>
+                            </Grid>
+                        </Border>
+
+                        <!-- VirtualizingPanel.IsVirtualizing="True" causes the UI to not update properly when source is updated with IsSelected=false outside of the current page of items.
+                             then for some unknown but rediculous reason, the UI then tries to write its dirty state back onto the source. -->
+
+                        <ListView Padding="5,5,0,0" DockPanel.Dock="Top"
+                          SelectionMode="Multiple"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                  
+                          
+                          VirtualizingPanel.IsVirtualizing="False"                       
+                          ScrollViewer.IsDeferredScrollingEnabled="False"
+                          ItemContainerStyle="{DynamicResource ListViewItemStyle}"
+                          Background="#333333"
+                          ItemsSource="{Binding ItemList.ItemTypes.View}"
+                          VerticalContentAlignment="Stretch"                              
+                          Style="{DynamicResource ListViewStyle1}" />
+                    </DockPanel>
+                </TabItem>
+
+                <TabItem Header="Misc" Style="{DynamicResource TertiaryTabItem}">
+                    <Border Padding="10"  Background="#333333">
+                    <StackPanel>
+                        <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#474747">
+                            <GroupBox.Header>
+                                Overrides
+                            </GroupBox.Header>
+                            <StackPanel>
+                                    <TextBlock Margin="0,0,0,10" TextWrapping="Wrap">These settings will override any selections or rules you may have set up.</TextBlock>
+                                <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL ancients to be stashed." Content="Always Keep Ancient Items" IsChecked="{Binding ItemList.AlwaysStashAncients}" />
+                                <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL non-ancients to be trashed." Content="Always Sell/Salvage Non-Ancients" IsChecked="{Binding ItemList.AlwaysTrashNonAncients}" />
+                                
+                                
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#474747">
+                            <GroupBox.Header>
+                                Auto-Upgrade Rules
+                            </GroupBox.Header>
+                            <StackPanel>
+                                <TextBlock Margin="0,0,0,10" TextWrapping="Wrap">Items that are evaluated to be stashed will apply their current stat values to any rules you have setup for the item. This will prevent weaker versions of the item being kept in future.</TextBlock>
+                                <CheckBox ToolTip="Rule sliders will automatically be increased as you find more powerful items." Content="Enable Auto-Upgrade" IsChecked="{Binding ItemList.UpgradeRules}" />
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#474747">
+                            <GroupBox.Header>
+                                Load Items from Character
+                            </GroupBox.Header>
+                                <StackPanel Margin="0,10,0,0">
+                                    <UniformGrid Rows="1">
+                                        <Button Command="{Binding ItemList.LoadEquippedItemsCommand}">Select Equipped</Button>
+                                        <Button Command="{Binding ItemList.LoadStashedItemsCommand}">Select Stashed</Button>
+                                    </UniformGrid>
+                             </StackPanel>
+                        </GroupBox>
+                        </StackPanel>
+                    </Border>
+                </TabItem>
+                
+                <!--VirtualizingPanel.IsVirtualizing="True"
+                          VirtualizingPanel.VirtualizationMode="Standard"
+                          VirtualizingPanel.IsVirtualizingWhenGrouping="False"
+                          VirtualizingPanel.CacheLengthUnit="Page"
+                          VirtualizingPanel.CacheLength="2"-->
+            </TabControl>
+        </DockPanel>
+
+        <!-- Import/Export Modal -->
+        <ut:ModalContentPresenter.ModalContent>
+            <Grid Margin="45,45,45,45">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="45" />
+                </Grid.RowDefinitions>
+
+                <!-- Import -->
+                <TextBox Grid.Row="0"
+                         Visibility="{Binding Path=ItemList.SelectedModalPage, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=Import}"
+                         Text="{Binding ItemList.ExportCode, FallbackValue='Export Code Error'}" MinHeight="200"
+                         Height="Auto" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" IsReadOnly="False" />
+
+                <UniformGrid Grid.Row="1"
+                             Visibility="{Binding Path=ItemList.SelectedModalPage, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=Import}">
+                    <Button Content="Import" Margin="0,0,0,-22.5" VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center" Width="Auto" Height="Auto"
+                            Command="{Binding ItemList.ImportCommand}" />
+                    <Button Content="Close" Margin="0,0,0,-22.5" VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center" Width="Auto" Height="Auto"
+                            Command="{Binding Source={x:Static ut:ModalContentCommands.HideModalContent}}" />
+                </UniformGrid>
+
+                <!-- Export -->
+                <TextBox Grid.Row="0"
+                         Visibility="{Binding Path=ItemList.SelectedModalPage, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=Export}"
+                         Text="{Binding ItemList.ExportCode, FallbackValue='Export Code Error'}" MinHeight="200"
+                         Height="Auto" TextWrapping="Wrap" ut:SelectTextOnFocus.Active="True"
+                         VerticalScrollBarVisibility="Auto" IsReadOnly="True" />
+
+                <StackPanel Grid.Row="1"
+                            Visibility="{Binding Path=ItemList.SelectedModalPage, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=Export}">
+                    <Button Content="Close" Margin="0" Padding="10" Height="45"
+                            Command="{Binding Source={x:Static ut:ModalContentCommands.HideModalContent}}" />
+                </StackPanel>
+
+            </Grid>
+        </ut:ModalContentPresenter.ModalContent>
+    </ut:ModalContentPresenter>
+</UserControl>

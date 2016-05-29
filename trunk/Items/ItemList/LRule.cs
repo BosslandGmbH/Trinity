@@ -13,7 +13,7 @@ using Trinity.Reference;
 namespace Trinity.UIComponents
 {
     /// <summary>
-    /// ListItem loot rule
+    /// Rule for an item
     /// </summary>
     [DataContract(Namespace = "")]
     public class LRule : INotifyPropertyChanged
