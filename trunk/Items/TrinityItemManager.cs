@@ -137,7 +137,7 @@ namespace Trinity.Items
             TrinityItemBaseType tBaseType = item.TrinityItemBaseType; // DetermineBaseType(trinityItemType);
 
             // ItemRules - Always stash ancients setting
-            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules && TrinityPlugin.Settings.Loot.ItemRules.AlwaysStashAncients && item.IsAncient)
+            if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules && TrinityPlugin.Settings.Loot.ItemRules.AlwaysStashAncients && item.IsAncient)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (STASHING: ItemRules Option - Always Stash Ancients)", item.Name, item.InternalName);
                 return true;
@@ -150,7 +150,7 @@ namespace Trinity.Items
             }
 
             // ItemList - Always stash ancients setting
-            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && TrinityPlugin.Settings.Loot.ItemList.AlwaysStashAncients && item.IsAncient)
+            if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.ItemList && TrinityPlugin.Settings.Loot.ItemList.AlwaysStashAncients && item.IsAncient)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (STASHING: ItemList Option - Always Stash Ancients)", item.Name, item.InternalName);
                 return true;
@@ -159,7 +159,7 @@ namespace Trinity.Items
             // ItemList - Always sell/salvage non-ancients setting
             var isArmorWeaponOrJewellery = item.ItemBaseType == ItemBaseType.Armor || item.ItemBaseType == ItemBaseType.Jewelry || item.ItemBaseType == ItemBaseType.Weapon;
 
-            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && TrinityPlugin.Settings.Loot.ItemList.AlwaysTrashNonAncients &&
+            if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.ItemList && TrinityPlugin.Settings.Loot.ItemList.AlwaysTrashNonAncients &&
                 !item.IsAncient && item.ItemQualityLevel >= ItemQuality.Legendary && isArmorWeaponOrJewellery)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (TRASHING: ItemList Option - Always Sell/Salvage Non-Ancients) IsAncient={2} IsUnidentified={3}", item.Name, item.InternalName, item.IsAncient, item.IsUnidentified);
@@ -265,7 +265,7 @@ namespace Trinity.Items
                 return true;
             }
 
-            if (tItemType == TrinityItemType.HealthPotion && TrinityPlugin.Player.EquippedHealthPotion.AnnId == item.AnnId)
+            if (tItemType == TrinityItemType.HealthPotion && TrinityPlugin.Player.EquippedHealthPotion?.AnnId == item.AnnId)
             {
                 Logger.LogDebug($"{item.Name} [{item.InternalName}] [{tItemType}] = (dont stash equipped potion)");
                 return false;
@@ -301,7 +301,7 @@ namespace Trinity.Items
                 return false;
             }
 
-            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+            if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
             {
                 Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkItem(item.GetAcdItem(), ItemEvaluationType.Keep);
 
@@ -364,7 +364,7 @@ namespace Trinity.Items
             }
 
             // Item List
-            if (item.ItemQualityLevel >= ItemQuality.Legendary && TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem || item.IsPotion))
+            if (item.ItemQualityLevel >= ItemQuality.Legendary && TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem || item.IsPotion))
             {
                 var result = ItemListEvaluator.ShouldStashItem(item);
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, "ItemListCheck=" + (result ? "KEEP" : "TRASH"));
@@ -481,7 +481,7 @@ namespace Trinity.Items
                     return false;
                 }
 
-                if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+                if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
                 {
                     var result = ItemRulesSalvageSell(item.GetAcdItem(), ItemEvaluationType.Salvage);
                     reason = $"ItemRules {result}";
@@ -617,7 +617,7 @@ namespace Trinity.Items
                     return false;
                 }
 
-                if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+                if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
                 {
                     var result = ItemRulesSalvageSell(item.GetAcdItem(), ItemEvaluationType.Sell);
                     reason = $"ItemRules Decision {result}";
@@ -1304,7 +1304,7 @@ namespace Trinity.Items
                 pickupItem.Quality, pickupItem.Level, pickupItem.DBBaseType,
                 pickupItem.DBItemType, pickupItem.IsOneHand ? "1H" : pickupItem.IsTwoHand ? "2H" : "NH");
 
-            if (TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules && TrinityPlugin.StashRule != null)
+            if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules && TrinityPlugin.StashRule != null)
             {
                 // using ItemEvaluationType.Identify isn't available so we are abusing Sell for that manner
                 Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkPickUpItem(pickupItem, ItemEvaluationType.Sell);
@@ -1859,7 +1859,7 @@ namespace Trinity.Items
         //{
         //    Logger.Log(LogCategory.ItemValuation, "DB is requesting Identification Item={0} IsInTown={1} UseBook={2} ItemMode={3}", 
         //        e.Item.InternalName, ZetaDia.IsInTown, CharacterSettings.Instance.UseBookOfCain, 
-        //        TrinityPlugin.Settings.Loot.ItemFilterMode);
+        //        TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode);
 
         //    if (TrinityPlugin.Settings.Loot.TownRun.DropInTownOption == Settings.Loot.DropInTownOption.All)
         //    {

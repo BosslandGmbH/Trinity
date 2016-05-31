@@ -6,12 +6,13 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Adventurer.Util;
 using JetBrains.Annotations;
 using Trinity.Framework.Objects.Attributes;
+using Trinity.Framework.Objects.Memory.Sno.Types;
 using Trinity.UIComponents;
 using UnconstrainedMelody;
 using Trinity.Helpers;
+using Trinity.Technicals;
 
 namespace Trinity.UI.UIComponents
 {
@@ -44,7 +45,30 @@ namespace Trinity.UI.UIComponents
 
         public object Flag { get; set; }
 
-        public BindingMember Source { get; set; }
+        public BindingMember Source
+        {
+            get { return _source; }
+            set
+            {
+                if (_source != value)
+                {
+                    _source = value;
+                    if (_source != null)
+                    {
+                        _source.PropertyChanged += SourcePropertyChanged;
+                    }                    
+                    OnPropertyChanged(nameof(Source));
+                }                
+            }
+        }
+
+        private void SourcePropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            if (string.IsNullOrEmpty(args.PropertyName) || args.PropertyName == nameof(Source.Value))
+            {
+                OnPropertyChanged(nameof(Value));
+            }
+        }
 
         public Type Type { get; set; }
 
@@ -58,7 +82,7 @@ namespace Trinity.UI.UIComponents
             OnSourceChanged += name =>
             {
                 if (name == Source.Name)
-                    OnPropertyChanged("Value");
+                    OnPropertyChanged(nameof(Value));
             };
         }
 
@@ -83,6 +107,8 @@ namespace Trinity.UI.UIComponents
 
         private long _allValuesSum;
         private Enum _allValues;
+        private BindingMember _source;
+
         public Enum AllValues
         {
             get
@@ -136,10 +162,7 @@ namespace Trinity.UI.UIComponents
             OnSourceChanged?.Invoke(Source.Name);
         }
 
-        public ICommand FlagCheckboxSetCommand
-        {
-            get { return _instancedCommand; }
-        }
+        public ICommand FlagCheckboxSetCommand => _instancedCommand;
 
         public bool Value
         {
@@ -181,7 +204,7 @@ namespace Trinity.UI.UIComponents
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Exception in PropertyValueFlagBindingItem: {ex}");
+                    Logger.LogError($"Exception in PropertyValueFlagBindingItem: {ex}");
                 }
 
             }
@@ -193,7 +216,7 @@ namespace Trinity.UI.UIComponents
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
     }

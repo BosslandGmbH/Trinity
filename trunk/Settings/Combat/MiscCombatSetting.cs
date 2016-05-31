@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using Trinity.Framework.Objects.Attributes;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
+using Trinity.Technicals;
 using Trinity.UIComponents;
 using Zeta.Game.Internals.Actors;
 
@@ -15,6 +16,7 @@ namespace Trinity.Config.Combat
     [DataContract(Namespace = "")]
     public class MiscCombatSetting : NotifyBase, ITrinitySetting<MiscCombatSetting>, INotifyPropertyChanged, ITrinitySettingEvents
     {
+
         #region Fields
         private MonsterAffixes _ignoredAffixes;
         private GoblinPriority _GoblinPriority;
@@ -52,7 +54,7 @@ namespace Trinity.Config.Combat
         /// <summary>
         /// Occurs when property changed.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
         private bool _ignoreMonstersWhileReflectingDamage;
         private FollowerBossFightMode _followerBossFightDialogMode;
         private bool _ignoreHighHitPointTrash;
@@ -1114,17 +1116,17 @@ namespace Trinity.Config.Combat
             return TrinitySetting.Clone(this);
         }
 
-        /// <summary>
-        /// Called when property changed.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+        ///// <summary>
+        ///// Called when property changed.
+        ///// </summary>
+        ///// <param name="propertyName">Name of the property.</param>
+        //private void OnPropertyChanged(string propertyName)
+        //{
+        //    if (PropertyChanged != null)
+        //    {
+        //        PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        //    }
+        //}
 
         /// <summary>
         /// This will set default values for new settings if they were not present in the serialized XML (otherwise they will be the type defaults)

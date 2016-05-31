@@ -859,7 +859,7 @@ namespace Trinity.Settings.Loot
             EnableItemListCommand = new RelayCommand(parameter =>
             {
                 Logger.Log("Setting ItemFilterMode to ItemList");
-                UILoader.DataContext.Loot.ItemFilterMode = ItemFilterMode.ItemList;
+                UILoader.DataContext.Loot.Pickup.ItemFilterMode = ItemFilterMode.ItemList;
             });
 
             LoadModalCommand = new RelayCommand(parameter =>
@@ -1183,8 +1183,7 @@ namespace Trinity.Settings.Loot
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {
-            if (TrinityPlugin.Settings.Loot.TownRun.AlwaysStashAncients && TrinityPlugin.Settings.Loot.ItemFilterMode == ItemFilterMode.ItemList)
-                AlwaysStashAncients = true;
+
         }
 
         #endregion

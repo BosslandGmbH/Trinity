@@ -90,7 +90,7 @@ namespace Trinity.Framework.Utilities
 
         private static bool CheckIsCasting(SNOPower power)
         {
-            return ZetaDia.IsInGame && ZetaDia.Me.CommonData.GetAttribute<int>(((int)power << 12) +
+            return ZetaDia.IsInGame && ZetaDia.Me?.CommonData?.GetAttribute<int>(((int)power << 12) +
                 ((int)ActorAttributeType.PowerBuff0VisualEffectNone & 0xFFF)) == 1;
         }
 

@@ -55,17 +55,20 @@ namespace Trinity.Config
         /// <summary>
         /// Initializes a new instance of the <see cref="TrinitySetting" /> class.
         /// </summary>
-        public TrinitySetting()
+        public TrinitySetting(bool initialize = true)
         {
-            Combat = new CombatSetting();
-            WorldObject = new WorldObjectSetting();
-            Loot = new ItemSetting();
-            Advanced = new AdvancedSetting();
-            Notification = new NotificationSetting();
-            KanaisCube = new KanaisCubeSetting();
-            Gambling = new GamblingSetting();
-            Avoidance = new AvoidanceSetting();
-            Paragon = new ParagonSetting();
+            if (initialize)
+            {
+                Combat = new CombatSetting();
+                WorldObject = new WorldObjectSetting();
+                Loot = new ItemSetting();
+                Advanced = new AdvancedSetting();
+                Notification = new NotificationSetting();
+                KanaisCube = new KanaisCubeSetting();
+                Gambling = new GamblingSetting();
+                Avoidance = new AvoidanceSetting();
+                Paragon = new ParagonSetting();
+            }
 
             _FSWatcher = new FileSystemWatcher()
             {
@@ -242,18 +245,18 @@ namespace Trinity.Config
         internal string BattleTagSettingsFile
         {
             get
-            {                
+            {
                 return Path.Combine(FileManager.SpecificSettingsPath, "Trinity.xml");
             }
         }
 
         private int _currentHeroId;
-        
+
         [IgnoreDataMember]
         internal string HeroSpecificSettingsFile
         {
             get
-            {                
+            {
                 if (ZetaDia.Service.IsValid && ZetaDia.Service.Hero != null && ZetaDia.Service.Hero.IsValid)
                 {
                     _currentHeroId = ZetaDia.Service.Hero.HeroId;
@@ -280,8 +283,6 @@ namespace Trinity.Config
                 return Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Settings", "Trinity.xml");
             }
         }
-
-
 
         #endregion Properties
 
@@ -400,6 +401,11 @@ namespace Trinity.Config
             }
         }
 
+        public static TrinitySetting GetSettingsFromFile(string filename)
+        {
+            return new TrinitySetting().LoadSettingsFromFile(filename, false);
+        }
+
         public TrinitySetting LoadSettingsFromFile(string filename, bool applyToThis = true)
         {
             TrinitySetting loadedSettings = null;
@@ -416,20 +422,23 @@ namespace Trinity.Config
                 using (Stream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
                     DataContractSerializer serializer = new DataContractSerializer(this.GetType());
-
                     XmlReader reader = XmlReader.Create(stream);
-
-                    //var dReader = XmlDictionaryReader.CreateDictionaryReader(reader);
-
                     XmlReader migrator = new SettingsMigrator(reader);
-                    //loadedSettings = (TrinitySetting) serializer.ReadObject(dReader, false, new TrinitySettingMigrationResolver());
 
                     loadedSettings = (TrinitySetting)serializer.ReadObject(migrator);
 
                     if (applyToThis)
+                    {
                         loadedSettings.CopyTo(this);
+                        ApplyDataMigration(this);
+                    }
+                    else
+                    {
+                        ApplyDataMigration(loadedSettings);
+                    }
 
                     stream.Close();
+
                     Logger.Log("Configuration file loaded");
 
                     // this tests to make sure we didn't load anything null, and our load was succesful
@@ -438,14 +447,34 @@ namespace Trinity.Config
                         Logger.Log("Configuration loaded successfully.");
                         OnLoaded();
                     }
+
+
+                    
+
                 }
             }
             else
             {
                 Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation, "Configuration file not found.");
                 Reset();
-            }
+            }            
             return loadedSettings;
+        }
+
+        private void ApplyDataMigration(TrinitySetting loadedSettings)
+        {
+            if (loadedSettings?.Loot?.Pickup != null && loadedSettings.Loot.Pickup.ItemFilterMode == default(ItemFilterMode))
+            {
+                if (loadedSettings.Loot.ItemFilterMode == default(ItemFilterMode))
+                {
+                    loadedSettings.Loot.Pickup.ItemFilterMode = ItemFilterMode.TrinityOnly;
+                }
+                else
+                {
+                    Logger.LogVerbose(LogCategory.Configuration, $"Migrating Setting: ItemFilterMode: {loadedSettings.Loot.ItemFilterMode} from .Loot.Pickup.ItemFilterMode to .Loot.Pickup.ItemFilterMode");
+                    loadedSettings.Loot.Pickup.ItemFilterMode = loadedSettings.Loot.ItemFilterMode;
+                }
+            }
         }
 
         //public class TrinitySettingMigrationResolver : DataContractResolver
@@ -531,9 +560,9 @@ namespace Trinity.Config
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Saving Config file");
                 using (Stream stream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
-                    DataContractSerializer serializer = new DataContractSerializer(typeof (TrinitySetting), "TrinitySetting", "");
+                    DataContractSerializer serializer = new DataContractSerializer(typeof(TrinitySetting), "TrinitySetting", "");
 
-                    var xmlWriterSettings = new XmlWriterSettings {Indent = true};
+                    var xmlWriterSettings = new XmlWriterSettings { Indent = true };
                     using (var xmlWriter = XmlWriter.Create(stream, xmlWriterSettings))
                     {
                         serializer.WriteObject(xmlWriter, settings);
@@ -589,8 +618,8 @@ namespace Trinity.Config
                 Logger.Log(TrinityLogLevel.Verbose, LogCategory.Configuration, "Starting Reset Object {0}", type.Name);
                 foreach (PropertyInfo prop in type.GetProperties(BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
                 {
-                    if (Attribute.IsDefined(prop, typeof (IgnoreDataMemberAttribute)))
-                        continue;                        
+                    if (Attribute.IsDefined(prop, typeof(IgnoreDataMemberAttribute)))
+                        continue;
 
                     if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
                     {
@@ -619,7 +648,7 @@ namespace Trinity.Config
                 }
 
                 OnReset();
-                    
+
                 Logger.Log(TrinityLogLevel.Verbose, LogCategory.Configuration, "End Reset Object {0}", type.Name);
             }
             catch (Exception ex)
@@ -628,10 +657,15 @@ namespace Trinity.Config
             }
         }
 
-        internal static void CopyTo<T>(ITrinitySetting<T> source, ITrinitySetting<T> destination) where T : class, ITrinitySetting<T>
+        private static IEnumerable<string> _ignorePropertyNames = new List<string>();
+
+        internal static void CopyTo<T>(ITrinitySetting<T> source, ITrinitySetting<T> destination, IEnumerable<string> ignorePropertyNames = null) where T : class, ITrinitySetting<T>
         {
             try
             {
+                //if (ignorePropertyNames != null)
+                //    _ignorePropertyNames = ignorePropertyNames;
+
                 Type type = typeof(T);
                 Logger.Log(TrinityLogLevel.Verbose, LogCategory.Configuration, "Starting CopyTo Object {0}", type.Name);
                 foreach (PropertyInfo prop in type.GetProperties(BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
@@ -639,7 +673,10 @@ namespace Trinity.Config
                     try
                     {
                         if (Attribute.IsDefined(prop, typeof(IgnoreDataMemberAttribute)))
-                            continue;     
+                            continue;
+
+                        //if (_ignorePropertyNames.Contains(prop.Name))
+                        //    continue;
 
                         if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
                         {
@@ -658,7 +695,7 @@ namespace Trinity.Config
                                 MethodBase method = prop.PropertyType.GetMethod("CopyTo", new[] { prop.PropertyType });
                                 if (method != null)
                                 {
-                                    method.Invoke(sourceValue, new[] {destinationValue});
+                                    method.Invoke(sourceValue, new[] { destinationValue });
                                 }
                                 //else
                                 //{
@@ -688,6 +725,18 @@ namespace Trinity.Config
             {
                 Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "Error while CopyTo Setting {1} : {0} {2}", ex.Message, typeof(T).Name, ex);
             }
+            finally
+            {
+                //if(ignorePropertyNames != null)
+                //    _ignorePropertyNames = new List<string>();
+            }
+        }
+
+        static bool IsNullable(Type type)
+        {
+            if (!type.IsValueType) return true; // ref-type
+            if (Nullable.GetUnderlyingType(type) != null) return true; // Nullable<T>
+            return false; // value-type
         }
 
         internal static T Clone<T>(ITrinitySetting<T> setting) where T : class, ITrinitySetting<T>
@@ -724,7 +773,7 @@ namespace Trinity.Config
         internal static string GetSettingsXml<T>(T instance, string rootName = "") where T : ITrinitySetting<T>
         {
             if (string.IsNullOrEmpty(rootName))
-                rootName = typeof (T).Name;
+                rootName = typeof(T).Name;
 
             var serializer = new DataContractSerializer(typeof(T), rootName, "");
             var sb = new StringBuilder();
@@ -750,7 +799,7 @@ namespace Trinity.Config
                 XmlReader migrator = new SettingsMigrator(reader);
                 var loadedSetting = (T)serializer.ReadObject(migrator);
                 return loadedSetting;
-            }           
+            }
         }
 
         #endregion Static Methods

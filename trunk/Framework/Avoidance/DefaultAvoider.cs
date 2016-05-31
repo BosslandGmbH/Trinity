@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Cache;
 using Trinity.Combat.Abilities;
 using Trinity.Config;
 using Trinity.Config.Combat;
@@ -10,6 +11,7 @@ using Trinity.Technicals;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals;
 using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Framework.Avoidance
@@ -61,7 +63,13 @@ namespace Trinity.Framework.Avoidance
         {
             get
             {
-                if (Settings.Avoidances == null || !Settings.Avoidances.Any(a => a.IsEnabled))
+                if (Settings.Avoidances == null)
+                    return false;
+
+                if (!Settings.Avoidances.Any(a => a.IsEnabled))
+                    return false;
+
+                if (Settings.OnlyAvoidWhileInGrifts && (!RiftProgression.IsInRift || ZetaDia.CurrentRift.Type != RiftType.Greater))
                     return false;
 
                 if (Core.Avoidance.ActiveAvoidanceIds == null || !Core.Avoidance.ActiveAvoidanceIds.Any())

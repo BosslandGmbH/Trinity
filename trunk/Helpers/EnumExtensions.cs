@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Settings;
 
 namespace Trinity.Helpers
 {
@@ -62,11 +63,11 @@ namespace Trinity.Helpers
             });
         }
 
-        //public static List<T> ToList<T>(this Enum input, bool skipDefault = false)
-        //{
-        //    var defaultValue = default(T);
-        //    return Enum.GetValues(input.GetType()).Cast<T>().Where(e => !defaultValue.Equals(e)).ToList();
-        //}
+        public static List<T> ToList<T>(this Enum input, bool skipDefault = false)
+        {
+            var defaultValue = default(T);
+            return Enum.GetValues(input.GetType()).Cast<T>().Where(e => !defaultValue.Equals(e)).ToList();
+        }
 
         public static IEnumerable<T> GetFlags<T>(this Enum input, bool excludeDefault = true) where T : struct
         {

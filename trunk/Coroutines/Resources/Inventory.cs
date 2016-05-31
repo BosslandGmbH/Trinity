@@ -146,7 +146,7 @@ namespace TrinityCoroutines.Resources
 
             public bool HasStackQuantityOfType(InventoryItemType type, InventorySlot location, int quantity)
             {
-                return Source[type].StackQuantityByInventorySlot(location) > quantity;
+                return Source.Any() && Source[type].StackQuantityByInventorySlot(location) > quantity;
             }
 
             public bool HasStackQuantityOfTypes(IEnumerable<InventoryItemType> types, InventorySlot location, int quantity)

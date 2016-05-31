@@ -134,7 +134,9 @@ namespace Trinity.UI
                             //CreateButton("Clsoe Vendor", CloseVendorWindowTest),
 
                             CreateButton("Upgrade Rares", UpgradeBackpackRares),
+                            CreateButton("Extract Powers", ExtractBackpackPowers),
                             CreateButton("ItemList Check", btnClick_TestItemList),
+                            
 
                             //CreateButton("Stash Test", StashItems),
                             //CreateButton("Test Internals", TestInternals),
@@ -941,9 +943,26 @@ namespace Trinity.UI
         {
             try
             {
-                //ActorManager.Start();
+                // todo figure out why the first time cache doesnt update properly
+                //Core.ForcedUpdate();
+
                 var alltypes = Enum.GetValues(typeof(ItemSelectionType)).Cast<ItemSelectionType>().ToList();
                 CoroutineHelper.RunCoroutine(() => CubeRaresToLegendary.Execute(alltypes), result => !CubeRaresToLegendary.CanRun());
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Exception: " + ex);
+            }
+        }
+
+        private static void ExtractBackpackPowers(object sender, RoutedEventArgs routedEventArgs)
+        {
+            try
+            {
+                // todo figure out why the first time cache doesnt update properly
+                //Core.ForcedUpdate();
+
+                CoroutineHelper.RunCoroutine(ExtractLegendaryPowers.ExtractAllBackpack);
             }
             catch (Exception ex)
             {

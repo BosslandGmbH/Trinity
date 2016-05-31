@@ -98,7 +98,7 @@ namespace Trinity
                     CharacterSettings.Instance.LootRadius);
             }
 
-            if (Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+            if (Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
             {
                 try
                 {

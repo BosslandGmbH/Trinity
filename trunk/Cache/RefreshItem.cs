@@ -166,11 +166,11 @@ namespace Trinity
                     {
                         AddToCache = false;
                     }
-                    else if (Settings.Loot.ItemFilterMode == ItemFilterMode.DemonBuddy)
+                    else if (Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.DemonBuddy)
                     {
                         AddToCache = ItemManager.Current.ShouldPickUpItem((ACDItem)c_diaObject.CommonData);
                     }
-                    else if (Settings.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+                    else if (Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
                     {
                         AddToCache = TrinityItemManager.ItemRulesPickupValidation(pickupItem);
                     }

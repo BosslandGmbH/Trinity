@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
+using Trinity.Technicals;
 using Trinity.UI.UIComponents;
 
 namespace Trinity.UIComponents
 {
     public class PropertyValueConverter : IValueConverter
     {
+        public string PropertyName = string.Empty;
+        public BindingMember BindingMember { get; set; }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
@@ -18,9 +23,13 @@ namespace Trinity.UIComponents
             var param  = parameter as string;
             if (param != null)
             {
+                PropertyName = param;
                 var paramBinding = GetProperty(value, param);
                 if (paramBinding != null)
+                {
+                    BindingMember = paramBinding;
                     return paramBinding;
+                }
             }
 
             var settingProperties = GetProperties(value).ToList();
@@ -42,6 +51,15 @@ namespace Trinity.UIComponents
             cvs.Source = settingProperties;
             cvs.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
             return cvs.View;
+        }
+
+        private void NotifyOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (PropertyName == propertyChangedEventArgs.PropertyName)
+            {
+                Logger.LogNormal($"Property Changed {propertyChangedEventArgs.PropertyName}");
+                BindingMember.OnPropertyChanged(nameof(BindingMember.Value));
+            }
         }
 
         /// <summary>
