@@ -381,13 +381,20 @@ namespace Trinity
                 {
                     //var potionElement = UIElement.FromHash(9033406906766196825);
                     //var potionGameBalanceId = ZetaDia.Memory.Read<int>(potionElement.BaseAddress - 0x24);
-                    var potionElement = UIElement.FromHash(16768550267251786851);
-                    if (potionElement != null && potionElement.IsValid)
+                    try
                     {
-                        var potionAnnId = ZetaDia.Memory.Read<int>(potionElement.BaseAddress - 0x18);
-                        return ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(a => a.AnnId == potionAnnId);                  
+                        var potionElement = UIElement.FromHash(16768550267251786851);
+                        if (potionElement != null && potionElement.IsValid)
+                        {
+                            var potionAnnId = ZetaDia.Memory.Read<int>(potionElement.BaseAddress - 0x18);
+                            return ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(a => a.AnnId == potionAnnId);
+                        }
                     }
-                    return null;
+                    catch (Exception ex)
+                    {
+                        Logger.LogError($"Exception finding EquippedHealthPotion {ex}");
+                    }
+                    return ZetaDia.Me.Inventory.BaseHealthPotion;
                 }
             }
 

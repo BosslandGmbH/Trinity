@@ -468,7 +468,7 @@ namespace Trinity.Items
                     return false;
                 }
 
-                if (item.TrinityItemType == TrinityItemType.HealthPotion && TrinityPlugin.Player.EquippedHealthPotion.AnnId == item.AnnId)
+                if (item.TrinityItemType == TrinityItemType.HealthPotion && TrinityPlugin.Player.EquippedHealthPotion?.AnnId == item.AnnId)
                 {
                     reason = "Equipped Potion";
                     return false;
@@ -568,7 +568,7 @@ namespace Trinity.Items
                     return false;
                 }
 
-                if (item.TrinityItemType == TrinityItemType.HealthPotion && TrinityPlugin.Player.EquippedHealthPotion.AnnId == item.AnnId)
+                if (item.TrinityItemType == TrinityItemType.HealthPotion && TrinityPlugin.Player.EquippedHealthPotion?.AnnId == item.AnnId)
                 {
                     reason = "Equipped Potion";
                     return false;
