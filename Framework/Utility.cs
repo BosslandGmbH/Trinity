@@ -4,6 +4,7 @@ using System.Linq;
 using Trinity.Coroutines.Town;
 using Trinity.Technicals;
 using Zeta.Bot;
+using Zeta.Game;
 
 namespace Trinity.Framework
 {
@@ -33,6 +34,9 @@ namespace Trinity.Framework
         internal void FirePulse(object sender, EventArgs eventArgs)
         {
             if (DateTime.UtcNow.Subtract(LastUpdated).TotalMilliseconds < UpdateInterval.TotalMilliseconds)
+                return;
+
+            if (ZetaDia.Me == null)
                 return;
 
             OnPulse();

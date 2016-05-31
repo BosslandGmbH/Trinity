@@ -417,6 +417,10 @@ namespace Trinity
                         {
                             CurrentTargetIsInLoS = true;
                         }
+                        else if (CurrentTarget.IsUnit && CurrentTarget.Unit.IsHidden)
+                        {
+                            CurrentTargetIsInLoS = false;
+                        }
                         else if (Settings.Combat.Misc.UseNavMeshTargeting && CurrentTarget.Type != TrinityObjectType.Barricade && CurrentTarget.Type != TrinityObjectType.Destructible)
                         {
                             CurrentTargetIsInLoS = (NavHelper.CanRayCast(Player.Position, CurrentDestination) || DataDictionary.LineOfSightWhitelist.Contains(CurrentTarget.ActorSNO));
@@ -1437,11 +1441,17 @@ namespace Trinity
                 {
                     // * Unit, we need to pick an ability to use and get within range
                     case TrinityObjectType.Unit:
+                    {
+                        if (CurrentTarget.Unit.IsHidden)
                         {
-                            // Pick a range to try to reach
-                            TargetRangeRequired = CombatBase.CurrentPower.MinimumRange;
-                            break;
+                            TargetRangeRequired = CurrentTarget.CollisionRadius;
                         }
+                        else
+                        {
+                            TargetRangeRequired = CombatBase.CurrentPower.MinimumRange;
+                        }
+                        break;
+                    }
                     // * Item - need to get within 6 feet and then interact with it
                     case TrinityObjectType.Item:
                         {

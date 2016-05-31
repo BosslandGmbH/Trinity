@@ -342,8 +342,7 @@ namespace Trinity.UI
                     MinHeight = 400,
                     MinWidth = 200,
                     Title = title,
-                    ResizeMode = ResizeMode.CanResizeWithGrip,
-
+                    ResizeMode = ResizeMode.CanResizeWithGrip,  
                     //SizeToContent = SizeToContent.WidthAndHeight,
                     SnapsToDevicePixels = true,
                     Topmost = false,

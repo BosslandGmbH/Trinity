@@ -304,6 +304,9 @@
     <Compile Include="Settings\Paragon\ParagonItem.cs" />
     <Compile Include="Settings\Paragon\TrinityParagonBonusType.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Settings\Modals\SettingsSelectionViewModel.cs" />
+    <Compile Include="Settings\Modals\SettingsSelectionItem.cs" />
+    <Compile Include="Settings\Modals\SettingsSection.cs" />
     <Compile Include="UI\Overlays\3D\3DTools\MathUtils.cs" />
     <Compile Include="UI\Overlays\3D\3DTools\Matrix3DStack.cs" />
     <Compile Include="UI\Overlays\3D\3DTools\MeshUtils.cs" />
@@ -912,6 +915,10 @@
     <None Include="ItemRules\Rules\soft\set.dis" />
     <None Include="ItemRules\translation.dis" />
     <Compile Include="Settings\AvoidanceSetting.cs" />
+    <Page Include="UI\Modals\SettingsSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>

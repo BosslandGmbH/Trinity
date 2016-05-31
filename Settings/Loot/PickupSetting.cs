@@ -58,6 +58,7 @@ namespace Trinity.Config.Loot
         private bool _stashWings;
         private bool _stashPets;
         private bool _stashTransmog;
+        private ItemFilterMode _itemFilterMode;
 
         #endregion Fields
 
@@ -79,6 +80,24 @@ namespace Trinity.Config.Loot
         #endregion Constructors
 
         #region Properties
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(ItemFilterMode.None)]
+        public ItemFilterMode ItemFilterMode
+        {
+            get
+            {
+                return _itemFilterMode;
+            }
+            set
+            {
+                if (_itemFilterMode != value)
+                {
+                    _itemFilterMode = value;
+                    OnPropertyChanged("ItemFilterMode");
+                }
+            }
+        }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(true)]
@@ -509,7 +528,7 @@ namespace Trinity.Config.Loot
                 if (_pickupblueFollowerItems != value)
                 {
                     _pickupblueFollowerItems = value;
-                    OnPropertyChanged("FollowerBluePickup");
+                    OnPropertyChanged(nameof(PickupBlueFollowerItems));
                 }
             }
         }
@@ -527,7 +546,7 @@ namespace Trinity.Config.Loot
                 if (_pickupYellowFollowerItems != value)
                 {
                     _pickupYellowFollowerItems = value;
-                    OnPropertyChanged("FollowerYellowPickup");
+                    OnPropertyChanged(nameof(PickupYellowFollowerItems));
                 }
             }
         }

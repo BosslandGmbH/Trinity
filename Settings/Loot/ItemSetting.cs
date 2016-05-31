@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Org.BouncyCastle.Crypto.Tls;
 using Trinity.Config;
 using Trinity.Config.Loot;
 using Trinity.Technicals;
@@ -17,9 +19,9 @@ namespace Trinity.Settings.Loot
         private PickupSetting _pickup;
         private TownRunSetting _townRun;
         private ItemRuleSetting _itemRules;
-        private ItemRankSettings _itemRank;
+        //private ItemRankSettings _itemRank;
         private ItemListSettings _itemList;
-
+        private ItemFilterMode _migrationItemFilterMode;
 
         #endregion Fields
 
@@ -37,25 +39,28 @@ namespace Trinity.Settings.Loot
             Pickup = new PickupSetting();
             TownRun = new TownRunSetting();
             ItemRules = new ItemRuleSetting();
-            ItemRank = new ItemRankSettings();
+            //ItemRank = new ItemRankSettings();
             ItemList = new ItemListSettings();
         }
+
         #endregion Constructors
 
         #region Properties
+
+        [Obsolete("Use ItemFilterMode in Loot.ItemMisc.ItemFilterMode; TrinitySetting containers should contain only other TrinitySetting objects")]
         [DataMember(IsRequired = false)]
         [DefaultValue(ItemFilterMode.TrinityOnly)]
         public ItemFilterMode ItemFilterMode
         {
             get
             {
-                return _itemFilterMode;
+                return _migrationItemFilterMode;
             }
             set
             {
-                if (_itemFilterMode != value)
+                if (_migrationItemFilterMode != value)
                 {
-                    _itemFilterMode = value;
+                    _migrationItemFilterMode = value;
                     OnPropertyChanged("ItemFilterMode");
                 }
             }
@@ -110,22 +115,22 @@ namespace Trinity.Settings.Loot
                 }
             }
         }
-        [DataMember(IsRequired = false)]
-        public ItemRankSettings ItemRank
-        {
-            get
-            {
-                return _itemRank;
-            }
-            set
-            {
-                if (_itemRank != value)
-                {
-                    _itemRank = value;
-                    OnPropertyChanged("ItemRank");
-                }
-            }
-        }
+        //[DataMember(IsRequired = false)]
+        //public ItemRankSettings ItemRank
+        //{
+        //    get
+        //    {
+        //        return _itemRank;
+        //    }
+        //    set
+        //    {
+        //        if (_itemRank != value)
+        //        {
+        //            _itemRank = value;
+        //            OnPropertyChanged("ItemRank");
+        //        }
+        //    }
+        //}
         [DataMember(IsRequired = false)]
         public ItemListSettings ItemList
         {
@@ -135,7 +140,7 @@ namespace Trinity.Settings.Loot
             }
             set
             {
-                if (_itemList!= value)
+                if (_itemList != value)
                 {
                     _itemList = value;
                     OnPropertyChanged("ItemList");

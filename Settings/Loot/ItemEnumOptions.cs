@@ -37,6 +37,7 @@ namespace Trinity.Settings.Loot
 
     public enum ItemFilterMode
     {
+        None = 0,
         TrinityOnly,
         TrinityWithItemRules,
         DemonBuddy,

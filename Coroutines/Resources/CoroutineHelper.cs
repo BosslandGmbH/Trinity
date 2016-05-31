@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Buddy.Coroutines;
 using log4net;
+using Trinity.Framework;
 using Trinity.Helpers;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
@@ -87,6 +88,16 @@ namespace TrinityCoroutines
             {
                 try
                 {
+                    using (ZetaDia.Memory.AcquireFrame(true))
+                    {
+                        if (!ZetaDia.IsInGame || !ZetaDia.Service.IsValid)
+                            return;
+
+                        ZetaDia.Actors.Update();
+                        BotMain.PauseFor(TimeSpan.FromSeconds(1));
+                        Core.ForcedUpdate();
+                    }
+
                     var result = true;
                     while (result)
                     {
@@ -100,10 +111,13 @@ namespace TrinityCoroutines
 
                         using (ZetaDia.Memory.AcquireFrame(true))
                         {
+                            
+
                             if (!ZetaDia.IsInGame || !ZetaDia.Service.IsValid)
                                 return;
 
                             ZetaDia.Actors.Update();
+                            Core.ForcedUpdate();
 
                             if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
                                 return;

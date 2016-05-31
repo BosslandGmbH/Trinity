@@ -84,6 +84,11 @@ namespace Trinity.Coroutines.Town
             if (types == null)
                 types = TrinityPlugin.Settings.KanaisCube.GetRareUpgradeSettings();
 
+            if (!Inventory.Backpack.Items.Any())
+            {
+                Logger.LogVerbose("[CubeRaresToLegendary] No items were found in backpack!");
+            }
+
             var rares = Inventory.Backpack.Items.Where(i =>
             {
                 if (Inventory.InvalidItemDynamicIds.Contains(i.AnnId))

@@ -33,7 +33,7 @@ namespace Trinity.UI.UIComponents
 
         public static event CategoryChangedEvent OnCategoryChanged;
         public delegate void CategoryChangedEvent(string categoryName);
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
         private List<object> _source = new List<object>();
         public static Dictionary<string, bool> GroupStatus = new Dictionary<string, bool>();
         private Range _range;
@@ -63,6 +63,15 @@ namespace Trinity.UI.UIComponents
             _isGroupControllerAttribute = GetAttribute<IsGroupController>(propertyInfo);
             _groupAttribute = GetAttribute<GroupAttribute>(propertyInfo);
 
+            //Logger.LogVerbose($"Created Binding Member for {propertyInfo.Name}");
+
+            var notify = baseObject as INotifyPropertyChanged;
+            if (notify != null)
+            {
+                //Logger.LogVerbose($"Registering Property Changed for {baseObject.GetType().Name} ({propertyInfo.Name})");
+                notify.PropertyChanged += NotifyOnPropertyChanged;
+            }
+
             //_bindingAttribute = GetAttribute<BindingAttribute>(propertyInfo);
 
             _BindingAttributes = propertyInfo.GetCustomAttributes(typeof (BindingAttribute)).OfType<BindingAttribute>().ToList();
@@ -80,7 +89,7 @@ namespace Trinity.UI.UIComponents
             OnCategoryChanged += categoryId =>
             {
                 if (categoryId == GroupId)
-                    OnPropertyChanged("IsEnabled");
+                    OnPropertyChanged(nameof(IsEnabled));
             };
 
             IsNoLabel = _uiControlAttribute != null && _uiControlAttribute.Options.HasFlag(UIControlOptions.NoLabel);
@@ -156,6 +165,14 @@ namespace Trinity.UI.UIComponents
 
         }
 
+        private void NotifyOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (PropertyName == propertyChangedEventArgs.PropertyName)
+            {
+                OnPropertyChanged(nameof(Value));                
+            }
+        }
+
         private long? _excludeMask;
         public long ExcludeMask
         {
@@ -171,7 +188,7 @@ namespace Trinity.UI.UIComponents
             set { _excludeMask = value; }
         }
 
-        public bool IsIndented { get { return IsGroupChild && !IsInline; } }
+        public bool IsIndented => IsGroupChild && !IsInline;
 
         public bool IsInline { get; set; }
 
@@ -610,8 +627,7 @@ namespace Trinity.UI.UIComponents
                     //if (PropertyType.IsEnum && value is string)
                     //{
                     //    value = GetValueFromDescriptionAttribute((string)value, PropertyType);
-                    //}
-
+                    //}                    
                     return value;
                 }
                 catch (Exception ex)
@@ -697,6 +713,7 @@ namespace Trinity.UI.UIComponents
 
                 // Need to convert type or it won't save numbers properly
                 _propertyInfo.SetValue(_baseObject, val, null);
+                OnPropertyChanged(nameof(Value));
             }
             catch (Exception ex)
             {

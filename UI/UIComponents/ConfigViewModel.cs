@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -37,7 +38,7 @@ namespace Trinity.UI.UIComponents
         /// </summary>
         private void SaveSettings(TrinitySetting model)
         {
-            if (TrinityPlugin.StashRule == null && model.Loot.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
+            if (TrinityPlugin.StashRule == null && model.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
             {
                 // Load interpreter for the first time if needed
                 TrinityPlugin.StashRule = new Interpreter();
@@ -59,10 +60,11 @@ namespace Trinity.UI.UIComponents
         /// <summary>
         /// Copies settings to the current settings viewmodel, will still not be saved until save button is clicked.
         /// </summary>
-        public void LoadSettings(TrinitySetting model)
+        public void LoadSettings(TrinitySetting model, IEnumerable<string> ignorePropertyNames = null)
         {
-            model.CopyTo(_Model);
+            TrinitySetting.CopyTo(model, _Model, ignorePropertyNames);
             _Model.FireOnLoadedEvents();
+            _Model.OnPropertyChanged("");
         }
     
         /// <summary>
@@ -677,10 +679,10 @@ namespace Trinity.UI.UIComponents
             get { return _Model.Loot.Pickup; }
         }
 
-        public ItemRankSettings ItemRank
-        {
-            get { return _Model.Loot.ItemRank; }
-        }
+        //public ItemRankSettings ItemRank
+        //{
+        //    get { return _Model.Loot.ItemRank; }
+        //}
 
         public ItemListSettings ItemList
         {
@@ -811,7 +813,7 @@ namespace Trinity.UI.UIComponents
         {
             try
             {
-                _Model.Loot.ItemFilterMode = ItemFilterMode.TrinityOnly;
+                _Model.Loot.Pickup.ItemFilterMode = ItemFilterMode.TrinityOnly;
                 _Model.Loot.Pickup.PickupBlueArmor = true;
                 _Model.Loot.Pickup.PickupYellowArmor = true;
                 _Model.Loot.Pickup.PickupBlueWeapons = true;
@@ -841,7 +843,7 @@ namespace Trinity.UI.UIComponents
         {
             try
             {
-                _Model.Loot.ItemFilterMode = ItemFilterMode.TrinityOnly;
+                _Model.Loot.Pickup.ItemFilterMode = ItemFilterMode.TrinityOnly;
                 _Model.Loot.Pickup.PickupBlueArmor = false;
                 _Model.Loot.Pickup.PickupYellowArmor = false;
                 _Model.Loot.Pickup.PickupBlueWeapons = false;

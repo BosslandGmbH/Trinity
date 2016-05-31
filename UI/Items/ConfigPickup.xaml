@@ -19,10 +19,10 @@
     </UserControl.Resources>
     <ScrollViewer>
         <StackPanel Margin="0,10,5,0">
-            <GroupBox Header="Item Rules Mode">
+            <GroupBox Header="Item Management System">
                 <StackPanel>
                     <Border BorderBrush="White" BorderThickness="1" Margin="5">
-                        <ComboBox FontSize="14" HorizontalAlignment="Stretch" SelectedValuePath="Tag" SelectedValue="{Binding Path=Loot.ItemFilterMode, Mode=TwoWay}">
+                        <ComboBox FontSize="14" HorizontalAlignment="Stretch" SelectedValuePath="Tag" SelectedValue="{Binding Path=Pickup.ItemFilterMode, Mode=TwoWay}">
                             <ComboBoxItem Content="Simple Scoring (Default)" Tag="TrinityOnly" IsSelected="True" ToolTip="Uses TrinityPlugin Scoring Only (see TrinityPlugin Town-Runs Tab)" />
                             <ComboBoxItem Content="File Based Rules (Obsolete)" Tag="TrinityWithItemRules" ToolTip="This is outdated and not supported" />
                             <ComboBoxItem Content="Item List" Tag="ItemList" ToolTip="Use custom list of items" />
@@ -30,21 +30,6 @@
                     </Border>
                 </StackPanel>
             </GroupBox>            
-            <!--<GroupBox Header="Item Management Mode">
-                <StackPanel>
-                    <Border BorderBrush="White" BorderThickness="1" Margin="5">
-                        <ComboBox FontSize="14" HorizontalAlignment="Stretch" SelectedValuePath="Tag" SelectedValue="{Binding Path=Loot.ItemFilterMode, Mode=TwoWay}">
-                            <ComboBoxItem Content="Item List" Tag="ItemList" IsSelected="True" ToolTip="Use custom list of items" />                            
-                            <ComboBoxItem Content="Basic Scoring (Not Recommended)" Tag="TrinityPluginOnly" ToolTip="Uses TrinityPlugin Scoring Only" />
-                            <ComboBoxItem Content="File Based Rules (Obsolete)" Tag="TrinityPluginWithItemRules" ToolTip="Utilizes Item Rulesets (see ItemRules directory)" />
-                        </ComboBox>
-                    </Border>
-                    <TextBlock TextWrapping="Wrap"
-                        Text="WARNING : This mode is not actively supported and may not work correctly." 
-                           HorizontalAlignment="Center" FontSize="12" FontWeight="Bold"  Foreground="#FFCC0000" 
-                           Visibility="{Binding Path=Loot.ItemFilterMode, Converter={StaticResource enumVisibilityConverter}, ConverterParameter=TrinityWithItemRules}"/>
-                </StackPanel>
-            </GroupBox>-->
             <GroupBox Header="Equipment Pickup Options">
                 <StackPanel HorizontalAlignment="Center">
                     <CheckBox IsChecked="{Binding Path=Pickup.PickupLegendaries}" VerticalAlignment="Center" HorizontalAlignment="Center">

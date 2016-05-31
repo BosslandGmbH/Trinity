@@ -108,6 +108,7 @@ namespace Trinity.Config
         private bool _pathAroundAvoidance;
         private bool _avoidOutsideCombat;
         private bool _dontAvoidWhenBlocked;
+        private bool _onlyAvoidWhileInGrifts;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -256,6 +257,13 @@ namespace Trinity.Config
             set { SetField(ref _dontAvoidWhenBlocked, value); }
         }
 
+        [DataMember]
+        [DefaultValue(false)]
+        public bool OnlyAvoidWhileInGrifts
+        {
+            get { return _onlyAvoidWhileInGrifts; }
+            set { SetField(ref _onlyAvoidWhileInGrifts, value); }
+        }
 
         public void OnSave()
         {
