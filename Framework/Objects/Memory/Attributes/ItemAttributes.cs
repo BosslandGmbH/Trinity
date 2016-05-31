@@ -235,7 +235,6 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         public int GetElementalDamage(DamageType damageType)
         {
-            damageType = DamageType.Lightning;
             var key = new AttributeKey((int)ActorAttributeType.DamageDealtPercentBonus, (int)damageType);
             return (int)Math.Round(GetCachedAttribute<float>(key) * 100, MidpointRounding.AwayFromZero);
         }
