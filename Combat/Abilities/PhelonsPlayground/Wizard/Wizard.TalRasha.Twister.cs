@@ -103,7 +103,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     => new TrinityPower(SNOPower.Wizard_EnergyTwister, 45f, ActualLocation);
 
                 private static TrinityPower CastElectrocute
-                    => new TrinityPower(SNOPower.Wizard_Electrocute, 45f, PhelonTargeting.BestAoeUnit(45, true).ACDGuid)
+                    => new TrinityPower(SNOPower.Wizard_Electrocute, 60f, TargetUtil.GetBestPierceTarget(60f).ACDGuid)
                     ;
 
                 #endregion

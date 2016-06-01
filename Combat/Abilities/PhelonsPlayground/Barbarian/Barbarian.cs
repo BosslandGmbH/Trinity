@@ -46,8 +46,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
 
                 //if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
             }
-            //if (CurrentTarget != null && CurrentTarget.IsUnit)
-            //    Logger.Log($"{CurrentTarget != null} && {CurrentTarget.IsUnit}");
+            if (CurrentTarget != null && CurrentTarget.IsUnit)
+               Logger.Log($"{CurrentTarget != null} && {CurrentTarget.IsUnit}");
             //if (power != null)
             //    Logger.Log($"Using: {power}");
             return power;

@@ -18,6 +18,13 @@ namespace Trinity
     /// </summary>
     internal partial class DataDictionary
     {
+        public static HashSet<int> HerdingMatsSnoIds = new HashSet<int>()
+        {
+            214604, //"gibbering-gemstone": ["Gibbering Gemstone", 214604, "Cow_Gem"],
+            214605, //"leorics-shinbone": ["Leoric's Shinbone", 214605, "Cow_Bone"],
+            214603, //"liquid-rainbow": ["Liquid Rainbow", 214603, "Cow_Water"],
+            180697, //"wirts-bell": ["Wirt's Bell", 180697, "CowBell"],
+        };
         public static GameBalanceTable PetTable = new GameBalanceTable
         {
             { 2390, 95923716, -1080354364, "Cosmetic_Pet_gluttony_01" },

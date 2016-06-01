@@ -26,7 +26,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 }
                 if (TalRashasCount == 3)
                 {
-                    if (VyrsCount > 1)
+                    if (VyrsCount >= 1)
                         power = TalRasha.VyrArchon.PowerSelector();
 
                     if (Legendary.TheTwistedSword.IsEquipped)

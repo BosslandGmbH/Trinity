@@ -131,6 +131,12 @@ namespace Trinity.Items
                 Logger.Log($"Wings found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
             }
+            //todo: Add an option to GUI for Staff of Hering Mats
+            if (DataDictionary.HerdingMatsSnoIds.Contains(item.ActorSnoId))
+            {
+                Logger.Log($"Staff of Herding Mat found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                return true;
+            }
 
             // Now look for Misc items we might want to keep
             TrinityItemType tItemType = item.TrinityItemType; // DetermineItemType(cItem.InternalName, cItem.DBItemType, cItem.FollowerType);
@@ -1116,6 +1122,12 @@ namespace Trinity.Items
             if (item.BalanceID == 2087837753)
             {
                 return TrinityPlugin.Settings.Loot.Pickup.PickupDeathsBreath;
+            }
+            //todo: Add Staff of Herding to GUI
+            if (DataDictionary.HerdingMatsSnoIds.Contains(item.ActorSNO))
+            {
+                Logger.Log($"Staff of Herding Mat found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
+                return true;
             }
 
             if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.BalanceID) || DataDictionary.PetSnoIds.Contains(item.ActorSNO))

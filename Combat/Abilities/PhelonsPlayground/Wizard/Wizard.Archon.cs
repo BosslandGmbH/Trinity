@@ -25,9 +25,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (ShouldSlowTime)
                     return CastSlowTime;
 
-                if (ShouldArcaneBlast)
-                    return CastArcaneBlast;
-
                 if (ShouldArcaneStrike)
                     return CastArcaneStrike;
 
@@ -47,12 +44,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 => Skills.Wizard.ArchonStrike.IsActive && PhelonTargeting.BestAoeUnit(45, true).Distance < 12f;
 
             private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 12f,
-                PhelonTargeting.BestAoeUnit(45, true).Position);
-
-            private static bool ShouldArcaneBlast
-                => Skills.Wizard.ArchonBlast.CanCast() && PhelonTargeting.BestAoeUnit(45, true).Distance < 12f;
-
-            private static TrinityPower CastArcaneBlast => new TrinityPower(Skills.Wizard.ArchonBlast.SNOPower, 12f,
                 PhelonTargeting.BestAoeUnit(45, true).Position);
 
             private static bool ShouldSlowTime => Skills.Wizard.ArchonSlowTime.IsActive && NeedSlowTime;
