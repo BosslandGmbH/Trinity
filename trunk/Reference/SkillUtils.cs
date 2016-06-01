@@ -164,7 +164,8 @@ namespace Trinity.Reference
         /// </summary>
         private static bool ShouldUpdateActiveSkills
         {
-            get { return DateTime.UtcNow.Subtract(_lastUpdatedActiveSkills) > TimeSpan.FromSeconds(3); }
+            //todo: Phelon - This is what is borking Archon Switching.
+            get { return DateTime.UtcNow.Subtract(_lastUpdatedActiveSkills) > TimeSpan.FromMilliseconds(250); }
         }
 
         /// <summary>

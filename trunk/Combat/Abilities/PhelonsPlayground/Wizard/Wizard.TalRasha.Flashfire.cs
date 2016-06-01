@@ -20,10 +20,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 //public static bool NeedTwister = false;
                 public static TrinityPower PowerSelector()
                 {
-                    if (ShouldSpectralBlade)
-                        return CastSpectralBlade;
-                    if (ShouldElectrocute)
-                        return CastElectrocute;
+                    if (CurrentTarget != null && CurrentTarget.IsUnit)
+                    {
+                        if (ShouldSpectralBlade)
+                            return CastSpectralBlade;
+                        if (ShouldElectrocute)
+                            return CastElectrocute;
+                    }
                     if (ShouldFrostNova)
                         return CastFrostNova;
                     if (ShouldExplosiveBlast)
@@ -43,7 +46,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 private static bool ShouldFrostNova
                 {
-                    get { return Skills.Wizard.FrostNova.CanCast() && TargetUtil.AnyMobsInRange(12); }
+                    get { return Skills.Wizard.FrostNova.CanCast(); }
                 }
 
                 private static TrinityPower CastFrostNova
@@ -56,7 +59,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     get
                     {
                         return Skills.Wizard.SpectralBlade.CanCast() && CurrentTarget != null &&
-                               (TalRashasCount < 4 || Player.PrimaryResourcePct < 0.25);
+                               (TalRashasCount < 4 || Player.PrimaryResourcePct < 0.25 ||
+                                Skills.Wizard.ExplosiveBlast.CooldownRemaining > 0);
                     }
                 }
 
@@ -70,7 +74,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     get
                     {
                         return Skills.Wizard.Electrocute.CanCast() && CurrentTarget != null &&
-                               (TalRashasCount < 4 || Player.PrimaryResourcePct < 0.25);
+                               (TalRashasCount < 4 || Player.PrimaryResourcePct < 0.25 ||
+                                Skills.Wizard.ExplosiveBlast.CooldownRemaining > 0);
                     }
                 }
 

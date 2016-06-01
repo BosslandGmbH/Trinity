@@ -17,7 +17,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 public static TrinityPower PowerSelector()
                 {
-                    if (Player.IsIncapacitated) return null;
+                    //if (Player.IsIncapacitated) return null;
 
                     if (ShouldFrostNova)
                         return CastFrostNova;
@@ -57,7 +57,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 private static bool ShouldExplosiveBlast
                     =>
                         Skills.Wizard.ExplosiveBlast.CanCast() && TargetUtil.AnyMobsInRange(12f, false) &&
-                        (Skills.Wizard.Archon.CanCast() || TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 4000);
+                        (Skills.Wizard.Archon.CanCast() || TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 4000 ||
+                         Player.PrimaryResourcePct > 0.90);
 
                 private static TrinityPower CastArcaneTorrent
                 {
@@ -74,7 +75,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     {
                         return Skills.Wizard.BlackHole.CanCast() && PhelonTargeting.BestAoeUnit(45, true) != null &&
                                (Skills.Wizard.Archon.CanCast() ||
-                                TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 15000 && TalRashasCount < 4);
+                                TimeSincePowerUse(Skills.Wizard.BlackHole.SNOPower) > 15000 && TalRashasCount < 4 ||
+                                Player.PrimaryResourcePct > 0.90);
                     }
                 }
 
@@ -92,7 +94,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     get
                     {
                         return Skills.Wizard.FrostNova.CanCast() && TargetUtil.AnyMobsInRange(12f, false) &&
-                               (Skills.Wizard.Archon.CanCast() || TimeSincePowerUse(Skills.Wizard.FrostNova.SNOPower) > 8000);
+                               (Skills.Wizard.Archon.CanCast() ||
+                                TimeSincePowerUse(Skills.Wizard.FrostNova.SNOPower) > 8000);
                     }
                 }
 
