@@ -71,11 +71,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
             private static bool ShouldTeleport(out Vector3 position)
             {
+                position = Vector3.Zero;
                 if (!CanTeleport)
-                {
-                    position = Vector3.Zero;
                     return false;
-                }
+
                 // Ports to Closest HealthGlobe
                 if (TrinityPlugin.Player.CurrentHealthPct < Settings.Combat.Wizard.HealthGlobeLevel)
                 {
@@ -93,11 +92,27 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
                     return true;
                 }
-                var maxRange = DMOCount > 2 || GetHasBuff(Skills.Wizard.Archon.SNOPower) ? 12 : 40;
-                var bestDpsPosition = PhelonUtils.BestDpsPosition(maxRange);
+
+                if (Skills.Wizard.Archon.CooldownRemaining < Skills.Wizard.Teleport.Cooldown.Milliseconds)
+                    return false;
+
+                if (Skills.Wizard.Archon.CanCast())
+                {
+                    position = PhelonTargeting.BestAoeUnit(45f, true).Position;
+                    return true;
+                }
+
+                var maxRange = DMOCount > 2 || GetHasBuff(Skills.Wizard.Archon.SNOPower) ? 18 : 40;
+                var bestDpsPosition = IsInParty && PhelonGroupSupport.Monk != null && 
+                    PhelonGroupSupport.Monk.Distance < 45 && GetHasBuff(Skills.Wizard.Archon.SNOPower)
+                    ? PhelonGroupSupport.Monk.Position
+                    : PhelonUtils.BestDpsPosition(maxRange, IsInParty);
                 if (bestDpsPosition != Vector3.Zero &&
-                    (bestDpsPosition.Distance(Player.Position) > 12 || Skills.Wizard.Teleport.CanCast() && (Runes.Wizard.Calamity.IsActive ||
-                     Runes.Wizard.SafePassage.IsActive) && TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500))
+                    (bestDpsPosition.Distance(Player.Position) > maxRange ||
+                     Skills.Wizard.Teleport.CanCast() &&
+                     (Runes.Wizard.Calamity.IsActive && TalRashaStackCount < 4 ||
+                      Runes.Wizard.SafePassage.IsActive &&
+                      TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500)))
                 {
                     position = bestDpsPosition;
                     return true;

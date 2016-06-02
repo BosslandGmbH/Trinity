@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Reference;
+using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
@@ -25,10 +27,16 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             if (Player.IsInTown)
                 return null;
             TrinityPower power = Unconditional.PowerSelector();
+
             if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
             {
                 if (IszDPS)
-                    power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestDpsPosition(35f, true));
+                {
+                    power = PhelonUtils.BestDpsPosition(35f, true).Distance(Player.Position) < 12f
+                        ? ZDps.PowerSelector()
+                        : new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestDpsPosition(35f, true));
+                }
+                //power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestDpsPosition(35f, true));
             }
             return power;
         }
