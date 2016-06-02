@@ -47,10 +47,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
         internal static Vector3 BestDpsPosition(float maxRange, bool objectsInAoe = false)
         {
-            return BestBuffPosition(maxRange, objectsInAoe) != Vector3.Zero &&
-                   BestBuffPosition(maxRange, objectsInAoe).Distance(PhelonTargeting.BestAoeUnit(45f, objectsInAoe).Position) < maxRange
-                ? BestBuffPosition(maxRange, objectsInAoe)
-                : PhelonTargeting.BestAoeUnit(45f, objectsInAoe).Position;
+            return
+                BestBuffPosition(maxRange, objectsInAoe)
+                    .Distance(PhelonTargeting.BestAoeUnit(45f, objectsInAoe).Position) < maxRange
+                    ? BestBuffPosition(maxRange, objectsInAoe)
+                    : PhelonTargeting.BestAoeUnit(45f, objectsInAoe).Position;
         }
 
         internal static Vector3 BestWalkLocation(float maxRange, bool objectsInAoe = false)
