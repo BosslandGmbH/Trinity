@@ -49,7 +49,7 @@ namespace Trinity.Framework.Avoidance
         private readonly HashSet<int> _currentRActorIds = new HashSet<int>();
 
         public IEnumerable<IActor> ActiveAvoidanceActors => CurrentAvoidances.SelectMany(a => a.Actors);
-        public HashSet<int> ActiveAvoidanceIds { get; set; }
+        public HashSet<int> ActiveAvoidanceIds = new HashSet<int>();
 
         private readonly HashSet<GizmoType> _flaggedGizmoTypes = new HashSet<GizmoType>
         {

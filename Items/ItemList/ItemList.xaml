@@ -705,7 +705,7 @@
     <ut:ModalContentPresenter x:Name="modalPresenter" IsModal="{Binding ItemList.IsModalVisible}"  OpenCommand="{Binding ItemList.LoadModalCommand}">
 
         <DockPanel LastChildFill="True" VerticalAlignment="Stretch" Margin="0,10,10,0">
-            <StackPanel DockPanel.Dock="Top" Background="DarkRed"  Visibility="{Binding Loot.ItemFilterMode, Converter={StaticResource EnumTrueToCollapsedConverter}, ConverterParameter=ItemList, Mode=TwoWay}">
+            <StackPanel DockPanel.Dock="Top" Background="DarkRed"  Visibility="{Binding Loot.Pickup.ItemFilterMode, Converter={StaticResource EnumTrueToCollapsedConverter}, ConverterParameter=ItemList, Mode=TwoWay}">
                 <WrapPanel Margin="10">
                     <Label VerticalAlignment="Center" Background="Transparent" Foreground="White" Content="Item list is NOT the active Rules Engine!" Margin="0,0,10,0"/>
                     <Button VerticalAlignment="Center" Style="{DynamicResource LinkButton}" Content="Enable ItemList" Command="{Binding ItemList.EnableItemListCommand}"/>

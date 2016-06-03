@@ -1123,8 +1123,8 @@ namespace Trinity.Items
             {
                 return TrinityPlugin.Settings.Loot.Pickup.PickupDeathsBreath;
             }
-            //todo: Add Staff of Herding to GUI
-            if (DataDictionary.HerdingMatsSnoIds.Contains(item.ActorSNO))
+
+            if (TrinityPlugin.Settings.Loot.Pickup.PickupStaffOfHerdingParts && DataDictionary.HerdingMatsSnoIds.Contains(item.ActorSNO))
             {
                 Logger.Log($"Staff of Herding Mat found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
                 return true;
