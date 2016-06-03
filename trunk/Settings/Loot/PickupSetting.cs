@@ -59,6 +59,7 @@ namespace Trinity.Config.Loot
         private bool _stashPets;
         private bool _stashTransmog;
         private ItemFilterMode _itemFilterMode;
+        private bool _pickupStaffOfHerdingParts;
 
         #endregion Fields
 
@@ -940,6 +941,24 @@ namespace Trinity.Config.Loot
 
         [DataMember(IsRequired = false)]
         [DefaultValue(true)]
+        public bool PickupStaffOfHerdingParts
+        {
+            get
+            {
+                return _pickupStaffOfHerdingParts;
+            }
+            set
+            {
+                if (_pickupStaffOfHerdingParts != value)
+                {
+                    _pickupStaffOfHerdingParts = value;
+                    OnPropertyChanged(nameof(PickupStaffOfHerdingParts));
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(true)]
         public bool StashWings
         {
             get
@@ -1029,6 +1048,7 @@ namespace Trinity.Config.Loot
             IgnoreHealthGlobesInAoE = true;
             StashWings = true;
             StashPets = true;
+            PickupStaffOfHerdingParts = true;
         }
         #endregion Methods
     }

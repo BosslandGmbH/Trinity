@@ -27,7 +27,7 @@
             <TabItem Header="Gambling" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\Gambling.xaml"/>
             </TabItem>
-            <TabItem Header="ItemRules" Foreground="{DynamicResource TextBrush}" Visibility="{Binding Loot.ItemFilterMode, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=TrinityWithItemRules}">
+            <TabItem Header="ItemRules" Foreground="{DynamicResource TextBrush}" Visibility="{Binding Loot.Pickup.ItemFilterMode, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=TrinityWithItemRules}">
                 <Border Tag="Items\ConfigItemRules.xaml"/>
             </TabItem>
             <TabItem Header="Town Run" Foreground="{DynamicResource TextBrush}">

@@ -103,6 +103,8 @@
                     <CheckBox Content="Stash Pets" IsChecked="{Binding Pickup.StashPets}" Margin="5" ToolTip="If enabled Pets are picked up and stashed"/>
                     <CheckBox Content="Stash Transmog Whites" IsChecked="{Binding Pickup.StashTransmog}" Margin="5" ToolTip="If enabled transmog items are picked up and stashed"/>
                     <CheckBox Content="Stash Wings" IsChecked="{Binding Pickup.StashWings}" Margin="5" ToolTip="If enabled Wings are picked up and stashed"/>
+                    <CheckBox Content="Staff of Herding Parts" IsChecked="{Binding Pickup.PickupStaffOfHerdingParts}" Margin="5" ToolTip="If enabled staff of herding crafting materials will be picked up and stashed"/>
+                    
                     <!--<CheckBox Content="Always Pickup Nearby" IsChecked="{Binding Pickup.AlwaysVacuumItems}" Margin="5" ToolTip="Bot will try to pickup items within range while walking to other places"/>-->
                 </UniformGrid>
             </GroupBox>
