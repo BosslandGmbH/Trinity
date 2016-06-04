@@ -316,7 +316,7 @@ namespace Trinity.UI
                     ZetaDia.Actors.Update();
 
                     Func<DiaObject, bool> isValid = u => u != null && u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.CommonData.IsDisposed;
-                    var testunits = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Where(u => isValid(u) && u.RActorId != ZetaDia.Me.RActorId).ToList();
+                    var testunits = ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Where(u => isValid(u) && u.RActorId != ZetaDia.Me.RActorId && ZetaDia.Me.TeamId != u.TeamId).ToList();
                     var testunit = testunits.OrderBy(u => u.Distance).FirstOrDefault();
                     if (testunit == null || testunit.CommonData == null)
                     {
