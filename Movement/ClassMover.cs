@@ -489,13 +489,13 @@ namespace Trinity.Movement
             //    destination = PlayerMover.GetCurrentPathFarthestPoint(MinDistance, movementRange);
 
             // Prevent bot from teleporting very short distance/on top of itself
-            if (destination == Vector3.Zero || PlayerMover.MyPosition.Distance(destination) < 20)
+            if (destination == Vector3.Zero)
                 return false;
 
             // Teleport for a wizard 
             if (CombatBase.CanCast(SNOPower.Wizard_Teleport, CombatBase.CanCastFlags.NoTimer) &&
                 SpellHistory.TimeSinceUse(SNOPower.Wizard_Teleport) >=
-                new TimeSpan(0, 0, 0, 0, (int) TrinityPlugin.Settings.Combat.Wizard.TeleportDelay))
+                new TimeSpan(0, 0, 0, 0, (int) TrinityPlugin.Settings.Combat.Wizard.TeleportDelay) || MinDistance < 10)
             {
                 Skills.Wizard.Teleport.Cast(destination);
                 LogMovement(SNOPower.Wizard_Teleport, destination);
