@@ -25,11 +25,16 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (ShouldSlowTime)
                     return CastSlowTime;
 
-                if (ShouldArcaneStrike)
-                    return CastArcaneStrike;
-
-                if (ShouldDisentegrate)
-                    return CastDisentegrate;
+                if (PhelonUtils.GetBestPierceTarget(45).NearbyUnitsWithinDistance() < TargetUtil.NumMobsInRange(14))
+                {
+                    //if (ShouldArcaneStrike)
+                        return CastArcaneStrike;
+                }
+                else
+                {
+                    //if (ShouldDisentegrate)
+                        return CastDisentegrate;
+                }
                 return null;
             }
 
@@ -41,9 +46,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     PhelonUtils.PointBehind(PhelonUtils.GetBestPierceTarget(45).Position));
 
             private static bool ShouldArcaneStrike
-                => Skills.Wizard.ArchonStrike.IsActive && PhelonTargeting.BestAoeUnit(45, true).RadiusDistance < 15f;
+                => Skills.Wizard.ArchonStrike.IsActive && TargetUtil.GetClosestUnit(14) != null;
 
-            private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 15f,
+            private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 14f,
                 Player.Position);
 
             private static bool ShouldSlowTime => Skills.Wizard.ArchonSlowTime.IsActive && NeedSlowTime;

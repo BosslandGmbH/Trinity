@@ -4,6 +4,7 @@ using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 {
@@ -81,6 +82,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     var safePoint = TargetUtil.GetBestHealthGlobeClusterPoint(5, 40);
                     if (safePoint != Vector3.Zero)
                     {
+                        Logger.Log("Porting to get Health Globe!");
                         position = safePoint;
                         return true;
                     }
@@ -89,6 +91,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 //Ports out Avoidance
                 if (Core.Avoidance.InCriticalAvoidance(Player.Position) && !IsInParty)
                 {
+                    Logger.Log("Porting to get out of Avoidance!");
                     position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
                     return true;
                 }
@@ -98,25 +101,33 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 if (Skills.Wizard.Archon.CanCast() || TalRashasCount >= 3 && Legendary.WandOfWoh.IsEquipped)
                 {
+                    Logger.Log("Porting to get closer for Woh or Archon");
                     position = PhelonTargeting.BestAoeUnit(45f, true).Position;
                     return true;
                 }
-                var maxRange = DMOCount > 2 || GetHasBuff(Skills.Wizard.Archon.SNOPower) ? 12 : 40;
-                var bestDpsPosition = IsInParty && PhelonGroupSupport.Monk != null &&
-                                      PhelonGroupSupport.Monk.Distance > maxRange &&
-                                      GetHasBuff(Skills.Wizard.Archon.SNOPower)
+                var maxRange = DMOCount > 2 || GetHasBuff(Skills.Wizard.Archon.SNOPower) ? 14 : 40;
+                var bestDpsPosition = IsInParty && PhelonGroupSupport.Monk != null
                     ? PhelonGroupSupport.Monk.Position
                     : PhelonUtils.BestDpsPosition(maxRange, IsInParty);
-                if (bestDpsPosition != Vector3.Zero &&
-                    (bestDpsPosition.Distance(Player.Position) > maxRange ||
-                     Skills.Wizard.Teleport.CanCast() &&
-                     (Runes.Wizard.Calamity.IsActive && TalRashaStackCount < 4 ||
-                      Runes.Wizard.SafePassage.IsActive &&
-                      TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500)))
+
+                if (bestDpsPosition != Vector3.Zero && bestDpsPosition.Distance(Player.Position) > maxRange)
                 {
+                    Logger.Log("Porting to get to best DPS position!");
                     position = bestDpsPosition;
                     return true;
                 }
+
+                if (Skills.Wizard.Teleport.CanCast() &&
+                    (Runes.Wizard.Calamity.IsActive && 
+                     TimeSincePowerUse(Skills.Wizard.Teleport.SNOPower) > 8000 ||
+                     Runes.Wizard.SafePassage.IsActive &&
+                     TimeSincePowerUse(SNOPower.Wizard_Teleport) > 4500))
+                {
+                    Logger.Log("Porting to get to Safe Passage or Calamity buff!");
+                    position = bestDpsPosition;
+                    return true;
+                }
+
                 position = Vector3.Zero;
                 return false;
             }

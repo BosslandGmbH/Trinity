@@ -177,7 +177,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                           ((useWeights && u.Weight > 0) || !useWeights) &&
                           !(ignoreElites && u.IsEliteRareUnique) &&
                           (!inLineOfSight || u.IsInLineOfSight()) &&
-                          u.RadiusDistance <= maxSearchRange && !u.IsSafeSpot
+                          u.Distance <= maxSearchRange && !u.IsSafeSpot
                     orderby
                         u.NearbyUnitsWithinDistance(clusterRadius) descending,
                         u.HitPointsPct descending
