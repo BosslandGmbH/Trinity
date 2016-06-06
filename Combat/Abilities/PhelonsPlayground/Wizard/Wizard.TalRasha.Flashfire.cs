@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Trinity.Movement;
 using Trinity.Reference;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 {
@@ -20,10 +21,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 //public static bool NeedTwister = false;
                 public static TrinityPower PowerSelector()
                 {
-                    if (CurrentTarget != null && CurrentTarget.IsUnit)
+                    if (CurrentTarget != null && CurrentTarget.IsUnit &&
+                        (TimeSincePowerUse(SNOPower.Wizard_Electrocute) > 3500 ||
+                         !Skills.Wizard.ExplosiveBlast.CanCast()))
                     {
-                        if (ShouldSpectralBlade)
-                            return CastSpectralBlade;
                         if (ShouldElectrocute)
                             return CastElectrocute;
                     }

@@ -19,6 +19,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 {
                     //if (Player.IsIncapacitated) return null;
 
+                    if (ShouldArchon())
+                        return CastArchon;
+
                     if (ShouldFrostNova)
                         return CastFrostNova;
 
@@ -27,9 +30,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                     if (ShouldBlackHole)
                         return CastBlackHole;
-
-                    if (ShouldArchon())
-                        return CastArchon;
 
                     var power = Archon.PowerSelector();
                     if (power != null)
@@ -58,7 +58,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     =>
                         Skills.Wizard.ExplosiveBlast.CanCast() && TargetUtil.AnyMobsInRange(12f, false) &&
                         (Skills.Wizard.Archon.CanCast() || TimeSincePowerUse(SNOPower.Wizard_ExplosiveBlast) > 4000 ||
-                         Player.PrimaryResourcePct > 0.90);
+                         Player.PrimaryResourcePct > 0.70);
 
                 private static TrinityPower CastArcaneTorrent
                 {
@@ -76,7 +76,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         return Skills.Wizard.BlackHole.CanCast() && PhelonTargeting.BestAoeUnit(45, true) != null &&
                                (Skills.Wizard.Archon.CanCast() ||
                                 TimeSincePowerUse(Skills.Wizard.BlackHole.SNOPower) > 15000 && TalRashasCount < 4 ||
-                                Player.PrimaryResourcePct > 0.90);
+                                Player.PrimaryResourcePct > 0.70);
                     }
                 }
 
@@ -106,9 +106,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 #region Archon Skills
 
-                public static bool ShouldArchon()
+                private static bool ShouldArchon()
                 {
                     if (!Skills.Wizard.Archon.CanCast() || Skills.Wizard.ArchonBlast.CanCast())
+                        return false;
+
+                    if (Legendary.ConventionOfElements.IsEquipped && TimeToElementStart(Element.Cold) < 3000 &&
+                        TimeToElementStart(Element.Cold) > 0)
                         return false;
 
                     if (Player.PrimaryResourcePct < 0.20 ||

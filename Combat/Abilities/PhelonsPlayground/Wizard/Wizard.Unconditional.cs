@@ -96,15 +96,15 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (Skills.Wizard.Archon.CooldownRemaining < Skills.Wizard.Teleport.Cooldown.Milliseconds)
                     return false;
 
-                if (Skills.Wizard.Archon.CanCast())
+                if (Skills.Wizard.Archon.CanCast() || TalRashasCount >= 3 && Legendary.WandOfWoh.IsEquipped)
                 {
                     position = PhelonTargeting.BestAoeUnit(45f, true).Position;
                     return true;
                 }
-
-                var maxRange = DMOCount > 2 || GetHasBuff(Skills.Wizard.Archon.SNOPower) ? 18 : 40;
-                var bestDpsPosition = IsInParty && PhelonGroupSupport.Monk != null && 
-                    PhelonGroupSupport.Monk.Distance < 45 && GetHasBuff(Skills.Wizard.Archon.SNOPower)
+                var maxRange = DMOCount > 2 || GetHasBuff(Skills.Wizard.Archon.SNOPower) ? 12 : 40;
+                var bestDpsPosition = IsInParty && PhelonGroupSupport.Monk != null &&
+                                      PhelonGroupSupport.Monk.Distance > maxRange &&
+                                      GetHasBuff(Skills.Wizard.Archon.SNOPower)
                     ? PhelonGroupSupport.Monk.Position
                     : PhelonUtils.BestDpsPosition(maxRange, IsInParty);
                 if (bestDpsPosition != Vector3.Zero &&
