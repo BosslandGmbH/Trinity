@@ -19,8 +19,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (ShouldArchon())
                     return CastArchon;
 
-                if (Player.IsIncapacitated) return null;
-
                 if (ShouldHydra())
                     return CastHydra;
 
@@ -105,21 +103,16 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                            GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021) > 19;
                 }
 
-                if (Settings.Combat.Wizard.ArchonElitesOnly &&
-                    TargetUtil.AnyElitesInRange(Settings.Combat.Wizard.ArchonEliteDistance))
-                    return true;
-
-                if (!Settings.Combat.Wizard.ArchonElitesOnly &&
-                    TargetUtil.AnyMobsInRange(Settings.Combat.Wizard.ArchonMobDistance,
-                        Settings.Combat.Wizard.ArchonMobCount))
-                    return true;
-
-                return PhelonTargeting.BestAoeUnit(45, true).IsBoss;
+                return true;
             }
 
             public static TrinityPower CastArchon
             {
-                get { return new TrinityPower(SNOPower.Wizard_Archon); }
+                get
+                {
+                    Archon.NeedSlowTime = true;
+                    return new TrinityPower(Skills.Wizard.Archon.SNOPower);
+                }
             }
 
             #endregion

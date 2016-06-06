@@ -1,3 +1,6 @@
+using System.Linq;
+using Trinity.Reference;
+
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
 {
     partial class Barbarian
@@ -6,23 +9,29 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
         {
             public static TrinityPower PowerSelector()
             {
-                TrinityPower power = UnconditionalPower();
-                power = CurrentTarget == null ? OutofCombatPower() : InCombatPower();
-                return power;
-            }
-            public static TrinityPower OutofCombatPower()
-            {
+                TrinityCacheObject target;
+
+                if (ShouldWhirlWind(out target))
+                    return CastWhirlWind(target);
+
                 return null;
             }
 
-            public static TrinityPower InCombatPower()
+            public static bool ShouldWhirlWind(out TrinityCacheObject target)
             {
-                return null;
+                target = CurrentTarget;
+                if (!Skills.Barbarian.Whirlwind.CanCast())
+                    return false;
+
+                return target != null && Player.PrimaryResource > 10;
             }
 
-            public static TrinityPower UnconditionalPower()
+            public static TrinityPower CastWhirlWind(TrinityCacheObject target)
             {
-                return null;
+                var targetPosition = target.Distance < 10 ?
+                TargetUtil.GetZigZagTarget(target.Position, 25f, true) : target.Position;
+                return new TrinityPower(Skills.Barbarian.Whirlwind.SNOPower, 25f, targetPosition,
+                    TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);
             }
         }
     }

@@ -16,24 +16,19 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             public static TrinityPower PowerSelector()
             {
                 TrinityCacheObject target;
-
-                Logger.Log($"ShouldAncientSpear");
+                
                 if (ShouldAncientSpear(out target))
                     return CastAncientSpear(target);
-
-                Logger.Log($"ShouldRend");
+                
                 if (ShouldRend(out target))
                     return CastRend(target);
-
-                Logger.Log($"ShouldBash");
+                
                 if (ShouldBash(out target))
                     return CastBash(target);
-
-                Logger.Log($"ShouldWhirlWind");
+                
                 if (ShouldWhirlWind(out target))
                     return CastWhirlWind(target);
-
-                Logger.Log($"ShouldFuriousCharge");
+                
                 if (ShouldFuriousCharge(out target))
                     return CastFuriousCharge(target);
 

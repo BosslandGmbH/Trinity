@@ -10,8 +10,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
         {
             public static TrinityPower PowerSelector()
             {
-                if (ShouldThreateningShout)
-                    return CastThreateningShout;
+
                 if (ShouldIgnorePain)
                     return CastIgnorePain;
 
@@ -19,6 +18,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     return CastWrathOfTheBerserker;
 
                 if (Player.IsIncapacitated) return null;
+
+                if (ShouldThreateningShout)
+                    return CastThreateningShout;
+
+                if (ShouldBattleRage)
+                    return CastBattleRage;
 
                 if (ShouldUseWarCry)
                     return CastWarCry;
@@ -28,13 +33,28 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return null;
             }
 
+            public static bool ShouldBattleRage
+            {
+                get
+                {
+
+                    return !Player.IsIncapacitated && CanCast(SNOPower.Barbarian_BattleRage, CanCastFlags.NoTimer) &&
+                           !GetHasBuff(SNOPower.Barbarian_BattleRage) && Player.PrimaryResource >= 20;
+                }
+            }
+
+            public static TrinityPower CastBattleRage
+            {
+                get { return new TrinityPower(SNOPower.Barbarian_BattleRage); }
+            }
+
             public static bool ShouldThreateningShout
             {
                 get
                 {
                     return Skills.Barbarian.ThreateningShout.CanCast() &&
-                           (Skills.Barbarian.ThreateningShout.TimeSinceUse > 2000 || Player.PrimaryResourcePct < 0.25 ||
-                            CurrentTarget != null && zDPSEquipped);
+                           (Skills.Barbarian.ThreateningShout.TimeSinceUse > 2000 || Player.PrimaryResourcePct < 0.25 || 
+                           Legendary.BladeOfTheTribes.IsEquipped || CurrentTarget != null && zDPSEquipped);
                 }
             }
 
@@ -94,6 +114,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                         return false;
 
                     if (Player.PrimaryResource <= 40 || CurrentTarget != null && zDPSEquipped ||
+                        Legendary.BladeOfTheTribes.IsEquipped || 
                         Skills.Barbarian.WarCry.TimeSinceUse >= Settings.Combat.Barbarian.WarCryWaitDelay)
                         return true;
 

@@ -34,16 +34,16 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             }
 
             private static bool ShouldDisentegrate => Skills.Wizard.ArchonDisintegrationWave.IsActive &&
-                                                      PhelonUtils.GetBestPierceTarget(45).RadiusDistance < 45;
+                                                      PhelonUtils.GetBestPierceTarget(45) != null;
 
             private static TrinityPower CastDisentegrate
                 => new TrinityPower(Skills.Wizard.ArchonDisintegrationWave.SNOPower, 45f,
                     PhelonUtils.PointBehind(PhelonUtils.GetBestPierceTarget(45).Position));
 
             private static bool ShouldArcaneStrike
-                => Skills.Wizard.ArchonStrike.IsActive && PhelonTargeting.BestAoeUnit(45, true).RadiusDistance < 12f;
+                => Skills.Wizard.ArchonStrike.IsActive && PhelonTargeting.BestAoeUnit(45, true).RadiusDistance < 15f;
 
-            private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 12f,
+            private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 15f,
                 Player.Position);
 
             private static bool ShouldSlowTime => Skills.Wizard.ArchonSlowTime.IsActive && NeedSlowTime;
