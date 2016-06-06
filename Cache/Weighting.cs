@@ -220,7 +220,7 @@ namespace Trinity
                             continue;
                         }
 
-                        if (Core.Avoidance.InCriticalAvoidance(cacheObject.Position) || Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
+                        if (!Settings.Advanced.BetaPlayground && Core.Avoidance.InCriticalAvoidance(cacheObject.Position) || Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
                         {
                             cacheObject.Weight = 0;
                             cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Intersected by Critical Avoidance.";
