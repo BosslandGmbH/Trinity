@@ -19,20 +19,28 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                                                      (objectsInAoe || !Core.Avoidance.InAvoidance(x.Position))).ToList();
         }
 
-        internal static Vector3 BestBuffPosition(float maxRange, bool objectsInAoe = false)
+        internal static bool BestBuffPosition(float maxRange, Vector3 fromLocation, bool objectsInAoe, out Vector3 location)
         {
-            if (ClosestSancAndOcc(maxRange, objectsInAoe) != Vector3.Zero &&
-                ClosestSancAndOcc(maxRange, objectsInAoe).Distance(TrinityPlugin.Player.Position) < maxRange)
-                return ClosestSancAndOcc(maxRange, objectsInAoe);
-
-            if (ClosestSanctuary(maxRange, objectsInAoe) != Vector3.Zero &&
-                ClosestSanctuary(maxRange, objectsInAoe).Distance(TrinityPlugin.Player.Position) < maxRange)
-                return ClosestSanctuary(maxRange, objectsInAoe);
-
-            return ClosestOcculous(maxRange, objectsInAoe) != Vector3.Zero &&
-                   ClosestOcculous(maxRange, objectsInAoe).Distance(TrinityPlugin.Player.Position) < maxRange
-                ? ClosestOcculous(maxRange, objectsInAoe)
-                : PhelonTargeting.BestAoeUnit(45, true).Position;
+            location = Vector3.Zero;
+            var closestSancAndOcc = ClosestSancAndOcc(maxRange, objectsInAoe);
+            if (closestSancAndOcc != Vector3.Zero && closestSancAndOcc.Distance(fromLocation) < maxRange)
+            {
+                location = closestSancAndOcc;
+                return true;
+            }
+            var closestOcc = ClosestOcculous(maxRange, objectsInAoe);
+            if (closestOcc != Vector3.Zero && closestOcc.Distance(fromLocation) < maxRange)
+            {
+                location = closestOcc;
+                return true;
+            }
+            var closestSanc = ClosestSanctuary(maxRange, objectsInAoe);
+            if (closestSanc != Vector3.Zero && closestSanc.Distance(fromLocation) < maxRange)
+            {
+                location = closestSanc;
+                return true;
+            }
+            return false;
         }
 
         internal static List<TrinityCacheObject> BestShrine(float range = 25f, bool objectsInAoe = false)
@@ -45,13 +53,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                     select u).ToList();
         }
 
-        internal static Vector3 BestDpsPosition(float maxRange, bool objectsInAoe = false)
+        internal static Vector3 BestDpsPosition(float maxRange, float searchRange, bool objectsInAoe = false)
         {
-            return
-                BestBuffPosition(maxRange, objectsInAoe)
-                    .Distance(PhelonTargeting.BestAoeUnit(45f, objectsInAoe).Position) < maxRange
-                    ? BestBuffPosition(maxRange, objectsInAoe)
-                    : PhelonTargeting.BestAoeUnit(45f, objectsInAoe).Position;
+            var bestTarget = PhelonTargeting.BestAoeUnit(maxRange, objectsInAoe).Position;
+            Vector3 bestBuffPosition = Vector3.Zero;
+            return BestBuffPosition(searchRange, bestTarget, objectsInAoe, out bestBuffPosition)
+                ? bestBuffPosition
+                : bestTarget;
         }
 
         internal static Vector3 BestWalkLocation(float maxRange, bool objectsInAoe = false)
@@ -330,6 +338,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             var properDistance = point.Distance2D(TrinityPlugin.Player.Position) - maxRange;
             //return MathEx.GetPointAt(point, properDistance, TrinityPlugin.Player.Rotation);
             return MathEx.CalculatePointFrom(TrinityPlugin.Player.Position, point, properDistance);
+        }
+
+        public static Vector3 SlightlyForwardPosition(float distance = 4f)
+        {
+            return MathEx.GetPointAt(Core.Avoidance.Avoider.SafeSpot, distance, TrinityPlugin.Player.Rotation);
         }
     }
 }

@@ -32,9 +32,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             {
                 if (IszDPS)
                 {
-                    power = PhelonUtils.BestDpsPosition(35f, true).Distance(Player.Position) < 12f
+                    Vector3 bestBuffPosition;
+                    return PhelonUtils.BestBuffPosition(12, Player.Position, true, out bestBuffPosition) &&
+                           bestBuffPosition.Distance(Player.Position) < 5
                         ? ZDps.PowerSelector()
-                        : new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestDpsPosition(35f, true));
+                        : new TrinityPower(SNOPower.Walk, 3f, bestBuffPosition);
                 }
                 //power = ZDps.PowerSelector() ?? new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestDpsPosition(35f, true));
             }
