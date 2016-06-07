@@ -1142,7 +1142,7 @@ namespace Trinity
                     if (commonData.GizmoState == 1)
                         return true;
 
-                    if (actor.GizmoAttributes.GizmoState == 1)
+                    if (actor.ActorAttributes.GizmoState == 1)
                         return true;
 
                     if (commonData.GizmoOperatorACDId > 0)
@@ -1225,8 +1225,8 @@ namespace Trinity
             return affixes;
         }
         
-        public GizmoAttributes GizmoAttributes => _gizmoAttributes ?? (_gizmoAttributes = new GizmoAttributes(CommonData.FastAttribGroupId));
-        private GizmoAttributes _gizmoAttributes;
+        public ActorAttributes ActorAttributes => _actorAttributes ?? (_actorAttributes = new ActorAttributes(CommonData.FastAttribGroupId));
+        private ActorAttributes _actorAttributes;
 
         public string Flags => string.Join(", ", Core.Avoidance.Grid.GetAvoidanceFlags(Position));
         public int TeamId { get; set; }

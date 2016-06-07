@@ -1942,6 +1942,19 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     if (SelectedRadarObject == radarObject)
                         pen = RadarResources.SelectionPen;
 
+                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Misc) && TrinityPlugin.Player.ActorClass == ActorClass.Wizard)
+                    {
+                        var tActor = radarObject.Actor as TrinityCacheObject;
+                        if (tActor != null)
+                        {
+                            if (tActor.ActorAttributes.HasFirebirdPermanent)
+                            {
+                                res.Brush = RedBrush;
+                                pen = RadarResources.OrangeDashPen;
+                            }
+                        }
+                    }
+
                     dc.DrawEllipse(res.Brush, pen, radarObject.Point, gridRadius, gridRadius);
 
                     DrawActorLabel(dc, canvas, radarObject, res.Brush);
