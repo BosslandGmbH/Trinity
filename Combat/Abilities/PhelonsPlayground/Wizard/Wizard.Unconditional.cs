@@ -105,10 +105,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     position = PhelonTargeting.BestAoeUnit(45f, true).Position;
                     return true;
                 }
-                var maxRange = DMOCount > 2 || GetHasBuff(Skills.Wizard.Archon.SNOPower) ? 14 : 40;
+                var maxRange = DMOCount > 2 || GetHasBuff(Skills.Wizard.Archon.SNOPower) || IsInParty ? 14 : 40;
+
                 var bestDpsPosition = IsInParty && PhelonGroupSupport.Monk != null
-                    ? PhelonGroupSupport.Monk.Position
-                    : PhelonUtils.BestDpsPosition(maxRange, IsInParty);
+                        ? PhelonGroupSupport.Monk.Position
+                        : PhelonUtils.BestDpsPosition(45, 14, true);
 
                 if (bestDpsPosition != Vector3.Zero && bestDpsPosition.Distance(Player.Position) > maxRange)
                 {

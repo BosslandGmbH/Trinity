@@ -30,7 +30,15 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         power = TalRasha.VyrArchon.PowerSelector();
 
                     if (Legendary.TheTwistedSword.IsEquipped)
-                        power = TalRasha.EnergyTwister.PowerSelector();
+                    {
+                        var twisterPosition = IsInParty && PhelonGroupSupport.Monk != null
+                        ? PhelonGroupSupport.Monk.Position
+                        : PhelonUtils.BestDpsPosition(45, 14, true);
+
+                        power = twisterPosition.Distance(Player.Position) > 15
+                            ? new TrinityPower(SNOPower.Walk, 3f, twisterPosition)
+                            : TalRasha.EnergyTwister.PowerSelector();
+                    }
 
                     if (Legendary.WandOfWoh.IsEquipped)
                         power = new TrinityPower(SNOPower.Walk, 3f, CurrentTarget.Position);
