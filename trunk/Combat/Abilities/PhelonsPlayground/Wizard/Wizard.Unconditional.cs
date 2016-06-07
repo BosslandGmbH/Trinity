@@ -61,7 +61,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 get { return new TrinityPower(Skills.Wizard.DiamondSkin.SNOPower); }
             }
 
-            private static bool CanTeleport
+            public static bool CanTeleport
             {
                 get
                 {
@@ -109,7 +109,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 var bestDpsPosition = IsInParty && PhelonGroupSupport.Monk != null
                         ? PhelonGroupSupport.Monk.Position
-                        : PhelonUtils.BestDpsPosition(45, 14, true);
+                        : PhelonUtils.BestDpsPosition(35, maxRange, true);
 
                 if (bestDpsPosition != Vector3.Zero && bestDpsPosition.Distance(Player.Position) > maxRange)
                 {

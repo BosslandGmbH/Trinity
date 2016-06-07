@@ -21,8 +21,18 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
             {
                 if (FirebirdsCount == 3 || VyrsCount == 3)
                 {
-                    power = Firebirds.PowerSelector();
-                    //if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
+                    if (Unconditional.CanTeleport)
+                    {
+                        var twisterPosition = IsInParty && PhelonGroupSupport.Monk != null
+                            ? PhelonGroupSupport.Monk.Position
+                            : PhelonUtils.BestDpsPosition(35f, 14f, true);
+
+                        power = twisterPosition.Distance(Player.Position) > 5
+                            ? new TrinityPower(SNOPower.Walk, 3f, twisterPosition)
+                            : Firebirds.PowerSelector();
+                    }
+                    else
+                        power = Firebirds.PowerSelector();
                 }
                 if (TalRashasCount == 3)
                 {
@@ -35,7 +45,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         ? PhelonGroupSupport.Monk.Position
                         : PhelonUtils.BestDpsPosition(35f, 14f, true);
 
-                        power = twisterPosition.Distance(Player.Position) > 7
+                        power = twisterPosition.Distance(Player.Position) > 5
                             ? new TrinityPower(SNOPower.Walk, 3f, twisterPosition)
                             : TalRasha.EnergyTwister.PowerSelector();
                     }

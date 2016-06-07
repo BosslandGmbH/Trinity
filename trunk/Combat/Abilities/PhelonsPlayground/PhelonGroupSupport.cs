@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Zeta.Common;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground
 {
@@ -13,7 +14,16 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             get
             {
-                return TrinityPlugin.ObjectCache.FirstOrDefault(x => x.InternalNameLowerCase.Contains("monk_"));
+                try
+                {
+                    return TrinityPlugin.ObjectCache.FirstOrDefault(x => x.InternalNameLowerCase.Contains("monk_"));
+                }
+                catch (Exception)
+                {
+                    Logger.Log("Unable to find Monk.  Where did he go?");
+                    //return CombatBase.IsInParty ? TargetUtil.GetClosestUnit(25) : null;
+                    return null;
+                }
             }
         }
 

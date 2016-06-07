@@ -24,17 +24,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 if (ShouldSlowTime)
                     return CastSlowTime;
-
-                if (PhelonUtils.GetBestPierceTarget(45).NearbyUnitsWithinDistance() < TargetUtil.NumMobsInRange(14))
-                {
-                    //if (ShouldArcaneStrike)
-                        return CastArcaneStrike;
-                }
-                else
-                {
-                    //if (ShouldDisentegrate)
-                        return CastDisentegrate;
-                }
+                //todo Arcane Strike is broken.
+                //if (PhelonUtils.GetBestPierceTarget(45).NearbyUnitsWithinDistance() < TargetUtil.NumMobsInRange(14))
+                //{
+                //    //if (ShouldArcaneStrike)
+                //        return CastArcaneStrike;
+                //}
+                if (ShouldDisentegrate)
+                    return CastDisentegrate;
                 return null;
             }
 
