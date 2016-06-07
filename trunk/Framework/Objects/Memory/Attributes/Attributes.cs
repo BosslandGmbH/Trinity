@@ -103,6 +103,12 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             return item => (int)attr == item.Key || attr == item.Value.Key.BaseAttribute;
         }
 
+        internal T GetCachedAttribute<T>(ActorAttributeType attr, int modifier)
+        {
+            var key = new AttributeKey((int)attr, modifier);
+            return GetCachedAttribute<T>(key);
+        }
+
         internal T GetCachedAttribute<T>(AttributeKey key)
         {
 
@@ -119,6 +125,22 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             if (!Items.TryGetValue((int)attr, out foundAttribute))
                 return default(T);
 
+            return foundAttribute.GetValue<T>();
+        }
+
+        internal T GetAttribute<T>(ActorAttributeType attr, int modifier)
+        {
+            var key = new AttributeKey((int)attr, modifier);
+            return GetAttribute<T>(key);
+        }
+
+        internal T GetAttribute<T>(AttributeKey key)
+        {
+            AttributeItem foundAttribute;
+            if (!Items.TryGetValue(key.Value, out foundAttribute))
+                return default(T);
+
+            foundAttribute.Update();
             return foundAttribute.GetValue<T>();
         }
 
