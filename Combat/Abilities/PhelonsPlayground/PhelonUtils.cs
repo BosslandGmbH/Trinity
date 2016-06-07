@@ -23,19 +23,19 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             location = Vector3.Zero;
             var closestSancAndOcc = ClosestSancAndOcc(maxRange, objectsInAoe);
-            if (closestSancAndOcc != Vector3.Zero && closestSancAndOcc.Distance(fromLocation) < maxRange)
+            if (closestSancAndOcc != Vector3.Zero)
             {
                 location = closestSancAndOcc;
                 return true;
             }
             var closestOcc = ClosestOcculous(maxRange, objectsInAoe);
-            if (closestOcc != Vector3.Zero && closestOcc.Distance(fromLocation) < maxRange)
+            if (closestOcc != Vector3.Zero)
             {
                 location = closestOcc;
                 return true;
             }
             var closestSanc = ClosestSanctuary(maxRange, objectsInAoe);
-            if (closestSanc != Vector3.Zero && closestSanc.Distance(fromLocation) < maxRange)
+            if (closestSanc != Vector3.Zero)
             {
                 location = closestSanc;
                 return true;
@@ -217,7 +217,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             return
                 (from u in SafeList(objectsInAoe)
-                    where u.RadiusDistance <= range &&
+                    where u.Distance <= range &&
                           u.ActorSNO == 433966
                     orderby u.Distance
                     select u).ToList();
@@ -229,8 +229,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             {
                 var occPoint = GetOculusBuffDiaObjects(maxRange).OrderBy(x => x.Distance)
                     .Select(y => y.Position)
-                    .OrderBy(z => !Core.Avoidance.InAvoidance(z))
-                    .FirstOrDefault(z => z.Distance2D(item) < 7);
+                    .FirstOrDefault(z => z.Distance2D(item) < 3);
                 if (occPoint != Vector3.Zero)
                     return MathEx.CalculatePointFrom(item, occPoint, item.Distance2D(occPoint)/2);
             }

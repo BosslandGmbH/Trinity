@@ -200,11 +200,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                     return false;
 
                 target = PhelonTargeting.BestAoeUnit(45, true);
-                if (target != null && Player.PrimaryResource < 20f)
+                if (target != null && Player.PrimaryResource < 20f && target.Distance < 12)
                     return true;
 
                 target = PhelonUtils.BestAuraUnit(SNOPower.Monk_CripplingWave, 12f, true);
-                return target != null && target.Distance < 12;
+                if (target != null && target.Distance < 12)
+                    return true;
+                target = TargetUtil.GetClosestUnit(12f);
+                return target != null;
             }
 
             private static TrinityPower CastCripplingWave(TrinityCacheObject target)
