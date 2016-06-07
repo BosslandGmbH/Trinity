@@ -33,9 +33,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     {
                         var twisterPosition = IsInParty && PhelonGroupSupport.Monk != null
                         ? PhelonGroupSupport.Monk.Position
-                        : PhelonUtils.BestDpsPosition(45, 14, true);
+                        : PhelonUtils.BestDpsPosition(35f, 14f, true);
 
-                        power = twisterPosition.Distance(Player.Position) > 15
+                        power = twisterPosition.Distance(Player.Position) > 7
                             ? new TrinityPower(SNOPower.Walk, 3f, twisterPosition)
                             : TalRasha.EnergyTwister.PowerSelector();
                     }
