@@ -18,6 +18,14 @@ namespace Trinity
     /// </summary>
     internal partial class DataDictionary
     {
+        /// <summary>
+        /// Client effects that will be let into the object cache
+        /// </summary>
+        public static readonly HashSet<int> AllowedClientEffects = new HashSet<int>
+        {
+            (int)SNOActor.p2_itemPassive_unique_ring_017_dome
+        };
+
         public static HashSet<int> HerdingMatsSnoIds = new HashSet<int>()
         {
             214604, //"gibbering-gemstone": ["Gibbering Gemstone", 214604, "Cow_Gem"],
@@ -334,6 +342,11 @@ namespace Trinity
             SNOAnim.Demonhunter_Female_Cast_BackFlip_in,
         };
 
+        public static HashSet<int> ProjectileBlockingGizmos = new HashSet<int>
+        {
+            3048, // a2dun_Zolt_Sand_Wall // 103: TeamId (-3993) i:1 f:0 Value=1 IsValid=True 
+        };
+            
         public static HashSet<int> SlowTimeSNO = new HashSet<int>()
         {
             5422, //slowTime_model_01
@@ -3108,6 +3121,8 @@ namespace Trinity
                 return false;
         }
         #endregion
+
+
     }
 
 

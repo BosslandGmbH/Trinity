@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Trinity.Cache;
+using Trinity.Combat.Abilities.PhelonsPlayground;
 using Trinity.Config;
 using Trinity.Config.Combat;
 using Trinity.DbProvider;
@@ -1467,6 +1468,46 @@ namespace Trinity.Combat.Abilities
 
         private static CombatMode _combatMode;
 
+        /// <summary>
+        /// Walk towards a location with positional bonuses e.g. occulus damage bonus / serenity defensive bonus.
+        /// </summary>
+        /// <param name="power"></param>
+        /// <param name="maxDistance">maximum distance spot can be from player's current position</param>
+        /// <param name="arriveDistance">how close to get to the middle of the spot before stopping walking</param>
+        /// <returns>Trinity power configured to move player towards a buffed position</returns>
+        public static bool TryMoveToBuffedSpot(out TrinityPower power, float maxDistance, float arriveDistance = 20f)
+        {
+            if (IsInCombat && !IsCurrentlyKiting && !IsCurrentlyAvoiding)
+            {
+                Vector3 buffedLocation;
+                if (PhelonUtils.BestBuffPosition(maxDistance, Player.Position, true, out buffedLocation))
+                {
+                    var lastPower = SpellHistory.LastPower;
+                    var distance = buffedLocation.Distance(Player.Position);
+
+                    Logger.LogVerbose(LogCategory.Routine, $"Buffed location found Dist={distance}");
+
+                    if (buffedLocation.Distance(Player.Position) < arriveDistance)
+                    {
+                        Logger.Log(LogCategory.Routine, $"Standing in Buffed Position {buffedLocation} Dist={distance}");
+                    }
+                    else if (lastPower != null && buffedLocation.Distance(CurrentTarget.Position) > lastPower.MinimumRange + CurrentTarget.CollisionRadius + Player.Radius)
+                    {
+                        Logger.LogVerbose(LogCategory.Routine, $"Buffed spot outside attack range for power {lastPower.SNOPower} Range={lastPower.MinimumRange} TimeSinceUse={lastPower.TimeSinceUse} Dist={distance}");
+                    }
+                    else if (!TargetUtil.AnyMobsInRangeOfPosition(Player.Position, KiteDistance + arriveDistance))
+                    {
+                        Logger.LogVerbose(LogCategory.Routine, $"Moving to Buffed Position {buffedLocation} Dist={distance}");
+                        {
+                            power = new TrinityPower(SNOPower.Walk, maxDistance, buffedLocation);
+                            return true;
+                        }
+                    }
+                }
+            }
+            power = null;
+            return false;
+        }
 
 
     }

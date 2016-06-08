@@ -126,7 +126,8 @@ namespace Trinity
         WizardHat,
         Gold,
         PortalDevice,
-        UberReagent
+        UberReagent,
+        ClientEffect
     }
 
     [Flags]

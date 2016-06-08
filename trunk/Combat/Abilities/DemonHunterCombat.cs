@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Trinity.Combat.Abilities.PhelonsPlayground;
 using Trinity.Config.Combat;
 using Trinity.Framework;
 using Trinity.Objects;
@@ -59,6 +60,9 @@ namespace Trinity.Combat.Abilities
                 Logger.LogVerbose(LogCategory.SkillSelection, "ShouldImpaleHighValueTarget");
                 return new TrinityPower(Skills.DemonHunter.Impale.SNOPower, 80f, target.ACDGuid);
             }
+
+            if (TryMoveToBuffedSpot(out power, 50f))
+                return power;
 
             if (ShouldRefreshTaegukBuff)
             {
@@ -124,6 +128,7 @@ namespace Trinity.Combat.Abilities
 
             return DefaultPower;
         }
+
 
         public static bool ShouldImpaleHighValueTarget(out TrinityCacheObject target)
         {

@@ -94,15 +94,18 @@ namespace Trinity.Items
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool TrinityStash(CachedItem item)
         {
-            //ItemEvents.ResetTownRun();
-
             if (item.IsProtected())
+            {
+                Logger.LogDebug($"Not stashing due to item being in a protected slot (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return false;
+            }
 
             if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
+            {
+                Logger.LogDebug($"Not stashing due to inventory locked, keep unidentified setting or participating in loot run. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return false;
+            }
 
-            // Vanity Items
             if (DataDictionary.VanityItems.Any(i => item.InternalName.StartsWith(i)))
             {
                 return TrinityPlugin.Settings.Loot.TownRun.StashVanityItems;
@@ -131,7 +134,7 @@ namespace Trinity.Items
                 Logger.Log($"Wings found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
             }
-            //todo: Add an option to GUI for Staff of Hering Mats
+
             if (DataDictionary.HerdingMatsSnoIds.Contains(item.ActorSnoId))
             {
                 Logger.Log($"Staff of Herding Mat found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
@@ -179,25 +182,8 @@ namespace Trinity.Items
                 tBaseType == TrinityItemBaseType.WeaponRange ||
                 tBaseType == TrinityItemBaseType.WeaponTwoHand);
 
-            //if (TrinityPlugin.Settings.Loot.TownRun.ApplyPickupValidationToStashing)
-            //{
-            //    // Check pickup (in case we accidentally picked it up)
-            //    var pItem = new PickupItem(item, tBaseType, tItemType);
-            //    var pickupCheck = PickupItemValidation(pItem);
-            //    if (!pickupCheck)
-            //    {
-            //        Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (TRASHING: Pickup check failed)", item.Name, item.InternalName);
-            //        return false;
-            //    }
-            //    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (Pickup check passed)", item.Name, item.InternalName);
-            //}
-
             if (item.ItemType == ItemType.KeystoneFragment)
             {
-                //if ((TrinityPlugin.Settings.Loot.TownRun.KeepTieredLootRunKeysInBackpack && item.TieredLootRunKeyLevel >= 1) ||
-                //(TrinityPlugin.Settings.Loot.TownRun.KeepTrialLootRunKeysInBackpack && item.TieredLootRunKeyLevel == 0) ||
-                //(TrinityPlugin.Settings.Loot.TownRun.KeepRiftKeysInBackpack && item.TieredLootRunKeyLevel <= -1))
-                //    return false;
                 return true;
             }
 
@@ -207,18 +193,18 @@ namespace Trinity.Items
                 return false;
             }
 
-            // Stash all unidentified items - assume we want to keep them since we are using an identifier over-ride
             if (item.IsUnidentified)
             {
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (autokeep unidentified items)", item.Name, item.InternalName);
                 return true;
             }
+
             if (tItemType == TrinityItemType.StaffOfHerding)
             {
-
                 Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep staff of herding)", item.Name, item.InternalName, tItemType);
                 return true;
             }
+
             if (tItemType == TrinityItemType.CraftingMaterial || item.IsCraftingReagent)
             {
                 var craftMaterialType = GetCraftingMaterialType(item.ActorSnoId);
@@ -325,7 +311,6 @@ namespace Trinity.Items
 
             if (tItemType == TrinityItemType.CraftingPlan)
             {
-
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep plans)", item.Name, item.InternalName, tItemType);
                 return true;
             }

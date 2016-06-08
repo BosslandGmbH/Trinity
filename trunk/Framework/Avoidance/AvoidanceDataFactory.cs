@@ -50,6 +50,25 @@ namespace Trinity.Framework.Avoidance
 
         private static void CreateData()
         {
+            //ClientEffect Name: ZK_tornado_model-468962 ActorSnoId: 186055, Distance: 22.96034
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Zultun Kule Tornado",
+                IsEnabledByDefault = true,
+                Element = Element.Physical,
+                Handler = new CircularAvoidanceHandler(),
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Tornado",
+                        ActorSnoId = (int)SNOActor.ZK_tornado_model,
+                        Type = PartType.Main,
+                        Radius = 12f,
+                    }
+                }
+            });
 
             /*
             [Trinity 2.41.122] -- Dumping Attribtues for X1_LR_Boss_TerrorDemon_A-12271 (Sno=360636 Ann=-2012478880) at <834.7147, 615.7178, 0.2362415> ----

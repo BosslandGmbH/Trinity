@@ -70,10 +70,13 @@ namespace Trinity
             }
             if (freshObject.CommonData == null)
             {
-                c_IgnoreReason = "ACDNull";
-                return false;
+                if (!DataDictionary.AllowedClientEffects.Contains(freshObject.ActorSnoId))
+                {
+                    c_IgnoreReason = "ACDNull";
+                    return false;
+                }
             }
-            if (!freshObject.CommonData.IsValid)
+            else if (!freshObject.CommonData.IsValid)
             {
                 c_IgnoreReason = "InvalidACD";
                 return false;
@@ -104,19 +107,24 @@ namespace Trinity
                 var guid = freshObject.RActorId;
                 CurrentCacheObject.RActorGuid = guid;
 
-                var annId = commonData.AnnId;
+                var annId = 0;
+                SNOAnim anim = default(SNOAnim);
+
+                if (commonData != null)
+                {
+                    annId = commonData.AnnId;
+                    anim = CurrentCacheObject.CommonData.CurrentAnimation;
+                }
+                
                 CurrentCacheObject.AnnId = annId;
 
                 CurrentCacheObject.ACDGuid = freshObject.ACDId;
                 CurrentCacheObject.InternalName = NameNumberTrimRegex.Replace(freshObject.Name, "");
-                CurrentCacheObject.InternalNameLowerCase = CurrentCacheObject.InternalName.ToLower();
-                
+                CurrentCacheObject.InternalNameLowerCase = CurrentCacheObject.InternalName.ToLower();                
                 CurrentCacheObject.ActorType = freshObject.ActorType;
                 CurrentCacheObject.ACDGuid = freshObject.ACDId;
                 CurrentCacheObject.CommonData = commonData;
-                CurrentCacheObject.GizmoType = CurrentCacheObject.CommonData.GizmoType;
-
-                var anim = CurrentCacheObject.CommonData.CurrentAnimation;
+                CurrentCacheObject.GizmoType = CurrentCacheObject.Object.ActorInfo.GizmoType;                
                 CurrentCacheObject.Animation = anim;
                 CurrentCacheObject.AnimationNameLowerCase = DataDictionary.GetAnimationNameLowerCase(anim);
 
@@ -131,19 +139,21 @@ namespace Trinity
                 return false;
             }
 
+            CurrentCacheObject.LastSeenTime = DateTime.UtcNow;
+            CurrentCacheObject.Position = c_diaObject.Position;
+            CurrentCacheObject.Distance = Player.Position.Distance(CurrentCacheObject.Position);
+
+            if (CurrentCacheObject.ActorType == ActorType.ClientEffect)
+            {
+                CurrentCacheObject.TrinityItemType = TrinityItemType.ClientEffect;
+                return true;
+            }
+
             if (CurrentCacheObject.ActorType == ActorType.Item && DropItems.DroppedItemAnnIds.Contains(freshObject.CommonData.AnnId))
             {
                 c_IgnoreReason = "DroppedThisItem";
                 return false;
             }
-
-            CurrentCacheObject.LastSeenTime = DateTime.UtcNow;
-
-            // Position
-            CurrentCacheObject.Position = c_diaObject.Position;
-
-            // Distance
-            CurrentCacheObject.Distance = Player.Position.Distance(CurrentCacheObject.Position);
 
             float radius;
             if (!DataDictionary.CustomObjectRadius.TryGetValue(CurrentCacheObject.ActorSNO, out radius))

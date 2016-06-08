@@ -23,6 +23,9 @@ namespace Trinity.Cache
 
         public void RefreshFrom(TrinityCacheObject obj)
         {
+            if (obj.CommonData == null)
+                return;
+
             this.IsBountyObjective = obj.CommonData.BountyObjective > 0;
             this.IsMiniMapActive = obj.CommonData.MinimapActive > 0;
         }

@@ -116,6 +116,7 @@ namespace Trinity.Coroutines.Town
 
                 Logger.LogVerbose($"Starting Townrun");
 
+
                 IsInTownVendoring = true;
 
                 while (DateTime.UtcNow.Subtract(TrinityPlugin.LastWorldChangeTime).TotalMilliseconds < 2000 || ZetaDia.IsLoadingWorld || ZetaDia.CurrentWorldSnoId <= 0)
@@ -134,14 +135,18 @@ namespace Trinity.Coroutines.Town
                         Logger.LogError("Something went terribly wrong, no items found");
                         _catastrophicErrorCount++;
                         ActorManager.Reset();
-                        
+
                         if (_catastrophicErrorCount > 2)
                         {
                             Logger.LogError("Unable to recover from error state, still cant read items properly");
                             ZetaDia.Service.Party.LeaveGame(true);
                             return false;
-                        }     
-                        continue;                   
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        ActorManager.Items.ForEach(i => Logger.LogDebug($"Backpack Item: {i.Name} ({i.ActorSnoId} / {i.InternalName}) RawItemType={i.RawItemType} TrinityItemType={i.TrinityItemType}"));
                     }
 
                     await Coroutine.Yield();
