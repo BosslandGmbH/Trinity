@@ -51,6 +51,57 @@ namespace Trinity.Framework.Avoidance
         private static void CreateData()
         {
 
+            /*
+            [Trinity 2.41.122] -- Dumping Attribtues for X1_LR_Boss_TerrorDemon_A-12271 (Sno=360636 Ann=-2012478880) at <834.7147, 615.7178, 0.2362415> ----
+            [Trinity 2.41.122] Attributes (21): 
+             867: PowerBuff2VisualEffectB (-3229) [ PowerSnoId: DemonHunter_Multishot: 77649 ] i:0 f:0 Value=0 IsValid=True 
+             859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: DemonHunter_Passive_ThrillOfTheHunt: 211225 ] i:0 f:0 Value=0 IsValid=True 
+             859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: ItemPassive_Unique_Gem_002U_x1: 403457 ] i:0 f:0 Value=0 IsValid=True 
+             124: HitpointsMaxTotal (-3972) i:0 f:3.80403E+11 Value=380403000000 IsValid=True 
+             122: HitpointsMax (-3974) i:0 f:3.80403E+11 Value=380403000000 IsValid=True 
+             119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 IsValid=True 
+             115: HitpointsCur (-3981) i:0 f:3.401741E+11 Value=340174100000 IsValid=True 
+             1386: IsLootRunBoss (-2710) i:1 f:0 Value=1 IsValid=True 
+             105: Invulnerable (-3991) i:0 f:0 Value=0 IsValid=True 
+             359: ProjectileSpeed (-3737) i:0 f:0 Value=0 IsValid=True 
+             1368: BountyObjective (-2728) i:1 f:0 Value=1 IsValid=True 
+             585: BuffVisualEffect (-3511) i:1 f:0 Value=1 IsValid=True 
+             1091: MinimapActive (-3005) i:1 f:0 Value=1 IsValid=True 
+             317: Slow (-3779) i:0 f:0 Value=0 IsValid=True 
+             57: Level (-4039) i:70 f:0 Value=70 IsValid=True 
+             305: Chilled (-3791) i:0 f:0 Value=0 IsValid=True 
+             300: Stunned (-3796) i:0 f:0 Value=0 IsValid=True 
+             554: LastDamageACD (-3542) i:-2017590488 f:0 Value=-2017591000 IsValid=True 
+             292: Untargetable (-3804) i:0 f:0 Value=0 IsValid=True 
+             800: UsingBossbar (-3296) i:1 f:0 Value=1 IsValid=True 
+             524: SummonerId (-3572) i:-2012478880 f:0 Value=-2012479000 IsValid=True 
+
+            [Trinity 2.41.122] SelectedItem changed from  to X1_LR_Boss_TerrorDemon_A_BreathMinion, Type=Unit Dist=26.11438 IsBossOrEliteRareUnique=True IsAttackable=True
+
+            [Trinity 2.41.122][Animation] TerrorDemon_attack_FireBreath State=Transform By: X1_LR_Boss_TerrorDemon_A_BreathMinion (429010)
+
+            [Trinity 2.41.122] SelectedItem changed from  to x1_LR_boss_terrorDemon_A_projectile-12931, Type=Unknown Dist=0 IsBossOrEliteRareUnique=False IsAttackable=False
+
+             */
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Orlash (Boss)",
+                IsEnabledByDefault = true,
+                Element = Element.Lightning,
+                Handler = new CircularAvoidanceHandler(),
+                Parts = new List<AvoidancePart>
+                {
+                    new AvoidancePart
+                    {
+                        Name = "Breathe Lightning",
+                        ActorSnoId = (int)SNOActor.x1_LR_boss_terrorDemon_A_projectile,
+                        Type = PartType.Projectile,
+                        Radius = 9f,
+                    }
+                }
+            });
+
             //17:43:34.477 INFO  MainWindow [1A6061A4] Type: Monster Name: X1_LR_Boss_westmarchBrute-75354 ActorSnoId: 353874, Distance: 12.13973
             //17:43:34.477 INFO  MainWindow [1A6058FC] Type: ServerProp Name: p2_westmarchBrute_leap_telegraph-76444 ActorSnoId: 428962, Distance: 12.43738
             //17:43:34.477 INFO  MainWindow [1A5F9A8C] Type: Monster Name: Generic_Proxy-76443 ActorSnoId: 4176, Distance: 12.43738
