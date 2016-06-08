@@ -15,7 +15,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
             public static TrinityPower PowerSelector()
             {
-                if (CurrentTarget != null && CurrentTarget.IsUnit)
+                if (CurrentTarget != null && (CurrentTarget.IsUnit || IsFlashfire && CurrentTarget.Distance > 7))
                 {
                     Vector3 portLocation;
                     if (ShouldTeleport(out portLocation))
@@ -35,7 +35,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (ShouldFamiliar)
                     return CastFamiliar;
 
-                if (TalRashasCount == 3 && Legendary.WandOfWoh.IsEquipped)
+                if (IsFlashfire)
                     return TalRasha.Flashfire.PowerSelector();
 
                 if (ShouldArcaneBlast)
@@ -75,7 +75,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 position = Vector3.Zero;
                 if (!CanTeleport)
                     return false;
-
+                if (IsFlashfire)
+                {
+                    Logger.Log("Porting to get closer for Woh");
+                    position = CurrentTarget.Position;
+                    return true;
+                }
                 // Ports to Closest HealthGlobe
                 if (TrinityPlugin.Player.CurrentHealthPct < Settings.Combat.Wizard.HealthGlobeLevel)
                 {
@@ -99,9 +104,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (Skills.Wizard.Archon.CooldownRemaining < Skills.Wizard.Teleport.Cooldown.Milliseconds)
                     return false;
 
-                if (Skills.Wizard.Archon.CanCast() || TalRashasCount >= 3 && Legendary.WandOfWoh.IsEquipped)
+                if (Skills.Wizard.Archon.CanCast())
                 {
-                    Logger.Log("Porting to get closer for Woh or Archon");
+                    Logger.Log("Porting to get closer for Archon");
                     position = PhelonTargeting.BestAoeUnit(45f, true).Position;
                     return true;
                 }
