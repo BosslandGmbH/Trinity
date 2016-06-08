@@ -1495,13 +1495,11 @@ namespace Trinity.Combat.Abilities
                     {
                         Logger.LogVerbose(LogCategory.Routine, $"Buffed spot outside attack range for power {lastPower.SNOPower} Range={lastPower.MinimumRange} TimeSinceUse={lastPower.TimeSinceUse} Dist={distance}");
                     }
-                    else if (!TargetUtil.AnyMobsInRangeOfPosition(Player.Position, KiteDistance + arriveDistance))
+                    else if (KiteDistance <= 0 || !TargetUtil.AnyMobsInRangeOfPosition(buffedLocation, KiteDistance))
                     {
-                        Logger.LogVerbose(LogCategory.Routine, $"Moving to Buffed Position {buffedLocation} Dist={distance}");
-                        {
-                            power = new TrinityPower(SNOPower.Walk, maxDistance, buffedLocation);
-                            return true;
-                        }
+                        Logger.LogVerbose(LogCategory.Routine, $"Moving to Buffed Position {buffedLocation} Dist={distance}");                       
+                        power = new TrinityPower(SNOPower.Walk, maxDistance, buffedLocation);
+                        return true;                       
                     }
                 }
             }
