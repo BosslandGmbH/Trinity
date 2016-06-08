@@ -869,12 +869,13 @@ namespace Trinity.UI.RadarUI
 
                         Thread.Sleep(500);
 
-                        var actor = param as IActor;
-                        if (actor != null)
-                        {
-                            Logger.Log("Actor: {0} was clicked on radar", actor.Name);
-                            SelectedObject = actor;
-                        }
+                        //var actor = param as IActor;
+                        //if (actor != null)
+                        //{
+                        //    Logger.Log("Actor: {0} was clicked on radar", actor.Name);
+                        //    SelectedObject = actor;
+                        //}
+                        SelectedObject = param as TrinityCacheObject;
                     }
                     catch (Exception ex)
                     {

@@ -87,6 +87,11 @@ namespace Trinity.Config
         {
             LoadDefaults();
         }
+
+        public override string ToString()
+        {
+            return base.ToString() + $": {Name}, {Handler?.GetType()}";
+        }
     }
 
     [DataContract(Namespace = "")]
@@ -322,7 +327,12 @@ namespace Trinity.Config
                     {
                         if(reset)
                             (def.Handler as NotifyBase)?.LoadDefaults();
+
                         var newAvoidance = new AvoidanceDataSettingViewModel(def);
+                        
+                        if(data.Any()) // Xml Settings have been loaded
+                            newAvoidance.Handler.LoadDefaults();
+
                         if (def.IsEnabledByDefault)
                             newAvoidance.IsEnabled = true;
                         Avoidances.Add(newAvoidance);
