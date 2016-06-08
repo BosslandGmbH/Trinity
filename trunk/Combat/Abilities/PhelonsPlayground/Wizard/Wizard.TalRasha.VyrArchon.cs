@@ -115,15 +115,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         TimeToElementStart(Element.Cold) > 0)
                         return false;
 
-                    if (Player.PrimaryResourcePct < 0.20 ||
-                        CacheData.Buffs.GetBuffTimeRemainingMilliseconds(SNOPower.Wizard_Archon) < 1500)
+                    if (CacheData.Buffs.HasArchon && CacheData.Buffs.GetBuffTimeRemainingMilliseconds(SNOPower.Wizard_Archon) < 1500)
                         return true;
 
                     if (Sets.ChantodosResolve.IsFullyEquipped)
-                    {
                         return GetHasBuff(SNOPower.P3_ItemPassive_Unique_Ring_021) &&
                                GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021) > 19;
-                    }
 
                     return true;
                 }

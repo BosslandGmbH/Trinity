@@ -12,6 +12,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
         private static int DMOCount = Sets.DelseresMagnumOpus.CurrentBonuses;
         private static int TalRashaStackCount = GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_052);
 
+        public static bool IsFlashfire = TalRashasCount == 3 && Legendary.WandOfWoh.IsEquipped;
+        public static bool isTalVys = TalRashasCount == 3 && VyrsCount >= 1;
+        public static bool IsTwister = TalRashasCount == 3 && Legendary.TheTwistedSword.IsEquipped;
+
+
         public static TrinityPower GetPower()
         {
             if (Player.IsInTown)
@@ -36,10 +41,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 }
                 if (TalRashasCount == 3)
                 {
-                    if (VyrsCount >= 1)
+                    if (isTalVys)
                         power = TalRasha.VyrArchon.PowerSelector();
 
-                    if (Legendary.TheTwistedSword.IsEquipped)
+                    if (IsTwister)
                     {
                         var twisterPosition = IsInParty && PhelonGroupSupport.Monk != null
                         ? PhelonGroupSupport.Monk.Position
@@ -50,7 +55,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                             : TalRasha.EnergyTwister.PowerSelector();
                     }
 
-                    if (Legendary.WandOfWoh.IsEquipped)
+                    if (IsFlashfire)
                         power = new TrinityPower(SNOPower.Walk, 3f, CurrentTarget.Position);
                 }
             }
