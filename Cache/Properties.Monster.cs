@@ -32,6 +32,9 @@ namespace Trinity.Cache
             if (obj.ActorType != ActorType.Monster)
                 return;
 
+            if (obj.CommonData == null)
+                return;
+
             this.IsBoss = obj.CommonData.MonsterQualityLevel == Zeta.Game.Internals.Actors.MonsterQuality.Boss;
 
             // Jondar gets a special forcing to undead so DB doesnt make him an Ally.

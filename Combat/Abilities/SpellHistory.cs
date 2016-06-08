@@ -67,6 +67,8 @@ namespace Trinity.Combat.Abilities
 
         public static SNOPower LastPowerUsed { get; set; }
 
+        public static TrinityPower LastPower => History.OrderBy(s => s.TimeSinceUse).FirstOrDefault(s => s.Power.SNOPower != SNOPower.Walk)?.Power;
+
         public static void RecordSpell(SNOPower power)
         {
             RecordSpell(new TrinityPower(power));

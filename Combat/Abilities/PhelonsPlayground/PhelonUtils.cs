@@ -215,6 +215,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
         internal static List<TrinityCacheObject> GetOculusBuffDiaObjects(float range = 25f, bool objectsInAoe = false)
         {
+            //[1FABA194] Type: ClientEffect Name: p2_itemPassive_unique_ring_017_dome-58267 ActorSnoId: 433966, Distance: 24.701
+
             return
                 (from u in SafeList(objectsInAoe)
                     where u.Distance <= range &&

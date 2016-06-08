@@ -28,6 +28,8 @@ namespace Trinity
 {
     public partial class TrinityPlugin : IPlugin
     {
+        private static uint _lastUpdatedTick;
+
         /// <summary>
         /// This method will add and update necessary information about all available actors. Determines ObjectType, sets ranges, updates blacklists, determines avoidance, kiting, target weighting
         /// and the result is we will have a new target for the Target Handler. Returns true if the cache was refreshed.
@@ -46,7 +48,7 @@ namespace Trinity
                 Logger.LogError("Hero is invalid!");
                 return false;
             }
-
+            
             if (!ZetaDia.IsInGame)
                 return false;
 
@@ -59,6 +61,12 @@ namespace Trinity
             if (!ZetaDia.Me.CommonData.IsValid)
                 return false;
 
+            var lastUpdatedTick = ZetaDia.Memory.Executor.FrameCount;
+            if (_lastUpdatedTick == lastUpdatedTick)
+            {
+                return false;
+            }
+            _lastUpdatedTick = lastUpdatedTick;
 
             using (new PerformanceLogger("RefreshDiaObjectCache"))
             {
@@ -539,16 +547,18 @@ namespace Trinity
 
         private static List<DiaObject> ReadDebugActorsFromMemory()
         {
+            // Note: ClientEffect has no ACD
             return (from o in ZetaDia.Actors.GetActorsOfType<DiaObject>(true, false)
-                    where o.IsValid && o.CommonData != null && o.CommonData.IsValid
+                    where o.IsValid && (o.CommonData == null || o.CommonData.IsValid)
                     orderby o.Distance
                     select o).ToList();
         }
 
         private static IEnumerable<DiaObject> ReadActorsFromMemory()
         {
+            // Note: ClientEffect has no ACD
             return from o in ZetaDia.Actors.GetActorsOfType<DiaObject>(true, false)
-                   where o.IsValid && o.CommonData != null && o.CommonData.IsValid
+                   where o.IsValid && (o.CommonData == null || o.CommonData.IsValid)
                    select o;
         }
         private static void RefreshWaitTimers()
