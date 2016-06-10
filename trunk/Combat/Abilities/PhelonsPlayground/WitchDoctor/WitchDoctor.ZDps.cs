@@ -104,7 +104,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
 
             private static TrinityPower CastMassConfusion
             {
-                get { return new TrinityPower(SNOPower.Witchdoctor_MassConfusion); }
+                get
+                {
+                    var target = PhelonGroupSupport.Monk ?? PhelonTargeting.BestAoeUnit(45f, true);
+                    return new TrinityPower(SNOPower.Witchdoctor_MassConfusion, 35f, target.ACDGuid); }
             }
 
             private static bool ShouldHaunt(out TrinityCacheObject target)

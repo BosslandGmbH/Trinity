@@ -46,7 +46,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 => Skills.Wizard.ArchonStrike.IsActive && TargetUtil.GetClosestUnit(14) != null;
 
             private static TrinityPower CastArcaneStrike => new TrinityPower(Skills.Wizard.ArchonStrike.SNOPower, 14f,
-                PhelonUtils.SlightlyForwardPosition());
+                TargetUtil.GetClosestUnit(14).Position);
 
             private static bool ShouldSlowTime => Skills.Wizard.ArchonSlowTime.IsActive && NeedSlowTime;
 

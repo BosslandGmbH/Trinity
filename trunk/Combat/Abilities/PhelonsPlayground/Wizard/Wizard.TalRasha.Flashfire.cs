@@ -28,10 +28,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                         if (ShouldElectrocute)
                             return CastElectrocute;
                     }
-                    if (ShouldFrostNova)
-                        return CastFrostNova;
                     if (ShouldExplosiveBlast)
                         return CastExplosiveBlast;
+                    if (ShouldFrostNova)
+                        return CastFrostNova;
                     return null;
                 }
 
