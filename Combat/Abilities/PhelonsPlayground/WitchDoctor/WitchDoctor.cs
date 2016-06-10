@@ -12,7 +12,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
     {
         public static bool IszDPS
         {
-            get { return Legendary.AquilaCuirass.IsEquipped && Legendary.LastBreath.IsEquipped && Legendary.Stormshield.IsEquipped; }
+            get { return Legendary.AquilaCuirass.IsEquipped && Legendary.LastBreath.IsEquipped; }
         }
 
         public static TrinityPower GetPower()
