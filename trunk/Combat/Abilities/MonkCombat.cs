@@ -906,8 +906,8 @@ namespace Trinity.Combat.Abilities
                 CurrentTarget.Type != TrinityObjectType.Interactable &&
                 CurrentTarget.Type != TrinityObjectType.HealthWell &&
                 CurrentTarget.Type != TrinityObjectType.Door &&
-                CurrentTarget.TrinityItemType != TrinityItemType.HealthGlobe &&
-                CurrentTarget.TrinityItemType != TrinityItemType.ProgressionGlobe &&
+                CurrentTarget.ItemType != TrinityItemType.HealthGlobe &&
+                CurrentTarget.ItemType != TrinityItemType.ProgressionGlobe &&
 
                 // Avoid rapidly changing targets
                 DateTime.UtcNow.Subtract(_lastTargetChange).TotalMilliseconds > 500 &&
@@ -936,8 +936,8 @@ namespace Trinity.Combat.Abilities
             CurrentTarget.Type != TrinityObjectType.Interactable &&
             CurrentTarget.Type != TrinityObjectType.HealthWell &&
             CurrentTarget.Type != TrinityObjectType.Door &&
-            CurrentTarget.TrinityItemType != TrinityItemType.HealthGlobe && 
-            CurrentTarget.TrinityItemType != TrinityItemType.ProgressionGlobe &&
+            CurrentTarget.ItemType != TrinityItemType.HealthGlobe && 
+            CurrentTarget.ItemType != TrinityItemType.ProgressionGlobe &&
           
             // Avoid rapidly changing targets
             DateTime.UtcNow.Subtract(_lastTargetChange).TotalMilliseconds > 50 &&
@@ -968,8 +968,8 @@ namespace Trinity.Combat.Abilities
             CurrentTarget.Type != TrinityObjectType.Interactable &&
             CurrentTarget.Type != TrinityObjectType.HealthWell &&
             CurrentTarget.Type != TrinityObjectType.Door &&
-            CurrentTarget.TrinityItemType != TrinityItemType.HealthGlobe && 
-            CurrentTarget.TrinityItemType != TrinityItemType.ProgressionGlobe &&
+            CurrentTarget.ItemType != TrinityItemType.HealthGlobe && 
+            CurrentTarget.ItemType != TrinityItemType.ProgressionGlobe &&
           
             // Avoid rapidly changing targets
             DateTime.UtcNow.Subtract(_lastTargetChange).TotalMilliseconds > 50 &&

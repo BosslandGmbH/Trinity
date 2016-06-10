@@ -40,6 +40,47 @@ namespace Trinity.Cache
             }
         }
 
+        public static void SetRiftValue(TrinityCacheObject actor)
+        {
+            if (IsInRift)
+            {
+                double riftValue;
+                TryGetRiftValue(actor, out riftValue);
+                actor.RiftValuePct = riftValue;
+            }
+        }
+
+        public static bool TryGetRiftValue(TrinityCacheObject actor, out double riftValuePct)
+        {
+            riftValuePct = -1;
+            if (actor.IsMinion)
+            {
+                return true;
+            }
+            if (actor.IsBoss && !actor.IsSummoned)
+            {
+                riftValuePct = 10d;
+                return true;
+            }
+            if (actor.IsMinion)
+            {
+                riftValuePct = 0.25d;
+                return true;
+            }
+            if (actor.IsBossOrEliteRareUnique)
+            {
+                riftValuePct = 1d;
+                return true;
+            }
+            if (Values.ContainsKey(actor.ActorSNO))
+            {
+                var baseValue = Values[actor.ActorSNO];
+                riftValuePct = actor.IsBossOrEliteRareUnique ? baseValue * 4 : baseValue;
+                return true;
+            }
+            return false;
+        }
+
         public static Dictionary<int, double> Values = new Dictionary<int, double>()
         {            
             { 297708, 0.395064 },

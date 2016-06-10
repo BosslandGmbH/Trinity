@@ -1442,7 +1442,7 @@ namespace Trinity
                     // * Unit, we need to pick an ability to use and get within range
                     case TrinityObjectType.Unit:
                     {
-                        if (CurrentTarget.Unit.IsHidden)
+                        if (CurrentTarget.IsHidden)
                         {
                             TargetRangeRequired = CurrentTarget.CollisionRadius;
                         }

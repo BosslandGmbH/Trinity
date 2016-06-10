@@ -89,7 +89,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (Sets.TheLegacyOfRaekor.IsFullyEquipped && GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026) < 5)
                     return false;
 
-                target = PhelonTargeting.BestAoeUnit(60, true).IsInLineOfSight()
+                target = PhelonTargeting.BestAoeUnit(60, true).IsInLineOfSight
                     ? PhelonTargeting.BestAoeUnit(60, true)
                     : PhelonUtils.GetBestClusterUnit(10, 60, false, true, false, true);
 

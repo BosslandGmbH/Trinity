@@ -45,10 +45,10 @@ namespace Trinity.Framework.Avoidance
         public const float AvoidanceWeightRadiusFactor = 1f;
         public const float GizmoWeightRadiusFactor = 1f;
         public const int MaxDistance = 70;
-        private readonly Dictionary<int, IActor> _cachedActors = new Dictionary<int, IActor>();
+        private readonly Dictionary<int, TrinityCacheObject> _cachedActors = new Dictionary<int, TrinityCacheObject>();
         private readonly HashSet<int> _currentRActorIds = new HashSet<int>();
 
-        public IEnumerable<IActor> ActiveAvoidanceActors => CurrentAvoidances.SelectMany(a => a.Actors);
+        public IEnumerable<TrinityCacheObject> ActiveAvoidanceActors => CurrentAvoidances.SelectMany(a => a.Actors);
         public HashSet<int> ActiveAvoidanceIds = new HashSet<int>();
 
         private readonly HashSet<GizmoType> _flaggedGizmoTypes = new HashSet<GizmoType>
@@ -121,7 +121,7 @@ namespace Trinity.Framework.Avoidance
                 return;
 
 
-            var source = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Select(a => new TrinityCacheObject(a) as IActor).ToList();
+            var source = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Select(a => new TrinityCacheObject(a) as TrinityCacheObject).ToList();
 
             foreach (var actor in source)
             {
@@ -130,7 +130,7 @@ namespace Trinity.Framework.Avoidance
 
                 var rActorId = actor.RActorGuid;
 
-                IActor existingActor;
+                TrinityCacheObject existingActor;
 
                 _currentRActorIds.Add(rActorId);
 
@@ -147,7 +147,7 @@ namespace Trinity.Framework.Avoidance
                         //Logger.Log($"Updating Existing Actor {actor.Name} OldAnim={existingActor.CurrentAnimation} NewAnim={actor.CurrentAnimation}");
                         existingActor.Position = actor.Position;
                         existingActor.Distance = actor.Distance;
-                        existingActor.CurrentAnimation = actor.CurrentAnimation;
+                        existingActor.Animation = actor.Animation;
                     }
                     continue;
                 }
@@ -165,7 +165,7 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        private static bool IsValid(IActor actor)
+        private static bool IsValid(TrinityCacheObject actor)
         {
             return !actor.IsDead && (actor.CommonData == null || actor.CommonData.IsValid && !actor.CommonData.IsDisposed);
         }
@@ -330,7 +330,7 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        private void UpdateGizmoFlags(IActor actor)
+        private void UpdateGizmoFlags(TrinityCacheObject actor)
         {
             var isGizmo = _flaggedGizmoTypes.Contains(actor.GizmoType);
             if (!isGizmo)
@@ -350,7 +350,7 @@ namespace Trinity.Framework.Avoidance
                         node.AddNodeFlags(AvoidanceFlags.NavigationBlocking);
                     }
 
-                    if (actor.Type != ObjectType.Door || !actor.IsUsed)
+                    if (actor.ObjectType != ObjectType.Door || !actor.IsUsed)
                     {
                         node.AddNodeFlags(AvoidanceFlags.ClosedDoor);
                     }
@@ -358,7 +358,7 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        public void UpdateMonsterFlags(IActor actor, AvoidanceLayer layer)
+        public void UpdateMonsterFlags(TrinityCacheObject actor, AvoidanceLayer layer)
         {
             if (actor.ActorType != ActorType.Monster)
                 return;
@@ -374,7 +374,7 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        public void UpdateKiteFromFlags(IActor actor, AvoidanceLayer layer)
+        public void UpdateKiteFromFlags(TrinityCacheObject actor, AvoidanceLayer layer)
         {
             if (Settings.KiteMode == KiteMode.Never)
                 return;
@@ -417,9 +417,9 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        private void UpdateGlobeFlags(IActor actor)
+        private void UpdateGlobeFlags(TrinityCacheObject actor)
         {
-            if (actor.Type != ObjectType.HealthGlobe)
+            if (actor.ObjectType != ObjectType.HealthGlobe)
                 return;
 
             foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.Radius*GlobeWeightRadiusFactor))

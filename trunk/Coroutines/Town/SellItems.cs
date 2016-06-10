@@ -81,7 +81,8 @@ namespace Trinity.Coroutines.Town
             }
 
             if (UIElements.VendorWindow.IsVisible)
-            {       
+            {
+                await Coroutine.Sleep(1000);
                 var freshItems = Inventory.Backpack.Items.Where(ShouldSell);
                 foreach (var item in freshItems)
                 {

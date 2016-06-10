@@ -32,12 +32,12 @@ namespace Trinity.Framework.Avoidance.Handlers
         {
             foreach (var actor in avoidance.Actors)
             {
-                var part = avoidance.Data.GetPart(actor.CurrentAnimation);
+                var part = avoidance.Data.GetPart(actor.Animation);
                 var radius = Math.Max(part.Radius, actor.Radius);
                 var finalRadius = radius*DistanceMultiplier;
                 var nodes = grid.GetNodesInRadius(actor.Position, finalRadius);
 
-                if (actor.CurrentAnimation != part.Animation)
+                if (actor.Animation != part.Animation)
                     continue;
 
                 if (Prioritize)

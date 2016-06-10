@@ -35,21 +35,21 @@ namespace Trinity.Framework.Avoidance.Handlers
             {
                 try
                 {
-                    Logger.Log($"[BeamAvoidanceHandler] Actor={actor.Name} ActorCurrentAnimation={actor.CurrentAnimation} DiaAnim={actor.CommonData.CurrentAnimation}");
+                    Logger.Log($"[BeamAvoidanceHandler] Actor={actor.InternalName} ActorCurrentAnimation={actor.Animation} DiaAnim={actor.CommonData.CurrentAnimation}");
 
-                    var part = avoidance.Data.GetPart(actor.CurrentAnimation);
-                    if (actor.CurrentAnimation != part.Animation)
+                    var part = avoidance.Data.GetPart(actor.Animation);
+                    if (actor.Animation != part.Animation)
                         continue;
                     
                     var radius = Math.Max(part.Radius, actor.Radius) * DistanceMultiplier;
-                    var nonCachedRotation = actor.DiaUnit.Movement.Rotation;
+                    var nonCachedRotation = actor.Unit.Movement.Rotation;
                     var arcDegrees = Math.Max(15, part.AngleDegrees) * ArcMultiplier;
                     var nodes = grid.GetConeAsNodes(actor.Position, arcDegrees, radius, nonCachedRotation);
                     grid.FlagNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, 10);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogDebug($"AnimationConeAvoidanceHandler Exception for Actor: {actor.Name}. {ex}");
+                    Logger.LogDebug($"AnimationConeAvoidanceHandler Exception for Actor: {actor.InternalName}. {ex}");
                 }
             }
         }

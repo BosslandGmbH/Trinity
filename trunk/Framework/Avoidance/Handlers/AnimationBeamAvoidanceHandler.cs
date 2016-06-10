@@ -36,19 +36,19 @@ namespace Trinity.Framework.Avoidance.Handlers
                 {
                     //Logger.Log($"[BeamAvoidanceHandler] Actor={actor.Name} ActorCurrentAnimation={actor.CurrentAnimation} DiaAnim={actor.CommonData.CurrentAnimation}");
 
-                    var part = avoidance.Data.GetPart(actor.CurrentAnimation);
-                    if (actor.CurrentAnimation != part.Animation)
+                    var part = avoidance.Data.GetPart(actor.Animation);
+                    if (actor.Animation != part.Animation)
                         continue;
 
                     var radius = Math.Max(part.Radius, actor.Radius) * DistanceMultiplier;
-                    var nonCachedRotation = actor.DiaUnit.Movement.Rotation;
+                    var nonCachedRotation = actor.Unit.Movement.Rotation;
                     var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, radius, nonCachedRotation)).SelectMany(n => n.AdjacentNodes);
 
                     grid.FlagNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, 10);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogDebug($"AnimationBeamAvoidanceHandler Exception reading Animation/Rotation for actor: {actor.Name}");
+                    Logger.LogDebug($"AnimationBeamAvoidanceHandler Exception reading Animation/Rotation for actor: {actor.InternalName}");
                 }
             }
         }

@@ -241,7 +241,7 @@ namespace Trinity.Coroutines.Town
 
             if (!CanTownRun())
             {
-                Logger.LogDebug("Can't town run.");
+                Logger.LogVerbose("Can't town run.");
                 return false;
             }
 
@@ -295,7 +295,7 @@ namespace Trinity.Coroutines.Town
             {
                 if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift)
                 {
-                    Logger.LogDebug("Can't townrun while in greater rift!");
+                    Logger.LogVerbose("Can't townrun while in greater rift!");
                     DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(5);
                     return false;
                 }

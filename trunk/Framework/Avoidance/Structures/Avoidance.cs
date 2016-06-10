@@ -9,7 +9,7 @@ namespace Trinity.Framework.Avoidance.Structures
     {
         public DateTime CreationTime;        
         public AvoidanceData Data;
-        public List<IActor> Actors = new List<IActor>();
+        public List<TrinityCacheObject> Actors = new List<TrinityCacheObject>();
         public Vector3 StartPosition;
         public bool IsImmune;
     }

@@ -46,7 +46,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         /// <summary>
         /// RadarObject wraps a TrinityObject to add a canvas plot location.
         /// </summary>
-        public RadarObject(IActor obj, CanvasData canvasData)
+        public RadarObject(TrinityCacheObject obj, CanvasData canvasData)
         {
             Actor = obj;
             Morph.CanvasData = canvasData;
@@ -68,6 +68,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             }
         }
 
-        public IActor Actor { get; set; }
+        public TrinityCacheObject Actor { get; set; }
     }
 }

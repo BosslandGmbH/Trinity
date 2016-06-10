@@ -21,6 +21,8 @@ namespace Trinity.Framework.Avoidance
         bool ShouldAvoid { get; }
         bool ShouldKite { get; }
         TimeSpan TimeSinceLastAvoid { get; }
+        TimeSpan TimeSinceLastKite { get; }
+        bool IsKiteOnCooldown { get; }
         Vector3 SafeSpot { get; }
 
         bool TryGetSafeSpot(out Vector3 position,
@@ -51,6 +53,8 @@ namespace Trinity.Framework.Avoidance
         public static DateTime LastKiteTime = DateTime.MinValue;
 
         public TimeSpan TimeSinceLastAvoid => DateTime.UtcNow.Subtract(LastAvoidTime);
+        public TimeSpan TimeSinceLastKite => DateTime.UtcNow.Subtract(LastKiteTime);
+        public bool IsKiteOnCooldown => Settings.KiteDistance > 0 && Core.Avoidance.Avoider.TimeSinceLastKite.TotalMilliseconds > Settings.KiteStutterDuration;
 
         private readonly PerFrameCachedValue<bool> _shouldKite = new PerFrameCachedValue<bool>(GetShouldKite);
         private readonly PerFrameCachedValue<bool> _shouldAvoid = new PerFrameCachedValue<bool>(GetShouldAvoid);
@@ -231,7 +235,7 @@ namespace Trinity.Framework.Avoidance
 
             if (!CombatBase.IsInCombat)
                 return false;
-
+            
             if (CombatBase.IsDoingGoblinKamakazi)
             {
                 Logger.Log(LogCategory.Avoidance, "Not Kiting because goblin kamakazi");
@@ -262,26 +266,47 @@ namespace Trinity.Framework.Avoidance
                 return false;
             }
 
-            var isAtKiteHealth = TrinityPlugin.Player.CurrentHealthPct*100 <= Settings.KiteHealth;
+            var playerHealthPct = TrinityPlugin.Player.CurrentHealthPct*100;
+            if (playerHealthPct > 50)
+            {
+                // Restrict kiting when the current target is on the edge of line of sight
+                // This should help with flip-flopping around corners and doorways.
+
+                var from = TrinityPlugin.Player.Position;
+                var to = CombatBase.CurrentTarget.Position;
+
+                var losAngleA = MathEx.WrapAngle((float)(MathUtil.FindDirectionRadian(from, to) - Math.Round(Math.PI, 5) / 2));
+                var losPositionA = MathEx.GetPointAt(from, CombatBase.CurrentTarget.Distance, losAngleA);
+                if (!Core.Avoidance.Grid.CanRayCast(from, losPositionA))
+                    return false;
+
+                var losAngleB = MathEx.WrapAngle((float)(MathUtil.FindDirectionRadian(from, to) + Math.Round(Math.PI, 5) / 2));
+                var losPositionB = MathEx.GetPointAt(from, CombatBase.CurrentTarget.Distance, losAngleB);
+                if (!Core.Avoidance.Grid.CanRayCast(from, losPositionB))
+                    return false;
+            }
+
+            var isAtKiteHealth = playerHealthPct <= Settings.KiteHealth;
             if (isAtKiteHealth && TargetZDif < 4 && Settings.KiteMode != KiteMode.Never)
             {
                 var canSeeTarget = CombatBase.CurrentTarget == null || Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, CombatBase.CurrentTarget.Position);
-                if (canSeeTarget && Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.KiteFrom))
+                if (canSeeTarget)
                 {
-                    if (DateTime.UtcNow.Subtract(LastKiteTime).TotalMilliseconds > Settings.KiteStutterDelay)
+                    if (Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.KiteFrom))
                     {
-                        Logger.Log(LogCategory.Avoidance, "Kite Shutter Triggered");
-                        LastKiteTime = DateTime.UtcNow;
-                        KiteStutterCooldownEndTime = DateTime.UtcNow.AddMilliseconds(Settings.KiteStutterDuration);
-                        return true;
-                    }
+                        if (DateTime.UtcNow.Subtract(LastKiteTime).TotalMilliseconds > Settings.KiteStutterDelay)
+                        {
+                            Logger.Log(LogCategory.Avoidance, "Kite Shutter Triggered");
+                            LastKiteTime = DateTime.UtcNow;
+                            KiteStutterCooldownEndTime = DateTime.UtcNow.AddMilliseconds(Settings.KiteStutterDuration);
+                            return true;
+                        }
 
-                    Logger.Log(LogCategory.Avoidance, "IsStandingInFlags... KiteFromNode");
-                    LastAvoidTime = DateTime.UtcNow;
-                    {
+                        Logger.Log(LogCategory.Avoidance, "IsStandingInFlags... KiteFromNode");
+                        LastAvoidTime = DateTime.UtcNow;
                         return true;
                     }
-                }
+                } 
             }
             return false;
         }

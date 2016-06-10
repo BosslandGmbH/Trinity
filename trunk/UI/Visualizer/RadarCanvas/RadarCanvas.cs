@@ -290,13 +290,13 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
         public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.Register("SelectedItem",
-                typeof(IActor),
+                typeof(TrinityCacheObject),
                 typeof(RadarCanvas),
                 new FrameworkPropertyMetadata(default(IActor), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
 
-        public IActor SelectedItem
+        public TrinityCacheObject SelectedItem
         {
-            get { return (IActor)GetValue(SelectedItemProperty); }
+            get { return (TrinityCacheObject)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }            
         }
 
@@ -408,7 +408,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     if (DesiredSize.Height <= 0 || DesiredSize.Width <= 0)
                         return;
 
-                    if (!IsVisible || TrinityPlugin.Player.IActor == null || TrinityPlugin.Player.IsLoadingWorld || !TrinityPlugin.Player.IsInGame)
+                    if (!IsVisible || TrinityPlugin.Player.Actor == null || TrinityPlugin.Player.IsLoadingWorld || !TrinityPlugin.Player.IsInGame)
                         return;
 
                     Objects.Clear();
@@ -419,7 +419,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     // Find the actor who should be in the center of the radar
                     // and whos position all other points should be plotted against.
 
-                    var center = ItemsSource.OfType<IActor>().FirstOrDefault(u => u.IsMe);
+                    var center = ItemsSource.OfType<TrinityCacheObject>().FirstOrDefault(u => u.IsMe);
                     if (center == null)
                         return;
                     
@@ -432,7 +432,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                     var updatedSelection = false;
 
-                    foreach (var trinityObject in ItemsSource.OfType<IActor>())
+                    foreach (var trinityObject in ItemsSource.OfType<TrinityCacheObject>())
                     {
                         var radarObject = new RadarObject(trinityObject, CanvasData);
 
@@ -1822,7 +1822,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             var actorRadius = radarObject.Actor.CollisionRadius * GridSize;
             dc.DrawEllipse(brush, null, radarObject.Point, actorRadius, actorRadius);
             dc.DrawEllipse(BlackBrush, null, radarObject.Point, GridSize, GridSize);
-            var headingWorldPositionAtRadius = MathEx.GetPointAt(radarObject.Actor.Position, radarObject.Actor.CollisionRadius, radarObject.Actor.RotationRadians);
+            var headingWorldPositionAtRadius = MathEx.GetPointAt(radarObject.Actor.Position, radarObject.Actor.CollisionRadius, radarObject.Actor.Rotation);
             dc.DrawLine(RadarResources.BlackPen, radarObject.Point, headingWorldPositionAtRadius.ToCanvasPoint());
             HitTester.AddEllipse(radarObject, radarObject.Point, actorRadius, actorRadius);
         }
@@ -1944,7 +1944,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Misc) && TrinityPlugin.Player.ActorClass == ActorClass.Wizard)
                     {
-                        var tActor = radarObject.Actor as TrinityCacheObject;
+                        var tActor = radarObject.Actor;
                         if (tActor != null)
                         {
                             if (tActor.ActorAttributes.HasFirebirdPermanent)
@@ -1963,8 +1963,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 }
                 else if (radarObject.Actor.ActorType == ActorType.Projectile && VisibilityFlags.HasFlag(RadarVisibilityFlags.Projectile))
                 {
-                    var start = MathEx.GetPointAt(radarObject.Actor.Position, GridSize * 0.5f, radarObject.Actor.RotationRadians);
-                    var end = MathEx.GetPointAt(radarObject.Actor.Position, GridSize * 0.5f, radarObject.Actor.RotationRadians - (int)Math.PI);
+                    var start = MathEx.GetPointAt(radarObject.Actor.Position, GridSize * 0.5f, radarObject.Actor.Rotation);
+                    var end = MathEx.GetPointAt(radarObject.Actor.Position, GridSize * 0.5f, radarObject.Actor.Rotation - (int)Math.PI);
                     dc.DrawLine(RadarResources.ProjectilePen, start.ToCanvasPoint(), end.ToCanvasPoint());
                 }
                 else if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Misc) && !radarObject.Actor.IsMe)
@@ -2019,7 +2019,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
         private static void DrawActorLabel(DrawingContext dc, CanvasData canvas, RadarObject radarObject, Brush brush, double yOffset = 0)
         {
-            var text = radarObject.Actor.IsGizmo ? radarObject.Actor.Type.ToString() : radarObject.Actor.Name;
+            var text = radarObject.Actor.IsGizmo ? radarObject.Actor.Type.ToString() : radarObject.Actor.InternalName;
             if (text == null)
                 return;
 

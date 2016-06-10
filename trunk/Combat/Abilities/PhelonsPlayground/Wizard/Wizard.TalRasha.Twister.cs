@@ -49,7 +49,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     return PhelonUtils.GetTwisterDiaObjects(25, true)
                         .OrderBy(x => x.Position.Distance(PhelonTargeting.BestAoeUnit(45, true).Position))
                         .FirstOrDefault(
-                            x => x.Position.Distance(PhelonTargeting.BestAoeUnit(45, true).Position) < 7 && x.IsInLineOfSight());
+                            x => x.Position.Distance(PhelonTargeting.BestAoeUnit(45, true).Position) < 7 && x.IsInLineOfSight);
                 }
 
                 private static Vector3 ActualLocation

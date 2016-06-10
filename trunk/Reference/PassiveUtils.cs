@@ -8,7 +8,7 @@ using Trinity.Technicals;
 
 namespace Trinity.Reference
 {
-    class PassiveUtils
+    public class PassiveUtils
     {
 
         /// <summary>

@@ -387,7 +387,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
             try
             {
-                switch (radarObject.Actor.Type)
+                switch (radarObject.Actor.ObjectType)
                 {
                     case ObjectType.Avoidance:
                         res.Brush = AvoidanceBrush;

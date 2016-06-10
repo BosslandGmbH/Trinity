@@ -171,7 +171,7 @@ namespace Trinity
                     TrinityCacheObject bestTarget = null;
                     foreach (var cacheObject in ObjectCache.Where(x => !x.IsPlayer))
                     {
-                        if (cacheObject == null || !cacheObject.IsFullyValid())
+                        if (cacheObject == null || !cacheObject.IsValid)
                             continue;
 
                         cacheObject.Weight = 0;
@@ -213,7 +213,7 @@ namespace Trinity
                             continue;
                         }
 
-                        if (cacheObject.TrinityItemType == TrinityItemType.HoradricRelic && Player.BloodShards >= Player.MaxBloodShards)
+                        if (cacheObject.ItemType == TrinityItemType.HoradricRelic && Player.BloodShards >= Player.MaxBloodShards)
                         {
                             cacheObject.Weight = 0;
                             cacheObject.WeightInfo += string.Format("Max BloodShards ", cacheObject.InternalName);
@@ -236,8 +236,7 @@ namespace Trinity
                                 {
                                     #region Unit Variables
 
-                                    bool isInHotSpot = GroupHotSpots.CacheObjectIsInHotSpot(cacheObject) ||
-                                                       cacheObject.IsNavBlocking();
+                                    bool isInHotSpot = GroupHotSpots.CacheObjectIsInHotSpot(cacheObject) || cacheObject.IsNavBlocking();
                                     bool elitesInRangeOfUnit = !CombatBase.IgnoringElites &&
                                                                ObjectCache.Any(
                                                                    u =>
@@ -1913,8 +1912,6 @@ namespace Trinity
                 // todo fix this its causing massive bouts of the bot doing nothing while standing in groups of mobs.             
                 //if(!cacheObject.IsUnit)
                 //    return BlockingMonsterObjects(cacheObject) * -100d;
-
-
 
                 if (!cacheObject.IsUnit || PlayerMover.IsCompletelyBlocked && cacheObject.Distance > 15f && !cacheObject.IsEliteRareUnique && Settings.Combat.Misc.AttackWhenBlocked)
                     return -MaxWeight;

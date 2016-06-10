@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Trinity.Cache;
 using Trinity.DbProvider;
 using Trinity.Helpers;
 using Trinity.Technicals;
@@ -26,13 +27,10 @@ namespace Trinity
 
             // Always set this, otherwise we divide by zero later
             CurrentCacheObject.KillRange = CurrentBotKillRange;
-
-            var quality = CurrentCacheObject.CommonData.MonsterQualityLevel;
+            CurrentCacheObject.MonsterQuality = CurrentCacheObject.CommonData.MonsterQualityLevel;
 
             // See if this is a boss
-            CurrentCacheObject.IsBoss = DataDictionary.BossIds.Contains(CurrentCacheObject.ActorSNO) || CurrentCacheObject.InternalNameLowerCase.Contains("boss") || quality == Zeta.Game.Internals.Actors.MonsterQuality.Boss;
-
-            CurrentCacheObject.IsChampion = quality == Zeta.Game.Internals.Actors.MonsterQuality.Champion;
+            CurrentCacheObject.IsBoss = DataDictionary.BossIds.Contains(CurrentCacheObject.ActorSNO) || CurrentCacheObject.InternalNameLowerCase.Contains("boss") || CurrentCacheObject.MonsterQuality == MonsterQuality.Boss;
 
             if (CurrentCacheObject.IsBoss)
                 CurrentCacheObject.KillRange = CurrentCacheObject.RadiusDistance + 10f;
@@ -58,6 +56,7 @@ namespace Trinity
                 Logger.LogDebug(LogCategory.CacheManagement, "Error while reading Rotation/Facing: {0}", ex.ToString());
             }
 
+            RiftProgression.SetRiftValue(CurrentCacheObject);
 
             //string teamIdHash = "teamId.RActorId=" + CurrentCacheObject.RActorGuid + ".ActorSnoId=" + CurrentCacheObject.ActorSNO + ".WorldId=" + Player.WorldID;
 
