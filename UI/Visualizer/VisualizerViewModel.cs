@@ -50,7 +50,7 @@ namespace Trinity.UI.RadarUI
     [Zeta.XmlEngine.XmlElement("VisualizerViewModel")]
     public class VisualizerViewModel : XmlSettings, INotifyPropertyChanged
     {
-        private ObservableCollection<IActor> _objects;
+        private ObservableCollection<TrinityCacheObject> _objects;
         private static VisualizerViewModel _instance;
         private int _windowWidth;
         private int _windowHeight;
@@ -62,15 +62,15 @@ namespace Trinity.UI.RadarUI
         private DateTime LastRefresh = DateTime.MinValue;
         private string _pauseButtonText = "Pause";
         private bool _isPaused;
-        private IActor _selectedObject;
+        private TrinityCacheObject _selectedObject;
         private ExpandingPanels _expandedPanel;
         private GridColumnFlags _selectedColumns;
         private GridColumnFlags _selectedSort;
         private bool _showPriority;
         private bool _showIgnored;
         private bool _showUncategorized;
-        private IActor _currentTarget;
-        private IActor _player;
+        private TrinityCacheObject _currentTarget;
+        private TrinityCacheObject _player;
         private string _blacklistButtonText;
         private bool _isBlacklisted;
         private SortDirection _sortDirection;
@@ -83,7 +83,7 @@ namespace Trinity.UI.RadarUI
             BotMain.OnStart += BotMain_OnStart;
             BotMain.OnStop += BotMain_OnStop;
 
-            NotInCacheObjects = new List<IActor>();
+            NotInCacheObjects = new List<TrinityCacheObject>();
 
             if (BotMain.IsRunning)
                 IsBotRunning = true;
@@ -176,10 +176,10 @@ namespace Trinity.UI.RadarUI
 
                 LastRefresh = DateTime.UtcNow;
 
-                var objects = TrinityPlugin.ObjectCache.Select(o => o.IActor).ToList();
+                var objects = TrinityPlugin.ObjectCache.ToList();
                 objects = ApplyFilter(objects);
                 var queryableObjects = ApplySort(objects.AsQueryable());
-                Objects = new ObservableCollection<IActor>(queryableObjects);
+                Objects = new ObservableCollection<TrinityCacheObject>(queryableObjects);
 
                 if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache) && DateTime.UtcNow.Subtract(LastUpdatedNotInCacheObjects).TotalSeconds > 1)
                 {
@@ -208,13 +208,13 @@ namespace Trinity.UI.RadarUI
 
                 CurrentTarget = CombatBase.CurrentTarget;
 
-                Player = TrinityPlugin.Player.IActor;
+                Player = TrinityPlugin.Player.Actor;
                 PlayerPositionX = Player.Position.X;
                 PlayerPositionY = Player.Position.Y;
                 PlayerPositionZ = Player.Position.Z;
                 WorldSnoId = TrinityPlugin.Player.WorldID;
                 LevelAreaSnoId = TrinityPlugin.Player.LevelAreaId;
-                PlayerRotation = MathUtil.RadianToDegree(Player.RotationRadians);
+                PlayerRotation = MathUtil.RadianToDegree(Player.Rotation);
 
                 IsStuck = Navigator.StuckHandler.IsStuck;
                 IsBlocked = PlayerMover.IsBlocked;
@@ -223,14 +223,14 @@ namespace Trinity.UI.RadarUI
                 if (!_listeningForStatChanges)
                     AddStatChangerListeners();
 
-                OnPropertyChanged("CurrentTarget");
-                OnPropertyChanged("SelectedObject");
+                OnPropertyChanged(nameof(CurrentTarget));
+                OnPropertyChanged(nameof(SelectedObject));
             }
         }
 
         public DateTime LastUpdatedNotInCacheObjects = DateTime.MinValue;
 
-        public List<IActor> NotInCacheObjects
+        public List<TrinityCacheObject> NotInCacheObjects
         {
             get { return _notInCacheObjects; }
             set { SetField(ref _notInCacheObjects, value); }
@@ -319,15 +319,15 @@ namespace Trinity.UI.RadarUI
         }
 
         [XmlIgnore]
-        public IActor Player
+        public TrinityCacheObject Player
         {
             get { return _player; }
             set { SetField(ref _player, value); }
         }
 
-        private List<IActor> ApplyFilter(IList<IActor> objects)
+        private List<TrinityCacheObject> ApplyFilter(IList<TrinityCacheObject> objects)
         {
-            var result = new List<IActor>();
+            var result = new List<TrinityCacheObject>();
             var playerGuid = ZetaDia.ActivePlayerACDId;
 
             foreach (var o in objects)
@@ -358,14 +358,14 @@ namespace Trinity.UI.RadarUI
         }
 
         [XmlIgnore]
-        public ObservableCollection<IActor> Objects
+        public ObservableCollection<TrinityCacheObject> Objects
         {
             get { return _objects; }
             set { SetField(ref _objects, value); }
         }
 
         [XmlIgnore]
-        public IActor SelectedObject
+        public TrinityCacheObject SelectedObject
         {
             get { return _selectedObject; }
             set
@@ -670,7 +670,7 @@ namespace Trinity.UI.RadarUI
             All = ~(-1 << 14)
         }
 
-        private IEnumerable<IActor> ApplySort(IQueryable<IActor> collection)
+        private IEnumerable<TrinityCacheObject> ApplySort(IQueryable<TrinityCacheObject> collection)
         {
             var sortProp = SelectedSort.ToString();
             if (sortProp == "None" || sortProp == "All")
@@ -737,7 +737,7 @@ namespace Trinity.UI.RadarUI
         }
 
         [XmlIgnore]
-        public IActor CurrentTarget
+        public TrinityCacheObject CurrentTarget
         {
             get { return _currentTarget; }
             set { SetField(ref _currentTarget, value); }
@@ -1008,7 +1008,7 @@ namespace Trinity.UI.RadarUI
         private float _playerPositionZ;
         private float _playerPositionY;
         private float _playerPositionX;
-        private List<IActor> _notInCacheObjects;
+        private List<TrinityCacheObject> _notInCacheObjects;
 
 
         public bool StartThreadAllowed

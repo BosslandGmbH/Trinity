@@ -56,7 +56,6 @@ namespace Trinity
             public List<ACDItem> Other { get; private set; }
             public HashSet<int> EquippedIds { get; private set; }
             public HashSet<int> KanaisCubeIds { get; private set; } 
-
             public bool IsGroundItemOverload { get; private set; }
 
             public void UpdateInventoryCache()

@@ -76,7 +76,7 @@ namespace Trinity.Framework.Avoidance.Handlers
             }
         }
 
-        private Rotator CreateNewRotator(IActor actor)
+        private Rotator CreateNewRotator(TrinityCacheObject actor)
         {
             //Logger.Log("Creating New Rotator");
 
@@ -86,7 +86,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 RotateAmount = 360,
                 RotateAntiClockwise = actor.InternalName.ToLower().Contains("_reverse"),
                 DebugLogging = false,
-                StartAngleDegrees = actor.DiaObject.Movement.RotationDegrees
+                StartAngleDegrees = actor.Object.Movement.RotationDegrees
             };
         }
 

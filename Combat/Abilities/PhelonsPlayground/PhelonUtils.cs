@@ -85,7 +85,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         internal static List<TrinityCacheObject> MobsBetweenRange(float startRange = 15f, float endRange = 25)
         {
             return (from u in SafeList(true)
-                where u.IsUnit && u.IsFullyValid() &&
+                where u.IsUnit && u.IsValid &&
                       u.Position.Distance(TrinityPlugin.Player.Position) <= endRange &&
                       u.Position.Distance(TrinityPlugin.Player.Position) >= startRange
                 select u).ToList();
@@ -146,7 +146,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             return (from u in SafeList(ignoreElites)
                 where u.IsUnit &&
-                      u.RadiusDistance <= maxRange && u.IsInLineOfSight() &&
+                      u.RadiusDistance <= maxRange && u.IsInLineOfSight &&
                       !(ignoreUnitsInAoE && u.IsStandingInAvoidance) &&
                       !(ignoreElites && u.IsEliteRareUnique)
                 orderby u.CountUnitsInFront() descending
@@ -184,7 +184,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                     where u.IsUnit && //u.HasBeenInLoS &&
                           ((useWeights && u.Weight > 0) || !useWeights) &&
                           !(ignoreElites && u.IsEliteRareUnique) &&
-                          (!inLineOfSight || u.IsInLineOfSight()) &&
+                          (!inLineOfSight || u.IsInLineOfSight) &&
                           u.Distance <= maxSearchRange && !u.IsSafeSpot
                     orderby
                         u.NearbyUnitsWithinDistance(clusterRadius) descending,

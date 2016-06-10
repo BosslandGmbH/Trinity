@@ -145,7 +145,7 @@ namespace Trinity
 
             if (CurrentCacheObject.ActorType == ActorType.ClientEffect)
             {
-                CurrentCacheObject.TrinityItemType = TrinityItemType.ClientEffect;
+                CurrentCacheObject.ItemType = TrinityItemType.ClientEffect;
                 return true;
             }
 
@@ -435,7 +435,7 @@ namespace Trinity
             CurrentCacheObject.OneHanded = c_IsOneHandedItem;
             CurrentCacheObject.RActorGuid = CurrentCacheObject.RActorGuid;
             CurrentCacheObject.Radius = CurrentCacheObject.Radius;
-            CurrentCacheObject.TrinityItemType = _cItemTinityItemType;
+            CurrentCacheObject.ItemType = _cItemTinityItemType;
             CurrentCacheObject.TwoHanded = c_IsTwoHandedItem;
             CurrentCacheObject.Type = CurrentCacheObject.Type;
             CurrentCacheObject.IsAncient = c_IsAncient;
@@ -740,7 +740,7 @@ namespace Trinity
                         //    break;
                         //}
                         _cItemTinityItemType = TrinityItemManager.DetermineItemType(CurrentCacheObject.InternalName, c_DBItemType, c_item_tFollowerType);
-                        var isPickupNoClick = DataDictionary.NoPickupClickTypes.Contains(_cItemTinityItemType);
+                        var isPickupNoClick = DataDictionary.NoPickupClickItemTypes.Contains(_cItemTinityItemType);
 
                         if (!isPickupNoClick && !TrinityItemManager.CachedIsValidTwoSlotBackpackLocation)
                         {
@@ -847,7 +847,7 @@ namespace Trinity
                 }
 
                 // Always pickup globes
-                if (CurrentCacheObject.TrinityItemType == TrinityItemType.ProgressionGlobe || CurrentCacheObject.Type == TrinityObjectType.ProgressionGlobe)
+                if (CurrentCacheObject.ItemType == TrinityItemType.ProgressionGlobe || CurrentCacheObject.Type == TrinityObjectType.ProgressionGlobe)
                 {
                     c_IgnoreSubStep = "NoLoSProgressionGlobe";
                     return true;

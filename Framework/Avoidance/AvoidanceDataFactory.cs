@@ -22,7 +22,7 @@ namespace Trinity.Framework.Avoidance
 
         public static readonly Dictionary<int, AvoidancePart> AvoidanceDataDictionary = new Dictionary<int, AvoidancePart>();
 
-        public static bool TryCreateAvoidance(List<IActor> actors, IActor actor, out Structures.Avoidance avoidance)
+        public static bool TryCreateAvoidance(List<TrinityCacheObject> actors, TrinityCacheObject actor, out Structures.Avoidance avoidance)
         {
             avoidance = null;
 
@@ -35,7 +35,7 @@ namespace Trinity.Framework.Avoidance
                 Data = data,
                 CreationTime = DateTime.UtcNow,
                 StartPosition = actor.Position,
-                Actors = new List<IActor> { actor },
+                Actors = new List<TrinityCacheObject> { actor },
                 IsImmune = TrinityPlugin.Player.ElementImmunity.Contains(data.Element)
             };
 
@@ -1206,7 +1206,7 @@ namespace Trinity.Framework.Avoidance
             LookupPartByAnimation = allParts.Where(o => o.Animation != default(SNOAnim)).ToLookup(k => k.Animation, v => v);
         }
 
-        public static AvoidanceData GetAvoidanceData(IActor actor)
+        public static AvoidanceData GetAvoidanceData(TrinityCacheObject actor)
         {
             if (actor == null)
                 return null;
@@ -1225,7 +1225,7 @@ namespace Trinity.Framework.Avoidance
             return null;
         }
 
-        private static bool TryFindPartByActorId(IActor actor, out AvoidanceData data)
+        private static bool TryFindPartByActorId(TrinityCacheObject actor, out AvoidanceData data)
         {
             data = null;
 
@@ -1243,14 +1243,14 @@ namespace Trinity.Framework.Avoidance
             return false;
         }
 
-        private static bool TryFindPartByAffix(IActor actor, out AvoidanceData data)
+        private static bool TryFindPartByAffix(TrinityCacheObject actor, out AvoidanceData data)
         {
             data = null;
 
-            if (actor?.MonsterAffixes == null || !actor.MonsterAffixes.Any())
+            if (actor?.Affixes == null || !actor.Affixes.Any())
                 return false;
 
-            foreach (var affix in actor.MonsterAffixes)
+            foreach (var affix in actor.Affixes)
             {
                 var part = GetAvoidancePart(affix);
                 if (part != null)
@@ -1262,14 +1262,14 @@ namespace Trinity.Framework.Avoidance
             return false;
         }
 
-        private static bool TryFindPartByAnimation(IActor actor, out AvoidanceData data)
+        private static bool TryFindPartByAnimation(TrinityCacheObject actor, out AvoidanceData data)
         {
             data = null;
 
-            if (actor.CurrentAnimation == default(SNOAnim))
+            if (actor.Animation == default(SNOAnim))
                 return false;
 
-            var part = GetAvoidancePart(actor.CurrentAnimation);
+            var part = GetAvoidancePart(actor.Animation);
             if (part != null)
             {
                 data = part.Parent;

@@ -41,14 +41,10 @@ namespace Trinity
                 get { return _instance ?? (_instance = new PlayerCache()); }
                 set { _instance = value; }
             }
+ 
+            public TrinityCacheObject Actor { get; set; } = new TrinityCacheObject();
 
-            private IActor _iActor = new TrinityCacheObject();
-            public IActor IActor
-            {
-                get { return _iActor; }
-            }
-
-			public int ACDGuid { get; private set; }
+            public int ACDGuid { get; private set; }
             public int RActorGuid { get; private set; }
             public DateTime LastUpdated { get; private set; }
             public bool IsIncapacitated { get; private set; }
@@ -203,7 +199,7 @@ namespace Trinity
 
             private void UpdateIActor()
             {
-                _iActor = new TrinityCacheObject
+                Actor = new TrinityCacheObject
                 {
                     Object = _me,
                     CommonData = _me.CommonData,

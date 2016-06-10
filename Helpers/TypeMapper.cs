@@ -55,12 +55,12 @@ namespace Trinity.Helpers
             }
         }
 
-        public static ObjectType GetObjectType(IActor actor)
+        public static ObjectType GetObjectType(TrinityCacheObject actor)
         {
             if (actor == null || actor.CommonData == null)
                 return ObjectType.Unknown;
 
-            return GetObjectType(actor.DiaObject.CommonData, actor.DiaObject.ActorType, actor.ActorSNO, actor.DiaObject.CommonData.GizmoType, actor.InternalName);
+            return GetObjectType(actor.Object.CommonData, actor.Object.ActorType, actor.ActorSNO, actor.Object.CommonData.GizmoType, actor.InternalName);
         }
 
         public static ObjectType GetObjectType(ACD acd, ActorType actorType, int actorSNO, GizmoType gizmoType, string internalName)

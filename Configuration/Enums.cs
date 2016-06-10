@@ -401,16 +401,16 @@ namespace Trinity
     }
     
 
-    public enum MonsterQuality
-    {
-        Normal = 0,
-        Champion = 1,
-        Rare = 2,
-        Minion = 3,
-        Unique = 4,
-        Hireling = 5,
-        Boss = 7
-    }
+    //public enum MonsterQuality
+    //{
+    //    Normal = 0,
+    //    Champion = 1,
+    //    Rare = 2,
+    //    Minion = 3,
+    //    Unique = 4,
+    //    Hireling = 5,
+    //    Boss = 7
+    //}
 
     public enum TrinityPetType
     {

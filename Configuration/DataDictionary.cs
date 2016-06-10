@@ -103,6 +103,8 @@ namespace Trinity
             (int) SNOActor.cos_pet_goatman_melee_02, // 441214,
             (int) SNOActor.p3_cos_pet_jadeSerpent, // 441437,
             
+
+
             451019, //Pet found! - Picking it up Cosmetic_Pet_hoodednightmare_01 Sno=451019 GbId=347688656
             451040, //Pet found! - Picking it up Cosmetic_Pet_squire Sno=451040 GbId=1967180567
             451051, //Pet found! - Picking it up Cosmetic_Pet_cowking_01 Sno=451051 GbId=-1526517200
@@ -141,6 +143,7 @@ namespace Trinity
 
         public static HashSet<int> CosmeticSnoIds = new HashSet<int>
         {
+            331905, //ActorId: 331905, Type: Item, Name: Amberwing
 
             410998, //portrait - 410998 (Cosmetic_Portrait_Frame_1)
 
@@ -1076,13 +1079,22 @@ namespace Trinity
 
         };
 
-        public readonly static HashSet<TrinityItemType> NoPickupClickTypes = new HashSet<TrinityItemType>
+        public readonly static HashSet<TrinityItemType> NoPickupClickItemTypes = new HashSet<TrinityItemType>
         {
             TrinityItemType.PowerGlobe,
             TrinityItemType.HealthGlobe,
             TrinityItemType.ProgressionGlobe,
             TrinityItemType.HoradricRelic,
         };
+
+        public readonly static HashSet<TrinityObjectType> NoPickupClickTypes = new HashSet<TrinityObjectType>
+        {
+            TrinityObjectType.HealthGlobe,
+            TrinityObjectType.ProgressionGlobe,
+            TrinityObjectType.PowerGlobe,
+            TrinityObjectType.Gold,
+        };
+
 
         /*
          * Combat-related dictionaries/defaults

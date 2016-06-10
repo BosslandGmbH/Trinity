@@ -86,7 +86,7 @@ namespace Trinity.Coroutines.Town
                 }
 
                 LogVerbose("Can buy items!");
-                    return true;
+                return true;
             }
         }
 

@@ -39,6 +39,7 @@ namespace Trinity.Coroutines.Town
 
             if (UIElements.VendorWindow.IsVisible)
             {
+                await Coroutine.Sleep(2000);
                 Logger.LogVerbose("[RepairItems] Repairing equipment while at this vendor");
                 Repair(shouldRepairAll);
                 return true;
@@ -59,6 +60,7 @@ namespace Trinity.Coroutines.Town
 
             if (GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible)
             {
+                await Coroutine.Sleep(2000);
                 Logger.LogVerbose($"[RepairItems] Repairing Equipment at {repairActor.Name} :)");
                 Repair(shouldRepairAll);
                 return true;

@@ -1471,10 +1471,10 @@ namespace Trinity.Combat.Abilities
         /// <summary>
         /// Walk towards a location with positional bonuses e.g. occulus damage bonus / serenity defensive bonus.
         /// </summary>
-        /// <param name="power"></param>
+        /// <param name="power">Trinity power configured to move player towards a buffed position</param>
         /// <param name="maxDistance">maximum distance spot can be from player's current position</param>
         /// <param name="arriveDistance">how close to get to the middle of the spot before stopping walking</param>
-        /// <returns>Trinity power configured to move player towards a buffed position</returns>
+        /// <returns>if a location was found and should be moved to</returns>
         public static bool TryMoveToBuffedSpot(out TrinityPower power, float maxDistance, float arriveDistance = 20f)
         {
             if (IsInCombat && !IsCurrentlyKiting && !IsCurrentlyAvoiding)
@@ -1490,6 +1490,14 @@ namespace Trinity.Combat.Abilities
                     if (buffedLocation.Distance(Player.Position) < arriveDistance)
                     {
                         Logger.Log(LogCategory.Routine, $"Standing in Buffed Position {buffedLocation} Dist={distance}");
+                    }
+                    else if (!Core.Avoidance.Grid.CanRayWalk(Player.Position, buffedLocation))
+                    {
+                        Logger.Log(LogCategory.Routine, $"Unable to straight-line path to Buffed Position {buffedLocation} Dist={distance}");
+                    }
+                    else if (Core.Avoidance.Avoider.IsKiteOnCooldown)
+                    {
+                        Logger.Log(LogCategory.Routine, $"Not moving to buffed location while on kite cooldown");
                     }
                     else if (lastPower != null && buffedLocation.Distance(CurrentTarget.Position) > lastPower.MinimumRange + CurrentTarget.CollisionRadius + Player.Radius)
                     {

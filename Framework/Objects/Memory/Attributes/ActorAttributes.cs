@@ -21,6 +21,8 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         public bool HasFirebirdTemporary => GetAttribute<bool>(ActorAttributeType.PowerBuff1VisualEffectNone, (int)SNOPower.ItemPassive_Unique_Ring_733_x1);
 
         public bool HasFirebirdPermanent => GetAttribute<bool>(ActorAttributeType.PowerBuff4VisualEffectNone, (int)SNOPower.ItemPassive_Unique_Ring_733_x1);
+
+        public bool IsBurrowed => GetAttribute<bool>(ActorAttributeType.Burrowed);
     }
 }
 
