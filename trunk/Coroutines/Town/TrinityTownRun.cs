@@ -241,7 +241,7 @@ namespace Trinity.Coroutines.Town
 
             if (!CanTownRun())
             {
-                Logger.LogVerbose("Can't town run.");
+                //Logger.LogVerbose("Can't town run.");
                 return false;
             }
 

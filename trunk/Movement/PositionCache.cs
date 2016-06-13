@@ -18,7 +18,7 @@ namespace Trinity
             {
                 Position = TrinityPlugin.Player.Position;
                 RecordedAt = DateTime.UtcNow;
-                WorldId = TrinityPlugin.Player.WorldID;
+                WorldId = TrinityPlugin.Player.WorldSnoId;
             }
         }
 

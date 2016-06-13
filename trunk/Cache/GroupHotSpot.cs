@@ -98,7 +98,7 @@ namespace Trinity
             var hotSpotList = HotSpotList.Where(s => 
                 s.Location.Distance(TrinityPlugin.Player.Position) <= 2500 && 
                 s.Location.Distance(TrinityPlugin.Player.Position) >= 50 && 
-                s.WorldId == TrinityPlugin.Player.WorldID).ToList();
+                s.WorldId == TrinityPlugin.Player.WorldSnoId).ToList();
 
             foreach (var hotSpot in hotSpotList)
             {
@@ -125,12 +125,12 @@ namespace Trinity
 
         internal static bool CacheObjectIsInHotSpot(TrinityCacheObject cacheObject)
         {
-            return LocationIsInHotSpot(cacheObject.Position, TrinityPlugin.Player.WorldID);
+            return LocationIsInHotSpot(cacheObject.Position, TrinityPlugin.Player.WorldSnoId);
         }
 
         internal static bool CacheObjectIsInHotSpot(Vector3 position)
         {
-            return LocationIsInHotSpot(position, TrinityPlugin.Player.WorldID);
+            return LocationIsInHotSpot(position, TrinityPlugin.Player.WorldSnoId);
         }
 
     }

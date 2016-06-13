@@ -16,7 +16,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
     /// </summary>
     public class RadarObject // : INotifyPropertyChanged
     {
-        private IActor _actor;
+        private TrinityCacheObject _actor;
 
         /// <summary>
         /// Contains the actors position and other useful information.

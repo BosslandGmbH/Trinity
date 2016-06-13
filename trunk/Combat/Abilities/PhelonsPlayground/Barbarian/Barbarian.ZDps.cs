@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Cache;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;

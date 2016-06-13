@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Net.Configuration;
 using Buddy.Coroutines;
+using Trinity.Cache;
 using Trinity.Config.Combat;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;

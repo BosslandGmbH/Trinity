@@ -387,41 +387,41 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
             try
             {
-                switch (radarObject.Actor.ObjectType)
+                switch (radarObject.Actor.Type)
                 {
-                    case ObjectType.Avoidance:
+                    case TrinityObjectType.Avoidance:
                         res.Brush = AvoidanceBrush;
                         res.Pen = AvoidanceLightPen;
                         break;
 
-                    case ObjectType.Portal:
-                    case ObjectType.Container:
-                    case ObjectType.CursedChest:
-                    case ObjectType.CursedShrine:
-                    case ObjectType.Shrine:
-                    case ObjectType.HealthWell:
-                    case ObjectType.Interactable:
-                    case ObjectType.Barricade:
-                    case ObjectType.Destructible:
+                    case TrinityObjectType.Portal:
+                    case TrinityObjectType.Container:
+                    case TrinityObjectType.CursedChest:
+                    case TrinityObjectType.CursedShrine:
+                    case TrinityObjectType.Shrine:
+                    case TrinityObjectType.HealthWell:
+                    case TrinityObjectType.Interactable:
+                    case TrinityObjectType.Barricade:
+                    case TrinityObjectType.Destructible:
                         res.Brush = GizmoBrush;
                         res.Pen = GizmoLightPen;
                         break;
 
-                    case ObjectType.ProgressionGlobe:
-                    case ObjectType.PowerGlobe:
-                    case ObjectType.HealthGlobe:
-                    case ObjectType.Gold:
-                    case ObjectType.Item:
+                    case TrinityObjectType.ProgressionGlobe:
+                    case TrinityObjectType.PowerGlobe:
+                    case TrinityObjectType.HealthGlobe:
+                    case TrinityObjectType.Gold:
+                    case TrinityObjectType.Item:
                         res.Brush = ItemBrush;
                         res.Pen = ItemLightPen;
                         break;
 
-                    case ObjectType.Player:
+                    case TrinityObjectType.Player:
                         res.Brush = PlayerBrush;
                         res.Pen = PlayerLightPen;
                         break;
 
-                    case ObjectType.Unit:
+                    case TrinityObjectType.Unit:
 
                         if (radarObject.Actor.IsElite)
                         {

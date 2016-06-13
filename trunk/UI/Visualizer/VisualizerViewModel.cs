@@ -212,7 +212,7 @@ namespace Trinity.UI.RadarUI
                 PlayerPositionX = Player.Position.X;
                 PlayerPositionY = Player.Position.Y;
                 PlayerPositionZ = Player.Position.Z;
-                WorldSnoId = TrinityPlugin.Player.WorldID;
+                WorldSnoId = TrinityPlugin.Player.WorldSnoId;
                 LevelAreaSnoId = TrinityPlugin.Player.LevelAreaId;
                 PlayerRotation = MathUtil.RadianToDegree(Player.Rotation);
 
@@ -965,7 +965,7 @@ namespace Trinity.UI.RadarUI
                 {
                     try
                     {
-                        var actor = param as IActor;
+                        var actor = param as TrinityCacheObject;
                         if (actor != null)
                         {
                             var sb = new StringBuilder();

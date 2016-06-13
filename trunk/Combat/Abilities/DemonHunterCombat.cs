@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Trinity.Cache;
 using Trinity.Combat.Abilities.PhelonsPlayground;
 using Trinity.Config.Combat;
 using Trinity.Framework;
@@ -52,6 +53,11 @@ namespace Trinity.Combat.Abilities
                 {
                     Logger.LogVerbose("Using General Avoidance Skill: {0}", power.SNOPower);
                 }
+                return power;
+            }
+
+            if (TryMaintainHardenedBuff(out power))
+            {
                 return power;
             }
 
@@ -129,6 +135,21 @@ namespace Trinity.Combat.Abilities
             return DefaultPower;
         }
 
+        private static bool TryMaintainHardenedBuff(out TrinityPower power)
+        {
+            if (Skills.DemonHunter.EvasiveFire.IsActive && Runes.DemonHunter.Hardened.IsActive && !CacheData.Buffs.HasBuff(SNOPower.X1_DemonHunter_EvasiveFire))
+            {
+                Logger.LogVerbose("Refreshing Hardened Buff");
+                var target = TargetUtil.GetClosestUnit(60f);
+                if (target != null)
+                {
+                    power = new TrinityPower(SNOPower.X1_DemonHunter_EvasiveFire, 18f, target.Position);
+                    return true;
+                }
+            }
+            power = null;
+            return false;
+        }
 
         public static bool ShouldImpaleHighValueTarget(out TrinityCacheObject target)
         {

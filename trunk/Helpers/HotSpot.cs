@@ -111,7 +111,7 @@ namespace Trinity
                         return null;
                     else
                     {
-                        return HotSpot.Serialize(new HotSpot(TrinityPlugin.CurrentTarget.Position, TrinityPlugin.Player.WorldID));
+                        return HotSpot.Serialize(new HotSpot(TrinityPlugin.CurrentTarget.Position, TrinityPlugin.Player.WorldSnoId));
                     }
                 }
                 catch

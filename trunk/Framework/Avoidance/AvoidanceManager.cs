@@ -49,7 +49,7 @@ namespace Trinity.Framework.Avoidance
         private readonly HashSet<int> _currentRActorIds = new HashSet<int>();
 
         public IEnumerable<TrinityCacheObject> ActiveAvoidanceActors => CurrentAvoidances.SelectMany(a => a.Actors);
-        public HashSet<int> ActiveAvoidanceIds = new HashSet<int>();
+        public HashSet<int> ActiveAvoidanceSnoIds = new HashSet<int>();
 
         private readonly HashSet<GizmoType> _flaggedGizmoTypes = new HashSet<GizmoType>
         {
@@ -195,7 +195,7 @@ namespace Trinity.Framework.Avoidance
                 var avoidanceNodes = new AvoidanceLayer();
                 var monsterNodes = new AvoidanceLayer();
                 var obstacleNodes = new AvoidanceLayer();
-                var activeAvoidanceIds = new HashSet<int>();
+                var activeAvoidanceSnoIds = new HashSet<int>();
                 var kiteFromNodes = new AvoidanceLayer();
 
                 var nodePool = Grid.GetNodesInRadius(TrinityPlugin.Player.Position, node => node.IsWalkable, MaxDistance).Select(n => n.Reset()).ToList();
@@ -242,7 +242,7 @@ namespace Trinity.Framework.Avoidance
                         {
                             avoidance.Actors.ForEach(a =>
                             {
-                                activeAvoidanceIds.Add(a.ActorSNO);
+                                activeAvoidanceSnoIds.Add(a.ActorSNO);
                                 if (Settings.PathAroundAvoidance)
                                 {
                                     TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(a.ActorSNO, a.CollisionRadius);
@@ -326,7 +326,7 @@ namespace Trinity.Framework.Avoidance
                 MonsterNodeLayer = monsterNodes;
                 NearbyNodes = nearestNodes;
                 ObstacleNodeLayer = obstacleNodes;
-                ActiveAvoidanceIds = activeAvoidanceIds;
+                ActiveAvoidanceSnoIds = activeAvoidanceSnoIds;
             }
         }
 
@@ -350,7 +350,7 @@ namespace Trinity.Framework.Avoidance
                         node.AddNodeFlags(AvoidanceFlags.NavigationBlocking);
                     }
 
-                    if (actor.ObjectType != ObjectType.Door || !actor.IsUsed)
+                    if (actor.Type != TrinityObjectType.Door || !actor.IsUsed)
                     {
                         node.AddNodeFlags(AvoidanceFlags.ClosedDoor);
                     }
@@ -419,7 +419,7 @@ namespace Trinity.Framework.Avoidance
 
         private void UpdateGlobeFlags(TrinityCacheObject actor)
         {
-            if (actor.ObjectType != ObjectType.HealthGlobe)
+            if (actor.Type != TrinityObjectType.HealthGlobe)
                 return;
 
             foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.Radius*GlobeWeightRadiusFactor))

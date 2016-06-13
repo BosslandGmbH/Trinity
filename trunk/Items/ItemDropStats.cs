@@ -176,7 +176,7 @@ namespace Trinity
                 if (!TrinityPlugin.Settings.Advanced.OutputReports)
                     return;
 
-                if (Player.WorldID <= 0 || TrinityPlugin.Player.ActorClass == ActorClass.Invalid)
+                if (Player.WorldSnoId <= 0 || TrinityPlugin.Player.ActorClass == ActorClass.Invalid)
                     return;
 
                 /*

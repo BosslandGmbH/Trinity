@@ -11,47 +11,47 @@ namespace Trinity
         Weight,
     }
 
-    /// <summary>
-    /// Generic object types - eg a monster, an item to pickup, a shrine to click etc.
-    /// </summary>
-    public enum ObjectType
-    {
-        Unknown,
-        Avoidance,
-        Backtrack,
-        Barricade,
-        Checkpoint,
-        Container,
-        Destructible,
-        Door,
-        HealthGlobe,
-        Gold,
-        HealthWell,
-        HotSpot,
-        Interactable,
-        Item,
-        MarkerLocation,
-        Player,
-        PowerGlobe,
-        ProgressionGlobe,
-        Proxy,
-        SavePoint,
-        ServerProp,
-        Shrine,
-        StartLocation,
-        Trigger,
-        Unit,
-        CursedChest,
-        CursedShrine,
-        Portal,
-        Banner,
-        Waypoint,
-        BloodShard,
-        Vector3,
-        Environment,
-        Effect,
-        Projectile
-    }
+    ///// <summary>
+    ///// Generic object types - eg a monster, an item to pickup, a shrine to click etc.
+    ///// </summary>
+    //public enum ObjectType
+    //{
+    //    Unknown,
+    //    Avoidance,
+    //    Backtrack,
+    //    Barricade,
+    //    Checkpoint,
+    //    Container,
+    //    Destructible,
+    //    Door,
+    //    HealthGlobe,
+    //    Gold,
+    //    HealthWell,
+    //    HotSpot,
+    //    Interactable,
+    //    Item,
+    //    MarkerLocation,
+    //    Player,
+    //    PowerGlobe,
+    //    ProgressionGlobe,
+    //    Proxy,
+    //    SavePoint,
+    //    ServerProp,
+    //    Shrine,
+    //    StartLocation,
+    //    Trigger,
+    //    Unit,
+    //    CursedChest,
+    //    CursedShrine,
+    //    Portal,
+    //    Banner,
+    //    Waypoint,
+    //    BloodShard,
+    //    Vector3,
+    //    Environment,
+    //    Effect,
+    //    Projectile
+    //}
 
     /// <summary>
     /// Primary "lowest level" item type (eg EXACTLY what kind of item it is)
@@ -127,7 +127,6 @@ namespace Trinity
         Gold,
         PortalDevice,
         UberReagent,
-        ClientEffect
     }
 
     [Flags]
@@ -272,6 +271,12 @@ namespace Trinity
         Portal,
         Banner,
         Waypoint,
+        ClientEffect,
+        Effect,
+        Projectile,
+        Environment,
+        BloodShard,
+        Invalid
     }
 
     [Flags]
@@ -463,7 +468,7 @@ namespace Trinity
         Fast = 3775118,
         //Powerful = 86743790,
         //Merger = 94780994,
-        Minion = 99383434,
+        //Minion = 99383434,
         Molten = 106438735,
         Mortar = 106654229,
         Horde = 127452338,
@@ -518,11 +523,11 @@ namespace Trinity
         //Wormhole = 1156956365,
         ////ExtraHealth = 3, // Disabled in Patch 2.1.2
         ////Vampiric = 14, // Disabled in Patch 2.1.2
-        ////Rare = 4206314,
-        ////ChampionBase = 924743082, 
-        ////Elite = 16, // Can't seem to find this one
-        ////Minion = 99383434, 
-        ////Unique = 418225399,
+        Rare = 4206314,
+        Champion = 924743082,//ChampionBase = 924743082,
+        Elite = 16, // Can't seem to find this one
+        Minion = 99383434,
+        Unique = 418225399,
     }
 
 }

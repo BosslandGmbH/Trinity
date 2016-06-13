@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Cache;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 using Vector3 = Buddy.Auth.Math.Vector3;

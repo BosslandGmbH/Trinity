@@ -253,7 +253,7 @@ namespace Trinity
             int navRaycast = 0;
             int pointsFound = 0;
 
-            int worldId = TrinityPlugin.Player.WorldID;
+            int worldId = TrinityPlugin.Player.WorldSnoId;
             Stopwatch[] timers = Enumerable.Range(0, 12).Select(i => new Stopwatch()).ToArray();
 
             Vector2 minWorld;
@@ -403,7 +403,7 @@ namespace Trinity
 
                         // Boss Areas
                         timers[5].Start();
-                        if (UnSafeZone.UnsafeKiteAreas.Any(a => a.WorldId == TrinityPlugin.Player.WorldID && a.Position.Distance2DSqr(gridPoint.Position) <= (a.Radius * a.Radius)))
+                        if (UnSafeZone.UnsafeKiteAreas.Any(a => a.WorldId == TrinityPlugin.Player.WorldSnoId && a.Position.Distance2DSqr(gridPoint.Position) <= (a.Radius * a.Radius)))
                         {
                             continue;
                         }

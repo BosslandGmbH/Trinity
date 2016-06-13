@@ -49,7 +49,7 @@ namespace Trinity.Cache
             DynamicID = item.AnnId;
             ActorSNO = item.ActorSnoId;
             ACDGuid = item.ACDId;
-            WorldId = TrinityPlugin.Player.WorldID;
+            WorldId = TrinityPlugin.Player.WorldSnoId;
         }
 
         public PickupItem(string name, string internalName, int level, ItemQuality quality, int balanceId, ItemBaseType dbItemBaseType, 
@@ -67,7 +67,7 @@ namespace Trinity.Cache
             ItemFollowerType = followerType;
             ACDGuid = acdGuid;
             DynamicID = dynamicID;
-            WorldId = TrinityPlugin.Player.WorldID;
+            WorldId = TrinityPlugin.Player.WorldSnoId;
         }
 
         public virtual bool Equals(PickupItem other)

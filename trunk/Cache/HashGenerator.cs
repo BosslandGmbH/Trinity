@@ -4,6 +4,7 @@ using System.Text;
 using Trinity.Technicals;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.SNO;
 
 namespace Trinity
 {
@@ -15,7 +16,7 @@ namespace Trinity
 
         public static string GenerateItemHash(TrinityCacheObject item)
         {
-            return GenerateItemHash(item.Position, item.ActorSNO, item.InternalName, TrinityPlugin.Player.WorldID, item.ItemQuality, item.ItemLevel);
+            return GenerateItemHash(item.Position, item.ActorSNO, item.InternalName, TrinityPlugin.Player.WorldSnoId, item.ItemQuality, item.ItemLevel);
         }
 
         /// <summary>
@@ -44,6 +45,9 @@ namespace Trinity
         /// <returns></returns>
         public static string GenerateObjecthash(TrinityCacheObject obj)
         {
+            if(obj.ActorType == ActorType.Item)
+                return GenerateItemHash(obj);
+
             using (MD5 md5 = MD5.Create())
             {
                 string objHashBase;

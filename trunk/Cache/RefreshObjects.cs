@@ -420,8 +420,8 @@ namespace Trinity
                         {
                             gizmoType = "GizmoType: " + giz.CommonData.ActorInfo.GizmoType.ToString();
                         }
-                        Logger.Log(ll, lc, "Error while refreshing DiaObject ActorSnoId: {0} Name: {1} Type: {2} Distance: {3:0} {4} {5}",
-                                currentObject.ActorSnoId, currentObject.Name, currentObject.ActorType, currentObject.Distance, gizmoType, ex);
+                        Logger.Log(ll, lc, "Error while refreshing DiaObject ActorSnoId: {0} Name: {1} Type: {2} Distance: {3:0} {4} {5} {6} ",
+                                currentObject.ActorSnoId, currentObject.Name, currentObject.ActorType, currentObject.Distance, gizmoType, ex, Environment.StackTrace);
 
                     }
 

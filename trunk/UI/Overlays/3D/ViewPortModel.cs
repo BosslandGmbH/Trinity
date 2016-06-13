@@ -82,7 +82,7 @@ namespace Trinity.UI.Overlays
             //CameraPosition = new Point3D(0,28,20);
             //CameraLookDirection = new Vector3D(0,-6,-4.5);
 
-            Objects = new ObservableCollection<IActor>();
+            Objects = new ObservableCollection<TrinityCacheObject>();
 
             Instance = this;
 
@@ -186,7 +186,7 @@ namespace Trinity.UI.Overlays
                 if (DateTime.UtcNow.Subtract(LastRefresh).TotalMilliseconds <= RefreshRateMs)
                     return;
 
-                List<IActor> objects;
+                List<TrinityCacheObject> objects;
                 using (ZetaDia.Memory.AcquireFrame())
                 {
                     ZetaDia.Actors.Update();
@@ -194,13 +194,13 @@ namespace Trinity.UI.Overlays
                     var myAcd = ZetaDia.Me.ACDId;
                     objects = ZetaDia.Actors.GetActorsOfType<DiaUnit>(true, true)
                         .Where(a => a.IsNPC || a.ACDId == myAcd)
-                        .Select(a => new TrinityCacheObject(a) as IActor).ToList();
+                        .Select(a => new TrinityCacheObject(a) as TrinityCacheObject).ToList();
                 }
 
                 Logger.Log("UpdateVisualizer");
 
                 LastRefresh = DateTime.UtcNow;
-                Objects = new ObservableCollection<IActor>(objects);
+                Objects = new ObservableCollection<TrinityCacheObject>(objects);
             }
         }
 
@@ -253,12 +253,12 @@ namespace Trinity.UI.Overlays
 
         public static ViewPortModel Instance { get; set; }
 
-        public static ObservableCollection<IActor> StaticObjects
+        public static ObservableCollection<TrinityCacheObject> StaticObjects
         {
             get { return Instance.Objects; }
         }
 
-        public ObservableCollection<IActor> Objects
+        public ObservableCollection<TrinityCacheObject> Objects
         {
             get { return _objects; }
             set { SetField(ref _objects, value); }
@@ -267,7 +267,7 @@ namespace Trinity.UI.Overlays
         public double RefreshRateMs = 1000;
 
         public DateTime LastRefresh = DateTime.MinValue;
-        private ObservableCollection<IActor> _objects;
+        private ObservableCollection<TrinityCacheObject> _objects;
         private bool _startThreadAllowed;
         private double _cameraScale;
         private double _cameraFarPlaneDistance;

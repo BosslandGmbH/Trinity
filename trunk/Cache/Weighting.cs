@@ -236,7 +236,8 @@ namespace Trinity
                                 {
                                     #region Unit Variables
 
-                                    bool isInHotSpot = GroupHotSpots.CacheObjectIsInHotSpot(cacheObject) || cacheObject.IsNavBlocking();
+                                    //bool isInHotSpot = GroupHotSpots.CacheObjectIsInHotSpot(cacheObject) || cacheObject.IsNavBlocking();
+
                                     bool elitesInRangeOfUnit = !CombatBase.IgnoringElites &&
                                                                ObjectCache.Any(
                                                                    u =>
@@ -283,7 +284,7 @@ namespace Trinity
                                     cacheObject.WeightInfo =
                                         string.Format(
                                             "ShouldIgnore={3} nearbyCount={0} radiusDistance={1:0} hotspot={2} elitesInRange={4} hitPointsPc={5:0.0} summoner={6} quest={7} minimap={8} bounty={9} ",
-                                            nearbyTrashCount, cacheObject.RadiusDistance, isInHotSpot,
+                                            nearbyTrashCount, cacheObject.RadiusDistance, false,
                                             usingTownPortal, elitesInRangeOfUnit, cacheObject.HitPointsPct,
                                             ignoreSummoner, cacheObject.IsQuestMonster, cacheObject.IsMinimapActive,
                                             cacheObject.IsBountyObjective);

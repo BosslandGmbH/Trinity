@@ -40,7 +40,7 @@ namespace Trinity
                 ((DiaItem)c_diaObject).CommonData.GetAttribute<int>(ActorAttributeType.ItemQualityLevelIdentified);
                 c_ItemDisplayName = diaItem.CommonData.Name;
 
-                CurrentCacheObject.DynamicID = c_diaObject.CommonData.AnnId;
+                CurrentCacheObject.AnnId = c_diaObject.CommonData.AnnId;
                 CurrentCacheObject.GameBalanceID = c_diaObject.CommonData.GameBalanceId;
 
                 c_ItemLevel = diaItem.CommonData.Level;
@@ -71,7 +71,7 @@ namespace Trinity
                     CurrentCacheObject.Position,
                     CurrentCacheObject.ActorSNO,
                     CurrentCacheObject.InternalName,
-                    Player.WorldID,
+                    Player.WorldSnoId,
                     c_ItemQuality,
                     c_ItemLevel);
 
@@ -135,7 +135,7 @@ namespace Trinity
                     IsOneHand = c_IsOneHandedItem,
                     IsTwoHand = c_IsTwoHandedItem,
                     ItemFollowerType = c_item_tFollowerType,
-                    DynamicID = CurrentCacheObject.DynamicID,
+                    DynamicID = CurrentCacheObject.AnnId,
                     Position = CurrentCacheObject.Position,
                     ActorSNO = CurrentCacheObject.ActorSNO,
                     ACDGuid = CurrentCacheObject.ACDGuid,
@@ -378,7 +378,7 @@ namespace Trinity
                 }
                 LogWriter.Write(FormatCSVField(CurrentCacheObject.ActorSNO));
                 LogWriter.Write(FormatCSVField(CurrentCacheObject.RActorGuid));
-                LogWriter.Write(FormatCSVField(CurrentCacheObject.DynamicID));
+                LogWriter.Write(FormatCSVField(CurrentCacheObject.AnnId));
                 LogWriter.Write(FormatCSVField(CurrentCacheObject.ACDGuid));
                 LogWriter.Write(FormatCSVField(CurrentCacheObject.InternalName));
                 LogWriter.Write(FormatCSVField(c_GoldStackSize));

@@ -76,7 +76,7 @@ namespace Trinity.Framework.Avoidance
                 if (Settings.OnlyAvoidWhileInGrifts && (!RiftProgression.IsInRift || ZetaDia.CurrentRift.Type != RiftType.Greater))
                     return false;
 
-                if (Core.Avoidance.ActiveAvoidanceIds == null || !Core.Avoidance.ActiveAvoidanceIds.Any())
+                if (Core.Avoidance.ActiveAvoidanceSnoIds == null || !Core.Avoidance.ActiveAvoidanceSnoIds.Any())
                     return false;
 
                 if (Core.Avoidance.Grid.IsStandingInFlags(AvoidanceFlags.NoAvoid) && PlayerMover.IsBlocked)
