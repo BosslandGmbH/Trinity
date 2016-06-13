@@ -28,6 +28,7 @@ namespace Trinity
 
         public static HashSet<int> HerdingMatsSnoIds = new HashSet<int>()
         {
+            215500, // "Gibbering Gemstone", Cow_Gem_Flippy-3672 ActorId: 215500
             214604, //"gibbering-gemstone": ["Gibbering Gemstone", 214604, "Cow_Gem"],
             214605, //"leorics-shinbone": ["Leoric's Shinbone", 214605, "Cow_Bone"],
             214603, //"liquid-rainbow": ["Liquid Rainbow", 214603, "Cow_Water"],

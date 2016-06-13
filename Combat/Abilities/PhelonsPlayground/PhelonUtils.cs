@@ -202,7 +202,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                       u.IsBossOrEliteRareUnique &&
                       u.Distance <= range
                 orderby
-                    u.NearbyUnitsWithinDistance(range) descending,
+                    u.NearbyUnitsWithinDistance(15) descending,
                     u.HitPointsPct descending
                 select u).FirstOrDefault();
 
