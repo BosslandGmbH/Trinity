@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Cache;
 using Trinity.Combat;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;

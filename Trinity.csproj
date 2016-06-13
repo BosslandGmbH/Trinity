@@ -101,6 +101,8 @@
     <Compile Include="Cache\CacheData.Inventory.cs" />
     <Compile Include="Cache\CacheData.Player.cs" />
     <Compile Include="Cache\CacheUIObject.cs" />
+    <Compile Include="Cache\Properties\ItemProperties.cs" />
+    <Compile Include="Cache\Properties\GizmoProperties.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.Earth.cs" />
     <Compile Include="Combat\Abilities\PhelonsPlayground\Barbarian\Barbarian.ImmortalKings.cs" />
@@ -384,9 +386,9 @@
     <Compile Include="Cache\Execution.cs" />
     <Compile Include="Cache\ItemStashSellAppender.cs" />
     <Compile Include="Cache\ItemDroppedAppender.cs" />
-    <Compile Include="Cache\Properties.cs" />
-    <Compile Include="Cache\Properties.Monster.cs" />
-    <Compile Include="Cache\Properties.Static.cs" />
+    <Compile Include="Cache\Properties\PropertyLoader.cs" />
+    <Compile Include="Cache\Properties\MonsterProperties.cs" />
+    <Compile Include="Cache\Properties\CommonProperties.cs" />
     <Compile Include="Cache\RiftProgression.cs" />
     <Compile Include="Cache\TrinityBountyInfo.cs" />
     <Compile Include="Cache\CacheData.cs" />
@@ -473,7 +475,6 @@
     <Compile Include="Helpers\UIElementExtensions.cs" />
     <Compile Include="Objects\Build.cs" />
     <Compile Include="Objects\CachedBuff.cs" />
-    <Compile Include="Objects\IActor.cs" />
     <Compile Include="Objects\IUnique.cs" />
     <Compile Include="Objects\ItemStatRange.cs" />
     <Compile Include="Framework\Objects\Memory\Misc\ItemRecord.cs" />

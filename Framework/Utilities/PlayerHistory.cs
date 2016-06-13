@@ -18,7 +18,7 @@ namespace Trinity.Framework.Utilities
                 {
                     Position = TrinityPlugin.Player.Position;
                     RecordedAt = DateTime.UtcNow;
-                    WorldId = TrinityPlugin.Player.WorldID;
+                    WorldId = TrinityPlugin.Player.WorldSnoId;
                 }
             }
 
@@ -73,7 +73,7 @@ namespace Trinity.Framework.Utilities
 
         public void MaintainCache()
         {
-            var worldId = TrinityPlugin.Player.WorldID;
+            var worldId = TrinityPlugin.Player.WorldSnoId;
 
             Cache.RemoveAll(p => p.WorldId != worldId);
 

@@ -14,7 +14,7 @@ namespace Trinity.Cache
         public SameWorldPortal()
         {
             StartPosition = TrinityPlugin.Player.Position;
-            WorldID = TrinityPlugin.Player.WorldID;
+            WorldID = TrinityPlugin.Player.WorldSnoId;
             LastInteract = DateTime.UtcNow;
         }
 

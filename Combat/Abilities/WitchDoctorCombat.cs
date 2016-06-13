@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Trinity.Cache;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Movement;

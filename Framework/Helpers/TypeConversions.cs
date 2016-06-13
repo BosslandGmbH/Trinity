@@ -761,15 +761,13 @@ namespace Trinity.Framework.Helpers
             return false;
         }
 
-        public static bool GetIsTwoSlot(ItemBaseType baseType, ItemType itemType, RawItemType rawType)
+        public static bool GetIsTwoSlot(ItemBaseType baseType, ItemType itemType)
         {
-            switch (rawType)
-            {
-                case RawItemType.TreasureBag:
-                    return true;
-            }
             switch (itemType)
             {
+                case ItemType.HoradricCache:
+                case ItemType.SeasonCache:
+                    return true;
                 case ItemType.Belt:
                     return false;
             }

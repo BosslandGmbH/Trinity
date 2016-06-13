@@ -504,7 +504,7 @@ namespace Trinity.UI.Overlays
             }
         }
 
-        private async Task<bool> CreateVisual(IActor updatedWorldActor)
+        private async Task<bool> CreateVisual(TrinityCacheObject updatedWorldActor)
         {
             ViewPort3DActor actor;
             var visual = CreateActorVisual(updatedWorldActor);
@@ -521,7 +521,7 @@ namespace Trinity.UI.Overlays
             return true;
         }
 
-        private GeometryElement3D CreateActorVisual(IActor actor)
+        private GeometryElement3D CreateActorVisual(TrinityCacheObject actor)
         {
             var sphere = new Spherical3D();
             sphere.Material = GetSurfaceMaterial();

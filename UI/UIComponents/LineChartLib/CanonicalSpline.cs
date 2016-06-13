@@ -11,7 +11,7 @@ namespace LineChartLib
         // Cached PathGeometry
         PathGeometry pathGeometry;
 
-        // Dependency Properties
+        // Dependency PropertyLoader
         public static readonly DependencyProperty PointsProperty =
             Polyline.PointsProperty.AddOwner(typeof(CanonicalSpline),
                 new FrameworkPropertyMetadata(null, OnMeasurePropertyChanged));

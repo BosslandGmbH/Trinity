@@ -292,7 +292,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             DependencyProperty.Register("SelectedItem",
                 typeof(TrinityCacheObject),
                 typeof(RadarCanvas),
-                new FrameworkPropertyMetadata(default(IActor), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
+                new FrameworkPropertyMetadata(default(TrinityCacheObject), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
 
         public TrinityCacheObject SelectedItem
         {

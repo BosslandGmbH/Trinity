@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Trinity.Cache;
 using Trinity.Config.Combat;
 using Trinity.Reference;
 using Trinity.Technicals;

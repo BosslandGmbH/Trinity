@@ -12,7 +12,7 @@ namespace Trinity.UI.Overlays._3D
 {
     public class ViewPort3DActor
     {
-        public IActor Actor;
+        public TrinityCacheObject Actor;
         public CanvasData Canvas;
         public Point3D Offset;
         public GeometryElement3D Visual;
@@ -20,7 +20,7 @@ namespace Trinity.UI.Overlays._3D
         public TranslateTransform3D Translation;
         public ScaleTransform3D Scale;
 
-        public ViewPort3DActor(IActor obj, CanvasData canvasData, GeometryElement3D visual)
+        public ViewPort3DActor(TrinityCacheObject obj, CanvasData canvasData, GeometryElement3D visual)
         {
             Canvas = canvasData;
             Visual = visual;
@@ -33,7 +33,7 @@ namespace Trinity.UI.Overlays._3D
         }
 
 
-        public void Update(IActor obj)
+        public void Update(TrinityCacheObject obj)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Trinity.UI.Overlays._3D
         }
 
 
-        public static Point3D GetDrawOffset(IActor actor, CanvasData canvas)
+        public static Point3D GetDrawOffset(TrinityCacheObject actor, CanvasData canvas)
         {
             var gridSize = (float) canvas.GridSquareSize.Height;
             var position = actor.Position;

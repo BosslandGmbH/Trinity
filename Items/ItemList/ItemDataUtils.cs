@@ -641,7 +641,7 @@ namespace Trinity.Reference
         };
 
         /// <summary>
-        /// Properties that are ALWAYS available to the ItemType are listed here.  
+        /// PropertyLoader that are ALWAYS available to the ItemType are listed here.  
         /// Determines if Property will be available in ItemList rules dropdown.     
         /// </summary>
         public static readonly Dictionary<KeyValuePair<TrinityItemType, ItemProperty>, ItemStatRange> ItemPropertyLimitsByItemType = new Dictionary<KeyValuePair<TrinityItemType, ItemProperty>, ItemStatRange>

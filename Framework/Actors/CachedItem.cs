@@ -175,7 +175,7 @@ namespace Trinity.Framework.Actors
             IsSalvageable = IsEquipment && !IsVendorBought && RequiredLevel > 1 || IsPotion;
             IsLegendaryGem = RawItemType == RawItemType.UpgradeableJewel;
             IsMiscItem = ItemBaseType == ItemBaseType.Misc;
-            IsTwoSquareItem = TypeConversions.GetIsTwoSlot(ItemBaseType, ItemType, RawItemType);
+            IsTwoSquareItem = TypeConversions.GetIsTwoSlot(ItemBaseType, ItemType);
             LastRefreshTime = DateTime.UtcNow;
         }
 

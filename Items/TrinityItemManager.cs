@@ -814,7 +814,7 @@ namespace Trinity.Items
                     }
                     catch (Exception ex)
                     {
-                        Logger.Log("Exception reading Item Properties\n{0}", ex.ToString());
+                        Logger.Log("Exception reading Item PropertyLoader\n{0}", ex.ToString());
                     }
 
                 }
@@ -1406,6 +1406,10 @@ namespace Trinity.Items
             if (name.StartsWith("x1_")) name = name.Substring(3, name.Length - 3);
             if (name.StartsWith("p1_")) name = name.Substring(3, name.Length - 3);
             if (name.StartsWith("p2_")) name = name.Substring(3, name.Length - 3);
+            if (name.StartsWith("p3_")) name = name.Substring(3, name.Length - 3);
+            if (name.StartsWith("p4_")) name = name.Substring(3, name.Length - 3);
+            if (name.StartsWith("p5_")) name = name.Substring(3, name.Length - 3);
+            if (name.StartsWith("p6_")) name = name.Substring(3, name.Length - 3);
             if (ItemExpansionRegex.IsMatch(name)) name = name.Substring(3, name.Length - 3);
 
             if (name.StartsWith("demonorgan_")) return TrinityItemType.UberReagent;

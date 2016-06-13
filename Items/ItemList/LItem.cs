@@ -104,7 +104,7 @@ namespace Trinity.UI.UIComponents
         }
 
         /// <summary>
-        /// Properties that are valid for this particular item
+        /// PropertyLoader that are valid for this particular item
         /// </summary>
         public List<ItemProperty> ItemProperties
         {

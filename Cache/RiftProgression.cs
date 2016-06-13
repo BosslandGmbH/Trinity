@@ -50,6 +50,16 @@ namespace Trinity.Cache
             }
         }
 
+        public static double GetRiftValue(TrinityCacheObject actor)
+        {
+            var riftValue = 0d;
+            if (IsInRift)
+            {
+                TryGetRiftValue(actor, out riftValue);
+            }
+            return riftValue;
+        }
+
         public static bool TryGetRiftValue(TrinityCacheObject actor, out double riftValuePct)
         {
             riftValuePct = -1;

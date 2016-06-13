@@ -15,7 +15,7 @@ namespace LineChartLib
                 typeof(AxisStrategy),
                 new PropertyMetadata(OnAxisPropertyChanged));
 
-        // Properties that are common to many axis strategies
+        // PropertyLoader that are common to many axis strategies
         public static readonly DependencyProperty IsFlippedProperty =
             DependencyProperty.Register("IsFlipped",
                 typeof(bool),

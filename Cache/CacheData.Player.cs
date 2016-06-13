@@ -71,7 +71,7 @@ namespace Trinity
 			public double PlayerDamagePerSecond { get; private set; }
 			public SceneInfo Scene { get; private set; }
 			public int WorldDynamicID { get; private set; }
-			public int WorldID { get; private set; }
+			public int WorldSnoId { get; private set; }
 			public bool IsInGame { get; private set; }
 			public bool IsDead { get; private set; }
 			public bool IsLoadingWorld { get; private set; }
@@ -169,10 +169,10 @@ namespace Trinity
 
                         
                         WorldDynamicID = ZetaDia.WorldId;
-                        WorldID = ZetaDia.CurrentWorldSnoId;
+                        WorldSnoId = ZetaDia.CurrentWorldSnoId;
 
                         TrinityPlugin.CurrentWorldDynamicId = WorldDynamicID;
-                        TrinityPlugin.CurrentWorldId = WorldID;
+                        TrinityPlugin.CurrentWorldId = WorldSnoId;
 
 
                         if (DateTime.UtcNow.Subtract(LastVerySlowUpdate).TotalMilliseconds > 5000)
@@ -184,7 +184,7 @@ namespace Trinity
                         UpdateFastChangingData();
 
 
-                        UpdateIActor();
+                        UpdateActor();
 
 
                     }
@@ -197,7 +197,7 @@ namespace Trinity
 
             public DateTime LastChangedLevelAreaId { get; set; }
 
-            private void UpdateIActor()
+            private void UpdateActor()
             {
                 Actor = new TrinityCacheObject
                 {
@@ -205,12 +205,11 @@ namespace Trinity
                     CommonData = _me.CommonData,
                     ACDGuid = this.ACDGuid,
                     ActorType = ActorType.Player,
-                    ObjectType = ObjectType.Player,
                     IsHostile = false,
                     HitPoints = this.CurrentHealth,
                     HitPointsPct = this.CurrentHealthPct,
                     Rotation = this.Rotation,
-                    DynamicID = this.MyDynamicID,                    
+                    AnnId = this.MyDynamicID,                    
                     AnimationState = _me.CommonData.AnimationState,
                     Animation = _me.CommonData.CurrentAnimation,   
                     InternalName = _me.Name,
@@ -224,7 +223,7 @@ namespace Trinity
                 RActorGuid = _me.RActorId;
                 LastUpdated = DateTime.UtcNow;
                 IsInTown = DataDictionary.TownLevelAreaIds.Contains(LevelAreaId);
-                IsInRift = DataDictionary.RiftWorldIds.Contains(WorldID);
+                IsInRift = DataDictionary.RiftWorldIds.Contains(WorldSnoId);
                 IsDead = _me.IsDead;
                 IsIncapacitated = (_me.IsFeared || _me.IsStunned || _me.IsFrozen || _me.IsBlind);
                 IsRooted = _me.IsRooted;
@@ -295,7 +294,7 @@ namespace Trinity
                 Coinage = ZetaDia.PlayerData.Coinage;
                 CurrentExperience = (long)ZetaDia.Me.CurrentExperience;
 
-                IsInPandemoniumFortress = DataDictionary.PandemoniumFortressWorlds.Contains(WorldID) ||
+                IsInPandemoniumFortress = DataDictionary.PandemoniumFortressWorlds.Contains(WorldSnoId) ||
                         DataDictionary.PandemoniumFortressLevelAreaIds.Contains(LevelAreaId);
 
                 if (CurrentHealthPct > 0)

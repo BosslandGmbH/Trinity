@@ -123,7 +123,6 @@ namespace Trinity
                 if (ZetaDia.CurrentAct == Act.OpenWorld && CurrentCacheObject.IsQuestGiver && !(WantToTownRun || ForceVendorRunASAP || BrainBehavior.IsVendoring))
                 {
                     CurrentCacheObject.Type = TrinityObjectType.Interactable;
-                    CurrentCacheObject.Type = TrinityObjectType.Interactable;
                     CurrentCacheObject.Radius = c_diaObject.CollisionSphere.Radius;
                     return true;
                 }
@@ -175,40 +174,40 @@ namespace Trinity
                 }
             }
 
-            // Pull up the Monster Affix cached data
-            RefreshAffixes();
-            if (c_MonsterAffixes.HasFlag(MonsterAffixes.Shielding))
-                c_unit_HasShieldAffix = true;
+            //// Pull up the Monster Affix cached data
+            //RefreshAffixes();
+            //if (c_MonsterAffixes.HasFlag(MonsterAffixes.Shielding))
+            //    c_unit_HasShieldAffix = true;
 
-            //[TrinityPlugin 2.14.34] Unit FallenGrunt_A-68856 has MonsterAffix_IllusionistCast (PowerBuff0VisualEffectNone)
-            if (CurrentCacheObject.Affixes.Any() && CurrentCacheObject.Affixes.Contains(TrinityMonsterAffix.Illusionist))
-            {
-                var isIllusion = CurrentCacheObject.CommonData.GetAttribute<int>(((int)SNOPower.MonsterAffix_IllusionistCast << 12) + ((int)ActorAttributeType.PowerBuff0VisualEffectNone & 0xFFF)) == 1;
-                if (isIllusion)
-                {
-                    //Logger.Log("Actor {0} is an illusion! dont be fooled", CurrentCacheObject.InternalName);
-                    CurrentCacheObject.IsIllusion = true;
-                }
-            }
+            ////[TrinityPlugin 2.14.34] Unit FallenGrunt_A-68856 has MonsterAffix_IllusionistCast (PowerBuff0VisualEffectNone)
+            //if (CurrentCacheObject.Affixes.Any() && CurrentCacheObject.Affixes.Contains(TrinityMonsterAffix.Illusionist))
+            //{
+            //    var isIllusion = CurrentCacheObject.CommonData.GetAttribute<int>(((int)SNOPower.MonsterAffix_IllusionistCast << 12) + ((int)ActorAttributeType.PowerBuff0VisualEffectNone & 0xFFF)) == 1;
+            //    if (isIllusion)
+            //    {
+            //        //Logger.Log("Actor {0} is an illusion! dont be fooled", CurrentCacheObject.InternalName);
+            //        CurrentCacheObject.IsIllusion = true;
+            //    }
+            //}
 
 
 
-            // Only if at full health, else don't bother checking each loop
-            // See if we already have this monster's size stored, if not get it and cache it
-            if (!CacheData.MonsterSizes.TryGetValue(CurrentCacheObject.ActorSNO, out c_unit_MonsterSize))
-            {
-                try
-                {
-                    RefreshMonsterSize();
-                }
-                catch
-                {
-                    Logger.LogDebug("Error refreshing MonsterSize");
-                }
-            }
+            //// Only if at full health, else don't bother checking each loop
+            //// See if we already have this monster's size stored, if not get it and cache it
+            //if (!CacheData.MonsterSizes.TryGetValue(CurrentCacheObject.ActorSNO, out c_unit_MonsterSize))
+            //{
+            //    try
+            //    {
+            //        RefreshMonsterSize();
+            //    }
+            //    catch
+            //    {
+            //        Logger.LogDebug("Error refreshing MonsterSize");
+            //    }
+            //}
 
             RefreshMonsterHealth();
-            
+
             DebugUtil.LogAnimation(CurrentCacheObject);
 
             // Unit is already dead
@@ -385,35 +384,35 @@ namespace Trinity
             if (killRange <= 60) killRange = 60;
             return killRange;
         }
-        private static void RefreshAffixes()
-        {
-            CurrentCacheObject.Affixes = TrinityCacheObject.GetMonsterAffixes(CurrentCacheObject.CommonData.Affixes);
+        //private static void RefreshAffixes()
+        //{
+        //    CurrentCacheObject.Affixes = TrinityCacheObject.GetMonsterAffixes(CurrentCacheObject.CommonData.Affixes);
 
-            MonsterAffixes affixFlags;
-            if (!CacheData.UnitMonsterAffix.TryGetValue(CurrentCacheObject.RActorGuid, out affixFlags))
-            {
-                try
-                {
-                    affixFlags = c_diaObject.CommonData.MonsterAffixes;
-                    CacheData.UnitMonsterAffix.Add(CurrentCacheObject.RActorGuid, affixFlags);
-                }
-                catch (Exception ex)
-                {
-                    affixFlags = MonsterAffixes.None;
-                    Logger.Log(LogCategory.CacheManagement, "Handled Exception getting affixes for Monster SNO={0} Name={1} RAGuid={2}", CurrentCacheObject.ActorSNO, CurrentCacheObject.InternalName, CurrentCacheObject.RActorGuid);
-                    Logger.Log(LogCategory.CacheManagement, ex.ToString());
-                }
-            }
+        //    MonsterAffixes affixFlags;
+        //    if (!CacheData.UnitMonsterAffix.TryGetValue(CurrentCacheObject.RActorGuid, out affixFlags))
+        //    {
+        //        try
+        //        {
+        //            affixFlags = c_diaObject.CommonData.MonsterAffixes;
+        //            CacheData.UnitMonsterAffix.Add(CurrentCacheObject.RActorGuid, affixFlags);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            affixFlags = MonsterAffixes.None;
+        //            Logger.Log(LogCategory.CacheManagement, "Handled Exception getting affixes for Monster SNO={0} Name={1} RAGuid={2}", CurrentCacheObject.ActorSNO, CurrentCacheObject.InternalName, CurrentCacheObject.RActorGuid);
+        //            Logger.Log(LogCategory.CacheManagement, ex.ToString());
+        //        }
+        //    }
 
-            c_unit_IsElite = affixFlags.HasFlag(MonsterAffixes.Elite);
-            c_unit_IsRare = affixFlags.HasFlag(MonsterAffixes.Rare);
-            c_unit_IsUnique = affixFlags.HasFlag(MonsterAffixes.Unique);
-            c_unit_IsMinion = affixFlags.HasFlag(MonsterAffixes.Minion);
-            // All-in-one flag for quicker if checks throughout
-            c_IsEliteRareUnique = (c_unit_IsElite || c_unit_IsRare || c_unit_IsUnique || c_unit_IsMinion);
+        //    c_unit_IsElite = affixFlags.HasFlag(MonsterAffixes.Elite);
+        //    c_unit_IsRare = affixFlags.HasFlag(MonsterAffixes.Rare);
+        //    c_unit_IsUnique = affixFlags.HasFlag(MonsterAffixes.Unique);
+        //    c_unit_IsMinion = affixFlags.HasFlag(MonsterAffixes.Minion);
+        //    // All-in-one flag for quicker if checks throughout
+        //    c_IsEliteRareUnique = (c_unit_IsElite || c_unit_IsRare || c_unit_IsUnique || c_unit_IsMinion);
 
-            c_MonsterAffixes = affixFlags;
-        }
+        //    c_MonsterAffixes = affixFlags;
+        //}
 
         private static MonsterType RefreshMonsterType(bool addToDictionary)
         {

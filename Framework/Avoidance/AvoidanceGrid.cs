@@ -50,11 +50,13 @@ namespace Trinity.Framework.Avoidance
 
         public override bool CanRayCast(Vector3 @from, Vector3 to)
         {
+            if (@from == Vector3.Zero || to == Vector3.Zero) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile));
         }
 
         public override bool CanRayWalk(Vector3 @from, Vector3 to)
         {
+            if (@from == Vector3.Zero || to == Vector3.Zero) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk) && node.IsWalkable && !node.NodeFlags.HasFlag(NodeFlags.NearWall));
         }
 

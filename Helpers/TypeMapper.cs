@@ -8,7 +8,7 @@ namespace Trinity.Helpers
 {
     public class TypeMapper
     {
-        public static TrinityPlugin.Weighting.ShrineTypes GetShrineType(IActor actor)
+        public static TrinityPlugin.Weighting.ShrineTypes GetShrineType(TrinityCacheObject actor)
         {
             switch (actor.ActorSNO)
             {
@@ -55,115 +55,117 @@ namespace Trinity.Helpers
             }
         }
 
-        public static ObjectType GetObjectType(TrinityCacheObject actor)
-        {
-            if (actor == null || actor.CommonData == null)
-                return ObjectType.Unknown;
+        //public static TrinityObjectType GetObjectType(TrinityCacheObject actor)
+        //{
+        //    if (actor == null || actor.CommonData == null && actor.ActorType != ActorType.ClientEffect)
+        //        return TrinityObjectType.Unknown;
 
-            return GetObjectType(actor.Object.CommonData, actor.Object.ActorType, actor.ActorSNO, actor.Object.CommonData.GizmoType, actor.InternalName);
-        }
+        //    return GetObjectType(actor.Object.CommonData, actor.Object.ActorType, actor.ActorSNO, actor.Object.CommonData.GizmoType, actor.InternalName);
+        //}
 
-        public static ObjectType GetObjectType(ACD acd, ActorType actorType, int actorSNO, GizmoType gizmoType, string internalName)
-        {
-            if (actorType != ActorType.ClientEffect && !acd.IsValid)
-                return ObjectType.Unknown;
 
-            if (DataDictionary.ObjectTypeOverrides.ContainsKey(actorSNO))
-                return DataDictionary.ObjectTypeOverrides[actorSNO];
 
-            if (DataDictionary.CursedChestSNO.Contains(actorSNO))
-                return ObjectType.CursedChest;
+        //public static ObjectType GetObjectType(ACD acd, ActorType actorType, int actorSNO, GizmoType gizmoType, string internalName)
+        //{
+        //    if (actorType != ActorType.ClientEffect && !acd.IsValid)
+        //        return ObjectType.Unknown;
 
-            if (DataDictionary.CursedShrineSNO.Contains(actorSNO))
-                return ObjectType.CursedShrine;
+        //    if (DataDictionary.ObjectTypeOverrides.ContainsKey(actorSNO))
+        //        return DataDictionary.ObjectTypeOverrides[actorSNO];
 
-            if (DataDictionary.ShrineSNO.Contains(actorSNO))
-                return ObjectType.Shrine;
+        //    if (DataDictionary.CursedChestSNO.Contains(actorSNO))
+        //        return ObjectType.CursedChest;
 
-            if (DataDictionary.HealthGlobeSNO.Contains(actorSNO))
-                return ObjectType.HealthGlobe;
+        //    if (DataDictionary.CursedShrineSNO.Contains(actorSNO))
+        //        return ObjectType.CursedShrine;
 
-            if (DataDictionary.PowerGlobeSNO.Contains(actorSNO))
-                return ObjectType.PowerGlobe;
+        //    if (DataDictionary.ShrineSNO.Contains(actorSNO))
+        //        return ObjectType.Shrine;
 
-            if (DataDictionary.ProgressionGlobeSNO.Contains(actorSNO))
-                return ObjectType.ProgressionGlobe;
+        //    if (DataDictionary.HealthGlobeSNO.Contains(actorSNO))
+        //        return ObjectType.HealthGlobe;
 
-            if (DataDictionary.GoldSNO.Contains(actorSNO))
-                return ObjectType.Gold;
+        //    if (DataDictionary.PowerGlobeSNO.Contains(actorSNO))
+        //        return ObjectType.PowerGlobe;
 
-            if (DataDictionary.BloodShardSNO.Contains(actorSNO))
-                return ObjectType.BloodShard;
+        //    if (DataDictionary.ProgressionGlobeSNO.Contains(actorSNO))
+        //        return ObjectType.ProgressionGlobe;
 
-            if (actorType == ActorType.Item || DataDictionary.ForceToItemOverrideIds.Contains(actorSNO))
-                return ObjectType.Item;
+        //    if (DataDictionary.GoldSNO.Contains(actorSNO))
+        //        return ObjectType.Gold;
 
-            //if (DataDictionary.InteractWhiteListIds.Contains(actorSNO))
-            //    return ObjectType.Interactable;
+        //    if (DataDictionary.BloodShardSNO.Contains(actorSNO))
+        //        return ObjectType.BloodShard;
 
-            if (DataDictionary.AvoidanceTypeSNO.ContainsKey(actorSNO) || DataDictionary.AvoidanceSNO.Contains(actorSNO))
-                return ObjectType.Avoidance;
+        //    if (actorType == ActorType.Item || DataDictionary.ForceToItemOverrideIds.Contains(actorSNO))
+        //        return ObjectType.Item;
 
-            if (DataDictionary.ForceTypeAsBarricade.Contains(actorSNO))
-                return ObjectType.Barricade;
+        //    //if (DataDictionary.InteractWhiteListIds.Contains(actorSNO))
+        //    //    return ObjectType.Interactable;
 
-            if (actorType == ActorType.Monster)
-                return ObjectType.Unit;
+        //    if (DataDictionary.AvoidanceTypeSNO.ContainsKey(actorSNO) || DataDictionary.AvoidanceSNO.Contains(actorSNO))
+        //        return ObjectType.Avoidance;
 
-            if (actorType == ActorType.Gizmo)
-            {
-                switch (gizmoType)
-                {
-                    case GizmoType.HealingWell:
-                        return ObjectType.HealthWell;
+        //    if (DataDictionary.ForceTypeAsBarricade.Contains(actorSNO))
+        //        return ObjectType.Barricade;
 
-                    case GizmoType.Door:
-                        return ObjectType.Door;
+        //    if (actorType == ActorType.Monster)
+        //        return ObjectType.Unit;
 
-                    case GizmoType.BreakableDoor:
-                        return ObjectType.Barricade;
+        //    if (actorType == ActorType.Gizmo)
+        //    {
+        //        switch (gizmoType)
+        //        {
+        //            case GizmoType.HealingWell:
+        //                return ObjectType.HealthWell;
 
-                    case GizmoType.PoolOfReflection:
-                    case GizmoType.PowerUp:
-                        return ObjectType.Shrine;
+        //            case GizmoType.Door:
+        //                return ObjectType.Door;
 
-                    case GizmoType.Chest:
-                        return ObjectType.Container;
+        //            case GizmoType.BreakableDoor:
+        //                return ObjectType.Barricade;
 
-                    case GizmoType.DestroyableObject:
-                    case GizmoType.BreakableChest:
-                        return ObjectType.Destructible;
+        //            case GizmoType.PoolOfReflection:
+        //            case GizmoType.PowerUp:
+        //                return ObjectType.Shrine;
 
-                    case GizmoType.PlacedLoot:
-                    case GizmoType.Switch:
-                    case GizmoType.Headstone:
-                        return ObjectType.Interactable;
+        //            case GizmoType.Chest:
+        //                return ObjectType.Container;
 
-                    case GizmoType.Portal:
-                        return ObjectType.Portal;
-                }
-            }
+        //            case GizmoType.DestroyableObject:
+        //            case GizmoType.BreakableChest:
+        //                return ObjectType.Destructible;
 
-            if (actorType == ActorType.Environment || actorType == ActorType.Critter || actorType == ActorType.ServerProp)
-                return ObjectType.Environment;
+        //            case GizmoType.PlacedLoot:
+        //            case GizmoType.Switch:
+        //            case GizmoType.Headstone:
+        //                return ObjectType.Interactable;
 
-            if (actorType == ActorType.Projectile)
-                return ObjectType.Projectile;
+        //            case GizmoType.Portal:
+        //                return ObjectType.Portal;
+        //        }
+        //    }
 
-            if (actorType == ActorType.ClientEffect)
-                return ObjectType.Effect;
+        //    if (actorType == ActorType.Environment || actorType == ActorType.Critter || actorType == ActorType.ServerProp)
+        //        return ObjectType.Environment;
 
-            if (actorType == ActorType.Player)
-                return ObjectType.Player;
+        //    if (actorType == ActorType.Projectile)
+        //        return ObjectType.Projectile;
 
-            if (DataDictionary.PlayerBannerSNO.Contains(actorSNO))
-                return ObjectType.Banner;
+        //    if (actorType == ActorType.ClientEffect)
+        //        return ObjectType.Effect;
 
-            if (internalName != null && internalName.StartsWith("Waypoint-"))
-                return ObjectType.Waypoint;
+        //    if (actorType == ActorType.Player)
+        //        return ObjectType.Player;
 
-            return ObjectType.Unknown;
-        }
+        //    if (DataDictionary.PlayerBannerSNO.Contains(actorSNO))
+        //        return ObjectType.Banner;
+
+        //    if (internalName != null && internalName.StartsWith("Waypoint-"))
+        //        return ObjectType.Waypoint;
+
+        //    return ObjectType.Unknown;
+        //}
 
         public static TrinityItemType GetItemType(ACDItem item)
         {
@@ -348,7 +350,5 @@ namespace Trinity.Helpers
             }
             return itemBaseType;
         }
-
-
     }
 }

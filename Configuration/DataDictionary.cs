@@ -141,6 +141,14 @@ namespace Trinity
             //ActorId: 451031, Type: Item, Name: Humbart Wessel
         };
 
+        public static HashSet<MonsterType> AllyMonsterTypes = new HashSet<MonsterType>
+        {
+            MonsterType.Ally,
+            MonsterType.Scenery,
+            MonsterType.Helper,
+            MonsterType.Team,
+        };
+
         public static HashSet<int> CosmeticSnoIds = new HashSet<int>
         {
             331905, //ActorId: 331905, Type: Item, Name: Amberwing
@@ -383,6 +391,9 @@ namespace Trinity
             get { return _animatioNamesById ?? (_animatioNamesById = SNOAnim.Invalid.ToDictionary(true)); }
         }
 
+        /// <summary>
+        /// The SNOAnim enum is so large that preprocessing to a dictionary has a significant performance improvement
+        /// </summary>
         public static string GetAnimationNameLowerCase(SNOAnim anim)
         {
             if (anim == SNOAnim.Invalid)
@@ -946,14 +957,13 @@ namespace Trinity
             159369, //MorluSpellcaster_Meteor_Pending-178011 (159369)
         };
 
-        public static readonly Dictionary<int, ObjectType> ObjectTypeOverrides = new Dictionary<int, ObjectType>
+        public static readonly Dictionary<int, TrinityObjectType> ObjectTypeOverrides = new Dictionary<int, TrinityObjectType>
         {
             // Needed for A5 bounty clicky on death orbs
             //ActorSnoId=334466 AnimSnoId=x1_Death_Orb_Event_Worldstone_idle TargetedCount=2 Type=Unit
-            { 334466, ObjectType.Interactable }, 
-
-            { 432258, ObjectType.Interactable },
-            { 221574, ObjectType.Interactable} //a1dun_Leoric_IronMaiden_Event, Type=Door GizmoType=Door ActorSnoId=221574
+            { 334466, TrinityObjectType.Interactable }, 
+            { 432258, TrinityObjectType.Interactable },
+            { 221574, TrinityObjectType.Interactable} //a1dun_Leoric_IronMaiden_Event, Type=Door GizmoType=Door ActorSnoId=221574
             //{ 54882, ObjectType.Door } //a3dun_Keep_Door_Wooden_A, Type=Interactable GizmoType=Door 
             //{ 433403, ObjectType.Interactable}
         };
@@ -1186,7 +1196,6 @@ namespace Trinity
             // A5 Forgotton War trash
             { 300864, -300 },
          };
-
 
         /// <summary>
         /// A list of all known SNO's of treasure goblins/bandits etc.
@@ -1829,6 +1838,8 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.Cow_B, //95263
+
             (int)SNOActor.a1dun_Leor_Jail_Door_SuperLocked_A_Fake,
             (int)SNOActor.a3dun_Keep_BucketMetal_A_Breakable,
             (int)SNOActor.x1_Catacombs_Breakable_Half_Bridge_Walkway_A,

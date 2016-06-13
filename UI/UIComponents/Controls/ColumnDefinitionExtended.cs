@@ -16,7 +16,7 @@ namespace Trinity.UIComponents
         // Variables
         public static DependencyProperty VisibleProperty;
 
-        // Properties
+        // PropertyLoader
         public Boolean Visible
         {
             get { return (Boolean)GetValue(VisibleProperty); }

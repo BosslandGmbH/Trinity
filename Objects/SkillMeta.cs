@@ -284,7 +284,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Special action to apply default overrides. 
         /// This exposes a way to write code that wont fit in the collection initializer
-        /// E.g. Properties based on IF statements or set properties on the skill object.
+        /// E.g. PropertyLoader based on IF statements or set properties on the skill object.
         /// </summary>
         public Action<Skill, SkillMeta> Defaults;
 
@@ -330,7 +330,7 @@ namespace Trinity.Objects
 
         /// <summary>
         /// Change this instance using the set values of other instances
-        /// Properties that have not been set will not be applied.
+        /// PropertyLoader that have not been set will not be applied.
         /// </summary>
         public SkillMeta Apply(params SkillMeta[] others)
         {
@@ -371,7 +371,7 @@ namespace Trinity.Objects
 
         /// <summary>
         /// Copy the set values of this instance to another instance
-        /// Properties that have not been set will not be applied.
+        /// PropertyLoader that have not been set will not be applied.
         /// </summary>
         /// <param name="other"></param>
         public void ApplyTo(SkillMeta other)

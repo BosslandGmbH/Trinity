@@ -228,7 +228,7 @@ namespace Trinity
 
         internal static void PersistentUpdateStats()
         {
-            int worldId = TrinityPlugin.Player.WorldID;
+            int worldId = TrinityPlugin.Player.WorldSnoId;
             if (worldId <= 0 || TrinityPlugin.Player.ActorClass == ActorClass.Invalid)
                 return;
 
@@ -298,13 +298,13 @@ namespace Trinity
 
             try
             {
-                if (TrinityPlugin.Player.WorldID > 0 && TrinityPlugin.Player.ActorClass != ActorClass.Invalid)
+                if (TrinityPlugin.Player.WorldSnoId > 0 && TrinityPlugin.Player.ActorClass != ActorClass.Invalid)
                 {
-                    var worldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.log", TrinityPlugin.Player.ActorClass, TrinityPlugin.Player.WorldID));
+                    var worldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.log", TrinityPlugin.Player.ActorClass, TrinityPlugin.Player.WorldSnoId));
 
                     using (FileStream LogStream = File.Open(worldStatsPath, FileMode.Create, FileAccess.Write, FileShare.Read))
                     {
-                        LogStats(LogStream, WorldStatsDictionary[TrinityPlugin.Player.WorldID]);
+                        LogStats(LogStream, WorldStatsDictionary[TrinityPlugin.Player.WorldSnoId]);
                     }
                 }
             }

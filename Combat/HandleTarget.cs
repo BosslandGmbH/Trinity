@@ -409,7 +409,7 @@ namespace Trinity
                     using (new PerformanceLogger("HandleTarget.LoSCheck"))
                     {                        
                         TargetCurrentDistance = CurrentTarget.RadiusDistance;
-                        if (DataDictionary.AlwaysRaycastWorlds.Contains(Player.WorldID) && CurrentTarget.Distance > CurrentTarget.Radius + 2f)
+                        if (DataDictionary.AlwaysRaycastWorlds.Contains(Player.WorldSnoId) && CurrentTarget.Distance > CurrentTarget.Radius + 2f)
                         {
                             CurrentTargetIsInLoS = NavHelper.CanRayCast(Player.Position, CurrentDestination);
                         }
