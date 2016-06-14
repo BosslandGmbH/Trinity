@@ -106,9 +106,14 @@ namespace Trinity
                     var isStuck = Navigator.StuckHandler.IsStuck;
 
                     var elites = new List<TrinityCacheObject>();
+                    var eliteswithAffixes = new List<TrinityCacheObject>();
 
+                    var ignoredAffixes = Settings.Combat.Misc.IgnoreAffixes.GetFlags<MonsterAffixes>().ToList();
                     foreach (var unit in ObjectCache.Where(u => u.IsUnit))
                     {
+                        if ((unit.IsRare || unit.IsChampion || unit.IsMinion) &&
+                            ignoredAffixes.Any(a => unit.MonsterAffixes.HasFlag(a)))
+                            eliteswithAffixes.Add(unit);
                         if (unit.IsBossOrEliteRareUnique)
                             elites.Add(unit);
                     }
@@ -163,8 +168,6 @@ namespace Trinity
                             CombatBase.CombatMode = CombatMode.On;
                         }
                     }
-
-                    var ignoredAffixes = Settings.Combat.Misc.IgnoreAffixes.GetFlags<MonsterAffixes>();
 
                     #region Foreach Loop
 
@@ -656,7 +659,7 @@ namespace Trinity
                                     var pack = PackDensityFormula(cacheObject);
                                     var health = UnitHealthFormula(cacheObject);
                                     var path = PathBlockedFormula(cacheObject);
-                                    var reflect = AffixMonsterNearFormula(cacheObject, elites.Where(elitex => ignoredAffixes.Any(a => elitex.MonsterAffixes.HasFlag(a))).ToList());
+                                    var reflect = AffixMonsterNearFormula(cacheObject, eliteswithAffixes);
                                     var elite = EliteMonsterNearFormula(cacheObject, elites);
                                     var aoe = AoENearFormula(cacheObject) + AoEInPathFormula(cacheObject);
 
