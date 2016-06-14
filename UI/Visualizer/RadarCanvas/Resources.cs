@@ -62,6 +62,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             ActorDefaultBrush = new SolidColorBrush(Colors.White);
 
             PlayerBrush = new SolidColorBrush(Colors.White);
+
+            OtherPlayerBrush = new SolidColorBrush(Colors.Beige);
+
+
             PlayerLightPen = new Pen(new SolidColorBrush(ControlPaint.Light(PlayerBrush.Color.ToDrawingColor(), 50).ToMediaColor()), 1);
 
             ItemBrush = new SolidColorBrush(Colors.DarkSeaGreen);
@@ -496,6 +500,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         public static SolidColorBrush ItemBrush { get; set; }
 
         public static SolidColorBrush PlayerBrush { get; set; }
+
+        public static SolidColorBrush OtherPlayerBrush { get; set; }
 
         public static SolidColorBrush SelectionBrush { get; set; }
 

@@ -54,7 +54,7 @@ namespace Trinity.Framework.Avoidance
 
         public TimeSpan TimeSinceLastAvoid => DateTime.UtcNow.Subtract(LastAvoidTime);
         public TimeSpan TimeSinceLastKite => DateTime.UtcNow.Subtract(LastKiteTime);
-        public bool IsKiteOnCooldown => Settings.KiteDistance > 0 && Core.Avoidance.Avoider.TimeSinceLastKite.TotalMilliseconds > Settings.KiteStutterDuration;
+        public bool IsKiteOnCooldown => Settings.KiteDistance > 0 && Core.Avoidance.Avoider.TimeSinceLastKite.TotalMilliseconds < Settings.KiteStutterDuration;
 
         private readonly PerFrameCachedValue<bool> _shouldKite = new PerFrameCachedValue<bool>(GetShouldKite);
         private readonly PerFrameCachedValue<bool> _shouldAvoid = new PerFrameCachedValue<bool>(GetShouldAvoid);

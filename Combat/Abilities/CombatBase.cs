@@ -1495,6 +1495,10 @@ namespace Trinity.Combat.Abilities
                     {
                         Logger.Log(LogCategory.Routine, $"Unable to straight-line path to Buffed Position {buffedLocation} Dist={distance}");
                     }
+                    else if (!Core.Avoidance.Grid.CanRayWalk(CurrentTarget.Position, buffedLocation))
+                    {
+                        Logger.Log(LogCategory.Routine, $"Can't see target from buffed position {buffedLocation} Dist={distance}");
+                    }
                     else if (Core.Avoidance.Avoider.IsKiteOnCooldown)
                     {
                         Logger.Log(LogCategory.Routine, $"Not moving to buffed location while on kite cooldown");

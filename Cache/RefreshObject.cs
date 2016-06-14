@@ -744,8 +744,8 @@ namespace Trinity
             switch (trinityObjectType)
             {
                 case TrinityObjectType.Player:
-                    if (!CurrentCacheObject.IsMe)
-                        return RefreshUnit();
+                    //if (!CurrentCacheObject.IsMe)
+                    //    return RefreshUnit();
                     return true;
                 case TrinityObjectType.Unit:
                     return RefreshUnit();

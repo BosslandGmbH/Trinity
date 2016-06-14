@@ -1817,7 +1817,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         private void DrawActivePlayer(DrawingContext dc, CanvasData canvas, RadarObject radarObject)
         {
             
-            var brush = RadarResources.PlayerBrush;
+            var brush = radarObject.Actor.IsMe ? RadarResources.PlayerBrush : RadarResources.OtherPlayerBrush;
             brush.Opacity = 0.75;
             var actorRadius = radarObject.Actor.CollisionRadius * GridSize;
             dc.DrawEllipse(brush, null, radarObject.Point, actorRadius, actorRadius);
