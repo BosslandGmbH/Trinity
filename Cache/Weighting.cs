@@ -656,7 +656,7 @@ namespace Trinity
                                     var pack = PackDensityFormula(cacheObject);
                                     var health = UnitHealthFormula(cacheObject);
                                     var path = PathBlockedFormula(cacheObject);
-                                    var reflect = ReflectiveMonsterNearFormula(cacheObject, elites.Where(x => x.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage)).ToList());
+                                    var reflect = AffixMonsterNearFormula(cacheObject, elites.Where(elitex => ignoredAffixes.Any(a => elitex.MonsterAffixes.HasFlag(a))).ToList());
                                     var elite = EliteMonsterNearFormula(cacheObject, elites);
                                     var aoe = AoENearFormula(cacheObject) + AoEInPathFormula(cacheObject);
 
@@ -1767,23 +1767,16 @@ namespace Trinity
             }
 
             /// <summary>
-            ///     Gets the weight for objects near Reflective Damage
+            /// 
             /// </summary>
             /// <param name="cacheObject"></param>
-            /// <param name="monstersWithReflectActive"></param>
+            /// <param name="monstersWithAffix"></param>
             /// <returns></returns>
-            public static double ReflectiveMonsterNearFormula(TrinityCacheObject cacheObject,
-                List<TrinityCacheObject> monstersWithReflectActive)
+            public static double AffixMonsterNearFormula(TrinityCacheObject cacheObject,
+                List<TrinityCacheObject> monstersWithAffix)
             {
-                double weight = 0;
-                if (!Settings.Combat.Misc.IgnoreMonstersWhileReflectingDamage)
-                    return 0;
-                var monsters = monstersWithReflectActive.Where(u => u.Position.Distance(cacheObject.Position) < 10f);
-                foreach (var monster in monsters)
-                {
-                    weight -= 50 * (Math.Max(0, 10 - monster.RadiusDistance)) / 10;
-                }
-                return weight;
+                var monsters = monstersWithAffix.Where(u => u.Position.Distance(cacheObject.Position) < 30f);
+                return monsters.Aggregate<TrinityCacheObject, double>(0, (current, monster) => current + 5000*Math.Max(0, (int) (30 - monster.Distance)));
             }
 
             /// <summary>
