@@ -173,7 +173,8 @@ namespace Trinity
         public bool IsRare { get; set; }        
         public bool IsUnique { get; set; }        
         public bool IsMinion { get; set; }        
-        public MonsterAffixes MonsterAffixes { get; set; }        
+        public MonsterAffixes MonsterAffixes { get; set; }
+        public HashSet<MonsterAffixes> MonsterAffixesCollection { get; set; }
         public bool IsTreasureGoblin { get; set; }
         public bool IsBoss { get; set; }        
         public bool IsAncient { get; set; }              
