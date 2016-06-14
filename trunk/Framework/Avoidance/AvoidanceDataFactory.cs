@@ -8,6 +8,7 @@ using Trinity.Objects;
 using Trinity.Technicals;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Framework.Avoidance
@@ -145,7 +146,6 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Thunderstorm",
-                AffixGbId = 0,
                 IsEnabledByDefault = true,
                 Element = Element.Lightning,
                 Handler = new CircularAvoidanceHandler(),
@@ -166,7 +166,6 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Herald of Pestilence",
-                AffixGbId = 0,
                 IsEnabledByDefault = true,
                 Element = Element.Poison,
                 Handler = new CircularAvoidanceHandler(),
@@ -188,7 +187,6 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Desecrator",
-                AffixGbId = 0,
                 IsEnabledByDefault = true,
                 Element = Element.Fire,
                 Handler = new CircularAvoidanceHandler(),
@@ -211,7 +209,6 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Morlu Meteor",
-                AffixGbId = 0,
                 IsEnabledByDefault = true,
                 Element = Element.Fire,
                 Handler = new CircularAvoidanceHandler(),
@@ -297,7 +294,7 @@ namespace Trinity.Framework.Avoidance
             {
                 Name = "Molten Core",
                 IsEnabledByDefault = true,
-                AffixGbId = (int) TrinityMonsterAffix.Molten,
+                Affix = MonsterAffixes.Molten,
                 Element = Element.Fire,
                 Handler = new CircularAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
@@ -340,7 +337,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Fire Chains",
-                AffixGbId = (int) TrinityMonsterAffix.FireChains,
+                Affix = MonsterAffixes.FireChains,
                 Handler = new FireChainsAvoidanceHandler(),
                 Element = Element.Fire,
                 Parts = new List<AvoidancePart>
@@ -364,7 +361,6 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Rift Boss: Tethrys",
-                AffixGbId = (int) TrinityMonsterAffix.Frozen,
                 Handler = new CircularAvoidanceHandler(),
                 Element = Element.Cold,
                 Parts = new List<AvoidancePart>
@@ -401,7 +397,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Frozen",
-                AffixGbId = (int) TrinityMonsterAffix.Frozen,
+                Affix = MonsterAffixes.Frozen,
                 Handler = new CircularAvoidanceHandler(),
                 Element = Element.Cold,
                 Parts = new List<AvoidancePart>
@@ -867,7 +863,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Plagued",
-                AffixGbId = (int) TrinityMonsterAffix.Plagued,
+                Affix = MonsterAffixes.Plagued,
                 Handler = new CircularAvoidanceHandler(),
                 Element = Element.Poison,
                 Parts = new List<AvoidancePart>
@@ -896,7 +892,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "FrozenPulse",
-                AffixGbId = (int) TrinityMonsterAffix.FrozenPulse,
+                Affix = MonsterAffixes.FrozenPulse,
                 Element = Element.Cold,
                 Handler = new CircularAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
@@ -945,7 +941,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Molten Trail",
-                AffixGbId = 95868,
+                Affix = MonsterAffixes.Molten, //AffixGbId = 95868,
                 Handler = new CircularAvoidanceHandler(),
                 Element = Element.Fire,
                 Parts = new List<AvoidancePart>
@@ -968,7 +964,7 @@ namespace Trinity.Framework.Avoidance
             {
                 Name = "Arcane Sentry",
                 IsEnabledByDefault = true,
-                AffixGbId = (int) TrinityMonsterAffix.ArcaneEnchanted,
+                Affix = MonsterAffixes.ArcaneEnchanted,
                 Element = Element.Arcane,
                 Handler = new ArcaneAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
@@ -1006,7 +1002,6 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Maghda Projectile",
-                AffixGbId = 0,
                 Element = Element.Physical,
                 Handler = new CircularAvoidanceHandler(),
                 Parts = new List<AvoidancePart>
@@ -1032,7 +1027,6 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Orbiter",
-                AffixGbId = 0,
                 IsEnabledByDefault = true,
                 Element = Element.Lightning,
                 Handler = new CircularAvoidanceHandler(),
@@ -1065,7 +1059,6 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Mage Fire",
-                AffixGbId = 0,
                 Handler = new CircularAvoidanceHandler(),
                 Element = Element.Fire,
                 Parts = new List<AvoidancePart>
@@ -1127,7 +1120,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Poison Enchanted",
-                AffixGbId = (int) TrinityMonsterAffix.PoisonEnchanted,
+                Affix = MonsterAffixes.PoisonEnchanted,
                 Handler = new PoisonEnchantedAvoidanceHandler(),
                 Element = Element.Poison,
                 Parts = new List<AvoidancePart>
@@ -1162,7 +1155,7 @@ namespace Trinity.Framework.Avoidance
             AvoidanceData.Add(new AvoidanceData
             {
                 Name = "Mortar",
-                AffixGbId = (int) TrinityMonsterAffix.Mortar,
+                Affix = MonsterAffixes.Mortar,
                 Handler = new CircularAvoidanceHandler(),
                 Element = Element.Fire,
                 Parts = new List<AvoidancePart>
@@ -1248,11 +1241,10 @@ namespace Trinity.Framework.Avoidance
         {
             data = null;
 
-            var affixes = actor.MonsterAffixes.ToList<TrinityMonsterAffix>();
-            if (affixes == null || !affixes.Any())
+            if (actor?.MonsterAffixesCollection == null || !actor.MonsterAffixesCollection.Any())
                 return false;
 
-            foreach (var affix in affixes)
+            foreach (var affix in actor.MonsterAffixesCollection)
             {
                 var part = GetAvoidancePart(affix);
                 if (part != null)
@@ -1260,7 +1252,7 @@ namespace Trinity.Framework.Avoidance
                     data = part.Parent;
                     return true;
                 }
-            }            
+            }
             return false;
         }
 
@@ -1286,9 +1278,9 @@ namespace Trinity.Framework.Avoidance
             return AvoidanceDataDictionary.ContainsKey(actorId) ? AvoidanceDataDictionary[actorId] : null;
         }
 
-        public static AvoidancePart GetAvoidancePart(TrinityMonsterAffix affix)
+        public static AvoidancePart GetAvoidancePart(MonsterAffixes affixes)
         {
-            return AvoidanceDataDictionary.Values.FirstOrDefault(a => a.Affix == affix);
+            return AvoidanceDataDictionary.Values.FirstOrDefault(a => affixes.HasFlag(a.Affix));
         }
 
         public static AvoidancePart GetAvoidancePart(SNOAnim actorAnimation)

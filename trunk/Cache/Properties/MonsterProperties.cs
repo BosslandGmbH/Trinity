@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
@@ -35,6 +36,7 @@ namespace Trinity.Cache.Properties
             target.HitPointsPct = this.HitPointsPct;
             target.HasDotDPS = this.HasDotDps;
             target.MonsterAffixes = this.MonsterAffixes;
+            target.MonsterAffixesCollection = this.MonsterAffixesCollection;
             target.IsTreasureGoblin = this.IsGoblin;
             target.IsAlly = this.IsAlly;
             target.IsIllusion = this.IsIllusion;
@@ -72,7 +74,11 @@ namespace Trinity.Cache.Properties
             this.MonsterType = monsterInfo.MonsterType;
             this.MonsterQuality = commonData.MonsterQualityLevel;
             this.IsBoss = this.MonsterQuality == MonsterQuality.Boss;
-            this.MonsterAffixes = MonsterPropertyUtils.GetMonsterAffixes(source);
+
+            var affixes = MonsterPropertyUtils.GetMonsterAffixes(source);
+            this.MonsterAffixes = affixes.Flags;
+            this.MonsterAffixesCollection = affixes.Collection;
+
             this.IsHostile = unit.IsHostile;
             this.IsSummoned = commonData.SummonedByACDId > 0;
             this.RiftValuePct = RiftProgression.GetRiftValue(source);
@@ -137,6 +143,7 @@ namespace Trinity.Cache.Properties
             }
         }
 
+        public HashSet<MonsterAffixes> MonsterAffixesCollection { get; set; }
         public bool IsChampion { get; set; }
         public bool IsReflectingDamage { get; set; }
         public bool IsSummonedByPlayer { get; set; }
@@ -203,126 +210,167 @@ namespace Trinity.Cache.Properties
             return false;
         }
 
-        public static MonsterAffixes GetMonsterAffixes(TrinityCacheObject source)
+        public class FlagEnumParseResult
+        {
+            public MonsterAffixes Flags;
+            public HashSet<MonsterAffixes> Collection;
+        }
+
+        public static FlagEnumParseResult GetMonsterAffixes(TrinityCacheObject source)
         {
             // because DiaUnit.MonsterAffixes is very very slow
-
-            var result = MonsterAffixes.None;
+            var hash = new HashSet<MonsterAffixes>();
+            var flags = MonsterAffixes.None;
             foreach (var affix in source.CommonData.Affixes)
             {
                 if (affix == -1) continue;
 
-                switch ((TrinityMonsterAffix)affix)
+                switch (affix)
                 {
-                    case TrinityMonsterAffix.ArcaneEnchanted:
-                        result |= MonsterAffixes.ArcaneEnchanted;
+                    case -1669589516:
+                        hash.Add(MonsterAffixes.ArcaneEnchanted);
+                        flags |= MonsterAffixes.ArcaneEnchanted;
                         continue;
-                    case TrinityMonsterAffix.Avenger:
-                        result |= MonsterAffixes.Avenger;
+                    case 1165197192:
+                        hash.Add(MonsterAffixes.Avenger);
+                        flags |= MonsterAffixes.Avenger;
                         continue;
-                    case TrinityMonsterAffix.Desecrator:
-                        result |= MonsterAffixes.Desecrator;
+                    case -121983956:
+                        hash.Add(MonsterAffixes.Desecrator);
+                        flags |= MonsterAffixes.Desecrator;
                         continue;
-                    case TrinityMonsterAffix.Electrified:
-                        result |= MonsterAffixes.Electrified;
+                    case -1752429632:
+                        hash.Add(MonsterAffixes.Electrified);
+                        flags |= MonsterAffixes.Electrified;
                         continue;
-                    case TrinityMonsterAffix.ExtraHealth:
-                        result |= MonsterAffixes.ExtraHealth;
+                    case -1512481702:
+                        hash.Add(MonsterAffixes.ExtraHealth);
+                        flags |= MonsterAffixes.ExtraHealth;
                         continue;
-                    case TrinityMonsterAffix.Fast:
-                        result |= MonsterAffixes.Fast;
+                    case 3775118:
+                        hash.Add(MonsterAffixes.Fast);
+                        flags |= MonsterAffixes.Fast;
                         continue;
-                    case TrinityMonsterAffix.FireChains:
-                        result |= MonsterAffixes.FireChains;
+                    case -439707236:
+                        hash.Add(MonsterAffixes.FireChains);
+                        flags |= MonsterAffixes.FireChains;
                         continue;
-                    case TrinityMonsterAffix.Frozen:
-                        result |= MonsterAffixes.Frozen;
+                    case -163836908:
+                        hash.Add(MonsterAffixes.Frozen);
+                        flags |= MonsterAffixes.Frozen;
                         continue;
-                    case TrinityMonsterAffix.FrozenPulse:
-                        result |= MonsterAffixes.FrozenPulse;
+                    case 1886876669:
+                        hash.Add(MonsterAffixes.FrozenPulse);
+                        flags |= MonsterAffixes.FrozenPulse;
                         continue;
-                    case TrinityMonsterAffix.HealthLink:
-                        result |= MonsterAffixes.HealthLink;
+                    case 1799201764:
+                        hash.Add(MonsterAffixes.HealthLink);
+                        flags |= MonsterAffixes.HealthLink;
                         continue;
-                    case TrinityMonsterAffix.Horde:
-                        result |= MonsterAffixes.Horde;
+                    case 127452338:
+                        hash.Add(MonsterAffixes.Horde);
+                        flags |= MonsterAffixes.Horde;
                         continue;
-                    case TrinityMonsterAffix.Illusionist:
-                        result |= MonsterAffixes.Illusionist;
+                    case 394214687:
+                        hash.Add(MonsterAffixes.Illusionist);
+                        flags |= MonsterAffixes.Illusionist;
                         continue;
-                    case TrinityMonsterAffix.Jailer:
-                        result |= MonsterAffixes.Jailer;
+                    case -27686857:
+                        hash.Add(MonsterAffixes.Jailer);
+                        flags |= MonsterAffixes.Jailer;
                         continue;
-                    case TrinityMonsterAffix.Knockback:
-                        result |= MonsterAffixes.Knockback;
+                    case -2088540441:
+                        hash.Add(MonsterAffixes.Knockback);
+                        flags |= MonsterAffixes.Knockback;
                         continue;
-                    case TrinityMonsterAffix.MissileDampening:
-                        result |= MonsterAffixes.MissileDampening;
+                    case -1412750743:
+                        hash.Add(MonsterAffixes.MissileDampening);
+                        flags |= MonsterAffixes.MissileDampening;
                         continue;
-                    case TrinityMonsterAffix.Molten:
-                        result |= MonsterAffixes.Molten;
+                    case 106438735:
+                        hash.Add(MonsterAffixes.Molten);
+                        flags |= MonsterAffixes.Molten;
                         continue;
-                    case TrinityMonsterAffix.Mortar:
-                        result |= MonsterAffixes.Mortar;
+                    case 106654229:
+                        hash.Add(MonsterAffixes.Mortar);
+                        flags |= MonsterAffixes.Mortar;
                         continue;
-                    case TrinityMonsterAffix.Nightmarish:
-                        result |= MonsterAffixes.Nightmarish;
+                    case -1245918914:
+                        hash.Add(MonsterAffixes.Nightmarish);
+                        flags |= MonsterAffixes.Nightmarish;
                         continue;
-                    case TrinityMonsterAffix.Orbiter:
-                        result |= MonsterAffixes.Orbiter;
+                    case 1905614711:
+                        hash.Add(MonsterAffixes.Orbiter);
+                        flags |= MonsterAffixes.Orbiter;
                         continue;
-                    case TrinityMonsterAffix.Plagued:
-                        result |= MonsterAffixes.Plagued;
+                    case -1333953694:
+                        hash.Add(MonsterAffixes.Plagued);
+                        flags |= MonsterAffixes.Plagued;
                         continue;
-                    case TrinityMonsterAffix.PoisonEnchanted:
-                        result |= MonsterAffixes.PoisonEnchanted;
+                    case 1929212066:
+                        hash.Add(MonsterAffixes.PoisonEnchanted);
+                        flags |= MonsterAffixes.PoisonEnchanted;
                         continue;
-                    case TrinityMonsterAffix.ReflectsDamage:
-                        result |= MonsterAffixes.ReflectsDamage;
+                    case -1374592233:
+                        hash.Add(MonsterAffixes.ReflectsDamage);
+                        flags |= MonsterAffixes.ReflectsDamage;
                         continue;
-                    case TrinityMonsterAffix.Shielding:
-                        result |= MonsterAffixes.Shielding;
+                    case -725865705:
+                        hash.Add(MonsterAffixes.Shielding);
+                        flags |= MonsterAffixes.Shielding;
                         continue;
-                    case TrinityMonsterAffix.Teleporter:
-                        result |= MonsterAffixes.Teleporter;
+                    case -507706394:
+                        hash.Add(MonsterAffixes.Teleporter);
+                        flags |= MonsterAffixes.Teleporter;
                         continue;
-                    case TrinityMonsterAffix.Thunderstorm:
-                        result |= MonsterAffixes.Thunderstorm;
+                    case -50556465:
+                        hash.Add(MonsterAffixes.Thunderstorm);
+                        flags |= MonsterAffixes.Thunderstorm;
                         continue;
-                    case TrinityMonsterAffix.Vampiric:
-                        result |= MonsterAffixes.Vampiric;
+                    case 395423867:
+                        hash.Add(MonsterAffixes.Vampiric);
+                        flags |= MonsterAffixes.Vampiric;
                         continue;
-                    case TrinityMonsterAffix.Vortex:
-                        result |= MonsterAffixes.Vortex;
+                    case 458872904:
+                        hash.Add(MonsterAffixes.Vortex);
+                        flags |= MonsterAffixes.Vortex;
                         continue;
-                    case TrinityMonsterAffix.Waller:
-                        result |= MonsterAffixes.Waller;
+                    case 481181063:
+                        hash.Add(MonsterAffixes.Waller);
+                        flags |= MonsterAffixes.Waller;
                         continue;
-                    case TrinityMonsterAffix.Wormhole:
-                        result |= MonsterAffixes.Wormhole;
+                    case 1156956365:
+                        hash.Add(MonsterAffixes.Wormhole);
+                        flags |= MonsterAffixes.Wormhole;
                         continue;
-                    //case TrinityMonsterAffix.Champion: //? DB's enum doesn't have champs?
-                    //    result |= MonsterAffixes.;
-                    //    continue;
-                    case TrinityMonsterAffix.Rare:
-                        result |= MonsterAffixes.Rare;
+                    case 924743082: // Champion
+                        hash.Add(MonsterAffixes.Elite);
+                        flags |= MonsterAffixes.Elite;
                         continue;
-                    case TrinityMonsterAffix.Unique:
-                        result |= MonsterAffixes.Unique;
+                    case 4206314:
+                        hash.Add(MonsterAffixes.Rare);
+                        flags |= MonsterAffixes.Rare;
                         continue;
-                    case TrinityMonsterAffix.Minion:
-                        result |= MonsterAffixes.Minion;
+                    case 418225399:
+                        hash.Add(MonsterAffixes.Unique);
+                        flags |= MonsterAffixes.Unique;
                         continue;
-                    case TrinityMonsterAffix.Elite:
-                        result |= MonsterAffixes.Elite;
+                    case 99383434:
+                        hash.Add(MonsterAffixes.Minion);
+                        flags |= MonsterAffixes.Minion;
                         continue;
                     default:
-                        //var entry = source.CommonData.MonsterAffixEntries.FirstOrDefault(a => a.Gbid == affix);
-                        //Trinity.Technicals.Logger.LogNormal($"Unknown AffixId={affix} Name={entry.Name} Type={entry.AffixType} Element={entry.Resistance}");
+                        var entry = source.CommonData.MonsterAffixEntries.FirstOrDefault(a => a.Gbid == affix);
+                        Technicals.Logger.LogNormal($"Unknown AffixId={affix} Name={entry.Name} Type={entry.AffixType} Element={entry.Resistance}");
                         break;
                 }
             }
-            return result;
+
+            return new FlagEnumParseResult
+            {
+                Collection = hash,
+                Flags = flags
+            };
         }
 
 

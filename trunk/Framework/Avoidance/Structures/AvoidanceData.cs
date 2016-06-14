@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Avoidance.Handlers;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Avoidance.Structures
 {
@@ -60,6 +61,7 @@ namespace Trinity.Framework.Avoidance.Structures
         public bool IsEnabled { get; set; }
 
         public Element Element { get; set; }
+        public MonsterAffixes Affix { get; set; }
 
         /// <summary>
         /// Retrieve a part by ActorSnoId
