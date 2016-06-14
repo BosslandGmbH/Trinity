@@ -249,7 +249,15 @@ namespace Trinity.Framework.Avoidance
                                 }
                             });
 
-                            handler.UpdateNodes(Grid, avoidance);
+                            try
+                            {
+                                handler.UpdateNodes(Grid, avoidance);
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.LogError($"Exception in AvoidanceHandler updating nodes. Name={avoidance.Data?.Name} Handler={avoidance.Data.Handler?.GetType()} {ex} {Environment.StackTrace}");
+                            }
+
                         }
                     }
 

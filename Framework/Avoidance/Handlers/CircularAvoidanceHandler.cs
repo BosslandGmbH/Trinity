@@ -27,7 +27,7 @@ namespace Trinity.Framework.Avoidance.Handlers
         public bool IsAllowed => TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct;
 
         public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
-        {
+        {            
             foreach (var actor in avoidance.Actors)
             {
                 if (actor == null || !actor.IsValid)
