@@ -122,7 +122,7 @@ namespace Trinity.Framework.Actors
                 }
 
                 var slot = acd.InventorySlot;
-                if (slot != InventorySlot.BackpackItems && slot != InventorySlot.BaseHealthPotion &&
+                if (slot != InventorySlot.BackpackItems && 
                     slot != InventorySlot.None && // Ground
                     (!inTown || slot != InventorySlot.SharedStash))
                 {

@@ -512,7 +512,7 @@
                                     </Grid>
 
 
-                                    <Grid  Grid.Row="3" HorizontalAlignment="Stretch" Margin="1,1,0,0">
+                                    <!--<Grid  Grid.Row="3" HorizontalAlignment="Stretch" Margin="1,1,0,0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="110"  />
                                             <ColumnDefinition Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Converter={StaticResource OffsetWidthConverter}, ConverterParameter=140}" />
@@ -528,7 +528,7 @@
                                                 <SolidColorBrush Color="DarkBlue" Opacity="0.05" />
                                             </TextBlock.Background>
                                         </TextBlock>
-                                    </Grid>
+                                    </Grid>-->
 
                                     <Grid Grid.Row="4" HorizontalAlignment="Stretch" Margin="1,1,0,0" Background="DarkSlateGray"
                                                Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ScrollViewer}}, Converter={StaticResource OffsetWidthConverter}, ConverterParameter=40}"

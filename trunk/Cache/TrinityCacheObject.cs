@@ -139,7 +139,6 @@ namespace Trinity
         public bool IsWaitSpot { get; set; }
         public double RiftValueInRadius { get; set; }
         public bool IsIllusion { get; set; }
-        public HashSet<TrinityMonsterAffix> Affixes { get; set; }
         public AnimationState AnimationState { get; internal set; }        
         public bool IsHostile { get; internal set; }
         public bool IsSummoned { get; internal set; }
@@ -240,13 +239,19 @@ namespace Trinity
         public bool IsRareChest { get; set; }
         public bool IsGizmoDisabledByScript { get; set; }
         public bool IsPlayerHeadstone { get; set; }
+        public bool IsChampion { get; set; }
 
         #endregion
 
         #region Calculated PropertyLoader
 
-        public bool IsEliteRareUnique => IsElite || IsRare || IsUnique || IsMinion;
-        public bool IsBossOrEliteRareUnique => (IsUnit && (IsEliteRareUnique || IsBoss));
+        [Obsolete("Use IsElite for includes all special monster types and specific properties for special cases IsBoss IsUnique etc")]
+
+        public bool IsEliteRareUnique => IsElite;
+
+        [Obsolete("Use IsElite for includes all special monster types and specific properties for special cases IsBoss IsUnique etc")]
+        public bool IsBossOrEliteRareUnique => IsElite;
+
         public bool IsTrashMob => (IsUnit && !(IsEliteRareUnique || IsBoss || IsTreasureGoblin || IsMinion));
         public bool IsMe => RActorGuid == TrinityPlugin.Player.RActorGuid;
         public bool IsUnit => Type == TrinityObjectType.Unit || ActorType == ActorType.Monster;
@@ -267,7 +272,6 @@ namespace Trinity
         public bool IsStandingInAvoidance => CacheData.TimeBoundAvoidance.Any(a => a.Position.Distance(Position) <= a.Radius);
         public bool CanWalkTo => Core.Avoidance.Grid.CanRayWalk(TrinityPlugin.Player.Position, Position);
         public bool CanCastTo => Core.Avoidance.Grid.CanRayCast(TrinityPlugin.Player.Position, Position);
-        public bool IsChampion => MonsterQuality == MonsterQuality.Champion;
         public float ZDiff => Math.Abs(Position.Z - TrinityPlugin.Player.Position.Z);
         public float RadiusDistance => Math.Max(Distance - Radius, 0f);
 
