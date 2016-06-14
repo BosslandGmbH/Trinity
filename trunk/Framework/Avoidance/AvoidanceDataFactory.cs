@@ -1228,11 +1228,9 @@ namespace Trinity.Framework.Avoidance
 
             var part = GetAvoidancePart(actor.ActorSNO);
             if (part != null)
-            {
-                {
-                    data = part.Parent;
-                    return true;
-                }
+            {            
+                data = part.Parent;
+                return true;                
             }
             return false;
         }
@@ -1241,18 +1239,15 @@ namespace Trinity.Framework.Avoidance
         {
             data = null;
 
-            if (actor?.MonsterAffixesCollection == null || !actor.MonsterAffixesCollection.Any())
+            if (actor.MonsterAffixes.HasFlag(MonsterAffixes.None))
                 return false;
 
-            foreach (var affix in actor.MonsterAffixesCollection)
+            var part = GetAvoidancePart(actor.MonsterAffixes);
+            if (part != null)
             {
-                var part = GetAvoidancePart(affix);
-                if (part != null)
-                {
-                    data = part.Parent;
-                    return true;
-                }
-            }
+                data = part.Parent;
+                return true;
+            }        
             return false;
         }
 
@@ -1269,7 +1264,6 @@ namespace Trinity.Framework.Avoidance
                 data = part.Parent;
                 return true;
             }
-
             return false;
         }
 
@@ -1280,7 +1274,7 @@ namespace Trinity.Framework.Avoidance
 
         public static AvoidancePart GetAvoidancePart(MonsterAffixes affixes)
         {
-            return AvoidanceDataDictionary.Values.FirstOrDefault(a => affixes.HasFlag(a.Affix));
+            return AvoidanceDataDictionary.Values.FirstOrDefault(a => affixes.HasAny(a.Affix));
         }
 
         public static AvoidancePart GetAvoidancePart(SNOAnim actorAnimation)

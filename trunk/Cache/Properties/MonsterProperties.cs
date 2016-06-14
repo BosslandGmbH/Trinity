@@ -36,7 +36,6 @@ namespace Trinity.Cache.Properties
             target.HitPointsPct = this.HitPointsPct;
             target.HasDotDPS = this.HasDotDps;
             target.MonsterAffixes = this.MonsterAffixes;
-            target.MonsterAffixesCollection = this.MonsterAffixesCollection;
             target.IsTreasureGoblin = this.IsGoblin;
             target.IsAlly = this.IsAlly;
             target.IsIllusion = this.IsIllusion;
@@ -68,17 +67,17 @@ namespace Trinity.Cache.Properties
                 return;
 
             var commonData = source.CommonData;
+            if (commonData == null || !commonData.IsValid)
+                return;
+
             var monsterInfo = source.Unit.MonsterInfo;
             this.MonsterSize = monsterInfo.MonsterSize;
             this.MonsterRace = monsterInfo.MonsterRace;
             this.MonsterType = monsterInfo.MonsterType;
+
+            this.MonsterAffixes = MonsterPropertyUtils.GetMonsterAffixes(commonData.Affixes).Flags;
             this.MonsterQuality = commonData.MonsterQualityLevel;
             this.IsBoss = this.MonsterQuality == MonsterQuality.Boss;
-
-            var affixes = MonsterPropertyUtils.GetMonsterAffixes(source);
-            this.MonsterAffixes = affixes.Flags;
-            this.MonsterAffixesCollection = affixes.Collection;
-
             this.IsHostile = unit.IsHostile;
             this.IsSummoned = commonData.SummonedByACDId > 0;
             this.RiftValuePct = RiftProgression.GetRiftValue(source);
@@ -143,7 +142,6 @@ namespace Trinity.Cache.Properties
             }
         }
 
-        public HashSet<MonsterAffixes> MonsterAffixesCollection { get; set; }
         public bool IsChampion { get; set; }
         public bool IsReflectingDamage { get; set; }
         public bool IsSummonedByPlayer { get; set; }
@@ -216,12 +214,12 @@ namespace Trinity.Cache.Properties
             public HashSet<MonsterAffixes> Collection;
         }
 
-        public static FlagEnumParseResult GetMonsterAffixes(TrinityCacheObject source)
+        public static FlagEnumParseResult GetMonsterAffixes(int[] affixIds)
         {
             // because DiaUnit.MonsterAffixes is very very slow
             var hash = new HashSet<MonsterAffixes>();
             var flags = MonsterAffixes.None;
-            foreach (var affix in source.CommonData.Affixes)
+            foreach (var affix in affixIds)
             {
                 if (affix == -1) continue;
 
@@ -360,8 +358,7 @@ namespace Trinity.Cache.Properties
                         flags |= MonsterAffixes.Minion;
                         continue;
                     default:
-                        var entry = source.CommonData.MonsterAffixEntries.FirstOrDefault(a => a.Gbid == affix);
-                        Technicals.Logger.LogNormal($"Unknown AffixId={affix} Name={entry.Name} Type={entry.AffixType} Element={entry.Resistance}");
+                        Technicals.Logger.LogVerbose($"Unknown AffixId={affix}");
                         break;
                 }
             }
