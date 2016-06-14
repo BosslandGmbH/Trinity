@@ -56,7 +56,7 @@ namespace Trinity.Framework.Avoidance.Structures
         /// <summary>
         /// The associated affix on the monster who casts this.
         /// </summary>
-        public TrinityMonsterAffix Affix { get; set; }
+        public MonsterAffixes Affix { get; set; }
 
         /// <summary>
         /// Generally speaking how seriously should we take this.
