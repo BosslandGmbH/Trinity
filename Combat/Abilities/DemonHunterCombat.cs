@@ -56,11 +56,6 @@ namespace Trinity.Combat.Abilities
                 return power;
             }
 
-            if (TryMaintainHardenedBuff(out power))
-            {
-                return power;
-            }
-
             if (ShouldImpaleHighValueTarget(out target))
             {
                 Logger.LogVerbose(LogCategory.SkillSelection, "ShouldImpaleHighValueTarget");
@@ -102,6 +97,11 @@ namespace Trinity.Combat.Abilities
             }
             else
             {
+                if (TryMaintainHardenedBuff(out power))
+                {
+                    return power;
+                }
+
                 // Elusive ring gives a damage reduction buff
                 if (ShouldRefreshElusiveBuff)
                 {

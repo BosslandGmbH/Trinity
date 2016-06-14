@@ -47,6 +47,7 @@ namespace Trinity.Cache.Properties
             target.IsUnique = this.IsUnique;
             target.IsMinion = this.IsMinion;
             target.IsRare = this.IsRare;
+            target.IsChampion = this.IsChampion;
             target.IsSummoner = this.IsSummoner;
             target.SummonedByACDId = this.SummonedByACDId;
             target.SummonerId = this.SummonerId;
@@ -76,11 +77,12 @@ namespace Trinity.Cache.Properties
             this.IsSummoned = commonData.SummonedByACDId > 0;
             this.RiftValuePct = RiftProgression.GetRiftValue(source);
             this.IsGoblin = MonsterRace == MonsterRace.TreasureGoblin || source.InternalNameLowerCase.Contains("goblin");
-            this.IsIllusion = this.MonsterAffixes.HasFlag(MonsterAffixes.Illusionist) && source.ActorAttributes.IsIllusion;
-            this.IsElite = this.MonsterAffixes.HasFlag(MonsterAffixes.Elite);
-            this.IsRare = this.MonsterAffixes.HasFlag(MonsterAffixes.Rare);
-            this.IsUnique = this.MonsterAffixes.HasFlag(MonsterAffixes.Unique);
-            this.IsMinion = this.MonsterAffixes.HasFlag(MonsterAffixes.Minion);
+            this.IsIllusion = this.MonsterAffixes.HasFlag(MonsterAffixes.Illusionist) && source.ActorAttributes.IsIllusion;            
+            this.IsRare = this.MonsterAffixes.HasFlag(MonsterAffixes.Rare) || MonsterQuality == MonsterQuality.Rare;
+            this.IsChampion = MonsterQuality == MonsterQuality.Champion;
+            this.IsUnique = this.MonsterAffixes.HasFlag(MonsterAffixes.Unique) || MonsterQuality == MonsterQuality.Unique;
+            this.IsMinion = this.MonsterAffixes.HasFlag(MonsterAffixes.Minion) || MonsterQuality == MonsterQuality.Minion;
+            this.IsElite = IsMinion || IsRare || IsChampion || IsUnique || IsBoss;
 
             if (source.ActorSNO == 86624) // Jondar is not an ally.
                 this.MonsterType = MonsterType.Undead;
@@ -116,7 +118,7 @@ namespace Trinity.Cache.Properties
 
             this.HitPoints = unit.HitpointsCurrent;
             this.HitPointsMax = unit.HitpointsMax;
-            this.HitPointsPct = this.HitPoints/this.HitPointsMax;
+            this.HitPointsPct = this.HitPoints / this.HitPointsMax;
             this.HasDotDps = source.ActorAttributes.HasDotDps;
             this.IsReflectingDamage = this.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage) && source.ActorAttributes.IsReflecting;
             this.IsNPC = unit.IsNPC;
@@ -135,6 +137,7 @@ namespace Trinity.Cache.Properties
             }
         }
 
+        public bool IsChampion { get; set; }
         public bool IsReflectingDamage { get; set; }
         public bool IsSummonedByPlayer { get; set; }
         public bool IsSummoner { get; set; }
@@ -207,7 +210,7 @@ namespace Trinity.Cache.Properties
             var result = MonsterAffixes.None;
             foreach (var affix in source.CommonData.Affixes)
             {
-                if (affix < 0) continue;
+                if (affix == -1) continue;
 
                 switch ((TrinityMonsterAffix)affix)
                 {
@@ -298,7 +301,9 @@ namespace Trinity.Cache.Properties
                     case TrinityMonsterAffix.Wormhole:
                         result |= MonsterAffixes.Wormhole;
                         continue;
-                    case TrinityMonsterAffix.Champion:
+                    //case TrinityMonsterAffix.Champion: //? DB's enum doesn't have champs?
+                    //    result |= MonsterAffixes.;
+                    //    continue;
                     case TrinityMonsterAffix.Rare:
                         result |= MonsterAffixes.Rare;
                         continue;
@@ -312,8 +317,8 @@ namespace Trinity.Cache.Properties
                         result |= MonsterAffixes.Elite;
                         continue;
                     default:
-                        var entry = source.CommonData.MonsterAffixEntries.FirstOrDefault(a => a.Gbid == affix);
-                        Trinity.Technicals.Logger.LogNormal($"Unknown AffixId={affix} Name={entry.Name} Type={entry.AffixType} Element={entry.Resistance}");
+                        //var entry = source.CommonData.MonsterAffixEntries.FirstOrDefault(a => a.Gbid == affix);
+                        //Trinity.Technicals.Logger.LogNormal($"Unknown AffixId={affix} Name={entry.Name} Type={entry.AffixType} Element={entry.Resistance}");
                         break;
                 }
             }

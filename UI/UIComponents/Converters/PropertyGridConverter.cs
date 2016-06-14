@@ -31,15 +31,15 @@ namespace Trinity.UIComponents
 
             var props = value.GetType().GetProperties();
 
-            var interfacePropsNames = new HashSet<string>(value.GetType().GetInterfaces().SelectMany(i => i.GetProperties()).Select(p => p.Name));
+            //var interfacePropsNames = new HashSet<string>(value.GetType().GetInterfaces().SelectMany(i => i.GetProperties()).Select(p => p.Name));
 
             Parallel.ForEach(props, prop =>
             {
                 BindingMember bm = null;
                 try
                 {
-                    if (!interfacePropsNames.Contains(prop.Name))
-                        return;
+                    //if (!interfacePropsNames.Contains(prop.Name))
+                    //    return;
 
                     bm = new BindingMember(prop, value, null, true);
                 }

@@ -14,6 +14,8 @@ using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
+using Zeta.Common;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Helpers
 {
@@ -22,6 +24,44 @@ namespace Trinity.Helpers
     /// </summary>
     public static class Extensions
     {
+
+        public static void AddRangeOverride<TKey, TValue>(this Dictionary<TKey, TValue> dic, Dictionary<TKey, TValue> dicToAdd)
+        {
+            dicToAdd.ForEach(x => dic[x.Key] = x.Value);
+        }
+
+        public static void AddRangeNewOnly<TKey, TValue>(this Dictionary<TKey, TValue> dic, Dictionary<TKey, TValue> dicToAdd)
+        {
+            dicToAdd.ForEach(x => { if (!dic.ContainsKey(x.Key)) dic.Add(x.Key, x.Value); });
+        }
+
+        public static void AddRange<TKey, TValue>(this Dictionary<TKey, TValue> dic, Dictionary<TKey, TValue> dicToAdd)
+        {
+            dicToAdd.ForEach(x => dic.Add(x.Key, x.Value));
+        }
+
+        public static bool ContainsKeys<TKey, TValue>(this Dictionary<TKey, TValue> dic, IEnumerable<TKey> keys)
+        {
+            bool result = false;
+            keys.ForEachOrBreak((x) => { result = dic.ContainsKey(x); return result; });
+            return result;
+        }
+
+        //public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        //{
+        //    foreach (var item in source)
+        //        action(item);
+        //}
+
+        public static void ForEachOrBreak<T>(this IEnumerable<T> source, Func<T, bool> func)
+        {
+            foreach (var item in source)
+            {
+                bool result = func(item);
+                if (result) break;
+            }
+        }
+
         public static Queue<T> AddRange<T>(this Queue<T> queue, IEnumerable<T> range)
         {
             foreach (var item in range)

@@ -8,6 +8,7 @@ using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Items;
+using Trinity.Helpers;
 using Trinity.Technicals;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -49,8 +50,15 @@ namespace Trinity.Framework.Objects.Memory.Attributes
                 Logger.LogVerbose($"Attribute Map Invalid for groupId: {groupId}");
                 return;
             }
-            
+
             Items = Map.Data.Items;
+           
+            if (Group.Map.Count != Items.Count && Group.Map2.IsValid)
+            {
+                Items.AddRangeNewOnly(Group.Map2.Data.Items);
+            }
+
+
         }
 
         internal List<TValue> GetCachedAttributes<TValue>(ActorAttributeType attr)
@@ -164,7 +172,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         public override string ToString()
         {
             return Items.Aggregate($"Attributes ({Items.Count}): {Environment.NewLine}",
-                (current, attr) => current + $" {attr.Value} IsValid={IsValid} {Environment.NewLine}");
+                (current, attr) => current + $" {attr.Value} {Environment.NewLine}");
         }
 
         public string ToProperties()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Avoidance.Handlers;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Technicals;
 using Zeta.Game;
@@ -1247,10 +1248,11 @@ namespace Trinity.Framework.Avoidance
         {
             data = null;
 
-            if (actor?.Affixes == null || !actor.Affixes.Any())
+            var affixes = actor.MonsterAffixes.ToList<TrinityMonsterAffix>();
+            if (affixes == null || !affixes.Any())
                 return false;
 
-            foreach (var affix in actor.Affixes)
+            foreach (var affix in affixes)
             {
                 var part = GetAvoidancePart(affix);
                 if (part != null)

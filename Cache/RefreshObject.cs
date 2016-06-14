@@ -465,17 +465,17 @@ namespace Trinity
             //CurrentCacheObject.HitPointsPct = c_HitPointsPct;
             //CurrentCacheObject.InternalName = CurrentCacheObject.InternalName;
             CurrentCacheObject.IsAttackable = c_unit_IsAttackable;
-            CurrentCacheObject.IsElite = c_unit_IsElite;
+            //CurrentCacheObject.IsElite = c_unit_IsElite;
             //CurrentCacheObject.IsEliteRareUnique = c_IsEliteRareUnique;
-            CurrentCacheObject.IsMinion = c_unit_IsMinion;
-            CurrentCacheObject.IsRare = c_unit_IsRare;
-            CurrentCacheObject.IsTreasureGoblin = c_unit_IsTreasureGoblin;
-            CurrentCacheObject.IsUnique = c_unit_IsUnique;
+            //CurrentCacheObject.IsMinion = c_unit_IsMinion;
+            //CurrentCacheObject.IsRare = c_unit_IsRare;
+            //CurrentCacheObject.IsTreasureGoblin = c_unit_IsTreasureGoblin;
+            //CurrentCacheObject.IsUnique = c_unit_IsUnique;
             CurrentCacheObject.ItemLevel = c_ItemLevel;
             //CurrentCacheObject.ItemLink = c_ItemLink;
             CurrentCacheObject.ItemQuality = c_ItemQuality;
-            CurrentCacheObject.MonsterAffixes = c_MonsterAffixes;
-            CurrentCacheObject.MonsterSize = c_unit_MonsterSize;
+            //CurrentCacheObject.MonsterAffixes = c_MonsterAffixes;
+            //CurrentCacheObject.MonsterSize = c_unit_MonsterSize;
             //CurrentCacheObject.OneHanded = c_IsOneHandedItem;
             //CurrentCacheObject.RActorGuid = CurrentCacheObject.RActorGuid;
             //CurrentCacheObject.Radius = CurrentCacheObject.Radius;
@@ -743,10 +743,10 @@ namespace Trinity
         {
             switch (trinityObjectType)
             {
-                case TrinityObjectType.Player:                    
+                case TrinityObjectType.Player:
                     if (!CurrentCacheObject.IsMe)
                         return RefreshUnit();
-                    return true;       
+                    return true;
                 case TrinityObjectType.Unit:
                     return RefreshUnit();
                 case TrinityObjectType.Item:
@@ -776,12 +776,12 @@ namespace Trinity
                 case TrinityObjectType.Interactable:
                 case TrinityObjectType.HealthWell:
                 case TrinityObjectType.CursedChest:
-                case TrinityObjectType.CursedShrine:                
-                    return RefreshGizmo();             
-                default:                    
+                case TrinityObjectType.CursedShrine:
+                    return RefreshGizmo();
+                default:
                     DebugUtil.LogUnknown(c_diaObject);
                     c_IgnoreSubStep = "Unknown." + c_diaObject.ActorType;
-                    return false;                    
+                    return false;
             }
         }
 
