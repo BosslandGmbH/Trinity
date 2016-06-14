@@ -570,7 +570,7 @@ namespace Trinity.Combat.Abilities
         /// </summary>
         private static bool MultiShotCondition(SkillMeta meta)
         {
-            meta.CastRange = 65f;
+            meta.CastRange = 60f;
             meta.CastFlags = CanCastFlags.NoPowerManager;
             meta.TargetUnitSelector = ret => TargetUtil.GetClosestUnit();
 
@@ -582,7 +582,7 @@ namespace Trinity.Combat.Abilities
             //    Sets.NatalyasVengeance.IsMaxBonusActive && TargetUtil.AnyMobsInRange(80f) ||
             //    TargetUtil.ClusterExists(45, 2) || TargetUtil.AnyElitesInRange(80f))
             //    return true;
-            return TargetUtil.AnyMobsInRange(65f);
+            return TargetUtil.AnyMobsInRange(60f);
 
 
             //return false;
