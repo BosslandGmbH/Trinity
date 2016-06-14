@@ -345,7 +345,7 @@ namespace Trinity.Framework.Avoidance
                     new AvoidancePart
                     {
                         Name = "Fire Chain Actor",
-                        Affix = TrinityMonsterAffix.FireChains,
+                        Affix = MonsterAffixes.FireChains,
                         Duration = TimeSpan.FromSeconds(3),
                         Type = PartType.ActorAffix,
                     },
