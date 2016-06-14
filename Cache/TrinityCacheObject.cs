@@ -254,7 +254,7 @@ namespace Trinity
 
         public bool IsTrashMob => (IsUnit && !(IsEliteRareUnique || IsBoss || IsTreasureGoblin || IsMinion));
         public bool IsMe => RActorGuid == TrinityPlugin.Player.RActorGuid;
-        public bool IsUnit => Type == TrinityObjectType.Unit || ActorType == ActorType.Monster;
+        public bool IsUnit => Type == TrinityObjectType.Unit || ActorType == ActorType.Monster || ActorType == ActorType.Player;
         public bool IsItem => Type == TrinityObjectType.Item || ActorType == ActorType.Item;
         public bool IsPlayer => Type == TrinityObjectType.Player || ActorType == ActorType.Player;
         public bool IsGizmo => ActorType == ActorType.Gizmo;
