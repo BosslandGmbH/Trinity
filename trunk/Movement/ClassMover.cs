@@ -11,6 +11,7 @@ using Trinity.Framework.Avoidance.Structures;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
+using Zeta.Bot.Dungeons;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -499,12 +500,16 @@ namespace Trinity.Movement
             {
                 Skills.Wizard.Teleport.Cast(destination);
                 LogMovement(SNOPower.Wizard_Teleport, destination);
+                Navigator.Clear();
+                GridSegmentation.Reset();
                 return true;
             }
             if (Skills.Wizard.ArchonTeleport.CanCast())
             {
                 Skills.Wizard.ArchonTeleport.Cast(destination);
                 LogMovement(SNOPower.Wizard_Archon_Teleport, destination);
+                Navigator.Clear();
+                GridSegmentation.Reset();
                 return true;
             }
             return false;
