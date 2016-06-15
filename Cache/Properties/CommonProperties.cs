@@ -38,7 +38,7 @@ namespace Trinity.Cache.Properties
             target.ObjectHash = this.ObjectHash;
             target.ActorSNO = this.ActorSnoId;
             target.InternalName = this.InternalName;
-            target.InternalNameLowerCase = this.InternalName;
+            target.InternalNameLowerCase = this.InternalName.ToLower();
             target.ActorType = this.ActorType;
             target.GizmoType = this.GizmoType;
             target.IsObstacle = this.IsObstacle;
