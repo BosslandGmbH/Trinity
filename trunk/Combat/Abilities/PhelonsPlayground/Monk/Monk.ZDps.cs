@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Adventurer.Util;
 using Trinity.Config.Combat;
 using Trinity.Reference;
 using Zeta.Game;
@@ -17,7 +18,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             public static TrinityPower PowerSelector()
             {
                 if (Player.IsIncapacitated) return null;
-                
+
                 TrinityCacheObject target;
                 if (ShouldDashingStrike(out target))
                     return CastDashingStrike(target);
@@ -38,11 +39,22 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                 if (ShouldCycloneStrike)
                     return CastCycloneStrike;
 
+                if (ShouldWalk(5f, 20f, true))
+                    return Walk(20f, true);
+
                 if (ShouldCripplingWave(out target))
                     return CastCripplingWave(target);
 
                 return null;
             }
+
+            private static bool ShouldWalk(float minRange, float maxRange, bool objectsInAoe)
+            {
+                return PhelonUtils.BestTankPosition(maxRange, objectsInAoe).Distance(Player.Position) < maxRange &&
+                       PhelonUtils.BestTankPosition(maxRange, objectsInAoe).Distance(Player.Position) > minRange;
+            }
+
+            private static TrinityPower Walk(float maxRange, bool objectsInAoe) => new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestTankPosition(maxRange, objectsInAoe));
 
             private static bool ShouldDashingStrike(out TrinityCacheObject target)
             {
@@ -142,7 +154,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             {
                 get
                 {
-                    if (!Skills.Monk.Epiphany.CanCast() ||  GetHasBuff(SNOPower.X1_Monk_Epiphany))
+                    if (!Skills.Monk.Epiphany.CanCast() || GetHasBuff(SNOPower.X1_Monk_Epiphany))
                         return false;
 
                     // Epiphany mode is 'Off Cooldown'

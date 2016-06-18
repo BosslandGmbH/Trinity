@@ -16,11 +16,14 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             {
                 try
                 {
-                    return TrinityPlugin.ObjectCache.FirstOrDefault(x => x.InternalNameLowerCase.Contains("monk_"));
+                    var monk = TrinityPlugin.ObjectCache.FirstOrDefault(x => x.InternalName.ToLower().Contains("monk"));
+                    if (monk == null)
+                        Logger.Log("Unable to find Monk.  Where did he go?");
+                    return monk;
                 }
                 catch (Exception)
                 {
-                    Logger.Log("Unable to find Monk.  Where did he go?");
+                    Logger.Log("Unable to find Monk.  Error?");
                     //return CombatBase.IsInParty ? TargetUtil.GetClosestUnit(25) : null;
                     return null;
                 }
@@ -60,7 +63,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
             return
                 (from u in PhelonUtils.SafeList(includeUnitsInAoe)
-                    where u.IsUnit && u.IsInLineOfSight && u.HasBeenInLoS &&
+                    where u.IsUnit && u.CanCastTo && u.HasBeenInLoS &&
                           !UnitsAroundPuller(pullLocation, 20, includeUnitsInAoe)
                               .Select(x => x.ACDGuid)
                               .Contains(u.ACDGuid) &&

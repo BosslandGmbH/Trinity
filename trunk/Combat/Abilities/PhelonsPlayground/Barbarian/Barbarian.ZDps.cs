@@ -79,12 +79,16 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 if (!Skills.Barbarian.Whirlwind.CanCast())
                     return false;
 
-                target = CurrentTarget.IsBoss
-                    ? CurrentTarget
-                    : (PhelonGroupSupport.Monk != null
-                        ? PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault()
-                        : PhelonGroupSupport.Monk ?? PhelonUtils.ClosestGlobe() ??
-                          PhelonTargeting.BestAoeUnit(45, true));
+                if (CurrentTarget.IsElite)
+                    target = CurrentTarget;
+                else if (PhelonGroupSupport.Monk != null && PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault() != null)
+                    target = PhelonGroupSupport.UnitsToPull(PhelonGroupSupport.Monk.Position).FirstOrDefault();
+                else if (PhelonGroupSupport.Monk != null)
+                    target = PhelonGroupSupport.Monk;
+                else if (PhelonUtils.ClosestGlobe() != null)
+                    target = PhelonUtils.ClosestGlobe();
+                else
+                    PhelonTargeting.BestAoeUnit(15, true);
 
                 return target != null && Player.PrimaryResource > 10;
             }

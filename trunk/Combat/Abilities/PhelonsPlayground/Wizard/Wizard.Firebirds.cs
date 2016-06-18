@@ -15,9 +15,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
         {
             public static TrinityPower PowerSelector()
             {
-
-                if (ShouldArchon())
-                    return CastArchon;
+                if (Archon.ShouldArchon())
+                    return Archon.CastArchon;
 
                 if (ShouldHydra())
                     return CastHydra;
@@ -85,38 +84,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     return new TrinityPower(SNOPower.Wizard_Hydra, 55f, PhelonTargeting.BestAoeUnit(45, true).Position);
                 }
             }
-
-            #region Archon Skills
-
-            public static bool ShouldArchon()
-            {
-                if (!Skills.Wizard.Archon.CanCast() || Skills.Wizard.ArchonBlast.CanCast())
-                    return false;
-
-                if (Player.PrimaryResourcePct < 0.20 ||
-                    CacheData.Buffs.GetBuffTimeRemainingMilliseconds(SNOPower.Wizard_Archon) < 1500)
-                    return true;
-
-                if (Sets.ChantodosResolve.IsFullyEquipped)
-                {
-                    return GetHasBuff(SNOPower.P3_ItemPassive_Unique_Ring_021) &&
-                           GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021) > 19;
-                }
-
-                return true;
-            }
-
-            public static TrinityPower CastArchon
-            {
-                get
-                {
-                    Archon.NeedSlowTime = true;
-                    return new TrinityPower(Skills.Wizard.Archon.SNOPower);
-                }
-            }
-
-            #endregion
-
         }
     }
 }
