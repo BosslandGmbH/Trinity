@@ -11,7 +11,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
         private static int EarthCount = Sets.MightOfTheEarth.CurrentBonuses;
         private static int WastesCount = Sets.WrathOfTheWastes.CurrentBonuses;
 
-        public static bool zDPSEquipped = (WastesCount == 2 || RaekorCount == 2 || Sets.LegacyOfNightmares.IsEquipped) &&
+        public static bool zDPSEquipped = (WastesCount <= 2 || RaekorCount <= 2 || Sets.LegacyOfNightmares.IsEquipped) &&
                                   (Sets.BulKathossOath.IsEquipped ||
                                    Sets.IstvansPairedBlades.IsEquipped ||
                                    Legendary.IllusoryBoots.IsEquipped);
@@ -25,9 +25,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             {
                 //Logger.Log($"{zDPSEquipped} | {Sets.LegacyOfNightmares.IsEquipped} | {Legendary.IllusoryBoots.IsEquipped}");
                 if (zDPSEquipped)
-                {
                     power = ZDps.PowerSelector();
-                }
 
                 if (RaekorCount == 3)
                     power = Raekor.PowerSelector();
@@ -46,8 +44,6 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
 
                 //if (power == null) power = new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation);
             }
-            if (CurrentTarget != null && CurrentTarget.IsUnit)
-               Logger.Log($"{CurrentTarget != null} && {CurrentTarget.IsUnit}");
             //if (power != null)
             //    Logger.Log($"Using: {power}");
             return power;

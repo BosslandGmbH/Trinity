@@ -24,6 +24,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 //public static bool NeedTwister = false;
                 public static TrinityPower PowerSelector()
                 {
+                    if (Archon.ShouldArchon())
+                        return Archon.CastArchon;
+
                     if (ShouldFrostNova)
                         return CastFrostNova;
 
@@ -49,7 +52,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     return PhelonUtils.GetTwisterDiaObjects(25, true)
                         .OrderBy(x => x.Position.Distance(PhelonTargeting.BestAoeUnit(45, true).Position))
                         .FirstOrDefault(
-                            x => x.Position.Distance(PhelonTargeting.BestAoeUnit(45, true).Position) < 7 && x.IsInLineOfSight);
+                            x => x.Position.Distance(PhelonTargeting.BestAoeUnit(45, true).Position) < 7 && x.CanCastTo);
                 }
 
                 private static Vector3 ActualLocation

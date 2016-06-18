@@ -59,6 +59,32 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 }
             }
 
+            public static bool ShouldArchon()
+            {
+                if (!Skills.Wizard.Archon.CanCast() || Skills.Wizard.ArchonBlast.CanCast())
+                    return false;
+
+                //if (Legendary.ConventionOfElements.IsEquipped && TimeToElementStart(Element.Cold) < 3000 && TimeToElementStart(Element.Cold) > 0)
+                //    return false;
+
+                //if (CacheData.Buffs.HasArchon && CacheData.Buffs.GetBuffTimeRemainingMilliseconds(SNOPower.Wizard_Archon) < 1500)
+                //    return true;
+
+                //if (Sets.ChantodosResolve.IsFullyEquipped)
+                //    return GetHasBuff(SNOPower.P3_ItemPassive_Unique_Ring_021) && GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021) > 19;
+
+                return true;
+            }
+
+            public static TrinityPower CastArchon
+            {
+                get
+                {
+                    Archon.NeedSlowTime = true;
+                    return new TrinityPower(Skills.Wizard.Archon.SNOPower);
+                }
+            }
+
             //private static bool ShouldCancelArchon
             //    => 
             //        CanCast(SNOPower.Wizard_Archon_Cancel) && VyrsCount >= 1 && TalRashasCount >= 3 &&

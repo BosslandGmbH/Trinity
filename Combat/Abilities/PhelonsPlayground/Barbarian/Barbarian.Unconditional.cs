@@ -96,7 +96,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                         return false;
 
                     return !Sets.ImmortalKingsCall.IsFirstBonusActive && CurrentTarget != null &&
-                           (CurrentTarget.IsEliteRareUnique || TargetUtil.AnyMobsInRange(25f, 3)) ||
+                           (CurrentTarget.IsElite || TargetUtil.AnyMobsInRange(25f, 3)) ||
                            Sets.ImmortalKingsCall.IsFirstBonusActive && TrinityPlugin.PlayerOwnedAncientCount < 3;
                 }
             }
@@ -139,8 +139,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
 
                     var shouldRefreshTaeguk = GetHasBuff(SNOPower.ItemPassive_Unique_Gem_015_x1) &&
                                               !Hotbar.Contains(SNOPower.Barbarian_Whirlwind) &&
-                                              Skills.Barbarian.BattleRage.TimeSinceUse >= 2300 &&
-                                              Skills.Barbarian.BattleRage.TimeSinceUse <= 3000;
+                                              Skills.Barbarian.BattleRage.TimeSinceUse >= 3000;
 
                     return !GetHasBuff(SNOPower.Barbarian_BattleRage) || shouldRefreshTaeguk;
                 }

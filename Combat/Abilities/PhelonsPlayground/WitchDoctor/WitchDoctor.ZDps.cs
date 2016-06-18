@@ -38,7 +38,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 if (ShouldHaunt(out target))
                     return CastHaunt(target);
 
-                return null;
+                return PhelonGroupSupport.Monk != null
+                    ? new TrinityPower(SNOPower.Walk, 3f, PhelonGroupSupport.Monk.Position)
+                    : new TrinityPower(SNOPower.Walk, 3f, PhelonTargeting.BestAoeUnit(45).Position);
             }
 
             private static bool ShouldPiranhas(out TrinityCacheObject target)
