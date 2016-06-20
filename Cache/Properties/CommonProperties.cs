@@ -23,12 +23,16 @@ namespace Trinity.Cache.Properties
         private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(100);
         private static readonly Regex NameNumberTrimRegex = new Regex(@"-\d+$", RegexOptions.Compiled);
 
+        public bool IsValid { get; set; } = true;
+
         public DateTime CreationTime { get; } = DateTime.UtcNow;
 
         public void ApplyTo(TrinityCacheObject target)
         {
             if (!this.IsFrozen && DateTime.UtcNow.Subtract(_lastUpdated) > UpdateInterval || this.IsMe)
+            {
                 Update(target);
+            }
 
             target.ActorAttributes = this.ActorAttributes;
             target.Animation = this.Animation;
@@ -170,6 +174,14 @@ namespace Trinity.Cache.Properties
             this.Distance = TrinityPlugin.Player.Position.Distance(this.Position);
             this.AcdId = diaObject.ACDId;
 
+            // Check for an RActorGuid that was re-used for another object.
+            var snoId = diaObject.ActorSnoId;
+            if (snoId != this.ActorSnoId)
+            {
+                Logger.Warn($"SnoIds dont match for actor {diaObject.Name} ({snoId})/ {this.InternalName} ({this.ActorSnoId})");
+                this.IsValid = false;
+            }
+
             if (this.Distance > 100f)
                 return;
 
@@ -210,6 +222,8 @@ namespace Trinity.Cache.Properties
             }
 
         }
+
+        public bool IsCorrupt { get; set; }
 
         public float AxialRadius { get; set; }
         public bool IsMe { get; set; }

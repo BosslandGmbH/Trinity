@@ -18,6 +18,8 @@ namespace Trinity.Cache.Properties
         private DateTime _lastUpdated = DateTime.MinValue;
         private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(250);
 
+        public bool IsValid { get; set; } = true;
+
         public DateTime CreationTime { get; } = DateTime.UtcNow;
 
         public void ApplyTo(TrinityCacheObject target)

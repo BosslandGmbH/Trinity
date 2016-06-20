@@ -18,7 +18,7 @@ namespace Trinity.Cache.Properties
 
         public static int Count => PropertyCollections.Count;
 
-        private const int ActorLimit = 1000;
+        private const int ActorLimit = 500;
 
         /// <summary>
         /// Retrieves all property collections for an actor
@@ -48,11 +48,16 @@ namespace Trinity.Cache.Properties
                 var removeAmount = ActorLimit/4;
                 foreach (var id in InsertionOrder.Take(removeAmount).ToList())
                 {
-                    PropertyCollections.Remove(id);
-                    InsertionOrder.Remove(id);
+                    RemoveItem(id);
                 }
                 Logger.LogVerbose(LogCategory.CacheManagement, $"Cleared {removeAmount} property collections");
             }
+        }
+
+        private static void RemoveItem(int id)
+        {
+            PropertyCollections.Remove(id);
+            InsertionOrder.Remove(id);
         }
 
         /// <summary>
@@ -74,23 +79,22 @@ namespace Trinity.Cache.Properties
                 return null;
          
             var props = collections.OfType<T>().FirstOrDefault();
-
             if (props != null)
             {
                 try
                 {
-                    //Logger.Log($"PropertyCollection Found {typeof(T)} for {obj.InternalName} RActorGuid={obj.RActorGuid}, Age={DateTime.UtcNow.Subtract(props.CreationTime).TotalMilliseconds}ms");
-
                     props.ApplyTo(obj);
                 }
                 catch (Exception ex)
                 {                    
                     Logger.LogError($"Exception updating {typeof(T)} properties. {obj?.InternalName} {obj?.ActorType} {ex}");
                 }
-                return props;
-            }
 
-            //Logger.Log($"PropertyCollection Created {typeof(T)} for {obj.InternalName} RActorGuid={obj.RActorGuid}");
+                if (obj != null && !props.IsValid)
+                    RemoveItem(obj.RActorGuid);
+                else
+                    return props;
+            }
 
             props = CreatePropertyCollection<T>(obj);
             collections.Add(props);
@@ -127,6 +131,11 @@ namespace Trinity.Cache.Properties
         /// </summary>
         /// <param name="source">object from which to get data</param>
         void Update(TrinityCacheObject source);
+
+        /// <summary>
+        /// if set to true, collection will be deleted.
+        /// </summary>
+        bool IsValid { get; }
     }
 }
 
