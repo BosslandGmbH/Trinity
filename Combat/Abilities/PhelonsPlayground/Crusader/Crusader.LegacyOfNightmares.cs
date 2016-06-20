@@ -112,7 +112,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Crusader
                 get
                 {
                     return Skills.Crusader.ShieldGlare.CanCast() &&
-                           ((CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.RadiusDistance <= 15f) ||
+                           ((CurrentTarget.IsElite && CurrentTarget.RadiusDistance <= 15f) ||
                             TargetUtil.UnitsPlayerFacing(16f) >= Settings.Combat.Crusader.ShieldGlareAoECount);
                 }
             }

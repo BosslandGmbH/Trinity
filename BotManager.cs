@@ -140,7 +140,7 @@ namespace Trinity
                     if (!CombatTargeting.Instance.AllowedToKillMonsters)
                         return false;
 
-                    TrinityPlugin.RefreshDiaObjectCache();
+                    CacheData.Update();
                     await Coroutine.Yield();
                 }
                 return true;

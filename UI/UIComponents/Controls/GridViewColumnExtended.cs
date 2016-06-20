@@ -29,6 +29,7 @@ namespace Trinity.UIComponents
                 new FrameworkPropertyMetadata((Double)0, null,
                     CoerceWidth));
 
+            
             //MinWidthProperty.OverrideMetadata(typeof(ColumnDefinitionExtended),
             //    new FrameworkPropertyMetadata((Double)0, null,
             //        new CoerceValueCallback(CoerceMinWidth)));

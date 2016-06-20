@@ -89,8 +89,6 @@ namespace Trinity
                     return TargetCheckResult(true, "Current Target is not null");
                 }
 
-                MonkCombat.RunOngoingPowers();
-
                 // if we just opened a horadric cache, wait around to open it
                 if (DateTime.UtcNow.Subtract(Composites.LastFoundHoradricCache).TotalSeconds < 5)
                     return TargetCheckResult(true, "Recently opened Horadric Cache");
@@ -136,7 +134,6 @@ namespace Trinity
                                     SpellHistory.RecordSpell(powerBuff);
                                 }
                                 LastPowerUsed = powerBuff.SNOPower;
-                                CacheData.AbilityLastUsed[powerBuff.SNOPower] = DateTime.UtcNow;
 
                                 // Monk Stuffs get special attention
                                 {

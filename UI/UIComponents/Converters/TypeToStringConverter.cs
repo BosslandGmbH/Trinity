@@ -17,7 +17,7 @@ namespace Trinity.UIComponents
          object value, Type targetType,
          object parameter, CultureInfo culture)
         {
-            throw new Exception("Can't convert back");
+            return Binding.DoNothing;
         }
     }
 }

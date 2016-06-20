@@ -73,11 +73,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
 
                 if (Sets.ThousandStorms.IsSecondBonusActive &&
                     (charges > 1 && TrinityPlugin.Player.PrimaryResource >= 75 ||
-                     CacheData.BuffsCache.Instance.HasCastingShrine))
+                     CacheData.Buffs.HasCastingShrine))
                     return true;
 
                 if (!Sets.ThousandStorms.IsSecondBonusActive &&
-                    (TargetUtil.AnyMobsInRange(60f) || CacheData.BuffsCache.Instance.HasCastingShrine))
+                    (TargetUtil.AnyMobsInRange(60f) || CacheData.Buffs.HasCastingShrine))
                     return true;
                 return false;
             }

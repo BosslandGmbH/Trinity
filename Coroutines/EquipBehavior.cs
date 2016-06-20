@@ -81,7 +81,7 @@ namespace Trinity.Coroutines
 
                     KnownSkills = ZetaDia.Me.KnownSkills.ToList().DistinctBy(s => s.SNOPower).ToDictionary(s => s.SNOPower, v => v);
 
-                    CacheData.Hotbar.UpdateHotbarCache();
+                    CacheData.Hotbar.Update();
 
                     var primarySkills = _skills.Where(s => s.Key.IsPrimary).Take(2).ToList();
                     if (primarySkills.Any())

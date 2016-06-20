@@ -396,12 +396,12 @@ namespace Trinity.Movement
                 Vector3 vTargetAimPoint = destination;
 
                 vTargetAimPoint = TargetUtil.FindTempestRushTarget();
+                var lastUse = SpellHistory.MillisecondsSinceUse(SNOPower.Monk_TempestRush);
 
                 if (!_canChannelTempestRush &&
                     ((TrinityPlugin.Player.PrimaryResource >= TrinityPlugin.Settings.Combat.Monk.TR_MinSpirit &&
                       destinationDistance >= TrinityPlugin.Settings.Combat.Monk.TR_MinDist) ||
-                     DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush]).TotalMilliseconds <=
-                     150) && PowerManager.CanCast(SNOPower.Monk_TempestRush))
+                     lastUse <= 150) && PowerManager.CanCast(SNOPower.Monk_TempestRush))
                 {
                     _canChannelTempestRush = true;
                 }
@@ -409,9 +409,6 @@ namespace Trinity.Movement
                 {
                     _canChannelTempestRush = false;
                 }
-
-                double lastUse =
-                    DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush]).TotalMilliseconds;
 
                 if (_canChannelTempestRush)
                 {

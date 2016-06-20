@@ -122,11 +122,12 @@ namespace Trinity.DbProvider
                 return IsBlocked;
             }
 
-            var testObjects = TrinityPlugin.ObjectCache.Where(o => (o.IsTrashMob || o.IsBossOrEliteRareUnique || o.IsMinion) && o.HitPoints > 0 && o.Distance <= 12f).ToList();
+            var testObjects = TrinityPlugin.ObjectCache.Where(o => o.IsUnit && o.HitPoints > 0 && o.Distance <= 14f).ToList();
             var surrounded = false;
-            var testPoints = MathUtil.GetCirclePoints(8, 10f, ZetaDia.Me.Position).Where(p => NavHelper.CanRayCast(p) && TrinityPlugin.MainGridProvider.CanStandAt(p)).ToList();
+            var myPosition = ZetaDia.Me.Position;
+            var testPoints = MathUtil.GetCirclePoints(10, 10f, myPosition).Where(p => Core.Avoidance.Grid.CanRayWalk(myPosition, p)).ToList();
             var halfPoints = Math.Round(testPoints.Count * 0.60, 0, MidpointRounding.AwayFromZero);
-            var blockedPoints = testPoints.Count(p => testObjects.Any(o => MathUtil.PositionIsInCircle(p, o.Position, o.Radius / 2)));
+            var blockedPoints = testPoints.Count(p => testObjects.Any(o => MathUtil.PositionIsInCircle(p, o.Position, o.CollisionRadius / 2)));
             if (blockedPoints > halfPoints)
             {
                 Logger.LogVerbose(LogCategory.Movement, "Surrounded BlockedPoints={0} Required={1} TotalPoints={2}", blockedPoints, halfPoints, testPoints.Count);
@@ -197,17 +198,12 @@ namespace Trinity.DbProvider
                     case ActorClass.Barbarian:
                         return CacheData.Buffs.HasBuff(SNOPower.Barbarian_Sprint) && Runes.Barbarian.Gangway.IsActive;
                     case ActorClass.Monk:
-                        return CacheData.Buffs.HasBuff(SNOPower.Monk_TempestRush) || Runes.Monk.InstantKarma.IsActive && CacheData.BuffsCache.Instance.HasBuff(SNOPower.Monk_Serenity);
+                        return CacheData.Buffs.HasBuff(SNOPower.Monk_TempestRush) || Runes.Monk.InstantKarma.IsActive && CacheData.Buffs.HasBuff(SNOPower.Monk_Serenity);
                     case ActorClass.Crusader:
                         return CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_SteedCharge);
                 }
                 return false;
             }
-        }
-
-        private static bool ShrinesInArea(Vector3 targetpos)
-        {
-            return TrinityPlugin.ObjectCache.Any(o => BasicMovementOnlyIDs.Contains(o.ActorSNO) && Vector3.Distance(o.Position, targetpos) <= 50f);
         }
 
         private static readonly DateTime LastUsedMoveStop = DateTime.MinValue;
@@ -776,19 +772,19 @@ namespace Trinity.DbProvider
         //}
 
 
-        private static DateTime lastRecordedSkipAheadCache = DateTime.MinValue;
-        internal static void RecordSkipAheadCachePoint()
-        {
-            if (DateTime.UtcNow.Subtract(lastRecordedSkipAheadCache).TotalMilliseconds < 100)
-                return;
+        //private static DateTime lastRecordedSkipAheadCache = DateTime.MinValue;
+        //internal static void RecordSkipAheadCachePoint()
+        //{
+        //    if (DateTime.UtcNow.Subtract(lastRecordedSkipAheadCache).TotalMilliseconds < 100)
+        //        return;
 
-            lastRecordedSkipAheadCache = DateTime.UtcNow;
+        //    lastRecordedSkipAheadCache = DateTime.UtcNow;
 
-            if (!TrinityPlugin.SkipAheadAreaCache.Any(p => p.Position.Distance(TrinityPlugin.Player.Position) <= 5f))
-            {
-                TrinityPlugin.SkipAheadAreaCache.Add(new CacheObstacleObject() { Position = TrinityPlugin.Player.Position, Radius = 20f });
-            }
-        }
+        //    if (!TrinityPlugin.SkipAheadAreaCache.Any(p => p.Position.Distance(TrinityPlugin.Player.Position) <= 5f))
+        //    {
+        //        TrinityPlugin.SkipAheadAreaCache.Add(new CacheObstacleObject() { Position = TrinityPlugin.Player.Position, Radius = 20f });
+        //    }
+        //}
 
 
     }

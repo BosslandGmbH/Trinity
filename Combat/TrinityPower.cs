@@ -58,18 +58,11 @@ namespace Trinity
         /// The DateTime when the power was assigned
         /// </summary>
         public DateTime PowerAssignmentTime { get; set; }
+
         /// <summary>
         /// Returns the DateTime the power was last used <seealso cref="CacheData.AbilityLastUsed"/>
         /// </summary>
-        public DateTime PowerLastUsedTime
-        {
-            get
-            {
-                if (CacheData.AbilityLastUsed.ContainsKey(SNOPower))
-                    return CacheData.AbilityLastUsed[SNOPower];
-                return DateTime.MinValue;
-            }
-        }
+        public DateTime PowerLastUsedTime => SpellHistory.LastSpellUseTime;
 
         /// <summary>
         /// The minimum delay in millseconds we should wait before using a power

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
+using Trinity.Technicals;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -42,7 +43,10 @@ namespace Trinity.Framework.Utilities
 
         protected override void OnPulse()
         {
-            AddPosition();
+            using (new PerformanceLogger("Utilty.PlayerHistory.Pulse"))
+            {
+                AddPosition();
+            }
         }
         
         protected override void OnWorldChanged()

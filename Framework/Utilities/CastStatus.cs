@@ -96,9 +96,12 @@ namespace Trinity.Framework.Utilities
 
         protected override void OnPulse()
         {
-            CheckCasting(StoneOfRecall);
-            CheckCasting(TeleportToPlayer);
-            CheckCasting(TeleportToWaypoint);
+            using (new PerformanceLogger("Utilty.CastStatus.Pulse"))
+            {
+                CheckCasting(StoneOfRecall);
+                CheckCasting(TeleportToPlayer);
+                CheckCasting(TeleportToWaypoint);
+            }                
         }
 
         private void CheckCasting(CastTrackInfo info)

@@ -212,7 +212,7 @@ namespace Trinity.Combat.Abilities
             float blackholeRadius = Runes.Wizard.Supermassive.IsActive ? 20f : 15f;
             if (CanCast(SNOPower.X1_Wizard_Wormhole, CanCastFlags.NoTimer) && !ShouldWaitForConventionElement(Skills.Wizard.BlackHole) &&
                 (!(Sets.VyrsAmazingArcana.IsFullyEquipped && Sets.ChantodosResolve.IsFirstBonusActive) || GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021) == 19) &&
-                (TargetUtil.ClusterExists(blackholeRadius, 45f, TrinityPlugin.Settings.Combat.Wizard.BlackHoleAoECount) || CurrentTarget.IsBossOrEliteRareUnique))
+                (TargetUtil.ClusterExists(blackholeRadius, 45f, TrinityPlugin.Settings.Combat.Wizard.BlackHoleAoECount) || CurrentTarget.IsElite))
             {
                 // Botting with 2+ wizards, stagger blackholes.
                 if (ZetaDia.Service.Party.NumPartyMembers > 1)
@@ -269,7 +269,7 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // Then casting on elites
-                else if (CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.Distance < bubbleMaxRange && isValidBubblePosition(CurrentTarget.Position))
+                else if (CurrentTarget.IsElite && CurrentTarget.Distance < bubbleMaxRange && isValidBubblePosition(CurrentTarget.Position))
                 {
                     reason = "Bubble on some elites";
                     bubblePower = new TrinityPower(SNOPower.Wizard_SlowTime, bubbleMaxRange, CurrentTarget.Position);
@@ -320,7 +320,7 @@ namespace Trinity.Combat.Abilities
             // Mirror Image  @ half health or 5+ monsters or rooted/incapacitated or last elite left @25% health
             if (CanCast(SNOPower.Wizard_MirrorImage, CanCastFlags.NoTimer) &&
                 (Player.CurrentHealthPct <= EmergencyHealthPotionLimit || TargetUtil.AnyMobsInRange(30, 4) || Player.IsIncapacitated || Player.IsRooted ||
-                TargetUtil.AnyElitesInRange(30) || CurrentTarget.IsBossOrEliteRareUnique))
+                TargetUtil.AnyElitesInRange(30) || CurrentTarget.IsElite))
             {
                 return new TrinityPower(SNOPower.Wizard_MirrorImage);
             }
@@ -371,7 +371,7 @@ namespace Trinity.Combat.Abilities
             // Blizzard
             float blizzardRadius = Runes.Wizard.Apocalypse.IsActive ? 30f : 12f;
             if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_Blizzard, CanCastFlags.NoTimer) && !ShouldWaitForConventionElement(Skills.Wizard.Blizzard) &&
-                (TargetUtil.ClusterExists(blizzardRadius, 90f, 2, false) || CurrentTarget.IsBossOrEliteRareUnique || !HasPrimarySkill) &&
+                (TargetUtil.ClusterExists(blizzardRadius, 90f, 2, false) || CurrentTarget.IsElite || !HasPrimarySkill) &&
                 (Player.PrimaryResource >= 40 || (Runes.Wizard.Snowbound.IsActive && Player.PrimaryResource >= 20)) &&
                 (!Legendary.EtchedSigil.IsEquipped || Sets.TalRashasElements.IsFullyEquipped))
             {

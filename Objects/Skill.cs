@@ -303,14 +303,7 @@ namespace Trinity.Objects
         /// <summary>
         /// When this spell was last used
         /// </summary>
-        public DateTime LastUsed
-        {
-            get
-            {
-                DateTime dt;
-                return CacheData.AbilityLastUsed.TryGetValue(SNOPower, out dt) ? dt : DateTime.MinValue;
-            }
-        }
+        public DateTime LastUsed => SpellHistory.PowerLastUsedTime(SNOPower);
 
         /// <summary>
         /// Gets the current skill charge count
@@ -418,7 +411,6 @@ namespace Trinity.Objects
                 if (ZetaDia.Me.UsePower(SNOPower, clickPosition, TrinityPlugin.CurrentWorldDynamicId, targetAcdGuid))
                 {
                     TrinityPlugin.LastPowerUsed = SNOPower;
-                    CacheData.AbilityLastUsed[SNOPower] = DateTime.UtcNow;
                     if (CombatBase.CurrentTarget != null)
                         SpellTracker.TrackSpellOnUnit(CombatBase.CurrentTarget.ACDGuid, SNOPower);
                     SpellHistory.RecordSpell(SNOPower);

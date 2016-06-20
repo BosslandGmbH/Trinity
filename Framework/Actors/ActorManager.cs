@@ -23,6 +23,12 @@ using ThreadState = System.Threading.ThreadState;
 
 namespace Trinity.Framework.Actors
 {
+    /// <summary>
+    /// This is a replacement for the low level ZetaDia.Actors class.
+    /// * It handles reading actors directly from memory.
+    /// * It currently only handles items in backpack or stash.
+    /// * It was created to fix legendary items IsAncient property not having correct values.    
+    /// </summary>
     public static class ActorManager
     {
         public static uint LastUpdatedFrame;
@@ -52,23 +58,26 @@ namespace Trinity.Framework.Actors
 
         public static void Update()
         {
-            try
+            using (new PerformanceLogger("ActorManager.Update"))
             {
-                var currentFrame = ZetaDia.Memory.Executor.FrameCount;
-                if (LastUpdatedFrame == currentFrame)
-                    return;
-
-                var items = ReadItems();
-                if (items.Any())
+                try
                 {
-                    Items = items;
-                }
+                    var currentFrame = ZetaDia.Memory.Executor.FrameCount;
+                    if (LastUpdatedFrame == currentFrame)
+                        return;
 
-                LastUpdatedFrame = currentFrame;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception {0}", ex);
+                    var items = ReadItems();
+                    if (items.Any())
+                    {
+                        Items = items;
+                    }
+
+                    LastUpdatedFrame = currentFrame;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log("Exception {0}", ex);
+                }
             }
         }
 

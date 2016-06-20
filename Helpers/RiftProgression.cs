@@ -77,7 +77,7 @@ namespace Trinity.Cache
                 riftValuePct = 0.25d;
                 return true;
             }
-            if (actor.IsBossOrEliteRareUnique)
+            if (actor.IsElite)
             {
                 riftValuePct = 1d;
                 return true;
@@ -85,7 +85,7 @@ namespace Trinity.Cache
             if (Values.ContainsKey(actor.ActorSNO))
             {
                 var baseValue = Values[actor.ActorSNO];
-                riftValuePct = actor.IsBossOrEliteRareUnique ? baseValue * 4 : baseValue;
+                riftValuePct = actor.IsElite ? baseValue * 4 : baseValue;
                 return true;
             }
             return false;

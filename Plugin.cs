@@ -104,7 +104,7 @@ namespace Trinity
         {
             try
             {
-                using (new PerformanceLogger("TrinityPlugin Pulse"))
+                using (new PerformanceLogger("OnPulse"))
                 {
 
                     if (!_postedWarnings)
@@ -127,76 +127,75 @@ namespace Trinity
                         Logger.LogSpecial(() => $"RiftProgression%={Core.Globals.RiftProgressionPct} RiftSouls={Core.Globals.RiftSouls}");
                     }
 
-                    using (new PerformanceLogger("OnPulse"))
+     
+                    GameUI.SafeClickUIButtons();
+
+                    using (new PerformanceLogger("CacheData.Update"))
                     {
-                        GameUI.SafeClickUIButtons();
+                        CacheData.Update();
+                    }
 
-                        using (new PerformanceLogger("TargetCheck.RefreshCache"))
-                        {  
-                            RefreshDiaObjectCache();
-                        }
+                    //Core.Avoidance.UpdateGrid();
+                    VisualizerViewModel.Instance.UpdateVisualizer();
 
-                        //Core.Avoidance.UpdateGrid();
-                        VisualizerViewModel.Instance.UpdateVisualizer();
+                    if (ZetaDia.Me.IsDead)
+                        return;
 
-                        if (ZetaDia.Me.IsDead)
-                            return;
+                    using (new PerformanceLogger("LazyRaiderClickToPause"))
+                    {
 
-                        using (new PerformanceLogger("LazyRaiderClickToPause"))
+                        if (Settings.Advanced.LazyRaiderClickToPause && !BotMain.IsPaused && MouseLeft())
                         {
-
-                            if (Settings.Advanced.LazyRaiderClickToPause && !BotMain.IsPaused && MouseLeft())
-                            {
-                                BotMain.PauseWhile(MouseLeft);
-                            }
-                        }
-
-                        // See if we should update the stats file
-                        if (DateTime.UtcNow.Subtract(ItemDropStats.ItemStatsLastPostedReport).TotalSeconds > 10)
-                        {
-                            ItemDropStats.ItemStatsLastPostedReport = DateTime.UtcNow;
-                            ItemDropStats.OutputReport();
-                        }
-
-                        // Recording of all the XML's in use this run
-                        UsedProfileManager.RecordProfile();
-
-                        DebugUtil.LogOnPulse();
-
-                        if (!Settings.Advanced.IsDBInactivityEnabled)
-                        {
-                            GlobalSettings.Instance.LogoutInactivityTime = 0;
-                        }
-                        else
-                        {
-                            GlobalSettings.Instance.LogoutInactivityTime = (float)TimeSpan.FromSeconds(Settings.Advanced.InactivityTimer).TotalMinutes;
-                        }
-                        
-                        if (GoldInactivity.Instance.GoldInactive())
-                        {
-                            LeaveGame("Gold Inactivity Tripped");
-                        }
-
-                        if (XpInactivity.Instance.XpInactive())
-                        {
-                            LeaveGame("XP Inactivity Tripped");
-                        }
-
-                        Gamble.CheckShouldTownRunForGambling();
-
-                        MonkCombat.RunOngoingPowers();
-
-                        KillAllBountyDetector.Check();
-
-                        //RiftProgression.Pulse();
-
-                        if (!HasLoggedCurrentBuild && BotMain.IsRunning && CacheData.Inventory.EquippedIds.Any())
-                        {
-                            // Requires Inventory Cache to be up to date.                
-                            DebugUtil.LogBuildAndItems();
-                            HasLoggedCurrentBuild = true;
+                            BotMain.PauseWhile(MouseLeft);
                         }
                     }
+
+                    // See if we should update the stats file
+                    if (DateTime.UtcNow.Subtract(ItemDropStats.ItemStatsLastPostedReport).TotalSeconds > 10)
+                    {
+                        ItemDropStats.ItemStatsLastPostedReport = DateTime.UtcNow;
+                        ItemDropStats.OutputReport();
+                    }
+
+                    // Recording of all the XML's in use this run
+                    UsedProfileManager.RecordProfile();
+
+                    DebugUtil.LogOnPulse();
+
+                    if (!Settings.Advanced.IsDBInactivityEnabled)
+                    {
+                        GlobalSettings.Instance.LogoutInactivityTime = 0;
+                    }
+                    else
+                    {
+                        GlobalSettings.Instance.LogoutInactivityTime = (float)TimeSpan.FromSeconds(Settings.Advanced.InactivityTimer).TotalMinutes;
+                    }
+                        
+                    if (GoldInactivity.Instance.GoldInactive())
+                    {
+                        LeaveGame("Gold Inactivity Tripped");
+                    }
+
+                    if (XpInactivity.Instance.XpInactive())
+                    {
+                        LeaveGame("XP Inactivity Tripped");
+                    }
+
+                    Gamble.CheckShouldTownRunForGambling();
+
+
+
+                    KillAllBountyDetector.Check();
+
+                    //RiftProgression.Pulse();
+
+                    if (!HasLoggedCurrentBuild && BotMain.IsRunning && CacheData.Inventory.EquippedIds.Any())
+                    {
+                        // Requires Inventory Cache to be up to date.                
+                        DebugUtil.LogBuildAndItems();
+                        HasLoggedCurrentBuild = true;
+                    }
+                 
 
                 }
             }
@@ -365,7 +364,7 @@ namespace Trinity
             Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "");
             Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "DISABLED: TrinityPlugin is now shut down...");
             Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "");
-            GenericCache.Shutdown();
+            //GenericCache.Shutdown();
             GenericBlacklist.Shutdown();
             //ClearArea.Disable();
             OverlayLoader.Disable();
@@ -378,7 +377,7 @@ namespace Trinity
         /// </summary>
         public void OnShutdown()
         {
-            GenericCache.Shutdown();
+            //GenericCache.Shutdown();
             GenericBlacklist.Shutdown();
             PluginCheck.Shutdown();
         }
@@ -437,8 +436,6 @@ namespace Trinity
         {
             _instance = this;
             PluginCheck.CheckAndInstallTrinityRoutine();
-
-            Execution.Initialize();
         }
 
         /// <summary>

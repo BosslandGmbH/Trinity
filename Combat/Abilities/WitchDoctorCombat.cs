@@ -71,7 +71,7 @@ namespace Trinity.Combat.Abilities
             if (UseOOCBuff)
             {
                 var dogCount = Passives.WitchDoctor.MidnightFeast.IsActive ? 4 : 3;
-                if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && TrinityPlugin.PlayerOwnedZombieDogCount < dogCount)
+                if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && Player.Summons.ZombieDogCount < dogCount)
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
             }
 
@@ -88,7 +88,7 @@ namespace Trinity.Combat.Abilities
             {
                 // Zombie Dogs
                 var dogCount = Passives.WitchDoctor.MidnightFeast.IsActive ? 4 : 3;
-                if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && (TrinityPlugin.PlayerOwnedZombieDogCount < dogCount ||
+                if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && (TrinityPlugin.Player.Summons.ZombieDogCount < dogCount ||
                     TargetUtil.AnyElitesInRange(30f)))
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
 
@@ -126,7 +126,7 @@ namespace Trinity.Combat.Abilities
                 // Wall of Zombies
                 if (CanCast(SNOPower.Witchdoctor_WallOfZombies) &&
                     (TargetUtil.AnyElitesInRange(15, 1) || TargetUtil.AnyMobsInRange(15, 1) ||
-                    ((CurrentTarget.IsEliteRareUnique || CurrentTarget.IsTreasureGoblin || CurrentTarget.IsBoss) && CurrentTarget.RadiusDistance <= 25f)))
+                    ((CurrentTarget.IsElite || CurrentTarget.IsTreasureGoblin || CurrentTarget.IsBoss) && CurrentTarget.RadiusDistance <= 25f)))
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_WallOfZombies, 25f, CurrentTarget.Position);
                 }
@@ -195,7 +195,7 @@ namespace Trinity.Combat.Abilities
             // Gargantuan should be cast ASAP.
             if (CanCast(SNOPower.Witchdoctor_Gargantuan))
             {
-                var hasAllGargs = TrinityPlugin.PlayerOwnedGargantuanCount != 0 && (!Legendary.TheShortMansFinger.IsEquipped || TrinityPlugin.PlayerOwnedGargantuanCount > 2);
+                var hasAllGargs = Player.Summons.GargantuanCount != 0 && (!Legendary.TheShortMansFinger.IsEquipped || Player.Summons.GargantuanCount > 2);
                 if (!hasAllGargs)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
@@ -226,8 +226,8 @@ namespace Trinity.Combat.Abilities
 
             // Zombie Dogs should be cast ASAP.
             if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) &&
-            ((Legendary.TheTallMansFinger.IsEquipped && TrinityPlugin.PlayerOwnedZombieDogCount < 1) ||
-            (!Legendary.TheTallMansFinger.IsEquipped && TrinityPlugin.PlayerOwnedZombieDogCount <= 2)))
+            ((Legendary.TheTallMansFinger.IsEquipped && Player.Summons.ZombieDogCount < 1) ||
+            (!Legendary.TheTallMansFinger.IsEquipped && Player.Summons.ZombieDogCount <= 2)))
             {
                 return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
             }
@@ -235,8 +235,8 @@ namespace Trinity.Combat.Abilities
             // Summon Fetish Army
             var isTikiTorph = Runes.WitchDoctor.TikiTorchers.IsActive;
             var hasEnoughFetishes = isTikiTorph
-                ? TrinityPlugin.PlayerOwnedFetishArmyCount >= 7
-                : TrinityPlugin.PlayerOwnedFetishArmyCount >= 5;
+                ? Player.Summons.FetishArmyCount >= 7
+                : Player.Summons.FetishArmyCount >= 5;
 
             var useFetishWithZumiSet = !hasEnoughFetishes && Sets.ZunimassasHaunt.IsFirstBonusActive || Settings.Combat.WitchDoctor.UseFetishArmyOffCooldown;
             var useFetishNormal = !hasEnoughFetishes && !Sets.ZunimassasHaunt.IsFirstBonusActive && (TargetUtil.EliteOrTrashInRange(30f) || TargetUtil.IsEliteTargetInRange(40f)) || Settings.Combat.WitchDoctor.UseFetishArmyOffCooldown;
@@ -604,15 +604,15 @@ namespace Trinity.Combat.Abilities
                 // END Tiklandian Visage ----------------------------------------------------------------------   
 
                 // Sacrifice
-                if (CanCast(SNOPower.Witchdoctor_Sacrifice) && TrinityPlugin.PlayerOwnedZombieDogCount > 0 &&
-                    (TargetUtil.AnyElitesInRange(15, 1) || (CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.RadiusDistance <= 9f)))
+                if (CanCast(SNOPower.Witchdoctor_Sacrifice) && Player.Summons.ZombieDogCount > 0 &&
+                    (TargetUtil.AnyElitesInRange(15, 1) || (CurrentTarget.IsElite && CurrentTarget.RadiusDistance <= 9f)))
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Sacrifice);
                 }
 
                 // Sacrifice for Circle of Life
                 bool hasCircleofLife = CacheData.Hotbar.PassiveSkills.Any(s => s == SNOPower.Witchdoctor_Passive_CircleOfLife);
-                if (CanCast(SNOPower.Witchdoctor_Sacrifice) && TrinityPlugin.PlayerOwnedZombieDogCount > 0 && hasCircleofLife && TargetUtil.AnyMobsInRange(15f))
+                if (CanCast(SNOPower.Witchdoctor_Sacrifice) && Player.Summons.ZombieDogCount > 0 && hasCircleofLife && TargetUtil.AnyMobsInRange(15f))
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Sacrifice);
                 }
@@ -620,7 +620,7 @@ namespace Trinity.Combat.Abilities
                 // Wall of Zombies
                 if (CanCast(SNOPower.Witchdoctor_WallOfZombies) &&
                     (TargetUtil.AnyElitesInRange(15, 1) || TargetUtil.AnyMobsInRange(15, 1) ||
-                    ((CurrentTarget.IsEliteRareUnique || CurrentTarget.IsTreasureGoblin || CurrentTarget.IsBoss) && CurrentTarget.RadiusDistance <= 25f)))
+                    ((CurrentTarget.IsElite || CurrentTarget.IsTreasureGoblin || CurrentTarget.IsBoss) && CurrentTarget.RadiusDistance <= 25f)))
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_WallOfZombies, 25f, CurrentTarget.Position);
                 }
@@ -629,7 +629,7 @@ namespace Trinity.Combat.Abilities
 
                 // Zombie Dogs for Sacrifice
                 if (hasSacrifice && CanCast(SNOPower.Witchdoctor_SummonZombieDog) &&
-                    (LastPowerUsed == SNOPower.Witchdoctor_Sacrifice || TrinityPlugin.PlayerOwnedZombieDogCount <= 2) &&
+                    (LastPowerUsed == SNOPower.Witchdoctor_Sacrifice || Player.Summons.ZombieDogCount <= 2) &&
                     LastPowerUsed != SNOPower.Witchdoctor_SummonZombieDog)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
@@ -656,7 +656,7 @@ namespace Trinity.Combat.Abilities
 
                 // Mass Confuse, elites only or big mobs or to escape on low health
                 if (CanCast(SNOPower.Witchdoctor_MassConfusion) &&
-                    (TargetUtil.AnyElitesInRange(12, 1) || TargetUtil.AnyMobsInRange(12, 6) || Player.CurrentHealthPct <= 0.25 || (CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.RadiusDistance <= 12f)) &&
+                    (TargetUtil.AnyElitesInRange(12, 1) || TargetUtil.AnyMobsInRange(12, 6) || Player.CurrentHealthPct <= 0.25 || (CurrentTarget.IsElite && CurrentTarget.RadiusDistance <= 12f)) &&
                     !CurrentTarget.IsTreasureGoblin)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_MassConfusion, 0f, CurrentTarget.ACDGuid);
@@ -910,13 +910,13 @@ namespace Trinity.Combat.Abilities
 
                 // Zombie Dogs non-sacrifice build
                 if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) &&
-                ((Legendary.TheTallMansFinger.IsEquipped && TrinityPlugin.PlayerOwnedZombieDogCount < 1) ||
-                (!Legendary.TheTallMansFinger.IsEquipped && TrinityPlugin.PlayerOwnedZombieDogCount <= 2)))
+                ((Legendary.TheTallMansFinger.IsEquipped && Player.Summons.ZombieDogCount < 1) ||
+                (!Legendary.TheTallMansFinger.IsEquipped && Player.Summons.ZombieDogCount <= 2)))
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
                 }
 
-                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && !hasRestlessGiant && !hasWrathfulProtector && TrinityPlugin.PlayerOwnedGargantuanCount == 0)
+                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && !hasRestlessGiant && !hasWrathfulProtector && Player.Summons.ZombieDogCount == 0)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
                 }
@@ -1105,7 +1105,7 @@ namespace Trinity.Combat.Abilities
                     return new TrinityPower(SNOPower.Witchdoctor_AcidCloud, 12f, CurrentTarget.Position);
 
                 if (Hotbar.Contains(SNOPower.Witchdoctor_Sacrifice) && Hotbar.Contains(SNOPower.Witchdoctor_SummonZombieDog) &&
-                    TrinityPlugin.PlayerOwnedZombieDogCount > 0 && Settings.Combat.WitchDoctor.ZeroDogs)
+                    Player.Summons.ZombieDogCount > 0 && Settings.Combat.WitchDoctor.ZeroDogs)
                     return new TrinityPower(SNOPower.Witchdoctor_Sacrifice, 12f, CurrentTarget.Position);
 
                 if (Hotbar.Contains(SNOPower.Witchdoctor_SpiritBarrage) && Player.PrimaryResource > 100)

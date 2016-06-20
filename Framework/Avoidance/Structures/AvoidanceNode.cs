@@ -85,6 +85,13 @@ namespace Trinity.Framework.Avoidance.Structures
             {
                 AvoidanceFlags |= AvoidanceFlags.AllowProjectile;
             }
+            if (NodeFlags.HasFlag(NodeFlags.RoundedCorner0) ||
+                NodeFlags.HasFlag(NodeFlags.RoundedCorner1) ||
+                NodeFlags.HasFlag(NodeFlags.RoundedCorner2) ||
+                NodeFlags.HasFlag(NodeFlags.RoundedCorner3))
+            {
+                AvoidanceFlags |= AvoidanceFlags.RoundedCorner;
+            }
         }
 
         public AvoidanceNode Reset()

@@ -179,10 +179,14 @@ namespace Trinity.Framework.Avoidance
             CurrentAvoidances.RemoveAll(a => !a.Actors.Any(actor => actor.IsValid));
         }
 
+        public bool IsUpdatingNodes { get; set; }
+
         public void UpdateGrid()
         {
+            Grid.IsUpdatingNodes = true;
+
             using (new PerformanceLogger("UpdateGrid"))
-            {
+            {                
                 HighestNodeWeight = 0;
 
                 if (Grid.NearestNode == null || Grid.NearestNode.DynamicWorldId != ZetaDia.WorldId)
@@ -222,10 +226,10 @@ namespace Trinity.Framework.Avoidance
                         UpdateKiteFromFlags(obj, kiteFromNodes);                       
                     }
 
-                    foreach (var obstacle in CacheData.NavigationObstacles)
-                    {
-                        UpdateObstacleFlags(obstacle, obstacleNodes);
-                    }
+                    //foreach (var obstacle in CacheData.NavigationObstacles)
+                    //{
+                    //    UpdateObstacleFlags(obstacle, obstacleNodes);
+                    //}
 
                     //UpdateBacktrackFlags();
                     
@@ -336,6 +340,8 @@ namespace Trinity.Framework.Avoidance
                 ObstacleNodeLayer = obstacleNodes;
                 ActiveAvoidanceSnoIds = activeAvoidanceSnoIds;
             }
+
+            Grid.IsUpdatingNodes = true;
         }
 
         private void UpdateGizmoFlags(TrinityCacheObject actor)
@@ -391,7 +397,7 @@ namespace Trinity.Framework.Avoidance
                 return;
 
             var kiteFromBoss = Settings.KiteMode == KiteMode.Elites && actor.IsBoss;
-            var kiteFromElites = Settings.KiteMode == KiteMode.Elites && actor.IsBossOrEliteRareUnique;
+            var kiteFromElites = Settings.KiteMode == KiteMode.Elites && actor.IsElite;
             var kiteAlways = Settings.KiteMode == KiteMode.Always;
             var isKiting = kiteFromBoss || kiteFromElites || kiteAlways;
             var weight = (int)Settings.KiteWeight;
@@ -410,20 +416,20 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        public void UpdateObstacleFlags(CacheObstacleObject actor, AvoidanceLayer layer)
-        {
-            if (!DataDictionary.PathFindingObstacles.ContainsKey(actor.ActorSNO))
-                return;
+        //public void UpdateObstacleFlags(CacheObstacleObject actor, AvoidanceLayer layer)
+        //{
+        //    if (!DataDictionary.PathFindingObstacles.ContainsKey(actor.ActorSNO))
+        //        return;
 
-            var radius = DataDictionary.PathFindingObstacles[actor.ActorSNO];
+        //    var radius = DataDictionary.PathFindingObstacles[actor.ActorSNO];
 
-            foreach (var node in Grid.GetNodesInRadius(actor.Position, radius))
-            {
-                node.NodeFlags &= ~NodeFlags.AllowWalk;
-                node.IsWalkable = false;
-                layer.Add(node);
-            }
-        }
+        //    foreach (var node in Grid.GetNodesInRadius(actor.Position, radius))
+        //    {
+        //        node.NodeFlags &= ~NodeFlags.AllowWalk;
+        //        node.IsWalkable = false;
+        //        layer.Add(node);
+        //    }
+        //}
 
         private void UpdateGlobeFlags(TrinityCacheObject actor)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Org.BouncyCastle.Bcpg.Sig;
 using Trinity.Technicals;
 using Zeta.Common;
 using Logger = Trinity.Technicals.Logger;
@@ -15,7 +16,9 @@ namespace Trinity.Cache.Properties
         private static readonly Dictionary<int, List<IPropertyCollection>> PropertyCollections = new Dictionary<int, List<IPropertyCollection>>();
         private static readonly IndexedList<int> InsertionOrder = new IndexedList<int>();
 
-        private const int ActorLimit = 500;
+        public static int Count => PropertyCollections.Count;
+
+        private const int ActorLimit = 1000;
 
         /// <summary>
         /// Retrieves all property collections for an actor
@@ -42,7 +45,7 @@ namespace Trinity.Cache.Properties
         {
             if (PropertyCollections.Count > ActorLimit)
             {
-                var removeAmount = ActorLimit/2;
+                var removeAmount = ActorLimit/4;
                 foreach (var id in InsertionOrder.Take(removeAmount).ToList())
                 {
                     PropertyCollections.Remove(id);
@@ -53,7 +56,15 @@ namespace Trinity.Cache.Properties
         }
 
         /// <summary>
-        /// Populates properties, T may decide to use cached values or refresh them.
+        /// Populate properties from many IPropertyCollection.
+        /// </summary>
+        public static void LoadAll(TrinityCacheObject obj, List<IPropertyCollection> collections)
+        {
+            collections?.ForEach(p => p.ApplyTo(obj));
+        }
+
+        /// <summary>
+        /// Populates specific properties.
         /// </summary>
         public static IPropertyCollection Load<T>(TrinityCacheObject obj, List<IPropertyCollection> collections = null) where T : IPropertyCollection, new()
         {
@@ -68,6 +79,8 @@ namespace Trinity.Cache.Properties
             {
                 try
                 {
+                    //Logger.Log($"PropertyCollection Found {typeof(T)} for {obj.InternalName} RActorGuid={obj.RActorGuid}, Age={DateTime.UtcNow.Subtract(props.CreationTime).TotalMilliseconds}ms");
+
                     props.ApplyTo(obj);
                 }
                 catch (Exception ex)
@@ -76,7 +89,9 @@ namespace Trinity.Cache.Properties
                 }
                 return props;
             }
-    
+
+            //Logger.Log($"PropertyCollection Created {typeof(T)} for {obj.InternalName} RActorGuid={obj.RActorGuid}");
+
             props = CreatePropertyCollection<T>(obj);
             collections.Add(props);
             return props;                                         
@@ -85,33 +100,33 @@ namespace Trinity.Cache.Properties
         private static T CreatePropertyCollection<T>(TrinityCacheObject obj) where T : IPropertyCollection, new()
         {
             var newProps = new T();
-            newProps.OnCreate(obj);
-            newProps.Update(obj);
+            newProps.OnCreate(obj);  
             newProps.ApplyTo(obj);
             return newProps;
         }
+    }
 
-        public interface IPropertyCollection
-        {
-            /// <summary>
-            /// Applies current values to a TrinityCacheObject
-            /// </summary>
-            /// <param name="target">object to receive values</param>
-            void ApplyTo(TrinityCacheObject target);
+    public interface IPropertyCollection
+    {
+        DateTime CreationTime { get; }
 
-            /// <summary>
-            /// Called once when initializing object
-            /// </summary>
-            /// <param name="source">object from which to retrieve values</param>
-            void OnCreate(TrinityCacheObject source);
+        /// <summary>
+        /// Applies values to a TrinityCacheObject
+        /// </summary>
+        /// <param name="target">object to receive new values</param>
+        void ApplyTo(TrinityCacheObject target);
 
-            /// <summary>
-            /// Refresh properties that change over time.
-            /// </summary>
-            /// <param name="source">object from which to retrieve values</param>
-            void Update(TrinityCacheObject source);
-        }
+        /// <summary>
+        /// Called once after creating IPropertyCollection
+        /// </summary>
+        /// <param name="source">object from which to get data</param>
+        void OnCreate(TrinityCacheObject source);
 
+        /// <summary>
+        /// Refresh properties that change over time.
+        /// </summary>
+        /// <param name="source">object from which to get data</param>
+        void Update(TrinityCacheObject source);
     }
 }
 

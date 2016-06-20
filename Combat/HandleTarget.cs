@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Buddy.Coroutines;
+using Trinity.Cache;
 using Trinity.Combat;
 using Trinity.Combat.Abilities;
 using Trinity.Config.Combat;
@@ -51,7 +52,6 @@ namespace Trinity
         /// <returns></returns>
         private static RunStatus GetRunStatus(RunStatus status, string location)
         {
-            MonkCombat.RunOngoingPowers();
             string extras = "";
 
             if (CombatBase.CombatMovement.IsQueuedMovement)
@@ -228,10 +228,22 @@ namespace Trinity
                         }
                     }
 
-                    if (ShouldWaitForLootDrop)
+                    if (CombatBase.IsDoingGoblinKamakazi && CurrentTarget != null && CurrentTarget.Type != TrinityObjectType.Door && CurrentTarget.Type != TrinityObjectType.Barricade && !CurrentTarget.InternalName.ToLower().Contains("corrupt") && CurrentTarget.Weight >= Weighting.MaxWeight)
                     {
-                        Logger.LogVerbose("Wait for loot drop");
+                        Logger.Log("Forcing Target to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSNO, CombatBase.KamakaziGoblin.Distance);
+                        CurrentTarget = CombatBase.KamakaziGoblin;
                     }
+
+                    if (CombatBase.IsDoingGoblinKamakazi && CurrentTarget == null)
+                    {
+                        Logger.Log("No Target, Switching to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSNO, CombatBase.KamakaziGoblin.Distance);
+                        CurrentTarget = CombatBase.KamakaziGoblin;
+                    }
+
+                    //if (ShouldWaitForLootDrop)
+                    //{
+                    //    Logger.LogVerbose("Wait for loot drop");
+                    //}
 
                     if (_isWaitingForAttackToFinish)
                     {
@@ -328,8 +340,6 @@ namespace Trinity
                         Logger.Log(TrinityLogLevel.Debug, LogCategory.Behavior, "CurrentTarget was passed as null! Continuing...");
                     }
 
-                    MonkCombat.RunOngoingPowers();
-
                     // Refresh the object Cache every time
                     //RefreshDiaObjectCache();
 
@@ -364,13 +374,13 @@ namespace Trinity
                         return GetRunStatus(RunStatus.Failure, "CurrentTargetNull2");
                     }
 
-                    // Handle Target stuck / timeout
-                    var targetName = CurrentTarget.InternalName;
-                    if (HandleTargetTimeoutTask())
-                    {
-                        Logger.LogVerbose(LogCategory.Behavior, "Blacklisted Target: {0}, Returning Failure", targetName);
-                        return GetRunStatus(RunStatus.Running, "BlackListTarget");
-                    }
+                    //// Handle Target stuck / timeout // blacklist should be handled already in weighting 
+                    //var targetName = CurrentTarget.InternalName;
+                    //if (HandleTargetTimeoutTask())
+                    //{
+                    //    Logger.LogVerbose(LogCategory.Behavior, "Blacklisted Target: {0}, Returning Failure", targetName);
+                    //    return GetRunStatus(RunStatus.Running, "BlackListTarget");
+                    //}
 
                     if (CurrentTarget != null)
                         AssignPower();
@@ -388,48 +398,50 @@ namespace Trinity
 
                     SetRangeRequiredForTarget();
 
-                    using (new PerformanceLogger("HandleTarget.SpecialNavigation"))
-                    {
-                        PositionCache.AddPosition();
+                    //using (new PerformanceLogger("HandleTarget.SpecialNavigation"))
+                    //{
+                    //    PositionCache.AddPosition();
 
-                        // Maintain an area list of all zones we pass through/near while moving, for our custom navigation handler
-                        if (DateTime.UtcNow.Subtract(LastAddedLocationCache).TotalMilliseconds >= 100)
-                        {
-                            LastAddedLocationCache = DateTime.UtcNow;
-                            if (Vector3.Distance(Player.Position, LastRecordedPosition) >= 5f)
-                            {
-                                SkipAheadAreaCache.Add(new CacheObstacleObject(Player.Position, 20f, 0));
-                                LastRecordedPosition = Player.Position;
+                    //    // Maintain an area list of all zones we pass through/near while moving, for our custom navigation handler
+                    //    if (DateTime.UtcNow.Subtract(LastAddedLocationCache).TotalMilliseconds >= 100)
+                    //    {
+                    //        LastAddedLocationCache = DateTime.UtcNow;
+                    //        if (Vector3.Distance(Player.Position, LastRecordedPosition) >= 5f)
+                    //        {
+                    //            SkipAheadAreaCache.Add(new CacheObstacleObject(Player.Position, 20f, 0));
+                    //            LastRecordedPosition = Player.Position;
 
-                            }
-                        }
-                    }
+                    //        }
+                    //    }
+                    //}
 
+                    TargetCurrentDistance = CurrentTarget.RadiusDistance;
+                    CurrentTargetIsInLoS = TargetCurrentDistance <= 2f || (CurrentTarget.IsUnit ? CurrentTarget.IsInLineOfSight : CurrentTarget.IsWalkable);
 
-                    using (new PerformanceLogger("HandleTarget.LoSCheck"))
-                    {                        
-                        TargetCurrentDistance = CurrentTarget.RadiusDistance;
-                        if (DataDictionary.AlwaysRaycastWorlds.Contains(Player.WorldSnoId) && CurrentTarget.Distance > CurrentTarget.Radius + 2f)
-                        {
-                            CurrentTargetIsInLoS = NavHelper.CanRayCast(Player.Position, CurrentDestination);
-                        }
-                        else if (TargetCurrentDistance <= 2f)
-                        {
-                            CurrentTargetIsInLoS = true;
-                        }
-                        else if (CurrentTarget.IsUnit && CurrentTarget.Unit.IsHidden)
-                        {
-                            CurrentTargetIsInLoS = false;
-                        }
-                        else if (Settings.Combat.Misc.UseNavMeshTargeting && CurrentTarget.Type != TrinityObjectType.Barricade && CurrentTarget.Type != TrinityObjectType.Destructible)
-                        {
-                            CurrentTargetIsInLoS = (NavHelper.CanRayCast(Player.Position, CurrentDestination) || DataDictionary.LineOfSightWhitelist.Contains(CurrentTarget.ActorSNO));
-                        }
-                        else
-                        {
-                            CurrentTargetIsInLoS = true;
-                        }
-                    }
+                    //using (new PerformanceLogger("HandleTarget.LoSCheck"))
+                    //{                        
+
+                    //    if (DataDictionary.AlwaysRaycastWorlds.Contains(Player.WorldSnoId) && CurrentTarget.Distance > CurrentTarget.Radius + 2f)
+                    //    {
+                    //        CurrentTargetIsInLoS = NavHelper.CanRayCast(Player.Position, CurrentDestination);
+                    //    }
+                    //    else if (TargetCurrentDistance <= 2f)
+                    //    {
+                    //        CurrentTargetIsInLoS = true;
+                    //    }
+                    //    else if (CurrentTarget.IsUnit && CurrentTarget.Unit.IsHidden)
+                    //    {
+                    //        CurrentTargetIsInLoS = false;
+                    //    }
+                    //    else if (Settings.Combat.Misc.UseNavMeshTargeting && CurrentTarget.Type != TrinityObjectType.Barricade && CurrentTarget.Type != TrinityObjectType.Destructible)
+                    //    {
+                    //        CurrentTargetIsInLoS = (NavHelper.CanRayCast(Player.Position, CurrentDestination) || DataDictionary.LineOfSightWhitelist.Contains(CurrentTarget.ActorSNO));
+                    //    }
+                    //    else
+                    //    {
+                    //        CurrentTargetIsInLoS = true;
+                    //    }
+                    //}
 
                     using (new PerformanceLogger("HandleTarget.InRange"))
                     {
@@ -540,7 +552,6 @@ namespace Trinity
                     if (ZetaDia.Me.UsePower(powerBuff.SNOPower, powerBuff.TargetPosition, powerBuff.TargetDynamicWorldId, powerBuff.TargetACDGUID))
                     {
                         LastPowerUsed = powerBuff.SNOPower;
-                        CacheData.AbilityLastUsed[powerBuff.SNOPower] = DateTime.UtcNow;
                         SpellHistory.RecordSpell(powerBuff.SNOPower);
                         {
                             status = GetRunStatus(RunStatus.Running, "Cast Avoidance Spell");
@@ -778,8 +789,9 @@ namespace Trinity
                                 Logger.LogNormal("Interacting with {0}", CurrentTarget.InternalName);
                                 //if (ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, CurrentTarget.ACDId))
                                 //ZetaDia.Me.UsePower(SNOPower.Interact_Crouching, Vector3.Zero, 0, CurrentTarget.ACDId)
-                                var hasBeenOperated = c_diaObject is DiaGizmo && (c_diaObject as DiaGizmo).HasBeenOperated;
-                                if (!hasBeenOperated && ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, CurrentTarget.ACDGuid))
+                                //var hasBeenOperated = c_diaObject is DiaGizmo && (c_diaObject as DiaGizmo).HasBeenOperated;
+                                
+                                if (!CurrentTarget.IsUsed && ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, CurrentTarget.ACDGuid))
                                 {
                                     SpellHistory.RecordSpell(new TrinityPower()
                                     {
@@ -830,8 +842,9 @@ namespace Trinity
                                     CurrentTarget.InternalName, CurrentTarget.ActorSNO, attemptCount);
 
                                 CacheData.InteractAttempts[CurrentTarget.RActorGuid] = 0;
-                                Blacklist60Seconds.Add(CurrentTarget.AnnId);
-                                Blacklist60LastClear = DateTime.UtcNow;
+                                GenericBlacklist.Blacklist(CurrentTarget, TimeSpan.FromSeconds(60), "Too Many Interaction Attempts");
+                                //Blacklist60Seconds.Add(CurrentTarget.AnnId);
+                                //Blacklist60LastClear = DateTime.UtcNow;
                             }
                         }
                         break;
@@ -949,7 +962,7 @@ namespace Trinity
                                 CacheData.InteractAttempts[CurrentTarget.RActorGuid]++;
                             }
 
-                            CacheData.AbilityLastUsed[CombatBase.CurrentPower.SNOPower] = DateTime.UtcNow;
+                            //CacheData.AbilityLastUsed[CombatBase.CurrentPower.SNOPower] = DateTime.UtcNow;
 
                             // Prevent this EXACT object being targetted again for a short while, just incase
                             _ignoreRactorGuid = CurrentTarget.RActorGuid;
@@ -1043,8 +1056,6 @@ namespace Trinity
                 if ((CurrentTargetIsUnit() && !CurrentTarget.IsBoss && GetSecondsSinceTargetUpdate() > 30))
                     shouldTryBlacklist = true;
 
-                if (CurrentTarget.Type == TrinityObjectType.HotSpot)
-                    shouldTryBlacklist = false;
 
                 if (shouldTryBlacklist)
                 {
@@ -1319,7 +1330,7 @@ namespace Trinity
             statusText.Append(" SNO=");
             statusText.Append(CurrentTarget.ActorSNO.ToString(CultureInfo.InvariantCulture));
             statusText.Append(" Elite=");
-            statusText.Append(CurrentTarget.IsBossOrEliteRareUnique.ToString());
+            statusText.Append(CurrentTarget.IsElite.ToString());
             statusText.Append(" Weight=");
             statusText.Append(CurrentTarget.Weight.ToString("0"));
             statusText.Append(" Type=");
@@ -1376,18 +1387,18 @@ namespace Trinity
                         Logger.Log(LogCategory.Avoidance, $"Moving to SafeSpot Distance={CurrentTarget.Distance}");
 
                     var distance = CurrentDestination.Distance(Player.Position);
-                    var straightLinePathing = !DataDictionary.StraightLinePathingLevelAreaIds.Contains(Player.LevelAreaId) && distance <= 35f && !PlayerMover.IsBlocked && !Navigator.StuckHandler.IsStuck && NavHelper.CanRayCast(CurrentDestination);
+                    var straightLinePathing = distance <= 10f && !DataDictionary.StraightLinePathingLevelAreaIds.Contains(Player.LevelAreaId) &&  !PlayerMover.IsBlocked && !Navigator.StuckHandler.IsStuck && Core.Grids.CanRayWalk(ZetaDia.Me.Position, CurrentDestination); //&& NavHelper.CanRayCast(CurrentDestination)
 
                     string destname = String.Format("{0} {1:0} yds Elite={2} LoS={3} HP={4:0.00} Dir={5}",
                         CurrentTarget.InternalName,
                         CurrentTarget.Distance,
-                        CurrentTarget.IsBossOrEliteRareUnique,
+                        CurrentTarget.IsElite,
                         CurrentTarget.HasBeenInLoS,
                         CurrentTarget.HitPointsPct,
                         MathUtil.GetHeadingToPoint(CurrentTarget.Position));
 
                     MoveResult lastMoveResult;
-                    if (straightLinePathing || distance < 10f)
+                    if (straightLinePathing)
                     {
                         lastMoveResult = MoveResult.Moved;
                         // just "Click" 
@@ -1717,12 +1728,12 @@ namespace Trinity
                 if (usePowerResult)
                 {
                     // Monk Stuffs get special attention
-                    {
-                        if (CombatBase.CurrentPower.SNOPower == SNOPower.Monk_TempestRush)
-                            MonkCombat.LastTempestRushLocation = CombatBase.CurrentPower.TargetPosition;
+                    //{
+                    //    if (CombatBase.CurrentPower.SNOPower == SNOPower.Monk_TempestRush)
+                    //        MonkCombat.LastTempestRushLocation = CombatBase.CurrentPower.TargetPosition;
 
-                        MonkCombat.RunOngoingPowers();
-                    }
+                    //    MonkCombat.RunOngoingPowers();
+                    //}
 
                     if (skill != null && skill.Meta != null)
                     {
@@ -1749,7 +1760,6 @@ namespace Trinity
                     SpellTracker.TrackSpellOnUnit(CombatBase.CurrentPower.TargetACDGUID, CombatBase.CurrentPower.SNOPower);
                     SpellHistory.RecordSpell(CombatBase.CurrentPower);
 
-                    CacheData.AbilityLastUsed[CombatBase.CurrentPower.SNOPower] = DateTime.UtcNow;
                     lastGlobalCooldownUse = DateTime.UtcNow;
                     LastPowerUsed = CombatBase.CurrentPower.SNOPower;
 
@@ -1926,7 +1936,7 @@ namespace Trinity
                         }
                         ItemDropStats.ItemsPickedStats.PotionsPerLevel[CurrentTarget.ItemLevel]++;
                     }
-                    else if (_cItemTinityItemType == TrinityItemType.InfernalKey)
+                    else if (itemType == TrinityItemType.InfernalKey)
                     {
                         ItemDropStats.ItemsPickedStats.TotalInfernalKeys++;
                     }
@@ -1952,6 +1962,26 @@ namespace Trinity
                 // Now tell TrinityPlugin to get a new target!
                 _forceTargetUpdate = true;
                 return iInteractAttempts;
+            }
+        }
+
+        public static bool ShouldWaitForLootDrop
+        {
+            get
+            {
+                if (Player.ParticipatingInTieredLootRun)
+                {
+                    return CurrentTarget == null &&
+                           (DateTime.UtcNow.Subtract(lastHadEliteUnitInSights).TotalMilliseconds <= Settings.Combat.Misc.DelayAfterKill ||
+                            DateTime.UtcNow.Subtract(lastHadBossUnitInSights).TotalMilliseconds <= 3000);
+                }
+
+                return CurrentTarget == null &&
+                           (DateTime.UtcNow.Subtract(lastHadUnitInSights).TotalMilliseconds <= Settings.Combat.Misc.DelayAfterKill ||
+                            DateTime.UtcNow.Subtract(lastHadEliteUnitInSights).TotalMilliseconds <= Settings.Combat.Misc.DelayAfterKill ||
+                            DateTime.UtcNow.Subtract(lastHadBossUnitInSights).TotalMilliseconds <= 3000 ||
+                            DateTime.UtcNow.Subtract(Composites.LastFoundHoradricCache).TotalMilliseconds <= 5000) ||
+                           DateTime.UtcNow.Subtract(lastHadContainerInSights).TotalMilliseconds <= Settings.WorldObject.OpenContainerDelay;
             }
         }
 

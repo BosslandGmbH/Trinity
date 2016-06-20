@@ -241,7 +241,7 @@ namespace Trinity
     /// </summary>
     public enum TrinityObjectType
     {
-        Unknown,
+        Unknown = 0,
         Avoidance,
         Backtrack,
         Barricade,
@@ -272,11 +272,11 @@ namespace Trinity
         Banner,
         Waypoint,
         ClientEffect,
-        Effect,
         Projectile,
         Environment,
         BloodShard,
-        Invalid
+        Invalid,
+        BuffedRegion
     }
 
     [Flags]

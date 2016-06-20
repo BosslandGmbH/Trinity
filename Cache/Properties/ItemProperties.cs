@@ -9,16 +9,20 @@ using Zeta.Game.Internals.SNO;
 namespace Trinity.Cache.Properties
 {
     /// <summary>
-    /// PropertyLoader that are specific to items (on the ground only)
+    /// Properties that are specific to items (on the ground only)
+    /// This class should update all values that are possible/reasonable/useful.
+    /// DO NOT put settings or situational based exclusions in here, do that in weighting etc.
     /// </summary>
-    public class ItemProperties : PropertyLoader.IPropertyCollection
+    public class ItemProperties : IPropertyCollection
     {
         private DateTime _lastUpdated = DateTime.MinValue;
-        private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(100);
+        private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(250);
+
+        public DateTime CreationTime { get; } = DateTime.UtcNow;
 
         public void ApplyTo(TrinityCacheObject target)
         {
-            if (DateTime.UtcNow.Subtract(_lastUpdated).TotalMilliseconds > UpdateInterval.TotalMilliseconds)
+            if (!target.IsFrozen && DateTime.UtcNow.Subtract(_lastUpdated) > UpdateInterval)
                 Update(target);
 
             target.IsMyDroppedItem = this.IsMyDroppedItem;
@@ -30,9 +34,11 @@ namespace Trinity.Cache.Properties
             target.FollowerType = this.FollowerType;
             target.IsEquipment = this.IsEquipment;
             target.IsTwoSlotItem = this.IsTwoHanded;
+            target.ItemLevel = this.ItemLevel;
+            target.ObjectHash = this.ItemHash;
+            target.ItemQuality = this.ItemQuality;
+            target.IsPickupNoClick = this.IsPickupNoClick;
         }
-
-
 
         public void OnCreate(TrinityCacheObject source)
         {
@@ -57,6 +63,8 @@ namespace Trinity.Cache.Properties
             this.IsTwoHanded = TypeConversions.GetIsTwoSlot(DBItemBaseType, DBItemType);
             this.ItemLevel = this.TrinityItemBaseType == TrinityItemBaseType.Gem ? acdItem.Level : (int)acdItem.GemQuality;
             this.ItemQuality = source.ActorAttributes.GetCachedAttribute<ItemQuality>(ActorAttributeType.ItemQualityLevel);
+            this.IsPickupNoClick = DataDictionary.NoPickupClickItemTypes.Contains(this.TrinityItemType) || DataDictionary.NoPickupClickTypes.Contains(source.Type);
+            this.IsMyDroppedItem = DropItems.DroppedItemAnnIds.Contains(source.AnnId);
 
             this.ItemHash = HashGenerator.GenerateItemHash(
                 source.Position, 
@@ -68,9 +76,9 @@ namespace Trinity.Cache.Properties
 
             if (source.Type == TrinityObjectType.Gold)
                 this.GoldAmount = acdItem.Gold;
+
+            Update(source);
         }
-
-
 
         public void Update(TrinityCacheObject source)
         {
@@ -85,9 +93,12 @@ namespace Trinity.Cache.Properties
 
             var acdItem = item.CommonData;
             if(acdItem == null || !acdItem.IsValid)
-                return;            
+                return;
+
+
         }
 
+        public bool IsPickupNoClick { get; set; }
         public string ItemHash { get; set; }
         public int ItemLevel { get; set; }
         public ItemQuality ItemQuality { get; set; }

@@ -311,17 +311,17 @@ namespace Trinity.ItemRules
             return array;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal InterpreterAction checkPickUpItem(PickupItem item, ItemEvaluationType evaluationType)
-        {
-            fillPickupDic(item);
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="item"></param>
+        ///// <returns></returns>
+        //internal InterpreterAction checkPickUpItem(PickupItem item, ItemEvaluationType evaluationType)
+        //{
+        //    fillPickupDic(item);
 
-            return checkItem(evaluationType);
-        }
+        //    return checkItem(evaluationType);
+        //}
 
         /// <summary>
         /// 
@@ -720,60 +720,60 @@ namespace Trinity.ItemRules
             return (obj != null);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="level"></param>
-        /// <param name="itemQuality"></param>
-        /// <param name="itemBaseType"></param>
-        /// <param name="itemType"></param>
-        /// <param name="isOneHand"></param>
-        /// <param name="isTwoHand"></param>
-        /// <param name="gameBalanceId"></param>
-        private void fillPickupDic(PickupItem item)
-        {
-            object result;
-            itemDic = new Dictionary<string, object>();
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <param name="name"></param>
+        ///// <param name="level"></param>
+        ///// <param name="itemQuality"></param>
+        ///// <param name="itemBaseType"></param>
+        ///// <param name="itemType"></param>
+        ///// <param name="isOneHand"></param>
+        ///// <param name="isTwoHand"></param>
+        ///// <param name="gameBalanceId"></param>
+        //private void fillPickupDic(PickupItem item)
+        //{
+        //    object result;
+        //    itemDic = new Dictionary<string, object>();
 
-            // add log unique key
-            itemDic.Add("[KEY]", item.DynamicID.ToString());
+        //    // add log unique key
+        //    itemDic.Add("[KEY]", item.DynamicID.ToString());
 
-            // - BASETYPE ---------------------------------------------------------//
-            itemDic.Add("[BASETYPE]", item.DBBaseType.ToString());
+        //    // - BASETYPE ---------------------------------------------------------//
+        //    itemDic.Add("[BASETYPE]", item.DBBaseType.ToString());
 
-            // - TYPE -------------------------------------------------------------//
-            /// TODO remove this check if it isnt necessary anymore
-            if (item.DBItemType == ItemType.Unknown && (item.Name.Contains("Plan") || item.Name.Contains("Design")))
-            {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "There are still buggy itemType infos for craftingPlan around {0} has itemType = {1}", item.Name, item.DBItemType);
-                result = ItemType.CraftingPlan.ToString();
-            }
-            else result = item.DBItemType.ToString();
-            itemDic.Add("[TYPE]", result);
+        //    // - TYPE -------------------------------------------------------------//
+        //    /// TODO remove this check if it isnt necessary anymore
+        //    if (item.DBItemType == ItemType.Unknown && (item.Name.Contains("Plan") || item.Name.Contains("Design")))
+        //    {
+        //        Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "There are still buggy itemType infos for craftingPlan around {0} has itemType = {1}", item.Name, item.DBItemType);
+        //        result = ItemType.CraftingPlan.ToString();
+        //    }
+        //    else result = item.DBItemType.ToString();
+        //    itemDic.Add("[TYPE]", result);
 
-            // - QUALITY -------------------------------------------------------//
-            itemDic.Add("[QUALITY]", Regex.Replace(item.Quality.ToString(), @"[\d-]", string.Empty));
-            itemDic.Add("[D3QUALITY]", item.Quality.ToString());
+        //    // - QUALITY -------------------------------------------------------//
+        //    itemDic.Add("[QUALITY]", Regex.Replace(item.Quality.ToString(), @"[\d-]", string.Empty));
+        //    itemDic.Add("[D3QUALITY]", item.Quality.ToString());
 
-            // - ROLL ----------------------------------------------------------//
-            float roll;
-            if (float.TryParse(Regex.Replace(item.Quality.ToString(), @"[^\d]", string.Empty), out roll))
-                itemDic.Add("[ROLL]", roll);
-            else
-                itemDic.Add("[ROLL]", 0f);
+        //    // - ROLL ----------------------------------------------------------//
+        //    float roll;
+        //    if (float.TryParse(Regex.Replace(item.Quality.ToString(), @"[^\d]", string.Empty), out roll))
+        //        itemDic.Add("[ROLL]", roll);
+        //    else
+        //        itemDic.Add("[ROLL]", 0f);
 
-            // - NAME -------------------------------------------------------------//
-            itemDic.Add("[NAME]", item.Name.ToString().Replace(" ", ""));
+        //    // - NAME -------------------------------------------------------------//
+        //    itemDic.Add("[NAME]", item.Name.ToString().Replace(" ", ""));
 
-            // - LEVEL ------------------------------------------------------------//
-            itemDic.Add("[LEVEL]", (float)item.Level);
-            itemDic.Add("[ONEHAND]", item.IsOneHand);
-            itemDic.Add("[TWOHAND]", item.IsTwoHand);
-            itemDic.Add("[UNIDENT]", (bool)true);
-            itemDic.Add("[INTNAME]", item.InternalName);
-            itemDic.Add("[ITEMID]", item.BalanceID.ToString());
-        }
+        //    // - LEVEL ------------------------------------------------------------//
+        //    itemDic.Add("[LEVEL]", (float)item.Level);
+        //    itemDic.Add("[ONEHAND]", item.IsOneHand);
+        //    itemDic.Add("[TWOHAND]", item.IsTwoHand);
+        //    itemDic.Add("[UNIDENT]", (bool)true);
+        //    itemDic.Add("[INTNAME]", item.InternalName);
+        //    itemDic.Add("[ITEMID]", item.BalanceID.ToString());
+        //}
 
         /// <summary>
         /// 

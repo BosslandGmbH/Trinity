@@ -171,14 +171,14 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         public override string ToString()
         {
-            return Items.Aggregate($"Attributes ({Items.Count}): {Environment.NewLine}",
+            return Items.Aggregate($"Attributes ({Items.Count}) Id={(short)FastAttributeGroupId}/{FastAttributeGroupId} {Environment.NewLine}",
                 (current, attr) => current + $" {attr.Value} {Environment.NewLine}");
         }
 
         public string ToProperties()
         {
             return Items.Where(i => i.Value.Integer != 0 || i.Value.Single > float.Epsilon)
-                .Aggregate($"Attribute Properties ({Items.Count}): {Environment.NewLine}",
+                .Aggregate($"Attribute Properties ({Items.Count}) Id={(short)FastAttributeGroupId}/{FastAttributeGroupId} {Environment.NewLine}",
                 (current, attr) => current + $" public {attr.Value.Descripter.DataType} " +
                 $"{attr.Value.Attribute} => GetCachedAttribute<{attr.Value.Descripter.DataType}>" +
                 $"(ActorAttributeType.{attr.Value.Attribute}); // {attr.Value.Attribute} " +
