@@ -3,7 +3,7 @@ using Zeta.Common;
 
 namespace Trinity.Combat.Abilities
 {
-    class SpellHistoryItem
+    public class SpellHistoryItem
     {
         public TrinityPower Power { get; set; }
         public DateTime UseTime { get; set; }

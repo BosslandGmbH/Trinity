@@ -30,7 +30,7 @@ namespace Trinity.Helpers
                 if (!BotMain.IsRunning && MemoryHelperTools.LastUpdatedFrame != ZetaDia.Memory.Executor.FrameCount)
                 {
                     MemoryHelperTools.LastUpdatedFrame = ZetaDia.Memory.Executor.FrameCount;
-                    CacheData.Player.UpdatePlayerCache();
+                    CacheData.Player.Update();
                     ZetaDia.Actors.Update();
                 }
 

@@ -1141,18 +1141,6 @@ namespace Trinity.UI
             }
         }
 
-        private static void ShowCacheWindowEventHandler(object sender, RoutedEventArgs routedEventArgs)
-        {
-            try
-            {
-                CacheUI.CreateWindow();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError("Error showing CacheUI:" + ex);
-            }
-        }
-
         private static void btnClick_ScanUIElement(object sender, RoutedEventArgs routedEventArgs)
         {
             try

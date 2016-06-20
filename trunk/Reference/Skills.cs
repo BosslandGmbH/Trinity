@@ -4175,7 +4175,7 @@ namespace Trinity.Reference
                         _strike.Meta.ApplyDefaults();
                     }
 
-                    var power = CacheData.HotbarCache.Instance.ActiveSkills
+                    var power = CacheData.Hotbar.ActiveSkills
                         .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_DisintegrationWave ||
                                              p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Cold ||
                                              p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Fire ||
@@ -4232,7 +4232,7 @@ namespace Trinity.Reference
                         _strike.Meta.ApplyDefaults();
                     }
 
-                    var power = CacheData.HotbarCache.Instance.ActiveSkills
+                    var power = CacheData.Hotbar.ActiveSkills
                         .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneStrike ||
                                              p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Fire ||
                                              p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Cold ||
@@ -4289,7 +4289,7 @@ namespace Trinity.Reference
                         _blast.Meta.ApplyDefaults();
                     }
 
-                    var power = CacheData.HotbarCache.Instance.ActiveSkills
+                    var power = CacheData.Hotbar.ActiveSkills
                         .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneBlast ||
                                              p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Cold ||
                                              p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Fire ||
@@ -4389,7 +4389,7 @@ namespace Trinity.Reference
 
             public static bool IsArchonActive()
             {
-                return CacheData.HotbarCache.Instance.ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int)p));
+                return CacheData.Hotbar.ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int)p));
             }
 
             public static bool IsSlowTimeActive()

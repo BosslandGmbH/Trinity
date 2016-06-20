@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Adventurer.Util;
 using Trinity.Framework;
 using Trinity.Framework.Objects.Memory.Attributes;
 using Zeta.Game;
@@ -11,17 +13,21 @@ using Vector3 = Zeta.Common.Vector3;
 namespace Trinity.Cache.Properties
 {
     /// <summary>
-    /// PropertyLoader shared by many types
+    /// Properties shared by many types of actors
+    /// This class should update all values that are possible/reasonable/useful.
+    /// DO NOT put settings or situational based exclusions in here, do that in weighting etc.
     /// </summary>
-    public class CommmonProperties : PropertyLoader.IPropertyCollection
+    public class CommonProperties : IPropertyCollection
     {
         private DateTime _lastUpdated = DateTime.MinValue;
-        private static TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(100);
+        private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(100);
         private static readonly Regex NameNumberTrimRegex = new Regex(@"-\d+$", RegexOptions.Compiled);
+
+        public DateTime CreationTime { get; } = DateTime.UtcNow;
 
         public void ApplyTo(TrinityCacheObject target)
         {
-            if (DateTime.UtcNow.Subtract(_lastUpdated).TotalMilliseconds > UpdateInterval.TotalMilliseconds && target.IsValid)
+            if (!this.IsFrozen && DateTime.UtcNow.Subtract(_lastUpdated) > UpdateInterval || this.IsMe)
                 Update(target);
 
             target.ActorAttributes = this.ActorAttributes;
@@ -42,44 +48,113 @@ namespace Trinity.Cache.Properties
             target.ActorType = this.ActorType;
             target.GizmoType = this.GizmoType;
             target.IsObstacle = this.IsObstacle;
-            target.IsIgnoreName = this.IsIgnoreName;
+            target.IsExcludedId = this.IsExcludedId;
             target.GameBalanceID = this.GameBalanceId;
             target.GameBalanceType = this.GameBalanceType;
             target.Type = this.Type;
             target.AnnId = this.AnnId;
             target.ACDGuid = this.AcdId;
             target.WorldSnoId = this.WorldSnoId;
+            target.HasBeenInLoS = this.HasBeenCastable;
+            target.HasBeenWalkable = this.HasBeenWalkable;
+            target.IsInLineOfSight = this.IsCastable;
+            target.IsWalkable = this.IsWalkable;
+            target.FastAttributeGroupId = this.FastAttributeGroupId;
+            target.IsFrozen = this.IsFrozen;
+            target.IsExcludedId = this.IsExcludedId;
+            target.IsExcludedType = this.IsExcludedType;
+            target.IsAllowedClientEffect = this.IsAllowedClientEffect;
+            target.IsMe = this.IsMe;
+            target.IsUnit = this.IsUnit;
+            target.IsItem = this.IsItem;
+            target.IsPlayer = this.IsPlayer;
+            target.IsGizmo = this.IsGizmo;
+            target.IsMonster = this.IsMonster;
+            target.AxialRadius = this.AxialRadius;
         }
 
         public void OnCreate(TrinityCacheObject source)
         {
             var diaObject = source.Object;
-            if (diaObject == null)
+            if (diaObject == null || !diaObject.IsValid)
                 return;
 
             this.ActorSnoId = diaObject.ActorSnoId;
             this.ActorType = diaObject.ActorType;
             this.InternalName = NameNumberTrimRegex.Replace(diaObject.Name, "");
+
+            this.IsExcludedId = DataDictionary.ExcludedActorIds.Contains(this.ActorSnoId) || DataDictionary.BlackListIds.Contains(this.ActorSnoId);
+            if (this.IsExcludedId)
+            {
+                this.IsFrozen = true;
+                return;
+            }
+
+            this.IsExcludedType = DataDictionary.ExcludedActorTypes.Contains(this.ActorType);
+            if (this.IsExcludedType)
+            {
+                this.IsFrozen = true;
+                return;
+            }
+
+            if (this.ActorType == ActorType.ClientEffect)
+            {
+                this.IsAllowedClientEffect = DataDictionary.AllowedClientEffects.Contains(this.ActorSnoId);
+                if (!this.IsAllowedClientEffect)
+                {
+                    this.IsFrozen = true;
+                    return;
+                }
+            }
+
             this.InternalNameLowerCase = InternalName.ToLower();
             this.GizmoType = diaObject.ActorInfo.GizmoType;
             this.IsObstacle = DataDictionary.NavigationObstacleIds.Contains(this.ActorSnoId) || DataDictionary.PathFindingObstacles.ContainsKey(this.ActorSnoId);
+            this.WorldSnoId = TrinityPlugin.Player.WorldSnoId;
+            this.Radius = diaObject.CollisionSphere.Radius;
+            this.AxialRadius = diaObject.ActorInfo.AxialCylinder.Ax1;
+            this.CollisionRadius = this.AxialRadius * 0.6f;
 
+            var commonData = source.CommonData;
+            var isValid = ActorType == ActorType.ClientEffect || commonData != null && commonData.IsValid && !commonData.IsDisposed;
+            
             this.Type = CommonPropertyUtils.GetObjectType(
-                source.IsValid,
+                isValid,
                 this.ActorType,
                 this.ActorSnoId,
                 this.GizmoType,
                 this.InternalName
             );
 
-            this.IsIgnoreName = DataDictionary.ActorIgnoreNames.Any(n => this.InternalNameLowerCase.StartsWith(n));
+            this.ObjectHash = HashGenerator.GenerateObjecthash(
+                this.ActorSnoId,
+                this.Position,
+                this.InternalName,
+                this.Type
+            );
 
-            if (source.CommonData == null)
+            if (commonData == null || !commonData.IsValid)
                 return;
 
-            this.AnnId = source.CommonData.AnnId;
-            this.GameBalanceId = source.CommonData.GameBalanceId;
-            this.GameBalanceType = source.CommonData.GameBalanceType;
+            // Trinity attributes incurs an initial cost to cache the attributes structures and all values.
+            // GetCachedAttribute<T>() is a straight dictionary lookup, 
+            // GetAttribute<T>() updates the value before returning.
+
+            this.FastAttributeGroupId = commonData.FastAttribGroupId;
+            this.ActorAttributes = new ActorAttributes(commonData.FastAttribGroupId);
+
+            this.AnnId = commonData.AnnId;
+            this.GameBalanceId = commonData.GameBalanceId;
+            this.GameBalanceType = commonData.GameBalanceType;
+
+            this.IsMe = source.RActorGuid == TrinityPlugin.Player.RActorGuid;
+            this.IsUnit = Type == TrinityObjectType.Unit || ActorType == ActorType.Monster || ActorType == ActorType.Player;
+            this.IsItem = Type == TrinityObjectType.Item || ActorType == ActorType.Item;
+            this.IsPlayer = Type == TrinityObjectType.Player || ActorType == ActorType.Player;
+            this.IsGizmo = ActorType == ActorType.Gizmo;
+            this.IsMonster = ActorType == ActorType.Monster;
+
+            Update(source);
         }
 
         public void Update(TrinityCacheObject source)
@@ -93,37 +168,68 @@ namespace Trinity.Cache.Properties
             this.LastSeenTime = DateTime.UtcNow;
             this.Position = diaObject.Position;
             this.Distance = TrinityPlugin.Player.Position.Distance(this.Position);
-            this.Radius = diaObject.CollisionSphere.Radius;
-            this.CollisionRadius = diaObject.ActorInfo.AxialCylinder.Ax1*0.6f;
-            this.ObjectHash = HashGenerator.GenerateObjecthash(source);
             this.AcdId = diaObject.ACDId;
-            this.WorldSnoId = TrinityPlugin.Player.WorldSnoId;
+
+            if (this.Distance > 100f)
+                return;
 
             var commonData = source.CommonData;
-            if (commonData == null)
+            if (commonData == null || !commonData.IsValid)
                 return;
-            
-            this.ActorAttributes = new ActorAttributes(commonData.FastAttribGroupId);
+
+            var fagId = commonData.FastAttribGroupId;
+            if (fagId != this.FastAttributeGroupId)
+            {
+                this.FastAttributeGroupId = fagId;
+                this.ActorAttributes = new ActorAttributes(fagId); 
+            }
+
             this.Animation = commonData.CurrentAnimation;
             this.AnimationNameLowerCase = DataDictionary.GetAnimationNameLowerCase(this.Animation);
             this.AnimationState = commonData.AnimationState;
-            //this.IsBountyObjective = source.CommonData.BountyObjective > 0; // 0.200ms
-            this.IsMiniMapActive = commonData.MinimapActive > 0;
 
-            if (!this.HasBeenWalkable)
-                this.HasBeenWalkable = Core.Avoidance.Grid.CanRayWalk(TrinityPlugin.Player.Position, this.Position);
+            if (ActorAttributes != null)
+            {
+                this.IsBountyObjective = this.ActorAttributes.IsBountyObjective;
+                this.IsMiniMapActive = this.ActorAttributes.IsMinimapActive;
+            }
 
-            if (!this.HasBeenCastable)
-                this.HasBeenCastable = Core.Avoidance.Grid.CanRayCast(TrinityPlugin.Player.Position, this.Position);            
+            this.IsCastable = Core.Avoidance.Grid.CanRayCast(TrinityPlugin.Player.Position, this.Position);
+            if (!this.HasBeenCastable && this.IsCastable)
+                this.HasBeenCastable = true;
+
+            if (this.IsCastable)
+            {
+                this.IsWalkable = Core.Avoidance.Grid.CanRayWalk(TrinityPlugin.Player.Position, this.Position);
+                if (!this.HasBeenWalkable && this.IsWalkable)
+                    this.HasBeenWalkable = true;
+            }
+            else
+            {
+                this.IsWalkable = false;
+            }
+
         }
 
+        public float AxialRadius { get; set; }
+        public bool IsMe { get; set; }
+        public bool IsUnit { get; set; }
+        public bool IsItem { get; set; }
+        public bool IsPlayer { get; set; }
+        public bool IsGizmo { get; set; }
+        public bool IsMonster { get; set; }
+        public bool IsFrozen { get; set; }
+        public int FastAttributeGroupId { get; set; }
+        public bool IsExcludedType { get; set; }
+        public bool IsAllowedClientEffect { get; set; }
+        public bool IsWalkable { get; set; }
+        public bool IsCastable { get; set; }
         public int WorldSnoId { get; set; }
-        public string AnimationNameLowerCase { get; set; }
+        public string AnimationNameLowerCase { get; set; } = string.Empty;
         public int AnnId { get; set; }
         public bool HasBeenCastable { get; set; }
         public bool HasBeenWalkable { get; set; }
-        public bool IsBlacklisted { get; set; }
-        public string ObjectHash { get; set; }
+        public string ObjectHash { get; set; } = string.Empty;
         public int AcdId { get; set; }
         public float CollisionRadius { get; set; }
         public float Radius { get; set; }
@@ -135,14 +241,14 @@ namespace Trinity.Cache.Properties
         public AnimationState AnimationState { get; set; }
         public bool IsBountyObjective { get; set; }
         public bool IsMiniMapActive { get; set; }
-        public bool IsIgnoreName { get; set; }
+        public bool IsExcludedId { get; set; }
         public bool IsObstacle { get; set; }
         public TrinityObjectType Type { get; set; }
         public int ActorSnoId { get; set; }
-        public ActorType ActorType { get; set; }
-        public GizmoType GizmoType { get; set; }
-        public string InternalNameLowerCase { get; set; }
-        public string InternalName { get; set; }
+        public ActorType ActorType { get; set; } = ActorType.Invalid;
+        public GizmoType GizmoType { get; set; } 
+        public string InternalNameLowerCase { get; set; } = string.Empty;
+        public string InternalName { get; set; } = string.Empty;
         public int GameBalanceId { get; set; }
         public GameBalanceType GameBalanceType { get; set; }
     }
@@ -184,7 +290,7 @@ namespace Trinity.Cache.Properties
             if (actorType == ActorType.Item || DataDictionary.ForceToItemOverrideIds.Contains(actorSNO))
                 return TrinityObjectType.Item;
 
-            if (Core.Avoidance.ActiveAvoidanceSnoIds.Contains(actorSNO) || DataDictionary.AvoidanceSNO.Contains(actorSNO))
+            if (DataDictionary.AvoidanceSNO.Contains(actorSNO))
                 return TrinityObjectType.Avoidance;
 
             if (DataDictionary.ForceTypeAsBarricade.Contains(actorSNO))
@@ -233,8 +339,11 @@ namespace Trinity.Cache.Properties
             if (actorType == ActorType.Projectile)
                 return TrinityObjectType.Projectile;
 
+            if (DataDictionary.BuffedLocationSno.Contains(actorSNO))
+                return TrinityObjectType.BuffedRegion;
+
             if (actorType == ActorType.ClientEffect)
-                return TrinityObjectType.Effect;
+                return TrinityObjectType.ClientEffect;
 
             if (actorType == ActorType.Player)
                 return TrinityObjectType.Player;

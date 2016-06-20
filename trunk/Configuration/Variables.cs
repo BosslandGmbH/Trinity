@@ -117,21 +117,10 @@ namespace Trinity
         /// <summary>
         /// Holds all of the player's current info handily cached, updated once per loop with a minimum timer on updates to save D3 memory hits
         /// </summary>
-        public static CacheData.PlayerCache Player
-        {
-            get
-            {
-                return CacheData.Player;
-            }
-        }
+        public static PlayerCache Player => CacheData.Player;
 
-        public static PlayerMover PlayerMover
-        {
-            get
-            {
-                return PlayerMover.Instance;
-            }
-        }
+        public static PlayerMover PlayerMover => PlayerMover.Instance;
+
 
         // Also storing a list of all profiles, for experimental reasons/incase I want to use them down the line
         public static List<string> ProfileHistory = new List<string>();
@@ -140,7 +129,7 @@ namespace Trinity
         public static string FirstProfile = "";
 
         // A list of small areas covering zones we move through while fighting to help our custom move-handler skip ahead waypoints
-        internal static HashSet<CacheObstacleObject> SkipAheadAreaCache = new HashSet<CacheObstacleObject>();
+        //internal static HashSet<CacheObstacleObject> SkipAheadAreaCache = new HashSet<CacheObstacleObject>();
         public static DateTime LastAddedLocationCache = DateTime.MinValue;
         public static Vector3 LastRecordedPosition = Vector3.Zero;
         public static bool SkipAheadAGo = false;
@@ -149,14 +138,14 @@ namespace Trinity
         private static DateTime _lastClearedAvoidanceBlackspots = DateTime.MinValue;
 
         // A count for player mystic ally, gargantuans, and zombie dogs
-        internal static int PlayerOwnedMysticAllyCount = 0;
-        internal static int PlayerOwnedGargantuanCount = 0;
-        internal static int PlayerOwnedZombieDogCount = 0;
-        internal static int PlayerOwnedFetishArmyCount = 0;
-        internal static int PlayerOwnedDHPetsCount = 0;
-        internal static int PlayerOwnedDHSentryCount = 0;
-        internal static int PlayerOwnedHydraCount = 0;
-        internal static int PlayerOwnedAncientCount = 0;       
+        //internal static int PlayerOwnedMysticAllyCount = 0;
+        //internal static int PlayerOwnedGargantuanCount = 0;
+        //internal static int PlayerOwnedZombieDogCount = 0;
+        //internal static int PlayerOwnedFetishArmyCount = 0;
+        //internal static int PlayerOwnedDHPetsCount = 0;
+        //internal static int PlayerOwnedDHSentryCount = 0;
+        //internal static int PlayerOwnedHydraCount = 0;
+        //internal static int PlayerOwnedAncientCount = 0;       
 
         // These are a bunch of safety counters for how many times in a row we register having *NO* ability to select when we need one (eg all off cooldown)
 
@@ -363,16 +352,17 @@ namespace Trinity
          * Even if it looks a bit messy and probably should have just used it's own object instance of the cache-class instead! :D
          * c_ variables are all used in the caching mechanism
          */
+
         /// <summary>
         /// This contains the active cache of DiaObjects
         /// </summary>
-        internal static List<TrinityCacheObject> ObjectCache = new List<TrinityCacheObject>();
+        internal static List<TrinityCacheObject> ObjectCache => CacheData.Actors.Items;
 
         // From main RefreshDiaobjects
         /// <summary>
         /// The position of the last CurrentTarget (Primary Target)
         /// </summary>
-        internal static Vector3 LastPrimaryTargetPosition;
+        internal static Vector3 LastTargetPosition;
         private static Vector3 KiteAvoidDestination;
         /// <summary>
         /// The RActorGUID of the last CurrentTarget (PrimaryTarget)

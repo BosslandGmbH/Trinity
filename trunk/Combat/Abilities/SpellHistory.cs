@@ -60,7 +60,7 @@ namespace Trinity.Combat.Abilities
             LastPowerUsed = power.SNOPower;
 
             Logger.LogVerbose(LogCategory.Targetting, "Recorded {0}", power);
-            CacheData.AbilityLastUsed[power.SNOPower] = DateTime.UtcNow;            
+            //CacheData.AbilityLastUsed[power.SNOPower] = DateTime.UtcNow;            
         }
 
         public static DateTime LastSpellUseTime { get; set; }
@@ -74,39 +74,41 @@ namespace Trinity.Combat.Abilities
             RecordSpell(new TrinityPower(power));
         }
 
-        public static TrinityPower GetLastTrinityPower()
+
+        public static DateTime PowerLastUsedTime(SNOPower power)
         {
+            var useTime = DateTime.MinValue;
             if (History.Any())
-                return _history.OrderByDescending(i => i.UseTime).FirstOrDefault().Power;
-            return new TrinityPower();
+            {
+                var spellHistoryItem = GetLastUseHistoryItem(power);
+                if (spellHistoryItem != null)
+                {
+                    useTime = spellHistoryItem.UseTime;
+                }
+                return useTime;
+            }
+            return useTime;
         }
 
-        public static SNOPower GetLastSNOPower()
+        public static SpellHistoryItem GetLastUseHistoryItem(SNOPower power)
         {
-            if (History.Any())
-                return _history.OrderByDescending(i => i.UseTime).FirstOrDefault().Power.SNOPower;
-            return SNOPower.None;
-        }
-
-        public static DateTime GetSpellLastused(SNOPower power = SNOPower.None)
-        {
-            DateTime lastUsed = DateTime.MinValue;
-            if (power == SNOPower.None && CacheData.AbilityLastUsed.Any())
-            {
-                var pair = CacheData.AbilityLastUsed.LastOrDefault();
-                lastUsed = pair.Value;
-            }
-            else
-            {
-                CacheData.AbilityLastUsed.TryGetValue(power, out lastUsed);
-            }
-            return lastUsed;
+            return _history.OrderByDescending(i => i.UseTime).FirstOrDefault(o => o.Power.SNOPower == power);
         }
 
         public static TimeSpan TimeSinceUse(SNOPower power)
         {
-            DateTime lastUsed = GetSpellLastused(power);
-            return DateTime.UtcNow.Subtract(lastUsed);
+            var lastUsed = PowerLastUsedTime(power);
+            if(lastUsed != DateTime.MinValue)
+                return DateTime.UtcNow.Subtract(lastUsed);
+            return TimeSpan.MaxValue;
+        }
+
+        internal static double MillisecondsSinceUse(SNOPower power)
+        {
+            var lastUsed = PowerLastUsedTime(power);
+            if (lastUsed != DateTime.MinValue)
+                return DateTime.UtcNow.Subtract(lastUsed).TotalMilliseconds;
+            return -1;
         }
 
         public static int SpellUseCountInTime(SNOPower power, TimeSpan time)

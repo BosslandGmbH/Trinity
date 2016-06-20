@@ -13,6 +13,8 @@ namespace Trinity.Cache
     /// </summary>
     public static class TrinityCacheObjectUtils
     {
+
+
         public static bool HasDebuff(this TrinityCacheObject obj, SNOPower debuffSNO)
         {
             if (obj?.CommonData == null || !obj.IsValid)
@@ -89,6 +91,5 @@ namespace Trinity.Cache
             }
             return false;
         }
-
     }
 }

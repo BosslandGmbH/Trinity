@@ -195,7 +195,7 @@ namespace Trinity.Framework.Avoidance
 
         public static bool GetShouldAvoid()
         {
-            if (CacheData.BuffsCache.Instance.HasInvulnerableShrine)
+            if (CacheData.Buffs.HasInvulnerableShrine)
                 return false;
 
             if (CombatBase.IsDoingGoblinKamakazi)
@@ -227,7 +227,7 @@ namespace Trinity.Framework.Avoidance
 
         private static bool GetShouldKite()
         {
-            if (CacheData.BuffsCache.Instance.HasInvulnerableShrine)
+            if (CacheData.Buffs.HasInvulnerableShrine)
                 return false;
 
             if (TrinityPlugin.Player.IsInTown)

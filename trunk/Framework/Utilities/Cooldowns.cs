@@ -112,7 +112,7 @@ namespace Trinity.Framework.Utilities
 
         protected override void OnPulse()
         {
-            using (new PerformanceLogger("Cooldowns.Pulse"))
+            using (new PerformanceLogger("Utility.Cooldowns.Pulse"))
             {
                 CurrentTime = ZetaDia.CurrentTime;
                 IsLogging = TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Cooldowns);

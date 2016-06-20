@@ -210,10 +210,10 @@ namespace Trinity.Combat.Abilities
                     return false;
 
                 if (!Sets.ImmortalKingsCall.IsFirstBonusActive && CurrentTarget != null &&
-                    (CurrentTarget.IsEliteRareUnique || TargetUtil.AnyMobsInRange(25f, 3)))
+                    (CurrentTarget.IsElite || TargetUtil.AnyMobsInRange(25f, 3)))
                     return true;
 
-                if (Sets.ImmortalKingsCall.IsFirstBonusActive && TrinityPlugin.PlayerOwnedAncientCount < 3)
+                if (Sets.ImmortalKingsCall.IsFirstBonusActive && Player.Summons.AncientCount < 3)
                     return true;
 
                 return false;
@@ -442,7 +442,7 @@ namespace Trinity.Combat.Abilities
                 if (Legendary.LutSocks.IsEquipped)
                     return leapresult && TargetUtil.AnyMobsInRange(15f, 1);
 
-                return leapresult && (TargetUtil.ClusterExists(15f, 35f, 3) || CurrentTarget.IsBossOrEliteRareUnique);
+                return leapresult && (TargetUtil.ClusterExists(15f, 35f, 3) || CurrentTarget.IsElite);
             }
         }
 
@@ -459,7 +459,7 @@ namespace Trinity.Combat.Abilities
                 var mobCountThreshold =
                     TrinityPlugin.ObjectCache.Count(
                         o => o.IsUnit && (!o.HasDebuff(SNOPower.Barbarian_Rend)) && o.RadiusDistance <= 12) >= 3 ||
-                    CurrentTarget.IsEliteRareUnique;
+                    CurrentTarget.IsElite;
                 if (!mobCountThreshold)
                     return false;
 
@@ -507,7 +507,7 @@ namespace Trinity.Combat.Abilities
 
                 return CurrentTarget.RadiusDistance <= 10 && !overPowerHasBuffEffect &&
                        TargetUtil.AnyMobsInRange(10f) &&
-                       (CurrentTarget.IsEliteRareUnique || CurrentTarget.IsMinion || CurrentTarget.IsBoss ||
+                       (CurrentTarget.IsElite || CurrentTarget.IsMinion || CurrentTarget.IsBoss ||
                         TargetUtil.NumMobsInRangeOfPosition(TrinityPlugin.Player.Position, 9) >= 4);
             }
         }
@@ -645,7 +645,7 @@ namespace Trinity.Combat.Abilities
                 {
                     if (canUseHota)
                     {
-                        bool hotaElites = (CurrentTarget.IsBossOrEliteRareUnique || CurrentTarget.IsTreasureGoblin) &&
+                        bool hotaElites = (CurrentTarget.IsElite || CurrentTarget.IsTreasureGoblin) &&
                                           TargetUtil.EliteOrTrashInRange(10f);
 
                         bool hotaTrash = IgnoringElites && CurrentTarget.IsTrashMob &&
@@ -659,7 +659,7 @@ namespace Trinity.Combat.Abilities
                 {
                     if (canUseHota && !CanUseLeap)
                     {
-                        bool hotaElites = (CurrentTarget.IsBossOrEliteRareUnique || CurrentTarget.IsTreasureGoblin) &&
+                        bool hotaElites = (CurrentTarget.IsElite || CurrentTarget.IsTreasureGoblin) &&
                                           TargetUtil.EliteOrTrashInRange(10f);
 
                         bool hotaTrash = IgnoringElites && CurrentTarget.IsTrashMob &&

@@ -23,7 +23,22 @@ namespace Trinity
         /// </summary>
         public static readonly HashSet<int> AllowedClientEffects = new HashSet<int>
         {
-            (int)SNOActor.p2_itemPassive_unique_ring_017_dome
+            (int)SNOActor.p2_itemPassive_unique_ring_017_dome,
+            (int)SNOActor.monk_serenity_goldRings_AOE,
+            (int)SNOActor.monk_serenity_goldRings_health,
+            (int)SNOActor.monk_serenity_goldRings_immune,
+            (int)SNOActor.monk_serenity_goldRings_reflect,
+            (int)SNOActor.monk_serenity_goldRings_spirit,
+        };
+
+        public static readonly HashSet<int> BuffedLocationSno = new HashSet<int>
+        {
+            (int)SNOActor.p2_itemPassive_unique_ring_017_dome,
+            (int)SNOActor.monk_serenity_goldRings_AOE,
+            (int)SNOActor.monk_serenity_goldRings_health,
+            (int)SNOActor.monk_serenity_goldRings_immune,
+            (int)SNOActor.monk_serenity_goldRings_reflect,
+            (int)SNOActor.monk_serenity_goldRings_spirit,
         };
 
         public static HashSet<int> HerdingMatsSnoIds = new HashSet<int>()
@@ -1839,6 +1854,11 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.a3dun_Keep_Bridge,
+
+            (int)SNOActor.x1_Catacombs_Breakable_Corner_Wall,
+            (int)SNOActor.x1_Catacombs_Breakable_Wall_A,
+
             (int)SNOActor.Cow_B, //95263
 
             (int)SNOActor.a1dun_Leor_Jail_Door_SuperLocked_A_Fake,
@@ -2217,23 +2237,20 @@ namespace Trinity
         };
 
         /// <summary>
-        /// Actor types that we dont wan't to even look at from DB's ACD List.
+        /// Actor types that we always want to completely ignore
         /// </summary>
         public static HashSet<ActorType> ExcludedActorTypes = new HashSet<ActorType>
         {
             ActorType.Environment,
-            ActorType.ClientEffect,
             ActorType.AxeSymbol,
-            ActorType.CustomBrain,
+            //ActorType.CustomBrain, // Some avoidance are custom brain like herald of pestilence creepMobArm
+            //ActorType.ClientEffect, // Some avoidance are client effect like thunderstorm, fastmummy poison clouds.
             ActorType.Invalid,
-            //ActorType.ServerProp,
-            //ActorType.Player,
-            //ActorType.Projectile, //lots of avoidance are classified as projectile
             ActorType.Critter,
         };
 
         /// <summary>
-        /// ActorSnoId that we want to completely ignore
+        /// ActorSnoId that we always want to completely ignore
         /// </summary>
         public static HashSet<int> ExcludedActorIds = new HashSet<int>
         {
@@ -2244,10 +2261,22 @@ namespace Trinity
             3462, // Box Trigger
             5466, // Sphere Trigger
             3461, // OneShot Box Trigger
-            //6442, // Waypoint
             3795, // Checkpoint
             5992, // OneShot Trigger Sphere
-            180941 // SavePoint
+            180941, // SavePoint
+            143853, //DH_discipline ActorSnoId=143853
+            143854, //DH_hatred ActorSnoId=143854
+            4433, //HealthBall_forecast ActorSnoId=4433
+            3440, //bottomBarUI ActorSnoId=3440
+            447059, //JobsDone ActorSnoId=447059
+            3441, //bottomBar_buttonFX ActorSnoId=3441
+            447057, //JobsDone_shineBox ActorSnoId=447057
+            123504, //actor_isSlowed_color ActorSnoId=123504
+            3441, //bottomBar_buttonFX ActorSnoId=3441
+            179841, //HirelingHeadstone ActorSnoId=179841
+            4434, //HealthBall_liquid ActorSnoId=4434
+            375094, //invisBoxCollision_flippy ActorSnoId=375094
+            89880, //g_LightGlow_Orange ActorSnoId=89880
         };
 
         public static HashSet<MonsterType> NonHostileMonsterTypes = new HashSet<MonsterType>

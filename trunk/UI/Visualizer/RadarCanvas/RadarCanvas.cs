@@ -64,6 +64,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         private void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
             IsMouseDown = true;
+            IsRightClick = e.RightButton == MouseButtonState.Pressed;
+            IsLeftClick = e.LeftButton == MouseButtonState.Pressed;
             Cursor = Cursors.Hand;
             DragInitialPosition = Mouse.GetPosition(this);
             DragInitialPanOffset = CanvasData.PanOffset;
@@ -71,17 +73,38 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             //HandleMapClicked(sender, e);
         }
 
+        public bool IsLeftClick { get; set; }
+        public bool IsRightClick { get; set; }
+
+        public Tuple<Vector3, Vector3, bool> CurrentRayCast { get; set; }
+        public Tuple<Vector3, Vector3, bool> CurrentRayWalk { get; set; }
+
         private void HandleMapClicked(object sender, MouseButtonEventArgs e)
         {
             var clickedWorldPosition = PointMorph.GetWorldPosition(DragInitialPosition, CanvasData);
 
             Logger.Log($"Clicked World Position = {clickedWorldPosition}, Distance={clickedWorldPosition.Distance(ZetaDia.Me.Position)}");
 
+            if (IsRightClick)
+            {
+                var result = Core.Grids.Avoidance.CanRayWalk(clickedWorldPosition, Player.Actor.Position);
+                CurrentRayWalk = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
+            }
+            else if(IsLeftClick)
+            {
+                var result = Core.Grids.Avoidance.CanRayCast(clickedWorldPosition, Player.Actor.Position);
+                CurrentRayCast = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
+            }
+
             var hit = FindElementUnderClick(sender, e);
             if (hit != null)
             {
                 var actor = hit.RadarObject.Actor;
                 ClickCommand.Execute(actor);
+
+                // Trigger Canvas to Render
+                InvalidateVisual();
+
                 return;
             }
 
@@ -92,6 +115,9 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 Distance = clickedWorldPosition.Distance(ZetaDia.Me.Position),
                 Position = clickedWorldPosition,
             };
+
+            // Trigger Canvas to Render
+            InvalidateVisual();
         }
 
         private RadarHitTestUtility.HitContainer FindElementUnderClick(object sender, MouseEventArgs e)
@@ -621,6 +647,11 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                         }
                     }
 
+                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.RadarDebug))
+                    //{
+                    DrawClickRays(dc, CanvasData);
+                    //}
+
                     //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Clusters))
                     //{
                     //    DrawClusters(dc, CanvasData);
@@ -645,10 +676,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     //    DrawKiteFromNodes(dc, CanvasData);
                     //}
 
-                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache))
-                    {
+                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache))
+                    //{
                         DrawNotInCacheObjects(dc, CanvasData);
-                    }
+                    //}
 
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.CombatRadius))
                     {
@@ -696,6 +727,20 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             }
         }
 
+        private void DrawClickRays(DrawingContext dc, CanvasData canvasData)
+        {
+            if (CurrentRayWalk != null && CurrentRayWalk.Item1 != Vector3.Zero && CurrentRayWalk.Item2 != Vector3.Zero)
+            {
+                var rayWalkPen = CurrentRayWalk.Item3 ? RadarResources.SuccessPen : RadarResources.FailurePen;
+                dc.DrawLine(rayWalkPen, CurrentRayWalk.Item1.ToCanvasPoint(), CurrentRayWalk.Item2.ToCanvasPoint());
+            }
+            if (CurrentRayCast != null && CurrentRayCast.Item1 != Vector3.Zero && CurrentRayCast.Item2 != Vector3.Zero)
+            {
+                var rayWalkPen = CurrentRayCast.Item3 ? RadarResources.SuccessPen : RadarResources.FailurePen;
+                dc.DrawLine(rayWalkPen, CurrentRayCast.Item1.ToCanvasPoint(), CurrentRayCast.Item2.ToCanvasPoint());
+            }
+        }
+
         private void DrawCombatRadius(DrawingContext dc, CanvasData canvasData)
         {
             try
@@ -739,25 +784,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             }
         }
 
-        private void DrawObstacles(DrawingContext dc, CanvasData canvas)
-        {
-            try
-            {
-                foreach (var obstacle in CacheData.NavigationObstacles)
-                {
-                    if (!DataDictionary.PathFindingObstacles.ContainsKey(obstacle.ActorSNO))
-                        return;
 
-                    var radius = DataDictionary.PathFindingObstacles[obstacle.ActorSNO];
-
-                    dc.DrawEllipse(BlackBrush, null, obstacle.Position.ToCanvasPoint(), 4 * radius, 4 * radius);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception in RadarUI.DrawObstacles(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            }
-        }
 
         private PathGeometry _lastClusterGeom;
         private DateTime _lastClusterGeomCreationTime = DateTime.MinValue;
@@ -873,6 +900,9 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         {
             try
             {
+                if (Core.Avoidance.IsUpdatingNodes)
+                    return;
+
                 if (Core.Avoidance.CurrentNodes == null)
                     return;
 
@@ -1833,7 +1863,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             {
                 var brush = RadarResources.GreyBrush;
                 brush.Opacity = 0.75;
-                var actorRadius = Math.Min(30, Math.Max(2 * GridSize, actor.CollisionRadius * GridSize));
+                var actorRadius = Math.Min(30, Math.Max(4, actor.CollisionRadius * GridSize));
                 var radarObject = new RadarObject(actor, canvas);
                 dc.DrawEllipse(brush, null, radarObject.Point, actorRadius, actorRadius);
                 HitTester.AddEllipse(radarObject, radarObject.Point, actorRadius, actorRadius);
@@ -1853,16 +1883,23 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             {
                 var res = RadarResources.GetActorResourceSet(radarObject);
 
-                //if (radarObject.Actor.IsDead)
-                //    return;
-
-                if (radarObject.Actor.IsMonster || radarObject.Actor.IsAvoidance)
-                {
-                    // Draw a line to indicate which way the unit is facing
-                    //dc.DrawLine(res.Pen, radarObject.Point, radarObject.HeadingPointAtRadius);
-                }
+                Pen pen = RadarResources.GreyPen;
+                if (radarObject.Actor.IsInLineOfSight)
+                    pen = RadarResources.LineOfSightPen;
+                if (SelectedRadarObject == radarObject)
+                    pen = RadarResources.SelectionPen;
+                if (radarObject.Actor.IsBlacklisted)
+                    pen = RadarResources.BlacklistedPen;
 
                 var gridRadius = Math.Min(30, Math.Max(2 * GridSize, radarObject.Actor.CollisionRadius * GridSize));
+
+                if (radarObject.Actor.Type == TrinityObjectType.BuffedRegion)
+                {
+                    var size = radarObject.Actor.AxialRadius*GridSize;
+                    dc.DrawEllipse(RadarResources.BuffedRegionBrush, RadarResources.BuffedRegionPen, radarObject.Point, size, size);
+                    HitTester.AddEllipse(radarObject, radarObject.Point, size, size);
+                    return;
+                }
 
                 if (VisibilityFlags.HasFlag(RadarVisibilityFlags.RiftValue))
                 {
@@ -1873,7 +1910,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                         DrawLabel(dc, canvas, value, radarObject.Point, YellowBrush, 15, 12, 8);
                     }
                 }
-
                 else if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Weighting))
                 {
                     var tco = radarObject.Actor as TrinityCacheObject;
@@ -1886,14 +1922,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                 if (radarObject.Actor.IsGizmo && (VisibilityFlags.HasFlag(RadarVisibilityFlags.Gizmos) || VisibilityFlags.HasFlag(RadarVisibilityFlags.Misc)))
                 {
-                    Pen pen = null;
-
-                    if (radarObject.Actor.IsBlacklisted)
-                        pen = RadarResources.BlacklistedPen;
-
-                    if (SelectedRadarObject == radarObject)
-                            pen = RadarResources.SelectionPen;
-
                     dc.DrawEllipse(RadarResources.GizmoBrush, pen, radarObject.Point, GridSize, GridSize);
 
                     if (Zoom > 5)
@@ -1903,27 +1931,18 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     return;
                 }                
 
-                if (radarObject.Actor.IsAvoidance && VisibilityFlags.HasFlag(RadarVisibilityFlags.Avoidance))
+                if (radarObject.Actor.IsActiveAvoidance && VisibilityFlags.HasFlag(RadarVisibilityFlags.Avoidance))
                 {
                     res.Brush = RadarResources.AvoidanceBrush;
                     dc.DrawEllipse(res.Brush, null, radarObject.Point, GridSize / 2, GridSize / 2);
                     res.Brush.Opacity = 0.15;
-                    //var gridRadius = radarObject.Actor.Radius * GridSize;
-                    var pen = radarObject.Actor.IsInLineOfSight ? RadarResources.LineOfSightLightPen : RadarResources.AvoidanceLightPen;
-
-                    if (radarObject.Actor.IsBlacklisted)
-                        pen = RadarResources.BlacklistedPen;
-
-                    if (SelectedRadarObject == radarObject)
-                        pen = RadarResources.SelectionPen;
-
                     dc.DrawEllipse(res.Brush, pen, radarObject.Point, gridRadius, gridRadius);
                     DrawActorLabel(dc, canvas, radarObject, RadarResources.AvoidanceTextBrush);
                 }
                 else if (radarObject.Actor.IsMonster && VisibilityFlags.HasFlag(RadarVisibilityFlags.Monsters))
                 {
                     // Units may become avoidances in special circumstances, beast charge, about to expode etc
-                    if (radarObject.Actor.IsAvoidance)
+                    if (radarObject.Actor.IsActiveAvoidance)
                         res.Brush = RadarResources.AvoidanceBrush;
     
                     // Draw a dot in the center of the actor;
@@ -1931,29 +1950,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                     // Draw a circle representing the size of the actor
                     res.Brush.Opacity = 0.15;
-
-                    //var gridRadius = radarObject.Actor.CollisionRadius * GridSize;
-
-                    var pen = radarObject.Actor.IsInLineOfSight ? RadarResources.LineOfSightLightPen : null;
-
-                    if (radarObject.Actor.IsBlacklisted)
-                        pen = RadarResources.BlacklistedPen;
-
-                    if (SelectedRadarObject == radarObject)
-                        pen = RadarResources.SelectionPen;
-
-                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Misc) && TrinityPlugin.Player.ActorClass == ActorClass.Wizard)
-                    {
-                        var tActor = radarObject.Actor;
-                        if (tActor != null)
-                        {
-                            if (tActor.ActorAttributes.HasFirebirdPermanent)
-                            {
-                                res.Brush = RedBrush;
-                                pen = RadarResources.OrangeDashPen;
-                            }
-                        }
-                    }
 
                     dc.DrawEllipse(res.Brush, pen, radarObject.Point, gridRadius, gridRadius);
 
@@ -1970,7 +1966,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 else if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Misc) && !radarObject.Actor.IsMe)
                 {
                     // Units may become avoidances in special circumstances, beast charge, about to expode etc
-                    if (radarObject.Actor.IsAvoidance)
+                    if (radarObject.Actor.IsActiveAvoidance)
                     {
                         res.Brush = RadarResources.AvoidanceBrush;
                         res.Brush.Opacity = 0.85;
@@ -1979,18 +1975,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     {
                         res.Brush.Opacity = 0.5;
                     }
-
-
-                    //// Draw a dot in the center of the actor;
-                    //dc.DrawEllipse(res.Brush, null, radarObject.Point, GridSize / 2, GridSize / 2);
-
-                    Pen pen = null;
-
-                    if (radarObject.Actor.IsBlacklisted)
-                        pen = RadarResources.BlacklistedPen;
-
-                    if (SelectedRadarObject == radarObject)
-                        pen = RadarResources.SelectionPen;
 
                     //var gridRadius = radarObject.Actor.Radius * GridSize;
                     dc.DrawEllipse(res.Brush, pen, radarObject.Point, gridRadius, gridRadius);

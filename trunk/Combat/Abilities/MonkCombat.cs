@@ -456,7 +456,7 @@ namespace Trinity.Combat.Abilities
                 if (Sets.ThousandStorms.IsSecondBonusActive)
                 {
                     if ((Player.PrimaryResource >= 75 && Skills.Monk.DashingStrike.Charges >= 1) || CacheData.Buffs.HasCastingShrine && Sets.ThousandStorms.IsFullyEquipped) {
-                        if (CurrentTarget.IsBossOrEliteRareUnique)
+                        if (CurrentTarget.IsElite)
                             return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, CurrentTarget.Position);
 
                         if (!Sets.ThousandStorms.IsFullyEquipped)
@@ -508,7 +508,7 @@ namespace Trinity.Combat.Abilities
                 GenerateMonkZigZag();
                 TrinityPlugin.MaintainTempestRush = true;
                 const string trUse = "Continuing Tempest Rush for Combat";
-                LogTempestRushStatus(trUse);
+                //LogTempestRushStatus(trUse);
                 return new TrinityPower(SNOPower.Monk_TempestRush, 23f, ZigZagPosition, TrinityPlugin.CurrentWorldDynamicId, -1, 0, 0);
             }
 
@@ -518,7 +518,7 @@ namespace Trinity.Combat.Abilities
                 GenerateMonkZigZag();
                 TrinityPlugin.MaintainTempestRush = true;
                 const string trUse = "Starting Tempest Rush for Combat";
-                LogTempestRushStatus(trUse);
+                //LogTempestRushStatus(trUse);
                 return new TrinityPower(SNOPower.Monk_TempestRush, 23f, ZigZagPosition, TrinityPlugin.CurrentWorldDynamicId, -1, 0, 0);
             }
 
@@ -828,7 +828,7 @@ namespace Trinity.Combat.Abilities
                        TargetUtil.AnyElitesInRange(15, 1) ||
                        Player.CurrentHealthPct <= 0.4 ||
                        (TargetUtil.AnyMobsInRange(15, 3)) ||
-                       (CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.RadiusDistance <= 15f));
+                       (CurrentTarget.IsElite && CurrentTarget.RadiusDistance <= 15f));
         }
 
         private static bool CanCastInnerSanctuary()
@@ -1057,10 +1057,10 @@ namespace Trinity.Combat.Abilities
                     TrinityPlugin.ShouldWaitForLootDrop || charges < 1 || !CanCast(SNOPower.X1_Monk_DashingStrike))
                     return false;
                 
-                if (Sets.ThousandStorms.IsSecondBonusActive && (charges > 1 && TrinityPlugin.Player.PrimaryResource >= 75 || CacheData.BuffsCache.Instance.HasCastingShrine))
+                if (Sets.ThousandStorms.IsSecondBonusActive && (charges > 1 && TrinityPlugin.Player.PrimaryResource >= 75 || CacheData.Buffs.HasCastingShrine))
                     return true;
 
-                if (!Sets.ThousandStorms.IsSecondBonusActive && (TargetUtil.AnyMobsInRange(60f) || CacheData.BuffsCache.Instance.HasCastingShrine))
+                if (!Sets.ThousandStorms.IsSecondBonusActive && (TargetUtil.AnyMobsInRange(60f) || CacheData.Buffs.HasCastingShrine))
                     return true;
 
                 return false;
@@ -1223,102 +1223,102 @@ namespace Trinity.Combat.Abilities
             return true;
         }
 
-        internal static void RunOngoingPowers()
-        {
-            MaintainTempestRush();
-        }
+        //internal static void RunOngoingPowers()
+        //{
+        //    MaintainTempestRush();
+        //}
 
-        internal static void MaintainTempestRush()
-        {
-            if (!IsTempestRushReady())
-                return;
+        //internal static void MaintainTempestRush()
+        //{
+        //    if (!IsTempestRushReady())
+        //        return;
 
-            if (Player.ActorClass != ActorClass.Monk)
-                return;
+        //    if (Player.ActorClass != ActorClass.Monk)
+        //        return;
 
-            if (Player.IsInTown || BrainBehavior.IsVendoring)
-                return;
+        //    if (Player.IsInTown || BrainBehavior.IsVendoring)
+        //        return;
 
-            if (TrinityTownRun.IsTryingToTownPortal())
-                return;
+        //    if (TrinityTownRun.IsTryingToTownPortal())
+        //        return;
 
-            if (TrinityPlugin.TimeSinceUse(SNOPower.Monk_TempestRush) > 150)
-                return;
+        //    if (TrinityPlugin.TimeSinceUse(SNOPower.Monk_TempestRush) > 150)
+        //        return;
 
-            bool shouldMaintain = false;
-            bool nullTarget = CurrentTarget == null;
-            if (!nullTarget)
-            {
-                // maintain for everything except items, doors, interactables... stuff we have to "click" on
-                switch (CurrentTarget.Type)
-                {
-                    case TrinityObjectType.Unit:
-                    case TrinityObjectType.Gold:
-                    case TrinityObjectType.Avoidance:
-                    case TrinityObjectType.Barricade:
-                    case TrinityObjectType.Destructible:
-                    case TrinityObjectType.HealthGlobe:
-                    case TrinityObjectType.PowerGlobe:
-                    case TrinityObjectType.ProgressionGlobe:
-                        {
-                            if (Settings.Combat.Monk.TROption == TempestRushOption.TrashOnly &&
-                                    (TargetUtil.AnyElitesInRange(40f) || CurrentTarget.IsBossOrEliteRareUnique))
-                                break;
-                            shouldMaintain = true;
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                shouldMaintain = true;
-            }
+        //    bool shouldMaintain = false;
+        //    bool nullTarget = CurrentTarget == null;
+        //    if (!nullTarget)
+        //    {
+        //        // maintain for everything except items, doors, interactables... stuff we have to "click" on
+        //        switch (CurrentTarget.Type)
+        //        {
+        //            case TrinityObjectType.Unit:
+        //            case TrinityObjectType.Gold:
+        //            case TrinityObjectType.Avoidance:
+        //            case TrinityObjectType.Barricade:
+        //            case TrinityObjectType.Destructible:
+        //            case TrinityObjectType.HealthGlobe:
+        //            case TrinityObjectType.PowerGlobe:
+        //            case TrinityObjectType.ProgressionGlobe:
+        //                {
+        //                    if (Settings.Combat.Monk.TROption == TempestRushOption.TrashOnly &&
+        //                            (TargetUtil.AnyElitesInRange(40f) || CurrentTarget.IsElite))
+        //                        break;
+        //                    shouldMaintain = true;
+        //                }
+        //                break;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        shouldMaintain = true;
+        //    }
 
-            if (Settings.Combat.Monk.TROption != TempestRushOption.MovementOnly && CanCast(SNOPower.Monk_TempestRush) && shouldMaintain)
-            {
-                Vector3 target = LastTempestRushLocation;
+        //    if (Settings.Combat.Monk.TROption != TempestRushOption.MovementOnly && CanCast(SNOPower.Monk_TempestRush) && shouldMaintain)
+        //    {
+        //        Vector3 target = LastTempestRushLocation;
 
-                const string locationSource = "LastLocation";
+        //        const string locationSource = "LastLocation";
 
-                if (target.Distance(ZetaDia.Me.Position) <= 1f)
-                {
-                    // rrrix edit: we can't maintain here
-                    return;
-                }
+        //        if (target.Distance(ZetaDia.Me.Position) <= 1f)
+        //        {
+        //            // rrrix edit: we can't maintain here
+        //            return;
+        //        }
 
-                if (target == Vector3.Zero)
-                    return;
+        //        if (target == Vector3.Zero)
+        //            return;
 
-                float destinationDistance = target.Distance(ZetaDia.Me.Position);
+        //        float destinationDistance = target.Distance(ZetaDia.Me.Position);
 
-                target = TargetUtil.FindTempestRushTarget();
+        //        target = TargetUtil.FindTempestRushTarget();
 
-                if (destinationDistance > 10f && NavHelper.CanRayCast(ZetaDia.Me.Position, target))
-                {
-                    LogTempestRushStatus(String.Format("Using Tempest Rush to maintain channeling, source={0}, V3={1} dist={2:0}", locationSource, target, destinationDistance));
+        //        if (destinationDistance > 10f && NavHelper.CanRayCast(ZetaDia.Me.Position, target))
+        //        {
+        //            LogTempestRushStatus(String.Format("Using Tempest Rush to maintain channeling, source={0}, V3={1} dist={2:0}", locationSource, target, destinationDistance));
 
-                    var usePowerResult = ZetaDia.Me.UsePower(SNOPower.Monk_TempestRush, target, TrinityPlugin.CurrentWorldDynamicId);
-                    if (usePowerResult)
-                    {
-                        CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush] = DateTime.UtcNow;
-                        SpellHistory.RecordSpell(SNOPower.Monk_TempestRush);
-                    }
-                    else
-                    {
-                        TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
-                    }
-                }
-            }
-        }
+        //            var usePowerResult = ZetaDia.Me.UsePower(SNOPower.Monk_TempestRush, target, TrinityPlugin.CurrentWorldDynamicId);
+        //            if (usePowerResult)
+        //            {    
+        //                CacheData.AbilityLastUsed[SNOPower.Monk_TempestRush] = DateTime.UtcNow;
+        //                SpellHistory.RecordSpell(SNOPower.Monk_TempestRush);
+        //            }
+        //            else
+        //            {
+        //                TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
+        //            }
+        //        }
+        //    }
+        //}
 
-        internal static void LogTempestRushStatus(string trUse)
-        {
+        //internal static void LogTempestRushStatus(string trUse)
+        //{
 
-            Logger.Log(TrinityLogLevel.Debug, LogCategory.Behavior, "{0}, xyz={4} spirit={1:0} cd={2} lastUse={3:0}",
-                trUse,
-                TrinityPlugin.Player.PrimaryResource, PowerManager.CanCast(SNOPower.Monk_TempestRush),
-                TrinityPlugin.TimeSinceUse(SNOPower.Monk_TempestRush), ZigZagPosition);
-        }
+        //    Logger.Log(TrinityLogLevel.Debug, LogCategory.Behavior, "{0}, xyz={4} spirit={1:0} cd={2} lastUse={3:0}",
+        //        trUse,
+        //        TrinityPlugin.Player.PrimaryResource, PowerManager.CanCast(SNOPower.Monk_TempestRush),
+        //        TrinityPlugin.TimeSinceUse(SNOPower.Monk_TempestRush), ZigZagPosition);
+        //}
 
         private static bool MonkHasNoPrimary
         {

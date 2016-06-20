@@ -53,7 +53,7 @@ namespace Trinity.UI.UIComponents
 
             Logger.Log("TPSActual={0}", BotMain.TicksPerSecond);
 
-            CacheData.FullClear();
+            CacheData.Clear();
             UsedProfileManager.SetProfileInWindowTitle();
         }
 
@@ -319,7 +319,7 @@ namespace Trinity.UI.UIComponents
                 DumpSkillsCommand = new RelayCommand(
                     parameter =>
                     {
-                        CacheData.Hotbar.Dump();
+                        //CacheData.Hotbar.Dump();
                         UILoader.CloseWindow();
                     });
             }

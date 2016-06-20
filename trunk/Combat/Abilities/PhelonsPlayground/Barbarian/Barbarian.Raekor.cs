@@ -64,7 +64,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     }
                 }
 
-                if (CurrentTarget.IsBossOrEliteRareUnique || CurrentTarget.IsTreasureGoblin)
+                if (CurrentTarget.IsElite || CurrentTarget.IsTreasureGoblin)
                 {
                     target = CurrentTarget;
                     return true;

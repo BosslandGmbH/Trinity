@@ -146,7 +146,7 @@ namespace Trinity
             TotalInfernalKeys = totalKeys;
         }
 
-        private static CacheData.PlayerCache Player
+        private static PlayerCache Player
         {
             get
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Trinity.Config;
+using Trinity.Technicals;
 using Zeta.Game;
 using Zeta.Common;
 using Zeta.Game.Internals;
@@ -16,7 +17,10 @@ namespace Trinity.Framework.Utilities
 
         protected override void OnPulse()
         {
-            SpendPoints();
+            using (new PerformanceLogger("Utilty.Paragon.Pulse"))
+            {
+                SpendPoints();
+            }
         }
 
         public void SpendPoints()

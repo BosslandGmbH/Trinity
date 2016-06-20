@@ -25,6 +25,16 @@ namespace Trinity.Helpers
     public static class Extensions
     {
 
+
+        public static void RemoveAll<TKey, TValue>(this Dictionary<TKey, TValue> dic, Func<TValue, bool> predicate)
+        {
+            var keys = dic.Keys.Where(k => predicate(dic[k])).ToList();
+            foreach (var key in keys)
+            {
+                dic.Remove(key);
+            }
+        }
+
         public static void AddRangeOverride<TKey, TValue>(this Dictionary<TKey, TValue> dic, Dictionary<TKey, TValue> dicToAdd)
         {
             dicToAdd.ForEach(x => dic[x.Key] = x.Value);

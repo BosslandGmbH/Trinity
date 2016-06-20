@@ -6,9 +6,71 @@ using Trinity.Technicals;
 
 namespace Trinity.Cache
 {
+    internal class GenericCacheObject
+    {
+        public string Key { get; set; }
+        public object Value { get; set; }
+        public DateTime Expires { get; set; }
+
+        public GenericCacheObject() { }
+
+        public GenericCacheObject(string key, object value, TimeSpan expirationDuration)
+        {
+            Key = key;
+            Value = value;
+            Expires = DateTime.UtcNow.Add(expirationDuration);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as GenericCacheObject;
+            if (other == null)
+                return false;
+            if (other.Key.Trim() == string.Empty)
+                return false;
+
+            return this.Key == other.Key;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Key.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"Key={Key} Value={Value} Expires={Expires}";
+        }
+    }
+
     internal class GenericBlacklist
     {
-        private static HashSet<GenericCacheObject> _blacklist = new HashSet<GenericCacheObject>();
+        public static void Blacklist(TrinityCacheObject objectToBlacklist, TimeSpan duration = default(TimeSpan), string reason = "")
+        {
+            Logger.Log($@"Blacklisting target {objectToBlacklist.InternalName} due to possible stuck/flipflop!
+                            Reason={reason})                             
+                            ActorSnoId={objectToBlacklist.ActorSNO} 
+                            RActorId={objectToBlacklist.RActorGuid}");
+
+            DateTime expires;
+            if (duration == default(TimeSpan))
+            {
+                expires = objectToBlacklist.IsMarker
+                    ? DateTime.UtcNow.AddSeconds(60)
+                    : DateTime.UtcNow.AddSeconds(30);
+            }
+            else
+            {
+                expires = DateTime.UtcNow.Add(duration);
+            }
+
+            AddToBlacklist(new GenericCacheObject
+            {
+                Key = objectToBlacklist.ObjectHash,
+                Value = null,
+                Expires = expires
+            });
+        }
 
         private static readonly Dictionary<string, GenericCacheObject> DataCache = new Dictionary<string, GenericCacheObject>();
         private static readonly Dictionary<DateTime, string> ExpireCache = new Dictionary<DateTime, string>();
@@ -16,6 +78,11 @@ namespace Trinity.Cache
         private static readonly object Synchronizer = new object();
 
         private static Thread _manager;
+
+        static GenericBlacklist()
+        {
+            MaintainBlacklist();
+        }
 
         public static bool AddToBlacklist(GenericCacheObject obj)
         {

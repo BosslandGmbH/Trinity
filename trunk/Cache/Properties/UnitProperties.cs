@@ -1,23 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Trinity.Framework;
+using Trinity.Framework.Objects.Memory.Attributes;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Cache.Properties
 {
     /// <summary>
-    /// PropertyLoader that are specific to monsters
+    /// Properties that are specific to monsters
+    /// This class should update all values that are possible/reasonable/useful.
+    /// DO NOT put settings or situational based exclusions in here, do that in weighting etc.
     /// </summary>
-    public class MonsterProperties : PropertyLoader.IPropertyCollection
+    public class UnitProperties : IPropertyCollection
     {
         private DateTime _lastUpdated = DateTime.MinValue;
         private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(100);
 
+        public DateTime CreationTime { get; } = DateTime.UtcNow;
+
         public void ApplyTo(TrinityCacheObject target)
         {
-            if (DateTime.UtcNow.Subtract(_lastUpdated).TotalMilliseconds > UpdateInterval.TotalMilliseconds && target.IsValid)
+            if (!target.IsFrozen && DateTime.UtcNow.Subtract(_lastUpdated) > UpdateInterval)
                 Update(target);
 
             target.IsBoss = this.IsBoss;
@@ -36,7 +42,7 @@ namespace Trinity.Cache.Properties
             target.HitPointsPct = this.HitPointsPct;
             target.HasDotDPS = this.HasDotDps;
             target.MonsterAffixes = this.MonsterAffixes;
-            target.IsTreasureGoblin = this.IsGoblin;
+            target.IsTreasureGoblin = this.IsTreasureGoblin;
             target.IsAlly = this.IsAlly;
             target.IsIllusion = this.IsIllusion;
             target.IsNPC = this.IsNPC;
@@ -55,6 +61,9 @@ namespace Trinity.Cache.Properties
             target.IsSummonedByPlayer = this.IsSummonedByPlayer;
             target.IsSummoned = this.IsSummoned;
             target.IsReflectingDamage = this.IsReflectingDamage;
+            target.IsSpawning = this.IsSpawning;
+            target.IsDead = this.IsDead;
+            target.IsHidden = this.IsHidden;
         }
 
         public void OnCreate(TrinityCacheObject source)
@@ -79,48 +88,48 @@ namespace Trinity.Cache.Properties
             this.MonsterQuality = commonData.MonsterQualityLevel;
             this.IsBoss = this.MonsterQuality == MonsterQuality.Boss;
             this.IsHostile = unit.IsHostile;
-            this.IsSummoned = commonData.SummonedByACDId > 0;
+
             this.RiftValuePct = RiftProgression.GetRiftValue(source);
-            this.IsGoblin = MonsterRace == MonsterRace.TreasureGoblin || source.InternalNameLowerCase.Contains("goblin");
+            this.IsTreasureGoblin = MonsterRace == MonsterRace.TreasureGoblin || source.InternalNameLowerCase.Contains("goblin");
             this.IsIllusion = this.MonsterAffixes.HasFlag(MonsterAffixes.Illusionist) && source.ActorAttributes.IsIllusion;            
             this.IsRare = this.MonsterAffixes.HasFlag(MonsterAffixes.Rare) || MonsterQuality == MonsterQuality.Rare;
             this.IsChampion = MonsterQuality == MonsterQuality.Champion;
             this.IsUnique = this.MonsterAffixes.HasFlag(MonsterAffixes.Unique) || MonsterQuality == MonsterQuality.Unique;
             this.IsMinion = this.MonsterAffixes.HasFlag(MonsterAffixes.Minion) || MonsterQuality == MonsterQuality.Minion;
             this.IsElite = IsMinion || IsRare || IsChampion || IsUnique || IsBoss;
+            this.IsTrashMob = source.IsUnit && !(IsElite || IsBoss || IsTreasureGoblin || IsMinion);
 
             if (source.ActorSNO == 86624) // Jondar is not an ally.
                 this.MonsterType = MonsterType.Undead;
 
-            if (this.IsHostile && !this.IsSameTeam)
-            {
-                this.SummonedByACDId = unit.SummonedByACDId;
-                this.IsSummoned = this.SummonedByACDId > 0;
+            this.SummonedByACDId = unit.SummonedByACDId;
+            this.IsSummoned = this.SummonedByACDId > 0;
 
-                if (this.IsSummoned)
-                {
-                    this.IsSummonedByPlayer = this.SummonedByACDId == TrinityPlugin.Player.MyDynamicID;
-                }
-                else
-                {
-                    this.SummonerId = unit.SummonerId;
-                    this.IsSummoner = this.SummonerId > 0;
-                }
+            if (this.IsSummoned)
+            {                
+                this.IsSummonedByPlayer = this.SummonedByACDId == TrinityPlugin.Player.MyDynamicID;
+            }
+            else
+            {
+                this.SummonerId = unit.SummonerId;
+                this.IsSummoner = this.SummonerId > 0;
             }
 
+            Update(source);
         }
 
         public void Update(TrinityCacheObject source)
         {
-            _lastUpdated = DateTime.UtcNow;
+            _lastUpdated = DateTime.UtcNow;            
 
-            if (source.ActorType != ActorType.Monster || !source.IsValid)
+            if (!source.IsValid || source.ActorType != ActorType.Monster && source.ActorType != ActorType.Player)
                 return;
 
             var unit = source.Unit;
             if (unit == null || !unit.IsValid)
                 return;
 
+            this.IsDead = MonsterPropertyUtils.IsDead(source);
             this.HitPoints = unit.HitpointsCurrent;
             this.HitPointsMax = unit.HitpointsMax;
             this.HitPointsPct = this.HitPoints / this.HitPointsMax;
@@ -131,8 +140,11 @@ namespace Trinity.Cache.Properties
             this.NPCIsOperatable = source.ActorAttributes.NPCIsOperatable;
             this.IsUntargetable = source.ActorAttributes.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(source.ActorSNO);
             this.IsInvulnerable = source.ActorAttributes.IsInvulnerable;
-            this.TeamId = source.TeamId;
+            this.TeamId = unit.TeamId;
             this.IsSameTeam = this.TeamId == 1 || this.TeamId == 2 || this.TeamId == 17 || this.TeamId == TrinityPlugin.Player.TeamId || DataDictionary.AllyMonsterTypes.Contains(this.MonsterType);
+            this.IsSpawning = this.IsBoss && this.IsUntargetable;
+            this.IsHidden = source.ActorAttributes.IsHidden || source.ActorAttributes.IsBurrowed;
+            this.IsCurrentAvoidance = Core.Avoidance.ActiveAvoidanceSnoIds.Contains(source.ActorSNO);            
 
             var movement = unit.Movement;
             if (movement != null && movement.IsValid)
@@ -142,6 +154,11 @@ namespace Trinity.Cache.Properties
             }
         }
 
+        public bool IsTrashMob { get; set; }
+        public bool IsCurrentAvoidance { get; set; }
+        public bool IsHidden { get; set; }
+        public bool IsDead { get; set; }
+        public bool IsSpawning { get; set; }
         public bool IsChampion { get; set; }
         public bool IsReflectingDamage { get; set; }
         public bool IsSummonedByPlayer { get; set; }
@@ -161,7 +178,7 @@ namespace Trinity.Cache.Properties
         public bool IsNPC { get; set; }
         public bool IsIllusion { get; set; }
         public bool IsAlly { get; set; }
-        public bool IsGoblin { get; set; }
+        public bool IsTreasureGoblin { get; set; }
         public MonsterAffixes MonsterAffixes { get; set; }
         public bool HasDotDps { get; set; }
         public float HitPointsMax { get; set; }
@@ -175,19 +192,29 @@ namespace Trinity.Cache.Properties
         public float Rotation { get; set; }
         public bool IsBoss { get; set; }
         public MonsterQuality MonsterQuality { get; set; }
-        public MonsterType MonsterType { get; set; }
-        public MonsterRace MonsterRace { get; set; }
-        public MonsterSize MonsterSize { get; set; }
+        public MonsterType MonsterType { get; set; } = MonsterType.None;
+        public MonsterRace MonsterRace { get; set; } = MonsterRace.Unknown;
+        public MonsterSize MonsterSize { get; set; } = MonsterSize.Unknown;
 
     }
 
     public class MonsterPropertyUtils
     {
-        public bool IsDead(TrinityCacheObject monster)
+        public static bool IsDead(TrinityCacheObject monster)
         {
             if (monster.ActorType == ActorType.Monster)
             {
+                if (DataDictionary.FakeDeathMonsters.Contains(monster.ActorSNO))
+                {
+                    return false;
+                }
+
                 if (monster.AnimationState == AnimationState.Dead)
+                {
+                    return true;
+                }
+
+                if (monster.Unit.IsDead || monster.ActorAttributes.IsDead)
                 {
                     return true;
                 }
@@ -358,7 +385,7 @@ namespace Trinity.Cache.Properties
                         flags |= MonsterAffixes.Minion;
                         continue;
                     default:
-                        Technicals.Logger.LogVerbose($"Unknown AffixId={affix}");
+                        Logger.LogVerbose($"Unknown AffixId={affix}");
                         break;
                 }
             }

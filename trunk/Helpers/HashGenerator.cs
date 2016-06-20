@@ -43,21 +43,11 @@ namespace Trinity
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static string GenerateObjecthash(TrinityCacheObject obj)
+        public static string GenerateObjecthash(int actorSnoId, Vector3 position, string internalName, TrinityObjectType type)
         {
-            if(obj.ActorType == ActorType.Item)
-                return GenerateItemHash(obj);
-
             using (MD5 md5 = MD5.Create())
             {
-                string objHashBase;
-                if (obj.Type == TrinityObjectType.Unit)
-                    objHashBase = obj.ActorSNO + obj.InternalName + obj.Position + obj.Type + TrinityPlugin.CurrentWorldDynamicId;
-                else if (obj.Type == TrinityObjectType.Item)
-                    return GenerateItemHash(obj.Position, obj.ActorSNO, obj.InternalName, TrinityPlugin.CurrentWorldId, obj.ItemQuality, obj.ItemLevel);
-                else
-                    objHashBase = String.Format("{0}{1}{2}{3}", obj.ActorSNO, obj.Position, obj.Type, TrinityPlugin.CurrentWorldDynamicId);
-
+                string objHashBase = actorSnoId + internalName + position + type + TrinityPlugin.CurrentWorldDynamicId;
                 string objHash = GetMd5Hash(md5, objHashBase);
                 return objHash;
             }

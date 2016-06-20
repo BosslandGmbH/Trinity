@@ -65,10 +65,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             return
                 (from u in SafeList(objectsInAoe)
-                 where u.RadiusDistance <= range &&
-                       u.Type == TrinityObjectType.Shrine
-                 orderby u.Distance
-                 select u).ToList();
+                    where u.RadiusDistance <= range &&
+                          u.Type == TrinityObjectType.Shrine
+                    orderby u.Distance
+                    select u).ToList();
         }
 
         internal static Vector3 BestDpsPosition(float maxRange, float searchRange = 12f, bool objectsInAoe = false)
@@ -91,31 +91,31 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
         internal static Vector3 BestWalkLocation(float maxRange, bool objectsInAoe = false)
         {
-            if (ClosestGlobe(maxRange, objectsInAoe) != null)
-                return ClosestGlobe(maxRange, objectsInAoe).Position;
-            var shrine = BestShrine(35, objectsInAoe).FirstOrDefault();
-            if (Legendary.NemesisBracers.IsEquipped && shrine != null)
-                return shrine.Position;
-            // Prevent Default Attack
-            if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Destructible &&
-                TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Shrine &&
-                TrinityPlugin.CurrentTarget.Type != TrinityObjectType.HealthGlobe)
-            {
-                //Logger.Log("Prevent Primary Attack ");
-                var targetPosition = TargetUtil.GetLoiterPosition(TrinityPlugin.CurrentTarget, 20f);
-                // return new TrinityPower(SNOPower.Walk, 7f, targetPosition);
-                return targetPosition;
-            }
-            return TrinityPlugin.CurrentTarget.Position;
+                if (ClosestGlobe(maxRange, objectsInAoe) != null)
+                    return ClosestGlobe(maxRange, objectsInAoe).Position;
+                var shrine = BestShrine(35, objectsInAoe).FirstOrDefault();
+                if (Legendary.NemesisBracers.IsEquipped && shrine != null)
+                    return shrine.Position;
+                // Prevent Default Attack
+                if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Destructible &&
+                    TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Shrine &&
+                    TrinityPlugin.CurrentTarget.Type != TrinityObjectType.HealthGlobe)
+                {
+                    //Logger.Log("Prevent Primary Attack ");
+                    var targetPosition = TargetUtil.GetLoiterPosition(TrinityPlugin.CurrentTarget, 20f);
+                    // return new TrinityPower(SNOPower.Walk, 7f, targetPosition);
+                    return targetPosition;
+                }
+                return TrinityPlugin.CurrentTarget.Position;
         }
 
         internal static List<TrinityCacheObject> MobsBetweenRange(float startRange = 15f, float endRange = 25)
         {
             return (from u in SafeList(true)
-                    where u.IsUnit && u.IsValid &&
-                          u.Position.Distance(TrinityPlugin.Player.Position) <= endRange &&
-                          u.Position.Distance(TrinityPlugin.Player.Position) >= startRange
-                    select u).ToList();
+                where u.IsUnit && u.IsValid &&
+                      u.Position.Distance(TrinityPlugin.Player.Position) <= endRange &&
+                      u.Position.Distance(TrinityPlugin.Player.Position) >= startRange
+                select u).ToList();
         }
 
         internal static TrinityCacheObject GetFarthestClusterUnit(float aoe_radius = 25f, float maxRange = 65f,
@@ -125,13 +125,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             {
                 return
                     (from u in SafeList(includeUnitsInAoe)
-                     where ((useWeights && u.Weight > 0) || !useWeights) &&
-                           u.IsUnit && u.HasBeenInLoS &&
-                           u.RadiusDistance <= maxRange &&
-                           u.NearbyUnitsWithinDistance(aoe_radius) >= count
-                     orderby u.NearbyUnitsWithinDistance(aoe_radius),
-                         u.Distance descending
-                     select u).FirstOrDefault();
+                        where ((useWeights && u.Weight > 0) || !useWeights) &&
+                              u.IsUnit && u.HasBeenInLoS &&
+                              u.RadiusDistance <= maxRange &&
+                              u.NearbyUnitsWithinDistance(aoe_radius) >= count
+                        orderby u.NearbyUnitsWithinDistance(aoe_radius),
+                            u.Distance descending
+                        select u).FirstOrDefault();
             }
         }
 
@@ -139,12 +139,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             bool addUnitsInAoE = false)
         {
             return (from u in SafeList(addUnitsInAoE)
-                    where u.IsUnit &&
-                          u.RadiusDistance <= maxSearchRange &&
-                          u.HasBeenInLoS && !u.HasDebuff(aura)
-                    orderby u.NearbyUnitsWithinDistance(),
-                        u.Distance
-                    select u).FirstOrDefault();
+                where u.IsUnit &&
+                      u.RadiusDistance <= maxSearchRange &&
+                      u.HasBeenInLoS && !u.HasDebuff(aura)
+                orderby u.NearbyUnitsWithinDistance(),
+                    u.Distance
+                select u).FirstOrDefault();
         }
 
         internal static TrinityCacheObject BestPierceOrClusterUnit(float clusterRadius = 15f, float maxSearchRange = 65f,
@@ -172,12 +172,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
             bool ignoreElites = false)
         {
             return (from u in SafeList(ignoreElites)
-                    where u.IsUnit &&
-                          u.RadiusDistance <= maxRange && u.IsInLineOfSight &&
-                          !(ignoreUnitsInAoE && u.IsStandingInAvoidance) &&
-                          !(ignoreElites && u.IsEliteRareUnique)
-                    orderby u.CountUnitsInFront() descending
-                    select u).ToList();
+                where u.IsUnit &&
+                      u.RadiusDistance <= maxRange && u.IsInLineOfSight &&
+                      !(ignoreUnitsInAoE && u.IsStandingInAvoidance) &&
+                      !(ignoreElites && u.IsElite)
+                orderby u.CountUnitsInFront() descending
+                select u).ToList();
         }
 
         internal static TrinityCacheObject GetBestPierceTarget(float maxRange, bool ignoreUnitsInAoE = false,
@@ -208,15 +208,15 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
             var clusterUnits =
                 (from u in SafeList(includeUnitsInAoe)
-                 where u.IsUnit && //u.HasBeenInLoS &&
-                       ((useWeights && u.Weight > 0) || !useWeights) &&
-                       !(ignoreElites && u.IsEliteRareUnique) &&
-                       (!inLineOfSight || u.IsInLineOfSight) &&
-                       u.Distance <= maxSearchRange && !u.IsSafeSpot
-                 orderby
-                     u.NearbyUnitsWithinDistance(clusterRadius) descending,
-                     u.HitPointsPct descending
-                 select u).ToList();
+                    where u.IsUnit && //u.HasBeenInLoS &&
+                          ((useWeights && u.Weight > 0) || !useWeights) &&
+                          !(ignoreElites && u.IsElite) &&
+                          (!inLineOfSight || u.IsInLineOfSight) &&
+                          u.Distance <= maxSearchRange && !u.IsSafeSpot
+                    orderby
+                        u.NearbyUnitsWithinDistance(clusterRadius) descending,
+                        u.HitPointsPct descending
+                    select u).ToList();
 
             return clusterUnits.FirstOrDefault();
         }
@@ -224,13 +224,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         public static TrinityCacheObject BestEliteInRange(float range, bool objectsInAoe = false)
         {
             return (from u in SafeList(objectsInAoe)
-                    where u.IsUnit &&
-                          u.IsBossOrEliteRareUnique &&
-                          u.Distance <= range
-                    orderby
-                        u.NearbyUnitsWithinDistance(15) descending,
-                        u.HitPointsPct descending
-                    select u).FirstOrDefault();
+                where u.IsUnit &&
+                      u.IsElite &&
+                      u.Distance <= range
+                orderby
+                    u.NearbyUnitsWithinDistance(15) descending,
+                    u.HitPointsPct descending
+                select u).FirstOrDefault();
 
         }
 
@@ -256,10 +256,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
             return
                 (from u in SafeList(objectsInAoe)
-                 where u.Distance <= range &&
-                       u.ActorSNO == 433966
-                 orderby u.Distance
-                 select u).ToList();
+                    where u.Distance <= range &&
+                          u.ActorSNO == 433966
+                    orderby u.Distance
+                    select u).ToList();
         }
 
         internal static Vector3 ClosestSancAndOcc(float maxRange, bool objectsInAoe = false)
@@ -286,19 +286,19 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             return
                 (from u in SafeList(objectsInAoe)
-                 where u.RadiusDistance <= range &&
-                       u.ActorSNO == 320136
-                 orderby u.Distance
-                 select u).ToList();
+                    where u.RadiusDistance <= range &&
+                          u.ActorSNO == 320136
+                    orderby u.Distance
+                    select u).ToList();
         }
 
         internal static TrinityCacheObject ClosestGlobe(float distance = 45, bool objectsInAoe = false)
         {
             return (from u in SafeList(objectsInAoe)
-                    where
-                        (u.Type == TrinityObjectType.HealthGlobe || u.Type == TrinityObjectType.PowerGlobe) &&
-                        u.RadiusDistance <= distance
-                    select u).FirstOrDefault();
+                where
+                    (u.Type == TrinityObjectType.HealthGlobe || u.Type == TrinityObjectType.PowerGlobe) &&
+                    u.RadiusDistance <= distance
+                select u).FirstOrDefault();
         }
 
         internal static bool WithInDistance(TrinityCacheObject actor, TrinityCacheObject actor2, float distance,
@@ -322,10 +322,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             return
                 (from u in SafeList(objectsInAoe)
-                 where u.RadiusDistance <= range &&
-                       u.ActorSNO == actorSNO
-                 orderby u.Distance
-                 select u).ToList();
+                    where u.RadiusDistance <= range &&
+                          u.ActorSNO == actorSNO
+                    orderby u.Distance
+                    select u).ToList();
         }
 
         internal static Vector3 GetDiaObjectBestClusterPoint(uint actorSNO, float radius = 15f, float maxRange = 45f,
@@ -333,11 +333,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             var clusterUnits =
                 (from u in SafeList(objectsInAoe)
-                 where u.ActorSNO == actorSNO &&
-                       u.RadiusDistance <= maxRange
-                 orderby u.NearbyUnitsWithinDistance(radius),
-                     u.Distance descending
-                 select u.Position).ToList();
+                    where u.ActorSNO == actorSNO &&
+                          u.RadiusDistance <= maxRange
+                    orderby u.NearbyUnitsWithinDistance(radius),
+                        u.Distance descending
+                    select u.Position).ToList();
 
             return clusterUnits.Any() ? clusterUnits.FirstOrDefault() : Vector3.Zero;
         }
@@ -346,10 +346,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             return
                 (from u in SafeList(objectsInAoe)
-                 where u.RadiusDistance <= range &&
-                       u.ActorSNO == 322236
-                 orderby u.Distance
-                 select u).ToList();
+                    where u.RadiusDistance <= range &&
+                          u.ActorSNO == 322236
+                    orderby u.Distance
+                    select u).ToList();
         }
 
         internal static Vector3 GetBestTwsiterClusterPoint(float radius = 15f, float maxRange = 45f,
@@ -362,11 +362,11 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
             var clusterUnits =
                 (from u in SafeList(objectsInAoe)
-                 where u.ActorSNO == 322236 &&
-                       u.RadiusDistance <= maxRange
-                 orderby u.NearbyUnitsWithinDistance(radius),
-                     u.Distance descending
-                 select u.Position).ToList();
+                    where u.ActorSNO == 322236 &&
+                          u.RadiusDistance <= maxRange
+                    orderby u.NearbyUnitsWithinDistance(radius),
+                        u.Distance descending
+                    select u.Position).ToList();
 
             return clusterUnits.Any() ? clusterUnits.FirstOrDefault() : Vector3.Zero;
         }

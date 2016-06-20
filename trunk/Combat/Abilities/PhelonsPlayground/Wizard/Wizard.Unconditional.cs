@@ -97,7 +97,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (Core.Avoidance.InCriticalAvoidance(Player.Position) && !IsInParty)
                 {
                     Logger.Log("Porting to get out of Avoidance!");
-                    position = NavHelper.FindSafeZone(false, 1, Player.Position, true);
+                    position = Core.Avoidance.Avoider.SafeSpot;
                     return true;
                 }
 

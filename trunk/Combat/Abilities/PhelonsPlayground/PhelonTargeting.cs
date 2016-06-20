@@ -31,7 +31,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
         {
             return CurrentTarget.Type == TrinityObjectType.Shrine || CurrentTarget.IsTreasureGoblin ||
                    CurrentTarget.IsTreasureGoblin || CurrentTarget.Type == TrinityObjectType.HealthGlobe || 
-                   CurrentTarget.IsBossOrEliteRareUnique
+                   CurrentTarget.IsElite
                 ? CurrentTarget
                 : BestAoeUnit(45, true) ?? CurrentTarget;
         }

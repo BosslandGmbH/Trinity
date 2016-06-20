@@ -294,20 +294,7 @@ namespace Trinity.Combat.Abilities
 
         public static bool IsQuestingMode { get; set; }
 
-        /// <summary>
-        /// A dictionary containing the date time we last used a specific spell
-        /// </summary>
-        public static Dictionary<SNOPower, DateTime> AbilityLastUsedCache
-        {
-            get
-            {
-                return CacheData.AbilityLastUsed;
-            }
-            set
-            {
-                CacheData.AbilityLastUsed = value;
-            }
-        }
+
 
         /// <summary>
         /// Always contains the last power used
@@ -334,7 +321,7 @@ namespace Trinity.Combat.Abilities
             get
             {
                 return
-                   TrinityPlugin.ObjectCache.Any(o => o.IsEliteRareUnique &&
+                   TrinityPlugin.ObjectCache.Any(o => o.IsElite &&
                           o.MonsterAffixes.HasFlag(MonsterAffixes.ArcaneEnchanted | MonsterAffixes.Frozen | MonsterAffixes.Jailer | MonsterAffixes.Molten | MonsterAffixes.Nightmarish) ||
                           (o.MonsterAffixes.HasFlag(MonsterAffixes.Electrified) && o.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage))) ||
                         TrinityPlugin.ObjectCache.Any(o => o.IsBoss);
@@ -418,28 +405,9 @@ namespace Trinity.Combat.Abilities
             set { _currentPower = value; }
         }
 
-        public static HashSet<SNOPower> Hotbar
-        {
-            get
-            {
-                return CacheData.Hotbar.ActivePowers;
-            }
-        }
-        public static CacheData.PlayerCache Player
-        {
-            get
-            {
-                return CacheData.Player;
-            }
-        }
-
-        public static TrinityCacheObject CurrentTarget
-        {
-            get
-            {
-                return TrinityPlugin.CurrentTarget;
-            }
-        }
+        public static HashSet<SNOPower> Hotbar => CacheData.Hotbar.ActivePowers;
+        public static PlayerCache Player => CacheData.Player;
+        public static TrinityCacheObject CurrentTarget => TrinityPlugin.CurrentTarget;
 
         public static TrinityPower DefaultPower
         {
@@ -508,9 +476,9 @@ namespace Trinity.Combat.Abilities
                 {
                     case SNOPower.Weapon_Ranged_Instant:
                     case SNOPower.Weapon_Ranged_Projectile:
-                        return 65f;
+                        return 50f;
                     case SNOPower.Weapon_Ranged_Wand:
-                        return 55f;
+                        return 50f;
                     default:
                         return 12f;
                 }
@@ -622,10 +590,8 @@ namespace Trinity.Combat.Abilities
 
         private static int _lastComboLevel;
 
-        [Execution.TrackMethod]
         public static int GetCurrentComboLevel()
         {
-            if (Execution.Restrict("GetCurrentComboLevel", 100)) return _lastComboLevel;
             return _lastComboLevel = ZetaDia.Me.CommonData.ComboLevel;
         }
 
@@ -673,9 +639,10 @@ namespace Trinity.Combat.Abilities
         /// <returns></returns>
         internal static TimeSpan TimeSpanSincePowerUse(SNOPower power)
         {
-            if (CacheData.AbilityLastUsed.ContainsKey(power))
-                return DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[power]);
-            return TimeSpan.MinValue;
+            //if (CacheData.AbilityLastUsed.ContainsKey(power))
+            //    return DateTime.UtcNow.Subtract(CacheData.AbilityLastUsed[power]);
+            //return TimeSpan.MinValue;
+            return SpellHistory.TimeSinceUse(power);
         }
 
         /// <summary>
@@ -1116,7 +1083,7 @@ namespace Trinity.Combat.Abilities
                             return string.Format("NotEnoughResource({0}/{1})", Math.Round(actualResource), resourceCost);
                     }
 
-                    //if (meta.IsEliteOnly && !CurrentTarget.IsBossOrEliteRareUnique)
+                    //if (meta.IsEliteOnly && !CurrentTarget.IsElite)
                     //    return false;
 
                     //if (!adhocConditionResult)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Instrumentation;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Reference;
@@ -11,30 +12,9 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity
 {
-    public partial class CacheData
-    {
-        /// <summary>
-        /// Fast Hotbar Cache, Self-Updating, use instead of ZetaDia.PlayerData / TrinityPlugin.Hotbar
-        /// </summary>
+
         public class HotbarCache
         {
-            static HotbarCache()
-            {
-                Pulsator.OnPulse += (sender, args) => Instance.UpdateHotbarCache();
-            }
-
-            public HotbarCache()
-            {
-                UpdateHotbarCache();
-            }
-
-            private static HotbarCache _instance;
-            public static HotbarCache Instance
-            {
-                get { return _instance ?? (_instance = new HotbarCache()); }
-                set { _instance = value; }
-            }
-
             public class HotbarSkill
             {
                 public Skill Skill { get; set; }
@@ -60,7 +40,7 @@ namespace Trinity
                 }
                 public override string ToString()
                 {
-                    return String.Format("Power: {0}, SRune: {1}, Charge:{2}, Slot:{3}", Power, Rune, Charges, Slot);
+                    return $"Power: {Power}, SRune: {Rune}, Charge:{Charges}, Slot:{Slot}";
                 }
             }
 
@@ -69,15 +49,16 @@ namespace Trinity
             public HashSet<SNOPower> PassiveSkills { get; private set; }
             public DateTime LastUpdated = DateTime.MinValue;
 
-            private static Dictionary<SNOPower, HotbarSkill> _skillBySNOPower = new Dictionary<SNOPower, HotbarSkill>();
-            private static Dictionary<HotbarSlot, HotbarSkill> _skillBySlot = new Dictionary<HotbarSlot, HotbarSkill>();
+            private Dictionary<SNOPower, HotbarSkill> _skillBySNOPower = new Dictionary<SNOPower, HotbarSkill>();
 
-            public static bool IsArchonActive
+            private Dictionary<HotbarSlot, HotbarSkill> _skillBySlot = new Dictionary<HotbarSlot, HotbarSkill>();
+
+            public bool IsArchonActive
             {
-                get { return Instance.ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int)p)); }
+                get { return ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int)p)); }
             }
 
-            internal void UpdateHotbarCache()
+            internal void Update()
             {
                 using (new PerformanceLogger("UpdateCachedHotbarData"))
                 {
@@ -136,8 +117,8 @@ namespace Trinity
                         if (!DataDictionary.LastUseAbilityTimeDefaults.ContainsKey(power))
                             DataDictionary.LastUseAbilityTimeDefaults.Add(power, DateTime.MinValue);
 
-                        if (!AbilityLastUsed.ContainsKey(power))
-                            AbilityLastUsed.Add(power, DateTime.MinValue);
+                        //if (!AbilityLastUsed.ContainsKey(power))
+                        //    AbilityLastUsed.Add(power, DateTime.MinValue);
 
                     }
 
@@ -161,23 +142,6 @@ namespace Trinity
                 return _skillBySlot.TryGetValue(slot, out skill) ? skill : new HotbarSkill();
             }
 
-            public void Dump()
-            {
-                //using (new MemoryHelper())
-                //{
-                //    foreach (var hotbarskill in ActiveSkills.ToList())
-                //    {
-                //        Logger.Log("Power={0} SkillName={1} Slot={2} DBRuneIndex={3} ProperRuneIndex={4} RuneName={5}",
-                //            hotbarskill.Power,
-                //            hotbarskill.Skill.Name,
-                //            hotbarskill.Slot,
-                //            hotbarskill.RuneIndex,
-                //            hotbarskill.Rune.Index,
-                //            hotbarskill.Rune.Name);
-                //    }
-                //}
-            }
-
             public int GetSkillStacks(int id)
             {
                 return GetSkill((SNOPower)id).Charges;
@@ -196,6 +160,8 @@ namespace Trinity
                 _skillBySNOPower = new Dictionary<SNOPower, HotbarSkill>();
                 _skillBySlot = new Dictionary<HotbarSlot, HotbarSkill>();
             }
+
+
         }
-    }
+  
 }

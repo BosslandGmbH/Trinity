@@ -16,34 +16,14 @@ using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity
-{
-    public partial class CacheData
-    {
+{ 
         /// <summary>
         /// Fast Player Cache, Self-Updating, use instead of ZetaDia.Me / ZetaDia.Cplayer
         /// </summary>
         public class PlayerCache
         {
-            static PlayerCache()
-            {
-                Pulsator.OnPulse += (sender, args) => Instance.UpdatePlayerCache();            
-            }
-
-            public PlayerCache()
-            {
-                HealthHistory = new List<float>();
-                UpdatePlayerCache();
-            }
-
-            private static PlayerCache _instance;
-            public static PlayerCache Instance
-            {
-                get { return _instance ?? (_instance = new PlayerCache()); }
-                set { _instance = value; }
-            }
- 
+            public SummonInfo Summons = new SummonInfo();
             public TrinityCacheObject Actor { get; set; } = new TrinityCacheObject();
-
             public int ACDGuid { get; private set; }
             public int RActorGuid { get; private set; }
             public DateTime LastUpdated { get; private set; }
@@ -89,7 +69,6 @@ namespace Trinity
 			public bool IsGhosted { get; private set; }
 			public bool IsInPandemoniumFortress { get; private set; }
 			public GameDifficulty GameDifficulty { get; private set; }
-			public TrinityBountyInfo ActiveBounty { get; private set; }
 			public bool InActiveEvent { get; private set; }
 			public bool HasEventInspectionTask { get; private set; }
 			public bool ParticipatingInTieredLootRun { get; private set; }
@@ -114,7 +93,7 @@ namespace Trinity
 
             public bool IsInventoryLockedForGreaterRift { get; set; }
 
-            public List<float> HealthHistory { get; set; }
+            public List<float> HealthHistory { get; set; } = new List<float>();
 
             public class SceneInfo
             {
@@ -126,7 +105,7 @@ namespace Trinity
             internal static DateTime LastVerySlowUpdate = DateTime.MinValue;
 			internal static DiaActivePlayer _me;
 
-			internal void UpdatePlayerCache()
+			internal void Update()
 			{
 				using (new PerformanceLogger("UpdateCachedPlayerData"))
 				{
@@ -582,8 +561,8 @@ namespace Trinity
                 return -1;
             }
 
-			public void Clear()
-			{
+            public void Clear()
+            {
                 LastUpdated = DateTime.MinValue;
                 LastSlowUpdate = DateTime.MinValue;
                 LastVerySlowUpdate = DateTime.MinValue;
@@ -602,20 +581,21 @@ namespace Trinity
                 BattleTag = String.Empty;
                 SceneId = -1;
                 LevelAreaId = -1;
-				Scene = new SceneInfo()
-				{
-					SceneId = -1,
-					LastUpdate = DateTime.UtcNow
-				};
-			}
+                Scene = new SceneInfo()
+                {
+                    SceneId = -1,
+                    LastUpdate = DateTime.UtcNow
+                };
 
-            public void ForceUpdates()
+                Summons = new SummonInfo();
+            }
+
+            public void ForceUpdate()
             {
                 LastUpdated = DateTime.MinValue;
                 LastSlowUpdate = DateTime.MinValue;
                 LastVerySlowUpdate = DateTime.MinValue;
             }
-
 
 			public bool IsFacing(Vector3 targetPosition, float arcDegrees = 70f)
 			{
@@ -630,8 +610,21 @@ namespace Trinity
 				return false;
 			}
 
+            public class SummonInfo
+            {
+                public int MysticAllyCount = 0;
+                public int GargantuanCount = 0;
+                public int ZombieDogCount = 0;
+                public int FetishArmyCount = 0;
+                public int DHPetsCount = 0;
+                public int DHSentryCount = 0;
+                public int HydraCount = 0;
+                public int AncientCount = 0;
+                public int SpiderPetCount = 0;
+            }
 
-        
+
+
         }
     }
-}
+

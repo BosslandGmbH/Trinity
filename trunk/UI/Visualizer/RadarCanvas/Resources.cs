@@ -35,6 +35,20 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             public Pen Pen;
         }
 
+        // I dont know what they're doing in the Brushes resource but its probably returning a new object from a color.
+        // This is bad, very bad for performance. Use a fixed resource like these brushes below.
+        internal static readonly SolidColorBrush BlueBrush = Brushes.Blue;
+        internal static readonly SolidColorBrush SkyBlueBrush = Brushes.DeepSkyBlue;
+        internal static readonly SolidColorBrush OrangeRedBrush = Brushes.OrangeRed;
+        internal static readonly SolidColorBrush RedBrush = Brushes.DarkRed;
+        internal static readonly SolidColorBrush GreenBrush = Brushes.Green;
+        internal static readonly SolidColorBrush BlackBrush = Brushes.Black;
+        internal static readonly SolidColorBrush DarkGrayBrush = Brushes.DarkGray;
+        internal static readonly SolidColorBrush LimeGreenBrush = Brushes.LimeGreen;
+        internal static readonly SolidColorBrush HotPinkBrush = Brushes.HotPink;
+        internal static readonly SolidColorBrush OrangeBrush = Brushes.Orange;
+        internal static readonly SolidColorBrush YellowBrush = Brushes.Yellow;
+
         static RadarResources()
         {
 
@@ -56,7 +70,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             GreyBrush = new SolidColorBrush(Colors.DarkGray);
             GreyPen = new Pen(GreyBrush, 1);
 
-            BlackBrush = new SolidColorBrush(Colors.Black);
             BlackPen = new Pen(BlackBrush, 2);
 
             ActorDefaultBrush = new SolidColorBrush(Colors.White);
@@ -64,6 +77,18 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             PlayerBrush = new SolidColorBrush(Colors.White);
 
             OtherPlayerBrush = new SolidColorBrush(Colors.Beige);
+
+            SuccessPen = new Pen(new SolidColorBrush(Colors.LawnGreen), 3)
+            {
+                DashStyle = DashStyles.DashDotDot,
+                DashCap = PenLineCap.Round
+            };
+
+            FailurePen = new Pen(new SolidColorBrush(Colors.OrangeRed), 3)
+            {
+                DashStyle = DashStyles.Dash,
+                DashCap = PenLineCap.Round
+            };
 
 
             PlayerLightPen = new Pen(new SolidColorBrush(ControlPaint.Light(PlayerBrush.Color.ToDrawingColor(), 50).ToMediaColor()), 1);
@@ -92,7 +117,25 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 DashCap = PenLineCap.Flat
             };
 
-            BlacklistedBrush = new SolidColorBrush(Colors.Black);
+            BuffedRegionBrush = new RadialGradientBrush
+            {
+                RadiusX = 0.25,
+                RadiusY = 0.25,
+                GradientStops = new GradientStopCollection
+                {
+                    new GradientStop(Colors.Transparent, 0),
+                    new GradientStop(Color.FromArgb(50, 144, 238, 144), 0.5),
+                    new GradientStop(Color.FromArgb(75, 124, 252, 0), 1),
+                }
+            };
+
+            BuffedRegionPen = new Pen(SelectionBrush, 2)
+            {
+                DashStyle = DashStyles.DashDotDot,
+                DashCap = PenLineCap.Flat
+            };
+
+            BlacklistedBrush = new SolidColorBrush(Colors.Red);
 
             BlacklistedPen = new Pen(BlacklistedBrush, 2)
             {
@@ -240,9 +283,11 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             BlankNode = new SolidColorBrush(Colors.Transparent);
         }
 
-        public static Pen BlackPen { get; set; }
+        public static RadialGradientBrush BuffedRegionBrush { get; set; }
 
-        public static SolidColorBrush BlackBrush { get; set; }
+        public static Pen BuffedRegionPen { get; set; }
+
+        public static Pen BlackPen { get; set; }
 
         public static SolidColorBrush AvoidanceTextBrush { get; set; }
 
@@ -546,5 +591,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         public static SolidColorBrush Target { get; set; }
 
         public static Pen WalkableTerrainBorder { get; set; }
+
+        public static Pen SuccessPen { get; set; }
+        public static Pen FailurePen { get; set; }
     }
 }

@@ -97,7 +97,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
 
                     return !Sets.ImmortalKingsCall.IsFirstBonusActive && CurrentTarget != null &&
                            (CurrentTarget.IsElite || TargetUtil.AnyMobsInRange(25f, 3)) ||
-                           Sets.ImmortalKingsCall.IsFirstBonusActive && TrinityPlugin.PlayerOwnedAncientCount < 3;
+                           Sets.ImmortalKingsCall.IsFirstBonusActive && Player.Summons.AncientCount < 3;
                 }
             }
 

@@ -134,7 +134,7 @@ namespace Trinity.Combat.Abilities
                 // Bombardment
                 if (CanCastBombardment())
                 {
-                    Vector3 bestPoint = CurrentTarget.IsEliteRareUnique ?
+                    Vector3 bestPoint = CurrentTarget.IsElite ?
                             CurrentTarget.Position :
                             TargetUtil.GetBestClusterPoint();
 
@@ -311,7 +311,7 @@ namespace Trinity.Combat.Abilities
                     if (CanCast(SNOPower.X1_Crusader_LawsOfValor2))
                         return new TrinityPower(SNOPower.X1_Crusader_LawsOfValor2);
 
-                    var bestPoint = CurrentTarget.IsEliteRareUnique
+                    var bestPoint = CurrentTarget.IsElite
                         ? CurrentTarget.Position
                         : TargetUtil.GetBestClusterPoint();
 
@@ -583,7 +583,7 @@ namespace Trinity.Combat.Abilities
                     if (IsBombardmentBuild && Runes.Crusader.DecayingStrength.IsActive && CanCast(SNOPower.X1_Crusader_LawsOfJustice2))
                         return new TrinityPower(SNOPower.X1_Crusader_LawsOfJustice2);
 
-                    Vector3 bestPoint = CurrentTarget.IsEliteRareUnique ?
+                    Vector3 bestPoint = CurrentTarget.IsElite ?
                         CurrentTarget.Position :
                         TargetUtil.GetBestClusterPoint();
 
@@ -697,18 +697,14 @@ namespace Trinity.Combat.Abilities
                 // Ensure steed charge isn't interrupted by Punish.
                 if (IsSteedCharging && CurrentTarget != null && !IsDoingGoblinKamakazi)
                 {
-                    Logger.Log("Steed Charging X");
-
-                    if (IsBombardmentBuild && Loiter(out power, 20f))
-                        return power;
-
+                    Logger.Log(LogCategory.Routine, "Steed Charging X");
                     return new TrinityPower(SNOPower.Walk, 100f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 16f));
                 }
 
                 // Prevent Default Attack
                 if (IsBombardmentBuild && (CurrentTarget == null || CurrentTarget.Type != TrinityObjectType.Destructible))
                 {
-                    Logger.Log("Prevent Primary Attack ");
+                    Logger.Log(LogCategory.Routine, "Prevent Primary Attack ");
                     var targetPosition = TargetUtil.GetLoiterPosition(CurrentTarget, 5f);
                     return new TrinityPower(SNOPower.Walk, 12f, targetPosition);
                 }
@@ -773,60 +769,7 @@ namespace Trinity.Combat.Abilities
             {
                 Skills.Crusader.LawsOfValor.Cast();
             }
-        }
-
-        private Vector3 _currentLoiterTarget;
-        private static bool Loiter(out TrinityPower power, float targetDistance = 14f, bool forceMove = false)
-        {
-            var monsterTooClose = CurrentTarget != null && CurrentTarget.Distance < targetDistance || CurrentTarget == null && TargetUtil.AnyMobsInRange(targetDistance);
-            if (monsterTooClose || forceMove)
-            {
-                var maxDistance = targetDistance * 1.5f;
-
-                // Pick a safe spot near current target
-                var safeSpot = CurrentTarget != null ?
-                    NavHelper.KitePoint(CurrentTarget.Position, targetDistance, maxDistance) :
-                    NavHelper.KitePoint(Player.Position, targetDistance, maxDistance);
-
-                if (safeSpot.Distance(Player.Position) < 8f)
-                {
-                    safeSpot = NavHelper.KitePoint(TargetUtil.GetBestClusterPoint(16f, maxDistance), targetDistance, maxDistance);
-                }
-
-                CombatMovement.Queue(new CombatMovement
-                {
-                    Options = new CombatMovementOptions()
-                    {
-                        AcceptableDistance = 2f,
-                        FailureBlacklistSeconds = 1,
-                        MaxDistance = 60f,
-                        SuccessBlacklistSeconds = 1,
-                        Logging = LogLevel.All
-                    },
-                    Destination = safeSpot,
-                    Name = "CrusaderLoiterPoint",
-                    OnUpdate = m =>
-                    {
-                        if (CanCastSteedCharge())
-                            Skills.Crusader.SteedCharge.Cast();
-
-                        // Dynamically change the destination.
-                        if (m != null && m.Status != null && m.Status.LastPosition != Vector3.Zero)
-                        {
-                            var target = TargetUtil.GetZigZagTarget(m.Status.LastPosition, 10f);
-                            if (target != Vector3.Zero && target.Distance(m.Destination) > 10f)
-                                m.Destination = target;
-                        }
-                    }
-                });
-
-                power = new TrinityPower(SNOPower.Walk);
-                return true;
-            }
-
-            power = null;
-            return false;
-        }
+        }   
 
         public static TrinityPower GetPrimaryPower()
         {
@@ -958,7 +901,7 @@ namespace Trinity.Combat.Abilities
                 (CacheData.Buffs.ConventionElement != Element.Holy || Player.CurrentHealthPct <= 0.5))
                 return true;
 
-            return !Sets.SeekerOfTheLight.IsFullyEquipped && (CurrentTarget.IsEliteRareUnique || TargetUtil.ClusterExists(15f, 65f, CrusaderSettings.FallingSwordAoECount)) &&
+            return !Sets.SeekerOfTheLight.IsFullyEquipped && (CurrentTarget.IsElite || TargetUtil.ClusterExists(15f, 65f, CrusaderSettings.FallingSwordAoECount)) &&
                 Player.PrimaryResource >= 25 * (1 - Player.ResourceCostReductionPct);
         }
 
@@ -1045,7 +988,7 @@ namespace Trinity.Combat.Abilities
                 return true;
             }
 
-            if (!IsBombardmentBuild && CurrentTarget.IsBossOrEliteRareUnique &&
+            if (!IsBombardmentBuild && CurrentTarget.IsElite &&
                 CurrentTarget.RadiusDistance <= 10f && !Settings.Combat.Misc.UseConventionElementOnly)
                 return true;
 
@@ -1061,12 +1004,12 @@ namespace Trinity.Combat.Abilities
                 return false;
 
             if (!IsBombardmentBuild &&
-                ((CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.RadiusDistance <= 15f) ||
+                ((CurrentTarget.IsElite && CurrentTarget.RadiusDistance <= 15f) ||
                  TargetUtil.UnitsPlayerFacing(16f) >= CrusaderSettings.ShieldGlareAoECount))
                 return true;
 
             if (IsBombardmentBuild && !ShouldWaitForConventionofElements(Skills.Crusader.ShieldGlare, Element.Physical, 2500, 0) &&
-                ((CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.RadiusDistance <= 15f) ||
+                ((CurrentTarget.IsElite && CurrentTarget.RadiusDistance <= 15f) ||
                  TargetUtil.UnitsPlayerFacing(16f) >= CrusaderSettings.ShieldGlareAoECount))
                 return true;
 

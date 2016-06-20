@@ -74,7 +74,7 @@ namespace Trinity.Combat.Abilities
             if (IsVaultFree && Player.CurrentHealthPct < 0.5 && LastPowerUsed != SNOPower.DemonHunter_Vault)
             {                
                 Logger.Log("Emergency Avoidance Vault to SafeZone");
-                return new TrinityPower(Skills.DemonHunter.Vault.SNOPower, 30, NavHelper.MainFindSafeZone(Player.Position));
+                return new TrinityPower(Skills.DemonHunter.Vault.SNOPower, 30, Core.Avoidance.Avoider.SafeSpot);
             }
 
             // Vault towards target before casting fan.
@@ -211,7 +211,7 @@ namespace Trinity.Combat.Abilities
         {
             if (SimpleCanCast(Skills.DemonHunter.Vault))
             {
-                power = new TrinityPower(Skills.DemonHunter.Vault.SNOPower, 60f, NavHelper.MainFindSafeZone(Player.Position));
+                power = new TrinityPower(Skills.DemonHunter.Vault.SNOPower, 60f, Core.Avoidance.Avoider.SafeSpot);
                 return true;
             }
                 
@@ -544,7 +544,7 @@ namespace Trinity.Combat.Abilities
             //meta.ReUseDelay = 250;
             meta.TargetPositionSelector = ret =>
             {
-                var kitePoint = NavHelper.FindSafeZone(false, 0, CurrentTarget.Position, true, TrinityPlugin.ObjectCache, false);
+                var kitePoint = Core.Avoidance.Avoider.SafeSpot;
                 if (kitePoint == Vector3.Zero)
                 {
                     return TargetUtil.GetZigZagTarget(CurrentTarget.Position, 20f);
@@ -749,7 +749,7 @@ namespace Trinity.Combat.Abilities
                 return true;
 
             // Use Boar Taunt on 3 or more trash mobs in an area or on Unique/Elite/Champion
-            if (Runes.DemonHunter.BoarCompanion.IsActive && ((TargetUtil.ClusterExists(20f, 4) && TargetUtil.EliteOrTrashInRange(20f)) || (CurrentTarget.IsBossOrEliteRareUnique && CurrentTarget.Distance <= 20f)))
+            if (Runes.DemonHunter.BoarCompanion.IsActive && ((TargetUtil.ClusterExists(20f, 4) && TargetUtil.EliteOrTrashInRange(20f)) || (CurrentTarget.IsElite && CurrentTarget.Distance <= 20f)))
                 return true;
 
             // Ferrets used for picking up Health Globes when low on Health
@@ -790,7 +790,7 @@ namespace Trinity.Combat.Abilities
             if (meta.Skill.Charges == 0)
                 return false;
 
-            if (TargetUtil.AnyMobsInRange(65) && TrinityPlugin.PlayerOwnedDHSentryCount < MaxSentryCount)
+            if (TargetUtil.AnyMobsInRange(65) && Player.Summons.DHSentryCount < MaxSentryCount)
                 return true;
 
             return false;

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using Trinity.Technicals;
 using Trinity.UI.UIComponents;
 using Zeta.Bot;
@@ -39,9 +41,14 @@ namespace Trinity.Helpers
                 if (Process.GetProcessesByName(v).Any())
                 {
                     var ctl = ConfigViewModel.MainWindowGrid();
-                    Application.Current.Dispatcher.Invoke(new Action(() => TrinityPlugin.SetVector(ctl)));
+                    Application.Current.Dispatcher.Invoke(() => SetVector(ctl));
                 }
             }
+        }
+
+        internal static Transform SetVector(Grid ctl)
+        {
+            return ctl.RenderTransform = new RotateTransform(180, ctl.RenderSize.Width / 2, ctl.RenderSize.Height / 2);
         }
 
         /// <summary>

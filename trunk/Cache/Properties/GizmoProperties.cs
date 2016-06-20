@@ -9,16 +9,20 @@ using Zeta.Game.Internals.SNO;
 namespace Trinity.Cache.Properties
 {
     /// <summary>
-    /// PropertyLoader that are specific to gizmos
+    /// Properties that are specific to gizmos
+    /// This class should update all values that are possible/reasonable/useful.
+    /// DO NOT put settings or situational based exclusions in here, do that in weighting etc.
     /// </summary>
-    public class GizmoProperties : PropertyLoader.IPropertyCollection
+    public class GizmoProperties : IPropertyCollection
     {
         private DateTime _lastUpdated = DateTime.MinValue;
-        private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(100);
+        private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(500);
+
+        public DateTime CreationTime { get; } = DateTime.UtcNow;
 
         public void ApplyTo(TrinityCacheObject target)
         {
-            if (DateTime.UtcNow.Subtract(_lastUpdated).TotalMilliseconds > UpdateInterval.TotalMilliseconds)
+            if (!target.IsFrozen && DateTime.UtcNow.Subtract(_lastUpdated) > UpdateInterval)
                 Update(target);
 
             target.IsUsed = this.IsUsed;
@@ -30,6 +34,12 @@ namespace Trinity.Cache.Properties
             target.IsRareChest = this.IsRareChest;
             target.IsGizmoDisabledByScript = this.IsGizmoDisabledByScript;
             target.IsPlayerHeadstone = this.IsPlayerHeadstone;
+            target.IsContainer = this.IsContainer;
+            target.IsInvulnerable = this.IsInvulnerable;
+            target.IsCursedChest = this.IsCursedChest;
+            target.IsCursedShrine = this.IsCursedShrine;
+            target.IsDestroyable = this.IsDestroyable;
+            target.IsInteractableType = this.IsInteractableType;
         }
 
         public void OnCreate(TrinityCacheObject source)
@@ -47,6 +57,12 @@ namespace Trinity.Cache.Properties
             this.IsCorpse = source.InternalNameLowerCase.Contains("corpse");
             this.IsWeaponRack = source.InternalNameLowerCase.Contains("rack");
             this.IsGroundClicky = source.InternalNameLowerCase.Contains("ground_clicky");
+            this.IsPlayerHeadstone = source.ActorSNO == DataDictionary.PLAYER_HEADSTONE_SNO;
+            this.IsContainer = IsRareChest || IsChest || IsCorpse || IsWeaponRack || IsGroundClicky;
+            this.IsCursedChest = source.Type == TrinityObjectType.CursedChest;
+            this.IsCursedShrine = source.Type == TrinityObjectType.CursedShrine;
+            this.IsDestroyable = source.Type == TrinityObjectType.Barricade || source.Type == TrinityObjectType.Destructible;
+            this.IsEventObject = IsCursedChest || IsCursedShrine;
 
             var commonData = source.CommonData;
             if (commonData == null)
@@ -54,6 +70,8 @@ namespace Trinity.Cache.Properties
 
             this.IsUntargetable = source.ActorAttributes.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(source.ActorSNO);
             this.IsInvulnerable = source.ActorAttributes.IsInvulnerable;
+
+            Update(source);
         }
 
         public void Update(TrinityCacheObject source)
@@ -69,27 +87,35 @@ namespace Trinity.Cache.Properties
 
             this.IsUsed = GizmoPropertyUtils.IsGizmoUsed(source);
             this.IsGizmoDisabledByScript = gizmo.IsGizmoDisabledByScript;
-
+            this.IsInteractableType = DataDictionary.InteractableTypes.Contains(source.Type);
         }
 
+        public bool IsEventObject { get; set; }
+        public bool IsDestroyable { get; set; }
+        public bool IsCursedShrine { get; set; }
+        public bool IsCursedChest { get; set; }
+        public bool IsContainer { get; set; }
         public bool IsGroundClicky { get; set; }
         public bool IsWeaponRack { get; set; }
         public bool IsCorpse { get; set; }
         public bool IsChest { get; set; }
         public bool IsUntargetable { get; set; }
-        public object IsInvulnerable { get; set; }
+        public bool IsInvulnerable { get; set; }
         public bool IsRareChest { get; set; }
         public bool IsGizmoDisabledByScript { get; set; }
         public bool IsUsed { get; set; }
         public bool IsPlayerHeadstone { get; set; }
+        public bool IsInteractableType { get; set; }
     }
-
-
 
     public class GizmoPropertyUtils
     {
+
+
         public static bool IsGizmoUsed(TrinityCacheObject actor)
         {
+            // todo: this method neds to be refactored
+
             if (actor.ActorType != ActorType.Gizmo || !actor.IsValid)
                 return false;
 

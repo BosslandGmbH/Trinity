@@ -116,7 +116,7 @@ namespace Trinity
 
         private static void GameEvents_OnGameChanged(object sender, EventArgs e)
         {
-            ClearCachesOnGameChange(sender, e);
+            CacheData.Clear();
 
             // reload the profile juuuuuuuuuuuust in case Demonbuddy missed it... which it is known to do on disconnects
             //string currentProfilePath = ProfileManager.CurrentProfile.Path;
@@ -129,7 +129,7 @@ namespace Trinity
         static void GameEvents_OnWorldChanged(object sender, EventArgs e)
         {
             SnapShot.Record();
-            CacheData.WorldChangedClear();
+            //CacheData.WorldChangedClear();
             TrinityItemManager.ResetBackPackCheck();
             LastWorldChangeTime = DateTime.UtcNow;
         }
@@ -150,7 +150,7 @@ namespace Trinity
             PlayerMover.TimeLastRecordedPosition = DateTime.MinValue;
             PlayerMover.LastGeneratedStuckPosition = DateTime.MinValue;
             DeathsThisRun = 0;
-            CacheData.FullClear();
+            CacheData.Clear();
         }
 
         private static void TrinityOnDeath(object src, EventArgs mea)
@@ -160,7 +160,7 @@ namespace Trinity
                 LastDeathTime = DateTime.UtcNow;
                 TotalDeaths++;
                 DeathsThisRun++;
-                CacheData.AbilityLastUsed = new Dictionary<SNOPower, DateTime>(DataDictionary.LastUseAbilityTimeDefaults);
+                CacheData.Clear();
                 PlayerMover.TotalAntiStuckAttempts = 1;
                 PlayerMover.vSafeMovementLocation = Vector3.Zero;
 
@@ -206,7 +206,7 @@ namespace Trinity
                 //TownRun.PreTownRunWorldId = -1;
                 //TownRun.WasVendoring = false;
 
-                CacheData.AbilityLastUsed.Clear();
+                //CacheData.AbilityLastUsed.Clear();
                 SpellHistory.History.Clear();
 
                 DeathsThisRun = 0;
@@ -228,9 +228,9 @@ namespace Trinity
                 PlayerMover.TimesReachedMaxUnstucks = 0;
                 PlayerMover.CancelUnstuckerForSeconds = 0;
                 PlayerMover.LastCancelledUnstucker = DateTime.MinValue;
-                NavHelper.UsedStuckSpots = new List<GridPoint3>();
+                //NavHelper.UsedStuckSpots = new List<GridPoint3>();
 
-                CacheData.FullClear();
+                //CacheData.WorldChangedClear();
 
                 // Reset all the caches
                 ProfileHistory = new List<string>();
@@ -242,7 +242,7 @@ namespace Trinity
 
                 CombatBase.IsQuestingMode = false;
 
-                GenericCache.ClearCache();
+                //GenericCache.ClearCache();
                 GenericBlacklist.ClearBlacklist();
             });
         }
