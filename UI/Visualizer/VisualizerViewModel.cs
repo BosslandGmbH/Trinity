@@ -613,6 +613,7 @@ namespace Trinity.UI.RadarUI
             RadarVisibilityFlags.SafeNodes |
             RadarVisibilityFlags.Avoidance |
             RadarVisibilityFlags.KiteFromNodes |
+            RadarVisibilityFlags.NotInCache |
             RadarVisibilityFlags.RangeGuide)]
         [UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]
         public RadarVisibilityFlags VisibilityFlags

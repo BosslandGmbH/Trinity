@@ -81,6 +81,8 @@ namespace Trinity.Cache
                     catch (Exception ex)
                     {
                         Logger.LogError($"Exception updating object cache {diaObject.Name} {diaObject.ActorSnoId} {ex}");
+                        PropertyLoader.Clear();
+                        return;
                     }
                 }
 
@@ -104,6 +106,8 @@ namespace Trinity.Cache
                 Ignored = ignored;
             }
         }
+
+        
 
         private bool ShouldCacheActor(TrinityCacheObject cacheObject)
         {
@@ -133,6 +137,7 @@ namespace Trinity.Cache
                 case TrinityObjectType.HealthGlobe:
                 case TrinityObjectType.ProgressionGlobe:
                 case TrinityObjectType.BuffedRegion:
+                case TrinityObjectType.BloodShard:
                     return true;
 
                 case TrinityObjectType.Unit:

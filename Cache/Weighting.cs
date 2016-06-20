@@ -686,7 +686,8 @@ namespace Trinity
                             #endregion
 
                             #region Item
-
+                            
+                            case TrinityObjectType.BloodShard:
                             case TrinityObjectType.Item:
                                 {
                                     var isTwoSquare = true;
@@ -1572,7 +1573,7 @@ namespace Trinity
                         info.TargetedTimes = 0;
                         info.BlacklistedTimes++;
                     }
-                    else if (info.TimeAsCurrentTarget.TotalSeconds > 60 && !bestTarget.IsBoss)
+                    else if (info.TimeAsCurrentTarget.TotalSeconds > 120 && !bestTarget.IsBoss)
                     {
                         GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TimeAsCurrentTarget.TotalSeconds}s))");
                         info.TimeAsCurrentTarget = TimeSpan.Zero;

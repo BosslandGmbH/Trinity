@@ -20,6 +20,8 @@ namespace Trinity.Cache.Properties
     public class CommonProperties : IPropertyCollection
     {
         private DateTime _lastUpdated = DateTime.MinValue;
+        private DateTime _attributesLastUpdated = DateTime.MinValue;
+
         private static readonly TimeSpan UpdateInterval = TimeSpan.FromMilliseconds(100);
         private static readonly Regex NameNumberTrimRegex = new Regex(@"-\d+$", RegexOptions.Compiled);
 
@@ -144,9 +146,6 @@ namespace Trinity.Cache.Properties
             // GetCachedAttribute<T>() is a straight dictionary lookup, 
             // GetAttribute<T>() updates the value before returning.
 
-            this.FastAttributeGroupId = commonData.FastAttribGroupId;
-            this.ActorAttributes = new ActorAttributes(commonData.FastAttribGroupId);
-
             this.AnnId = commonData.AnnId;
             this.GameBalanceId = commonData.GameBalanceId;
             this.GameBalanceType = commonData.GameBalanceType;
@@ -186,14 +185,15 @@ namespace Trinity.Cache.Properties
                 return;
 
             var commonData = source.CommonData;
-            if (commonData == null || !commonData.IsValid)
+            if (commonData == null || !commonData.IsValid || commonData.IsDisposed)
                 return;
 
             var fagId = commonData.FastAttribGroupId;
-            if (fagId != this.FastAttributeGroupId)
+            if ((fagId != this.FastAttributeGroupId || DateTime.UtcNow.Subtract(_attributesLastUpdated).TotalSeconds > 1) && fagId > 0)
             {
                 this.FastAttributeGroupId = fagId;
-                this.ActorAttributes = new ActorAttributes(fagId); 
+                this.ActorAttributes = new ActorAttributes(fagId);                
+                _attributesLastUpdated = DateTime.UtcNow;
             }
 
             this.Animation = commonData.CurrentAnimation;

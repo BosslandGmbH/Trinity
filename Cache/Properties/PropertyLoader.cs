@@ -108,6 +108,12 @@ namespace Trinity.Cache.Properties
             newProps.ApplyTo(obj);
             return newProps;
         }
+
+        public static void Clear()
+        {
+            InsertionOrder.Clear();
+            PropertyCollections.Clear();
+        }
     }
 
     public interface IPropertyCollection
