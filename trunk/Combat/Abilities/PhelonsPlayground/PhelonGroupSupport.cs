@@ -63,7 +63,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
 
             return
                 (from u in PhelonUtils.SafeList(includeUnitsInAoe)
-                    where u.IsUnit && u.CanCastTo && u.HasBeenInLoS &&
+                    where u.IsUnit && u.CanCastTo() && u.HasBeenInLoS &&
                           !UnitsAroundPuller(pullLocation, 20, includeUnitsInAoe)
                               .Select(x => x.ACDGuid)
                               .Contains(u.ACDGuid) &&
