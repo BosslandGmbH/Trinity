@@ -129,7 +129,10 @@ namespace Trinity.Cache.Properties
 
             var unit = source.Unit;
             if (unit == null || !unit.IsValid)
+            {
+                this.IsDead = true;
                 return;
+            }
 
             this.IsDead = MonsterPropertyUtils.IsDead(source);
             this.HitPoints = unit.HitpointsCurrent;
@@ -203,7 +206,7 @@ namespace Trinity.Cache.Properties
     public class MonsterPropertyUtils
     {
         public static bool IsDead(TrinityCacheObject monster)
-        {
+        {            
             if (monster.ActorType == ActorType.Monster)
             {
                 if (DataDictionary.FakeDeathMonsters.Contains(monster.ActorSNO))
