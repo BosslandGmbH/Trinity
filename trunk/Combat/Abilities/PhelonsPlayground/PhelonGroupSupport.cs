@@ -17,8 +17,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                 try
                 {
                     var monk = TrinityPlugin.ObjectCache.FirstOrDefault(x => x.InternalName.ToLower().Contains("monk"));
-                    if (monk == null)
-                        Logger.Log("Unable to find Monk.  Where did he go?");
+                    //if (monk == null)
+                    //    Logger.Log("Unable to find Monk.  Where did he go?");
                     return monk;
                 }
                 catch (Exception)
@@ -70,10 +70,8 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground
                           !UnitsAroundPlayer(10, includeUnitsInAoe)
                               .Select(x => x.ACDGuid)
                               .Contains(u.ACDGuid) &&
-                          u.Position.Distance(pullLocation) <= searchRange //&&
-                          //u.NearbyUnitsWithinDistance(groupRadius) >= groupCount
-                    orderby //u.NearbyUnitsWithinDistance(groupRadius),
-                        u.Distance descending 
+                          u.Position.Distance(pullLocation) <= searchRange
+                    orderby u.Distance
                     select u).ToList();
         }
     }

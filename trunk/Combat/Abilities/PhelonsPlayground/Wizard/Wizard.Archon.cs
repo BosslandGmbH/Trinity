@@ -64,6 +64,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                 if (!Skills.Wizard.Archon.CanCast() || Skills.Wizard.ArchonBlast.CanCast())
                     return false;
 
+                if (CacheData.Buffs.HasArchon&& Legendary.TheTwistedSword.IsEquipped)
+                    return false;
+
                 //if (Legendary.ConventionOfElements.IsEquipped && TimeToElementStart(Element.Cold) < 3000 && TimeToElementStart(Element.Cold) > 0)
                 //    return false;
 

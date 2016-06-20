@@ -70,7 +70,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     if (!Skills.WitchDoctor.BigBadVoodoo.CanCast())
                         return false;
                     var target = PhelonGroupSupport.Monk ?? PhelonTargeting.BestAoeUnit(45f, true);
-                    return target != null && target.Distance < 45;
+                    return target != null && target.Distance < 15;
                 }
             }
 
@@ -100,7 +100,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     if (!Skills.WitchDoctor.MassConfusion.CanCast())
                         return false;
                     var target = PhelonGroupSupport.Monk ?? PhelonTargeting.BestAoeUnit(45f, true);
-                    return target != null && target.Distance < 45;
+                    return target != null && target.Distance < `5;
                 }
             }
 
