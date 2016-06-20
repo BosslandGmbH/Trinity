@@ -1572,12 +1572,12 @@ namespace Trinity
                         info.TargetedTimes = 0;
                         info.BlacklistedTimes++;
                     }
-                    //else if (info.TimeAsCurrentTarget.TotalSeconds > 30 && !bestTarget.IsBoss)
-                    //{
-                    //    GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TimeAsCurrentTarget.TotalSeconds}s))");
-                    //    info.TimeAsCurrentTarget = TimeSpan.Zero;                        
-                    //    info.BlacklistedTimes++;
-                    //}
+                    else if (info.TimeAsCurrentTarget.TotalSeconds > 60 && !bestTarget.IsBoss)
+                    {
+                        GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TimeAsCurrentTarget.TotalSeconds}s))");
+                        info.TimeAsCurrentTarget = TimeSpan.Zero;
+                        info.BlacklistedTimes++;
+                    }
                     else
                     {
                         info.LastTargetedTime = DateTime.UtcNow;

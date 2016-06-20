@@ -17,6 +17,8 @@ namespace Trinity.Cache.Properties
     {
         public DateTime CreationTime { get; } = DateTime.UtcNow;
 
+        public bool IsValid { get; set; } = true;
+
         public void ApplyTo(TrinityCacheObject target)
         {
             target.ActorClass = this.ActorClass;
