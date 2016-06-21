@@ -18,6 +18,11 @@ namespace Trinity
     /// </summary>
     internal partial class DataDictionary
     {
+        public static readonly HashSet<int> KeywardenSno = new HashSet<int>
+        {
+            (int)SNOActor.DuneDervish_B_Unique_Uber
+        };
+
         /// <summary>
         /// Client effects that will be let into the object cache
         /// </summary>

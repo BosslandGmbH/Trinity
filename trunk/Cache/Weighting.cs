@@ -1573,7 +1573,7 @@ namespace Trinity
                         info.TargetedTimes = 0;
                         info.BlacklistedTimes++;
                     }
-                    else if (info.TimeAsCurrentTarget.TotalSeconds > 120 && !bestTarget.IsBoss)
+                    else if (info.TimeAsCurrentTarget.TotalSeconds > 120 && !bestTarget.IsBoss && !(bestTarget.Type == TrinityObjectType.Door && !bestTarget.IsUsed))
                     {
                         GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TimeAsCurrentTarget.TotalSeconds}s))");
                         info.TimeAsCurrentTarget = TimeSpan.Zero;
