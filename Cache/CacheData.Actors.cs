@@ -81,7 +81,7 @@ namespace Trinity.Cache
                     catch (Exception ex)
                     {
                         Logger.LogError($"Exception updating object cache {diaObject.Name} {diaObject.ActorSnoId} {ex}");
-                        PropertyLoader.Clear();
+                        Clear();
                         return;
                     }
                 }
@@ -237,6 +237,18 @@ namespace Trinity.Cache
                 case TrinityObjectType.Shrine:
                 case TrinityObjectType.BuffedRegion:
                     return true;
+                
+                case TrinityObjectType.Door:
+                    if (cacheObject.RadiusDistance < 15f)
+                        return true;
+
+                    break;
+
+                case TrinityObjectType.Unit:
+                    if (CombatBase.CombatMode == CombatMode.KillAll)
+                        return true;
+
+                    break;
             }
 
             if (cacheObject.Distance < 4) return true;
@@ -505,6 +517,8 @@ namespace Trinity.Cache
         public void Clear()
         {
             Items.Clear();
+            Ignored.Clear();            
+            PropertyLoader.Clear();
         }
     }
 }

@@ -16,9 +16,19 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         static AttributeManager()
         {
+            Create();
+        }
+
+        private static void Create()
+        {
             var descriptors = ReadObjects<AttributeDescripter>(Internals.Addresses.AttributeDescripters, 1435, 0x28).ToList();
             AttributeDescriptors = descriptors.ToDictionary(descripter => descripter.Id);
         }
+
+        public static void Reset()
+        {
+            Create();
+        }   
 
         public static ExpandoContainer<AttributeGroup> AttributeGroups
         {

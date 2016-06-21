@@ -34,31 +34,36 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         protected void Create(int groupId)
         {
-            FastAttributeGroupId = groupId;
-            Group = AttributeManager.FindGroup(groupId);
-
-            if (Group == null || !Group.IsValid)
+            try
             {
-                Logger.LogVerbose($"Attribute group is invalid with id: {groupId}");
-                return;
-            }
+                FastAttributeGroupId = groupId;
+                Group = AttributeManager.FindGroup(groupId);
 
-            Map = (Group.Flags & 4) != 0 ? Group.PtrMap : Group.Map;
-            if (!Map.IsValid)
+                if (Group == null || !Group.IsValid)
+                {
+                    Logger.LogVerbose($"Attribute group is invalid with id: {groupId}");
+                    return;
+                }
+
+                Map = (Group.Flags & 4) != 0 ? Group.PtrMap : Group.Map;
+                if (!Map.IsValid)
+                {
+                    ActorManager.Reset();
+                    Logger.LogVerbose($"Attribute Map Invalid for groupId: {groupId}");
+                    return;
+                }
+
+                Items = Map.Data.Items;
+
+                if (Group.Map.Count != Items.Count && Group.Map2.IsValid)
+                {
+                    Items.AddRangeNewOnly(Group.Map2.Data.Items);
+                }
+            }
+            catch (Exception ex)
             {
-                ActorManager.Reset();
-                Logger.LogVerbose($"Attribute Map Invalid for groupId: {groupId}");
-                return;
+                Logger.Log($"Exception creating attributes {ex} for groupId {groupId}");
             }
-
-            Items = Map.Data.Items;
-           
-            if (Group.Map.Count != Items.Count && Group.Map2.IsValid)
-            {
-                Items.AddRangeNewOnly(Group.Map2.Data.Items);
-            }
-
-
         }
 
         internal List<TValue> GetCachedAttributes<TValue>(ActorAttributeType attr)

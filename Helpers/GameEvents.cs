@@ -5,6 +5,8 @@ using Trinity.Cache;
 using Trinity.Combat;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
+using Trinity.Framework;
+using Trinity.Framework.Objects.Memory.Attributes;
 using Trinity.Helpers;
 using Trinity.ItemRules;
 using Trinity.Items;
@@ -241,6 +243,9 @@ namespace Trinity
                 GoldInactivity.Instance.ResetCheckGold();
 
                 CombatBase.IsQuestingMode = false;
+
+                CacheData.Clear();
+                AttributeManager.Reset();
 
                 //GenericCache.ClearCache();
                 GenericBlacklist.ClearBlacklist();
