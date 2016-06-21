@@ -471,7 +471,7 @@ namespace Trinity
                         {
                             Logger.LogVerbose("Rift Boss is Spawning!");
 
-                            if (!TargetUtil.AnyTrashInRange(20f) && !Gems.Taeguk.IsEquipped && Skills.Barbarian.FuriousCharge.IsActive) {
+                            if (!TargetUtil.AnyTrashInRange(20f) && !Gems.Taeguk.IsEquipped) {
                                 Logger.LogVerbose(LogCategory.Avoidance, "Waiting for Rift Boss to Spawn");
                                 return RunStatus.Running;
                             }
@@ -836,7 +836,7 @@ namespace Trinity
                                 CacheData.InteractAttempts[CurrentTarget.RActorGuid] += 1;
                             }
 
-                            var attempts = CurrentTarget.Type == TrinityObjectType.Shrine ? 8 : 15;
+                            var attempts = CurrentTarget.Type == TrinityObjectType.Shrine ? 8 : 20;
 
                             // If we've tried interacting too many times, blacklist this for a while
                             if (CacheData.InteractAttempts[CurrentTarget.RActorGuid] > attempts && CurrentTarget.Type != TrinityObjectType.HealthWell)
@@ -845,7 +845,7 @@ namespace Trinity
                                     CurrentTarget.InternalName, CurrentTarget.ActorSNO, attemptCount);
 
                                 CacheData.InteractAttempts[CurrentTarget.RActorGuid] = 0;
-                                GenericBlacklist.Blacklist(CurrentTarget, TimeSpan.FromSeconds(60), "Too Many Interaction Attempts");
+                                GenericBlacklist.Blacklist(CurrentTarget, TimeSpan.FromSeconds(15), "Too Many Interaction Attempts");
                                 //Blacklist60Seconds.Add(CurrentTarget.AnnId);
                                 //Blacklist60LastClear = DateTime.UtcNow;
                             }

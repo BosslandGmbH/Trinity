@@ -591,6 +591,13 @@ namespace Trinity
                                         //    break;
                                         //}
 
+                                        if (cacheObject.IsSpawningBoss)
+                                        {
+                                            cacheObject.WeightInfo += string.Format("Boss is spawning", cacheObject.InternalName);
+                                            cacheObject.Weight += 0;
+                                            break;
+                                        }
+
                                         if (cacheObject.HitPointsPct <=
                                             Settings.Combat.Misc.ForceKillElitesHealth && !cacheObject.IsMinion)
                                         {
@@ -1567,13 +1574,15 @@ namespace Trinity
                         info.TimeAsCurrentTarget = info.TimeAsCurrentTarget + diff;
                     }
 
-                    if (info.TargetedTimes > GetBlacklistTargetTimes(bestTarget))
+                    var isUnusedDoor = bestTarget.Type == TrinityObjectType.Door && !bestTarget.IsUsed;
+
+                    if (info.TargetedTimes > GetBlacklistTargetTimes(bestTarget) && !bestTarget.IsBoss && !isUnusedDoor)
                     {
                         GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(60), $"Targetted too many times ({info.TargetedTimes})");
                         info.TargetedTimes = 0;
                         info.BlacklistedTimes++;
                     }
-                    else if (info.TimeAsCurrentTarget.TotalSeconds > 120 && !bestTarget.IsBoss && !(bestTarget.Type == TrinityObjectType.Door && !bestTarget.IsUsed))
+                    else if (info.TimeAsCurrentTarget.TotalSeconds > 120 && !bestTarget.IsBoss && !isUnusedDoor)
                     {
                         GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TimeAsCurrentTarget.TotalSeconds}s))");
                         info.TimeAsCurrentTarget = TimeSpan.Zero;
