@@ -151,7 +151,7 @@ namespace Trinity
         public float CollisionRadius { get; set; }
         public bool IsMarker { get; set; }
         public bool IsSafeSpot { get; set; }
-        public bool IsSpawning { get; set; }
+        public bool IsSpawningBoss { get; set; }
         public string AnimationNameLowerCase { get; set; }
         public string InternalNameLowerCase { get; set; }
         public int TeamId { get; set; }
@@ -235,7 +235,6 @@ namespace Trinity
         public string DebugNavCellFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.NodeFlags.ToString();
         public bool IsStandingInAvoidance => Core.Avoidance.Grid.IsLocationInFlags(Position, AvoidanceFlags.Avoidance);        
         public bool IsValid => Object != null && Object.IsValid && (ActorType == ActorType.ClientEffect || CommonData != null && CommonData.IsValid && !CommonData.IsDisposed);
-
 
         #endregion
 

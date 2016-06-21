@@ -467,11 +467,14 @@ namespace Trinity
                                 break;
                         }
 
-                        if (CurrentTarget.IsBoss && Player.IsInRift && CurrentTarget.IsSpawning && !TargetUtil.AnyTrashInRange(20f) &&
-                            !Gems.Taeguk.IsEquipped && Skills.Barbarian.FuriousCharge.IsActive)
+                        if (CurrentTarget.IsSpawningBoss && Player.IsInRift)
                         {
-                            Logger.LogVerbose(LogCategory.Avoidance, "Waiting for Rift Boss to Spawn");
-                            return RunStatus.Running;
+                            Logger.LogVerbose("Rift Boss is Spawning!");
+
+                            if (!TargetUtil.AnyTrashInRange(20f) && !Gems.Taeguk.IsEquipped && Skills.Barbarian.FuriousCharge.IsActive) {
+                                Logger.LogVerbose(LogCategory.Avoidance, "Waiting for Rift Boss to Spawn");
+                                return RunStatus.Running;
+                            }
                         }
 
                         // Interact/use power on target if already in range
