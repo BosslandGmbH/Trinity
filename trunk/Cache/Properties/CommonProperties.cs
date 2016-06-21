@@ -142,10 +142,6 @@ namespace Trinity.Cache.Properties
             if (commonData == null || !commonData.IsValid)
                 return;
 
-            // Trinity attributes incurs an initial cost to cache the attributes structures and all values.
-            // GetCachedAttribute<T>() is a straight dictionary lookup, 
-            // GetAttribute<T>() updates the value before returning.
-
             this.AnnId = commonData.AnnId;
             this.GameBalanceId = commonData.GameBalanceId;
             this.GameBalanceType = commonData.GameBalanceType;
@@ -187,6 +183,10 @@ namespace Trinity.Cache.Properties
             var commonData = source.CommonData;
             if (commonData == null || !commonData.IsValid || commonData.IsDisposed)
                 return;
+
+            // ActorAttributes incurs an initial cost to cache the attributes structures and all values.
+            // GetCachedAttribute<T>() is a straight dictionary lookup, 
+            // GetAttribute<T>() updates the value before returning.
 
             var fagId = commonData.FastAttribGroupId;
             if ((fagId != this.FastAttributeGroupId || DateTime.UtcNow.Subtract(_attributesLastUpdated).TotalSeconds > 1) && fagId > 0)

@@ -63,9 +63,9 @@ namespace Trinity.Cache.Properties
             target.IsSummonedByPlayer = this.IsSummonedByPlayer;
             target.IsSummoned = this.IsSummoned;
             target.IsReflectingDamage = this.IsReflectingDamage;
-            target.IsSpawning = this.IsSpawning;
             target.IsDead = this.IsDead;
             target.IsHidden = this.IsHidden;
+            target.IsSpawningBoss = this.IsSpawningBoss;
         }
 
         public void OnCreate(TrinityCacheObject source)
@@ -147,9 +147,9 @@ namespace Trinity.Cache.Properties
             this.IsInvulnerable = source.ActorAttributes.IsInvulnerable;
             this.TeamId = unit.TeamId;
             this.IsSameTeam = this.TeamId == 1 || this.TeamId == 2 || this.TeamId == 17 || this.TeamId == TrinityPlugin.Player.TeamId || DataDictionary.AllyMonsterTypes.Contains(this.MonsterType);
-            this.IsSpawning = this.IsBoss && this.IsUntargetable;
             this.IsHidden = source.ActorAttributes.IsHidden || source.ActorAttributes.IsBurrowed;
-            this.IsCurrentAvoidance = Core.Avoidance.ActiveAvoidanceSnoIds.Contains(source.ActorSNO);            
+            this.IsCurrentAvoidance = Core.Avoidance.ActiveAvoidanceSnoIds.Contains(source.ActorSNO);
+            this.IsSpawningBoss = this.IsBoss && this.IsUntargetable;
 
             var movement = unit.Movement;
             if (movement != null && movement.IsValid)
@@ -159,11 +159,11 @@ namespace Trinity.Cache.Properties
             }
         }
 
+        public bool IsSpawningBoss { get; set; }
         public bool IsTrashMob { get; set; }
         public bool IsCurrentAvoidance { get; set; }
         public bool IsHidden { get; set; }
         public bool IsDead { get; set; }
-        public bool IsSpawning { get; set; }
         public bool IsChampion { get; set; }
         public bool IsReflectingDamage { get; set; }
         public bool IsSummonedByPlayer { get; set; }

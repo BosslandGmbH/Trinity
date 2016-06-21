@@ -36,6 +36,8 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         public bool IsUntargetable => GetAttribute<bool>(ActorAttributeType.Untargetable);
 
+        public bool IsRiftBoss => GetAttribute<bool>(ActorAttributeType.IsLootRunBoss);
+
         public bool IsInvulnerable => GetAttribute<bool>(ActorAttributeType.Invulnerable);
 
         public bool IsBountyObjective => GetAttribute<bool>(ActorAttributeType.BountyObjective);
