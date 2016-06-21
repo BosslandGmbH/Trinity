@@ -142,7 +142,6 @@ namespace Trinity.Cache.Properties
             if (commonData == null || !commonData.IsValid)
                 return;
 
-            this.AnnId = commonData.AnnId;
             this.GameBalanceId = commonData.GameBalanceId;
             this.GameBalanceType = commonData.GameBalanceType;
 
@@ -161,28 +160,48 @@ namespace Trinity.Cache.Properties
             _lastUpdated = DateTime.UtcNow;
 
             var diaObject = source.Object;
-            if (diaObject == null)
+            if (diaObject == null || !diaObject.IsValid)
                 return;
 
-            this.LastSeenTime = DateTime.UtcNow;
             this.Position = diaObject.Position;
             this.Distance = TrinityPlugin.Player.Position.Distance(this.Position);
-            this.AcdId = diaObject.ACDId;
-
-            // Check for an RActorGuid that was re-used for another object.
-            var snoId = diaObject.ActorSnoId;
-            if (snoId != this.ActorSnoId)
-            {
-                Logger.Warn($"SnoIds dont match for actor {diaObject.Name} ({snoId})/ {this.InternalName} ({this.ActorSnoId})");
-                this.IsValid = false;
-            }
-
             if (this.Distance > 100f)
                 return;
 
+            this.AcdId = diaObject.ACDId;
+            if (source.Type != TrinityObjectType.ClientEffect && this.AcdId == -1)                
+            {
+                this.IsValid = false;
+                return;
+            }
+
+            var snoId = diaObject.ActorSnoId;            
+            if (this.ActorSnoId != 0 && snoId != this.ActorSnoId)
+            {
+                Logger.Warn($"SnoIds don't match for actor {diaObject.Name} ({snoId})/ {this.InternalName} ({this.ActorSnoId})");
+                this.IsValid = false;
+                return;
+            }
+
+            this.LastSeenTime = DateTime.UtcNow;
+
             var commonData = source.CommonData;
             if (commonData == null || !commonData.IsValid || commonData.IsDisposed)
+            {
+                Logger.Warn($"CommonData is invalid or disposed for actor {this.InternalName} ({this.ActorSnoId}), previous AcdId={this.AcdId}");
+                this.IsValid = false;
                 return;
+            }
+
+            var annId = commonData.AnnId;
+            if (this.AnnId != 0 && annId != this.AnnId)
+            {
+                Logger.Warn($"AnnIds don't match for actor {diaObject.Name} ({snoId}) CachedAnnId={this.AnnId} NewAnnId=={annId}");
+                this.IsValid = false;
+                return;
+            }
+
+            this.AnnId = annId;
 
             // ActorAttributes incurs an initial cost to cache the attributes structures and all values.
             // GetCachedAttribute<T>() is a straight dictionary lookup, 
