@@ -83,7 +83,7 @@ namespace Trinity.Items.ItemList
                 return EvaluateRules(cItem, itemSetting, test);
             }
 
-            Logger.Log($"  >>  Unselected ListItem {cItem.Name} {cItem.ActorSnoId} IsValid={cItem.IsValid}");
+            Logger.Log($"  >>  Unselected ListItem {cItem.Name} {cItem.ActorSnoId} GbId={cItem.GameBalanceId} IsValid={cItem.IsValid}");
             return false;
         }
 
