@@ -53,6 +53,7 @@ namespace Trinity.Cache.Properties
             target.IsUntargetable = this.IsUntargetable;
             target.IsInvulnerable = this.IsInvulnerable;
             target.IsElite = this.IsElite;
+            target.IsTrashMob = this.IsTrashMob;
             target.IsUnique = this.IsUnique;
             target.IsMinion = this.IsMinion;
             target.IsRare = this.IsRare;
