@@ -362,6 +362,7 @@ namespace Trinity
             { 2440, 1286110481, -1453914927, "TransmogXbow_241_001" },
             { 2441, 1345846545, -1990947631, "TransmogAxe_241_003" },
             { 2445, 2089009826, 1862484578, "TransmogSword_241_003" },
+            { 331905, 2089009825, 0, "" }, //Amberwing
         };
 
         public static HashSet<SNOAnim> VaultAnimations = new HashSet<SNOAnim>
