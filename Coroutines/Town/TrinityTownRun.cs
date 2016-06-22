@@ -127,9 +127,13 @@ namespace Trinity.Coroutines.Town
                 await Coroutine.Wait(8000, () => ActorManager.Items.Any());
                 await Coroutine.Sleep(1000);
 
+                Logger.LogDebug("Started Town Run Loop");
+
                 var checkCycles = 2;
                 while (!TrinityPlugin.Player.IsInventoryLockedForGreaterRift)
                 {
+
+
                     if (!ActorManager.Items.Any())
                     {
                         Logger.LogError("Something went terribly wrong, no items found");
@@ -350,7 +354,7 @@ namespace Trinity.Coroutines.Town
         {
             if (ZetaDia.IsInTown || !ZetaDia.Me.IsFullyValid() || !UIElements.BackgroundScreenPCButtonRecall.IsEnabled)
             {
-                Logger.Log("Not portaling because in combat.");
+                Logger.Log("Not portaling because its no longer needed or invalid.");
                 return false;
             }
 
@@ -372,7 +376,7 @@ namespace Trinity.Coroutines.Town
             }
 
             await Coroutine.Sleep(500);
-            await Coroutine.Wait(5000, () => !Core.CastStatus.StoneOfRecall.IsCasting);
+            await Coroutine.Wait(5000, () => !Core.CastStatus.StoneOfRecall.IsCasting && !ZetaDia.IsInTown);
             //await CommonBehaviors.CreateUseTownPortal().ExecuteCoroutine();
             //await CommonCoroutines.UseTownPortal("TrinityPlugin can haz town now plz?");
             return true;

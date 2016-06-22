@@ -1592,6 +1592,7 @@ namespace Trinity
         public static HashSet<int> InteractWhiteListIds { get { return interactWhiteListIds; } }
         private static readonly HashSet<int> interactWhiteListIds = new HashSet<int>
         {
+
             //328830//x1_Fortress_Portal_Switch (328830)
             309432, // x1_westm_Bridge
             209133, // TentacleLord (209133)  QuestSnoId: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!
@@ -1860,6 +1861,8 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.a2dun_Zolt_Random_Breakable_Statue,
+
             (int)SNOActor.a3dun_Keep_Bridge,
 
             (int)SNOActor.x1_Catacombs_Breakable_Corner_Wall,

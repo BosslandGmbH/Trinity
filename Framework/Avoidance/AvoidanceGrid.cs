@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Adventurer;
 using Adventurer.Game.Exploration;
 using Trinity.DbProvider;
 using Trinity.Framework.Avoidance.Structures;
@@ -34,21 +36,31 @@ namespace Trinity.Framework.Avoidance
         {
             if (_currentGrid == null)
             {
-                Logger.Warn($"Grid is null, creating new grid.");
+                Logger.LogDebug($"Grid is null, creating new grid.");
                 _currentGrid = new AvoidanceGrid();
                 return _currentGrid;
             }
 
             if (_currentGrid == null || ZetaDia.WorldId != _currentGrid.WorldDynamicId)
             {
-                Logger.Warn("WorldId changed, returning new grid");
+                Logger.LogDebug("WorldId changed, returning new grid");
                 _currentGrid = new AvoidanceGrid();
             }
 
-            if (_currentGrid.NearestNode == null && DateTime.UtcNow.Subtract(_currentGrid.Created).TotalSeconds > 10)
+            if (!ScenesStorage.CurrentWorldScenes.Any())
             {
-                Logger.Warn($"WorldId changed, grid is oldand nearestNode is Null Age={DateTime.UtcNow.Subtract(_currentGrid.Created).TotalSeconds}");
-                _currentGrid = new AvoidanceGrid();
+                Logger.LogDebug("Scene data is not ready yet, waiting.");
+                return _currentGrid;
+            }
+
+            if (_currentGrid.NearestNode == null)
+            {
+                Logger.LogDebug($"Nearest node NULL AdvDiaPos={AdvDia.MyPosition} changed, grid is old and nearestNode is Null Age={DateTime.UtcNow.Subtract(_currentGrid.Created).TotalSeconds}");
+                if (DateTime.UtcNow.Subtract(_currentGrid.Created).TotalSeconds > 2)
+                {
+                    Logger.LogDebug($"WorldId changed and NearestNode == null, recreating grid");
+                    _currentGrid = new AvoidanceGrid();
+                }
             }
 
             return _currentGrid;
@@ -102,6 +114,8 @@ namespace Trinity.Framework.Avoidance
         {
             IsUpdatingNodes = true;
 
+            var sw = Stopwatch.StartNew();
+
             var nodes = newNodes.ExplorationNodes.SelectMany(n => n.Nodes, (p, c) => new AvoidanceNode(c)).ToList();
 
             UpdateInnerGrid(nodes);
@@ -116,7 +130,8 @@ namespace Trinity.Framework.Avoidance
 
             IsUpdatingNodes = false;
 
-            Logger.LogVerbose("Avoidance Grid updated");
+            sw.Stop();
+            Logger.LogVerbose($"Avoidance Grid updated NewNodes={newNodes.ExplorationNodes.Count} NearestNodeFound={NearestNode != null} Time={sw.Elapsed.TotalMilliseconds}ms");
         }
 
         public void FlagNodes(IEnumerable<AvoidanceNode> nodes, AvoidanceFlags flags, int weightModification = 0)

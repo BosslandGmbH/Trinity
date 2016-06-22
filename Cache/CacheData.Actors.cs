@@ -193,8 +193,11 @@ namespace Trinity.Cache
                 return false;
             }
 
-            if (cacheObject.ActorAttributes == null)
-                cacheObject.AddCacheInfo("NoAttributes");
+            if (cacheObject.ActorAttributes == null && cacheObject.ActorType != ActorType.ClientEffect)
+            {
+                cacheObject.AddCacheInfo("UnitNoAttributes");
+                return false;           
+            }
 
             if (cacheObject.IsDead)
             {
@@ -252,7 +255,7 @@ namespace Trinity.Cache
             }
 
             if (cacheObject.Distance < 4) return true;
-            if (cacheObject.IsBoss) return true;
+            if (cacheObject.IsElite) return true;
             if (cacheObject.IsTreasureGoblin) return true;
             if (cacheObject.ItemQuality >= ItemQuality.Legendary) return true;
             if (DataDictionary.LineOfSightWhitelist.Contains(cacheObject.ActorSNO)) return true;
