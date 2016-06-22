@@ -103,19 +103,19 @@
             <!--<TextBlock Text="{Binding}" Foreground="Gold" />-->
         </DataTemplate>
         
-        <!--<Style TargetType="{x:Type ListViewItem}">
+        <Style TargetType="{x:Type ListViewItem}">
             <Setter Property="TextElement.Foreground" Value="White" />
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding InCache}" Value="">
+                <DataTrigger Binding="{Binding IsIgnored}" Value="True">
                     <Setter Property="TextElement.Foreground" Value="Gray" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding TrinityType}" Value="Unknown">
+                <!--<DataTrigger Binding="{Binding Type}" Value="Unknown">
                     <Setter Property="TextElement.Foreground" Value="Gray" />
-                </DataTrigger>
+                </DataTrigger>-->
             </Style.Triggers>
-        </Style>-->
+        </Style>
 
         <Style x:Key="MainListViewStyle" TargetType="{x:Type ListView}">
             <Setter Property="SnapsToDevicePixels" Value="true"/>
@@ -133,10 +133,6 @@
                             </ScrollViewer>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsGrouping"
-                                Value="true">
-                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
-                            </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter TargetName="Border" Property="Background" Value="DarkSlateBlue"/>
                             </Trigger>
@@ -341,74 +337,84 @@
                             </Viewbox>
                         </Grid>
                     </Button>
-                    <ListView Grid.Row="0" Grid.Column="0" Tag="" ItemsSource="{Binding AllObjects}" IsEnabled="{Binding IsGridPanelExpanded}" SelectedItem="{Binding SelectedObject}" Style="{StaticResource MainListViewStyle}"                              
+                    <ListView Grid.Row="0" Grid.Column="0" Tag="" ItemsSource="{Binding AllObjects}" IsEnabled="{Binding IsGridPanelExpanded}" SelectedItem="{Binding SelectedObject}" Style="{StaticResource MainListViewStyle}"                                                    
                          ut:MouseObserver.Observe="True"
                          ut:MouseObserver.ObservedMouseOver="{Binding IsMouseOverGrid, Mode=OneWayToSource}">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
                         <ListView.View>
 
                             <ut:AutoSizedGridView GridView.ColumnCollection="{Binding GridViewColumns, Mode=OneWayToSource}">
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=RActorGuid}" Width="Auto">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=RActorGuid}" Width="Auto" DisplayMemberBinding="{Binding RActorGuid}">
                                     <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="RActorGuid"  Command="{Binding SortCommand}" CommandParameter="RActorGuid" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding RActorGuid}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>                                    
+                                    </GridViewColumn.CellTemplate>-->                                    
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ACDGuid}" Width="Auto">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ACDGuid}" Width="Auto"  DisplayMemberBinding="{Binding ACDGuid}">
                                     <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="ACDGuid" Command="{Binding SortCommand}" CommandParameter="ACDId" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding ACDGuid}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
+                                    </GridViewColumn.CellTemplate>-->
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ActorSNO}" Width="Auto">
-                                    <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="ActorSnoId" Command="{Binding SortCommand}" CommandParameter="ActorSNO" />
-                                    <GridViewColumn.CellTemplate>
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ActorSNO}" Width="Auto" DisplayMemberBinding="{Binding ActorSNO}">
+                                    <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="ActorSnoId" Command="{Binding SortCommand}" CommandParameter="ActorSNO"   />
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding ActorSNO}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>                                    
+                                    </GridViewColumn.CellTemplate>-->                                    
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=InternalName}" Width="225">
-                                    <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="InternalName"  Command="{Binding SortCommand}" CommandParameter="InternalName" />
-                                    <GridViewColumn.CellTemplate>
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=InternalName}" Width="225" DisplayMemberBinding="{Binding InternalName}">
+                                    <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="InternalName"  Command="{Binding SortCommand}" CommandParameter="InternalName"   />
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding InternalName}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
+                                    </GridViewColumn.CellTemplate>-->
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=RadiusDistance}" Width="65">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=RadiusDistance}" Width="65" DisplayMemberBinding="{Binding RadiusDistance, Mode=OneWay, Converter={StaticResource intToStringConverter}}">
                                     <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="RDistance" Command="{Binding SortCommand}" CommandParameter="RadiusDistance" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding RadiusDistance, Mode=OneWay, Converter={StaticResource intToStringConverter}}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>                                    
+                                    </GridViewColumn.CellTemplate>-->                                    
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Distance}" Width="65">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Distance}" Width="65" DisplayMemberBinding="{Binding Distance, Mode=OneWay, Converter={StaticResource intToStringConverter}}">
                                     <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="Distance" Command="{Binding SortCommand}" CommandParameter="Distance" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Distance, Mode=OneWay, Converter={StaticResource intToStringConverter}}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
+                                    </GridViewColumn.CellTemplate>-->
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Weight}" Width="80">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Weight}" Width="80" DisplayMemberBinding="{Binding Weight, Mode=OneWay, Converter={StaticResource intToStringConverter}}">
                                     <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="Weight" Command="{Binding SortCommand}" CommandParameter="Weight" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Weight, Mode=OneWay, Converter={StaticResource intToStringConverter}}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>                                    
+                                    </GridViewColumn.CellTemplate>-->                                    
                                 </ut:GridViewColumnExtended>
 
                                 <!--<ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=TargetingType}" Width="80">
@@ -420,49 +426,49 @@
                                     </GridViewColumn.CellTemplate>
                                 </ut:GridViewColumnExtended>-->
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Type}" Width="90">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Type}" Width="90" DisplayMemberBinding="{Binding Type, Mode=OneWay}">
                                     <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="Type" Command="{Binding SortCommand}" CommandParameter="Type" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Type, Mode=OneWay}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
+                                    </GridViewColumn.CellTemplate>-->
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ActorType}" Width="Auto">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ActorType}" Width="Auto" DisplayMemberBinding="{Binding ActorType, Mode=OneWay}">
                                     <GridViewColumnHeader BorderThickness="0" Content="ActorType" Command="{Binding SortCommand}" CommandParameter="ActorType" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding ActorType, Mode=OneWay}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>                                    
+                                    </GridViewColumn.CellTemplate>-->                                    
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Radius}" Width="Auto">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Radius}" Width="Auto" DisplayMemberBinding="{Binding Radius, Mode=OneWay, Converter={StaticResource intToStringConverter}}">
                                     <GridViewColumnHeader BorderThickness="0" Content="Radius" Command="{Binding SortCommand}" CommandParameter="Radius" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Radius, Mode=OneWay, Converter={StaticResource intToStringConverter}}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
+                                    </GridViewColumn.CellTemplate>-->
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=AnimationState}" Width="Auto">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=AnimationState}" Width="Auto" DisplayMemberBinding="{Binding AnimationState, Mode=OneWay}">
                                     <GridViewColumnHeader BorderThickness="0" Content="AnimState" Command="{Binding SortCommand}" CommandParameter="AnimationState" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding AnimationState, Mode=OneWay}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>                                    
+                                    </GridViewColumn.CellTemplate>-->                                    
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=CurrentAnimation}" Width="Auto">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=CurrentAnimation}" Width="Auto" DisplayMemberBinding="{Binding Animation, Mode=OneWay}">
                                     <GridViewColumnHeader BorderThickness="0" Content="Animation" Command="{Binding SortCommand}" CommandParameter="Animation" />
-                                    <GridViewColumn.CellTemplate>
+                                    <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Animation, Mode=OneWay}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
+                                    </GridViewColumn.CellTemplate>-->
                                 </ut:GridViewColumnExtended>
 
                             </ut:AutoSizedGridView>

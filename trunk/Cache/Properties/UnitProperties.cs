@@ -226,9 +226,16 @@ namespace Trinity.Cache.Properties
                 }
 
                 var lowerAnim = monster.AnimationNameLowerCase;
-                if (lowerAnim != null && (lowerAnim.Contains("_dead") || (lowerAnim.Contains("_death") && !lowerAnim.Contains("deathmaiden") && !lowerAnim.Contains("death_orb"))))
+                if (lowerAnim != null)
                 {
-                    return true;
+                    var mentionsDeath = lowerAnim.Contains("_dead") || lowerAnim.Contains("_death");
+                    if (mentionsDeath)
+                    {
+                        if (lowerAnim.Contains("deathmaiden") || lowerAnim.Contains("death_orb") || lowerAnim.Contains("raise_dead"))
+                            return false;
+
+                        return true;
+                    }
                 }
 
                 ////if (CurrentCacheObject.CommonData.GetAttribute<int>(ActorAttributeType.DeletedOnServer) > 0)

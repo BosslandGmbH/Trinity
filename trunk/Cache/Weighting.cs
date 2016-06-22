@@ -223,13 +223,13 @@ namespace Trinity
                             cacheObject.WeightInfo += string.Format("Max BloodShards ", cacheObject.InternalName);
                             continue;
                         }
-
-                        if (!Settings.Advanced.BetaPlayground && Core.Avoidance.InCriticalAvoidance(cacheObject.Position) || Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
-                        {
-                            cacheObject.Weight = 0;
-                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Intersected by Critical Avoidance.";
-                            continue;
-                        }
+                        
+                        //if (!Settings.Advanced.BetaPlayground && Core.Avoidance.InCriticalAvoidance(cacheObject.Position) || Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
+                        //{
+                        //    cacheObject.Weight = 0;
+                        //    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Intersected by Critical Avoidance.";
+                        //    continue;
+                        //}
 
                         cacheObject.Weight = MinWeight;
                         switch (cacheObject.Type)
@@ -1568,29 +1568,25 @@ namespace Trinity
                     if (bestTarget.IsBoss || bestTarget.IsSafeSpot || bestTarget.IsWaitSpot)
                         return info.TargetedTimes;
 
-                    if (!isNewTarget)
+                    if (isNewTarget)
                     {
-                        var diff = DateTime.UtcNow.Subtract(info.LastTargetedTime);
-                        info.TimeAsCurrentTarget = info.TimeAsCurrentTarget + diff;
+                        info.LastTargetedTime = DateTime.UtcNow;
                     }
 
                     var isUnusedDoor = bestTarget.Type == TrinityObjectType.Door && !bestTarget.IsUsed;
+                    var timeAsCurrentTarget = DateTime.UtcNow.Subtract(info.LastTargetedTime).TotalSeconds;
 
-                    if (info.TargetedTimes > GetBlacklistTargetTimes(bestTarget) && !bestTarget.IsBoss && !isUnusedDoor)
+                    if (info.TargetedTimes > GetBlacklistTargetTimes(bestTarget) && !bestTarget.IsElite && !isUnusedDoor)
                     {
                         GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(60), $"Targetted too many times ({info.TargetedTimes})");
                         info.TargetedTimes = 0;
                         info.BlacklistedTimes++;
-                    }
-                    else if (info.TimeAsCurrentTarget.TotalSeconds > 120 && !bestTarget.IsBoss && !isUnusedDoor)
+                    }                    
+                    else if (timeAsCurrentTarget > 120 && !bestTarget.IsElite && !isUnusedDoor && info.TargetedTimes > 25)
                     {
-                        GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TimeAsCurrentTarget.TotalSeconds}s))");
-                        info.TimeAsCurrentTarget = TimeSpan.Zero;
+                        GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TotalTimeAsCurrentTarget.TotalSeconds}s))");
+                        info.TotalTimeAsCurrentTarget = TimeSpan.Zero;
                         info.BlacklistedTimes++;
-                    }
-                    else
-                    {
-                        info.LastTargetedTime = DateTime.UtcNow;
                     }
 
                     return info.TargetedTimes;
@@ -2008,11 +2004,12 @@ namespace Trinity
         public DateTime LastTargetedTime;
         public int TargetedTimes;
         public int BlacklistedTimes;
-        public TimeSpan TimeAsCurrentTarget;
+        public TimeSpan TotalTimeAsCurrentTarget;
+        public DateTime TimeLastTargetted;
 
         public override string ToString()
         {
-            return base.ToString() + $"TimeAsCurrentTarget(ms)={TimeAsCurrentTarget.TotalMilliseconds:N2}";
+            return base.ToString() + $"TimeAsCurrentTarget(ms)={TotalTimeAsCurrentTarget.TotalMilliseconds:N2}";
         }
     }
 }
