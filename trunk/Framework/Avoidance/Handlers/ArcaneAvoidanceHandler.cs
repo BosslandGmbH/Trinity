@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
 using Trinity.Framework.Objects.Attributes;
@@ -35,15 +36,15 @@ namespace Trinity.Framework.Avoidance.Handlers
                     continue;
                 }
 
-                var part = avoidance.Data.GetPart(actor.ActorSNO);
+                var part = avoidance.Data.GetPart(actor.ActorSnoId);
 
                 if (part.MovementType == MovementType.Rotation)
                 {
                     Rotator rotator;
-                    if (!_rotators.TryGetValue(actor.RActorGuid, out rotator))
+                    if (!_rotators.TryGetValue(actor.RActorId, out rotator))
                     {
                         rotator = CreateNewRotator(actor);
-                        _rotators.Add(actor.RActorGuid, rotator);
+                        _rotators.Add(actor.RActorId, rotator);
                         Task.FromResult(rotator.Rotate());
                     }
                     
@@ -76,7 +77,7 @@ namespace Trinity.Framework.Avoidance.Handlers
             }
         }
 
-        private Rotator CreateNewRotator(TrinityCacheObject actor)
+        private Rotator CreateNewRotator(TrinityActor actor)
         {
             //Logger.Log("Creating New Rotator");
 
@@ -86,7 +87,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 RotateAmount = 360,
                 RotateAntiClockwise = actor.InternalName.ToLower().Contains("_reverse"),
                 DebugLogging = false,
-                StartAngleDegrees = actor.Object.Movement.RotationDegrees
+                StartAngleDegrees = actor.RotationDegrees
             };
         }
 

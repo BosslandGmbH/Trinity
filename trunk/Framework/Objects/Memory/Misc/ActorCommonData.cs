@@ -1,6 +1,8 @@
-﻿using Trinity.Framework.Objects.Memory.Containers;
+﻿using System;
+using System.Collections.Generic;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Objects.Memory.Misc
@@ -24,7 +26,7 @@ namespace Trinity.Framework.Objects.Memory.Misc
         public GizmoType GizmoType => ReadOffset<GizmoType>(0x180);
         public ActorType ActorType => ReadOffset<ActorType>(0x184);
         public float HitPoints => ReadOffset<float>(0x188);
-        public LinkedList<int> ItemAffixes => ReadObject<LinkedList<int>>(0x148);
+        public Containers.LinkedList<int> ItemAffixes => ReadObject<Containers.LinkedList<int>>(0x148);
         public int MagicPrefixGameBalanceId => ItemAffixes.Last.Value;
         public int MagicSuffixGameBalanceId => ItemAffixes.First.Value; 
         public int RareItemPartAIsPrefix => ReadOffset<int>(0x170);
@@ -32,7 +34,17 @@ namespace Trinity.Framework.Objects.Memory.Misc
         public int RareItemPartBStringListId => ReadOffset<int>(0x174); 
         public int RareItemPartBStringListIndex => ReadOffset<int>(0x178);
         public int GoodFood => ReadOffset<int>(0x2c0);
-        public bool IsDisposed => GoodFood == unchecked((int)0xFEEDFACE);
+        public bool IsDisposed => GoodFood != 0x600df00d; //unchecked((int)0xFEEDFACE);
+        public List<int> AffixIds => ReadArray<int>(0x1AC, 8); // 0x1a4 (2 affixes previous to this? (-8))
+        public IntPtr AnimationInfoAddress => ReadOffset<IntPtr>(0x210);
+        public SNOAnim Animation => AnimationInfoAddress != IntPtr.Zero ? Read<SNOAnim>(AnimationInfoAddress + 0x04) : default(SNOAnim);
+        public AnimationState AnimationState => AnimationInfoAddress != IntPtr.Zero ? Read<AnimationState>(AnimationInfoAddress + 0xD8) : default(AnimationState);
+
+
+        //public object ItemType { get; set; }
+        //public DBItemBaseType DBItemBaseType { get; set; }
+        //public FollowerType FollowerSpecialType { get; set; }
+
     }
 }
 

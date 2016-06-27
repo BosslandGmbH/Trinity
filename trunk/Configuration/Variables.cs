@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Trinity.Config;
 using Trinity.DbProvider;
+using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Modules;
 using Trinity.ItemRules;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
@@ -13,7 +15,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity
 {
-    public partial class TrinityPlugin : IPlugin
+    public partial class TrinityPlugin
     {
         private static TrinitySetting _Settings = new TrinitySetting();
 
@@ -60,7 +62,7 @@ namespace Trinity
         /// This object is used for the main handling - the "current target" etc. as selected by the target-selecter, whether it be a unit, an item, a shrine, anything. 
         /// It's cached data using my own class, so I never need to hit D3 memory to "re-check" the data or to call an interact request or anything
         /// </summary>
-        internal static TrinityCacheObject CurrentTarget
+        internal static TrinityActor CurrentTarget
         {
             get { return _currentTarget; }
             set
@@ -195,7 +197,7 @@ namespace Trinity
         /// <summary>
         /// Store the date-time when we *FIRST* picked this target, so we can blacklist after X period of time targeting
         /// </summary>
-        private static DateTime _lastPickedTargetTime = DateTime.MinValue;
+        public static DateTime LastPickedTargetTime = DateTime.MinValue;
 
         // These values below are set on a per-class basis later on, so don't bother changing them here! These are the old default values
         public static double PlayerEmergencyHealthPotionLimit = 0.35;
@@ -254,7 +256,7 @@ namespace Trinity
 
         private static string _currentAvoidanceName;
 
-        private static TrinityCacheObject _currentAvoidance;
+        private static TrinityActor _currentAvoidance;
 
         /// <summary>
         /// This lets us know if there is a target but it's in avoidance so we can just "stay put" until avoidance goes
@@ -354,9 +356,9 @@ namespace Trinity
          */
 
         /// <summary>
-        /// This contains the active cache of DiaObjects
+        /// This contains the active cache of valid objects 
         /// </summary>
-        internal static List<TrinityCacheObject> ObjectCache => CacheData.Actors.Items;
+        internal static List<TrinityActor> Targets => CacheData.Targets.Items;
 
         // From main RefreshDiaobjects
         /// <summary>
@@ -369,7 +371,7 @@ namespace Trinity
         /// </summary>
         public static int LastTargetRactorGUID;
 
-        internal static int LastTargetACDGuid;
+        internal static int LastTargetAcdId;
         /// <summary>
         /// The number of monsters within melee range distance of the player
         /// </summary>
@@ -475,7 +477,7 @@ namespace Trinity
         }
 
         private static DateTime eventStartTime = DateTime.MinValue;
-        private static TrinityCacheObject _currentTarget;
+        private static TrinityActor _currentTarget;
 
         public static DateTime EventStartTime
         {

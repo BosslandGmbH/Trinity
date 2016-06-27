@@ -30,7 +30,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 if (actor == null)
                     continue;
 
-                var part = avoidance.Data.GetPart(actor.ActorSNO);
+                var part = avoidance.Data.GetPart(actor.ActorSnoId);
 
                 if (actor.IsDead || actor.CommonData == null || !actor.CommonData.IsValid || actor.CommonData.IsDisposed)
                 {
@@ -40,10 +40,10 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                 if (part.Type == PartType.VisualEffect)
                 {
-                    if (actor.CommonData.GetAttribute<int>(((int)part.Power << 12) + ((int)part.Attribute & 0xFFF)) == 1)
+                    if (actor.Attributes.GetAttribute<bool>(part.Attribute, part.Power))
                     {
                         Logger.Log("Power {0} on {1} ({1}) in Attribute {2}", part.Power, actor.InternalName, part.Name, part.Attribute);
-                        var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 30f, actor.Unit.Movement.Rotation)).SelectMany(n => n.AdjacentNodes).Distinct();
+                        var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 30f, actor.Rotation)).SelectMany(n => n.AdjacentNodes).Distinct();
                         grid.FlagNodes(nodes, AvoidanceFlags.Avoidance, 10);
                     }
                 }

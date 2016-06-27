@@ -11,7 +11,8 @@ using Trinity.Config;
 using Trinity.Config.Combat;
 using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Framework.Utilities;
+using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Modules;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Reference;
@@ -321,10 +322,10 @@ namespace Trinity.Combat.Abilities
             get
             {
                 return
-                   TrinityPlugin.ObjectCache.Any(o => o.IsElite &&
+                   TrinityPlugin.Targets.Any(o => o.IsElite &&
                           o.MonsterAffixes.HasFlag(MonsterAffixes.ArcaneEnchanted | MonsterAffixes.Frozen | MonsterAffixes.Jailer | MonsterAffixes.Molten | MonsterAffixes.Nightmarish) ||
                           (o.MonsterAffixes.HasFlag(MonsterAffixes.Electrified) && o.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage))) ||
-                        TrinityPlugin.ObjectCache.Any(o => o.IsBoss);
+                        TrinityPlugin.Targets.Any(o => o.IsBoss);
             }
         }
 
@@ -407,7 +408,7 @@ namespace Trinity.Combat.Abilities
 
         public static HashSet<SNOPower> Hotbar => CacheData.Hotbar.ActivePowers;
         public static PlayerCache Player => CacheData.Player;
-        public static TrinityCacheObject CurrentTarget => TrinityPlugin.CurrentTarget;
+        public static TrinityActor CurrentTarget => TrinityPlugin.CurrentTarget;
 
         public static TrinityPower DefaultPower
         {
@@ -420,7 +421,7 @@ namespace Trinity.Combat.Abilities
                     {
                         SNOPower = DefaultWeaponPower,
                         MinimumRange = DefaultWeaponDistance,
-                        TargetACDGUID = CurrentTarget.ACDGuid,
+                        TargetAcdId = CurrentTarget.AcdId,
                     };
                 }
                 return new TrinityPower();
@@ -435,7 +436,7 @@ namespace Trinity.Combat.Abilities
         {
             get
             {
-                ACDItem lhItem = CacheData.Inventory.Equipped.FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand);
+                var lhItem = CacheData.Inventory.Equipped.FirstOrDefault(i => i.InventorySlot == InventorySlot.LeftHand);
                 if (lhItem == null)
                     return SNOPower.None;
 
@@ -1201,7 +1202,7 @@ namespace Trinity.Combat.Abilities
                         CurrentTarget != null ? CurrentTarget.InternalName : "Null"
                         );
 
-                    return skill.ToPower(castRange, targetUnit.Position, targetUnit.ACDGuid, ticksBefore, ticksAfter);
+                    return skill.ToPower(castRange, targetUnit.Position, targetUnit.AcdId, ticksBefore, ticksAfter);
                 }
             }
 
@@ -1220,7 +1221,7 @@ namespace Trinity.Combat.Abilities
                     skill.AreaEffectRadius
                     );
 
-                return skill.ToPower(castRange, target.Position, target.ACDGuid, ticksBefore, ticksAfter);
+                return skill.ToPower(castRange, target.Position, target.AcdId, ticksBefore, ticksAfter);
             }
 
             return skill.ToPower(castRange, CurrentTarget.Position);
@@ -1231,12 +1232,12 @@ namespace Trinity.Combat.Abilities
         /// </summary>
         /// <param name="skill">skill to be used</param>
         /// <returns>target position</returns>
-        public static TrinityCacheObject GetBestAreaEffectTarget(Skill skill)
+        public static TrinityActor GetBestAreaEffectTarget(Skill skill)
         {
             // Avoid bot choosing a target that is too far away (and potentially running towards it) when there is danger close by.
             var searchRange = (float)(skill.IsGeneratorOrPrimary && Enemies.CloseNearby.Units.Any() ? skill.Meta.CastRange * 0.5 : skill.Meta.CastRange);
 
-            TrinityCacheObject target;
+            TrinityActor target;
             switch (skill.Meta.AreaEffectShape)
             {
                 case AreaEffectShapeType.Beam:
@@ -1419,7 +1420,7 @@ namespace Trinity.Combat.Abilities
         }
 
         public static bool IsDoingGoblinKamakazi { get; set; }
-        public static TrinityCacheObject KamakaziGoblin { get; set; }
+        public static TrinityActor KamakaziGoblin { get; set; }
         public static Func<bool> IsWaitingForPower = () => false;
 
         public static HashSet<string> HighHitPointTrashMobNames = new HashSet<string>

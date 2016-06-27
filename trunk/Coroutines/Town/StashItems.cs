@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls.WebParts;
 using Buddy.Coroutines;
 using IronPython.Modules;
-using Trinity.Framework.Actors;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
 using Trinity.Items;
@@ -24,7 +23,8 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Actors.Gizmos;
-using ActorManager = Trinity.Framework.Actors.ActorManager;
+using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Extensions = Zeta.Common.Extensions;
 
 namespace Trinity.Coroutines.Town
@@ -39,7 +39,7 @@ namespace Trinity.Coroutines.Town
 
         private static readonly Dictionary<int, bool> Cache = new Dictionary<int, bool>();
 
-        public static bool ShouldStash(CachedItem i)
+        public static bool ShouldStash(TrinityItem i)
         {
             if (i.IsUnidentified)
                 return true;
@@ -205,18 +205,18 @@ namespace Trinity.Coroutines.Town
             return true;
         }
 
-        public static int GetStashPage(IItem item)
+        public static int GetStashPage(TrinityItem item)
         {
             if (item.InventorySlot != InventorySlot.SharedStash) return -1;
             return (int)Math.Floor(item.InventoryRow / 10d);
         }
 
-        public static IItem GetItemAtLocation(int col, int row)
+        public static TrinityItem GetItemAtLocation(int col, int row)
         {
             return Inventory.Stash.Items.FirstOrDefault(i => i.InventoryRow == row && i.InventoryColumn == col);
         }
 
-        public static IItem GetNextStashItem(int currentCol, int currentRow, int actorSnoId = -1)
+        public static TrinityItem GetNextStashItem(int currentCol, int currentRow, int actorSnoId = -1)
         {
             if (actorSnoId > 0)
             {
@@ -261,7 +261,7 @@ namespace Trinity.Coroutines.Town
             return true;
         }
 
-        public static IEnumerable<CachedItem> GetItemsOnStashPage(int page)
+        public static IEnumerable<TrinityItem> GetItemsOnStashPage(int page)
         {
             return Inventory.Stash.Items.Where(i => i.InventoryRow >= page * 10 && i.InventoryRow < page * 10 + 10);
         }
@@ -293,11 +293,11 @@ namespace Trinity.Coroutines.Town
         //    var rowOnPage = 0;
         //    var map = GetInventoryMap();
 
-        //    var itemsMovedAway = new List<IItem>();
+        //    var itemsMovedAway = new List<TrinityItem>();
         //    var items = GetItemsOnStashPage(page).ToList();
         //    var equipment = items.Where(i => i.IsEquipment).OrderBy(i => i.RawItemType).ThenBy(i => i.ActorSnoId);
         //    var other = items.Where(i => !i.IsEquipment).OrderBy(i => i.RawItemType).ThenBy(i => i.ActorSnoId);
-        //    var orderedItems = new Queue<CachedItem>(other).AddRange(equipment);
+        //    var orderedItems = new Queue<TrinityItem>(other).AddRange(equipment);
 
         //    // Step through each square on the stash page.
         //    while (orderedItems.Any())
@@ -305,7 +305,7 @@ namespace Trinity.Coroutines.Town
         //        var itemToMove = orderedItems.Dequeue();
         //        var targetRow = page * 10 + rowOnPage;
 
-        //        CachedItem itemInTargetLocation, itemInLocationBelow, itemInLocationAbove;
+        //        TrinityItem itemInTargetLocation, itemInLocationBelow, itemInLocationAbove;
 
         //        if (targetCol > 6 || rowOnPage > 9)
         //            break;
@@ -399,7 +399,7 @@ namespace Trinity.Coroutines.Town
         /// <summary>
         /// Get the stash page where items should ideally be placed, ignoring if it can actually be placed there.
         /// </summary>
-        public static int GetIdealStashPage(IItem item)
+        public static int GetIdealStashPage(TrinityItem item)
         {
             if (TrinityPlugin.Settings.Loot.TownRun.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
             {
@@ -412,7 +412,7 @@ namespace Trinity.Coroutines.Town
             return -1;
         }
 
-        private static bool AllowedToStash(bool dontStashCraftingMaterials, CachedItem i)
+        private static bool AllowedToStash(bool dontStashCraftingMaterials, TrinityItem i)
         {
             return !dontStashCraftingMaterials || !i.IsCraftingReagent;
         }
@@ -425,7 +425,7 @@ namespace Trinity.Coroutines.Town
             //{ RawItemType.Potion, -1 },
         };
 
-        public static int GetBestStashLocation(IItem item, out int col, out int row)
+        public static int GetBestStashLocation(TrinityItem item, out int col, out int row)
         {
             col = 0;
             row = 0;
@@ -486,7 +486,7 @@ namespace Trinity.Coroutines.Town
             RawItemType.CraftingPlanSmith,
         };
 
-        public static bool CanPutItemInStashPage(IItem item, int stashPageNumber, out int col, out int row)
+        public static bool CanPutItemInStashPage(TrinityItem item, int stashPageNumber, out int col, out int row)
         {
             var itemsOnStashPage = GetInventoryMap();
 
@@ -528,7 +528,7 @@ namespace Trinity.Coroutines.Town
             return false;
         }
 
-        private static bool CanPlaceOnPage(IItem item, int stashPageNumber, ref int col, ref int row, InventoryMap itemsOnStashPage)
+        private static bool CanPlaceOnPage(TrinityItem item, int stashPageNumber, ref int col, ref int row, InventoryMap itemsOnStashPage)
         {
             for (int i = 0; i < 10; i++)
             {
@@ -543,7 +543,7 @@ namespace Trinity.Coroutines.Town
             return false;
         }
 
-        private static bool CanStackOnPage(IItem item, int stashPageNumber, ref int col, ref int row, InventoryMap itemsOnStashPage)
+        private static bool CanStackOnPage(TrinityItem item, int stashPageNumber, ref int col, ref int row, InventoryMap itemsOnStashPage)
         {
 
             if (item.IsUnidentified)
@@ -597,7 +597,7 @@ namespace Trinity.Coroutines.Town
         //    return new InventorySquare(0, 0);
         //}
 
-        private static bool TryGetStackLocation(IItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
+        private static bool TryGetStackLocation(TrinityItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
         {
             var loc = new Tuple<int, int>(col, row);
 
@@ -630,7 +630,7 @@ namespace Trinity.Coroutines.Town
             return false;
         }
 
-        private static bool TryGetStashingLocation(IItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
+        private static bool TryGetStashingLocation(TrinityItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
         {
             var loc = new Tuple<int, int>(col, row);
             var isSquareEmpty = !map.ContainsKey(loc);
@@ -662,9 +662,9 @@ namespace Trinity.Coroutines.Town
         }
 
 
-        public class InventoryMap : Dictionary<Tuple<int, int>, CachedItem>
+        public class InventoryMap : Dictionary<Tuple<int, int>, TrinityItem>
         {
-            public InventoryMap(Dictionary<Tuple<int, int>, CachedItem> dictionary) : base(dictionary)
+            public InventoryMap(Dictionary<Tuple<int, int>, TrinityItem> dictionary) : base(dictionary)
             {
             }
         }

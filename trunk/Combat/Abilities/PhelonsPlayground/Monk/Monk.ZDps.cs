@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Adventurer.Util;
 using Trinity.Config.Combat;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -19,7 +20,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             {
                 if (Player.IsIncapacitated) return null;
 
-                TrinityCacheObject target;
+                TrinityActor target;
                 if (ShouldDashingStrike(out target))
                     return CastDashingStrike(target);
 
@@ -56,7 +57,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
 
             private static TrinityPower Walk(float maxRange, bool objectsInAoe) => new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.BestTankPosition(maxRange, objectsInAoe));
 
-            private static bool ShouldDashingStrike(out TrinityCacheObject target)
+            private static bool ShouldDashingStrike(out TrinityActor target)
             {
                 target = null;
 
@@ -82,9 +83,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                 return false;
             }
 
-            private static TrinityPower CastDashingStrike(TrinityCacheObject target)
+            private static TrinityPower CastDashingStrike(TrinityActor target)
             {
-                return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 65, target.ACDGuid);
+                return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 65, target.AcdId);
             }
 
             private static bool ShouldInnerSanctuary
@@ -204,7 +205,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
 
             }
 
-            private static bool ShouldCripplingWave(out TrinityCacheObject target)
+            private static bool ShouldCripplingWave(out TrinityActor target)
             {
                 target = null;
 
@@ -222,9 +223,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
                 return target != null;
             }
 
-            private static TrinityPower CastCripplingWave(TrinityCacheObject target)
+            private static TrinityPower CastCripplingWave(TrinityActor target)
             {
-                return new TrinityPower(SNOPower.Monk_CripplingWave, 12f, target.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_CripplingWave, 12f, target.AcdId);
             }
         }
     }

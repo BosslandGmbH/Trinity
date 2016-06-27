@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using log4net.Core;
+using Trinity.Framework.Modules;
 using Trinity.Helpers;
 using Trinity.Technicals;
 using Zeta.Game;

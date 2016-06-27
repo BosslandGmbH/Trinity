@@ -23,7 +23,7 @@
 //        /// <summary>
 //        /// This will eventually be come our single source of truth and we can get rid of most/all of the below "c_" variables
 //        /// </summary>
-//        private static TrinityCacheObject CurrentCacheObject = new TrinityCacheObject();
+//        private static TrinityActor CurrentCacheObject = new TrinityActor();
 
 //        private static double c_HitPointsPct = 0d;
 //        private static double c_HitPoints = 0d;
@@ -39,7 +39,7 @@
 //        private static bool c_IsAncient = false;
 //        private static ItemQuality c_ItemQuality = ItemQuality.Invalid;
 //        private static ItemType c_DBItemType = ItemType.Unknown;
-//        private static ItemBaseType c_DBItemBaseType = ItemBaseType.None;
+//        private static DBItemBaseType c_DBItemBaseType = DBItemBaseType.None;
 //        private static FollowerType c_item_tFollowerType = FollowerType.None;
 //        private static TrinityItemType _cItemTinityItemType = TrinityItemType.Unknown;
 //        private static MonsterSize c_unit_MonsterSize = MonsterSize.Unknown;
@@ -63,9 +63,9 @@
 //        private static MonsterAffixes c_MonsterAffixes = MonsterAffixes.None;
 //        //private static bool c_IsFacingPlayer;
 
-//        private static bool TryCacheActor(DiaObject freshObject, out TrinityCacheObject cacheObject)
+//        private static bool TryCacheActor(DiaObject freshObject, out TrinityActor cacheObject)
 //        {
-//            cacheObject = new TrinityCacheObject(freshObject);
+//            cacheObject = new TrinityActor(freshObject);
 
 //            if (!ShouldCacheCommon(cacheObject))
 //                return false;
@@ -112,7 +112,7 @@
 //            }
 //        }
 
-//        private static bool ShouldCacheCommon(TrinityCacheObject cacheObject)
+//        private static bool ShouldCacheCommon(TrinityActor cacheObject)
 //        {
 //            if (!cacheObject.IsValid)
 //            {
@@ -164,12 +164,12 @@
 //            return true;
 //        }
 
-//        private static bool ShouldCacheUnit(TrinityCacheObject cacheObject)
+//        private static bool ShouldCacheUnit(TrinityActor cacheObject)
 //        {
 //            throw new NotImplementedException();
 //        }
 
-//        private static bool ShouldIncludeGold(TrinityCacheObject cacheObject)
+//        private static bool ShouldIncludeGold(TrinityActor cacheObject)
 //        {
 //            if (!Settings.Loot.Pickup.PickupGold)
 //            {
@@ -184,7 +184,7 @@
 //            return true;
 //        }
 
-//        private static bool ShouldCacheItem(TrinityCacheObject cacheObject)
+//        private static bool ShouldCacheItem(TrinityActor cacheObject)
 //        {
 //            if (!cacheObject.IsPickupNoClick && !TrinityItemManager.CachedIsValidTwoSlotBackpackLocation)
 //            {
@@ -204,7 +204,7 @@
 //                return false;
 //            }
 
-//            if (cacheObject.ItemQuality <= ItemQuality.Rare4 && cacheObject.Distance > CharacterSettings.Instance.LootRadius)
+//            if (cacheObject.ItemQualityLevel <= ItemQuality.Rare4 && cacheObject.Distance > CharacterSettings.Instance.LootRadius)
 //            {
 //                cacheObject.AddCacheInfo($"OutOfRange Limit={CharacterSettings.Instance.LootRadius}");
 //                return false;
@@ -219,7 +219,7 @@
 //            return true;
 //        }
 
-//        private static bool ShouldCacheGizmo(TrinityCacheObject cacheObject)
+//        private static bool ShouldCacheGizmo(TrinityActor cacheObject)
 //        {
 //            if (cacheObject.IsUsed)
 //            {
@@ -245,7 +245,7 @@
 //                return false;
 //            }
 
-//            if (!DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSNO) && Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.ForceIgnore)
+//            if (!DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSnoId) && Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.ForceIgnore)
 //            {
 //                cacheObject.AddCacheInfo("ForceIgnoreDestructibles");
 //                return false;
@@ -328,10 +328,10 @@
 //             *  Get primary reference objects and keys
 //             */
 //            //CurrentCacheObject.Object = c_diaObject = freshObject;
-//            //CurrentCacheObject.ActorSNO = freshObject.ActorSnoId;
+//            //CurrentCacheObject.ActorSnoId = freshObject.ActorSnoId;
 //            //var commonData = freshObject.CommonData;
 
-//            if (DataDictionary.AvoidanceSNO.Contains(CurrentCacheObject.ActorSNO))
+//            if (DataDictionary.AvoidanceSNO.Contains(CurrentCacheObject.ActorSnoId))
 //            {
 //                c_IgnoreReason = "AvoidanceSNO";
 //                return false;
@@ -340,24 +340,24 @@
 //            try
 //            {
 //                //var rActorGuid = freshObject.RActorId;
-//                //CurrentCacheObject.RActorGuid = rActorGuid;
+//                //CurrentCacheObject.RActorId = rActorGuid;
 //                //var annId = 0;
 //                //if (commonData != null)
 //                //{
 //                //    annId = commonData.AnnId;
 //                //}
 //                //CurrentCacheObject.AnnId = annId;
-//                //CurrentCacheObject.ACDGuid = freshObject.ACDId;
+//                //CurrentCacheObject.AcdId = freshObject.AcdId;
 //                //CurrentCacheObject.CommonData = commonData;
 //                //CurrentCacheObject.InternalName = NameNumberTrimRegex.Replace(freshObject.Name, "");
 //                //CurrentCacheObject.InternalNameLowerCase = CurrentCacheObject.InternalName.ToLower();                
 //                //CurrentCacheObject.ActorType = freshObject.ActorType;
-//                //CurrentCacheObject.ACDGuid = freshObject.ACDId;
+//                //CurrentCacheObject.AcdId = freshObject.AcdId;
 //                //CurrentCacheObject.GizmoType = CurrentCacheObject.Object.ActorInfo.GizmoType;                
 //                //CurrentCacheObject.Animation = anim;
 //                //CurrentCacheObject.AnimationNameLowerCase = DataDictionary.GetAnimationNameLowerCase(anim);
 
-//                CurrentCacheObject = new TrinityCacheObject(freshObject);
+//                CurrentCacheObject = new TrinityActor(freshObject);
 
 //            }
 //            catch (Exception ex)
@@ -385,7 +385,7 @@
 //            }
 
 //            //float radius;
-//            //if (!DataDictionary.CustomObjectRadius.TryGetValue(CurrentCacheObject.ActorSNO, out radius))
+//            //if (!DataDictionary.CustomObjectRadius.TryGetValue(CurrentCacheObject.ActorSnoId, out radius))
 //            //{
 //            //    try
 //            //    {
@@ -403,13 +403,13 @@
 //            //CurrentCacheObject.Radius = radius;
 
 //            // Have ActorSnoId Check for SNO based navigation obstacle hashlist
-//            //c_IsObstacle = DataDictionary.NavigationObstacleIds.Contains(CurrentCacheObject.ActorSNO);
+//            //c_IsObstacle = DataDictionary.NavigationObstacleIds.Contains(CurrentCacheObject.ActorSnoId);
 
 //            //// Object Type
 //            //CurrentCacheObject.Type = StaticPropertyUtils.GetObjectType(
 //            //    CurrentCacheObject.CommonData,
 //            //    CurrentCacheObject.ActorType,
-//            //    CurrentCacheObject.ActorSNO,
+//            //    CurrentCacheObject.ActorSnoId,
 //            //    CurrentCacheObject.GizmoType,
 //            //    CurrentCacheObject.InternalName);
 
@@ -458,7 +458,7 @@
 //            //if (CurrentCacheObject.GameBalanceID == -1)
 //            //{
 //            //    Logger.Log("Invalid GameBalanceId (-1) for {0} SNO={1} ACDId={2}", 
-//            //        CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId, CurrentCacheObject.ACDId);
+//            //        CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId, CurrentCacheObject.AcdId);
 //            //}
 
 //            if (CurrentCacheObject.IsDead)
@@ -502,7 +502,7 @@
 //            //if (c_IsObstacle)
 //            //{
 //            //    Vector3 pos;
-//            //    if (!CacheData.Position.TryGetValue(CurrentCacheObject.RActorGuid, out pos))
+//            //    if (!CacheData.Position.TryGetValue(CurrentCacheObject.RActorId, out pos))
 //            //    {
 //            //        CurrentCacheObject.Position = c_diaObject.Position;
 //            //        //CacheData.Position.Add(CurrentCacheObject.RActorId, CurrentCacheObject.Position);
@@ -512,7 +512,7 @@
 
 //            //    CacheData.NavigationObstacles.Add(new CacheObstacleObject()
 //            //    {
-//            //        ActorSNO = CurrentCacheObject.ActorSNO,
+//            //        ActorSNO = CurrentCacheObject.ActorSnoId,
 //            //        Name = CurrentCacheObject.InternalName,
 //            //        Position = CurrentCacheObject.Position,
 //            //        Radius = CurrentCacheObject.Radius,
@@ -522,9 +522,9 @@
 //            //    // Forge Still being walked into, increasing radius.
 //            //    // [228D379C] Type: Monster Name: a3_Battlefield_demonic_forge-661599 ActorSnoId: 174900, Distance: 9.246254
 //            //    var forceIds = new HashSet<int> {174900, 185391};
-//            //    var r = forceIds.Contains(CurrentCacheObject.ActorSNO) ? 25f : CurrentCacheObject.Radius;
+//            //    var r = forceIds.Contains(CurrentCacheObject.ActorSnoId) ? 25f : CurrentCacheObject.Radius;
 
-//            //    MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, r);
+//            //    MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, r);
 
 //            //    c_IgnoreReason = "NavigationObstacle";
 //            //    AddToCache = false;
@@ -569,7 +569,7 @@
 //            CurrentCacheObject.Type = CurrentCacheObject.Type;
 //            if (CurrentCacheObject.Type != TrinityObjectType.Item)
 //            {
-//                CurrentCacheObject.ObjectHash = HashGenerator.GenerateWorldObjectHash(CurrentCacheObject.ActorSNO, CurrentCacheObject.Position, CurrentCacheObject.Type.ToString(), CurrentWorldDynamicId);
+//                CurrentCacheObject.ObjectHash = HashGenerator.GenerateWorldObjectHash(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Position, CurrentCacheObject.Type.ToString(), CurrentWorldDynamicId);
 //            }
 
 //            // Check Blacklists
@@ -586,7 +586,7 @@
 //                }
 //            }
 
-//            if (DataDictionary.AvoidanceSNO.Contains(CurrentCacheObject.ActorSNO))
+//            if (DataDictionary.AvoidanceSNO.Contains(CurrentCacheObject.ActorSnoId))
 //            {
 //                // Avoidance is handled elsewhere, exclude avoidance actors from this cache so 
 //                // they dont get targetted with spells. (frozen pulse monster etc)
@@ -602,8 +602,8 @@
 
 //            if (CurrentCacheObject.IsObstacle)
 //            {
-//                var radius = DataDictionary.PathFindingObstacles[CurrentCacheObject.ActorSNO];
-//                MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, radius);
+//                var radius = DataDictionary.PathFindingObstacles[CurrentCacheObject.ActorSnoId];
+//                MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, radius);
 //            }
 
 //            if (!ShouldAddToCacheByType(CurrentCacheObject.Type))
@@ -684,10 +684,10 @@
 
 //            c_IgnoreReason = "";
 
-//            //CurrentCacheObject.ACDGuid = CurrentCacheObject.ACDGuid;
-//            //CurrentCacheObject.ActorSNO = CurrentCacheObject.ActorSNO;
+//            //CurrentCacheObject.AcdId = CurrentCacheObject.AcdId;
+//            //CurrentCacheObject.ActorSnoId = CurrentCacheObject.ActorSnoId;
 //            //CurrentCacheObject.DBItemBaseType = c_DBItemBaseType;
-//            //CurrentCacheObject.DBItemType = c_DBItemType;
+//            //CurrentCacheObject.ItemType = c_DBItemType;
 //            //CurrentCacheObject.Distance = CurrentCacheObject.Distance;
 //            //CurrentCacheObject.DynamicID = CurrentCacheObject.AnnId;
 //            //CurrentCacheObject.FollowerType = c_item_tFollowerType;
@@ -696,7 +696,7 @@
 //            CurrentCacheObject.HasBeenInLoS = c_HasBeenInLoS;
 //            //CurrentCacheObject.HasBeenNavigable = c_HasBeenNavigable;
 //            //CurrentCacheObject.HasBeenRaycastable = c_HasBeenRaycastable;
-//            //CurrentCacheObject.HasDotDPS = c_HasDotDPS;
+//            //CurrentCacheObject.HasDotDps = c_HasDotDPS;
 //            //CurrentCacheObject.HitPoints = c_HitPoints;
 //            //CurrentCacheObject.HitPointsPct = c_HitPointsPct;
 //            //CurrentCacheObject.InternalName = CurrentCacheObject.InternalName;
@@ -709,11 +709,11 @@
 //            //CurrentCacheObject.IsUnique = c_unit_IsUnique;
 //            //CurrentCacheObject.ItemLevel = c_ItemLevel;
 //            //CurrentCacheObject.ItemLink = c_ItemLink;
-//            //CurrentCacheObject.ItemQuality = c_ItemQuality;
+//            //CurrentCacheObject.ItemQualityLevel = c_ItemQuality;
 //            //CurrentCacheObject.MonsterAffixes = c_MonsterAffixes;
 //            //CurrentCacheObject.MonsterSize = c_unit_MonsterSize;
 //            //CurrentCacheObject.OneHanded = c_IsOneHandedItem;
-//            //CurrentCacheObject.RActorGuid = CurrentCacheObject.RActorGuid;
+//            //CurrentCacheObject.RActorId = CurrentCacheObject.RActorId;
 //            //CurrentCacheObject.Radius = CurrentCacheObject.Radius;
 //            //CurrentCacheObject.ItemType = _cItemTinityItemType;
 //            //CurrentCacheObject.TwoHanded = c_IsTwoHandedItem;
@@ -735,7 +735,7 @@
 //                case TrinityObjectType.Shrine:
 //                    CacheData.NavigationObstacles.Add(new CacheObstacleObject()
 //                    {
-//                        ActorSNO = CurrentCacheObject.ActorSNO,
+//                        ActorSNO = CurrentCacheObject.ActorSnoId,
 //                        Radius = CurrentCacheObject.Radius,
 //                        Position = CurrentCacheObject.Position,
 //                        Name = CurrentCacheObject.InternalName,
@@ -754,7 +754,7 @@
 //                // Add to the collision-list
 //                CacheData.MonsterObstacles.Add(new CacheObstacleObject()
 //                {
-//                    ActorSNO = CurrentCacheObject.ActorSNO,
+//                    ActorSNO = CurrentCacheObject.ActorSnoId,
 //                    Name = CurrentCacheObject.InternalName,
 //                    Position = CurrentCacheObject.Position,
 //                    Radius = CurrentCacheObject.Radius,
@@ -767,7 +767,7 @@
 //        /// </summary>
 //        private static void RefreshStepInit()
 //        {
-//            CurrentCacheObject = new TrinityCacheObject();
+//            CurrentCacheObject = new TrinityActor();
 //            // Start this object as off as unknown type
 //            CurrentCacheObject.Type = TrinityObjectType.Unknown;
 //            CurrentCacheObject.GizmoType = GizmoType.None;
@@ -779,11 +779,11 @@
 //            CurrentCacheObject.InternalName = "";
 //            c_IgnoreReason = "";
 //            c_IgnoreSubStep = "";
-//            CurrentCacheObject.ACDGuid = -1;
-//            CurrentCacheObject.RActorGuid = -1;
+//            CurrentCacheObject.AcdId = -1;
+//            CurrentCacheObject.RActorId = -1;
 //            //CurrentCacheObject.DynamicID = -1;
 //            CurrentCacheObject.GameBalanceID = -1;
-//            CurrentCacheObject.ActorSNO = -1;
+//            CurrentCacheObject.ActorSnoId = -1;
 //            c_ItemLevel = -1;
 //            c_GoldStackSize = -1;
 //            c_HitPointsPct = -1;
@@ -804,7 +804,7 @@
 //            c_HasBeenInLoS = false;
 //            c_ItemMd5Hash = string.Empty;
 //            c_ItemQuality = ItemQuality.Invalid;
-//            c_DBItemBaseType = ItemBaseType.None;
+//            c_DBItemBaseType = DBItemBaseType.None;
 //            c_DBItemType = ItemType.Unknown;
 //            c_item_tFollowerType = FollowerType.None;
 //            _cItemTinityItemType = TrinityItemType.Unknown;
@@ -863,9 +863,9 @@
 //                            c_IgnoreSubStep = "InvalidUnitCommonData";
 //                            AddToCache = false;
 //                        }
-//                        else if (c_diaObject.ACDId != c_diaObject.CommonData.ACDId)
+//                        else if (c_diaObject.AcdId != c_diaObject.CommonData.AcdId)
 //                        {
-//                            c_IgnoreSubStep = "InvalidUnitACDGuid";
+//                            c_IgnoreSubStep = "InvalidUnitAcdId";
 //                            AddToCache = false;
 //                        }
 //                        else
@@ -878,7 +878,7 @@
 //                {
 //                    CurrentCacheObject.Type = TrinityObjectType.Player;
 //                }
-//                else if (DataDictionary.ForceToItemOverrideIds.Contains(CurrentCacheObject.ActorSNO) || (c_diaObject.ActorType == ActorType.Item))
+//                else if (DataDictionary.ForceToItemOverrideIds.Contains(CurrentCacheObject.ActorSnoId) || (c_diaObject.ActorType == ActorType.Item))
 //                {
 //                    using (new PerformanceLogger("RefreshCachedType.2"))
 //                    {
@@ -888,7 +888,7 @@
 //                        {
 //                            AddToCache = false;
 //                        }
-//                        if (c_diaObject.CommonData != null && c_diaObject.ACDId != c_diaObject.CommonData.ACDId)
+//                        if (c_diaObject.CommonData != null && c_diaObject.AcdId != c_diaObject.CommonData.AcdId)
 //                        {
 //                            AddToCache = false;
 //                        }
@@ -899,7 +899,7 @@
 //                        }
 //                    }
 //                }
-//                else if (DataDictionary.InteractWhiteListIds.Contains(CurrentCacheObject.ActorSNO))
+//                else if (DataDictionary.InteractWhiteListIds.Contains(CurrentCacheObject.ActorSnoId))
 //                {
 //                    CurrentCacheObject.Type = TrinityObjectType.Interactable;
 //                }
@@ -1043,8 +1043,8 @@
 //                if (DataDictionary.NeverRaycastLevelAreaIds.Contains(Player.LevelAreaId))
 //                {
 //                    c_HasBeenRaycastable = true;
-//                    if (!CacheData.HasBeenRayCasted.ContainsKey(CurrentCacheObject.RActorGuid))
-//                        CacheData.HasBeenRayCasted.Add(CurrentCacheObject.RActorGuid, c_HasBeenRaycastable);
+//                    if (!CacheData.HasBeenRayCasted.ContainsKey(CurrentCacheObject.RActorId))
+//                        CacheData.HasBeenRayCasted.Add(CurrentCacheObject.RActorId, c_HasBeenRaycastable);
 //                    return true;
 //                }
 
@@ -1071,22 +1071,22 @@
 //                }
 
 //                // Everything except items and the current target
-//                if (CurrentCacheObject.RActorGuid != LastTargetRactorGUID && CurrentCacheObject.Type != TrinityObjectType.Unknown)
+//                if (CurrentCacheObject.RActorId != LastTargetRactorGUID && CurrentCacheObject.Type != TrinityObjectType.Unknown)
 //                {
-//                    var importantItem = CurrentCacheObject.Type == TrinityObjectType.ProgressionGlobe || CurrentCacheObject.ItemQuality == ItemQuality.Legendary;
+//                    var importantItem = CurrentCacheObject.Type == TrinityObjectType.ProgressionGlobe || CurrentCacheObject.ItemQualityLevel == ItemQuality.Legendary;
 
 //                    if (CurrentCacheObject.Distance < 95 && !(importantItem && CurrentCacheObject.Distance <= 200f))
 //                    {
 //                        using (new PerformanceLogger("RefreshLoS.2"))
 //                        {
 //                            // Get whether or not this RActor has ever been in a path line with AllowWalk. If it hasn't, don't add to cache and keep rechecking
-//                            if (!CacheData.HasBeenRayCasted.TryGetValue(CurrentCacheObject.RActorGuid, out c_HasBeenRaycastable) || DataDictionary.AlwaysRaycastWorlds.Contains(Player.WorldSnoId))
+//                            if (!CacheData.HasBeenRayCasted.TryGetValue(CurrentCacheObject.RActorId, out c_HasBeenRaycastable) || DataDictionary.AlwaysRaycastWorlds.Contains(Player.WorldSnoId))
 //                            {
 //                                if (CurrentCacheObject.Distance >= 1f && CurrentCacheObject.Distance <= 5f)
 //                                {
 //                                    c_HasBeenRaycastable = true;
-//                                    if (!CacheData.HasBeenRayCasted.ContainsKey(CurrentCacheObject.RActorGuid))
-//                                        CacheData.HasBeenRayCasted.Add(CurrentCacheObject.RActorGuid, c_HasBeenRaycastable);
+//                                    if (!CacheData.HasBeenRayCasted.ContainsKey(CurrentCacheObject.RActorId))
+//                                        CacheData.HasBeenRayCasted.Add(CurrentCacheObject.RActorId, c_HasBeenRaycastable);
 //                                }
 //                                else if (Settings.Combat.Misc.UseNavMeshTargeting)
 //                                {
@@ -1107,8 +1107,8 @@
 //                                    else
 //                                    {
 //                                        c_HasBeenRaycastable = true;
-//                                        if (!CacheData.HasBeenRayCasted.ContainsKey(CurrentCacheObject.RActorGuid))
-//                                            CacheData.HasBeenRayCasted.Add(CurrentCacheObject.RActorGuid, c_HasBeenRaycastable);
+//                                        if (!CacheData.HasBeenRayCasted.ContainsKey(CurrentCacheObject.RActorId))
+//                                            CacheData.HasBeenRayCasted.Add(CurrentCacheObject.RActorId, c_HasBeenRaycastable);
 //                                    }
 //                                }
 //                                else
@@ -1121,8 +1121,8 @@
 //                                    else
 //                                    {
 //                                        c_HasBeenRaycastable = true;
-//                                        if (!CacheData.HasBeenRayCasted.ContainsKey(CurrentCacheObject.RActorGuid))
-//                                            CacheData.HasBeenRayCasted.Add(CurrentCacheObject.RActorGuid, c_HasBeenRaycastable);
+//                                        if (!CacheData.HasBeenRayCasted.ContainsKey(CurrentCacheObject.RActorId))
+//                                            CacheData.HasBeenRayCasted.Add(CurrentCacheObject.RActorId, c_HasBeenRaycastable);
 //                                    }
 
 //                                }
@@ -1131,7 +1131,7 @@
 //                        using (new PerformanceLogger("RefreshLoS.3"))
 //                        {
 //                            // Get whether or not this RActor has ever been in "Line of Sight" (as determined by Demonbuddy). If it hasn't, don't add to cache and keep rechecking
-//                            if (!CacheData.HasBeenInLoS.TryGetValue(CurrentCacheObject.RActorGuid, out c_HasBeenInLoS) || DataDictionary.AlwaysRaycastWorlds.Contains(Player.WorldSnoId))
+//                            if (!CacheData.HasBeenInLoS.TryGetValue(CurrentCacheObject.RActorId, out c_HasBeenInLoS) || DataDictionary.AlwaysRaycastWorlds.Contains(Player.WorldSnoId))
 //                            {
 //                                var alwaysLoSCheckTypes = new HashSet<TrinityObjectType>
 //                                {
@@ -1145,7 +1145,7 @@
 //                                //var inLineOfSight = CombatBase.CurrentPower != null && CombatBase.CurrentPower.MinimumRange > CurrentCacheObject.Distance ? Core.Avoidance.Grid.CanRayCast(Player.Position, CurrentCacheObject.Position) : c_diaObject.InLineOfSight;
 //                                var inLineOfSight = c_diaObject.InLineOfSight;
 
-//                                if (!CurrentCacheObject.IsBoss && !inLineOfSight && !alwaysLoSCheckTypes.Contains(CurrentCacheObject.Type) && !DataDictionary.LineOfSightWhitelist.Contains(CurrentCacheObject.ActorSNO))
+//                                if (!CurrentCacheObject.IsBoss && !inLineOfSight && !alwaysLoSCheckTypes.Contains(CurrentCacheObject.Type) && !DataDictionary.LineOfSightWhitelist.Contains(CurrentCacheObject.ActorSnoId))
 //                                {
 //                                    AddToCache = false;
 //                                    c_IgnoreSubStep = "NotInLoS";
@@ -1153,8 +1153,8 @@
 //                                else
 //                                {
 //                                    c_HasBeenInLoS = true;
-//                                    if (!CacheData.HasBeenInLoS.ContainsKey(CurrentCacheObject.RActorGuid))
-//                                        CacheData.HasBeenInLoS.Add(CurrentCacheObject.RActorGuid, c_HasBeenInLoS);
+//                                    if (!CacheData.HasBeenInLoS.ContainsKey(CurrentCacheObject.RActorId))
+//                                        CacheData.HasBeenInLoS.Add(CurrentCacheObject.RActorId, c_HasBeenInLoS);
 //                                }
 
 //                            }
@@ -1174,7 +1174,7 @@
 //                        c_IgnoreSubStep = "";
 //                    }
 //                    // always take the current target even if not in LoS
-//                    if (CurrentCacheObject.RActorGuid == LastTargetRactorGUID)
+//                    if (CurrentCacheObject.RActorId == LastTargetRactorGUID)
 //                    {
 //                        AddToCache = true;
 //                        c_IgnoreSubStep = "";
@@ -1182,13 +1182,13 @@
 //                }
 
 //                // Simple whitelist for LoS 
-//                if (DataDictionary.LineOfSightWhitelist.Contains(CurrentCacheObject.ActorSNO))
+//                if (DataDictionary.LineOfSightWhitelist.Contains(CurrentCacheObject.ActorSnoId))
 //                {
 //                    AddToCache = true;
 //                    c_IgnoreSubStep = "";
 //                }
 //                // Always pickup Infernal Keys whether or not in LoS
-//                if (DataDictionary.ForceToItemOverrideIds.Contains(CurrentCacheObject.ActorSNO))
+//                if (DataDictionary.ForceToItemOverrideIds.Contains(CurrentCacheObject.ActorSnoId))
 //                {
 //                    AddToCache = true;
 //                    c_IgnoreSubStep = "";
@@ -1214,7 +1214,7 @@
 //            return AddToCache;
 //        }
 
-//        public static float GetZDiff(TrinityCacheObject obj)
+//        public static float GetZDiff(TrinityActor obj)
 //        {
 //            if (ZetaDia.Me == null)
 //            {
@@ -1232,14 +1232,14 @@
 //            //c_diaObject.ZDiff; // Doesnt use cached player position
 
 //            // always take current target regardless if ZDiff changed
-//            if (CurrentCacheObject.RActorGuid == LastTargetRactorGUID)
+//            if (CurrentCacheObject.RActorId == LastTargetRactorGUID)
 //            {
 //                AddToCache = true;
 //                return AddToCache;
 //            }
 
 //            // Special whitelist for always getting stuff regardless of ZDiff or LoS
-//            if (DataDictionary.LineOfSightWhitelist.Contains(CurrentCacheObject.ActorSNO))
+//            if (DataDictionary.LineOfSightWhitelist.Contains(CurrentCacheObject.ActorSnoId))
 //            {
 //                AddToCache = true;
 //                return AddToCache;
@@ -1309,10 +1309,10 @@
 
 //        private static bool RefreshStepCheckBlacklists(bool AddToCache)
 //        {
-//            if (!DataDictionary.Avoidances.Contains(CurrentCacheObject.ActorSNO) && !DataDictionary.ButcherFloorPanels.Contains(CurrentCacheObject.ActorSNO) && !CurrentCacheObject.IsBountyObjective && !CurrentCacheObject.IsQuestMonster)
+//            if (!DataDictionary.Avoidances.Contains(CurrentCacheObject.ActorSnoId) && !DataDictionary.ButcherFloorPanels.Contains(CurrentCacheObject.ActorSnoId) && !CurrentCacheObject.IsBountyObjective && !CurrentCacheObject.IsQuestMonster)
 //            {
 //                // See if it's something we should always ignore like ravens etc.
-//                if (!c_IsObstacle && DataDictionary.BlackListIds.Contains(CurrentCacheObject.ActorSNO))
+//                if (!c_IsObstacle && DataDictionary.BlackListIds.Contains(CurrentCacheObject.ActorSnoId))
 //                {
 //                    AddToCache = false;
 //                    c_IgnoreSubStep = "Blacklist";
@@ -1385,13 +1385,13 @@
 //        {
 //            if (!bHasCachedHealth)
 //            {
-//                CacheData.CurrentUnitHealth.Add(CurrentCacheObject.RActorGuid, dThisCurrentHealth);
-//                CacheData.LastCheckedUnitHealth.Add(CurrentCacheObject.RActorGuid, iLastCheckedHealth);
+//                CacheData.CurrentUnitHealth.Add(CurrentCacheObject.RActorId, dThisCurrentHealth);
+//                CacheData.LastCheckedUnitHealth.Add(CurrentCacheObject.RActorId, iLastCheckedHealth);
 //            }
 //            else
 //            {
-//                CacheData.CurrentUnitHealth[CurrentCacheObject.RActorGuid] = dThisCurrentHealth;
-//                CacheData.LastCheckedUnitHealth[CurrentCacheObject.RActorGuid] = iLastCheckedHealth;
+//                CacheData.CurrentUnitHealth[CurrentCacheObject.RActorId] = dThisCurrentHealth;
+//                CacheData.LastCheckedUnitHealth[CurrentCacheObject.RActorId] = iLastCheckedHealth;
 //            }
 //        }
 

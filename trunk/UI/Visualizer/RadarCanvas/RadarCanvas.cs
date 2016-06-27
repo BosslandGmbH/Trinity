@@ -16,6 +16,7 @@ using Adventurer.Game.Exploration;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
@@ -109,7 +110,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             }
 
             var node = Core.Avoidance.Grid.GetNearestNode(clickedWorldPosition);
-            SelectedItem = new TrinityCacheObject
+            SelectedItem = new TrinityActor
             {
                 InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int) clickedWorldPosition.X},{(int) clickedWorldPosition.Y}]",
                 Distance = clickedWorldPosition.Distance(ZetaDia.Me.Position),
@@ -316,13 +317,13 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
         public static readonly DependencyProperty SelectedItemProperty =
             DependencyProperty.Register("SelectedItem",
-                typeof(TrinityCacheObject),
+                typeof(TrinityActor),
                 typeof(RadarCanvas),
-                new FrameworkPropertyMetadata(default(TrinityCacheObject), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
+                new FrameworkPropertyMetadata(default(TrinityActor), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemChanged));
 
-        public TrinityCacheObject SelectedItem
+        public TrinityActor SelectedItem
         {
-            get { return (TrinityCacheObject)GetValue(SelectedItemProperty); }
+            get { return (TrinityActor)GetValue(SelectedItemProperty); }
             set { SetValue(SelectedItemProperty, value); }            
         }
 
@@ -445,7 +446,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     // Find the actor who should be in the center of the radar
                     // and whos position all other points should be plotted against.
 
-                    var center = ItemsSource.OfType<TrinityCacheObject>().FirstOrDefault(u => u.IsMe);
+                    var center = ItemsSource.OfType<TrinityActor>().FirstOrDefault(u => u.IsMe);
                     if (center == null)
                         return;
                     
@@ -458,11 +459,11 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                     var updatedSelection = false;
 
-                    foreach (var trinityObject in ItemsSource.OfType<TrinityCacheObject>())
+                    foreach (var trinityObject in ItemsSource.OfType<TrinityActor>())
                     {
                         var radarObject = new RadarObject(trinityObject, CanvasData);
 
-                        if (!updatedSelection && SelectedItem != null && trinityObject.ACDGuid == SelectedItem.ACDGuid)
+                        if (!updatedSelection && SelectedItem != null && trinityObject.AcdId == SelectedItem.AcdId)
                         {
                             updatedSelection = true;
                             SelectedRadarObject = radarObject;
@@ -700,7 +701,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     {
                         foreach (var actor in avoidance.Actors)
                         {
-                            var part = avoidance.Data.GetPart(actor.ActorSNO);
+                            var part = avoidance.Data.GetPart(actor.ActorSnoId);
                             if (part != null)
                             {
                                 var r = part.Radius * GridSize;
@@ -1903,7 +1904,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                 if (VisibilityFlags.HasFlag(RadarVisibilityFlags.RiftValue))
                 {
-                    var tco = radarObject.Actor as TrinityCacheObject;
+                    var tco = radarObject.Actor as TrinityActor;
                     if (tco != null)
                     {
                         var value = $"{tco.RiftValuePct:0.00}%";
@@ -1912,7 +1913,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 }
                 else if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Weighting))
                 {
-                    var tco = radarObject.Actor as TrinityCacheObject;
+                    var tco = radarObject.Actor as TrinityActor;
                     if (tco != null)
                     {
                         var value = $"{tco.Weight:#.#}";

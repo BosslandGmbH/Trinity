@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Threading;
 using IronPython.Compiler.Ast;
-using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Items;
@@ -27,15 +27,22 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         public bool IsValid => Group != null && Group.IsValid && Group.Id != 0 && Map != null && Map.IsValid && Map.Count != 0;
 
+        public Attributes() { }
+
+        public int _lastRowCount;
+
         public Attributes(int groupId)
         {
-            Create(groupId);
+            ReadAttributes(groupId);
         }
 
-        protected void Create(int groupId)
+        public void ReadAttributes(int groupId)
         {
             try
             {
+                if (groupId == -1)
+                    return;
+
                 FastAttributeGroupId = groupId;
                 Group = AttributeManager.FindGroup(groupId);
 
@@ -45,17 +52,26 @@ namespace Trinity.Framework.Objects.Memory.Attributes
                     return;
                 }
 
-                Map = (Group.Flags & 4) != 0 ? Group.PtrMap : Group.Map;
+                if ((Group.Flags & 4) != 0)
+                {
+                    Map = Group.PtrMap;
+                }
+                else
+                {
+                    Map = Group.Map;
+                }
+
                 if (!Map.IsValid)
                 {
-                    ActorManager.Reset();
+                    //Core.Actors.Reset();
                     Logger.LogVerbose($"Attribute Map Invalid for groupId: {groupId}");
                     return;
                 }
 
                 Items = Map.Data.Items;
+                _lastRowCount = Map.Count;
 
-                if (Group.Map.Count != Items.Count && Group.Map2.IsValid)
+                if (Map.Count != Items.Count && Group.Map2.Count > 0)
                 {
                     Items.AddRangeNewOnly(Group.Map2.Data.Items);
                 }
@@ -64,6 +80,54 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             {
                 Logger.Log($"Exception creating attributes {ex} for groupId {groupId}");
             }
+        }
+
+        private Dictionary<int, AttributeItem> _previousItems = new Dictionary<int, AttributeItem>();
+
+        public bool Update()
+        {
+            if (!IsValid)
+                return false;
+
+            var isChanged = Map.Count != _lastRowCount;
+             
+            //    _previousItems = new Dictionary<int, AttributeItem>(Items);
+
+            //    ReadAttributes(FastAttributeGroupId);
+
+            //    foreach (var newItem in Items)
+            //    {
+            //        var key = newItem.Key;
+            //        if (!_previousItems.ContainsKey(key))
+            //        {
+            //            Logger.Log("Attribute Added " + newItem.Value);
+            //        }
+            //        else
+            //        {
+            //            var oldValue = _previousItems[key].GetValue();
+            //            if (!Equals(newItem.Value.GetValue(), oldValue))
+            //            {
+            //                Logger.Log($"Attribute Changed {newItem.Value }, was {oldValue}");
+            //            }
+            //        }
+            //        _previousItems.Remove(key);
+            //    }
+
+            //    foreach (var removedItem in _previousItems)
+            //    {
+            //        Logger.Log("Attribute Removed " + removedItem);
+            //    }
+
+            //    _lastRowCount = Map.Count;
+            //    return isChanged;
+         
+            if (isChanged)
+            {
+                ReadAttributes(FastAttributeGroupId);                
+                _lastRowCount = Map.Count;
+                return true;
+            }
+            return false;
         }
 
         internal List<TValue> GetCachedAttributes<TValue>(ActorAttributeType attr)
@@ -81,7 +145,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal Dictionary<TModifier, TValue> GetCachedAttributes<TModifier, TValue>(ActorAttributeType attr) where TModifier : IConvertible
         {
-            var result = new Dictionary<TModifier, TValue>();        
+            var result = new Dictionary<TModifier, TValue>();
             foreach (var a in Items)
             {
                 if (a.Value.Key.BaseAttribute == attr)
@@ -141,6 +205,12 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             return foundAttribute.GetValue<T>();
         }
 
+        internal T GetAttribute<T>(ActorAttributeType attr, SNOPower modifier)
+        {
+            var key = new AttributeKey((int)attr, (int)modifier);
+            return GetAttribute<T>(key);
+        }
+
         internal T GetAttribute<T>(ActorAttributeType attr, int modifier)
         {
             var key = new AttributeKey((int)attr, modifier);
@@ -169,7 +239,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal AttributeItem GetAttributeItem(ActorAttributeType attr)
         {
-            var attributePair = Items.FirstOrDefault(a => a.Value.Attribute == attr || a.Value.Key.BaseAttribute == attr);            
+            var attributePair = Items.FirstOrDefault(a => a.Value.Attribute == attr || a.Value.Key.BaseAttribute == attr);
             attributePair.Value?.Update();
             return attributePair.Value;
         }

@@ -21,7 +21,7 @@
 
 //            var unit = CurrentCacheObject.Object as DiaUnit;
 
-//            if (CurrentCacheObject.ActorType != ActorType.Monster || c_diaObject.ACDId == -1 || unit == null)
+//            if (CurrentCacheObject.ActorType != ActorType.Monster || c_diaObject.AcdId == -1 || unit == null)
 //                return false;
 
 
@@ -30,7 +30,7 @@
 //            CurrentCacheObject.MonsterQuality = CurrentCacheObject.CommonData.MonsterQualityLevel;
 
 //            // See if this is a boss
-//            CurrentCacheObject.IsBoss = DataDictionary.BossIds.Contains(CurrentCacheObject.ActorSNO) || CurrentCacheObject.InternalNameLowerCase.Contains("boss") || CurrentCacheObject.MonsterQuality == MonsterQuality.Boss;
+//            CurrentCacheObject.IsBoss = DataDictionary.BossIds.Contains(CurrentCacheObject.ActorSnoId) || CurrentCacheObject.InternalNameLowerCase.Contains("boss") || CurrentCacheObject.MonsterQuality == MonsterQuality.Boss;
 
 //            if (CurrentCacheObject.IsBoss)
 //                CurrentCacheObject.KillRange = CurrentCacheObject.RadiusDistance + 10f;
@@ -58,7 +58,7 @@
 
 //            RiftProgression.SetRiftValue(CurrentCacheObject);
 
-//            //string teamIdHash = "teamId.RActorId=" + CurrentCacheObject.RActorGuid + ".ActorSnoId=" + CurrentCacheObject.ActorSNO + ".WorldId=" + Player.WorldID;
+//            //string teamIdHash = "teamId.RActorId=" + CurrentCacheObject.RActorId + ".ActorSnoId=" + CurrentCacheObject.ActorSnoId + ".WorldId=" + Player.WorldID;
 
 //            //int teamId;
 //            //if (!CurrentCacheObject.IsBoss && GenericCache.ContainsKey(teamIdHash))
@@ -112,7 +112,7 @@
 //            catch (Exception ex)
 //            {
 //                Logger.LogDebug(LogCategory.CacheManagement, "Error reading IsQuestMonster for Unit sno:{0} raGuid:{1} name:{2} ex:{3}",
-//                    CurrentCacheObject.ActorSNO, CurrentCacheObject.RActorGuid, CurrentCacheObject.InternalName, ex.Message);
+//                    CurrentCacheObject.ActorSnoId, CurrentCacheObject.RActorId, CurrentCacheObject.InternalName, ex.Message);
 //            }
 
 //            try
@@ -160,7 +160,7 @@
 //            // Only set treasure goblins to true *IF* they haven't disabled goblins! Then check the SNO in the goblin hash list!
 //            c_unit_IsTreasureGoblin = false;
 //            // Flag this as a treasure goblin *OR* ignore this object altogether if treasure goblins are set to ignore
-//            if (DataDictionary.GoblinIds.Contains(CurrentCacheObject.ActorSNO) || CurrentCacheObject.InternalNameLowerCase.StartsWith("treasureGoblin") || unit.MonsterInfo.MonsterRace == MonsterRace.TreasureGoblin)
+//            if (DataDictionary.GoblinIds.Contains(CurrentCacheObject.ActorSnoId) || CurrentCacheObject.InternalNameLowerCase.StartsWith("treasureGoblin") || unit.MonsterInfo.MonsterRace == MonsterRace.TreasureGoblin)
 //            {
 //                if (Settings.Combat.Misc.GoblinPriority != 0)
 //                {
@@ -194,7 +194,7 @@
 
 //            //// Only if at full health, else don't bother checking each loop
 //            //// See if we already have this monster's size stored, if not get it and cache it
-//            //if (!CacheData.MonsterSizes.TryGetValue(CurrentCacheObject.ActorSNO, out c_unit_MonsterSize))
+//            //if (!CacheData.MonsterSizes.TryGetValue(CurrentCacheObject.ActorSnoId, out c_unit_MonsterSize))
 //            //{
 //            //    try
 //            //    {
@@ -218,7 +218,7 @@
 //                return addToCache;
 //            }
 
-//            if (CurrentCacheObject.Unit.IsDead && !DataDictionary.FakeDeathMonsters.Contains(CurrentCacheObject.ActorSNO))
+//            if (CurrentCacheObject.Unit.IsDead && !DataDictionary.FakeDeathMonsters.Contains(CurrentCacheObject.ActorSnoId))
 //            {
 //                addToCache = false;
 //                c_IgnoreSubStep = "IsDead";
@@ -265,7 +265,7 @@
 //            if (monsterInfo != null)
 //            {
 //                c_unit_MonsterSize = monsterInfo.MonsterSize;
-//                CacheData.MonsterSizes.Add(CurrentCacheObject.ActorSNO, c_unit_MonsterSize);
+//                CacheData.MonsterSizes.Add(CurrentCacheObject.ActorSnoId, c_unit_MonsterSize);
 //            }
 //            else
 //            {
@@ -281,10 +281,10 @@
 //            // health calculations
 //            double maxHealth;
 //            // Get the max health of this unit, a cached version if available, if not cache it
-//            if (!CacheData.UnitMaxHealth.TryGetValue(CurrentCacheObject.RActorGuid, out maxHealth))
+//            if (!CacheData.UnitMaxHealth.TryGetValue(CurrentCacheObject.RActorId, out maxHealth))
 //            {
 //                maxHealth = CurrentCacheObject.Unit.HitpointsMax;
-//                CacheData.UnitMaxHealth.Add(CurrentCacheObject.RActorGuid, maxHealth);
+//                CacheData.UnitMaxHealth.Add(CurrentCacheObject.RActorId, maxHealth);
 //            }
 
 //            // Health calculations            
@@ -298,7 +298,7 @@
 //        {
 
 
-//            if (unit.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(CurrentCacheObject.ActorSNO))
+//            if (unit.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(CurrentCacheObject.ActorSnoId))
 //            {
 //                AddToCache = false;
 //                c_IgnoreSubStep = "IsUntargetable";
@@ -314,13 +314,13 @@
 //            }
 
 //            bool isBurrowed;
-//            if (!CacheData.UnitIsBurrowed.TryGetValue(CurrentCacheObject.RActorGuid, out isBurrowed))
+//            if (!CacheData.UnitIsBurrowed.TryGetValue(CurrentCacheObject.RActorId, out isBurrowed))
 //            {
 //                isBurrowed = unit.IsBurrowed;
 //                // if the unit is NOT burrowed - we can attack them, add to cache (as IsAttackable)
 //                if (!isBurrowed)
 //                {
-//                    CacheData.UnitIsBurrowed.Add(CurrentCacheObject.RActorGuid, isBurrowed);
+//                    CacheData.UnitIsBurrowed.Add(CurrentCacheObject.RActorId, isBurrowed);
 //                }
 //            }
 
@@ -355,7 +355,7 @@
 //        private static double SetKillRange()
 //        {
 //            // Always within kill range if in the NoCheckKillRange list!
-//            if (DataDictionary.NoCheckKillRange.Contains(CurrentCacheObject.ActorSNO))
+//            if (DataDictionary.NoCheckKillRange.Contains(CurrentCacheObject.ActorSnoId))
 //                return CurrentCacheObject.RadiusDistance + 100f;
 
 //            double killRange;
@@ -386,20 +386,20 @@
 //        }
 //        //private static void RefreshAffixes()
 //        //{
-//        //    CurrentCacheObject.Affixes = TrinityCacheObject.GetMonsterAffixes(CurrentCacheObject.CommonData.Affixes);
+//        //    CurrentCacheObject.Affixes = TrinityActor.GetMonsterAffixes(CurrentCacheObject.CommonData.Affixes);
 
 //        //    MonsterAffixes affixFlags;
-//        //    if (!CacheData.UnitMonsterAffix.TryGetValue(CurrentCacheObject.RActorGuid, out affixFlags))
+//        //    if (!CacheData.UnitMonsterAffix.TryGetValue(CurrentCacheObject.RActorId, out affixFlags))
 //        //    {
 //        //        try
 //        //        {
 //        //            affixFlags = c_diaObject.CommonData.MonsterAffixes;
-//        //            CacheData.UnitMonsterAffix.Add(CurrentCacheObject.RActorGuid, affixFlags);
+//        //            CacheData.UnitMonsterAffix.Add(CurrentCacheObject.RActorId, affixFlags);
 //        //        }
 //        //        catch (Exception ex)
 //        //        {
 //        //            affixFlags = MonsterAffixes.None;
-//        //            Logger.Log(LogCategory.CacheManagement, "Handled Exception getting affixes for Monster SNO={0} Name={1} RAGuid={2}", CurrentCacheObject.ActorSNO, CurrentCacheObject.InternalName, CurrentCacheObject.RActorGuid);
+//        //            Logger.Log(LogCategory.CacheManagement, "Handled Exception getting affixes for Monster SNO={0} Name={1} RAGuid={2}", CurrentCacheObject.ActorSnoId, CurrentCacheObject.InternalName, CurrentCacheObject.RActorId);
 //        //            Logger.Log(LogCategory.CacheManagement, ex.ToString());
 //        //        }
 //        //    }
@@ -421,7 +421,7 @@
 //            if (monsterInfo != null)
 //            {
 //                // Force Jondar as an undead, since Diablo 3 sticks him as a permanent ally
-//                if (CurrentCacheObject.ActorSNO == 86624)
+//                if (CurrentCacheObject.ActorSnoId == 86624)
 //                {
 //                    monsterType = MonsterType.Undead;
 //                }
@@ -431,9 +431,9 @@
 //                }
 //                // Is this going to be a new dictionary entry, or updating one already existing?
 //                if (addToDictionary)
-//                    CacheData.MonsterTypes.Add(CurrentCacheObject.ActorSNO, monsterType);
+//                    CacheData.MonsterTypes.Add(CurrentCacheObject.ActorSnoId, monsterType);
 //                else
-//                    CacheData.MonsterTypes[CurrentCacheObject.ActorSNO] = monsterType;
+//                    CacheData.MonsterTypes[CurrentCacheObject.ActorSnoId] = monsterType;
 //            }
 //            else
 //            {
@@ -444,7 +444,7 @@
 
 //        private static bool RefreshStepCachedSummons(DiaUnit unit)
 //        {
-//            var sno = CurrentCacheObject.ActorSNO;
+//            var sno = CurrentCacheObject.ActorSnoId;
 //            var actorClass = Player.ActorClass;
 
 //            if (!CurrentCacheObject.IsUnit || CurrentCacheObject.IsMe)

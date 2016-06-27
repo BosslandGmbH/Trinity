@@ -9,7 +9,6 @@ using Trinity.Combat.Abilities;
 using Trinity.Coroutines.Town;
 using Trinity.Framework;
 using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Framework.Utilities;
 using Trinity.Helpers;
 using Trinity.Movement;
 using Trinity.Reference;

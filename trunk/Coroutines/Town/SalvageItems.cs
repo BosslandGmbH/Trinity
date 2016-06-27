@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Framework.Actors;
+using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Technicals;
@@ -14,7 +15,7 @@ using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using ActorManager = Trinity.Framework.Actors.ActorManager;
+using Trinity.Framework.Actors;
 
 namespace Trinity.Coroutines.Town
 {
@@ -29,7 +30,7 @@ namespace Trinity.Coroutines.Town
         private static readonly Dictionary<int, bool> Cache = new Dictionary<int, bool>();
         private static readonly Random Rnd = new Random();
 
-        public static bool ShouldSalvage(CachedItem i)
+        public static bool ShouldSalvage(TrinityItem i)
         {
             if (!i.IsValid)
                 return false;
@@ -141,7 +142,7 @@ namespace Trinity.Coroutines.Town
                         break;
 
                     await Coroutine.Sleep(Rnd.Next(500, 750));
-                    ActorManager.Update();
+                    Core.Actors.Update();
                     //await ActorManager.WaitForUpdate();
 
                     var freshItems = Inventory.Backpack.Items.Where(i => ShouldSalvage(i) && !Inventory.InvalidItemDynamicIds.Contains(i.AnnId)).ToList();
@@ -157,7 +158,7 @@ namespace Trinity.Coroutines.Town
                         continue;
                     }
 
-                    if (!ActorManager.IsAnnIdValid(item.AnnId))
+                    if (!Core.Actors.IsAnnIdValid(item.AnnId))
                     {
                         Logger.Log("AnnId test failed, skipping salvage to prevent disconnect");
                         Inventory.InvalidItemDynamicIds.Add(item.AnnId);

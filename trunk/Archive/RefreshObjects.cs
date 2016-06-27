@@ -80,7 +80,7 @@
                 
 //                RefreshCacheInit();
 
-//                // Populate ObjectCache with TrinityCacheObjects
+//                // Populate ObjectCache with TrinityActors
 //                RefreshCacheMainLoop();
            
 //                // Add Legendary & Set Minimap Markers to ObjectCache
@@ -94,13 +94,13 @@
 //                {             
 //                    if (CombatBase.IsDoingGoblinKamakazi && CurrentTarget != null && CurrentTarget.Type != TrinityObjectType.Door && CurrentTarget.Type != TrinityObjectType.Barricade && !CurrentTarget.InternalName.ToLower().Contains("corrupt") && CurrentTarget.Weight != Weighting.MaxWeight)
 //                    {
-//                        Logger.Log("Forcing Target to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSNO, CombatBase.KamakaziGoblin.Distance);
+//                        Logger.Log("Forcing Target to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSnoId, CombatBase.KamakaziGoblin.Distance);
 //                        CurrentTarget = CombatBase.KamakaziGoblin;
 //                    }
 
 //                    if (CombatBase.IsDoingGoblinKamakazi && CurrentTarget == null)
 //                    {
-//                        Logger.Log("No Target, Switching to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSNO, CombatBase.KamakaziGoblin.Distance);
+//                        Logger.Log("No Target, Switching to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSnoId, CombatBase.KamakaziGoblin.Distance);
 //                        CurrentTarget = CombatBase.KamakaziGoblin;
 //                    }
 
@@ -110,7 +110,7 @@
 //                        // See if we should wait for [playersetting] milliseconds for possible loot drops before continuing run
 //                        if (ShouldWaitForLootDrop)
 //                        {
-//                            CurrentTarget = new TrinityCacheObject()
+//                            CurrentTarget = new TrinityActor()
 //                            {
 //                                Position = Player.Position,
 //                                Type = TrinityObjectType.Avoidance,
@@ -144,7 +144,7 @@
 //                        lastHadContainerInSights = DateTime.UtcNow;
 
 //                    //// Record the last time our target changed
-//                    //if (LastTargetRactorGUID != CurrentTarget.RActorGuid)
+//                    //if (LastTargetRactorGUID != CurrentTarget.RActorId)
 //                    //{
 //                    //    Weighting.RecordTargetHistory();
 
@@ -156,7 +156,7 @@
 //                    //        CurrentTarget.IsElite,
 //                    //        CurrentTarget.Radius,
 //                    //        CurrentTarget.Weight,
-//                    //        CurrentTarget.ActorSNO,
+//                    //        CurrentTarget.ActorSnoId,
 //                    //        CurrentTarget.Animation,
 //                    //        CurrentTarget.TimesBeenPrimaryTarget,
 //                    //        CurrentTarget.Type
@@ -174,7 +174,7 @@
 //                    //        if (CurrentTarget.HitPointsPct != _targetLastHealth)
 //                    //        {
 //                    //            Logger.Log(TrinityLogLevel.Debug, LogCategory.Weight, "Keeping Target {0} - CurrentTarget.HitPoints: {1:0.00} TargetLastHealth: {2:0.00} ",
-//                    //                            CurrentTarget.RActorGuid, CurrentTarget.HitPointsPct, _targetLastHealth);
+//                    //                            CurrentTarget.RActorId, CurrentTarget.HitPointsPct, _targetLastHealth);
 //                    //            _lastPickedTargetTime = DateTime.UtcNow;
 //                    //        }
 //                    //        // Now store the target's last-known health
@@ -207,7 +207,7 @@
 //                {
 //                    var name = (marker.MinimapTextureSnoId == setItemMarkerTexture ? "Set Item" : "Legendary Item") + " Minimap Marker";
 
-//                    var cacheObject = new TrinityCacheObject
+//                    var cacheObject = new TrinityActor
 //                    {
 //                        Position = new Vector3((float)Math.Floor(marker.Position.X), (float)Math.Floor(marker.Position.Y), (float)Math.Floor(marker.Position.Z)),
 //                        InternalName = name,
@@ -241,15 +241,15 @@
 //                    foreach (var diaItem in legendaryItems)
 //                    {
 //                        Logger.LogDebug(LogCategory.CacheManagement, "Adding Legendary Item from Marker {0} dist={1} ActorSnoId={2} ACD={3} RActor={4}",
-//                            diaItem.Name, diaItem.Distance, diaItem.ActorSnoId, diaItem.ACDId, diaItem.RActorId);
+//                            diaItem.Name, diaItem.Distance, diaItem.ActorSnoId, diaItem.AcdId, diaItem.RActorId);
 
-//                        ObjectCache.Add(new TrinityCacheObject()
+//                        ObjectCache.Add(new TrinityActor()
 //                        {
 //                            Position = diaItem.Position,
 //                            InternalName = diaItem.Name,
 //                            RActorGuid = diaItem.RActorId,
 //                            ActorSNO = diaItem.ActorSnoId,
-//                            ACDGuid = diaItem.ACDId,
+//                            AcdId = diaItem.AcdId,
 //                            HasBeenInLoS = true,
 //                            Distance = diaItem.Distance,
 //                            ActorType = ActorType.Item,
@@ -274,7 +274,7 @@
 //                foreach (var marker in ZetaDia.Minimap.Markers.CurrentWorldMarkers.Where(riftGuardianMarkerFunc))
 //                {
 //                    Logger.LogDebug(LogCategory.CacheManagement, "Adding Rift Guardian POI, distance {0}", marker.Position.Distance(Player.Position));
-//                    ObjectCache.Add(new TrinityCacheObject()
+//                    ObjectCache.Add(new TrinityActor()
 //                    {
 //                        Position = marker.Position,
 //                        InternalName = "Rift Guardian",
@@ -292,7 +292,7 @@
 //            {
 //                foreach (var marker in ZetaDia.Minimap.Markers.CurrentWorldMarkers.Where(m => m.IsPointOfInterest && !Blacklist60Seconds.Contains(m.NameHash)))
 //                {
-//                    ObjectCache.Add(new TrinityCacheObject()
+//                    ObjectCache.Add(new TrinityActor()
 //                    {
 //                        Position = marker.Position,
 //                        InternalName = "Rift Guardian",
@@ -365,14 +365,14 @@
 //                                    CurrentCacheObject.GizmoType != GizmoType.None ? CurrentCacheObject.GizmoType.ToString() : "",
 //                                    CurrentCacheObject.Type,
 //                                    CurrentCacheObject.InternalName,
-//                                    CurrentCacheObject.ActorSNO,
+//                                    CurrentCacheObject.ActorSnoId,
 //                                    (CurrentCacheObject.IsBoss ? " IsBoss" : ""),
 //                                    (c_CurrentAnimation != SNOAnim.Invalid ? " AnimSnoId: " + c_CurrentAnimation : ""),
 //                                    CurrentCacheObject.Distance,
 //                                    CurrentCacheObject.RadiusDistance,
 //                                    c_ZDiff,
 //                                    CurrentCacheObject.Radius,
-//                                    CurrentCacheObject.RActorGuid,
+//                                    CurrentCacheObject.RActorId,
 //                                    CurrentCacheObject.ExtraInfo);
 //                        }
 //                    }
@@ -420,9 +420,9 @@
 
 //                // store last target GUID
 //                if(CurrentTarget != null)
-//                    LastTargetRactorGUID = CurrentTarget.RActorGuid;
+//                    LastTargetRactorGUID = CurrentTarget.RActorId;
 
-//                LastTargetACDGuid = CurrentTarget != null ? CurrentTarget.ACDGuid : -1;
+//                LastTargetAcdId = CurrentTarget != null ? CurrentTarget.AcdId : -1;
 
 //                //reset current target
 //                //CurrentTarget = null;
@@ -505,7 +505,7 @@
 //                PlayerOwnedAncientCount = 0;
 
 //                // Here's the list we'll use to store each object
-//                ObjectCache = new List<TrinityCacheObject>();
+//                ObjectCache = new List<TrinityActor>();
 
 //            }
 //        }

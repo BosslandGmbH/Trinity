@@ -12,8 +12,10 @@ using Trinity.Coroutines;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Movement;
@@ -99,6 +101,8 @@ namespace Trinity
         {
             RunStatus status;
 
+            Player.CurrentAction = default(PlayerAction);
+
             using (new PerformanceLogger("HandleTarget"))
             {
                 try
@@ -138,7 +142,7 @@ namespace Trinity
                             {                                
                                 var distance = safespot.Distance(Player.Position);
                                 Logger.Log(LogCategory.Avoidance, $"Targetted SafeSpot Distance={distance}");
-                                CurrentTarget = new TrinityCacheObject()
+                                CurrentTarget = new TrinityActor()
                                 {
                                     Position = safespot,
                                     Type = TrinityObjectType.Avoidance,
@@ -151,6 +155,7 @@ namespace Trinity
 
                                 TryCastAvoidancePower(out status);
                                 PlayerMover.NavigateTo(safespot, "SafeSpot");
+                                Player.CurrentAction = PlayerAction.Avoiding;
                                 return GetRunStatus(RunStatus.Running, "Movement for Avoidance");
                             }
                         }
@@ -166,7 +171,7 @@ namespace Trinity
 
                             var distance = safespot.Distance(Player.Position);
                             Logger.Log(LogCategory.Avoidance, $"Targetted KiteSpot Distance={distance}");
-                            CurrentTarget = new TrinityCacheObject()
+                            CurrentTarget = new TrinityActor()
                             {
                                 Position = safespot,
                                 Type = TrinityObjectType.Avoidance,
@@ -178,6 +183,7 @@ namespace Trinity
                             };
 
                             PlayerMover.NavigateTo(safespot, "KiteSpot");
+                            Player.CurrentAction = PlayerAction.Kiting;
                             return GetRunStatus(RunStatus.Running, "Movement for Kiting");                          
                         }
                     }
@@ -230,13 +236,13 @@ namespace Trinity
 
                     if (CombatBase.IsDoingGoblinKamakazi && CurrentTarget != null && CurrentTarget.Type != TrinityObjectType.Door && CurrentTarget.Type != TrinityObjectType.Barricade && !CurrentTarget.InternalName.ToLower().Contains("corrupt") && CurrentTarget.Weight >= Weighting.MaxWeight)
                     {
-                        Logger.Log("Forcing Target to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSNO, CombatBase.KamakaziGoblin.Distance);
+                        Logger.Log("Forcing Target to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSnoId, CombatBase.KamakaziGoblin.Distance);
                         CurrentTarget = CombatBase.KamakaziGoblin;
                     }
 
                     if (CombatBase.IsDoingGoblinKamakazi && CurrentTarget == null)
                     {
-                        Logger.Log("No Target, Switching to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSNO, CombatBase.KamakaziGoblin.Distance);
+                        Logger.Log("No Target, Switching to Goblin '{0} ({1})' Distance={2}", CombatBase.KamakaziGoblin.InternalName, CombatBase.KamakaziGoblin.ActorSnoId, CombatBase.KamakaziGoblin.Distance);
                         CurrentTarget = CombatBase.KamakaziGoblin;
                     }
 
@@ -301,7 +307,7 @@ namespace Trinity
                     // Prevent running away after progression globes spawn if they're in aoe
                     if (Player.IsInRift && !Core.Avoidance.Avoider.ShouldAvoid)
                     {                       
-                        var globes = ObjectCache.Where(o => o.Type == TrinityObjectType.ProgressionGlobe && o.Distance < AvoidanceManager.MaxDistance).ToList();
+                        var globes = Targets.Where(o => o.Type == TrinityObjectType.ProgressionGlobe && o.Distance < AvoidanceManager.MaxDistance).ToList();
                         var shouldWaitForGlobes = globes.Any(o => Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, o.Position, AvoidanceFlags.CriticalAvoidance));
                         if (shouldWaitForGlobes)
                         {                          
@@ -391,12 +397,24 @@ namespace Trinity
                             return status;
                     }
 
-                    // Pick the destination point and range of target
-                    /*
-                     * Set the range required for attacking/interacting/using
-                     */
 
-                    SetRangeRequiredForTarget();
+                    TargetRangeRequired = Math.Max(2f, CurrentTarget.RequiredRange);
+                    TargetCurrentDistance = CurrentTarget.RadiusDistance;
+
+                    switch (CurrentTarget.Type)
+                    {
+                        case TrinityObjectType.Gold:
+                            CurrentDestination = MathEx.CalculatePointFrom(Player.Position, CurrentTarget.Position, -2f);
+                            break;
+                        case TrinityObjectType.Interactable:
+                            CurrentDestination = MathEx.CalculatePointFrom(CurrentTarget.Position, Player.Position, CurrentTarget.Radius + 2f);
+                            break;
+                        default:
+                            CurrentDestination = CurrentTarget.Position;
+                            break;
+                    }
+
+                    // SetRangeRequiredForTarget();
 
                     //using (new PerformanceLogger("HandleTarget.SpecialNavigation"))
                     //{
@@ -435,7 +453,7 @@ namespace Trinity
                     //    }
                     //    else if (Settings.Combat.Misc.UseNavMeshTargeting && CurrentTarget.Type != TrinityObjectType.Barricade && CurrentTarget.Type != TrinityObjectType.Destructible)
                     //    {
-                    //        CurrentTargetIsInLoS = (NavHelper.CanRayCast(Player.Position, CurrentDestination) || DataDictionary.LineOfSightWhitelist.Contains(CurrentTarget.ActorSNO));
+                    //        CurrentTargetIsInLoS = (NavHelper.CanRayCast(Player.Position, CurrentDestination) || DataDictionary.LineOfSightWhitelist.Contains(CurrentTarget.ActorSnoId));
                     //    }
                     //    else
                     //    {
@@ -473,6 +491,7 @@ namespace Trinity
 
                             if (!TargetUtil.AnyTrashInRange(20f) && !Gems.Taeguk.IsEquipped) {
                                 Logger.LogVerbose(LogCategory.Avoidance, "Waiting for Rift Boss to Spawn");
+                                Player.CurrentAction = PlayerAction.Waiting;
                                 return RunStatus.Running;
                             }
                         }
@@ -482,19 +501,12 @@ namespace Trinity
                         {
                             Logger.LogDebug(LogCategory.Behavior, "Object in Range: noRangeRequired={0} Target In Range={1} stuckOnTarget={2} npcInRange={3} power={4} target={5}", noRangeRequired, (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetIsInLoS), stuckOnTarget, npcInRange, CombatBase.CurrentPower.SNOPower, CurrentTarget);
 
-                            UpdateStatusTextTarget(true);
+                            Player.CurrentAction = PlayerAction.Moving;
 
                             HandleObjectInRange();
                             return GetRunStatus(RunStatus.Running, "HandleObjectInRange");
                         }
-                    }
-
-
-                    using (new PerformanceLogger("HandleTarget.UpdateStatusText"))
-                    {
-                        // Out-of-range, so move towards the target
-                        UpdateStatusTextTarget(false);
-                    }
+                    }                    
 
                     // Are we currently incapacitated? If so then wait...
                     if (Player.IsIncapacitated || Player.IsRooted)
@@ -552,7 +564,7 @@ namespace Trinity
                 {
                     Logger.LogVerbose(LogCategory.Behavior, "HandleTarget: Casting {0} for Avoidance", powerBuff.SNOPower);
 
-                    if (ZetaDia.Me.UsePower(powerBuff.SNOPower, powerBuff.TargetPosition, powerBuff.TargetDynamicWorldId, powerBuff.TargetACDGUID))
+                    if (ZetaDia.Me.UsePower(powerBuff.SNOPower, powerBuff.TargetPosition, powerBuff.TargetDynamicWorldId, powerBuff.TargetAcdId))
                     {
                         LastPowerUsed = powerBuff.SNOPower;
                         SpellHistory.RecordSpell(powerBuff.SNOPower);
@@ -601,10 +613,10 @@ namespace Trinity
 
             //if (CurrentTarget != null)
             //{
-            //    var target = ZetaDia.Actors.GetActorByACDId(CurrentTarget.ACDGuid) as DiaUnit;
+            //    var target = ZetaDia.Actors.GetActorByACDId(CurrentTarget.AcdId) as DiaUnit;
 
-            //    Logger.Log($"CurrentTarget={CurrentTarget?.InternalName} SNO={CurrentTarget?.ActorSNO} Distance={CurrentTarget?.Distance} " +
-            //               $"CurrentPower={CombatBase.CurrentPower} TargetAcd={CurrentTarget?.ACDGuid} TargetValid={target.IsFullyValid()} " +
+            //    Logger.Log($"CurrentTarget={CurrentTarget?.InternalName} SNO={CurrentTarget?.ActorSnoId} Distance={CurrentTarget?.Distance} " +
+            //               $"CurrentPower={CombatBase.CurrentPower} TargetAcd={CurrentTarget?.AcdId} TargetValid={target.IsFullyValid()} " +
             //               $"TargetAlive={target?.IsAlive} TargetHealth={CurrentTarget.HitPoints} " +
             //               $"PowerTargetDistance={CombatBase.CurrentPower.TargetPosition.Distance(ZetaDia.Me.Position)} " +
             //               $"TargetDistance={target?.Distance} TimeSinceLastUse={SpellHistory.TimeSinceUse(CombatBase.CurrentPower.SNOPower)}");
@@ -687,11 +699,11 @@ namespace Trinity
                 case TrinityObjectType.Item:
                     {
                         // Check if we actually have room for this item first
-
+                        var item = CurrentTarget as TrinityItem;
                         bool isTwoSlot = true;
-                        if (CurrentTarget.Item != null && CurrentTarget.Item.CommonData != null)
+                        if (item != null && item.IsValid)
                         {
-                            isTwoSlot = CurrentTarget.Item.CommonData.IsTwoSquareItem;
+                            isTwoSlot = item.IsTwoSquareItem;
                         }
 
                         Vector2 validLocation = TrinityItemManager.FindValidBackpackLocation(isTwoSlot);
@@ -717,20 +729,20 @@ namespace Trinity
                     {
                         int interactAttempts;
                         // Count how many times we've tried interacting
-                        if (!CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorGuid, out interactAttempts))
+                        if (!CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorId, out interactAttempts))
                         {
-                            CacheData.InteractAttempts.Add(CurrentTarget.RActorGuid, 1);
+                            CacheData.InteractAttempts.Add(CurrentTarget.RActorId, 1);
                         }
                         else
                         {
-                            CacheData.InteractAttempts[CurrentTarget.RActorGuid]++;
+                            CacheData.InteractAttempts[CurrentTarget.RActorId]++;
                         }
                         // If we've tried interacting too many times, blacklist this for a while
                         if (interactAttempts > 3)
                         {
                             Blacklist3Seconds.Add(CurrentTarget.AnnId);
                         }
-                        _ignoreRactorGuid = CurrentTarget.RActorGuid;
+                        _ignoreRactorGuid = CurrentTarget.RActorId;
                         _ignoreTargetForLoops = 3;
 
                         // Now tell TrinityPlugin to get a new target!
@@ -748,6 +760,8 @@ namespace Trinity
                     {
                         _forceTargetUpdate = true;
 
+                        Player.CurrentAction = PlayerAction.Interacting;
+
                         if (ZetaDia.Me.Movement.SpeedXY > 0.5 && CurrentTarget.Distance < 8f)
                         {
                             Logger.LogVerbose(LogCategory.Behavior, "Trying to stop, Speeds:{0:0.00}/{1:0.00}", ZetaDia.Me.Movement.SpeedXY, PlayerMover.GetMovementSpeed());
@@ -761,19 +775,19 @@ namespace Trinity
                             }
 
                             int attemptCount;
-                            CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorGuid, out attemptCount);
+                            CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorId, out attemptCount);
 
                             Logger.LogDebug(LogCategory.UserInformation, "Interacting with {1} Distance {2:0} Radius {3:0.0} Attempt {4}",
                                      SNOPower.Axe_Operate_Gizmo, CurrentTarget.InternalName, CurrentTarget.Distance, CurrentTarget.Radius, attemptCount);
 
                             if (CurrentTarget.ActorType == ActorType.Monster)
                             {
-                                if (ZetaDia.Me.UsePower(SNOPower.Axe_Operate_NPC, Vector3.Zero, CurrentWorldDynamicId, CurrentTarget.ACDGuid))
+                                if (ZetaDia.Me.UsePower(SNOPower.Axe_Operate_NPC, Vector3.Zero, CurrentWorldDynamicId, CurrentTarget.AcdId))
                                 {
                                     SpellHistory.RecordSpell(new TrinityPower()
                                     {
                                         SNOPower = SNOPower.Axe_Operate_Gizmo,
-                                        TargetACDGUID = CurrentTarget.ACDGuid,
+                                        TargetAcdId = CurrentTarget.AcdId,
                                         MinimumRange = TargetRangeRequired,
                                         TargetPosition = CurrentTarget.Position,
                                     });
@@ -790,30 +804,30 @@ namespace Trinity
 
              
                                 Logger.LogNormal("Interacting with {0}", CurrentTarget.InternalName);
-                                //if (ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, CurrentTarget.ACDId))
-                                //ZetaDia.Me.UsePower(SNOPower.Interact_Crouching, Vector3.Zero, 0, CurrentTarget.ACDId)
+                                //if (ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, CurrentTarget.AcdId))
+                                //ZetaDia.Me.UsePower(SNOPower.Interact_Crouching, Vector3.Zero, 0, CurrentTarget.AcdId)
                                 //var hasBeenOperated = c_diaObject is DiaGizmo && (c_diaObject as DiaGizmo).HasBeenOperated;
                                 
-                                if (!CurrentTarget.IsUsed && ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, CurrentTarget.ACDGuid))
+                                if (!CurrentTarget.IsUsed && ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, CurrentTarget.AcdId))
                                 {
                                     SpellHistory.RecordSpell(new TrinityPower()
                                     {
                                         SNOPower = SNOPower.Axe_Operate_Gizmo,
-                                        TargetACDGUID = CurrentTarget.ACDGuid,
+                                        TargetAcdId = CurrentTarget.AcdId,
                                         MinimumRange = TargetRangeRequired,
                                         TargetPosition = CurrentTarget.Position,
                                     });
                                 }
                                 else
                                 {
-                                    CurrentTarget.Object.Interact();
+                                    CurrentTarget.Interact();
 
                                     //{
                                     //    Logger.LogNormal("Fallback Interact on {0}", CurrentCacheObject.InternalName);
                                     //    SpellHistory.RecordSpell(new TrinityPower()
                                     //    {
                                     //        SNOPower = SNOPower.Axe_Operate_Gizmo,
-                                    //        TargetACDGUID = CurrentTarget.ACDId,
+                                    //        TargetAcdId = CurrentTarget.AcdId,
                                     //        MinimumRange = TargetRangeRequired,
                                     //        TargetPosition = CurrentTarget.Position,
                                     //    });
@@ -827,24 +841,24 @@ namespace Trinity
                             }
 
                             // Count how many times we've tried interacting
-                            if (!CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorGuid, out attemptCount))
+                            if (!CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorId, out attemptCount))
                             {
-                                CacheData.InteractAttempts.Add(CurrentTarget.RActorGuid, 1);
+                                CacheData.InteractAttempts.Add(CurrentTarget.RActorId, 1);
                             }
                             else
                             {
-                                CacheData.InteractAttempts[CurrentTarget.RActorGuid] += 1;
+                                CacheData.InteractAttempts[CurrentTarget.RActorId] += 1;
                             }
 
                             var attempts = CurrentTarget.Type == TrinityObjectType.Shrine ? 8 : 20;
 
                             // If we've tried interacting too many times, blacklist this for a while
-                            if (CacheData.InteractAttempts[CurrentTarget.RActorGuid] > attempts && CurrentTarget.Type != TrinityObjectType.HealthWell)
+                            if (CacheData.InteractAttempts[CurrentTarget.RActorId] > attempts && CurrentTarget.Type != TrinityObjectType.HealthWell)
                             {
                                 Logger.LogVerbose("Blacklisting {0} ({1}) for 60 seconds after {2} interactions",
-                                    CurrentTarget.InternalName, CurrentTarget.ActorSNO, attemptCount);
+                                    CurrentTarget.InternalName, CurrentTarget.ActorSnoId, attemptCount);
 
-                                CacheData.InteractAttempts[CurrentTarget.RActorGuid] = 0;
+                                CacheData.InteractAttempts[CurrentTarget.RActorId] = 0;
                                 GenericBlacklist.Blacklist(CurrentTarget, TimeSpan.FromSeconds(15), "Too Many Interaction Attempts");
                                 //Blacklist60Seconds.Add(CurrentTarget.AnnId);
                                 //Blacklist60LastClear = DateTime.UtcNow;
@@ -856,6 +870,9 @@ namespace Trinity
                 case TrinityObjectType.Destructible:
                 case TrinityObjectType.Barricade:
                     {
+
+                        Player.CurrentAction = PlayerAction.Attacking;
+
                         if (CombatBase.CurrentPower.SNOPower != SNOPower.None)
                         {
                             if (CurrentTarget.Type == TrinityObjectType.Barricade)
@@ -863,7 +880,7 @@ namespace Trinity
                                 Logger.Log(TrinityLogLevel.Verbose, LogCategory.Behavior,
                                     "Barricade: Name={0}. SNO={1}, Range={2}. Needed range={3}. Radius={4}. Type={5}. Using power={6}",
                                     CurrentTarget.InternalName,     // 0
-                                    CurrentTarget.ActorSNO,         // 1
+                                    CurrentTarget.ActorSnoId,         // 1
                                     CurrentTarget.Distance,         // 2
                                     TargetRangeRequired,            // 3
                                     CurrentTarget.Radius,           // 4
@@ -876,7 +893,7 @@ namespace Trinity
                                 Logger.Log(TrinityLogLevel.Verbose, LogCategory.Behavior,
                                     "Destructible: Name={0}. SNO={1}, Range={2}. Needed range={3}. Radius={4}. Type={5}. Using power={6}",
                                     CurrentTarget.InternalName,       // 0
-                                    CurrentTarget.ActorSNO,           // 1
+                                    CurrentTarget.ActorSnoId,           // 1
                                     TargetCurrentDistance,            // 2
                                     TargetRangeRequired,              // 3 
                                     CurrentTarget.Radius,             // 4
@@ -886,7 +903,7 @@ namespace Trinity
                             }
 
                             //if (CurrentTarget.RActorId == _ignoreRactorGuid || DataDictionary.DestroyAtLocationIds.Contains(CurrentTarget.ActorSnoId))
-                            if (DataDictionary.DestroyAtLocationIds.Contains(CurrentTarget.ActorSNO))
+                            if (DataDictionary.DestroyAtLocationIds.Contains(CurrentTarget.ActorSnoId))
                             {
                                 // Location attack - attack the Vector3/map-area (equivalent of holding shift and left-clicking the object in-game to "force-attack")
                                 Vector3 vAttackPoint;
@@ -922,8 +939,8 @@ namespace Trinity
                             {
                                 Logger.LogVerbose(LogCategory.Behavior, "Attacking  destructable");
 
-                                // Standard attack - attack the ACDGUID (equivalent of left-clicking the object in-game)
-                                if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, CurrentTarget.Position, -1, CurrentTarget.ACDGuid))
+                                // Standard attack - attack the AcdId (equivalent of left-clicking the object in-game)
+                                if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, CurrentTarget.Position, -1, CurrentTarget.AcdId))
                                 {
                                     SpellHistory.RecordSpell(CombatBase.CurrentPower.SNOPower);
                                 }
@@ -932,7 +949,7 @@ namespace Trinity
                                     CombatBase.CurrentPower = CombatBase.DefaultPower;
                                     Navigator.PlayerMover.MoveTowards(CurrentTarget.Position);
 
-                                    if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, CurrentTarget.Position, -1, CurrentTarget.ACDGuid))
+                                    if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, CurrentTarget.Position, -1, CurrentTarget.AcdId))
                                     {
                                         SpellHistory.RecordSpell(CombatBase.CurrentPower.SNOPower);
                                     }
@@ -956,23 +973,23 @@ namespace Trinity
 
                             int interactAttempts;
                             // Count how many times we've tried interacting
-                            if (!CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorGuid, out interactAttempts))
+                            if (!CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorId, out interactAttempts))
                             {
-                                CacheData.InteractAttempts.Add(CurrentTarget.RActorGuid, 1);
+                                CacheData.InteractAttempts.Add(CurrentTarget.RActorId, 1);
                             }
                             else
                             {
-                                CacheData.InteractAttempts[CurrentTarget.RActorGuid]++;
+                                CacheData.InteractAttempts[CurrentTarget.RActorId]++;
                             }
 
                             //CacheData.AbilityLastUsed[CombatBase.CurrentPower.SNOPower] = DateTime.UtcNow;
 
                             // Prevent this EXACT object being targetted again for a short while, just incase
-                            _ignoreRactorGuid = CurrentTarget.RActorGuid;
+                            _ignoreRactorGuid = CurrentTarget.RActorId;
                             _ignoreTargetForLoops = 3;
                             // Add this destructible/barricade to our very short-term ignore list
                             //Destructible3SecBlacklist.Add(CurrentTarget.RActorId);
-                            Logger.Log(TrinityLogLevel.Debug, LogCategory.Behavior, "Blacklisting {0} {1} {2} for 3 seconds for Destrucable attack", CurrentTarget.Type, CurrentTarget.InternalName, CurrentTarget.ActorSNO);
+                            Logger.Log(TrinityLogLevel.Debug, LogCategory.Behavior, "Blacklisting {0} {1} {2} for 3 seconds for Destrucable attack", CurrentTarget.Type, CurrentTarget.InternalName, CurrentTarget.ActorSnoId);
                             _lastDestroyedDestructible = DateTime.UtcNow;
                             _needClearDestructibles = true;
                         }
@@ -1037,7 +1054,7 @@ namespace Trinity
                     return false;
 
                 // don't timeout on legendary items
-                if (CurrentTarget.Type == TrinityObjectType.Item && CurrentTarget.ItemQuality >= ItemQuality.Legendary)
+                if (CurrentTarget.Type == TrinityObjectType.Item && CurrentTarget.ItemQualityLevel >= ItemQuality.Legendary)
                     return false;
 
                 // don't timeout if we're actively moving
@@ -1073,7 +1090,7 @@ namespace Trinity
                     }
 
                     int interactAttempts;
-                    CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorGuid, out interactAttempts);
+                    CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorId, out interactAttempts);
 
                     if ((CurrentTarget.Type == TrinityObjectType.Door || CurrentTarget.Type == TrinityObjectType.Interactable || CurrentTarget.Type == TrinityObjectType.Container) &&
                         interactAttempts < 45 && DateTime.UtcNow.Subtract(PlayerMover.LastRecordedAnyStuck).TotalSeconds > 15)
@@ -1091,7 +1108,7 @@ namespace Trinity
                             return true;
                         }
 
-                        if (CurrentTarget.Type == TrinityObjectType.Item && CurrentTarget.ItemQuality >= ItemQuality.Legendary)
+                        if (CurrentTarget.Type == TrinityObjectType.Item && CurrentTarget.ItemQualityLevel >= ItemQuality.Legendary)
                         {
                             return false;
                         }
@@ -1106,10 +1123,10 @@ namespace Trinity
                             Logger.LogDebug(
                                 "Blacklisting a monster because of possible stuck issues. Monster={0} [{1}] Range={2:0} health %={3:0} RActorGUID={4}",
                                 CurrentTarget.InternalName,         // 0
-                                CurrentTarget.ActorSNO,             // 1
+                                CurrentTarget.ActorSnoId,             // 1
                                 CurrentTarget.Distance,       // 2
                                 CurrentTarget.HitPointsPct,            // 3
-                                CurrentTarget.RActorGuid            // 4
+                                CurrentTarget.RActorId            // 4
                                 );
                         }
                         else
@@ -1117,9 +1134,9 @@ namespace Trinity
                             Logger.LogDebug(
                                 "Blacklisting an object because of possible stuck issues. Object={0} [{1}]. Range={2:0} RActorGUID={3}",
                                 CurrentTarget.InternalName,         // 0
-                                CurrentTarget.ActorSNO,             // 1 
+                                CurrentTarget.ActorSnoId,             // 1 
                                 CurrentTarget.Distance,       // 2
-                                CurrentTarget.RActorGuid            // 3
+                                CurrentTarget.RActorId            // 3
                                 );
                         }
 
@@ -1272,104 +1289,106 @@ namespace Trinity
         /// <returns></returns>
         private static double GetSecondsSinceTargetUpdate()
         {
-            return DateTime.UtcNow.Subtract(_lastPickedTargetTime).TotalSeconds;
+            return DateTime.UtcNow.Subtract(LastPickedTargetTime).TotalSeconds;
         }
 
-        private static string lastStatusText = "";
         private static List<DateTime> _lastActionTimes;
 
-        /// <summary>
-        /// Updates bot status text with appropriate information if we are moving into range of our <see cref="CurrentTarget"/>
-        /// </summary>
-        private static void UpdateStatusTextTarget(bool targetIsInRange)
-        {
-            string action = "";
+        ///// <summary>
+        ///// Updates bot status text with appropriate information if we are moving into range of our <see cref="CurrentTarget"/>
+        ///// </summary>
+        //private static void UpdateStatusTextTarget(bool targetIsInRange)
+        //{
+        //    if (!Settings.Advanced.DebugInStatusBar)
+        //        return;
 
-            StringBuilder statusText = new StringBuilder();
-            if (!targetIsInRange)
-                action = "Moveto ";
-            else
-                switch (CurrentTarget.Type)
-                {
-                    case TrinityObjectType.Avoidance:
-                        action = "Avoid ";
-                        break;
-                    case TrinityObjectType.Unit:
-                        action = "Attack ";
-                        break;
-                    case TrinityObjectType.Item:
-                    case TrinityObjectType.Gold:
-                    case TrinityObjectType.PowerGlobe:
-                    case TrinityObjectType.HealthGlobe:
-                    case TrinityObjectType.ProgressionGlobe:
-                        action = "Pickup ";
-                        break;
-                    case TrinityObjectType.Interactable:
-                        action = "Interact ";
-                        break;
-                    case TrinityObjectType.Door:
-                    case TrinityObjectType.Container:
-                        action = "Open ";
-                        break;
-                    case TrinityObjectType.Destructible:
-                    case TrinityObjectType.Barricade:
-                        action = "Destroy ";
-                        break;
-                    case TrinityObjectType.Shrine:
-                        action = "Click ";
-                        break;
-                }
-            statusText.Append(action);
+        //    string action = "";
 
-            statusText.Append("Target=");
-            statusText.Append(CurrentTarget.InternalName);
-            if (CurrentTarget.IsUnit && CombatBase.CurrentPower.SNOPower != SNOPower.None)
-            {
-                statusText.Append(" Power=");
-                statusText.Append(CombatBase.CurrentPower.SNOPower);
-            }
-            //statusText.Append(" Speed=");
-            //statusText.Append(ZetaDia.Me.Movement.SpeedXY.ToString("0.00"));
-            statusText.Append(" SNO=");
-            statusText.Append(CurrentTarget.ActorSNO.ToString(CultureInfo.InvariantCulture));
-            statusText.Append(" Elite=");
-            statusText.Append(CurrentTarget.IsElite.ToString());
-            statusText.Append(" Weight=");
-            statusText.Append(CurrentTarget.Weight.ToString("0"));
-            statusText.Append(" Type=");
-            statusText.Append(CurrentTarget.Type.ToString());
-            statusText.Append(" C-Dist=");
-            statusText.Append(CurrentTarget.Distance.ToString("0.0"));
-            statusText.Append(" R-Dist=");
-            statusText.Append(CurrentTarget.RadiusDistance.ToString("0.0"));
-            statusText.Append(" RangeReq'd=");
-            statusText.Append(TargetRangeRequired.ToString("0.0"));
-            statusText.Append(" DistfromTrgt=");
-            statusText.Append(TargetCurrentDistance.ToString("0"));
-            statusText.Append(" tHP=");
-            statusText.Append((CurrentTarget.HitPointsPct * 100).ToString("0"));
-            statusText.Append(" MyHP=");
-            statusText.Append((Player.CurrentHealthPct * 100).ToString("0"));
-            statusText.Append(" MyMana=");
-            statusText.Append((Player.PrimaryResource).ToString("0"));
-            statusText.Append(" InLoS=");
-            statusText.Append(CurrentTargetIsInLoS.ToString());
+        //    StringBuilder statusText = new StringBuilder();
+        //    if (!targetIsInRange)
+        //        action = "Moveto ";
+        //    else
+        //        switch (CurrentTarget.Type)
+        //        {
+        //            case TrinityObjectType.Avoidance:
+        //                action = "Avoid ";
+        //                break;
+        //            case TrinityObjectType.Unit:
+        //                action = "Attack ";
+        //                break;
+        //            case TrinityObjectType.Item:
+        //            case TrinityObjectType.Gold:
+        //            case TrinityObjectType.PowerGlobe:
+        //            case TrinityObjectType.HealthGlobe:
+        //            case TrinityObjectType.ProgressionGlobe:
+        //                action = "Pickup ";
+        //                break;
+        //            case TrinityObjectType.Interactable:
+        //                action = "Interact ";
+        //                break;
+        //            case TrinityObjectType.Door:
+        //            case TrinityObjectType.Container:
+        //                action = "Open ";
+        //                break;
+        //            case TrinityObjectType.Destructible:
+        //            case TrinityObjectType.Barricade:
+        //                action = "Destroy ";
+        //                break;
+        //            case TrinityObjectType.Shrine:
+        //                action = "Click ";
+        //                break;
+        //        }
+        //    statusText.Append(action);
 
-            statusText.Append(String.Format(" Duration={0:0}", DateTime.UtcNow.Subtract(_lastPickedTargetTime).TotalSeconds));
+        //    statusText.Append("Target=");
+        //    statusText.Append(CurrentTarget.InternalName);
+        //    if (CurrentTarget.IsUnit && CombatBase.CurrentPower.SNOPower != SNOPower.None)
+        //    {
+        //        statusText.Append(" Power=");
+        //        statusText.Append(CombatBase.CurrentPower.SNOPower);
+        //    }
+        //    //statusText.Append(" Speed=");
+        //    //statusText.Append(ZetaDia.Me.Movement.SpeedXY.ToString("0.00"));
+        //    statusText.Append(" SNO=");
+        //    statusText.Append(CurrentTarget.ActorSnoId.ToString(CultureInfo.InvariantCulture));
+        //    statusText.Append(" Elite=");
+        //    statusText.Append(CurrentTarget.IsElite.ToString());
+        //    statusText.Append(" Weight=");
+        //    statusText.Append(CurrentTarget.Weight.ToString("0"));
+        //    statusText.Append(" Type=");
+        //    statusText.Append(CurrentTarget.Type.ToString());
+        //    statusText.Append(" C-Dist=");
+        //    statusText.Append(CurrentTarget.Distance.ToString("0.0"));
+        //    statusText.Append(" R-Dist=");
+        //    statusText.Append(CurrentTarget.RadiusDistance.ToString("0.0"));
+        //    statusText.Append(" RangeReq'd=");
+        //    statusText.Append(TargetRangeRequired.ToString("0.0"));
+        //    statusText.Append(" DistfromTrgt=");
+        //    statusText.Append(TargetCurrentDistance.ToString("0"));
+        //    statusText.Append(" tHP=");
+        //    statusText.Append((CurrentTarget.HitPointsPct * 100).ToString("0"));
+        //    statusText.Append(" MyHP=");
+        //    statusText.Append((Player.CurrentHealthPct * 100).ToString("0"));
+        //    statusText.Append(" MyMana=");
+        //    statusText.Append((Player.PrimaryResource).ToString("0"));
+        //    statusText.Append(" InLoS=");
+        //    statusText.Append(CurrentTargetIsInLoS.ToString());
 
-            if (Settings.Advanced.DebugInStatusBar)
-            {
-                _statusText = statusText.ToString();
-                BotMain.StatusText = _statusText;
-            }
-            if (lastStatusText != statusText.ToString())
-            {
-                // prevent spam
-                lastStatusText = statusText.ToString();
-                Logger.Log(TrinityLogLevel.Debug, LogCategory.Targetting, "{0}", statusText.ToString());
-                _resetStatusText = true;
-            }
-        }
+        //    statusText.Append(String.Format(" Duration={0:0}", DateTime.UtcNow.Subtract(LastPickedTargetTime).TotalSeconds));
+
+        //    if (Settings.Advanced.DebugInStatusBar)
+        //    {
+        //        _statusText = statusText.ToString();
+        //        BotMain.StatusText = _statusText;
+        //    }
+        //    if (lastStatusText != statusText.ToString())
+        //    {
+        //        // prevent spam
+        //        lastStatusText = statusText.ToString();
+        //        Logger.Log(TrinityLogLevel.Debug, LogCategory.Targetting, "{0}", statusText.ToString());
+        //        _resetStatusText = true;
+        //    }
+        //}
 
         /// <summary>
         /// Moves our player if no special ability is available
@@ -1382,7 +1401,9 @@ namespace Trinity
                 // Now for the actual movement request stuff
                 IsAlreadyMoving = true;
                 lastMovementCommand = DateTime.UtcNow;
-                
+
+                Player.CurrentAction = PlayerAction.Moving;
+
                 if (DateTime.UtcNow.Subtract(lastSentMovePower).TotalMilliseconds >= 250 || Vector3.Distance(LastMoveToTarget, CurrentDestination) >= 2f || bForceNewMovement)
                 {
 
@@ -1427,7 +1448,7 @@ namespace Trinity
                     //        Blacklist60Seconds.Add(CurrentTarget.RActorId);
                     //        Logger.Log("Unable to navigate to target! Blacklisting {0} SNO={1} RAGuid={2} dist={3:0} "
                     //            + (CurrentTarget.IsElite ? " IsElite " : "")
-                    //            + (CurrentTarget.ItemQuality >= ItemQuality.Legendary ? "IsLegendaryItem " : ""),
+                    //            + (CurrentTarget.ItemQualityLevel >= ItemQuality.Legendary ? "IsLegendaryItem " : ""),
                     //            CurrentTarget.InternalName, CurrentTarget.ActorSnoId, CurrentTarget.RActorId, CurrentTarget.Distance);
                     //    }
                     //}
@@ -1441,135 +1462,131 @@ namespace Trinity
             }
         }
 
-        private static void SetRangeRequiredForTarget()
-        {
-            using (new PerformanceLogger("HandleTarget.SetRequiredRange"))
-            {
-                TargetRangeRequired = 2f;
-                TargetCurrentDistance = CurrentTarget.RadiusDistance;
-                CurrentTargetIsInLoS = false;
-                // Set current destination to our current target's destination
-                CurrentDestination = CurrentTarget.Position;
+        //private static void SetRangeRequiredForTarget()
+        //{
+        //    using (new PerformanceLogger("HandleTarget.SetRequiredRange"))
+        //    {
 
-                switch (CurrentTarget.Type)
-                {
-                    // * Unit, we need to pick an ability to use and get within range
-                    case TrinityObjectType.Unit:
-                    {
-                        if (CurrentTarget.IsHidden)
-                        {
-                            TargetRangeRequired = CurrentTarget.CollisionRadius;
-                        }
-                        else
-                        {
-                            TargetRangeRequired = CombatBase.CurrentPower.MinimumRange;
-                        }
-                        break;
-                    }
-                    // * Item - need to get within 6 feet and then interact with it
-                    case TrinityObjectType.Item:
-                        {
-                            TargetRangeRequired = 2f;
-                            TargetCurrentDistance = CurrentTarget.Distance;
-                            break;
-                        }
-                    // * Gold - need to get within pickup radius only
-                    case TrinityObjectType.Gold:
-                        {
-                            TargetRangeRequired = 2f;
-                            TargetCurrentDistance = CurrentTarget.Distance;
-                            CurrentDestination = MathEx.CalculatePointFrom(Player.Position, CurrentTarget.Position, -2f);
-                            break;
-                        }
-                    // * Globes - need to get within pickup radius only
-                    case TrinityObjectType.PowerGlobe:
-                    case TrinityObjectType.HealthGlobe:
-                    case TrinityObjectType.ProgressionGlobe:
-                        {
-                            TargetRangeRequired = 2f;
-                            TargetCurrentDistance = CurrentTarget.Distance;
-                            break;
-                        }
-                    // * Shrine & Container - need to get within 8 feet and interact
-                    case TrinityObjectType.HealthWell:
-                        {
-                            TargetRangeRequired = 4f;
 
-                            float range;
-                            if (DataDictionary.CustomObjectRadius.TryGetValue(CurrentTarget.ActorSNO, out range))
-                            {
-                                TargetRangeRequired = range;
-                            }
-                            break;
-                        }
-                    case TrinityObjectType.Shrine:
-                    case TrinityObjectType.Container:
-                        {
-                            TargetRangeRequired = 6f;
+        //        switch (CurrentTarget.Type)
+        //        {
+        //            // * Unit, we need to pick an ability to use and get within range
+        //            case TrinityObjectType.Unit:
+        //            {
+        //                if (CurrentTarget.IsHidden)
+        //                {
+        //                    TargetRangeRequired = CurrentTarget.CollisionRadius;
+        //                }
+        //                else
+        //                {
+        //                    TargetRangeRequired = CombatBase.CurrentPower.MinimumRange;
+        //                }
+        //                break;
+        //            }
+        //            // * Item - need to get within 6 feet and then interact with it
+        //            case TrinityObjectType.Item:
+        //                {
+        //                    TargetRangeRequired = 2f;
+        //                    TargetCurrentDistance = CurrentTarget.Distance;
+        //                    break;
+        //                }
+        //            // * Gold - need to get within pickup radius only
+        //            case TrinityObjectType.Gold:
+        //                {
+        //                    TargetRangeRequired = 2f;
+        //                    TargetCurrentDistance = CurrentTarget.Distance;
+        //                    CurrentDestination = MathEx.CalculatePointFrom(Player.Position, CurrentTarget.Position, -2f);
+        //                    break;
+        //                }
+        //            // * Globes - need to get within pickup radius only
+        //            case TrinityObjectType.PowerGlobe:
+        //            case TrinityObjectType.HealthGlobe:
+        //            case TrinityObjectType.ProgressionGlobe:
+        //                {
+        //                    TargetRangeRequired = 2f;
+        //                    TargetCurrentDistance = CurrentTarget.Distance;
+        //                    break;
+        //                }
+        //            // * Shrine & Container - need to get within 8 feet and interact
+        //            case TrinityObjectType.HealthWell:
+        //                {
+        //                    TargetRangeRequired = 4f;
 
-                            float range;
-                            if (DataDictionary.CustomObjectRadius.TryGetValue(CurrentTarget.ActorSNO, out range))
-                            {
-                                TargetRangeRequired = range;
-                            }
-                            break;
-                        }
-                    case TrinityObjectType.Interactable:
-                        {
-                            if (CurrentTarget.IsQuestGiver)
-                            {
-                                CurrentDestination = MathEx.CalculatePointFrom(CurrentTarget.Position, Player.Position, CurrentTarget.Radius + 2f);
-                                TargetRangeRequired = 5f;
-                            }
-                            else
-                            {
-                                TargetRangeRequired = 5f;
-                            }
-                            // Check if it's in our interactable range dictionary or not
-                            float range;
+        //                    float range;
+        //                    if (DataDictionary.CustomObjectRadius.TryGetValue(CurrentTarget.ActorSnoId, out range))
+        //                    {
+        //                        TargetRangeRequired = range;
+        //                    }
+        //                    break;
+        //                }
+        //            case TrinityObjectType.Shrine:
+        //            case TrinityObjectType.Container:
+        //                {
+        //                    TargetRangeRequired = 6f;
 
-                            if (DataDictionary.CustomObjectRadius.TryGetValue(CurrentTarget.ActorSNO, out range))
-                            {
-                                TargetRangeRequired = range;
-                            }
-                            if (TargetRangeRequired <= 0)
-                                TargetRangeRequired = CurrentTarget.Radius;
+        //                    float range;
+        //                    if (DataDictionary.CustomObjectRadius.TryGetValue(CurrentTarget.ActorSnoId, out range))
+        //                    {
+        //                        TargetRangeRequired = range;
+        //                    }
+        //                    break;
+        //                }
+        //            case TrinityObjectType.Interactable:
+        //                {
+        //                    if (CurrentTarget.IsQuestGiver)
+        //                    {
+        //                        CurrentDestination = MathEx.CalculatePointFrom(CurrentTarget.Position, Player.Position, CurrentTarget.Radius + 2f);
+        //                        TargetRangeRequired = 5f;
+        //                    }
+        //                    else
+        //                    {
+        //                        TargetRangeRequired = 5f;
+        //                    }
+        //                    // Check if it's in our interactable range dictionary or not
+        //                    float range;
 
-                            break;
-                        }
-                    // * Destructible - need to pick an ability and attack it
-                    case TrinityObjectType.Destructible:
-                        {
-                            // Pick a range to try to reach + (tmp_fThisRadius * 0.70);
-                            //TargetRangeRequired = CombatBase.CurrentPower.SNOPower == SNOPower.None ? 9f : CombatBase.CurrentPower.MinimumRange;
-                            TargetRangeRequired = CombatBase.CurrentPower.MinimumRange;
-                            CurrentTarget.Radius = 1f;
-                            TargetCurrentDistance = CurrentTarget.Distance;
-                            break;
-                        }
-                    case TrinityObjectType.Barricade:
-                        {
-                            // Pick a range to try to reach + (tmp_fThisRadius * 0.70);
-                            TargetRangeRequired = CombatBase.CurrentPower.MinimumRange;
-                            CurrentTarget.Radius = 1f;
-                            TargetCurrentDistance = CurrentTarget.Distance;
-                            break;
-                        }
-                    // * Avoidance - need to pick an avoid location and move there
-                    case TrinityObjectType.Avoidance:
-                        {
-                            TargetRangeRequired = 2f;
-                            break;
-                        }
-                    case TrinityObjectType.Door:
-                        TargetRangeRequired = 2f;
-                        break;
-                    default:
-                        TargetRangeRequired = CurrentTarget.Radius;
-                        break;
-                }
-            }
-        }
+        //                    if (DataDictionary.CustomObjectRadius.TryGetValue(CurrentTarget.ActorSnoId, out range))
+        //                    {
+        //                        TargetRangeRequired = range;
+        //                    }
+        //                    if (TargetRangeRequired <= 0)
+        //                        TargetRangeRequired = CurrentTarget.Radius;
+
+        //                    break;
+        //                }
+        //            // * Destructible - need to pick an ability and attack it
+        //            case TrinityObjectType.Destructible:
+        //                {
+        //                    // Pick a range to try to reach + (tmp_fThisRadius * 0.70);
+        //                    //TargetRangeRequired = CombatBase.CurrentPower.SNOPower == SNOPower.None ? 9f : CombatBase.CurrentPower.MinimumRange;
+        //                    TargetRangeRequired = CombatBase.CurrentPower.MinimumRange;
+        //                    CurrentTarget.Radius = 1f;
+        //                    TargetCurrentDistance = CurrentTarget.Distance;
+        //                    break;
+        //                }
+        //            case TrinityObjectType.Barricade:
+        //                {
+        //                    // Pick a range to try to reach + (tmp_fThisRadius * 0.70);
+        //                    TargetRangeRequired = CombatBase.CurrentPower.MinimumRange;
+        //                    CurrentTarget.Radius = 1f;
+        //                    TargetCurrentDistance = CurrentTarget.Distance;
+        //                    break;
+        //                }
+        //            // * Avoidance - need to pick an avoid location and move there
+        //            case TrinityObjectType.Avoidance:
+        //                {
+        //                    TargetRangeRequired = 2f;
+        //                    break;
+        //                }
+        //            case TrinityObjectType.Door:
+        //                TargetRangeRequired = 2f;
+        //                break;
+        //            default:
+        //                TargetRangeRequired = CurrentTarget.Radius;
+        //                break;
+        //        }
+        //    }
+        //}
 
         private static void HandleUnitInRange()
         {
@@ -1595,19 +1612,19 @@ namespace Trinity
 
                 float distance;
                 Vector3 targetPosition = Vector3.Zero;
-                int targetACDGuid = -1;                
+                int targetAcdId = -1;                
 
                 if (CombatBase.CurrentPower.IsCastOnSelf)
                 {
                     distance = 0;
-                    targetACDGuid = -1;
+                    targetAcdId = -1;
                     targetPosition = ZetaDia.Me.Position;
                 }
                 else
                 {
                     var isTargetPosition = CombatBase.CurrentPower.TargetPosition != Vector3.Zero;
-                    var isACDGuid = CombatBase.CurrentPower.TargetACDGUID != -1;
-                    var isValidTargetData = isACDGuid && isTargetPosition;
+                    var isAcdId = CombatBase.CurrentPower.TargetAcdId != -1;
+                    var isValidTargetData = isAcdId && isTargetPosition;
 
                     // TrinityPower gave us everything we need, lets rely on its accuracy
                     if (isValidTargetData)
@@ -1615,37 +1632,37 @@ namespace Trinity
                         Logger.LogVerbose(LogCategory.Behavior, "{0} Using power targetACD and targetPosition", CombatBase.CurrentPower.SNOPower);
 
                         targetPosition = CombatBase.CurrentPower.TargetPosition;
-                        targetACDGuid = CombatBase.CurrentPower.TargetACDGUID;
+                        targetAcdId = CombatBase.CurrentPower.TargetAcdId;
                     }
 
                     // We were given only an ACDId, find the actors position.
-                    if (!isTargetPosition && isACDGuid)
+                    if (!isTargetPosition && isAcdId)
                     {
-                        var powerTarget = ObjectCache.FirstOrDefault(o => o.ACDGuid == CombatBase.CurrentPower.TargetACDGUID);
+                        var powerTarget = Targets.FirstOrDefault(o => o.AcdId == CombatBase.CurrentPower.TargetAcdId);
                         if (powerTarget != null)
                         {
                             Logger.LogVerbose(LogCategory.Behavior, "{0} Found target by ACDId", CombatBase.CurrentPower.SNOPower);
 
                             targetPosition = powerTarget.Position;
-                            targetACDGuid = powerTarget.ACDGuid;
+                            targetAcdId = powerTarget.AcdId;
                         }                        
                     }
 
                     distance = ZetaDia.Me.Position.Distance(targetPosition); 
 
                     // We don't have valid casting data, use current target
-                    if ((!isTargetPosition && !isACDGuid || targetPosition == Vector3.Zero || targetACDGuid == -1 || distance > 150f) && !CurrentTarget.IsSafeSpot)
+                    if ((!isTargetPosition && !isAcdId || targetPosition == Vector3.Zero || targetAcdId == -1 || distance > 150f) && !CurrentTarget.IsSafeSpot)
                     {
                         Logger.LogVerbose(LogCategory.Behavior,"{0} Using  CurrentTarget Position/ACD", CombatBase.CurrentPower.SNOPower);
                         targetPosition = CurrentTarget.Position;
-                        targetACDGuid = CurrentTarget.ACDGuid; 
+                        targetAcdId = CurrentTarget.AcdId; 
                     }
 
-                    if (isTargetPosition && !isACDGuid)
+                    if (isTargetPosition && !isAcdId)
                     {
                         Logger.LogVerbose(LogCategory.Behavior,"{0} Using target position only.", CombatBase.CurrentPower.SNOPower);
                         targetPosition = CombatBase.CurrentPower.TargetPosition;
-                        targetACDGuid = CombatBase.CurrentPower.TargetACDGUID;
+                        targetAcdId = CombatBase.CurrentPower.TargetAcdId;
                     }
                 }
 
@@ -1655,9 +1672,9 @@ namespace Trinity
                     return;
                 }
 
-                if (targetACDGuid > 0)
+                if (targetAcdId > 0)
                 {
-                    var targetAcd = ZetaDia.Actors.GetActorByACDId(targetACDGuid);
+                    var targetAcd = ZetaDia.Actors.GetActorByACDId(targetAcdId);
                     if (!targetAcd.IsFullyValid())
                     {
                         Logger.LogVerbose("Invalid target Acd, probably dead");
@@ -1670,6 +1687,8 @@ namespace Trinity
                         return;
                     }
                 }
+
+                Player.CurrentAction = PlayerAction.Attacking;
 
 
                 var d = targetPosition.Distance(Player.Position);
@@ -1703,12 +1722,12 @@ namespace Trinity
                     {                       
                         //Logger.Log(LogCategory.Targetting, "Casting {0} at {1} WorldId={2} ACDId={3} CastOnSelf={4} Flags={5} IsDeadZeta={6} DeadPlayers={7}",
                         //    CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, 
-                        //    targetACDGuid, CombatBase.CurrentPower.IsCastOnSelf, flags, ZetaDia.Me.IsDead, ZetaDia.Actors.GetActorsOfType<DiaPlayer>().Any(x => x.IsDead));
+                        //    targetAcdId, CombatBase.CurrentPower.IsCastOnSelf, flags, ZetaDia.Me.IsDead, ZetaDia.Actors.GetActorsOfType<DiaPlayer>().Any(x => x.IsDead));
 
                         if (powerBuff != null && powerBuff.ShouldWaitForAttackToFinish)
                             _isWaitingForAttackToFinish = true;
 
-                        usePowerResult = ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, targetACDGuid);
+                        usePowerResult = ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, targetAcdId);
 
                         if (!usePowerResult)
                         {
@@ -1718,7 +1737,7 @@ namespace Trinity
                     else
                     {
                         Logger.Log(LogCategory.Targetting, "Unable to Cast {0} at {1} WorldId={2} ACDId={3} CastOnSelf={4} Flags={5}",
-                            CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, targetACDGuid, CombatBase.CurrentPower.IsCastOnSelf, flags);
+                            CombatBase.CurrentPower.SNOPower, targetPosition, CombatBase.CurrentPower.TargetDynamicWorldId, targetAcdId, CombatBase.CurrentPower.IsCastOnSelf, flags);
 
                         usePowerResult = false;
                     }
@@ -1760,7 +1779,7 @@ namespace Trinity
                         Logger.LogVerbose("Used Power {0} " + target, CombatBase.CurrentPower.SNOPower);
                     }
 
-                    SpellTracker.TrackSpellOnUnit(CombatBase.CurrentPower.TargetACDGUID, CombatBase.CurrentPower.SNOPower);
+                    SpellTracker.TrackSpellOnUnit(CombatBase.CurrentPower.TargetAcdId, CombatBase.CurrentPower.SNOPower);
                     SpellHistory.RecordSpell(CombatBase.CurrentPower);
 
                     lastGlobalCooldownUse = DateTime.UtcNow;
@@ -1827,13 +1846,13 @@ namespace Trinity
                 if (CurrentTarget.HitPointsPct >= 0.9d &&
                     !NavHelper.CanRayCast(Player.Position, CurrentTarget.Position) &&
                     !CurrentTarget.IsBoss &&
-                    !(DataDictionary.StraightLinePathingLevelAreaIds.Contains(Player.LevelAreaId) || DataDictionary.LineOfSightWhitelist.Contains(CurrentTarget.ActorSNO)))
+                    !(DataDictionary.StraightLinePathingLevelAreaIds.Contains(Player.LevelAreaId) || DataDictionary.LineOfSightWhitelist.Contains(CurrentTarget.ActorSnoId)))
                 {
-                    _ignoreRactorGuid = CurrentTarget.RActorGuid;
+                    _ignoreRactorGuid = CurrentTarget.RActorId;
                     _ignoreTargetForLoops = 6;
                     // Add this monster to our very short-term ignore list
                     Blacklist3Seconds.Add(CurrentTarget.AnnId);
-                    Logger.Log(TrinityLogLevel.Verbose, LogCategory.Behavior, "Blacklisting {0} {1} {2} for 3 seconds due to Raycast failure", CurrentTarget.Type, CurrentTarget.InternalName, CurrentTarget.ActorSNO);
+                    Logger.Log(TrinityLogLevel.Verbose, LogCategory.Behavior, "Blacklisting {0} {1} {2} for 3 seconds due to Raycast failure", CurrentTarget.Type, CurrentTarget.InternalName, CurrentTarget.ActorSnoId);
                     Blacklist3LastClear = DateTime.UtcNow;
                     NeedToClearBlacklist3 = true;
                 }
@@ -1851,20 +1870,24 @@ namespace Trinity
             else if (CurrentTarget != null)
                 dist = CurrentTarget.Position.Distance(Player.Position);
 
-            var name = CurrentTarget != null && CurrentTarget.ACDGuid == CombatBase.CurrentPower.TargetACDGUID ? CurrentTarget.InternalName : string.Empty;
+            var name = CurrentTarget != null && CurrentTarget.AcdId == CombatBase.CurrentPower.TargetAcdId ? CurrentTarget.InternalName : string.Empty;
 
             string target = CombatBase.CurrentPower.TargetPosition != Vector3.Zero ? "at " + NavHelper.PrettyPrintVector3(CombatBase.CurrentPower.TargetPosition) + " dist=" + (int)dist : "";
-            target += CombatBase.CurrentPower.TargetACDGUID != -1 ? " on " + name + " (" + CombatBase.CurrentPower.TargetACDGUID : ")";
+            target += CombatBase.CurrentPower.TargetAcdId != -1 ? " on " + name + " (" + CombatBase.CurrentPower.TargetAcdId : ")";
             return target;
         }
 
-        private static int HandleItemInRange()
+        private static void HandleItemInRange()
         {
+            var item = CurrentTarget as TrinityItem;
+            if (item == null)
+                return;
+
             using (new PerformanceLogger("HandleTarget.HandleItemInRange"))
             {
                 int iInteractAttempts;
                 // Pick the item up the usepower way, and "blacklist" for a couple of loops
-                if (ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, CurrentTarget.ACDGuid))
+                if (ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, item.AcdId))
                 {
                     SpellHistory.RecordSpell(SNOPower.Axe_Operate_Gizmo);
                 }
@@ -1872,17 +1895,17 @@ namespace Trinity
                 {
                     TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
                 }
-                _ignoreRactorGuid = CurrentTarget.RActorGuid;
+                _ignoreRactorGuid = item.RActorId;
                 _ignoreTargetForLoops = 3;
                 // Store item pickup stats
 
- 
+                Player.CurrentAction = PlayerAction.Interacting;
 
-                string itemSha1Hash = HashGenerator.GenerateItemHash(CurrentTarget.Position, CurrentTarget.ActorSNO, CurrentTarget.InternalName, CurrentWorldDynamicId, CurrentTarget.ItemQuality, CurrentTarget.ItemLevel);
+                string itemSha1Hash = HashGenerator.GenerateItemHash(item.Position, item.ActorSnoId, item.InternalName, CurrentWorldDynamicId, item.ItemQualityLevel, item.ItemLevel);
                 if (!ItemDropStats._hashsetItemPicksLookedAt.Contains(itemSha1Hash))
                 {
                     ItemDropStats._hashsetItemPicksLookedAt.Add(itemSha1Hash);
-                    TrinityItemType itemType = TrinityItemManager.DetermineItemType(CurrentTarget.InternalName, CurrentTarget.DBItemType, CurrentTarget.FollowerType);
+                    TrinityItemType itemType = TrinityItemManager.DetermineItemType(item.InternalName, item.ItemType, item.FollowerType);
                     TrinityItemBaseType itemBaseType = TrinityItemManager.DetermineBaseType(itemType);
                     if (itemBaseType == TrinityItemBaseType.Armor || itemBaseType == TrinityItemBaseType.WeaponOneHand || itemBaseType == TrinityItemBaseType.WeaponTwoHand ||
                         itemBaseType == TrinityItemBaseType.WeaponRange || itemBaseType == TrinityItemBaseType.Jewelry || itemBaseType == TrinityItemBaseType.FollowerItem ||
@@ -1890,11 +1913,11 @@ namespace Trinity
                     {
                         int iQuality;
                         ItemDropStats.ItemsPickedStats.Total++;
-                        if (CurrentTarget.ItemQuality >= ItemQuality.Legendary)
+                        if (item.ItemQualityLevel >= ItemQuality.Legendary)
                             iQuality = ItemDropStats.QUALITYORANGE;
-                        else if (CurrentTarget.ItemQuality >= ItemQuality.Rare4)
+                        else if (item.ItemQualityLevel >= ItemQuality.Rare4)
                             iQuality = ItemDropStats.QUALITYYELLOW;
-                        else if (CurrentTarget.ItemQuality >= ItemQuality.Magic1)
+                        else if (item.ItemQualityLevel >= ItemQuality.Magic1)
                             iQuality = ItemDropStats.QUALITYBLUE;
                         else
                             iQuality = ItemDropStats.QUALITYWHITE;
@@ -1903,13 +1926,13 @@ namespace Trinity
                         {
                             Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ERROR: Item type (" + iQuality + ") out of range");
                         }
-                        if ((CurrentTarget.ItemLevel < 0) || (CurrentTarget.ItemLevel >= 74))
+                        if ((item.ItemLevel < 0) || (item.ItemLevel >= 74))
                         {
-                            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ERROR: Item level (" + CurrentTarget.ItemLevel + ") out of range");
+                            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ERROR: Item level (" + item.ItemLevel + ") out of range");
                         }
                         ItemDropStats.ItemsPickedStats.TotalPerQuality[iQuality]++;
-                        ItemDropStats.ItemsPickedStats.TotalPerLevel[CurrentTarget.ItemLevel]++;
-                        ItemDropStats.ItemsPickedStats.TotalPerQPerL[iQuality, CurrentTarget.ItemLevel]++;
+                        ItemDropStats.ItemsPickedStats.TotalPerLevel[item.ItemLevel]++;
+                        ItemDropStats.ItemsPickedStats.TotalPerQPerL[iQuality, item.ItemLevel]++;
                     }
                     else if (itemBaseType == TrinityItemBaseType.Gem)
                     {
@@ -1927,17 +1950,17 @@ namespace Trinity
                             iGemType = ItemDropStats.GEMDIAMOND;
 
                         ItemDropStats.ItemsPickedStats.GemsPerType[iGemType]++;
-                        ItemDropStats.ItemsPickedStats.GemsPerLevel[CurrentTarget.ItemLevel]++;
-                        ItemDropStats.ItemsPickedStats.GemsPerTPerL[iGemType, CurrentTarget.ItemLevel]++;
+                        ItemDropStats.ItemsPickedStats.GemsPerLevel[item.ItemLevel]++;
+                        ItemDropStats.ItemsPickedStats.GemsPerTPerL[iGemType, item.ItemLevel]++;
                     }
                     else if (itemType == TrinityItemType.HealthPotion)
                     {
                         ItemDropStats.ItemsPickedStats.TotalPotions++;
-                        if ((CurrentTarget.ItemLevel < 0) || (CurrentTarget.ItemLevel > 63))
+                        if ((item.ItemLevel < 0) || (item.ItemLevel > 63))
                         {
-                            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ERROR: Potion level ({0}) out of range", CurrentTarget.ItemLevel);
+                            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ERROR: Potion level ({0}) out of range", item.ItemLevel);
                         }
-                        ItemDropStats.ItemsPickedStats.PotionsPerLevel[CurrentTarget.ItemLevel]++;
+                        ItemDropStats.ItemsPickedStats.PotionsPerLevel[item.ItemLevel]++;
                     }
                     else if (itemType == TrinityItemType.InfernalKey)
                     {
@@ -1946,25 +1969,25 @@ namespace Trinity
                 }
 
                 // Count how many times we've tried interacting
-                if (!CacheData.InteractAttempts.TryGetValue(CurrentTarget.RActorGuid, out iInteractAttempts))
+                if (!CacheData.InteractAttempts.TryGetValue(item.RActorId, out iInteractAttempts))
                 {
-                    CacheData.InteractAttempts.Add(CurrentTarget.RActorGuid, 1);
+                    CacheData.InteractAttempts.Add(item.RActorId, 1);
 
                     // Fire item looted for Demonbuddy Item stats
-                    GameEvents.FireItemLooted(CurrentTarget.ACDGuid);
+                    GameEvents.FireItemLooted(item.AcdId);
                 }
                 else
                 {
-                    CacheData.InteractAttempts[CurrentTarget.RActorGuid]++;
+                    CacheData.InteractAttempts[item.RActorId]++;
                 }
                 // If we've tried interacting too many times, blacklist this for a while
-                if (iInteractAttempts > 20 && CurrentTarget.ItemQuality < ItemQuality.Legendary)
+                if (iInteractAttempts > 20 && item.ItemQualityLevel < ItemQuality.Legendary)
                 {
-                    Blacklist90Seconds.Add(CurrentTarget.AnnId);
+                    Blacklist90Seconds.Add(item.AnnId);
                 }
                 // Now tell TrinityPlugin to get a new target!
                 _forceTargetUpdate = true;
-                return iInteractAttempts;
+
             }
         }
 

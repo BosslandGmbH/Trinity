@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Cache;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;
@@ -16,7 +17,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
         {
             public static TrinityPower PowerSelector()
             {
-                TrinityCacheObject target;
+                TrinityActor target;
                 
                 if (ShouldAncientSpear(out target))
                     return CastAncientSpear(target);
@@ -36,7 +37,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return null;
             }
 
-            public static bool ShouldRend(out TrinityCacheObject target)
+            public static bool ShouldRend(out TrinityActor target)
             {
                 target = null;
 
@@ -47,12 +48,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return target != null && target.Distance <= 12 && Player.PrimaryResourcePct > 0.50;
             }
 
-            public static TrinityPower CastRend(TrinityCacheObject target)
+            public static TrinityPower CastRend(TrinityActor target)
             {
-                return new TrinityPower(Skills.Barbarian.Rend.SNOPower, 12f, target.ACDGuid);
+                return new TrinityPower(Skills.Barbarian.Rend.SNOPower, 12f, target.AcdId);
             }
 
-            public static bool ShouldBash(out TrinityCacheObject target)
+            public static bool ShouldBash(out TrinityActor target)
             {
                 target = null;
 
@@ -67,12 +68,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return target != null && target.Distance <= 12;
             }
 
-            public static TrinityPower CastBash(TrinityCacheObject target)
+            public static TrinityPower CastBash(TrinityActor target)
             {
-                return new TrinityPower(SNOPower.Barbarian_Bash, 12f, target.ACDGuid);
+                return new TrinityPower(SNOPower.Barbarian_Bash, 12f, target.AcdId);
             }
             
-            public static bool ShouldWhirlWind(out TrinityCacheObject target)
+            public static bool ShouldWhirlWind(out TrinityActor target)
             {
                 target = null;
 
@@ -93,7 +94,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return target != null && Player.PrimaryResource > 10;
             }
 
-            public static TrinityPower CastWhirlWind(TrinityCacheObject target)
+            public static TrinityPower CastWhirlWind(TrinityActor target)
             {
                 var targetPosition = target.Distance < 10 ?
                 TargetUtil.GetZigZagTarget(target.Position, 25f, true) : target.Position;
@@ -101,7 +102,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                     TrinityPlugin.CurrentWorldDynamicId, -1, 0, 1);
             }
 
-            public static bool ShouldFuriousCharge(out TrinityCacheObject target)
+            public static bool ShouldFuriousCharge(out TrinityActor target)
             {
                 target = null;
 
@@ -113,13 +114,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return target != null && Player.PrimaryResourcePct < 0.25;
             }
 
-            public static TrinityPower CastFuriousCharge(TrinityCacheObject target)
+            public static TrinityPower CastFuriousCharge(TrinityActor target)
             {
                 return new TrinityPower(SNOPower.Barbarian_FuriousCharge, 38,
                     PhelonUtils.PointBehind(target.Position));
             }
 
-            public static bool ShouldAncientSpear(out TrinityCacheObject target)
+            public static bool ShouldAncientSpear(out TrinityActor target)
             {
                 target = null;
 
@@ -134,10 +135,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                        TimeSincePowerUse(SNOPower.X1_Barbarian_AncientSpear) > 1500;
             }
 
-            public static TrinityPower CastAncientSpear(TrinityCacheObject target)
+            public static TrinityPower CastAncientSpear(TrinityActor target)
             {
                 return new TrinityPower(SNOPower.X1_Barbarian_AncientSpear, 60f,
-                    target.ACDGuid);
+                    target.AcdId);
             }
         }
     }

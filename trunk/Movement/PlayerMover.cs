@@ -9,9 +9,9 @@ using Buddy.Coroutines;
 using Trinity.Combat.Abilities;
 using Trinity.Config.Combat;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Utilities;
 using Trinity.Movement;
 using Trinity.Objects;
 using Trinity.Reference;
@@ -122,7 +122,7 @@ namespace Trinity.DbProvider
                 return IsBlocked;
             }
 
-            var testObjects = TrinityPlugin.ObjectCache.Where(o => o.IsUnit && o.HitPoints > 0 && o.Distance <= 14f).ToList();
+            var testObjects = TrinityPlugin.Targets.Where(o => o.IsUnit && o.HitPoints > 0 && o.Distance <= 14f).ToList();
             var surrounded = false;
             var myPosition = ZetaDia.Me.Position;
             var testPoints = MathUtil.GetCirclePoints(10, 10f, myPosition).Where(p => Core.Avoidance.Grid.CanRayWalk(myPosition, p)).ToList();
@@ -138,7 +138,7 @@ namespace Trinity.DbProvider
             if (CurrentTarget != null && CurrentTarget.Distance > 10f)
             {
                 var pointInFacingDirection0 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 8f, TrinityPlugin.Player.Rotation);
-                var numMonstersInFront = (from u in TrinityPlugin.ObjectCache
+                var numMonstersInFront = (from u in TrinityPlugin.Targets
                                           where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, TrinityPlugin.Player.Position, pointInFacingDirection0)
                                           select u).Count();
 
@@ -644,7 +644,7 @@ namespace Trinity.DbProvider
         }
 
 
-        private static TrinityCacheObject CurrentTarget { get { return TrinityPlugin.CurrentTarget; } }
+        private static TrinityActor CurrentTarget { get { return TrinityPlugin.CurrentTarget; } }
 
         internal static async Task<MoveResult> NavigateToTask(Vector3 destination, string destinationName = "")
         {

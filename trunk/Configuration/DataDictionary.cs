@@ -172,7 +172,7 @@ namespace Trinity
 
         public static HashSet<int> CosmeticSnoIds = new HashSet<int>
         {
-            331905, //ActorId: 331905, Type: Item, Name: Amberwing
+            //331905, //ActorId: 331905, Type: Item, Name: Amberwing
 
             410998, //portrait - 410998 (Cosmetic_Portrait_Frame_1)
 
@@ -362,7 +362,7 @@ namespace Trinity
             { 2440, 1286110481, -1453914927, "TransmogXbow_241_001" },
             { 2441, 1345846545, -1990947631, "TransmogAxe_241_003" },
             { 2445, 2089009826, 1862484578, "TransmogSword_241_003" },
-            { 331905, 2089009825, 0, "" }, //Amberwing
+            { 331905, 2089009825, 0, "transmogSword_241_002" }, //Amberwing
         };
 
         public static HashSet<SNOAnim> VaultAnimations = new HashSet<SNOAnim>
@@ -1747,7 +1747,7 @@ namespace Trinity
          };
 
         /// <summary>
-        /// Destructible things that need targeting by a location instead of an ACDGUID (stuff you can't "click on" to destroy in-game)
+        /// Destructible things that need targeting by a location instead of an AcdId (stuff you can't "click on" to destroy in-game)
         /// </summary>
         public static HashSet<int> DestroyAtLocationIds { get { return destroyAtLocationIds; } }
         private static readonly HashSet<int> destroyAtLocationIds = new HashSet<int>

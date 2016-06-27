@@ -33,25 +33,29 @@ namespace Trinity.Coroutines
             // Items that shouldn't be picked up are currently excluded from cache.
             // a pickup evaluation should be added if that changes.            
 
-            foreach(var item in TrinityPlugin.ObjectCache)
+            foreach(var item in TrinityPlugin.Targets)
             {
-                var guid = item.ACDGuid;
-
-                if (item.Item == null || item.Distance > 8f || VacuumedGuids.Contains(guid))
+                if (item == null || !item.IsValid)
                     continue;
 
-                if (!ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, guid))
+                if (item.Distance > 8f || VacuumedGuids.Contains(item.AcdId))
+                    continue;
+
+                if (!ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, item.AcdId))
                     continue;
 
                 count++;       
                 SpellHistory.RecordSpell(SNOPower.Axe_Operate_Gizmo);
-                VacuumedGuids.Add(guid);            
+                VacuumedGuids.Add(item.AcdId);            
             }
 
             if (count > 0)
             {
                 Logger.LogVerbose($"Vacuumed {count} items");
             }
+
+            if(VacuumedGuids.Count > 1000)
+                VacuumedGuids.Clear();
         }
 
         public static HashSet<int> VacuumedGuids { get; } = new HashSet<int>();

@@ -5,6 +5,7 @@ using Trinity.Cache;
 using Trinity.Combat;
 using Trinity.Combat.Abilities;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Common;
@@ -287,7 +288,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Checks if a unit is currently being tracked with a given SNOPower. When the spell is properly configured, this can be used to set a "timer" on a DoT re-cast, for example.
         /// </summary>
-        public bool IsTrackedOnUnit(TrinityCacheObject unit)
+        public bool IsTrackedOnUnit(TrinityActor unit)
         {
             return unit.HasDebuff(SNOPower);
         }
@@ -313,9 +314,9 @@ namespace Trinity.Objects
         /// <summary>
         /// This skill as TrinityPower
         /// </summary>
-        public TrinityPower ToPower(float minimumRange, int acdGuid)
+        public TrinityPower ToPower(float minimumRange, int AcdId)
         {
-            return new TrinityPower(SNOPower, minimumRange, acdGuid);
+            return new TrinityPower(SNOPower, minimumRange, AcdId);
         }
 
 
@@ -338,9 +339,9 @@ namespace Trinity.Objects
         /// <summary>
         /// This skill as TrinityPower
         /// </summary>
-        public TrinityPower ToPower(float minimumRange, Vector3 targetPosition, int acdGuid, int waitTicksBeforeUse, int waitTicksAfterUse)
+        public TrinityPower ToPower(float minimumRange, Vector3 targetPosition, int AcdId, int waitTicksBeforeUse, int waitTicksAfterUse)
         {
-            return new TrinityPower(SNOPower, minimumRange, targetPosition, TrinityPlugin.Player.WorldDynamicID, acdGuid, waitTicksBeforeUse, waitTicksAfterUse);
+            return new TrinityPower(SNOPower, minimumRange, targetPosition, TrinityPlugin.Player.WorldDynamicID, AcdId, waitTicksBeforeUse, waitTicksAfterUse);
         }
 
         /// <summary>
@@ -386,9 +387,9 @@ namespace Trinity.Objects
         /// <summary>
         /// Cast this skill at the specified target
         /// </summary>
-        public bool Cast(TrinityCacheObject target)
+        public bool Cast(TrinityActor target)
         {
-            return Cast(target.Position, target.ACDGuid);
+            return Cast(target.Position, target.AcdId);
         }
 
         /// <summary>
@@ -396,23 +397,23 @@ namespace Trinity.Objects
         /// </summary>
         public bool Cast(TrinityPower power)
         {
-            return Cast(power.TargetPosition, power.TargetACDGUID);
+            return Cast(power.TargetPosition, power.TargetAcdId);
         }
 
         /// <summary>
         /// Cast this skill
         /// </summary>
-        public bool Cast(Vector3 clickPosition, int targetAcdGuid)
+        public bool Cast(Vector3 clickPosition, int targetAcdId)
         {
             if (SNOPower != SNOPower.None && clickPosition != Vector3.Zero && IsActive && GameIsReady)
             {
                 Logger.LogVerbose(LogCategory.Behavior, "Skill.cs: Using {0}", Name);
 
-                if (ZetaDia.Me.UsePower(SNOPower, clickPosition, TrinityPlugin.CurrentWorldDynamicId, targetAcdGuid))
+                if (ZetaDia.Me.UsePower(SNOPower, clickPosition, TrinityPlugin.CurrentWorldDynamicId, targetAcdId))
                 {
                     TrinityPlugin.LastPowerUsed = SNOPower;
                     if (CombatBase.CurrentTarget != null)
-                        SpellTracker.TrackSpellOnUnit(CombatBase.CurrentTarget.ACDGuid, SNOPower);
+                        SpellTracker.TrackSpellOnUnit(CombatBase.CurrentTarget.AcdId, SNOPower);
                     SpellHistory.RecordSpell(SNOPower);
                     return true;
                 }

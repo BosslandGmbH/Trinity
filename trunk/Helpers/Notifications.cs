@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.DbProvider;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Notifications;
 using Trinity.Technicals;
 using Zeta.Game;
@@ -43,7 +43,7 @@ namespace Trinity.Helpers
         /// <summary>
         ///     Log the nice items we found and stashed
         /// </summary>
-        public static void LogGoodItems(CachedItem item, TrinityItemBaseType itemBaseType, TrinityItemType itemType, double itemValue)
+        public static void LogGoodItems(TrinityItem item, TrinityItemBaseType itemBaseType, TrinityItemType itemType, double itemValue)
         {
             FileStream logStream = null;
             try
@@ -113,7 +113,7 @@ namespace Trinity.Helpers
         /// <summary>
         ///     Log the rubbish junk items we salvaged or sold
         /// </summary>
-        public static void LogJunkItems(CachedItem item, TrinityItemBaseType itemBaseType, TrinityItemType itemType, double itemValue)
+        public static void LogJunkItems(TrinityItem item, TrinityItemBaseType itemBaseType, TrinityItemType itemType, double itemValue)
         {
             FileStream logStream = null;
             try

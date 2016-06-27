@@ -19,7 +19,7 @@
 //            if (c_diaGizmo == null)
 //                return false;
 
-//            if (!Settings.WorldObject.AllowPlayerResurection && CurrentCacheObject.ActorSNO == DataDictionary.PLAYER_HEADSTONE_SNO)
+//            if (!Settings.WorldObject.AllowPlayerResurection && CurrentCacheObject.ActorSnoId == DataDictionary.PLAYER_HEADSTONE_SNO)
 //            {
 //                c_IgnoreSubStep = "IgnoreHeadstones";
 //                addToCache = false;
@@ -32,7 +32,7 @@
 
 //            // Ignore it if it's not in range yet, except shrines, pools of reflection and resplendent chests if we're opening chests
 //            if ((CurrentCacheObject.RadiusDistance > CurrentBotLootRange || CurrentCacheObject.RadiusDistance > 50) && CurrentCacheObject.Type != TrinityObjectType.HealthWell &&
-//                CurrentCacheObject.Type != TrinityObjectType.Shrine && CurrentCacheObject.RActorGuid != LastTargetRactorGUID)
+//                CurrentCacheObject.Type != TrinityObjectType.Shrine && CurrentCacheObject.RActorId != LastTargetRactorGUID)
 //            {
 //                addToCache = false;
 //                c_IgnoreSubStep = "NotInRange";
@@ -65,29 +65,29 @@
 //            {
 //                CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                {
-//                    ActorSNO = CurrentCacheObject.ActorSNO,
+//                    ActorSNO = CurrentCacheObject.ActorSnoId,
 //                    Radius = CurrentCacheObject.Radius,
 //                    Position = CurrentCacheObject.Position,
-//                    RActorGUID = CurrentCacheObject.RActorGuid,
+//                    RActorGUID = CurrentCacheObject.RActorId,
 //                    ObjectType = CurrentCacheObject.Type,
 //                });
 
 //                Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement,
-//                    "Safely handled exception getting Gizmo-Disabled-By-Script attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSNO);
+//                    "Safely handled exception getting Gizmo-Disabled-By-Script attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId);
 //                c_IgnoreSubStep = "isGizmoDisabledByScriptException";
 //                addToCache = false;
 //            }                       
 
 //            if (isGizmoDisabledByScript)
 //            {
-//                MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 
 //                CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                {
-//                    ActorSNO = CurrentCacheObject.ActorSNO,
+//                    ActorSNO = CurrentCacheObject.ActorSnoId,
 //                    Radius = CurrentCacheObject.Radius,
 //                    Position = CurrentCacheObject.Position,
-//                    RActorGUID = CurrentCacheObject.RActorGuid,
+//                    RActorGUID = CurrentCacheObject.RActorId,
 //                    ObjectType = CurrentCacheObject.Type,
 //                });
 
@@ -130,15 +130,15 @@
 //            {
 //                CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                {
-//                    ActorSNO = CurrentCacheObject.ActorSNO,
+//                    ActorSNO = CurrentCacheObject.ActorSnoId,
 //                    Radius = CurrentCacheObject.Radius,
 //                    Position = CurrentCacheObject.Position,
-//                    RActorGUID = CurrentCacheObject.RActorGuid,
+//                    RActorGUID = CurrentCacheObject.RActorId,
 //                    ObjectType = CurrentCacheObject.Type,
 //                });
 
 //                Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement,
-//                    "Safely handled exception getting NoDamage attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSNO);
+//                    "Safely handled exception getting NoDamage attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId);
 //                c_IgnoreSubStep = "NoDamage";
 //                addToCache = false;
 //            }
@@ -156,13 +156,13 @@
 //                        {
 //                            if (gizmoDoor != null && gizmoDoor.IsLocked)
 //                            {
-//                                MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                                MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                                CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                                {
-//                                    ActorSNO = CurrentCacheObject.ActorSNO,
+//                                    ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                    Radius = CurrentCacheObject.Radius,
 //                                    Position = CurrentCacheObject.Position,
-//                                    RActorGUID = CurrentCacheObject.RActorGuid,
+//                                    RActorGUID = CurrentCacheObject.RActorId,
 //                                    ObjectType = CurrentCacheObject.Type,
 //                                });
 
@@ -172,12 +172,12 @@
 //                        }
 //                        catch
 //                        {
-//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gizmoDoor.IsLocked attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSNO);
+//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gizmoDoor.IsLocked attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId);
 //                        }
 
 //                        if (c_diaObject is DiaGizmo && ((DiaGizmo)c_diaObject).HasBeenOperated)
 //                        {
-//                            if(CurrentCacheObject.ActorSNO == 108466) // trOut_OldTristram_Exit_Gate-1866 (108466) 
+//                            if(CurrentCacheObject.ActorSnoId == 108466) // trOut_OldTristram_Exit_Gate-1866 (108466) 
 //                                AddGizmoToNavigationObstacleCache();
                                          
 //                            c_IgnoreSubStep = "Door has been operated";
@@ -197,7 +197,7 @@
 //                        }
 //                        catch
 //                        {
-//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gizmoDoor.CurrentAnimation attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSNO);
+//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gizmoDoor.CurrentAnimation attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId);
 //                        }
 
 //                        if (gizmoUsed)
@@ -224,13 +224,13 @@
 
 //                        if (untargetable)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -251,10 +251,10 @@
 //                                    {
 //                                        CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                                        {
-//                                            ActorSNO = CurrentCacheObject.ActorSNO,
+//                                            ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                            Radius = CurrentCacheObject.Radius,
 //                                            Position = CurrentCacheObject.Position,
-//                                            RActorGUID = CurrentCacheObject.RActorGuid,
+//                                            RActorGUID = CurrentCacheObject.RActorId,
 //                                            ObjectType = CurrentCacheObject.Type,
 //                                        });
 
@@ -272,7 +272,7 @@
 
 //                            catch
 //                            {
-//                                Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gizmoDoor.IsGizmoDisabledByScript attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSNO);
+//                                Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gizmoDoor.IsGizmoDisabledByScript attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId);
 //                            }
 //                        }
 //                    }
@@ -283,13 +283,13 @@
 
 //                        if (untargetable)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -299,7 +299,7 @@
 
 
 //                        int endAnimation;
-//                        if (DataDictionary.InteractEndAnimations.TryGetValue(CurrentCacheObject.ActorSNO, out endAnimation))
+//                        if (DataDictionary.InteractEndAnimations.TryGetValue(CurrentCacheObject.ActorSnoId, out endAnimation))
 //                        {
 //                            if (endAnimation == (int)c_diaGizmo.CommonData.CurrentAnimation)
 //                            {
@@ -327,7 +327,7 @@
 //                    {
 //                        addToCache = true;
 
-//                        MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                        MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 
 //                        try
 //                        {
@@ -335,7 +335,7 @@
 //                        }
 //                        catch
 //                        {
-//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting shrine-been-operated attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSNO);
+//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting shrine-been-operated attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId);
 //                        }
 //                        try
 //                        {
@@ -361,13 +361,13 @@
 //                        }
 //                        if (untargetable)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -409,17 +409,17 @@
 //                            return addToCache;
 //                        }
 
-//                        MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, 4f);
+//                        MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, 4f);
 
 //                        if (untargetable)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -430,7 +430,7 @@
 
 
 //                        // Determine what shrine type it is, and blacklist if the user has disabled it
-//                        switch (CurrentCacheObject.ActorSNO)
+//                        switch (CurrentCacheObject.ActorSnoId)
 //                        {
 //                            case (int)SNOActor.Shrine_Global_Frenzied:  //Frenzy Shrine
 //                                if (!Settings.WorldObject.UseFrenzyShrine)
@@ -555,13 +555,13 @@
 
 //                        if (noDamage)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -571,13 +571,13 @@
 //                        }
 //                        if (untargetable)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -589,13 +589,13 @@
 
 //                        if (invulnerable)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -606,7 +606,7 @@
 
 //                        //float maxRadiusDistance;
 
-//                        //if (DataDictionary.DestructableObjectRadius.TryGetValue(CurrentCacheObject.ActorSNO, out maxRadiusDistance))
+//                        //if (DataDictionary.DestructableObjectRadius.TryGetValue(CurrentCacheObject.ActorSnoId, out maxRadiusDistance))
 //                        //{
 //                        //    if (CurrentCacheObject.RadiusDistance < maxRadiusDistance)
 //                        //    {
@@ -652,18 +652,18 @@
 //                        }
 //                        catch (Exception)
 //                        {
-//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gizmoDestructible.HitpointsCurrentPct attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSNO);
+//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gizmoDestructible.HitpointsCurrentPct attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId);
 //                        }
 
 //                        if (noDamage)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -674,13 +674,13 @@
 
 //                        if (invulnerable)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -690,13 +690,13 @@
 //                        }
 //                        if (untargetable)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 
@@ -727,7 +727,7 @@
 //                            break;
 //                        }
 
-//                        if (!DataDictionary.ForceDestructibles.Contains(CurrentCacheObject.ActorSNO) && Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.ForceIgnore)
+//                        if (!DataDictionary.ForceDestructibles.Contains(CurrentCacheObject.ActorSnoId) && Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.ForceIgnore)
 //                        {
 //                            addToCache = false;
 //                            c_IgnoreSubStep = "ForceIgnoreDestructibles";
@@ -756,7 +756,7 @@
 
 //                        float maxRadiusDistance;
 
-//                        if (DataDictionary.DestructableObjectRadius.TryGetValue(CurrentCacheObject.ActorSNO, out maxRadiusDistance))
+//                        if (DataDictionary.DestructableObjectRadius.TryGetValue(CurrentCacheObject.ActorSnoId, out maxRadiusDistance))
 //                        {
 //                            if (CurrentCacheObject.RadiusDistance < maxRadiusDistance)
 //                            {
@@ -791,7 +791,7 @@
 //                            c_IgnoreSubStep = "";
 //                        }
 
-//                        if (CurrentCacheObject.RActorGuid == LastTargetRactorGUID)
+//                        if (CurrentCacheObject.RActorId == LastTargetRactorGUID)
 //                        {
 //                            addToCache = true;
 //                            c_IgnoreSubStep = "";
@@ -804,9 +804,9 @@
 //                    {
 //                        addToCache = false;
 
-//                        bool isRareChest = CurrentCacheObject.InternalNameLowerCase.Contains("chest_rare") || DataDictionary.ResplendentChestIds.Contains(CurrentCacheObject.ActorSNO);
+//                        bool isRareChest = CurrentCacheObject.InternalNameLowerCase.Contains("chest_rare") || DataDictionary.ResplendentChestIds.Contains(CurrentCacheObject.ActorSnoId);
 //                        bool isChest = (!isRareChest && CurrentCacheObject.InternalNameLowerCase.Contains("chest")) ||
-//                            DataDictionary.ContainerWhiteListIds.Contains(CurrentCacheObject.ActorSNO); // We know it's a container but this is not a known rare chest
+//                            DataDictionary.ContainerWhiteListIds.Contains(CurrentCacheObject.ActorSnoId); // We know it's a container but this is not a known rare chest
 //                        bool isCorpse = CurrentCacheObject.InternalNameLowerCase.Contains("corpse");
 //                        bool isWeaponRack = CurrentCacheObject.InternalNameLowerCase.Contains("rack");
 //                        bool isGroundClicky = CurrentCacheObject.InternalNameLowerCase.Contains("ground_clicky");
@@ -818,7 +818,7 @@
 //                            c_IgnoreSubStep = "ForceVendorRunASAP";
 //                        }
 
-//                        MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                        MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 
 //                        // Already open, blacklist it and don't look at it again
 //                        bool chestOpen;
@@ -828,7 +828,7 @@
 //                        }
 //                        catch
 //                        {
-//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting container-been-opened attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSNO);
+//                            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting container-been-opened attribute for object {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId);
 //                            c_IgnoreSubStep = "ChestOpenException";
 //                            addToCache = false;
 //                            return addToCache;
@@ -845,13 +845,13 @@
 
 //                        if (untargetable)
 //                        {
-//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSNO, CurrentCacheObject.Radius);
+//                            MainGridProvider.AddCellWeightingObstacle(CurrentCacheObject.ActorSnoId, CurrentCacheObject.Radius);
 //                            CacheData.NavigationObstacles.Add(new CacheObstacleObject
 //                            {
-//                                ActorSNO = CurrentCacheObject.ActorSNO,
+//                                ActorSNO = CurrentCacheObject.ActorSnoId,
 //                                Radius = CurrentCacheObject.Radius,
 //                                Position = CurrentCacheObject.Position,
-//                                RActorGUID = CurrentCacheObject.RActorGuid,
+//                                RActorGUID = CurrentCacheObject.RActorId,
 //                                ObjectType = CurrentCacheObject.Type,
 //                            });
 

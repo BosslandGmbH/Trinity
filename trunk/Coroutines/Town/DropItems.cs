@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls.WebParts;
 using Buddy.Coroutines;
 using IronPython.Modules;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
 using Trinity.Items;
@@ -35,7 +35,7 @@ namespace Trinity.Coroutines.Town
             BotMain.OnStop += bot => Cache.Clear();
         }
 
-        public static bool ShouldDrop(CachedItem i)
+        public static bool ShouldDrop(TrinityItem i)
         {
             if (Cache.ContainsKey(i.AnnId))
                 return Cache[i.AnnId];
@@ -83,7 +83,7 @@ namespace Trinity.Coroutines.Town
         /// <summary>
         /// Drop item in town and record it so we can avoid picking it up again.
         /// </summary>
-        public static async Task<bool> Drop(CachedItem item)
+        public static async Task<bool> Drop(TrinityItem item)
         {
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || item.IsAccountBound)
                 return false;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;
 
@@ -14,7 +15,7 @@ namespace Trinity.Combat
     {
         private const int AnyRune = -999;
 
-        public int ACDGuid { get; set; }
+        public int AcdId { get; set; }
         public SNOPower Power { get; set; }
         public DateTime Expiration { get; set; }
 
@@ -29,7 +30,7 @@ namespace Trinity.Combat
             }
         }
 
-        internal static void TrackSpellOnUnit(int acdGuid, SNOPower power)
+        internal static void TrackSpellOnUnit(int AcdId, SNOPower power)
         {
             try
             {
@@ -50,10 +51,10 @@ namespace Trinity.Combat
 
                 if (duration > 0)
                 {
-                    Logger.Log(TrinityLogLevel.Verbose, LogCategory.Behavior, "Tracking unit {0} with power {1} for duration {2:0.00}", acdGuid, power, duration);
+                    Logger.Log(TrinityLogLevel.Verbose, LogCategory.Behavior, "Tracking unit {0} with power {1} for duration {2:0.00}", AcdId, power, duration);
                     TrackSpellOnUnit(new SpellTracker()
                        {
-                           ACDGuid = acdGuid,
+                           AcdId = AcdId,
                            Power = power,
                            Expiration = DateTime.UtcNow.AddMilliseconds(duration)
                        });
@@ -68,12 +69,12 @@ namespace Trinity.Combat
         /// <summary>
         /// Checks if a unit is currently being tracked with a given SNOPower. When the spell is properly configured, this can be used to set a "timer" on a DoT re-cast, for example.
         /// </summary>
-        /// <param name="acdGuid"></param>
+        /// <param name="AcdId"></param>
         /// <param name="power"></param>
         /// <returns></returns>
-        public static bool IsUnitTracked(int acdGuid, SNOPower power)
+        public static bool IsUnitTracked(int AcdId, SNOPower power)
         {
-            return TrackedUnits.Any(t => t.ACDGuid == acdGuid && t.Power == power);
+            return TrackedUnits.Any(t => t.AcdId == AcdId && t.Power == power);
         }
 
         /// <summary>
@@ -82,18 +83,18 @@ namespace Trinity.Combat
         /// <param name="unit"></param>
         /// <param name="power"></param>
         /// <returns></returns>
-        public static bool IsUnitTracked(TrinityCacheObject unit, SNOPower power)
+        public static bool IsUnitTracked(TrinityActor unit, SNOPower power)
         {
             if (unit == null)
                 return false;
 
             if (unit.Type != TrinityObjectType.Unit)
                 return false;
-            bool result = TrackedUnits.Any(t => t.ACDGuid == unit.ACDGuid && t.Power == power);
+            bool result = TrackedUnits.Any(t => t.AcdId == unit.AcdId && t.Power == power);
             //if (result)
-            //    Technicals.Logger.LogNormal("Unit {0} is tracked with power {1}", unit.ACDId, power);
+            //    Technicals.Logger.LogNormal("Unit {0} is tracked with power {1}", unit.AcdId, power);
             //else
-            //    Technicals.Logger.LogNormal("Unit {0} is NOT tracked with power {1}", unit.ACDId, power);
+            //    Technicals.Logger.LogNormal("Unit {0} is NOT tracked with power {1}", unit.AcdId, power);
             return result;
         }
 
@@ -130,7 +131,7 @@ namespace Trinity.Combat
                             var units = TrackedUnits.Where(t => t.Expiration < DateTime.UtcNow);
                             foreach (var unit in units.ToList())
                             {
-                                //Technicals.Logger.LogNormal("Removing unit {0} from TrackedUnits ({1}, {2})", unit.ACDId, unit.Expiration.Ticks, DateTime.UtcNow.Ticks);
+                                //Technicals.Logger.LogNormal("Removing unit {0} from TrackedUnits ({1}, {2})", unit.AcdId, unit.Expiration.Ticks, DateTime.UtcNow.Ticks);
                                 TrackedUnits.Remove(unit);
                             }
                         }
@@ -147,7 +148,7 @@ namespace Trinity.Combat
         #region IEquatable Implimentation
         public bool Equals(SpellTracker other)
         {
-            return this.ACDGuid == other.ACDGuid && this.Power == other.Power;
+            return this.AcdId == other.AcdId && this.Power == other.Power;
         }
         #endregion
 

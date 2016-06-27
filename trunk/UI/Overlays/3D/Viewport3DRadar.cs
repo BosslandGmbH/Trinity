@@ -17,6 +17,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using System.Xml;
 using Adventurer.Util;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.UI.Overlays._3D;
@@ -470,7 +471,7 @@ namespace Trinity.UI.Overlays
                         continue;
 
                     ViewPort3DActor actor;
-                    if (!_actors.TryGetValue(updatedWorldActor.RActorGuid, out actor))
+                    if (!_actors.TryGetValue(updatedWorldActor.RActorId, out actor))
                     {
                         Dispatcher.Invoke(DispatcherPriority.Normal, new Action(async () => await CreateVisual(updatedWorldActor)));
                     }
@@ -479,8 +480,8 @@ namespace Trinity.UI.Overlays
                         actor.Update(updatedWorldActor);
                     }
 
-                    if (!_currentRActorGuids.Contains(updatedWorldActor.RActorGuid))
-                        _currentRActorGuids.Add(updatedWorldActor.RActorGuid);
+                    if (!_currentRActorGuids.Contains(updatedWorldActor.RActorId))
+                        _currentRActorGuids.Add(updatedWorldActor.RActorId);
                 }
 
                 foreach (var child in _viewport.Children.ToList())
@@ -504,24 +505,24 @@ namespace Trinity.UI.Overlays
             }
         }
 
-        private async Task<bool> CreateVisual(TrinityCacheObject updatedWorldActor)
+        private async Task<bool> CreateVisual(TrinityActor updatedWorldActor)
         {
             ViewPort3DActor actor;
             var visual = CreateActorVisual(updatedWorldActor);
-            visual.Id = updatedWorldActor.RActorGuid;
+            visual.Id = updatedWorldActor.RActorId;
             visual.DefaultTextureMapping = false;
             visual.Freeze();
             actor = new ViewPort3DActor(updatedWorldActor, null, visual);
 
-            _actors.TryAdd(updatedWorldActor.RActorGuid, actor);
+            _actors.TryAdd(updatedWorldActor.RActorId, actor);
 
             //_viewport.Children.Add(actor.Visual);
             _viewport.Children.Add(actor.Visual);
-            Logger.Log("Created model for {0}, ({1})", updatedWorldActor.InternalName, updatedWorldActor.RActorGuid);
+            Logger.Log("Created model for {0}, ({1})", updatedWorldActor.InternalName, updatedWorldActor.RActorId);
             return true;
         }
 
-        private GeometryElement3D CreateActorVisual(TrinityCacheObject actor)
+        private GeometryElement3D CreateActorVisual(TrinityActor actor)
         {
             var sphere = new Spherical3D();
             sphere.Material = GetSurfaceMaterial();
@@ -630,7 +631,17 @@ namespace Trinity.UI.Overlays
                     CameraMove();
 
                     ///*
-                    //    Float8: 0 => -0.3513986                     //    FloatC: 0 => 0.8483514                                         //    Float10: 0 => -0.1515441                                         //    Float14: 0 => -0.3658597                                         //    Float18: 0 => 440.08                                         //    Position: <0, 0, 0> => <475.08, 66.18381, 0>                                         //    Dword2C: 0 => 1065353216                                         //    float30: 0 => 1                                         //    float34: 0 => 1                                         //    float38: 0 => 1                                        //    Dword44: 0 => 1 
+                    //    Float8: 0 => -0.3513986 
+                    //    FloatC: 0 => 0.8483514                     
+                    //    Float10: 0 => -0.1515441                     
+                    //    Float14: 0 => -0.3658597                     
+                    //    Float18: 0 => 440.08                     
+                    //    Position: <0, 0, 0> => <475.08, 66.18381, 0>                     
+                    //    Dword2C: 0 => 1065353216                     
+                    //    float30: 0 => 1                     
+                    //    float34: 0 => 1                     
+                    //    float38: 0 => 1                    
+                    //    Dword44: 0 => 1 
                     //*/
 
                     //var test = new Quaternion(cam.Float8, cam.Float10, cam.Float14, cam.Float18);

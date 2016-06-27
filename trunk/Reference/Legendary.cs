@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Zeta.Game.Internals.Actors;
@@ -283,7 +283,7 @@ namespace Trinity.Reference
         //    ItemType = ItemType.CeremonialDagger,
         //    TrinityItemType = TrinityItemType.CeremonialKnife,
         //    IsTwoHanded = false,
-        //    BaseType = ItemBaseType.Weapon,
+        //    BaseType = DBItemBaseType.Weapon,
         //    InternalName = "",
         //    DataUrl = "",
         //    Url = "",
@@ -410,7 +410,7 @@ namespace Trinity.Reference
         //    ItemType = ItemType.Unknown,
         //    TrinityItemType = TrinityItemType.Unknown,
         //    IsTwoHanded = false,
-        //    BaseType = ItemBaseType.None,
+        //    BaseType = DBItemBaseType.None,
         //    InternalName = "",
         //    DataUrl = "https://us.battle.net/api/d3/data/item/health-potion",
         //    Url = "http://us.battle.net/d3/en/item/health-potion",
@@ -14336,14 +14336,14 @@ namespace Trinity.Reference
             return new Item();
         }
 
-        public static Item GetItem(CachedItem cachedItem)
+        public static Item GetItem(TrinityItem TrinityItem)
         {
             Item item;
 
-            if (TryGetItemByGameBalanceId(cachedItem.GameBalanceId, out item))
+            if (TryGetItemByGameBalanceId(TrinityItem.GameBalanceId, out item))
                 return item;
 
-            if (TryGetItemByActorSnoId(cachedItem.ActorSnoId, out item))
+            if (TryGetItemByActorSnoId(TrinityItem.ActorSnoId, out item))
                 return item;
 
             return null;
@@ -14400,7 +14400,7 @@ namespace Trinity.Reference
         /// <summary>
         /// Gets equipped legendaries as ACDItems
         /// </summary>
-        public static List<ACDItem> EquippedACDItems
+        public static List<TrinityItem> EquippedTrinityItems
         {
             get { return CacheData.Inventory.Equipped.Where(i => ItemIds.Contains(i.ActorSnoId)).ToList(); }
         }
@@ -14411,3 +14411,4 @@ namespace Trinity.Reference
 
 
 }
+

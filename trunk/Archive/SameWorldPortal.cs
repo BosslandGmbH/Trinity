@@ -28,22 +28,22 @@
 
 //        public bool Equals(SameWorldPortal other)
 //        {
-//            return this.RActorGUID == other.RActorGUID;
+//            return this.RActorId == other.RActorId;
 //        }
 
 //        public override int GetHashCode()
 //        {
-//            return this.RActorGUID.GetHashCode();
+//            return this.RActorId.GetHashCode();
 //        }
 
 //        public static bool operator ==(SameWorldPortal a, SameWorldPortal b)
 //        {
-//            return a.RActorGUID == b.RActorGUID;
+//            return a.RActorId == b.RActorId;
 //        }
 
 //        public static bool operator !=(SameWorldPortal a, SameWorldPortal b)
 //        {
-//            return a.RActorGUID != b.RActorGUID;
+//            return a.RActorId != b.RActorId;
 //        }
 //    }
 //}

@@ -84,7 +84,7 @@
 //            sb.Append(FormatCSVField(item.AcdItem.ActorSnoId));
 //            sb.Append(FormatCSVField(item.RealName));
 
-//            if (item.Quality >= ItemQuality.Legendary || item.BaseType == ItemBaseType.Misc)
+//            if (item.Quality >= ItemQuality.Legendary || item.BaseType == DBItemBaseType.Misc)
 //                sb.Append(FormatCSVField(GetCleanName(item.InternalName)));
 //            else
 //                sb.Append(FormatCSVField(item.Quality + " " + item.BaseType));

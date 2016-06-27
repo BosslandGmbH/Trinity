@@ -744,12 +744,12 @@ namespace Trinity.ItemRules
 
         //    // - TYPE -------------------------------------------------------------//
         //    /// TODO remove this check if it isnt necessary anymore
-        //    if (item.DBItemType == ItemType.Unknown && (item.Name.Contains("Plan") || item.Name.Contains("Design")))
+        //    if (item.ItemType == ItemType.Unknown && (item.Name.Contains("Plan") || item.Name.Contains("Design")))
         //    {
-        //        Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "There are still buggy itemType infos for craftingPlan around {0} has itemType = {1}", item.Name, item.DBItemType);
+        //        Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "There are still buggy itemType infos for craftingPlan around {0} has itemType = {1}", item.Name, item.ItemType);
         //        result = ItemType.CraftingPlan.ToString();
         //    }
-        //    else result = item.DBItemType.ToString();
+        //    else result = item.ItemType.ToString();
         //    itemDic.Add("[TYPE]", result);
 
         //    // - QUALITY -------------------------------------------------------//

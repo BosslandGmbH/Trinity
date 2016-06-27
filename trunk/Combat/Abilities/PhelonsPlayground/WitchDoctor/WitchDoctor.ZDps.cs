@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Zeta.Game.Internals.Actors;
 
@@ -15,7 +16,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
             public static TrinityPower PowerSelector()
             {
                 if (Player.IsIncapacitated) return null;
-                TrinityCacheObject target;
+                TrinityActor target;
 
                 if (GetHasBuff(SNOPower.Witchdoctor_SpiritWalk))
                     return new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation(35f, true));
@@ -43,7 +44,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     : new TrinityPower(SNOPower.Walk, 3f, PhelonTargeting.BestAoeUnit(45).Position);
             }
 
-            private static bool ShouldPiranhas(out TrinityCacheObject target)
+            private static bool ShouldPiranhas(out TrinityActor target)
             {
                 target = null;
 
@@ -58,7 +59,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 return target != null;
             }
 
-            private static TrinityPower CastPiranhas(TrinityCacheObject target)
+            private static TrinityPower CastPiranhas(TrinityActor target)
             {
                 return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 45, target.Position);
             }
@@ -79,7 +80,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 get { return new TrinityPower(SNOPower.Witchdoctor_BigBadVoodoo); }
             }
 
-            private static bool ShouldHex(out TrinityCacheObject target)
+            private static bool ShouldHex(out TrinityActor target)
             {
                 target = null;
                 if (!Skills.WitchDoctor.Hex.CanCast())
@@ -88,7 +89,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 return target != null && target.Distance < 35;
             }
 
-            private static TrinityPower CastHex(TrinityCacheObject target)
+            private static TrinityPower CastHex(TrinityActor target)
             {
                 return new TrinityPower(SNOPower.Witchdoctor_Hex, 35f, target.Position);
             }
@@ -109,10 +110,10 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 get
                 {
                     var target = PhelonGroupSupport.Monk ?? PhelonTargeting.BestAoeUnit(45f, true);
-                    return new TrinityPower(SNOPower.Witchdoctor_MassConfusion, 35f, target.ACDGuid); }
+                    return new TrinityPower(SNOPower.Witchdoctor_MassConfusion, 35f, target.AcdId); }
             }
 
-            private static bool ShouldHaunt(out TrinityCacheObject target)
+            private static bool ShouldHaunt(out TrinityActor target)
             {
                 target = null;
                 if (!Skills.WitchDoctor.Haunt.CanCast())
@@ -121,12 +122,12 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 return target != null;
             }
 
-            private static TrinityPower CastHaunt(TrinityCacheObject target)
+            private static TrinityPower CastHaunt(TrinityActor target)
             {
-                return new TrinityPower(SNOPower.Witchdoctor_Haunt, 35f, target.ACDGuid);
+                return new TrinityPower(SNOPower.Witchdoctor_Haunt, 35f, target.AcdId);
             }
 
-            private static bool ShouldLocustSwarm(out TrinityCacheObject target)
+            private static bool ShouldLocustSwarm(out TrinityActor target)
             {
                 target = null;
                 if (!Skills.WitchDoctor.LocustSwarm.CanCast() || Legendary.Wormwood.IsEquipped)
@@ -135,9 +136,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 return target != null;
             }
 
-            private static TrinityPower CastLocustSwarmt(TrinityCacheObject target)
+            private static TrinityPower CastLocustSwarmt(TrinityActor target)
             {
-                return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 35f, target.ACDGuid);
+                return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 35f, target.AcdId);
             }
         }
     }

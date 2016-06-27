@@ -92,7 +92,7 @@ namespace Trinity.Movement
         private static float MinDistance = PlayerMover.IsBlocked || CombatBase.IsCurrentlyAvoiding || HasInfiniteCasting
             ? 0
             : TrinityPlugin.CurrentTarget != null &&
-              (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNPC ||
+              (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNpc ||
                TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine)
                 ? 10
                 : 15;
@@ -204,7 +204,7 @@ namespace Trinity.Movement
                 //if (destination == Vector3.Zero)
                 //    return false;
                 // Furious Charge movement for a barb
-                var pierceCount = TrinityPlugin.ObjectCache.Count(
+                var pierceCount = TrinityPlugin.Targets.Count(
                     u =>
                         u.IsUnit &&
                         MathUtil.IntersectsPath(u.Position, u.Radius + 5f, TrinityPlugin.Player.Position,
@@ -237,7 +237,7 @@ namespace Trinity.Movement
 
             //Don't Channel if Item Shrine or isNPC is near.
             if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.Distance < _interactDistance &&
-                (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNPC ||
+                (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNpc ||
                  TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine))
                 return false;
 
@@ -385,7 +385,7 @@ namespace Trinity.Movement
             }
             //Don't Channel if Item Shrine or isNPC is near.
             if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.Distance < _interactDistance &&
-                (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNPC ||
+                (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNpc ||
                  TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine))
                 return false;
 

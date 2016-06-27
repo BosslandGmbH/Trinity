@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Technicals;
 using TrinityCoroutines;
@@ -14,14 +14,14 @@ namespace Trinity.Coroutines.Town
 {
     public static class Transmute
     {
-        public static async Task<bool> Execute(List<CachedItem> transmuteGroup)
+        public static async Task<bool> Execute(List<TrinityItem> transmuteGroup)
         {
             ZetaDia.Actors.Clear();
             ZetaDia.Actors.Update();
             
-            var acds = transmuteGroup.Select(i => i.GetAcdItem()).ToList();
+            var acds = transmuteGroup.Select(i => i.ToAcdItem()).ToList();
             //var acds = transmuteGroup.Select(i => ZetaDia.Actors.GetACDByAnnId(i.AnnId) as ACDItem).ToList();
-            //var acds = transmuteGroup.Select(i => i.GetAcdItem()).ToList();
+            //var acds = transmuteGroup.Select(i => i.ToAcdItem()).ToList();
 
             return await Execute(acds);
         }

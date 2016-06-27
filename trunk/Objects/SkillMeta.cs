@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Trinity.Combat.Abilities;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Technicals;
 using Zeta.Common;
@@ -279,7 +280,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Special delegate for determining which unit to cast the spell on
         /// </summary>
-        public Func<SkillMeta, TrinityCacheObject> TargetUnitSelector;
+        public Func<SkillMeta, TrinityActor> TargetUnitSelector;
 
         /// <summary>
         /// Special action to apply default overrides. 

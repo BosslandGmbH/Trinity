@@ -9,6 +9,8 @@ using Trinity.Combat.Abilities;
 using Trinity.Config;
 using Trinity.Config.Combat;
 using Trinity.DbProvider;
+using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Objects;
 using Trinity.Technicals;
@@ -22,7 +24,7 @@ using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Framework.Avoidance
 {
-    public class AvoidanceManager : Utility
+    public class AvoidanceManager : Module
     {
         public AvoidanceManager()
         {
@@ -45,10 +47,10 @@ namespace Trinity.Framework.Avoidance
         public const float AvoidanceWeightRadiusFactor = 1f;
         public const float GizmoWeightRadiusFactor = 1f;
         public const int MaxDistance = 70;
-        private readonly Dictionary<int, TrinityCacheObject> _cachedActors = new Dictionary<int, TrinityCacheObject>();
+        private readonly Dictionary<int, TrinityActor> _cachedActors = new Dictionary<int, TrinityActor>();
         private readonly HashSet<int> _currentRActorIds = new HashSet<int>();
 
-        public IEnumerable<TrinityCacheObject> ActiveAvoidanceActors => CurrentAvoidances.SelectMany(a => a.Actors);
+        public IEnumerable<TrinityActor> ActiveAvoidanceActors => CurrentAvoidances.SelectMany(a => a.Actors);
         public HashSet<int> ActiveAvoidanceSnoIds = new HashSet<int>();
 
         private readonly HashSet<GizmoType> _flaggedGizmoTypes = new HashSet<GizmoType>
@@ -121,16 +123,16 @@ namespace Trinity.Framework.Avoidance
                 return;
 
 
-            var source = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Select(a => new TrinityCacheObject(a) as TrinityCacheObject).ToList();
+            var source = Core.Actors.AllRActors.ToList();
 
             foreach (var actor in source)
             {
                 if (actor == null)
                     continue;
 
-                var rActorId = actor.RActorGuid;
+                var rActorId = actor.RActorId;
 
-                TrinityCacheObject existingActor;
+                TrinityActor existingActor;
 
                 _currentRActorIds.Add(rActorId);
 
@@ -158,14 +160,14 @@ namespace Trinity.Framework.Avoidance
                 Structures.Avoidance avoidance;
                 if (AvoidanceDataFactory.TryCreateAvoidance(source, actor, out avoidance))
                 {
-                    Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorGuid} ({avoidance.Data.Name}, Immune: {avoidance.IsImmune})");
+                    Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Data.Name}, Immune: {avoidance.IsImmune})");
                     _cachedActors.Add(rActorId, actor);
                     CurrentAvoidances.Add(avoidance);
                 }
             }
         }
 
-        private static bool IsValid(TrinityCacheObject actor)
+        private static bool IsValid(TrinityActor actor)
         {
             return !actor.IsDead && (actor.CommonData == null || actor.CommonData.IsValid && !actor.CommonData.IsDisposed);
         }
@@ -174,7 +176,7 @@ namespace Trinity.Framework.Avoidance
         {
             foreach (var avoidance in CurrentAvoidances)
             {
-                avoidance.Actors.RemoveAll(a => !_currentRActorIds.Contains(a.RActorGuid));
+                avoidance.Actors.RemoveAll(a => !_currentRActorIds.Contains(a.RActorId));
             }
             CurrentAvoidances.RemoveAll(a => !a.Actors.Any(actor => actor.IsValid));
         }
@@ -215,7 +217,7 @@ namespace Trinity.Framework.Avoidance
                     if (!nodePool.Any())
                         return;
 
-                    foreach (var obj in TrinityPlugin.ObjectCache)
+                    foreach (var obj in TrinityPlugin.Targets)
                     {
                         if (obj.IsMe)
                             continue;
@@ -246,10 +248,10 @@ namespace Trinity.Framework.Avoidance
                         {
                             avoidance.Actors.ForEach(a =>
                             {
-                                activeAvoidanceSnoIds.Add(a.ActorSNO);
+                                activeAvoidanceSnoIds.Add(a.ActorSnoId);
                                 if (Settings.PathAroundAvoidance)
                                 {
-                                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(a.ActorSNO, a.CollisionRadius);
+                                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(a.ActorSnoId, a.CollisionRadius);
                                 }
                             });
 
@@ -344,7 +346,7 @@ namespace Trinity.Framework.Avoidance
             Grid.IsUpdatingNodes = true;
         }
 
-        private void UpdateGizmoFlags(TrinityCacheObject actor)
+        private void UpdateGizmoFlags(TrinityActor actor)
         {
             var isGizmo = _flaggedGizmoTypes.Contains(actor.GizmoType);
             if (!isGizmo)
@@ -372,7 +374,7 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        public void UpdateMonsterFlags(TrinityCacheObject actor, AvoidanceLayer layer)
+        public void UpdateMonsterFlags(TrinityActor actor, AvoidanceLayer layer)
         {
             if (actor.ActorType != ActorType.Monster)
                 return;
@@ -388,7 +390,7 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
-        public void UpdateKiteFromFlags(TrinityCacheObject actor, AvoidanceLayer layer)
+        public void UpdateKiteFromFlags(TrinityActor actor, AvoidanceLayer layer)
         {
             if (Settings.KiteMode == KiteMode.Never)
                 return;
@@ -418,10 +420,10 @@ namespace Trinity.Framework.Avoidance
 
         //public void UpdateObstacleFlags(CacheObstacleObject actor, AvoidanceLayer layer)
         //{
-        //    if (!DataDictionary.PathFindingObstacles.ContainsKey(actor.ActorSNO))
+        //    if (!DataDictionary.PathFindingObstacles.ContainsKey(actor.ActorSnoId))
         //        return;
 
-        //    var radius = DataDictionary.PathFindingObstacles[actor.ActorSNO];
+        //    var radius = DataDictionary.PathFindingObstacles[actor.ActorSnoId];
 
         //    foreach (var node in Grid.GetNodesInRadius(actor.Position, radius))
         //    {
@@ -431,7 +433,7 @@ namespace Trinity.Framework.Avoidance
         //    }
         //}
 
-        private void UpdateGlobeFlags(TrinityCacheObject actor)
+        private void UpdateGlobeFlags(TrinityActor actor)
         {
             if (actor.Type != TrinityObjectType.HealthGlobe)
                 return;

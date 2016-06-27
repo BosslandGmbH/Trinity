@@ -6,6 +6,7 @@ using Trinity.Cache;
 using Trinity.Combat.Abilities.PhelonsPlayground;
 using Trinity.Config.Combat;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Technicals;
@@ -39,7 +40,7 @@ namespace Trinity.Combat.Abilities
 
 
             TrinityPower power;
-            TrinityCacheObject target;
+            TrinityActor target;
 
             if (UseDestructiblePower && TryGetPower(GetDestructablesSkill(), out power))
             {
@@ -59,7 +60,7 @@ namespace Trinity.Combat.Abilities
             if (ShouldImpaleHighValueTarget(out target))
             {
                 Logger.LogVerbose(LogCategory.SkillSelection, "ShouldImpaleHighValueTarget");
-                return new TrinityPower(Skills.DemonHunter.Impale.SNOPower, 80f, target.ACDGuid);
+                return new TrinityPower(Skills.DemonHunter.Impale.SNOPower, 80f, target.AcdId);
             }
 
             if (TryMoveToBuffedSpot(out power, 50f))
@@ -151,7 +152,7 @@ namespace Trinity.Combat.Abilities
             return false;
         }
 
-        public static bool ShouldImpaleHighValueTarget(out TrinityCacheObject target)
+        public static bool ShouldImpaleHighValueTarget(out TrinityActor target)
         {
             target = null;
 
@@ -240,7 +241,7 @@ namespace Trinity.Combat.Abilities
                 if (target != null)
                 {
                     {
-                        return new TrinityPower(skill.SNOPower, skill.Meta.CastRange, target.ACDGuid);                        
+                        return new TrinityPower(skill.SNOPower, skill.Meta.CastRange, target.AcdId);                        
                     }
                 }
 
@@ -479,7 +480,7 @@ namespace Trinity.Combat.Abilities
         }
 
 
-        private static TrinityCacheObject GetClusterTarget()
+        private static TrinityActor GetClusterTarget()
         {
             return TargetUtil.GetBestClusterUnit();
         }
@@ -651,7 +652,7 @@ namespace Trinity.Combat.Abilities
             return false;
         }
 
-        private static TrinityCacheObject GetShadowFanTargetUnit()
+        private static TrinityActor GetShadowFanTargetUnit()
         {
             if(IsDoingGoblinKamakazi && CurrentTarget.IsTreasureGoblin)
                 return CurrentTarget;
@@ -753,7 +754,7 @@ namespace Trinity.Combat.Abilities
                 return true;
 
             // Ferrets used for picking up Health Globes when low on Health
-            if (Runes.DemonHunter.FerretCompanion.IsActive && TrinityPlugin.ObjectCache.Any(o => o.Type == TrinityObjectType.HealthGlobe && o.Distance < 60f) && Player.CurrentHealthPct < EmergencyHealthPotionLimit)
+            if (Runes.DemonHunter.FerretCompanion.IsActive && TrinityPlugin.Targets.Any(o => o.Type == TrinityObjectType.HealthGlobe && o.Distance < 60f) && Player.CurrentHealthPct < EmergencyHealthPotionLimit)
                 return true;
 
             // Use Wolf Howl on Unique/Elite/Champion - Would help for farming trash, but trash farming should not need this - Used on Elites to reduce Deaths per hour

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Objects;
@@ -10,7 +11,6 @@ using Trinity.UIComponents;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Actors;
 
 namespace Trinity.Reference
 {
@@ -433,7 +433,7 @@ namespace Trinity.Reference
             { Legendary.Manticore, Skills.DemonHunter.ClusterArrow }
         };
 
-        public static float GetPassivePowerValue(CachedItem item)
+        public static float GetPassivePowerValue(TrinityItem item)
         {
             //todo: bug with attribtues where sometimes the passivepower is not in the attribute list
 

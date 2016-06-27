@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Technicals;
 using TrinityCoroutines.Resources;
@@ -16,7 +16,7 @@ namespace Trinity.Coroutines.Town
     /// </summary>
     public class ConvertMaterials
     {
-        public static List<CachedItem> GetBackpackItemsOfQuality(List<ItemQuality> qualities)
+        public static List<TrinityItem> GetBackpackItemsOfQuality(List<ItemQuality> qualities)
         {
             // DB is reporting items as being still there after transmution, add a bunch of checks :(
             return Inventory.Backpack.Items.Where(i =>
@@ -29,7 +29,7 @@ namespace Trinity.Coroutines.Town
 
                 if (i.ItemBaseType != ItemBaseType.Armor && i.ItemBaseType != ItemBaseType.Weapon && i.ItemBaseType != ItemBaseType.Jewelry)
                 {
-                    //Logger.LogVerbose(LogCategory.Behavior, "[ConvertMaterials] Invalid item '{0}' BaseType={1}", i.InternalName, i.ItemBaseType);
+                    //Logger.LogVerbose(LogCategory.Behavior, "[ConvertMaterials] Invalid item '{0}' BaseType={1}", i.InternalName, i.DBItemBaseType);
                     return false;
                 }
 
@@ -138,7 +138,7 @@ namespace Trinity.Coroutines.Town
                 }
 
                 var item = sacraficialItems.First();
-                var transmuteGroup = new List<CachedItem>
+                var transmuteGroup = new List<TrinityItem>
 				{
                     Inventory.Backpack.DeathsBreath.First(),
                     item
@@ -192,9 +192,9 @@ namespace Trinity.Coroutines.Town
 
         public static int ConsecutiveFailures { get; set; }
 
-        public static List<CachedItem> GetSacraficialItems(InventoryItemType to, bool excludeLegendaryUpgradeRares = false)
+        public static List<TrinityItem> GetSacraficialItems(InventoryItemType to, bool excludeLegendaryUpgradeRares = false)
         {
-            List<CachedItem> sacraficialItems = new List<CachedItem>();
+            List<TrinityItem> sacraficialItems = new List<TrinityItem>();
 
             switch (to)
             {

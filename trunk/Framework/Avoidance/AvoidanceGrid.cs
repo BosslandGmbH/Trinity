@@ -22,7 +22,7 @@ namespace Trinity.Framework.Avoidance
 
         private static List<AvoidanceFlags> Flags { get; set; }
 
-        private const int Bounds = 2500;        
+        private const int Bounds = 2500;
 
         public override float BoxSize => 2.5f;
         public override int GridBounds => Bounds;
@@ -36,29 +36,29 @@ namespace Trinity.Framework.Avoidance
         {
             if (_currentGrid == null)
             {
-                Logger.LogDebug($"Grid is null, creating new grid.");
+                //Logger.LogDebug($"Grid is null, creating new grid.");
                 _currentGrid = new AvoidanceGrid();
                 return _currentGrid;
             }
 
             if (_currentGrid == null || ZetaDia.WorldId != _currentGrid.WorldDynamicId)
             {
-                Logger.LogDebug("WorldId changed, returning new grid");
+                //Logger.LogDebug("WorldId changed, returning new grid");
                 _currentGrid = new AvoidanceGrid();
             }
 
             if (!ScenesStorage.CurrentWorldScenes.Any())
             {
-                Logger.LogDebug("Scene data is not ready yet, waiting.");
+                //Logger.LogDebug("Scene data is not ready yet, waiting.");
                 return _currentGrid;
             }
 
             if (_currentGrid.NearestNode == null)
             {
-                Logger.LogDebug($"Nearest node NULL AdvDiaPos={AdvDia.MyPosition} changed, grid is old and nearestNode is Null Age={DateTime.UtcNow.Subtract(_currentGrid.Created).TotalSeconds}");
+                //Logger.LogDebug($"Nearest node NULL AdvDiaPos={AdvDia.MyPosition} changed, grid is old and nearestNode is Null Age={DateTime.UtcNow.Subtract(_currentGrid.Created).TotalSeconds}");
                 if (DateTime.UtcNow.Subtract(_currentGrid.Created).TotalSeconds > 2)
                 {
-                    Logger.LogDebug($"WorldId changed and NearestNode == null, recreating grid");
+                    //Logger.LogDebug($"WorldId changed and NearestNode == null, recreating grid");
                     _currentGrid = new AvoidanceGrid();
                 }
             }
@@ -66,21 +66,26 @@ namespace Trinity.Framework.Avoidance
             return _currentGrid;
         }
 
+        public bool IsValidGridWorldPosition(Vector3 position)
+        {
+            return position.X > 0 && position.Y > 0 && position != Vector3.Zero && position.X < GridBounds && position.Y < GridBounds;
+        }
+
         public override bool CanRayCast(Vector3 @from, Vector3 to)
         {
-            if (@from == Vector3.Zero || to == Vector3.Zero) return false;
+            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile) && !node.AvoidanceFlags.HasFlag(AvoidanceFlags.RoundedCorner));
         }
 
         public override bool CanRayWalk(Vector3 @from, Vector3 to)
         {
-            if (@from == Vector3.Zero || to == Vector3.Zero) return false;
+            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk) && node.IsWalkable && !node.NodeFlags.HasFlag(NodeFlags.NearWall));
         }
 
         public bool IsIntersectedByFlags(Vector3 @from, Vector3 to, params AvoidanceFlags[] flags)
         {
-            if (@from == Vector3.Zero || to == Vector3.Zero) return false;
+            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Any(node => node != null && flags != null && flags.Any(f => node.AvoidanceFlags.HasFlag(f)));
         }
 
@@ -90,7 +95,7 @@ namespace Trinity.Framework.Avoidance
         }
 
         public IEnumerable<AvoidanceNode> GetConeAsNodes(Vector3 position, float arcWidthDegrees, float radius, float rotationRadians)
-        {            
+        {
             //GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Where(n => n != null)
 
             var rotationDegrees = MathEx.ToDegrees(rotationRadians);
@@ -107,7 +112,7 @@ namespace Trinity.Framework.Avoidance
 
         public override void Reset()
         {
-            
+
         }
 
         protected override void OnUpdated(SceneData newNodes)
@@ -122,7 +127,7 @@ namespace Trinity.Framework.Avoidance
 
             foreach (var node in nodes)
             {
-                if(GetNeighbors(node).Any(n => (n.NodeFlags & NodeFlags.AllowWalk) == 0))
+                if (GetNeighbors(node).Any(n => (n.NodeFlags & NodeFlags.AllowWalk) == 0))
                 {
                     node.NodeFlags |= NodeFlags.NearWall;
                 }
@@ -200,7 +205,7 @@ namespace Trinity.Framework.Avoidance
                 numChecked = 0;
                 while (numChecked < edgeLength)
                 {
-                    if(!TryGetNextNode(position, condition, Direction.East, maxDistance, subMin, final, nodes, ref curNode, ref numChecked))
+                    if (!TryGetNextNode(position, condition, Direction.East, maxDistance, subMin, final, nodes, ref curNode, ref numChecked))
                         return nodes;
                 }
                 i++;
@@ -303,7 +308,7 @@ namespace Trinity.Framework.Avoidance
             if (nearest == null)
                 return false;
 
-            var nodes = new List<AvoidanceNode> {nearest};
+            var nodes = new List<AvoidanceNode> { nearest };
             nodes.AddRange(nearest.AdjacentNodes);
             return nodes.Any(n => n != null && flags.Any(f => n.AvoidanceFlags.HasFlag(f)));
         }
@@ -314,7 +319,7 @@ namespace Trinity.Framework.Avoidance
         //    var nearest = GetNearestNode(location);
         //    if (nearest == null)
         //        return flags;
-            
+
         //    var nodes = new HashSet<AvoidanceNode>(nearest.AdjacentNodes) { nearest };            
         //    foreach (var flag in nodes.SelectMany(node => Flags.Where(flag => node.AvoidanceFlags.HasFlag(flag))))
         //    {

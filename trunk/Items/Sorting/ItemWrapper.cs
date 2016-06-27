@@ -12,10 +12,10 @@ namespace Trinity.Items
 {
     public class ItemWrapper : IComparable<ItemWrapper>, IEquatable<ItemWrapper>
     {
-        public int ActorSNO { get; set; }
+        public int ActorSnoId { get; set; }
         public int GameBalanceId { get; set; }
         public int DynamicId { get; set; }
-        public int ACDGuid { get; set; }
+        public int AcdId { get; set; }
         public int RequiredLevel { get; set; }
         public InventorySlot InventorySlot { get; set; }
         public InventorySlot[] ValidInventorySlots { get; set; }
@@ -53,10 +53,10 @@ namespace Trinity.Items
         {
             try
             {
-                ActorSNO = item.ActorSnoId;
+                ActorSnoId = item.ActorSnoId;
                 GameBalanceId = item.GameBalanceId;
                 DynamicId = item.AnnId;
-                ACDGuid = item.ACDId;
+                AcdId = item.ACDId;
                 InventorySlot = item.InventorySlot;
                 ValidInventorySlots = item.ValidInventorySlots;
                 RequiredLevel = item.RequiredLevel;

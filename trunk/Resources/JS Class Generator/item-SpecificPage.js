@@ -90,7 +90,7 @@ var Items = function() {
                     item.DataUrl = "https://us.battle.net/api/d3/data/" + ((item.IsCrafted) ? "recipe" : "item") + "/" + item.Slug;
 
                     if (itemLookup[item.Slug] != null) {
-                        item.ActorSNO = itemLookup[item.Slug][1];
+                        item.ActorSnoId = itemLookup[item.Slug][1];
                         item.InternalName = itemLookup[item.Slug][2];
                     }
 

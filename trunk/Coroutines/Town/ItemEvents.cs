@@ -3,14 +3,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using Buddy.Coroutines;
 using Trinity.DbProvider;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Coroutines.Town
 {
     public class ItemEvents
     {
-        public delegate void ItemEvent(CachedItem item);
+        public delegate void ItemEvent(TrinityItem item);
 
         /// <summary>
         /// When an item has been salvaged.
@@ -47,46 +47,46 @@ namespace Trinity.Coroutines.Town
         /// </summary>
         public static event ItemEvent OnItemDropped;
 
-        public static void FireItemStashed(CachedItem item)
+        public static void FireItemStashed(TrinityItem item)
         {
             OnItemStashed?.Invoke(item);
         }
 
-        public static void FireItemSalvaged(CachedItem item)
+        public static void FireItemSalvaged(TrinityItem item)
         {
             OnItemSalvaged?.Invoke(item);
         }
 
-        public static void FireItemDropped(CachedItem item)
+        public static void FireItemDropped(TrinityItem item)
         {
             OnItemDropped?.Invoke(item);
         }
 
-        public static void FireItemPickedUp(CachedItem item)
+        public static void FireItemPickedUp(TrinityItem item)
         {
             OnItemPickedUp?.Invoke(item);
         }
 
-        public static void FireItemSold(CachedItem item)
+        public static void FireItemSold(TrinityItem item)
         {
             OnItemSold?.Invoke(item);
         }
 
-        public static void FireItemIdentified(CachedItem item)
+        public static void FireItemIdentified(TrinityItem item)
         {
             OnItemIdentified?.Invoke(item);
         }
 
-        public static void FireItemMoved(CachedItem item)
+        public static void FireItemMoved(TrinityItem item)
         {
             OnItemMoved?.Invoke(item);
         }
 
-        //public delegate bool ItemEvaluation(CachedItem item);
+        //public delegate bool ItemEvaluation(TrinityItem item);
 
         //public static event ItemEvaluation OnShouldDropItem;
 
-        //public static bool FireShouldDropItem(CachedItem item)
+        //public static bool FireShouldDropItem(TrinityItem item)
         //{
         //    return FireEvent(OnShouldDropItem, item, true);
         //}

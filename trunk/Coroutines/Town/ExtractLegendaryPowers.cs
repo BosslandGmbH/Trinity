@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Items.ItemList;
@@ -43,8 +43,8 @@ namespace Trinity.Coroutines.Town
             Legendary.CorruptedAshbringer.Id
         };
 
-        private static List<CachedItem> _backpackCandidates;
-        private static List<CachedItem> _stashCandidates;
+        private static List<TrinityItem> _backpackCandidates;
+        private static List<TrinityItem> _stashCandidates;
         private static readonly List<int> _itemsTakenFromStashAnnId = new List<int>();
         private static readonly HashSet<int> _blacklistedActorSnoIds = new HashSet<int>();
 
@@ -103,7 +103,7 @@ namespace Trinity.Coroutines.Town
 
             _stashCandidates = TrinityPlugin.Settings.KanaisCube.CubeExtractFromStash
                 ? GetLegendaryExtractionCandidates(InventorySlot.SharedStash).DistinctBy(i => i.ActorSnoId).ToList()
-                : new List<CachedItem>();
+                : new List<TrinityItem>();
 
             if (!_backpackCandidates.Any() && !_stashCandidates.Any())
             {
@@ -115,9 +115,9 @@ namespace Trinity.Coroutines.Town
             return true;
         }
 
-        private static List<CachedItem> GetLegendaryExtractionCandidates(InventorySlot slot)
+        private static List<TrinityItem> GetLegendaryExtractionCandidates(InventorySlot slot)
         {
-            var result = new List<CachedItem>();
+            var result = new List<TrinityItem>();
 
             if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
                 return result;
@@ -134,7 +134,7 @@ namespace Trinity.Coroutines.Town
                 if (item.TrinityItemType == TrinityItemType.HealthPotion)
                     continue;
 
-                if (item.FollowerSpecialType != FollowerType.None)
+                if (item.FollowerType != FollowerType.None)
                     continue;
 
                 if (DoNotExtractItemIds.Contains(item.ActorSnoId))

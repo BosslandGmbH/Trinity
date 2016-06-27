@@ -95,7 +95,7 @@ namespace TrinityCoroutines
 
                         ZetaDia.Actors.Update();
                         BotMain.PauseFor(TimeSpan.FromSeconds(1));
-                        Core.ForcedUpdate();
+                        Core.Update();
                     }
 
                     var result = true;
@@ -117,7 +117,7 @@ namespace TrinityCoroutines
                                 return;
 
                             ZetaDia.Actors.Update();
-                            Core.ForcedUpdate();
+                            Core.Update();
 
                             if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
                                 return;

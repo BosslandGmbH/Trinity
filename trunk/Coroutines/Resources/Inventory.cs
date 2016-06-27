@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Framework.Actors;
+using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Technicals;
@@ -11,7 +12,7 @@ using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using ActorManager = Trinity.Framework.Actors.ActorManager;
+using ActorManager = Trinity.Framework.Actors;
 
 namespace TrinityCoroutines.Resources
 {
@@ -134,12 +135,12 @@ namespace TrinityCoroutines.Resources
                 return Source.Where(m => types.Contains(m.Key));
             }
 
-            public List<CachedItem> GetStacksOfType(InventoryItemType type, InventorySlot location)
+            public List<TrinityItem> GetStacksOfType(InventoryItemType type, InventorySlot location)
             {
                 return Source[type].GetItemsByInventorySlot(location);
             }
 
-            public List<CachedItem> GetStacksOfType(InventoryItemType type, InventorySlot location, int quantity)
+            public List<TrinityItem> GetStacksOfType(InventoryItemType type, InventorySlot location, int quantity)
             {
                 return GetStacksUpToQuantity(Source[type].GetItemsByInventorySlot(location),quantity).ToList();
             }
@@ -159,14 +160,14 @@ namespace TrinityCoroutines.Resources
                 return recipe.All(entry => HasStackQuantityOfType(entry.Key, location, entry.Value));
             }
 
-            public List<CachedItem> GetRecipeItems(Dictionary<InventoryItemType, int> recipe, InventorySlot location)
+            public List<TrinityItem> GetRecipeItems(Dictionary<InventoryItemType, int> recipe, InventorySlot location)
             {
                 return recipe.SelectMany(i => GetStacksOfType(i.Key, location, i.Value)).ToList();
             }
         }
 
 
-        public static IEnumerable<CachedItem> GetStacksUpToQuantity(List<CachedItem> materialsStacks, int maxStackQuantity)
+        public static IEnumerable<TrinityItem> GetStacksUpToQuantity(List<TrinityItem> materialsStacks, int maxStackQuantity)
         {
             if (materialsStacks == null || !materialsStacks.Any() || materialsStacks.Count == 1)
                 return materialsStacks;
@@ -177,7 +178,7 @@ namespace TrinityCoroutines.Resources
             // First of Non-Stackable Items
             var first = materialsStacks.First();
             if (first.ItemStackQuantity == 0 && maxStackQuantity == 1 && materialsStacks.All(i => !i.IsCraftingReagent))
-                return new List<CachedItem> { first };
+                return new List<TrinityItem> { first };
 
             // Position in the cube matters; it looks like it will fail if
             // stacks are added after the required amount of ingredient is met, 
@@ -204,8 +205,8 @@ namespace TrinityCoroutines.Resources
             public int ActorId { get; set; }
             public InventoryItemType Type { get; set; }
 
-            public List<CachedItem> StashItems = new List<CachedItem>();
-            public List<CachedItem> BackpackItems = new List<CachedItem>();
+            public List<TrinityItem> StashItems = new List<TrinityItem>();
+            public List<TrinityItem> BackpackItems = new List<TrinityItem>();
 
             public long Total
             {
@@ -250,9 +251,9 @@ namespace TrinityCoroutines.Resources
                 }
             }
 
-            public List<CachedItem> GetItemsByInventorySlot(params InventorySlot[] slots)
+            public List<TrinityItem> GetItemsByInventorySlot(params InventorySlot[] slots)
             {
-                var items = new List<CachedItem>();
+                var items = new List<TrinityItem>();
                 foreach (var slot in slots)
                 {
                     switch (slot)
@@ -415,41 +416,41 @@ namespace TrinityCoroutines.Resources
 
 
 
-        public static List<CachedItem> OfType(IEnumerable<InventoryItemType> types)
+        public static List<TrinityItem> OfType(IEnumerable<InventoryItemType> types)
         {
             var typesHash = new HashSet<int>(types.Select(t => (int)t));
             return AllItems.Where(i => typesHash.Contains(i.ActorSnoId)).ToList();
         }
 
-        public static List<CachedItem> OfType(params InventoryItemType[] types)
+        public static List<TrinityItem> OfType(params InventoryItemType[] types)
         {
             var typesHash = new HashSet<int>(types.Select(t => (int)t));
             return AllItems.Where(i => typesHash.Contains(i.ActorSnoId)).ToList();
         }
 
-        public static List<CachedItem> OfType(InventoryItemType type)
+        public static List<TrinityItem> OfType(InventoryItemType type)
         {
             return AllItems.Where(i => i.ActorSnoId == (int)type).ToList();
         }
 
-        public static List<CachedItem> ByItemType(ItemType type)
+        public static List<TrinityItem> ByItemType(ItemType type)
         {
             return AllItems.Where(i => i.ItemType == type).ToList();
         }
 
-        public static List<CachedItem> ByActorSNO(int ActorSNO)
+        public static List<TrinityItem> ByActorSNO(int ActorSNO)
         {
             return AllItems.Where(i => i.ActorSnoId == ActorSNO).ToList();
         }
 
         public static string LastLogInfo;
 
-        public static List<CachedItem> AllItems
+        public static List<TrinityItem> AllItems
         {
             get
             {
                 //var items = ZetaDia.Actors.GetActorsOfType<ACDItem>(true).Where(i =>
-                var items = ActorManager.Items.Where(i =>
+                var items = Core.Actors.Inventory.Where(i =>
                 {
                     //if (!i.IsValid || i.IsDisposed)
                     //{
@@ -551,84 +552,84 @@ namespace TrinityCoroutines.Resources
 
         public static class Backpack
         {
-            public static List<CachedItem> Items
+            public static List<TrinityItem> Items
             {
                 get { return AllItems.Where(i => i.InventorySlot == InventorySlot.BackpackItems).ToList(); }
             }
 
-            public static List<CachedItem> OfType(IEnumerable<InventoryItemType> types)
+            public static List<TrinityItem> OfType(IEnumerable<InventoryItemType> types)
             {
                 var typesHash = new HashSet<int>(types.Select(t => (int)t));
                 return Items.Where(i => i.IsValid && typesHash.Contains(i.ActorSnoId)).ToList();
             }
 
-            public static List<CachedItem> OfType(params InventoryItemType[] types)
+            public static List<TrinityItem> OfType(params InventoryItemType[] types)
             {
                 var typesHash = new HashSet<int>(types.Select(t => (int)t));
                 return Items.Where(i => typesHash.Contains(i.ActorSnoId)).ToList();
             }
 
-            public static List<CachedItem> OfType(InventoryItemType type)
+            public static List<TrinityItem> OfType(InventoryItemType type)
             {
                 return Items.Where(i => i.ActorSnoId == (int)type).ToList();
             }
 
-            public static List<CachedItem> ByItemType(ItemType type)
+            public static List<TrinityItem> ByItemType(ItemType type)
             {
                 return Items.Where(i => i.ItemType == type).ToList();
             }
 
-            public static List<CachedItem> ByActorSNO(int ActorSNO)
+            public static List<TrinityItem> ByActorSNO(int ActorSNO)
             {
                 return Items.Where(i => i.ActorSnoId == ActorSNO).ToList();
             }
 
-            public static List<CachedItem> ArcaneDust
+            public static List<TrinityItem> ArcaneDust
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.ArcaneDust).ToList(); }
             }
 
-            public static List<CachedItem> ReusableParts
+            public static List<TrinityItem> ReusableParts
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.ReusableParts).ToList(); }
             }
 
-            public static List<CachedItem> VeiledCrystals
+            public static List<TrinityItem> VeiledCrystals
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.VeiledCrystal).ToList(); }
             }
 
-            public static List<CachedItem> DeathsBreath
+            public static List<TrinityItem> DeathsBreath
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.DeathsBreath).ToList(); }
             }
 			
-            public static List<CachedItem> ForgottenSoul
+            public static List<TrinityItem> ForgottenSoul
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.ForgottenSoul).ToList(); }
             }			
 			
-            public static List<CachedItem> CaldeumNightshade
+            public static List<TrinityItem> CaldeumNightshade
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.CaldeumNightshade).ToList(); }
             }			
 
-			public static List<CachedItem> WestmarchHolyWater
+			public static List<TrinityItem> WestmarchHolyWater
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.WestmarchHolyWater).ToList(); }
             }		
 			
-			public static List<CachedItem> ArreatWarTapestry
+			public static List<TrinityItem> ArreatWarTapestry
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.ArreatWarTapestry).ToList(); }
             }			
 
-			public static List<CachedItem> CorruptedAngelFlesh
+			public static List<TrinityItem> CorruptedAngelFlesh
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.CorruptedAngelFlesh).ToList(); }
             }	
 			
-			public static List<CachedItem> KhanduranRune
+			public static List<TrinityItem> KhanduranRune
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.KhanduranRune).ToList(); }
             }
@@ -636,84 +637,84 @@ namespace TrinityCoroutines.Resources
 
         public static class Stash
         {
-            public static List<CachedItem> Items
+            public static List<TrinityItem> Items
             {
                 get { return AllItems.Where(i => i.InventorySlot == InventorySlot.SharedStash).ToList(); }
             }
 
-            public static List<CachedItem> OfType(IEnumerable<InventoryItemType> types)
+            public static List<TrinityItem> OfType(IEnumerable<InventoryItemType> types)
             {
                 var typesHash = new HashSet<int>(types.Select(t => (int)t));
                 return Items.Where(i => typesHash.Contains(i.ActorSnoId)).ToList();
             }
 
-            public static List<CachedItem> OfType(params InventoryItemType[] types)
+            public static List<TrinityItem> OfType(params InventoryItemType[] types)
             {
                 var typesHash = new HashSet<int>(types.Select(t => (int)t));
                 return Items.Where(i => typesHash.Contains(i.ActorSnoId)).ToList();
             }
 
-            public static List<CachedItem> OfType(InventoryItemType type)
+            public static List<TrinityItem> OfType(InventoryItemType type)
             {
                 return Items.Where(i => i.ActorSnoId == (int)type).ToList();
             }
 
-            public static List<CachedItem> ByItemType(ItemType type)
+            public static List<TrinityItem> ByItemType(ItemType type)
             {
                 return Items.Where(i => i.ItemType == type).ToList();
             }
 
-            public static List<CachedItem> ByActorSNO(int ActorSNO)
+            public static List<TrinityItem> ByActorSNO(int ActorSNO)
             {
                 return Items.Where(i => i.ActorSnoId == ActorSNO).ToList();
             }
 
-            public static List<CachedItem> ArcaneDust
+            public static List<TrinityItem> ArcaneDust
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.ArcaneDust).ToList(); }
             }
 
-            public static List<CachedItem> ReusableParts
+            public static List<TrinityItem> ReusableParts
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.ReusableParts).ToList(); }
             }
 
-            public static List<CachedItem> VeiledCrystals
+            public static List<TrinityItem> VeiledCrystals
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.VeiledCrystal).ToList(); }
             }
 
-            public static List<CachedItem> DeathsBreath
+            public static List<TrinityItem> DeathsBreath
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.DeathsBreath).ToList(); }
             }
 			
-            public static List<CachedItem> ForgottenSoul
+            public static List<TrinityItem> ForgottenSoul
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.ForgottenSoul).ToList(); }
             }			
 			
-            public static List<CachedItem> CaldeumNightshade
+            public static List<TrinityItem> CaldeumNightshade
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.CaldeumNightshade).ToList(); }
             }			
 
-			public static List<CachedItem> WestmarchHolyWater
+			public static List<TrinityItem> WestmarchHolyWater
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.WestmarchHolyWater).ToList(); }
             }		
 			
-			public static List<CachedItem> ArreatWarTapestry
+			public static List<TrinityItem> ArreatWarTapestry
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.ArreatWarTapestry).ToList(); }
             }			
 
-			public static List<CachedItem> CorruptedAngelFlesh
+			public static List<TrinityItem> CorruptedAngelFlesh
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.CorruptedAngelFlesh).ToList(); }
             }	
 			
-			public static List<CachedItem> KhanduranRune
+			public static List<TrinityItem> KhanduranRune
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.KhanduranRune).ToList(); }
             }	            			

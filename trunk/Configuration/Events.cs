@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Trinity.Framework.Actors.ActorTypes;
 
 namespace Trinity.Configuration
 {
@@ -18,7 +19,7 @@ namespace Trinity.Configuration
             add { if (OnUnitAliveHandler == null || !OnUnitAliveHandler.GetInvocationList().Contains(value)) OnUnitAliveHandler += value; }
             remove { OnUnitAliveHandler -= value; }
         }
-        public delegate void UnitAliveHandler(TrinityCacheObject unit);
+        public delegate void UnitAliveHandler(TrinityActor unit);
         private static UnitAliveHandler _onUnitAliveHandler;
         public static UnitAliveHandler OnUnitAliveHandler
         {
@@ -34,7 +35,7 @@ namespace Trinity.Configuration
             add { if (OnUnitDeathHandler == null || !OnUnitDeathHandler.GetInvocationList().Contains(value)) OnUnitDeathHandler += value; }
             remove { OnUnitDeathHandler -= value; }
         }
-        public delegate void UnitDeathHandler(TrinityCacheObject unit);
+        public delegate void UnitDeathHandler(TrinityActor unit);
         private static UnitDeathHandler _onUnitDeathHandler;
         public static UnitDeathHandler OnUnitDeathHandler
         {

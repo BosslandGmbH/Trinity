@@ -1,4 +1,5 @@
 using System.Linq;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 
 namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
@@ -9,7 +10,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
         {
             public static TrinityPower PowerSelector()
             {
-                TrinityCacheObject target;
+                TrinityActor target;
 
                 if (ShouldWhirlWind(out target))
                     return CastWhirlWind(target);
@@ -17,7 +18,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return null;
             }
 
-            public static bool ShouldWhirlWind(out TrinityCacheObject target)
+            public static bool ShouldWhirlWind(out TrinityActor target)
             {
                 target = CurrentTarget;
                 if (!Skills.Barbarian.Whirlwind.CanCast())
@@ -26,7 +27,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return target != null && Player.PrimaryResource > 10;
             }
 
-            public static TrinityPower CastWhirlWind(TrinityCacheObject target)
+            public static TrinityPower CastWhirlWind(TrinityActor target)
             {
                 var targetPosition = target.Distance < 10 ?
                 TargetUtil.GetZigZagTarget(target.Position, 25f, true) : target.Position;

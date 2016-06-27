@@ -68,7 +68,7 @@ namespace Trinity.Coroutines
                 if (_equippedItems.ContainsKey(item.InventorySlot))
                     continue;
 
-                _equippedItems.Add(item.InventorySlot, CachedACDItem.GetCachedItem(item));
+                _equippedItems.Add(item.InventorySlot, CachedACDItem.GetTrinityItem(item));
             }
 
             _upgrades = _slots.ToDictionary(k => k, v => default(CachedACDItem));
@@ -138,7 +138,7 @@ namespace Trinity.Coroutines
             if (location == TrinityItemManager.NoFreeSlot)
                 return;
 
-            Logger.Log("Unequipping Item {0} ({1}) from slot {2}", item.RealName, item.ActorSNO, item.InventorySlot);
+            Logger.Log("Unequipping Item {0} ({1}) from slot {2}", item.RealName, item.ActorSnoId, item.InventorySlot);
             ZetaDia.Me.Inventory.MoveItem(item.DynamicId, ZetaDia.Me.CommonData.AnnId, InventorySlot.BackpackItems, (int)location.X, (int)location.Y);
         }
 
@@ -340,7 +340,7 @@ namespace Trinity.Coroutines
         public IEnumerable<CachedACDItem> BackpackEquipment
         {
             get { return _backpackEquipment ?? (_backpackEquipment = ZetaDia.Me.Inventory.Backpack
-                    .Select(CachedACDItem.GetCachedItem)
+                    .Select(CachedACDItem.GetTrinityItem)
                     .Where(i => i.AcdItem.IsValid && i.IsEquipment && i.IsUsableByClass(TrinityPlugin.Player.ActorClass) && !i.IsUnidentified)); }
         }
 

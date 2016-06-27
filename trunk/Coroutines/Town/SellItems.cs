@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Technicals;
@@ -29,7 +29,7 @@ namespace Trinity.Coroutines.Town
 
         private static readonly Dictionary<int, bool> Cache = new Dictionary<int, bool>();
 
-        public static bool ShouldSell(CachedItem i)
+        public static bool ShouldSell(TrinityItem i)
         {
             //if (Cache.ContainsKey(i.AnnId))
             //    return Cache[i.AnnId];
@@ -86,7 +86,7 @@ namespace Trinity.Coroutines.Town
                 var freshItems = Inventory.Backpack.Items.Where(ShouldSell);
                 foreach (var item in freshItems)
                 {
-                    if (ZetaDia.Me.Inventory.CanSellItem(item.GetAcdItem()))
+                    if (ZetaDia.Me.Inventory.CanSellItem(item.ToAcdItem()))
                     {
                         if (!item.IsValid || item.IsUnidentified)
                         {
@@ -95,7 +95,7 @@ namespace Trinity.Coroutines.Town
                         }
 
                         Logger.LogVerbose($"[SellItems] Selling: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} Name={item.InternalName}");
-                        ZetaDia.Me.Inventory.SellItem(item.GetAcdItem());
+                        ZetaDia.Me.Inventory.SellItem(item.ToAcdItem());
                         ItemEvents.FireItemSold(item);
                         Inventory.InvalidItemDynamicIds.Add(item.AnnId);
                     }

@@ -4,26 +4,26 @@ using System.Diagnostics;
 
 namespace Trinity.Technicals
 {
-    public static class PerformanceTracker
-    {
-        public static ConcurrentDictionary<DateTime, TrackedPerformance> Performances = new ConcurrentDictionary<DateTime, TrackedPerformance>();
+    //public static class PerformanceTracker
+    //{
+    //    public static ConcurrentDictionary<DateTime, TrackedPerformance> Performances = new ConcurrentDictionary<DateTime, TrackedPerformance>();
 
-        public class TrackedPerformance
-        {
-            public TrackedPerformance(DateTime startTime, DateTime endTime)
-            {
-                StartTime = startTime;
-                EndTime = endTime;
-                Duration = endTime - startTime;
-                Milliseconds = (float)Duration.TotalMilliseconds;
-            }
+    //    public class TrackedPerformance
+    //    {
+    //        public TrackedPerformance(DateTime startTime, DateTime endTime)
+    //        {
+    //            StartTime = startTime;
+    //            EndTime = endTime;
+    //            Duration = endTime - startTime;
+    //            Milliseconds = (float)Duration.TotalMilliseconds;
+    //        }
 
-            public DateTime StartTime { get; set; }
-            public DateTime EndTime { get; set; }
-            public TimeSpan Duration { get; set; }
-            public float Milliseconds { get; set; }
-        }
-    }
+    //        public DateTime StartTime { get; set; }
+    //        public DateTime EndTime { get; set; }
+    //        public TimeSpan Duration { get; set; }
+    //        public float Milliseconds { get; set; }
+    //    }
+    //}
 
     [DebuggerStepThrough]
     public class PerformanceLogger : IDisposable

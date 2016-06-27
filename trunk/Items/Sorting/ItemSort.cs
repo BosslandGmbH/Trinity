@@ -165,7 +165,7 @@ namespace Trinity.Items
                     return thisItem.ItemQualityLevel.CompareTo(thatItem.ItemQualityLevel);
                 }
 
-                // Compare ItemBaseType order
+                // Compare DBItemBaseType order
                 if (thisItem.ItemBaseType == ItemBaseType.Weapon && thatItem.ItemBaseType != ItemBaseType.Weapon)
                     return 1;
                 if (thatItem.ItemBaseType == ItemBaseType.Weapon && thisItem.ItemBaseType != ItemBaseType.Weapon)
@@ -601,7 +601,7 @@ namespace Trinity.Items
                         await Coroutine.Sleep(50);
                         await Coroutine.Yield();
 
-                        var sameItem = ZetaDia.Me.Inventory.Backpack.FirstOrDefault(item => item.ActorSnoId == i.ActorSNO && item.Name.StartsWith(i.Name.Substring(0, 4)));
+                        var sameItem = ZetaDia.Me.Inventory.Backpack.FirstOrDefault(item => item.ActorSnoId == i.ActorSnoId && item.Name.StartsWith(i.Name.Substring(0, 4)));
                         if (sameItem != null)
                         {
                             ZetaDia.Me.Inventory.QuickStash(sameItem);

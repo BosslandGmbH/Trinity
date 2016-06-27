@@ -353,7 +353,7 @@ namespace Trinity.Config
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool DebugInStatusBar
         {
             get
@@ -672,6 +672,7 @@ namespace Trinity.Config
             UseTrinityDeathHandler = false;
             UseExperimentalAvoidance = false;
             BetaPlayground = false;
+            DebugInStatusBar = false;
         }
         #endregion Methods
     }

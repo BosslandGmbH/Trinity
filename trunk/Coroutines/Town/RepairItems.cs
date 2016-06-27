@@ -7,6 +7,7 @@ using Buddy.Coroutines;
 using Trinity.Technicals;
 using TrinityCoroutines;
 using TrinityCoroutines.Resources;
+using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -58,6 +59,12 @@ namespace Trinity.Coroutines.Town
                 return false;
             };
 
+            if (repairActor.Distance <= 10f)
+            {
+                Navigator.PlayerMover.MoveStop();
+                await Coroutine.Sleep(2000);
+            }
+
             if (GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible)
             {
                 await Coroutine.Sleep(2000);
@@ -66,7 +73,18 @@ namespace Trinity.Coroutines.Town
                 return true;
             }
 
-            Logger.LogError($"[RepairItems] Failed to repair at {repairActor.Name} :)");
+            repairActor.GetActor().Interact();
+            await Coroutine.Sleep(2000);
+
+            if (GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible)
+            {
+                await Coroutine.Sleep(2000);
+                Logger.LogVerbose($"[RepairItems] Repairing Equipment at {repairActor.Name} :) (Attempt Two)");
+                Repair(shouldRepairAll);
+                return true;
+            }
+
+            Logger.LogError($"[RepairItems] Failed to repair at {repairActor.Name} :(");
             return false;
         }
 

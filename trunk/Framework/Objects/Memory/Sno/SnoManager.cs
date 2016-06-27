@@ -33,11 +33,11 @@ namespace Trinity.Framework.Objects.Memory.Sno
             public SnoGroups()
             {
                 StringList = Core.CreateGroup<SnoStringList>(SnoType.StringList);
-                //Monster = Core.CreateGroup<NativeMonster>(SnoType.Monster);
+                Monster = Core.CreateGroup<NativeMonster>(SnoType.Monster);
                 //Hero = Core.CreateGroup<NativeHero>(SnoType.Hero);
                 //GameBalance = Core.CreateGroup<NativeGameBalance>(SnoType.GameBalance);
                 //Globals = Core.CreateGroup<NativeGlobals>(SnoType.Globals);
-                //Actor = Core.CreateGroup<NativeActor>(SnoType.Actor);
+                Actor = Core.CreateGroup<NativeActor>(SnoType.Actor);
                 //Account = Core.CreateGroup<NativeAccount>(SnoType.Account);
                 //Globals = Core.CreateGroup<NativeGlobals>(SnoType.Globals);
                 //LevelArea = Core.CreateGroup<NativeLevelArea>(SnoType.LevelArea);

@@ -40,7 +40,7 @@ using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Zeta.TreeSharp;
-using ActorManager = Trinity.Framework.Actors.ActorManager;
+using Trinity.Framework.Actors;
 using Logger = Trinity.Technicals.Logger;
 using MemoryHelper = Trinity.Framework.Helpers.MemoryHelper;
 using TrinityItemQuality = Trinity.Config.Combat.TrinityItemQuality;
@@ -134,7 +134,7 @@ namespace Trinity.UI
                             //CreateButton("Clsoe Vendor", CloseVendorWindowTest),
 
                             CreateButton("Upgrade Rares", UpgradeBackpackRares),
-                            CreateButton("Extract Powers", ExtractBackpackPowers),
+                            //CreateButton("Extract Powers", ExtractBackpackPowers),
                             CreateButton("ItemList Check", btnClick_TestItemList),
                             
 
@@ -186,11 +186,17 @@ namespace Trinity.UI
         {
             try
             {
-                //var dir = Path.Combine(FileManager.DemonBuddyPath, "Dumps/");
-                //if (!Directory.Exists(dir))
-                //    Directory.CreateDirectory(dir);
+                var dir = Path.Combine(FileManager.DemonBuddyPath, "Dumps/");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
 
-                //File.WriteAllText(Path.Combine(FileManager.DemonBuddyPath, "Dumps/ItemRecord.txt"), ReflectionHelper.DumpOffsets<ItemRecord>());
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    ZetaDia.Actors.Update();
+                    var obj = ZetaDia.Actors.GetActorsOfType<DiaObject>().FirstOrDefault();
+                    if (obj != null)
+                        File.WriteAllText(Path.Combine(FileManager.DemonBuddyPath, $"Dumps/{obj?.GetType().Name}.txt"), obj.DumpOffsets());
+                }
             }
             catch (Exception ex)
             {
@@ -378,7 +384,7 @@ namespace Trinity.UI
                 using (ZetaDia.Memory.AcquireFrame())
                 {
                     ZetaDia.Actors.Update();
-                    Core.ForcedUpdate();
+                    Core.Update();
 
 
                     //ClassMapper.MapRecursively(SnoManager.Groups.Actor.DataType);
@@ -428,63 +434,63 @@ namespace Trinity.UI
                     //var symbols = SymbolManager.Tables;
                     // SymbolManager.GenerateEnums();
 
-                    var count = 0;
-                    var foundSnoIds = new HashSet<int>();
-                    var regex = new Regex(@"(?<min>[\d.]+)[-–](?<max>[\d.]+)", RegexOptions.Compiled);
+                    //var count = 0;
+                    //var foundSnoIds = new HashSet<int>();
+                    //var regex = new Regex(@"(?<min>[\d.]+)[-–](?<max>[\d.]+)", RegexOptions.Compiled);
 
-                    foreach (var item in Inventory.AllItems)
-                    {
-                        if (item == null)
-                            continue;
+                    //foreach (var item in Inventory.AllItems)
+                    //{
+                    //    if (item == null)
+                    //        continue;
 
-                        if (foundSnoIds.Contains(item.ActorSnoId))
-                        {
-                            continue;
-                        }
+                    //    if (foundSnoIds.Contains(item.ActorSnoId))
+                    //    {
+                    //        continue;
+                    //    }
 
-                        Objects.Item itemRef;
-                        if (!Legendary.TryGetItemByActorSnoId(item.ActorSnoId, out itemRef))
-                        {
-                            continue;
-                        }
+                    //    Internals.Objects.Item itemRef;
+                    //    if (!Legendary.TryGetItemByActorSnoId(item.ActorSnoId, out itemRef))
+                    //    {
+                    //        continue;
+                    //    }
 
-                        var match = regex.Match(itemRef.LegendaryAffix);
+                    //    var match = regex.Match(itemRef.LegendaryAffix);
 
-                        double max;
-                        double min;
+                    //    double max;
+                    //    double min;
 
-                        if (match.Groups.Count == 3)
-                        {
-                            min = (double)Convert.ChangeType(match.Groups[1].Value, typeof(double));
-                            max = (double)Convert.ChangeType(match.Groups[2].Value, typeof(double));
-                        }
-                        else
-                        {
-                            continue;
-                        }
+                    //    if (match.Groups.Count == 3)
+                    //    {
+                    //        min = (double)Convert.ChangeType(match.Groups[1].Value, typeof(double));
+                    //        max = (double)Convert.ChangeType(match.Groups[2].Value, typeof(double));
+                    //    }
+                    //    else
+                    //    {
+                    //        continue;
+                    //    }
 
-                        if (Math.Abs(min - max) < double.Epsilon || min <= 0 || max <= 0)
-                        {
-                            continue;
-                        }
+                    //    if (Math.Abs(min - max) < double.Epsilon || min <= 0 || max <= 0)
+                    //    {
+                    //        continue;
+                    //    }
 
-                        var passive = item.Attributes.GetAttributeItem(ActorAttributeType.ItemPowerPassive);
-                        if (passive == null)
-                            continue;
+                    //    var passive = item.Attributes.GetAttributeItem(ActorAttributeType.ItemPowerPassive);
+                    //    if (passive == null)
+                    //        continue;
 
-                        var index = itemRef.LegendaryAffix.IndexOf(max.ToString()) + max.ToString().Length;
-                        var isPercent = itemRef.LegendaryAffix[index] == '%';
+                    //    var index = itemRef.LegendaryAffix.IndexOf(max.ToString()) + max.ToString().Length;
+                    //    var isPercent = itemRef.LegendaryAffix[index] == '%';
 
-                        if (!ItemDataUtils.ItemPassivePowers.ContainsKey(item.ActorSnoId))
-                        {
-                            Logger.LogRaw($"    {{ {item.ActorSnoId}, new ItemPowerDescripter({passive.Key.ModifierId}, {passive.Key.Value}, {min}, {max}, {isPercent.ToString().ToLower()}) }}, // {item.Name} ({passive.Modifer}) {itemRef.LegendaryAffix}");
-                            foundSnoIds.Add(item.ActorSnoId);
-                        }
-                        count++;
-                    }
+                    //    if (!ItemDataUtils.ItemPassivePowers.ContainsKey(item.ActorSnoId))
+                    //    {
+                    //        Logger.LogRaw($"    {{ {item.ActorSnoId}, new ItemPowerDescripter({passive.Key.ModifierId}, {passive.Key.Value}, {min}, {max}, {isPercent.ToString().ToLower()}) }}, // {item.Name} ({passive.Modifer}) {itemRef.LegendaryAffix}");
+                    //        foundSnoIds.Add(item.ActorSnoId);
+                    //    }
+                    //    count++;
+                    //}
 
-                    if (count == 0)
-                        Logger.Log("No new passive powers were found");
+                    //if (count == 0)
+                    //    Logger.Log("No new passive powers were found");
 
                 }
 

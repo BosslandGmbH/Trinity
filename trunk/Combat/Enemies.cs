@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Configuration;
 using Trinity.Configuration;
+using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -11,8 +12,8 @@ namespace Trinity.Combat
 {
     public static class Enemies
     {
-        public static List<TrinityCacheObject> Alive = new List<TrinityCacheObject>();
-        public static List<TrinityCacheObject> Dead = new List<TrinityCacheObject>();
+        public static List<TrinityActor> Alive = new List<TrinityActor>();
+        public static List<TrinityActor> Dead = new List<TrinityActor>();
         public static HashSet<int> DeadGuids = new HashSet<int>();
         public static HashSet<int> AliveGuids = new HashSet<int>();
         public static TargetArea Nearby = new TargetArea(80f);
@@ -27,21 +28,21 @@ namespace Trinity.Combat
             if (!ZetaDia.IsInGame || !ZetaDia.Me.IsValid)
                 return;
 
-            List<TrinityCacheObject> units = TrinityPlugin.ObjectCache.Where(o => o.IsUnit && o.IsValid || o.IsElite).ToList();
-            var unitsGuids = new HashSet<int>(units.Select(e => e.ACDGuid));
+            List<TrinityActor> units = TrinityPlugin.Targets.Where(o => o.IsUnit && o.IsValid || o.IsElite).ToList();
+            var unitsGuids = new HashSet<int>(units.Select(e => e.AcdId));
 
             // Find Newly Dead Units
-            List<TrinityCacheObject> newlyDead = Alive.Where(a => !unitsGuids.Contains(a.ACDGuid) && !DeadGuids.Contains(a.ACDGuid)).ToList();
+            List<TrinityActor> newlyDead = Alive.Where(a => !unitsGuids.Contains(a.AcdId) && !DeadGuids.Contains(a.AcdId)).ToList();
             newlyDead.ForEach(u => Events.OnUnitAliveHandler.Invoke(u));
             Dead.AddRange(newlyDead);
             Dead.RemoveAll(e => DateTime.UtcNow.Subtract(e.LastSeenTime).TotalSeconds > 60);
-            DeadGuids = new HashSet<int>(Dead.Select(e => e.ACDGuid));
+            DeadGuids = new HashSet<int>(Dead.Select(e => e.AcdId));
 
             // Find Newly Alive Units
-            var newlyAliveGuids = new HashSet<int>(units.Where(a => !AliveGuids.Contains(a.ACDGuid)).Select(a => a.ACDGuid));
+            var newlyAliveGuids = new HashSet<int>(units.Where(a => !AliveGuids.Contains(a.AcdId)).Select(a => a.AcdId));
             Alive = units;
             AliveGuids = unitsGuids;
-            Alive.Where(u => newlyAliveGuids.Contains(u.ACDGuid)).ForEach(u => Events.OnUnitDeathHandler.Invoke(u));
+            Alive.Where(u => newlyAliveGuids.Contains(u.AcdId)).ForEach(u => Events.OnUnitDeathHandler.Invoke(u));
 
             Nearby.Update();
             CloseNearby.Update();
@@ -58,8 +59,8 @@ namespace Trinity.Combat
             if (position == Vector3.Zero)
                 NearMe = true;
 
-            Units = new List<TrinityCacheObject>();
-            UnitsACDGuid = new HashSet<int>();
+            Units = new List<TrinityActor>();
+            UnitsAcdId = new HashSet<int>();
             Position = position;
             Range = range;
             Update();
@@ -71,8 +72,8 @@ namespace Trinity.Combat
         public int BossCount { get; set; }
         public int UnitCount { get; set; }
         public bool NearMe { get; set; }
-        public List<TrinityCacheObject> Units { get; set; }
-        public HashSet<int> UnitsACDGuid { get; set; }
+        public List<TrinityActor> Units { get; set; }
+        public HashSet<int> UnitsAcdId { get; set; }
 
         public double AverageHealthPct
         {
@@ -88,7 +89,7 @@ namespace Trinity.Combat
                 return;
 
             Units = TargetUtil.ListUnitsInRangeOfPosition(Position, Range);
-            UnitsACDGuid = new HashSet<int>(Units.Select(u => u.ACDGuid));
+            UnitsAcdId = new HashSet<int>(Units.Select(u => u.AcdId));
             EliteCount = TargetUtil.NumElitesInRangeOfPosition(Position, Range);
             UnitCount = TargetUtil.NumMobsInRangeOfPosition(Position, Range);
             BossCount = TargetUtil.NumBossInRangeOfPosition(Position, Range);
@@ -147,7 +148,7 @@ namespace Trinity.Combat
             TargetArea = new TargetArea(Radius, Position);
         }
 
-        internal TrinityCacheObject GetTargetWithoutDebuffs (IEnumerable<SNOPower> debuffs)
+        internal TrinityActor GetTargetWithoutDebuffs (IEnumerable<SNOPower> debuffs)
         {
             return TargetUtil.BestTargetWithoutDebuffs(Range, debuffs, Position);
         }

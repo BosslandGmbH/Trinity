@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Helpers;
 using Trinity.Objects;
@@ -14,7 +14,7 @@ namespace Trinity.Items.ItemList
 {
     public class ItemListEvaluator
     {
-        internal static bool ShouldStashItem(CachedItem cItem, bool test = false)
+        internal static bool ShouldStashItem(TrinityItem cItem, bool test = false)
         {
             if (ShouldStashItemType(cItem, test))
             {
@@ -31,7 +31,7 @@ namespace Trinity.Items.ItemList
             return ShouldStashItem(item, cItem, test);
         }
 
-        internal static bool ShouldStashItemType(CachedItem cItem, bool test = false)
+        internal static bool ShouldStashItemType(TrinityItem cItem, bool test = false)
         {
             var typeEntry = TrinityPlugin.Settings.Loot.ItemList.GetitemTypeRule(cItem.TrinityItemType);
 
@@ -50,7 +50,7 @@ namespace Trinity.Items.ItemList
             return typeEntry.IsSelected && EvaluateRules(cItem, typeEntry, test);
         }
 
-        internal static bool ShouldStashItem(Item referenceItem, CachedItem cItem, bool test = false)
+        internal static bool ShouldStashItem(Item referenceItem, TrinityItem cItem, bool test = false)
         {
             var id = referenceItem.Id;
             var logLevel = test ? TrinityLogLevel.Info : TrinityLogLevel.Debug;
@@ -87,7 +87,7 @@ namespace Trinity.Items.ItemList
             return false;
         }
 
-        private static bool EvaluateRules(CachedItem cItem, LItem itemSetting, bool isTest)
+        private static bool EvaluateRules(TrinityItem cItem, LItem itemSetting, bool isTest)
         {
             if (itemSetting == null)
             {
@@ -97,7 +97,7 @@ namespace Trinity.Items.ItemList
 
             if (cItem == null)
             {
-                Logger.LogError("Null CachedItem");
+                Logger.LogError("Null TrinityItem");
                 return false;
             }
 
@@ -171,12 +171,12 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        internal static bool EvaluateProperty(LRule itemRule, CachedItem cItem, out float newValue)
+        internal static bool EvaluateProperty(LRule itemRule, TrinityItem cItem, out float newValue)
         {
             return EvaluateProperty(cItem, itemRule.ItemProperty, (float)itemRule.Value, itemRule.Variant, out newValue);
         }
 
-        private static bool EvaluateProperty(CachedItem item, ItemProperty prop, float value, int variant, out float newValue)
+        private static bool EvaluateProperty(TrinityItem item, ItemProperty prop, float value, int variant, out float newValue)
         {
             var result = false;
             string friendlyVariant = string.Empty;

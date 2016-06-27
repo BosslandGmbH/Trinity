@@ -437,7 +437,7 @@ namespace Trinity.Combat.Abilities
                 Player.PrimaryResource >= 30)
             {
                 var disintegrateRange = Runes.Wizard.Entropy.IsActive ? 10f : 35f;
-                return new TrinityPower(SNOPower.Wizard_Disintegrate, disintegrateRange, Vector3.Zero, -1, CurrentTarget.ACDGuid, 0, 0);
+                return new TrinityPower(SNOPower.Wizard_Disintegrate, disintegrateRange, Vector3.Zero, -1, CurrentTarget.AcdId, 0, 0);
             }
 
             // Arcane Orb
@@ -445,14 +445,14 @@ namespace Trinity.Combat.Abilities
             {
                 return Runes.Wizard.ArcaneOrbit.IsActive ?
                     new TrinityPower(SNOPower.Wizard_ArcaneOrb) :
-                    new TrinityPower(SNOPower.Wizard_ArcaneOrb, 35f, CurrentTarget.ACDGuid);
+                    new TrinityPower(SNOPower.Wizard_ArcaneOrb, 35f, CurrentTarget.AcdId);
             }
 
             // Arcane Torrent
             if (!Player.IsIncapacitated && CanCast(SNOPower.Wizard_ArcaneTorrent) && !ShouldWaitForConventionElement(Skills.Wizard.ArcaneTorrent) &&
                 (Player.PrimaryResource >= 20 || Legendary.HergbrashsBinding.IsEquipped && Player.PrimaryResource >= 16))
             {
-                return new TrinityPower(SNOPower.Wizard_ArcaneTorrent, 40f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Wizard_ArcaneTorrent, 40f, CurrentTarget.AcdId);
             }
 
             // Ray of Frost
@@ -462,7 +462,7 @@ namespace Trinity.Combat.Abilities
                 if (Runes.Wizard.SleetStorm.IsActive)
                     rayRange = 5f;
 
-                return new TrinityPower(SNOPower.Wizard_RayOfFrost, rayRange, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Wizard_RayOfFrost, rayRange, CurrentTarget.AcdId);
             }
 
             power = GetPrimaryPower();
@@ -495,10 +495,10 @@ namespace Trinity.Combat.Abilities
 
                 if (bestPierceTarget != null)
                     targetId = Runes.Wizard.Conflagrate.IsActive ?
-                        bestPierceTarget.ACDGuid :
-                        CurrentTarget.ACDGuid;
+                        bestPierceTarget.AcdId :
+                        CurrentTarget.AcdId;
                 else
-                    targetId = CurrentTarget.ACDGuid;
+                    targetId = CurrentTarget.AcdId;
 
                 return new TrinityPower(SNOPower.Wizard_MagicMissile, 45f, targetId);
             }
@@ -507,7 +507,7 @@ namespace Trinity.Combat.Abilities
             // Shock Pulse
             if (CanCast(SNOPower.Wizard_ShockPulse))
             {
-                return new TrinityPower(SNOPower.Wizard_ShockPulse, shockPulseRange, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Wizard_ShockPulse, shockPulseRange, CurrentTarget.AcdId);
             }
             // Spectral Blade
             if (CanCast(SNOPower.Wizard_SpectralBlade))
@@ -515,7 +515,7 @@ namespace Trinity.Combat.Abilities
                 var bladeTarget = IsDmoWiz ? TargetUtil.GetClosestUnit() : CurrentTarget;
                 var bladeRange = Runes.Wizard.ArcaneOrbit.IsActive ? 4f : 15f;
                 if (bladeTarget != null)
-                    return new TrinityPower(SNOPower.Wizard_SpectralBlade, bladeRange, bladeTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Wizard_SpectralBlade, bladeRange, bladeTarget.AcdId);
             }
 
             var isFlashWiz = Sets.TalRashasElements.IsFullyEquipped && Legendary.WandOfWoh.IsEquipped;
@@ -523,10 +523,10 @@ namespace Trinity.Combat.Abilities
             if (CanCast(SNOPower.Wizard_Electrocute))
             {
                 if (isFlashWiz && TimeSincePowerUse(SNOPower.Wizard_Electrocute) >= 4000)
-                    return new TrinityPower(SNOPower.Wizard_Electrocute, 40f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Wizard_Electrocute, 40f, CurrentTarget.AcdId);
 
                 if (!isFlashWiz)
-                    return new TrinityPower(SNOPower.Wizard_Electrocute, 40f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Wizard_Electrocute, 40f, CurrentTarget.AcdId);
             }
 
             return null;
@@ -664,8 +664,8 @@ namespace Trinity.Combat.Abilities
             CurrentTarget.Type != TrinityObjectType.Interactable &&
             CurrentTarget.Type != TrinityObjectType.HealthWell &&
             CurrentTarget.Type != TrinityObjectType.Door &&
-            CurrentTarget.ItemType != TrinityItemType.HealthGlobe &&
-            CurrentTarget.ItemType != TrinityItemType.ProgressionGlobe &&
+            CurrentTarget.TrinityItemType != TrinityItemType.HealthGlobe &&
+            CurrentTarget.TrinityItemType != TrinityItemType.ProgressionGlobe &&
 
             // Avoid rapidly changing targets
             DateTime.UtcNow.Subtract(_lastTargetChange).TotalMilliseconds > 200 &&
@@ -684,14 +684,14 @@ namespace Trinity.Combat.Abilities
             var currentTarget = CurrentTarget;
             var lowestHealthTarget = TargetUtil.LowestHealthTarget(60f, TrinityPlugin.Me.Position, SNOPower.Wizard_Disintegrate);
 
-            //Logger.LogNormal("Blacklisting {0} {1} - Changing Target", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId);
+            //Logger.LogNormal("Blacklisting {0} {1} - Changing Target", CurrentTarget.InternalName, CurrentTarget.CommonData.AcdId);
             TrinityPlugin.Blacklist3Seconds.Add(CurrentTarget.AnnId);
 
             // Would like the new target to be different than the one we just blacklisted, or be very close to dead.
-            if (lowestHealthTarget.ACDGuid == currentTarget.ACDGuid && lowestHealthTarget.HitPointsPct < 0.2) return;
+            if (lowestHealthTarget.AcdId == currentTarget.AcdId && lowestHealthTarget.HitPointsPct < 0.2) return;
 
             TrinityPlugin.CurrentTarget = lowestHealthTarget;
-            //Logger.LogNormal("Found lowest health target {0} {1} ({2:0.##}%)", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId, lowestHealthTarget.HitPointsPct * 100);
+            //Logger.LogNormal("Found lowest health target {0} {1} ({2:0.##}%)", CurrentTarget.InternalName, CurrentTarget.CommonData.AcdId, lowestHealthTarget.HitPointsPct * 100);
         }
 
         /// <summary>
@@ -916,20 +916,20 @@ namespace Trinity.Combat.Abilities
             //if (!Player.IsIncapacitated && !Settings.Combat.Wizard.DisableDisintegrationWave && CanCast(beamPower, CanCastFlags.NoTimer) &&
             //    (CurrentTarget.CountUnitsBehind(25f) > 2 || Settings.Combat.Wizard.NoArcaneStrike || Settings.Combat.Wizard.KiteLimit > 0))
             //{
-            //    return new TrinityPower(beamPower, 49f, CurrentTarget.ACDGuid);
+            //    return new TrinityPower(beamPower, 49f, CurrentTarget.AcdId);
             //}
 
             //// Arcane Strike Rapid Spam at close-range only, and no AoE inbetween us and target
             //if (!Player.IsIncapacitated && !Settings.Combat.Wizard.NoArcaneStrike && CanCast(strikePower, CanCastFlags.NoTimer) &&
             //    !CacheData.TimeBoundAvoidance.Any(aoe => MathUtil.IntersectsPath(aoe.Position, aoe.Radius, Player.Position, CurrentTarget.Position)))
             //{
-            //    return new TrinityPower(strikePower, 7f, CurrentTarget.ACDGuid);
+            //    return new TrinityPower(strikePower, 7f, CurrentTarget.AcdId);
             //}
 
             //// Disintegrate as final option just in case
             //if (!Player.IsIncapacitated && CanCast(beamPower, CanCastFlags.NoTimer))
             //{
-            //    return new TrinityPower(beamPower, 49f, CurrentTarget.ACDGuid);
+            //    return new TrinityPower(beamPower, 49f, CurrentTarget.AcdId);
             //}
 
             //return null;

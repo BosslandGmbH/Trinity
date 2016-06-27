@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Trinity.Resources.BNetAPI
 {
     [DataContract]
-    public class ApiItem : ApiItemBase, IApiAttributes
+    public class ApTrinityItem : ApTrinityItemBase, IApiAttributes
     {
         [DataMember(Name = "requiredLevel")]
         public int RequiredLevel { get; set; }
@@ -32,7 +32,7 @@ namespace Trinity.Resources.BNetAPI
         public string TypeName { get; set; }
 
         [DataMember(Name = "type")]
-        public ApiItemType Type { get; set; }
+        public ApTrinityItemType Type { get; set; }
 
         [DataMember(Name = "armor")]
         public ApiRange Armor { get; set; }
@@ -85,7 +85,7 @@ namespace Trinity.Resources.BNetAPI
     }
 
     [DataContract]
-    public class ApiItemBase
+    public class ApTrinityItemBase
     {
         [DataMember(Name = "id")]
         public string Id { get; set; }
@@ -110,7 +110,7 @@ namespace Trinity.Resources.BNetAPI
         public string Name { get; set; }
 
         [DataMember(Name = "items")]
-        public List<ApiItemBase> Items { get; set; }
+        public List<ApTrinityItemBase> Items { get; set; }
 
         [DataMember(Name = "slug")]
         public string Slug { get; set; }
@@ -150,7 +150,7 @@ namespace Trinity.Resources.BNetAPI
     }
 
     [DataContract]
-    public class ApiItemType
+    public class ApTrinityItemType
     {
         [DataMember(Name = "twoHanded")]
         public bool TwoHanded { get; set; }

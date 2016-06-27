@@ -1,4 +1,5 @@
 using System;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Movement;
 using Trinity.Reference;
 using Zeta.Game.Internals.Actors;
@@ -12,7 +13,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
             public static TrinityPower PowerSelector()
             {
                 if (Player.IsIncapacitated) return null;
-                TrinityCacheObject target = null;
+                TrinityActor target = null;
                 if (ShouldAncientSpear(out target))
                     return CastAncientSpear(target);
                 if (ShouldUseFuriousCharge(out target))
@@ -20,17 +21,17 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return null;
             }
 
-            private static bool ShouldUseFuriousCharge(out TrinityCacheObject target)
+            private static bool ShouldUseFuriousCharge(out TrinityActor target)
             {
                 target = null;
                 if (!Skills.Barbarian.FuriousCharge.CanCast())
                     return false;
                 var targetGoal = Math.Floor(5*TrinityPlugin.Player.CooldownReductionPct);
-                TrinityCacheObject bestPierce = PhelonUtils.GetBestPierceTarget(45);
+                TrinityActor bestPierce = PhelonUtils.GetBestPierceTarget(45);
                 var bestPierceCount = bestPierce?.NearbyUnitsWithinDistance(7) ?? 0;
-                TrinityCacheObject bestTarget = PhelonTargeting.BestAoeUnit(45, true);
+                TrinityActor bestTarget = PhelonTargeting.BestAoeUnit(45, true);
                 var bestTargetCount = bestTarget?.NearbyUnitsWithinDistance(7) ?? 0;
-                TrinityCacheObject bestCluster = PhelonUtils.GetBestClusterUnit(7, 45);
+                TrinityActor bestCluster = PhelonUtils.GetBestClusterUnit(7, 45);
                 var bestClusterCount = bestCluster?.NearbyUnitsWithinDistance(7) ?? 0;
                 if (!ClassMover.HasInfiniteCasting)
                 {
@@ -73,13 +74,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return false;
             }
 
-            private static TrinityPower CastFuriousCharge(TrinityCacheObject target)
+            private static TrinityPower CastFuriousCharge(TrinityActor target)
             {
                 return new TrinityPower(SNOPower.Barbarian_FuriousCharge, 45,
                     PhelonUtils.PointBehind(target.Position));
             }
 
-            private static bool ShouldAncientSpear(out TrinityCacheObject target)
+            private static bool ShouldAncientSpear(out TrinityActor target)
             {
                 target = null;
 
@@ -103,7 +104,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Barbarian
                 return target.Distance <= 60 && Player.PrimaryResourcePct > 0.95;
             }
 
-            private static TrinityPower CastAncientSpear(TrinityCacheObject target)
+            private static TrinityPower CastAncientSpear(TrinityActor target)
             {
                 return new TrinityPower(SNOPower.X1_Barbarian_AncientSpear, 60f,
                     target.Position);
