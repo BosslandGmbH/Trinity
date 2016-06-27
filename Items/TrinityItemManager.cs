@@ -11,7 +11,7 @@ using Trinity.Cache;
 using Trinity.Coroutines.Town;
 using TrinityCoroutines.Resources;
 using Trinity.DbProvider;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
 using Trinity.ItemRules;
@@ -39,7 +39,7 @@ namespace Trinity.Items
             ItemEvents.OnItemSalvaged += TrinityOnItemSalvaged;
             ItemEvents.OnItemSold += TrinityOnItemSold;
         }
-        public static bool TrinityDrop(CachedItem item, ItemEvaluationType scheduledAction)
+        public static bool TrinityDrop(TrinityItem item, ItemEvaluationType scheduledAction)
         {
             if (item.IsProtected() || item.IsAccountBound)
                 return false;
@@ -92,7 +92,7 @@ namespace Trinity.Items
         /// <param name="item">The item.</param>
         /// <param name="evaluationType">Type of the evaluation.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        public static bool TrinityStash(CachedItem item)
+        public static bool TrinityStash(TrinityItem item)
         {
             if (item.IsProtected())
             {
@@ -142,7 +142,7 @@ namespace Trinity.Items
             }
 
             // Now look for Misc items we might want to keep
-            TrinityItemType tItemType = item.TrinityItemType; // DetermineItemType(cItem.InternalName, cItem.DBItemType, cItem.FollowerType);
+            TrinityItemType tItemType = item.TrinityItemType; // DetermineItemType(cItem.InternalName, cItem.ItemType, cItem.FollowerType);
             TrinityItemBaseType tBaseType = item.TrinityItemBaseType; // DetermineBaseType(trinityItemType);
 
             // ItemRules - Always stash ancients setting
@@ -304,7 +304,7 @@ namespace Trinity.Items
 
             if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
             {
-                Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkItem(item.GetAcdItem(), ItemEvaluationType.Keep);
+                Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkItem(item.ToAcdItem(), ItemEvaluationType.Keep);
 
                 Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "IR2 {0} [{1}] [{2}] = (" + action + ")", item.Name, item.InternalName, item.ItemType);
                 switch (action)
@@ -380,7 +380,7 @@ namespace Trinity.Items
 
             // Ok now try to do some decent item scoring based on item types
             double iNeedScore = ItemValuation.ScoreNeeded(item.ItemBaseType);
-            double iMyScore = ItemValuation.ValueThisItem(CachedACDItem.GetCachedItem(item.GetAcdItem()), tItemType);
+            double iMyScore = ItemValuation.ValueThisItem(CachedACDItem.GetTrinityItem(item.ToAcdItem()), tItemType);
 
             Logger.Log(TrinityLogLevel.Verbose, LogCategory.ItemValuation, "{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, iMyScore);
 
@@ -419,7 +419,7 @@ namespace Trinity.Items
         /// Determines if we should salvage an item
         /// </summary>
 
-        public static bool TrinitySalvage(CachedItem item)
+        public static bool TrinitySalvage(TrinityItem item)
         {
             var reason = string.Empty;
             try
@@ -492,7 +492,7 @@ namespace Trinity.Items
 
                 if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
                 {
-                    var result = ItemRulesSalvageSell(item.GetAcdItem(), ItemEvaluationType.Salvage);
+                    var result = ItemRulesSalvageSell(item.ToAcdItem(), ItemEvaluationType.Salvage);
                     reason = $"ItemRules {result}";
                     switch (result)
                     {
@@ -547,7 +547,7 @@ namespace Trinity.Items
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        internal static bool TrinitySell(CachedItem item)
+        internal static bool TrinitySell(TrinityItem item)
         {
             var reason = string.Empty;
             try
@@ -637,7 +637,7 @@ namespace Trinity.Items
 
                 if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
                 {
-                    var result = ItemRulesSalvageSell(item.GetAcdItem(), ItemEvaluationType.Sell);
+                    var result = ItemRulesSalvageSell(item.ToAcdItem(), ItemEvaluationType.Sell);
                     reason = $"ItemRules Decision {result}";
                     switch (result)
                     {
@@ -787,7 +787,7 @@ namespace Trinity.Items
                     try
                     {
                         string itemName = String.Format("\nName={0} InternalName={1} ActorSnoId={2} DynamicID={3} InventorySlot={4}",
-                        item.Name, item.InternalName, item.ActorSNO, item.DynamicId, item.InventorySlot);
+                        item.Name, item.InternalName, item.ActorSnoId, item.DynamicId, item.InventorySlot);
 
                         Logger.Log(itemName);
                     }
@@ -1088,7 +1088,7 @@ namespace Trinity.Items
             }
         }
 
-        internal static bool ShouldPickupItem(TrinityCacheObject item)
+        internal static bool ShouldPickupItem(TrinityItem item)
         {
             if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
             {
@@ -1101,12 +1101,12 @@ namespace Trinity.Items
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        internal static bool ItemRulesPickupValidation(TrinityCacheObject item)
+        internal static bool ItemRulesPickupValidation(TrinityItem item)
         {
             if (TrinityPlugin.StashRule == null)
                 TrinityPlugin.StashRule = new Interpreter();
 
-            Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkItem(item.CommonData as ACDItem, ItemEvaluationType.PickUp);
+            Interpreter.InterpreterAction action = TrinityPlugin.StashRule.checkItem(item.ToAcdItem(), ItemEvaluationType.PickUp);
 
             switch (action)
             {
@@ -1119,21 +1119,21 @@ namespace Trinity.Items
             return TrinityPickup(item);
         }
 
-
-        internal static bool TrinityPickup(TrinityCacheObject item)
+        internal static bool TrinityPickup(TrinityItem item)
         {
             // Calculate item types and base types etc.
-            TrinityItemType itemType = DetermineItemType(item.InternalName, item.DBItemType, item.FollowerType);
-            TrinityItemBaseType baseType = DetermineBaseType(itemType);
+            //TrinityItemType itemType = DetermineItemType(item.InternalName, item.ItemType, item.FollowerType);
+            //TrinityItemBaseType baseType = DetermineBaseType(itemType);
 
-            var acdItem = item.Item?.CommonData;
-            if (acdItem == null)
+
+
+            if (!item.IsValid)
             {
-                Logger.LogDebug($"Not a valid item {item.InternalName} Sno={item.ActorSNO} GbId={item.GameBalanceID}");
+                Logger.LogDebug($"Not a valid item {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
             }
 
             // Pickup Ramaladni's Gift
-            if (itemType == TrinityItemType.ConsumableAddSockets)
+            if (item.TrinityItemType == TrinityItemType.ConsumableAddSockets)
             {
                 return TrinityPlugin.Settings.Loot.Pickup.RamadalinisGift;
             }
@@ -1143,95 +1143,95 @@ namespace Trinity.Items
             // GameBalanceId still works though.
             // 2087837753 DB
             // -605947593 veil
-            if (item.GameBalanceID == 2087837753)
+            if (item.GameBalanceId == 2087837753)
             {
                 return TrinityPlugin.Settings.Loot.Pickup.PickupDeathsBreath;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.PickupStaffOfHerdingParts && DataDictionary.HerdingMatsSnoIds.Contains(item.ActorSNO))
+            if (TrinityPlugin.Settings.Loot.Pickup.PickupStaffOfHerdingParts && DataDictionary.HerdingMatsSnoIds.Contains(item.ActorSnoId))
             {
-                Logger.Log($"Staff of Herding Mat found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.GameBalanceID}");
+                Logger.Log($"Staff of Herding Mat found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.GameBalanceID) || DataDictionary.PetSnoIds.Contains(item.ActorSNO))
+            if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.GameBalanceId) || DataDictionary.PetSnoIds.Contains(item.ActorSnoId))
             {
-                Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.GameBalanceID}");
+                Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
-            if (DataDictionary.TransmogTable.Contains(item.GameBalanceID))
+            if (DataDictionary.TransmogTable.Contains(item.GameBalanceId))
             {
-                Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSNO} GbId={item.GameBalanceID}");
+                Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
-            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.GameBalanceID) || DataDictionary.CosmeticSnoIds.Contains(item.ActorSNO))
+            if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.GameBalanceId) || DataDictionary.CosmeticSnoIds.Contains(item.ActorSnoId))
             {
-                Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.GameBalanceID}");
+                Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
-            if (item.IsTwoSlotItem && TrinityPlugin.Settings.Loot.Pickup.IgnoreTwoHandedWeapons && item.ItemQuality < ItemQuality.Legendary)
+            if (item.IsTwoSquareItem && TrinityPlugin.Settings.Loot.Pickup.IgnoreTwoHandedWeapons && item.ItemQualityLevel < ItemQuality.Legendary)
             {
                 return false;
             }
 
             // Tiered Rift Keys
-            if (itemType == TrinityItemType.TieredLootrunKey)
+            if (item.TrinityItemType == TrinityItemType.TieredLootrunKey)
             {
                 return TrinityPlugin.Settings.Loot.Pickup.LootRunKey;
             }
 
             // Pickup Legendary potions
-            if (itemType == TrinityItemType.HealthPotion && item.ItemQuality >= ItemQuality.Legendary)
+            if (item.TrinityItemType == TrinityItemType.HealthPotion && item.ItemQualityLevel >= ItemQuality.Legendary)
             {
                 return TrinityPlugin.Settings.Loot.Pickup.LegendaryPotions;
             }
 
-            if (itemType == TrinityItemType.InfernalKey || itemType == TrinityItemType.PortalDevice)
+            if (item.TrinityItemType == TrinityItemType.InfernalKey || item.TrinityItemType == TrinityItemType.PortalDevice)
             {
                 return TrinityPlugin.Settings.Loot.Pickup.InfernalKeys;
             }
 
-            if (itemType == TrinityItemType.UberReagent)
+            if (item.TrinityItemType == TrinityItemType.UberReagent)
             {
                 return true;
             }
 
             // Rift Keystone Fragments == LootRunkey
-            if (itemType == TrinityItemType.LootRunKey)
+            if (item.TrinityItemType == TrinityItemType.LootRunKey)
             {
                 return TrinityPlugin.Settings.Loot.Pickup.LootRunKey;
             }
 
             // Blood Shards == HoradricRelic
-            if (itemType == TrinityItemType.HoradricRelic && ZetaDia.PlayerData.BloodshardCount < TrinityPlugin.Player.MaxBloodShards)
+            if (item.TrinityItemType == TrinityItemType.HoradricRelic && ZetaDia.PlayerData.BloodshardCount < TrinityPlugin.Player.MaxBloodShards)
             {
                 return TrinityPlugin.Settings.Loot.Pickup.BloodShards;
             }
 
-            if (itemType == TrinityItemType.ProgressionGlobe)
+            if (item.TrinityItemType == TrinityItemType.ProgressionGlobe)
                 return true;
 
-            if (itemType == TrinityItemType.CraftingMaterial && (acdItem.GetTrinityItemQuality() < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality || !TrinityPlugin.Settings.Loot.Pickup.CraftMaterials))
+            if (item.TrinityItemType == TrinityItemType.CraftingMaterial && (item.TrinityItemQuality < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality || !TrinityPlugin.Settings.Loot.Pickup.CraftMaterials))
             {
                 return false;
             }
 
             // Plans
-            if (item.InternalName.ToLower().StartsWith("craftingplan_smith") && (acdItem.GetTrinityItemQuality() < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality || !TrinityPlugin.Settings.Loot.Pickup.Plans))
+            if (item.InternalName.ToLower().StartsWith("craftingplan_smith") && (item.TrinityItemQuality < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality || !TrinityPlugin.Settings.Loot.Pickup.Plans))
             {
                 return false;
             }
 
             // Designs
-            if (item.InternalName.ToLower().StartsWith("craftingplan_jeweler") && (acdItem.GetTrinityItemQuality() < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality || !TrinityPlugin.Settings.Loot.Pickup.Designs))
+            if (item.InternalName.ToLower().StartsWith("craftingplan_jeweler") && (item.TrinityItemQuality < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality || !TrinityPlugin.Settings.Loot.Pickup.Designs))
             {
                 return false;
             }
 
-            if (itemType == TrinityItemType.CraftingPlan && item.ItemQuality >= ItemQuality.Legendary && TrinityPlugin.Settings.Loot.Pickup.LegendaryPlans)
+            if (item.TrinityItemType == TrinityItemType.CraftingPlan && item.ItemQualityLevel >= ItemQuality.Legendary && TrinityPlugin.Settings.Loot.Pickup.LegendaryPlans)
             {
                 return true;
             }
@@ -1241,7 +1241,7 @@ namespace Trinity.Items
                 return true;
             }
 
-            if (item.DBItemType == ItemType.LegendaryGem)
+            if (item.ItemType == ItemType.LegendaryGem)
             {
                 return true;
             }
@@ -1251,54 +1251,54 @@ namespace Trinity.Items
             //    return true;
             //}
 
-            switch (baseType)
+            switch (item.TrinityItemBaseType)
             {
                 case TrinityItemBaseType.WeaponTwoHand:
                 case TrinityItemBaseType.WeaponOneHand:
                 case TrinityItemBaseType.WeaponRange:
-                    if (item.ItemQuality >= ItemQuality.Legendary)
+                    if (item.ItemQualityLevel >= ItemQuality.Legendary)
                         return TrinityPlugin.Settings.Loot.Pickup.PickupLegendaries;
 
-                    return CheckLevelRequirements(item.ItemLevel, item.ItemQuality, TrinityPlugin.Settings.Loot.Pickup.PickupBlueWeapons, TrinityPlugin.Settings.Loot.Pickup.PickupYellowWeapons);
+                    return CheckLevelRequirements(item.ItemLevel, item.ItemQualityLevel, TrinityPlugin.Settings.Loot.Pickup.PickupBlueWeapons, TrinityPlugin.Settings.Loot.Pickup.PickupYellowWeapons);
                 case TrinityItemBaseType.Armor:
                 case TrinityItemBaseType.Offhand:
-                    if (item.ItemQuality >= ItemQuality.Legendary)
+                    if (item.ItemQualityLevel >= ItemQuality.Legendary)
                         return TrinityPlugin.Settings.Loot.Pickup.PickupLegendaries;
 
-                    return CheckLevelRequirements(item.ItemLevel, item.ItemQuality, TrinityPlugin.Settings.Loot.Pickup.PickupBlueArmor, TrinityPlugin.Settings.Loot.Pickup.PickupYellowArmor);
+                    return CheckLevelRequirements(item.ItemLevel, item.ItemQualityLevel, TrinityPlugin.Settings.Loot.Pickup.PickupBlueArmor, TrinityPlugin.Settings.Loot.Pickup.PickupYellowArmor);
                 case TrinityItemBaseType.Jewelry:
-                    if (item.ItemQuality >= ItemQuality.Legendary)
+                    if (item.ItemQualityLevel >= ItemQuality.Legendary)
                         return TrinityPlugin.Settings.Loot.Pickup.PickupLegendaries;
 
-                    return CheckLevelRequirements(item.ItemLevel, item.ItemQuality, TrinityPlugin.Settings.Loot.Pickup.PickupBlueJewlery, TrinityPlugin.Settings.Loot.Pickup.PickupYellowJewlery);
+                    return CheckLevelRequirements(item.ItemLevel, item.ItemQualityLevel, TrinityPlugin.Settings.Loot.Pickup.PickupBlueJewlery, TrinityPlugin.Settings.Loot.Pickup.PickupYellowJewlery);
                 case TrinityItemBaseType.FollowerItem:
-                    if (item.ItemQuality >= ItemQuality.Legendary)
+                    if (item.ItemQualityLevel >= ItemQuality.Legendary)
                         return TrinityPlugin.Settings.Loot.Pickup.PickupLegendaryFollowerItems;
 
-                    if (item.ItemQuality >= ItemQuality.Magic1 && item.ItemQuality <= ItemQuality.Magic3)
+                    if (item.ItemQualityLevel >= ItemQuality.Magic1 && item.ItemQualityLevel <= ItemQuality.Magic3)
                         return TrinityPlugin.Settings.Loot.Pickup.PickupBlueFollowerItems;
 
-                    if (item.ItemQuality >= ItemQuality.Rare4 && item.ItemQuality <= ItemQuality.Rare6)
+                    if (item.ItemQualityLevel >= ItemQuality.Rare4 && item.ItemQualityLevel <= ItemQuality.Rare6)
                         return TrinityPlugin.Settings.Loot.Pickup.PickupYellowFollowerItems;
                     // not matched above, ignore it
                     return false;
                 case TrinityItemBaseType.Gem:
-                    if (item.ItemLevel < TrinityPlugin.Settings.Loot.Pickup.GemLevel ||
-                        (itemType == TrinityItemType.Ruby && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Ruby)) ||
-                        (itemType == TrinityItemType.Emerald && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Emerald)) ||
-                        (itemType == TrinityItemType.Amethyst && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Amethyst)) ||
-                        (itemType == TrinityItemType.Topaz && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Topaz)) ||
-                        (itemType == TrinityItemType.Diamond && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Diamond)))
+                    if ((int)item.GemQuality < TrinityPlugin.Settings.Loot.Pickup.GemLevel ||
+                        (item.TrinityItemType == TrinityItemType.Ruby && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Ruby)) ||
+                        (item.TrinityItemType == TrinityItemType.Emerald && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Emerald)) ||
+                        (item.TrinityItemType == TrinityItemType.Amethyst && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Amethyst)) ||
+                        (item.TrinityItemType == TrinityItemType.Topaz && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Topaz)) ||
+                        (item.TrinityItemType == TrinityItemType.Diamond && !TrinityPlugin.Settings.Loot.Pickup.GemType.HasFlag(TrinityGemType.Diamond)))
                     {
                         return false;
                     }
                     break;
                 case TrinityItemBaseType.Misc:
-                    if (acdItem.GetTrinityItemQuality() < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality)
+                    if (item.TrinityItemQuality < TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality)
                         return false;
 
                     // Potion filtering
-                    if (itemType == TrinityItemType.HealthPotion && item.ItemQuality < ItemQuality.Legendary)
+                    if (item.TrinityItemType == TrinityItemType.HealthPotion && item.ItemQualityLevel < ItemQuality.Legendary)
                     {
                         long potionsInBackPack = ZetaDia.Me.Inventory.Backpack.Where(p => p.ItemType == ItemType.Potion).Sum(p => p.ItemStackQuantity);
 
@@ -1329,7 +1329,7 @@ namespace Trinity.Items
         //internal static bool PickupItemValidation(PickupItem item)
         //{
         //    // Calculate item types and base types etc.
-        //    TrinityItemType itemType = DetermineItemType(item.InternalName, item.DBItemType, item.ItemFollowerType);
+        //    TrinityItemType itemType = DetermineItemType(item.InternalName, item.ItemType, item.ItemFollowerType);
         //    TrinityItemBaseType baseType = DetermineBaseType(itemType);
 
         //    // Pickup Ramaladni's Gift
@@ -1348,27 +1348,27 @@ namespace Trinity.Items
         //        return TrinityPlugin.Settings.Loot.Pickup.PickupDeathsBreath;
         //    }
 
-        //    if (TrinityPlugin.Settings.Loot.Pickup.PickupStaffOfHerdingParts && DataDictionary.HerdingMatsSnoIds.Contains(item.ActorSNO))
+        //    if (TrinityPlugin.Settings.Loot.Pickup.PickupStaffOfHerdingParts && DataDictionary.HerdingMatsSnoIds.Contains(item.ActorSnoId))
         //    {
-        //        Logger.Log($"Staff of Herding Mat found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
+        //        Logger.Log($"Staff of Herding Mat found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.BalanceID}");
         //        return true;
         //    }
 
-        //    if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.BalanceID) || DataDictionary.PetSnoIds.Contains(item.ActorSNO))
+        //    if (TrinityPlugin.Settings.Loot.Pickup.StashPets && DataDictionary.PetTable.Contains(item.BalanceID) || DataDictionary.PetSnoIds.Contains(item.ActorSnoId))
         //    {
-        //        Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
+        //        Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.BalanceID}");
         //        return true;
         //    }
 
         //    if (DataDictionary.TransmogTable.Contains(item.BalanceID))
         //    {
-        //        Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
+        //        Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSnoId} GbId={item.BalanceID}");
         //        return true;
         //    }
 
-        //    if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.BalanceID) || DataDictionary.CosmeticSnoIds.Contains(item.ActorSNO))
+        //    if (TrinityPlugin.Settings.Loot.Pickup.StashWings && DataDictionary.WingsTable.Contains(item.BalanceID) || DataDictionary.CosmeticSnoIds.Contains(item.ActorSnoId))
         //    {
-        //        Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSNO} GbId={item.BalanceID}");
+        //        Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.BalanceID}");
         //        return true;
         //    }
 
@@ -1527,18 +1527,18 @@ namespace Trinity.Items
         //        item.Level,
         //        item.ItemQualityLevel,
         //        item.GameBalanceId,
-        //        item.ItemBaseType,
+        //        item.DBItemBaseType,
         //        item.ItemType,
         //        item.IsOneHand,
         //        item.IsTwoHand,
         //        item.FollowerSpecialType,
-        //        item.ACDId,
+        //        item.AcdId,
         //        item.AnnId);
 
         //    Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation,
         //        "Incoming Identification Request: {0}, {1}, {2}, {3}, {4}",
         //        pickupItem.Quality, pickupItem.Level, pickupItem.DBBaseType,
-        //        pickupItem.DBItemType, pickupItem.IsOneHand ? "1H" : pickupItem.IsTwoHand ? "2H" : "NH");
+        //        pickupItem.ItemType, pickupItem.IsOneHand ? "1H" : pickupItem.IsTwoHand ? "2H" : "NH");
 
         //    if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules && TrinityPlugin.StashRule != null)
         //    {
@@ -1985,10 +1985,10 @@ namespace Trinity.Items
 
         internal static InventoryItemType GetCraftingMaterialType(CachedACDItem item)
         {
-            if (item.ActorSNO == 361989 || item.ActorSNO == 449044)
+            if (item.ActorSnoId == 361989 || item.ActorSnoId == 449044)
                 return InventoryItemType.DeathsBreath;
 
-            return (InventoryItemType)item.ActorSNO;
+            return (InventoryItemType)item.ActorSnoId;
         }
 
         internal static InventoryItemType GetCraftingMaterialType(int actorSnoId)
@@ -2000,7 +2000,7 @@ namespace Trinity.Items
 
         }
 
-        internal static Func<ACDItem, CachedItem, bool> StackItemMatchFunc = (item, cItem) => item.IsValid && item.ActorSnoId == cItem.ActorSnoId;
+        internal static Func<ACDItem, TrinityItem, bool> StackItemMatchFunc = (item, cItem) => item.IsValid && item.ActorSnoId == cItem.ActorSnoId;
 
         /// <summary>
         /// Gets the number of items combined in all stacks
@@ -2009,7 +2009,7 @@ namespace Trinity.Items
         /// <param name="inventorySlot">The inventory slot.</param>
         /// <returns>System.Int32.</returns>
         /// <exception cref="System.ArgumentException">InventorySlot  + inventorySlot +  is not supported for GetStackCount method</exception>
-        internal static int GetItemStackCount(CachedItem cItem, InventorySlot inventorySlot)
+        internal static int GetItemStackCount(TrinityItem cItem, InventorySlot inventorySlot)
         {
             try
             {
@@ -2029,7 +2029,7 @@ namespace Trinity.Items
             }
         }
 
-        internal static void TrinityOnItemStashed(CachedItem item)
+        internal static void TrinityOnItemStashed(TrinityItem item)
         {
             try
             {
@@ -2040,7 +2040,7 @@ namespace Trinity.Items
                         break;
                     default:
                         Helpers.Notifications.LogGoodItems(item, item.TrinityItemBaseType, item.TrinityItemType, 0);
-                        //ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetCachedItem(item.GetAcdItem()), "Stashed");
+                        //ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetTrinityItem(item.ToAcdItem()), "Stashed");
                         break;
                 }
             }
@@ -2051,7 +2051,7 @@ namespace Trinity.Items
             }
         }
 
-        internal static void TrinityOnItemSalvaged(CachedItem item)
+        internal static void TrinityOnItemSalvaged(TrinityItem item)
         {
             try
             {
@@ -2062,7 +2062,7 @@ namespace Trinity.Items
                         break;
                     default:
                         Helpers.Notifications.LogJunkItems(item, item.TrinityItemBaseType, item.TrinityItemType, 0);
-                        //ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetCachedItem(item.GetAcdItem()), "Salvaged");
+                        //ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetTrinityItem(item.ToAcdItem()), "Salvaged");
                         break;
                 }
             }
@@ -2073,7 +2073,7 @@ namespace Trinity.Items
             }
         }
 
-        internal static void TrinityOnItemSold(CachedItem item)
+        internal static void TrinityOnItemSold(TrinityItem item)
         {
             try
             {
@@ -2084,7 +2084,7 @@ namespace Trinity.Items
                         break;
                     default:
                         Helpers.Notifications.LogJunkItems(item, item.TrinityItemBaseType, item.TrinityItemType, 0);
-                        //ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetCachedItem(item.GetAcdItem()), "Sold");
+                        //ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetTrinityItem(item.ToAcdItem()), "Sold");
                         break;
                 }
             }

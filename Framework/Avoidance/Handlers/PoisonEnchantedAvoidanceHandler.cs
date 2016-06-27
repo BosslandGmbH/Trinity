@@ -30,7 +30,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 if (actor == null)
                     continue;
 
-                var part = avoidance.Data.GetPart(actor.ActorSNO);
+                var part = avoidance.Data.GetPart(actor.ActorSnoId);
 
                 try
                 {
@@ -47,7 +47,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                     }
                     else
                     {
-                        //var group = Core.Avoidance.Current.Where(a => partIds.Contains(a.Actors.First().ActorSNO)
+                        //var group = Core.Avoidance.Current.Where(a => partIds.Contains(a.Actors.First().ActorSnoId)
                         //            && a.CreationTime.Subtract(avoidance.CreationTime).TotalMilliseconds < 250
                         //            && a.StartPosition.Distance(avoidance.StartPosition) <= 5f);
 
@@ -58,7 +58,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                         grid.FlagNodes(nodes, AvoidanceFlags.Avoidance, 10);
 
                         //Logger.Log("Poison Actor {0} ({1}) - GroupCount={2}, CreationTime={3} StartPosition={4}",
-                        //    actor.InternalName, actor.RActorGuid, group.Count(),
+                        //    actor.InternalName, actor.RActorId, group.Count(),
                         //    avoidance.CreationTime, avoidance.StartPosition);
                     }
                 }

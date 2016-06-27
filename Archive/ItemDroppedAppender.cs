@@ -68,16 +68,16 @@
 //        internal void AppendDroppedItem(PickupItem item)
 //        {
 //            bool pickupItem;
-//            CacheData.PickupItem.TryGetValue(item.RActorGUID, out pickupItem);
+//            CacheData.PickupItem.TryGetValue(item.RActorId, out pickupItem);
 
 //            StringBuilder sb = new StringBuilder();
 
-//            sb.Append(FormatCSVField(item.ActorSNO));
+//            sb.Append(FormatCSVField(item.ActorSnoId));
 //            sb.Append(FormatCSVField(item.BalanceID));
 //            sb.Append(FormatCSVField(item.Name));
 //            sb.Append(FormatCSVField(item.InternalName));
 //            sb.Append(FormatCSVField(item.DBBaseType.ToString()));
-//            sb.Append(FormatCSVField(item.DBItemType.ToString()));
+//            sb.Append(FormatCSVField(item.ItemType.ToString()));
 //            sb.Append(FormatCSVField(item.TBaseType.ToString()));
 //            sb.Append(FormatCSVField(item.TType.ToString()));
 //            sb.Append(FormatCSVField(item.Quality.ToString()));

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects.Memory;
 using Zeta.Game;
 
@@ -40,7 +41,7 @@ namespace Trinity.Cache
             }
         }
 
-        public static void SetRiftValue(TrinityCacheObject actor)
+        public static void SetRiftValue(TrinityActor actor)
         {
             if (IsInRift)
             {
@@ -50,7 +51,7 @@ namespace Trinity.Cache
             }
         }
 
-        public static double GetRiftValue(TrinityCacheObject actor)
+        public static double GetRiftValue(TrinityActor actor)
         {
             var riftValue = 0d;
             if (IsInRift)
@@ -60,7 +61,7 @@ namespace Trinity.Cache
             return riftValue;
         }
 
-        public static bool TryGetRiftValue(TrinityCacheObject actor, out double riftValuePct)
+        public static bool TryGetRiftValue(TrinityActor actor, out double riftValuePct)
         {
             riftValuePct = -1;
             if (actor.IsMinion)
@@ -82,9 +83,9 @@ namespace Trinity.Cache
                 riftValuePct = 1d;
                 return true;
             }
-            if (Values.ContainsKey(actor.ActorSNO))
+            if (Values.ContainsKey(actor.ActorSnoId))
             {
-                var baseValue = Values[actor.ActorSNO];
+                var baseValue = Values[actor.ActorSnoId];
                 riftValuePct = actor.IsElite ? baseValue * 4 : baseValue;
                 return true;
             }

@@ -7,6 +7,7 @@ using Adventurer.Game.Exploration;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Framework.Modules;
 using Trinity.Helpers;
 using Trinity.Movement;
 using Trinity.Technicals;
@@ -80,16 +81,16 @@ namespace Trinity
 //        /// <param name="shouldKite"></param>
 //        /// <param name="avoidDeath"></param>
 //        /// <returns></returns>
-//        internal static Vector3 FindSafeZone(bool isStuck, int stuckAttempts, Vector3 dangerPoint, bool shouldKite = false, IEnumerable<TrinityCacheObject> monsterList = null, bool avoidDeath = false)
+//        internal static Vector3 FindSafeZone(bool isStuck, int stuckAttempts, Vector3 dangerPoint, bool shouldKite = false, IEnumerable<TrinityActor> monsterList = null, bool avoidDeath = false)
 //        {
 //            // Handle The Butcher's Lair
-//            var butcherFloorPanels = CacheData.TimeBoundAvoidance.Where(aoe => DataDictionary.ButcherFloorPanels.Contains(aoe.ActorSNO)).ToList();
+//            var butcherFloorPanels = CacheData.TimeBoundAvoidance.Where(aoe => DataDictionary.ButcherFloorPanels.Contains(aoe.ActorSnoId)).ToList();
 //            if (butcherFloorPanels.Any())
 //            {
 //                foreach (var safePoint in DataDictionary.ButcherPanelPositions.OrderBy(p => p.Value.Distance2DSqr(TrinityPlugin.Player.Position)))
 //                {
 //                    // Floor panel with fire animation was added to cache
-//                    if (butcherFloorPanels.Any(p => p.ActorSNO == safePoint.Key && p.Position.Distance2DSqr(safePoint.Value) <= 15f*15f))
+//                    if (butcherFloorPanels.Any(p => p.ActorSnoId == safePoint.Key && p.Position.Distance2DSqr(safePoint.Value) <= 15f*15f))
 //                    {
 //                        continue;
 //                    }
@@ -133,7 +134,7 @@ namespace Trinity
 //                //    ));
 //                //// Wizards can look for bee stings in range and try a wave of force to dispel them
 //                //if (!shouldKite && Player.ActorClass == ActorClass.Wizard && CombatBase.CanCast(SNOPower.Wizard_WaveOfForce) &&
-//                //    !Player.IsIncapacitated && CacheData.TimeBoundAvoidance.Count(u => u.ActorSNO == 5212 && u.Position.Distance(Player.Position) <= 15f) >= 2 &&
+//                //    !Player.IsIncapacitated && CacheData.TimeBoundAvoidance.Count(u => u.ActorSnoId == 5212 && u.Position.Distance(Player.Position) <= 15f) >= 2 &&
 //                //    (
 //                //    //HotbarSkills.PassiveSkills.Contains(SNOPower.Wizard_Passive_CriticalMass) || 
 //                //    PowerManager.CanCast(SNOPower.Wizard_WaveOfForce)))
@@ -146,7 +147,7 @@ namespace Trinity
 //            float highestWeight = 0f;
 
 //            if (monsterList == null)
-//                monsterList = new List<TrinityCacheObject>();
+//                monsterList = new List<TrinityActor>();
 
 //            //Vector3 vBestLocation = FindSafeZone(dangerPoint, shouldKite, isStuck, monsterList, avoidDeath);            
 //            Vector3 vBestLocation = MainFindSafeZone(dangerPoint, shouldKite, isStuck, monsterList, avoidDeath);
@@ -172,16 +173,16 @@ namespace Trinity
 
 //        internal static Vector3 KitePoint(Vector3 origin, float minDistance, float maxDistance)
 //        {
-//            return MainFindSafeZone(origin, true, false, new List<TrinityCacheObject> {TargetUtil.GetBestClusterUnit()}, false, minDistance, maxDistance);
+//            return MainFindSafeZone(origin, true, false, new List<TrinityActor> {TargetUtil.GetBestClusterUnit()}, false, minDistance, maxDistance);
 //        }
 
-//        internal static Vector3 MainFindSafeZone(Vector3 origin, bool shouldKite = false, bool isStuck = false, IEnumerable<TrinityCacheObject> monsterList = null, bool avoidDeath = false, float minDistance = 0f, float maxDistance = 0f)
+//        internal static Vector3 MainFindSafeZone(Vector3 origin, bool shouldKite = false, bool isStuck = false, IEnumerable<TrinityActor> monsterList = null, bool avoidDeath = false, float minDistance = 0f, float maxDistance = 0f)
 //        {
 //            return PluginCommunicationResponse.
 //        }
 
 //    //// thanks to Main for the super fast can-stand-at code
-//        //internal static Vector3 MainFindSafeZone(Vector3 origin, bool shouldKite = false, bool isStuck = false, IEnumerable<TrinityCacheObject> monsterList = null, bool avoidDeath = false, float minDistance = 0f, float maxDistance = 0f)
+//        //internal static Vector3 MainFindSafeZone(Vector3 origin, bool shouldKite = false, bool isStuck = false, IEnumerable<TrinityActor> monsterList = null, bool avoidDeath = false, float minDistance = 0f, float maxDistance = 0f)
 //        //{
 //        //    const float gridSquareSize = 5f;
 

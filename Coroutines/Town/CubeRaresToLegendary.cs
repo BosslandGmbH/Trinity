@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Reference;
 using Trinity.Technicals;
@@ -79,7 +79,7 @@ namespace Trinity.Coroutines.Town
         /// <summary>
         /// A list of conversion candidates from backpack
         /// </summary>
-        public static List<CachedItem> GetBackPackRares(IEnumerable<ItemSelectionType> types = null)
+        public static List<TrinityItem> GetBackPackRares(IEnumerable<ItemSelectionType> types = null)
         {
             if (types == null)
                 types = TrinityPlugin.Settings.KanaisCube.GetRareUpgradeSettings();
@@ -114,7 +114,7 @@ namespace Trinity.Coroutines.Town
             return rares;
         }
 
-        public static ItemSelectionType GetItemSelectionType(CachedItem item)
+        public static ItemSelectionType GetItemSelectionType(TrinityItem item)
         {
             ItemSelectionType result;
             return Enum.TryParse(item.TrinityItemType.ToString(), out result) ? result : ItemSelectionType.Unknown;
@@ -198,7 +198,7 @@ namespace Trinity.Coroutines.Town
                     var itemName = item.Name;
                     var itemDynamicId = item.AnnId;
                     var itemInternalName = item.InternalName;
-                    var transmuteGroup = new List<CachedItem>
+                    var transmuteGroup = new List<TrinityItem>
                     {
                         item,
                     };

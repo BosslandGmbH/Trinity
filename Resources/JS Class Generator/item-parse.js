@@ -196,16 +196,16 @@ var Items = function() {
                     item.DataUrl = "https://us.battle.net/api/d3/data/" + ((item.IsCrafted) ? "recipe" : "item") + "/" + item.Slug;
 
                     if (itemLookup[item.Slug] != null) {
-                        item.ActorSNO = itemLookup[item.Slug][1];
+                        item.ActorSnoId = itemLookup[item.Slug][1];
                         item.InternalName = itemLookup[item.Slug][2];
                     }
                     
-                    if(item.ActorSNO == 0)
+                    if(item.ActorSnoId == 0)
                     {
                         var strippedName = item.Name.replace(/[^a-zA-Z ]/g, "").trim().toLowerCase();
                         var refByName = itemLookup[strippedName];
                         if (refByName != null) {
-                            item.ActorSNO = refByName[1];
+                            item.ActorSnoId = refByName[1];
                         }
                     }
 

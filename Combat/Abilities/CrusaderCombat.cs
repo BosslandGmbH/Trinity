@@ -4,7 +4,6 @@ using System.Linq;
 using Trinity.Config.Combat;
 using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Framework.Utilities;
 using Trinity.Helpers;
 using Trinity.Reference;
 using Zeta.Common;
@@ -153,7 +152,7 @@ namespace Trinity.Combat.Abilities
                     var closestMonster = TargetUtil.GetClosestUnit(12f);
                     if (closestMonster != null)
                     {
-                        return new TrinityPower(SNOPower.X1_Crusader_Punish, 12f, closestMonster.ACDGuid);
+                        return new TrinityPower(SNOPower.X1_Crusader_Punish, 12f, closestMonster.AcdId);
                     }
                 }
 
@@ -389,7 +388,7 @@ namespace Trinity.Combat.Abilities
                 {
                     var bestPierceTarget = TargetUtil.GetBestPierceTarget(45f);
                     if (!Runes.Crusader.Bowmen.IsActive && bestPierceTarget != null)
-                        return new TrinityPower(SNOPower.x1_Crusader_Phalanx3, 45f, bestPierceTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.x1_Crusader_Phalanx3, 45f, bestPierceTarget.AcdId);
                     return new TrinityPower(SNOPower.x1_Crusader_Phalanx3);
                 }
 
@@ -619,14 +618,14 @@ namespace Trinity.Combat.Abilities
                 {
                     var bestPierceTarget = TargetUtil.GetBestPierceTarget(45f);
                     if (!Runes.Crusader.Bowmen.IsActive && bestPierceTarget != null)
-                        return new TrinityPower(SNOPower.x1_Crusader_Phalanx3, 45f, bestPierceTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.x1_Crusader_Phalanx3, 45f, bestPierceTarget.AcdId);
                     return new TrinityPower(SNOPower.x1_Crusader_Phalanx3);
                 }
                 if (CanCastPhalanxStampede())
                 {
                     var bestPierceTarget = TargetUtil.GetBestPierceTarget(45f);
                     if (bestPierceTarget != null)
-                        return new TrinityPower(SNOPower.x1_Crusader_Phalanx3, 45f, bestPierceTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.x1_Crusader_Phalanx3, 45f, bestPierceTarget.AcdId);
                 }
 
                 // Blessed Shield : Piercing Shield
@@ -635,13 +634,13 @@ namespace Trinity.Combat.Abilities
                 {
                     var bestPierceTarget = TargetUtil.GetBestPierceTarget(45f);
                     if (bestPierceTarget != null)
-                        return new TrinityPower(SNOPower.X1_Crusader_BlessedShield, 14f, bestPierceTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.X1_Crusader_BlessedShield, 14f, bestPierceTarget.AcdId);
                 }
 
                 // Blessed Shield
                 if (CanCastBlessedShield() && !hasPiercingShield)
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_BlessedShield, 14f, TargetUtil.GetBestClusterUnit().ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_BlessedShield, 14f, TargetUtil.GetBestClusterUnit().AcdId);
                 }
 
                 // Fist of Heavens
@@ -672,7 +671,7 @@ namespace Trinity.Combat.Abilities
                 {
                     var bestTarget = CurrentTarget.IsBoss ? CurrentTarget : TargetUtil.GetBestClusterUnit(15, 50f, 1, true, false);
                     if (bestTarget != null)
-                        return new TrinityPower(SNOPower.X1_Crusader_ShieldBash2, 65f, bestTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.X1_Crusader_ShieldBash2, 65f, bestTarget.AcdId);
                 }
 
                 // Sweep Attack
@@ -691,7 +690,7 @@ namespace Trinity.Combat.Abilities
                 // Blessed Shield
                 if (CanCast(SNOPower.X1_Crusader_BlessedShield))
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_BlessedShield, 14f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_BlessedShield, 14f, CurrentTarget.AcdId);
                 }
 
                 // Ensure steed charge isn't interrupted by Punish.
@@ -773,12 +772,12 @@ namespace Trinity.Combat.Abilities
 
         public static TrinityPower GetPrimaryPower()
         {
-            var targetAcdGuid = CurrentTarget?.ACDGuid ?? -1;
+            var targetAcdId = CurrentTarget?.AcdId ?? -1;
 
             // Justice
             if (CanCast(SNOPower.X1_Crusader_Justice))
             {
-                return new TrinityPower(SNOPower.X1_Crusader_Justice, 12f, targetAcdGuid);
+                return new TrinityPower(SNOPower.X1_Crusader_Justice, 12f, targetAcdId);
             }
 
             // Smite
@@ -787,10 +786,10 @@ namespace Trinity.Combat.Abilities
                 var smiteTarget = TargetUtil.GetBestClusterUnit(15f, 15f);
                 if (smiteTarget != null)
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_Smite, 15f, TargetUtil.GetBestClusterUnit(15f, 15f).ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_Smite, 15f, TargetUtil.GetBestClusterUnit(15f, 15f).AcdId);
                 }
 
-                return new TrinityPower(SNOPower.X1_Crusader_Smite, 15f, targetAcdGuid);
+                return new TrinityPower(SNOPower.X1_Crusader_Smite, 15f, targetAcdId);
             }
 
             // Slash
@@ -799,15 +798,15 @@ namespace Trinity.Combat.Abilities
                 var slashTarget = TargetUtil.GetBestClusterUnit(5f, 8f);
                 if (slashTarget != null)
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_Slash, 15f, TargetUtil.GetBestClusterUnit(5f, 8f).ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_Slash, 15f, TargetUtil.GetBestClusterUnit(5f, 8f).AcdId);
                 }
-                return new TrinityPower(SNOPower.X1_Crusader_Slash, 15f, targetAcdGuid);
+                return new TrinityPower(SNOPower.X1_Crusader_Slash, 15f, targetAcdId);
             }
 
             // Punish
             if (CanCast(SNOPower.X1_Crusader_Punish))
             {
-                return new TrinityPower(SNOPower.X1_Crusader_Punish, 12f, targetAcdGuid);
+                return new TrinityPower(SNOPower.X1_Crusader_Punish, 12f, targetAcdId);
             }
 
             return null;
@@ -1048,37 +1047,37 @@ namespace Trinity.Combat.Abilities
                 // Sweep Attack
                 if (CanCast(SNOPower.X1_Crusader_SweepAttack))
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_SweepAttack, 15f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_SweepAttack, 15f, CurrentTarget.AcdId);
                 }
 
                 //Blessed Shield
                 if (CanCast(SNOPower.X1_Crusader_BlessedShield))
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_BlessedShield, 14f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_BlessedShield, 14f, CurrentTarget.AcdId);
                 }
 
                 // Justice
                 if (CanCast(SNOPower.X1_Crusader_Justice))
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_Justice, 45f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_Justice, 45f, CurrentTarget.AcdId);
                 }
 
                 // Smite
                 if (CanCast(SNOPower.X1_Crusader_Smite))
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_Smite, 15f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_Smite, 15f, CurrentTarget.AcdId);
                 }
 
                 // Slash
                 if (CanCast(SNOPower.X1_Crusader_Slash))
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_Slash, 5f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_Slash, 5f, CurrentTarget.AcdId);
                 }
 
                 // Punish
                 if (CanCast(SNOPower.X1_Crusader_Punish))
                 {
-                    return new TrinityPower(SNOPower.X1_Crusader_Punish, 5f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Crusader_Punish, 5f, CurrentTarget.AcdId);
                 }
                 return DefaultPower;
             }

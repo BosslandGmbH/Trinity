@@ -18,9 +18,9 @@ namespace Trinity.Resources.BNetAPI
 
         private static JavaScriptSerializer _serializer;
 
-        internal static ApiItem GetItem(string slug)
+        internal static ApTrinityItem GetItem(string slug)
         {
-            ApiItem item = null;
+            ApTrinityItem item = null;
             var url = "https://us.battle.net/api/d3/data/item/" + slug;
 
             try
@@ -29,7 +29,7 @@ namespace Trinity.Resources.BNetAPI
                 {
                     Logger.Log("Requesting Data from: {0}", url);
                     var json = webClient.DownloadString(url);
-                    item = _serializer.Deserialize<ApiItem>(json);
+                    item = _serializer.Deserialize<ApTrinityItem>(json);
                 }
             }
             catch (Exception ex)

@@ -38,7 +38,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 if (otherAvoidance == avoidance)
                     continue;
 
-                var fireChainFriend = otherAvoidance.Actors.FirstOrDefault(a => a.ActorSNO == actor.ActorSNO);
+                var fireChainFriend = otherAvoidance.Actors.FirstOrDefault(a => a.ActorSnoId == actor.ActorSnoId);
                 if (fireChainFriend != null)
                 {
                     var nodes = grid.GetRayLineAsNodes(actor.Position, fireChainFriend.Position).SelectMany(n => n.AdjacentNodes);

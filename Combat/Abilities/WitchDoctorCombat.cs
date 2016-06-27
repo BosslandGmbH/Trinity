@@ -134,7 +134,7 @@ namespace Trinity.Combat.Abilities
                 // Haunt
                 if (CanCast(SNOPower.Witchdoctor_Haunt) && Player.PrimaryResource >= 50)
                 {
-                    return new TrinityPower(SNOPower.Witchdoctor_Haunt, 21f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_Haunt, 21f, CurrentTarget.AcdId);
                 }
 
                 // Acid Cloud
@@ -158,7 +158,7 @@ namespace Trinity.Combat.Abilities
                     var maxDistance = Math.Max(60f, CurrentTarget.CollisionRadius + KiteDistance);
                     if (Core.Avoidance.Avoider.TryGetSafeSpot(out safePositionNearTarget, 10f, maxDistance, CurrentTarget.Position))
                     {
-                        Logger.Log(LogCategory.Routine, $"Moving to safe point near {CurrentTarget.Unit.Name}");
+                        Logger.Log(LogCategory.Routine, $"Moving to safe point near {CurrentTarget.InternalName}");
                         power = new TrinityPower(SNOPower.Walk, 45f, safePositionNearTarget);
                     }
                     else
@@ -278,31 +278,31 @@ namespace Trinity.Combat.Abilities
             if (!UseOOCBuff && !IsCurrentlyAvoiding && CurrentTarget != null)
             {
 
-                var dartTargetACDGuid = CurrentTarget.ACDGuid;
+                var dartTargetAcdId = CurrentTarget.AcdId;
                 if (Legendary.TheDaggerOfDarts.IsEquipped)
                 {
                     var target = TargetUtil.GetBestPierceTarget(50f);
                     if (target != null)
-                        dartTargetACDGuid = target.ACDGuid;
+                        dartTargetAcdId = target.AcdId;
                 }
 
                 if (_bastianGeneratorWaitTimer.IsFinished && ShouldRefreshBastiansGeneratorBuff)
                 {
                     if (Hotbar.Contains(SNOPower.Witchdoctor_CorpseSpider) && (!Runes.WitchDoctor.SpiderQueen.IsActive || TrinityPlugin.PlayerOwnedSpiderPetsCount == 0))
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, 50f, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, 50f, CurrentTarget.AcdId);
                     }
                     if (Hotbar.Contains(SNOPower.Witchdoctor_PoisonDart))
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_PoisonDart, 50f, dartTargetACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_PoisonDart, 50f, dartTargetAcdId);
                     }
                     if (Hotbar.Contains(SNOPower.Witchdoctor_PlagueOfToads))
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_PlagueOfToads, 50f, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_PlagueOfToads, 50f, CurrentTarget.AcdId);
                     }
                     if (Hotbar.Contains(SNOPower.Witchdoctor_Firebomb))
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_Firebomb, 50f, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_Firebomb, 50f, CurrentTarget.AcdId);
                     }
                     _bastianGeneratorWaitTimer.Reset();
                 }
@@ -310,7 +310,7 @@ namespace Trinity.Combat.Abilities
                 // Summon Corpse Spider Queen
                 if (CanCast(SNOPower.Witchdoctor_CorpseSpider) && Runes.WitchDoctor.SpiderQueen.IsActive && TrinityPlugin.PlayerOwnedSpiderPetsCount == 0)
                 {
-                    return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, 60f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, 60f, CurrentTarget.AcdId);
                 }
 
 
@@ -396,25 +396,25 @@ namespace Trinity.Combat.Abilities
                     if (CanCast(SNOPower.Witchdoctor_PoisonDart))
                     {
                         VisionQuestRefreshTimer.Restart();
-                        return new TrinityPower(SNOPower.Witchdoctor_PoisonDart, basicAttackRange, dartTargetACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_PoisonDart, basicAttackRange, dartTargetAcdId);
                     }
                     // Corpse Spiders
                     if (CanCast(SNOPower.Witchdoctor_CorpseSpider) && (!Runes.WitchDoctor.SpiderQueen.IsActive || TrinityPlugin.PlayerOwnedSpiderPetsCount == 0))
                     {
                         VisionQuestRefreshTimer.Restart();
-                        return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, basicAttackRange, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, basicAttackRange, CurrentTarget.AcdId);
                     }
                     // Plague Of Toads 
                     if (CanCast(SNOPower.Witchdoctor_PlagueOfToads))
                     {
                         VisionQuestRefreshTimer.Restart();
-                        return new TrinityPower(SNOPower.Witchdoctor_PlagueOfToads, basicAttackRange, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_PlagueOfToads, basicAttackRange, CurrentTarget.AcdId);
                     }
                     // Fire Bomb 
                     if (CanCast(SNOPower.Witchdoctor_Firebomb))
                     {
                         VisionQuestRefreshTimer.Restart();
-                        return new TrinityPower(SNOPower.Witchdoctor_Firebomb, basicAttackRange, CurrentTarget.ACDGuid); ;
+                        return new TrinityPower(SNOPower.Witchdoctor_Firebomb, basicAttackRange, CurrentTarget.AcdId); ;
                     }
                 }
 
@@ -470,7 +470,7 @@ namespace Trinity.Combat.Abilities
                     if (CanCast(SNOPower.Witchdoctor_Locust_Swarm) && Player.PrimaryResource >= 300 &&
                         !CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm))
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 20f, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 20f, CurrentTarget.AcdId);
                     }
 
                     // Acid Cloud
@@ -489,13 +489,13 @@ namespace Trinity.Combat.Abilities
                     // Haunt 
                     if (CanCast(SNOPower.Witchdoctor_Haunt) && Player.PrimaryResource >= 50 && !CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Haunt))
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_Haunt, 45f, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_Haunt, 45f, CurrentTarget.AcdId);
                     }
 
                     if (CanCast(SNOPower.Witchdoctor_Haunt) && !CurrentTarget.IsTreasureGoblin && CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm) &&
                         CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Haunt) && Player.PrimaryResource >= 350 && !MinimumSoulHarvestCriteria(Enemies.CloseNearby))
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_Haunt, 45f, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_Haunt, 45f, CurrentTarget.AcdId);
                     }
 
                     //// Save mana for locust swarm || piranhas
@@ -659,7 +659,7 @@ namespace Trinity.Combat.Abilities
                     (TargetUtil.AnyElitesInRange(12, 1) || TargetUtil.AnyMobsInRange(12, 6) || Player.CurrentHealthPct <= 0.25 || (CurrentTarget.IsElite && CurrentTarget.RadiusDistance <= 12f)) &&
                     !CurrentTarget.IsTreasureGoblin)
                 {
-                    return new TrinityPower(SNOPower.Witchdoctor_MassConfusion, 0f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_MassConfusion, 0f, CurrentTarget.AcdId);
                 }
 
                 if (!Settings.Combat.WitchDoctor.UseBigBadVoodooOffCooldown)
@@ -743,7 +743,7 @@ namespace Trinity.Combat.Abilities
                     !SpellTracker.IsUnitTracked(CurrentTarget, SNOPower.Witchdoctor_Haunt) &&
                     LastPowerUsed != SNOPower.Witchdoctor_Haunt)
                 {
-                    return new TrinityPower(SNOPower.Witchdoctor_Haunt, 21f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_Haunt, 21f, CurrentTarget.AcdId);
                 }
 
                 //skillDict.Add("LocustSwarm", SNOPower.Witchdoctor_Locust_Swarm);
@@ -752,7 +752,7 @@ namespace Trinity.Combat.Abilities
                 if (CanCast(SNOPower.Witchdoctor_Locust_Swarm) && Player.PrimaryResource >= 300 && !Legendary.Wormwood.IsEquipped &&
                     !SpellTracker.IsUnitTracked(CurrentTarget, SNOPower.Witchdoctor_Locust_Swarm) && LastPowerUsed != SNOPower.Witchdoctor_Locust_Swarm)
                 {
-                    return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 12f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 12f, CurrentTarget.AcdId);
                 }
 
                 // Sacrifice for 0 Dogs
@@ -791,7 +791,7 @@ namespace Trinity.Combat.Abilities
                 var fireBatsMana = TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) < 125 ? fireBatsChannelCost : 225;
 
                 var firebatsMaintain =
-                  TrinityPlugin.ObjectCache.Any(u => u.IsUnit &&
+                  TrinityPlugin.Targets.Any(u => u.IsUnit &&
                       u.IsPlayerFacing(70f) && u.Weight > 0 &&
                       u.Distance <= 35 &&
                       SpellHistory.TimeSinceUse(SNOPower.Witchdoctor_Firebats) <= TimeSpan.FromMilliseconds(250d));
@@ -802,7 +802,7 @@ namespace Trinity.Combat.Abilities
                 {
                     var range = Settings.Combat.WitchDoctor.FirebatsRange > 12f ? 12f : Settings.Combat.WitchDoctor.FirebatsRange;
 
-                    return new TrinityPower(SNOPower.Witchdoctor_Firebats, range, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_Firebats, range, CurrentTarget.AcdId);
                 }
 
                 // Fire Bats fast-attack
@@ -832,9 +832,9 @@ namespace Trinity.Combat.Abilities
                     hasRushOfEssence && !hasManitou)
                 {
                     if (hasWellOfSouls)
-                        return new TrinityPower(SNOPower.Witchdoctor_SpiritBarrage, 21f, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Witchdoctor_SpiritBarrage, 21f, CurrentTarget.AcdId);
 
-                    return new TrinityPower(SNOPower.Witchdoctor_SpiritBarrage, 21f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_SpiritBarrage, 21f, CurrentTarget.AcdId);
                 }
 
                 // Zombie Charger backup
@@ -846,32 +846,32 @@ namespace Trinity.Combat.Abilities
                 // Regular spirit barage
                 if (CanCast(SNOPower.Witchdoctor_SpiritBarrage) && Player.PrimaryResource >= 100 && !hasManitou)
                 {
-                    return new TrinityPower(SNOPower.Witchdoctor_SpiritBarrage, basicAttackRange, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_SpiritBarrage, basicAttackRange, CurrentTarget.AcdId);
                 }
 
                 // Poison Darts fast-attack Spams Darts when mana is too low (to cast bears) @12yds or @10yds if Bears avialable
                 if (CanCast(SNOPower.Witchdoctor_PoisonDart))
                 {
                     VisionQuestRefreshTimer.Restart();
-                    return new TrinityPower(SNOPower.Witchdoctor_PoisonDart, basicAttackRange, dartTargetACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_PoisonDart, basicAttackRange, dartTargetAcdId);
                 }
                 // Corpse Spiders fast-attacks Spams Spiders when mana is too low (to cast bears) @12yds or @10yds if Bears avialable
                 if (CanCast(SNOPower.Witchdoctor_CorpseSpider) && (!Runes.WitchDoctor.SpiderQueen.IsActive || TrinityPlugin.PlayerOwnedSpiderPetsCount == 0))
                 {
                     VisionQuestRefreshTimer.Restart();
-                    return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, basicAttackRange, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, basicAttackRange, CurrentTarget.AcdId);
                 }
                 // Toads fast-attacks Spams Toads when mana is too low (to cast bears) @12yds or @10yds if Bears avialable
                 if (CanCast(SNOPower.Witchdoctor_PlagueOfToads))
                 {
                     VisionQuestRefreshTimer.Restart();
-                    return new TrinityPower(SNOPower.Witchdoctor_PlagueOfToads, basicAttackRange, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_PlagueOfToads, basicAttackRange, CurrentTarget.AcdId);
                 }
                 // Fire Bomb fast-attacks Spams Bomb when mana is too low (to cast bears) @12yds or @10yds if Bears avialable
                 if (CanCast(SNOPower.Witchdoctor_Firebomb))
                 {
                     VisionQuestRefreshTimer.Restart();
-                    return new TrinityPower(SNOPower.Witchdoctor_Firebomb, basicAttackRange, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_Firebomb, basicAttackRange, CurrentTarget.AcdId);
                 }
 
                 //Hexing Pants Mod
@@ -1109,7 +1109,7 @@ namespace Trinity.Combat.Abilities
                     return new TrinityPower(SNOPower.Witchdoctor_Sacrifice, 12f, CurrentTarget.Position);
 
                 if (Hotbar.Contains(SNOPower.Witchdoctor_SpiritBarrage) && Player.PrimaryResource > 100)
-                    return new TrinityPower(SNOPower.Witchdoctor_SpiritBarrage, 12f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Witchdoctor_SpiritBarrage, 12f, CurrentTarget.AcdId);
 
                 return DefaultPower;
             }

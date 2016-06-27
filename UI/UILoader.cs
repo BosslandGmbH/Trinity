@@ -217,6 +217,9 @@ namespace Trinity.UI
                 filecontent = filecontent.Replace("xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays\"", "xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop\"", "xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
                 filecontent = filecontent.Replace("xmlns:cc=\"clr-namespace:CustomControls\"", "xmlns:cc=\"clr-namespace:CustomControls;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                filecontent = filecontent.Replace("xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums\"", "xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+
+                
 
                 // Remove Template designer reference
                 //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"..\\Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);

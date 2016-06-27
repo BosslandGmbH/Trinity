@@ -22,7 +22,7 @@ namespace Trinity
         public int GoldAmount { get; set; }
         public int BalanceID { get; set; }
         public int DynamicId { get; set; }
-        public int ActorSNO { get; set; }
+        public int ActorSnoId { get; set; }
         public bool OneHanded { get; set; }
         public bool TwoHanded { get; set; }
         public DyeType DyeType { get; set; }
@@ -183,7 +183,7 @@ namespace Trinity
             return 1;
         }
 
-        public static CachedACDItem GetCachedItem(ACDItem item)
+        public static CachedACDItem GetTrinityItem(ACDItem item)
         {
             try
             {
@@ -200,7 +200,7 @@ namespace Trinity
                     GoldAmount = item.Gold,
                     BalanceID = item.GameBalanceId,
                     DynamicId = item.AnnId,
-                    ActorSNO = item.ActorSnoId,
+                    ActorSnoId = item.ActorSnoId,
                     OneHanded = item.IsOneHand,
                     TwoHanded = item.IsTwoHand,
                     DyeType = item.DyeType,
@@ -228,7 +228,7 @@ namespace Trinity
             }
             catch (Exception ex)
             {
-                Logger.LogError("Error getting CachedItem {0}", ex.Message);
+                Logger.LogError("Error getting TrinityItem {0}", ex.Message);
                 return default(CachedACDItem);
             }
 
@@ -362,14 +362,14 @@ namespace Trinity
 
         protected bool Equals(CachedACDItem other)
         {
-            return DynamicId == other.DynamicId && ActorSNO == other.ActorSNO;
+            return DynamicId == other.DynamicId && ActorSnoId == other.ActorSnoId;
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return (DynamicId * 397) ^ ActorSNO;
+                return (DynamicId * 397) ^ ActorSnoId;
             }
         }
     }

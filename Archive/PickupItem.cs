@@ -11,7 +11,7 @@
 //        public int Level { get; set; }
 //        public ItemQuality Quality { get; set; }
 //        public int BalanceID { get; set; }
-//        public ItemBaseType DBBaseType { get; set; }
+//        public DBItemBaseType DBBaseType { get; set; }
 //        public ItemType DBItemType { get; set; }
 //        public TrinityItemBaseType TBaseType { get; set; }
 //        public TrinityItemType TType { get; set; }
@@ -21,9 +21,9 @@
 //        public int DynamicID { get; set; }
 //        public Vector3 Position { get; set; }
 //        public int ActorSNO { get; set; }
-//        public int ACDGuid { get; set; }
+//        public int AcdId { get; set; }
 //        public int RActorGUID { get; set; }
-//        public ACDItem ACDItem { get { return ZetaDia.Actors.GetACDItemById(ACDGuid); } }
+//        public ACDItem ACDItem { get { return ZetaDia.Actors.GetACDItemById(AcdId); } }
 //        public bool IsUpgrade { get; set; }
 //        public float UpgradeDamage { get; set; }
 //        public float UpgradeToughness { get; set; }
@@ -39,7 +39,7 @@
 //            Level = item.Level;
 //            Quality = item.ItemQualityLevel;
 //            BalanceID = item.GameBalanceId;
-//            DBBaseType = item.ItemBaseType;
+//            DBBaseType = item.DBItemBaseType;
 //            DBItemType = item.ItemType;
 //            TBaseType = trinityItemBaseType;
 //            TType = trinityItemType;
@@ -48,12 +48,12 @@
 //            ItemFollowerType = item.FollowerSpecialType;
 //            DynamicID = item.AnnId;
 //            ActorSNO = item.ActorSnoId;
-//            ACDGuid = item.ACDId;
+//            AcdId = item.AcdId;
 //            WorldId = TrinityPlugin.Player.WorldSnoId;
 //        }
 
-//        public PickupItem(string name, string internalName, int level, ItemQuality quality, int balanceId, ItemBaseType dbItemBaseType, 
-//            ItemType dbItemType, bool isOneHand, bool isTwoHand, FollowerType followerType, int acdGuid, int dynamicID = 0)
+//        public PickupItem(string name, string internalName, int level, ItemQuality quality, int balanceId, DBItemBaseType dbItemBaseType, 
+//            ItemType dbItemType, bool isOneHand, bool isTwoHand, FollowerType followerType, int AcdId, int dynamicID = 0)
 //        {
 //            Name = name;
 //            InternalName = TrinityPlugin.NameNumberTrimRegex.Replace(internalName, "");
@@ -65,7 +65,7 @@
 //            IsOneHand = isOneHand;
 //            IsTwoHand = isTwoHand;
 //            ItemFollowerType = followerType;
-//            ACDGuid = acdGuid;
+//            AcdId = AcdId;
 //            DynamicID = dynamicID;
 //            WorldId = TrinityPlugin.Player.WorldSnoId;
 //        }

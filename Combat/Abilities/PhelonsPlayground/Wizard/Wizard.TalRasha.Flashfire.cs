@@ -67,7 +67,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 private static TrinityPower CastSpectralBlade
                 {
-                    get { return new TrinityPower(Skills.Wizard.SpectralBlade.SNOPower, 12f, CurrentTarget.ACDGuid); }
+                    get { return new TrinityPower(Skills.Wizard.SpectralBlade.SNOPower, 12f, CurrentTarget.AcdId); }
                 }
 
                 private static bool ShouldElectrocute
@@ -82,7 +82,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 private static TrinityPower CastElectrocute
                 {
-                    get { return new TrinityPower(Skills.Wizard.Electrocute.SNOPower, 35f, CurrentTarget.ACDGuid); }
+                    get { return new TrinityPower(Skills.Wizard.Electrocute.SNOPower, 35f, CurrentTarget.AcdId); }
                 }
             }
         }

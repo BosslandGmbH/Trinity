@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Trinity;
 using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Items;
 using Trinity.Items.ItemList;
@@ -111,18 +112,18 @@ namespace Trinity.Helpers
         private static Dictionary<int, DateTime> _seenUnknownCache = new Dictionary<int, DateTime>();
 
 
-        public static void LogAnimation(TrinityCacheObject cacheObject)
+        public static void LogAnimation(TrinityActor cacheObject)
         {
-            if (!LogCategoryEnabled(LogCategory.Animation) || cacheObject.CommonData == null || !cacheObject.CommonData.IsValid || !cacheObject.CommonData.AnimationInfo.IsValid)
+            if (!LogCategoryEnabled(LogCategory.Animation) || cacheObject.CommonData == null || !cacheObject.CommonData.IsValid)
                 return;
 
             var state = cacheObject.CommonData.AnimationState.ToString();
-            var name = cacheObject.CommonData.CurrentAnimation.ToString();
+            var name = cacheObject.CommonData.Animation.ToString();
 
             // Log Animation
             if (!_seenAnimationCache.ContainsKey(name))
             {
-                Logger.Log(LogCategory.Animation, "{0} State={1} By: {2} ({3})", name, state, cacheObject.InternalName, cacheObject.ActorSNO);
+                Logger.Log(LogCategory.Animation, "{0} State={1} By: {2} ({3})", name, state, cacheObject.InternalName, cacheObject.ActorSnoId);
                 _seenAnimationCache.Add(name, DateTime.UtcNow);
             }
 
@@ -515,7 +516,7 @@ namespace Trinity.Helpers
             {
                 Logger.Log($"{acdItem.Name} ActorSnoId={acdItem.ActorSnoId} GameBalanceId={acdItem.GameBalanceId} ACDId={acdItem.ACDId} AnnId={acdItem.AnnId}");
 
-                var cItem = new CachedItem(acdItem.BaseAddress);
+                var cItem = ActorFactory.CreateActor(acdItem);
                 Logger.LogVerbose(cItem.Attributes.ToString());
 
                 if (ItemListEvaluator.ShouldStashItem(cItem, true))

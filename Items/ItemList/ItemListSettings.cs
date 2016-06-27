@@ -35,7 +35,7 @@ namespace Trinity.Settings.Loot
     {
         #region Fields
 
-        private static List<LItem> _cachedItems;
+        private static List<LItem> _TrinityItems;
         private FullyObservableCollection<LItem> _displayItems;
         private List<LItem> _selectedItems = new List<LItem>();
         private GroupingType _grouping;
@@ -73,7 +73,7 @@ namespace Trinity.Settings.Loot
         private void Initialization()
         {
             CacheReferenceItems();
-            DisplayItems = new FullyObservableCollection<LItem>(_cachedItems, true);
+            DisplayItems = new FullyObservableCollection<LItem>(_TrinityItems, true);
             BindEvents();
             LoadCommands();
             GroupsExpandedByDefault = false;
@@ -112,7 +112,7 @@ namespace Trinity.Settings.Loot
 
             var itemTypeImages = itemTypes.ToDictionary(k => k, v => string.Empty);
 
-            foreach (var item in _cachedItems)
+            foreach (var item in _TrinityItems)
             {
                 itemTypeImages[item.TrinityItemType] = item.IconUrl;
             }
@@ -279,8 +279,8 @@ namespace Trinity.Settings.Loot
         /// </summary>
         public static void CacheReferenceItems()
         {
-            if (_cachedItems == null)
-                _cachedItems = Legendary.ToList().Where(i => !i.IsCrafted && i.Id != 0).Select(i => new LItem(i)).ToList();
+            if (_TrinityItems == null)
+                _TrinityItems = Legendary.ToList().Where(i => !i.IsCrafted && i.Id != 0).Select(i => new LItem(i)).ToList();
         }
 
         /// <summary>

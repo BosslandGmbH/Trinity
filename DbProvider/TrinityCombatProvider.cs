@@ -2,6 +2,7 @@
 using Trinity.Combat;
 using Trinity.Combat.Abilities;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Bot;
 using Zeta.Game.Internals.Actors;
 
@@ -17,8 +18,8 @@ namespace Trinity.DbProvider
         public List<DiaObject> GetObjectsByWeight()
         {
             var list = new List<DiaObject>();
-            if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.Object != null && TrinityPlugin.CurrentTarget.Object.IsValid)
-                list.Add(TrinityPlugin.CurrentTarget.Object);
+            if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.IsValid)
+                list.Add(TrinityPlugin.CurrentTarget.ToDiaObject());
             return list;
         }
 
@@ -32,7 +33,7 @@ namespace Trinity.DbProvider
             get { return CombatBase.CurrentPower; }
         }
 
-        public TrinityCacheObject CurrentTarget
+        public TrinityActor CurrentTarget
         {
             get { return CombatBase.CurrentTarget; }
         }

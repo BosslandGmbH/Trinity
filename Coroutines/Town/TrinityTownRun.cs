@@ -7,8 +7,7 @@ using Buddy.Coroutines;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Framework.Actors;
-using Trinity.Framework.Utilities;
+using Trinity.Framework.Modules;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Notifications;
@@ -25,7 +24,7 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using ActorManager = Trinity.Framework.Actors.ActorManager;
+using Trinity.Framework.Actors;
 using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Coroutines.Town
@@ -124,7 +123,7 @@ namespace Trinity.Coroutines.Town
                     await Coroutine.Sleep(2000);
                 }
 
-                await Coroutine.Wait(8000, () => ActorManager.Items.Any());
+                await Coroutine.Wait(8000, () => Core.Actors.Inventory.Any());
                 await Coroutine.Sleep(1000);
 
                 Logger.LogDebug("Started Town Run Loop");
@@ -134,11 +133,11 @@ namespace Trinity.Coroutines.Town
                 {
 
 
-                    if (!ActorManager.Items.Any())
+                    if (!Core.Actors.Inventory.Any())
                     {
                         Logger.LogError("Something went terribly wrong, no items found");
                         _catastrophicErrorCount++;
-                        ActorManager.Reset();
+                        //Core.Actors.Reset();
 
                         if (_catastrophicErrorCount > 2)
                         {
@@ -150,7 +149,7 @@ namespace Trinity.Coroutines.Town
                     }
                     else
                     {
-                        ActorManager.Items.ForEach(i => Logger.LogDebug($"Backpack Item: {i.Name} ({i.ActorSnoId} / {i.InternalName}) RawItemType={i.RawItemType} TrinityItemType={i.TrinityItemType}"));
+                        Core.Actors.Inventory.ForEach(i => Logger.LogDebug($"Backpack Item: {i.Name} ({i.ActorSnoId} / {i.InternalName}) RawItemType={i.RawItemType} TrinityItemType={i.TrinityItemType}"));
                     }
 
                     await Coroutine.Yield();

@@ -118,9 +118,9 @@
 //                {
 //                    Logger.Log("Cleaning stash...");
 
-//                    foreach (var item in ZetaDia.Me.Inventory.StashItems.Where(i => i.ACDId != 0 && i.IsValid).ToList())
+//                    foreach (var item in ZetaDia.Me.Inventory.StashItems.Where(i => i.AcdId != 0 && i.IsValid).ToList())
 //                    {
-//                        CachedACDItem cItem = CachedACDItem.GetCachedItem(item);
+//                        CachedACDItem cItem = CachedACDItem.GetTrinityItem(item);
 //                        // Don't take potions from the stash
 //                        if (cItem.TrinityItemType == TrinityItemType.HealthPotion)
 //                            continue;

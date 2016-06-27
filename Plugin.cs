@@ -19,10 +19,8 @@ using TrinityCoroutines;
 using TrinityCoroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Framework.Actors;
 using Trinity.Framework.Grid;
 using Trinity.Framework.Objects.Memory;
-using Trinity.Framework.Utilities;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Movement;
@@ -129,11 +127,6 @@ namespace Trinity
 
      
                     GameUI.SafeClickUIButtons();
-
-                    using (new PerformanceLogger("CacheData.Update"))
-                    {
-                        CacheData.Update();
-                    }
 
                     //Core.Avoidance.UpdateGrid();
                     VisualizerViewModel.Instance.UpdateVisualizer();

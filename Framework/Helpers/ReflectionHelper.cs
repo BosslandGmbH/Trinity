@@ -54,6 +54,11 @@ namespace Trinity.Objects.Native
             return Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, args, null);
         }
 
+        public static T UnsafeCreate<T>(this IntPtr instance, int offset)
+        {
+            return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { instance + offset }, null);
+        }
+
         public static T UnsafeCreate<T>(this IntPtr instance)
         {
             return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { instance }, null);
@@ -86,7 +91,16 @@ namespace Trinity.Objects.Native
             var db = new StringBuilder();
             foreach (var property in type.GetProperties())
             {
-                dynamic value = Convert.ChangeType(property.GetValue(obj), property.PropertyType);
+                object val = null;
+                try
+                {
+                    val = property.GetValue(obj);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }                
+                dynamic value = Convert.ChangeType(val, property.PropertyType);
                 if (property.PropertyType.IsValueType)
                 {
                     var offset = MemoryHelper.GetOffetOfValue(obj.BaseAddress, value);

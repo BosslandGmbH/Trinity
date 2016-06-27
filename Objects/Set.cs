@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -71,7 +72,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Items of this set that are currently equipped, as ACDItem
         /// </summary>
-        public List<ACDItem> EquippedACDItems
+        public List<TrinityItem> EquippedTrinityItems
         {
             get { return CacheData.Inventory.Equipped.Where(i => ItemIds.Contains(i.ActorSnoId)).ToList(); }
         }

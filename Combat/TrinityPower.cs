@@ -42,7 +42,7 @@ namespace Trinity
         /// <summary>
         /// The Unit RActorGUID that we want to target
         /// </summary>
-        public int TargetACDGUID { get; set; }
+        public int TargetAcdId { get; set; }
 
         /// <summary>
         /// The number of 1/10th second intervals we should wait before casting this power
@@ -140,7 +140,7 @@ namespace Trinity
             MinimumRange = 0f;
             TargetPosition = Vector3.Zero;
             TargetDynamicWorldId = -1;
-            TargetACDGUID = -1;
+            TargetAcdId = -1;
             IsCastOnSelf = false;
         }
 
@@ -155,7 +155,7 @@ namespace Trinity
             MinimumRange = 0f;
             TargetPosition = Vector3.Zero;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
-            TargetACDGUID = -1;
+            TargetAcdId = -1;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
@@ -172,7 +172,7 @@ namespace Trinity
             MinimumRange = 0f;
             TargetPosition = Vector3.Zero;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
-            TargetACDGUID = -1;
+            TargetAcdId = -1;
             WaitTicksBeforeUse = waitTicksBeforeuse;
             WaitTicksAfterUse = waitTicksAfterUse;
             PowerAssignmentTime = DateTime.UtcNow;
@@ -183,15 +183,15 @@ namespace Trinity
         /// </summary>
         /// <param name="snoPower"></param>
         /// <param name="minimumRange"></param>
-        /// <param name="targetAcdGuid"></param>
-        public TrinityPower(SNOPower snoPower, float minimumRange, int targetAcdGuid)
+        /// <param name="targetAcdId"></param>
+        public TrinityPower(SNOPower snoPower, float minimumRange, int targetAcdId)
         {
             IsCastOnSelf = false;
             SNOPower = snoPower;
             MinimumRange = minimumRange;
             TargetPosition = Vector3.Zero;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
-            TargetACDGUID = targetAcdGuid;
+            TargetAcdId = targetAcdId;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
@@ -207,7 +207,7 @@ namespace Trinity
             MinimumRange = minimumRange;
             TargetPosition = Vector3.Zero;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
-            TargetACDGUID = -1;
+            TargetAcdId = -1;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
@@ -224,7 +224,7 @@ namespace Trinity
             MinimumRange = minimumRange;
             TargetPosition = position;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
-            TargetACDGUID = -1;
+            TargetAcdId = -1;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
@@ -241,7 +241,7 @@ namespace Trinity
             MinimumRange = minimumRange;
             TargetPosition = position;
             TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
-            TargetACDGUID = -1;
+            TargetAcdId = -1;
             WaitTicksBeforeUse = waitTicksBeforeUse;
             WaitTicksAfterUse = waitTicksAfterUse;
             PowerAssignmentTime = DateTime.UtcNow;
@@ -254,17 +254,17 @@ namespace Trinity
         /// <param name="minimumRange">The minimum range required from the Position or Target to be used</param>
         /// <param name="position">The Position to use the power at</param>
         /// <param name="targetDynamicWorldId">Usually the CurrentDynamicWorlID</param>
-        /// <param name="targetACDGUID">The Unit we are targetting</param>
+        /// <param name="targetAcdId">The Unit we are targetting</param>
         /// <param name="waitTicksBeforeUse">The number of "ticks" to wait before using a power - logically 1/10th of a second</param>
         /// <param name="waitTicksAfterUse">The number of "ticks" to wait after using a power - logically 1/10th of a second</param>
-        public TrinityPower(SNOPower snoPower, float minimumRange, Vector3 position, int targetDynamicWorldId, int targetACDGUID, float waitTicksBeforeUse, float waitTicksAfterUse)
+        public TrinityPower(SNOPower snoPower, float minimumRange, Vector3 position, int targetDynamicWorldId, int targetAcdId, float waitTicksBeforeUse, float waitTicksAfterUse)
         {
             IsCastOnSelf = false;
             SNOPower = snoPower;
             MinimumRange = minimumRange;
             TargetPosition = position;
             TargetDynamicWorldId = targetDynamicWorldId;
-            TargetACDGUID = targetACDGUID;
+            TargetAcdId = targetAcdId;
             WaitTicksBeforeUse = waitTicksBeforeUse;
             WaitTicksAfterUse = waitTicksAfterUse;
             PowerAssignmentTime = DateTime.UtcNow;
@@ -274,7 +274,7 @@ namespace Trinity
         {
             return SNOPower == other.SNOPower &&
                 TargetPosition == other.TargetPosition &&
-                TargetACDGUID == other.TargetACDGUID &&
+                TargetAcdId == other.TargetAcdId &&
                 WaitAfterUseDelay == other.WaitAfterUseDelay &&
                 TargetDynamicWorldId == other.TargetDynamicWorldId &&
                 MinimumRange == other.MinimumRange;
@@ -283,10 +283,10 @@ namespace Trinity
         public override string ToString()
         {
             return
-            String.Format("power={0} pos={1} acdGuid={2} preWait={3} postWait={4} timeSinceAssigned={5} timeSinceUse={6} range={7} charges={8}",
+            String.Format("power={0} pos={1} AcdId={2} preWait={3} postWait={4} timeSinceAssigned={5} timeSinceUse={6} range={7} charges={8}",
                     SNOPower,
                     NavHelper.PrettyPrintVector3(TargetPosition),
-                    TargetACDGUID,
+                    TargetAcdId,
                     WaitTicksBeforeUse,
                     WaitTicksAfterUse,
                     TimeSinceAssignedMs,

@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Trinity.Config.Combat;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Items;
 using Trinity.Reference;
 using Trinity.Technicals;
@@ -183,11 +184,11 @@ namespace Trinity.Helpers
         /// <param name="actor">The actor.</param>
         /// <param name="type">The type.</param>
         /// <returns>T.</returns>
-        public static T GetAttributeOrDefault<T>(this TrinityCacheObject actor, ActorAttributeType type) where T : struct
+        public static T GetAttributeOrDefault<T>(this TrinityActor actor, ActorAttributeType type) where T : struct
         {
             try
             {
-                actor.CommonData.GetAttribute<T>(type);
+                actor.Attributes.GetAttribute<T>(type);
             }
             catch (Exception ex)
             {

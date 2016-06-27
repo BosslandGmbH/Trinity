@@ -42,7 +42,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                 if (Prioritize)
                 {
-                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(actor.ActorSNO, finalRadius);
+                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(actor.ActorSnoId, finalRadius);
 
                     foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk)))
                     {

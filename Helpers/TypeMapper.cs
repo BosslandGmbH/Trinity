@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Objects;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -8,9 +9,9 @@ namespace Trinity.Helpers
 {
     public class TypeMapper
     {
-        public static TrinityPlugin.Weighting.ShrineTypes GetShrineType(TrinityCacheObject actor)
+        public static TrinityPlugin.Weighting.ShrineTypes GetShrineType(TrinityActor actor)
         {
-            switch (actor.ActorSNO)
+            switch (actor.ActorSnoId)
             {
                 case (int)SNOActor.a4_Heaven_Shrine_Global_Fortune:
                 case (int)SNOActor.Shrine_Global_Fortune:
@@ -55,12 +56,12 @@ namespace Trinity.Helpers
             }
         }
 
-        //public static TrinityObjectType GetObjectType(TrinityCacheObject actor)
+        //public static TrinityObjectType GetObjectType(TrinityActor actor)
         //{
         //    if (actor == null || actor.CommonData == null && actor.ActorType != ActorType.ClientEffect)
         //        return TrinityObjectType.Unknown;
 
-        //    return GetObjectType(actor.Object.CommonData, actor.Object.ActorType, actor.ActorSNO, actor.Object.CommonData.GizmoType, actor.InternalName);
+        //    return GetObjectType(actor.Object.CommonData, actor.Object.ActorType, actor.ActorSnoId, actor.Object.CommonData.GizmoType, actor.InternalName);
         //}
 
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Objects;
@@ -16,7 +17,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
     /// </summary>
     public class RadarObject // : INotifyPropertyChanged
     {
-        private TrinityCacheObject _actor;
+        private TrinityActor _actor;
 
         /// <summary>
         /// Contains the actors position and other useful information.
@@ -46,7 +47,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         /// <summary>
         /// RadarObject wraps a TrinityObject to add a canvas plot location.
         /// </summary>
-        public RadarObject(TrinityCacheObject obj, CanvasData canvasData)
+        public RadarObject(TrinityActor obj, CanvasData canvasData)
         {
             Actor = obj;
             Morph.CanvasData = canvasData;
@@ -68,6 +69,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             }
         }
 
-        public TrinityCacheObject Actor { get; set; }
+        public TrinityActor Actor { get; set; }
     }
 }

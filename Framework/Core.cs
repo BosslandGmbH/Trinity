@@ -1,71 +1,83 @@
 ﻿using System;
 using Trinity.Config;
 using Trinity.DbProvider;
+using Trinity.Framework.Actors;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Grid;
+using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Framework.Utilities;
 using Trinity.Helpers;
 using Trinity.Movement;
 using Zeta.Bot;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using ActorManager = Trinity.Framework.Actors.ActorManager;
 
 namespace Trinity.Framework
 {
     public static class Core
     {
-        public static TrinitySetting Settings => TrinityPlugin.Settings;
-
-        // Managers
-        public static readonly AvoidanceManager Avoidance = new AvoidanceManager();
+        public static bool IsEnabled { get; private set; }
 
         // Memory
-        public static readonly Hero Hero = new Hero(Internals.Addresses.Hero);
-        public static readonly Globals Globals = new Globals(Internals.Addresses.Globals);
+        public static Hero Hero { get; } = new Hero(Internals.Addresses.Hero);
+        public static Globals Globals { get; } = new Globals(Internals.Addresses.Globals);
 
-        // Utility
-        public static readonly CastStatus CastStatus = new CastStatus();
-        public static readonly Cooldowns Cooldowns = new Cooldowns();
-        public static readonly PlayerHistory PlayerHistory = new PlayerHistory();
-        public static readonly Paragon Paragon = new Paragon();
+        // Modules
+        public static ActorCache Actors { get; } = new ActorCache();
+        public static HotbarCache Hotbar { get; } = new HotbarCache();
+        public static InventoryCache Inventory { get; } = new InventoryCache();
+        public static PlayerCache Player { get; } = new PlayerCache();
+        public static BuffsCache Buffs { get; } = new BuffsCache();
+        public static TargetsCache Targets { get; } = new TargetsCache();
+        public static AvoidanceManager Avoidance { get; } = new AvoidanceManager();
+        public static CastStatus CastStatus { get; } = new CastStatus();
+        public static Cooldowns Cooldowns { get; } = new Cooldowns();
+        public static PlayerHistory PlayerHistory { get; } = new PlayerHistory();
+        public static Paragon Paragon { get; } = new Paragon();
+        public static StatusBar StatusBar { get; } = new StatusBar();
 
         // Misc
-        public static readonly GridHelper Grids = new GridHelper();
-        public static readonly PlayerMover PlayerMover = new PlayerMover();
-        public static readonly StuckHandler StuckHandler = new StuckHandler();
-
-
-        public static bool IsRunning;
+        public static GridHelper Grids { get; } = new GridHelper();
+        public static PlayerMover PlayerMover { get; } = new PlayerMover();
+        public static StuckHandler StuckHandler { get; } = new StuckHandler();
+        public static TrinitySetting Settings => TrinityPlugin.Settings;
 
         public static void Enable()
         {
-            if (!IsRunning)
+            if (!IsEnabled)
             {
-                IsRunning = true;                
+                IsEnabled = true;                
                 Pulsator.OnPulse += Pulse;
-                Utility.EnableAll();
+                GameEvents.OnWorldChanged += OnWorldChanged;
+                Module.EnableAll();
             }
         }
 
-        private static void Pulse(object sender, EventArgs eventArgs)
+        private static void OnWorldChanged(object sender, EventArgs eventArgs)
         {
-            IsRunning = false;
-            ActorManager.Update();
+            Module.FireEventAll(ModuleEventType.WorldChanged);
         }
 
         public static void Disable()
         {
-            Utility.DisableAll();
+            IsEnabled = false;
             Pulsator.OnPulse -= Pulse;
+            GameEvents.OnWorldChanged -= OnWorldChanged;
+            Module.DisableAll();
         }
 
-        public static void ForcedUpdate()
+        private static void Pulse(object sender, EventArgs eventArgs)
         {
-            ActorManager.Update();
-            Utility.PulseAll();
+            Update();
+        }
+
+        public static void Update(bool force = false)
+        {
+            if(force)
+                Module.FireEventAll(ModuleEventType.ForcedPulse);
+            else
+                Module.FireEventAll(ModuleEventType.Pulse);
         }
 
         public static void Init()

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Coroutines.Town;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.ProfileTags.EmbedTags;
 using TrinityCoroutines.Resources;
@@ -49,7 +49,7 @@ namespace Trinity.ProfileTags
                 return false;
             }
 
-            var transmuteGroup = new List<CachedItem>();
+            var transmuteGroup = new List<TrinityItem>();
 
             foreach (var item in Items)
             {

@@ -291,7 +291,7 @@ namespace Trinity.Framework.Objects.Memory
 
         protected T Read<T>(IntPtr address) where T : struct
         {
-            if (address == IntPtr.Zero)
+            if (address == IntPtr.Zero || (int)address < 10000)
             {
                 return default(T);
             }
@@ -301,7 +301,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             catch (Exception ex)
             {
-                Logger.Log($"Memory Read Exception. {ex.ToLogString(Environment.StackTrace)}");
+                Logger.Log($"Memory Read Exception. {ex} {ex.ToLogString(Environment.StackTrace)}");
             }
             return default(T);
         }

@@ -41,7 +41,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                         continue;
 
                     var radius = Math.Max(part.Radius, actor.Radius) * DistanceMultiplier;
-                    var nonCachedRotation = actor.Unit.Movement.Rotation;
+                    var nonCachedRotation = actor.Rotation;
                     var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, radius, nonCachedRotation)).SelectMany(n => n.AdjacentNodes);
 
                     grid.FlagNodes(nodes.SelectMany(n => n.AdjacentNodes), AvoidanceFlags.Avoidance, 10);

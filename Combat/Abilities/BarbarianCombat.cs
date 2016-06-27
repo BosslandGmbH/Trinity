@@ -457,7 +457,7 @@ namespace Trinity.Combat.Abilities
                     return false;
 
                 var mobCountThreshold =
-                    TrinityPlugin.ObjectCache.Count(
+                    TrinityPlugin.Targets.Count(
                         o => o.IsUnit && (!o.HasDebuff(SNOPower.Barbarian_Rend)) && o.RadiusDistance <= 12) >= 3 ||
                     CurrentTarget.IsElite;
                 if (!mobCountThreshold)
@@ -868,22 +868,22 @@ namespace Trinity.Combat.Abilities
 
         public static TrinityPower PowerWeaponThrow
         {
-            get { return new TrinityPower(SNOPower.X1_Barbarian_WeaponThrow, 60f, CurrentTarget.ACDGuid); }
+            get { return new TrinityPower(SNOPower.X1_Barbarian_WeaponThrow, 60f, CurrentTarget.AcdId); }
         }
 
         public static TrinityPower PowerFrenzy
         {
-            get { return new TrinityPower(SNOPower.Barbarian_Frenzy, 10f, CurrentTarget.ACDGuid); }
+            get { return new TrinityPower(SNOPower.Barbarian_Frenzy, 10f, CurrentTarget.AcdId); }
         }
 
         public static TrinityPower PowerBash
         {
-            get { return new TrinityPower(SNOPower.Barbarian_Bash, 6f, CurrentTarget.ACDGuid); }
+            get { return new TrinityPower(SNOPower.Barbarian_Bash, 6f, CurrentTarget.AcdId); }
         }
 
         public static TrinityPower PowerCleave
         {
-            get { return new TrinityPower(SNOPower.Barbarian_Cleave, 6f, CurrentTarget.ACDGuid); }
+            get { return new TrinityPower(SNOPower.Barbarian_Cleave, 6f, CurrentTarget.AcdId); }
         }
 
         private static TrinityPower DestroyObjectPower

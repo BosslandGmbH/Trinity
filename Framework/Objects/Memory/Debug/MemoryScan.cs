@@ -9,7 +9,7 @@ namespace Trinity.Framework.Objects.Memory.Debug
 {
     public class MemoryScan : MemoryWrapper
     {
-        public int Size { get; set; }
+        public int Size { get; set; } = 2000;
 
         public MemoryScan Init(int size)
         {
@@ -38,6 +38,9 @@ namespace Trinity.Framework.Objects.Memory.Debug
 
             for (int index = 0; index < size; index++)
             {
+                if (index % 4 != 0) // Aligned 4 bytes int/float
+                    continue;
+
                 var lastComparison = compareTo.Variances.ContainsKey(index) ? compareTo.Variances[index] : new MemoryVariance<T>();
 
                 var value = default(T);
@@ -97,7 +100,7 @@ namespace Trinity.Framework.Objects.Memory.Debug
 
                 foreach (var item in Variances)
                 {
-                    var offsetHex = "0x0" + item.Value.Offset.ToString("X");               
+                    var offsetHex = "0x" + item.Value.Offset.ToString("X");               
                     sb.AppendLine($"\r {offsetHex} {item.Value.Offset}: {item.Value.ValA} => {item.Value.ValB} ");
                 }
                 return sb.ToString();
@@ -109,6 +112,11 @@ namespace Trinity.Framework.Objects.Memory.Debug
             public int Offset { get; set; }
             public T ValA { get; set; }
             public T ValB { get; set; }
+
+            public override string ToString()
+            {
+                return $"0x{Offset.ToString("X")} {Offset}: {ValA} => {ValB}";
+            }
         }
     }
 }

@@ -6,7 +6,9 @@ using Trinity.Combat;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Modules;
 using Trinity.Movement;
 using Trinity.Objects;
 using Trinity.Technicals;
@@ -19,14 +21,14 @@ using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity
 {
-    class TargetUtil
+    public static class TargetUtil
     {
         public static void ClearCurrentTarget(string reason)
         {
             if (TrinityPlugin.CurrentTarget != null)
             {
                 var clearString = "Clearing CURRENT TARGET: " + reason +
-                        $"{Environment.NewLine} Name: {CurrentTarget.InternalName} Type: {CurrentTarget.Type} SNO: {CurrentTarget.ActorSNO} Distance: {CurrentTarget.Distance} " +
+                        $"{Environment.NewLine} Name: {CurrentTarget.InternalName} Type: {CurrentTarget.Type} SNO: {CurrentTarget.ActorSnoId} Distance: {CurrentTarget.Distance} " +
                         $"{Environment.NewLine} Weight: {CurrentTarget.Weight} Info: {CurrentTarget.WeightInfo}";
                 Logger.LogVerbose(clearString);
                 TrinityPlugin.CurrentTarget = null;
@@ -35,11 +37,11 @@ namespace Trinity
 
         #region Helper fields
 
-        private static List<TrinityCacheObject> ObjectCache
+        private static List<TrinityActor> ObjectCache
         {
             get
             {
-                return TrinityPlugin.ObjectCache;
+                return TrinityPlugin.Targets;
             }
         }
         private static PlayerCache Player
@@ -59,7 +61,7 @@ namespace Trinity
                     return false;
             }
         }
-        private static TrinityCacheObject CurrentTarget
+        private static TrinityActor CurrentTarget
         {
             get
             {
@@ -76,27 +78,27 @@ namespace Trinity
 
         #endregion
 
-        public static int CountUnitsBehind(TrinityCacheObject actor, float range)
+        public static int CountUnitsBehind(TrinityActor actor, float range)
         {
             return
                 (from u in ObjectCache
-                 where u.RActorGuid != actor.RActorGuid &&
+                 where u.RActorId != actor.RActorId &&
                        u.IsUnit &&
                        MathUtil.IntersectsPath(actor.Position, actor.Radius, TrinityPlugin.Player.Position, u.Position)
                  select u).Count();
         }
 
-        public static int CountUnitsInFront(TrinityCacheObject actor)
+        public static int CountUnitsInFront(TrinityActor actor)
         {
             return
-                (from u in TrinityPlugin.ObjectCache
-                 where u.RActorGuid != actor.RActorGuid &&
+                (from u in TrinityPlugin.Targets
+                 where u.RActorId != actor.RActorId &&
                        u.IsUnit &&
                        MathUtil.IntersectsPath(u.Position, u.Radius, TrinityPlugin.Player.Position, actor.Position)
                  select u).Count();
         }
 
-        public static bool IsFacing(TrinityCacheObject actor, Vector3 targetPosition, float arcDegrees = 70f)
+        public static bool IsFacing(TrinityActor actor, Vector3 targetPosition, float arcDegrees = 70f)
         {
             if (actor.DirectionVector != Vector2.Zero)
             {
@@ -109,15 +111,15 @@ namespace Trinity
             return false;
         }
 
-        public static int NearbyUnitsWithinDistance(TrinityCacheObject actor, float range = 5f)
+        public static int NearbyUnitsWithinDistance(TrinityActor actor, float range = 5f)
         {
             using (new PerformanceLogger("CacheObject.UnitsNear"))
             {
                 if (actor.Type != TrinityObjectType.Unit)
                     return 0;
 
-                return TrinityPlugin.ObjectCache
-                    .Count(u => u.RActorGuid != actor.RActorGuid && u.IsUnit && u.Position.Distance(actor.Position) <= range && u.HasBeenInLoS);
+                return TrinityPlugin.Targets
+                    .Count(u => u.RActorId != actor.RActorId && u.IsUnit && u.Position.Distance(actor.Position) <= range && u.HasBeenInLoS);
             }
         }
 
@@ -246,7 +248,7 @@ namespace Trinity
             return clusterUnit.Position;
         }
 
-        internal static List<TrinityCacheObject> TargetsInFrontOfMe(float maxRange, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
+        internal static List<TrinityActor> TargetsInFrontOfMe(float maxRange, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
         {
             return (from u in ObjectCache
                     where u.IsUnit &&
@@ -257,7 +259,7 @@ namespace Trinity
                     u.IsElite descending
                     select u).ToList();
         }
-        internal static TrinityCacheObject GetBestPierceTarget(float maxRange, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
+        internal static TrinityActor GetBestPierceTarget(float maxRange, bool ignoreUnitsInAoE = false, bool ignoreElites = false)
         {
             var result = TargetsInFrontOfMe(maxRange, ignoreUnitsInAoE, ignoreElites).FirstOrDefault();
             if (result != null)
@@ -269,7 +271,7 @@ namespace Trinity
             return GetBestClusterUnit(15f, maxRange, 1, true, !ignoreUnitsInAoE, ignoreElites);
         }
 
-        internal static TrinityCacheObject GetBestArcTarget(float maxRange, float arcDegrees)
+        internal static TrinityActor GetBestArcTarget(float maxRange, float arcDegrees)
         {
             var result =
                 (from u in ObjectCache
@@ -302,7 +304,7 @@ namespace Trinity
             return _bestMovementPosition;
         }
 
-        internal static TrinityCacheObject GetFarthestClusterUnit(float aoe_radius = 25f, float maxRange = 65f, int count = 1, bool useWeights = true, bool includeUnitsInAoe = true)
+        internal static TrinityActor GetFarthestClusterUnit(float aoe_radius = 25f, float maxRange = 65f, int count = 1, bool useWeights = true, bool includeUnitsInAoe = true)
         {
             if (aoe_radius < 1f)
                 aoe_radius = 1f;
@@ -311,7 +313,7 @@ namespace Trinity
 
             using (new PerformanceLogger("TargetUtil.GetFarthestClusterUnit"))
             {
-                TrinityCacheObject bestClusterUnit;
+                TrinityActor bestClusterUnit;
                 var clusterUnits =
                     (from u in ObjectCache
                      where ((useWeights && u.Weight > 0) || !useWeights) &&
@@ -328,7 +330,7 @@ namespace Trinity
                 else if (TrinityPlugin.CurrentTarget != null)
                     bestClusterUnit = TrinityPlugin.CurrentTarget;
                 else
-                    bestClusterUnit = default(TrinityCacheObject);
+                    bestClusterUnit = default(TrinityActor);
 
                 return bestClusterUnit;
             }
@@ -442,7 +444,7 @@ namespace Trinity
         /// <param name="includeUnitsInAoe">Include mobs in AoE or not</param>
         /// <param name="ignoreElites">Ingore elites or not/param>
         /// <returns></returns>
-        internal static TrinityCacheObject GetBestClusterUnit(
+        internal static TrinityActor GetBestClusterUnit(
             float radius = 15f, float maxRange = 65f, int count = 1, bool useWeights = true, bool includeUnitsInAoe = true, bool ignoreElites = false)
         {
             if (radius < 1f)
@@ -450,7 +452,7 @@ namespace Trinity
             if (maxRange > 300f)
                 maxRange = 300f;
 
-            TrinityCacheObject bestClusterUnit;
+            TrinityActor bestClusterUnit;
             var clusterUnits =
                 (from u in ObjectCache
                  where u.IsUnit &&
@@ -469,7 +471,7 @@ namespace Trinity
             else if (TrinityPlugin.CurrentTarget != null)
                 bestClusterUnit = TrinityPlugin.CurrentTarget;
             else
-                bestClusterUnit = default(TrinityCacheObject);
+                bestClusterUnit = default(TrinityActor);
 
             return bestClusterUnit;
         }
@@ -603,7 +605,7 @@ namespace Trinity
         /// <summary>
         /// Returns list of units within the specified range
         /// </summary>
-        internal static List<TrinityCacheObject> ListUnitsInRangeOfPosition(Vector3 position, float range = 15f)
+        internal static List<TrinityActor> ListUnitsInRangeOfPosition(Vector3 position, float range = 15f)
         {
             return (from u in ObjectCache
                     where u.IsUnit && u.IsValid &&
@@ -769,7 +771,7 @@ namespace Trinity
                 }
 
 
-                List<TrinityCacheObject> zigZagTargetList;
+                List<TrinityActor> zigZagTargetList;
                 if (attackInAoe)
                 {
                     zigZagTargetList =
@@ -796,7 +798,7 @@ namespace Trinity
                 }
             }
 
-            float highestWeightFound = float.NegativeInfinity;
+            float highestWeightFound = Single.NegativeInfinity;
             Vector3 bestLocation = origin;
 
             // the unit circle always starts at 0 :)
@@ -885,7 +887,7 @@ namespace Trinity
         /// </summary>
         /// <param name="u"></param>
         /// <returns></returns>
-        internal static bool UnitOrPathInAoE(TrinityCacheObject u)
+        internal static bool UnitOrPathInAoE(TrinityActor u)
         {
             return Core.Avoidance.InAvoidance(u.Position) || PathToActorIntersectsAoe(u);
         }
@@ -895,7 +897,7 @@ namespace Trinity
             if (position == Vector3.Zero)
                 return false;
 
-            return TrinityPlugin.ObjectCache.Any(m => m.Weight > 0 && m.IsUnit && m.Position.Distance(position) <= m.Radius * 0.85);
+            return TrinityPlugin.Targets.Any(m => m.Weight > 0 && m.IsUnit && m.Position.Distance(position) <= m.Radius * 0.85);
         }
 
 
@@ -904,7 +906,7 @@ namespace Trinity
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        internal static bool PathToActorIntersectsAoe(TrinityCacheObject obj)
+        internal static bool PathToActorIntersectsAoe(TrinityActor obj)
         {
             if (obj == null)
                 return false;
@@ -924,13 +926,13 @@ namespace Trinity
                                    where u.IsUnit && u.IsValid &&
                                           u.Weight > 0 &&
                                           u.Position.Distance(position) <= range &&
-                                          SpellTracker.IsUnitTracked(u.ACDGuid, power)
+                                          SpellTracker.IsUnitTracked(u.AcdId, power)
                                    select u).ToList();
 
             // Make sure units exist
             //unitsWithDebuff.RemoveAll(u =>
             //{
-            //    var acd = ZetaDia.Actors.GetACDById(u.ACDId);
+            //    var acd = ZetaDia.Actors.GetACDById(u.AcdId);
             //    return acd == null || !acd.IsValid;
             //});
 
@@ -965,7 +967,7 @@ namespace Trinity
         /// <summary>
         /// Checks if for units without a debuff
         /// </summary>
-        internal static TrinityCacheObject ClosestUnit(float range, Func<TrinityCacheObject, bool> condition)
+        internal static TrinityActor ClosestUnit(float range, Func<TrinityActor, bool> condition)
         {
             return (from u in ObjectCache
                     where u.IsUnit && u.IsValid &&
@@ -1012,14 +1014,14 @@ namespace Trinity
         }
 
 
-        internal static TrinityCacheObject GetBestHarvestTarget(float skillRange, float maxRange = 30f)
+        internal static TrinityActor GetBestHarvestTarget(float skillRange, float maxRange = 30f)
         {
-            TrinityCacheObject harvestTarget =
+            TrinityActor harvestTarget =
             (from u in ObjectCache
              where u.IsUnit && u.IsValid &&
              u.RadiusDistance <= maxRange &&
              u.IsElite &&
-             u.CommonData.GetAttribute<int>(ActorAttributeType.BuffVisualEffect) != 0
+             u.HasBuffVisualEffect
              orderby u.NearbyUnitsWithinDistance(skillRange) descending
              select u).FirstOrDefault();
             if (harvestTarget != null)
@@ -1028,7 +1030,7 @@ namespace Trinity
             return (from u in ObjectCache
                     where u.IsUnit &&
                     u.RadiusDistance <= maxRange &&
-                    u.CommonData.GetAttribute<int>(ActorAttributeType.BuffVisualEffect) != 0
+                    u.HasBuffVisualEffect
                     orderby u.NearbyUnitsWithinDistance(skillRange) descending
                     select u).FirstOrDefault();
         }
@@ -1082,7 +1084,7 @@ namespace Trinity
                     select u).Count();
         }
 
-        internal static int MobsWithDebuff(IEnumerable<SNOPower> powers, IEnumerable<TrinityCacheObject> units)
+        internal static int MobsWithDebuff(IEnumerable<SNOPower> powers, IEnumerable<TrinityActor> units)
         {
             return (from u in units
                     where u.IsUnit && u.IsValid &&
@@ -1100,7 +1102,7 @@ namespace Trinity
                     ).Sum();
         }
 
-        internal static int DebuffCount(IEnumerable<SNOPower> powers, IEnumerable<TrinityCacheObject> units)
+        internal static int DebuffCount(IEnumerable<SNOPower> powers, IEnumerable<TrinityActor> units)
         {
             return (from u in units
                     where u.IsUnit && u.IsValid &&
@@ -1110,17 +1112,17 @@ namespace Trinity
         }
 
 
-        internal static TrinityCacheObject LowestHealthTarget(float range, Vector3 position = new Vector3(), SNOPower debuff = SNOPower.None)
+        internal static TrinityActor LowestHealthTarget(float range, Vector3 position = new Vector3(), SNOPower debuff = SNOPower.None)
         {
             if (position == new Vector3())
                 position = Player.Position;
 
-            TrinityCacheObject lowestHealthTarget;
+            TrinityActor lowestHealthTarget;
             var unitsByHealth = (from u in ObjectCache
                                  where u.IsUnit && u.IsValid &&
                                         u.Weight > 0 &&
                                         u.Position.Distance(position) <= range &&
-                                        (debuff == SNOPower.None || !SpellTracker.IsUnitTracked(u.ACDGuid, debuff))// &&
+                                        (debuff == SNOPower.None || !SpellTracker.IsUnitTracked(u.AcdId, debuff))// &&
                                         //!CacheData.MonsterObstacles.Any(m => MathUtil.IntersectsPath(m.Position, m.Radius, u.Position, Player.Position))
                                  orderby u.HitPoints ascending
                                  select u).ToList();
@@ -1130,22 +1132,22 @@ namespace Trinity
             else if (TrinityPlugin.CurrentTarget != null)
                 lowestHealthTarget = TrinityPlugin.CurrentTarget;
             else
-                lowestHealthTarget = default(TrinityCacheObject);
+                lowestHealthTarget = default(TrinityActor);
 
             return lowestHealthTarget;
         }
 
-        internal static TrinityCacheObject BestExploadingPalmTarget(float range, Vector3 position = new Vector3())
+        internal static TrinityActor BestExploadingPalmTarget(float range, Vector3 position = new Vector3())
         {
             if (position == new Vector3())
                 position = Player.Position;
 
-            TrinityCacheObject lowestHealthTarget;
+            TrinityActor lowestHealthTarget;
             var unitsByHealth = (from u in ObjectCache
                                  where u.IsUnit && u.IsValid &&
                                         u.Weight > 0 &&
                                         u.Position.Distance(position) <= range &&
-                                        !SpellTracker.IsUnitTracked(u.ACDGuid, SNOPower.Monk_ExplodingPalm) &&
+                                        !SpellTracker.IsUnitTracked(u.AcdId, SNOPower.Monk_ExplodingPalm) &&
                                         //!CacheData.MonsterObstacles.Any(m => MathUtil.IntersectsPath(m.Position, m.Radius, u.Position, Player.Position)) &&
                                         u.IsInLineOfSight
                                  orderby u.HitPoints ascending
@@ -1156,17 +1158,17 @@ namespace Trinity
             else if (TrinityPlugin.CurrentTarget != null)
                 lowestHealthTarget = TrinityPlugin.CurrentTarget;
             else
-                lowestHealthTarget = default(TrinityCacheObject);
+                lowestHealthTarget = default(TrinityActor);
 
             return lowestHealthTarget;
         }
 
-        internal static TrinityCacheObject BestTargetWithoutDebuffs(float range, IEnumerable<SNOPower> debuffs, Vector3 position = new Vector3())
+        internal static TrinityActor BestTargetWithoutDebuffs(float range, IEnumerable<SNOPower> debuffs, Vector3 position = new Vector3())
         {
             if (position == new Vector3())
                 position = Player.Position;
 
-            TrinityCacheObject target;
+            TrinityActor target;
             var unitsByWeight = (from u in ObjectCache
                                  where u.IsUnit && u.IsValid &&
                                         u.Weight > 0 &&
@@ -1181,12 +1183,12 @@ namespace Trinity
             else if (TrinityPlugin.CurrentTarget != null)
                 target = TrinityPlugin.CurrentTarget;
             else
-                target = default(TrinityCacheObject);
+                target = default(TrinityActor);
 
             return target;
         }
 
-        internal static TrinityCacheObject GetDashStrikeFarthestTarget(float maxRange, float procDistance = 33f, int arcDegrees = 0)
+        internal static TrinityActor GetDashStrikeFarthestTarget(float maxRange, float procDistance = 33f, int arcDegrees = 0)
         {
             var result =
                 (from u in ObjectCache
@@ -1241,7 +1243,7 @@ namespace Trinity
         }
 
 
-        internal static TrinityCacheObject GetClosestUnit(float maxDistance = 100f)
+        internal static TrinityActor GetClosestUnit(float maxDistance = 100f)
         {
             var result =
                 (from u in ObjectCache
@@ -1262,7 +1264,7 @@ namespace Trinity
             return Core.Avoidance.InAvoidance(Player.Position);
         }
 
-        public static TrinityCacheObject BestEliteInRange(float range)
+        public static TrinityActor BestEliteInRange(float range)
         {
             return (from u in ObjectCache
                  where u.IsUnit &&
@@ -1276,7 +1278,7 @@ namespace Trinity
 
         }
 
-        public static List<TrinityCacheObject> GetHighValueRiftTargets(float maxRange, double minValuePercent)
+        public static List<TrinityActor> GetHighValueRiftTargets(float maxRange, double minValuePercent)
         {     
             return (from u in ObjectCache
                     where u.IsUnit && u.Distance <= maxRange && u.RiftValuePct >= minValuePercent
@@ -1313,7 +1315,7 @@ namespace Trinity
             return Centroid(unitPositions.Take(sample).ToList());
         }
 
-        private static double GetRiftValueWithinDistance(TrinityCacheObject obj, float distance)
+        private static double GetRiftValueWithinDistance(TrinityActor obj, float distance)
         {
             return ObjectCache.Where(u => u.Position.Distance(obj.Position) <= distance).Sum(u => u.RiftValuePct);
         }
@@ -1335,7 +1337,7 @@ namespace Trinity
             return result;
         }
 
-        public static Vector3 GetLoiterPosition(TrinityCacheObject target, float radiusDistance)
+        public static Vector3 GetLoiterPosition(TrinityActor target, float radiusDistance)
         {
             // Estimate based on the target size how far away we should be from it.
             var walkTarget = target != null ? target.Position : GetBestClusterPoint();
@@ -1472,8 +1474,63 @@ namespace Trinity
             return sample;
         }
 
+        private static HashSet<ActorAttributeType> _debuffSlots = new HashSet<ActorAttributeType>
+        {
+            ActorAttributeType.PowerBuff0VisualEffect,
+            ActorAttributeType.PowerBuff0VisualEffectNone,
+            ActorAttributeType.PowerBuff0VisualEffectA,
+            ActorAttributeType.PowerBuff0VisualEffectB,
+            ActorAttributeType.PowerBuff0VisualEffectC,
+            ActorAttributeType.PowerBuff0VisualEffectD,
+            ActorAttributeType.PowerBuff0VisualEffectE,
+            ActorAttributeType.PowerBuff1VisualEffectNone,
+            ActorAttributeType.PowerBuff1VisualEffectC,
+            ActorAttributeType.PowerBuff2VisualEffectNone,
+            ActorAttributeType.PowerBuff2VisualEffectE,
+            ActorAttributeType.PowerBuff3VisualEffectNone,
+            ActorAttributeType.PowerBuff3VisualEffectE,
+            ActorAttributeType.PowerBuff4VisualEffectNone,
+            ActorAttributeType.PowerBuff4VisualEffectC,
+            ActorAttributeType.PowerBuff4VisualEffectNone,
+            ActorAttributeType.PowerBuff1VisualEffectA,
+            ActorAttributeType.PowerBuff1VisualEffectB,
+            ActorAttributeType.PowerBuff1VisualEffectD,
+            ActorAttributeType.PowerBuff1VisualEffectE,
+            ActorAttributeType.PowerBuff2VisualEffectA,
+            ActorAttributeType.PowerBuff2VisualEffectB,
+            ActorAttributeType.PowerBuff2VisualEffectC,
+            ActorAttributeType.PowerBuff2VisualEffectD,
+            ActorAttributeType.PowerBuff3VisualEffectA,
+            ActorAttributeType.PowerBuff3VisualEffectB,
+            ActorAttributeType.PowerBuff3VisualEffectC,
+            ActorAttributeType.PowerBuff3VisualEffectD,
+        };
 
-        //private static double GetRiftValueWithinDistance(TrinityCacheObject obj, float distance)
+
+
+        public static bool HasDebuff(this TrinityActor obj, SNOPower debuffSNO)
+        {
+            if (obj?.CommonData == null || !obj.IsValid)
+                return false;
+
+            //todo this is needlessly slow checking all these attributes, trace the spells being used and record only the required slots
+            //or better yet, cache collection of attributes in buff visual effect slots keyed by snopower
+
+            var sno = (int) debuffSNO;
+
+            try
+            {
+
+                return _debuffSlots.Any(attr => obj.Attributes.GetAttribute<bool>(attr, sno));
+            }
+            catch (Exception)
+            {
+            }
+
+            return false;
+        }
+
+        //private static double GetRiftValueWithinDistance(TrinityActor obj, float distance)
         //{
         //    return ObjectCache.Where(u => u.Position.Distance(obj.Position) <= distance).Sum(u => u.RiftValuePct);
         //}

@@ -35,7 +35,7 @@
 
 //        //        bool TryToKite = false;
 
-//        //        List<TrinityCacheObject> kiteMonsterList = new List<TrinityCacheObject>();
+//        //        List<TrinityActor> kiteMonsterList = new List<TrinityActor>();
 
 //        //        if (CurrentTarget != null && CurrentTarget.IsUnit)
 //        //        {
@@ -147,7 +147,7 @@
 //        //                        NeedToKite, TryToKite);
 //        //                }
 
-//        //                CurrentTarget = new TrinityCacheObject()
+//        //                CurrentTarget = new TrinityActor()
 //        //                {
 //        //                    Position = vAnySafePoint,
 //        //                    Type = TrinityObjectType.Avoidance,

@@ -8,6 +8,7 @@ using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Misc;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using MonsterRace = Zeta.Game.Internals.SNO.MonsterRace;
 using MonsterSize = Zeta.Game.Internals.SNO.MonsterSize;

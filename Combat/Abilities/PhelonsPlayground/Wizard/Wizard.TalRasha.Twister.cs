@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game;
@@ -47,7 +48,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
 
                 #region Vectors
 
-                private static TrinityCacheObject ClosestTwister()
+                private static TrinityActor ClosestTwister()
                 {
                     return PhelonUtils.GetTwisterDiaObjects(25, true)
                         .OrderBy(x => x.Position.Distance(PhelonTargeting.BestAoeUnit(45, true).Position))
@@ -106,7 +107,7 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Wizard
                     => new TrinityPower(SNOPower.Wizard_EnergyTwister, 45f, ActualLocation);
 
                 private static TrinityPower CastElectrocute
-                    => new TrinityPower(SNOPower.Wizard_Electrocute, 60f, TargetUtil.GetBestPierceTarget(60f).ACDGuid)
+                    => new TrinityPower(SNOPower.Wizard_Electrocute, 60f, TargetUtil.GetBestPierceTarget(60f).AcdId)
                     ;
 
                 #endregion

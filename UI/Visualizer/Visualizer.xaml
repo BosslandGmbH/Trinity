@@ -31,6 +31,7 @@
         <ut:PropertyValueConverter x:Key="propertyValueConverter" />
         <ut:PropertyGridConverter x:Key="propertyGridConverter" />
         <ut:IntToStringConverter x:Key="intToStringConverter" Format="0:0.00" />
+        <ut:ValueToStringConverter x:Key="valueToStringConverter" />        
         <ut:PercentConverter x:Key="percentConverter" />
         <ut:EnumBooleanConverter x:Key="enumBooleanConverter" />
         <ut:EnumBooleanToGridLengthConverter x:Key="enumBooleanToGridLengthConverter" TrueValue="*" FalseValue="Auto" />
@@ -249,7 +250,7 @@
                         <SolidColorBrush Color="DodgerBlue" Opacity="0.2" />
                     </Label.Background>
                 </Label>
-                <TextBlock Grid.Column="1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="5,3,0,0" MinHeight="22" Text="{Binding Value}">
+                <TextBlock Grid.Column="1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="5,3,0,0" MinHeight="22" Text="{Binding Value, Converter={StaticResource valueToStringConverter}}">
                     <TextBlock.Background>
                         <SolidColorBrush Color="DodgerBlue" Opacity="0.05" />
                     </TextBlock.Background>
@@ -363,17 +364,17 @@
                                     </GridViewColumn.CellTemplate>-->                                    
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ACDGuid}" Width="Auto"  DisplayMemberBinding="{Binding ACDGuid}">
-                                    <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="ACDGuid" Command="{Binding SortCommand}" CommandParameter="ACDId" />
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=AcdId}" Width="Auto"  DisplayMemberBinding="{Binding AcdId}">
+                                    <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="AcdId" Command="{Binding SortCommand}" CommandParameter="ACDId" />
                                     <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding ACDGuid}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
+                                            <TextBlock Text="{Binding AcdId}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>-->
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ActorSNO}" Width="Auto" DisplayMemberBinding="{Binding ActorSNO}">
-                                    <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="ActorSnoId" Command="{Binding SortCommand}" CommandParameter="ActorSNO"   />
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ActorSnoId}" Width="Auto" DisplayMemberBinding="{Binding ActorSnoId}">
+                                    <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="ActorSnoId" Command="{Binding SortCommand}" CommandParameter="ActorSnoId"   />
                                     <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding ActorSNO}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
@@ -426,7 +427,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </ut:GridViewColumnExtended>-->
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Type}" Width="90" DisplayMemberBinding="{Binding Type, Mode=OneWay}">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=Type}" Width="90" DisplayMemberBinding="{Binding Type, Mode=OneWay, Converter={StaticResource valueToStringConverter}}">
                                     <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="Type" Command="{Binding SortCommand}" CommandParameter="Type" />
                                     <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -435,7 +436,7 @@
                                     </GridViewColumn.CellTemplate>-->
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ActorType}" Width="Auto" DisplayMemberBinding="{Binding ActorType, Mode=OneWay}">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=ActorType}" Width="Auto" DisplayMemberBinding="{Binding ActorType, Mode=OneWay, Converter={StaticResource valueToStringConverter}}">
                                     <GridViewColumnHeader BorderThickness="0" Content="ActorType" Command="{Binding SortCommand}" CommandParameter="ActorType" />
                                     <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -453,7 +454,7 @@
                                     </GridViewColumn.CellTemplate>-->
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=AnimationState}" Width="Auto" DisplayMemberBinding="{Binding AnimationState, Mode=OneWay}">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=AnimationState}" Width="Auto" DisplayMemberBinding="{Binding AnimationState, Mode=OneWay, Converter={StaticResource valueToStringConverter}}">
                                     <GridViewColumnHeader BorderThickness="0" Content="AnimState" Command="{Binding SortCommand}" CommandParameter="AnimationState" />
                                     <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -462,7 +463,7 @@
                                     </GridViewColumn.CellTemplate>-->                                    
                                 </ut:GridViewColumnExtended>
 
-                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=CurrentAnimation}" Width="Auto" DisplayMemberBinding="{Binding Animation, Mode=OneWay}">
+                                <ut:GridViewColumnExtended Visible="{Binding SelectedColumns, Converter={StaticResource flagsEnumValueConverter}, ConverterParameter=CurrentAnimation}" Width="Auto" DisplayMemberBinding="{Binding Animation, Mode=OneWay, Converter={StaticResource valueToStringConverter}}">
                                     <GridViewColumnHeader BorderThickness="0" Content="Animation" Command="{Binding SortCommand}" CommandParameter="Animation" />
                                     <!--<GridViewColumn.CellTemplate>
                                         <DataTemplate>

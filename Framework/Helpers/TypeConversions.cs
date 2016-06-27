@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Config.Combat;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Settings.Loot;
 using Zeta.Game;
@@ -52,6 +53,29 @@ namespace Trinity.Framework.Helpers
             {
                 return default(T);
             }
+        }
+
+        public static TrinityItemQuality GetTrinityItemQuality(ItemQuality quality)
+        {
+            switch (quality)
+            {
+                case ItemQuality.Inferior:
+                    return TrinityItemQuality.Inferior;
+                case ItemQuality.Normal:
+                case ItemQuality.Superior:
+                    return TrinityItemQuality.Common;
+                case ItemQuality.Magic1:
+                case ItemQuality.Magic2:
+                case ItemQuality.Magic3:
+                    return TrinityItemQuality.Magic;
+                case ItemQuality.Rare4:
+                case ItemQuality.Rare5:
+                case ItemQuality.Rare6:
+                    return TrinityItemQuality.Rare;
+                case ItemQuality.Legendary:
+                    return TrinityItemQuality.Legendary;                
+            }
+            return TrinityItemQuality.None;
         }
     
         public static DamageType GetDamageType(Element element)

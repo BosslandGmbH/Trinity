@@ -33,14 +33,14 @@ namespace Trinity.Framework.Avoidance.Handlers
                 if (actor == null || !actor.IsValid)
                     continue;
 
-                var part = avoidance.Data.GetPart(actor.ActorSNO);
+                var part = avoidance.Data.GetPart(actor.ActorSnoId);
                 var radius = Math.Max(part.Radius, actor.Radius);
                 var finalRadius = radius*DistanceMultiplier;
                 var nodes = grid.GetNodesInRadius(actor.Position, finalRadius);
 
                 if (part.Severity == Severity.Extreme)
                 {
-                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(actor.ActorSNO, finalRadius);
+                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(actor.ActorSnoId, finalRadius);
 
                     foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk)))
                     {

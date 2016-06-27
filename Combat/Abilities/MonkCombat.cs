@@ -6,6 +6,7 @@ using Trinity.Cache;
 using Trinity.Config.Combat;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
@@ -190,8 +191,8 @@ namespace Trinity.Combat.Abilities
                     TargetUtil.AnyMobsInRange(25f))
                 {
                     if (mysticAllyTarget != null)
-                        return new TrinityPower(SNOPower.X1_Monk_MysticAlly_v2, 15f, mysticAllyTarget.ACDGuid);
-                    return new TrinityPower(SNOPower.X1_Monk_MysticAlly_v2, 15f, CurrentTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.X1_Monk_MysticAlly_v2, 15f, mysticAllyTarget.AcdId);
+                    return new TrinityPower(SNOPower.X1_Monk_MysticAlly_v2, 15f, CurrentTarget.AcdId);
                 }
 
                 // InnerSanctuary 
@@ -211,21 +212,21 @@ namespace Trinity.Combat.Abilities
 
                         // Exploding Palm
                         if (CanCastExplodingPalm() && CurrentTarget.Distance <= 10f)
-                            return new TrinityPower(SNOPower.Monk_ExplodingPalm, 10f, CurrentTarget.ACDGuid);
+                            return new TrinityPower(SNOPower.Monk_ExplodingPalm, 10f, CurrentTarget.AcdId);
                     }
                 }
 
                 // Get your Assimilation stacks right before COLD COE buff
                 if (CanCast(SNOPower.Monk_WayOfTheHundredFists) && IsInsideCoeTimeSpan(Element.Physical))
-                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.AcdId);
 
                 // Dashing Strike
                 if (CanCastDashingStrike)
-                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 10f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 10f, CurrentTarget.AcdId);
 
                 // Check if the current target is dying so we can make a bomb out of it
                 if (CurrentTarget.HitPointsPct <= 10 &&CanCastExplodingPalm())
-                    return new TrinityPower(SNOPower.Monk_ExplodingPalm, 10f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Monk_ExplodingPalm, 10f, CurrentTarget.AcdId);
 
                 // Things to do after casting mystic ally
                 if (TimeSincePowerUse(SNOPower.X1_Monk_MysticAlly_v2) <= 2500 && TargetUtil.AnyMobsInRange(cycloneRange))
@@ -239,14 +240,14 @@ namespace Trinity.Combat.Abilities
                     // EP on lowest health target
                     if (CanCastExplodingPalm() && !mysticAllyTarget.HasDebuff(SNOPower.Monk_ExplodingPalm) &&
                         SpellHistory.SpellUseCountInTime(SNOPower.Monk_CycloneStrike, TimeSpan.FromMilliseconds(2500)) < 1)
-                        return new TrinityPower(SNOPower.Monk_ExplodingPalm, 10f, mysticAllyTarget.ACDGuid);
+                        return new TrinityPower(SNOPower.Monk_ExplodingPalm, 10f, mysticAllyTarget.AcdId);
                 }
 
                 // if all else fails, just punch
                 if (mysticAllyTarget != null && !CanCastDashingStrike && !CanCastCycloneStrike(cycloneRange, 50))
-                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, mysticAllyTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, mysticAllyTarget.AcdId);
 
-                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.AcdId);
             }
 
             if (IsNull(null) && !Player.IsInTown && TargetUtil.AnyMobsInRange(60f))
@@ -463,7 +464,7 @@ namespace Trinity.Combat.Abilities
                             return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, TargetUtil.GetBestClusterPoint());
 
                         if (!Sets.ThousandStorms.IsSecondBonusActive)
-                            return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, CurrentTarget.ACDGuid);
+                            return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, CurrentTarget.AcdId);
 
                         return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange, TargetUtil.GetBestPierceTarget(50f, true).Position);
                     }
@@ -486,7 +487,7 @@ namespace Trinity.Combat.Abilities
                 // Exploding Palm
                 if (CanCastExplodingPalm())
                 {
-                    return new TrinityPower(SNOPower.Monk_ExplodingPalm, 10f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Monk_ExplodingPalm, 10f, CurrentTarget.AcdId);
                 }
             }
 
@@ -499,7 +500,7 @@ namespace Trinity.Combat.Abilities
             // Lashing Tail Kick
             if (CanCastLashingTailKick())
             {
-                return new TrinityPower(SNOPower.Monk_LashingTailKick, 10f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_LashingTailKick, 10f, CurrentTarget.AcdId);
             }
 
             // For tempest rush re-use
@@ -548,18 +549,18 @@ namespace Trinity.Combat.Abilities
             if (!IsCurrentlyAvoiding && CanCast(SNOPower.Monk_FistsofThunder) && Runes.Monk.StaticCharge.IsActive &&
                 CanCast(SNOPower.Monk_WayOfTheHundredFists) && Runes.Monk.FistsOfFury.IsActive)
             {
-                var nearbyEnemyCount = TrinityPlugin.ObjectCache.Count(u => u.IsUnit && u.HitPoints > 0 && u.Distance <= 30f);
+                var nearbyEnemyCount = TrinityPlugin.Targets.Count(u => u.IsUnit && u.HitPoints > 0 && u.Distance <= 30f);
                 var currentGeneratorStep = GetCurrentComboLevel();
 
                 // Dashing Strike resets the current generator step, so it's the perfect opportunity to snapshot FoF's 75% proc
                 if (Skills.Monk.DashingStrike.TimeSinceUse < SpellHistory.TimeSinceGeneratorCast)
-                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.AcdId);
 
                 // If we have nothing to spread to, just make sure the current enemy is charged
                 if (!CurrentTarget.HasDebuff(SNOPower.Monk_FistsofThunder) || nearbyEnemyCount <= 2)
                 {
                     //Logger.Log(LogCategory.Behavior, "Putting Static Charge on Current Target {0}", CurrentTarget.InternalName);
-                    return new TrinityPower(SNOPower.Monk_FistsofThunder, 12f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Monk_FistsofThunder, 12f, CurrentTarget.AcdId);
                 }
 
                 // Spread Static Charge among enemies, unless step=0, in which case it's better to apply FoF's debuff first
@@ -567,9 +568,9 @@ namespace Trinity.Combat.Abilities
                 {
                     var target = GetNewStaticChargeTarget() ?? CurrentTarget;
                     if (target != null && currentGeneratorStep == 0 && !target.HasDebuff(SNOPower.Monk_WayOfTheHundredFists))
-							return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, target.ACDGuid);
+							return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, target.AcdId);
 
-                        return new TrinityPower(SNOPower.Monk_FistsofThunder, 12f, target.ACDGuid);
+                        return new TrinityPower(SNOPower.Monk_FistsofThunder, 12f, target.AcdId);
                 }
 
                 // Spread WotHF among very close enemies, unless step=1 which has a measly 5% proc rate that we don't want to snapshot
@@ -577,16 +578,16 @@ namespace Trinity.Combat.Abilities
 				{
 					var changeTarget = GetNewWotHFTarget() ?? CurrentTarget;
 					if(changeTarget != null && currentGeneratorStep == 1 && !changeTarget.HasDebuff(SNOPower.Monk_WayOfTheHundredFists))
-							return new TrinityPower(SNOPower.Monk_FistsofThunder, 9f, changeTarget.ACDGuid);
+							return new TrinityPower(SNOPower.Monk_FistsofThunder, 9f, changeTarget.AcdId);
 
-					return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.ACDGuid);
+					return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.AcdId);
 				}
 
                 // If we don't need to spread anything, but step=1, cast FoT. Otherwise we cast WotHF
                 if (currentGeneratorStep == 1 && !CurrentTarget.HasDebuff(SNOPower.Monk_WayOfTheHundredFists))
-                    return new TrinityPower(SNOPower.Monk_FistsofThunder, 9f, CurrentTarget.ACDGuid);
+                    return new TrinityPower(SNOPower.Monk_FistsofThunder, 9f, CurrentTarget.AcdId);
 
-                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 9f, CurrentTarget.AcdId);
             }
 
             /*
@@ -625,7 +626,7 @@ namespace Trinity.Combat.Abilities
                 (SpellHistory.TimeSinceUse(SNOPower.Monk_DeadlyReach) > TimeSpan.FromMilliseconds(deadlyReachInterval) ||
                 (SpellHistory.SpellUseCountInTime(SNOPower.Monk_DeadlyReach, TimeSpan.FromMilliseconds(27000)) < 3) && Runes.Monk.Foresight.IsActive))
             {
-                return new TrinityPower(SNOPower.Monk_DeadlyReach, 16f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_DeadlyReach, 16f, CurrentTarget.AcdId);
             }
 
             // Way of the Hundred Fists: Blazing Fists, every 4-5ish seconds or if we don't have 3 stacks of the buff or or 2.7 seconds with combo strike
@@ -633,14 +634,14 @@ namespace Trinity.Combat.Abilities
                 (GetBuffStacks(SNOPower.Monk_WayOfTheHundredFists) < 3 ||
                 SpellHistory.TimeSinceUse(SNOPower.Monk_WayOfTheHundredFists) > TimeSpan.FromMilliseconds(wayOfTheHundredFistsInterval)))
             {
-                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 16f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 16f, CurrentTarget.AcdId);
             }
 
             // Crippling Wave
             if (!IsCurrentlyAvoiding && CanCast(SNOPower.Monk_CripplingWave) && isDualOrTriGen &&
                 SpellHistory.TimeSinceUse(SNOPower.Monk_CripplingWave) > TimeSpan.FromMilliseconds(cripplingWaveInterval))
             {
-                return new TrinityPower(SNOPower.Monk_CripplingWave, 20f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_CripplingWave, 20f, CurrentTarget.AcdId);
             }
 
             power = GetPrimaryPower();
@@ -676,31 +677,31 @@ namespace Trinity.Combat.Abilities
             // Fists of Thunder:Thunder Clap - Fly to Target
             if (!IsCurrentlyAvoiding && CanCast(SNOPower.Monk_FistsofThunder) && Runes.Monk.Thunderclap.IsActive && CurrentTarget.Distance > 16f)
             {
-                return new TrinityPower(SNOPower.Monk_FistsofThunder, 30f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_FistsofThunder, 30f, CurrentTarget.AcdId);
             }
 
             // Fists of Thunder
             if (!IsCurrentlyAvoiding && CanCast(SNOPower.Monk_FistsofThunder))
             {
-                return new TrinityPower(SNOPower.Monk_FistsofThunder, 45f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_FistsofThunder, 45f, CurrentTarget.AcdId);
             }
             
             // Deadly Reach normal
             if (!IsCurrentlyAvoiding && CanCast(SNOPower.Monk_DeadlyReach))
             {
-                return new TrinityPower(SNOPower.Monk_DeadlyReach, 16f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_DeadlyReach, 16f, CurrentTarget.AcdId);
             }
 
             // Way of the Hundred Fists normal
             if (!IsCurrentlyAvoiding && CanCast(SNOPower.Monk_WayOfTheHundredFists))
             {
-                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 16f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 16f, CurrentTarget.AcdId);
             }
 
             // Crippling Wave Normal
             if (!IsCurrentlyAvoiding && CanCast(SNOPower.Monk_CripplingWave))
             {
-                return new TrinityPower(SNOPower.Monk_CripplingWave, 30f, CurrentTarget.ACDGuid);
+                return new TrinityPower(SNOPower.Monk_CripplingWave, 30f, CurrentTarget.AcdId);
             }
             return null;
         }
@@ -790,7 +791,7 @@ namespace Trinity.Combat.Abilities
 
         private static bool CanCastSevenSidedStrike()
         {
-            var shouldWaitForPrimary = Settings.Combat.Monk.PrimaryBeforeSSS && !TrinityPlugin.ObjectCache.Any(u => u.IsUnit && u.Distance < 35f && u.HasDebuff(SNOPower.Monk_ExplodingPalm));
+            var shouldWaitForPrimary = Settings.Combat.Monk.PrimaryBeforeSSS && !TrinityPlugin.Targets.Any(u => u.IsUnit && u.Distance < 35f && u.HasDebuff(SNOPower.Monk_ExplodingPalm));
 
             if (!shouldWaitForPrimary && Settings.Combat.Monk.SSSOffCD && (Player.PrimaryResource >= 50 || Runes.Monk.Pandemonium.IsActive) && 
                 CanCast(SNOPower.Monk_SevenSidedStrike, CanCastFlags.NoTimer) && TargetUtil.AnyMobsInRange(15))
@@ -907,8 +908,8 @@ namespace Trinity.Combat.Abilities
                 CurrentTarget.Type != TrinityObjectType.Interactable &&
                 CurrentTarget.Type != TrinityObjectType.HealthWell &&
                 CurrentTarget.Type != TrinityObjectType.Door &&
-                CurrentTarget.ItemType != TrinityItemType.HealthGlobe &&
-                CurrentTarget.ItemType != TrinityItemType.ProgressionGlobe &&
+                CurrentTarget.TrinityItemType != TrinityItemType.HealthGlobe &&
+                CurrentTarget.TrinityItemType != TrinityItemType.ProgressionGlobe &&
 
                 // Avoid rapidly changing targets
                 DateTime.UtcNow.Subtract(_lastTargetChange).TotalMilliseconds > 500 &&
@@ -937,8 +938,8 @@ namespace Trinity.Combat.Abilities
             CurrentTarget.Type != TrinityObjectType.Interactable &&
             CurrentTarget.Type != TrinityObjectType.HealthWell &&
             CurrentTarget.Type != TrinityObjectType.Door &&
-            CurrentTarget.ItemType != TrinityItemType.HealthGlobe && 
-            CurrentTarget.ItemType != TrinityItemType.ProgressionGlobe &&
+            CurrentTarget.TrinityItemType != TrinityItemType.HealthGlobe && 
+            CurrentTarget.TrinityItemType != TrinityItemType.ProgressionGlobe &&
           
             // Avoid rapidly changing targets
             DateTime.UtcNow.Subtract(_lastTargetChange).TotalMilliseconds > 50 &&
@@ -969,8 +970,8 @@ namespace Trinity.Combat.Abilities
             CurrentTarget.Type != TrinityObjectType.Interactable &&
             CurrentTarget.Type != TrinityObjectType.HealthWell &&
             CurrentTarget.Type != TrinityObjectType.Door &&
-            CurrentTarget.ItemType != TrinityItemType.HealthGlobe && 
-            CurrentTarget.ItemType != TrinityItemType.ProgressionGlobe &&
+            CurrentTarget.TrinityItemType != TrinityItemType.HealthGlobe && 
+            CurrentTarget.TrinityItemType != TrinityItemType.ProgressionGlobe &&
           
             // Avoid rapidly changing targets
             DateTime.UtcNow.Subtract(_lastTargetChange).TotalMilliseconds > 50 &&
@@ -999,51 +1000,51 @@ namespace Trinity.Combat.Abilities
             var currentTarget = CurrentTarget;
             var lowestHealthTarget = TargetUtil.LowestHealthTarget(15f, TrinityPlugin.Me.Position, Skills.Monk.ExplodingPalm.SNOPower);
 
-            //Logger.LogNormal("Blacklisting {0} {1} - Changing Target", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId);
+            //Logger.LogNormal("Blacklisting {0} {1} - Changing Target", CurrentTarget.InternalName, CurrentTarget.CommonData.AcdId);
             TrinityPlugin.Blacklist3Seconds.Add(CurrentTarget.AnnId);
 
             // Would like the new target to be different than the one we just blacklisted, or be very close to dead.
-            if (lowestHealthTarget.ACDGuid == currentTarget.ACDGuid && lowestHealthTarget.HitPointsPct < 0.2) return;
+            if (lowestHealthTarget.AcdId == currentTarget.AcdId && lowestHealthTarget.HitPointsPct < 0.2) return;
 
             TrinityPlugin.CurrentTarget = lowestHealthTarget;
-            //Logger.LogNormal("Found lowest health target {0} {1} ({2:0.##}%)", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId, lowestHealthTarget.HitPointsPct * 100);
+            //Logger.LogNormal("Found lowest health target {0} {1} ({2:0.##}%)", CurrentTarget.InternalName, CurrentTarget.CommonData.AcdId, lowestHealthTarget.HitPointsPct * 100);
         }
 
-        internal static TrinityCacheObject GetNewStaticChargeTarget()
+        internal static TrinityActor GetNewStaticChargeTarget()
         {          
-            var bossTarget = TargetUtil.ClosestUnit(20f, t => t.ACDGuid != CurrentTarget.ACDGuid && t.IsBoss && !t.HasDebuff(SNOPower.Monk_FistsofThunder));
+            var bossTarget = TargetUtil.ClosestUnit(20f, t => t.AcdId != CurrentTarget.AcdId && t.IsBoss && !t.HasDebuff(SNOPower.Monk_FistsofThunder));
 			if (bossTarget != null)
 			{
 				_lastTargetChange = DateTime.UtcNow;
-				Logger.Log(LogCategory.Behavior, "Blacklisting {0} {1} for 1 second", bossTarget.InternalName, bossTarget.CommonData.ACDId);
-				TrinityPlugin.Blacklist1Second.Add(bossTarget.RActorGuid);
+				Logger.Log(LogCategory.Behavior, "Blacklisting {0} {1} for 1 second", bossTarget.InternalName, bossTarget.CommonData.AcdId);
+				TrinityPlugin.Blacklist1Second.Add(bossTarget.RActorId);
 				return bossTarget;				
 			}
-			var bestTarget = TargetUtil.ClosestUnit(20f, t => t.ACDGuid != CurrentTarget.ACDGuid && !t.HasDebuff(SNOPower.Monk_FistsofThunder));            
+			var bestTarget = TargetUtil.ClosestUnit(20f, t => t.AcdId != CurrentTarget.AcdId && !t.HasDebuff(SNOPower.Monk_FistsofThunder));            
             if (bestTarget == null)
                 return CurrentTarget;
 
             _lastTargetChange = DateTime.UtcNow;
 
-            Logger.Log(LogCategory.Behavior, "Blacklisting {0} {1} for 1 second", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId);
-            TrinityPlugin.Blacklist1Second.Add(CurrentTarget.RActorGuid);
+            Logger.Log(LogCategory.Behavior, "Blacklisting {0} {1} for 1 second", CurrentTarget.InternalName, CurrentTarget.CommonData.AcdId);
+            TrinityPlugin.Blacklist1Second.Add(CurrentTarget.RActorId);
 
-            Logger.Log(LogCategory.Behavior, "Changing target to {0} {1} (Health={2:0.##}%)", bestTarget.InternalName, bestTarget.CommonData.ACDId, bestTarget.HitPointsPct * 100);
+            Logger.Log(LogCategory.Behavior, "Changing target to {0} {1} (Health={2:0.##}%)", bestTarget.InternalName, bestTarget.CommonData.AcdId, bestTarget.HitPointsPct * 100);
             return bestTarget;
         }
 
-        internal static TrinityCacheObject GetNewWotHFTarget()
+        internal static TrinityActor GetNewWotHFTarget()
         {          
-			var bestTarget = TargetUtil.ClosestUnit(10f, t => t.ACDGuid != CurrentTarget.ACDGuid && !t.HasDebuff(SNOPower.Monk_WayOfTheHundredFists) && t.HasDebuff(SNOPower.Monk_FistsofThunder));            
+			var bestTarget = TargetUtil.ClosestUnit(10f, t => t.AcdId != CurrentTarget.AcdId && !t.HasDebuff(SNOPower.Monk_WayOfTheHundredFists) && t.HasDebuff(SNOPower.Monk_FistsofThunder));            
             if (bestTarget == null)
                 return CurrentTarget;
 
             _lastTargetChange = DateTime.UtcNow;
 
-            Logger.Log(LogCategory.Behavior, "Blacklisting {0} {1} for 1 second", CurrentTarget.InternalName, CurrentTarget.CommonData.ACDId);
-            TrinityPlugin.Blacklist1Second.Add(CurrentTarget.RActorGuid);
+            Logger.Log(LogCategory.Behavior, "Blacklisting {0} {1} for 1 second", CurrentTarget.InternalName, CurrentTarget.CommonData.AcdId);
+            TrinityPlugin.Blacklist1Second.Add(CurrentTarget.RActorId);
 
-            Logger.Log(LogCategory.Behavior, "Changing target to {0} {1} (Health={2:0.##}%)", bestTarget.InternalName, bestTarget.CommonData.ACDId, bestTarget.HitPointsPct * 100);
+            Logger.Log(LogCategory.Behavior, "Changing target to {0} {1} (Health={2:0.##}%)", bestTarget.InternalName, bestTarget.CommonData.AcdId, bestTarget.HitPointsPct * 100);
             return bestTarget;
         }
         private static bool CanCastDashingStrike

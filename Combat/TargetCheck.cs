@@ -5,6 +5,7 @@ using System.Linq;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Helpers;
 using Trinity.Technicals;
@@ -68,7 +69,7 @@ namespace Trinity
                         {
                             var distance = safespot.Distance(Player.Position);
                             Logger.Log(LogCategory.Avoidance, $"Targetted SafeSpot Distance={distance}");
-                            CurrentTarget = new TrinityCacheObject()
+                            CurrentTarget = new TrinityActor()
                             {
                                 Position = safespot,
                                 Type = TrinityObjectType.Avoidance,
@@ -101,13 +102,6 @@ namespace Trinity
                         UsePotionIfNeededTask();
                     }
                 }
-                _statusText = "[TrinityPlugin] No more targets - DemonBuddy/profile management is now in control";
-
-                if (Settings.Advanced.DebugInStatusBar && _resetStatusText)
-                {
-                    _resetStatusText = false;
-                    BotMain.StatusText = _statusText;
-                }
 
                 // Nothing to do... do we have some maintenance we can do instead, like out of combat buffing?
 
@@ -129,7 +123,7 @@ namespace Trinity
                             if (powerBuff != null && powerBuff.SNOPower != SNOPower.None)
                             {
                                 Logger.LogVerbose(LogCategory.Behavior, "Using OOC Buff: {0}", powerBuff.SNOPower.ToString());
-                                if (ZetaDia.Me.UsePower(powerBuff.SNOPower, powerBuff.TargetPosition, powerBuff.TargetDynamicWorldId, powerBuff.TargetACDGUID))
+                                if (ZetaDia.Me.UsePower(powerBuff.SNOPower, powerBuff.TargetPosition, powerBuff.TargetDynamicWorldId, powerBuff.TargetAcdId))
                                 {
                                     SpellHistory.RecordSpell(powerBuff);
                                 }

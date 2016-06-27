@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Technicals;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
@@ -14,9 +15,9 @@ namespace Trinity
          * Reference implementation: http://msdn.microsoft.com/en-us/library/s02tk69a.aspx
          */
 
-        public static string GenerateItemHash(TrinityCacheObject item)
+        public static string GenerateItemHash(TrinityItem item)
         {
-            return GenerateItemHash(item.Position, item.ActorSNO, item.InternalName, TrinityPlugin.Player.WorldSnoId, item.ItemQuality, item.ItemLevel);
+            return GenerateItemHash(item.Position, item.ActorSnoId, item.InternalName, TrinityPlugin.Player.WorldSnoId, item.ItemQualityLevel, item.ItemLevel);
         }
 
         /// <summary>
@@ -38,19 +39,27 @@ namespace Trinity
             }
         }
 
-        /// <summary>
-        /// Generates an SHA1 hash of a particular CacheObject
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
+        static UInt64 CalculateKnuthHash(string read)
+        {
+            UInt64 hashedValue = 3074457345618258791ul;
+            for (int i = 0; i < read.Length; i++)
+            {
+                hashedValue += read[i];
+                hashedValue *= 3074457345618258799ul;
+            }
+            return hashedValue;
+        }
+
         public static string GenerateObjecthash(int actorSnoId, Vector3 position, string internalName, TrinityObjectType type)
         {
-            using (MD5 md5 = MD5.Create())
-            {
-                string objHashBase = actorSnoId + internalName + position + type + TrinityPlugin.CurrentWorldDynamicId;
-                string objHash = GetMd5Hash(md5, objHashBase);
-                return objHash;
-            }
+            //using (MD5 md5 = MD5.Create())
+            //{
+                //string objHashBase = actorSnoId + internalName + position + type + TrinityPlugin.CurrentWorldDynamicId;
+                //string objHash = CalculateKnuthHash(objHashBase).ToString(); //GetMd5Hash(md5, objHashBase);
+                //return objHash;
+            //}
+
+            return CalculateKnuthHash(actorSnoId + internalName + position + type).ToString();
         }
 
         /// <summary>

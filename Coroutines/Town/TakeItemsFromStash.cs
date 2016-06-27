@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using TrinityCoroutines;
 using Zeta.Game;
@@ -120,7 +120,7 @@ namespace Trinity.Coroutines.Town
             return true;
         }
 
-        public static async Task<bool> Execute(List<CachedItem> stashCandidates)
+        public static async Task<bool> Execute(List<TrinityItem> stashCandidates)
         {
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
                 return false;
@@ -154,7 +154,7 @@ namespace Trinity.Coroutines.Town
                     }
 
                     Logger.LogVerbose($"[TakeItemsFromStash] QuickWithdrawing: {item.InternalName} Id={item.ActorSnoId} AnnId={item.AnnId} Name={item.Name} Quality={item.ItemQualityLevel} IsAncient={item.IsAncient}");
-                    ZetaDia.Me.Inventory.QuickWithdraw(item.GetAcdItem());                    
+                    ZetaDia.Me.Inventory.QuickWithdraw(item.ToAcdItem());                    
                 }
                 catch (Exception ex)
                 {

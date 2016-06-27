@@ -11,7 +11,6 @@ using Trinity.Coroutines;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Framework.Actors;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Movement;
@@ -99,7 +98,7 @@ namespace Trinity
 
             var equippedItems = ZetaDia.Me.Inventory.Equipped.Where(i => i.IsValid);
             bool needEmergencyRepair = false;
-            //ZetaDia.Me.Inventory.Equipped.Where(i => i.ACDId != 0 && i.IsValid).Average(i => i.DurabilityPercent) < 0.05
+            //ZetaDia.Me.Inventory.Equipped.Where(i => i.AcdId != 0 && i.IsValid).Average(i => i.DurabilityPercent) < 0.05
             foreach (var item in equippedItems)
             {
                 if (item.ACDId == 0) continue;
@@ -140,7 +139,6 @@ namespace Trinity
                     if (!CombatTargeting.Instance.AllowedToKillMonsters)
                         return false;
 
-                    CacheData.Update();
                     await Coroutine.Yield();
                 }
                 return true;

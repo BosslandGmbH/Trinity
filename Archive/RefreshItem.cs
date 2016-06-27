@@ -44,7 +44,7 @@
 //                CurrentCacheObject.GameBalanceID = c_diaObject.CommonData.GameBalanceId;
 
 //                c_ItemLevel = diaItem.CommonData.Level;
-//                c_DBItemBaseType = diaItem.CommonData.ItemBaseType;
+//                c_DBItemBaseType = diaItem.CommonData.DBItemBaseType;
 //                c_DBItemType = diaItem.CommonData.ItemType;
 //                c_IsOneHandedItem = diaItem.CommonData.IsOneHand;
 //                c_IsTwoHandedItem = diaItem.CommonData.IsTwoHand;
@@ -58,10 +58,10 @@
 //                TrinityItemBaseType itemBaseType = TrinityItemManager.DetermineBaseType(_cItemTinityItemType);
 
 //                // Compute item quality from item link 
-//                if (!CacheData.ItemLinkQuality.TryGetValue(CurrentCacheObject.ACDGuid, out c_ItemQuality))
+//                if (!CacheData.ItemLinkQuality.TryGetValue(CurrentCacheObject.AcdId, out c_ItemQuality))
 //                {
 //                    c_ItemQuality = diaItem.CommonData.GetItemQuality();
-//                    CacheData.ItemLinkQuality.Add(CurrentCacheObject.ACDGuid, c_ItemQuality);
+//                    CacheData.ItemLinkQuality.Add(CurrentCacheObject.AcdId, c_ItemQuality);
 //                }
 
 //                if (itemBaseType == TrinityItemBaseType.Gem)
@@ -69,7 +69,7 @@
 
 //                CurrentCacheObject.ObjectHash = HashGenerator.GenerateItemHash(
 //                    CurrentCacheObject.Position,
-//                    CurrentCacheObject.ActorSNO,
+//                    CurrentCacheObject.ActorSnoId,
 //                    CurrentCacheObject.InternalName,
 //                    Player.WorldSnoId,
 //                    c_ItemQuality,
@@ -91,7 +91,7 @@
 //                }
 
 //                // Always include deaths breath in cache.
-//                var craftMaterialType = TrinityItemManager.GetCraftingMaterialType(CurrentCacheObject.ActorSNO);
+//                var craftMaterialType = TrinityItemManager.GetCraftingMaterialType(CurrentCacheObject.ActorSnoId);
 //                if (craftMaterialType == InventoryItemType.DeathsBreath)
 //                {
 //                    CurrentCacheObject.Type = TrinityObjectType.Item;
@@ -137,9 +137,9 @@
 //                    ItemFollowerType = c_item_tFollowerType,
 //                    DynamicID = CurrentCacheObject.AnnId,
 //                    Position = CurrentCacheObject.Position,
-//                    ActorSNO = CurrentCacheObject.ActorSNO,
-//                    ACDGuid = CurrentCacheObject.ACDGuid,
-//                    RActorGUID = CurrentCacheObject.RActorGuid,
+//                    ActorSNO = CurrentCacheObject.ActorSnoId,
+//                    AcdId = CurrentCacheObject.AcdId,
+//                    RActorGUID = CurrentCacheObject.RActorId,
 //                };
 
 //                // Treat all globes as a yes
@@ -160,7 +160,7 @@
 //                logNewItem = RefreshItemStats(itemBaseType);
 
 //                // Get whether or not we want this item, cached if possible
-//                if (!CacheData.PickupItem.TryGetValue(CurrentCacheObject.RActorGuid, out AddToCache))
+//                if (!CacheData.PickupItem.TryGetValue(CurrentCacheObject.RActorId, out AddToCache))
 //                {
 
 //                    if (Settings.Loot.Pickup.ItemFilterMode == ItemFilterMode.DemonBuddy)
@@ -198,7 +198,7 @@
                             
 //                    }
 
-//                    CacheData.PickupItem.Add(CurrentCacheObject.RActorGuid, AddToCache);
+//                    CacheData.PickupItem.Add(CurrentCacheObject.RActorId, AddToCache);
 //                }
 
 //                if (AddToCache && ForceVendorRunASAP)
@@ -243,7 +243,7 @@
 //            }
 
 //            // Get the gold amount of this pile, cached if possible
-//            if (!CacheData.GoldStack.TryGetValue(CurrentCacheObject.RActorGuid, out c_GoldStackSize))
+//            if (!CacheData.GoldStack.TryGetValue(CurrentCacheObject.RActorId, out c_GoldStackSize))
 //            {
 //                try
 //                {
@@ -251,11 +251,11 @@
 //                }
 //                catch
 //                {
-//                    Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gold pile amount for item {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSNO);
+//                    Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception getting gold pile amount for item {0} [{1}]", CurrentCacheObject.InternalName, CurrentCacheObject.ActorSnoId);
 //                    c_IgnoreSubStep = "GetAttributeException";
 //                    return false;
 //                }
-//                CacheData.GoldStack.Add(CurrentCacheObject.RActorGuid, c_GoldStackSize);
+//                CacheData.GoldStack.Add(CurrentCacheObject.RActorId, c_GoldStackSize);
 //            }
 
 //            if (c_GoldStackSize < Settings.Loot.Pickup.MinimumGoldStack)
@@ -270,7 +270,7 @@
 //        {
 //            bool isNewLogItem = false;
 
-//            c_ItemMd5Hash = HashGenerator.GenerateItemHash(CurrentCacheObject.Position, CurrentCacheObject.ActorSNO, CurrentCacheObject.InternalName, CurrentWorldDynamicId, c_ItemQuality, c_ItemLevel);
+//            c_ItemMd5Hash = HashGenerator.GenerateItemHash(CurrentCacheObject.Position, CurrentCacheObject.ActorSnoId, CurrentCacheObject.InternalName, CurrentWorldDynamicId, c_ItemQuality, c_ItemLevel);
 
 //            if (!GenericCache.ContainsKey(c_ItemMd5Hash))
 //            {
@@ -373,10 +373,10 @@
 //                {
 //                    LogWriter.WriteLine("ActorSnoId,RActorGUID,DyanmicID,ACDId,Name,GoldStackSize,IgnoreItemSubStep,Distance");
 //                }
-//                LogWriter.Write(FormatCSVField(CurrentCacheObject.ActorSNO));
-//                LogWriter.Write(FormatCSVField(CurrentCacheObject.RActorGuid));
+//                LogWriter.Write(FormatCSVField(CurrentCacheObject.ActorSnoId));
+//                LogWriter.Write(FormatCSVField(CurrentCacheObject.RActorId));
 //                LogWriter.Write(FormatCSVField(CurrentCacheObject.AnnId));
-//                LogWriter.Write(FormatCSVField(CurrentCacheObject.ACDGuid));
+//                LogWriter.Write(FormatCSVField(CurrentCacheObject.AcdId));
 //                LogWriter.Write(FormatCSVField(CurrentCacheObject.InternalName));
 //                LogWriter.Write(FormatCSVField(c_GoldStackSize));
 //                LogWriter.Write(FormatCSVField(c_IgnoreSubStep));
