@@ -9,6 +9,7 @@ using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Helpers;
 using Trinity.Objects.Native;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -36,6 +37,8 @@ namespace Trinity.Framework.Actors
         public TrinityPlayer Me { get; private set; }
 
         protected override void OnPulse() => Update();
+
+        protected override void OnWorldChanged() => Reset();
 
         public void Update()
         {
@@ -337,6 +340,20 @@ namespace Trinity.Framework.Actors
         }
 
         #endregion
+
+        private void Reset()
+        {
+            _commonDataContainer = null;
+            _rActorContainer = null;
+            _annToAcdIndex.Clear();
+            _commonData.ForEach(o => o.Value.Update(IntPtr.Zero));
+            _rActors.ForEach(o => o.Value.RActor.Update(IntPtr.Zero));
+            _inventory.Clear();
+            _commonData.Clear();
+            _rActors.Clear();
+            Me = null;
+            Update();
+        }
 
     }
 

@@ -1492,30 +1492,32 @@ namespace Trinity
 
                     #endregion Foreach loop
 
-                    // Set Record History
-                    if (bestTarget?.InternalName != null && bestTarget.ActorSnoId > 0 && bestTarget.Weight > 0)
-                    {
-                        //TargetUtil.ClearCurrentTarget("Clearing for Weight");
-                        LastTargetIsSafeSpot = bestTarget != null && CurrentTarget != null && CurrentTarget.IsSafeSpot;
-                        CurrentTarget = bestTarget;
-
-                        //Logger.Log($"Last Guid = {LastTargetRactorGUID}");
-
-                        var timesTargetted = RecordTargetHistory(bestTarget);
-
-                        if (bestTarget.RActorId != LastTargetRactorGUID || bestTarget != null && bestTarget.IsMarker)
-                        {
-                            Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation,
-                                $"Target changed to {CurrentTarget.ActorSnoId} // {CurrentTarget.InternalName} RActorGuid={CurrentTarget.RActorId} " +
-                                $"({CurrentTarget.Type}) {CurrentTarget.WeightInfo} TargetTimes={timesTargetted}");
-                        }
-                        return;
-                    }
-                    TargetUtil.ClearCurrentTarget("No good target's found in Weighting.");
-                    //var text = bestTarget != null ? bestTarget.Weight : 0;
-                    //Logger.Log(" CACHE COUNT: " + ObjectCache.Count(x => !x.IsPlayer) + " Weight: " + text);
-
+                    SetTarget(bestTarget);
                 }
+            }
+
+            private static void SetTarget(TrinityActor bestTarget)
+            {
+// Set Record History
+                if (bestTarget?.InternalName != null && bestTarget.ActorSnoId > 0 && bestTarget.Weight > 0)
+                {
+                    //TargetUtil.ClearCurrentTarget("Clearing for Weight");
+                    LastTargetIsSafeSpot = bestTarget != null && CurrentTarget != null && CurrentTarget.IsSafeSpot;
+                    CurrentTarget = bestTarget;
+
+                    //Logger.Log($"Last Guid = {LastTargetRactorGUID}");
+
+                    var timesTargetted = RecordTargetHistory(bestTarget);
+
+                    if (bestTarget.RActorId != LastTargetRactorGUID || bestTarget != null && bestTarget.IsMarker)
+                    {
+                        Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation,
+                            $"Target changed to {CurrentTarget.ActorSnoId} // {CurrentTarget.InternalName} RActorGuid={CurrentTarget.RActorId} " +
+                            $"({CurrentTarget.Type}) {CurrentTarget.WeightInfo} TargetTimes={timesTargetted}");
+                    }
+                    return;
+                }
+                TargetUtil.ClearCurrentTarget("No good target's found in Weighting.");
             }
 
             private static TrinityActor GetNewBestTarget(TrinityActor cacheObject, TrinityActor bestTarget)

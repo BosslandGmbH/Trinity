@@ -82,6 +82,9 @@ namespace Trinity.Framework.Actors.Properties
                 if (attributes.IsGizmoBeenOperated)
                     return true;
 
+                if (attributes.IsGizmoDisabledByScript)
+                    return true;
+
                 if (attributes.GizmoCharges > 0)
                     return true;
 
