@@ -92,6 +92,9 @@ namespace Trinity.Framework.Actors.Properties
 
         public static void UpdateLineOfSight(TrinityActor actor)
         {
+            if(actor.ActorType == ActorType.Item && !actor.IsGroundItem)
+                return;
+
             if (actor.Position != Vector3.Zero || Core.Avoidance.Grid.GridBounds == 0)
             {
                 var inLineOfSight = Core.Avoidance.Grid.CanRayCast(TrinityPlugin.Player.Position, actor.Position);

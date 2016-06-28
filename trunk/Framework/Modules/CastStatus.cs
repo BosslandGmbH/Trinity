@@ -17,6 +17,9 @@ namespace Trinity.Framework.Modules
         Transition
     }
 
+    /// <summary>
+    /// Keeps track of any spells that are being channelled
+    /// </summary>
     public class CastStatus : Module
     {
         protected override int UpdateIntervalMs => 50;

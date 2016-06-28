@@ -8,6 +8,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Modules
 {
+    //todo merge functionality with Coroutines\Resources\Inventory.cs
     public class InventoryCache : Module
     {
         public InventoryCache()

@@ -1,4 +1,6 @@
-﻿using Zeta.Game.Internals.Actors;
+﻿using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Helpers;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Actors.Attributes
 {
@@ -58,19 +60,21 @@ namespace Trinity.Framework.Actors.Attributes
 
         public int TeamId => GetAttribute<int>(ActorAttributeType.TeamId);
 
-        public MarkerType MarkerType => GetAttribute<MarkerType>(ActorAttributeType.ConversationIcon); // 483: ConversationIcon(-3613)
+        public MarkerType MarkerType => GetFirstCachedAttribute<MarkerType>(ActorAttributeType.ConversationIcon); // 483: ConversationIcon(-3613)
 
         public int SummonerId => GetAttribute<int>(ActorAttributeType.SummonerId);
 
         public bool IsNPC => GetAttribute<bool>(ActorAttributeType.IsNPC);
 
-        public int SummonedByACDId => GetAttribute<int>(ActorAttributeType.SummonedByACDId);
+        public int SummonedByAnnId => GetAttribute<int>(ActorAttributeType.SummonedByACDId);
 
         public bool HasBuffVisualEffect => GetAttribute<bool>(ActorAttributeType.BuffVisualEffect);
 
         public bool IsQuestMonster => GetAttribute<bool>(ActorAttributeType.QuestMonster);
 
+        //public PetType PetType => GetAttribute<PetType>(ActorAttributeType.PetType);
 
+        public PetType PetType => GetAttributeOrCustomDefault<PetType>(ActorAttributeType.PetType, () => PetType.None);
     }
 }
 

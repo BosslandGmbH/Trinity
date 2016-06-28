@@ -8,6 +8,9 @@ using Zeta.Game;
 
 namespace Trinity.Framework.Modules
 {
+    /// <summary>
+    /// History of where the player has moved
+    /// </summary>
     public class PlayerHistory : Module
     {
         public class PositionHistory : IEquatable<PositionHistory>

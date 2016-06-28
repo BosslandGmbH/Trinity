@@ -6,6 +6,9 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Modules
 {
+    /// <summary>
+    /// Keeps track of any buffs that are active
+    /// </summary>
     public class BuffsCache : Module
     {
         public List<CachedBuff> ActiveBuffs = new List<CachedBuff>();

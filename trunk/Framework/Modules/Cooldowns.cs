@@ -9,6 +9,9 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Modules
 {
+    /// <summary>
+    /// Keep track of cooldowns for buffs and skills
+    /// </summary>
     public sealed class Cooldowns : Module
     {
         public class CooldownData

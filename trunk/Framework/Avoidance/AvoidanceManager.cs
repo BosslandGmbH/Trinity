@@ -136,7 +136,7 @@ namespace Trinity.Framework.Avoidance
 
                 _currentRActorIds.Add(rActorId);
 
-                var isValid = IsValid(actor);
+                var isValid = actor.IsValid;
 
                 if (_cachedActors.TryGetValue(rActorId, out existingActor))
                 {
@@ -165,11 +165,6 @@ namespace Trinity.Framework.Avoidance
                     CurrentAvoidances.Add(avoidance);
                 }
             }
-        }
-
-        private static bool IsValid(TrinityActor actor)
-        {
-            return !actor.IsDead && (actor.CommonData == null || actor.CommonData.IsValid && !actor.CommonData.IsDisposed);
         }
 
         private void RemoveExpiredAvoidances()

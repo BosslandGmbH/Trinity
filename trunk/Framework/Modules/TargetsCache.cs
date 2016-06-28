@@ -210,8 +210,8 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-
-            if (cacheObject.IsNpc)
+            var isQuestGiverOutsideTown = cacheObject.IsQuestGiver && !Core.Player.IsInTown;
+            if (cacheObject.IsNpc && !isQuestGiverOutsideTown)
             {
                 cacheObject.AddCacheInfo("Npc");
                 return false;
@@ -223,10 +223,19 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (cacheObject.IsObstacle && cacheObject.IsGizmo && cacheObject.IsUsed)
+            if (cacheObject.IsObstacle)
             {
-                cacheObject.AddCacheInfo("UsedObstacle");
-                return false;
+                if (cacheObject.IsGizmo && cacheObject.IsUsed)
+                {
+                    cacheObject.AddCacheInfo("UsedGizmoObstacle");
+                    return false;
+                }
+
+                if (cacheObject.IsMonster && !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSnoId))
+                {
+                    cacheObject.AddCacheInfo("MonsterObstacle");
+                    return false;
+                }
             }
 
             if (cacheObject.IsBlacklisted)
@@ -282,15 +291,15 @@ namespace Trinity.Framework.Modules
 
         private bool ShouldCacheUnit(TrinityActor cacheObject)
         {
-            if (cacheObject.IsSameTeam)
+            if (cacheObject.IsSameTeam && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("SameTeam");
                 return false;
             }
 
-            if (cacheObject.IsFriendly)
+            if (cacheObject.IsFriendly && !cacheObject.IsQuestGiver)
             {
-                cacheObject.AddCacheInfo("SameTeam");
+                cacheObject.AddCacheInfo("Friendly");
                 return false;
             }
 

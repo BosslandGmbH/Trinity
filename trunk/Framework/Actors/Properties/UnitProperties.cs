@@ -2,6 +2,7 @@
 using System.Linq;
 using Trinity.Cache;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Objects.Memory.Misc;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -60,22 +61,23 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsQuestGiver = actor.MarkerType == MarkerType.Exclamation;
             actor.HasBuffVisualEffect = attributes.HasBuffVisualEffect;
             actor.IsQuestMonster = attributes.IsQuestMonster;
+            actor.PetType = attributes.PetType;
 
             var teamOverride = attributes.TeamOverride;
-            actor.TeamId = teamOverride == -1 ? attributes.TeamId : teamOverride;
+            actor.TeamId = teamOverride > 0 ? teamOverride : attributes.TeamId;
             actor.IsFriendly = actor.TeamId == 1 || actor.TeamId == 2 || actor.TeamId == 17;
             actor.IsHostile = !actor.IsFriendly;
             actor.IsSameTeam = actor.IsFriendly || actor.TeamId == TrinityPlugin.Player.TeamId || DataDictionary.AllyMonsterTypes.Contains(actor.MonsterType);
             actor.IsHidden = attributes.IsHidden || attributes.IsBurrowed;
             actor.IsSpawningBoss = actor.IsBoss && actor.IsUntargetable;
 
-            var summonedByAcdId = attributes.SummonedByACDId;
-            actor.SummonedByAcdId = summonedByAcdId;
-            actor.IsSummoned = summonedByAcdId > 0;
+            var summonedByAnnId = attributes.SummonedByAnnId;
+            actor.SummonedByAnnId = summonedByAnnId;
+            actor.IsSummoned = summonedByAnnId > 0;
 
             if (actor.IsSummoned)
             {
-                actor.IsSummonedByPlayer = actor.SummonedByAcdId == TrinityPlugin.Player.MyDynamicID;
+                actor.IsSummonedByPlayer = actor.SummonedByAnnId == TrinityPlugin.Player.MyDynamicID || actor.PetType != PetType.None;
             }
             else
             {

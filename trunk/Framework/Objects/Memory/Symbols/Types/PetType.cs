@@ -2,6 +2,7 @@ namespace Trinity.Framework.Objects.Memory.Misc
 {
     public enum PetType // 2.4.0.36090 @26708592 index:81
     {
+        None = -1,
         Hireling = 0,
         WizardMirrorImage = 1,
         WdWickerman = 2,

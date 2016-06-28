@@ -443,8 +443,6 @@ namespace Trinity.Framework.Modules
             return false;
         }
 
-
-
         public bool IsCastingOrLoading
         {
             get

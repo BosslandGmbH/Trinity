@@ -1610,6 +1610,13 @@ namespace Trinity
                     return;
                 }
 
+                if (CurrentTarget.IsQuestGiver && CurrentTarget.RadiusDistance <= 0)
+                {
+                    Logger.LogVerbose(LogCategory.Targetting, $"Interacting with quest giver {CurrentTarget}");
+                    CurrentTarget.Interact();
+                    return;
+                }
+
                 float distance;
                 Vector3 targetPosition = Vector3.Zero;
                 int targetAcdId = -1;                
