@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using Adventurer.Game.Exploration;
 using Trinity.Cache;
 using Trinity.Coroutines.Town;
 using TrinityCoroutines;
@@ -244,8 +245,12 @@ namespace Trinity.UI
         {
             try
             {
-                using (new Helpers.AquireFrameHelper())
+                using (ZetaDia.Memory.AcquireFrame())
                 {
+                    ZetaDia.Actors.Update();
+                    CacheData.Player.Update();
+                    ScenesStorage.Update();
+                    Core.Update(true);
                     DebugUtil.ItemListTest();
                 }
             }

@@ -7,6 +7,9 @@ using UIElement = Zeta.Game.Internals.UIElement;
 
 namespace Trinity.Framework.Modules
 {
+    /// <summary>
+    /// Spend paragon points
+    /// </summary>
     public class Paragon : Module
     {
         public DateTime LastAssignedParagon = DateTime.MinValue;

@@ -4,7 +4,9 @@ using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Objects;
 using Trinity.Objects.Native;
+using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Settings;
@@ -101,6 +103,8 @@ namespace Trinity.Framework.Actors.ActorTypes
                 acdItem.Socket(gem);
             }
         }
+
+        public Item Reference => Legendary.GetItem(this);
 
         public ACDItem ToAcdItem() => Core.Actors.GetAcdItemByAnnId(AnnId);
 

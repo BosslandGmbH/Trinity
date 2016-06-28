@@ -20,6 +20,7 @@ using Zeta.Bot.Navigation;
 using Zeta.Bot.Profile.Common;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Technicals.Logger;
@@ -81,6 +82,22 @@ namespace Trinity
 
                     var getHiPriorityContainer = Settings.WorldObject.HiPriorityContainers &&
                                                  objects.Any(c => c.Type == TrinityObjectType.Container);
+
+                    //var killQuestStepTypes = new HashSet<QuestStepObjectiveType>
+                    //{
+                    //    QuestStepObjectiveType.KillAllMonstersInWorld,
+                    //    QuestStepObjectiveType.KillAnyMonsterInLevelArea,
+                    //    QuestStepObjectiveType.KillElitePackInLevelArea,
+                    //    QuestStepObjectiveType.KillGroup,
+                    //    QuestStepObjectiveType.KillMonster,
+                    //    QuestStepObjectiveType.KillMonsterFromFamily,
+                    //    QuestStepObjectiveType.KillMonsterFromGroup,
+                    //};
+
+                    //var inKillQuest = ZetaDia.ActInfo.ActiveQuests.FirstOrDefault(
+                    //    q => q.QuestRecord.Steps.Any(
+                    //        s => s.QuestStepObjectiveSet.QuestStepObjectives.Any(
+                    //            o => killQuestStepTypes.Contains(o.ObjectiveType)))) != null;
 
                     var profileTagCheck = false;
 
@@ -432,7 +449,8 @@ namespace Trinity
                                         break;
                                     }
 
-                                    if (!cacheObject.IsHostile)
+                                    var isQuestGiverOutsideCombat = cacheObject.IsQuestGiver && !ZetaDia.Me.IsInCombat;
+                                    if (!cacheObject.IsHostile && !isQuestGiverOutsideCombat)
                                     {
                                         cacheObject.WeightInfo += "Unit Not Hostile";
                                         cacheObject.Weight = MinWeight;
@@ -558,7 +576,7 @@ namespace Trinity
                                             break;
                                         }
                                         else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize &&
-                                                 !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSnoId))
+                                                 !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat)
                                         {
                                             cacheObject.WeightInfo +=
                                                 $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {CombatBase.CombatOverrides.EffectiveTrashSize})";

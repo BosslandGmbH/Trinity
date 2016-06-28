@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
-using System.Threading;
-using IronPython.Compiler.Ast;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Items;
@@ -226,6 +222,19 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             foundAttribute.Update();
             return foundAttribute.GetValue<T>();
         }
+        
+        /// <summary>
+        /// Get an attribute, if its not found return a custom default value.
+        /// </summary>
+        internal T GetAttributeOrCustomDefault<T>(ActorAttributeType attr, Func<T> defaultValue)
+        {
+            AttributeItem foundAttribute;
+            if (!Items.TryGetValue((int)attr, out foundAttribute))
+                return defaultValue();
+
+            foundAttribute.Update();
+            return foundAttribute.GetValue<T>();
+        }
 
         internal T GetAttribute<T>(ActorAttributeType attr)
         {
@@ -253,7 +262,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         public string ToProperties()
         {
             return Items.Where(i => i.Value.Integer != 0 || i.Value.Single > float.Epsilon)
-                .Aggregate($"Attribute Properties ({Items.Count}) Id={(short)FastAttributeGroupId}/{FastAttributeGroupId} {Environment.NewLine}",
+                .Aggregate($"Attribute Properties ({Items.Count}/{Map.Count}) Id={(short)FastAttributeGroupId}/{FastAttributeGroupId} {Environment.NewLine}",
                 (current, attr) => current + $" public {attr.Value.Descripter.DataType} " +
                 $"{attr.Value.Attribute} => GetCachedAttribute<{attr.Value.Descripter.DataType}>" +
                 $"(ActorAttributeType.{attr.Value.Attribute}); // {attr.Value.Attribute} " +

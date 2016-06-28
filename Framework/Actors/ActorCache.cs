@@ -16,7 +16,9 @@ using Zeta.Game.Internals.SNO;
 namespace Trinity.Framework.Actors
 {
     /// <summary>
-    /// Maintains the current valid list of actors
+    /// Maintains the current valid list of actors.
+    /// Collections are complete, except for bad data / disposed actors.
+    /// Filtered lists for attacking/interacting can be found in Core.Targets   
     /// </summary>
     public class ActorCache : Module
     {
@@ -87,8 +89,8 @@ namespace Trinity.Framework.Actors
                 var ann = newAcd.AnnId;
 
                 _commonData.AddOrUpdate(acdId,
-                    id => CommonDataAddValueFactory(id, newAcd),
-                    CommonDataUpdateValueFactory);
+                    id => AddAcd(id, newAcd),
+                    UpdateAcd);
 
                 oldAcds.Remove(acdId);
                 _annToAcdIndex[ann] = (short)acdId;
@@ -104,12 +106,12 @@ namespace Trinity.Framework.Actors
             }
         }
 
-        private ActorCommonData CommonDataAddValueFactory(int id, ActorCommonData acd)
+        private ActorCommonData AddAcd(int id, ActorCommonData acd)
         {
             return acd;
         }
 
-        private ActorCommonData CommonDataUpdateValueFactory(int id, ActorCommonData actorCommonData)
+        private ActorCommonData UpdateAcd(int id, ActorCommonData actorCommonData)
         {
             actorCommonData.Update(actorCommonData.BaseAddress);
             return actorCommonData;
@@ -205,8 +207,8 @@ namespace Trinity.Framework.Actors
                     continue;
 
                 _inventory.AddOrUpdate(annId,
-                    id => InventoryAddValueFactory(id, commonData),
-                    (id, existingItem) => InventoryUpdateValueFactory(id, existingItem, commonData));
+                    id => AddInventoryItem(id, commonData),
+                    (id, existingItem) => UpdateInventoryItem(id, existingItem, commonData));
 
                 untouchedIds.Remove(annId);
             }
@@ -223,12 +225,12 @@ namespace Trinity.Framework.Actors
             }
         }
 
-        private TrinityItem InventoryAddValueFactory(int id, ActorCommonData newItem)
+        private TrinityItem AddInventoryItem(int id, ActorCommonData newItem)
         {
             return ActorFactory.CreateFromAcd<TrinityItem>(newItem);
         }
 
-        private TrinityItem InventoryUpdateValueFactory(int id, TrinityItem item, ActorCommonData commonData)
+        private TrinityItem UpdateInventoryItem(int id, TrinityItem item, ActorCommonData commonData)
         {
             _timer.Start();
             item.CommonData = commonData;

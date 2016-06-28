@@ -4,6 +4,7 @@ using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Objects.Native;
 using Zeta.Common;
 using Zeta.Game;
@@ -16,9 +17,6 @@ namespace Trinity.Framework.Actors.ActorTypes
 {
     public class TrinityActor : ActorBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
         public virtual ActorAttributes Attributes { get; set; }
         public bool IsAllowedClientEffect { get; set; }
         public bool IsExcludedId { get; set; }
@@ -103,7 +101,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsNpc { get; set; }
         public bool NpcIsOperable { get; set; }
         public bool HasDotDps { get; set; }
-        public int SummonedByAcdId { get; set; }
+        public int SummonedByAnnId { get; set; }
         public string CacheInfo { get; set; }
         public float Distance { get; set; }
         public float RadiusDistance { get; set; }
@@ -121,6 +119,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public string Name { get; set; }
         public float RotationDegrees { get; set; }
         public bool IsQuestMonster { get; set; }
+        public PetType PetType { get; set; } = PetType.None;
 
         /// <summary>
         /// Rotation in radians
@@ -189,6 +188,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsFacingPlayer => TargetUtil.IsFacing(this, Core.Player.Position, 30f);
         public double CacheTime => Math.Abs(UpdateTime) < double.Epsilon ? CreateTime : UpdateTime;
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;
+
 
         public void AddCacheInfo(string reason)
         {

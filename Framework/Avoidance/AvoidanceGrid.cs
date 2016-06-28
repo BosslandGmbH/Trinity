@@ -67,14 +67,22 @@ namespace Trinity.Framework.Avoidance
         }
 
         public bool IsValidGridWorldPosition(Vector3 position)
-        {
+        {            
             return position.X > 0 && position.Y > 0 && position != Vector3.Zero && position.X < GridBounds && position.Y < GridBounds;
         }
 
         public override bool CanRayCast(Vector3 @from, Vector3 to)
         {
-            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
-            return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile) && !node.AvoidanceFlags.HasFlag(AvoidanceFlags.RoundedCorner));
+            try
+            {
+                if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
+                return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile) && !node.AvoidanceFlags.HasFlag(AvoidanceFlags.RoundedCorner));
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Exception in CanRayCast from={@from} to={to} {ex}");
+            }
+            return false;
         }
 
         public override bool CanRayWalk(Vector3 @from, Vector3 to)

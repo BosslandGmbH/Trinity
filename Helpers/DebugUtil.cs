@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Trinity;
+using Trinity.Framework;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects.Memory;
@@ -508,24 +509,23 @@ namespace Trinity.Helpers
         {
             Logger.Log("Starting ItemList Backpack Test");
 
-            var backpackItems = ZetaDia.Me.Inventory.Backpack.ToList();
+            var backpackItems =  Core.Inventory.Backpack;
             var total = backpackItems.Count;
-            var stashCount = 0;
+            var toBeStashed = 0;
 
             foreach (var acdItem in backpackItems)
             {
-                Logger.Log($"{acdItem.Name} ActorSnoId={acdItem.ActorSnoId} GameBalanceId={acdItem.GameBalanceId} ACDId={acdItem.ACDId} AnnId={acdItem.AnnId}");
+                Logger.Log($"{acdItem.Name} ActorSnoId={acdItem.ActorSnoId} GameBalanceId={acdItem.GameBalanceId} ACDId={acdItem.AcdId} AnnId={acdItem.AnnId}");
+                Logger.LogVerbose(acdItem.ToString());
+                Logger.LogVerbose(acdItem.Attributes.ToString());
 
-                var cItem = ActorFactory.CreateActor(acdItem);
-                Logger.LogVerbose(cItem.Attributes.ToString());
-
-                if (ItemListEvaluator.ShouldStashItem(cItem, true))
-                    stashCount++;
+                if (ItemListEvaluator.ShouldStashItem(acdItem, true))
+                    toBeStashed++;
             }
 
             Logger.Log("Finished ItemList Backpack Test");
 
-            Logger.Log("Finished - Stash {0} / {1}", stashCount, total);
+            Logger.Log("Finished - Stash {0} / {1}", toBeStashed, total);
         }
     }
 }

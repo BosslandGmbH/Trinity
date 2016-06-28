@@ -171,6 +171,9 @@ namespace Trinity.UI.RadarUI
             if (Window == null || !Window.IsVisible)
                 return;
 
+            if (!ZetaDia.IsInGame)
+                return;
+
             using (new PerformanceLogger("Visualizer Update"))
             {
                 if (DateTime.UtcNow.Subtract(LastRefresh).TotalMilliseconds <= RefreshRateMs || IsPaused)
