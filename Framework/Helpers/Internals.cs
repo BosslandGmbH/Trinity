@@ -63,7 +63,8 @@ namespace Trinity.Helpers
                 ObjectManagerPtr = (IntPtr)0x01E9F8EC,
                 SymbolManagerPtr = (IntPtr)0x01EE7598,
                 SnoGroupsAddr = (IntPtr)0x1EA0BC8,
-                AttributeDescripterAddr = (IntPtr) 0x1EEFE70
+                AttributeDescripterAddr = (IntPtr) 0x1EEFE70,
+                GlobalsOffset = 0x790
             },
             new BuildMemoryInfo
             {

@@ -34,7 +34,7 @@ namespace Trinity.Framework.Objects.Memory.Misc
         public int RareItemPartBStringListId => ReadOffset<int>(0x174); 
         public int RareItemPartBStringListIndex => ReadOffset<int>(0x178);
         public int GoodFood => ReadOffset<int>(0x2c0);
-        public bool IsDisposed => GoodFood != 0x600df00d; //unchecked((int)0xFEEDFACE);
+        public bool IsDisposed => GoodFood == unchecked((int)0xFEEDFACE);
         public List<int> AffixIds => ReadArray<int>(0x1AC, 8); // 0x1a4 (2 affixes previous to this? (-8))
         public IntPtr AnimationInfoAddress => ReadOffset<IntPtr>(0x210);
         public SNOAnim Animation => AnimationInfoAddress != IntPtr.Zero ? Read<SNOAnim>(AnimationInfoAddress + 0x04) : default(SNOAnim);

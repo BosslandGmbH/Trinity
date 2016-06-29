@@ -7,12 +7,14 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Technicals;
 using Trinity.Helpers;
 using Trinity.Objects.Native;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Framework.Actors
 {
@@ -51,11 +53,11 @@ namespace Trinity.Framework.Actors
 
         private void UpdateContainers()
         {
-            if (_rActorContainer == null || !_rActorContainer.IsValid || _rActorContainer.IsDisposed)
-                _rActorContainer = MemoryWrapper.Create<ExpandoContainer<RActor>>(Internals.Addresses.RActorManager);
-
-            if (_commonDataContainer == null || !_commonDataContainer.IsValid || _commonDataContainer.IsDisposed)
-                _commonDataContainer = MemoryWrapper.Create<ExpandoContainer<ActorCommonData>>(Internals.Addresses.AcdManager);
+            if (_rActorContainer == null || !_rActorContainer.IsValid || _rActorContainer.IsDisposed ||
+                _commonDataContainer == null || !_commonDataContainer.IsValid || _commonDataContainer.IsDisposed)
+            {
+                Reset();
+            }
         }        
 
         private void UpdateObjectsFromMemory()
@@ -343,6 +345,7 @@ namespace Trinity.Framework.Actors
 
         private void Reset()
         {
+            Logger.Log("Resetting ActorCache");
             _commonDataContainer = null;
             _rActorContainer = null;
             _annToAcdIndex.Clear();
@@ -352,6 +355,8 @@ namespace Trinity.Framework.Actors
             _commonData.Clear();
             _rActors.Clear();
             Me = null;
+            _rActorContainer = MemoryWrapper.Create<ExpandoContainer<RActor>>(Internals.Addresses.RActorManager);
+            _commonDataContainer = MemoryWrapper.Create<ExpandoContainer<ActorCommonData>>(Internals.Addresses.AcdManager);
             Update();
         }
 

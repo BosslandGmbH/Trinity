@@ -1890,6 +1890,10 @@ namespace Trinity
             (int)SNOActor.px_Cave_A_Breakable_Stalagmites_F,
             (int)SNOActor.px_Cave_A_Breakable_Stalagmites_G,
 
+            (int)SNOActor.x1_Adria_CauldronSpawner_Temp,
+            (int)SNOActor.x1_Fortress_Ring_Hazard,
+            (int)SNOActor.P4_Ruins_Frost_Trap_Swinging_Blade,
+
             165415, //ActorId: 165415, Type: Gizmo, Name: a2dun_Zolt_SandBridgeBase_BossFight-529, Distance2d: 41.01208, CollisionRadius: 18.31754, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
             165415, //ActorId: 165415, Type: Gizmo, Name: a2dun_Zolt_SandBridgeBase_BossFight-921, Distance2d: 41.67792, CollisionRadius: 18.31754, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
             //156328, //ActorId: 156328, Type: Gizmo, Name: a2dun_Zolt_black_soulstone-515, Distance2d: 41.42352, CollisionRadius: 20.39608, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0            
