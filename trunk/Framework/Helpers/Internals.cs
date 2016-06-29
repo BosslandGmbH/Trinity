@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.InteropServices;
-using GongSolutions.Wpf.DragDrop.Utilities;
-using Trinity.Cache;
-using Trinity.Objects.Native;
+using Trinity.Technicals;
 using Zeta.Game;
 using Zeta.Game.Internals;
 
@@ -14,6 +9,18 @@ namespace Trinity.Helpers
 {
     public static class Internals
     {
+        private class BuildMemoryInfo
+        {
+            public Version Version;
+            public IntPtr ObjectManagerPtr;
+            public IntPtr SymbolManagerPtr;
+            public IntPtr SnoGroupsAddr;
+            public IntPtr AttributeDescripterAddr;
+            public int GlobalsOffset;
+        }
+
+        private static BuildMemoryInfo _currentBuild;
+
         public static class Objects
         {
             public static ACDManager AcdManager => _acdManager.Value;
@@ -28,24 +35,48 @@ namespace Trinity.Helpers
 
         public static class Addresses
         {
-            public static IntPtr ObjectManager => ZetaDia.Memory.Read<IntPtr>(Pointers.ObjectManagerPtr);
+            static Addresses()
+            {
+                // Use the memory info from the most recent version lower than current.
+                var d3Version = new Version(ZetaDia.Memory.Process.MainModule.FileVersionInfo.FileVersion.Replace(", ", "."));
+                _currentBuild = SupportedBuilds.Where(o => o.Version <= d3Version).OrderBy(o => o.Version).LastOrDefault();
+                Logger.LogDebug($"D3: {d3Version}; Data: {_currentBuild?.Version}");
+            }
+
+            public static IntPtr ObjectManager => ZetaDia.Memory.Read<IntPtr>(_currentBuild.ObjectManagerPtr);
             public static IntPtr RActorManager => Objects.RActorManager.BaseAddress;
             public static IntPtr AcdManager => Objects.AcdManager.BaseAddress;        
             public static IntPtr ActivePlayerData => Objects.ActivePlayerData.BaseAddress;
-            public static IntPtr SymbolManager => ZetaDia.Memory.Read<IntPtr>(Pointers.SymbolManagerPtr);
+            public static IntPtr SymbolManager => ZetaDia.Memory.Read<IntPtr>(_currentBuild.SymbolManagerPtr);
             public static IntPtr Hero => ZetaDia.Service.Hero.BaseAddress;
-            public static IntPtr Globals => ObjectManager + 0x790;
-            public static IntPtr SnoGroups => (IntPtr)0x1EA0BC8;
-            public static IntPtr AttributeDescripters => (IntPtr)0x1EEFE70;
-            public static IntPtr HealthPotion => (IntPtr)0x18B1EBD0;
+            public static IntPtr Globals => ObjectManager + _currentBuild.GlobalsOffset;
+            public static IntPtr SnoGroups => _currentBuild.SnoGroupsAddr; 
+            public static IntPtr AttributeDescripters => _currentBuild.AttributeDescripterAddr;
         }
 
-        public static class Pointers 
+        private static readonly List<BuildMemoryInfo> SupportedBuilds = new List<BuildMemoryInfo>
         {
-            public static IntPtr ObjectManagerPtr => (IntPtr)0x01E9F8EC;
-            public static IntPtr SymbolManagerPtr => (IntPtr)0x01EE7598;
-        }
 
+            new BuildMemoryInfo
+            {
+                Version = new Version("2.4.1.36595"),
+                ObjectManagerPtr = (IntPtr)0x01E9F8EC,
+                SymbolManagerPtr = (IntPtr)0x01EE7598,
+                SnoGroupsAddr = (IntPtr)0x1EA0BC8,
+                AttributeDescripterAddr = (IntPtr) 0x1EEFE70
+            },
+            new BuildMemoryInfo
+            {
+                Version = new Version("2.4.2.37893"),
+                ObjectManagerPtr = (IntPtr)0x1C8755B0,
+                SymbolManagerPtr = (IntPtr)0x01F01900,
+                SnoGroupsAddr = (IntPtr)0x01EA73A8,
+                AttributeDescripterAddr = (IntPtr)0x01EBEB78,
+                GlobalsOffset = 0x790
+            },
+        };
     }
+
 }
+
 
