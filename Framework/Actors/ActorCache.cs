@@ -78,7 +78,7 @@ namespace Trinity.Framework.Actors
         #region Update Methods
 
         /// <summary>
-        /// Get new Acds from Memory
+        /// Get new Acds from Memory; update ones we already know about.
         /// * Some Acds like backpack/stash/equipped items do not have an associated RActor
         /// </summary>
         private void UpdateAcds()
@@ -122,7 +122,7 @@ namespace Trinity.Framework.Actors
 
 
         /// <summary>
-        /// Get new RActors from Memory.
+        /// Get new RActors from Memory; update ones we already know about.
         /// * Some RActors like client effects and environment do not have an associated acd.
         /// </summary>
         private void UpdateRActors()
