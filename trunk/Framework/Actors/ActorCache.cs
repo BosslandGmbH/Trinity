@@ -345,7 +345,7 @@ namespace Trinity.Framework.Actors
 
         private void Reset()
         {
-            Logger.Log("Resetting ActorCache");
+            Logger.LogDebug("Resetting ActorCache");
             _commonDataContainer = null;
             _rActorContainer = null;
             _annToAcdIndex.Clear();

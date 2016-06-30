@@ -323,18 +323,13 @@ namespace Trinity.Framework.Objects.Memory
             BaseSeralizationInfo = info;
         }
 
-        public static T Create<T>(IntPtr ptr) where T : new()
+        public static T Create<T>(IntPtr ptr) where T : MemoryWrapper, new()
         {
             if (ptr == IntPtr.Zero)
                 return default(T);
 
             var item = new T();
-            var memoryWrapper = item as MemoryWrapper;
-            if (memoryWrapper == null)
-            {
-                return default(T);
-            }
-            memoryWrapper.Update(ptr);
+            item.Update(ptr);
             return item;
         }
     }

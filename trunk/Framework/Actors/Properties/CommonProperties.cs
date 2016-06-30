@@ -115,127 +115,6 @@ namespace Trinity.Framework.Actors.Properties
                 }
             }
         }
-
-        //public static void Load(TrinityActor target, DiaObject diaObject)
-        //{
-        //    if (diaObject == null || !diaObject.IsValid)
-        //        return;
-
-        //    var AcdId = diaObject.AcdId;
-        //    var actorType = diaObject.ActorType;
-        //    var actorSno = diaObject.ActorSnoId;
-        //    var internalName = NameNumberTrimRegex.Replace(diaObject.Name, "");
-
-        //    target.ActorType = actorType;
-        //    target.AcdId = AcdId;
-        //    target.ActorSnoId = actorSno;
-        //    target.InternalName = internalName;
-
-        //    if (AcdId == -1 && actorType != ActorType.ClientEffect)
-        //        return;
-
-        //    target.IsExcludedId = DataDictionary.ExcludedActorIds.Contains(actorSno) || DataDictionary.BlackListIds.Contains(actorSno);
-        //    if (target.IsExcludedId)
-        //        return;
-
-        //    target.IsExcludedType = DataDictionary.ExcludedActorTypes.Contains(actorType);
-        //    if (target.IsExcludedType)
-        //        return;
-
-        //    var rActorGuid = diaObject.RActorId;
-        //    target.RActorId = rActorGuid;
-        //    target.InternalNameLowerCase = internalName.ToLower();
-
-        //    if (actorType == ActorType.ClientEffect)
-        //    {
-        //        target.IsAllowedClientEffect = DataDictionary.AllowedClientEffects.Contains(actorSno);
-        //        if (!target.IsAllowedClientEffect)
-        //            return;
-        //    }
-
-        //    target.GizmoType = diaObject.ActorInfo.GizmoType;
-        //    target.IsObstacle = DataDictionary.NavigationObstacleIds.Contains(actorSno) || DataDictionary.PathFindingObstacles.ContainsKey(actorSno);
-        //    target.WorldSnoId = TrinityPlugin.Player.WorldSnoId;
-        //    target.Radius = diaObject.CollisionSphere.Radius;
-
-        //    var axialRadius = diaObject.ActorInfo.AxialCylinder.Ax1;
-        //    target.AxialRadius = axialRadius;
-        //    target.CollisionRadius = axialRadius*0.6f;
-
-        //    var position = diaObject.Position;
-        //    target.Position = position;
-
-        //    var commonData = target.CommonData;
-        //    if (commonData == null || !commonData.IsValid || commonData.IsDisposed)
-        //        return;
-
-        //    var type = GetObjectType(
-        //        target.ActorType,
-        //        target.ActorSnoId,
-        //        target.GizmoType,
-        //        target.InternalName
-        //        );
-
-        //    target.Type = type;
-
-        //    target.ObjectHash = HashGenerator.GenerateObjecthash(
-        //        target.ActorSnoId,
-        //        target.Position,
-        //        target.InternalName,
-        //        target.Type
-        //        );
-
-        //    target.GameBalanceID = commonData.GameBalanceId;
-        //    target.GameBalanceType = commonData.GameBalanceType;
-        //    target.IsMe = rActorGuid == TrinityPlugin.Player.RActorId;
-        //    target.IsUnit = type == TrinityObjectType.Unit || actorType == ActorType.Monster || actorType == ActorType.Player;
-        //    target.IsItem = type == TrinityObjectType.Item || actorType == ActorType.Item;
-        //    target.IsPlayer = type == TrinityObjectType.Player || actorType == ActorType.Player;
-        //    target.IsGizmo = actorType == ActorType.Gizmo;
-        //    target.IsMonster = actorType == ActorType.Monster;
-
-        //    target.Distance = TrinityPlugin.Player.Position.Distance(position);
-        //    if (target.Distance > 100f)
-        //        return;
-
-        //    target.LastSeenTime = DateTime.UtcNow;
-        //    target.AnnId = commonData.AnnId;
-
-        //    var fagId = commonData.FastAttribGroupId;
-        //    target.FastAttributeGroupId = fagId;
-
-        //    var attributes = new ActorAttributes(fagId);
-        //    target.ActorAttributes = attributes;
-
-        //    var animation = commonData.CurrentAnimation;
-        //    target.Animation = animation;
-        //    target.AnimationNameLowerCase = DataDictionary.GetAnimationNameLowerCase(animation);
-        //    target.AnimationState = commonData.AnimationState;
-
-        //    if (target.ActorAttributes != null)
-        //    {
-        //        target.IsBountyObjective = attributes.IsBountyObjective;
-        //        target.IsMinimapActive = attributes.IsMinimapActive;
-        //    }
-
-        //    var inLineOfSight = Core.Avoidance.Grid.CanRayCast(TrinityPlugin.Player.Position, position);
-        //    target.IsInLineOfSight = inLineOfSight;
-        //    if (!target.HasBeenInLoS && inLineOfSight)
-        //        target.HasBeenInLoS = true;
-
-        //    if (target.IsInLineOfSight)
-        //    {
-        //        var isWalkable = Core.Avoidance.Grid.CanRayWalk(TrinityPlugin.Player.Position, position);
-        //        target.IsWalkable = isWalkable;
-        //        if (!target.HasBeenWalkable && isWalkable)
-        //            target.HasBeenWalkable = true;
-        //    }
-        //    else
-        //    {
-        //        target.IsWalkable = false;
-        //    }
-        //}
-
         public static TrinityObjectType GetObjectType(ActorType actorType, int actorSno, GizmoType gizmoType, string internalName)
         {
             if (DataDictionary.ObjectTypeOverrides.ContainsKey(actorSno))
@@ -354,7 +233,7 @@ namespace Trinity.Framework.Actors.Properties
                 // * Unit, we need to pick an ability to use and get within range
                 case TrinityObjectType.Unit:
                     {
-                        if (actor.IsHidden)
+                        if (actor.IsHidden || actor.IsQuestMonster)
                         {
                             result = actor.CollisionRadius;
                         }

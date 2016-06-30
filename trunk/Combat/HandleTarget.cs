@@ -472,8 +472,6 @@ namespace Trinity
                              CurrentTarget.Type == TrinityObjectType.Destructible) &&
                              !ZetaDia.Me.Movement.IsMoving && DateTime.UtcNow.Subtract(PlayerMover.TimeLastUsedPlayerMover).TotalMilliseconds < 250);
 
-                        bool npcInRange = CurrentTarget.IsQuestGiver && CurrentTarget.RadiusDistance <= 3f;
-
                         bool noRangeRequired = TargetRangeRequired <= 1f;
                         switch (CurrentTarget.Type)
                         {
@@ -497,9 +495,9 @@ namespace Trinity
                         }
 
                         // Interact/use power on target if already in range
-                        if (!CurrentTarget.IsSafeSpot && (noRangeRequired || (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetIsInLoS) || stuckOnTarget || npcInRange))
+                        if (!CurrentTarget.IsSafeSpot && (noRangeRequired || (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetIsInLoS) || stuckOnTarget))
                         {
-                            Logger.LogDebug(LogCategory.Behavior, "Object in Range: noRangeRequired={0} Target In Range={1} stuckOnTarget={2} npcInRange={3} power={4} target={5}", noRangeRequired, (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetIsInLoS), stuckOnTarget, npcInRange, CombatBase.CurrentPower.SNOPower, CurrentTarget);
+                            Logger.LogDebug(LogCategory.Behavior, "Object in Range: noRangeRequired={0} Target In Range={1} stuckOnTarget={2} npcInRange={3} power={4} target={5}", noRangeRequired, (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetIsInLoS), stuckOnTarget, string.Empty, CombatBase.CurrentPower.SNOPower, CurrentTarget);
 
                             Player.CurrentAction = PlayerAction.Moving;
 
@@ -1590,6 +1588,7 @@ namespace Trinity
 
         private static void HandleUnitInRange()
         {
+            
             using (new PerformanceLogger("HandleTarget.HandleUnitInRange"))
             {
                 bool usePowerResult;
@@ -1609,11 +1608,18 @@ namespace Trinity
                     Logger.LogVerbose(LogCategory.Targetting, "Target is Dead ({0})", CurrentTarget.InternalName);
                     return;
                 }
-
-                if (CurrentTarget.IsQuestGiver && CurrentTarget.RadiusDistance <= 0)
+                
+                if (CurrentTarget.IsQuestGiver)
                 {
-                    Logger.LogVerbose(LogCategory.Targetting, $"Interacting with quest giver {CurrentTarget}");
-                    CurrentTarget.Interact();
+                    if (CurrentTarget.RadiusDistance > 0)
+                    {
+                        PlayerMover.MoveTowards(CurrentTarget.Position);
+                    }
+                    else
+                    {
+                        Logger.LogVerbose(LogCategory.Targetting, $"Interacting with quest giver {CurrentTarget}");
+                        CurrentTarget.Interact();
+                    }
                     return;
                 }
 

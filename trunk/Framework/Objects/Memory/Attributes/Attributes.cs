@@ -20,7 +20,10 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         public Map<AttributeItem> PtrMap;
         public AttributeGroup Group;
         private Map<AttributeItem> Map;
-
+        private static uint AttributeHasher(int key)
+        {
+            return unchecked((uint)(key ^ (key >> 12)));
+        }
         public bool IsValid => Group != null && Group.IsValid && Group.Id != 0 && Map != null && Map.IsValid && Map.Count != 0;
 
         public Attributes() { }
@@ -187,6 +190,17 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
             AttributeItem foundAttribute;
             if (!Items.TryGetValue(key.Value, out foundAttribute))
+                return default(T);
+
+            return foundAttribute.GetValue<T>();
+        }
+
+        internal T GetAttributeDirectlyFromTable<T>(ActorAttributeType attr, int modifier = -1)
+        {
+            var key = new AttributeKey((int)attr, modifier);
+
+            AttributeItem foundAttribute;
+            if (!Map.TryGetItemByKey(key.Value, out foundAttribute, AttributeHasher))
                 return default(T);
 
             return foundAttribute.GetValue<T>();

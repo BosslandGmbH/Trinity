@@ -390,7 +390,7 @@ namespace Trinity.Framework.Avoidance
             if (Settings.KiteMode == KiteMode.Never)
                 return;
 
-            if (actor.ActorType != ActorType.Monster)
+            if (actor.ActorType != ActorType.Monster || actor.IsQuestMonster)
                 return;
 
             var kiteFromBoss = Settings.KiteMode == KiteMode.Elites && actor.IsBoss;

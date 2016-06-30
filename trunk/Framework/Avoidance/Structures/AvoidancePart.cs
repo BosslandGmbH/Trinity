@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Runtime.Serialization;
+using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -68,5 +70,8 @@ namespace Trinity.Framework.Avoidance.Structures
         public SNOPower Power { get; set; }
         public SNOAnim Animation { get; set; }
         public float AngleDegrees { get; set; }
+
+        public Func<TrinityActor, bool> Filter { get; set; }
+
     }
 }

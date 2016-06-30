@@ -28,6 +28,8 @@ namespace Trinity.Framework.Helpers
         public void Stop()
         {
             _stopwatch.Stop();
+            _updateCount++;
+            _totalTimeMs += _stopwatch.Elapsed.TotalMilliseconds;
 
             var currentTime = DateTime.UtcNow;
             var currentSecond = currentTime.Second;
@@ -37,16 +39,12 @@ namespace Trinity.Framework.Helpers
                 _currentSecond = currentSecond;
                 OnSecondChanged();
                 Reset();
-                return;
-            }
-      
-            _updateCount++;
-            _totalTimeMs += _stopwatch.Elapsed.TotalMilliseconds;          
+            }            
         }
 
         private void OnSecondChanged()
         {
-            if (_updateCount == 0 || Math.Abs(_totalTimeMs) < double.Epsilon) return;
+            if (Math.Abs(_totalTimeMs) < double.Epsilon) return;
 
             UpdateCount = _updateCount;
             TotalTimeMilliseconds = _totalTimeMs;

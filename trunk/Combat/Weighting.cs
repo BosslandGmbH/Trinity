@@ -229,13 +229,14 @@ namespace Trinity
                             {
                                 cacheObject.Weight = MaxWeight;
                                 cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Goblin Kamakazi Run ";
+                                bestTarget = GetNewBestTarget(cacheObject, bestTarget);
                                 break;
                             }
                             continue;
                         }
 
-                        var item = cacheObject as TrinityItem;                        
-                        
+                        var item = cacheObject as TrinityItem;
+
                         //if (!Settings.Advanced.BetaPlayground && Core.Avoidance.InCriticalAvoidance(cacheObject.Position) || Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
                         //{
                         //    cacheObject.Weight = 0;
@@ -335,7 +336,11 @@ namespace Trinity
                                         break;
                                     }
 
-                                    if (Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
+                                    // Note, a check here to ignore monsters in critical avoidance (molten core/arcane) was causing elites to be skipped.
+                                    // what needs to happen is the bot doesnt MOVE into the critical area but can still attack the monsters
+                                    // Movement spells that might cause the bot to teleport ontop of a molten core the moment it becomes targetted
+                                    // should have their own checks at power selection to make sure that doesnt happen.
+                                    if (Core.Avoidance.InCriticalAvoidance(cacheObject.Position) && Core.Avoidance.InCriticalAvoidance(Player.Position))
                                     {
                                         cacheObject.WeightInfo +=
                                             string.Format("Ignoring {0} - in Critical Avoidance.", cacheObject.InternalName);
@@ -707,10 +712,10 @@ namespace Trinity
                             #endregion
 
                             #region Item
-                            
 
+                            case TrinityObjectType.BloodShard:
                             case TrinityObjectType.Item:
-                            {
+                                {
 
                                     if (item.TrinityItemType == TrinityItemType.HoradricRelic && Player.BloodShards >= Player.MaxBloodShards)
                                     {
@@ -758,7 +763,7 @@ namespace Trinity
                                     }
 
                                     // Don't pickup items if we're doing a TownRun
-                                    if (!TrinityItemManager.CachedIsValidTwoSlotBackpackLocation)
+                                    if (!TrinityItemManager.CachedIsValidTwoSlotBackpackLocation && !item.IsPickupNoClick)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for TownRun";
                                         break;
@@ -1498,7 +1503,7 @@ namespace Trinity
 
             private static void SetTarget(TrinityActor bestTarget)
             {
-// Set Record History
+                // Set Record History
                 if (bestTarget?.InternalName != null && bestTarget.ActorSnoId > 0 && bestTarget.Weight > 0)
                 {
                     //TargetUtil.ClearCurrentTarget("Clearing for Weight");
@@ -1592,7 +1597,7 @@ namespace Trinity
                         GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(60), $"Targetted too many times ({info.TargetedTimes})");
                         info.TargetedTimes = 0;
                         info.BlacklistedTimes++;
-                    }                    
+                    }
                     else if (timeAsCurrentTarget > 120 && !bestTarget.IsElite && !isUnusedDoor && info.TargetedTimes > 25)
                     {
                         GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TotalTimeAsCurrentTarget.TotalSeconds}s))");

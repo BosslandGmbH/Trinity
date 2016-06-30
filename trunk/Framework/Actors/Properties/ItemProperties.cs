@@ -13,63 +13,6 @@ namespace Trinity.Framework.Actors.Properties
 {
     public class ItemProperties
     {
-        //public static void UpdateItemProperties(TrinityActor target, DiaItem diaItem)
-        //{
-        //    // properties that were already updated by common properties
-        //    var actorSno = target.ActorSnoId;
-        //    var type = target.Type;
-        //    var annId = target.AnnId;
-        //    var rActorGuid = target.RActorId;
-        //    var attributes = target.ActorAttributes;
-        //    var internalName = target.InternalName;
-        //    var internalNameLowerCase = target.InternalNameLowerCase;
-
-        //    if (diaItem == null || !diaItem.IsValid || attributes == null)
-        //        return;
-
-        //    var acdItem = diaItem.CommonData;
-        //    if (acdItem == null || !acdItem.IsValid || acdItem.IsDisposed)
-        //        return;
-
-        //    var dbItemType = acdItem.ItemType;
-        //    target.ItemType = dbItemType;
-
-        //    var dbItemBaseType = acdItem.DBItemBaseType;
-        //    target.DBItemBaseType = dbItemBaseType;
-
-        //    var followerType = acdItem.FollowerSpecialType;
-        //    target.FollowerType = followerType;
-
-        //    var itemType = TrinityItemManager.DetermineItemType(target.InternalName, dbItemType, followerType);
-        //    target.ItemType = itemType;
-
-        //    var trinityItemBaseType = TypeConversions.GetTrinityItemBaseType(itemType);
-        //    target.BaseType = trinityItemBaseType;
-
-        //    target.IsEquipment = TypeConversions.GetIsEquipment(trinityItemBaseType);
-        //    target.IsTwoSlotItem = TypeConversions.GetIsTwoSlot(dbItemBaseType, dbItemType);
-
-        //    var itemLevel = trinityItemBaseType == TrinityItemBaseType.Gem ? acdItem.Level : (int)acdItem.GemQuality;
-        //    target.ItemLevel = itemLevel;
-
-        //    var itemQuality = target.ActorAttributes.GetCachedAttribute<ItemQuality>(ActorAttributeType.ItemQualityLevel);
-        //    target.ItemQualityLevel = itemQuality;
-
-        //    target.IsPickupNoClick = DataDictionary.NoPickupClickItemTypes.Contains(itemType) || DataDictionary.NoPickupClickTypes.Contains(target.Type);
-        //    target.IsMyDroppedItem = DropItems.DroppedItemAnnIds.Contains(target.AnnId);
-
-        //    target.ObjectHash = HashGenerator.GenerateItemHash(
-        //        target.Position,
-        //        target.ActorSnoId,
-        //        target.InternalName,
-        //        target.WorldSnoId,
-        //        itemQuality,
-        //        itemLevel);
-
-        //    if (target.Type == TrinityObjectType.Gold)
-        //        target.GoldAmount = acdItem.Gold;
-        //}
-
         public static void Create(TrinityItem actor)
         {
             if (actor.ActorType != ActorType.Item)
@@ -81,45 +24,8 @@ namespace Trinity.Framework.Actors.Properties
             var commonData = actor.CommonData;
             var attributes = actor.Attributes;
 
-            //var dbItemType = commonData.ItemType;
-            //actor.ItemType = dbItemType;
-
-            //var dbItemBaseType = commonData.DBItemBaseType;
-            //actor.DBItemBaseType = dbItemBaseType;
-
-            //var followerType = commonData.FollowerSpecialType;
-            //actor.FollowerType = followerType;
-
-            //var itemType = TrinityItemManager.DetermineItemType(actor.InternalName, dbItemType, followerType);
-            //actor.ItemType = itemType;
-
-            //var trinityItemBaseType = TypeConversions.GetTrinityItemBaseType(itemType);
-            //actor.BaseType = trinityItemBaseType;
-
-            //actor.IsEquipment = TypeConversions.GetIsEquipment(trinityItemBaseType);
-            //actor.IsTwoSlotItem = TypeConversions.GetIsTwoSlot(dbItemBaseType, dbItemType);
-
-            //var itemLevel = trinityItemBaseType == TrinityItemBaseType.Gem ? commonData.Level : (int)commonData.GemQuality;
-            //actor.ItemLevel = itemLevel;
-
-            //var itemQuality = target.ActorAttributes.GetCachedAttribute<ItemQuality>(ActorAttributeType.ItemQualityLevel);
-            //actor.ItemQualityLevel = itemQuality;
-
-            //actor.IsPickupNoClick = DataDictionary.NoPickupClickItemTypes.Contains(itemType) || DataDictionary.NoPickupClickTypes.Contains(target.Type);
-            //actor.IsMyDroppedItem = DropItems.DroppedItemAnnIds.Contains(target.AnnId);
-
-            //actor.ObjectHash = HashGenerator.GenerateItemHash(
-            //    target.Position,
-            //    target.ActorSnoId,
-            //    target.InternalName,
-            //    target.WorldSnoId,
-            //    itemQuality,
-            //    itemLevel);
-
             actor.InventoryColumn = commonData.InventoryColumn;
             actor.InventoryRow = commonData.InventoryRow;
-            //actor.FastAttributeGroupId = acd.FastAttributeGroupId;
-            //Attributes = new ItemAttributes(FastAttributeGroupId);
             actor.IsUnidentified = attributes.IsUnidentified;
             actor.IsAncient = attributes.IsAncient;
             actor.ItemQualityLevel = attributes.ItemQualityLevel;

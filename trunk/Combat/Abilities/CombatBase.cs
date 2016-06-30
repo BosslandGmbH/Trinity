@@ -400,6 +400,26 @@ namespace Trinity.Combat.Abilities
             }
         }
 
+        public Leash CurrentLeash = new Leash();
+
+        public class Leash
+        {
+            public Leash()
+            {
+                
+            }
+
+            public Leash(Vector3 position, DateTime expireTime)
+            {
+                Position = position;
+                ExpireTime = expireTime;
+            }
+
+            public Vector3 Position { get; set; }
+            public DateTime ExpireTime { get; set; } = DateTime.MinValue;
+            public bool IsActive => DateTime.UtcNow > ExpireTime;
+        }
+
         public static TrinityPower CurrentPower
         {
             get { return _currentPower; }

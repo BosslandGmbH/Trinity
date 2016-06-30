@@ -219,7 +219,7 @@ namespace Trinity.Framework.Actors.ActorTypes
                     return false;
             }
         }
-
+        
         public DiaObject ToDiaObject() => RActor.IsValid ? RActor.BaseAddress.UnsafeCreate<DiaObject>() : null;
 
         public DiaObject ToDiaUnit() => RActor.IsValid ? RActor.BaseAddress.UnsafeCreate<DiaUnit>() : null;
