@@ -39,6 +39,7 @@ namespace Trinity.Config
         private bool _useExperimentalAvoidance;
         private bool _useExperimentalTownRun;
         private bool _betaPlayground;
+        private bool _stopOnGoblins;
 
         #endregion Fields
 
@@ -620,6 +621,24 @@ namespace Trinity.Config
                 }
             }
         }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool StopOnGoblins
+        {
+            get
+            {
+                return _stopOnGoblins;
+            }
+            set
+            {
+                if (_stopOnGoblins != value)
+                {
+                    _stopOnGoblins = value;
+                    OnPropertyChanged("StopOnGoblins");
+                }
+            }
+        }               
 
         #endregion Properties
 

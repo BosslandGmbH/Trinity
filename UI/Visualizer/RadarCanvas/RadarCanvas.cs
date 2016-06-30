@@ -626,9 +626,9 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                         DrawRangeGuide(dc, CanvasData);
                     }
 
-
                     DrawTrinityGrid(dc, CanvasData);
 
+                    DrawNotInCacheObjects(dc, CanvasData);
 
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.CurrentPath))
                     {
@@ -679,7 +679,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                     //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache))
                     //{
-                        DrawNotInCacheObjects(dc, CanvasData);
+
                     //}
 
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.CombatRadius))

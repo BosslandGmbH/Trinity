@@ -77,6 +77,8 @@
                         <CheckBox IsChecked="{Binding Advanced.LazyRaiderClickToPause}" Content="Lazy Raider Click to Pause"/>
                         <CheckBox IsChecked="{Binding Advanced.DisableAllMovement}" Content="Disable All Movement"/>
                         <CheckBox IsChecked="{Binding Advanced.AllowDuplicateMessages}" Content="Allow Duplicate Messages"/>
+                        <CheckBox IsChecked="{Binding Advanced.StopOnGoblins}" Content="Stop When Goblins Found"/>
+
                         <!--<CheckBox IsChecked="{Binding Advanced.UseTrinityDeathHandler}" Content="Use Trinity Death Handler"/>-->
                         <!--<CheckBox IsChecked="{Binding Advanced.UseExperimentalTownRun}" Content="Use Experimental Town Run"/>-->
                         <!--<CheckBox IsChecked="{Binding Advanced.UseExperimentalAvoidance}" Content="Use Experimental Avoidance"/>-->

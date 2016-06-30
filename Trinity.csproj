@@ -152,6 +152,9 @@
     <Compile Include="Framework\Helpers\Randomizer.cs" />
     <Compile Include="Framework\Helpers\UpdateStats.cs" />
     <Compile Include="Framework\Actors\ActorCache.cs" />
+    <Compile Include="Framework\ModuleManager.cs" />
+    <Compile Include="Framework\Modules\GameStopper.cs" />
+    <Compile Include="Framework\Modules\MarkersCache.cs" />
     <Compile Include="Framework\Modules\StatusBar.cs" />
     <Compile Include="Framework\Objects\Enums\PlayerAction.cs" />
     <Compile Include="Framework\Objects\Enums\ModuleEventType.cs" />
@@ -455,7 +458,7 @@
     <Compile Include="Helpers\InterfaceLoader.cs" />
     <Compile Include="Helpers\Rotator.cs" />
     <Compile Include="Helpers\TypeMapper.cs" />
-    <Compile Include="Framework\Module.cs" />
+    <Compile Include="Framework\Objects\Module.cs" />
     <Compile Include="Objects\BaseObject.cs" />
     <Compile Include="Coroutines\Town\BuyItemsFromVendor.cs" />
     <Compile Include="Coroutines\Town\ConvertMaterials.cs" />

@@ -13,8 +13,6 @@ using AttributeKey = Trinity.Framework.Objects.Memory.Attributes.AttributeKey;
 
 namespace Trinity.Framework.Objects.Memory.Items
 {
-
-
     public class AttributeItem : MemoryWrapper, ITableItem
     {
         public AttributeDescripter Descripter = new AttributeDescripter();

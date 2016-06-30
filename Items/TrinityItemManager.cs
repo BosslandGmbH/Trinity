@@ -2039,7 +2039,7 @@ namespace Trinity.Items
                     case ItemBaseType.Misc:
                         break;
                     default:
-                        Helpers.Notifications.LogGoodItems(item, item.TrinityItemBaseType, item.TrinityItemType, 0);
+                        Helpers.Notifications.LogStashedItems(item, item.TrinityItemBaseType, item.TrinityItemType, 0);
                         //ItemStashSellAppender.Instance.AppendItem(CachedACDItem.GetTrinityItem(item.ToAcdItem()), "Stashed");
                         break;
                 }

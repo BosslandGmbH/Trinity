@@ -53,6 +53,27 @@ namespace Trinity.Framework.Avoidance
 
         private static void CreateData()
         {
+
+            AvoidanceData.Add(new AvoidanceData
+            {
+                Name = "Disease Cloud",
+                IsEnabledByDefault = false,
+                Element = Element.Poison,
+                Handler = new CircularAvoidanceHandler(),
+                Parts = new List<AvoidancePart>
+                {
+                    // Generic Proxy is used for many different things but it's attributes may contain powers that identify it
+                    new AvoidancePart
+                    {
+                        Name = "Disease Cloud Effect",
+                        Filter = o => o.Attributes.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.FastMummy_Disease_Cloud),
+                        ActorSnoId = (int)SNOActor.Generic_Proxy,
+                        Type = PartType.Main,
+                        Radius = 12f,
+                    },
+                }
+            });
+
             //ClientEffect Name: ZK_tornado_model-468962 ActorSnoId: 186055, Distance: 22.96034
 
             AvoidanceData.Add(new AvoidanceData
@@ -1228,7 +1249,7 @@ namespace Trinity.Framework.Avoidance
                 return false;
 
             var part = GetAvoidancePart(actor.ActorSnoId);
-            if (part != null)
+            if (part != null && (part.Filter == null || part.Filter(actor)))
             {            
                 data = part.Parent;
                 return true;                

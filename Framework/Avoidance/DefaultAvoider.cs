@@ -235,7 +235,7 @@ namespace Trinity.Framework.Avoidance
 
             if (!CombatBase.IsInCombat)
                 return false;
-            
+
             if (CombatBase.IsDoingGoblinKamakazi)
             {
                 Logger.Log(LogCategory.Avoidance, "Not Kiting because goblin kamakazi");

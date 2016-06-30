@@ -43,7 +43,7 @@ namespace Trinity.Helpers
         /// <summary>
         ///     Log the nice items we found and stashed
         /// </summary>
-        public static void LogGoodItems(TrinityItem item, TrinityItemBaseType itemBaseType, TrinityItemType itemType, double itemValue)
+        public static void LogStashedItems(TrinityItem item, TrinityItemBaseType itemBaseType, TrinityItemType itemType, double itemValue)
         {
             FileStream logStream = null;
             try
@@ -65,11 +65,9 @@ namespace Trinity.Helpers
 
                     if (item.ItemQualityLevel >= ItemQuality.Legendary)
                     {
-                        if (!TrinityPlugin.Settings.Notification.LegendaryScoring)
-                            shouldSendNotifications = true;
-                        else if (TrinityPlugin.Settings.Notification.LegendaryScoring && ItemValuation.CheckScoreForNotification(itemBaseType, itemValue))
-                            shouldSendNotifications = true;
-                        if (shouldSendNotifications)
+
+                        shouldSendNotifications = true;
+
                             NotificationManager.AddNotificationToQueue(item.Name + " [" + itemType +
                                                                        "] (Score=" + itemValue + ". " + item.Attributes.Summary() + ")",
                                 ZetaDia.Service.Hero.Name + " new legendary!", ProwlNotificationPriority.Emergency);

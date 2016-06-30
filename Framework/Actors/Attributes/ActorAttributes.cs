@@ -77,6 +77,9 @@ namespace Trinity.Framework.Actors.Attributes
         public PetType PetType => GetAttributeOrCustomDefault<PetType>(ActorAttributeType.PetType, () => PetType.None);
 
         public bool IsGizmoDisabledByScript => GetAttribute<bool>(ActorAttributeType.GizmoDisabledByScript);
+
+        public bool IsDeletedOnServer => GetAttributeDirectlyFromTable<bool>(ActorAttributeType.DeletedOnServer);
+
     }
 }
 

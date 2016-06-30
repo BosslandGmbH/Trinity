@@ -11,13 +11,13 @@ namespace Trinity.Framework.Objects.Memory.Misc
 
         public IntPtr BaseAddress;
 
-        public Ptr<TCast> Cast<TCast>() where TCast : new()
+        public Ptr<TCast> Cast<TCast>() where TCast : MemoryWrapper, new()
         {
             return new Ptr<TCast>(BaseAddress);
         }
     }
 
-    public class Ptr<T> : Ptr where T : new()
+    public class Ptr<T> : Ptr where T : MemoryWrapper, new()
     {
         public Ptr(IntPtr ptr) : base(ptr) { }
 

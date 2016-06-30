@@ -5,6 +5,12 @@ using Zeta.Game;
 
 namespace Trinity.Framework.Objects.Memory.Containers
 {
+    public class TableItem : MemoryWrapper, ITableItem
+    {
+        public IntPtr Next => ReadOffset<IntPtr>(0x00);
+        public int ModKey => ReadOffset<int>(0x04);
+    }
+
     public interface ITableItem
     {
         int ModKey { get; }
@@ -16,7 +22,7 @@ namespace Trinity.Framework.Objects.Memory.Containers
 
         public int Size => ReadOffset<int>(0x08);
 
-        public IEnumerable<IntPtr> RowPtrs => ZetaDia.Memory.ReadArray<IntPtr>(DataPtr, Size);
+        public IntPtr[] RowPtrs => ZetaDia.Memory.ReadArray<IntPtr>(DataPtr, Size);
 
         public Dictionary<int, T> Items = new Dictionary<int, T>();
 
@@ -35,6 +41,18 @@ namespace Trinity.Framework.Objects.Memory.Containers
             {
                 var item = Create<T>(ptr);
                 Items.Add(item.ModKey, item);
+            }
+        }
+
+        public IntPtr this[int key]
+        {
+            get
+            {
+                return RowPtrs[key];
+            }
+            set
+            {
+                RowPtrs[key] = value;
             }
         }
     }

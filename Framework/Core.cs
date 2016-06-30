@@ -36,6 +36,8 @@ namespace Trinity.Framework
         public static PlayerHistory PlayerHistory { get; } = new PlayerHistory();
         public static Paragon Paragon { get; } = new Paragon();
         public static StatusBar StatusBar { get; } = new StatusBar();
+        public static GameStopper GameStopper { get; } = new GameStopper();
+        public static MarkersCache Markers { get; } = new MarkersCache();
 
         // Misc
         public static GridHelper Grids { get; } = new GridHelper();
@@ -50,13 +52,13 @@ namespace Trinity.Framework
                 IsEnabled = true;                
                 Pulsator.OnPulse += Pulse;
                 GameEvents.OnWorldChanged += OnWorldChanged;
-                Module.EnableAll();
+                ModuleManager.EnableAll();
             }
         }
 
         private static void OnWorldChanged(object sender, EventArgs eventArgs)
         {
-            Module.FireEventAll(ModuleEventType.WorldChanged);
+            ModuleManager.FireEventAll(ModuleEventType.WorldChanged);
         }
 
         public static void Disable()
@@ -64,7 +66,7 @@ namespace Trinity.Framework
             IsEnabled = false;
             Pulsator.OnPulse -= Pulse;
             GameEvents.OnWorldChanged -= OnWorldChanged;
-            Module.DisableAll();
+            ModuleManager.DisableAll();
         }
 
         private static void Pulse(object sender, EventArgs eventArgs)
@@ -74,10 +76,7 @@ namespace Trinity.Framework
 
         public static void Update(bool force = false)
         {
-            if(force)
-                Module.FireEventAll(ModuleEventType.ForcedPulse);
-            else
-                Module.FireEventAll(ModuleEventType.Pulse);
+            ModuleManager.FireEventAll(force ? ModuleEventType.ForcedPulse : ModuleEventType.Pulse);
         }
 
         public static void Init()
