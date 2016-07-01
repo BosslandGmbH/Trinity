@@ -4,48 +4,25 @@ using Trinity.Combat.Abilities;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Bot;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.DbProvider
 {
-    /// <summary>Combat Targeting Provider </summary>
     public class TrinityCombatProvider : ITargetingProvider
     {
-        private static readonly List<DiaObject> targetList = new List<DiaObject>();
+        public List<DiaObject> GetObjectsByWeight() => new List<DiaObject> { ZetaDia.Actors.GetActorById(CurrentTargetRActorId) };
 
-        /// <summary> Gets list of target in range by weight.</summary>
-        /// <returns>Blank list of target, TrinityPlugin don't use this Db process.</returns>
-        public List<DiaObject> GetObjectsByWeight()
-        {
-            var list = new List<DiaObject>();
-            if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.IsValid)
-                list.Add(TrinityPlugin.CurrentTarget.ToDiaObject());
-            return list;
-        }
+        public float CurrentCastRange => CurrentPower?.MinimumRange ?? CombatBase.DefaultWeaponDistance;
 
-        public float CurrentCastRange
-        {
-            get { return CurrentPower != null ? CurrentPower.MinimumRange : CombatBase.DefaultWeaponDistance; }
-        }
+        public TrinityPower CurrentPower => CombatBase.CurrentPower;
 
-        public TrinityPower CurrentPower
-        {
-            get { return CombatBase.CurrentPower; }
-        }
+        public TrinityActor CurrentTarget => CombatBase.CurrentTarget;
 
-        public TrinityActor CurrentTarget
-        {
-            get { return CombatBase.CurrentTarget; }
-        }
+        public int CurrentTargetRActorId => CurrentTarget?.RActorId ?? -1;
 
-        public bool IsAvoiding
-        {
-            get { return CombatBase.IsCurrentlyAvoiding; }
-        }
+        public bool IsAvoiding => CombatBase.IsCurrentlyAvoiding;
 
-        public bool IsKiting
-        {
-            get { return CombatBase.IsCurrentlyKiting; }
-        }
+        public bool IsKiting => CombatBase.IsCurrentlyKiting;
     }
 }

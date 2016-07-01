@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Helpers.Exporter;
 using Trinity.Helpers;
 using Trinity.Objects.Native;
 
@@ -47,6 +48,22 @@ namespace Trinity.Framework.Objects.Memory.Sno
             }
             return dictionary;
         }
+
+        public string WriteToEnumFile()
+        {
+            var options = new ExportOptions
+            {
+                QuoteValue = false
+            };
+
+            var exportData = StringTableEntries.ToDictionary(k => k.Key, v => v.GameBalanceNameNormalHashed.ToString());
+
+            var enumString = Exporter.Enum.Create(exportData, options);    
+                    
+            DebugUtil.WriteLinesToLog($"enum_{Header.SnoId}.txt", enumString, true);
+            return enumString;
+        }
+
     }
 }
 

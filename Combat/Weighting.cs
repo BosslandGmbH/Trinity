@@ -397,10 +397,11 @@ namespace Trinity
 
                                     //Monster is in cache but not within kill range
                                     var killRange = DistanceForObjectType(cacheObject);
+                                    var isQuestNpc = cacheObject.IsNpc && cacheObject.IsQuestGiver;
                                     if (!cacheObject.IsBoss && !cacheObject.IsTreasureGoblin &&
                                         LastTargetRactorGUID != cacheObject.RActorId &&
                                         !cacheObject.IsQuestMonster && !cacheObject.IsBountyObjective &&
-                                        cacheObject.RadiusDistance > killRange)
+                                        cacheObject.RadiusDistance > killRange && !isQuestNpc)
                                     {
                                         cacheObject.WeightInfo += string.Format("Ignoring {0} - out of Kill Range ({1})",
                                             cacheObject.InternalName, killRange);
@@ -1879,6 +1880,9 @@ namespace Trinity
                     range = cacheObject.IsElite
                         ? Settings.Combat.Misc.EliteRange
                         : Settings.Combat.Misc.NonEliteRange;
+
+                    if (cacheObject.IsMinimapActive)
+                        range *= 1.5f;
                 }
 
                 return multipler * ((range - cacheObject.RadiusDistance) / range);

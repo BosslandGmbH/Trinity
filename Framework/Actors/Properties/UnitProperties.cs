@@ -2,6 +2,7 @@
 using System.Linq;
 using Trinity.Cache;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
@@ -53,23 +54,29 @@ namespace Trinity.Framework.Actors.Properties
             actor.HitPointsPct = actor.HitPoints / actor.HitPointsMax;
             actor.HasDotDps = attributes.HasDotDps;
             actor.IsReflectingDamage = actor.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage) && attributes.IsReflecting;
-            actor.IsNpc = attributes.IsNPC;
+
+
+
             actor.NpcIsOperable = attributes.NPCIsOperatable;
             actor.IsUntargetable = attributes.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
             actor.IsInvulnerable = attributes.IsInvulnerable;
             actor.MarkerType = attributes.MarkerType;
-            actor.IsQuestGiver = actor.MarkerType == MarkerType.Exclamation;
+            actor.IsQuestGiver = actor.MarkerType == MarkerType.Exclamation || actor.MarkerType == MarkerType.Asterisk;
             actor.HasBuffVisualEffect = attributes.HasBuffVisualEffect;
             actor.IsQuestMonster = attributes.IsQuestMonster;
             actor.PetType = attributes.PetType;
 
             var teamOverride = attributes.TeamOverride;
             actor.TeamId = teamOverride > 0 ? teamOverride : attributes.TeamId;
+            actor.Team = (TeamType)actor.TeamId;
             actor.IsFriendly = actor.TeamId == 1 || actor.TeamId == 2 || actor.TeamId == 17;
             actor.IsHostile = !actor.IsFriendly;
             actor.IsSameTeam = actor.IsFriendly || actor.TeamId == TrinityPlugin.Player.TeamId || DataDictionary.AllyMonsterTypes.Contains(actor.MonsterType);
             actor.IsHidden = attributes.IsHidden || attributes.IsBurrowed;
             actor.IsSpawningBoss = actor.IsBoss && actor.IsUntargetable;
+
+            // Note 'npcs' are monsters you have to fight, e.g Adria
+            actor.IsNpc = attributes.IsNPC && !actor.IsHostile;
 
             var summonedByAnnId = attributes.SummonedByAnnId;
             actor.SummonedByAnnId = summonedByAnnId;

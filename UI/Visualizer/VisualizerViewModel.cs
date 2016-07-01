@@ -30,7 +30,9 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Grid;
+using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Attributes;
+using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Technicals;
@@ -149,8 +151,7 @@ namespace Trinity.UI.RadarUI
 
                 ScenesStorage.Update();
                 AdvDia.MyPosition = ZetaDia.Me.Position;
-                //CacheData.Update();
-                Core.Update(true);
+                Core.Update();
                 UpdateVisualizer();
                 return false;
             }
@@ -201,18 +202,25 @@ namespace Trinity.UI.RadarUI
                     LastUpdatedNotInCacheObjects = DateTime.UtcNow;
                 }
 
+                //if (!IsMouseOverGrid)
+                //{
+                    switch (SelectedTab)
+                    {
+                        case Tab.Actors:
+                            var allobjects = new List<TrinityActor>(Objects);
+                            allobjects.AddRange(NotInCacheObjects);
+                            AllObjects = new ObservableCollection<TrinityActor>(allobjects);
+                            break;
 
-                if (!IsMouseOverGrid)
-                {
-                    // Used for the Grid
-                    var allobjects = new List<TrinityActor>(Objects);
-                    allobjects.AddRange(NotInCacheObjects);
-                    AllObjects = new ObservableCollection<TrinityActor>(allobjects);
-                }
-                else
-                {
-                    Logger.LogVerbose("Skipping grid update so grid items can be clicked properly");
-                }
+                        case Tab.Markers:
+                            AllMarkers = new ObservableCollection<TrinityMarker>(Core.Markers.CurrentWorldMarkers);
+                            break;
+                    }
+                //}
+                //else
+                //{
+                //    Logger.LogVerbose("Skipping grid update so grid items can be clicked properly");
+                //}
 
                 CurrentTarget = CombatBase.CurrentTarget;                
 
@@ -234,6 +242,12 @@ namespace Trinity.UI.RadarUI
                 OnPropertyChanged(nameof(CurrentTarget));
                 //OnPropertyChanged(nameof(SelectedObject));
             }
+        }
+
+        public ObservableCollection<TrinityMarker> AllMarkers
+        {
+            get { return _allMarkers; }
+            set { SetField(ref _allMarkers, value); }
         }
 
         public ObservableCollection<TrinityActor> AllObjects
@@ -399,6 +413,13 @@ namespace Trinity.UI.RadarUI
             }
         }
 
+        [XmlIgnore]
+        public TrinityMarker SelectedMarker
+        {
+            get { return _selectedMarker; }
+            set { SetField(ref _selectedMarker, value); }
+        }
+
         [Zeta.XmlEngine.XmlElement("WindowWidth")]
         [DefaultValue(400)]
         public int WindowWidth
@@ -521,6 +542,25 @@ namespace Trinity.UI.RadarUI
         {
             get { return _isGridPanelExpanded; }
             set { SetField(ref _isGridPanelExpanded, value); }
+        }
+
+        [IgnoreDataMember]
+        public Tab SelectedTab => (Tab)SelectedTabIndex;
+
+        public int SelectedTabIndex
+        {
+            get { return _selectedTabIndex; }
+            set
+            {
+                SetField(ref _selectedTabIndex, value);
+                OnPropertyChanged(nameof(SelectedTab));
+            }
+        }
+
+        public enum Tab
+        {
+            Actors,
+            Markers
         }
 
         private GridLength _sidePanelWidth = new GridLength(0, GridUnitType.Auto);
@@ -1031,6 +1071,9 @@ namespace Trinity.UI.RadarUI
         private List<TrinityActor> _notInCacheObjects;
         private ObservableCollection<TrinityActor> _allObjects;
         private bool _isMouseOverGrid;
+        private int _selectedTabIndex;
+        private ObservableCollection<TrinityMarker> _allMarkers;
+        private TrinityMarker _selectedMarker;
 
 
         public bool StartThreadAllowed

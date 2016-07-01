@@ -79,7 +79,9 @@ namespace Trinity.Framework.Objects.Memory.Sno
             IndexData indexData;
             if (LookupTable.TryGetValue(groupId, out indexData))
             {
-                return indexData.Index[snoEntryId];
+                short entityId;
+                if (indexData.Index.TryGetValue(snoEntryId, out entityId))
+                    return entityId;
             }
             return 0;
         }

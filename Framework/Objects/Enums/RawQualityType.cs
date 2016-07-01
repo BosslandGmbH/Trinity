@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Trinity.Framework.Objects.Enums
 {
-    public enum Name
+    public enum RawQualityType
     {
         FormatString = 887383520,
         Magic = 132867009,
@@ -20,3 +20,4 @@ namespace Trinity.Framework.Objects.Enums
         AncientSet = 2033380270,
     }
 }
+
