@@ -478,6 +478,11 @@ namespace Trinity.Helpers
             Logger.Log("Finished Dumping Item SNO Reference to {0}", path);
         }
 
+        public static string WriteLinesToLog(string logFileName, string lines, bool deleteFirst = false)
+        {
+            return WriteLinesToLog(logFileName, new List<string> {lines}, deleteFirst);
+        }
+
         /// <summary>
         /// Writes an ActorMeta record to the log file in the format for a Dictionary collection initializer
         /// </summary>

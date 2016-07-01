@@ -44,7 +44,7 @@ namespace Trinity.Framework.Actors.Properties
                 if (attributes.GizmoCharges > 0)
                     return false;
 
-                if (attributes.GizmoState == 1)
+                if (attributes.GizmoState == 1 && !attributes.IsQuestMonster)
                     return true;
 
                 if (attributes.GizmoOperatorACDId > 0)

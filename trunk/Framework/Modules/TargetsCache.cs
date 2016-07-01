@@ -259,8 +259,15 @@ namespace Trinity.Framework.Modules
             return true;
         }
 
+
         private static bool ShouldIgnoreLoS(TrinityActor cacheObject)
         {
+            if (cacheObject.IsMinimapActive)
+                return true;
+
+            if (cacheObject.IsNpc && cacheObject.IsQuestGiver)
+                return true;
+
             switch (cacheObject.Type)
             {
                 case TrinityObjectType.ProgressionGlobe:
@@ -294,6 +301,12 @@ namespace Trinity.Framework.Modules
             if (cacheObject.IsSameTeam && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("SameTeam");
+                return false;
+            }
+
+            if (cacheObject.IsNoDamage)
+            {
+                cacheObject.AddCacheInfo("UnitNoDamage");
                 return false;
             }
 
@@ -403,7 +416,7 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (cacheObject.IsContainer && cacheObject.RadiusDistance > TrinityPlugin.Settings.WorldObject.ContainerOpenRange)
+            if (cacheObject.IsContainer && !cacheObject.IsMinimapActive && cacheObject.RadiusDistance > TrinityPlugin.Settings.WorldObject.ContainerOpenRange)
             {
                 cacheObject.AddCacheInfo("ContainerOpenRange");
                 return false;

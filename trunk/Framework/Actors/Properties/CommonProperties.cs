@@ -78,6 +78,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsGizmo = actor.ActorType == ActorType.Gizmo;
             actor.IsMonster = actor.ActorType == ActorType.Monster;
             actor.IsGroundItem = actor.IsItem && actor.InventorySlot == InventorySlot.None;
+            
 
             actor.RequiredRange = GetRequiredRange(actor);
 
@@ -85,6 +86,7 @@ namespace Trinity.Framework.Actors.Properties
             {
                 actor.IsBountyObjective = actor.Attributes.IsBountyObjective;
                 actor.IsMinimapActive = actor.Attributes.IsMinimapActive;
+                actor.IsNoDamage = actor.Attributes.IsNoDamage;
             }
      
             UpdateLineOfSight(actor);
