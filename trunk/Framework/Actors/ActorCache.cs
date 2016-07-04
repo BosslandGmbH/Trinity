@@ -40,7 +40,9 @@ namespace Trinity.Framework.Actors
 
         protected override void OnPulse() => Update();
 
-        protected override void OnWorldChanged() => Reset();
+        protected override void OnWorldChanged() => Clear();
+
+        protected override void OnGameJoined() => Clear();
 
         public void Update()
         {
@@ -56,7 +58,9 @@ namespace Trinity.Framework.Actors
             if (_rActorContainer == null || !_rActorContainer.IsValid || _rActorContainer.IsDisposed ||
                 _commonDataContainer == null || !_commonDataContainer.IsValid || _commonDataContainer.IsDisposed)
             {
-                Reset();
+                Clear();
+                _rActorContainer = MemoryWrapper.Create<ExpandoContainer<RActor>>(Internals.Addresses.RActorManager);
+                _commonDataContainer = MemoryWrapper.Create<ExpandoContainer<ActorCommonData>>(Internals.Addresses.AcdManager);
             }
         }        
 
@@ -343,7 +347,7 @@ namespace Trinity.Framework.Actors
 
         #endregion
 
-        private void Reset()
+        private void Clear()
         {
             Logger.LogDebug("Resetting ActorCache");
             _commonDataContainer = null;
@@ -355,9 +359,8 @@ namespace Trinity.Framework.Actors
             _commonData.Clear();
             _rActors.Clear();
             Me = null;
-            _rActorContainer = MemoryWrapper.Create<ExpandoContainer<RActor>>(Internals.Addresses.RActorManager);
-            _commonDataContainer = MemoryWrapper.Create<ExpandoContainer<ActorCommonData>>(Internals.Addresses.AcdManager);
-            Update();
+            _rActorContainer = null;
+            _commonDataContainer = null;
         }
 
     }

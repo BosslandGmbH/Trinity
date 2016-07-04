@@ -190,7 +190,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsFacingPlayer => TargetUtil.IsFacing(this, Core.Player.Position, 30f);
         public double CacheTime => Math.Abs(UpdateTime) < double.Epsilon ? CreateTime : UpdateTime;
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;
-
+        public bool NpcHasInteractOptions { get; set; }
 
 
         public void AddCacheInfo(string reason)

@@ -6,5 +6,6 @@ namespace Trinity.Framework
         Pulse,
         ForcedPulse,
         WorldChanged,
+        GameJoined
     }
 }

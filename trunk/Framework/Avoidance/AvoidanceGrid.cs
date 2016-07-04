@@ -67,8 +67,8 @@ namespace Trinity.Framework.Avoidance
         }
 
         public bool IsValidGridWorldPosition(Vector3 position)
-        {            
-            return position.X > 0 && position.Y > 0 && position != Vector3.Zero && position.X < GridBounds && position.Y < GridBounds;
+        {
+            return position.X > 0 && position.Y > 0 && position != Vector3.Zero && position.X < (MaxX * BoxSize) && position.Y < (MaxY * BoxSize);
         }
 
         public override bool CanRayCast(Vector3 @from, Vector3 to)

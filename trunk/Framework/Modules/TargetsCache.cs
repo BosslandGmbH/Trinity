@@ -210,8 +210,14 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
+            if (cacheObject.IsUntargetable)
+            {
+                cacheObject.AddCacheInfo("Untargetable");
+                return false;
+            }
+
             var isQuestGiverOutsideTown = cacheObject.IsQuestGiver && !Core.Player.IsInTown;
-            if (cacheObject.IsNpc && !isQuestGiverOutsideTown)
+            if (cacheObject.IsNpc && !isQuestGiverOutsideTown && !cacheObject.IsBoss)
             {
                 cacheObject.AddCacheInfo("Npc");
                 return false;
@@ -304,7 +310,7 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (cacheObject.IsNoDamage)
+            if (cacheObject.IsNoDamage && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("UnitNoDamage");
                 return false;
@@ -313,6 +319,12 @@ namespace Trinity.Framework.Modules
             if (cacheObject.IsFriendly && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("Friendly");
+                return false;
+            }
+
+            if ((int)cacheObject.MonsterRace == -1)
+            {
+                cacheObject.AddCacheInfo("InvalidRace");
                 return false;
             }
 

@@ -52,13 +52,23 @@ namespace Trinity.Framework
                 IsEnabled = true;                
                 Pulsator.OnPulse += Pulse;
                 GameEvents.OnWorldChanged += OnWorldChanged;
+                GameEvents.OnGameJoined += OnGameJoined;
                 ModuleManager.EnableAll();
             }
+        }
+
+        private static void OnGameJoined(object sender, EventArgs e)
+        {
+            ModuleManager.FireEventAll(ModuleEventType.GameJoined);
         }
 
         private static void OnWorldChanged(object sender, EventArgs eventArgs)
         {
             ModuleManager.FireEventAll(ModuleEventType.WorldChanged);
+        }
+        private static void Pulse(object sender, EventArgs eventArgs)
+        {
+            Update();
         }
 
         public static void Disable()
@@ -66,12 +76,8 @@ namespace Trinity.Framework
             IsEnabled = false;
             Pulsator.OnPulse -= Pulse;
             GameEvents.OnWorldChanged -= OnWorldChanged;
+            GameEvents.OnGameJoined -= OnGameJoined;
             ModuleManager.DisableAll();
-        }
-
-        private static void Pulse(object sender, EventArgs eventArgs)
-        {
-            Update();
         }
 
         public static void Update(bool force = false)

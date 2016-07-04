@@ -276,10 +276,17 @@ namespace Trinity
                         Logger.LogVerbose("CurrentTarget == null");
                     }
 
-                    //if (ClearArea.ShouldMoveToPortalPosition)
-                    //    return RunStatus.Success;
 
-                    _waitedTicks = 0;
+                    if (InteractionWaitUntilTime > DateTime.UtcNow)
+                    {
+                        Logger.Log("Waiting after interaction");
+                        return RunStatus.Running;
+                    }
+
+                        //if (ClearArea.ShouldMoveToPortalPosition)
+                        //    return RunStatus.Success;
+
+                        _waitedTicks = 0;
                     _isWaitingAfterPower = false;
                     _isWaitingBeforePower = false;
 
@@ -303,7 +310,6 @@ namespace Trinity
                                 _isWaitingForPower, _isWaitingBeforePower, CombatBase.CurrentPower, CurrentTarget);
                         }
                     }
-
                     // Prevent running away after progression globes spawn if they're in aoe
                     if (Player.IsInRift && !Core.Avoidance.Avoider.ShouldAvoid)
                     {                       
@@ -498,7 +504,6 @@ namespace Trinity
                         if (!CurrentTarget.IsSafeSpot && (noRangeRequired || (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetIsInLoS) || stuckOnTarget))
                         {
                             Logger.LogDebug(LogCategory.Behavior, "Object in Range: noRangeRequired={0} Target In Range={1} stuckOnTarget={2} npcInRange={3} power={4} target={5}", noRangeRequired, (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetIsInLoS), stuckOnTarget, string.Empty, CombatBase.CurrentPower.SNOPower, CurrentTarget);
-
                             Player.CurrentAction = PlayerAction.Moving;
 
                             HandleObjectInRange();
@@ -1185,9 +1190,11 @@ namespace Trinity
                         }
                     }
 
-                    // Select an ability for destroying a destructible with in advance
-                    if (CurrentTarget.Type == TrinityObjectType.Destructible || CurrentTarget.Type == TrinityObjectType.Barricade)
-                        CombatBase.CurrentPower = AbilitySelector(UseDestructiblePower: true);
+                    if (CombatBase.CurrentPower?.SNOPower == SNOPower.None && (CurrentTarget.Type == TrinityObjectType.Destructible || CurrentTarget.Type == TrinityObjectType.Barricade))
+                    {
+                        Logger.LogDebug("Selecting default destructible power");
+                        CombatBase.CurrentPower = CombatBase.DefaultPower;
+                    }
                     
                     if (CombatBase.CurrentPower == null || CombatBase.CurrentPower.SNOPower == SNOPower.None)
                     {
@@ -1617,6 +1624,7 @@ namespace Trinity
                     }
                     else
                     {
+                        InteractionWaitUntilTime = DateTime.UtcNow.AddMilliseconds(500);
                         Logger.LogVerbose(LogCategory.Targetting, $"Interacting with quest giver {CurrentTarget}");
                         CurrentTarget.Interact();
                     }
@@ -1873,6 +1881,7 @@ namespace Trinity
             }
         }
 
+        public static DateTime InteractionWaitUntilTime { get; set; } = DateTime.MinValue;
 
 
         private static string GetTargetName()
