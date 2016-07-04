@@ -14,7 +14,8 @@ namespace Trinity.Framework.Objects.Enums
         Entrance = 102321,
         Exit = 102320,
         Objective = 81058,
-        Portal = 332286
+        Portal = 332286,
+        Item = 275968,      
     }
 }
 

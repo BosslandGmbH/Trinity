@@ -61,7 +61,8 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsUntargetable = attributes.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
             actor.IsInvulnerable = attributes.IsInvulnerable;
             actor.MarkerType = attributes.MarkerType;
-            actor.IsQuestGiver = actor.MarkerType == MarkerType.Exclamation || actor.MarkerType == MarkerType.Asterisk;
+            actor.NpcHasInteractOptions = attributes.NpcHasInteractOptions;            
+            actor.IsQuestGiver = (actor.MarkerType == MarkerType.Exclamation || actor.MarkerType == MarkerType.Asterisk);
             actor.HasBuffVisualEffect = attributes.HasBuffVisualEffect;
             actor.IsQuestMonster = attributes.IsQuestMonster;
             actor.PetType = attributes.PetType;
@@ -70,13 +71,11 @@ namespace Trinity.Framework.Actors.Properties
             actor.TeamId = teamOverride > 0 ? teamOverride : attributes.TeamId;
             actor.Team = (TeamType)actor.TeamId;
             actor.IsFriendly = actor.TeamId == 1 || actor.TeamId == 2 || actor.TeamId == 17;
-            actor.IsHostile = !actor.IsFriendly;
+            actor.IsHostile = actor.TeamId == 10 || actor.Attributes.LastDamageAnnId == TrinityPlugin.Player.MyDynamicID;  //!actor.IsFriendly;
             actor.IsSameTeam = actor.IsFriendly || actor.TeamId == TrinityPlugin.Player.TeamId || DataDictionary.AllyMonsterTypes.Contains(actor.MonsterType);
             actor.IsHidden = attributes.IsHidden || attributes.IsBurrowed;
             actor.IsSpawningBoss = actor.IsBoss && actor.IsUntargetable;
-
-            // Note 'npcs' are monsters you have to fight, e.g Adria
-            actor.IsNpc = attributes.IsNPC && !actor.IsHostile;
+            actor.IsNpc = attributes.IsNPC;
 
             var summonedByAnnId = attributes.SummonedByAnnId;
             actor.SummonedByAnnId = summonedByAnnId;

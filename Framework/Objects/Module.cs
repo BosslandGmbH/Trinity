@@ -23,6 +23,8 @@ namespace Trinity.Framework
 
         protected virtual void OnWorldChanged() { }
 
+        protected virtual void OnGameJoined() { }
+
         public Module()
         {
             Name = GetType().Name;
@@ -46,6 +48,9 @@ namespace Trinity.Framework
                 case ModuleEventType.WorldChanged:
                     OnWorldChanged();
                     break;
+                case ModuleEventType.GameJoined:
+                    OnGameJoined();
+                    break;
             }
         }
 
@@ -65,4 +70,5 @@ namespace Trinity.Framework
 
     }
 }
+
 

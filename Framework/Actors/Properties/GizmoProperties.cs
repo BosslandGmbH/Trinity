@@ -1,4 +1,5 @@
-﻿using Trinity.Framework.Actors.ActorTypes;
+﻿using System;
+using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Actors.Properties
@@ -27,7 +28,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsInteractableType = DataDictionary.InteractableTypes.Contains(actor.Type);
             actor.IsUntargetable = actor.Attributes.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
             actor.IsInvulnerable = actor.Attributes.IsInvulnerable;
-            actor.IsUsed = GetIsGizmoUsed(actor);
+            actor.IsUsed = GetIsGizmoUsed(actor);            
         }
 
         public static bool GetIsGizmoUsed(TrinityActor actor)
@@ -59,8 +60,13 @@ namespace Trinity.Framework.Actors.Properties
                 if (actor.Type == TrinityObjectType.Barricade && attributes.IsNoDamage)
                     return true;
 
-                if ((actor.Type == TrinityObjectType.Destructible || actor.Type == TrinityObjectType.Barricade) && actor.IsUntargetable || actor.IsInvulnerable)
-                    return true;
+                if (actor.Type == TrinityObjectType.Destructible || actor.Type == TrinityObjectType.Barricade)
+                {
+                    if (actor.IsUntargetable || actor.IsInvulnerable || Math.Abs(actor.HitPointsMax - actor.HitPoints) > 0.0001)
+                    {
+                        return true;
+                    }
+                }
             }
 
             int endAnimation;
