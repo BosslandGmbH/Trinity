@@ -10,6 +10,7 @@ using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Modules;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Movement;
@@ -1259,6 +1260,11 @@ namespace Trinity
 
                             #region Door and Barricade
 
+                            case TrinityObjectType.Gate:
+                                cacheObject.Weight = 0;
+                                cacheObject.WeightInfo += "Ignoring Gate";
+                                break;
+
                             case TrinityObjectType.Barricade:
                             case TrinityObjectType.Door:
                                 {
@@ -1956,11 +1962,14 @@ namespace Trinity
                 if (cacheObject.ActorSnoId == 3349) // Belial, can't be pathed to.
                     return 0;
 
-                if (cacheObject.IsUnit && RunningTime.TotalSeconds > 10 && Core.Grids.Avoidance.IsIntersectedByFlags(Player.Position, cacheObject.Position, AvoidanceFlags.ClosedDoor))
-                    return -MaxWeight;
+                if (cacheObject.IsUnit)
+                {
+                    if (Core.Grids.Avoidance.IsIntersectedByFlags(Player.Position, cacheObject.Position, AvoidanceFlags.ClosedDoor, AvoidanceFlags.ProjectileBlocking))
+                        return -MaxWeight;
+                }
 
                 if (!PlayerMover.IsCompletelyBlocked)
-                    return 0;
+                    return 0;         
 
                 if (BlockingObjects(cacheObject) > 0)
                     return -MaxWeight;

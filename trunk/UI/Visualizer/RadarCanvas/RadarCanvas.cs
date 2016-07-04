@@ -651,6 +651,9 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.RadarDebug))
                     //{
                     DrawClickRays(dc, CanvasData);
+
+                    DrawDeathGates(dc, CanvasData);
+
                     //}
 
                     //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Clusters))
@@ -726,6 +729,18 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     Logger.Log("Exception in RadarUI.OnRender(). {0} {1}", ex.Message, ex.InnerException);
                 }
             }
+        }
+
+        private void DrawDeathGates(DrawingContext dc, CanvasData canvasData)
+        {
+
+            //BitmapImage img = new BitmapImage(new Uri("c:\\demo.jpg"));
+            //dc.DrawImage(img, new Rect(0, 0, img.PixelWidth, img.PixelHeight));
+
+            foreach (var zone in DeathGates.Zones.Where(z => z.PortalScene != null))
+            {
+                dc.DrawLine(RadarResources.SuccessPen, zone.EnterPosition.ToCanvasPoint(), zone.ExitPosition.ToCanvasPoint());
+            }           
         }
 
         private void DrawClickRays(DrawingContext dc, CanvasData canvasData)
@@ -944,6 +959,12 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             {
                 if (VisibilityFlags.HasFlag(RadarVisibilityFlags.BacktrackNodes))
                     DrawNodeArea(dc, canvas, node, RadarResources.WalkedTerrain);
+            }
+
+            if (node.AvoidanceFlags.HasFlag(AvoidanceFlags.ProjectileBlocking))
+            {
+                dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
+                return;
             }
 
             // Draw Layer 2

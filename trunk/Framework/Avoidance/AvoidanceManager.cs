@@ -220,7 +220,8 @@ namespace Trinity.Framework.Avoidance
                         UpdateGizmoFlags(obj);
                         UpdateGlobeFlags(obj);
                         UpdateMonsterFlags(obj, monsterNodes);
-                        UpdateKiteFromFlags(obj, kiteFromNodes);                       
+                        UpdateKiteFromFlags(obj, kiteFromNodes);      
+                        UpdateProjectileBlockers(obj);                 
                     }
 
                     //foreach (var obstacle in CacheData.NavigationObstacles)
@@ -439,6 +440,20 @@ namespace Trinity.Framework.Avoidance
                     node.Weight -= 6;
 
                 node.AddNodeFlags(AvoidanceFlags.Health);
+            }
+        }
+
+        private void UpdateProjectileBlockers(TrinityActor actor)
+        {
+            if (actor.GizmoType != GizmoType.Gate)
+                return;
+
+            if (actor.ActorSnoId == 3048) // a2dun_Zolt_Sand_Wall
+            {
+                var startPoint = MathEx.GetPointAt(actor.Position, 15f, MathEx.WrapAngle((float)(actor.Rotation - Math.PI / 2)));
+                var endPoint = MathEx.GetPointAt(actor.Position, 15f, MathEx.WrapAngle((float)(actor.Rotation + Math.PI / 2)));
+                var nodes = Grid.GetRayLineAsNodes(startPoint, endPoint);
+                Grid.FlagNodes(nodes, AvoidanceFlags.ProjectileBlocking);
             }
         }
 

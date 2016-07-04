@@ -160,6 +160,7 @@
     <Compile Include="Framework\Actors\ActorCache.cs" />
     <Compile Include="Framework\ModuleManager.cs" />
     <Compile Include="Framework\Modules\GameStopper.cs" />
+    <Compile Include="Framework\Modules\WorldCache.cs" />
     <Compile Include="Framework\Modules\MarkersCache.cs" />
     <Compile Include="Framework\Modules\StatusBar.cs" />
     <Compile Include="Framework\Objects\Enums\SnoMarker.cs" />

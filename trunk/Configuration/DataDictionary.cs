@@ -1776,7 +1776,7 @@ namespace Trinity
         public static HashSet<int> LineOfSightWhitelist { get { return lineOfSightWhitelist; } }
         private static readonly HashSet<int> lineOfSightWhitelist = new HashSet<int>
         {
-
+            307, // a2dun_zolt_pedestal
             410366, // Siege_wallMonster_C = 410366, Bounty to kill wall monsters, failing los checks.
             309432, // x1_westm_Bridge
             116807, // Butcher Health Well
@@ -1874,6 +1874,7 @@ namespace Trinity
             (int)SNOActor.a3dun_Keep_BucketMetal_A_Breakable,
             (int)SNOActor.x1_Catacombs_Breakable_Half_Bridge_Walkway_A,
 
+            (int)SNOActor.a4dunSpire_Interactives_Izual_Ice_Barrier_A,
             //209133, //TentacleLord
             //(int)SNOActor.trDun_Cath_Gate_D_UdderChaos, // Door that is locked until you talk to cow king
 
@@ -1948,6 +1949,9 @@ namespace Trinity
              * A5
              */
 
+            (int)SNOActor.X1_Pand_HexMaze_PortalChampSummon, // Monster that looks like a portal, and summons champions.
+
+           
             // 4798, old necromancer bounty quest actor
 
             // Pandemonium Fortress

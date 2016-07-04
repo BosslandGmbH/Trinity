@@ -467,6 +467,9 @@ namespace Trinity.Combat.Abilities
                 CastLaws();
             }
 
+            if (UseDestructiblePower)
+                return DestroyObjectPower;
+
             if (IsBombardmentBuild)
             {
                 return GetBombardPower();

@@ -11,6 +11,12 @@ namespace Trinity.Framework.Objects.Memory.Debug
     {
         public int Size { get; set; } = 2000;
 
+        public MemoryScan(IntPtr address, int size)
+        {
+            Update(address);
+            Size = size;
+        }
+
         public MemoryScan Init(int size)
         {
             Size = size;

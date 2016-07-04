@@ -725,6 +725,7 @@ namespace Trinity
                         break;
                     }
                 // * Gold & Globe - need to get within pickup radius only
+                case TrinityObjectType.BloodShard:
                 case TrinityObjectType.Gold:
                 case TrinityObjectType.HealthGlobe:
                 case TrinityObjectType.PowerGlobe:
