@@ -737,10 +737,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             //BitmapImage img = new BitmapImage(new Uri("c:\\demo.jpg"));
             //dc.DrawImage(img, new Rect(0, 0, img.PixelWidth, img.PixelHeight));
 
-            foreach (var zone in DeathGates.Zones.Where(z => z.PortalScene != null))
-            {
-                dc.DrawLine(RadarResources.SuccessPen, zone.EnterPosition.ToCanvasPoint(), zone.ExitPosition.ToCanvasPoint());
-            }           
+            //foreach (var zone in DeathGates.Zones.Where(z => z.PortalScene != null))
+            //{
+            //    dc.DrawLine(RadarResources.SuccessPen, zone.EnterPosition.ToCanvasPoint(), zone.ExitPosition.ToCanvasPoint());
+            //}           
         }
 
         private void DrawClickRays(DrawingContext dc, CanvasData canvasData)

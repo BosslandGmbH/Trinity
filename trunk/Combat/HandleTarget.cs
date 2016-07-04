@@ -440,7 +440,7 @@ namespace Trinity
                     //}
 
                     TargetCurrentDistance = CurrentTarget.RadiusDistance;
-                    CurrentTargetIsInLoS = TargetCurrentDistance <= 2f || (CurrentTarget.IsUnit ? CurrentTarget.IsInLineOfSight : CurrentTarget.IsWalkable);
+                    CurrentTargetIsInLoS = TargetCurrentDistance <= 2f || (CurrentTarget.IsUnit ? CurrentTarget.IsInLineOfSight : CurrentTarget.IsWalkable) || DataDictionary.LineOfSightWhitelist.Contains(CurrentTarget.ActorSnoId);
 
                     //using (new PerformanceLogger("HandleTarget.LoSCheck"))
                     //{                        
