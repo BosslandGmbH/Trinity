@@ -151,6 +151,7 @@ namespace Trinity.Framework.Modules
                 case TrinityObjectType.HealthGlobe:
                 case TrinityObjectType.ProgressionGlobe:
                 case TrinityObjectType.BuffedRegion:
+                case TrinityObjectType.Gate:
                 case TrinityObjectType.BloodShard:
                     return true;
 
@@ -322,7 +323,7 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if ((int)cacheObject.MonsterRace == -1)
+            if (cacheObject.MonsterRace == MonsterRace.Unknown)
             {
                 cacheObject.AddCacheInfo("InvalidRace");
                 return false;

@@ -42,6 +42,7 @@ using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Zeta.TreeSharp;
 using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
 using Logger = Trinity.Technicals.Logger;
 using MemoryHelper = Trinity.Framework.Helpers.MemoryHelper;
 using TrinityItemQuality = Trinity.Config.Combat.TrinityItemQuality;
@@ -194,9 +195,22 @@ namespace Trinity.UI
                 using (ZetaDia.Memory.AcquireFrame())
                 {
                     ZetaDia.Actors.Update();
-                    var obj = ZetaDia.Actors.GetActorsOfType<DiaObject>().FirstOrDefault();
-                    if (obj != null)
-                        File.WriteAllText(Path.Combine(FileManager.DemonBuddyPath, $"Dumps/{obj?.GetType().Name}.txt"), obj.DumpOffsets());
+                    Core.Actors.Update();
+                    //var obj = ZetaDia.Actors.GetActorsOfType<DiaObject>().FirstOrDefault();
+                    //if (obj != null)
+                    //    File.WriteAllText(Path.Combine(FileManager.DemonBuddyPath, $"Dumps/{obj?.GetType().Name}.txt"), obj.DumpOffsets());
+
+                    //var wall = Core.Actors.GetActorsOfType<TrinityActor>().FirstOrDefault(a => a.ActorSnoId == (int) SNOActor.a2dun_Zolt_Sand_Wall);
+
+                    //if (wall == null)
+                    //    return;
+
+                    //var scan = new MemoryScan(wall.RActor.BaseAddress, 4000);
+   
+                    //Logger.LogRaw(scan.Floats.ToString());
+
+                    //Logger.Log($"WorldEnv == {Core.World.EnvironmentType}");
+                 
                 }
             }
             catch (Exception ex)

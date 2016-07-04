@@ -276,7 +276,8 @@ namespace Trinity
         Environment,
         BloodShard,
         Invalid,
-        BuffedRegion
+        BuffedRegion,
+        Gate
     }
 
     [Flags]

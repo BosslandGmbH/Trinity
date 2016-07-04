@@ -189,6 +189,9 @@ namespace Trinity.Framework.Actors.Properties
 
                     case GizmoType.Portal:
                         return TrinityObjectType.Portal;
+
+                    case GizmoType.Gate:
+                        return TrinityObjectType.Gate;
                 }
             }
 

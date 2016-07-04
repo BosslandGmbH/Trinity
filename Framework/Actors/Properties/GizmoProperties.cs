@@ -1,5 +1,6 @@
 ﻿using System;
 using Trinity.Framework.Actors.ActorTypes;
+using Zeta.Common;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Actors.Properties
@@ -13,6 +14,10 @@ namespace Trinity.Framework.Actors.Properties
 
             if (!actor.IsAcdBased || !actor.IsAcdValid)
                 return;
+
+            var attributes = actor.Attributes;
+            var commonData = actor.CommonData;
+            var rActor = actor.RActor;
 
             actor.IsPlayerHeadstone = actor.ActorSnoId == DataDictionary.PLAYER_HEADSTONE_SNO;
             actor.IsRareChest = actor.InternalNameLowerCase.Contains("chest_rare") || DataDictionary.ResplendentChestIds.Contains(actor.ActorSnoId);
@@ -28,7 +33,17 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsInteractableType = DataDictionary.InteractableTypes.Contains(actor.Type);
             actor.IsUntargetable = actor.Attributes.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
             actor.IsInvulnerable = actor.Attributes.IsInvulnerable;
-            actor.IsUsed = GetIsGizmoUsed(actor);            
+            actor.IsUsed = GetIsGizmoUsed(actor);
+
+            var movement = rActor.Movement;
+            if (movement != null && movement.IsValid)
+            {
+                actor.Rotation = movement.Rotation;
+                actor.RotationDegrees = MathEx.ToDegrees(actor.Rotation);
+                actor.DirectionVector = movement.DirectionVector;
+                actor.IsMoving = movement.IsMoving;
+                actor.MovementSpeed = movement.SpeedXY;
+            }
         }
 
         public static bool GetIsGizmoUsed(TrinityActor actor)
@@ -74,21 +89,27 @@ namespace Trinity.Framework.Actors.Properties
                 && endAnimation == (int)actor.Animation)
                 return true;
 
-            if (actor.Type == TrinityObjectType.Door || actor.Type == TrinityObjectType.Container || actor.Type == TrinityObjectType.Interactable)
+            switch (actor.Type)
             {
-                var currentAnimation = actor.AnimationNameLowerCase;
+                case TrinityObjectType.Door:
+                case TrinityObjectType.Container:
+                case TrinityObjectType.Interactable:
+                case TrinityObjectType.Destructible:
+                    var currentAnimation = actor.AnimationNameLowerCase;
 
-                if (currentAnimation.Contains("irongate") && currentAnimation.Contains("open"))
-                    return false;
+                    if (currentAnimation.Contains("irongate") && currentAnimation.Contains("open"))
+                        return false;
 
-                if (currentAnimation.Contains("_dead"))
-                    return true;
+                    if (currentAnimation.Contains("_dead"))
+                        return true;
 
-                if (currentAnimation.Contains("irongate") && currentAnimation.Contains("idle"))
-                    return true;
+                    if (currentAnimation.Contains("irongate") && currentAnimation.Contains("idle"))
+                        return true;
 
-                if (currentAnimation.EndsWith("open") || currentAnimation.EndsWith("opening"))
-                    return true;
+                    if (currentAnimation.EndsWith("open") || currentAnimation.EndsWith("opening"))
+                        return true;
+
+                    break;
             }
 
             return false;

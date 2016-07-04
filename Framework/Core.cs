@@ -38,6 +38,7 @@ namespace Trinity.Framework
         public static StatusBar StatusBar { get; } = new StatusBar();
         public static GameStopper GameStopper { get; } = new GameStopper();
         public static MarkersCache Markers { get; } = new MarkersCache();
+        public static WorldCache World { get; } = new WorldCache();
 
         // Misc
         public static GridHelper Grids { get; } = new GridHelper();
