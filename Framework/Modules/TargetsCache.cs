@@ -405,6 +405,12 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
+            if (DataDictionary.InteractWhiteListIds.Contains(cacheObject.ActorSnoId))
+            {
+                cacheObject.AddCacheInfo("Interact Whitelist");
+                return true;
+            }
+
             if (cacheObject.IsPlayerHeadstone && !TrinityPlugin.Settings.WorldObject.AllowPlayerResurection)
             {
                 cacheObject.AddCacheInfo("AllowResurectionSetting");

@@ -5,9 +5,7 @@ using Trinity.Framework.Actors;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Grid;
 using Trinity.Framework.Modules;
-using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Helpers;
 using Trinity.Movement;
 using Zeta.Bot;
 using Zeta.Game.Internals;
@@ -18,10 +16,7 @@ namespace Trinity.Framework
     public static class Core
     {
         public static bool IsEnabled { get; private set; }
-
-        // Memory
-        public static Hero Hero { get; } = new Hero(Internals.Addresses.Hero);
-        public static Globals Globals { get; } = new Globals(Internals.Addresses.Globals);
+        public static MemoryModel MemoryModel { get; } = new MemoryModel();
 
         // Modules
         public static ActorCache Actors { get; } = new ActorCache();

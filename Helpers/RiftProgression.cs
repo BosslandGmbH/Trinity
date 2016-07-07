@@ -12,7 +12,7 @@ namespace Trinity.Cache
 {
     public static class RiftProgression
     {
-        public static float CurrentProgressionPct => Core.Globals.RiftProgressionPct;
+        public static float CurrentProgressionPct => Core.MemoryModel.Globals.RiftProgressionPct;
 
         public static bool IsInRift
         {

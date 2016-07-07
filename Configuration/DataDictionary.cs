@@ -1607,6 +1607,8 @@ namespace Trinity
             5747, // A1 Cathedral Switch
             365097, // Cursed Chest - Damp Cellar
 
+            (int)SNOActor.a2dun_Aqd_Chest_Special_GreedyMiner, // Bounty Quest: A Miners' Gold requires it to be opened.
+
             // A5
             348096, // Paths of the Drowned - portal switches - x1_Bog_Beacon_B
             361364, // A5 Siege Rune Path of War
@@ -1877,6 +1879,8 @@ namespace Trinity
             (int)SNOActor.a4dunSpire_Interactives_Izual_Ice_Barrier_A,
             //209133, //TentacleLord
             //(int)SNOActor.trDun_Cath_Gate_D_UdderChaos, // Door that is locked until you talk to cow king
+
+            (int)SNOActor.trDun_Cath_Braizer_Trap, // hanging chandelier triggered by trap switch
 
             (int)SNOActor.x1_BogCave_Breakable_Stalagmites_A,
             (int)SNOActor.x1_BogCave_Breakable_Stalagmites_B,

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Adventurer.Coroutines;
 using Adventurer.Game.Exploration;
+using Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
@@ -31,7 +32,7 @@ using Zeta.Game;
 using Zeta.Game.Internals.SNO;
 using LineSegment = System.Windows.Media.LineSegment;
 using Logger = Trinity.Technicals.Logger;
-using Edge = System.Tuple<int,int>;
+using Edge = System.Tuple<int, int>;
 
 namespace Trinity.UI.UIComponents.RadarCanvas
 {
@@ -51,7 +52,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             MouseWheel += (sender, args) => Zoom = args.Delta < 0 ? Zoom - 1 : Zoom + 1;
             MouseDown += MouseDownHandler;
             MouseMove += MouseMoveHandler;
-            MouseUp += MouseUpHandler;            
+            MouseUp += MouseUpHandler;
 
             Background = new SolidColorBrush(Color.FromArgb(0, 50, 50, 50));
 
@@ -79,6 +80,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
         public Tuple<Vector3, Vector3, bool> CurrentRayCast { get; set; }
         public Tuple<Vector3, Vector3, bool> CurrentRayWalk { get; set; }
+        public Tuple<Vector3, Vector3, bool> CurrentTestLine { get; set; }
+
 
         private void HandleMapClicked(object sender, MouseButtonEventArgs e)
         {
@@ -86,44 +89,69 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
             Logger.Log($"Clicked World Position = {clickedWorldPosition}, Distance={clickedWorldPosition.Distance(ZetaDia.Me.Position)}");
 
-            if (IsRightClick)
+            if (!IsDragging)
             {
-                var result = Core.Grids.Avoidance.CanRayWalk(clickedWorldPosition, Player.Actor.Position);
-                CurrentRayWalk = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
+                if (IsRightClick)
+                {
+                    var result = Core.Grids.Avoidance.CanRayWalk(clickedWorldPosition, Player.Actor.Position);
+                    CurrentRayWalk = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
+                }
+                else if (IsLeftClick)
+                {
+                    var result = Core.Grids.Avoidance.CanRayCast(clickedWorldPosition, Player.Actor.Position);
+
+                    CurrentRayCast = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
+
+                    var gatePosition = DeathGates.GetBestGatePosition(clickedWorldPosition);
+                    CurrentTestLine = new Tuple<Vector3, Vector3, bool>(gatePosition, Player.Actor.Position, result);
+
+                    var sequence = DeathGates.CreateSequence();
+                    for (int i = 0; i < sequence.Count; i++)
+                    {
+                        var scene = sequence[i];
+                        Logger.Log($"{i}: {(sequence.Index == i ? ">> " : "")}{scene.Name}");
+                    }
+
+                    //var zone = DeathGates.GetZoneForPosition(clickedWorldPosition);
+                    //if (zone != null)
+                    //{
+                    //    var gatePos = zone.NavigableGatePosition;
+                    //    if (gatePos != Vector3.Zero)
+                    //    {
+                    //        CurrentTestLine = new Tuple<Vector3, Vector3, bool>(gatePos, Player.Actor.Position, result);
+                    //    }
+                    //}
+                }
+
+                var hit = FindElementUnderClick(sender, e);
+                if (hit != null)
+                {
+                    var actor = hit.RadarObject.Actor;
+                    ClickCommand.Execute(actor);
+
+                    // Trigger Canvas to Render
+                    InvalidateVisual();
+
+                    return;
+                }
+
+                var node = Core.Avoidance.Grid.GetNearestNode(clickedWorldPosition);
+                SelectedItem = new TrinityActor
+                {
+                    InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int)clickedWorldPosition.X},{(int)clickedWorldPosition.Y}]",
+                    Distance = clickedWorldPosition.Distance(ZetaDia.Me.Position),
+                    Position = clickedWorldPosition,
+                };
             }
-            else if(IsLeftClick)
-            {
-                var result = Core.Grids.Avoidance.CanRayCast(clickedWorldPosition, Player.Actor.Position);
-                CurrentRayCast = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
-            }
-
-            var hit = FindElementUnderClick(sender, e);
-            if (hit != null)
-            {
-                var actor = hit.RadarObject.Actor;
-                ClickCommand.Execute(actor);
-
-                // Trigger Canvas to Render
-                InvalidateVisual();
-
-                return;
-            }
-
-            var node = Core.Avoidance.Grid.GetNearestNode(clickedWorldPosition);
-            SelectedItem = new TrinityActor
-            {
-                InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int) clickedWorldPosition.X},{(int) clickedWorldPosition.Y}]",
-                Distance = clickedWorldPosition.Distance(ZetaDia.Me.Position),
-                Position = clickedWorldPosition,
-            };
 
             // Trigger Canvas to Render
             InvalidateVisual();
         }
 
+
         private RadarHitTestUtility.HitContainer FindElementUnderClick(object sender, MouseEventArgs e)
         {
-            var position = e.GetPosition((UIElement)sender);            
+            var position = e.GetPosition((UIElement)sender);
             return HitTester.GetHit(position);
         }
 
@@ -133,12 +161,17 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         {
             if (IsMouseDown)
             {
+                IsDragging = true;
                 const double dragSpeed = 0.5;
                 var position = e.GetPosition(this);
                 var xOffset = position.X - DragInitialPosition.X;
                 var yOffset = position.Y - DragInitialPosition.Y;
                 DragOffset = new Point((int)(xOffset * dragSpeed) + DragInitialPanOffset.X, (int)(yOffset * dragSpeed) + DragInitialPanOffset.Y);
                 CanvasData.PanOffset = DragOffset;
+            }
+            else
+            {
+                IsDragging = false;
             }
 
             if (DateTime.UtcNow.Subtract(LastMoveCursorCheck).TotalMilliseconds > 25)
@@ -154,6 +187,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 }
             }
         }
+
+        //public bool IsDragging { get; set; }
 
         private void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
@@ -287,6 +322,32 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
         #endregion
 
+        #region IsDragging Property
+
+        public static readonly DependencyProperty IsDraggingProperty =
+            DependencyProperty.Register("IsDragging",
+                typeof(bool),
+                typeof(RadarCanvas),
+                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.None, OnIsDraggingChanged));
+
+        private static void OnIsDraggingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Logger.LogVerbose("[RadarUI] Dragging Changed from {0} to {1}", e.OldValue, e.NewValue);
+            var radarCanvas = d as RadarCanvas;
+            if (radarCanvas != null)
+            {
+                // Update Pan Offset
+            }
+        }
+
+        public bool IsDragging
+        {
+            set { SetValue(IsDraggingProperty, value); }
+            get { return (bool)GetValue(IsDraggingProperty); }
+        }
+
+        #endregion
+
         #region Pan Property
 
         public static readonly DependencyProperty PanProperty =
@@ -324,7 +385,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         public TrinityActor SelectedItem
         {
             get { return (TrinityActor)GetValue(SelectedItemProperty); }
-            set { SetValue(SelectedItemProperty, value); }            
+            set { SetValue(SelectedItemProperty, value); }
         }
 
         static void OnSelectedItemChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
@@ -389,7 +450,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         /// </summary>
         void OnItemsSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-           // UpdateData();
+            // UpdateData();
         }
 
         #endregion
@@ -427,64 +488,64 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 //using (new PerformanceLogger("RadarUI UpdateData"))
                 //{
 
-                    //if (DateTime.UtcNow.Subtract(LastUpdate).TotalMilliseconds < 5)
-                    //    return;
+                //if (DateTime.UtcNow.Subtract(LastUpdate).TotalMilliseconds < 5)
+                //    return;
 
-                    //LastUpdate = DateTime.UtcNow;
+                //LastUpdate = DateTime.UtcNow;
 
-                    if (DesiredSize.Height <= 0 || DesiredSize.Width <= 0)
-                        return;
+                if (DesiredSize.Height <= 0 || DesiredSize.Width <= 0)
+                    return;
 
-                    if (!IsVisible || TrinityPlugin.Player.Actor == null || TrinityPlugin.Player.IsLoadingWorld || !TrinityPlugin.Player.IsInGame)
-                        return;
+                if (!IsVisible || TrinityPlugin.Player.Actor == null || TrinityPlugin.Player.IsLoadingWorld || !TrinityPlugin.Player.IsInGame)
+                    return;
 
-                    Objects.Clear();
-                    HitTester.Clear();
+                Objects.Clear();
+                HitTester.Clear();
 
-                    CanvasData.Update(DesiredSize, GridSize);
+                CanvasData.Update(DesiredSize, GridSize);
 
-                    // Find the actor who should be in the center of the radar
-                    // and whos position all other points should be plotted against.
+                // Find the actor who should be in the center of the radar
+                // and whos position all other points should be plotted against.
 
-                    var center = ItemsSource.OfType<TrinityActor>().FirstOrDefault(u => u.IsMe);
-                    if (center == null)
-                        return;
-                    
-                    CenterActor = new RadarObject(center, CanvasData);
-                    CanvasData.CenterVector = CenterActor.Actor.Position;
-                    CanvasData.CenterMorph = CenterActor.Morph;
+                var center = ItemsSource.OfType<TrinityActor>().FirstOrDefault(u => u.IsMe);
+                if (center == null)
+                    return;
 
-                    // Calculate locations for all actors positions
-                    // on RadarObject ctor; or with .Update();
+                CenterActor = new RadarObject(center, CanvasData);
+                CanvasData.CenterVector = CenterActor.Actor.Position;
+                CanvasData.CenterMorph = CenterActor.Morph;
 
-                    var updatedSelection = false;
+                // Calculate locations for all actors positions
+                // on RadarObject ctor; or with .Update();
 
-                    foreach (var trinityObject in ItemsSource.OfType<TrinityActor>())
+                var updatedSelection = false;
+
+                foreach (var trinityObject in ItemsSource.OfType<TrinityActor>())
+                {
+                    var radarObject = new RadarObject(trinityObject, CanvasData);
+
+                    if (!updatedSelection && SelectedItem != null && trinityObject.AcdId == SelectedItem.AcdId)
                     {
-                        var radarObject = new RadarObject(trinityObject, CanvasData);
-
-                        if (!updatedSelection && SelectedItem != null && trinityObject.AcdId == SelectedItem.AcdId)
-                        {
-                            updatedSelection = true;
-                            SelectedRadarObject = radarObject;
-                        }
-                            
-                        Objects.Add(radarObject);
-
-                        if (radarObject.Actor.IsMe)
-                            Player = radarObject;
+                        updatedSelection = true;
+                        SelectedRadarObject = radarObject;
                     }
 
-                    UpdateRelativeDrawings();
+                    Objects.Add(radarObject);
 
-                    //UpdateAvoidanceGridData();
+                    if (radarObject.Actor.IsMe)
+                        Player = radarObject;
+                }
 
-                    //UpdateTestData();
+                UpdateRelativeDrawings();
 
-                    // Trigger LastKiteNodes collection.
-                    //_testkiteNode = TrinDia.Avoidance.BestKiteNode;
+                //UpdateAvoidanceGridData();
 
-                    //Logger.Log("Heading={0}",ZetaDia.Me.Movement.RotationDegrees);
+                //UpdateTestData();
+
+                // Trigger LastKiteNodes collection.
+                //_testkiteNode = TrinDia.Avoidance.BestKiteNode;
+
+                //Logger.Log("Heading={0}",ZetaDia.Me.Movement.RotationDegrees);
 
                 //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Clusters))
                 //{
@@ -654,6 +715,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                     DrawDeathGates(dc, CanvasData);
 
+                    DrawMarkers(dc, CanvasData);
+
                     //}
 
                     //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Clusters))
@@ -737,10 +800,150 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             //BitmapImage img = new BitmapImage(new Uri("c:\\demo.jpg"));
             //dc.DrawImage(img, new Rect(0, 0, img.PixelWidth, img.PixelHeight));
 
+            //var drawing = new DrawingGroup();
+
+            //using (var groupdc = drawing.Open())
+            //{
+
+   
+            //    var enterRegion = DeathGates.EnterRegion;                
+          
+            //    var enterTopLeft = new Vector3(enterRegion.Min.X, enterRegion.Min.Y, 0);
+            //    var enterTopRight = new Vector3(enterRegion.Max.X, enterRegion.Min.Y, 0);
+            //    var enterBottomLeft = new Vector3(enterRegion.Min.X, enterRegion.Max.Y, 0);
+            //    var enterBottomRight = new Vector3(enterRegion.Max.X, enterRegion.Max.Y, 0);
+
+            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterTopRight.ToCanvasPoint()));
+            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(enterBottomLeft.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));
+            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterBottomLeft.ToCanvasPoint()));
+            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(enterTopRight.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));
+
+            //    var exitRegion = DeathGates.ExitRegion;
+
+            //    var exitTopLeft = new Vector3(exitRegion.Min.X, exitRegion.Min.Y, 0);
+            //    var exitTopRight = new Vector3(exitRegion.Max.X, exitRegion.Min.Y, 0);
+            //    var exitBottomLeft = new Vector3(exitRegion.Min.X, exitRegion.Max.Y, 0);
+            //    var exitBottomRight = new Vector3(exitRegion.Max.X, exitRegion.Max.Y, 0);
+
+            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(exitTopLeft.ToCanvasPoint(), exitTopRight.ToCanvasPoint()));
+            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(exitBottomLeft.ToCanvasPoint(), exitBottomRight.ToCanvasPoint()));
+            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(exitTopLeft.ToCanvasPoint(), exitBottomLeft.ToCanvasPoint()));
+            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(exitTopRight.ToCanvasPoint(), exitBottomRight.ToCanvasPoint()));
+
+            //    //#region Scene Title
+
+            //    //if (sceneborders)
+            //    //{
+            //    //    var textPoint = adventurerScene.Center.ToVector3().ToCanvasPoint();
+            //    //    var glyphRun = DrawingUtilities.CreateGlyphRun(adventurerScene.Name, 10, textPoint);
+            //    //    groupdc.DrawGlyphRun(Brushes.Wheat, glyphRun);
+            //    //    textPoint = adventurerScene.Center.ToVector3().ToCanvasPoint();
+            //    //    textPoint.Y = textPoint.Y + 20;
+            //    //    glyphRun = DrawingUtilities.CreateGlyphRun((adventurerScene.Max - adventurerScene.Min) + " " + (adventurerScene.HasChild ? "HasSubScene" : string.Empty) + " " + (adventurerScene.SubScene != null ? " (Loaded)" : string.Empty), 8, textPoint);
+            //    //    groupdc.DrawGlyphRun(Brushes.Wheat, glyphRun);
+            //    //}
+            //    //#endregion
+            //}
+
+            //dc.DrawDrawing(drawing);
+
+            //foreach (var scene in DeathGates.Scenes)
+            //{
+            //    foreach (var rect in scene.InsideRegion.Cast<RectangularRegion>())
+            //    {
+            //        dc.DrawDrawing(GetRectangle(rect + scene.PortalScene.Min));
+            //    }           
+            //}
+
+            foreach (var rect in DeathGates.ExitRegion.Cast<RectangularRegion>())
+            {
+                if (rect.Max.X - rect.Min.X > 240 || rect.Max.Y - rect.Min.Y > 240)
+                {
+                    dc.DrawDrawing(GetRectangle(rect));
+                }
+                else
+                {
+                    dc.DrawDrawing(GetOutlineRectangle(rect));
+                }
+            }
+
+            foreach (var rect in DeathGates.EnterRegion.Cast<RectangularRegion>())
+            {
+                if (rect.Max.X - rect.Min.X > 240 || rect.Max.Y - rect.Min.Y > 240)
+                {
+                    dc.DrawDrawing(GetRectangle(rect));
+                }
+                else
+                {
+                    dc.DrawDrawing(GetOutlineRectangle(rect));
+                }
+            }
+
+            //foreach (var rect in DeathGates.EnterRegion.Cast<RectangularRegion>())
+            //{
+            //    dc.DrawDrawing(GetRectangle(rect));
+            //}
+
+            foreach (var zone in DeathGates.Scenes.Where(z => z.IsValid))
+            {
+                dc.DrawLine(RadarResources.SuccessPen, zone.EnterPosition.ToCanvasPoint(), zone.ExitPosition.ToCanvasPoint());
+            }
+        }
+
+        private static DrawingGroup GetRectangle(RectangularRegion enterRegion)
+        {
+            var drawing = new DrawingGroup();
+            using (var groupdc = drawing.Open())
+            {
+                var pen = enterRegion.CombineType == CombineType.Add ? RadarResources.SceneFrameInclude : RadarResources.SceneFrameExclude;
+                var enterTopLeft = new Vector3(enterRegion.Min.X, enterRegion.Min.Y, 0);
+                var enterTopRight = new Vector3(enterRegion.Max.X, enterRegion.Min.Y, 0);
+                var enterBottomLeft = new Vector3(enterRegion.Min.X, enterRegion.Max.Y, 0);
+                var enterBottomRight = new Vector3(enterRegion.Max.X, enterRegion.Max.Y, 0);
+                groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterTopRight.ToCanvasPoint()));
+                groupdc.DrawGeometry(null, pen, new LineGeometry(enterBottomLeft.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));
+                groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterBottomLeft.ToCanvasPoint()));
+                groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopRight.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));
+            }
+            return drawing;
+        }
+
+        private static DrawingGroup GetOutlineRectangle(RectangularRegion enterRegion)
+        {
+            var drawing = new DrawingGroup();
+            using (var groupdc = drawing.Open())
+            {
+                var padding = 3;
+                var pen = enterRegion.CombineType == CombineType.Add ? RadarResources.SceneFrameInclude : RadarResources.SceneFrameExclude;
+                var enterTopLeft = new Vector3(enterRegion.Min.X + padding, enterRegion.Min.Y + padding, 0);
+                var enterTopRight = new Vector3(enterRegion.Max.X - padding, enterRegion.Min.Y + padding, 0);
+                var enterBottomLeft = new Vector3(enterRegion.Min.X + padding, enterRegion.Max.Y - padding, 0);
+                var enterBottomRight = new Vector3(enterRegion.Max.X - padding, enterRegion.Max.Y - padding, 0);
+                groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterTopRight.ToCanvasPoint()));
+                groupdc.DrawGeometry(null, pen, new LineGeometry(enterBottomLeft.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));
+                groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterBottomLeft.ToCanvasPoint()));
+                groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopRight.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));                
+                //groupdc.DrawGeometry(null, pen, new LineGeometry(enterBottomRight.ToCanvasPoint(), enterTopLeft.ToCanvasPoint()));
+            }
+            return drawing;
+        }
+
+        private void DrawMarkers(DrawingContext dc, CanvasData canvasData)
+        {
+
+            //BitmapImage img = new BitmapImage(new Uri("c:\\demo.jpg"));
+            //dc.DrawImage(img, new Rect(0, 0, img.PixelWidth, img.PixelHeight));
+
             //foreach (var zone in DeathGates.Zones.Where(z => z.PortalScene != null))
             //{
             //    dc.DrawLine(RadarResources.SuccessPen, zone.EnterPosition.ToCanvasPoint(), zone.ExitPosition.ToCanvasPoint());
-            //}           
+            //}      
+            foreach (var marker in Core.Markers.CurrentWorldMarkers)
+            {
+                var markerPoint = marker.Position.ToCanvasPoint();
+                dc.DrawLine(RadarResources.MarkerPen, CenterActor.Point, markerPoint);
+                DrawLabel(dc, CanvasData, marker.Name, markerPoint, OrangeBrush, 45, 12, 3);
+            }
         }
 
         private void DrawClickRays(DrawingContext dc, CanvasData canvasData)
@@ -754,6 +957,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             {
                 var rayWalkPen = CurrentRayCast.Item3 ? RadarResources.SuccessPen : RadarResources.FailurePen;
                 dc.DrawLine(rayWalkPen, CurrentRayCast.Item1.ToCanvasPoint(), CurrentRayCast.Item2.ToCanvasPoint());
+            }
+            if (CurrentTestLine != null && CurrentTestLine.Item1 != Vector3.Zero && CurrentTestLine.Item2 != Vector3.Zero)
+            {
+                dc.DrawLine(RadarResources.BlackPen, CurrentTestLine.Item1.ToCanvasPoint(), CurrentTestLine.Item2.ToCanvasPoint());
             }
         }
 
@@ -783,7 +990,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             {
                 if (NavigationProvider == null)
                     NavigationProvider = Navigator.GetNavigationProviderAs<DefaultNavigationProvider>();
-          
+
                 var currentPath = NavigationProvider.CurrentPath;
 
                 for (int i = 1; i < currentPath.Count; i++)
@@ -817,7 +1024,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     dc.DrawPolygon(points.Select(p => p.ToCanvasPoint()), RadarResources.TransparentBrush, RadarResources.WhiteDashPen);
 
                     var center = ValueClusterCenter.ToCanvasPoint();
-                    
+
                     dc.DrawEllipse(BlackBrush, null, center, 5, 5);
 
                     var text = $"{ClusterValue:0.00}%";
@@ -827,7 +1034,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawClusters(). {0} {1} {2}", 
+                Logger.Log("Exception in RadarUI.DrawClusters(). {0} {1} {2}",
                     ex.Message, ex.InnerException, ex);
             }
         }
@@ -836,7 +1043,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         {
             try
             {
-                var target = CombatBase.CurrentTarget;               
+                var target = CombatBase.CurrentTarget;
                 if (target == null)
                     return;
 
@@ -976,7 +1183,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 {
                     dc.DrawEllipse(weightedBrush, null, node.NavigableCenter.ToCanvasPoint(), size * 1.5, size * 1.5);
                 }
-                
+
                 dc.DrawEllipse(weightedBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
                 return;
             }
@@ -1113,7 +1320,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                 var canvasPoint = centroid.ToCanvasPoint();
                 dc.DrawEllipse(Brushes.Black, null, canvasPoint, 5, 5);
-                dc.DrawLine(new Pen(Brushes.Black, 2), TrinityPlugin.Player.Position.ToCanvasPoint(), canvasPoint);                
+                dc.DrawLine(new Pen(Brushes.Black, 2), TrinityPlugin.Player.Position.ToCanvasPoint(), canvasPoint);
             }
             catch (Exception ex)
             {
@@ -1868,7 +2075,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
         private void DrawActivePlayer(DrawingContext dc, CanvasData canvas, RadarObject radarObject)
         {
-            
+
             var brush = radarObject.Actor.IsMe ? RadarResources.PlayerBrush : RadarResources.OtherPlayerBrush;
             brush.Opacity = 0.75;
             var actorRadius = radarObject.Actor.CollisionRadius * GridSize;
@@ -1917,7 +2124,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                 if (radarObject.Actor.Type == TrinityObjectType.BuffedRegion)
                 {
-                    var size = radarObject.Actor.AxialRadius*GridSize;
+                    var size = radarObject.Actor.AxialRadius * GridSize;
                     dc.DrawEllipse(RadarResources.BuffedRegionBrush, RadarResources.BuffedRegionPen, radarObject.Point, size, size);
                     HitTester.AddEllipse(radarObject, radarObject.Point, size, size);
                     return;
@@ -1948,10 +2155,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                     if (Zoom > 5)
                         DrawActorLabel(dc, canvas, radarObject, RadarResources.GizmoBrush);
-               
+
                     HitTester.AddEllipse(radarObject, radarObject.Point, GridSize, GridSize);
                     return;
-                }                
+                }
 
                 if (radarObject.Actor.IsActiveAvoidance && VisibilityFlags.HasFlag(RadarVisibilityFlags.Avoidance))
                 {
@@ -1966,7 +2173,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     // Units may become avoidances in special circumstances, beast charge, about to expode etc
                     if (radarObject.Actor.IsActiveAvoidance)
                         res.Brush = RadarResources.AvoidanceBrush;
-    
+
                     // Draw a dot in the center of the actor;
                     dc.DrawEllipse(res.Brush, null, radarObject.Point, GridSize / 2, GridSize / 2);
 

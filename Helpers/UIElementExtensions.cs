@@ -139,8 +139,8 @@ namespace Trinity.Helpers
             if (element == null)
                 return;
 
-            Logger.Log("Element Name={1}, IsVisible={0}, Text={2}, Hash={3}, IsEnabled={4}, HasText={5}",
-                element.IsVisible, element.Name, element.Text, element.Hash, element.IsEnabled, element.HasText);
+            Logger.Log(string.Format("[{6}] Element Name={1}, IsVisible={0}, Text={2}, Hash={3}, IsEnabled={4}, HasText={5}",
+                element.IsVisible, element.Name, element.Text, element.Hash, element.IsEnabled, element.HasText, element.BaseAddress));
         }
 
         public static bool SafeClick(this UIElement element)

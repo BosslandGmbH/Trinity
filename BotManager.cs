@@ -11,6 +11,8 @@ using Trinity.Coroutines;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Movement;
@@ -130,6 +132,24 @@ namespace Trinity
             await AutoEquipSkills.Instance.Execute();
             await AutoEquipItems.Instance.Execute();
 
+
+            var itemMarker = Core.Markers.CurrentWorldMarkers.FirstOrDefault(m => m.MarkerType == WorldMarkerType.SetItem || m.MarkerType == WorldMarkerType.LegendaryItem && !_visitedItemMarkers.Contains(m.Position));
+            if (itemMarker != null && (!CombatBase.IsInCombat && itemMarker.Distance < 500f) && !Navigator.StuckHandler.IsStuck)
+            {
+                if (itemMarker.Distance < 10f)
+                {
+                    Logger.Warn($"Arrived at Item Marker: {itemMarker.Position}! Distance {itemMarker.Distance}!");
+                    _visitedItemMarkers.Add(itemMarker.Position);
+                }
+                else
+                {
+                    Logger.Warn($"Moving to Item Marker at {itemMarker.Position}! Distance {itemMarker.Distance}!");
+                    await CommonCoroutines.MoveTo(itemMarker.Position, "ItemMarker"); 
+                    TrinityPlugin.Player.CurrentAction = PlayerAction.Moving;
+                    return true;
+                }
+            }
+
             var isTarget = TrinityPlugin.TargetCheck(null);
 
             if (CombatBase.CombatMovement.IsQueuedMovement & CombatBase.IsCombatAllowed)
@@ -144,7 +164,7 @@ namespace Trinity
                 return true;
             }
 
-            if (!CombatTargeting.Instance.AllowedToKillMonsters && (TrinityPlugin.CurrentTarget == null || TrinityPlugin.CurrentTarget.IsUnit))
+            if (!CombatTargeting.Instance.AllowedToKillMonsters && (TrinityPlugin.CurrentTarget == null || TrinityPlugin.CurrentTarget.IsUnit) && CombatBase.CombatMode != CombatMode.KillAll)
             {
                 Logger.LogVerbose(LogCategory.Behavior, "Aborting MainCombatTask() AllowCombat={0}", CombatTargeting.Instance.AllowedToKillMonsters);
                 return false;
@@ -159,6 +179,7 @@ namespace Trinity
             //return await new Decorator(TrinityPlugin.TargetCheck, new Action(ret => TrinityPlugin.HandleTarget())).ExecuteCoroutine();
         }
 
+        public static HashSet<Vector3> _visitedItemMarkers { get; set; } = new HashSet<Vector3>();
 
         private static void ReplaceVendorRunHook()
         {
@@ -331,6 +352,5 @@ namespace Trinity
                 Logger.Log(ex.ToString());
             }
         }
-
     }
 }

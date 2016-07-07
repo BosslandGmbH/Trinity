@@ -149,6 +149,7 @@
     <Compile Include="Framework\Avoidance\Handlers\AnimationBeamAvoidanceHandler.cs" />
     <Compile Include="Framework\Avoidance\Structures\AvoidanceLayer.cs" />
     <Compile Include="Framework\Avoidance\Structures\WeightingOptions.cs" />
+    <Compile Include="Framework\MemoryModel.cs" />
     <Compile Include="Framework\Helpers\Exporter\DictionaryExporter.cs" />
     <Compile Include="Framework\Helpers\Exporter\EnumExporter.cs" />
     <Compile Include="Framework\Helpers\Exporter\Exporter.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Framework\Helpers\UpdateStats.cs" />
     <Compile Include="Framework\Actors\ActorCache.cs" />
     <Compile Include="Framework\ModuleManager.cs" />
+    <Compile Include="Framework\Helpers\ConcurrentCache.cs" />
     <Compile Include="Framework\Modules\GameStopper.cs" />
     <Compile Include="Framework\Modules\WorldCache.cs" />
     <Compile Include="Framework\Modules\MarkersCache.cs" />
@@ -173,6 +175,7 @@
     <Compile Include="Framework\Objects\Enums\TargetCategory.cs" />
     <Compile Include="Framework\Objects\Enums\TeamType.cs" />
     <Compile Include="Framework\Objects\Memory\Globals.cs" />
+    <Compile Include="Framework\Objects\Memory\Storage.cs" />
     <Compile Include="Framework\Objects\Memory\Hero.cs" />
     <Compile Include="Framework\Helpers\TypeConversions.cs" />
     <Compile Include="Framework\Objects\Enums\SnoGameBalanceType.cs" />
@@ -213,7 +216,7 @@
     <Compile Include="Framework\Objects\Memory\Symbols\Types\CurveType.cs" />
     <Compile Include="Framework\Objects\Memory\Symbols\Types\DamageType.cs" />
     <Compile Include="Framework\Objects\Memory\Symbols\Types\DensityType.cs" />
-    <Compile Include="Framework\Objects\Memory\Symbols\Types\DifficultyLevel.cs" />
+    <Compile Include="Framework\Objects\Memory\Symbols\Types\Difficulty.cs" />
     <Compile Include="Framework\Objects\Memory\Symbols\Types\DifficultyType.cs" />
     <Compile Include="Framework\Objects\Memory\Symbols\Types\ElementType.cs" />
     <Compile Include="Framework\Objects\Memory\Symbols\Types\ItemResult.cs" />

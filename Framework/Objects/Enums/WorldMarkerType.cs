@@ -15,7 +15,10 @@ namespace Trinity.Framework.Objects.Enums
         Exit = 102320,
         Objective = 81058,
         Portal = 332286,
-        Item = 275968,      
+        LegendaryItem = 275968,   
+        SetItem = 404424,
+        ExitStone = 218394, 
     }
 }
+
 
