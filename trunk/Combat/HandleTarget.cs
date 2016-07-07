@@ -944,8 +944,6 @@ namespace Trinity
                             {
                                 Logger.LogVerbose(LogCategory.Behavior, "Attacking  destructable");
 
-                                var destructiblePower = AbilitySelector();
-
                                 // Standard attack - attack the AcdId (equivalent of left-clicking the object in-game)
                                 if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, CurrentTarget.Position, -1, CurrentTarget.AcdId))
                                 {
