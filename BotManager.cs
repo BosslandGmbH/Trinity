@@ -134,11 +134,24 @@ namespace Trinity
 
 
             var itemMarker = Core.Markers.CurrentWorldMarkers.FirstOrDefault(m => m.MarkerType == WorldMarkerType.SetItem || m.MarkerType == WorldMarkerType.LegendaryItem && !_visitedItemMarkers.Contains(m.Position));
-            if (itemMarker != null && (!CombatBase.IsInCombat && itemMarker.Distance < 500f) && !Navigator.StuckHandler.IsStuck)
+            if (itemMarker != null && (_movingToMarker || (!CombatBase.IsInCombat && itemMarker.Distance < 500f)) && !Navigator.StuckHandler.IsStuck)
             {
+                if (!_movingToMarker)
+                {
+                    _movingToMarkerTimeout = DateTime.UtcNow.AddSeconds(20f);
+                    _movingToMarker = true;
+                }
+
                 if (itemMarker.Distance < 10f)
                 {
                     Logger.Warn($"Arrived at Item Marker: {itemMarker.Position}! Distance {itemMarker.Distance}!");
+                    _movingToMarker = false;
+                    _visitedItemMarkers.Add(itemMarker.Position);
+                    VacuumItems.Execute();
+                }
+                else if (DateTime.UtcNow > _movingToMarkerTimeout)
+                {
+                    _movingToMarker = false;
                     _visitedItemMarkers.Add(itemMarker.Position);
                 }
                 else
@@ -178,6 +191,9 @@ namespace Trinity
             return false;
             //return await new Decorator(TrinityPlugin.TargetCheck, new Action(ret => TrinityPlugin.HandleTarget())).ExecuteCoroutine();
         }
+
+        private static bool _movingToMarker { get; set; }
+        private static DateTime _movingToMarkerTimeout { get; set; }
 
         public static HashSet<Vector3> _visitedItemMarkers { get; set; } = new HashSet<Vector3>();
 

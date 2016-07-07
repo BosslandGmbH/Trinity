@@ -726,7 +726,7 @@ namespace Trinity
                                         continue;
                                     }
 
-                                    if (!cacheObject.IsWalkable && !cacheObject.HasBeenWalkable)
+                                    if (!cacheObject.IsWalkable && !cacheObject.HasBeenWalkable && cacheObject.Distance > 50f)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring unreachable.";
                                         break;
