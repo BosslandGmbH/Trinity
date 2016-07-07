@@ -445,55 +445,55 @@ namespace TrinityCoroutines.Resources
 
         public static string LastLogInfo;
 
-        public static List<TrinityItem> AllItems
+        public static IEnumerable<TrinityItem> AllItems
         {
             get
             {
                 //var items = ZetaDia.Actors.GetActorsOfType<ACDItem>(true).Where(i =>
-                var items = Core.Actors.Inventory.Where(i =>
-                {
-                    //if (!i.IsValid || i.IsDisposed)
-                    //{
-                    //    Logger.LogVerbose($"Inventory Skipping: {i.InternalName} ({i.ActorSnoId}) due to not valid or disposed");
-                    //    return false;
-                    //}
+                //var items = Core.Actors.Inventory.Where(i =>
+                //{
+                //    //if (!i.IsValid || i.IsDisposed)
+                //    //{
+                //    //    Logger.LogVerbose($"Inventory Skipping: {i.InternalName} ({i.ActorSnoId}) due to not valid or disposed");
+                //    //    return false;
+                //    //}
 
-                    if (i.InventorySlot != InventorySlot.BackpackItems && i.InventorySlot != InventorySlot.SharedStash)
-                    {
-                        return false;
-                    }
+                //    if (i.InventorySlot != InventorySlot.BackpackItems && i.InventorySlot != InventorySlot.SharedStash)
+                //    {
+                //        return false;
+                //    }
 
-                    //if (InvalidItemDynamicIds.Contains(i.AnnId))
-                    //{
-                    //    Logger.LogVerbose($"Inventory Skipping: {i.Name} ({i.ActorSnoId}) due to InvalidItemDynamicId ({i.AnnId})");
-                    //    return false;
-                    //}
+                //    //if (InvalidItemDynamicIds.Contains(i.AnnId))
+                //    //{
+                //    //    Logger.LogVerbose($"Inventory Skipping: {i.Name} ({i.ActorSnoId}) due to InvalidItemDynamicId ({i.AnnId})");
+                //    //    return false;
+                //    //}
 
-                    if (!i.IsValid)
-                    {
-                        Logger.LogVerbose($"Inventory Skipping: {i.Name} ({i.ActorSnoId}) is invalid or disposed");
-                    }
+                //    if (!i.IsValid)
+                //    {
+                //        Logger.LogVerbose($"Inventory Skipping: {i.Name} ({i.ActorSnoId}) is invalid or disposed");
+                //    }
 
-                    //todo: perf optimize
-                    var stackQuantity = i.ItemStackQuantity;
-                    var isEquipment = !i.IsCraftingReagent && stackQuantity == 0;
-                    var isCraftingMaterial = i.IsCraftingReagent && stackQuantity > 0;
-                    var isGem = i.IsGem && stackQuantity > 0;
-                    var isPotion = i.IsPotion && stackQuantity == 0;
-                    var isMisc = i.IsMiscItem || i.ItemBaseType == ItemBaseType.Misc;
-                    var isCraftingBook = i.ItemType == ItemType.CraftingPage || i.ItemType == ItemType.CraftingPlan;
-                    var isCraftingPlan = i.ItemType == ItemType.CraftingPlan && stackQuantity == 1;
+                //    //todo: perf optimize
+                //    var stackQuantity = i.ItemStackQuantity;
+                //    var isEquipment = !i.IsCraftingReagent && stackQuantity == 0;
+                //    var isCraftingMaterial = i.IsCraftingReagent && stackQuantity > 0;
+                //    var isGem = i.IsGem && stackQuantity > 0;
+                //    var isPotion = i.IsPotion && stackQuantity == 0;
+                //    var isMisc = i.IsMiscItem || i.ItemBaseType == ItemBaseType.Misc;
+                //    var isCraftingBook = i.ItemType == ItemType.CraftingPage || i.ItemType == ItemType.CraftingPlan;
+                //    var isCraftingPlan = i.ItemType == ItemType.CraftingPlan && stackQuantity == 1;
 
-                    var isValid = isEquipment || isCraftingMaterial || isCraftingPlan || isPotion || isGem || isMisc || isCraftingBook;
+                //    var isValid = isEquipment || isCraftingMaterial || isCraftingPlan || isPotion || isGem || isMisc || isCraftingBook;
 
-                    if (!isValid)                 
-                        Logger.LogVerbose($"Inventory Skipping: {i.Name} ({i.ActorSnoId}), unknown item");
+                //    if (!isValid)                 
+                //        Logger.LogVerbose($"Inventory Skipping: {i.Name} ({i.ActorSnoId}), unknown item");
 
-                    return isValid;
+                //    return isValid;
 
-                }).ToList();
+                //}).ToList();
 
-                return items;
+                return Core.Actors.Inventory.Where(i => !InvalidItemDynamicIds.Contains(i.AnnId));
             }
         }
 
@@ -632,6 +632,14 @@ namespace TrinityCoroutines.Resources
 			public static List<TrinityItem> KhanduranRune
             {
                 get { return Items.Where(i => i.ActorSnoId == (int)InventoryItemType.KhanduranRune).ToList(); }
+            }
+
+            public static void Update()
+            {
+                foreach (var item in Items)
+                {
+                    item.OnUpdated();
+                }
             }
         }
 

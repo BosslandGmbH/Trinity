@@ -15,6 +15,7 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
 using Trinity.Items;
@@ -107,7 +108,7 @@ namespace Trinity
             {
                 try
                 {
-                    if (!CombatTargeting.Instance.AllowedToKillMonsters && (CurrentTarget == null || CurrentTarget.IsUnit))
+                    if (!CombatTargeting.Instance.AllowedToKillMonsters && (CurrentTarget == null || CurrentTarget.IsUnit) && CombatBase.CombatMode != CombatMode.KillAll)
                     {
                         Logger.LogVerbose("Aborting HandleTarget() AllowCombat={0} ShouldAvoid={1}", CombatTargeting.Instance.AllowedToKillMonsters, Core.Avoidance.Avoider.ShouldAvoid);
                         return RunStatus.Failure;
@@ -292,7 +293,6 @@ namespace Trinity
 
                     if (!Core.Avoidance.Avoider.ShouldAvoid)
                     {
-
                         if (!_isWaitingForPower && !_isWaitingBeforePower && (CombatBase.CurrentPower == null || CombatBase.CurrentPower.SNOPower == SNOPower.None) && CurrentTarget != null)
                         {
                             CombatBase.CurrentPower = AbilitySelector();
@@ -306,10 +306,11 @@ namespace Trinity
                         }
                         else
                         {
-                            Logger.LogVerbose(LogCategory.Behavior, "Not Selecting Ability WaitingForPower={0} WaitingBeforePower={1} CurrentPower={2} CurrentTarget={3}",
+                            Logger.LogVerbose(LogCategory.Behavior, "Not Avoiding WaitingForPower={0} WaitingBeforePower={1} CurrentPower={2} CurrentTarget={3}",
                                 _isWaitingForPower, _isWaitingBeforePower, CombatBase.CurrentPower, CurrentTarget);
                         }
                     }
+
                     // Prevent running away after progression globes spawn if they're in aoe
                     if (Player.IsInRift && !Core.Avoidance.Avoider.ShouldAvoid)
                     {                       
@@ -551,7 +552,7 @@ namespace Trinity
                     return GetRunStatus(RunStatus.Failure, "Exception");
                 }
 
-                HandleTargetBasicMovement(ForceNewMovement);
+                HandleTargetBasicMovement(CurrentDestination, ForceNewMovement);
 
                 Logger.LogDebug(LogCategory.Behavior, "End of HandleTarget");
                 return GetRunStatus(RunStatus.Running, "End");
@@ -943,6 +944,8 @@ namespace Trinity
                             {
                                 Logger.LogVerbose(LogCategory.Behavior, "Attacking  destructable");
 
+                                var destructiblePower = AbilitySelector();
+
                                 // Standard attack - attack the AcdId (equivalent of left-clicking the object in-game)
                                 if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, CurrentTarget.Position, -1, CurrentTarget.AcdId))
                                 {
@@ -1167,7 +1170,7 @@ namespace Trinity
                 }
 
                 // Find a valid ability if the target is a monster
-                if (_shouldPickNewAbilities && !_isWaitingForPower && !_isWaitingForPotion && !_isWaitingBeforePower)
+                if (!_isWaitingForPower && !_isWaitingForPotion && !_isWaitingBeforePower)
                 {
                     _shouldPickNewAbilities = false;
                     if (CurrentTarget.IsUnit)
@@ -1400,7 +1403,7 @@ namespace Trinity
         /// Moves our player if no special ability is available
         /// </summary>
         /// <param name="bForceNewMovement"></param>
-        private static void HandleTargetBasicMovement(bool bForceNewMovement)
+        private static void HandleTargetBasicMovement(Vector3 destination, bool bForceNewMovement)
         {
             using (new PerformanceLogger("HandleTarget.HandleBasicMovement"))
             {
@@ -1410,14 +1413,14 @@ namespace Trinity
 
                 Player.CurrentAction = PlayerAction.Moving;
 
-                if (DateTime.UtcNow.Subtract(lastSentMovePower).TotalMilliseconds >= 250 || Vector3.Distance(LastMoveToTarget, CurrentDestination) >= 2f || bForceNewMovement)
+                if (DateTime.UtcNow.Subtract(lastSentMovePower).TotalMilliseconds >= 250 || Vector3.Distance(LastMoveToTarget, destination) >= 2f || bForceNewMovement)
                 {
 
                     if(CurrentTarget.IsSafeSpot)
                         Logger.Log(LogCategory.Avoidance, $"Moving to SafeSpot Distance={CurrentTarget.Distance}");
 
-                    var distance = CurrentDestination.Distance(Player.Position);
-                    var straightLinePathing = distance <= 10f && !DataDictionary.StraightLinePathingLevelAreaIds.Contains(Player.LevelAreaId) &&  !PlayerMover.IsBlocked && !Navigator.StuckHandler.IsStuck && Core.Grids.CanRayWalk(ZetaDia.Me.Position, CurrentDestination); //&& NavHelper.CanRayCast(CurrentDestination)
+                    var distance = destination.Distance(Player.Position);
+                    var straightLinePathing = distance <= 10f && !DataDictionary.StraightLinePathingLevelAreaIds.Contains(Player.LevelAreaId) &&  !PlayerMover.IsBlocked && !Navigator.StuckHandler.IsStuck && Core.Grids.CanRayWalk(ZetaDia.Me.Position, destination); //&& NavHelper.CanRayCast(CurrentDestination)
 
                     string destname = String.Format("{0} {1:0} yds Elite={2} LoS={3} HP={4:0.00} Dir={5}",
                         CurrentTarget.InternalName,
@@ -1432,12 +1435,12 @@ namespace Trinity
                     {
                         lastMoveResult = MoveResult.Moved;
                         // just "Click" 
-                        Navigator.PlayerMover.MoveTowards(CurrentDestination);
+                        Navigator.PlayerMover.MoveTowards(destination);
                         Logger.LogVerbose(LogCategory.Movement, "Straight line pathing to {0}", destname);
                     }                    
                     else
                     {
-                        lastMoveResult = PlayerMover.NavigateTo(CurrentDestination, destname);
+                        lastMoveResult = PlayerMover.NavigateTo(destination, destname);
                     }
 
                     lastSentMovePower = DateTime.UtcNow;
@@ -1460,7 +1463,7 @@ namespace Trinity
                     //}
 
                     // Store the current destination for comparison incase of changes next loop
-                    LastMoveToTarget = CurrentDestination;
+                    LastMoveToTarget = destination;
                     // Reset total body-block count, since we should have moved
                     if (DateTime.UtcNow.Subtract(_lastForcedKeepCloseRange).TotalMilliseconds >= 2000)
                         _timesBlockedMoving = 0;
@@ -1621,7 +1624,7 @@ namespace Trinity
                 {
                     if (CurrentTarget.RadiusDistance > 0)
                     {
-                        PlayerMover.MoveTowards(CurrentTarget.Position);
+                        HandleTargetBasicMovement(CurrentTarget.Position, true);
                     }
                     else
                     {
@@ -2036,4 +2039,5 @@ namespace Trinity
 
         public static bool _isWaitingForAttackToFinish { get; set; }
     }
+
 }

@@ -16,6 +16,7 @@ using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Movement
@@ -301,6 +302,10 @@ namespace Trinity.Movement
                 return false;
 
             if (destination == Vector3.Zero)
+                return false;
+
+            // Vaulting away from stuff that needs to be interacted with.
+            if (ZetaDia.Actors.GetActorsOfType<DiaGizmo>().Any(g => g.Distance < 10f && g.ActorInfo.GizmoType != GizmoType.DestroyableObject))
                 return false;
 
             if (!Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position) && Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, destination, AvoidanceFlags.CriticalAvoidance))

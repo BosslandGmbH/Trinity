@@ -726,6 +726,12 @@ namespace Trinity
                                         continue;
                                     }
 
+                                    if (!cacheObject.IsWalkable && !cacheObject.HasBeenWalkable)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring unreachable.";
+                                        break;
+                                    }
+
                                     // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
                                     // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
                                     if (Player.WorldType != Act.OpenWorld && Player.CurrentQuestSNO == 257120 &&
@@ -928,6 +934,12 @@ namespace Trinity
 
                             case TrinityObjectType.PowerGlobe:
                                 {
+                                    if (!cacheObject.IsWalkable && !cacheObject.HasBeenWalkable)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring unreachable.";
+                                        break;
+                                    }
+
                                     if (Settings.Combat.Misc.IgnorePowerGlobes)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Power Globe Setting.";

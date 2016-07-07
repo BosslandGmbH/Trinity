@@ -1181,8 +1181,8 @@ namespace Trinity.Combat.Abilities
         /// <returns></returns>
         public static TrinityPower GetTrinityPower(Skill skill)
         {
-            var ticksBefore = skill.Meta.BeforeUseDelay == 0 ? 0 : (int)Math.Round(BotMain.TicksPerSecond * (skill.Meta.BeforeUseDelay / 1000));
-            var ticksAfter = skill.Meta.AfterUseDelay == 0 ? 0 : (int)Math.Round(BotMain.TicksPerSecond * (skill.Meta.AfterUseDelay / 1000));
+            var ticksBefore = 0; //skill.Meta.BeforeUseDelay == 0 ? 0 : (int)Math.Round(BotMain.TicksPerSecond * (skill.Meta.BeforeUseDelay / 1000));
+            var ticksAfter = 0; //skill.Meta.AfterUseDelay == 0 ? 0 : (int)Math.Round(BotMain.TicksPerSecond * (skill.Meta.AfterUseDelay / 1000));
 
             if (skill.Meta.IsCastOnSelf)
             {

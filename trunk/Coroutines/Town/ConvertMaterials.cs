@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Technicals;
@@ -26,6 +27,9 @@ namespace Trinity.Coroutines.Town
                     //Logger.LogVerbose(LogCategory.Behavior, "[ConvertMaterials] Invalid item '{0}' IsValid/Disposed", i.InternalName);
                     return false;
                 }
+
+                if (!i.IsCraftingReagent && i.RequiredLevel < 70)
+                    return false;
 
                 if (i.ItemBaseType != ItemBaseType.Armor && i.ItemBaseType != ItemBaseType.Weapon && i.ItemBaseType != ItemBaseType.Jewelry)
                 {
@@ -159,8 +163,8 @@ namespace Trinity.Coroutines.Town
                 await Coroutine.Sleep(1500);
                 await Coroutine.Yield();
 
-                var newToAmount = Inventory.Backpack.OfType(to).Select(i => i.ItemStackQuantity).Sum();
-				if(newToAmount > backpackToMaterialAmount)
+                var newToAmount = Inventory.Backpack.OfType(to).Select(i => i.Attributes.ItemStackQuantity).Sum();
+				if(newToAmount > backpackToMaterialAmount || Core.Actors.IsAnnIdValid(item.AnnId))
 				{
 					Logger.Log("[ConvertMaterials] Converted materials '{0}' ---> '{1}'", from, to);
 					backpackToMaterialAmount = newToAmount;

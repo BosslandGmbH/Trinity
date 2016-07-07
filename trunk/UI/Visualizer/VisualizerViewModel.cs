@@ -401,11 +401,19 @@ namespace Trinity.UI.RadarUI
                 if (_selectedObject != value)
                     ExpandedPanel = ExpandingPanels.SelectedItem;
 
-                if (!IsPaused && value != null)
-                    Pause();
+                if (!IsDragging)
+                {
+                    if (!IsPaused && value != null)
+                        Pause();
 
-                if (IsPaused && value == null)
-                    return;
+                    if (IsPaused && value == null)
+                        return;
+                }
+                else
+                {
+                    if (IsPaused && value == null)
+                        TogglePause();
+                }
 
                 SetField(ref _selectedObject, value);
 
@@ -605,7 +613,13 @@ namespace Trinity.UI.RadarUI
             get { return _isSidePanelExpanded || _sidePanelWidth.IsAuto || _sidePanelWidth.IsStar; }
             set { SetField(ref _isSidePanelExpanded, value); }
         }
-
+        
+        [IgnoreDataMember]
+        public bool IsDragging
+        {
+            get { return _isDragging; }
+            set { SetField(ref _isDragging, value); }
+        }
 
         readonly GridLengthConverter _gridLengthConverter = new GridLengthConverter();
         public GridLength GetGridLength<T>(T input)
@@ -934,7 +948,7 @@ namespace Trinity.UI.RadarUI
                         //{
                         //    Logger.Log("Actor: {0} was clicked on radar", actor.Name);
                         //    SelectedObject = actor;
-                        //}
+                        //}      
                         SelectedObject = param as TrinityActor;
                     }
                     catch (Exception ex)
@@ -1074,6 +1088,7 @@ namespace Trinity.UI.RadarUI
         private int _selectedTabIndex;
         private ObservableCollection<TrinityMarker> _allMarkers;
         private TrinityMarker _selectedMarker;
+        private bool _isDragging;
 
 
         public bool StartThreadAllowed

@@ -315,6 +315,7 @@
                         Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
                         Height="{Binding Path=ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type Border}}}"
                         SelectedItem="{Binding SelectedObject}"
+                        IsDragging="{Binding IsDragging, Mode=OneWayToSource}"
                         Background="#333333"  IsHitTestVisible="True"
                         ClickCommand="{Binding RadarClickCommand}"
                         VisibilityFlags="{Binding VisibilityFlags}"

@@ -122,7 +122,7 @@ namespace Trinity
                     if (RiftProgression.IsInRift && DateTime.UtcNow.Subtract(_lastTestPulseTime).TotalMilliseconds > 5000)
                     {
                         _lastTestPulseTime = DateTime.UtcNow;
-                        Logger.LogSpecial(() => $"RiftProgression%={Core.Globals.RiftProgressionPct} RiftSouls={Core.Globals.RiftSouls}");
+                        Logger.LogSpecial(() => $"RiftProgression%={Core.MemoryModel.Globals.RiftProgressionPct} RiftSouls={Core.MemoryModel.Globals.RiftSouls}");
                     }
 
      

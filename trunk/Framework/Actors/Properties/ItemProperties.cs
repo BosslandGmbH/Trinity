@@ -166,7 +166,7 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.ItemQualityLevel >= ItemQuality.Legendary || actor.IsCraftingReagent)
             {
-                return actor.Attributes.IsTradeable && actor.Attributes.ItemTradePlayerLow.Contains(Core.Hero.PlayerTradeId);
+                return actor.Attributes.IsTradeable && actor.Attributes.ItemTradePlayerLow.Contains(Core.MemoryModel.Hero.PlayerTradeId);
             }
 
             if (actor.IsEquipment && actor.ItemQualityLevel <= ItemQuality.Rare6)

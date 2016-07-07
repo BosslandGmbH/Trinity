@@ -17,6 +17,7 @@ namespace Trinity.Helpers
             public IntPtr SnoGroupsAddr;
             public IntPtr AttributeDescripterAddr;
             public int GlobalsOffset;
+            public int StorageOffset { get; set; }
         }
 
         private static BuildMemoryInfo _currentBuild;
@@ -52,6 +53,7 @@ namespace Trinity.Helpers
             public static IntPtr Globals => ObjectManager + _currentBuild.GlobalsOffset;
             public static IntPtr SnoGroups => _currentBuild.SnoGroupsAddr; 
             public static IntPtr AttributeDescripters => _currentBuild.AttributeDescripterAddr;
+            public static IntPtr Storage => ObjectManager + _currentBuild.StorageOffset;
         }
 
         private static readonly List<BuildMemoryInfo> SupportedBuilds = new List<BuildMemoryInfo>
@@ -64,7 +66,8 @@ namespace Trinity.Helpers
                 SymbolManagerPtr = (IntPtr)0x01EE7598,
                 SnoGroupsAddr = (IntPtr)0x1EA0BC8,
                 AttributeDescripterAddr = (IntPtr) 0x1EEFE70,
-                GlobalsOffset = 0x790
+                GlobalsOffset = 0x790,
+                StorageOffset = 0x798,
             },
             new BuildMemoryInfo
             {
@@ -73,7 +76,8 @@ namespace Trinity.Helpers
                 SymbolManagerPtr = (IntPtr)0x01F01900,
                 SnoGroupsAddr = (IntPtr)0x01EA73A8,
                 AttributeDescripterAddr = (IntPtr)0x01EBEB78,
-                GlobalsOffset = 0x790
+                GlobalsOffset = 0x790,
+                StorageOffset = 0x798,
             },
         };
     }

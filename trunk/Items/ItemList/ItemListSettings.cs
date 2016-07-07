@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using JetBrains.Annotations;
 using Trinity.Config;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Helpers;
 using Trinity.Reference;

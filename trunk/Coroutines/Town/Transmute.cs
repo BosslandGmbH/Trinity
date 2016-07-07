@@ -58,9 +58,10 @@ namespace Trinity.Coroutines.Town
                     return false;
                 }
 
+                //var isVendorWhite = item.IsVendorBought && item.ItemQualityLevel <= ItemQuality.Superior;
                 if (!item.IsCraftingReagent && item.Level < 70)
                 {
-                    Logger.Log(" --> Can't transmute low level items");
+                    Logger.Log($" --> The internal item level for {item.Name} is {item.Level}; most items less than 70 level will cause a failed transmute");
                     return false;
                 }
 

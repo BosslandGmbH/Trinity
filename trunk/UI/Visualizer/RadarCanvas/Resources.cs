@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Windows.Media;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Technicals;
+using DashStyle = System.Windows.Media.DashStyle;
 
 namespace Trinity.UI.UIComponents.RadarCanvas
 {
@@ -152,6 +154,18 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             
             EliteBrush = new SolidColorBrush(Colors.Blue);
             EliteLightPen = new Pen(new SolidColorBrush(ControlPaint.Light(EliteBrush.Color.ToDrawingColor(), 50).ToMediaColor()), 1);
+
+            SceneFrameInclude = new Pen(new SolidColorBrush(Colors.LightGreen), 2)
+            {
+                DashStyle = DashStyles.Dot,
+                DashCap = PenLineCap.Square
+            };
+
+            SceneFrameExclude = new Pen(new SolidColorBrush(Colors.OrangeRed), 2)
+            {
+                DashStyle = DashStyles.Dot,                
+                DashCap = PenLineCap.Square
+            };
 
             HostileUnitBrush = new SolidColorBrush(Colors.DodgerBlue);
             HostileUnitLightPen = new Pen(new SolidColorBrush(ControlPaint.Light(HostileUnitBrush.Color.ToDrawingColor(), 50).ToMediaColor()), 1);
@@ -594,5 +608,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
         public static Pen SuccessPen { get; set; }
         public static Pen FailurePen { get; set; }
+        public static Pen MarkerPen { get; set; } = new Pen(Brushes.Orange, 1);
+        public static Pen SceneFrameInclude { get; set; }
+        public static Pen SceneFrameExclude { get; set; }
     }
 }

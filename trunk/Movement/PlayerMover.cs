@@ -497,8 +497,6 @@ namespace Trinity.DbProvider
             if (!ZetaDia.IsInTown && ClassMover.IsSpecialMovementReady && !TrinityPlugin.ShouldWaitForLootDrop &&
                 (CombatBase.IsInCombat || CombatBase.IsCurrentlyAvoiding || ClassMover.OutOfCombatMovementAllowed))
             {
-                if (NavigationProvider == null)
-                    NavigationProvider = Navigator.GetNavigationProviderAs<DefaultNavigationProvider>();
 
                 if (ClassMover.SpecialMovement(destination))
                 {
@@ -702,7 +700,7 @@ namespace Trinity.DbProvider
         }
 
         private static Vector3 LastDestination { get; set; }
-        public static DefaultNavigationProvider NavigationProvider { get; set; }
+        public static DefaultNavigationProvider NavigationProvider => Navigator.GetNavigationProviderAs<DefaultNavigationProvider>();
 
         private static Coroutine _navigateToCoroutine;
         private static MoveResult _lastResult;

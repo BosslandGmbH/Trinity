@@ -135,6 +135,10 @@ namespace Trinity.UI
                             //CreateButton("Stop Internals", StopInternals),
                             //CreateButton("Clsoe Vendor", CloseVendorWindowTest),
 
+                      
+
+                            CreateButton("Test", TestUIElement),
+
                             CreateButton("Upgrade Rares", UpgradeBackpackRares),
                             //CreateButton("Extract Powers", ExtractBackpackPowers),
                             CreateButton("ItemList Check", btnClick_TestItemList),
@@ -206,11 +210,11 @@ namespace Trinity.UI
                     //    return;
 
                     //var scan = new MemoryScan(wall.RActor.BaseAddress, 4000);
-   
+
                     //Logger.LogRaw(scan.Floats.ToString());
 
                     //Logger.Log($"WorldEnv == {Core.World.EnvironmentType}");
-                 
+
                 }
             }
             catch (Exception ex)
@@ -599,14 +603,80 @@ namespace Trinity.UI
                 {
                     // [23194B50] Mouseover: 0xE062F8B5040F3076, Name: Root.NormalLayer.vendor_dialog_mainPage.tab_3
 
-                    var el = UIElement.FromHash(0xE062F8B5040F3076);
-                    el.Click();
+
+
+                    //var el = UIElement.FromHash(0xE062F8B5040F3076);
+                    //el.Click();
+
+                    Logger.Warn($"CurrentDifficulty={Core.MemoryModel.Storage.CurrentDifficulty}");
+
+                    //var elName = "Root.NormalLayer.gamemenu_dialog.gamemenu_bkgrnd.GameParams.GameParams.RightButtonStackContainer.Difficulty";
+                    //var el = UIElement.FromName(elName);
+                    //if (el != null)
+                    //{
+                    //    el.Log();
+                    //    el.GetChildren().Where(c => c != null).ForEach(c => c.Log());
+                    //}
+                    //else
+                    //{
+                    //    Logger.Log($"UIElement not found {elName}");
+                    //}
+
+                    //var elsA = new List<UIElement>();
+                    //var elsB = new List<UIElement>();
+                    //foreach (var el in UIElement.UIMap)
+                    //{
+                    //    if (!el.IsValid) continue;
+                    //    try
+                    //    {
+                    //        elsA.AddRange(el.FindDecedentsWithText("Master"));
+                    //        elsB.AddRange(el.FindDecendentsWithName("Difficulty"));
+                    //    }
+                    //    catch (Exception) { }
+
+                    //}
+
+                    //var elName1 = "Root.NormalLayer.minimap_dialog_backgroundScreen.minimap_dialog_pve.button_map";
+                    //var el1 = UIElement.FromName(elName1);
+
+                    //var test = UIElement.FromHash(3401232850578496395);
+                    //var ptr = ZetaDia.Memory.Read<IntPtr>(test.BaseAddress - 0x170);
+                    //var difficulty = ZetaDia.Memory.ReadString(ptr, Encoding.UTF8);
+                    //Logger.Warn(difficulty + " (A)");
+
+                    //var test2 = UIElement.FromHash(17922421684644209059).Text;
+                    //Logger.Warn(test2);
+
+                    //if (el != null)
+                    //{
+                    //    el.Log();
+                    //    el.GetChildren().Where(c => c != null).ForEach(c => c.Log());
+                    //}
+                    //else
+                    //{
+                    //    Logger.Log($"UIElement not found {elName}");
+                    //}
+
+                    //elName = "Root.NormalLayer.gamemenu_dialog.gamemenu_bkgrnd.GameParams.GameParams.RightButtonStackContainer";
+                    //el = UIElement.FromName(elName);
+                    //if (el != null)
+                    //{
+                    //    el.Log();
+                    //    el.GetChildren().Where(c => c != null).ForEach(c => c.Log());
+                    //}
+                    //else
+                    //{
+                    //    Logger.Log($"UIElement not found {elName}");
+                    //}
+
+                    //Root.NormalLayer.BattleNetStore_main.LayoutRoot.OverlayContainer.CurrencyPurchase.PurchaseButtonStackPanel1.PurchaseButtonTemplate2.TextDefault.PriceBannerTemplate.DiscountBanner;
+
                 }
 
             }
             catch (Exception ex)
             {
-                Logger.LogError("Error in LogTownActor: {0} {1}", logFile, ex.Message);
+                Logger.LogError("Error in TestUIElement: {0} {1}", logFile, ex.Message);
             }
         }
 
@@ -1053,7 +1123,15 @@ namespace Trinity.UI
 
             foreach (var fromMaterial in fromMaterials)
             {
-                if (UIElements.TransmuteItemsDialog.IsVisible && Coroutines.Town.ConvertMaterials.CanRun(fromMaterial, to))
+                var canRun = false;
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    ZetaDia.Actors.Update();
+                    Core.Update();
+                    canRun = Coroutines.Town.ConvertMaterials.CanRun(fromMaterial, to);
+                }
+
+                if (UIElements.TransmuteItemsDialog.IsVisible && canRun)
                 {
                     LastStartedConvert = DateTime.UtcNow;
                     CoroutineHelper.RunCoroutine(() => Coroutines.Town.ConvertMaterials.Execute(fromMaterial, to), result =>
