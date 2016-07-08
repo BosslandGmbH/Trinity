@@ -12,6 +12,8 @@ using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Behaviors;
+using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Helpers;
 using Trinity.Items;
@@ -128,40 +130,44 @@ namespace Trinity
                 Logger.LogDebug(LogCategory.GlobalHandler, "Recently died, durability zero");
                 return true;
             }
-            
+
             await AutoEquipSkills.Instance.Execute();
             await AutoEquipItems.Instance.Execute();
 
 
-            var itemMarker = Core.Markers.CurrentWorldMarkers.FirstOrDefault(m => m.MarkerType == WorldMarkerType.SetItem || m.MarkerType == WorldMarkerType.LegendaryItem && !_visitedItemMarkers.Contains(m.Position));
-            if (itemMarker != null && (_movingToMarker || (!CombatBase.IsInCombat && itemMarker.Distance < 500f)) && !Navigator.StuckHandler.IsStuck)
-            {
-                if (!_movingToMarker)
-                {
-                    _movingToMarkerTimeout = DateTime.UtcNow.AddSeconds(20f);
-                    _movingToMarker = true;
-                }
+            //var itemMarker = Core.Markers.CurrentWorldMarkers.FirstOrDefault(m => m.MarkerType == WorldMarkerType.SetItem || m.MarkerType == WorldMarkerType.LegendaryItem && !_visitedItemMarkers.Contains(m.Position));
+            //if (itemMarker != null && (_movingToMarker || (!CombatBase.IsInCombat && itemMarker.Distance < 500f)) && !Navigator.StuckHandler.IsStuck)
+            //{
+            //    if (!_movingToMarker)
+            //    {
+            //        _movingToMarkerTimeout = DateTime.UtcNow.AddSeconds(20f);
+            //        _movingToMarker = true;
+            //    }
 
-                if (itemMarker.Distance < 10f)
-                {
-                    Logger.Warn($"Arrived at Item Marker: {itemMarker.Position}! Distance {itemMarker.Distance}!");
-                    _movingToMarker = false;
-                    _visitedItemMarkers.Add(itemMarker.Position);
-                    VacuumItems.Execute();
-                }
-                else if (DateTime.UtcNow > _movingToMarkerTimeout)
-                {
-                    _movingToMarker = false;
-                    _visitedItemMarkers.Add(itemMarker.Position);
-                }
-                else
-                {
-                    Logger.Warn($"Moving to Item Marker at {itemMarker.Position}! Distance {itemMarker.Distance}!");
-                    await CommonCoroutines.MoveTo(itemMarker.Position, "ItemMarker"); 
-                    TrinityPlugin.Player.CurrentAction = PlayerAction.Moving;
-                    return true;
-                }
-            }
+            //    if (itemMarker.Distance < 10f)
+            //    {
+            //        Logger.Warn($"Arrived at Item Marker: {itemMarker.Position}! Distance {itemMarker.Distance}!");
+            //        _movingToMarker = false;
+            //        _visitedItemMarkers.Add(itemMarker.Position);
+            //        VacuumItems.Execute();
+            //    }
+            //    else if (DateTime.UtcNow > _movingToMarkerTimeout)
+            //    {
+            //        _movingToMarker = false;
+            //        _visitedItemMarkers.Add(itemMarker.Position);
+            //    }
+            //    else
+            //    {
+            //        Logger.Warn($"Moving to Item Marker at {itemMarker.Position}! Distance {itemMarker.Distance}!");
+            //        await CommonCoroutines.MoveTo(itemMarker.Position, "ItemMarker"); 
+            //        TrinityPlugin.Player.CurrentAction = PlayerAction.Moving;
+            //        return true;
+            //    }
+            //}
+
+            if (await Behaviors.MoveToMarker.While(m => m.MarkerType == WorldMarkerType.LegendaryItem || m.MarkerType == WorldMarkerType.SetItem))
+                return true;
+
 
             var isTarget = TrinityPlugin.TargetCheck(null);
 
@@ -188,12 +194,15 @@ namespace Trinity
                 return await new Action(ret => TrinityPlugin.HandleTarget()).ExecuteCoroutine();
             }
 
+            //new MoveToMarkerBehavior(() => )
+
             return false;
             //return await new Decorator(TrinityPlugin.TargetCheck, new Action(ret => TrinityPlugin.HandleTarget())).ExecuteCoroutine();
         }
 
         private static bool _movingToMarker { get; set; }
         private static DateTime _movingToMarkerTimeout { get; set; }
+
 
         public static HashSet<Vector3> _visitedItemMarkers { get; set; } = new HashSet<Vector3>();
 

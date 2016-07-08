@@ -297,6 +297,8 @@ namespace Trinity
                         {
                             CombatBase.CurrentPower = AbilitySelector();
 
+                            Logger.LogVerbose(LogCategory.Behavior, $"Selected Power {CombatBase.CurrentPower}");
+
                             if (CombatBase.CurrentPower.SNOPower == SNOPower.None)
                             {
                                 Logger.LogVerbose(LogCategory.Behavior, "SNOPower.None selected from combat routine :S");
@@ -907,74 +909,44 @@ namespace Trinity
                                     );
                             }
 
-                            //if (CurrentTarget.RActorId == _ignoreRactorGuid || DataDictionary.DestroyAtLocationIds.Contains(CurrentTarget.ActorSnoId))
+                            var vAttackPoint = CurrentTarget.Position;
                             if (DataDictionary.DestroyAtLocationIds.Contains(CurrentTarget.ActorSnoId))
                             {
-                                // Location attack - attack the Vector3/map-area (equivalent of holding shift and left-clicking the object in-game to "force-attack")
-                                Vector3 vAttackPoint;
+                                // Location attack - attack the Vector3/map-area (equivalent of holding shift and left-clicking the object in-game to "force-attack")                                
                                 if (CurrentTarget.Distance >= 6f)
-                                    vAttackPoint = MathEx.CalculatePointFrom(CurrentTarget.Position, Player.Position, 6f);
-                                else
-                                    vAttackPoint = CurrentTarget.Position;
+                                    vAttackPoint = MathEx.CalculatePointFrom(CurrentTarget.Position, Player.Position, 6f);                                     
+                            }
+                            vAttackPoint.Z += 1.5f;
 
-                                vAttackPoint.Z += 1.5f;
+                            // try with routine selected a destructible power
+                            var destructiblePower = AbilitySelector();
+                            if (destructiblePower == null || destructiblePower.SNOPower == SNOPower.Walk || destructiblePower.SNOPower == SNOPower.None)
+                            {
+                                destructiblePower = CombatBase.DefaultPower;
+                                Navigator.PlayerMover.MoveTowards(CurrentTarget.Position);
+                            }
 
-                                Logger.LogVerbose(LogCategory.Behavior, "Attacking  destructable at location");
+                            Logger.LogVerbose($"Attacking Destructable Power={destructiblePower}");
 
-                                if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, vAttackPoint, CurrentWorldDynamicId, -1))
-                                {
-                                    SpellHistory.RecordSpell(CombatBase.CurrentPower.SNOPower);
-                                }
-                                else
-                                {
-                                    Navigator.PlayerMover.MoveTowards(vAttackPoint);
-
-                                    if (ZetaDia.Me.UsePower(CombatBase.DefaultWeaponPower, vAttackPoint, CurrentWorldDynamicId, -1))
-                                    {
-                                        SpellHistory.RecordSpell(CombatBase.CurrentPower.SNOPower);
-                                    }
-
-                                    TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
-                                }
-                               
-                                if (CombatBase.CurrentPower.SNOPower == SNOPower.Monk_TempestRush)
-                                    MonkCombat.LastTempestRushLocation = vAttackPoint;
+                            // try with acdId
+                            if (ZetaDia.Me.UsePower(destructiblePower.SNOPower, vAttackPoint, -1, CurrentTarget.AcdId))
+                            {
+                                SpellHistory.RecordSpell(destructiblePower.SNOPower);
+                                LastActionTimes.Add(DateTime.UtcNow);
                             }
                             else
                             {
-                                Logger.LogVerbose(LogCategory.Behavior, "Attacking  destructable");
-
-                                // Standard attack - attack the AcdId (equivalent of left-clicking the object in-game)
-                                if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, CurrentTarget.Position, -1, CurrentTarget.AcdId))
+                                // try position
+                                if (ZetaDia.Me.UsePower(destructiblePower.SNOPower, vAttackPoint))
                                 {
-                                    SpellHistory.RecordSpell(CombatBase.CurrentPower.SNOPower);
+                                    SpellHistory.RecordSpell(destructiblePower.SNOPower);
+                                    LastActionTimes.Add(DateTime.UtcNow);
                                 }
-                                else
-                                {
-                                    CombatBase.CurrentPower = CombatBase.DefaultPower;
-                                    Navigator.PlayerMover.MoveTowards(CurrentTarget.Position);
-
-                                    if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, CurrentTarget.Position, -1, CurrentTarget.AcdId))
-                                    {
-                                        SpellHistory.RecordSpell(CombatBase.CurrentPower.SNOPower);
-                                    }
-                                    else
-                                    {
-                                        if (ZetaDia.Me.UsePower(CombatBase.CurrentPower.SNOPower, CurrentTarget.Position))
-                                        {
-                                            SpellHistory.RecordSpell(CombatBase.CurrentPower.SNOPower);
-                                        }
-                                        else
-                                        {
-                                            TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
-                                        }
-                                    }
-                                }
-
-
-                                if (CombatBase.CurrentPower.SNOPower == SNOPower.Monk_TempestRush)
-                                    MonkCombat.LastTempestRushLocation = CurrentTarget.Position;
                             }
+
+                            if (CombatBase.CurrentPower.SNOPower == SNOPower.Monk_TempestRush)
+                                MonkCombat.LastTempestRushLocation = CurrentTarget.Position;
+                          
 
                             int interactAttempts;
                             // Count how many times we've tried interacting
@@ -1168,7 +1140,7 @@ namespace Trinity
                 }
 
                 // Find a valid ability if the target is a monster
-                if (!_isWaitingForPower && !_isWaitingForPotion && !_isWaitingBeforePower)
+                if (_shouldPickNewAbilities && !_isWaitingForPower && !_isWaitingForPotion && !_isWaitingBeforePower)
                 {
                     _shouldPickNewAbilities = false;
                     if (CurrentTarget.IsUnit)

@@ -6,6 +6,7 @@ using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Objects.Native;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -211,6 +212,8 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public bool Interact()
         {
+            Navigator.PlayerMover.MoveStop();
+
             switch (ActorType)
             {
                 case ActorType.Monster:

@@ -10,6 +10,7 @@ using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Combat.Abilities
@@ -48,6 +49,11 @@ namespace Trinity.Combat.Abilities
             // Destructibles
             if (UseDestructiblePower)
                 return DestroyObjectPower();
+
+            if (Settings.Combat.Wizard.AlwaysExplosiveBlast && CanCast(SNOPower.Wizard_ExplosiveBlast) && Player.PrimaryResource > 20 && !Player.IsInTown && !Player.IsCastingOrLoading)
+            {
+                return new TrinityPower(SNOPower.Wizard_ExplosiveBlast);
+            }
 
             // In Combat, Avoiding
             if (IsCurrentlyAvoiding)
@@ -195,11 +201,6 @@ namespace Trinity.Combat.Abilities
                 (TargetUtil.AnyElitesInRange(range, 1) || TargetUtil.AnyMobsInRange(range, 1) || Player.CurrentHealthPct <= 0.90 || Player.IsIncapacitated || Player.IsRooted || CurrentTarget.RadiusDistance <= 40f))
             {
                 return new TrinityPower(SNOPower.Wizard_DiamondSkin);
-            }
-
-            if (Settings.Combat.Wizard.AlwaysExplosiveBlast && CanCast(SNOPower.Wizard_ExplosiveBlast) && Player.PrimaryResource > 20)
-            {
-                return new TrinityPower(SNOPower.Wizard_ExplosiveBlast);
             }
 
             // Explosive Blast
