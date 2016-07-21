@@ -231,7 +231,7 @@ namespace Trinity.Framework.Modules
             IsCasting = _me.LoopingAnimationEndTime > 0;
             CurrentAnimation = _me.CommonData.CurrentAnimation;
             IsInventoryLockedForGreaterRift = ZetaDia.CurrentRift.IsStarted && ZetaDia.CurrentRift.Type == RiftType.Greater && !ZetaDia.CurrentRift.IsCompleted;
-            Summons = new SummonInfo();
+
             //var direction = ZetaDia.Me.Movement.DirectionVector;
             //         var directionRadians = Math.Atan2(direction.X, direction.Y);
             //var directionDegrees = directionRadians * 180/Math.PI;
@@ -541,6 +541,8 @@ namespace Trinity.Framework.Modules
             public int AncientCount = 0;
             public int SpiderPetCount = 0;
         }
-        
+
+
+
     }
 }
