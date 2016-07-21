@@ -62,17 +62,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Adventurer">
-      <HintPath>..\Adventurer\Trunk\bin\Debug\Adventurer.dll</HintPath>
+      <HintPath>..\Adventurer\bin\Debug\Adventurer.dll</HintPath>
     </Reference>
     <Reference Include="Demonbuddy, Version=1.1.3036.624, Culture=neutral, PublicKeyToken=eff32ccf253d66d4, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DB-Current\Demonbuddy.exe</HintPath>
+      <HintPath>..\..\Demonbuddy.exe</HintPath>
     </Reference>
     <Reference Include="GreyMagic">
-      <HintPath>..\..\DB-Current\GreyMagic.dll</HintPath>
+      <HintPath>..\..\GreyMagic.dll</HintPath>
     </Reference>
     <Reference Include="IronPython">
-      <HintPath>..\..\DB-Current\IronPython.dll</HintPath>
+      <HintPath>..\..\IronPython.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="PresentationCore" />
@@ -96,6 +96,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Combat\Abilities\PhelonsPlayground\Monk\Monk.Innas.cs" />
+    <Compile Include="Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.Helltooth.cs" />
     <Compile Include="Framework\Actors\ActorTypes\TrinityItem.cs" />
     <Compile Include="Framework\Actors\Properties\ItemProperties.cs" />
     <Compile Include="Framework\Actors\Properties\GizmoProperties.cs" />

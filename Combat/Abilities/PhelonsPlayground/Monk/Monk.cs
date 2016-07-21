@@ -12,15 +12,13 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
 {
     partial class Monk : CombatBase
     {
-        public static bool IszDPS
-        {
-            get
-            {
-                return (Sets.IstvansPairedBlades.IsEquipped ||
-                        Sets.Innas.CurrentBonuses == 2 && Sets.ThousandStorms.CurrentBonuses >= 1) &&
-                       Skills.Monk.CycloneStrike.IsActive;
-            }
-        }
+        private static bool IszDPS => (Sets.IstvansPairedBlades.IsEquipped ||
+                                      Sets.Innas.CurrentBonuses == 2 && Sets.ThousandStorms.CurrentBonuses >= 1) &&
+                                      Skills.Monk.CycloneStrike.IsActive;
+
+        private static bool IsInnas => Sets.ShenlongsSpirit.IsFullyEquipped &&
+                                       Sets.Innas.CurrentBonuses == 3 && 
+                                       Sets.ThousandStorms.CurrentBonuses == 1;
 
         public static TrinityPower GetPower()
         {
@@ -32,9 +30,9 @@ namespace Trinity.Combat.Abilities.PhelonsPlayground.Monk
             if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
             {
                 if (IszDPS)
-                {
                     power = ZDps.PowerSelector();
-                }
+                if (IsInnas)
+                    power = Innas.PowerSelector();
             }
             return power;
         }
