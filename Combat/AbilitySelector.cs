@@ -15,6 +15,8 @@ namespace Trinity
 {
     public partial class TrinityPlugin : IPlugin
     {
+
+
         /// <summary>
         /// Check if a particular buff is present
         /// </summary>
@@ -129,7 +131,8 @@ namespace Trinity
                             if (Settings.Advanced.BetaPlayground)
                             {
                                 power = WitchDoctor.GetPower();
-                                break;
+                                if (power != null)
+                                    break;
                             }
                             power = WitchDoctorCombat.GetPower();
                             break;

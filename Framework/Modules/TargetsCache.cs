@@ -35,7 +35,7 @@ namespace Trinity.Framework.Modules
         {
             TrinityPlugin.LastRefreshedCache = DateTime.UtcNow;
             TrinityPlugin.LastTargetPosition = TrinityPlugin.CurrentTarget != null ? TrinityPlugin.CurrentTarget.Position : Vector3.Zero;
-            
+
             if (TrinityPlugin.CurrentTarget != null)
                 TrinityPlugin.LastTargetRactorGUID = TrinityPlugin.CurrentTarget.RActorId;
 
@@ -66,7 +66,7 @@ namespace Trinity.Framework.Modules
                 var timer = new Stopwatch();
 
                 PreUpdateTasks();
-                
+
                 foreach (var actor in Core.Actors.GetActorsOfType<TrinityActor>())
                 {
                     try
@@ -305,15 +305,6 @@ namespace Trinity.Framework.Modules
 
         private bool ShouldCacheUnit(TrinityActor cacheObject)
         {
-            if (cacheObject.IsSummonedByPlayer)
-            {
-                // todo: This doesnt seem like a good place for this sort of processing to happen.                
-                UpdatePlayerSummonCounts(cacheObject);
-
-                cacheObject.AddCacheInfo("SummonedByPlayer");
-                return false;
-            }
-
             if (cacheObject.IsSameTeam && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("SameTeam");
@@ -338,7 +329,14 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            
+            if (cacheObject.IsSummonedByPlayer)
+            {
+                // todo: This doesnt seem like a good place for this sort of processing to happen.                
+                UpdatePlayerSummonCounts(cacheObject);
+
+                cacheObject.AddCacheInfo("SummonedByPlayer");
+                return false;
+            }
 
             if (cacheObject.IsDead)
             {
