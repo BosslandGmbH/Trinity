@@ -8,6 +8,6 @@ namespace Trinity.Framework.Behaviors
 {
     public static class Behaviors
     {
-        public static MoveToMarkerBehavior MoveToMarker = new MoveToMarkerBehavior();
+        public static MoveToMarkerBehavior MoveToMarker { get; set; } = new MoveToMarkerBehavior();
     }
 }
