@@ -128,7 +128,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         /// Rotation in radians
         /// </summary>
         public float Rotation { get; set; }
-
         public Vector2 DirectionVector { get; set; }
         public float MovementSpeed { get; set; }
         public bool IsMoving { get; set; }
@@ -136,6 +135,8 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool HasBeenPrimaryTarget { get; set; }
         public double RiftValueInRadius { get; set; }
         public float RequiredRange { get; set; }
+        public bool NpcHasInteractOptions { get; set; }
+        public bool IsLockedDoor { get; set; }
 
         public override void OnCreated()
         {
@@ -191,7 +192,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsFacingPlayer => TargetUtil.IsFacing(this, Core.Player.Position, 30f);
         public double CacheTime => Math.Abs(UpdateTime) < double.Epsilon ? CreateTime : UpdateTime;
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;
-        public bool NpcHasInteractOptions { get; set; }
+
 
 
         public void AddCacheInfo(string reason)

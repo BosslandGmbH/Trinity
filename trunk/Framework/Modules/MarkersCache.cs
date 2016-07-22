@@ -74,6 +74,7 @@ namespace Trinity.Framework.Modules
         public string Name { get; set; }
         public WorldMarkerType MarkerType { get; set; }
         public int WorldSnoId { get; set; }
+        public override string ToString() => $"{Name} at {Position}! Distance {Distance}! Type={MarkerType} TextureId={TextureId}";
     }
 }
 

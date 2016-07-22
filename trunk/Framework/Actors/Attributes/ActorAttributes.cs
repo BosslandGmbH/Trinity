@@ -84,7 +84,7 @@ namespace Trinity.Framework.Actors.Attributes
 
         public int LastDamageAnnId => GetAttribute<int>(ActorAttributeType.LastDamageACD);
 
-
+        public bool IsDoorTimed => GetAttribute<int>(ActorAttributeType.DoorTimer) > 0;
     }
 }
 

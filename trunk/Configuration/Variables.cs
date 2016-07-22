@@ -447,7 +447,7 @@ namespace Trinity
         /// <summary>
         /// If our current target is in LoS for use in Behavior handling
         /// </summary>
-        private static bool CurrentTargetIsInLoS;
+        private static bool CurrentTargetWithinRange;
 
         // Darkfriend's Looting Rule
         public static Interpreter StashRule = null; // = new Interpreter();

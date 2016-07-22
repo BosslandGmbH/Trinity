@@ -224,6 +224,11 @@ namespace Trinity.Framework.Avoidance
                         UpdateProjectileBlockers(obj);                 
                     }
 
+                    foreach (var door in Core.Actors.AllRActors.Where(a => a.Type == TrinityObjectType.Door))
+                    {
+                        UpdateDoorFlags(door);
+                    }
+
                     //foreach (var obstacle in CacheData.NavigationObstacles)
                     //{
                     //    UpdateObstacleFlags(obstacle, obstacleNodes);
@@ -362,11 +367,26 @@ namespace Trinity.Framework.Avoidance
                         node.AddNodeFlags(AvoidanceFlags.NavigationBlocking);
                     }
 
-                    if (actor.Type != TrinityObjectType.Door || !actor.IsUsed)
+                    if (actor.Type != TrinityObjectType.Door || !actor.IsUsed || actor.IsLockedDoor)
                     {
                         node.AddNodeFlags(AvoidanceFlags.ClosedDoor);
                     }
                 }
+            }
+        }
+
+        private void UpdateDoorFlags(TrinityActor actor)
+        {
+            if (actor.Type != TrinityObjectType.Door)
+                return;
+
+            foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius))
+            {
+                // Mark area around closed doors so that monsters behind them can be ignored.
+                if (!actor.IsUsed || actor.IsLockedDoor)
+                {
+                    node.AddNodeFlags(AvoidanceFlags.ClosedDoor);
+                }             
             }
         }
 

@@ -443,7 +443,11 @@ namespace Trinity
                     //}
 
                     TargetCurrentDistance = CurrentTarget.RadiusDistance;
-                    CurrentTargetIsInLoS = TargetCurrentDistance <= 2f || (CurrentTarget.IsUnit ? CurrentTarget.IsInLineOfSight : CurrentTarget.IsWalkable) || DataDictionary.LineOfSightWhitelist.Contains(CurrentTarget.ActorSnoId);
+
+                    CurrentTargetWithinRange = IsWithinRange(CurrentTarget);
+
+                   
+
 
                     //using (new PerformanceLogger("HandleTarget.LoSCheck"))
                     //{                        
@@ -504,9 +508,9 @@ namespace Trinity
                         }
 
                         // Interact/use power on target if already in range
-                        if (!CurrentTarget.IsSafeSpot && (noRangeRequired || (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetIsInLoS) || stuckOnTarget))
+                        if (!CurrentTarget.IsSafeSpot && (noRangeRequired || (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetWithinRange) || stuckOnTarget))
                         {
-                            Logger.LogDebug(LogCategory.Behavior, "Object in Range: noRangeRequired={0} Target In Range={1} stuckOnTarget={2} npcInRange={3} power={4} target={5}", noRangeRequired, (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetIsInLoS), stuckOnTarget, string.Empty, CombatBase.CurrentPower.SNOPower, CurrentTarget);
+                            Logger.LogDebug(LogCategory.Behavior, "Object in Range: noRangeRequired={0} Target In Range={1} stuckOnTarget={2} npcInRange={3} power={4} target={5}", noRangeRequired, (TargetCurrentDistance <= TargetRangeRequired && CurrentTargetWithinRange), stuckOnTarget, string.Empty, CombatBase.CurrentPower.SNOPower, CurrentTarget);
                             Player.CurrentAction = PlayerAction.Moving;
 
                             HandleObjectInRange();
@@ -559,6 +563,24 @@ namespace Trinity
                 Logger.LogDebug(LogCategory.Behavior, "End of HandleTarget");
                 return GetRunStatus(RunStatus.Running, "End");
             }
+        }
+
+        /// <summary>
+        /// Determine if the target is attackable/interactable, false will cause the bot to move towards target.
+        /// </summary>
+        private static bool IsWithinRange(TrinityActor actor)
+        {
+            if (actor.Distance <= 2f)
+                return true;
+
+            // todo: disabled because handletarget or player mover needs handling to recognize the need to move to gate to get to the target and then to action it.            
+            //if (Core.Actors.AllRActors.Any(r => r.Distance <= 20f && r.ActorSnoId == (int) SNOActor.x1_Fortress_Portal_Switch))
+            //    return actor.IsWalkable;
+  
+            if (DataDictionary.LineOfSightWhitelist.Contains(actor.ActorSnoId))
+                return true;
+
+            return actor.IsUnit ? actor.IsInLineOfSight : actor.IsWalkable;
         }
 
         public static bool TryCastAvoidancePower(out RunStatus status)
