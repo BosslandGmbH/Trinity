@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Adventurer.Util;
+using Buddy.Coroutines;
 
 namespace Trinity.Framework.Behaviors
 {
@@ -16,33 +18,38 @@ namespace Trinity.Framework.Behaviors
 
         protected async Task<bool> Run(Func<Task<bool>> conditionProducer, Func<Task<bool>> actionProducer, int timeoutMs)
         {
-            var action = actionProducer?.Invoke();
-            if (action == null) return false;
-
-            var condition = conditionProducer?.Invoke();
-            if (condition == null) return false;
-
-            if (!await condition)
+            try
             {
-                if (IsRunning)
+                if (conditionProducer == null) return false;
+                if (actionProducer == null) return false;
+
+                if (!await conditionProducer())
+                {
+                    if (IsRunning)
+                        await Stop();
+
+                    return false;
+                }
+
+                if (!IsRunning)
+                {
+                    await Start(timeoutMs);
+                }
+                else if (DateTime.UtcNow > Timeout)
+                {
                     await Stop();
+                    return false;
+                }
 
-                return false;
+                CurrentBehavior = this;
+                await actionProducer();
+                return true;
             }
-
-            if (!IsRunning)
+            catch (CoroutineUnhandledException ex)
             {
-                await Start(timeoutMs);
+                Logger.Error($"{Name} Exception {ex} {Environment.StackTrace}");
+                throw;
             }
-            else if (DateTime.UtcNow > Timeout)
-            {
-                await Stop();
-                return false;
-            }
-
-            CurrentBehavior = this;
-            await action;
-            return true;
         }
 
         protected virtual async Task<bool> OnStopped() => true;

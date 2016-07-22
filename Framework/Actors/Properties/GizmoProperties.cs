@@ -34,6 +34,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsUntargetable = actor.Attributes.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
             actor.IsInvulnerable = actor.Attributes.IsInvulnerable;
             actor.IsUsed = GetIsGizmoUsed(actor);
+            actor.IsLockedDoor = actor.Attributes.IsDoorLocked || actor.Attributes.IsDoorTimed;
 
             var movement = rActor.Movement;
             if (movement != null && movement.IsValid)
@@ -78,9 +79,10 @@ namespace Trinity.Framework.Actors.Properties
                 if (actor.Type == TrinityObjectType.Destructible || actor.Type == TrinityObjectType.Barricade)
                 {
                     if (actor.IsUntargetable || actor.IsInvulnerable || Math.Abs(actor.HitPointsMax - actor.HitPoints) > 0.0001)
-                    {
+                         return true;
+
+                    if (attributes.IsDeletedOnServer)
                         return true;
-                    }
                 }
             }
 

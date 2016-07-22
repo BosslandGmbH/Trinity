@@ -102,7 +102,7 @@ namespace Trinity.Combat.Abilities
                     LastPowerUsed != SNOPower.Witchdoctor_Piranhas &&
                     Player.PrimaryResource >= 250)
                 {
-                    return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Enemies.BestCluster.Position);
+                    return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, TargetUtil.GetBestClusterPoint(14f));
                 }
 
                 // Soul Harvest

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.UI.WebControls;
+using Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Cache;
 using Trinity.Combat.Abilities;
 using Trinity.Config.Combat;
@@ -83,6 +84,9 @@ namespace Trinity
 
                     var getHiPriorityContainer = Settings.WorldObject.HiPriorityContainers &&
                                                  objects.Any(c => c.Type == TrinityObjectType.Container);
+
+                    var isGateNearby = Core.Actors.AllRActors.Any(r => r.Distance <= 20f && r.ActorSnoId == (int) SNOActor.x1_Fortress_Portal_Switch);
+
 
                     //var killQuestStepTypes = new HashSet<QuestStepObjectiveType>
                     //{
@@ -233,6 +237,13 @@ namespace Trinity
                                 bestTarget = GetNewBestTarget(cacheObject, bestTarget);
                                 break;
                             }
+                            continue;
+                        }
+
+                        if (isGateNearby && !cacheObject.IsWalkable)
+                        {
+                            cacheObject.Weight = 0;
+                            cacheObject.WeightInfo += "Ignoring Unwalkable by Death Gate ";
                             continue;
                         }
 
@@ -1286,6 +1297,12 @@ namespace Trinity
                                         break;
                                     }
 
+                                    if(cacheObject.IsLockedDoor)
+                                    {
+                                        cacheObject.WeightInfo += $"Locked Door";
+                                        break;
+                                    }
+
                                     if (!cacheObject.IsQuestMonster)
                                     {
                                         //Ignore because we are blocked by objects or mobs.
@@ -1326,6 +1343,13 @@ namespace Trinity
 
                             case TrinityObjectType.Destructible:
                                 {
+                                    if (!cacheObject.IsValid || cacheObject.IsUsed)
+                                    {
+                                        cacheObject.Weight = 0;
+                                        cacheObject.WeightInfo += $"Destroyed or Invalid";
+                                        break;
+                                    }
+
                                     if (!cacheObject.IsQuestMonster)
                                     {
                                         //Ignore because we are blocked by objects or mobs.
@@ -1343,6 +1367,7 @@ namespace Trinity
                                             break;
                                         }
                                     }
+
                                     if (DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSnoId))
                                     {
                                         cacheObject.Weight = 100d;
