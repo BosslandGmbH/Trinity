@@ -4,6 +4,7 @@ using System.Linq;
 using Trinity.Config.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Modules;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
@@ -263,7 +264,7 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // Defensive Bubble is Priority
-                else if (Enemies.Nearby.UnitCount >= 8 && (Runes.Wizard.PointOfNoReturn.IsActive || Runes.Wizard.StretchTime.IsActive) && isBubbleAtPlayerValid)
+                else if (Core.Clusters.Nearby.UnitCount >= 8 && (Runes.Wizard.PointOfNoReturn.IsActive || Runes.Wizard.StretchTime.IsActive) && isBubbleAtPlayerValid)
                 {
                     reason = "Bubble for defense";
                     bubblePower = new TrinityPower(SNOPower.Wizard_SlowTime, bubbleMaxRange, slightlyForwardPosition);
@@ -286,10 +287,10 @@ namespace Trinity.Combat.Abilities
                 // Cooldown isnt an issue with Magnum Opus, so just cast it somewhere.
                 else if (Sets.DelseresMagnumOpus.IsEquipped)
                 {
-                    if (Enemies.BestLargeCluster.Exists && Enemies.BestLargeCluster.Position.Distance(myPosition) < bubbleMaxRange && isValidBubblePosition(Enemies.BestLargeCluster.Position))
+                    if (Core.Clusters.BestLargeCluster.Exists && Core.Clusters.BestLargeCluster.Position.Distance(myPosition) < bubbleMaxRange && isValidBubblePosition(Core.Clusters.BestLargeCluster.Position))
                     {
                         reason = "Bubble on big cluster (DMO)";
-                        bubblePower = new TrinityPower(SNOPower.Wizard_SlowTime, bubbleMaxRange, Enemies.BestLargeCluster.Position);
+                        bubblePower = new TrinityPower(SNOPower.Wizard_SlowTime, bubbleMaxRange, Core.Clusters.BestLargeCluster.Position);
                     }
 
                     else if (TargetUtil.AnyMobsInRange(60) && isValidBubblePosition(clusterPosition))
@@ -1013,7 +1014,7 @@ namespace Trinity.Combat.Abilities
                 OnUpdate = m =>
                 {
                     if (CanCastTeleport() &&
-                    ArcaneOrbitCriteria(Enemies.BestRiftValueCluster))
+                    ArcaneOrbitCriteria(Core.Clusters.BestRiftValueCluster))
                         Skills.Wizard.Teleport.Cast(m.Destination);
                 },
                 Options = new CombatMovementOptions

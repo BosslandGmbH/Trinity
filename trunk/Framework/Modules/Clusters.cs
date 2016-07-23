@@ -1,49 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Configuration;
-using Trinity.Configuration;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Common;
-using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Combat
+namespace Trinity.Framework.Modules
 {
-    public static class Enemies
+    public class Clusters : Module
     {
-        public static List<TrinityActor> Alive = new List<TrinityActor>();
-        public static List<TrinityActor> Dead = new List<TrinityActor>();
-        public static HashSet<int> DeadGuids = new HashSet<int>();
-        public static HashSet<int> AliveGuids = new HashSet<int>();
-        public static TargetArea Nearby = new TargetArea(80f);
-        public static TargetArea CloseNearby = new TargetArea(16f);
-        public static TargetCluster BestCluster = new TargetCluster(20f);
-        public static TargetCluster BestLargeCluster = new TargetCluster(24f, 8);
-        public static TargetCluster BestRiftValueCluster = new TargetCluster(50f);
+        protected override int UpdateIntervalMs => 500;
 
-        public static void Update()
+        public TargetArea Nearby { get; private set; } = new TargetArea(80f);
+        public TargetArea CloseNearby { get; private set; } = new TargetArea(16f);
+        public TargetCluster BestCluster { get; private set; } = new TargetCluster(20f);
+        public TargetCluster BestLargeCluster { get; private set; } = new TargetCluster(24f, 8);
+        public TargetCluster BestRiftValueCluster { get; private set; } = new TargetCluster(50f);
+
+        protected override void OnPulse()
         {
-
-            if (!ZetaDia.IsInGame || !ZetaDia.Me.IsValid)
-                return;
-
-            List<TrinityActor> units = TrinityPlugin.Targets.Where(o => o.IsUnit && o.IsValid || o.IsElite).ToList();
-            var unitsGuids = new HashSet<int>(units.Select(e => e.AcdId));
-
-            // Find Newly Dead Units
-            List<TrinityActor> newlyDead = Alive.Where(a => !unitsGuids.Contains(a.AcdId) && !DeadGuids.Contains(a.AcdId)).ToList();
-            newlyDead.ForEach(u => Events.OnUnitAliveHandler.Invoke(u));
-            Dead.AddRange(newlyDead);
-            Dead.RemoveAll(e => DateTime.UtcNow.Subtract(e.LastSeenTime).TotalSeconds > 60);
-            DeadGuids = new HashSet<int>(Dead.Select(e => e.AcdId));
-
-            // Find Newly Alive Units
-            var newlyAliveGuids = new HashSet<int>(units.Where(a => !AliveGuids.Contains(a.AcdId)).Select(a => a.AcdId));
-            Alive = units;
-            AliveGuids = unitsGuids;
-            Alive.Where(u => newlyAliveGuids.Contains(u.AcdId)).ForEach(u => Events.OnUnitDeathHandler.Invoke(u));
-
             Nearby.Update();
             CloseNearby.Update();
             BestCluster.Update();
@@ -129,10 +103,7 @@ namespace Trinity.Combat
         public int Size { get; set; }
         public TargetArea TargetArea { get; set; }
 
-        public bool Exists
-        {
-            get { return TargetUtil.ClusterExists(Radius, Size); }
-        }
+        public bool Exists => TargetUtil.ClusterExists(Radius, Size);
 
         public new void Update()
         {

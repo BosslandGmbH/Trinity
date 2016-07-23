@@ -449,7 +449,7 @@
     <Compile Include="Framework\Avoidance\AvoidanceManager.cs" />
     <Compile Include="Framework\Avoidance\Handlers\IAvoidanceHandler.cs" />
     <Compile Include="Framework\Avoidance\Structures\MovementType.cs" />
-    <Compile Include="Combat\Enemies.cs" />
+    <Compile Include="Framework\Modules\Clusters.cs" />
     <Compile Include="Combat\Routine\TrinityRoutine.cs" />
     <Compile Include="Combat\SnapShot.cs" />
     <Compile Include="Combat\SpellTracker.cs" />

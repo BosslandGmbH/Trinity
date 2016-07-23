@@ -5,6 +5,7 @@ using System.Linq;
 using Trinity.Cache;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Framework.Modules;
 using Trinity.Movement;
 using Trinity.Reference;
 using Trinity.Technicals;
@@ -115,7 +116,7 @@ namespace Trinity.Combat.Abilities
                     if (TargetUtil.ClusterExists(3, 12f) && Skills.WitchDoctor.SoulHarvest.BuffStacks < 10)
                     {
                         Logger.Log(LogCategory.Routine, "Im going in to harvest! 4/12");
-                        MoveToSoulHarvestPoint(Enemies.BestCluster);
+                        MoveToSoulHarvestPoint(Core.Clusters.BestCluster);
                     }
                     else if(TargetUtil.AnyElitesInRange(12f) || TargetUtil.AnyMobsInRange(10f, 2))
                     {
@@ -256,13 +257,11 @@ namespace Trinity.Combat.Abilities
                 }
 
                 // Soul harvest at current location while avoiding
-                if (Sets.RaimentOfTheJadeHarvester.IsMaxBonusActive && MinimumSoulHarvestCriteria(Enemies.CloseNearby))
+                if (Sets.RaimentOfTheJadeHarvester.IsMaxBonusActive && MinimumSoulHarvestCriteria(Core.Clusters.CloseNearby))
                 {
                     Skills.WitchDoctor.SoulHarvest.Cast();
                 }
             }
-
-
 
             // Incapacitated or Rooted
             if (!UseOOCBuff && (Player.IsIncapacitated || Player.IsRooted))
@@ -334,7 +333,7 @@ namespace Trinity.Combat.Abilities
                     basicAttackRange = rangedAttackMaxRange;
                 else if (Hotbar.Contains(SNOPower.Witchdoctor_ZombieCharger) && Player.PrimaryResource >= 150)
                     basicAttackRange = 30f;
-                else if (Legendary.TiklandianVisage.IsEquipped && !TikHorrifyCriteria(Enemies.BestLargeCluster))
+                else if (Legendary.TiklandianVisage.IsEquipped && !TikHorrifyCriteria(Core.Clusters.BestLargeCluster))
                     basicAttackRange = 25f;
                 else if (Legendary.TiklandianVisage.IsEquipped)
                     basicAttackRange = 1f;
@@ -442,25 +441,25 @@ namespace Trinity.Combat.Abilities
                         LastPowerUsed != SNOPower.Witchdoctor_Piranhas &&
                         Player.PrimaryResource >= 250)
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Enemies.BestCluster.Position);
+                        return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Core.Clusters.BestCluster.Position);
                     }
 
                     // Should we move to cluster for harvest
-                    if (IdealSoulHarvestCriteria(Enemies.BestLargeCluster))
+                    if (IdealSoulHarvestCriteria(Core.Clusters.BestLargeCluster))
                     {
                         //LogTargetArea("--- Found a good harvest location...", Enemies.BestLargeCluster);
-                        MoveToSoulHarvestPoint(Enemies.BestLargeCluster);
+                        MoveToSoulHarvestPoint(Core.Clusters.BestLargeCluster);
                     }
 
                     // Is there a slightly better position than right here
-                    if (MinimumSoulHarvestCriteria(Enemies.BestCluster) && (Enemies.BestCluster.EliteCount >= 2 || Enemies.BestCluster.UnitCount > 4))
+                    if (MinimumSoulHarvestCriteria(Core.Clusters.BestCluster) && (Core.Clusters.BestCluster.EliteCount >= 2 || Core.Clusters.BestCluster.UnitCount > 4))
                     {
                         //LogTargetArea("--- Found an average harvest location...", Enemies.BestCluster);
-                        MoveToSoulHarvestPoint(Enemies.BestCluster);
+                        MoveToSoulHarvestPoint(Core.Clusters.BestCluster);
                     }
 
                     // Should we harvest right here?
-                    if (MinimumSoulHarvestCriteria(Enemies.CloseNearby))
+                    if (MinimumSoulHarvestCriteria(Core.Clusters.CloseNearby))
                     {
                         //LogTargetArea("--- Harvesting (CurrentPosition)", Enemies.CloseNearby);
                         return new TrinityPower(SNOPower.Witchdoctor_SoulHarvest);
@@ -493,7 +492,7 @@ namespace Trinity.Combat.Abilities
                     }
 
                     if (CanCast(SNOPower.Witchdoctor_Haunt) && !CurrentTarget.IsTreasureGoblin && CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm) &&
-                        CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Haunt) && Player.PrimaryResource >= 350 && !MinimumSoulHarvestCriteria(Enemies.CloseNearby))
+                        CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Haunt) && Player.PrimaryResource >= 350 && !MinimumSoulHarvestCriteria(Core.Clusters.CloseNearby))
                     {
                         return new TrinityPower(SNOPower.Witchdoctor_Haunt, 45f, CurrentTarget.AcdId);
                     }
@@ -521,13 +520,14 @@ namespace Trinity.Combat.Abilities
                     // Always Remember to refresh Taeguk
                     if (Gems.Taeguk.IsEquipped && TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) > 2000)
                     {
+                        Logger.LogNormal($"Taeguk refresh TimeSinceUse={TimeSincePowerUse(SNOPower.Witchdoctor_Firebats)}");
                         return new TrinityPower(SNOPower.Witchdoctor_Firebats);
                     }
 
                     // Move to best Firebats point
                     if (CanCast(SNOPower.Witchdoctor_Firebats) && TargetUtil.AnyMobsInRange(40f))
                     {
-                        MoveToFirebatsPoint(Enemies.BestCluster);
+                        MoveToFirebatsPoint(Core.Clusters.BestCluster);
                     }
 
                     // Big Bad Voodoo
@@ -535,7 +535,7 @@ namespace Trinity.Combat.Abilities
                         (Settings.Combat.WitchDoctor.UseBigBadVoodooOffCooldown || TargetUtil.AnyMobsInRange(30f)) &&
                         !GetHasBuff(SNOPower.Witchdoctor_BigBadVoodoo))
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_BigBadVoodoo, 30f, Enemies.BestCluster.Position);
+                        return new TrinityPower(SNOPower.Witchdoctor_BigBadVoodoo, 30f, Core.Clusters.BestCluster.Position);
                     }
 
                     // Soul Harvest
@@ -551,7 +551,7 @@ namespace Trinity.Combat.Abilities
                         LastPowerUsed != SNOPower.Witchdoctor_Piranhas &&
                         Player.PrimaryResource >= 250)
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Enemies.BestCluster.Position);
+                        return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Core.Clusters.BestCluster.Position);
                     }
 
                     var batMana = TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) < 125 ? 75 : 225;
@@ -569,7 +569,7 @@ namespace Trinity.Combat.Abilities
                         var bestClusterPoint = TargetUtil.GetBestClusterPoint(15f, 30f);
                         var range = Settings.Combat.WitchDoctor.FirebatsRange > 15f ? 15f : Settings.Combat.WitchDoctor.FirebatsRange;
 
-                        return new TrinityPower(SNOPower.Witchdoctor_Firebats, range, bestClusterPoint);
+                        return new TrinityPower(SNOPower.Witchdoctor_Firebats, range, bestClusterPoint,0,0);
                     }
 
                 }
@@ -587,7 +587,7 @@ namespace Trinity.Combat.Abilities
                         LastPowerUsed != SNOPower.Witchdoctor_Piranhas &&
                         Player.PrimaryResource >= 250)
                     {
-                        return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Enemies.BestCluster.Position);
+                        return new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Core.Clusters.BestCluster.Position);
                     }
 
                     //Cast Horrify before we go into the fray
@@ -595,8 +595,8 @@ namespace Trinity.Combat.Abilities
                         return new TrinityPower(SNOPower.Witchdoctor_Horrify);
 
                     // Should we move to a better position to fear people
-                    if (TikHorrifyCriteria(Enemies.BestLargeCluster))
-                        MoveToHorrifyPoint(Enemies.BestLargeCluster);
+                    if (TikHorrifyCriteria(Core.Clusters.BestLargeCluster))
+                        MoveToHorrifyPoint(Core.Clusters.BestLargeCluster);
 
 
                 }
@@ -944,7 +944,7 @@ namespace Trinity.Combat.Abilities
              (Player.CurrentHealthPct <= .45 && !Skills.WitchDoctor.SpiritWalk.CanCast())) &&
 
              // AND there's an elite, boss or more than 3 units or greater 35% of the units within sight are within this cluster
-             (area.EliteCount > 0 || area.BossCount > 0 || area.UnitCount >= 3 || area.UnitCount >= (float)Enemies.Nearby.UnitCount * 0.35);
+             (area.EliteCount > 0 || area.BossCount > 0 || area.UnitCount >= 3 || area.UnitCount >= (float)Core.Clusters.Nearby.UnitCount * 0.35);
 
 
         private static readonly Func<TargetArea, bool> IdealSoulHarvestCriteria = area =>
@@ -956,12 +956,12 @@ namespace Trinity.Combat.Abilities
             area.AverageHealthPct > 0.3f &&
 
             // AND at least 2 Elites, a boss or more than 5 units or 80% of the nearby units are within this area
-            (area.EliteCount >= 2 || area.BossCount > 0 || area.UnitCount >= 5 || area.UnitCount >= (float)Enemies.Nearby.UnitCount * 0.80);
+            (area.EliteCount >= 2 || area.BossCount > 0 || area.UnitCount >= 5 || area.UnitCount >= (float)Core.Clusters.Nearby.UnitCount * 0.80);
 
         private static readonly Func<TargetArea, bool> TikHorrifyCriteria = area =>
 
             //at least 2 Elites, a boss or more than 5 units or 80% of the nearby units are within this area
-            (area.EliteCount >= 2 || area.UnitCount >= 5 || area.UnitCount >= (float)Enemies.Nearby.UnitCount * 0.80);
+            (area.EliteCount >= 2 || area.UnitCount >= 5 || area.UnitCount >= (float)Core.Clusters.Nearby.UnitCount * 0.80);
 
         private static readonly Func<TargetArea, bool> LonFireBatsCriteria = area =>
 
@@ -992,16 +992,16 @@ namespace Trinity.Combat.Abilities
                 OnUpdate = m =>
                 {
                     // Only change destination if the new target is way better
-                    if (IdealSoulHarvestCriteria(Enemies.BestLargeCluster) &&
-                        Enemies.BestLargeCluster.Position.Distance(m.Destination) > 10f)
-                        m.Destination = Enemies.BestLargeCluster.Position;
+                    if (IdealSoulHarvestCriteria(Core.Clusters.BestLargeCluster) &&
+                        Core.Clusters.BestLargeCluster.Position.Distance(m.Destination) > 10f)
+                        m.Destination = Core.Clusters.BestLargeCluster.Position;
 
                     if (TargetUtil.NumMobsInRange(12f) >= 3 && Skills.WitchDoctor.SoulHarvest.CanCast())
                         Skills.WitchDoctor.SoulHarvest.Cast();
                 },
                 OnFinished = m =>
                 {
-                    if (MinimumSoulHarvestCriteria(Enemies.CloseNearby))
+                    if (MinimumSoulHarvestCriteria(Core.Clusters.CloseNearby))
                     {
                         //LogTargetArea("--- Harvesting (CombatMovement)", area);
                         Skills.WitchDoctor.SoulHarvest.Cast();
@@ -1025,9 +1025,9 @@ namespace Trinity.Combat.Abilities
                 OnUpdate = m =>
                 {
                     // Only change destination if the new target is way better
-                    if (TikHorrifyCriteria(Enemies.BestLargeCluster) &&
-                        Enemies.BestLargeCluster.Position.Distance(m.Destination) > 15f)
-                        m.Destination = Enemies.BestLargeCluster.Position;
+                    if (TikHorrifyCriteria(Core.Clusters.BestLargeCluster) &&
+                        Core.Clusters.BestLargeCluster.Position.Distance(m.Destination) > 15f)
+                        m.Destination = Core.Clusters.BestLargeCluster.Position;
                 },
                 Options = new CombatMovementOptions
                 {
@@ -1053,9 +1053,9 @@ namespace Trinity.Combat.Abilities
                     if (CanCast(SNOPower.Witchdoctor_SpiritWalk))
                         Skills.WitchDoctor.SpiritWalk.Cast();
                     // Only change destination if the new target is way better
-                    if (LonFireBatsCriteria(Enemies.BestCluster) &&
-                        Enemies.BestCluster.Position.Distance(m.Destination) > 15f)
-                        m.Destination = Enemies.BestCluster.Position;
+                    if (LonFireBatsCriteria(Core.Clusters.BestCluster) &&
+                        Core.Clusters.BestCluster.Position.Distance(m.Destination) > 15f)
+                        m.Destination = Core.Clusters.BestCluster.Position;
                 },
                 Options = new CombatMovementOptions
                 {

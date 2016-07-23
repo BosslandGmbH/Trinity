@@ -280,8 +280,6 @@ namespace Trinity
 
                     UILoader.PreLoadWindowContent();
 
-                    Events.OnCacheUpdated += Enemies.Update;
-
                     //OverlayLoader.Enable();
 
                     //ClearArea.Enable();

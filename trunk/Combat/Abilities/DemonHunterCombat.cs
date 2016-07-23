@@ -7,6 +7,7 @@ using Trinity.Combat.Abilities.PhelonsPlayground;
 using Trinity.Config.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Modules;
 using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Technicals;
@@ -861,7 +862,7 @@ namespace Trinity.Combat.Abilities
             if (!Runes.DemonHunter.Punishment.IsActive && Player.SecondaryResourcePct <= Settings.Combat.DemonHunter.PreperationResourcePct)
                 return true;
 
-            if (Runes.DemonHunter.Punishment.IsActive && Player.PrimaryResourcePct <= Settings.Combat.DemonHunter.PreperationResourcePct && (TargetUtil.AnyElitesInRange(50f) || Enemies.Nearby.UnitCount > 5))
+            if (Runes.DemonHunter.Punishment.IsActive && Player.PrimaryResourcePct <= Settings.Combat.DemonHunter.PreperationResourcePct && (TargetUtil.AnyElitesInRange(50f) || Core.Clusters.Nearby.UnitCount > 5))
                 return true;
 
             return false;
