@@ -266,6 +266,7 @@ namespace Trinity.Movement
             SNOPower.Witchdoctor_SpiritWalk,
             SNOPower.Witchdoctor_FetishArmy,
             SNOPower.Witchdoctor_Sacrifice,
+            SNOPower.Witchdoctor_Firebats,
         };
 
         private readonly HashSet<AnimationState> _busyAnimationStates = new HashSet<AnimationState>
