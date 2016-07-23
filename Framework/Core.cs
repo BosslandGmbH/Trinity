@@ -34,6 +34,7 @@ namespace Trinity.Framework
         public static GameStopper GameStopper { get; } = new GameStopper();
         public static MarkersCache Markers { get; } = new MarkersCache();
         public static WorldCache World { get; } = new WorldCache();
+        public static Clusters Clusters { get; } = new Clusters();
 
         // Misc
         public static GridHelper Grids { get; } = new GridHelper();

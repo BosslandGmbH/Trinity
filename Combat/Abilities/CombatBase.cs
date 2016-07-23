@@ -1255,7 +1255,7 @@ namespace Trinity.Combat.Abilities
         public static TrinityActor GetBestAreaEffectTarget(Skill skill)
         {
             // Avoid bot choosing a target that is too far away (and potentially running towards it) when there is danger close by.
-            var searchRange = (float)(skill.IsGeneratorOrPrimary && Enemies.CloseNearby.Units.Any() ? skill.Meta.CastRange * 0.5 : skill.Meta.CastRange);
+            var searchRange = (float)(skill.IsGeneratorOrPrimary && Core.Clusters.CloseNearby.Units.Any() ? skill.Meta.CastRange * 0.5 : skill.Meta.CastRange);
 
             TrinityActor target;
             switch (skill.Meta.AreaEffectShape)
