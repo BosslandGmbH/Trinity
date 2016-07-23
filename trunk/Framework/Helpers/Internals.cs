@@ -22,7 +22,7 @@ namespace Trinity.Helpers
 
         private static BuildMemoryInfo _currentBuild;
 
-        public static class Objects
+        public static class DemonBuddyObjects
         {
             public static ACDManager AcdManager => _acdManager.Value;
             private static readonly StaticRouter<ACDManager> _acdManager = new StaticRouter<ACDManager>(typeof (ZetaDia));
@@ -45,9 +45,9 @@ namespace Trinity.Helpers
             }
 
             public static IntPtr ObjectManager => ZetaDia.Memory.Read<IntPtr>(_currentBuild.ObjectManagerPtr);
-            public static IntPtr RActorManager => Objects.RActorManager.BaseAddress;
-            public static IntPtr AcdManager => Objects.AcdManager.BaseAddress;        
-            public static IntPtr ActivePlayerData => Objects.ActivePlayerData.BaseAddress;
+            public static IntPtr RActorManager => DemonBuddyObjects.RActorManager.BaseAddress;
+            public static IntPtr AcdManager => DemonBuddyObjects.AcdManager.BaseAddress;        
+            public static IntPtr ActivePlayerData => DemonBuddyObjects.ActivePlayerData.BaseAddress;
             public static IntPtr SymbolManager => ZetaDia.Memory.Read<IntPtr>(_currentBuild.SymbolManagerPtr);
             public static IntPtr Hero => ZetaDia.Service.Hero.BaseAddress;
             public static IntPtr Globals => ObjectManager + _currentBuild.GlobalsOffset;
@@ -76,6 +76,16 @@ namespace Trinity.Helpers
                 SymbolManagerPtr = (IntPtr)0x01F01900,
                 SnoGroupsAddr = (IntPtr)0x01EA73A8,
                 AttributeDescripterAddr = (IntPtr)0x01EBEB78,
+                GlobalsOffset = 0x790,
+                StorageOffset = 0x798,
+            },
+            new BuildMemoryInfo
+            {
+                Version = new Version("2.4.2.38247"),
+                ObjectManagerPtr = (IntPtr)0x01EA60CC,
+                SymbolManagerPtr = (IntPtr)0x01F01950, 
+                SnoGroupsAddr = (IntPtr)0x01EA73A8,
+                AttributeDescripterAddr = (IntPtr)0x1EBF020,
                 GlobalsOffset = 0x790,
                 StorageOffset = 0x798,
             },
