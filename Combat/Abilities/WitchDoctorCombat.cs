@@ -10,6 +10,7 @@ using Trinity.Movement;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Common.Helpers;
 using Zeta.Game;
@@ -245,6 +246,20 @@ namespace Trinity.Combat.Abilities
             if (CanCast(SNOPower.Witchdoctor_FetishArmy) && (useFetishWithZumiSet || useFetishNormal))
             {
                 return new TrinityPower(SNOPower.Witchdoctor_FetishArmy);
+            }
+
+            if (Gems.Taeguk.IsEquipped)
+            {
+                if (IsLonFirebatsBuild)
+                {
+                    var time = CanCast(SNOPower.Witchdoctor_Piranhas) && TargetUtil.ClusterExists(15f, 60f) && CurrentTarget.IsUnit ? 500 : 1000;
+                    if (TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) > time && Core.Targets.ByType[TrinityObjectType.Unit].Any(a => a.IsHostile && a.Distance < 80f))
+                    {
+                        Logger.Log(LogCategory.Routine,$"Taeguk refresh TimeSinceUse={TimeSincePowerUse(SNOPower.Witchdoctor_Firebats)}");
+                        var forwardPosition = MathEx.GetPointAt(ZetaDia.Me.Position, 15f, ZetaDia.Me.Movement.Rotation);
+                        Skills.WitchDoctor.Firebats.Cast(forwardPosition);
+                    }
+                }
             }
 
             // Combat Avoidance Spells
@@ -510,19 +525,12 @@ namespace Trinity.Combat.Abilities
 
                 // START LoN Firebats -----------------------------------------------------------------------
 
-                if (Sets.LegacyOfNightmares.IsFullyEquipped && Skills.WitchDoctor.Firebats.IsActive)
+                if (IsLonFirebatsBuild)
                 {
                     //LogTargetArea("BestLargeCluster", Enemies.BestLargeCluster);
                     //LogTargetArea("BestCluster", Enemies.BestCluster);
                     //LogTargetArea("Nearby", Enemies.Nearby);
                     //LogTargetArea("CloseNearby", Enemies.CloseNearby);
-
-                    // Always Remember to refresh Taeguk
-                    if (Gems.Taeguk.IsEquipped && TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) > 2000)
-                    {
-                        Logger.LogNormal($"Taeguk refresh TimeSinceUse={TimeSincePowerUse(SNOPower.Witchdoctor_Firebats)}");
-                        return new TrinityPower(SNOPower.Witchdoctor_Firebats);
-                    }
 
                     // Move to best Firebats point
                     if (CanCast(SNOPower.Witchdoctor_Firebats) && TargetUtil.AnyMobsInRange(40f))
@@ -567,7 +575,7 @@ namespace Trinity.Combat.Abilities
                         CanCast(SNOPower.Witchdoctor_Firebats) && Player.PrimaryResource >= batMana)
                     {
                         var bestClusterPoint = TargetUtil.GetBestClusterPoint(15f, 30f);
-                        var range = Settings.Combat.WitchDoctor.FirebatsRange > 15f ? 15f : Settings.Combat.WitchDoctor.FirebatsRange;
+                        var range = Settings.Combat.WitchDoctor.FirebatsRange > 20f ? 20f : Settings.Combat.WitchDoctor.FirebatsRange;
 
                         return new TrinityPower(SNOPower.Witchdoctor_Firebats, range, bestClusterPoint,0,0);
                     }
@@ -932,6 +940,11 @@ namespace Trinity.Combat.Abilities
             }
 
             return power;
+        }
+
+        private static bool IsLonFirebatsBuild
+        {
+            get { return Sets.LegacyOfNightmares.IsFullyEquipped && Skills.WitchDoctor.Firebats.IsActive; }
         }
 
         private static readonly Func<TargetArea, bool> MinimumSoulHarvestCriteria = area =>
