@@ -717,6 +717,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                     DrawMarkers(dc, CanvasData);
 
+                    //DrawMinimap(dc, CanvasData);
+
                     //}
 
                     //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Clusters))
@@ -791,6 +793,15 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 {
                     Logger.Log("Exception in RadarUI.OnRender(). {0} {1}", ex.Message, ex.InnerException);
                 }
+            }
+        }
+
+        private void DrawMinimap(DrawingContext dc, CanvasData canvasData)
+        {
+            foreach (var item in Core.Minimap.MinimapIcons)
+            {
+                var radius = 5 * GridSize;
+                dc.DrawEllipse(HotPinkBrush, null, item.Position.ToCanvasPoint(), radius, radius);
             }
         }
 

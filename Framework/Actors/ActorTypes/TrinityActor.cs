@@ -137,6 +137,8 @@ namespace Trinity.Framework.Actors.ActorTypes
         public float RequiredRange { get; set; }
         public bool NpcHasInteractOptions { get; set; }
         public bool IsLockedDoor { get; set; }
+        public int MinimapIconOverride { get; set; }
+
 
         public override void OnCreated()
         {

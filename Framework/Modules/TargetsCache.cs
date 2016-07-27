@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Combat.Abilities;
 using Trinity.Config.Combat;
 using Trinity.Coroutines.Town;
@@ -266,7 +267,6 @@ namespace Trinity.Framework.Modules
             return true;
         }
 
-
         private static bool ShouldIgnoreLoS(TrinityActor cacheObject)
         {
             if (cacheObject.IsMinimapActive)
@@ -277,27 +277,31 @@ namespace Trinity.Framework.Modules
 
             switch (cacheObject.Type)
             {
-                case TrinityObjectType.ProgressionGlobe:
                 case TrinityObjectType.Shrine:
-                case TrinityObjectType.BuffedRegion:
-                    return true;
+                    if (cacheObject.RadiusDistance < 40f || cacheObject.IsWalkable)
+                        return true;
+                    break;
 
+                case TrinityObjectType.ProgressionGlobe:
+                case TrinityObjectType.BuffedRegion:
+                        return true;
+                           
                 case TrinityObjectType.Door:
                     if (cacheObject.RadiusDistance < 15f)
                         return true;
-
                     break;
 
                 case TrinityObjectType.Unit:
-                    if (CombatBase.CombatMode == CombatMode.KillAll)
+                    if (CombatBase.CombatMode == CombatMode.KillAll && cacheObject.IsWalkable)
                         return true;
-
+                    if (cacheObject.IsElite && cacheObject.Distance < 40f || cacheObject.IsWalkable)
+                        return true;
+                    if (cacheObject.IsTreasureGoblin)
+                        return true;
                     break;
             }
 
             if (cacheObject.Distance < 4) return true;
-            if (cacheObject.IsElite) return true;
-            if (cacheObject.IsTreasureGoblin) return true;
             if (cacheObject.ItemQualityLevel >= ItemQuality.Legendary) return true;
             if (DataDictionary.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId)) return true;
             return false;
@@ -326,6 +330,12 @@ namespace Trinity.Framework.Modules
             if (cacheObject.MonsterRace == MonsterRace.Unknown)
             {
                 cacheObject.AddCacheInfo("InvalidRace");
+                return false;
+            }
+
+            if (cacheObject.IsInvulnerable && !cacheObject.IsQuestGiver)
+            {
+                cacheObject.AddCacheInfo("Invulnerable");
                 return false;
             }
 
@@ -455,7 +465,7 @@ namespace Trinity.Framework.Modules
                     return false;
                 }
 
-                if (cacheObject.IsChest && !TrinityPlugin.Settings.WorldObject.OpenChests)
+                if (cacheObject.IsChest && !TrinityPlugin.Settings.WorldObject.OpenChests && !cacheObject.IsQuestMonster)
                 {
                     cacheObject.AddCacheInfo("OpenChestsSetting");
                     return false;

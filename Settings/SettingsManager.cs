@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Serialization;
 using Trinity.Config;
+using Trinity.Framework;
+using Trinity.Helpers;
 using Trinity.Technicals;
 using Trinity.UI;
 using Trinity.UI.RadarUI;
@@ -21,6 +23,28 @@ namespace Trinity.Settings
     public class SettingsManager
     {
         public static string SaveDirectory => Path.Combine(FileManager.SettingsPath, "Saved");
+
+        public static TrinitySetting GetCurrentSettingsForExport(IEnumerable<SettingsSection> sections = null)
+        {
+            var settings = new TrinitySetting();
+            Core.Settings.CopyTo(settings);
+            settings.Notification = null;
+
+            if (sections != null)
+            {
+                RemoveSections(settings, sections);
+            }
+
+            return settings;
+        }
+
+        public static string GetCurrrentSettingsExportCode(IEnumerable<SettingsSection> sections = null)
+        {
+            var settings = GetCurrentSettingsForExport(sections);
+            var xml = TrinitySetting.GetSettingsXml(settings);
+            var code = ExportHelper.Compress(xml);;
+            return code;
+        }
 
         /// <summary>
         /// Handle the process of exporting a settings file
@@ -212,7 +236,7 @@ namespace Trinity.Settings
         /// <summary>
         /// Look through a TrinitySetting object and return a list of the sections that are populated with data.
         /// </summary>
-        private static HashSet<SettingsSection> GetSections(TrinitySetting settings)
+        public static HashSet<SettingsSection> GetSections(TrinitySetting settings)
         {
             var result = new HashSet<SettingsSection>();
             if (settings.Combat != null)
@@ -242,6 +266,19 @@ namespace Trinity.Settings
             return result;
         }
 
+        public static void RemoveSections(TrinitySetting settings, IEnumerable<SettingsSection> sections)
+        {
+            settings.Notification = null;
+
+            if (sections != null)
+            {
+                foreach (var section in sections)
+                {
+                    ClearSection(settings, section);
+                }
+            }
+        }
+
         /// <summary>
         /// Clear the specified parts of a TrinitySetting object so that they have no data.
         /// </summary>
@@ -257,47 +294,51 @@ namespace Trinity.Settings
                     Logger.Log($"Importing Section: {sectionEntry.Section}");
                     continue;
                 }
+                ClearSection(settings, sectionEntry.Section);
+            }
+        }
 
-                switch (sectionEntry.Section)
-                {
-                    case SettingsSection.Combat:
-                        settings.Combat = null;
-                        break;
-                    case SettingsSection.ItemList:
-                        if(settings.Loot != null)
-                            settings.Loot.ItemList = null;
-                        break;
-                    case SettingsSection.Gambling:
-                        settings.Gambling = null;
-                        break;
-                    case SettingsSection.KanaisCube:
-                        settings.KanaisCube = null;
-                        break;
-                    case SettingsSection.ItemPickup:
-                        if (settings.Loot != null)
-                            settings.Loot.Pickup = null;
-                        break;
-                    case SettingsSection.TownRun:
-                        if (settings.Loot != null)
-                            settings.Loot.TownRun = null;
-                        break;
-                    case SettingsSection.Objects:
-                        settings.WorldObject = null;
-                        break;
-                    case SettingsSection.Paragon:
-                        settings.Paragon = null;
-                        break;
-                    case SettingsSection.Advanced:
-                        settings.Advanced = null;
-                        break;
-                    case SettingsSection.Avoidance:
-                        settings.Avoidance = null;
-                        break;
-                    case SettingsSection.ItemRules:
-                        if (settings.Loot != null)
-                            settings.Loot.ItemRules = null;
-                        break;
-                }
+        private static void ClearSection(TrinitySetting settings, SettingsSection section)
+        {
+            switch (section)
+            {
+                case SettingsSection.Combat:
+                    settings.Combat = null;
+                    break;
+                case SettingsSection.ItemList:
+                    if (settings.Loot != null)
+                        settings.Loot.ItemList = null;
+                    break;
+                case SettingsSection.Gambling:
+                    settings.Gambling = null;
+                    break;
+                case SettingsSection.KanaisCube:
+                    settings.KanaisCube = null;
+                    break;
+                case SettingsSection.ItemPickup:
+                    if (settings.Loot != null)
+                        settings.Loot.Pickup = null;
+                    break;
+                case SettingsSection.TownRun:
+                    if (settings.Loot != null)
+                        settings.Loot.TownRun = null;
+                    break;
+                case SettingsSection.Objects:
+                    settings.WorldObject = null;
+                    break;
+                case SettingsSection.Paragon:
+                    settings.Paragon = null;
+                    break;
+                case SettingsSection.Advanced:
+                    settings.Advanced = null;
+                    break;
+                case SettingsSection.Avoidance:
+                    settings.Avoidance = null;
+                    break;
+                case SettingsSection.ItemRules:
+                    if (settings.Loot != null)
+                        settings.Loot.ItemRules = null;
+                    break;
             }
         }
 

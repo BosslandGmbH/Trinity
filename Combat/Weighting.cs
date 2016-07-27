@@ -593,7 +593,7 @@ namespace Trinity
                                                     cacheObject.InternalName);
                                             break;
                                         }
-                                        else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize &&
+                                        else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize && !Core.Minimap.MinimapIconAcdIds.Contains(cacheObject.AcdId) && 
                                                  !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat)
                                         {
                                             cacheObject.WeightInfo +=
@@ -2001,6 +2001,9 @@ namespace Trinity
 
                 if (cacheObject.IsUnit)
                 {
+                    if (!cacheObject.IsWalkable && cacheObject.IsInLineOfSight && cacheObject.Distance > 40f && !cacheObject.IsMinimapActive && !cacheObject.IsBoss && !cacheObject.IsTreasureGoblin)
+                        return -MaxWeight;
+
                     if (Core.Grids.Avoidance.IsIntersectedByFlags(Player.Position, cacheObject.Position, AvoidanceFlags.ClosedDoor, AvoidanceFlags.ProjectileBlocking))
                         return -MaxWeight;
                 }

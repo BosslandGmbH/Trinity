@@ -30,6 +30,33 @@ namespace Trinity.Framework.Helpers
             return hash;
         }
 
+        public static IEnumerable<int> FindFlagMasks(int maskValue)
+        {
+            for (int i = int.MaxValue; i > 0; i /= 2)
+            {
+                int x = i & maskValue;
+                if (x > 0)
+                {
+                    yield return x;
+                }
+            }
+        }
+
+        public static List<int> FindSetFlags(int maskValue)
+        {
+            var result = new List<int>();
+            var value = 1;
+            for (var i = 1; i <= 32; i++)
+            {
+                if (i == (maskValue & i))
+                {
+                    result.Add(value);
+                }
+                value = value << 1;
+            }
+            return result;
+        }
+
 
         /// <summary>
         /// Strip zero value byte off byte array

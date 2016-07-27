@@ -63,8 +63,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.MarkerType = attributes.MarkerType;
             actor.NpcHasInteractOptions = attributes.NpcHasInteractOptions;            
             actor.IsQuestGiver = (actor.MarkerType == MarkerType.Exclamation || actor.MarkerType == MarkerType.Asterisk || actor.MarkerType == MarkerType.ExclamationBlue);
-            actor.HasBuffVisualEffect = attributes.HasBuffVisualEffect;
-            actor.IsQuestMonster = attributes.IsQuestMonster;
+            actor.HasBuffVisualEffect = attributes.HasBuffVisualEffect;            
             actor.PetType = attributes.PetType;
 
             var teamOverride = attributes.TeamOverride;

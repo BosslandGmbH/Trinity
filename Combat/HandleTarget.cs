@@ -580,7 +580,7 @@ namespace Trinity
             if (DataDictionary.LineOfSightWhitelist.Contains(actor.ActorSnoId))
                 return true;
 
-            return actor.IsUnit ? actor.IsInLineOfSight : actor.IsWalkable;
+            return actor.IsUnit && actor.Distance < 50f && !actor.IsGizmo ? actor.IsInLineOfSight : actor.IsWalkable;
         }
 
         public static bool TryCastAvoidancePower(out RunStatus status)

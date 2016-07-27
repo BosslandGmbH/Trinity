@@ -61,7 +61,7 @@ namespace Trinity.Framework.Actors.Properties
                 if (attributes.GizmoCharges > 0)
                     return false;
 
-                if (attributes.GizmoState == 1 && !attributes.IsQuestMonster)
+                if (actor.IsUnit && attributes.GizmoState == 1 && !attributes.IsQuestMonster)
                     return true;
 
                 if (attributes.GizmoOperatorACDId > 0)
@@ -71,6 +71,15 @@ namespace Trinity.Framework.Actors.Properties
                     return true;
 
                 if (attributes.IsChestOpen)
+                    return true;
+
+                if (actor.GizmoType == GizmoType.PowerUp && attributes.GizmoState == 1)
+                    return true;
+
+                if (actor.GizmoType == GizmoType.Door && attributes.GizmoState == 1)
+                    return false;
+
+                if (attributes.GizmoState == 1)
                     return true;
 
                 if (actor.Type == TrinityObjectType.Barricade && attributes.IsNoDamage)

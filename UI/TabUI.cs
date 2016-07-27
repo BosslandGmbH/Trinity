@@ -48,6 +48,17 @@ using MemoryHelper = Trinity.Framework.Helpers.MemoryHelper;
 using TrinityItemQuality = Trinity.Config.Combat.TrinityItemQuality;
 using UIElement = Zeta.Game.Internals.UIElement;
 
+// For Debug Watch Panel Namespace.
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Objects.Memory;
+using Trinity.Framework.Objects.Memory.UX;
+using Trinity.Framework.Objects.Memory.Containers;
+using Trinity.Framework.Objects.Memory.Attributes;
+using Trinity.Framework.Objects.Memory.Sno;
+using Trinity.Framework.Objects.Memory.Misc;
+
 namespace Trinity.UI
 {
     internal class TabUi
@@ -603,7 +614,15 @@ namespace Trinity.UI
                 {
                     // [23194B50] Mouseover: 0xE062F8B5040F3076, Name: Root.NormalLayer.vendor_dialog_mainPage.tab_3
 
+                    var test = GameUI.GamePotion;
 
+                    foreach (var el in UIElement.UIMap)
+                    {
+                        if (el.Name.ToLower().Contains("minimap"))
+                        {
+                            var mapel = el;
+                        }
+                    }
 
                     //var el = UIElement.FromHash(0xE062F8B5040F3076);
                     //el.Click();

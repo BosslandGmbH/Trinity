@@ -17,7 +17,7 @@ namespace Trinity.Helpers
             public IntPtr SnoGroupsAddr;
             public IntPtr AttributeDescripterAddr;
             public int GlobalsOffset;
-            public int StorageOffset { get; set; }
+            public int StorageOffset;
         }
 
         private static BuildMemoryInfo _currentBuild;

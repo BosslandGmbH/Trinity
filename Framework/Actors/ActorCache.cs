@@ -32,6 +32,10 @@ namespace Trinity.Framework.Actors
         private readonly ConcurrentDictionary<int, ActorCommonData> _commonData = new ConcurrentDictionary<int, ActorCommonData>();
         private readonly ConcurrentDictionary<int, TrinityItem> _inventory = new ConcurrentDictionary<int, TrinityItem>();
         private readonly Dictionary<int, short> _annToAcdIndex = new Dictionary<int, short>();
+        private readonly Dictionary<int, int> _acdToRActorIndex = new Dictionary<int, int>();
+
+        public HashSet<int> CurrentAcdIds { get; set; } = new HashSet<int>();
+        public HashSet<int> CurrentRActorIds { get; set; } = new HashSet<int>();
 
         public ulong LastUpdatedFrame { get; private set; }
         public int ActivePlayerRActorId { get; private set; }
@@ -78,6 +82,9 @@ namespace Trinity.Framework.Actors
 
             UpdateInventory();
 
+            CurrentAcdIds = new HashSet<int>(_commonData.Keys);
+            CurrentRActorIds = new HashSet<int>(_rActors.Keys);
+
             LastUpdatedFrame = currentFrame;
         }
 
@@ -91,7 +98,7 @@ namespace Trinity.Framework.Actors
         {
             _annToAcdIndex.Clear();
 
-            var oldAcds = _commonData.Keys.ToList();
+            var oldAcds = new List<int>(_commonData.Keys);
             foreach (var newAcd in _commonDataContainer)
             {
                 var acdId = newAcd.AcdId;
@@ -133,7 +140,9 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateRActors()
         {
-            var untouchedIds = _rActors.Keys.ToList();
+            _acdToRActorIndex.Clear();
+
+            var untouchedIds = new List<int>(_rActors.Keys.ToList());
             foreach (var newRActor in _rActorContainer)
             {
                 var rActorId = newRActor.RActorId;
@@ -147,7 +156,7 @@ namespace Trinity.Framework.Actors
                     (id, existingActor) => TryUpdateRActor(id, existingActor, newRActor, out result));
 
                 if(result)
-                    untouchedIds.Remove(rActorId);
+                    untouchedIds.Remove(rActorId);                           
             }
 
             foreach (var key in untouchedIds)
@@ -169,6 +178,7 @@ namespace Trinity.Framework.Actors
             var player = actor as TrinityPlayer;
             if (player != null && player.IsMe)
                 Me = player;
+            _acdToRActorIndex[actor.AcdId] = actor.RActorId;
             _timer.Stop();
             actor.CreateTime = _timer.Elapsed.TotalMilliseconds;
 
@@ -187,6 +197,7 @@ namespace Trinity.Framework.Actors
             _timer.Restart();
             actor.RActor.Update(rActor.BaseAddress);
             actor.OnUpdated();
+            _acdToRActorIndex[actor.AcdId] = actor.RActorId;
             _timer.Stop();
             actor.UpdateTime = _timer.Elapsed.TotalMilliseconds;
 
@@ -199,7 +210,7 @@ namespace Trinity.Framework.Actors
         /// </summary>
         private void UpdateInventory()
         {
-            var untouchedIds = _inventory.Keys.ToList();
+            var untouchedIds = new List<int>(_inventory.Keys);
             foreach (var newItem in _commonData)
             {                
                 var commonData = newItem.Value;
@@ -358,11 +369,24 @@ namespace Trinity.Framework.Actors
             _inventory.Clear();
             _commonData.Clear();
             _rActors.Clear();
+            CurrentAcdIds.Clear();
+            CurrentRActorIds.Clear();
             Me = null;
             _rActorContainer = null;
             _commonDataContainer = null;
         }
 
+        public T GetActorByAcdId<T>(int acdId) where T : TrinityActor
+        {          
+            if (!_acdToRActorIndex.ContainsKey(acdId))
+                return default(T);
+
+            var rActorId = _acdToRActorIndex[acdId];
+            if (!_rActors.ContainsKey(rActorId))
+                return default(T);
+
+            return _rActors[rActorId] as T;
+        }
     }
 
 

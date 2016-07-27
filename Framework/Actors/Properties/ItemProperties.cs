@@ -126,7 +126,7 @@ namespace Trinity.Framework.Actors.Properties
                     Create(actor);
                     actor.OnIdentified();
                 }
-            }            
+            }
         }
 
 
@@ -144,10 +144,10 @@ namespace Trinity.Framework.Actors.Properties
                 case 192941:
                 case 52694: return FollowerType.Scoundrel;
             }
-            return FollowerType.None;           
+            return FollowerType.None;
         }
 
-        public static string GetName(int gameBalanceId) => SnoManager.StringList.GetStringListValue(SnoStringListType.Items, gameBalanceId);   
+        public static string GetName(int gameBalanceId) => SnoManager.StringList.GetStringListValue(SnoStringListType.Items, gameBalanceId);
 
         public static bool CanPickupItem(TrinityItem actor)
         {
@@ -166,7 +166,7 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.ItemQualityLevel >= ItemQuality.Legendary || actor.IsCraftingReagent)
             {
-                return actor.Attributes.IsTradeable && actor.Attributes.ItemTradePlayerLow.Contains(Core.MemoryModel.Hero.PlayerTradeId);
+                return !actor.Attributes.IsTradeable || actor.Attributes.ItemTradePlayerLow.Contains(Core.MemoryModel.Hero.PlayerTradeId);
             }
 
             if (actor.IsEquipment && actor.ItemQualityLevel <= ItemQuality.Rare6)
