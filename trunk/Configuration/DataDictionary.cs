@@ -1593,6 +1593,7 @@ namespace Trinity
         private static readonly HashSet<int> interactWhiteListIds = new HashSet<int>
         {
 
+
             //328830//x1_Fortress_Portal_Switch (328830)
             309432, // x1_westm_Bridge
             209133, // TentacleLord (209133)  QuestSnoId: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!
@@ -1863,6 +1864,13 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.a2dun_Zolt_SandBridgeBase, // bridge that is of type door, can't be interacted with.
+            (int)SNOActor.a3dun_crater_st_Demon_ChainPylon_Fire_Azmodan, // door with irregular properties
+
+            (int)SNOActor.caOut_Oasis_Sub240_Water_Money_Center_Wheel,
+            (int)SNOActor.a1dun_leor_firewall1,
+            (int)SNOActor.a1dun_leor_firewall2, //(89579) fire floor tiles
+
             (int)SNOActor.a2dun_Zolt_Random_Breakable_Statue,
 
             (int)SNOActor.a3dun_Keep_Bridge,

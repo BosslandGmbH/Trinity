@@ -366,11 +366,6 @@ namespace Trinity.Framework.Avoidance
                     {
                         node.AddNodeFlags(AvoidanceFlags.NavigationBlocking);
                     }
-
-                    if (actor.Type != TrinityObjectType.Door || !actor.IsUsed || actor.IsLockedDoor)
-                    {
-                        node.AddNodeFlags(AvoidanceFlags.ClosedDoor);
-                    }
                 }
             }
         }
@@ -383,7 +378,7 @@ namespace Trinity.Framework.Avoidance
             foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius))
             {
                 // Mark area around closed doors so that monsters behind them can be ignored.
-                if (!actor.IsUsed || actor.IsLockedDoor)
+                if ((!actor.IsUsed || actor.IsLockedDoor) && !actor.IsExcludedId)
                 {
                     node.AddNodeFlags(AvoidanceFlags.ClosedDoor);
                 }             

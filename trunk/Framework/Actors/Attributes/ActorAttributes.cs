@@ -12,7 +12,9 @@ namespace Trinity.Framework.Actors.Attributes
 
         public int GizmoState => GetAttribute<int>(ActorAttributeType.GizmoState);
 
-        public bool IsMinimapActive => GetAttribute<bool>(ActorAttributeType.MinimapActive);
+        public bool IsMinimapActive => GetAttributeDirectlyFromTable<bool>(ActorAttributeType.MinimapActive);
+
+        public int MinimapIconOverride => GetAttributeDirectlyFromTable<int>(ActorAttributeType.MinimapIconOverride);
 
         public bool HasFirebirdTemporary => GetAttribute<bool>(ActorAttributeType.PowerBuff1VisualEffectNone, (int)SNOPower.ItemPassive_Unique_Ring_733_x1);
 

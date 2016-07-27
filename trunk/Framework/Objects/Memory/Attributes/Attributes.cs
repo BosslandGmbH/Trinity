@@ -200,7 +200,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             var key = new AttributeKey((int)attr, modifier);
 
             AttributeItem foundAttribute;
-            if (!Map.TryGetItemByKey(key.Value, out foundAttribute, AttributeHasher))
+            if (Map == null || !Map.TryGetItemByKey(key.Value, out foundAttribute, AttributeHasher))
                 return default(T);
 
             return foundAttribute.GetValue<T>();

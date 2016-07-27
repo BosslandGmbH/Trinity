@@ -86,7 +86,9 @@ namespace Trinity.Framework.Actors.Properties
             {
                 actor.IsBountyObjective = actor.Attributes.IsBountyObjective;
                 actor.IsMinimapActive = actor.Attributes.IsMinimapActive;
+                actor.MinimapIconOverride = actor.Attributes.MinimapIconOverride;
                 actor.IsNoDamage = actor.Attributes.IsNoDamage;
+                actor.IsQuestMonster = actor.Attributes.IsQuestMonster;
             }
      
             UpdateLineOfSight(actor);

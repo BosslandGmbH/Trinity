@@ -149,6 +149,25 @@ namespace Trinity.Framework.Objects.Memory
             return results;
         }
 
+        public List<T> ReadObjects<T>(int offset, Predicate<T> invalidItemCondition) where T : MemoryWrapper, new()
+        {
+            var size = typeof (T).SizeOf();
+            if (size <= 0)
+            {
+                Logger.LogError("ReadObjects<T>(int offset, int count) requires a SizeOf field");
+                return null;
+            }     
+            var results = new List<T>();       
+            for (var i = 0; i < 255; i++)
+            {
+                var item = Create<T>(BaseAddress + offset + i*size);
+                if (invalidItemCondition(item))
+                    break;
+                results.Add(item);
+            }
+            return results;
+        }
+
         public IEnumerable<T> ReadObjects<T>(int offset, int count, int blockSize) where T : MemoryWrapper, new()
         {
             for (var i = 0; i < count; i++)

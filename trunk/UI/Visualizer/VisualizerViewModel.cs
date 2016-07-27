@@ -204,18 +204,22 @@ namespace Trinity.UI.RadarUI
 
                 //if (!IsMouseOverGrid)
                 //{
-                    switch (SelectedTab)
-                    {
-                        case Tab.Actors:
-                            var allobjects = new List<TrinityActor>(Objects);
-                            allobjects.AddRange(NotInCacheObjects);
-                            AllObjects = new ObservableCollection<TrinityActor>(allobjects);
-                            break;
+                switch (SelectedTab)
+                {
+                    case Tab.Actors:
+                        var allobjects = new List<TrinityActor>(Objects);
+                        allobjects.AddRange(NotInCacheObjects);
+                        AllObjects = new ObservableCollection<TrinityActor>(allobjects);
+                        break;
 
-                        case Tab.Markers:
-                            AllMarkers = new ObservableCollection<TrinityMarker>(Core.Markers.CurrentWorldMarkers);
-                            break;
-                    }
+                    case Tab.Markers:
+                        AllMarkers = new ObservableCollection<TrinityMarker>(Core.Markers.CurrentWorldMarkers);
+                        break;
+
+                    case Tab.Minimap:
+                        AllMinimap = new ObservableCollection<TrinityMinimapIcon>(Core.Minimap.MinimapIcons);
+                        break;
+                }
                 //}
                 //else
                 //{
@@ -242,6 +246,12 @@ namespace Trinity.UI.RadarUI
                 OnPropertyChanged(nameof(CurrentTarget));
                 //OnPropertyChanged(nameof(SelectedObject));
             }
+        }
+
+        public ObservableCollection<TrinityMinimapIcon> AllMinimap
+        {
+            get { return _allMinimap; }
+            set { SetField(ref _allMinimap, value); }
         }
 
         public ObservableCollection<TrinityMarker> AllMarkers
@@ -428,6 +438,13 @@ namespace Trinity.UI.RadarUI
             set { SetField(ref _selectedMarker, value); }
         }
 
+        [XmlIgnore]
+        public TrinityMinimapIcon SelectedIcon
+        {
+            get { return _selectedIcon; }
+            set { SetField(ref _selectedIcon, value); }
+        }
+
         [Zeta.XmlEngine.XmlElement("WindowWidth")]
         [DefaultValue(400)]
         public int WindowWidth
@@ -568,7 +585,8 @@ namespace Trinity.UI.RadarUI
         public enum Tab
         {
             Actors,
-            Markers
+            Markers,
+            Minimap
         }
 
         private GridLength _sidePanelWidth = new GridLength(0, GridUnitType.Auto);
@@ -1089,6 +1107,8 @@ namespace Trinity.UI.RadarUI
         private ObservableCollection<TrinityMarker> _allMarkers;
         private TrinityMarker _selectedMarker;
         private bool _isDragging;
+        private ObservableCollection<TrinityMinimapIcon> _allMinimap;
+        private TrinityMinimapIcon _selectedIcon;
 
 
         public bool StartThreadAllowed

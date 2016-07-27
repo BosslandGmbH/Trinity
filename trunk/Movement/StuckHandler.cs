@@ -267,6 +267,9 @@ namespace Trinity.Movement
             SNOPower.Witchdoctor_FetishArmy,
             SNOPower.Witchdoctor_Sacrifice,
             SNOPower.Witchdoctor_Firebats,
+            SNOPower.Weapon_Ranged_Instant,
+            SNOPower.Weapon_Ranged_Projectile,
+            SNOPower.Weapon_Ranged_Wand,
         };
 
         private readonly HashSet<AnimationState> _busyAnimationStates = new HashSet<AnimationState>

@@ -252,7 +252,7 @@ namespace Trinity.Combat.Abilities
             {
                 if (IsLonFirebatsBuild)
                 {
-                    var time = CanCast(SNOPower.Witchdoctor_Piranhas) && TargetUtil.ClusterExists(15f, 60f) && CurrentTarget.IsUnit ? 500 : 1000;
+                    var time = CanCast(SNOPower.Witchdoctor_Piranhas) && TargetUtil.ClusterExists(15f, 60f) && CurrentTarget != null && CurrentTarget.IsUnit ? 500 : 1000;
                     if (TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) > time && Core.Targets.ByType[TrinityObjectType.Unit].Any(a => a.IsHostile && a.Distance < 80f))
                     {
                         Logger.Log(LogCategory.Routine,$"Taeguk refresh TimeSinceUse={TimeSincePowerUse(SNOPower.Witchdoctor_Firebats)}");

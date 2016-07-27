@@ -75,6 +75,10 @@
       <HintPath>..\..\DB-Current\IronPython.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\DB-Current\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
@@ -152,6 +156,7 @@
     <Compile Include="Framework\Behaviors\BaseBehavior.cs" />
     <Compile Include="Framework\Behaviors\Behaviors.cs" />
     <Compile Include="Framework\Behaviors\MoveToMarkerBehavior.cs" />
+    <Compile Include="Framework\Helpers\ChangeDetector.cs" />
     <Compile Include="Framework\MemoryModel.cs" />
     <Compile Include="Framework\Helpers\Exporter\DictionaryExporter.cs" />
     <Compile Include="Framework\Helpers\Exporter\EnumExporter.cs" />
@@ -164,7 +169,9 @@
     <Compile Include="Framework\Actors\ActorCache.cs" />
     <Compile Include="Framework\ModuleManager.cs" />
     <Compile Include="Framework\Helpers\ConcurrentCache.cs" />
+    <Compile Include="Framework\Modules\BuildCache.cs" />
     <Compile Include="Framework\Modules\GameStopper.cs" />
+    <Compile Include="Framework\Modules\MinimapCache.cs" />
     <Compile Include="Framework\Modules\WorldCache.cs" />
     <Compile Include="Framework\Modules\MarkersCache.cs" />
     <Compile Include="Framework\Modules\StatusBar.cs" />
@@ -177,6 +184,7 @@
     <Compile Include="Framework\Actors\Attributes\ActorAttributes.cs" />
     <Compile Include="Framework\Objects\Enums\TargetCategory.cs" />
     <Compile Include="Framework\Objects\Enums\TeamType.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\Vector.cs" />
     <Compile Include="Framework\Objects\Memory\Globals.cs" />
     <Compile Include="Framework\Objects\Memory\Storage.cs" />
     <Compile Include="Framework\Objects\Memory\Hero.cs" />
@@ -306,6 +314,18 @@
     <Compile Include="Framework\Avoidance\DefaultAvoider.cs" />
     <Compile Include="Framework\Avoidance\Handlers\AnimationCircularAvoidanceHandler.cs" />
     <Compile Include="Framework\Helpers\GridHelper.cs" />
+    <Compile Include="Framework\Objects\API\Build.cs" />
+    <Compile Include="Framework\Objects\API\Item.cs" />
+    <Compile Include="Framework\Objects\API\Passive.cs" />
+    <Compile Include="Framework\Objects\API\Set.cs" />
+    <Compile Include="Framework\Objects\API\Skill.cs" />
+    <Compile Include="Framework\Objects\Enums\ControlType.cs" />
+    <Compile Include="Framework\Objects\Memory\UX\UXControl.cs" />
+    <Compile Include="Framework\Objects\Memory\UX\UXHelper.cs" />
+    <Compile Include="Framework\Objects\Memory\UX\UXRect.cs" />
+    <Compile Include="Framework\Objects\Memory\UX\UXReference.cs" />
+    <Compile Include="Framework\Objects\Memory\UX\UXLabel.cs" />
+    <Compile Include="Framework\Objects\Memory\UX\UXMinimap.cs" />
     <Compile Include="Helpers\Bitwise.cs" />
     <Compile Include="Helpers\EmptyLookup.cs" />
     <Compile Include="Helpers\EnumExtensions.cs" />

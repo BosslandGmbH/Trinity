@@ -33,8 +33,10 @@ namespace Trinity.Framework
         public static StatusBar StatusBar { get; } = new StatusBar();
         public static GameStopper GameStopper { get; } = new GameStopper();
         public static MarkersCache Markers { get; } = new MarkersCache();
+        public static MinimapCache Minimap { get; } = new MinimapCache();
         public static WorldCache World { get; } = new WorldCache();
         public static Clusters Clusters { get; } = new Clusters();
+        public static BuildCache Build { get; } = new BuildCache();
 
         // Misc
         public static GridHelper Grids { get; } = new GridHelper();

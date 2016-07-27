@@ -479,6 +479,56 @@
                             </DockPanel>
                         </TabItem>
 
+                        <TabItem Header="Minimap" Style="{DynamicResource TertiaryTabItem}">
+                            <DockPanel Background="#333333">
+
+                                <ListView Grid.Row="0" Grid.Column="0" Tag="" 
+                                          ItemsSource="{Binding AllMinimap}" 
+                                          IsEnabled="{Binding SelectedTab, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Minimap}" 
+                                          SelectedItem="{Binding SelectedIcon}" 
+                                          Style="{StaticResource MainListViewStyle}"                                                    
+                                         ut:MouseObserver.Observe="True"
+                                         ut:MouseObserver.ObservedMouseOver="{Binding IsMouseOverGrid, Mode=OneWayToSource}">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" Style="{DynamicResource ListViewTextTextBlockStyle}"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.View>
+                                        <ut:AutoSizedGridView>
+                                            <ut:GridViewColumnExtended Width="Auto" DisplayMemberBinding="{Binding Id}">
+                                                <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="Id" />
+                                            </ut:GridViewColumnExtended>
+                                            <ut:GridViewColumnExtended Width="Auto"  DisplayMemberBinding="{Binding AcdId}">
+                                                <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="AcdId" />
+                                            </ut:GridViewColumnExtended>                                            
+                                            <ut:GridViewColumnExtended Width="Auto"  DisplayMemberBinding="{Binding Name}">
+                                                <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="Name" />
+                                            </ut:GridViewColumnExtended>
+                                            <!--<ut:GridViewColumnExtended Width="Auto"  DisplayMemberBinding="{Binding ScreenPosition}">
+                                                <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="ScreenPosition" />
+                                            </ut:GridViewColumnExtended>
+                                            <ut:GridViewColumnExtended Width="Auto"  DisplayMemberBinding="{Binding ScreenOffset}">
+                                                <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="ScreenOffset" />
+                                            </ut:GridViewColumnExtended>-->
+                                            <ut:GridViewColumnExtended Width="Auto"  DisplayMemberBinding="{Binding Position}">
+                                                <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="Position" />
+                                            </ut:GridViewColumnExtended>
+                                            <ut:GridViewColumnExtended Width="Auto"  DisplayMemberBinding="{Binding Distance}">
+                                                <GridViewColumnHeader BorderThickness="0" HorizontalContentAlignment="Left" Content="Distance" />
+                                            </ut:GridViewColumnExtended>
+                                        </ut:AutoSizedGridView>
+                                    </ListView.View>
+                                </ListView>
+
+                            </DockPanel>
+                        </TabItem>
+
                     </TabControl>
                     
                 </Grid>
