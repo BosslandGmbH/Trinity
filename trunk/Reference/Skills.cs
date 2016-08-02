@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using Trinity.Combat;
 using Trinity.Helpers;
 using Trinity.Objects;
 using System.Collections.Generic;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Trinity.Technicals;
+using Trinity.Framework;
 
 namespace Trinity.Reference
 {
@@ -4120,7 +4120,7 @@ namespace Trinity.Reference
             {
                 try
                 {
-                    return ZetaDia.Me.UsePower(SNOPower.Wizard_Archon_Cancel, CacheData.Player.Position);
+                    return ZetaDia.Me.UsePower(SNOPower.Wizard_Archon_Cancel, Core.Player.Position);
                 }
                 catch (Exception ex)
                 {
@@ -4175,7 +4175,7 @@ namespace Trinity.Reference
                         _strike.Meta.ApplyDefaults();
                     }
 
-                    var power = CacheData.Hotbar.ActiveSkills
+                    var power = Core.Hotbar.ActiveSkills
                         .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_DisintegrationWave ||
                                              p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Cold ||
                                              p.Power == SNOPower.Wizard_Archon_DisintegrationWave_Fire ||
@@ -4232,7 +4232,7 @@ namespace Trinity.Reference
                         _strike.Meta.ApplyDefaults();
                     }
 
-                    var power = CacheData.Hotbar.ActiveSkills
+                    var power = Core.Hotbar.ActiveSkills
                         .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneStrike ||
                                              p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Fire ||
                                              p.Power == SNOPower.Wizard_Archon_ArcaneStrike_Cold ||
@@ -4289,7 +4289,7 @@ namespace Trinity.Reference
                         _blast.Meta.ApplyDefaults();
                     }
 
-                    var power = CacheData.Hotbar.ActiveSkills
+                    var power = Core.Hotbar.ActiveSkills
                         .FirstOrDefault(p => p.Power == SNOPower.Wizard_Archon_ArcaneBlast ||
                                              p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Cold ||
                                              p.Power == SNOPower.Wizard_Archon_ArcaneBlast_Fire ||
@@ -4389,7 +4389,7 @@ namespace Trinity.Reference
 
             public static bool IsArchonActive()
             {
-                return CacheData.Hotbar.ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int)p));
+                return Core.Hotbar.ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int)p));
             }
 
             public static bool IsSlowTimeActive()

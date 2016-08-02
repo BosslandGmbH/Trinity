@@ -23,11 +23,11 @@
 //                var item = new Item(cItem.AcdItem);
 //                var wrappedItem = new ItemWrapper(cItem.AcdItem);
 
-//                if (TrinityPlugin.Settings.Loot.ItemRank.AncientItemsOnly && wrappedItem.IsEquipment && !cItem.IsAncient)
+//                if (Core.Settings.Loot.ItemRank.AncientItemsOnly && wrappedItem.IsEquipment && !cItem.IsAncient)
 //                {
 //                    result = false;
 //                }
-//                else if (TrinityPlugin.Settings.Loot.ItemRank.RequireSocketsOnJewelry && wrappedItem.IsJewelry && cItem.AcdItem.NumSockets != 0)
+//                else if (Core.Settings.Loot.ItemRank.RequireSocketsOnJewelry && wrappedItem.IsJewelry && cItem.AcdItem.NumSockets != 0)
 //                {
 //                    result = false;
 //                }
@@ -95,13 +95,13 @@
 //        private static List<ItemRank> LastRankedItemsList = new List<ItemRank>();
 //        public static List<ItemRank> GetRankedItemsFromSettings()
 //        {
-//            var irs = TrinityPlugin.Settings.Loot.ItemRank;
-//            var settingSignature = (int)TrinityPlugin.Player.ActorClass + (int)irs.ItemRankMode + irs.MinimumRank + irs.MinimumSampleSize + irs.MinimumPercent;
+//            var irs = Core.Settings.Loot.ItemRank;
+//            var settingSignature = (int)Core.Player.ActorClass + (int)irs.ItemRankMode + irs.MinimumRank + irs.MinimumSampleSize + irs.MinimumPercent;
 //            if (settingSignature == lastSettingSignature)
 //                return LastRankedItemsList;
 
 //            lastSettingSignature = settingSignature;
-//            LastRankedItemsList = GetRankedItemsFromSettings(TrinityPlugin.Settings.Loot.ItemRank);
+//            LastRankedItemsList = GetRankedItemsFromSettings(Core.Settings.Loot.ItemRank);
 //            return LastRankedItemsList;
 //        }
 

@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Technicals;

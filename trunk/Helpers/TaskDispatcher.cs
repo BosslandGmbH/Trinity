@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Navigation;
-using Adventurer.Util;
 using Buddy.Coroutines;
 using Trinity.Helpers;
 using Trinity.Items;
@@ -15,6 +14,7 @@ using Zeta.Game;
 using Zeta.TreeSharp;
 using Action = Zeta.TreeSharp.Action;
 using Logger = Trinity.Technicals.Logger;
+using Randomizer = Trinity.Components.Adventurer.Util.Randomizer;
 
 namespace Trinity.Helpers
 {

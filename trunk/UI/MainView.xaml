@@ -42,8 +42,8 @@
                 <TabItem Header="Advanced" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="ConfigAdvanced.xaml"/>
                 </TabItem>
-                <TabItem Header="Debug" Foreground="{DynamicResource TextBrush}" Visibility="{Binding Path=DebugVisibility}" Style="{DynamicResource MainMenuTabItem}">
-                    <Border Tag="DebugTab.xaml"/>
+                <TabItem Header="Adventurer" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="Adventurer.xaml"/>
                 </TabItem>                
             </TabControl>
         </Border>

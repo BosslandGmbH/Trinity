@@ -7,6 +7,7 @@ using log4net.Appender;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
 using Trinity.Config;
+using Trinity.Framework;
 using Zeta.Common;
 
 namespace Trinity.Technicals
@@ -37,12 +38,12 @@ namespace Trinity.Technicals
         /// <param name="args">The parameters used when format message.</param>
         public static void Log(TrinityLogLevel level, LogCategory category, string formatMessage, params object[] args)
         {
-            if (string.IsNullOrEmpty(prefix) && TrinityPlugin.Settings != null)
+            if (string.IsNullOrEmpty(prefix) && Core.Settings != null)
             {
                 UpdatePrefix();
             }
 
-            if (category == LogCategory.UserInformation || level >= TrinityLogLevel.Error || (TrinityPlugin.Settings != null && TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(category)))
+            if (category == LogCategory.UserInformation || level >= TrinityLogLevel.Error || (Core.Settings != null && Core.Settings.Advanced.LogCategories.HasFlag(category)))
             {
                 string msg = string.Format(prefix + "{0} {1}", category != LogCategory.UserInformation ? "[" + category.ToString() + "]" : string.Empty, formatMessage);
 
@@ -60,7 +61,7 @@ namespace Trinity.Technicals
                 if (!LastLogMessages.ContainsKey(key))
                     LastLogMessages.Add(key, "");
 
-                var allowDuplicates = TrinityPlugin.Settings != null && TrinityPlugin.Settings.Advanced != null && TrinityPlugin.Settings.Advanced.AllowDuplicateMessages;
+                var allowDuplicates = Core.Settings != null && Core.Settings.Advanced != null && Core.Settings.Advanced.AllowDuplicateMessages;
 
                 string lastMessage;
                 if (LastLogMessages.TryGetValue(key, out lastMessage) && (allowDuplicates || lastMessage != msg))
@@ -88,7 +89,7 @@ namespace Trinity.Technicals
 
         public static void UpdatePrefix()
         {
-            var pluginStamp = TrinityPlugin.Settings.Advanced.BetaPlayground ? "Trinity:Beta" : "Trinity";
+            var pluginStamp = Core.Settings.Advanced.BetaPlayground ? "Trinity:Beta" : "Trinity";
             prefix = $"[{pluginStamp} {TrinityPlugin.Instance.Version}]";
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Modules;
@@ -129,7 +129,7 @@ namespace Trinity.Coroutines.Town
                 Logger.LogDebug("Started Town Run Loop");
 
                 var checkCycles = 2;
-                while (!TrinityPlugin.Player.IsInventoryLockedForGreaterRift)
+                while (!Core.Player.IsInventoryLockedForGreaterRift)
                 {
 
 
@@ -291,12 +291,12 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (TrinityPlugin.Player.IsDead)
+            if (Core.Player.IsDead)
                 return false;
 
             if (!RepairItems.EquipmentNeedsRepair())
             {
-                if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift)
+                if (Core.Player.IsInventoryLockedForGreaterRift)
                 {
                     Logger.LogVerbose("Can't townrun while in greater rift!");
                     DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(5);
@@ -304,7 +304,7 @@ namespace Trinity.Coroutines.Town
                 }
 
                 // Close Greater rift before doing a town run.
-                if (!TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
+                if (!Core.Settings.Loot.TownRun.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     return false;
                 }
@@ -317,21 +317,21 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (TrinityPlugin.Player.LevelAreaId == 19947 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && new Vector3(2959.893f, 2806.495f, 24.04533f).Distance(ZetaDia.Me.Position) > 180f)
+            if (Core.Player.LevelAreaId == 19947 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && new Vector3(2959.893f, 2806.495f, 24.04533f).Distance(ZetaDia.Me.Position) > 180f)
             {
                 Logger.Log("Can't townrun with the current quest (A1 New Game) !");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(30);
                 return false;
             }
 
-            if (DataDictionary.BossLevelAreaIDs.Contains(TrinityPlugin.Player.LevelAreaId))
+            if (DataDictionary.BossLevelAreaIDs.Contains(Core.Player.LevelAreaId))
             {
                 Logger.Log("Unable to Town Portal - Boss Area!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
                 return false;
             }
 
-            if (DataDictionary.NeverTownPortalLevelAreaIds.Contains(TrinityPlugin.Player.LevelAreaId))
+            if (DataDictionary.NeverTownPortalLevelAreaIds.Contains(Core.Player.LevelAreaId))
             {
                 Logger.Log("Unable to Town Portal in this area!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
@@ -417,7 +417,7 @@ namespace Trinity.Coroutines.Town
                 return true;
             }
 
-            if (TrinityPlugin.Player.IsCastingPortal)
+            if (Core.Player.IsCastingPortal)
             {
                 lastTownPortalCheckTime = DateTime.UtcNow;
                 lastTownPortalCheckResult = true;

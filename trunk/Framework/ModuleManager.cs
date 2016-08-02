@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using IronPython.Modules;
+using Trinity.Framework.Objects;
+using Trinity.Helpers.AutoFollow.Resources;
 
 namespace Trinity.Framework
 {
@@ -38,5 +41,28 @@ namespace Trinity.Framework
                 }
             }
         }
+
+        private static IEnumerable<Module> GetModules()
+        {
+            foreach (var utilReference in Instances.ToList())
+            {
+                Module util;
+                if (utilReference.TryGetTarget(out util))
+                {
+                    yield return util;
+                }
+                else
+                {
+                    Instances.Remove(utilReference);
+                }
+            }
+        }
+
+        //private static readonly InterfaceLoader<IDynamicSetting> _dynamicSettings = new InterfaceLoader<IDynamicSetting>();
+        //public static List<IDynamicSetting> DynamicSettings => _dynamicSettings.Items.Values.ToList();
+
+        public static IEnumerable<IDynamicSetting> DynamicSettings => GetModules().OfType<IDynamicSetting>();
+
+
     }
 }

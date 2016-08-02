@@ -114,9 +114,9 @@ namespace Trinity.Framework.Modules
             using (new PerformanceLogger("Utility.Cooldowns.Pulse"))
             {
                 CurrentTime = ZetaDia.CurrentTime;
-                IsLogging = TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Cooldowns);
+                IsLogging = Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.Cooldowns);
 
-                foreach (var buff in ZetaDia.Me.GetAllBuffs()) //CacheData.Buffs.AllBuffs)
+                foreach (var buff in ZetaDia.Me.GetAllBuffs()) //Core.Buffs.AllBuffs)
                 {
                     var cBuff = new CachedBuff(buff);
                     RecordBuffData(cBuff.Id, cBuff.BuffAttributeSlot, cBuff.VariantName);

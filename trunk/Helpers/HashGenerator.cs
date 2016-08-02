@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Technicals;
 using Zeta.Common;
@@ -17,7 +18,7 @@ namespace Trinity
 
         public static string GenerateItemHash(TrinityItem item)
         {
-            return GenerateItemHash(item.Position, item.ActorSnoId, item.InternalName, TrinityPlugin.Player.WorldSnoId, item.ItemQualityLevel, item.ItemLevel);
+            return GenerateItemHash(item.Position, item.ActorSnoId, item.InternalName, Core.Player.WorldSnoId, item.ItemQualityLevel, item.ItemLevel);
         }
 
         /// <summary>

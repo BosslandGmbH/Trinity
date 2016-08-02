@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Trinity.Components.Combat;
 using Trinity.Config;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Modules;
 using Trinity.ItemRules;
@@ -15,20 +17,17 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity
 {
+    public static class TrinityPluginSettings
+    {
+        public static TrinitySetting Settings = new TrinitySetting();
+    }
+
     public partial class TrinityPlugin
     {
-        private static TrinitySetting _Settings = new TrinitySetting();
-
         /// <summary>
         /// Settings of the plugin
         /// </summary>
-        public static TrinitySetting Settings
-        {
-            get
-            {
-                return _Settings;
-            }
-        }
+        public static TrinitySetting Settings => TrinityPluginSettings.Settings;
 
         /// <summary>
         /// Used for letting noobs know they started the bot without TrinityPlugin enabled in the plugins tab.
@@ -38,12 +37,12 @@ namespace Trinity
             get { return _isPluginEnabled; }
             set { _isPluginEnabled = value; }
         }
-        private static bool _isPluginEnabled;
+        public static bool _isPluginEnabled;
 
         /// <summary>
         /// Used for a global bot-pause
         /// </summary>
-        private const bool MainBotPaused = false;
+        public const bool MainBotPaused = false;
 
         /// <summary>
         /// Used to force-refresh dia objects at least once every XX milliseconds
@@ -74,52 +73,52 @@ namespace Trinity
         /// <summary>
         /// A flag to indicate if we should pick a new power/ability to use or not
         /// </summary>
-        private static bool _shouldPickNewAbilities;
+        public static bool _shouldPickNewAbilities;
 
         /// <summary>
         /// Flag used to indicate if we are simply waiting for a power to go off - so don't do any new target checking or anything
         /// </summary>
-        private static bool _isWaitingForPower;
+        public static bool _isWaitingForPower;
 
         /// <summary>
         /// A special post power use pause, causes targetHandler to wait on any new decisions
         /// </summary>
-        private static bool _isWaitingAfterPower;
+        public static bool _isWaitingAfterPower;
 
         /// <summary>
         /// A special post power use pause, causes targetHandler to wait on any new decisions
         /// </summary>
-        private static bool _isWaitingBeforePower;
+        public static bool _isWaitingBeforePower;
 
         /// <summary>
         /// If TargetHandle is waiting waiting before popping a potion - we won't refresh cache/change targets/unstuck/etc
         /// </summary>
-        private static bool _isWaitingForPotion;
+        public static bool _isWaitingForPotion;
 
         /// <summary>
         /// Status text for DB main window status
         /// </summary>
-        private static string _statusText = "";
+        public static string _statusText = "";
 
         /// <summary>
         /// Timestamp of when our position was last measured as changed
         /// </summary>
-        private static DateTime _lastMovedDuringCombat = DateTime.MinValue;
+        public static DateTime _lastMovedDuringCombat = DateTime.MinValue;
 
         /// <summary>
         /// Used to ignore a specific RActor for <see cref="_ignoreTargetForLoops"/> ticks
         /// </summary>
-        private static int _ignoreRactorGuid;
+        public static int _ignoreRactorGuid;
 
         /// <summary>
         /// Ignore <see cref=" _ignoreRactorGuid"/> for this many ticks
         /// </summary>
-        private static int _ignoreTargetForLoops;
+        public static int _ignoreTargetForLoops;
 
         /// <summary>
         /// Holds all of the player's current info handily cached, updated once per loop with a minimum timer on updates to save D3 memory hits
         /// </summary>
-        public static PlayerCache Player => CacheData.Player;
+        public static PlayerCache Player => Core.Player;
 
         public static PlayerMover PlayerMover => PlayerMover.Instance;
 
@@ -137,7 +136,7 @@ namespace Trinity
         public static bool SkipAheadAGo = false;
 
 
-        private static DateTime _lastClearedAvoidanceBlackspots = DateTime.MinValue;
+        public static DateTime _lastClearedAvoidanceBlackspots = DateTime.MinValue;
 
         // A count for player mystic ally, gargantuans, and zombie dogs
         //internal static int PlayerOwnedMysticAllyCount = 0;
@@ -152,8 +151,8 @@ namespace Trinity
         // These are a bunch of safety counters for how many times in a row we register having *NO* ability to select when we need one (eg all off cooldown)
 
         // After so many, give the player a friendly warning to check their skill/build setup
-        private static int NoAbilitiesAvailableInARow = 0;
-        private static DateTime lastRemindedAboutAbilities = DateTime.MinValue;
+        public static int NoAbilitiesAvailableInARow = 0;
+        public static DateTime lastRemindedAboutAbilities = DateTime.MinValue;
 
         // Last had any mob in range, for loot-waiting
         internal static DateTime lastHadUnitInSights = DateTime.MinValue;
@@ -165,31 +164,31 @@ namespace Trinity
         internal static DateTime lastHadContainerInSights = DateTime.MinValue;
 
         // Do we need to reset the debug bar after combat handling?
-        private static bool _resetStatusText;
+        public static bool _resetStatusText;
 
         // Death counts
         public static int DeathsThisRun = 0;
 
         // Force a target update after certain interactions
-        private static bool _forceTargetUpdate;
+        public static bool _forceTargetUpdate;
 
         /// <summary>
         /// This holds whether or not we want to prioritize a close-target, used when we might be body-blocked by monsters
         /// </summary>
-        private static bool _forceCloseRangeTarget;
+        public static bool _forceCloseRangeTarget;
 
         // How many times a movement fails because of being "blocked"
-        private static int _timesBlockedMoving;
+        public static int _timesBlockedMoving;
 
         // how long to force close-range targets for
-        private const int ForceCloseRangeForMilliseconds = 0;
+        public const int ForceCloseRangeForMilliseconds = 0;
 
         // Date time we were last told to stick to close range targets
-        private static DateTime _lastForcedKeepCloseRange = DateTime.MinValue;
+        public static DateTime _lastForcedKeepCloseRange = DateTime.MinValue;
 
 
         // Caching of the current primary target's health, to detect if we AREN'T damaging it for a period of time
-        private static double _targetLastHealth;
+        public static double _targetLastHealth;
 
         // This is used so we don't use certain skills until we "top up" our primary resource by enough
         internal static double MinEnergyReserve = 0d;
@@ -201,8 +200,8 @@ namespace Trinity
 
         // These values below are set on a per-class basis later on, so don't bother changing them here! These are the old default values
         public static double PlayerEmergencyHealthPotionLimit = 0.35;
-        private static double _playerEmergencyHealthGlobeLimit = 0.35;
-        private static double _playerHealthGlobeResource = 0.35;
+        public static double _playerEmergencyHealthGlobeLimit = 0.35;
+        public static double _playerHealthGlobeResource = 0.35;
 
         /*
          *  Blacklists
@@ -236,52 +235,52 @@ namespace Trinity
         internal static HashSet<int> Blacklist90Seconds = new HashSet<int>();
 
         // This is a blacklist that is cleared within 3 seconds of last attacking a destructible
-        private static HashSet<int> _destructible3SecBlacklist = new HashSet<int>();
-        private static DateTime _lastDestroyedDestructible = DateTime.MinValue;
-        private static bool _needClearDestructibles;
+        public static HashSet<int> _destructible3SecBlacklist = new HashSet<int>();
+        public static DateTime _lastDestroyedDestructible = DateTime.MinValue;
+        public static bool _needClearDestructibles;
 
         // The number of loops to extend kill range for after a fight to try to maximize kill bonus exp etc.
-        private static int _keepKillRadiusExtendedForSeconds;
-        private static DateTime _timeKeepKillRadiusExtendedUntil = DateTime.MinValue;
+        public static int _keepKillRadiusExtendedForSeconds;
+        public static DateTime _timeKeepKillRadiusExtendedUntil = DateTime.MinValue;
 
         // The number of loops to extend loot range for after a fight to try to stop missing loot
-        private static int _keepLootRadiusExtendedForSeconds;
+        public static int _keepLootRadiusExtendedForSeconds;
 
         // Some avoidance related variables
 
         /// <summary>
         /// Whether or not we need avoidance this target-search-loop
         /// </summary>
-        private static bool _standingInAvoidance;
+        public static bool _standingInAvoidance;
 
-        private static string _currentAvoidanceName;
+        public static string _currentAvoidanceName;
 
-        private static TrinityActor _currentAvoidance;
+        public static TrinityActor _currentAvoidance;
 
         /// <summary>
         /// This lets us know if there is a target but it's in avoidance so we can just "stay put" until avoidance goes
         /// </summary>
-        private static bool _shouldStayPutDuringAvoidance;
+        public static bool _shouldStayPutDuringAvoidance;
 
         /// <summary>
         /// This force-prevents avoidance for XX loops incase we get stuck trying to avoid stuff
         /// </summary>
-        private static readonly DateTime timeCancelledEmergencyMove = DateTime.MinValue;
-        private static int cancelledEmergencyMoveForMilliseconds = 0;
+        public static readonly DateTime timeCancelledEmergencyMove = DateTime.MinValue;
+        public static int cancelledEmergencyMoveForMilliseconds = 0;
 
         /// <summary>
         /// Prevent spam-kiting too much - allow fighting between each kite movement
         /// </summary>
-        private static DateTime timeCancelledKiteMove = DateTime.MinValue;
-        private static int cancelledKiteMoveForMilliseconds = 0;
+        public static DateTime timeCancelledKiteMove = DateTime.MinValue;
+        public static int cancelledKiteMoveForMilliseconds = 0;
 
         // Variable to let us force new target creations immediately after a root
-        private static bool wasRootedLastTick = false;
+        public static bool wasRootedLastTick = false;
 
         // Variables used to actually hold powers the power-selector has picked to use, for buffing and main power use
-        private static TrinityPower powerBuff;
+        public static TrinityPower powerBuff;
 
-        private static SNOPower lastPowerUsed = SNOPower.None;
+        public static SNOPower lastPowerUsed = SNOPower.None;
         public static SNOPower LastPowerUsed
         {
             get { return TrinityPlugin.lastPowerUsed; }
@@ -292,23 +291,23 @@ namespace Trinity
         public static bool OnlyTarget = false;
 
         // Target provider and core routine variables
-        //private static bool AnyElitesPresent = false;
-        private static bool AnyTreasureGoblinsPresent = false;
-        private static bool AnyMobsInRange = false;
-        private static float CurrentBotKillRange = 0f;
-        private static float CurrentBotLootRange = 0f;
+        //public static bool AnyElitesPresent = false;
+        public static bool AnyTreasureGoblinsPresent = false;
+        public static bool AnyMobsInRange = false;
+        public static float CurrentBotKillRange = 0f;
+        public static float CurrentBotLootRange = 0f;
         internal static bool MaintainTempestRush = false;
 
 
         // Goblinney things
-        private static int TotalNumberGoblins = 0;
-        private static DateTime lastGoblinTime = DateTime.MinValue;
+        public static int TotalNumberGoblins = 0;
+        public static DateTime lastGoblinTime = DateTime.MinValue;
 
 
-        private static bool IsAlreadyMoving = false;
-        private static Vector3 LastMoveToTarget;
-        private static float LastDistanceFromTarget;
-        private static DateTime lastMovementCommand = DateTime.MinValue;
+        public static bool IsAlreadyMoving = false;
+        public static Vector3 LastMoveToTarget;
+        public static float LastDistanceFromTarget;
+        public static DateTime lastMovementCommand = DateTime.MinValue;
 
         // Contains our apparent *CURRENT* hotbar abilities, cached in a fast hash
         public static List<SNOPower> Hotbar = new List<SNOPower>();
@@ -330,22 +329,22 @@ namespace Trinity
         /// <summary>
         /// Do not wait for animation after using, spam the power (false)
         /// </summary>
-        private const bool NO_WAIT_ANIM = false;
+        public const bool NO_WAIT_ANIM = false;
         /// <summary>
         /// Wait for animation after using, do not spam the power (true)
         /// </summary>
-        private const bool WAIT_FOR_ANIM = true;
+        public const bool WAIT_FOR_ANIM = true;
 
 
 
 
         // Whether to try forcing a vendor-run for custom reasons
         public static bool ForceVendorRunASAP = false;
-        private static bool _wantToTownRun;
+        public static bool _wantToTownRun;
         public static bool WantToTownRun { get { return _wantToTownRun; } set { _wantToTownRun = value; } }
 
         // Stash mapper - it's an array representing every slot in your stash, true or false dictating if the slot is free or not
-        private static bool[,] StashSlotBlocked = new bool[7, 30];
+        public static bool[,] StashSlotBlocked = new bool[7, 30];
 
         /*
          * From RefreshDiaObject
@@ -358,14 +357,14 @@ namespace Trinity
         /// <summary>
         /// This contains the active cache of valid objects 
         /// </summary>
-        internal static List<TrinityActor> Targets => CacheData.Targets.Items;
+        internal static List<TrinityActor> Targets => Core.Targets.Items;
 
         // From main RefreshDiaobjects
         /// <summary>
         /// The position of the last CurrentTarget (Primary Target)
         /// </summary>
         internal static Vector3 LastTargetPosition;
-        private static Vector3 KiteAvoidDestination;
+        public static Vector3 KiteAvoidDestination;
         /// <summary>
         /// The RActorGUID of the last CurrentTarget (PrimaryTarget)
         /// </summary>
@@ -375,9 +374,9 @@ namespace Trinity
         /// <summary>
         /// The number of monsters within melee range distance of the player
         /// </summary>
-        private static double HighestWeightFound;
+        public static double HighestWeightFound;
 
-        private static bool NeedToKite = false;
+        public static bool NeedToKite = false;
 
         /// <summary>
         /// Used for trimming off numbers from object names in RefreshDiaObject
@@ -385,11 +384,11 @@ namespace Trinity
         internal static Regex NameNumberTrimRegex = new Regex(@"-\d+$", RegexOptions.Compiled);
 
         // The following 2 variables are used to clear the dictionaries out - clearing one dictionary out per maximum every 2 seconds, working through in sequential order
-        private static DateTime lastClearedCacheDictionary = DateTime.MinValue;
+        public static DateTime lastClearedCacheDictionary = DateTime.MinValue;
 
         // On death, clear the timers for all abilities
         internal static DateTime LastDeathTime = DateTime.MinValue;
-        private static int _totalDeaths = 0;
+        public static int _totalDeaths = 0;
 
         internal static int TotalDeaths
         {
@@ -398,13 +397,13 @@ namespace Trinity
         }
 
         // When did we last send a move-power command?
-        private static DateTime lastSentMovePower = DateTime.MinValue;
+        public static DateTime lastSentMovePower = DateTime.MinValue;
 
 
         /// <summary>
         /// If we should force movement
         /// </summary>
-        private static bool ForceNewMovement = false;
+        public static bool ForceNewMovement = false;
 
         /// <summary>
         /// Store player current position
@@ -437,28 +436,28 @@ namespace Trinity
         /// <summary>
         /// Behaviors: How close we need to get to the target before we consider it "reached"
         /// </summary>
-        private static float TargetRangeRequired = 1f;
+        public static float TargetRangeRequired = 1f;
 
         /// <summary>
         /// An adjusted distance from the current target />
         /// </summary>
-        private static float TargetCurrentDistance;
+        public static float TargetCurrentDistance;
 
         /// <summary>
         /// If our current target is in LoS for use in Behavior handling
         /// </summary>
-        private static bool CurrentTargetWithinRange;
+        public static bool CurrentTargetWithinRange;
 
         // Darkfriend's Looting Rule
         public static Interpreter StashRule = null; // = new Interpreter();
 
         // Tesslerc - used for using combination strike
         // ForesightFirstHit is used to track the 30 second buff from deadly reach.
-        private static DateTime ForeSightFirstHit = new DateTime(1996, 6, 3, 22, 15, 0);
+        public static DateTime ForeSightFirstHit = new DateTime(1996, 6, 3, 22, 15, 0);
         // Foresight2 is used to track combination strike buff.
-        private static DateTime ForeSight2 = DateTime.MinValue;
+        public static DateTime ForeSight2 = DateTime.MinValue;
         // Otherthandeadlyreach is used for other spirit generators to track for combination strike buff.
-        private static DateTime OtherThanDeadlyReach = DateTime.MinValue;
+        public static DateTime OtherThanDeadlyReach = DateTime.MinValue;
 
         /// <summary>
         /// And a "global cooldown" to prevent non-signature-spells being used too fast
@@ -469,15 +468,15 @@ namespace Trinity
         public static int TotalBountyCachesOpened = 0;
 
         // Xp Counter
-        private static Vector3 eventStartPosition = Vector3.Zero;
+        public static Vector3 eventStartPosition = Vector3.Zero;
         public static Vector3 EventStartPosition
         {
             get { return TrinityPlugin.eventStartPosition; }
             set { TrinityPlugin.eventStartPosition = value; }
         }
 
-        private static DateTime eventStartTime = DateTime.MinValue;
-        private static TrinityActor _currentTarget;
+        public static DateTime eventStartTime = DateTime.MinValue;
+        public static TrinityActor _currentTarget;
 
         public static DateTime EventStartTime
         {

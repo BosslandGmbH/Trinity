@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Windows;
-using Adventurer.UI.UIComponents;
+
 using GongSolutions.Wpf.DragDrop;
 using JetBrains.Annotations;
 using Trinity.Config.Combat;

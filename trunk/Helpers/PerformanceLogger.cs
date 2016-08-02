@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using Trinity.Framework;
 
 namespace Trinity.Technicals
 {
@@ -54,7 +55,7 @@ namespace Trinity.Technicals
                 _Stopwatch.Stop();
                 if (_Stopwatch.Elapsed.TotalMilliseconds > 5 || _ForceLog)
                 {
-                    if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Performance) || _ForceLog)
+                    if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.Performance) || _ForceLog)
                     {
                         Logging.DebugFormat("[TrinityPlugin][Performance] Execution of {0} took {1:00.00000}ms.", _BlockName,
                                             _Stopwatch.Elapsed.TotalMilliseconds);

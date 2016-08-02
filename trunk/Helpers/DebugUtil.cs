@@ -13,7 +13,6 @@ using Trinity.Framework.Objects.Memory;
 using Trinity.Items;
 using Trinity.Items.ItemList;
 using Trinity.Objects;
-using Trinity.Objects.Native;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Common;
@@ -177,7 +176,7 @@ namespace Trinity.Helpers
 
         public static bool LogCategoryEnabled(LogCategory category)
         {
-            return TrinityPlugin.Settings != null && TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(category);
+            return Core.Settings != null && Core.Settings.Advanced.LogCategories.HasFlag(category);
         }
 
 
@@ -189,17 +188,17 @@ namespace Trinity.Helpers
 
         public static void LogBuffs()
         {
-            if (CacheData.Buffs != null && CacheData.Buffs.ActiveBuffs != null)
+            if (Core.Buffs != null && Core.Buffs.ActiveBuffs != null)
             {
                 _lastBuffs.ForEach(b =>
                 {
-                    if (CacheData.Buffs.ActiveBuffs.Any(o => o.Id + o.BuffAttributeSlot == b.Key))
+                    if (Core.Buffs.ActiveBuffs.Any(o => o.Id + o.BuffAttributeSlot == b.Key))
                         return;
 
                     Logger.Log(LogCategory.ActiveBuffs, "Buff lost '{0}' ({1}) Stacks={2} VariantId={3} VariantName={4}", b.Value.InternalName, b.Value.Id, b.Value.StackCount, b.Value.BuffAttributeSlot, b.Value.VariantName);
                 });
 
-                CacheData.Buffs.ActiveBuffs.ForEach(b =>
+                Core.Buffs.ActiveBuffs.ForEach(b =>
                 {
                     CachedBuff lastBuff;
                     if (_lastBuffs.TryGetValue(b.Id + b.BuffAttributeSlot, out lastBuff))
@@ -215,7 +214,7 @@ namespace Trinity.Helpers
                     }
                 });
 
-                _lastBuffs = CacheData.Buffs.ActiveBuffs.DistinctBy(k => k.Id + k.BuffAttributeSlot).ToDictionary(k => k.Id + k.BuffAttributeSlot, v => v);
+                _lastBuffs = Core.Buffs.ActiveBuffs.DistinctBy(k => k.Id + k.BuffAttributeSlot).ToDictionary(k => k.Id + k.BuffAttributeSlot, v => v);
             }
         }
 

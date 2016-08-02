@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Coroutines.Town;
+using Trinity.Framework;
 using TrinityCoroutines;
 using TrinityCoroutines.Resources;
 using Trinity.Helpers;
@@ -33,7 +34,7 @@ namespace Trinity.DbProvider
                 bool? result = null;
 
                 // Can't manage inventory while participating in a greater rift.
-                if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
+                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Loot.TownRun.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                     result = false;
 
                 // Learn some recipies.
@@ -89,7 +90,7 @@ namespace Trinity.DbProvider
                 bool? result = null;
 
                 // Can't manage inventory while participating in a greater rift.
-                if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
+                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Loot.TownRun.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                     result = false;
 
                 // Run again in case we missed first time due to full bags.

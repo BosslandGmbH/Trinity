@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Adventurer;
+using Trinity.Components.Adventurer;
+using Trinity.Components.Adventurer.UI;
 using Trinity.Config;
 using Trinity.Config.Combat;
 using Trinity.Config.Loot;
 using Trinity.Framework;
+using Trinity.Framework.Objects;
 using Trinity.Helpers;
+using Trinity.Helpers.AutoFollow.Resources;
 using Trinity.ItemRules;
 using Trinity.Items;
 using Trinity.Settings.Loot;
@@ -19,6 +23,7 @@ using Zeta.Bot;
 using Zeta.Game;
 using Application = System.Windows.Application;
 using BotManager = Trinity.BotManager;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Trinity.UI.UIComponents
 {
@@ -29,11 +34,12 @@ namespace Trinity.UI.UIComponents
     {
         private readonly TrinitySetting _Model;
         private readonly TrinitySetting _OriginalModel;
+        private InterfaceLoader<IDynamicSetting> _componentSettings;
 
         public TrinitySetting ViewModel => _Model;
 
         /// <summary>
-        /// Copies settings to the current/active set in TrinityPlugin.Settings.
+        /// Copies settings to the current/active set in Core.Settings.
         /// Allows settings only be actually applied when save button has been clicked.
         /// </summary>
         private void SaveSettings(TrinitySetting model)
@@ -53,7 +59,7 @@ namespace Trinity.UI.UIComponents
 
             Logger.Log("TPSActual={0}", BotMain.TicksPerSecond);
 
-            CacheData.Clear();
+            //Core.Clear();
             UsedProfileManager.SetProfileInWindowTitle();
         }
 
@@ -63,10 +69,24 @@ namespace Trinity.UI.UIComponents
         public void LoadSettings(TrinitySetting model, IEnumerable<string> ignorePropertyNames = null)
         {
             TrinitySetting.CopyTo(model, _Model, ignorePropertyNames);
+            _Model.LoadDynamicSettings();
             _Model.FireOnLoadedEvents();
             _Model.OnPropertyChanged("");
         }
-    
+
+        public System.Windows.Controls.UserControl AdventurerSettings
+        {
+            get
+            {
+                var advSettings = Adventurer.Instance as IDynamicSetting;
+                return new System.Windows.Controls.UserControl
+                {
+                    Content = advSettings.Control,
+                    DataContext = advSettings.DataContext
+                };
+            }
+        }
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="ConfigViewModel" /> class.
         /// </summary>
@@ -79,6 +99,7 @@ namespace Trinity.UI.UIComponents
                 _Model = new TrinitySetting();
                 _OriginalModel.CopyTo(_Model);
                 InitializeResetCommand();
+                //_componentSettings = new InterfaceLoader<IDynamicSetting>();                
 
                 SaveCommand = new RelayCommand(
                     parameter =>
@@ -313,13 +334,13 @@ namespace Trinity.UI.UIComponents
 
                         if (rusure == DialogResult.OK)
                         {
-                            TrinityPlugin.Settings.Save(true);
+                            Core.Settings.Save(true);
                         }
                     });
                 DumpSkillsCommand = new RelayCommand(
                     parameter =>
                     {
-                        //CacheData.Hotbar.Dump();
+                        //Core.Hotbar.Dump();
                         UILoader.CloseWindow();
                     });
             }

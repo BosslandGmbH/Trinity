@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Grid;
 using Trinity.Framework.Objects.Attributes;
 using Trinity.Helpers;
 using Trinity.Objects;
@@ -73,7 +72,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         public bool IsAllowed
         {
-            get { return TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct; }
+            get { return Core.Player.CurrentHealthPct <= HealthThresholdPct; }
         }
 
         [DataMember]

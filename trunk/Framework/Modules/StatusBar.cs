@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using System.Text;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Technicals;
 using Zeta.Bot;

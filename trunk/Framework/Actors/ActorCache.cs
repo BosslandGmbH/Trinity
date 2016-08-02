@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Technicals;
 using Trinity.Helpers;
-using Trinity.Objects.Native;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -358,7 +358,7 @@ namespace Trinity.Framework.Actors
 
         #endregion
 
-        private void Clear()
+        public void Clear()
         {
             Logger.LogDebug("Resetting ActorCache");
             _commonDataContainer = null;

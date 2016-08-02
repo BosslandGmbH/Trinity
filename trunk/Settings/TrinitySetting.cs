@@ -2,9 +2,11 @@
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net.Configuration;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -12,15 +14,19 @@ using System.Threading;
 using System.Windows;
 using System.Xml;
 using Trinity.Config.Combat;
+using Trinity.Framework;
+using Trinity.Framework.Objects;
+using Trinity.Helpers;
 using Trinity.Settings.Loot;
 using Trinity.Technicals;
 using Zeta.Bot.Settings;
 using Zeta.Game;
+using Extensions = Zeta.Common.Extensions;
 
 namespace Trinity.Config
 {
     [DataContract(Namespace = "")]
-    public class TrinitySetting : ITrinitySetting<TrinitySetting>, INotifyPropertyChanged
+    public class TrinitySetting : NotifyBase, ITrinitySetting<TrinitySetting>
     {
         #region Fields
         private CombatSetting _Combat;
@@ -68,6 +74,7 @@ namespace Trinity.Config
                 Gambling = new GamblingSetting();
                 Avoidance = new AvoidanceSetting();
                 Paragon = new ParagonSetting();
+                Dynamic = new DynamicSettingGroup();
             }
 
             _FSWatcher = new FileSystemWatcher()
@@ -77,6 +84,7 @@ namespace Trinity.Config
                 NotifyFilter = NotifyFilters.LastWrite,
                 EnableRaisingEvents = true
             };
+
             _FSWatcher.Changed += _FSWatcher_Changed;
             _LastLoadedSettings = DateTime.MinValue;
         }
@@ -84,6 +92,13 @@ namespace Trinity.Config
         #endregion Constructors
 
         #region Properties
+
+        [DataMember(IsRequired = false)]
+        public DynamicSettingGroup Dynamic
+        {
+            get { return _dynamic; }
+            set { SetField(ref _dynamic, value); }
+        }
 
         [DataMember(IsRequired = false)]
         public CombatSetting Combat
@@ -101,7 +116,6 @@ namespace Trinity.Config
                 }
             }
         }
-
 
         [DataMember(IsRequired = false)]
         public ParagonSetting Paragon
@@ -251,6 +265,7 @@ namespace Trinity.Config
         }
 
         private int _currentHeroId;
+        private DynamicSettingGroup _dynamic;
 
         [IgnoreDataMember]
         internal string HeroSpecificSettingsFile
@@ -338,7 +353,7 @@ namespace Trinity.Config
                         var globalSettings = LoadSettingsFromFile(filename);
                         loadSuccessful = globalSettings != null;
 
-                        //if (TrinityPlugin.Settings.Advanced.ForceSpecificGambleSettings && File.Exists(BattleTagSettingsFile))
+                        //if (Core.Settings.Advanced.ForceSpecificGambleSettings && File.Exists(BattleTagSettingsFile))
                         //{
                         //    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Loading BattleTag Settings for Gambling");
                         //    var specificSettings = LoadSettingsFromFile(BattleTagSettingsFile, false);
@@ -439,6 +454,8 @@ namespace Trinity.Config
 
                     stream.Close();
 
+                    LoadDynamicSettings();
+
                     Logger.Log("Configuration file loaded");
 
                     // this tests to make sure we didn't load anything null, and our load was succesful
@@ -447,10 +464,6 @@ namespace Trinity.Config
                         Logger.Log("Configuration loaded successfully.");
                         OnLoaded();
                     }
-
-
-                    
-
                 }
             }
             else
@@ -501,6 +514,8 @@ namespace Trinity.Config
                     GlobalSettings.Instance.Save();
                     CharacterSettings.Instance.Save();
 
+                    SaveDynamicSettings();
+
                     string filename;
 
                     if (File.Exists(GlobalSettingsFile) || useGlobal)
@@ -508,7 +523,7 @@ namespace Trinity.Config
                         filename = GlobalSettingsFile;
                         SaveToFile(filename, this);
 
-                        //if (TrinityPlugin.Settings.Advanced.ForceSpecificGambleSettings && File.Exists(BattleTagSettingsFile))
+                        //if (Core.Settings.Advanced.ForceSpecificGambleSettings && File.Exists(BattleTagSettingsFile))
                         //{
                         //    Logger.Log("Saving Gambling settings to Specific settings file");
                         //    filename = BattleTagSettingsFile;
@@ -528,6 +543,47 @@ namespace Trinity.Config
 
             }
             Logger.UpdatePrefix();
+        }
+
+        /// <summary>
+        /// Copy the current settings from modules and put them into Trinity settings.
+        /// </summary>
+        public void SaveDynamicSettings()
+        {
+            Dynamic.Settings.Clear();
+            foreach (var item in ModuleManager.DynamicSettings)
+            {
+                Dynamic.Settings.Add(new DynamicSettingNode
+                {
+                    Name = item.Name,
+                    Code = item.GetCode()
+                });
+            }
+        }
+
+        /// <summary>
+        /// Apply the settings loaded from Trinity settings over to their respective modules.
+        /// </summary>
+        public void LoadDynamicSettings()
+        {
+            if (Dynamic == null)
+                return;
+
+            foreach (var item in Dynamic.Settings)
+            {
+                var setting = item.Setting;
+                if (setting == null)
+                    continue;
+
+                if (string.IsNullOrEmpty(item.Code))
+                {
+                    setting.Reset();
+                }
+                else
+                {
+                    setting.ApplyCode(item.Code);
+                }
+            }
         }
 
         public void FireOnSaveEvents()
@@ -770,7 +826,7 @@ namespace Trinity.Config
         /// <param name="instance">Settings instance to be serialized to Xml</param>
         /// <param name="rootName">Name of the base node in resulting Xml</param>
         /// <returns>string of settings as Xml</returns>
-        internal static string GetSettingsXml<T>(T instance, string rootName = "") where T : ITrinitySetting<T>
+        public static string GetSettingsXml<T>(T instance, string rootName = "") where T : ITrinitySetting<T>
         {
             if (string.IsNullOrEmpty(rootName))
                 rootName = typeof(T).Name;
@@ -791,7 +847,7 @@ namespace Trinity.Config
         /// <typeparam name="T">Type of the settings you want</typeparam>
         /// <param name="xml">Xml string of settings</param>
         /// <returns>Instance of Settings Class</returns>
-        internal static T GetSettingsInstance<T>(string xml) where T : ITrinitySetting<T>
+        public static T GetSettingsInstance<T>(string xml) where T : ITrinitySetting<T>
         {
             var serializer = new DataContractSerializer(typeof(T));
             using (var reader = XmlReader.Create(new StringReader(xml)))
@@ -805,4 +861,78 @@ namespace Trinity.Config
         #endregion Static Methods
 
     }
+
+    [DataContract(Namespace = "")]
+    [KnownType(typeof(DynamicNodeCollection))]
+    public class DynamicSettingGroup : NotifyBase, ITrinitySetting<DynamicSettingGroup>
+    {
+        private DynamicNodeCollection _settings = new DynamicNodeCollection();
+
+        [DataMember]        
+        public DynamicNodeCollection Settings
+        {
+            get { return _settings; }
+            set { SetField(ref _settings, value); }
+        }
+
+        public void Reset() => Extensions.ForEach(_settings, s => s.Setting.Reset());
+
+        public void CopyTo(DynamicSettingGroup setting)
+        {
+            setting.Settings = new DynamicNodeCollection();
+            foreach (var item in _settings)
+            {
+                setting.Settings.Add(new DynamicSettingNode
+                {
+                    Name = item.Name,
+                    Code = item.Code
+                });
+            }
+        }
+
+        public DynamicSettingGroup Clone()
+        {
+            var settings = new DynamicSettingGroup();
+            foreach (var item in _settings)
+            {
+                settings.Settings.Add(new DynamicSettingNode
+                {
+                    Name = item.Name,
+                    Code = item.Code
+                });
+            }
+            return settings;
+        }
+    }
+
+    [CollectionDataContract(Namespace = "", ItemName = "Node")]
+    public class DynamicNodeCollection : ObservableCollection<DynamicSettingNode> { }
+
+    [DataContract(Namespace = "")]
+    public class DynamicSettingNode : NotifyBase
+    {
+        private string _name;
+        private string _code;
+
+        [IgnoreDataMember]
+        public IDynamicSetting Setting => ModuleManager.DynamicSettings.FirstOrDefault(s => s.Name == Name);
+
+        [DataMember]
+        public string Name
+        {
+            get { return _name; }
+            set { SetField(ref _name, value); }
+        }
+
+        [DataMember]
+        public string Code
+        {
+            get { return _code; }
+            set { SetField(ref _code, value); }
+        }
+    }
+
+
+
+
 }

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Cache;
-using Trinity.Combat;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
@@ -263,7 +263,7 @@ namespace Trinity.Objects
             get
             {
                 if (ZetaDia.IsInGame && ZetaDia.Me.IsValid && IsActive)
-                    return CacheData.Hotbar.GetSkill(SNOPower).Rune != null;
+                    return Core.Hotbar.GetSkill(SNOPower).Rune != null;
 
                 return false;
             }
@@ -341,7 +341,7 @@ namespace Trinity.Objects
         /// </summary>
         public TrinityPower ToPower(float minimumRange, Vector3 targetPosition, int AcdId, int waitTicksBeforeUse, int waitTicksAfterUse)
         {
-            return new TrinityPower(SNOPower, minimumRange, targetPosition, TrinityPlugin.Player.WorldDynamicID, AcdId, waitTicksBeforeUse, waitTicksAfterUse);
+            return new TrinityPower(SNOPower, minimumRange, targetPosition, Core.Player.WorldDynamicID, AcdId, waitTicksBeforeUse, waitTicksAfterUse);
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace Trinity.Objects
         /// </summary>
         public bool Cast()
         {
-            return Cast(TrinityPlugin.Player.Position, -1);
+            return Cast(Core.Player.Position, -1);
         }
 
         /// <summary>
@@ -417,7 +417,7 @@ namespace Trinity.Objects
                     SpellHistory.RecordSpell(SNOPower);
                     return true;
                 }
-                TrinityPlugin.LastActionTimes.Add(DateTime.UtcNow);
+                CombatManager.TargetHandler.LastActionTimes.Add(DateTime.UtcNow);
             }
 
             return false;

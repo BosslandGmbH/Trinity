@@ -5,7 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Buddy.Coroutines;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Config;
 using Trinity.Coroutines;
 using Trinity.Coroutines.Town;
@@ -37,7 +38,7 @@ namespace Trinity
         {
         }
 
-        private static TrinitySetting Settings { get { return TrinityPlugin.Settings; } }
+        private static TrinitySetting Settings { get { return Core.Settings; } }
 
         private static readonly Dictionary<string, Composite> OriginalHooks = new Dictionary<string, Composite>();
 
@@ -160,7 +161,7 @@ namespace Trinity
             //    {
             //        Logger.Warn($"Moving to Item Marker at {itemMarker.Position}! Distance {itemMarker.Distance}!");
             //        await CommonCoroutines.MoveTo(itemMarker.Position, "ItemMarker"); 
-            //        TrinityPlugin.Player.CurrentAction = PlayerAction.Moving;
+            //        Core.Player.CurrentAction = PlayerAction.Moving;
             //        return true;
             //    }
             //}
@@ -169,7 +170,7 @@ namespace Trinity
                 return true;
 
 
-            var isTarget = TrinityPlugin.TargetCheck(null);
+            var isTarget = CombatManager.TargetHandler.TargetCheck(null);
 
             if (CombatBase.CombatMovement.IsQueuedMovement & CombatBase.IsCombatAllowed)
             {
@@ -191,7 +192,7 @@ namespace Trinity
 
             if (isTarget)
             {
-                return await new Action(ret => TrinityPlugin.HandleTarget()).ExecuteCoroutine();
+                return await new Action(ret => CombatManager.TargetHandler.HandleTarget()).ExecuteCoroutine();
             }
 
             //new MoveToMarkerBehavior(() => )
@@ -282,7 +283,7 @@ namespace Trinity
             if (!TreeHooks.Instance.Hooks.ContainsKey("Death"))
                 return;
 
-            //if (TrinityPlugin.Settings.Advanced.UseTrinityDeathHandler)
+            //if (Core.Settings.Advanced.UseTrinityDeathHandler)
             //{
             StoreAndReplaceHook("Death", new ActionRunCoroutine(ret => DeathHandler.Execute()));
             //}

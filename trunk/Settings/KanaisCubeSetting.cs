@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Config.Combat;
+using Trinity.Framework;
 using Trinity.Settings.Loot;
 using TrinityCoroutines.Resources;
 using Trinity.Technicals;
@@ -192,7 +193,7 @@ namespace Trinity.Config
 
         public HashSet<ItemSelectionType> GetRareUpgradeSettings()
         {
-            var selectedTypes = TrinityPlugin.Settings.KanaisCube.RareUpgradeTypes;
+            var selectedTypes = Core.Settings.KanaisCube.RareUpgradeTypes;
             return new HashSet<ItemSelectionType>(Enum.GetValues(selectedTypes.GetType()).Cast<Enum>().Where(selectedTypes.HasFlag).Cast<ItemSelectionType>());
         }
 

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Helpers;
 using TrinityCoroutines.Resources;
 using Zeta.Bot;
@@ -14,6 +15,7 @@ using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.TreeSharp;
 using Logger = Trinity.Technicals.Logger;
+using TrinityPlugin = Trinity.TrinityPlugin;
 
 namespace TrinityCoroutines
 {
@@ -34,7 +36,7 @@ namespace TrinityCoroutines
 
             _startingWorldId = ZetaDia.CurrentWorldSnoId;
 
-            if (Trinity.TrinityPlugin.Player.IsInTown)
+            if (Core.Player.IsInTown)
             {
                 GameUI.CloseVendorWindow();
             }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using Trinity.Framework;
 using Zeta.Common;
 
 namespace Trinity
@@ -111,7 +112,7 @@ namespace Trinity
                         return null;
                     else
                     {
-                        return HotSpot.Serialize(new HotSpot(TrinityPlugin.CurrentTarget.Position, TrinityPlugin.Player.WorldSnoId));
+                        return HotSpot.Serialize(new HotSpot(TrinityPlugin.CurrentTarget.Position, Core.Player.WorldSnoId));
                     }
                 }
                 catch

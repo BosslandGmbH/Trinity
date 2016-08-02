@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Trinity.Components.Combat;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
@@ -57,7 +58,7 @@ namespace Trinity.Framework.Modules
         public void Update()
         {
             if (NearMe)
-                Position = TrinityPlugin.Player.Position;
+                Position = Core.Player.Position;
 
             if (Position == Vector3.Zero)
                 return;
@@ -106,11 +107,11 @@ namespace Trinity.Framework.Modules
         public bool Exists => TargetUtil.ClusterExists(Radius, Size);
 
         public new void Update()
-        {
+        {            
             Position = Exists ?
                 TargetUtil.GetClusterPoint(Radius, Size) :
                 TargetUtil.GetBestClusterPoint(Radius);
-                TargetUtil.GetBestRiftValueClusterPoint(Radius, TrinityPlugin.Settings.Combat.Misc.RiftValueAlwaysKillUnitsAbove);
+                TargetUtil.GetBestRiftValueClusterPoint(Radius, Core.Settings.Combat.Misc.RiftValueAlwaysKillUnitsAbove);
 
             NearMe = false;
             Range = Radius;

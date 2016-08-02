@@ -10,12 +10,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Adventurer.Game.Exploration;
-using Trinity.Combat.Abilities;
+
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Avoidance;
-using Trinity.Framework.Grid;
 using Trinity.Objects;
 using Trinity.Technicals;
 using Zeta.Bot;

@@ -11,16 +11,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Adventurer.Coroutines;
-using Adventurer.Game.Exploration;
-using Adventurer.Game.Exploration.SceneMapping;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Grid;
 using Trinity.Objects;
 using Trinity.Technicals;
 using Trinity.UI.RadarUI;
@@ -30,9 +27,13 @@ using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
+using CombineType = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.CombineType;
+using DeathGates = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.DeathGates;
 using LineSegment = System.Windows.Media.LineSegment;
 using Logger = Trinity.Technicals.Logger;
 using Edge = System.Tuple<int, int>;
+using RectangularRegion = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.RectangularRegion;
+using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
 namespace Trinity.UI.UIComponents.RadarCanvas
 {
@@ -496,7 +497,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 if (DesiredSize.Height <= 0 || DesiredSize.Width <= 0)
                     return;
 
-                if (!IsVisible || TrinityPlugin.Player.Actor == null || TrinityPlugin.Player.IsLoadingWorld || !TrinityPlugin.Player.IsInGame)
+                if (!IsVisible || Core.Player.Actor == null || Core.Player.IsLoadingWorld || !Core.Player.IsInGame)
                     return;
 
                 Objects.Clear();
@@ -628,7 +629,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             var keysToRemove = new List<string>();
             foreach (var drawing in Drawings.Relative)
             {
-                if (drawing.Value.WorldId != TrinityPlugin.Player.WorldDynamicID)
+                if (drawing.Value.WorldId != Core.Player.WorldDynamicID)
                 {
                     keysToRemove.Add(drawing.Key);
                     continue;
@@ -668,7 +669,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 if (CenterActor.Point.X == 0 && CenterActor.Point.Y == 0)
                     return;
 
-                if (!TrinityPlugin.Player.IsInGame || TrinityPlugin.Player.IsLoadingWorld)
+                if (!Core.Player.IsInGame || Core.Player.IsLoadingWorld)
                     return;
 
                 try
@@ -807,65 +808,6 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
         private void DrawDeathGates(DrawingContext dc, CanvasData canvasData)
         {
-
-            //BitmapImage img = new BitmapImage(new Uri("c:\\demo.jpg"));
-            //dc.DrawImage(img, new Rect(0, 0, img.PixelWidth, img.PixelHeight));
-
-            //var drawing = new DrawingGroup();
-
-            //using (var groupdc = drawing.Open())
-            //{
-
-   
-            //    var enterRegion = DeathGates.EnterRegion;                
-          
-            //    var enterTopLeft = new Vector3(enterRegion.Min.X, enterRegion.Min.Y, 0);
-            //    var enterTopRight = new Vector3(enterRegion.Max.X, enterRegion.Min.Y, 0);
-            //    var enterBottomLeft = new Vector3(enterRegion.Min.X, enterRegion.Max.Y, 0);
-            //    var enterBottomRight = new Vector3(enterRegion.Max.X, enterRegion.Max.Y, 0);
-
-            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterTopRight.ToCanvasPoint()));
-            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(enterBottomLeft.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));
-            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterBottomLeft.ToCanvasPoint()));
-            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(enterTopRight.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));
-
-            //    var exitRegion = DeathGates.ExitRegion;
-
-            //    var exitTopLeft = new Vector3(exitRegion.Min.X, exitRegion.Min.Y, 0);
-            //    var exitTopRight = new Vector3(exitRegion.Max.X, exitRegion.Min.Y, 0);
-            //    var exitBottomLeft = new Vector3(exitRegion.Min.X, exitRegion.Max.Y, 0);
-            //    var exitBottomRight = new Vector3(exitRegion.Max.X, exitRegion.Max.Y, 0);
-
-            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(exitTopLeft.ToCanvasPoint(), exitTopRight.ToCanvasPoint()));
-            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(exitBottomLeft.ToCanvasPoint(), exitBottomRight.ToCanvasPoint()));
-            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(exitTopLeft.ToCanvasPoint(), exitBottomLeft.ToCanvasPoint()));
-            //    groupdc.DrawGeometry(null, RadarResources.EliteLightPen, new LineGeometry(exitTopRight.ToCanvasPoint(), exitBottomRight.ToCanvasPoint()));
-
-            //    //#region Scene Title
-
-            //    //if (sceneborders)
-            //    //{
-            //    //    var textPoint = adventurerScene.Center.ToVector3().ToCanvasPoint();
-            //    //    var glyphRun = DrawingUtilities.CreateGlyphRun(adventurerScene.Name, 10, textPoint);
-            //    //    groupdc.DrawGlyphRun(Brushes.Wheat, glyphRun);
-            //    //    textPoint = adventurerScene.Center.ToVector3().ToCanvasPoint();
-            //    //    textPoint.Y = textPoint.Y + 20;
-            //    //    glyphRun = DrawingUtilities.CreateGlyphRun((adventurerScene.Max - adventurerScene.Min) + " " + (adventurerScene.HasChild ? "HasSubScene" : string.Empty) + " " + (adventurerScene.SubScene != null ? " (Loaded)" : string.Empty), 8, textPoint);
-            //    //    groupdc.DrawGlyphRun(Brushes.Wheat, glyphRun);
-            //    //}
-            //    //#endregion
-            //}
-
-            //dc.DrawDrawing(drawing);
-
-            //foreach (var scene in DeathGates.Scenes)
-            //{
-            //    foreach (var rect in scene.InsideRegion.Cast<RectangularRegion>())
-            //    {
-            //        dc.DrawDrawing(GetRectangle(rect + scene.PortalScene.Min));
-            //    }           
-            //}
-
             foreach (var rect in DeathGates.ExitRegion.Cast<RectangularRegion>())
             {
                 if (rect.Max.X - rect.Min.X > 240 || rect.Max.Y - rect.Min.Y > 240)
@@ -890,14 +832,9 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 }
             }
 
-            //foreach (var rect in DeathGates.EnterRegion.Cast<RectangularRegion>())
-            //{
-            //    dc.DrawDrawing(GetRectangle(rect));
-            //}
-
             foreach (var zone in DeathGates.Scenes.Where(z => z.IsValid))
             {
-                dc.DrawLine(RadarResources.SuccessPen, zone.EnterPosition.ToCanvasPoint(), zone.ExitPosition.ToCanvasPoint());
+                dc.DrawLine(RadarResources.SuccessPen, zone.ShallowPortalPosition.ToCanvasPoint(), zone.DeepPortalPosition.ToCanvasPoint());
             }
         }
 
@@ -979,7 +916,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         {
             try
             {
-                var combatRadius = TrinityPlugin.Settings.Combat.Misc.NonEliteRange;
+                var combatRadius = Core.Settings.Combat.Misc.NonEliteRange;
                 var radius = combatRadius * GridSize;
                 dc.DrawEllipse(null, RadarResources.GreyPen, Player.Point, radius, radius);
 
@@ -1331,7 +1268,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                 var canvasPoint = centroid.ToCanvasPoint();
                 dc.DrawEllipse(Brushes.Black, null, canvasPoint, 5, 5);
-                dc.DrawLine(new Pen(Brushes.Black, 2), TrinityPlugin.Player.Position.ToCanvasPoint(), canvasPoint);
+                dc.DrawLine(new Pen(Brushes.Black, 2), Core.Player.Position.ToCanvasPoint(), canvasPoint);
             }
             catch (Exception ex)
             {
@@ -1937,7 +1874,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     _isSceneInfoVisible = sceneInfoVisibility;
                 }
 
-                var worldId = TrinityPlugin.Player.WorldDynamicID;
+                var worldId = Core.Player.WorldDynamicID;
 
                 foreach (var adventurerScene in ScenesStorage.CurrentWorldScenes.Where(s => s.DynamicWorldId == worldId).ToList())
                 {
@@ -2022,7 +1959,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     if (pair.Value.Type != DrawingType.Scene)
                         continue;
 
-                    if (pair.Value.WorldId != TrinityPlugin.Player.WorldDynamicID)
+                    if (pair.Value.WorldId != Core.Player.WorldDynamicID)
                         continue;
 
                     if (!pair.Value.Drawing.Bounds.IntersectsWith(CanvasData.ClipRegion.Rect))

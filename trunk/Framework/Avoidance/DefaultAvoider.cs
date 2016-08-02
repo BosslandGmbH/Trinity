@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Cache;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Config;
 using Trinity.Config.Combat;
 using Trinity.DbProvider;
@@ -47,7 +48,7 @@ namespace Trinity.Framework.Avoidance
             TrinityObjectType.Shrine
         };
 
-        public static AvoidanceSetting Settings => TrinityPlugin.Settings.Avoidance;
+        public static AvoidanceSetting Settings => Core.Settings.Avoidance;
         public static DateTime KiteStutterCooldownEndTime = DateTime.MinValue;
         public static DateTime LastAvoidTime = DateTime.MinValue;
         public static DateTime LastKiteTime = DateTime.MinValue;
@@ -195,16 +196,16 @@ namespace Trinity.Framework.Avoidance
 
         public static bool GetShouldAvoid()
         {
-            if (CacheData.Buffs.HasInvulnerableShrine)
+            if (Core.Buffs.HasInvulnerableShrine)
                 return false;
 
             if (CombatBase.IsDoingGoblinKamakazi)
                 return false;
 
-            if (TrinityPlugin.Player.IsInTown)
+            if (Core.Player.IsInTown)
                 return false;
 
-            if (!TrinityPlugin.Settings.Combat.Misc.AvoidAoEOutOfCombat && !CombatBase.IsInCombat)
+            if (!Core.Settings.Combat.Misc.AvoidAoEOutOfCombat && !CombatBase.IsInCombat)
                 return false;
 
             if (CombatBase.IsDoingGoblinKamakazi)
@@ -227,10 +228,10 @@ namespace Trinity.Framework.Avoidance
 
         private static bool GetShouldKite()
         {
-            if (CacheData.Buffs.HasInvulnerableShrine)
+            if (Core.Buffs.HasInvulnerableShrine)
                 return false;
 
-            if (TrinityPlugin.Player.IsInTown)
+            if (Core.Player.IsInTown)
                 return false;
 
             if (!CombatBase.IsInCombat)
@@ -266,13 +267,13 @@ namespace Trinity.Framework.Avoidance
                 return false;
             }
 
-            var playerHealthPct = TrinityPlugin.Player.CurrentHealthPct*100;
+            var playerHealthPct = Core.Player.CurrentHealthPct*100;
             if (playerHealthPct > 50)
             {
                 // Restrict kiting when the current target is on the edge of line of sight
                 // This should help with flip-flopping around corners and doorways.
 
-                var from = TrinityPlugin.Player.Position;
+                var from = Core.Player.Position;
                 var to = CombatBase.CurrentTarget.Position;
 
                 var losAngleA = MathEx.WrapAngle((float)(MathUtil.FindDirectionRadian(from, to) - Math.Round(Math.PI, 5) / 2));

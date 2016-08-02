@@ -9,11 +9,13 @@ namespace Trinity.Settings
     {
         private bool _isSelected;
         private bool _isEnabled;
+        private string _sectionName;
         private SettingsSection _section;
 
-        public SettingsSelectionItem(SettingsSection item)
+        public SettingsSelectionItem(SettingsSection section, string name = "")
         {
-            Section = item;
+            Section = section;
+            SectionName = string.IsNullOrEmpty(name) ? section.ToString() : name;
         }
 
         [DataMember(IsRequired = false)]
@@ -22,6 +24,14 @@ namespace Trinity.Settings
         {
             get { return _section; }
             set { SetField(ref _section, value); }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue("")]
+        public string SectionName
+        {
+            get { return _sectionName; }
+            set { SetField(ref _sectionName, value); }
         }
 
         [DataMember(IsRequired = false)]
@@ -39,5 +49,7 @@ namespace Trinity.Settings
             get { return _isEnabled; }
             set { SetField(ref _isEnabled, value); }
         }
+
+        public override string ToString() => Section == SettingsSection.Dynamic ? $"{SectionName} (Dynamic)" : SectionName;
     }
 }

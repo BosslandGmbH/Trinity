@@ -1,7 +1,6 @@
 using System;
-using Trinity.Objects.Native;
 
-namespace Trinity.Helpers
+namespace Trinity.Framework.Helpers
 {
     public class StaticRouter<T>
     {

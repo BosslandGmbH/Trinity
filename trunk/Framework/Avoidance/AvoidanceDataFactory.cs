@@ -39,7 +39,7 @@ namespace Trinity.Framework.Avoidance
                 CreationTime = DateTime.UtcNow,
                 StartPosition = actor.Position,
                 Actors = new List<TrinityActor> { actor },
-                IsImmune = TrinityPlugin.Player.ElementImmunity.Contains(data.Element)
+                IsImmune = Core.Player.ElementImmunity.Contains(data.Element)
             };
 
             return true;

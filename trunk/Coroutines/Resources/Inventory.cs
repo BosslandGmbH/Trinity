@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
@@ -505,7 +506,7 @@ namespace TrinityCoroutines.Resources
             if (!i.IsValid || i.IsDisposed)
                 return true;
 
-            if (i.IsUnidentified && Trinity.TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid)
+            if (i.IsUnidentified && Core.Settings.Loot.TownRun.KeepLegendaryUnid)
                 return false;
 
             return i.Name == i.ItemType.ToString() || isCraftingReagent && stackQuantity == 0 || !isCraftingReagent && !i.IsGem && i.ItemBaseType != ItemBaseType.Misc && stackQuantity > 0;

@@ -54,7 +54,7 @@ namespace Trinity.DbProvider
                 {
                     Logger.Log("[Death] No Longer Dead");
 
-                    if (TrinityPlugin.Settings.Combat.Misc.FleeInGhostMode)
+                    if (Core.Settings.Combat.Misc.FleeInGhostMode)
                     {
                         await MoveWhileGhosted();
                     }
@@ -121,7 +121,7 @@ namespace Trinity.DbProvider
             {
                 Logger.Log("[Death] Waiting while being resurrected");
             }
-            else if (ZetaDia.Me.IsInBossEncounter && !RiftProgression.IsInRift && TrinityPlugin.Settings.Combat.Misc.WaitForResInBossEncounters && IsAlivePlayerNearby)
+            else if (ZetaDia.Me.IsInBossEncounter && !RiftProgression.IsInRift && Core.Settings.Combat.Misc.WaitForResInBossEncounters && IsAlivePlayerNearby)
             {
                 Logger.Log("[Death] Waiting because of wait for resurrect in boss encounter setting");
             }

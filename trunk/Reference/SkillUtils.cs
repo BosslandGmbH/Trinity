@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Objects;
 using Zeta.Common;
 using Zeta.Game;
@@ -153,8 +154,8 @@ namespace Trinity.Reference
         private static void UpdateActiveSkills()
         {
             _lastUpdatedActiveSkills = DateTime.UtcNow;
-            _active = CurrentClass.Where(s => CacheData.Hotbar.ActivePowers.Contains(s.SNOPower)).ToList();
-            _activeIds = CacheData.Hotbar.ActivePowers;
+            _active = CurrentClass.Where(s => Core.Hotbar.ActivePowers.Contains(s.SNOPower)).ToList();
+            _activeIds = Core.Hotbar.ActivePowers;
         }
 
         private static DateTime _lastUpdatedActiveSkills = DateTime.MinValue;

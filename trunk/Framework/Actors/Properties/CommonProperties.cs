@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Common;
 using Zeta.Game;
@@ -48,7 +48,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.Type = type;
 
             actor.ObjectHash = actor.InternalName + actor.AcdId + actor.RActorId;
-            actor.Distance = actor.Position.Distance(TrinityPlugin.Player.Position);
+            actor.Distance = actor.Position.Distance(Core.Player.Position);
             actor.RadiusDistance = Math.Max(actor.Distance - actor.AxialRadius, 0f);
 
             if (actor.IsAcdBased && actor.IsAcdValid)
@@ -101,14 +101,14 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.Position != Vector3.Zero || Core.Avoidance.Grid.GridBounds == 0)
             {
-                var inLineOfSight = Core.Avoidance.Grid.CanRayCast(TrinityPlugin.Player.Position, actor.Position);
+                var inLineOfSight = Core.Avoidance.Grid.CanRayCast(Core.Player.Position, actor.Position);
                 actor.IsInLineOfSight = inLineOfSight;
                 if (!actor.HasBeenInLoS && inLineOfSight)
                     actor.HasBeenInLoS = true;
 
                 if (actor.IsInLineOfSight)
                 {
-                    var isWalkable = Core.Avoidance.Grid.CanRayWalk(TrinityPlugin.Player.Position, actor.Position);
+                    var isWalkable = Core.Avoidance.Grid.CanRayWalk(Core.Player.Position, actor.Position);
                     actor.IsWalkable = isWalkable;
                     if (!actor.HasBeenWalkable && isWalkable)
                         actor.HasBeenWalkable = true;

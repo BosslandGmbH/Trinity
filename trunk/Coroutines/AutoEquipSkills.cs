@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Objects;
 using Trinity.Reference;
 using Zeta.Game;
@@ -29,10 +30,10 @@ namespace Trinity.Coroutines
 
         public async Task<bool> Execute()
         {
-            if (!TrinityPlugin.Settings.Loot.Pickup.AutoEquipSkills)
+            if (!Core.Settings.Loot.Pickup.AutoEquipSkills)
                 return false;
 
-            if (!TrinityPlugin.Player.IsValid || ZetaDia.Me == null || !ZetaDia.IsInGame || !ZetaDia.Me.IsValid || ZetaDia.Me.CommonData == null || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed)
+            if (!Core.Player.IsValid || ZetaDia.Me == null || !ZetaDia.IsInGame || !ZetaDia.Me.IsValid || ZetaDia.Me.CommonData == null || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed)
                 return false;
 
             var level = ZetaDia.Me.Level;
@@ -63,8 +64,8 @@ namespace Trinity.Coroutines
 
         private async Task<bool> Equip()
         {           
-            var builds = GetBuildsForClass(TrinityPlugin.Player.ActorClass);
-            var build = builds.OrderByDescending(b => b.Level).FirstOrDefault(b => b.Level <= TrinityPlugin.Player.Level);
+            var builds = GetBuildsForClass(Core.Player.ActorClass);
+            var build = builds.OrderByDescending(b => b.Level).FirstOrDefault(b => b.Level <= Core.Player.Level);
             if (build == null)
                 return false;
 

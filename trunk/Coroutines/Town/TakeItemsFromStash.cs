@@ -26,9 +26,9 @@ namespace Trinity.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
                 return true;
 
-            if (TownInfo.Stash.Distance > 3f)
+            if (TownInfo.Stash.Distance > 20f)
             {
-                await MoveToAndInteract.Execute(TownInfo.Stash);
+                await MoveTo.Execute(TownInfo.Stash.InteractPosition);
             }
 
             var stash = TownInfo.Stash?.GetActor();
@@ -37,6 +37,8 @@ namespace Trinity.Coroutines.Town
                 Logger.Log("[TakeItemsFromStash] Unable to find Stash");
                 return false;
             }
+
+            await MoveToAndInteract.Execute(TownInfo.Stash);
 
             if (!UIElements.StashWindow.IsVisible && TownInfo.Stash.Distance <= 10f)
             {                

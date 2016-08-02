@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Objects;
@@ -14402,7 +14403,7 @@ namespace Trinity.Reference
         /// </summary>
         public static List<TrinityItem> EquippedTrinityItems
         {
-            get { return CacheData.Inventory.Equipped.Where(i => ItemIds.Contains(i.ActorSnoId)).ToList(); }
+            get { return Core.Inventory.Equipped.Where(i => ItemIds.Contains(i.ActorSnoId)).ToList(); }
         }
 
         #endregion

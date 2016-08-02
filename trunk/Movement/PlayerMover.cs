@@ -6,7 +6,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Config.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
@@ -76,7 +77,7 @@ namespace Trinity.DbProvider
         private static readonly Stopwatch BlockedTimer = new Stopwatch();
         private static readonly Stopwatch BlockedCheckTimer = new Stopwatch();
 
-        private static int TimeToBlockMs => TrinityPlugin.Settings.Combat.Misc.TimeToBlockMs; //1000;
+        private static int TimeToBlockMs => Core.Settings.Combat.Misc.TimeToBlockMs; //1000;
 
         private const int TimeToCheckBlockingMs = 25;
 
@@ -137,9 +138,9 @@ namespace Trinity.DbProvider
             var blocked = false;
             if (CurrentTarget != null && CurrentTarget.Distance > 10f)
             {
-                var pointInFacingDirection0 = MathEx.GetPointAt(TrinityPlugin.Player.Position, 8f, TrinityPlugin.Player.Rotation);
+                var pointInFacingDirection0 = MathEx.GetPointAt(Core.Player.Position, 8f, Core.Player.Rotation);
                 var numMonstersInFront = (from u in TrinityPlugin.Targets
-                                          where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, TrinityPlugin.Player.Position, pointInFacingDirection0)
+                                          where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, Core.Player.Position, pointInFacingDirection0)
                                           select u).Count();
 
                 blocked = numMonstersInFront > 0;
@@ -191,16 +192,16 @@ namespace Trinity.DbProvider
                 if (Legendary.IllusoryBoots.IsEquipped)
                     return true;
 
-                switch (TrinityPlugin.Player.ActorClass)
+                switch (Core.Player.ActorClass)
                 {
                     case ActorClass.Witchdoctor:
-                        return CacheData.Buffs.HasBuff(SNOPower.Witchdoctor_SpiritWalk);
+                        return Core.Buffs.HasBuff(SNOPower.Witchdoctor_SpiritWalk);
                     case ActorClass.Barbarian:
-                        return CacheData.Buffs.HasBuff(SNOPower.Barbarian_Sprint) && Runes.Barbarian.Gangway.IsActive;
+                        return Core.Buffs.HasBuff(SNOPower.Barbarian_Sprint) && Runes.Barbarian.Gangway.IsActive;
                     case ActorClass.Monk:
-                        return CacheData.Buffs.HasBuff(SNOPower.Monk_TempestRush) || Runes.Monk.InstantKarma.IsActive && CacheData.Buffs.HasBuff(SNOPower.Monk_Serenity);
+                        return Core.Buffs.HasBuff(SNOPower.Monk_TempestRush) || Runes.Monk.InstantKarma.IsActive && Core.Buffs.HasBuff(SNOPower.Monk_Serenity);
                     case ActorClass.Crusader:
-                        return CacheData.Buffs.HasBuff(SNOPower.X1_Crusader_SteedCharge);
+                        return Core.Buffs.HasBuff(SNOPower.X1_Crusader_SteedCharge);
                 }
                 return false;
             }
@@ -251,7 +252,7 @@ namespace Trinity.DbProvider
             var myPosition = ZetaDia.Me.Position;
 
             // Never stuck if movement disabled
-            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
+            if (Core.Settings.Advanced.DisableAllMovement)
             {
                 return false;
             }
@@ -472,7 +473,7 @@ namespace Trinity.DbProvider
 
         public void MoveTowards(Vector3 destination)
         {
-            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
+            if (Core.Settings.Advanced.DisableAllMovement)
                 return;
 
             TrinityPlugin.NavServerReport(true);
@@ -494,7 +495,7 @@ namespace Trinity.DbProvider
             // Store distance to current moveto target
             float destinationDistance = MyPosition.Distance(destination);
 
-            if (!ZetaDia.IsInTown && ClassMover.IsSpecialMovementReady && !TrinityPlugin.ShouldWaitForLootDrop &&
+            if (!ZetaDia.IsInTown && ClassMover.IsSpecialMovementReady && !CombatManager.TargetHandler.ShouldWaitForLootDrop &&
                 (CombatBase.IsInCombat || CombatBase.IsCurrentlyAvoiding || ClassMover.OutOfCombatMovementAllowed))
             {
 
@@ -516,7 +517,7 @@ namespace Trinity.DbProvider
                 // Default movement
                 ZetaDia.Me.UsePower(SNOPower.Walk, destination, TrinityPlugin.CurrentWorldDynamicId, -1);
 
-                if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                     Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "PlayerMover Moved to:{0} dir:{1} Speed:{2:0.00} Dist:{3:0} ZDiff:{4:0} CanStand:{5} Raycast:{6}",
                         NavHelper.PrettyPrintVector3(destination), MathUtil.GetHeadingToPoint(destination), MovementSpeed, MyPosition.Distance(destination),
                         Math.Abs(MyPosition.Z - destination.Z),
@@ -526,7 +527,7 @@ namespace Trinity.DbProvider
             }
             else
             {
-                if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
+                if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.Movement))
                     Logger.Log(TrinityLogLevel.Debug, LogCategory.Movement, "Reached MoveTowards Destination {0} Current Speed: {1:0.0}", destination, MovementSpeed);
             }
         }
@@ -547,9 +548,9 @@ namespace Trinity.DbProvider
                     x =>
                         remaining.Contains(x) && NavHelper.CanRayCast(x) && 
                         !Core.Avoidance.InCriticalAvoidance(x) &&
-                        x.Distance(CacheData.Player.Position) <= maxDistance &&
-                        x.Distance(CacheData.Player.Position) >= minDistance)
-                    .OrderByDescending(y => y.Distance(CacheData.Player.Position))
+                        x.Distance(Core.Player.Position) <= maxDistance &&
+                        x.Distance(Core.Player.Position) >= minDistance)
+                    .OrderByDescending(y => y.Distance(Core.Player.Position))
                     .ToList();
             //Add some redundancy to find a spot that isn't ray cast
             if (!points.Any())
@@ -558,9 +559,9 @@ namespace Trinity.DbProvider
                 NavigationProvider.CurrentPath.Where(
                     x =>
                         remaining.Contains(x) && //NavHelper.CanRayCast(x) &&
-                        x.Distance(CacheData.Player.Position) <= maxDistance &&
-                        x.Distance(CacheData.Player.Position) >= minDistance)
-                    .OrderByDescending(y => y.Distance(CacheData.Player.Position))
+                        x.Distance(Core.Player.Position) <= maxDistance &&
+                        x.Distance(Core.Player.Position) >= minDistance)
+                    .OrderByDescending(y => y.Distance(Core.Player.Position))
                     .ToList();
             }
 
@@ -608,7 +609,7 @@ namespace Trinity.DbProvider
         {
             // The below code is to help profile/routine makers avoid waypoints with a long distance between them.
             // Long-distances between waypoints is bad - it increases stucks, and forces the DB nav-server to be called.
-            if (TrinityPlugin.Settings.Advanced.LogStuckLocation)
+            if (Core.Settings.Advanced.LogStuckLocation)
             {
                 if (vLastMoveTo == Vector3.Zero)
                     vLastMoveTo = vMoveToTarget;
@@ -616,7 +617,7 @@ namespace Trinity.DbProvider
                 {
                     float fDistance = Vector3.Distance(vMoveToTarget, vLastMoveTo);
                     // Log if not in town, last waypoint wasn't FROM town, and the distance is >200 but <2000 (cos 2000+ probably means we changed map zones!)
-                    if (!TrinityPlugin.Player.IsInTown && !bLastWaypointWasTown && fDistance >= 200 & fDistance <= 2000)
+                    if (!Core.Player.IsInTown && !bLastWaypointWasTown && fDistance >= 200 & fDistance <= 2000)
                     {
                         if (!hashDoneThisVector.Contains(vMoveToTarget))
                         {
@@ -634,7 +635,7 @@ namespace Trinity.DbProvider
                     }
                     vLastMoveTo = vMoveToTarget;
                     bLastWaypointWasTown = false;
-                    if (TrinityPlugin.Player.IsInTown)
+                    if (Core.Player.IsInTown)
                         bLastWaypointWasTown = true;
                 }
             }
@@ -663,7 +664,7 @@ namespace Trinity.DbProvider
 
                 // Shit was slow, make it slower but tell us why :)
                 string pathCheck = "";
-                if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.Navigator) && t1.ElapsedMilliseconds > maxTime)
+                if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.Navigator) && t1.ElapsedMilliseconds > maxTime)
                 {
                     //if (Navigator.GetNavigationProviderAs<DefaultNavigationProvider>().CanFullyClientPathTo(destination))
                     //    pathCheck = "CanFullyPath";
@@ -684,7 +685,7 @@ namespace Trinity.DbProvider
                     ll = TrinityLogLevel.Debug;
                 }
                 Logger.Log(ll, lc, "{0} in {1:0}ms {2} dist={3:0} {4}",
-                    result, t1.ElapsedMilliseconds, destinationName, destination.Distance(TrinityPlugin.Player.Position), pathCheck);
+                    result, t1.ElapsedMilliseconds, destinationName, destination.Distance(Core.Player.Position), pathCheck);
             }
             catch (OutOfMemoryException)
             {
@@ -778,9 +779,9 @@ namespace Trinity.DbProvider
 
         //    lastRecordedSkipAheadCache = DateTime.UtcNow;
 
-        //    if (!TrinityPlugin.SkipAheadAreaCache.Any(p => p.Position.Distance(TrinityPlugin.Player.Position) <= 5f))
+        //    if (!TrinityPlugin.SkipAheadAreaCache.Any(p => p.Position.Distance(Core.Player.Position) <= 5f))
         //    {
-        //        TrinityPlugin.SkipAheadAreaCache.Add(new CacheObstacleObject() { Position = TrinityPlugin.Player.Position, Radius = 20f });
+        //        TrinityPlugin.SkipAheadAreaCache.Add(new CacheObstacleObject() { Position = Core.Player.Position, Radius = 20f });
         //    }
         //}
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Profile;

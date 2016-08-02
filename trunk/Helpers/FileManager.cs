@@ -167,7 +167,7 @@ namespace Trinity.Technicals
         {
             get
             {
-                return Path.Combine(PluginPath, "Combat", "Routine", CombatRoutineFileName);
+                return Path.Combine(PluginPath, "DbProvider", CombatRoutineFileName);
             }
         }
 

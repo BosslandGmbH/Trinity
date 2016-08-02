@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Notifications;
 using Trinity.Technicals;
@@ -20,14 +21,14 @@ namespace Trinity.Helpers
 
         public static void SendEmailNotification()
         {
-            if (TrinityPlugin.Settings.Notification.MailEnabled && NotificationManager.EmailMessage.Length > 0)
+            if (Core.Settings.Notification.MailEnabled && NotificationManager.EmailMessage.Length > 0)
                 NotificationManager.SendEmail(
-                    TrinityPlugin.Settings.Notification.EmailAddress,
-                    TrinityPlugin.Settings.Notification.EmailAddress,
+                    Core.Settings.Notification.EmailAddress,
+                    Core.Settings.Notification.EmailAddress,
                     "New DB stash loot - " + FileManager.BattleTagName,
                     NotificationManager.EmailMessage.ToString(),
                     NotificationManager.SmtpServer,
-                    TrinityPlugin.Settings.Notification.EmailPassword);
+                    Core.Settings.Notification.EmailPassword);
             NotificationManager.EmailMessage.Clear();
         }
 
@@ -48,7 +49,7 @@ namespace Trinity.Helpers
             FileStream logStream = null;
             try
             {
-                string filePath = Path.Combine(FileManager.LoggingPath, "StashLog - " + TrinityPlugin.Player.ActorClass + ".log");
+                string filePath = Path.Combine(FileManager.LoggingPath, "StashLog - " + Core.Player.ActorClass + ".log");
                 logStream = File.Open(filePath, FileMode.Append, FileAccess.Write, FileShare.Read);
 
                 //TODO : Change File Log writing
@@ -116,7 +117,7 @@ namespace Trinity.Helpers
             FileStream logStream = null;
             try
             {
-                string filePath = Path.Combine(FileManager.LoggingPath, "JunkLog - " + TrinityPlugin.Player.ActorClass + ".log");
+                string filePath = Path.Combine(FileManager.LoggingPath, "JunkLog - " + Core.Player.ActorClass + ".log");
                 logStream = File.Open(filePath, FileMode.Append, FileAccess.Write, FileShare.Read);
                 using (var logWriter = new StreamWriter(logStream))
                 {

@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Input;
-using Adventurer.UI.UIComponents;
+
 using JetBrains.Annotations;
 using Trinity.Config.Combat;
 using Trinity.Framework;

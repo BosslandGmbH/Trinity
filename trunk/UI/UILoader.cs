@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Markup;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Technicals;
 using Trinity.UI.UIComponents;
@@ -63,7 +64,7 @@ namespace Trinity.UI
                         ConfigWindow = new Window();
                     }
                     Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Load Context");
-                    var viewmodel = new ConfigViewModel(TrinityPlugin.Settings);
+                    var viewmodel = new ConfigViewModel(Core.Settings);
                     DataContext = viewmodel;
                     ConfigWindow.DataContext = viewmodel;
 
@@ -115,7 +116,7 @@ namespace Trinity.UI
 
         private static void UpdateVolatileSttings()
         {
-            TrinityPlugin.Settings.Gambling.OnPropertyChanged("MaximumBloodShards");
+            Core.Settings.Gambling.OnPropertyChanged("MaximumBloodShards");
         }
 
         /// <summary>

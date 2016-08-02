@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using Trinity.Framework;
 using Trinity.Technicals;
 using Zeta.Common.Plugins;
 using Zeta.Game;
@@ -228,16 +229,16 @@ namespace Trinity
 
         internal static void PersistentUpdateStats()
         {
-            int worldId = TrinityPlugin.Player.WorldSnoId;
-            if (worldId <= 0 || TrinityPlugin.Player.ActorClass == ActorClass.Invalid)
+            int worldId = Core.Player.WorldSnoId;
+            if (worldId <= 0 || Core.Player.ActorClass == ActorClass.Invalid)
                 return;
 
             // Total stats
-            string filename = Path.Combine(FileManager.LoggingPath, String.Format("FullStats - {0}.xml", TrinityPlugin.Player.ActorClass));
+            string filename = Path.Combine(FileManager.LoggingPath, String.Format("FullStats - {0}.xml", Core.Player.ActorClass));
             PersistentTotalStats = PersistentUpdateOne(filename);
 
             // World ID stats
-            filename = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.xml", TrinityPlugin.Player.ActorClass, worldId));
+            filename = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.xml", Core.Player.ActorClass, worldId));
             if (!WorldStatsDictionary.ContainsKey(worldId))
                 WorldStatsDictionary.Add(worldId, new PersistentStats());
             WorldStatsDictionary[worldId] = PersistentUpdateOne(filename);
@@ -278,9 +279,9 @@ namespace Trinity
             // Full Stats
             try
             {
-                if (TrinityPlugin.Player.ActorClass.ToString() != "Invalid")
+                if (Core.Player.ActorClass.ToString() != "Invalid")
                 {
-                    var fullStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("FullStats - {0}.log", TrinityPlugin.Player.ActorClass));
+                    var fullStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("FullStats - {0}.log", Core.Player.ActorClass));
 
                     using (FileStream LogStream =
                         File.Open(fullStatsPath, FileMode.Create, FileAccess.Write, FileShare.Read))
@@ -298,13 +299,13 @@ namespace Trinity
 
             try
             {
-                if (TrinityPlugin.Player.WorldSnoId > 0 && TrinityPlugin.Player.ActorClass != ActorClass.Invalid)
+                if (Core.Player.WorldSnoId > 0 && Core.Player.ActorClass != ActorClass.Invalid)
                 {
-                    var worldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.log", TrinityPlugin.Player.ActorClass, TrinityPlugin.Player.WorldSnoId));
+                    var worldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("WorldStats {1} - {0}.log", Core.Player.ActorClass, Core.Player.WorldSnoId));
 
                     using (FileStream LogStream = File.Open(worldStatsPath, FileMode.Create, FileAccess.Write, FileShare.Read))
                     {
-                        LogStats(LogStream, WorldStatsDictionary[TrinityPlugin.Player.WorldSnoId]);
+                        LogStats(LogStream, WorldStatsDictionary[Core.Player.WorldSnoId]);
                     }
                 }
             }
@@ -316,9 +317,9 @@ namespace Trinity
             // AggregateWorldStats
             try
             {
-                if (TrinityPlugin.Player.ActorClass != ActorClass.Invalid)
+                if (Core.Player.ActorClass != ActorClass.Invalid)
                 {
-                    var aggregateWorldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("AgregateWorldStats - {0}.log", TrinityPlugin.Player.ActorClass));
+                    var aggregateWorldStatsPath = Path.Combine(FileManager.LoggingPath, String.Format("AgregateWorldStats - {0}.log", Core.Player.ActorClass));
 
                     using (FileStream LogStream = File.Open(aggregateWorldStatsPath, FileMode.Create, FileAccess.Write, FileShare.Read))
                     {

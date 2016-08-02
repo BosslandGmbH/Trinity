@@ -46,19 +46,19 @@ namespace Trinity.Framework.Modules
                     switch (category)
                     {
                         case ParagonCategory.PrimaryAttributes:
-                            ApplyPoints(TrinityPlugin.Settings.Paragon.CoreParagonPriority, pointsAvailable);
+                            ApplyPoints(Core.Settings.Paragon.CoreParagonPriority, pointsAvailable);
                             break;
 
                         case ParagonCategory.Defense:
-                            ApplyPoints(TrinityPlugin.Settings.Paragon.DefenseParagonPriority, pointsAvailable);
+                            ApplyPoints(Core.Settings.Paragon.DefenseParagonPriority, pointsAvailable);
                             break;
 
                         case ParagonCategory.Offense:
-                            ApplyPoints(TrinityPlugin.Settings.Paragon.OffenseParagonPriority, pointsAvailable);
+                            ApplyPoints(Core.Settings.Paragon.OffenseParagonPriority, pointsAvailable);
                             break;
 
                         case ParagonCategory.Utility:
-                            ApplyPoints(TrinityPlugin.Settings.Paragon.UtilityParagonPriority, pointsAvailable);
+                            ApplyPoints(Core.Settings.Paragon.UtilityParagonPriority, pointsAvailable);
                             break;
                     }
                 }

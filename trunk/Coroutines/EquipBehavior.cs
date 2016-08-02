@@ -7,6 +7,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Reference;
@@ -81,7 +82,7 @@ namespace Trinity.Coroutines
 
                     KnownSkills = ZetaDia.Me.KnownSkills.ToList().DistinctBy(s => s.SNOPower).ToDictionary(s => s.SNOPower, v => v);
 
-                    CacheData.Hotbar.Update();
+                    Core.Hotbar.Update();
 
                     var primarySkills = _skills.Where(s => s.Key.IsPrimary).Take(2).ToList();
                     if (primarySkills.Any())
@@ -89,7 +90,7 @@ namespace Trinity.Coroutines
                         for (int i = 0; i < Math.Min(primarySkills.Count,2); i++)
                         {
                             var skillDefinition = primarySkills.ElementAtOrDefault(i);
-                            if (CacheData.Hotbar.ActiveSkills.Any(s => s.Power == skillDefinition.Key.SNOPower && (int) s.Slot == i))
+                            if (Core.Hotbar.ActiveSkills.Any(s => s.Power == skillDefinition.Key.SNOPower && (int) s.Slot == i))
                             {
                                 Logger.LogVerbose("[Auto Skills] Skipping Skill (Already Equipped): {0} ({1}) - {2} in slot {3}",
                                     skillDefinition.Key.Name,
@@ -121,7 +122,7 @@ namespace Trinity.Coroutines
                 if (Passives == null || !Passives.Any())
                     return false;
 
-                var validPasives = Passives.Where(p => p.Class == ZetaDia.Me.ActorClass && TrinityPlugin.Player.Level >= p.RequiredLevel).ToList();
+                var validPasives = Passives.Where(p => p.Class == ZetaDia.Me.ActorClass && Core.Player.Level >= p.RequiredLevel).ToList();
                 var passivePowers = validPasives.Select(p => p.SNOPower).ToList();
 
                 foreach (var passive in validPasives)

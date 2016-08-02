@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Technicals;
@@ -130,7 +130,7 @@ namespace Trinity.Movement
 
         private bool IsNotStuck()
         {
-            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
+            if (Core.Settings.Advanced.DisableAllMovement)
             {
                 Logger.Log(LogCategory.Movement, $"Not Stuck: Movement is disabled in settings");
                 return true;

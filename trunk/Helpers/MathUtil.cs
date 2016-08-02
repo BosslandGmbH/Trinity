@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using Adventurer.Game.Exploration;
+
 using Org.BouncyCastle.Asn1.Pkcs;
+using Trinity.Framework;
 using Zeta.Common;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.SNO;
+using GridPoint = Trinity.Components.Adventurer.Game.Exploration.GridPoint;
 using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity
@@ -389,7 +391,7 @@ namespace Trinity
         #region Human Readable Headings
         public static string GetHeadingToPoint(Vector3 TargetPoint)
         {
-            return GetHeading(FindDirectionDegree(TrinityPlugin.Player.Position, TargetPoint));
+            return GetHeading(FindDirectionDegree(Core.Player.Position, TargetPoint));
         }
         
         /// <summary>

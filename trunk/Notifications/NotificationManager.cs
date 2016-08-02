@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Web;
+using Trinity.Framework;
 using Trinity.Technicals;
 
 namespace Trinity.Notifications
@@ -41,7 +42,7 @@ namespace Trinity.Notifications
             //New string to pass in notification type
             string notificationType = "";
 
-            if (TrinityPlugin.Settings.Notification.IPhoneEnabled && !string.IsNullOrWhiteSpace(TrinityPlugin.Settings.Notification.IPhoneKey))
+            if (Core.Settings.Notification.IPhoneEnabled && !string.IsNullOrWhiteSpace(Core.Settings.Notification.IPhoneKey))
             {
                 var newNotification =
                         new ProwlNotification
@@ -59,7 +60,7 @@ namespace Trinity.Notifications
                 {
                 }
             }
-            if (TrinityPlugin.Settings.Notification.AndroidEnabled && !string.IsNullOrWhiteSpace(TrinityPlugin.Settings.Notification.AndroidKey))
+            if (Core.Settings.Notification.AndroidEnabled && !string.IsNullOrWhiteSpace(Core.Settings.Notification.AndroidKey))
             {
                 var newNotification =
                         new ProwlNotification
@@ -79,7 +80,7 @@ namespace Trinity.Notifications
             }
 
             //Adding in Pushover Stuffs. 
-            if (TrinityPlugin.Settings.Notification.PushoverEnabled && !string.IsNullOrWhiteSpace(TrinityPlugin.Settings.Notification.PushoverKey))
+            if (Core.Settings.Notification.PushoverEnabled && !string.IsNullOrWhiteSpace(Core.Settings.Notification.PushoverKey))
             {
                 var newNotification =
                         new ProwlNotification
@@ -99,7 +100,7 @@ namespace Trinity.Notifications
             }
 
             //Adding in Pushbullet Stuffs. 
-            if (TrinityPlugin.Settings.Notification.PushbulletEnabled && !string.IsNullOrWhiteSpace(TrinityPlugin.Settings.Notification.PushbulletKey))
+            if (Core.Settings.Notification.PushbulletEnabled && !string.IsNullOrWhiteSpace(Core.Settings.Notification.PushbulletKey))
             {
                 var newNotification =
                         new ProwlNotification
@@ -125,7 +126,7 @@ namespace Trinity.Notifications
             if (notificationType == "pushbullet")
             {
                 const string url = "https://api.pushbullet.com/api/pushes";
-                string apiKey = TrinityPlugin.Settings.Notification.PushbulletKey;
+                string apiKey = Core.Settings.Notification.PushbulletKey;
                 CredentialCache myCache = new CredentialCache { { new Uri(url), "Basic", new NetworkCredential(apiKey, "") } };
                 string postData = "type=note" +
                               "&body=" + HttpUtility.UrlEncode(notice.Description) +
@@ -156,7 +157,7 @@ namespace Trinity.Notifications
             if (notificationType == "pushover")
             {
                 string url = "https://api.pushover.net/1/messages.json";
-                string apiKey = TrinityPlugin.Settings.Notification.PushoverKey;
+                string apiKey = Core.Settings.Notification.PushoverKey;
                 //The registered token for TrinityPlugin I set up on pushover.net
                 url += "?token=aBf5s4BGSCkRHkneWq3VcGQMX2GjgP" + // Created "TrinityPlugin" application in Pushover.net
                               "&user=" + HttpUtility.UrlEncode(apiKey.Trim()) +
@@ -185,7 +186,7 @@ namespace Trinity.Notifications
             if (notificationType == "iphone")
             {
                 string url = "https://prowl.weks.net/publicapi/add";
-                string apiKey = TrinityPlugin.Settings.Notification.IPhoneKey;
+                string apiKey = Core.Settings.Notification.IPhoneKey;
                 url += "?apikey=" + HttpUtility.UrlEncode(apiKey.Trim()) +
                              "&application=" + HttpUtility.UrlEncode("Trinity") +
                              "&description=" + HttpUtility.UrlEncode(notice.Description) +
@@ -213,7 +214,7 @@ namespace Trinity.Notifications
             if (notificationType == "android")
             {
                 string url = "https://www.notifymyandroid.com/publicapi/notify";
-                string apiKey = TrinityPlugin.Settings.Notification.AndroidKey;
+                string apiKey = Core.Settings.Notification.AndroidKey;
                 url += "?apikey=" + HttpUtility.UrlEncode(apiKey.Trim()) +
                               "&application=" + HttpUtility.UrlEncode("Trinity") +
                               "&description=" + HttpUtility.UrlEncode(notice.Description) +

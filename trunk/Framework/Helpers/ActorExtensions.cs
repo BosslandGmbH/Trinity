@@ -4,7 +4,7 @@ using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Helpers
+namespace Trinity.Framework.Helpers
 {
     public static class CacheUtils
     {

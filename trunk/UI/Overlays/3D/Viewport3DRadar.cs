@@ -16,7 +16,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using System.Xml;
-using Adventurer.Util;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Objects;

@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Adventurer.Util;
+using Trinity.Framework;
 using Trinity.Helpers;
 using Trinity.UIComponents;
+using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Settings
 {
@@ -26,12 +27,19 @@ namespace Trinity.Settings
 
         public static List<SettingsSelectionItem> GetDefaultSelections()
         {
-            return GetAllSections().Select(item => new SettingsSelectionItem(item)).ToList();
-        }
+            var result = new List<SettingsSelectionItem>();
+            
+            foreach (var item in default(SettingsSection).ToList<SettingsSection>(true).Where(i => i != SettingsSection.Dynamic))
+            {
+                result.Add(new SettingsSelectionItem(item));
+            }
 
-        public static List<SettingsSection> GetAllSections()
-        {
-            return default(SettingsSection).ToList<SettingsSection>(true);
+            foreach (var item in ModuleManager.DynamicSettings)
+            {                
+                result.Add(new SettingsSelectionItem(SettingsSection.Dynamic, item.Name));
+            }            
+
+            return result;
         }
     
         public bool IsWindowOpen

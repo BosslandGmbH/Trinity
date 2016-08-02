@@ -1,12 +1,15 @@
 ﻿using System;
+//using Trinity.Components.AutoFollow;
+using Trinity.Components.Adventurer;
 using Trinity.Config;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Avoidance;
-using Trinity.Framework.Grid;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Movement;
+using Trinity.UI.UIComponents;
 using Zeta.Bot;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
@@ -17,6 +20,10 @@ namespace Trinity.Framework
     {
         public static bool IsEnabled { get; private set; }
         public static MemoryModel MemoryModel { get; } = new MemoryModel();
+
+        // Components
+        public static Adventurer Adventurer { get; } = new Adventurer();
+        //public static AutoFollow AutoFollow { get; } = new AutoFollow();
 
         // Modules
         public static ActorCache Actors { get; } = new ActorCache();
@@ -65,6 +72,7 @@ namespace Trinity.Framework
         {
             ModuleManager.FireEventAll(ModuleEventType.WorldChanged);
         }
+
         private static void Pulse(object sender, EventArgs eventArgs)
         {
             Update();

@@ -34,7 +34,7 @@ namespace Trinity.Framework.Modules
 
         public void UpdateBuffs()
         {
-            if (!CacheData.Player.IsValid)
+            if (!Core.Player.IsValid)
                 return;
 
             Clear();

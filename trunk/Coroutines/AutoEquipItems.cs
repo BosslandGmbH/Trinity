@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Items;
 using Trinity.Objects;
 using Trinity.Reference;
@@ -38,10 +39,10 @@ namespace Trinity.Coroutines
 
         public async Task<bool> Execute()
         {
-            if (!TrinityPlugin.Settings.Loot.Pickup.AutoEquipItems)
+            if (!Core.Settings.Loot.Pickup.AutoEquipItems)
                 return false;
 
-            if (!TrinityPlugin.Player.IsValid || TrinityPlugin.Player.IsInCombat || !ZetaDia.IsInGame || ZetaDia.IsLoadingWorld)
+            if (!Core.Player.IsValid || Core.Player.IsInCombat || !ZetaDia.IsInGame || ZetaDia.IsLoadingWorld)
                 return false;
 
             if (DateTime.UtcNow.Subtract(_lastEquipCheckTime).TotalSeconds < 5)
@@ -50,10 +51,10 @@ namespace Trinity.Coroutines
             if (DateTime.UtcNow.Subtract(TrinityPlugin.BotStartTime).TotalSeconds < 10)
                 return false;
 
-            if (!ZetaDia.Me.IsValid || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed || ZetaDia.Me.Level == 0 || ZetaDia.Me.Level >= 70 && TrinityPlugin.Settings.Loot.Pickup.DisableAutoEquipAtMaxLevel)
+            if (!ZetaDia.Me.IsValid || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed || ZetaDia.Me.Level == 0 || ZetaDia.Me.Level >= 70 && Core.Settings.Loot.Pickup.DisableAutoEquipAtMaxLevel)
                 return false;
 
-            if (_lastFreeBackpackSlots == TrinityPlugin.Player.FreeBackpackSlots)
+            if (_lastFreeBackpackSlots == Core.Player.FreeBackpackSlots)
                 return false;
 
             await IdentifyLegendaries();
@@ -92,8 +93,8 @@ namespace Trinity.Coroutines
 
                     // Dont use a 2hander in some situations.
                     if (backpackItem.TwoHanded && (
-                        TrinityPlugin.Player.ActorClass == ActorClass.Crusader || // Crusader uses shield bash ability to level.
-                        TrinityPlugin.Player.ActorClass == ActorClass.DemonHunter && !backpackItem.IsClassItem))
+                        Core.Player.ActorClass == ActorClass.Crusader || // Crusader uses shield bash ability to level.
+                        Core.Player.ActorClass == ActorClass.DemonHunter && !backpackItem.IsClassItem))
                         continue;
                          
                     var bestUpgradeFoundSoFar = _upgrades[slot];                    
@@ -124,7 +125,7 @@ namespace Trinity.Coroutines
             }
 
             _lastEquipCheckTime = DateTime.UtcNow;
-            _lastFreeBackpackSlots = TrinityPlugin.Player.FreeBackpackSlots;
+            _lastFreeBackpackSlots = Core.Player.FreeBackpackSlots;
 
             await EquipWeaponSocket();
             await EquipArmorSockets();
@@ -203,7 +204,7 @@ namespace Trinity.Coroutines
         /// <returns></returns>
         private async Task<bool> EquipArmorSockets()
         { 
-            var attrType = GetAttributeTypeForClass(TrinityPlugin.Player.ActorClass);
+            var attrType = GetAttributeTypeForClass(Core.Player.ActorClass);
             var gem = GetGemForAttributeType(attrType);
 
             if (gem == null)
@@ -321,13 +322,13 @@ namespace Trinity.Coroutines
                     return BackpackEquipment.Where(i => i.ItemType == ItemType.Ring);
 
                 case InventorySlot.RightHand:
-                    if (TrinityPlugin.Settings.Loot.Pickup.AutoEquipIgnoreWeapons)
+                    if (Core.Settings.Loot.Pickup.AutoEquipIgnoreWeapons)
                         return null;
 
                     return BackpackEquipment.Where(i => i.TrinityItemBaseType == TrinityItemBaseType.Offhand || i.TrinityItemType == TrinityItemType.CrusaderShield);
 
                 case InventorySlot.LeftHand:
-                    if (TrinityPlugin.Settings.Loot.Pickup.AutoEquipIgnoreWeapons)
+                    if (Core.Settings.Loot.Pickup.AutoEquipIgnoreWeapons)
                         return null;
 
                     return BackpackEquipment.Where(i => i.BaseType == ItemBaseType.Weapon && (i.OneHanded || i.TwoHanded));
@@ -341,7 +342,7 @@ namespace Trinity.Coroutines
         {
             get { return _backpackEquipment ?? (_backpackEquipment = ZetaDia.Me.Inventory.Backpack
                     .Select(CachedACDItem.GetTrinityItem)
-                    .Where(i => i.AcdItem.IsValid && i.IsEquipment && i.IsUsableByClass(TrinityPlugin.Player.ActorClass) && !i.IsUnidentified)); }
+                    .Where(i => i.AcdItem.IsValid && i.IsEquipment && i.IsUsableByClass(Core.Player.ActorClass) && !i.IsUnidentified)); }
         }
 
         private IEnumerable<InventorySlot> _slots = new List<InventorySlot>
@@ -475,7 +476,7 @@ namespace Trinity.Coroutines
 
         private double GetWeaponWeight(CachedACDItem item)
         {
-            var classMultiplier = item.IsClassItem && TrinityPlugin.Player.ActorClass == ActorClass.DemonHunter ? 2 : 1;
+            var classMultiplier = item.IsClassItem && Core.Player.ActorClass == ActorClass.DemonHunter ? 2 : 1;
 
             return item.WeaponDamagePerSecond * classMultiplier + GetAttributeWeight(item) / 5;
         }

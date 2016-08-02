@@ -6,6 +6,10 @@ namespace Trinity.Framework
         Pulse,
         ForcedPulse,
         WorldChanged,
-        GameJoined
+        GameJoined,
+        PluginDisabled,
+        PluginEnabled,
+        PluginInitialized,
+        Shutdown,        
     }
 }

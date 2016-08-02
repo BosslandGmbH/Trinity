@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Helpers;
 using Trinity.Objects;
-using Trinity.Combat;
 using Zeta.Game;
 
 namespace Trinity.Reference

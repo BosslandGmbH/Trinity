@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using JetBrains.Annotations;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Grid;
 using Trinity.Framework.Objects.Attributes;
 using Trinity.Helpers;
 using Trinity.UIComponents;
@@ -26,7 +25,7 @@ namespace Trinity.Framework.Avoidance.Handlers
         private int _healthThresholdPct;
         private float _distanceMultiplier;
 
-        public bool IsAllowed => TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct;
+        public bool IsAllowed => Core.Player.CurrentHealthPct <= HealthThresholdPct;
 
         public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
         {
