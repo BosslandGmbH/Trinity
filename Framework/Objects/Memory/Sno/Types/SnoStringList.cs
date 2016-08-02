@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Helpers.Exporter;
 using Trinity.Helpers;
-using Trinity.Objects.Native;
 
 namespace Trinity.Framework.Objects.Memory.Sno
 {

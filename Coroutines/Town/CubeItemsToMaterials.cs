@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Framework;
 using TrinityCoroutines;
 using TrinityCoroutines.Resources;
 using Zeta.Game;
@@ -45,7 +46,7 @@ namespace Trinity.Coroutines.Town
 
             _highest = Inventory.Materials.HighestCountMaterial(Inventory.MaterialConversionTypes);
 
-            var settingsTypes = global::Trinity.TrinityPlugin.Settings.KanaisCube.GetCraftingMaterialTypes();
+            var settingsTypes = Core.Settings.KanaisCube.GetCraftingMaterialTypes();
             if (!settingsTypes.Any())
             {
                 Logger.LogVerbose("[CubeItemsToMaterials] No materials have been selected in settings", _highest.Type, _highest.TotalStackQuantity);

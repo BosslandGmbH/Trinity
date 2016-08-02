@@ -11,7 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-using Adventurer.Game.Exploration;
+
 using Trinity.Cache;
 using Trinity.Coroutines.Town;
 using TrinityCoroutines;
@@ -28,7 +28,6 @@ using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Helpers;
 using Trinity.ItemRules;
 using Trinity.Items;
-using Trinity.Objects.Native;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Trinity.UI.RadarUI;
@@ -58,6 +57,7 @@ using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Attributes;
 using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Framework.Objects.Memory.Misc;
+using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
 namespace Trinity.UI
 {
@@ -277,7 +277,7 @@ namespace Trinity.UI
                 using (ZetaDia.Memory.AcquireFrame())
                 {
                     ZetaDia.Actors.Update();
-                    CacheData.Player.Update();
+                    Core.Player.Update();
                     ScenesStorage.Update();
                     Core.Update(true);
                     DebugUtil.ItemListTest();
@@ -579,7 +579,7 @@ namespace Trinity.UI
 
                     var internalName = NameRegex.Replace(nearestActor.Name, "");
 
-                    Adventurer.Util.Logger.Raw($@"
+                    Components.Adventurer.Util.Logger.Raw($@"
             public static TownActor {internalName} = new TownActor
             {{
                 Name = ""{internalName}"",
@@ -1118,7 +1118,7 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack VeiledCrystals to Magic Dust.");
 
-                if (TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
+                if (Core.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
                 {
                     Logger.LogError("Aborting - Dangerous to pull craftin items to backpack when MiscItemQuality setting is set above common");
                     return;
@@ -1192,7 +1192,7 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack VeiledCrystals to ReusableParts");
 
-                if (TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
+                if (Core.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
                 {
                     Logger.LogError("Aborting - Too dangerous to put crafting items into backpack when MiscItemQuality setting is set above common");
                     return;
@@ -1214,7 +1214,7 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack ReusableParts/ArcaneDust to VeiledCrystals");
 
-                if (TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
+                if (Core.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
                 {
                     Logger.LogError("Aborting - Too dangerous to put crafting items into backpack when MiscItemQuality setting is set above common");
                     return;
@@ -1236,7 +1236,7 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack VeiledCrystals to ArcaneDust");
 
-                if (TrinityPlugin.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
+                if (Core.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
                 {
                     Logger.LogError("Aborting - Too dangerous to put crafting items into backpack when MiscItemQuality setting is set above common");
                     return;

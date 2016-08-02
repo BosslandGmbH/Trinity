@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Technicals;
 using TrinityCoroutines;
 using TrinityCoroutines.Resources;
@@ -25,7 +26,7 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid)
+            if (Core.Settings.Loot.TownRun.KeepLegendaryUnid)
             {
                 Logger.LogVerbose("[IdentifyItems] Town run setting 'Keep Legendary Unidentified' - Skipping ID");
                 return false;

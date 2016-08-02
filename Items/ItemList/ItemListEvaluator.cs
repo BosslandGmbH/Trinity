@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Helpers;
@@ -33,7 +34,7 @@ namespace Trinity.Items.ItemList
 
         internal static bool ShouldStashItemType(TrinityItem cItem, bool test = false)
         {
-            var typeEntry = TrinityPlugin.Settings.Loot.ItemList.GetitemTypeRule(cItem.TrinityItemType);
+            var typeEntry = Core.Settings.Loot.ItemList.GetitemTypeRule(cItem.TrinityItemType);
 
             if (typeEntry == null)
             {
@@ -77,7 +78,7 @@ namespace Trinity.Items.ItemList
                 Logger.LogVerbose("------- Finished Test for {0} against max value", cItem.Name);
             }
 
-            var itemSetting = TrinityPlugin.Settings.Loot.ItemList.SelectedItems.FirstOrDefault(i => referenceItem.Id == i.Id);
+            var itemSetting = Core.Settings.Loot.ItemList.SelectedItems.FirstOrDefault(i => referenceItem.Id == i.Id);
             if (itemSetting != null)
             {
                 return EvaluateRules(cItem, itemSetting, test);
@@ -161,7 +162,7 @@ namespace Trinity.Items.ItemList
 
         private static void UpgradeRules(Dictionary<LRule, float> ruleUpgrades)
         {
-            if (!TrinityPlugin.Settings.Loot.ItemList.UpgradeRules)
+            if (!Core.Settings.Loot.ItemList.UpgradeRules)
                 return;
 
             foreach (var pair in ruleUpgrades)
@@ -350,7 +351,7 @@ namespace Trinity.Items.ItemList
                 case ItemProperty.SkillDamage:
 
                     var skillId = variant;
-                    var skill = ItemDataUtils.GetSkillsForItemType(item.TrinityItemType, TrinityPlugin.Player.ActorClass).FirstOrDefault(s => s.Id == skillId);
+                    var skill = ItemDataUtils.GetSkillsForItemType(item.TrinityItemType, Core.Player.ActorClass).FirstOrDefault(s => s.Id == skillId);
                     if (skill != null)
                     {
                         friendlyVariant = skill.Name;

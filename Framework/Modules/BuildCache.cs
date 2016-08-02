@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Adventurer.Util;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects.API;
 using Zeta.Game;
@@ -20,7 +19,7 @@ namespace Trinity.Framework.Modules
         protected override void OnPulse()
         {
             var cubeItems = Reference.Legendary.Equipped.Where(i => i.IsEquippedInCube);
-            var equippedItems = CacheData.Inventory.Equipped.Where(i => !i.IsGem && !CacheData.Inventory.KanaisCubeIds.Contains(i.ActorSnoId));
+            var equippedItems = Core.Inventory.Equipped.Where(i => !i.IsGem && !Core.Inventory.KanaisCubeIds.Contains(i.ActorSnoId));
             var socketedItems = Core.Inventory.Equipped.Where(i => i.IsGem);
 
             var passives = Reference.PassiveUtils.Active.Select(p => new Passive

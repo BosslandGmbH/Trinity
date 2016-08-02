@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Coroutines;
 using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Enums;
@@ -47,7 +47,7 @@ namespace Trinity.Framework.Behaviors
         {
             Logger.LogVerbose($"Moving to Marker: {Marker}");
             await CommonCoroutines.MoveTo(Marker.Position, "ItemMarker");
-            TrinityPlugin.Player.CurrentAction = PlayerAction.Moving;
+            Core.Player.CurrentAction = PlayerAction.Moving;
             return true;
         }
 

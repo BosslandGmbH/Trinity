@@ -751,22 +751,22 @@ namespace Trinity.Framework.Helpers
         {
             if (qualityLevel >= ItemQuality.Inferior && qualityLevel <= ItemQuality.Superior)
             {
-                return TrinityPlugin.Settings.Loot.TownRun.SalvageWhiteItemOption;
+                return Core.Settings.Loot.TownRun.SalvageWhiteItemOption;
             }
 
             if (qualityLevel >= ItemQuality.Magic1 && qualityLevel <= ItemQuality.Magic3)
             {
-                return TrinityPlugin.Settings.Loot.TownRun.SalvageBlueItemOption;
+                return Core.Settings.Loot.TownRun.SalvageBlueItemOption;
             }
 
             if (qualityLevel >= ItemQuality.Rare4 && qualityLevel <= ItemQuality.Rare6)
             {
-                return TrinityPlugin.Settings.Loot.TownRun.SalvageYellowItemOption;
+                return Core.Settings.Loot.TownRun.SalvageYellowItemOption;
             }
 
             if (qualityLevel >= ItemQuality.Legendary)
             {
-                return TrinityPlugin.Settings.Loot.TownRun.SalvageLegendaryItemOption;
+                return Core.Settings.Loot.TownRun.SalvageLegendaryItemOption;
             }
             return SalvageOption.Sell;
         }

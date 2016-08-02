@@ -5,7 +5,6 @@ using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Objects;
-using Trinity.Objects.Native;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;

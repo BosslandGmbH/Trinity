@@ -12,14 +12,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Media3D;
 using System.Windows.Threading;
-using Adventurer.Game.Exploration;
+
 using Buddy.Overlay;
 using JetBrains.Annotations;
-using Trinity.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Technicals;

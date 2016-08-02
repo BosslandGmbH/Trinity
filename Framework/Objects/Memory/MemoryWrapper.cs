@@ -11,7 +11,6 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Items;
 using Trinity.Helpers;
-using Trinity.Objects.Native;
 using Trinity.Technicals;
 using Zeta.Game;
 

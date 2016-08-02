@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Items;
 using Trinity.Technicals;
 using Zeta.Bot.Logic;
@@ -44,7 +45,7 @@ namespace Trinity.Helpers
         public static Composite CreateUseHoradricCache()
         {
             return
-            new Decorator(ret => TrinityPlugin.Settings.Loot.TownRun.OpenHoradricCaches && !BrainBehavior.IsVendoring && !TrinityTownRun.IsTryingToTownPortal() &&
+            new Decorator(ret => Core.Settings.Loot.TownRun.OpenHoradricCaches && !BrainBehavior.IsVendoring && !TrinityTownRun.IsTryingToTownPortal() &&
                     DateTime.UtcNow.Subtract(LastCheckedForHoradricCache).TotalSeconds > 1,
                 new Sequence(
                     new Action(ret => LastCheckedForHoradricCache = DateTime.UtcNow),

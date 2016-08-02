@@ -5,7 +5,7 @@ using System.Threading;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Technicals;
 
-namespace Trinity.Cache
+namespace Trinity.Framework.Helpers
 {
     internal class GenericCacheObject
     {

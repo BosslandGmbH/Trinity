@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Items;
@@ -63,7 +64,7 @@ namespace Trinity.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || ZetaDia.WorldType != Act.OpenWorld)
                 return false;
 
-            if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
+            if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
                 return false;
 
             if (DateTime.UtcNow < DisabledUntil)
@@ -101,7 +102,7 @@ namespace Trinity.Coroutines.Town
 
             _backpackCandidates = GetLegendaryExtractionCandidates(InventorySlot.BackpackItems).DistinctBy(i => i.ActorSnoId).ToList();
 
-            _stashCandidates = TrinityPlugin.Settings.KanaisCube.CubeExtractFromStash
+            _stashCandidates = Core.Settings.KanaisCube.CubeExtractFromStash
                 ? GetLegendaryExtractionCandidates(InventorySlot.SharedStash).DistinctBy(i => i.ActorSnoId).ToList()
                 : new List<TrinityItem>();
 
@@ -119,7 +120,7 @@ namespace Trinity.Coroutines.Town
         {
             var result = new List<TrinityItem>();
 
-            if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
+            if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
                 return result;
 
            // var source = ZetaDia.Actors.ACDList.OfType<ACDItem>().Where(i => i.InventorySlot == slot);
@@ -146,11 +147,11 @@ namespace Trinity.Coroutines.Town
                 if (_blacklistedActorSnoIds.Contains(item.ActorSnoId))
                     continue;
 
-                if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed &&
-                    (ItemListEvaluator.ShouldStashItem(item) || TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode != ItemFilterMode.ItemList))
+                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed &&
+                    (ItemListEvaluator.ShouldStashItem(item) || Core.Settings.Loot.Pickup.ItemFilterMode != ItemFilterMode.ItemList))
                     continue;
 
-                if (TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient &&
+                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient &&
                     item.IsAncient)
                     continue;
 
@@ -176,7 +177,7 @@ namespace Trinity.Coroutines.Town
 
         public static async Task<bool> Execute()
         {
-            if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift)
+            if (Core.Player.IsInventoryLockedForGreaterRift)
             {
                 Logger.LogVerbose("Can't extract powers: inventory locked by greater rift");
                 return false;
@@ -233,7 +234,7 @@ namespace Trinity.Coroutines.Town
                 if (!started)
                 {
                     Logger.Log("[ExtractLegendaryPowers] Extraction is currently set to: {0}",
-                        TrinityPlugin.Settings.KanaisCube.ExtractLegendaryPowers);
+                        Core.Settings.KanaisCube.ExtractLegendaryPowers);
                     ;
                     Logger.Log("[ExtractLegendaryPowers] We begin the extractions.");
                     started = true;
@@ -259,7 +260,7 @@ namespace Trinity.Coroutines.Town
                     if (!await TakeItemsFromStash.Execute(ExtractLegendaryPowerRecipe.Select(pair => (int) pair.Key), 5000))
                         return false;
                 }
-                else if (_stashCandidates.Any() && TrinityPlugin.Settings.KanaisCube.CubeExtractFromStash)
+                else if (_stashCandidates.Any() && Core.Settings.KanaisCube.CubeExtractFromStash)
                 {
                     Logger.Log("[ExtractLegendaryPowers] Getting Legendaries from Stash");
 

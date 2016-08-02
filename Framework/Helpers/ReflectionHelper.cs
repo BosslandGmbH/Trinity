@@ -1,21 +1,17 @@
 ﻿//!CompilerOption:AddRef:Microsoft.CSharp.dll
+
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Technicals;
-using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Objects.Native
+namespace Trinity.Framework.Helpers
 {
     public static class ReflectionHelper
     {

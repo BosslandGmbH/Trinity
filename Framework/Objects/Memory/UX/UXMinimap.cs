@@ -10,7 +10,7 @@ namespace Trinity.Framework.Objects.Memory.UX
 {
     public class UXMinimap : UXControl
     {
-        public List<MinimapIcon> Items => ReadObjects<MinimapIcon>(0x00C74, Count);
+        public List<MinimapIcon> Items => ReadObjects<MinimapIcon>(0x00C74, Math.Min(255,Count));
         public int Count => ReadOffset<int>(0x12074);
         public Vector2 MinimapOffset => ReadOffset<Vector2>(0x12090);
         public Vector2 PlayerPosition => ReadOffset<Vector2>(0x120B4);

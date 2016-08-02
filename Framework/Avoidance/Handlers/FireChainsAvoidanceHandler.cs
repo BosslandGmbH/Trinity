@@ -3,10 +3,8 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Runtime.Serialization;
-using Adventurer.Util;
 using Org.BouncyCastle.Asn1.Esf;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Grid;
 using Trinity.Framework.Objects.Attributes;
 using Trinity.Helpers;
 using Trinity.UIComponents;
@@ -24,7 +22,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         public bool IsAllowed
         {
-            get { return TrinityPlugin.Player.CurrentHealthPct <= HealthThresholdPct; }
+            get { return Core.Player.CurrentHealthPct <= HealthThresholdPct; }
         }
 
         public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)

@@ -70,7 +70,7 @@
                                     <CheckBox IsEnabled="{Binding IsEnabled}" IsChecked="{Binding IsSelected, Mode=TwoWay}" HorizontalAlignment="Left">
                                         <WrapPanel Background="Transparent" HorizontalAlignment="Left">
                                             <TextBlock Visibility="{Binding IsEnabled, Converter={StaticResource VisibleWhenTrueConverter}}" 
-                                                   Margin="3,0,0,0" Foreground="LightGray" IsEnabled="{Binding IsEnabled}" Text="{Binding Section, Mode=OneWay}" />
+                                                   Margin="3,0,0,0" Foreground="LightGray" IsEnabled="{Binding IsEnabled}" Text="{Binding SectionName, Mode=OneWay}" />
                                             <TextBlock Visibility="{Binding IsEnabled, Converter={StaticResource VisibleWhenFalseConverter}}" 
                                                        Margin="3,0,0,0" Foreground="Gray" IsEnabled="{Binding IsEnabled}">
                                                 <Run Text="{Binding Section, Mode=OneWay}" />

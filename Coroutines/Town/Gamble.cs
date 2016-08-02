@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Items;
 using Trinity.Technicals;
 using TrinityCoroutines;
@@ -34,7 +35,7 @@ namespace Trinity.Coroutines.Town
             if (!ZetaDia.IsInTown)
                 IsDumpingShards = false;
 
-            if (TrinityPlugin.Settings.Gambling.ShouldTownRun && ZetaDia.PlayerData.BloodshardCount >= Math.Min(TrinityPlugin.Settings.Gambling.SaveShardsThreshold, TrinityPlugin.Player.MaxBloodShards))
+            if (Core.Settings.Gambling.ShouldTownRun && ZetaDia.PlayerData.BloodshardCount >= Math.Min(Core.Settings.Gambling.SaveShardsThreshold, Core.Player.MaxBloodShards))
             {
                 if (CanRun() && !ShouldSaveShards && !TrinityTownRun.IsTryingToTownPortal() && !BrainBehavior.IsVendoring)
                 {
@@ -52,7 +53,7 @@ namespace Trinity.Coroutines.Town
             {
                 try
                 {                                  
-                    if (!ZetaDia.IsInTown || ZetaDia.WorldType != Act.OpenWorld || TrinityPlugin.Player.IsCastingOrLoading)
+                    if (!ZetaDia.IsInTown || ZetaDia.WorldType != Act.OpenWorld || Core.Player.IsCastingOrLoading)
                         return false;
 
                     var kadala = TownInfo.Kadala?.GetActor();
@@ -68,7 +69,7 @@ namespace Trinity.Coroutines.Town
                         return false;
                     }
 
-                    if (ZetaDia.PlayerData.BloodshardCount < TrinityPlugin.Settings.Gambling.MinimumBloodShards || !CanAffordMostExpensiveItem)
+                    if (ZetaDia.PlayerData.BloodshardCount < Core.Settings.Gambling.MinimumBloodShards || !CanAffordMostExpensiveItem)
                     {
                         LogVerbose("Not enough shards!");
                         return false;
@@ -148,7 +149,7 @@ namespace Trinity.Coroutines.Town
 
 
                 if (!_gambleRotation.Any())
-                    _gambleRotation = TrinityPlugin.Settings.Gambling.SelectedGambleSlots;
+                    _gambleRotation = Core.Settings.Gambling.SelectedGambleSlots;
 
                 var slot = _gambleRotation[Rnd.Next(_gambleRotation.Count)];
                 var itemId = TownInfo.MysterySlotTypeAndId[slot];
@@ -188,18 +189,18 @@ namespace Trinity.Coroutines.Town
 
             try
             {
-                if (ZetaDia.WorldType != Act.OpenWorld || TrinityPlugin.Player.IsCastingOrLoading)
+                if (ZetaDia.WorldType != Act.OpenWorld || Core.Player.IsCastingOrLoading)
                 {
                     return false;
                 }
 
-                if (TrinityPlugin.Player.IsInventoryLockedForGreaterRift || !TrinityPlugin.Settings.Loot.TownRun.KeepLegendaryUnid && TrinityPlugin.Player.ParticipatingInTieredLootRun)
+                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Loot.TownRun.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     LogVerbose("No gambling during greater rift due to backpack items being disabled ");
                     return false;
                 }
 
-                if (TrinityPlugin.Settings.Gambling.SelectedGambleSlots.Count <= 0)
+                if (Core.Settings.Gambling.SelectedGambleSlots.Count <= 0)
                 {
                     LogVerbose("Select at least one thing to buy in settings");
                     return false;
@@ -243,10 +244,10 @@ namespace Trinity.Coroutines.Town
         {
             var debugInfo = string.Format(" Shards={0} SaveShards={1} SaveThreshold={2} CanAffordItem={3} SelectedSlots={4}",
                 ZetaDia.PlayerData.BloodshardCount,
-                TrinityPlugin.Settings.Gambling.ShouldSaveShards,
-                Math.Min(TrinityPlugin.Settings.Gambling.SaveShardsThreshold, TrinityPlugin.Player.MaxBloodShards),
+                Core.Settings.Gambling.ShouldSaveShards,
+                Math.Min(Core.Settings.Gambling.SaveShardsThreshold, Core.Player.MaxBloodShards),
                 CanAffordMostExpensiveItem,
-                TrinityPlugin.Settings.Gambling.SelectedGambleSlots.Count);
+                Core.Settings.Gambling.SelectedGambleSlots.Count);
 
             Logger.LogVerbose("[Gamble]" + msg + debugInfo, args);
         }
@@ -264,7 +265,7 @@ namespace Trinity.Coroutines.Town
         {
             get
             {
-                var slotAndPrice = TownInfo.MysterySlotTypeAndPrice.Where(pair => TrinityPlugin.Settings.Gambling.SelectedGambleSlots.Contains(pair.Key)).ToList();
+                var slotAndPrice = TownInfo.MysterySlotTypeAndPrice.Where(pair => Core.Settings.Gambling.SelectedGambleSlots.Contains(pair.Key)).ToList();
                 return slotAndPrice.Any() && slotAndPrice.Max(pair => pair.Value) <= ZetaDia.PlayerData.BloodshardCount;
             }
         }
@@ -273,14 +274,14 @@ namespace Trinity.Coroutines.Town
 
         private static bool BelowMinimumShards
         {
-            get { return ZetaDia.PlayerData.BloodshardCount < TrinityPlugin.Settings.Gambling.MinimumBloodShards; }
+            get { return ZetaDia.PlayerData.BloodshardCount < Core.Settings.Gambling.MinimumBloodShards; }
         }
 
         private static bool ShouldSaveShards
         {
             get
             {
-                if (TrinityPlugin.Settings.Gambling.ShouldSaveShards && ZetaDia.PlayerData.BloodshardCount < Math.Min(TrinityPlugin.Settings.Gambling.SaveShardsThreshold, TrinityPlugin.Player.MaxBloodShards))
+                if (Core.Settings.Gambling.ShouldSaveShards && ZetaDia.PlayerData.BloodshardCount < Math.Min(Core.Settings.Gambling.SaveShardsThreshold, Core.Player.MaxBloodShards))
                 {
                     LogVerbose("Should Save Shards!");
                     return true;

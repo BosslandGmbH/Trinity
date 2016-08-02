@@ -1,0 +1,19 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ut="clr-namespace:Trinity.UIComponents"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"  Background="#434343" Padding="10,0,0,0"
+             d:DesignHeight="420" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!-- Don't format this line otherwise Db can't open config window -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <ContentControl Content="{Binding AdventurerSettings}" Margin="0,28,0,128" />
+    </ScrollViewer>
+</UserControl>

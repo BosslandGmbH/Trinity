@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Adventurer.Game.Exploration;
+using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework.Objects.PriorityQueue;
 using Zeta.Common;
 
@@ -125,7 +125,7 @@ namespace Trinity.Framework.Avoidance.Structures
                     return _cachedDistance;
 
                 _lastUpdatedDistance = now;
-                return _cachedDistance = NavigableCenter.Distance(TrinityPlugin.Player.Position);
+                return _cachedDistance = NavigableCenter.Distance(Core.Player.Position);
             }
         }
 

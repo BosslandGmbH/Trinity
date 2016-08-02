@@ -70,8 +70,8 @@ namespace Trinity.Framework.Actors.Properties
             actor.TeamId = teamOverride > 0 ? teamOverride : attributes.TeamId;
             actor.Team = (TeamType)actor.TeamId;
             actor.IsFriendly = actor.TeamId == 1 || actor.TeamId == 2 || actor.TeamId == 17;
-            actor.IsHostile = actor.TeamId == 10 || actor.Attributes.LastDamageAnnId == TrinityPlugin.Player.MyDynamicID;  //!actor.IsFriendly;
-            actor.IsSameTeam = actor.IsFriendly || actor.TeamId == TrinityPlugin.Player.TeamId || DataDictionary.AllyMonsterTypes.Contains(actor.MonsterType);
+            actor.IsHostile = actor.TeamId == 10 || actor.Attributes.LastDamageAnnId == Core.Player.MyDynamicID;  //!actor.IsFriendly;
+            actor.IsSameTeam = actor.IsFriendly || actor.TeamId == Core.Player.TeamId || DataDictionary.AllyMonsterTypes.Contains(actor.MonsterType);
             actor.IsHidden = attributes.IsHidden || attributes.IsBurrowed;
             actor.IsSpawningBoss = actor.IsBoss && actor.IsUntargetable;
             actor.IsNpc = attributes.IsNPC;
@@ -82,7 +82,7 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.IsSummoned)
             {
-                actor.IsSummonedByPlayer = actor.SummonedByAnnId == TrinityPlugin.Player.MyDynamicID || actor.PetType != PetType.None;
+                actor.IsSummonedByPlayer = actor.SummonedByAnnId == Core.Player.MyDynamicID || actor.PetType != PetType.None;
             }
             else
             {

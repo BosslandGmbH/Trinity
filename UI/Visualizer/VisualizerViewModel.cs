@@ -18,10 +18,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using Adventurer;
-using Adventurer.Game.Exploration;
+
+
 using JetBrains.Annotations;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Config;
 using Trinity.Configuration;
 using Trinity.DbProvider;
@@ -29,7 +29,6 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Grid;
 using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Attributes;
 using Trinity.Framework.Objects.Memory.Misc;
@@ -46,8 +45,10 @@ using Zeta.Game;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
+using AdvDia = Trinity.Components.Adventurer.Cache.AdvDia;
 using Expression = System.Linq.Expressions.Expression;
 using Logger = Trinity.Technicals.Logger;
+using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
 namespace Trinity.UI.RadarUI
 {
@@ -198,7 +199,7 @@ namespace Trinity.UI.RadarUI
 
                 if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache) && DateTime.UtcNow.Subtract(LastUpdatedNotInCacheObjects).TotalMilliseconds > 200)
                 {
-                    NotInCacheObjects = new List<TrinityActor>(CacheData.Targets.Ignored);
+                    NotInCacheObjects = new List<TrinityActor>(Core.Targets.Ignored);
                     LastUpdatedNotInCacheObjects = DateTime.UtcNow;
                 }
 
@@ -228,12 +229,12 @@ namespace Trinity.UI.RadarUI
 
                 CurrentTarget = CombatBase.CurrentTarget;                
 
-                Player = TrinityPlugin.Player.Actor;
+                Player = Core.Player.Actor;
                 PlayerPositionX = Player.Position.X;
                 PlayerPositionY = Player.Position.Y;
                 PlayerPositionZ = Player.Position.Z;
-                WorldSnoId = TrinityPlugin.Player.WorldSnoId;
-                LevelAreaSnoId = TrinityPlugin.Player.LevelAreaId;
+                WorldSnoId = Core.Player.WorldSnoId;
+                LevelAreaSnoId = Core.Player.LevelAreaId;
                 PlayerRotation = MathUtil.RadianToDegree(Player.Rotation);
 
                 IsStuck = Navigator.StuckHandler.IsStuck;
@@ -455,7 +456,7 @@ namespace Trinity.UI.RadarUI
 
         public TrinitySetting Settings
         {
-            get { return TrinityPlugin.Settings; }
+            get { return Core.Settings; }
         }
 
         [Zeta.XmlEngine.XmlElement("WindowHeight")]
@@ -864,7 +865,7 @@ namespace Trinity.UI.RadarUI
                 {
                     try
                     {
-                        TrinityPlugin.Settings.Save();
+                        Core.Settings.Save();
                     }
                     catch (Exception ex)
                     {

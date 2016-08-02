@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Adventurer.Game.Exploration.SceneMapping;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Config.Combat;
 using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
@@ -26,6 +26,19 @@ namespace Trinity.Framework.Modules
     /// </summary>
     public class TargetsCache : Module
     {
+
+        /// <summary>
+        /// Contains an RActorGUID and count of the number of times we've switched to this target
+        /// todo evaluate, temporary placement here
+        /// </summary>
+        internal Dictionary<string, TargettingInfo> TargetHistory { get; } = new Dictionary<string, TargettingInfo>();
+
+        /// <summary>
+        /// How many times the player tried to interact with this object in total
+        /// todo evaluate, temporary placement here
+        /// </summary>
+        internal Dictionary<int, int> InteractAttempts { get; } = new Dictionary<int, int>();
+
         public ulong LastUpdatedTick;
         public List<TrinityActor> Items = new List<TrinityActor>();
         public List<TrinityActor> Ignored = new List<TrinityActor>();
@@ -35,7 +48,7 @@ namespace Trinity.Framework.Modules
         private static void PreUpdateTasks()
         {
             TrinityPlugin.LastRefreshedCache = DateTime.UtcNow;
-            TrinityPlugin.LastTargetPosition = TrinityPlugin.CurrentTarget != null ? TrinityPlugin.CurrentTarget.Position : Vector3.Zero;
+           TrinityPlugin.LastTargetPosition = TrinityPlugin.CurrentTarget != null ? TrinityPlugin.CurrentTarget.Position : Vector3.Zero;
 
             if (TrinityPlugin.CurrentTarget != null)
                 TrinityPlugin.LastTargetRactorGUID = TrinityPlugin.CurrentTarget.RActorId;
@@ -93,7 +106,7 @@ namespace Trinity.Framework.Modules
                     }
                 }
 
-                if (TrinityPlugin.Settings.Advanced.LogCategories.HasFlag(LogCategory.CacheManagement))
+                if (Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.CacheManagement))
                 {
                     foreach (var o in included)
                     {
@@ -106,7 +119,7 @@ namespace Trinity.Framework.Modules
                     }                   
                 }
 
-                TrinityPlugin.Weighting.RefreshDiaGetWeights(included);
+                CombatManager.Weighting.RefreshDiaGetWeights(included);
 
                 ByType = included.ToLookup(k => k.Type);
                 ByMonsterQuality = included.ToLookup(k => k.MonsterQuality);
@@ -359,12 +372,12 @@ namespace Trinity.Framework.Modules
 
         private bool ShouldIncludeGold(TrinityItem cacheObject)
         {
-            if (!TrinityPlugin.Settings.Loot.Pickup.PickupGold)
+            if (!Core.Settings.Loot.Pickup.PickupGold)
             {
                 cacheObject.AddCacheInfo("GoldPickupDisabled");
                 return false;
             }
-            if (cacheObject.GoldAmount < TrinityPlugin.Settings.Loot.Pickup.MinimumGoldStack)
+            if (cacheObject.GoldAmount < Core.Settings.Loot.Pickup.MinimumGoldStack)
             {
                 cacheObject.AddCacheInfo("NotEnoughGold");
                 return false;
@@ -421,19 +434,19 @@ namespace Trinity.Framework.Modules
                 return true;
             }
 
-            if (cacheObject.IsPlayerHeadstone && !TrinityPlugin.Settings.WorldObject.AllowPlayerResurection)
+            if (cacheObject.IsPlayerHeadstone && !Core.Settings.WorldObject.AllowPlayerResurection)
             {
                 cacheObject.AddCacheInfo("AllowResurectionSetting");
                 return false;
             }
 
-            if (!TrinityPlugin.Settings.WorldObject.UseShrine)
+            if (!Core.Settings.WorldObject.UseShrine)
             {
                 cacheObject.AddCacheInfo("UseShrineSetting");
                 return false;
             }
 
-            if (!DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSnoId) && TrinityPlugin.Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.ForceIgnore)
+            if (!DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSnoId) && Core.Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.ForceIgnore)
             {
                 cacheObject.AddCacheInfo("ForceIgnoreDestructibles");
                 return false;
@@ -445,7 +458,7 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (cacheObject.IsContainer && !cacheObject.IsMinimapActive && cacheObject.RadiusDistance > TrinityPlugin.Settings.WorldObject.ContainerOpenRange)
+            if (cacheObject.IsContainer && !cacheObject.IsMinimapActive && cacheObject.RadiusDistance > Core.Settings.WorldObject.ContainerOpenRange)
             {
                 cacheObject.AddCacheInfo("ContainerOpenRange");
                 return false;
@@ -457,39 +470,39 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (!TrinityPlugin.Settings.WorldObject.OpenAnyContainer)
+            if (!Core.Settings.WorldObject.OpenAnyContainer)
             {
-                if (cacheObject.IsRareChest && !TrinityPlugin.Settings.WorldObject.OpenRareChests)
+                if (cacheObject.IsRareChest && !Core.Settings.WorldObject.OpenRareChests)
                 {
                     cacheObject.AddCacheInfo("OpenRareChestsSetting");
                     return false;
                 }
 
-                if (cacheObject.IsChest && !TrinityPlugin.Settings.WorldObject.OpenChests && !cacheObject.IsQuestMonster)
+                if (cacheObject.IsChest && !Core.Settings.WorldObject.OpenChests && !cacheObject.IsQuestMonster)
                 {
                     cacheObject.AddCacheInfo("OpenChestsSetting");
                     return false;
                 }
 
-                if (cacheObject.IsCorpse && !TrinityPlugin.Settings.WorldObject.InspectCorpses)
+                if (cacheObject.IsCorpse && !Core.Settings.WorldObject.InspectCorpses)
                 {
                     cacheObject.AddCacheInfo("InspectCorpsesSetting");
                     return false;
                 }
 
-                if (cacheObject.IsGroundClicky && !TrinityPlugin.Settings.WorldObject.InspectGroundClicky)
+                if (cacheObject.IsGroundClicky && !Core.Settings.WorldObject.InspectGroundClicky)
                 {
                     cacheObject.AddCacheInfo("GroundClickySetting");
                     return false;
                 }
 
-                if (cacheObject.IsWeaponRack && !TrinityPlugin.Settings.WorldObject.InspectWeaponRacks)
+                if (cacheObject.IsWeaponRack && !Core.Settings.WorldObject.InspectWeaponRacks)
                 {
                     cacheObject.AddCacheInfo("WeaponRacksSetting");
                     return false;
                 }
 
-                if (cacheObject.IsWeaponRack && !TrinityPlugin.Settings.WorldObject.InspectWeaponRacks)
+                if (cacheObject.IsWeaponRack && !Core.Settings.WorldObject.InspectWeaponRacks)
                 {
                     cacheObject.AddCacheInfo("WeaponRacksSetting");
                     return false;

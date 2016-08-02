@@ -24,7 +24,7 @@ namespace Trinity.Settings
     {
         public static string SaveDirectory => Path.Combine(FileManager.SettingsPath, "Saved");
 
-        public static TrinitySetting GetCurrentSettingsForExport(IEnumerable<SettingsSection> sections = null)
+        public static TrinitySetting GetCurrentSettingsForExport(IEnumerable<SettingsSelectionItem> sections = null)
         {
             var settings = new TrinitySetting();
             Core.Settings.CopyTo(settings);
@@ -38,7 +38,7 @@ namespace Trinity.Settings
             return settings;
         }
 
-        public static string GetCurrrentSettingsExportCode(IEnumerable<SettingsSection> sections = null)
+        public static string GetCurrrentSettingsExportCode(IEnumerable<SettingsSelectionItem> sections = null)
         {
             var settings = GetCurrentSettingsForExport(sections);
             var xml = TrinitySetting.GetSettingsXml(settings);
@@ -65,7 +65,7 @@ namespace Trinity.Settings
                     var exportSettings = new TrinitySetting();
                     UILoader.DataContext.ViewModel.CopyTo(exportSettings);
 
-                    RemoveSections(exportSettings, selectionViewModel);
+                    UpdateSections("Exporting", exportSettings, selectionViewModel);
                     exportSettings.SaveToFile(filePath);
                 }                
             }
@@ -101,7 +101,7 @@ namespace Trinity.Settings
 
                 if (TryGetImportSelections(importedSections, out selectionViewModel))
                 {
-                    RemoveSections(settings, selectionViewModel);
+                    UpdateSections("Importing", settings, selectionViewModel);
                     UILoader.DataContext.LoadSettings(settings);
                 }
             }
@@ -164,7 +164,7 @@ namespace Trinity.Settings
         /// <summary>
         /// Try to get user to pick settings sections for import.
         /// </summary>
-        public static bool TryGetImportSelections(HashSet<SettingsSection> importedParts, out SettingsSelectionViewModel selectionViewModel)
+        public static bool TryGetImportSelections(HashSet<SettingsSelectionItem> importedParts, out SettingsSelectionViewModel selectionViewModel)
         {
             var dataContext = new SettingsSelectionViewModel
             {
@@ -198,7 +198,7 @@ namespace Trinity.Settings
                 OkButtonText = "Export",
             };
 
-            EnableSections(SettingsSelectionViewModel.GetAllSections(), dataContext);
+            EnableSections(SettingsSelectionViewModel.GetDefaultSelections(), dataContext);
 
             var window = UILoader.CreateNonModalWindow(
                 "Modals\\SettingsSelection.xaml",
@@ -236,37 +236,45 @@ namespace Trinity.Settings
         /// <summary>
         /// Look through a TrinitySetting object and return a list of the sections that are populated with data.
         /// </summary>
-        public static HashSet<SettingsSection> GetSections(TrinitySetting settings)
+        public static HashSet<SettingsSelectionItem> GetSections(TrinitySetting settings)
         {
-            var result = new HashSet<SettingsSection>();
+            var result = new HashSet<SettingsSelectionItem>();
             if (settings.Combat != null)
-                result.Add(SettingsSection.Combat);
+                result.Add(new SettingsSelectionItem(SettingsSection.Combat));
             if (settings.Loot?.ItemList != null)
-                result.Add(SettingsSection.ItemList);
+                result.Add(new SettingsSelectionItem(SettingsSection.ItemList));
             if (settings.Gambling != null)
-                result.Add(SettingsSection.Gambling);
+                result.Add(new SettingsSelectionItem(SettingsSection.Gambling));
             if (settings.KanaisCube != null)
-                result.Add(SettingsSection.KanaisCube);
+                result.Add(new SettingsSelectionItem(SettingsSection.KanaisCube));
             if (settings.Loot?.TownRun != null)
-                result.Add(SettingsSection.TownRun);
+                result.Add(new SettingsSelectionItem(SettingsSection.TownRun));
             if (settings.WorldObject != null)
-                result.Add(SettingsSection.Objects);
+                result.Add(new SettingsSelectionItem(SettingsSection.Objects));
             if (settings.Paragon != null)
-                result.Add(SettingsSection.Paragon);
+                result.Add(new SettingsSelectionItem(SettingsSection.Paragon));
             if (settings.Advanced != null)
-                result.Add(SettingsSection.Advanced);
+                result.Add(new SettingsSelectionItem(SettingsSection.Advanced));
             if (settings.Avoidance != null)
-                result.Add(SettingsSection.Avoidance);
+                result.Add(new SettingsSelectionItem(SettingsSection.Avoidance));
             if (settings.Loot?.Pickup != null)
-                 result.Add(SettingsSection.ItemPickup);
+                 result.Add(new SettingsSelectionItem(SettingsSection.ItemPickup));
             if (settings.Loot?.ItemRules != null)
-                result.Add(SettingsSection.ItemRules);
+                result.Add(new SettingsSelectionItem(SettingsSection.ItemRules));
 
-            Logger.Log($"File contains {result.Count} sections: {string.Join(",", result)}");
+            if (settings.Dynamic?.Settings != null)
+            {
+                foreach (var item in settings.Dynamic.Settings)
+                {
+                    result.Add(new SettingsSelectionItem(SettingsSection.Dynamic, item.Name));
+                }
+            }
+                
+            Logger.Log($"File contains {result.Count} sections: {string.Join(", ", result)}");
             return result;
         }
 
-        public static void RemoveSections(TrinitySetting settings, IEnumerable<SettingsSection> sections)
+        public static void RemoveSections(TrinitySetting settings, IEnumerable<SettingsSelectionItem> sections)
         {
             settings.Notification = null;
 
@@ -282,25 +290,26 @@ namespace Trinity.Settings
         /// <summary>
         /// Clear the specified parts of a TrinitySetting object so that they have no data.
         /// </summary>
-        public static void RemoveSections(TrinitySetting settings, SettingsSelectionViewModel selectionsViewModel)
+        public static void UpdateSections(string actionDescripter, TrinitySetting settings, SettingsSelectionViewModel selectionsViewModel)
         {
-            // always remove notification section because of sensitive information.
             settings.Notification = null;
 
             foreach (var sectionEntry in selectionsViewModel.Selections)
             {
                 if (sectionEntry.IsSelected)
                 {
-                    Logger.Log($"Importing Section: {sectionEntry.Section}");
+                    if(!string.IsNullOrEmpty(actionDescripter))
+                        Logger.Log($"{actionDescripter} Section: {sectionEntry}");
+
                     continue;
                 }
-                ClearSection(settings, sectionEntry.Section);
+                ClearSection(settings, sectionEntry);
             }
         }
 
-        private static void ClearSection(TrinitySetting settings, SettingsSection section)
+        private static void ClearSection(TrinitySetting settings, SettingsSelectionItem sectionDefinition)
         {
-            switch (section)
+            switch (sectionDefinition.Section)
             {
                 case SettingsSection.Combat:
                     settings.Combat = null;
@@ -339,17 +348,24 @@ namespace Trinity.Settings
                     if (settings.Loot != null)
                         settings.Loot.ItemRules = null;
                     break;
+                case SettingsSection.Dynamic:
+                    var foundItem = settings.Dynamic.Settings.FirstOrDefault(s => s.Name == sectionDefinition.SectionName);
+                    if (foundItem != null)
+                    {
+                        settings.Dynamic.Settings.Remove(foundItem);
+                    }
+                    break;
             }
         }
 
         /// <summary>
         /// Make checkboxes on the selections dialog enabled and clickable. (they default to disabled).
         /// </summary>
-        private static void EnableSections(ICollection<SettingsSection> validSections, SettingsSelectionViewModel selectionViewModel)
+        private static void EnableSections(ICollection<SettingsSelectionItem> validSections, SettingsSelectionViewModel selectionViewModel)
         {
             foreach (var item in selectionViewModel.Selections)
             {
-                if (validSections.Contains(item.Section))
+                if (validSections.Any(s => s.SectionName == item.SectionName))
                 {
                     item.IsEnabled = true;
                     item.IsSelected = true;

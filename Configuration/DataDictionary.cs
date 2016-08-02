@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Windows.Media.Media3D;
+using Trinity.Components.Combat;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Helpers;
 using Trinity.Objects;

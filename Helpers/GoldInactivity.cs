@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Trinity.Framework;
 using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Game;
@@ -21,7 +22,7 @@ namespace Trinity.Helpers
         /// </summary>
         internal void ResetCheckGold()
         {
-            Logger.LogDebug(LogCategory.GlobalHandler, "Resetting Gold Timer, Last gold changed from {0} to {1}", _lastGoldAmount, TrinityPlugin.Player.Coinage);
+            Logger.LogDebug(LogCategory.GlobalHandler, "Resetting Gold Timer, Last gold changed from {0} to {1}", _lastGoldAmount, Core.Player.Coinage);
 
             _lastCheckBag = DateTime.UtcNow;
             _lastFoundGold = DateTime.UtcNow;
@@ -36,13 +37,13 @@ namespace Trinity.Helpers
         /// <returns></returns>
         internal bool GoldInactive()
         {
-            if (TrinityPlugin.Player.ParticipatingInTieredLootRun)
+            if (Core.Player.ParticipatingInTieredLootRun)
                 return false;
 
-            if (TrinityPlugin.Settings.Advanced.DisableAllMovement)
+            if (Core.Settings.Advanced.DisableAllMovement)
                 return false;
 
-            if (!TrinityPlugin.Settings.Advanced.GoldInactivityEnabled)
+            if (!Core.Settings.Advanced.GoldInactivityEnabled)
             {
                 // timer isn't enabled so move along!
                 //ResetCheckGold();
@@ -76,19 +77,19 @@ namespace Trinity.Helpers
                     return false;
                 }
 
-                if (TrinityPlugin.Player.Coinage != _lastGoldAmount && TrinityPlugin.Player.Coinage != 0)
+                if (Core.Player.Coinage != _lastGoldAmount && Core.Player.Coinage != 0)
                 {
-                    Logger.LogVerbose(LogCategory.GlobalHandler, "Gold Changed from {0} to {1}", _lastGoldAmount, TrinityPlugin.Player.Coinage);
+                    Logger.LogVerbose(LogCategory.GlobalHandler, "Gold Changed from {0} to {1}", _lastGoldAmount, Core.Player.Coinage);
                     _lastFoundGold = DateTime.UtcNow;
-                    _lastGoldAmount = TrinityPlugin.Player.Coinage;
+                    _lastGoldAmount = Core.Player.Coinage;
                 }
 
                 int goldUnchangedSeconds = Convert.ToInt32(DateTime.UtcNow.Subtract(_lastFoundGold).TotalSeconds);
-                if (goldUnchangedSeconds >= TrinityPlugin.Settings.Advanced.InactivityTimer)
+                if (goldUnchangedSeconds >= Core.Settings.Advanced.InactivityTimer)
                 {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Gold inactivity after {0}s. (Setting={1}) Sending abort. ", goldUnchangedSeconds, TrinityPlugin.Settings.Advanced.InactivityTimer);
+                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Gold inactivity after {0}s. (Setting={1}) Sending abort. ", goldUnchangedSeconds, Core.Settings.Advanced.InactivityTimer);
                     _lastFoundGold = DateTime.UtcNow;
-                    _lastGoldAmount = TrinityPlugin.Player.Coinage;
+                    _lastGoldAmount = Core.Player.Coinage;
                     return true;
                 }
                 if (goldUnchangedSeconds > 0)

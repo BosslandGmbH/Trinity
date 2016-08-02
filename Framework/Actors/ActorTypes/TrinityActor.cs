@@ -1,11 +1,12 @@
 using System;
 using Trinity.Cache;
+using Trinity.Components.Combat;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Objects.Native;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -154,17 +155,17 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public bool CanWalkTo(Vector3 destination = default(Vector3))
         {
-            return Core.Avoidance.Grid.CanRayWalk(Position == default(Vector3) ? TrinityPlugin.Player.Position : destination, Position);
+            return Core.Avoidance.Grid.CanRayWalk(Position == default(Vector3) ? Core.Player.Position : destination, Position);
         }
 
         public bool CanCastTo(Vector3 destination = default(Vector3))
         {
-            return Core.Avoidance.Grid.CanRayCast(Position == default(Vector3) ? TrinityPlugin.Player.Position : destination, Position);
+            return Core.Avoidance.Grid.CanRayCast(Position == default(Vector3) ? Core.Player.Position : destination, Position);
         }
 
         public bool IsFacing(Vector3 targetPosition, float arcDegrees = 70f) => TargetUtil.IsFacing(this, targetPosition, arcDegrees);
 
-        public bool IsPlayerFacing(float arc) => TrinityPlugin.Player.IsFacing(Position, arc);
+        public bool IsPlayerFacing(float arc) => Core.Player.IsFacing(Position, arc);
 
         public int NearbyUnitsWithinDistance(float range = 5f) => TargetUtil.NearbyUnitsWithinDistance(this, range);
 
@@ -185,7 +186,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         /// <summary>
         /// Difference in position Z
         /// </summary>
-        public float ZDiff => Math.Abs(Position.Z - TrinityPlugin.Player.Position.Z);
+        public float ZDiff => Math.Abs(Position.Z - Core.Player.Position.Z);
 
         public bool IsLastTarget => RActorId == TrinityPlugin.LastTargetRactorGUID;
         public string DebugAvoidanceFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.AvoidanceFlags.ToString();

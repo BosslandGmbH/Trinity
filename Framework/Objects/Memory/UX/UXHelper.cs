@@ -12,7 +12,9 @@ namespace Trinity.Framework.Objects.Memory.UX
     {
         public static T GetControl<T>(ulong hash) where T : UXControl, new()
         {
-            return MemoryWrapper.Create<T>(UIMap[hash].BaseAddress);
+            //return MemoryWrapper.Create<T>(UIMap[hash].BaseAddress);
+            var el = UIElement.FromHash(hash);
+            return el.IsValid ? MemoryWrapper.Create<T>(el.BaseAddress) : default(T);
         }
 
         public static T GetControl<T>(UXReference reference) where T : UXControl, new()

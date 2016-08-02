@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Components.Combat;
 using Trinity.Config.Combat;
 using Trinity.Framework;
 using Trinity.Movement;
@@ -355,7 +356,7 @@ namespace TrinityCoroutines.Resources
         /// <returns></returns>
         public static bool SafeClickElement(UIElement element, string name = "", bool fireWorldTransfer = false)
         {
-            if (!Trinity.TrinityPlugin.Player.IsValid)
+            if (!Core.Player.IsValid)
                 return false;
 
             if (!IsElementVisible(element))
@@ -373,7 +374,7 @@ namespace TrinityCoroutines.Resources
         private static DateTime _lastCheckedUiButtons = DateTime.MinValue;
         public static void SafeClickUIButtons()
         {
-            var isInGame = Trinity.TrinityPlugin.Player.IsInGame;
+            var isInGame = Core.Player.IsInGame;
 
             // These buttons should be clicked with no delay
 
@@ -412,8 +413,8 @@ namespace TrinityCoroutines.Resources
 
             if (IsElementVisible(PartyFollowerBossDecline))
             {
-                var declineInBounty = Trinity.TrinityPlugin.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.DeclineInBounty && ZetaDia.ActInfo.ActiveBounty != null;
-                var alwaysDecline = Trinity.TrinityPlugin.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.AlwaysDecline;
+                var declineInBounty = Core.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.DeclineInBounty && ZetaDia.ActInfo.ActiveBounty != null;
+                var alwaysDecline = Core.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.AlwaysDecline;
 
                 if (declineInBounty || alwaysDecline)
                 {
@@ -429,7 +430,7 @@ namespace TrinityCoroutines.Resources
 
             _lastCheckedUiButtons = DateTime.UtcNow;
 
-            if (Trinity.TrinityPlugin.Player.IsCasting)
+            if (Core.Player.IsCasting)
                 return;
 
             if (isInGame && SafeClickElement(MercenaryOKButton, "Mercenary OK Button"))

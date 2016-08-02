@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Adventurer.Game.Exploration;
-using Adventurer.UI.UIComponents;
+
+
 using Buddy.Coroutines;
-using Trinity.Combat.Abilities;
 using Trinity.Config;
 using Trinity.Config.Combat;
 using Trinity.DbProvider;
@@ -21,6 +20,7 @@ using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Technicals.Logger;
+using NodeFlags = Trinity.Components.Adventurer.Game.Exploration.NodeFlags;
 
 namespace Trinity.Framework.Avoidance
 {
@@ -90,7 +90,7 @@ namespace Trinity.Framework.Avoidance
         public AvoidanceLayer ObstacleNodeLayer = new AvoidanceLayer();
         public AvoidanceLayer SafeNodeLayer = new AvoidanceLayer();
 
-        public AvoidanceSetting Settings => TrinityPlugin.Settings.Avoidance;
+        public AvoidanceSetting Settings => Core.Settings.Avoidance;
 
         public int HighestNodeWeight { get; set; }
         public Vector3 MonsterCentroid { get; set; }
@@ -119,7 +119,7 @@ namespace Trinity.Framework.Avoidance
         {
             _currentRActorIds.Clear();
 
-            if (!TrinityPlugin.Settings.Avoidance.Avoidances.Any(a => a.IsEnabled))
+            if (!Core.Settings.Avoidance.Avoidances.Any(a => a.IsEnabled))
                 return;
 
 
@@ -199,10 +199,10 @@ namespace Trinity.Framework.Avoidance
                 var activeAvoidanceSnoIds = new HashSet<int>();
                 var kiteFromNodes = new AvoidanceLayer();
 
-                var nodePool = Grid.GetNodesInRadius(TrinityPlugin.Player.Position, node => node.IsWalkable, MaxDistance).Select(n => n.Reset()).ToList();
-                //var allNodes = Grid.GetNodesInRadius(TrinityPlugin.Player.Position, node => node != null, MaxDistance).ToList();
-                var nearestNodes = Grid.GetNodesInRadius(TrinityPlugin.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), TrinityPlugin.Settings.Avoidance.AvoiderLocalRadius);
-                var weightSettings = TrinityPlugin.Settings.Avoidance.WeightingOptions;
+                var nodePool = Grid.GetNodesInRadius(Core.Player.Position, node => node.IsWalkable, MaxDistance).Select(n => n.Reset()).ToList();
+                //var allNodes = Grid.GetNodesInRadius(Core.Player.Position, node => node != null, MaxDistance).ToList();
+                var nearestNodes = Grid.GetNodesInRadius(Core.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), Core.Settings.Avoidance.AvoiderLocalRadius);
+                var weightSettings = Core.Settings.Avoidance.WeightingOptions;
 
                 try
                 {
@@ -451,7 +451,7 @@ namespace Trinity.Framework.Avoidance
 
             foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.Radius*GlobeWeightRadiusFactor))
             {
-                if (TrinityPlugin.Settings.Avoidance.WeightingOptions.HasFlag(WeightingOptions.Globes))
+                if (Core.Settings.Avoidance.WeightingOptions.HasFlag(WeightingOptions.Globes))
                     node.Weight -= 6;
 
                 node.AddNodeFlags(AvoidanceFlags.Health);
@@ -484,7 +484,7 @@ namespace Trinity.Framework.Avoidance
                     continue;
 
                 var weightChange = Grid.IsInKiteDirection(cachedPos.Position, 90) ? -1 : 0;
-                var shouldChangeWeight = TrinityPlugin.Settings.Avoidance.WeightingOptions.HasFlag(WeightingOptions.Globes);
+                var shouldChangeWeight = Core.Settings.Avoidance.WeightingOptions.HasFlag(WeightingOptions.Globes);
 
                 foreach (var node in nearestNode.AdjacentNodes)
                 {

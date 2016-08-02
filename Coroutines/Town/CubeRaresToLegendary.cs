@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Helpers;
 using Trinity.Reference;
 using Trinity.Technicals;
@@ -42,7 +44,7 @@ namespace Trinity.Coroutines.Town
             if (!HasUnlockedCube)
                 return false;
 
-            if (types == null && TrinityPlugin.Settings.KanaisCube.RareUpgradeTypes == ItemSelectionType.Unknown)
+            if (types == null && Core.Settings.KanaisCube.RareUpgradeTypes == ItemSelectionType.Unknown)
             {
                 Logger.LogVerbose("[CubeRaresToLegendary] No item types selected in settings - (Config => Items => Kanai's Cube)");
                 return false;
@@ -55,9 +57,9 @@ namespace Trinity.Coroutines.Town
             }
 
             var dbs = Inventory.OfType(InventoryItemType.DeathsBreath).StackQuantity();
-            if (dbs < TrinityPlugin.Settings.KanaisCube.DeathsBreathMinimum)
+            if (dbs < Core.Settings.KanaisCube.DeathsBreathMinimum)
             {
-                Logger.LogVerbose("[CubeRaresToLegendary] Not enough deaths breath - Limit is set to {0}, You currently have {1}", TrinityPlugin.Settings.KanaisCube.DeathsBreathMinimum, dbs);
+                Logger.LogVerbose("[CubeRaresToLegendary] Not enough deaths breath - Limit is set to {0}, You currently have {1}", Core.Settings.KanaisCube.DeathsBreathMinimum, dbs);
                 return false;
             }
 
@@ -82,7 +84,7 @@ namespace Trinity.Coroutines.Town
         public static List<TrinityItem> GetBackPackRares(IEnumerable<ItemSelectionType> types = null)
         {
             if (types == null)
-                types = TrinityPlugin.Settings.KanaisCube.GetRareUpgradeSettings();
+                types = Core.Settings.KanaisCube.GetRareUpgradeSettings();
 
             if (!Inventory.Backpack.Items.Any())
             {

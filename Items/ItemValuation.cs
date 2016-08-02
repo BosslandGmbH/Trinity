@@ -1,5 +1,6 @@
 ﻿using System;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Technicals;
@@ -1380,11 +1381,11 @@ namespace Trinity
             switch (itemBaseType)
             {
                 case ItemBaseType.Weapon:
-                    return Math.Round((double)TrinityPlugin.Settings.Loot.TownRun.WeaponScore);
+                    return Math.Round((double)Core.Settings.Loot.TownRun.WeaponScore);
                 case ItemBaseType.Armor:
-                    return Math.Round((double)TrinityPlugin.Settings.Loot.TownRun.ArmorScore);
+                    return Math.Round((double)Core.Settings.Loot.TownRun.ArmorScore);
                 case ItemBaseType.Jewelry:
-                    return Math.Round((double)TrinityPlugin.Settings.Loot.TownRun.JewelryScore);
+                    return Math.Round((double)Core.Settings.Loot.TownRun.JewelryScore);
                 default:
                     return 0;
             }
@@ -1400,12 +1401,12 @@ namespace Trinity
                 case TrinityItemBaseType.WeaponOneHand:
                 case TrinityItemBaseType.WeaponRange:
                 case TrinityItemBaseType.WeaponTwoHand:
-                    return (itemValue >= TrinityPlugin.Settings.Notification.WeaponScore);
+                    return (itemValue >= Core.Settings.Notification.WeaponScore);
                 case TrinityItemBaseType.Armor:
                 case TrinityItemBaseType.Offhand:
-                    return (itemValue >= TrinityPlugin.Settings.Notification.ArmorScore);
+                    return (itemValue >= Core.Settings.Notification.ArmorScore);
                 case TrinityItemBaseType.Jewelry:
-                    return (itemValue >= TrinityPlugin.Settings.Notification.JewelryScore);
+                    return (itemValue >= Core.Settings.Notification.JewelryScore);
             }
             return false;
         }

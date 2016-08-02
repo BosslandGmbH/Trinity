@@ -1,6 +1,6 @@
 ﻿﻿using System.IO;
 ﻿using System.Windows;
-﻿using Trinity.Combat.Abilities;
+﻿using Trinity.Components.Combat.Abilities;
 ﻿using Trinity.Technicals;
 ﻿using Trinity.UI;
 

@@ -10,8 +10,6 @@ using System.Windows;
 using System.Xml.Linq;
 using Buddy.Overlay;
 using Trinity.Cache;
-using Trinity.Combat;
-using Trinity.Combat.Abilities;
 using Trinity.Configuration;
 using Trinity.Coroutines;
 using Trinity.Coroutines.Town;
@@ -19,7 +17,7 @@ using TrinityCoroutines;
 using TrinityCoroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Framework.Grid;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Helpers;
 using Trinity.Items;
@@ -46,14 +44,10 @@ namespace Trinity
     /// <summary>
     /// TrinityPlugin DemonBuddy Plugin 
     /// </summary>
-    public partial class TrinityPlugin : ICommunicationEnabledPlugin
+    public partial class TrinityPlugin : IPlugin
     {
         public const bool IsDeveloperLoggingEnabled = false;
 
-        public PluginCommunicationResponse Receive(IPlugin sender, string command, params object[] args)
-        {
-            return PluginCommunicator.Receive(sender, command, args);
-        }
 
         private Version _version;
         public Version Version
@@ -63,25 +57,12 @@ namespace Trinity
                 if (_version != null) return _version;
                 var verXml = XDocument.Load(FileManager.VersionPath).Descendants("Revision").FirstOrDefault();
                 if (verXml != null) return new Version(2,42, int.Parse(verXml.Value));
-                return new Version(2, 42, 0);
+                return new Version(2, 50, 0);
             }
         }
 
-        public string Author
-        {
-            get
-            {
-                return "xzjv, rrrix, jubisman, and many more";
-            }
-        }
-
-        public string Description
-        {
-            get
-            {
-                return string.Format("TrinityPlugin v{0} BETA", Version);
-            }
-        }
+        public string Author => "xzjv, TarasBulba, rrrix, jubisman, and many more";
+        public string Description => $"v{Version} BETA. Provides Combat, Exploration and much more";
 
         private static bool MouseLeft()
         {
@@ -182,7 +163,7 @@ namespace Trinity
 
                     //RiftProgression.Pulse();
 
-                    if (!HasLoggedCurrentBuild && BotMain.IsRunning && CacheData.Inventory.EquippedIds.Any())
+                    if (!HasLoggedCurrentBuild && BotMain.IsRunning && Core.Inventory.EquippedIds.Any())
                     {
                         // Requires Inventory Cache to be up to date.                
                         DebugUtil.LogBuildAndItems();
@@ -301,6 +282,8 @@ namespace Trinity
             {
                 Logger.LogError("Error in OnEnable: " + ex);
             }
+
+            ModuleManager.FireEventAll(ModuleEventType.PluginEnabled);
         }
 
         private static void PPWarning()
@@ -361,6 +344,7 @@ namespace Trinity
             OverlayLoader.Disable();
             Core.Disable();
 
+            ModuleManager.FireEventAll(ModuleEventType.PluginDisabled);
         }
 
         /// <summary>
@@ -369,6 +353,7 @@ namespace Trinity
         public void OnShutdown()
         {
             //GenericCache.Shutdown();
+            ModuleManager.FireEventAll(ModuleEventType.Shutdown);
             GenericBlacklist.Shutdown();
             PluginCheck.Shutdown();
         }
@@ -389,8 +374,6 @@ namespace Trinity
                 Thread.CurrentThread.Name, Application.Current.CheckAccess());
 
             Core.Init();
-            //ActorManager.Initialize();
-
         }
 
         public string Name

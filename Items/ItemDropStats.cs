@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using log4net.Core;
+using Trinity.Framework;
 using Trinity.Framework.Modules;
 using Trinity.Helpers;
 using Trinity.Technicals;
@@ -151,7 +152,7 @@ namespace Trinity
         {
             get
             {
-                return CacheData.Player;
+                return Core.Player;
             }
         }
 
@@ -174,10 +175,10 @@ namespace Trinity
                 if (ZetaDia.Me.IsFullyValid())
                     return;
 
-                if (!TrinityPlugin.Settings.Advanced.OutputReports)
+                if (!Core.Settings.Advanced.OutputReports)
                     return;
 
-                if (Player.WorldSnoId <= 0 || TrinityPlugin.Player.ActorClass == ActorClass.Invalid)
+                if (Player.WorldSnoId <= 0 || Core.Player.ActorClass == ActorClass.Invalid)
                     return;
 
                 /*
@@ -187,7 +188,7 @@ namespace Trinity
                  */
                 try
                 {
-                    Level = TrinityPlugin.Player.Level;
+                    Level = Core.Player.Level;
 
                     if (Player.Level < 70)
                     {

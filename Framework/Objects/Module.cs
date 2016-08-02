@@ -25,6 +25,12 @@ namespace Trinity.Framework
 
         protected virtual void OnGameJoined() { }
 
+        protected virtual void OnPluginEnabled() { }
+
+        protected virtual void OnPluginDisabled() { }
+
+        protected virtual void OnShutdown() { }
+
         public Module()
         {
             Name = GetType().Name;
@@ -50,6 +56,15 @@ namespace Trinity.Framework
                     break;
                 case ModuleEventType.GameJoined:
                     OnGameJoined();
+                    break;
+                case ModuleEventType.PluginDisabled:
+                    OnPluginDisabled();
+                    break;
+                case ModuleEventType.PluginEnabled:
+                    OnPluginEnabled();
+                    break;
+                case ModuleEventType.Shutdown:
+                    OnShutdown();
                     break;
             }
         }

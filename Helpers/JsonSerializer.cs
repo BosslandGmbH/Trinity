@@ -2,7 +2,7 @@
 using System.Runtime.Serialization.Json;
 using System.Text;
 
-namespace Adventurer.Util
+namespace Trinity.Helpers
 {
     public static class JsonSerializer
     {

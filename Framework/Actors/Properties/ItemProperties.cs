@@ -104,6 +104,8 @@ namespace Trinity.Framework.Actors.Properties
             var columnChanged = col != actor.InventoryColumn;
             var rowChanged = row != actor.InventoryRow;
 
+            actor.ItemStackQuantity = actor.Attributes.ItemStackQuantity;
+
             if (columnChanged || rowChanged || slotChanged)
             {
                 if (slotChanged && actor.InventorySlot == InventorySlot.None && slot == InventorySlot.BackpackItems)

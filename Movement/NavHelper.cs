@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using Adventurer.Game.Exploration;
-using Trinity.Combat.Abilities;
+
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Modules;
@@ -25,7 +24,7 @@ namespace Trinity
 
         private static PlayerCache Player
         {
-            get { return CacheData.Player; }
+            get { return Core.Player; }
         }
 
         internal static string PrettyPrintVector3(Vector3 pos)
@@ -55,7 +54,7 @@ namespace Trinity
 
             //using (new PerformanceLogger("CanRayCast"))
             //{
-            //    if (DataDictionary.NeverRaycastLevelAreaIds.Contains(TrinityPlugin.Player.LevelAreaId))
+            //    if (DataDictionary.NeverRaycastLevelAreaIds.Contains(Core.Player.LevelAreaId))
             //        return true;
 
             //    bool rayCastHit = Navigator.Raycast(vStartLocation, vDestination);
@@ -87,7 +86,7 @@ namespace Trinity
 //            var butcherFloorPanels = CacheData.TimeBoundAvoidance.Where(aoe => DataDictionary.ButcherFloorPanels.Contains(aoe.ActorSnoId)).ToList();
 //            if (butcherFloorPanels.Any())
 //            {
-//                foreach (var safePoint in DataDictionary.ButcherPanelPositions.OrderBy(p => p.Value.Distance2DSqr(TrinityPlugin.Player.Position)))
+//                foreach (var safePoint in DataDictionary.ButcherPanelPositions.OrderBy(p => p.Value.Distance2DSqr(Core.Player.Position)))
 //                {
 //                    // Floor panel with fire animation was added to cache
 //                    if (butcherFloorPanels.Any(p => p.ActorSnoId == safePoint.Key && p.Position.Distance2DSqr(safePoint.Value) <= 15f*15f))
@@ -188,8 +187,8 @@ namespace Trinity
 
 //        //    if (maxDistance <= 0 || maxDistance <= minDistance)
 //        //    {
-//        //        var dhMaxDistance = Math.Max(TrinityPlugin.Settings.Combat.DemonHunter.KiteMaxDistance, TrinityPlugin.Settings.Combat.DemonHunter.KiteLimit + 5);
-//        //        maxDistance = TrinityPlugin.Player.ActorClass == ActorClass.DemonHunter ? dhMaxDistance : 100f;
+//        //        var dhMaxDistance = Math.Max(Core.Settings.Combat.DemonHunter.KiteMaxDistance, Core.Settings.Combat.DemonHunter.KiteLimit + 5);
+//        //        maxDistance = Core.Player.ActorClass == ActorClass.DemonHunter ? dhMaxDistance : 100f;
 //        //    }
 
 //        //    const int maxWeight = 100;
@@ -217,7 +216,7 @@ namespace Trinity
 //        //    int navRaycast = 0;
 //        //    int pointsFound = 0;
 
-//        //    int worldId = TrinityPlugin.Player.WorldSnoId;
+//        //    int worldId = Core.Player.WorldSnoId;
 //        //    Stopwatch[] timers = Enumerable.Range(0, 12).Select(i => new Stopwatch()).ToArray();
 
 //        //    Vector2 minWorld;
@@ -273,7 +272,7 @@ namespace Trinity
 //        //                Vector2 xy = MainGridProvider.GridToWorld(new Point(x, y));
 //        //                Vector3 xyz = Vector3.Zero;
 
-//        //                if (TrinityPlugin.Settings.Combat.Misc.UseNavMeshTargeting)
+//        //                if (Core.Settings.Combat.Misc.UseNavMeshTargeting)
 //        //                {
 //        //                    xyz = new Vector3(xy.X, xy.Y, MainGridProvider.GetHeight(xy));
 //        //                }
@@ -367,7 +366,7 @@ namespace Trinity
 
 //        //                // Boss Areas
 //        //                timers[5].Start();
-//        //                if (UnSafeZone.UnsafeKiteAreas.Any(a => a.WorldId == TrinityPlugin.Player.WorldSnoId && a.Position.Distance2DSqr(gridPoint.Position) <= (a.Radius * a.Radius)))
+//        //                if (UnSafeZone.UnsafeKiteAreas.Any(a => a.WorldId == Core.Player.WorldSnoId && a.Position.Distance2DSqr(gridPoint.Position) <= (a.Radius * a.Radius)))
 //        //                {
 //        //                    continue;
 //        //                }

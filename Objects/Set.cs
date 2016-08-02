@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Zeta.Game;
@@ -66,7 +67,7 @@ namespace Trinity.Objects
         /// </summary>
         public List<Item> EquippedItems
         {
-            get { return Items.Where(i => CacheData.Inventory.EquippedIds.Contains(i.Id)).ToList(); }
+            get { return Items.Where(i => Core.Inventory.EquippedIds.Contains(i.Id)).ToList(); }
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace Trinity.Objects
         /// </summary>
         public List<TrinityItem> EquippedTrinityItems
         {
-            get { return CacheData.Inventory.Equipped.Where(i => ItemIds.Contains(i.ActorSnoId)).ToList(); }
+            get { return Core.Inventory.Equipped.Where(i => ItemIds.Contains(i.ActorSnoId)).ToList(); }
         }
 
         public bool IsFirstBonusActive

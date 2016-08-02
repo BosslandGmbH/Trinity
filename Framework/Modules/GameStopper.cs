@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Trinity.Combat.Abilities;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Technicals;
 using Zeta.Bot;

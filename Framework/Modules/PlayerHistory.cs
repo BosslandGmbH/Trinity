@@ -19,9 +19,9 @@ namespace Trinity.Framework.Modules
             {
                 if (ZetaDia.Me != null && ZetaDia.Me.IsValid)
                 {
-                    Position = TrinityPlugin.Player.Position;
+                    Position = Core.Player.Position;
                     RecordedAt = DateTime.UtcNow;
-                    WorldId = TrinityPlugin.Player.WorldSnoId;
+                    WorldId = Core.Player.WorldSnoId;
                 }
             }
 
@@ -64,7 +64,7 @@ namespace Trinity.Framework.Modules
             if (Cache.Any(p => DateTime.UtcNow.Subtract(p.RecordedAt).TotalMilliseconds < 250))
                 return;
 
-            var myPosition = TrinityPlugin.Player.Position;
+            var myPosition = Core.Player.Position;
 
             if (Cache.Any(p => p.Position.Distance(myPosition) < distance))
                 return;
@@ -79,7 +79,7 @@ namespace Trinity.Framework.Modules
 
         public void MaintainCache()
         {
-            var worldId = TrinityPlugin.Player.WorldSnoId;
+            var worldId = Core.Player.WorldSnoId;
 
             Cache.RemoveAll(p => p.WorldId != worldId);
 

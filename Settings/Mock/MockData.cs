@@ -10,7 +10,7 @@ namespace Trinity.Settings.Mock
     /// Usage:
     /// 
     /// Add namespace: 
-    /// xmlns:mock="clr-namespace:TrinityPlugin.Settings.Mock"
+    /// xmlns:mock="clr-namespace:Core.Settings.Mock"
     /// 
     /// Ensure you have d (designtime) namesapace    
     /// xmlns:d="http://schemas.microsoft.com/expression/blend/2008"

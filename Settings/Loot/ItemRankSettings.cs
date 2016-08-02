@@ -24,7 +24,7 @@
 //            {
 //                try
 //                {
-//                    if (TrinityPlugin.Settings.Loot.Pickup.ItemFilterMode != ItemFilterMode.ItemRanks)
+//                    if (Core.Settings.Loot.Pickup.ItemFilterMode != ItemFilterMode.ItemRanks)
 //                        return "Item ranking is currently disabled.";
 
 //                    var ird = ItemRanks.GetRankedItemsFromSettings(this);

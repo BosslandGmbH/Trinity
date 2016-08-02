@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Adventurer.Game.Exploration;
+
 using Trinity.Cache;
-using Trinity.Combat;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Framework.Actors;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Memory.Attributes;
 using Trinity.Helpers;
 using Trinity.ItemRules;
@@ -118,7 +121,7 @@ namespace Trinity
 
         private static void GameEvents_OnGameChanged(object sender, EventArgs e)
         {
-            CacheData.Clear();
+            Clear();
 
             // reload the profile juuuuuuuuuuuust in case Demonbuddy missed it... which it is known to do on disconnects
             //string currentProfilePath = ProfileManager.CurrentProfile.Path;
@@ -126,6 +129,15 @@ namespace Trinity
             //Navigator.SearchGridProvider.Update();
             ResetEverythingNewGame();
             UsedProfileManager.SetProfileInWindowTitle();
+        }
+
+        private static void Clear()
+        {
+            Core.Actors.Clear();
+            Core.Hotbar.Clear();
+            Core.Inventory.Clear();
+            Core.Buffs.Clear();
+            Core.Targets.Clear();
         }
 
         static void GameEvents_OnWorldChanged(object sender, EventArgs e)
@@ -152,7 +164,7 @@ namespace Trinity
             PlayerMover.TimeLastRecordedPosition = DateTime.MinValue;
             PlayerMover.LastGeneratedStuckPosition = DateTime.MinValue;
             DeathsThisRun = 0;
-            CacheData.Clear();
+            Clear();
         }
 
         private static void TrinityOnDeath(object src, EventArgs mea)
@@ -162,7 +174,7 @@ namespace Trinity
                 LastDeathTime = DateTime.UtcNow;
                 TotalDeaths++;
                 DeathsThisRun++;
-                CacheData.Clear();
+                Clear();
                 PlayerMover.TotalAntiStuckAttempts = 1;
                 PlayerMover.vSafeMovementLocation = Vector3.Zero;
 
@@ -244,7 +256,7 @@ namespace Trinity
 
                 CombatBase.IsQuestingMode = false;
 
-                CacheData.Clear();
+                Clear();
                 AttributeManager.Reset();
 
                 //GenericCache.ClearCache();

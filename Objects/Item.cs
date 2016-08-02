@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.Serialization;
-using Trinity.Combat.Abilities;
+using Trinity.Components.Combat.Abilities;
+using Trinity.Framework;
 using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -53,7 +54,7 @@ namespace Trinity.Objects
         /// </summary>
         public bool IsEquipped
         {
-            get { return CacheData.Inventory.EquippedIds.Contains(Id) || IsEquippedInCube; }
+            get { return Core.Inventory.EquippedIds.Contains(Id) || IsEquippedInCube; }
         }
 
         /// <summary>
@@ -61,7 +62,7 @@ namespace Trinity.Objects
         /// </summary>
         public bool IsEquippedInCube
         {
-            get { return CacheData.Inventory.KanaisCubeIds.Contains(Id); }
+            get { return Core.Inventory.KanaisCubeIds.Contains(Id); }
         }
 
         /// <summary>

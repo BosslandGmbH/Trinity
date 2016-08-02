@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Adventurer.Game.Exploration;
+﻿using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework.Avoidance;
 using Zeta.Common;
 
-namespace Trinity.Framework.Grid
+namespace Trinity.Framework.Helpers
 {
     public class GridHelper
     {

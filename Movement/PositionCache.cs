@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -16,9 +17,9 @@ namespace Trinity
         {
             if (ZetaDia.Me != null && ZetaDia.Me.IsValid)
             {
-                Position = TrinityPlugin.Player.Position;
+                Position = Core.Player.Position;
                 RecordedAt = DateTime.UtcNow;
-                WorldId = TrinityPlugin.Player.WorldSnoId;
+                WorldId = Core.Player.WorldSnoId;
             }
         }
 
@@ -35,7 +36,7 @@ namespace Trinity
             if (Cache.Any(p => DateTime.UtcNow.Subtract(p.RecordedAt).TotalMilliseconds < 100))
                 return;
 
-            foreach (PositionCache p in Cache.Where(p => p.Position.Distance(TrinityPlugin.Player.Position) < distance).ToList())
+            foreach (PositionCache p in Cache.Where(p => p.Position.Distance(Core.Player.Position) < distance).ToList())
             {
                 Cache.Remove(p);
             }

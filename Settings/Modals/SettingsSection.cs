@@ -14,5 +14,6 @@ namespace Trinity.Settings
         Avoidance,
         Paragon,
         Advanced,
-    }
+        Dynamic
+    }    
 }

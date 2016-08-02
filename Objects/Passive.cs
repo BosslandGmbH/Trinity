@@ -1,4 +1,5 @@
-﻿using Trinity.Combat.Abilities;
+﻿using Trinity.Components.Combat.Abilities;
+using Trinity.Framework;
 using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -62,7 +63,7 @@ namespace Trinity.Objects
             {
                 if (ZetaDia.IsInGame && ZetaDia.Me.IsValid && Class == ZetaDia.Me.ActorClass)
                 {
-                    return CacheData.Hotbar.PassiveSkills.Contains(SNOPower);
+                    return Core.Hotbar.PassiveSkills.Contains(SNOPower);
                 }
                 return false;
             }

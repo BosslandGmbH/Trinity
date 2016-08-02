@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Combat.Abilities;
 using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -24,7 +23,7 @@ namespace Trinity.Coroutines
 
         //private async static Task<bool> DestroyUbersDoor()
         //{            
-        //    if (TrinityPlugin.Player.WorldID != 332336 || TrinityPlugin.Player.WorldType != Act.OpenWorld)
+        //    if (Core.Player.WorldID != 332336 || Core.Player.WorldType != Act.OpenWorld)
         //        return false;
 
         //    //ActorId: 258064, Type: Gizmo, Name: Uber_BossPortal_Door-548, 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Reference;
 using Zeta.Game;
 
@@ -64,7 +65,7 @@ namespace Trinity.Objects
             {
                 if (ZetaDia.IsInGame && ZetaDia.Me.IsValid && Class == ZetaDia.Me.ActorClass && Skill != null && RuneIndex >= 0)
                 {
-                    return CacheData.Hotbar.GetSkill(Skill.SNOPower).RuneIndex == RuneIndex || Skill.IsAllRuneBonusActive;
+                    return Core.Hotbar.GetSkill(Skill.SNOPower).RuneIndex == RuneIndex || Skill.IsAllRuneBonusActive;
                 }
                 return false;
             }

@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Adventurer;
-using Adventurer.Game.Exploration;
+using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.DbProvider;
 using Trinity.Framework.Avoidance.Structures;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
+using Direction = Trinity.Components.Adventurer.Game.Exploration.Direction;
 using Logger = Trinity.Technicals.Logger;
+using NodeFlags = Trinity.Components.Adventurer.Game.Exploration.NodeFlags;
+using SceneData = Trinity.Components.Adventurer.Game.Exploration.SceneData;
+using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
 namespace Trinity.Framework.Avoidance
 {
@@ -296,13 +299,13 @@ namespace Trinity.Framework.Avoidance
 
         public bool IsInKiteDirection(Vector3 position, double degreesDifferenceAllowed)
         {
-            return MathUtil.GetRelativeAngularVariance(TrinityPlugin.Player.Position, Core.PlayerHistory.Centroid, position) <= degreesDifferenceAllowed;
+            return MathUtil.GetRelativeAngularVariance(Core.Player.Position, Core.PlayerHistory.Centroid, position) <= degreesDifferenceAllowed;
         }
 
         public bool IsInPlayerFacingDirection(Vector3 position, double degreesDifferenceAllowed)
         {
-            var pointInFront = MathEx.GetPointAt(TrinityPlugin.Player.Position, 10f, TrinityPlugin.Player.Rotation);
-            return MathUtil.GetRelativeAngularVariance(TrinityPlugin.Player.Position, pointInFront, position) <= degreesDifferenceAllowed;
+            var pointInFront = MathEx.GetPointAt(Core.Player.Position, 10f, Core.Player.Rotation);
+            return MathUtil.GetRelativeAngularVariance(Core.Player.Position, pointInFront, position) <= degreesDifferenceAllowed;
         }
 
         public bool IsStandingInFlags(params AvoidanceFlags[] flags)
