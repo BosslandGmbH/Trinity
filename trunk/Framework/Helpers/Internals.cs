@@ -94,7 +94,7 @@ namespace Trinity.Framework.Helpers
                 Version = new Version("2.4.2.38682"),
                 ObjectManagerPtr = (IntPtr)0x01EA60D4,
                 SymbolManagerPtr = (IntPtr)0x01F01958,
-                SnoGroupsAddr = (IntPtr)0x0107A248,
+                SnoGroupsAddr = (IntPtr)0x01EA73B0,
                 AttributeDescripterAddr = (IntPtr)0x1EBF028,
                 GlobalsOffset = 0x790,
                 StorageOffset = 0x798,
