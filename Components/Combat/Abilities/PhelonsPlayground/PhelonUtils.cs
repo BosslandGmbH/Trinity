@@ -67,13 +67,12 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
                     select u).ToList();
         }
 
-        internal static Vector3 BestDpsPosition(float maxRange, float searchRange = 12f, bool objectsInAoe = false)
+        internal static Vector3 BestDpsPosition(Vector3 location, float searchRange = 12f, bool objectsInAoe = false)
         {
-            var bestTarget = PhelonTargeting.BestAoeUnit(maxRange, objectsInAoe).Position;
-            Vector3 bestBuffPosition = Vector3.Zero;
-            return BestBuffPosition(maxRange, bestTarget, objectsInAoe, out bestBuffPosition)
+            Vector3 bestBuffPosition;
+            return BestBuffPosition(searchRange, location, objectsInAoe, out bestBuffPosition)
                 ? bestBuffPosition
-                : bestTarget;
+                : location;
         }
 
         internal static Vector3 BestTankPosition(float maxRange, bool objectsInAoe = false)

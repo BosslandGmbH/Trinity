@@ -21,13 +21,13 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
                    CurrentTarget;
         }
 
-        public static TrinityActor BestTarget(bool includeInAoE = false)
+        public static TrinityActor BestTarget(float searchRange = 45f, bool includeInAoE = false)
         {
             return CurrentTarget.Type == TrinityObjectType.Shrine || CurrentTarget.IsTreasureGoblin ||
                    CurrentTarget.IsTreasureGoblin || CurrentTarget.Type == TrinityObjectType.HealthGlobe || 
                    CurrentTarget.IsElite
                 ? CurrentTarget
-                : BestAoeUnit(45, true) ?? CurrentTarget;
+                : BestAoeUnit(searchRange, true) ?? CurrentTarget;
         }
 
         public static void CombatToggling()

@@ -112,7 +112,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Wizard
 
                 var bestDpsPosition = IsInParty && PhelonGroupSupport.Monk != null
                         ? PhelonGroupSupport.Monk.Position
-                        : PhelonUtils.BestDpsPosition(35, maxRange, true);
+                        : PhelonUtils.BestDpsPosition(PhelonTargeting.BestTarget(45f, true).Position, maxRange, true);
 
                 if (bestDpsPosition != Vector3.Zero && bestDpsPosition.Distance(Player.Position) > maxRange)
                 {
