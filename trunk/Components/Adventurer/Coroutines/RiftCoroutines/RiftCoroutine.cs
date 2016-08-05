@@ -986,7 +986,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 _gemUpgradesLeft = gemUpgradesLeft;
                 _enableGemUpgradeLogs = true;
             }
-            if (gemUpgradesLeft == 0)
+            if (AdvDia.RiftQuest.State == QuestState.Completed && AdvDia.RiftQuest.Step != RiftStep.UrshiSpawned)//gemUpgradesLeft == 0)
             {
                 Logger.Debug("[Rift] Finished all upgrades, returning to town.");
                 State = States.Completed;

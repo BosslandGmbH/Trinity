@@ -33,6 +33,7 @@ namespace Trinity.Components.Adventurer.Game.Rift
                     case 34:
                         Step = RiftStep.UrshiSpawned;
                         break;
+                    case 46:
                     case 10:
                         Step = RiftStep.Cleared;
                         break;
