@@ -56,7 +56,7 @@ namespace Trinity
             {
                 if (_version != null) return _version;
                 var verXml = XDocument.Load(FileManager.VersionPath).Descendants("Revision").FirstOrDefault();
-                if (verXml != null) return new Version(2,42, int.Parse(verXml.Value));
+                if (verXml != null) return new Version(2,50, int.Parse(verXml.Value));
                 return new Version(2, 50, 0);
             }
         }
