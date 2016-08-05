@@ -47,7 +47,7 @@ namespace Trinity.Settings.Loot
 
         #region Properties
 
-        [Obsolete("Use ItemFilterMode in Loot.ItemMisc.ItemFilterMode; TrinitySetting containers should contain only other TrinitySetting objects")]
+        [Obsolete("Use ItemFilterMode in PickupSettings instead.")]
         [DataMember(IsRequired = false)]
         [DefaultValue(ItemFilterMode.TrinityOnly)]
         public ItemFilterMode ItemFilterMode

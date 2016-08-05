@@ -320,7 +320,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             if (AdvDia.RiftQuest.Step != RiftStep.NotStarted)
             {
                 // handle target destinations that are within a death gate scene. 
-                var sceneClickedInside = Scenes.FirstOrDefault(s => s.WorldScene.IsInScene(destination));
+                var sceneClickedInside = Scenes.FirstOrDefault(s => s.WorldScene != null && s.WorldScene.IsInScene(destination));
                 if (sceneClickedInside != null)
                 {
                     // handle player within death gate scene wanting to go to the other side.

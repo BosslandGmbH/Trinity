@@ -788,7 +788,7 @@ namespace Trinity.Components.Combat
         public bool ThrottleActionPerSecond(out RunStatus runStatus)
         {            
             const int measureTimeMs = 500;
-            const int actionLimit = 4;
+            const int actionLimit = 6;
             DateTime actionLimitTime;
 
             if (LastActionTimes.Count >= actionLimit)
@@ -820,7 +820,7 @@ namespace Trinity.Components.Combat
             var timeSince = DateTime.UtcNow.Subtract(actionLimitTime).TotalMilliseconds;
             if (timeSince < measureTimeMs / 2) 
             {
-                Logger.Log(LogCategory.Behavior, "Throttling - Actions Per Second Limit Reached! {0} actions were taken within {1}ms", actionLimit, timeSince);               
+                Logger.LogDebug(LogCategory.Behavior, "Throttling - Actions Per Second Limit Reached! {0} actions were taken within {1}ms", actionLimit, timeSince);               
                 //Logger.Warn($"Throttling - Actions Per Second Limit Reached! {actionLimit} actions were taken within {timeSince}ms");               
                 runStatus = RunStatus.Running;
                 return true;                
