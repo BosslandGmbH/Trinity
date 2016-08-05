@@ -325,13 +325,14 @@ namespace Trinity.Components.Adventurer.Settings
             BountyAct3 = true;
             BountyAct4 = true;
             BountyAct5 = true;
-            BountyZerg = true;
+            BountyZerg = false;
             BountyMode0 = true;
             BountyMode1 = false;
             BountyMode2 = false;
             BountyMode3 = false;
             BountyPrioritizeBonusAct = true;
             NephalemRiftFullExplore = false;
+            KeywardenZergMode = false;
         }
 
         [IgnoreDataMember]

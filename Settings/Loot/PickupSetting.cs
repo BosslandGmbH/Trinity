@@ -83,7 +83,7 @@ namespace Trinity.Config.Loot
         #region Properties
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(ItemFilterMode.None)]
+        [DefaultValue(ItemFilterMode.TrinityOnly)]
         public ItemFilterMode ItemFilterMode
         {
             get

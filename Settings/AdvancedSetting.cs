@@ -81,7 +81,7 @@ namespace Trinity.Config
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(LogCategory.UserInformation)]
+        [DefaultValue(LogCategory.UserInformation | LogCategory.Behavior | LogCategory.Routine | LogCategory.Avoidance | LogCategory.Targetting)]
         public LogCategory LogCategories
         {
             get
@@ -390,7 +390,7 @@ namespace Trinity.Config
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool LogDroppedItems
         {
             get
@@ -407,7 +407,7 @@ namespace Trinity.Config
             }
         }
         [DataMember(IsRequired = false)]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool OutputReports
         {
             get
@@ -425,7 +425,7 @@ namespace Trinity.Config
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         public bool ItemRulesLogs
         {
             get
@@ -682,9 +682,9 @@ namespace Trinity.Config
             ThrottleAPS = false;
             ThrottleAPSActionCount = 10;
             CacheRefreshRate = 100;
-            OutputReports = true;
-            ItemRulesLogs = true;
-            LogDroppedItems = true;
+            OutputReports = false;
+            ItemRulesLogs = false;
+            LogDroppedItems = false;
             InactivityTimer = 600;
             UnstuckerEnabled = true;
             IsDBInactivityEnabled = false;
@@ -692,6 +692,7 @@ namespace Trinity.Config
             UseExperimentalAvoidance = false;
             BetaPlayground = false;
             DebugInStatusBar = false;
+            LogCategories = LogCategory.UserInformation | LogCategory.Behavior | LogCategory.Routine | LogCategory.Avoidance | LogCategory.Targetting;
         }
         #endregion Methods
     }

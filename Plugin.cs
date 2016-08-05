@@ -369,6 +369,12 @@ namespace Trinity
             PluginCheck.CheckAndInstallTrinityRoutine();
             Logger.Log("Initialized v{0}", Version);
 
+            var trinityPluginContainer = PluginManager.Plugins.FirstOrDefault(p => p.Plugin == this);
+            if (trinityPluginContainer != null && !trinityPluginContainer.Enabled)
+            {
+                trinityPluginContainer.Enabled = true;
+            }
+
             Logger.LogVerbose("TrinityPlugin Initialized with PID: {0} CurrentThread={1} '{2}' CanAccessApplication={3}",
                 Process.GetCurrentProcess().Id, Thread.CurrentThread.ManagedThreadId,
                 Thread.CurrentThread.Name, Application.Current.CheckAccess());
