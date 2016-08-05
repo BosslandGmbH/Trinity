@@ -29,7 +29,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Wizard
                     {
                         var twisterPosition = IsInParty && PhelonGroupSupport.Monk != null
                             ? PhelonGroupSupport.Monk.Position
-                            : PhelonUtils.BestDpsPosition(35f, 14f, true);
+                            : PhelonUtils.BestDpsPosition(PhelonTargeting.BestAoeUnit(35f, true).Position);
 
                         power = twisterPosition.Distance(Player.Position) > 5
                             ? new TrinityPower(SNOPower.Walk, 3f, twisterPosition)
@@ -46,8 +46,8 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Wizard
                     if (IsTwister)
                     {
                         var twisterPosition = IsInParty && PhelonGroupSupport.Monk != null
-                        ? PhelonGroupSupport.Monk.Position
-                        : PhelonUtils.BestDpsPosition(35f, 14f, true);
+                            ? PhelonGroupSupport.Monk.Position
+                            : PhelonUtils.BestDpsPosition(PhelonTargeting.BestAoeUnit(35f, true).Position);
 
                         power = twisterPosition.Distance(Player.Position) > 5
                             ? new TrinityPower(SNOPower.Walk, 3f, twisterPosition)

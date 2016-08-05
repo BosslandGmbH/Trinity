@@ -14,6 +14,11 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             }
         }
 
+        public static bool IsRainment
+        {
+            get { return Sets.ThousandStorms.IsFullyEquipped; }
+        }
+
         public static TrinityPower GetPower()
         {
             if (Player.IsInTown)
@@ -23,6 +28,13 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
 
             if (power == null && CurrentTarget != null && CurrentTarget.IsUnit)
             {
+                if (IsRainment)
+                {
+                    if (Sets.ShenlongsSpirit.IsFullyEquipped)
+                    {
+                        power = Rainment.PowerSelector();
+                    }
+                }
                 if (IszDPS)
                 {
                     power = ZDps.PowerSelector();
