@@ -21,13 +21,13 @@ namespace Trinity.Framework.Actors.Properties
 
             actor.IsPlayerHeadstone = actor.ActorSnoId == DataDictionary.PLAYER_HEADSTONE_SNO;
             actor.IsRareChest = actor.InternalNameLowerCase.Contains("chest_rare") || DataDictionary.ResplendentChestIds.Contains(actor.ActorSnoId);
-            actor.IsChest = (!actor.IsRareChest && actor.InternalNameLowerCase.Contains("chest")) || DataDictionary.ContainerWhiteListIds.Contains(actor.ActorSnoId);
             actor.IsCorpse = actor.InternalNameLowerCase.Contains("corpse");
             actor.IsWeaponRack = actor.InternalNameLowerCase.Contains("rack");
             actor.IsGroundClicky = actor.InternalNameLowerCase.Contains("ground_clicky");
             actor.IsContainer = actor.IsRareChest || actor.IsChest || actor.IsCorpse || actor.IsWeaponRack || actor.IsGroundClicky;
             actor.IsCursedChest = actor.Type == TrinityObjectType.CursedChest;
             actor.IsCursedShrine = actor.Type == TrinityObjectType.CursedShrine;
+            actor.IsChest = actor.IsCursedChest || actor.IsRareChest || actor.InternalNameLowerCase.Contains("chest") || DataDictionary.ContainerWhiteListIds.Contains(actor.ActorSnoId);
             actor.IsDestroyable = actor.Type == TrinityObjectType.Barricade || actor.Type == TrinityObjectType.Destructible;
             actor.IsEventObject = actor.IsCursedChest || actor.IsCursedShrine;
             actor.IsInteractableType = DataDictionary.InteractableTypes.Contains(actor.Type);
@@ -72,6 +72,9 @@ namespace Trinity.Framework.Actors.Properties
 
                 if (attributes.IsChestOpen)
                     return true;
+
+                if (actor.IsChest && attributes.GizmoState == 1)
+                    return false;
 
                 if (actor.GizmoType == GizmoType.PowerUp && attributes.GizmoState == 1)
                     return true;

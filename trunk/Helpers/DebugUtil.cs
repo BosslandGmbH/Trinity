@@ -367,7 +367,7 @@ namespace Trinity.Helpers
         internal static void DumpReferenceItems(TrinityLogLevel level = TrinityLogLevel.Debug)
         {
 
-            var path = Path.Combine(FileManager.DemonBuddyPath, "Plugins\\TrinityPlugin\\Resources\\JS Class Generator\\ItemReference.js");
+            var path = Path.Combine(FileManager.DemonBuddyPath, "Plugins\\Trinity\\Resources\\JS Class Generator\\ItemReference.js");
 
             if (File.Exists(path))
                 File.Delete(path);

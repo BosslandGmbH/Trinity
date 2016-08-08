@@ -85,7 +85,7 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.Attributes != null)
             {
                 actor.IsBountyObjective = actor.Attributes.IsBountyObjective;
-                actor.IsMinimapActive = actor.Attributes.IsMinimapActive;
+                actor.IsMinimapActive = actor.Attributes.IsMinimapActive || Core.Minimap.MinimapIconAcdIds.Contains(actor.AcdId);
                 actor.MinimapIconOverride = actor.Attributes.MinimapIconOverride;
                 actor.IsNoDamage = actor.Attributes.IsNoDamage;
                 actor.IsQuestMonster = actor.Attributes.IsQuestMonster;

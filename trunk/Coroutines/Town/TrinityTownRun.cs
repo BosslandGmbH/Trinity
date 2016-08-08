@@ -198,7 +198,7 @@ namespace Trinity.Coroutines.Town
 
                 await StashItems.Execute();                
                 //await StashItems.SortStashPages();
-                await UseCraftingRecipes.Execute();
+                //await UseCraftingRecipes.Execute();
                 await RepairItems.Execute();
 
                 Logger.Log("Finished Town Run woo!");

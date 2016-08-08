@@ -73,7 +73,7 @@ namespace Trinity.Coroutines.Town
 
             GameUI.CloseVendorWindow();
 
-            if (StashPagesAvailableToPurchase && ZetaDia.PlayerData.Coinage > 10000000)
+            if (StashPagesAvailableToPurchase && ZetaDia.PlayerData.Coinage > 100000000)
             {
                 // todo: get the actual cost of buying pages
                 Logger.LogError("[StashItems] Buying stash page");

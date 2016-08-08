@@ -280,10 +280,10 @@ var Items = function() {
                         item.ZetaType = "Amulet";
                     else if (itemTypeName.contains("Ring"))
                         item.ZetaType = "Ring";
-                    else if (itemTypeName.contains("Shield"))
-                        item.ZetaType = "Shield";
                     else if (itemTypeName.contains("Crusader"))
                         item.ZetaType = "CrusaderShield";
+                    else if (itemTypeName.contains("Shield"))
+                        item.ZetaType = "Shield";
                     else if (itemTypeName.contains("Mojo"))
                         item.ZetaType = "Mojo";
                     else if (itemTypeName.contains("Source"))
@@ -362,10 +362,10 @@ var Items = function() {
                         item.TrinityItemType = "Amulet";
                     else if (itemTypeName.contains("Ring"))
                         item.TrinityItemType = "Ring";
-                    else if (itemTypeName.contains("Shield"))
-                        item.TrinityItemType = "Shield";
                     else if (itemTypeName.contains("Crusader"))
                         item.TrinityItemType = "CrusaderShield";
+                    else if (itemTypeName.contains("Shield"))
+                        item.TrinityItemType = "Shield";
                     else if (itemTypeName.contains("Mojo"))
                         item.TrinityItemType = "Mojo";
                     else if (itemTypeName.contains("Source"))
