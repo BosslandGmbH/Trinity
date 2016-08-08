@@ -173,7 +173,9 @@ namespace Trinity.Components.Adventurer.Game.Actors
             SNOAnim.X1_Westm_Ex_death, // 'wortham survivers' destructible gizmo
             SNOAnim.a3dun_Keep_Rope_Switch_open, //433385, Type: Gizmo, Name: px_Bounty_Ramparts_Camp_Switch-704, 
             SNOAnim.Prisioner_Stake_open, // templar inquisition bounty px_Wilderness_Camp_TemplarPrisoners-23542
-            SNOAnim.a1dun_Crypts_Jar_of_Souls_Dead //x1_westm_necro_jar_of_souls_camp_graveyard
+            SNOAnim.a1dun_Crypts_Jar_of_Souls_Dead, //x1_westm_necro_jar_of_souls_camp_graveyard
+            SNOAnim.a1dun_Crypts_Jar_of_Souls_Death_Backup, //x1_westm_necro_jar_of_souls_camp_graveyard
+            SNOAnim.trOut_Wilderness_Cultist_SummoningMachine_A_death, //px_Highlands_Camp_ResurgentCult_Totem
         };
 
         public static bool IsInteractableQuestObject<T>(this T actor) where T : DiaObject
