@@ -186,13 +186,10 @@ namespace Trinity.Components.Adventurer.Game.Rift
             var greaterRiftLevel = PluginSettings.Current.GreaterRiftLevel;
             if (greaterRiftLevel <= 0)
             {
-                var maxLevel = PluginSettings.Current.GreaterRiftLevel;
-                greaterRiftLevel = greaterRiftLevel + maxLevel;
-                if (greaterRiftLevel > maxLevel) greaterRiftLevel = maxLevel;
-                if (greaterRiftLevel < 1) greaterRiftLevel = 1;
+                var maxLevel = PluginSettings.Current.HighestUnlockedRiftLevel;
+                greaterRiftLevel = maxLevel + greaterRiftLevel;
             }
             return greaterRiftLevel;
-
         }
 
         public static Dictionary<int, long> EmpoweredRiftCost = new Dictionary<int, long>

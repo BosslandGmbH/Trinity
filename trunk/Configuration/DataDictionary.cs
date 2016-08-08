@@ -1865,6 +1865,8 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.a2dun_Spider_Ground_Spawner, //
+
             (int)SNOActor.a2dun_Zolt_SandBridgeBase, // bridge that is of type door, can't be interacted with.
             (int)SNOActor.a3dun_crater_st_Demon_ChainPylon_Fire_Azmodan, // door with irregular properties
 
