@@ -470,7 +470,7 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (!Core.Settings.WorldObject.OpenAnyContainer)
+            if (!Core.Settings.WorldObject.OpenAnyContainer && !cacheObject.IsMinimapActive)
             {
                 if (cacheObject.IsRareChest && !Core.Settings.WorldObject.OpenRareChests)
                 {
