@@ -349,7 +349,7 @@ namespace Trinity.Settings
                         settings.Loot.ItemRules = null;
                     break;
                 case SettingsSection.Dynamic:
-                    var foundItem = settings.Dynamic.Settings.FirstOrDefault(s => s.Name == sectionDefinition.SectionName);
+                    var foundItem = settings.Dynamic?.Settings.FirstOrDefault(s => s.Name == sectionDefinition.SectionName);
                     if (foundItem != null)
                     {
                         settings.Dynamic.Settings.Remove(foundItem);

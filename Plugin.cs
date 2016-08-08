@@ -196,9 +196,15 @@ namespace Trinity
         /// </summary>
         public void OnEnabled()
         {
-            Logger.Log($"Trinity OnEnabled was called from thread: {Thread.CurrentThread.Name} ({Thread.CurrentThread.ManagedThreadId})");
+            if (!Application.Current.CheckAccess())
+            {
+                Logger.LogVerbose("TrinityPlugin Skipped OnEnabled() attempt by PID: {0} CurrentThread={1} '{2}' CanAccessApplication={3}",
+                    Process.GetCurrentProcess().Id, Thread.CurrentThread.ManagedThreadId,
+                    Thread.CurrentThread.Name, Application.Current.CheckAccess());
+                return;
+            }
 
-            if (!Application.Current.CheckAccess()) return;
+            Logger.Log($"Trinity OnEnabled() was called from thread: {Thread.CurrentThread.Name} ({Thread.CurrentThread.ManagedThreadId})");
 
             try
             {
@@ -363,8 +369,15 @@ namespace Trinity
         /// </summary>
         public void OnInitialize()
         {
-            // YAR Login Support (YARKickstart Ibot will call this from the proper thread)
-            if (!Application.Current.CheckAccess()) return;
+            if (!Application.Current.CheckAccess())
+            {
+                Logger.LogVerbose("TrinityPlugin Skipped OnInitialize() attempt by PID: {0} CurrentThread={1} '{2}' CanAccessApplication={3}",
+                    Process.GetCurrentProcess().Id, Thread.CurrentThread.ManagedThreadId,
+                    Thread.CurrentThread.Name, Application.Current.CheckAccess());
+                return;
+            }
+
+            //Logger.Log($"Trinity OnInitialize() was called from thread: {Thread.CurrentThread.Name} ({Thread.CurrentThread.ManagedThreadId})");
 
             PluginCheck.CheckAndInstallTrinityRoutine();
             Logger.Log("Initialized v{0}", Version);

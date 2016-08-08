@@ -8,6 +8,7 @@ using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Util;
 using Trinity.Framework.Helpers;
 using Trinity.Helpers;
+using Zeta.Bot;
 using Zeta.Game;
 using JsonSerializer = Trinity.Components.Adventurer.Util.JsonSerializer;
 
@@ -52,8 +53,24 @@ namespace Trinity.Components.Adventurer.Settings
         [DataMember]
         public int HighestUnlockedRiftLevel
         {
-            get { return _highestUnlockedRiftLevel; }
-            set { SetField(ref _highestUnlockedRiftLevel, value); }
+            get
+            {
+                var level = 0;
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    if (ZetaDia.IsInGame)
+                    {
+                        if (!BotMain.IsRunning)
+                        {
+                            ZetaDia.Actors.Update();
+                        }
+
+                        level = PropertyReader<int>.SafeReadValue(() => ZetaDia.Me.HighestUnlockedRiftLevel);
+                    }
+                }
+                return level == 0 ? 120 : level;
+            }
+            set { }
         }
 
         [DataMember]
