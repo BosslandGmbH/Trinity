@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
@@ -126,7 +127,40 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             {
                 if (_bountyCoroutines.Count != 0)
                 {
-                    _currentBountyCoroutine = _bountyCoroutines[0];
+                    if (TrinityPluginSettings.Settings.Advanced.BetaPlayground)
+                    {
+                        try
+                        {
+                            if (ZetaDia.Service.Party.NumPartyMembers > 1)
+                            {
+                                if (BountyCoroutine.currentRandomizedBounty < 0 ||
+                                    BountyCoroutine.currentRandomizedBounty > _bountyCoroutines.Count)
+                                {
+                                    BountyCoroutine.currentRandomizedBounty =
+                                        Randomizer.GetRandomNumber(_bountyCoroutines.Count);
+                                    Logger.Info("[ActBounties] Randomized Bounty Complete.", Act);
+                                }
+                            }
+                            else
+                                BountyCoroutine.currentRandomizedBounty = 0;
+
+                            if (BountyCoroutine.currentRandomizedBounty < 0 ||
+                                BountyCoroutine.currentRandomizedBounty > _bountyCoroutines.Count)
+                                BountyCoroutine.currentRandomizedBounty = 0;
+
+                            _currentBountyCoroutine = _bountyCoroutines[BountyCoroutine.currentRandomizedBounty];
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Info(BountyCoroutine.currentRandomizedBounty + " | " + _bountyCoroutines.Count, Act);
+                            BountyCoroutine.currentRandomizedBounty = 0;
+                            _currentBountyCoroutine = _bountyCoroutines[0];
+                        }
+                    }
+                    else
+                    {
+                        _currentBountyCoroutine = _bountyCoroutines[0];
+                    }
                 }
                 else
                 {
