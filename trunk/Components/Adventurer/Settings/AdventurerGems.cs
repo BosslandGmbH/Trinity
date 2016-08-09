@@ -15,6 +15,9 @@ namespace Trinity.Components.Adventurer.Settings
 
         public void UpdateGems(int greaterRiftLevel, bool prioritizeEquipedGems)
         {
+            if (ZetaDia.Me == null)
+                return;
+
             var gemsInInventory = new List<AdventurerGem>();
             var result = SafeFrameLock.ExecuteWithinFrameLock(() =>
             {
@@ -26,6 +29,7 @@ namespace Trinity.Components.Adventurer.Settings
                     .OrderByDescending(i => i.Rank)
                     .ToList();
             }, true);
+
             if (!result.Success)
             {
                 Logger.Debug("[UpdateGems] " + result.Exception.Message);

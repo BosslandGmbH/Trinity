@@ -56,15 +56,10 @@ namespace Trinity.Components.Adventurer.Settings
             get
             {
                 var level = 0;
-                using (ZetaDia.Memory.AcquireFrame())
+                if (ZetaDia.Me != null)
                 {
-                    if (ZetaDia.IsInGame)
+                    using (ZetaDia.Memory.AcquireFrame())
                     {
-                        if (!BotMain.IsRunning)
-                        {
-                            ZetaDia.Actors.Update();
-                        }
-
                         level = PropertyReader<int>.SafeReadValue(() => ZetaDia.Me.HighestUnlockedRiftLevel);
                     }
                 }
@@ -277,10 +272,14 @@ namespace Trinity.Components.Adventurer.Settings
             }
         }
 
+        /// <summary>
+        /// Bound to UI rift level dropdown 
+        /// </summary>
         public string GreaterRiftLevelRaw
         {
             get
-            {
+            {                
+                // Convert special values into special strings for the dropdown.
                 switch (GreaterRiftLevel)
                 {
                     case 0:
@@ -302,18 +301,21 @@ namespace Trinity.Components.Adventurer.Settings
             }
             set
             {
+                // setter is called only by UI user selection
                 if (value == "Max")
                 {
-                    GreaterRiftLevel = HighestUnlockedRiftLevel;
+                    // user selected max sets level to 0, if riftcoroutine encounters 0 it uses the current highest unlocked when rift is open.
+                    GreaterRiftLevel = 0;
                 }
                 else
                 {
                     int greaterRiftLevel;
                     if (int.TryParse(value.Replace("Max - ", string.Empty), out greaterRiftLevel))
                     {
+                        // string from dropdown converted into a number can be a valid rift level (75) or a negative (-8)
+                        // if riftcoroutine encounters -x level it uses the current highest unlocked reduced by x when rift is open.
                         GreaterRiftLevel = greaterRiftLevel;
                     }
-                    if (value.Contains("Max")) GreaterRiftLevel = HighestUnlockedRiftLevel - GreaterRiftLevel * -1;
                 }
             }
         }
@@ -357,29 +359,7 @@ namespace Trinity.Components.Adventurer.Settings
         {
             get
             {
-                var unlockedRiftLevel = 0;
-
-                var result = SafeFrameLock.ExecuteWithinFrameLock(() =>
-                {
-                    Logger.Info("[Settings][ZetaDia.Me.HighestUnlockedRiftLevel] " + ZetaDia.Me.HighestUnlockedRiftLevel);
-                    unlockedRiftLevel = ZetaDia.Me.HighestUnlockedRiftLevel;
-
-                }, true);
-
-                if (!result.Success)
-                {
-                    Logger.Error("[Settings][HighestUnlockedRiftLevel] " + result.Exception.Message);
-                    unlockedRiftLevel = HighestUnlockedRiftLevel;
-                }
-                else
-                {
-                    HighestUnlockedRiftLevel = unlockedRiftLevel;
-                }
-
-                if (unlockedRiftLevel == 0)
-                {
-                    unlockedRiftLevel = 1;
-                }
+                var unlockedRiftLevel = HighestUnlockedRiftLevel;
 
                 var levels = new List<string>();
                 for (var i = 1; i <= unlockedRiftLevel; i++)
@@ -468,7 +448,7 @@ namespace Trinity.Components.Adventurer.Settings
         }
 
         public static PluginSettings LoadSettingsFromJsonString(string json)
-        {
+        {        
             if (!string.IsNullOrEmpty(json))
             {
                 var current = JsonSerializer.Deserialize<PluginSettings>(json);
