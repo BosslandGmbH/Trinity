@@ -1,4 +1,5 @@
 ﻿using Trinity.Reference;
+using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
