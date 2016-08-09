@@ -91,7 +91,7 @@ namespace Trinity.Movement
         public static bool HasInfiniteCasting = CombatBase.GetHasBuff(SNOPower.Pages_Buff_Infinite_Casting) ||
                                                 Core.Buffs.HasBuff(SNOPower.ItemPassive_Unique_Ring_919_x1);
 
-        private static float MinDistance = PlayerMover.IsCompletelyBlocked || CombatBase.IsCurrentlyAvoiding || HasInfiniteCasting
+        private static float MinDistance = PlayerMover.IsBlocked || CombatBase.IsCurrentlyAvoiding || HasInfiniteCasting
             ? 0
             : TrinityPlugin.CurrentTarget != null &&
               (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNpc ||
@@ -103,7 +103,7 @@ namespace Trinity.Movement
         {
             get
             {
-                if (!Core.Settings.Combat.Misc.AllowOOCMovement && !PlayerMover.IsCompletelyBlocked)
+                if (!Core.Settings.Combat.Misc.AllowOOCMovement && !PlayerMover.IsBlocked)
                     return false;
 
                 var Player = Core.Player;

@@ -230,6 +230,7 @@ namespace Trinity.Framework.Modules
             TieredLootRunlevel = _me.InTieredLootRunLevel;
             IsCasting = _me.LoopingAnimationEndTime > 0;
             CurrentAnimation = _me.CommonData.CurrentAnimation;
+            Summons = new SummonInfo();
             IsInventoryLockedForGreaterRift = ZetaDia.CurrentRift.IsStarted && ZetaDia.CurrentRift.Type == RiftType.Greater && !ZetaDia.CurrentRift.IsCompleted;
 
             //var direction = ZetaDia.Me.Movement.DirectionVector;
