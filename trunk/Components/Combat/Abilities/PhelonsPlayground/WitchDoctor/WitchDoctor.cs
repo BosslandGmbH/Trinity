@@ -5,7 +5,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
     partial class WitchDoctor : CombatBase
     {
         private static bool IszDPS => Legendary.AquilaCuirass.IsEquipped && Legendary.LastBreath.IsEquipped;
-        private static bool IsHelltooth => Sets.HelltoothHarness.IsFullyEquipped && Legendary.SacredHarvester.IsEquipped;
+        private static bool IsHelltooth => Sets.HelltoothHarness.IsFullyEquipped;
 
         #region Variables
 
@@ -44,7 +44,12 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 if (IszDPS)
                     power = ZDps.PowerSelector();
                 if (IsHelltooth)
-                    power = Helltooth.PowerSelector();
+                {
+                    if (Skills.WitchDoctor.Gargantuan.IsActive)
+                        power = Helltooth.ColdGarg.PowerSelector();
+                    else
+                        power = Helltooth.AcidCloud.PowerSelector();
+                }
             }
             return power;
         }
