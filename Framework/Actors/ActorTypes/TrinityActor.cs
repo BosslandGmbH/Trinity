@@ -139,7 +139,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool NpcHasInteractOptions { get; set; }
         public bool IsLockedDoor { get; set; }
         public int MinimapIconOverride { get; set; }
-
+        public int EffectOwnerAnnId { get; set; }
 
         public override void OnCreated()
         {

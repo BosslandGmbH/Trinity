@@ -963,11 +963,12 @@ namespace Trinity.Components.Combat.Abilities
             if (CanCast(SNOPower.Wizard_Electrocute))
                 return new TrinityPower(SNOPower.Wizard_Electrocute, 9f);
 
-            if (CanCast(SNOPower.Wizard_ArcaneTorrent) && Player.PrimaryResource > GetAdjustedCost(16))
-                return new TrinityPower(SNOPower.Wizard_ArcaneTorrent, 9f);
+            //if (CanCast(SNOPower.Wizard_ArcaneTorrent) && Player.PrimaryResource > GetAdjustedCost(16))
+            //    return new TrinityPower(SNOPower.Wizard_ArcaneTorrent, 9f);
 
             if (CanCast(SNOPower.Wizard_Blizzard))
                 return new TrinityPower(SNOPower.Wizard_Blizzard, 9f);
+
             return DefaultPower;
         }
 
