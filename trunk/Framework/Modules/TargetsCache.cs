@@ -322,6 +322,12 @@ namespace Trinity.Framework.Modules
 
         private bool ShouldCacheUnit(TrinityActor cacheObject)
         {
+            if (cacheObject.IsSummonedByPlayer)
+            {               
+                UpdatePlayerSummonCounts(cacheObject);
+                cacheObject.AddCacheInfo("SummonedByPlayer");
+                return false;
+            }
             if (cacheObject.IsSameTeam && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("SameTeam");
@@ -349,15 +355,6 @@ namespace Trinity.Framework.Modules
             if (cacheObject.IsInvulnerable && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("Invulnerable");
-                return false;
-            }
-
-            if (cacheObject.IsSummonedByPlayer)
-            {
-                // todo: This doesnt seem like a good place for this sort of processing to happen.                
-                UpdatePlayerSummonCounts(cacheObject);
-
-                cacheObject.AddCacheInfo("SummonedByPlayer");
                 return false;
             }
 
