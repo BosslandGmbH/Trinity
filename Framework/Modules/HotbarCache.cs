@@ -92,10 +92,8 @@ namespace Trinity.Framework.Modules
                 };
 
                 if (!ActivePowers.Contains(power))
-                {
                     ActivePowers.Add(power);
-                    ActiveSkills.Add(hotbarskill);
-                }
+                ActiveSkills.Add(hotbarskill);
                 _skillBySnoPower.Add(power, hotbarskill);
                 _skillBySlot.Add((HotbarSlot) i, hotbarskill);
 
