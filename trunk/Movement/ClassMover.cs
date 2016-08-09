@@ -91,19 +91,19 @@ namespace Trinity.Movement
         public static bool HasInfiniteCasting = CombatBase.GetHasBuff(SNOPower.Pages_Buff_Infinite_Casting) ||
                                                 Core.Buffs.HasBuff(SNOPower.ItemPassive_Unique_Ring_919_x1);
 
-        private static float MinDistance = PlayerMover.IsBlocked || CombatBase.IsCurrentlyAvoiding || HasInfiniteCasting
+        private static float MinDistance = PlayerMover.IsCompletelyBlocked || CombatBase.IsCurrentlyAvoiding || HasInfiniteCasting
             ? 0
             : TrinityPlugin.CurrentTarget != null &&
               (TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Item || TrinityPlugin.CurrentTarget.IsNpc ||
                TrinityPlugin.CurrentTarget.Type == TrinityObjectType.Shrine)
                 ? 10
-                : 15;
+                : 25;
 
         public static bool OutOfCombatMovementAllowed
         {
             get
             {
-                if (!Core.Settings.Combat.Misc.AllowOOCMovement)
+                if (!Core.Settings.Combat.Misc.AllowOOCMovement && !PlayerMover.IsCompletelyBlocked)
                     return false;
 
                 var Player = Core.Player;
@@ -164,7 +164,7 @@ namespace Trinity.Movement
                         return CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk);
                     case ActorClass.Wizard:
                         return Skills.Wizard.Teleport.CanCast() && (!Legendary.AetherWalker.IsEquipped ||
-                                Legendary.AetherWalker.IsEquipped && player.PrimaryResource > 25) || 
+                                Legendary.AetherWalker.IsEquipped && player.PrimaryResource > 25) ||
                                 Skills.Wizard.ArchonTeleport.CanCast();
                     default:
                         return false;
@@ -212,8 +212,8 @@ namespace Trinity.Movement
                         MathUtil.IntersectsPath(u.Position, u.Radius + 5f, Core.Player.Position,
                             destination));
                 if (Skills.Barbarian.FuriousCharge.CanCast() &&
-                    (HasInfiniteCasting || pierceCount == 1 || 
-                      pierceCount >= Math.Floor(5*Core.Player.CooldownReductionPct)))
+                    (HasInfiniteCasting || pierceCount == 1 ||
+                      pierceCount >= Math.Floor(5 * Core.Player.CooldownReductionPct)))
                 {
                     Skills.Barbarian.FuriousCharge.Cast(destination);
                     LogMovement(SNOPower.Barbarian_FuriousCharge, destination);
@@ -285,7 +285,7 @@ namespace Trinity.Movement
             }
 
             if (destinationDistance < 25f)
-            {                
+            {
                 destination = MathEx.CalculatePointFrom(destination, ZetaDia.Me.Position, 25);
             }
 
@@ -319,7 +319,7 @@ namespace Trinity.Movement
             var vaultCost = Runes.DemonHunter.Acrobatics.IsActive || isfree
                 ? 0
                 : Runes.DemonHunter.Tumble.IsActive && Skills.DemonHunter.Vault.TimeSinceUse < 6000
-                    ? Math.Round(vaultBaseCost*0.5)
+                    ? Math.Round(vaultBaseCost * 0.5)
                     : vaultBaseCost;
 
             if (Core.Player.SecondaryResource < vaultCost) return false;
@@ -332,13 +332,13 @@ namespace Trinity.Movement
             }
 
             if (timeSinceUse > vaultDelay || isfree && timeSinceUse > 250) //&&
-                //// Don't Vault into aboolance/monsters if we're kiting
-                //(CombatBase.KiteDistance <= 0 ||
-                // (CombatBase.KiteDistance > 0 &&
-                //  (!CacheData.TimeBoundAvoidance.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance) ||
-                //   !CacheData.TimeBoundAvoidance.Any(
-                //       a => MathEx.IntersectsPath(a.Position, a.Radius, Core.Player.Position, destination)) ||
-                //   !CacheData.MonsterObstacles.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance)))))
+                                                                           //// Don't Vault into aboolance/monsters if we're kiting
+                                                                           //(CombatBase.KiteDistance <= 0 ||
+                                                                           // (CombatBase.KiteDistance > 0 &&
+                                                                           //  (!CacheData.TimeBoundAvoidance.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance) ||
+                                                                           //   !CacheData.TimeBoundAvoidance.Any(
+                                                                           //       a => MathEx.IntersectsPath(a.Position, a.Radius, Core.Player.Position, destination)) ||
+                                                                           //   !CacheData.MonsterObstacles.Any(a => a.Position.Distance(destination) <= CombatBase.KiteDistance)))))
             {
 
                 //Logger.Log($"Casting vault OOC timeSinceUse={timeSinceUse} vaultDelay={vaultDelay}");
@@ -353,7 +353,7 @@ namespace Trinity.Movement
                 // Prevent trying to vault up walls; spider man he is not.
                 if (Math.Abs(destination.Z - Core.Player.Position.Z) > 5)
                     return false;
-                
+
                 Skills.DemonHunter.Vault.Cast(destination);
                 LogMovement(SNOPower.DemonHunter_Vault, destination);
                 return true;
@@ -374,6 +374,8 @@ namespace Trinity.Movement
         {
             float destinationDistance = PlayerMover.MyPosition.Distance(destination);
 
+            if (destinationDistance < MinDistance)
+                return false;
             // Dashing Strike OOC
             if (CombatBase.CanCast(SNOPower.X1_Monk_DashingStrike))
             {
@@ -499,7 +501,7 @@ namespace Trinity.Movement
             // Teleport for a wizard 
             if (CombatBase.CanCast(SNOPower.Wizard_Teleport, CombatBase.CanCastFlags.NoTimer) &&
                 SpellHistory.TimeSinceUse(SNOPower.Wizard_Teleport) >=
-                new TimeSpan(0, 0, 0, 0, (int) Core.Settings.Combat.Wizard.TeleportDelay) || MinDistance < 10)
+                new TimeSpan(0, 0, 0, 0, (int)Core.Settings.Combat.Wizard.TeleportDelay) || MinDistance < 10)
             {
                 Skills.Wizard.Teleport.Cast(destination);
                 LogMovement(SNOPower.Wizard_Teleport, destination);

@@ -304,7 +304,7 @@ namespace Trinity.Components.Adventurer.Settings
             {
                 if (value == "Max")
                 {
-                    GreaterRiftLevel = 0;
+                    GreaterRiftLevel = HighestUnlockedRiftLevel;
                 }
                 else
                 {
@@ -313,7 +313,7 @@ namespace Trinity.Components.Adventurer.Settings
                     {
                         GreaterRiftLevel = greaterRiftLevel;
                     }
-                    if (value.Contains("Max")) GreaterRiftLevel = GreaterRiftLevel * -1;
+                    if (value.Contains("Max")) GreaterRiftLevel = HighestUnlockedRiftLevel - GreaterRiftLevel * -1;
                 }
             }
         }
@@ -361,13 +361,14 @@ namespace Trinity.Components.Adventurer.Settings
 
                 var result = SafeFrameLock.ExecuteWithinFrameLock(() =>
                 {
+                    Logger.Info("[Settings][ZetaDia.Me.HighestUnlockedRiftLevel] " + ZetaDia.Me.HighestUnlockedRiftLevel);
                     unlockedRiftLevel = ZetaDia.Me.HighestUnlockedRiftLevel;
 
                 }, true);
 
                 if (!result.Success)
                 {
-                    //Logger.Error("[Settings][GreaterRiftLevels] " + result.Exception.Message);
+                    Logger.Error("[Settings][HighestUnlockedRiftLevel] " + result.Exception.Message);
                     unlockedRiftLevel = HighestUnlockedRiftLevel;
                 }
                 else
@@ -467,7 +468,7 @@ namespace Trinity.Components.Adventurer.Settings
         }
 
         public static PluginSettings LoadSettingsFromJsonString(string json)
-        {        
+        {
             if (!string.IsNullOrEmpty(json))
             {
                 var current = JsonSerializer.Deserialize<PluginSettings>(json);
