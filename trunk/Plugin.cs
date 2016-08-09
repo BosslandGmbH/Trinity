@@ -10,6 +10,7 @@ using System.Windows;
 using System.Xml.Linq;
 using Buddy.Overlay;
 using Trinity.Cache;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Configuration;
 using Trinity.Coroutines;
 using Trinity.Coroutines.Town;
@@ -106,6 +107,8 @@ namespace Trinity
                         Logger.LogSpecial(() => $"RiftProgression%={Core.MemoryModel.Globals.RiftProgressionPct} RiftSouls={Core.MemoryModel.Globals.RiftSouls}");
                     }
 
+                    if(!CombatBase.IsSettingsLoaded)
+                        CombatBase.LoadCombatSettings();
 
                     GameUI.SafeClickUIButtons();
 

@@ -61,7 +61,7 @@ namespace Trinity.Components.Adventurer.Game.Events
 
         public static void OnBotStop(IBot bot)
         {
-            Pulsator.OnPulse -= Pulsator_OnPulse;
+            //Pulsator.OnPulse -= Pulsator_OnPulse;
             BountyStatistics.Report();
         }
 

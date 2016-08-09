@@ -24,6 +24,13 @@ namespace Trinity.Components.Adventurer
             Instance = this;
         }
 
+        protected override int UpdateIntervalMs => 50;
+
+        protected override void OnPulse()
+        {
+            PluginEvents.PulseUpdates();
+        }
+
         protected override void OnPluginEnabled()
         {
             BotMain.OnStart += PluginEvents.OnBotStart;

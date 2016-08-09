@@ -26,9 +26,6 @@ namespace Trinity.Components.Combat.Abilities
         static CombatBase()
         {
             GameEvents.OnGameJoined += (sender, args) => LoadCombatSettings();
-
-            LoadCombatSettings();
-
             Pulsator.OnPulse += (sender, args) => Debug();
         }
 
@@ -55,6 +52,7 @@ namespace Trinity.Components.Combat.Abilities
         {
             return Math.Round(amount * (1 - Player.ResourceCostReductionPct), 0, MidpointRounding.AwayFromZero);
         }
+
 
 
         internal static void LoadCombatSettings()
@@ -209,6 +207,8 @@ namespace Trinity.Components.Combat.Abilities
                 SkillsDefaultMeta.Wizard.MirrorImage.ReUseDelay = 5000;
                 SkillsDefaultMeta.Wizard.Archon.ReUseDelay = 100000;
             }
+
+            IsSettingsLoaded = true;
         }
 
         private static int _kiteDistance;
@@ -1434,6 +1434,8 @@ namespace Trinity.Components.Combat.Abilities
 
         public static bool IsDoingGoblinKamakazi { get; set; }
         public static TrinityActor KamakaziGoblin { get; set; }
+        public static bool IsSettingsLoaded { get; set; }
+
         public static Func<bool> IsWaitingForPower = () => false;
 
         public static HashSet<string> HighHitPointTrashMobNames = new HashSet<string>

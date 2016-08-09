@@ -12,13 +12,11 @@ namespace Trinity
         private void SaveConfiguration()
         {
             Settings.Save();
-            CombatBase.LoadCombatSettings();
         }
         // Load Configuration
         private void LoadConfiguration()
         {
             Settings.Load();
-            CombatBase.LoadCombatSettings();
         }
 
         /// <summary>
