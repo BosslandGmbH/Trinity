@@ -380,7 +380,7 @@ namespace Trinity
         {
             3048, // a2dun_Zolt_Sand_Wall // 103: TeamId (-3993) i:1 f:0 Value=1 IsValid=True 
         };
-            
+
         public static HashSet<int> SlowTimeSNO = new HashSet<int>()
         {
             5422, //slowTime_model_01
@@ -984,7 +984,7 @@ namespace Trinity
         {
             // Needed for A5 bounty clicky on death orbs
             //ActorSnoId=334466 AnimSnoId=x1_Death_Orb_Event_Worldstone_idle TargetedCount=2 Type=Unit
-            { 334466, TrinityObjectType.Interactable }, 
+            { 334466, TrinityObjectType.Interactable },
             { 432258, TrinityObjectType.Interactable },
             { 221574, TrinityObjectType.Interactable} //a1dun_Leoric_IronMaiden_Event, Type=Door GizmoType=Door ActorSnoId=221574
             //{ 54882, ObjectType.Door } //a3dun_Keep_Door_Wooden_A, Type=Interactable GizmoType=Door 
@@ -1040,7 +1040,7 @@ namespace Trinity
         /// </summary>
         public static Dictionary<int, TimeSpan> AvoidanceSpawnerDuration { get { return avoidanceSpawnerDuration; } }
         private static readonly Dictionary<int, TimeSpan> avoidanceSpawnerDuration = new Dictionary<int, TimeSpan>
-        {   
+        {
             {221225, TimeSpan.FromSeconds(10)},   // Arcane
             {219702, TimeSpan.FromSeconds(10)},   // Arcane
             {5482, TimeSpan.FromSeconds(15)},   // Poison Tree
@@ -1108,7 +1108,7 @@ namespace Trinity
             {4804, 25f}, // Molten Core
             {224225, 25f}, // Molten Core
             {247987, 25f}, // Molten Core
-            {139741, 15}, 
+            {139741, 15},
 
         };
 
@@ -1814,7 +1814,7 @@ namespace Trinity
         public static HashSet<int> ContainerWhiteListIds { get { return containerWhiteListIds; } }
         private static readonly HashSet<int> containerWhiteListIds = new HashSet<int>
         {
-            
+
             (int)SNOActor.x1_Catacombs_Weapon_Rack_Raise,
             62859,  // TrOut_Fields_Chest
             62865,  // TrOut_Highlands_Chest
@@ -1939,7 +1939,7 @@ namespace Trinity
             107107, 107112, 106731, 107752, 107829, 90321, 107828, 121327, 249320, 81232, 81231, 81239, 81515, 210433, 195414,
             80758, 80757, 80745, 81229, 81230, 82109, 83024, 83025, 82972, 83959, 249190, 251396, 138472, 118260, 200226, 192654, 245828,
             215103, 132951, 217508, 199998, 199997, 114527, 245910, 169123, 123885, 169890, 168878, 169891, 169077, 169904, 169907,
-            169906, 169908, 169905, 169909, 179780, 179778, 179772, 179779, 179776, 122305, 80140, 110959, 103235, 103215, 105763, 103217, 51353,
+            169906, 169908, 169905, 169909, 80140,
             4176, 178664, 173827, 133741, 159144, 181748, 159098, 206569, 200706, 5895, 5896, 5897, 5899, 4686, 85843, 249338,
             251416, 249192, 183892,196899, 196900, 196903, 223333, 220636, 218951, 245838,
             //bone pile
@@ -3210,9 +3210,5 @@ namespace Trinity
                 return false;
         }
         #endregion
-
-
     }
-
-
 }

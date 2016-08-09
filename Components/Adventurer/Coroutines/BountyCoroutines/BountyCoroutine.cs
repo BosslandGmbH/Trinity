@@ -191,6 +191,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             return false;
         }
 
+        public static int currentRandomizedBounty = -1;
         private WaitTimer _completedWaitTimer;
         private async Task<bool> Completed()
         {
@@ -203,6 +204,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                 Stats.EndTime = DateTime.UtcNow;
                 Stats.IsCompleted = true;
                 Logger.Log(LogLevel.Overlay, "[Bounty] Completed {0} ({1}) Time {2:hh\\:mm\\:ss}", QuestData.Name, QuestId, Stats.EndTime - Stats.StartTime);
+                currentRandomizedBounty = -1;
             }
 
             return true;
@@ -210,7 +212,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> Failed()
         {
-
             Logger.Error("[Bounty] Failed {0} ({1})", QuestData.Name, QuestId);
             _isDone = true;
             Stats.EndTime = DateTime.UtcNow;
