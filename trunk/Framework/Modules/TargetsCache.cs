@@ -54,6 +54,7 @@ namespace Trinity.Framework.Modules
                 TrinityPlugin.LastTargetRactorGUID = TrinityPlugin.CurrentTarget.RActorId;
 
             TrinityPlugin.LastTargetAcdId = CombatBase.CurrentTarget != null ? CombatBase.CurrentTarget.AcdId : -1;
+                                    
         }
 
         protected override void OnPulse()
@@ -322,12 +323,6 @@ namespace Trinity.Framework.Modules
 
         private bool ShouldCacheUnit(TrinityActor cacheObject)
         {
-            if (cacheObject.IsSummonedByPlayer)
-            {               
-                UpdatePlayerSummonCounts(cacheObject);
-                cacheObject.AddCacheInfo("SummonedByPlayer");
-                return false;
-            }
             if (cacheObject.IsSameTeam && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("SameTeam");
@@ -355,6 +350,12 @@ namespace Trinity.Framework.Modules
             if (cacheObject.IsInvulnerable && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("Invulnerable");
+                return false;
+            }
+
+            if (cacheObject.IsSummonedByPlayer)
+            {
+                cacheObject.AddCacheInfo("SummonedByPlayer");
                 return false;
             }
 
@@ -550,44 +551,6 @@ namespace Trinity.Framework.Modules
             }
 
             return defaultValue;
-        }
-
-        private static void UpdatePlayerSummonCounts(TrinityActor cacheObject)
-        {
-            if (!cacheObject.IsSummonedByPlayer)
-                return;
-
-            switch (Core.Player.ActorClass)
-            {
-                case ActorClass.Monk:
-                    if (DataDictionary.MysticAllyIds.Contains(cacheObject.ActorSnoId))
-                        Core.Player.Summons.MysticAllyCount++;
-                    break;
-                case ActorClass.DemonHunter:
-                    if (DataDictionary.DemonHunterPetIds.Contains(cacheObject.ActorSnoId))
-                        Core.Player.Summons.DHPetsCount++;
-                    if (DataDictionary.DemonHunterSentryIds.Contains(cacheObject.ActorSnoId) && cacheObject.Distance < 60f)
-                        Core.Player.Summons.DHSentryCount++;
-                    break;
-                case ActorClass.Wizard:
-                    if (DataDictionary.WizardHydraIds.Contains(cacheObject.ActorSnoId) && cacheObject.Distance < 60f)
-                        Core.Player.Summons.HydraCount++;
-                    break;
-                case ActorClass.Witchdoctor:
-                    if (DataDictionary.SpiderPetIds.Contains(cacheObject.ActorSnoId) && cacheObject.Distance < 100f)
-                        Core.Player.Summons.SpiderPetCount++;
-                    if (DataDictionary.GargantuanIds.Contains(cacheObject.ActorSnoId))
-                        Core.Player.Summons.GargantuanCount++;
-                    if (DataDictionary.ZombieDogIds.Contains(cacheObject.ActorSnoId))
-                        Core.Player.Summons.ZombieDogCount++;
-                    if (DataDictionary.FetishArmyIds.Contains(cacheObject.ActorSnoId))
-                        Core.Player.Summons.FetishArmyCount++;
-                    break;
-                case ActorClass.Barbarian:
-                    if (DataDictionary.AncientIds.Contains(cacheObject.ActorSnoId))
-                        Core.Player.Summons.AncientCount++;
-                    break;
-            }
         }
 
         public void Clear()

@@ -77,12 +77,14 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsNpc = attributes.IsNPC;
 
             var summonedByAnnId = attributes.SummonedByAnnId;
+            var effectOwnerAnnId = attributes.EffectOwnerAnnId;
             actor.SummonedByAnnId = summonedByAnnId;
-            actor.IsSummoned = summonedByAnnId > 0;
+            actor.EffectOwnerAnnId = effectOwnerAnnId;
+            actor.IsSummoned = summonedByAnnId > 0 || effectOwnerAnnId > 0;
 
             if (actor.IsSummoned)
             {
-                actor.IsSummonedByPlayer = actor.SummonedByAnnId == Core.Player.MyDynamicID || actor.PetType != PetType.None;
+                actor.IsSummonedByPlayer = summonedByAnnId == Core.Player.MyDynamicID || effectOwnerAnnId == Core.Player.MyDynamicID || actor.PetType != PetType.None;
             }
             else
             {
