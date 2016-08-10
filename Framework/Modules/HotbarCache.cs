@@ -92,10 +92,12 @@ namespace Trinity.Framework.Modules
                 };
 
                 if (!ActivePowers.Contains(power))
+                {
                     ActivePowers.Add(power);
-                ActiveSkills.Add(hotbarskill);
-                _skillBySnoPower.Add(power, hotbarskill);
-                _skillBySlot.Add((HotbarSlot) i, hotbarskill);
+                    ActiveSkills.Add(hotbarskill);
+                    _skillBySnoPower.Add(power, hotbarskill);
+                    _skillBySlot.Add((HotbarSlot)i, hotbarskill);
+                }
 
                 if (!DataDictionary.LastUseAbilityTimeDefaults.ContainsKey(power))
                     DataDictionary.LastUseAbilityTimeDefaults.Add(power, DateTime.MinValue);
