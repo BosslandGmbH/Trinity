@@ -1042,10 +1042,13 @@ namespace Trinity.Components.Combat
                                     {
                                         cacheObject.WeightInfo +=
                                             $"Ignoring {cacheObject.InternalName} - Collect Health Globe Setting.";
-                                    }
+                                        break;
+                                }
+                                //todo XZ - Set this to be a value to ignore globes above certain health.
+                                //ADD MAX RANGE CHECK HERE
 
-                                    //Ignore because we are blocked by objects or mobs.
-                                    if (PlayerMover.IsCompletelyBlocked)
+                                //Ignore because we are blocked by objects or mobs.
+                                if (PlayerMover.IsCompletelyBlocked)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
                                         break;
@@ -1123,12 +1126,12 @@ namespace Trinity.Components.Combat
 
                                         // WD's logic with Gruesome Feast passive
                                         if (Core.Player.ActorClass == ActorClass.Witchdoctor &&
-                                            Core.Player.PrimaryResource <= 1200 &&
+                                            Core.Player.PrimaryResource <= 1200 && cacheObject.Distance < 15 &&
                                             Core.Hotbar.PassiveSkills.Contains(
                                                 SNOPower.Witchdoctor_Passive_GruesomeFeast))
                                         {
                                             cacheObject.WeightInfo +=
-                                                $"Adding {cacheObject.InternalName} - Reapes Wraps.";
+                                                $"Adding {cacheObject.InternalName} - Gruesome Feast PickUp.";
                                             cacheObject.Weight += hiPriorityHealthGlobes
                                                 ? MaxWeight
                                                 : (1d - Core.Player.PrimaryResource) * 5000d +
@@ -1141,7 +1144,7 @@ namespace Trinity.Components.Combat
                                         if (Legendary.ReapersWraps.IsEquipped && Core.Player.PrimaryResource <= 50)
                                         {
                                             cacheObject.WeightInfo +=
-                                                $"Adding {cacheObject.InternalName} - Reapes Wraps.";
+                                                $"Adding {cacheObject.InternalName} - Reapers Wraps.";
                                             cacheObject.Weight += hiPriorityHealthGlobes
                                                 ? MaxWeight
                                                 : (1d - Core.Player.PrimaryResource) * 5000d +
@@ -1149,11 +1152,10 @@ namespace Trinity.Components.Combat
                                                   PackDensityFormula(cacheObject, objects);
                                             break;
                                         }
-                                        //XZ - Set this to be a value to ignore globes above certain health.
-                                        if (ZetaDia.Me.HitpointsCurrentPct > 0.80)
+                                        if (ZetaDia.Me.HitpointsCurrentPct > TrinityPluginSettings.Settings.Combat.Misc.HealthGlobeLevel)
                                         {
                                             cacheObject.WeightInfo +=
-                                                $"Ignoring {cacheObject.InternalName} - Over 80% health.";
+                                                $"Ignoring {cacheObject.InternalName} - Over health globe Threshold.";
                                             break;
                                         }
                                     }
