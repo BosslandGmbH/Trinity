@@ -22,8 +22,10 @@
                             <TextBlock Grid.Column="0" Text="Greater Rift Level" Margin="4 4 0 0"></TextBlock>
                             <ComboBox Grid.Column="1" SelectedValue="{Binding GreaterRiftLevelRaw}" Name="GreaterRiftLevel" ItemsSource="{Binding GreaterRiftLevels}" HorizontalContentAlignment="Right" />
                         </Grid>
-                        <CheckBox Name="GreaterRiftRunNephalem" IsChecked="{Binding GreaterRiftRunNephalem}" Content="Run Nephalem Rifts If No Keys Found" Margin="2"></CheckBox>
-                        <Grid Margin="2" Background="Transparent">
+                    <Border Height="1" Background="DarkSlateGray" />
+                    <CheckBox Name="GreaterRiftRunNephalem" IsChecked="{Binding GreaterRiftRunNephalem}" Content="Run Nephalem Rifts If No Keys Found" Margin="2"></CheckBox>
+                    <Border Height="1" Background="DarkSlateGray" />
+                    <Grid Margin="2" Background="Transparent">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
                                 <ColumnDefinition Width="60"></ColumnDefinition>
@@ -31,22 +33,26 @@
                             <TextBlock Grid.Column="0" Text="Minimum Gem Upgrade Chance" Margin="4 4 0 0"></TextBlock>
                             <ComboBox Grid.Column="1" SelectedValue="{Binding GreaterRiftGemUpgradeChance}" Name="GreaterRiftGemUpgradeChance" ItemsSource="{Binding GemUpgradeChances}"></ComboBox>
                         </Grid>
-                        <CheckBox Name="GreaterRiftPrioritizeEquipedGems" IsChecked="{Binding GreaterRiftPrioritizeEquipedGems}" Content="Prioritize Equipped Gems" Margin="2"></CheckBox>
-                        <UniformGrid Rows="1">
-                            <CheckBox VerticalAlignment="Center" Name="UseEmpoweredRifts" IsChecked="{Binding UseEmpoweredRifts}" Content="Empower Rift" Margin="2" ToolTip="Cost a lot of money to give you a 4th gem upgrade opportunity"></CheckBox>
+                    <Border Height="1" Background="DarkSlateGray" />
+                    <CheckBox Name="GreaterRiftPrioritizeEquipedGems" IsChecked="{Binding GreaterRiftPrioritizeEquipedGems}" Content="Prioritize Equipped Gems" Margin="2"></CheckBox>
+                    <Border Height="1" Background="DarkSlateGray" />
+                    <UniformGrid Rows="1">
+                            <CheckBox VerticalAlignment="Center" Name="UseEmpoweredRifts" IsChecked="{Binding UseEmpoweredRifts}" Content="Empower Rift" Margin="2" ToolTip="Sinks a lot of money to give you a 4th gem upgrade opportunity"></CheckBox>
                             <WrapPanel HorizontalAlignment="Right" ToolTip="Max rift level for empowering rifts" Visibility="{Binding UseEmpoweredRifts, Converter={StaticResource VisibleWhenTrueConverter}}" >
-                                <Label>Max Level:</Label>
+                                <Label>Up To Level:</Label>
                                 <TextBox HorizontalAlignment="Right" Name="EmpowerMaxLevel" Width="50" Text="{Binding EmpoweredRiftLevelLimit, Converter={StaticResource IntToStringConverter}}" />
                             </WrapPanel>
                         </UniformGrid>
+                        <Border Height="1" Background="DarkSlateGray" />
                         <UniformGrid Rows="1">
-                            <CheckBox VerticalAlignment="Center" Name="UseGemAutoLevel" IsChecked="{Binding UseGemAutoLevel}" Content="Autolevel Gems" Margin="2" ToolTip="grift level will be automatically reduced for effective gem levelling"></CheckBox>
+                            <CheckBox VerticalAlignment="Center" Name="UseGemAutoLevel" IsChecked="{Binding UseGemAutoLevel}" Content="Automatically Reduce Rift Level" Margin="2" ToolTip="reduce rift level down to the minimum for 100% upgrade chance."></CheckBox>
                             <WrapPanel HorizontalAlignment="Right" ToolTip="Max level reduction allowed (on top of the -10 required for 100% upgrade chance" Visibility="{Binding UseGemAutoLevel, Converter={StaticResource VisibleWhenTrueConverter}}" >
                                 <Label>Max Reduction:</Label>
                                 <TextBox HorizontalAlignment="Right" Name="MaxLevelReduction" Width="50" Text="{Binding GemAutoLevelReductionLimit, Converter={StaticResource IntToStringConverter}}" />
                             </WrapPanel>
                         </UniformGrid>
-                        <CheckBox Name="GetXPShrine" IsChecked="{Binding NormalRiftForXPShrine}" Content="Run normal rift until XP Shrine found" Margin="2" ToolTip="Whenever bonus XP is not found, bot will run normal rifts to fine an XP shrine"></CheckBox>
+                    <Border Height="1" Background="DarkSlateGray" />
+                    <CheckBox Name="GetXPShrine" IsChecked="{Binding NormalRiftForXPShrine}" Content="Run normal rift until XP Shrine found" Margin="2" ToolTip="Whenever bonus XP is not found, bot will run normal rifts to fine an XP shrine"></CheckBox>
 
                     </StackPanel>
 
