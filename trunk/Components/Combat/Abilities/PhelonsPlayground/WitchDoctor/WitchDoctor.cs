@@ -6,6 +6,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
     {
         private static bool IszDPS => Legendary.AquilaCuirass.IsEquipped && Legendary.LastBreath.IsEquipped;
         private static bool IsHelltooth => Sets.HelltoothHarness.IsFullyEquipped;
+        private static bool IsJadeHArvester => Sets.RaimentOfTheJadeHarvester.IsFullyEquipped;
 
         #region Variables
 
@@ -43,6 +44,8 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
             {
                 if (IszDPS)
                     power = ZDps.PowerSelector();
+                if (IsJadeHArvester)
+                    power = JadeHarvester.Plaguebearer.PowerSelector();
                 if (IsHelltooth)
                 {
                     if (Skills.WitchDoctor.Gargantuan.IsActive)

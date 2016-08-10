@@ -6,9 +6,9 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 {
     partial class WitchDoctor
     {
-        partial class Helltooth
+        public class JadeHarvester
         {
-            public class ColdGarg
+            public class Plaguebearer
             {
                 public static TrinityPower PowerSelector()
                 {
@@ -18,22 +18,16 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     if (ShouldSoulHarvest)
                         return SoulHarvest;
 
-                    var bestDpsPosition =
-                        PhelonUtils.BestDpsPosition(PhelonTargeting.BestAoeUnit(45, true).Position, 45f, true);
                     if (GetHasBuff(SNOPower.Witchdoctor_SpiritWalk))
                     {
                         if (Player.CurrentHealthPct < Settings.Combat.Misc.HealthGlobeLevel &&
                             PhelonUtils.BestWalkLocation(35f, true).Distance(Player.Position) > 5)
-                            return new TrinityPower(SNOPower.Walk, 3f, PhelonUtils.BestWalkLocation(45f, true));
+                            return new TrinityPower(SNOPower.Walk, 7f, PhelonUtils.BestWalkLocation(45f, true));
 
-                        if (bestDpsPosition.Distance2D(Player.Position) > 5f)
-                            return new TrinityPower(SNOPower.Walk, 3f, bestDpsPosition);
+                        if (PhelonUtils.BestDpsPosition(PhelonTargeting.BestAoeUnit(45, true).Position, 45f, true).Distance(Player.Position) > 5)
+                            return new TrinityPower(SNOPower.Walk, 3f,
+                                PhelonUtils.BestDpsPosition(PhelonTargeting.BestAoeUnit(45, true).Position, 45f, true));
                     }
-                    else if (PhelonUtils.UnitsBetweenLocations(Player.Position, bestDpsPosition).Count < 3 && bestDpsPosition.Distance2D(Player.Position) > 5f)
-                        return new TrinityPower(SNOPower.Walk, 3f, bestDpsPosition);
-
-                    if (ShouldPiranhas(out target))
-                        return Piranhas(target);
 
                     if (ShouldWallOfDeath(out target))
                         return WallOfDeath(target);
@@ -41,13 +35,50 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     if (ShouldHaunt(out target))
                         return CastHaunt(target);
 
-                    if (PhelonUtils.BestDpsPosition(Player.Position, 45f, true).Distance(Player.Position) > 7f)
-                        return new TrinityPower(SNOPower.Walk, 3f,
-                            PhelonUtils.BestDpsPosition(Player.Position, 45f, true));
-                    return new TrinityPower(SNOPower.Walk, 3f, Player.Position);
+                    if (ShouldPiranhas(out target))
+                        return Piranhas(target);
+
+                    if (ShouldAcidCloud(out target))
+                        return CastAcidCloud(target);
+
+                    if (ShouldFirebomb(out target))
+                        return CastFirebomb(target);
+
+                    return new TrinityPower(SNOPower.Walk, 3f,
+                        PhelonUtils.BestDpsPosition(PhelonTargeting.BestAoeUnit(45, true).Position, 45f, true));
+
+                    return null;
                 }
 
                 #region Conditions
+
+                private static bool ShouldAcidCloud(out TrinityActor target)
+                {
+                    target = null;
+
+                    if (!Skills.WitchDoctor.AcidCloud.CanCast())
+                        return false;
+
+                    target = PhelonTargeting.BestAoeUnit(35, true);
+
+                    return target != null;
+                }
+
+                private static bool ShouldFirebomb(out TrinityActor target)
+                {
+                    target = null;
+
+                    if (Skills.WitchDoctor.Firebomb.IsActive && !Skills.WitchDoctor.PlagueOfToads.IsActive &&
+                        !Skills.WitchDoctor.CorpseSpiders.IsActive && !Skills.WitchDoctor.PoisonDart.IsActive)
+                        return false;
+
+                    target = PhelonTargeting.BestAoeUnit(45, true);
+                    if (target != null)
+                        return true;
+
+                    target = TargetUtil.GetClosestUnit(45f);
+                    return target != null;
+                }
 
                 private static bool ShouldPiranhas(out TrinityActor target)
                 {
@@ -69,7 +100,8 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 
                     if (!Skills.WitchDoctor.WallOfDeath.CanCast())
                         return false;
-
+                    if (Skills.WitchDoctor.WallOfDeath.TimeSinceUse < 2500)
+                        return false;
                     target = PhelonTargeting.BestAoeUnit(35, true);
 
                     return target != null;
@@ -90,7 +122,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     if (SpellHistory.LastPowerUsed == Skills.WitchDoctor.Haunt.SNOPower)
                         return false;
 
-                    target = PhelonUtils.BestAuraUnit(SNOPower.Witchdoctor_Haunt, 35, true) ?? CurrentTarget;
+                    target = PhelonUtils.BestAuraUnit(SNOPower.Witchdoctor_Haunt, 45, true);
 
                     return target != null;
                 }
@@ -98,10 +130,6 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 #endregion
 
                 #region Expressions
-
-                private static TrinityPower Walk => PhelonUtils.GetBestClusterUnit(18f, 30f) != null
-                    ? new TrinityPower(SNOPower.Walk, 0f, PhelonUtils.GetBestClusterUnit(18f, 30f).Position)
-                    : new TrinityPower(SNOPower.Walk, 5f, CurrentTarget.Position);
 
                 private static TrinityPower SoulHarvest => new TrinityPower(SNOPower.Witchdoctor_SoulHarvest);
 
@@ -113,6 +141,11 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 
                 private static TrinityPower CastHaunt(TrinityActor target)
                     => new TrinityPower(SNOPower.Witchdoctor_Haunt, 35f, target.AcdId);
+                private static TrinityPower CastAcidCloud(TrinityActor target)
+                    => new TrinityPower(Skills.WitchDoctor.AcidCloud.SNOPower, 45f, target.AcdId);
+
+                private static TrinityPower CastFirebomb(TrinityActor target)
+                    => new TrinityPower(Skills.WitchDoctor.Firebomb.SNOPower, 45f, target.AcdId);
 
                 #endregion
 

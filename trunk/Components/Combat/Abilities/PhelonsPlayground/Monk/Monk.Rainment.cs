@@ -71,20 +71,20 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                     }
                 }
                 //Ports to best DPS location
-                if (Core.Avoidance.InAvoidance(Player.Position) && Skills.Monk.DashingStrike.TimeSinceUse > 2000)
-                {
-                    var distance = Skills.Monk.CycloneStrike.CanCast() ? 20f : 12f;
-                    bestDpsPos = TargetUtil.GetLoiterPosition(target, distance);
-                    return true;
-                }
+                //if (Core.Avoidance.InAvoidance(Player.Position) && Skills.Monk.DashingStrike.TimeSinceUse > 2000)
+                //{
+                //    var distance = Skills.Monk.CycloneStrike.CanCast() ? 20f : 12f;
+                //    bestDpsPos = TargetUtil.GetLoiterPosition(target, distance);
+                //    return true;
+                //}
 
                 return bestDpsPos != Vector3.Zero && bestDpsPos.Distance(Player.Position) < 50 &&
-                       (bestDpsPos.Distance(Player.Position) > 10 || Skills.Monk.DashingStrike.TimeSinceUse > 4000);
+                       (bestDpsPos.Distance(Player.Position) > 10 && (Player.PrimaryResourcePct > 0.99 || Skills.Monk.DashingStrike.TimeSinceUse > 3750));
             }
 
             private static TrinityPower CastDashingStrike(Vector3 location)
             {
-                return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 65, location);
+                return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 50, location);
             }
 
             private static bool ShouldBreathOfHeaven
@@ -134,7 +134,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             private static bool CastMantra(out TrinityPower buffPower)
             {
                 buffPower = null;
-                if (Player.PrimaryResource >= cycloneStrikeSpirit)
+                if (Player.PrimaryResource >= 0.99)
                 {
                     if (Skills.Monk.MantraOfConviction.CanCast() &&
                         TimeSincePowerUse(SNOPower.X1_Monk_MantraOfConviction_v2) > 2750)
