@@ -22,6 +22,11 @@ namespace Trinity.Framework.Avoidance.Handlers
     [DataContract(Namespace = "")]
     public class AnimationConeAvoidanceHandler : NotifyBase, IAvoidanceHandler
     {
+        public AnimationConeAvoidanceHandler()
+        {
+            base.LoadDefaults();
+        }
+
         private int _healthThresholdPct;
         private float _distanceMultiplier;
         private float _arcMultiplier;

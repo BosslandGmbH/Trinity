@@ -22,6 +22,11 @@ namespace Trinity.Framework.Avoidance.Handlers
     [DataContract(Namespace = "")]
     public class AnimationBeamAvoidanceHandler : NotifyBase, IAvoidanceHandler
     {
+        public AnimationBeamAvoidanceHandler()
+        {
+            base.LoadDefaults();
+        }
+
         private int _healthThresholdPct;
         private float _distanceMultiplier;
 

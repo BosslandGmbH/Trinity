@@ -19,7 +19,12 @@ namespace Trinity.Framework.Avoidance.Handlers
 {
     [DataContract(Namespace = "")]
     internal class FurnaceAvoidanceHandler : NotifyBase, IAvoidanceHandler
-    { 
+    {
+        public FurnaceAvoidanceHandler()
+        {
+            base.LoadDefaults();
+        }
+
         private int _healthThresholdPct;
 
         public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
