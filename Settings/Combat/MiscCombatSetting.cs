@@ -81,6 +81,7 @@ namespace Trinity.Config.Combat
         private bool _waitForResInBossEncounters;
         private bool _ignoreHighHitPointElites;
         private int _timeToBlockMs;
+        private float _healthGlobeSearchDistance;
 
         #endregion Events
 
@@ -106,7 +107,7 @@ namespace Trinity.Config.Combat
                 if (_PotionLevel != value)
                 {
                     _PotionLevel = value;
-                    OnPropertyChanged("PotionLevel");
+                    OnPropertyChanged(nameof(PotionLevel));
                 }
             }
         }
@@ -124,7 +125,25 @@ namespace Trinity.Config.Combat
                 if (_HealthGlobeLevel != value)
                 {
                     _HealthGlobeLevel = value;
-                    OnPropertyChanged("HealthGlobeLevel");
+                    OnPropertyChanged(nameof(HealthGlobeLevel));
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(35f)]
+        public float HealthGlobeSearchDistance
+        {
+            get
+            {
+                return _healthGlobeSearchDistance;
+            }
+            set
+            {
+                if (_healthGlobeSearchDistance != value)
+                {
+                    _healthGlobeSearchDistance = value;
+                    OnPropertyChanged(nameof(HealthGlobeSearchDistance));
                 }
             }
         }
@@ -142,7 +161,7 @@ namespace Trinity.Config.Combat
                 if (_HealthGlobeLevelResource != value)
                 {
                     _HealthGlobeLevelResource = value;
-                    OnPropertyChanged("HealthGlobeLevelResource");
+                    OnPropertyChanged(nameof(HealthGlobeLevelResource));
                 }
             }
         }
@@ -178,7 +197,7 @@ namespace Trinity.Config.Combat
                 if (_ignoreGreaterProgressionGlobes != value)
                 {
                     _ignoreGreaterProgressionGlobes = value;
-                    OnPropertyChanged("IgnoreGreaterProgressionGlobes");
+                    OnPropertyChanged(nameof(IgnoreGreaterProgressionGlobes));
                 }
             }
         }
@@ -196,7 +215,7 @@ namespace Trinity.Config.Combat
                 if (_attackWhenBlocked != value)
                 {
                     _attackWhenBlocked = value;
-                    OnPropertyChanged("AttackWhenBlocked");
+                    OnPropertyChanged(nameof(AttackWhenBlocked));
                 }
             }
         }
@@ -214,7 +233,7 @@ namespace Trinity.Config.Combat
                 if (_ignoreMinions != value)
                 {
                     _ignoreMinions = value;
-                    OnPropertyChanged("IgnoreMinions");
+                    OnPropertyChanged(nameof(IgnoreMinions));
                 }
             }
         }
@@ -232,7 +251,7 @@ namespace Trinity.Config.Combat
                 if (_forceKillClusterElites != value)
                 {
                     _forceKillClusterElites = value;
-                    OnPropertyChanged("ForceKillClusterElites");
+                    OnPropertyChanged(nameof(ForceKillClusterElites));
                 }
             }
         }
@@ -250,7 +269,7 @@ namespace Trinity.Config.Combat
                 if (_tryToSnapshot != value)
                 {
                     _tryToSnapshot = value;
-                    OnPropertyChanged("TryToSnapshot");
+                    OnPropertyChanged(nameof(TryToSnapshot));
                 }
             }
         }
@@ -268,7 +287,7 @@ namespace Trinity.Config.Combat
                 if (_snapshotAttackSpeed != value)
                 {
                     _snapshotAttackSpeed = value;
-                    OnPropertyChanged("SnapshotAttackSpeed");
+                    OnPropertyChanged(nameof(SnapshotAttackSpeed));
                 }
             }
         }
@@ -304,7 +323,7 @@ namespace Trinity.Config.Combat
                 if (_riftValueAlwaysKillUnitsAbove != value)
                 {
                     _riftValueAlwaysKillUnitsAbove = value;
-                    OnPropertyChanged("RiftValueAlwaysKillUnitsAbove");
+                    OnPropertyChanged(nameof(RiftValueAlwaysKillUnitsAbove));
                 }
             }
         }
@@ -340,7 +359,7 @@ namespace Trinity.Config.Combat
                 if (_riftValueAlwaysKillClusterValue != value)
                 {
                     _riftValueAlwaysKillClusterValue = value;
-                    OnPropertyChanged("RiftValueAlwaysKillClusterValue");
+                    OnPropertyChanged(nameof(RiftValueAlwaysKillClusterValue));
                 }
             }
         }
@@ -358,7 +377,7 @@ namespace Trinity.Config.Combat
                 if (Math.Abs(_riftProgressionAlwaysKillPct - value) > float.Epsilon)
                 {
                     _riftProgressionAlwaysKillPct = value;
-                    OnPropertyChanged("RiftProgressionAlwaysKillPct");
+                    OnPropertyChanged(nameof(RiftProgressionAlwaysKillPct));
                 }
             }
         }
@@ -376,7 +395,7 @@ namespace Trinity.Config.Combat
                 if (_trashPackSize != value)
                 {
                     _trashPackSize = value;
-                    OnPropertyChanged("TrashPackSize");
+                    OnPropertyChanged(nameof(TrashPackSize));
                 }
             }
         }
@@ -394,7 +413,7 @@ namespace Trinity.Config.Combat
                 if (_trashPackSizeMin != value)
                 {
                     _trashPackSizeMin = value;
-                    OnPropertyChanged("TrashPackSizeMin");
+                    OnPropertyChanged(nameof(TrashPackSizeMin));
                 }
             }
         }
@@ -412,7 +431,7 @@ namespace Trinity.Config.Combat
                 if (_TrashPackClusterRadius != value)
                 {
                     _TrashPackClusterRadius = value;
-                    OnPropertyChanged("TrashPackClusterRadius");
+                    OnPropertyChanged(nameof(TrashPackClusterRadius));
                 }
             }
         }
@@ -430,7 +449,7 @@ namespace Trinity.Config.Combat
                 if (_UseNavMeshTargeting != value)
                 {
                     _UseNavMeshTargeting = value;
-                    OnPropertyChanged("UseNavMeshTargeting");
+                    OnPropertyChanged(nameof(UseNavMeshTargeting));
                 }
             }
         }
@@ -448,7 +467,7 @@ namespace Trinity.Config.Combat
                 if (_UseConventionElementOnly != value)
                 {
                     _UseConventionElementOnly = value;
-                    OnPropertyChanged("UseConventionElementOnly");
+                    OnPropertyChanged(nameof(UseConventionElementOnly));
                 }
             }
         }
@@ -466,7 +485,7 @@ namespace Trinity.Config.Combat
                 if (_IgnoreCoEunlessGRift != value)
                 {
                     _IgnoreCoEunlessGRift = value;
-                    OnPropertyChanged("IgnoreCoEunlessGRift");
+                    OnPropertyChanged(nameof(IgnoreCoEunlessGRift));
                 }
             }
         }
@@ -484,7 +503,7 @@ namespace Trinity.Config.Combat
                 if (_HiPriorityHG != value)
                 {
                     _HiPriorityHG = value;
-                    OnPropertyChanged("HiPriorityHG");
+                    OnPropertyChanged(nameof(HiPriorityHG));
                 }
             }
         }
@@ -502,7 +521,7 @@ namespace Trinity.Config.Combat
                 if (_GoblinPriority != value)
                 {
                     _GoblinPriority = value;
-                    OnPropertyChanged("GoblinPriority");
+                    OnPropertyChanged(nameof(GoblinPriority));
                 }
             }
         }
@@ -520,7 +539,7 @@ namespace Trinity.Config.Combat
                 if (_NonEliteRange != value)
                 {
                     _NonEliteRange = value;
-                    OnPropertyChanged("NonEliteRange");
+                    OnPropertyChanged(nameof(NonEliteRange));
                 }
             }
         }
@@ -538,7 +557,7 @@ namespace Trinity.Config.Combat
                 if (_EliteRange != value)
                 {
                     _EliteRange = value;
-                    OnPropertyChanged("EliteRange");
+                    OnPropertyChanged(nameof(EliteRange));
                 }
             }
         }
@@ -556,7 +575,7 @@ namespace Trinity.Config.Combat
                 if (_ExtendedTrashKill != value)
                 {
                     _ExtendedTrashKill = value;
-                    OnPropertyChanged("ExtendedTrashKill");
+                    OnPropertyChanged(nameof(ExtendedTrashKill));
                 }
             }
         }
@@ -574,7 +593,7 @@ namespace Trinity.Config.Combat
                 if (_AvoidAOE != value)
                 {
                     _AvoidAOE = value;
-                    OnPropertyChanged("AvoidAOE");
+                    OnPropertyChanged(nameof(AvoidAOE));
                 }
             }
         }
@@ -592,7 +611,7 @@ namespace Trinity.Config.Combat
                 if (_KillMonstersInAoE != value)
                 {
                     _KillMonstersInAoE = value;
-                    OnPropertyChanged("KillMonstersInAoE");
+                    OnPropertyChanged(nameof(KillMonstersInAoE));
                 }
             }
         }
@@ -610,7 +629,7 @@ namespace Trinity.Config.Combat
                 if (_CollectHealthGlobe != value)
                 {
                     _CollectHealthGlobe = value;
-                    OnPropertyChanged("CollectHealthGlobe");
+                    OnPropertyChanged(nameof(CollectHealthGlobe));
                 }
             }
         }
@@ -628,7 +647,7 @@ namespace Trinity.Config.Combat
                 if (_AllowOOCMovement != value)
                 {
                     _AllowOOCMovement = value;
-                    OnPropertyChanged("AllowOOCMovement");
+                    OnPropertyChanged(nameof(AllowOOCMovement));
                 }
             }
         }
@@ -646,7 +665,7 @@ namespace Trinity.Config.Combat
                 if (_AllowBacktracking != value)
                 {
                     _AllowBacktracking = value;
-                    OnPropertyChanged("AllowBacktracking");
+                    OnPropertyChanged(nameof(AllowBacktracking));
                 }
             }
         }
@@ -664,7 +683,7 @@ namespace Trinity.Config.Combat
                 if (_DelayAfterKill != value)
                 {
                     _DelayAfterKill = value;
-                    OnPropertyChanged("DelayAfterKill");
+                    OnPropertyChanged(nameof(DelayAfterKill));
                 }
             }
         }
@@ -690,8 +709,8 @@ namespace Trinity.Config.Combat
                 if (_IgnoreElites != value)
                 {
                     _IgnoreElites = value;
-                    OnPropertyChanged("IgnoreElites");
-                    OnPropertyChanged("ProfileTagOverride");
+                    OnPropertyChanged(nameof(IgnoreElites));
+                    OnPropertyChanged(nameof(ProfileTagOverride));
                 }
             }
         }
@@ -718,8 +737,8 @@ namespace Trinity.Config.Combat
                 if (_ProfileTagOverride != value)
                 {
                     _ProfileTagOverride = value;
-                    OnPropertyChanged("IgnoreElites");
-                    OnPropertyChanged("ProfileTagOverride");
+                    OnPropertyChanged(nameof(IgnoreElites));
+                    OnPropertyChanged(nameof(ProfileTagOverride));
                 }
             }
         }
@@ -736,7 +755,7 @@ namespace Trinity.Config.Combat
                 if (_AvoidDeath != value)
                 {
                     _AvoidDeath = value;
-                    OnPropertyChanged("AvoidDeath");
+                    OnPropertyChanged(nameof(AvoidDeath));
                 }
             }
         }
@@ -753,7 +772,7 @@ namespace Trinity.Config.Combat
                 if (_SkipElitesOn5NV != value)
                 {
                     _SkipElitesOn5NV = value;
-                    OnPropertyChanged("SkipElitesOn5NV");
+                    OnPropertyChanged(nameof(SkipElitesOn5NV));
                 }
             }
         }
@@ -771,7 +790,7 @@ namespace Trinity.Config.Combat
                 if (_AvoidanceNavigation != value)
                 {
                     _AvoidanceNavigation = value;
-                    OnPropertyChanged("AvoidanceNavigation");
+                    OnPropertyChanged(nameof(AvoidanceNavigation));
                 }
             }
         }
@@ -788,7 +807,7 @@ namespace Trinity.Config.Combat
                 if (_ForceKillTrashBelowHealth != value)
                 {
                     _ForceKillTrashBelowHealth = value;
-                    OnPropertyChanged("ForceKillTrashBelowHealth");
+                    OnPropertyChanged(nameof(ForceKillTrashBelowHealth));
                 }
             }
         }
@@ -805,7 +824,7 @@ namespace Trinity.Config.Combat
                 if (_IgnoreTrashBelowHealthDoT != value)
                 {
                     _IgnoreTrashBelowHealthDoT = value;
-                    OnPropertyChanged("IgnoreTrashBelowHealthDoT");
+                    OnPropertyChanged(nameof(IgnoreTrashBelowHealthDoT));
                 }
             }
         }
@@ -822,7 +841,7 @@ namespace Trinity.Config.Combat
                 if (_UseExperimentalSavageBeastAvoidance != value)
                 {
                     _UseExperimentalSavageBeastAvoidance = value;
-                    OnPropertyChanged("UseExperimentalSavageBeastAvoidance");
+                    OnPropertyChanged(nameof(UseExperimentalSavageBeastAvoidance));
                 }
             }
         }
@@ -839,7 +858,7 @@ namespace Trinity.Config.Combat
                 if (_UseExperimentalFireChainsAvoidance != value)
                 {
                     _UseExperimentalFireChainsAvoidance = value;
-                    OnPropertyChanged("UseExperimentalFireChainsAvoidance");
+                    OnPropertyChanged(nameof(UseExperimentalFireChainsAvoidance));
                 }
             }
         }
@@ -857,7 +876,7 @@ namespace Trinity.Config.Combat
                 if (_ForceKillElitesHealth != value)
                 {
                     _ForceKillElitesHealth = value;
-                    OnPropertyChanged("ForceKillElitesHealth");
+                    OnPropertyChanged(nameof(ForceKillElitesHealth));
                 }
             }
         }
@@ -875,7 +894,7 @@ namespace Trinity.Config.Combat
                 if (_ForceKillSummoners != value)
                 {
                     _ForceKillSummoners = value;
-                    OnPropertyChanged("ForceKillSummoners");
+                    OnPropertyChanged(nameof(ForceKillSummoners));
                 }
             }
         }
@@ -893,7 +912,7 @@ namespace Trinity.Config.Combat
                 if (_AvoidAoEOutOfCombat != value)
                 {
                     _AvoidAoEOutOfCombat = value;
-                    OnPropertyChanged("AvoidAoEOutOfCombat");
+                    OnPropertyChanged(nameof(AvoidAoEOutOfCombat));
                 }
             }
         }
@@ -911,7 +930,7 @@ namespace Trinity.Config.Combat
                 if (_FleeInGhostMode != value)
                 {
                     _FleeInGhostMode = value;
-                    OnPropertyChanged("FleeInGhostMode");
+                    OnPropertyChanged(nameof(FleeInGhostMode));
                 }
             }
         }
@@ -929,7 +948,7 @@ namespace Trinity.Config.Combat
                 if (_ignoreMonstersWhileReflectingDamage != value)
                 {
                     _ignoreMonstersWhileReflectingDamage = value;
-                    OnPropertyChanged("IgnoreMonstersWhileReflectingDamage");
+                    OnPropertyChanged(nameof(IgnoreMonstersWhileReflectingDamage));
                 }
             }
         }
@@ -947,7 +966,7 @@ namespace Trinity.Config.Combat
                 if (_ignoreHighHitPointTrash != value)
                 {
                     _ignoreHighHitPointTrash = value;
-                    OnPropertyChanged("IgnoreHighHitPointTrash");
+                    OnPropertyChanged(nameof(IgnoreHighHitPointTrash));
                 }
             }
         }
@@ -965,7 +984,7 @@ namespace Trinity.Config.Combat
                 if (_ignoreHighHitPointElites != value)
                 {
                     _ignoreHighHitPointElites = value;
-                    OnPropertyChanged("IgnoreHighHitPointElites");
+                    OnPropertyChanged(nameof(IgnoreHighHitPointElites));
                 }
             }
         }
@@ -983,7 +1002,7 @@ namespace Trinity.Config.Combat
                 if (_ignoreRares != value)
                 {
                     _ignoreRares = value;
-                    OnPropertyChanged("IgnoreRares");
+                    OnPropertyChanged(nameof(IgnoreRares));
                 }
             }
         }
@@ -1001,7 +1020,7 @@ namespace Trinity.Config.Combat
                 if (_ignoreChampions != value)
                 {
                     _ignoreChampions = value;
-                    OnPropertyChanged("IgnoreChampions");
+                    OnPropertyChanged(nameof(IgnoreChampions));
                 }
             }
         }
@@ -1028,7 +1047,7 @@ namespace Trinity.Config.Combat
                 if (_followerBossFightDialogMode != value)
                 {
                     _followerBossFightDialogMode = value;
-                    OnPropertyChanged("FollowerBossFightDialogMode");
+                    OnPropertyChanged(nameof(FollowerBossFightDialogMode));
                 }
             }
         }
@@ -1046,7 +1065,7 @@ namespace Trinity.Config.Combat
                 if (_ignorePowerGlobes != value)
                 {
                     _ignorePowerGlobes = value;
-                    OnPropertyChanged("IgnorePowerGlobes");
+                    OnPropertyChanged(nameof(IgnorePowerGlobes));
                 }
             }
         }
@@ -1158,6 +1177,7 @@ namespace Trinity.Config.Combat
             HiPriorityHG = false;
             SnapshotAttackSpeed = 4;
             TryToSnapshot = true;
+            HealthGlobeSearchDistance = 35f;
 
             ForceKillClusterElites = false;
             RiftValueAlwaysKillClusterValue = 10;

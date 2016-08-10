@@ -17,6 +17,11 @@ namespace Trinity.Framework.Avoidance.Handlers
     [DataContract(Namespace = "")]
     public class FireChainsAvoidanceHandler : NotifyBase, IAvoidanceHandler
     {
+        public FireChainsAvoidanceHandler()
+        {
+            base.LoadDefaults();
+        }
+
         private int _healthThresholdPct;
         private float _distanceMultiplier;
 

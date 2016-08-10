@@ -1040,15 +1040,18 @@ namespace Trinity.Components.Combat
                                 {
                                     if (!Core.Settings.Combat.Misc.CollectHealthGlobe)
                                     {
-                                        cacheObject.WeightInfo +=
-                                            $"Ignoring {cacheObject.InternalName} - Collect Health Globe Setting.";
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Collect Health Globe Setting.";
                                         break;
-                                }
-                                //todo XZ - Set this to be a value to ignore globes above certain health.
-                                //ADD MAX RANGE CHECK HERE
+                                    }
 
-                                //Ignore because we are blocked by objects or mobs.
-                                if (PlayerMover.IsCompletelyBlocked)
+                                    if (cacheObject.Distance > Core.Settings.Combat.Misc.HealthGlobeSearchDistance)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Health Globe Search Distance.";
+                                        break;
+                                    }
+
+                                    //Ignore because we are blocked by objects or mobs.
+                                    if (PlayerMover.IsCompletelyBlocked)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
                                         break;
@@ -1126,7 +1129,7 @@ namespace Trinity.Components.Combat
 
                                         // WD's logic with Gruesome Feast passive
                                         if (Core.Player.ActorClass == ActorClass.Witchdoctor &&
-                                            Core.Player.PrimaryResource <= 1200 && cacheObject.Distance < 15 &&
+                                            Core.Player.PrimaryResource <= 1200 &&
                                             Core.Hotbar.PassiveSkills.Contains(
                                                 SNOPower.Witchdoctor_Passive_GruesomeFeast))
                                         {

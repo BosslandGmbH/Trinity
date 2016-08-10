@@ -20,6 +20,11 @@ namespace Trinity.Framework.Avoidance.Handlers
     [DataContract(Namespace = "")]
     public class CircularAvoidanceHandler : NotifyBase, IAvoidanceHandler
     {
+        public CircularAvoidanceHandler()
+        {
+            base.LoadDefaults();
+        }
+
         private int _healthThresholdPct;
         private float _distanceMultiplier;
 

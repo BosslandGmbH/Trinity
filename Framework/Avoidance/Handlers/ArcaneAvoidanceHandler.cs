@@ -19,7 +19,12 @@ namespace Trinity.Framework.Avoidance.Handlers
 {
     [DataContract(Namespace = "")]
     internal class ArcaneAvoidanceHandler : NotifyBase, IAvoidanceHandler
-    { 
+    {
+        public ArcaneAvoidanceHandler()
+        {
+            base.LoadDefaults();
+        }
+
         private static Dictionary<int,Rotator> _rotators = new Dictionary<int, Rotator>();
 
         private int _healthThresholdPct;

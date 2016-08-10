@@ -19,7 +19,12 @@ namespace Trinity.Framework.Avoidance.Handlers
 {
     [DataContract(Namespace = "")]
     internal class PoisonEnchantedAvoidanceHandler : NotifyBase, IAvoidanceHandler
-    { 
+    {
+        public PoisonEnchantedAvoidanceHandler()
+        {
+            base.LoadDefaults();
+        }
+
         private int _healthThresholdPct;
 
         public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)

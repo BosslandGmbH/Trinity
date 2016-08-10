@@ -121,7 +121,6 @@ namespace Trinity.Config
         {
             TrinitySetting.Reset(this);
             Avoidances = new FullyObservableCollection<AvoidanceDataSettingViewModel>();
-            LoadSettingsFromDataFactory();
         }
 
         [IgnoreDataMember]
@@ -325,12 +324,12 @@ namespace Trinity.Config
                     }
                     else
                     {
-                        if(reset)
+                        if (reset)
                             (def.Handler as NotifyBase)?.LoadDefaults();
 
                         var newAvoidance = new AvoidanceDataSettingViewModel(def);
-                        
-                        if(data.Any()) // Xml Settings have been loaded
+
+                        if (!data.Any()) // Xml Settings have been loaded
                             newAvoidance.Handler.LoadDefaults();
 
                         if (def.IsEnabledByDefault)

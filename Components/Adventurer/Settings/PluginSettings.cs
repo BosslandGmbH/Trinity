@@ -278,7 +278,7 @@ namespace Trinity.Components.Adventurer.Settings
         public string GreaterRiftLevelRaw
         {
             get
-            {                
+            {
                 // Convert special values into special strings for the dropdown.
                 switch (GreaterRiftLevel)
                 {
@@ -310,10 +310,16 @@ namespace Trinity.Components.Adventurer.Settings
                 else
                 {
                     int greaterRiftLevel;
-                    if (int.TryParse(value.Replace("Max - ", string.Empty), out greaterRiftLevel))
+                    if (value.Contains("Max - "))
+                    {                      
+                        if (int.TryParse(value.Replace("Max - ", string.Empty), out greaterRiftLevel))
+                        {
+                            GreaterRiftLevel = -greaterRiftLevel;
+                            return;
+                        }
+                    }   
+                    if (int.TryParse(value, out greaterRiftLevel))
                     {
-                        // string from dropdown converted into a number can be a valid rift level (75) or a negative (-8)
-                        // if riftcoroutine encounters -x level it uses the current highest unlocked reduced by x when rift is open.
                         GreaterRiftLevel = greaterRiftLevel;
                     }
                 }
@@ -448,7 +454,7 @@ namespace Trinity.Components.Adventurer.Settings
         }
 
         public static PluginSettings LoadSettingsFromJsonString(string json)
-        {        
+        {
             if (!string.IsNullOrEmpty(json))
             {
                 var current = JsonSerializer.Deserialize<PluginSettings>(json);
