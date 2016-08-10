@@ -938,12 +938,6 @@ namespace Trinity.Components.Combat
 
                             case TrinityObjectType.PowerGlobe:
                                 {
-                                    if (!cacheObject.IsWalkable && !cacheObject.HasBeenWalkable)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring unreachable.";
-                                        break;
-                                    }
-
                                     if (Core.Settings.Combat.Misc.IgnorePowerGlobes)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Power Globe Setting.";

@@ -20,16 +20,18 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 
                     var bestDpsPosition =
                         PhelonUtils.BestDpsPosition(PhelonTargeting.BestAoeUnit(45, true).Position, 45f, true);
+
                     if (GetHasBuff(SNOPower.Witchdoctor_SpiritWalk))
                     {
                         if (Player.CurrentHealthPct < Settings.Combat.Misc.HealthGlobeLevel &&
                             PhelonUtils.BestWalkLocation(35f, true).Distance(Player.Position) > 5)
                             return new TrinityPower(SNOPower.Walk, 3f, PhelonUtils.BestWalkLocation(45f, true));
 
-                        if (bestDpsPosition.Distance2D(Player.Position) > 5f)
+                        if (bestDpsPosition.Distance2D(Player.Position) > 6f)
                             return new TrinityPower(SNOPower.Walk, 3f, bestDpsPosition);
                     }
-                    else if (PhelonUtils.UnitsBetweenLocations(Player.Position, bestDpsPosition).Count < 3 && bestDpsPosition.Distance2D(Player.Position) > 5f)
+
+                    if (PhelonUtils.UnitsBetweenLocations(Player.Position, bestDpsPosition).Count < 3 && bestDpsPosition.Distance2D(Player.Position) > 6f)
                         return new TrinityPower(SNOPower.Walk, 3f, bestDpsPosition);
 
                     if (ShouldPiranhas(out target))

@@ -54,12 +54,14 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             private static bool ShouldDashingStrike(out Vector3 bestDpsPos)
             {
                 var target = PhelonTargeting.BestTarget(45f, true);
+
                 bestDpsPos = PhelonUtils.BestDpsPosition(target.Position);
                 var charges = Skills.Monk.DashingStrike.Charges;
 
                 if (!Skills.Monk.DashingStrike.CanCast() ||
                     CombatManager.TargetHandler.ShouldWaitForLootDrop || charges < 1)
                     return false;
+
                 // Ports to Closest HealthGlobe
                 if (Core.Player.CurrentHealthPct < Settings.Combat.Monk.HealthGlobeLevel)
                 {
@@ -70,6 +72,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                         return true;
                     }
                 }
+
                 //Ports to best DPS location
                 //if (Core.Avoidance.InAvoidance(Player.Position) && Skills.Monk.DashingStrike.TimeSinceUse > 2000)
                 //{
@@ -78,8 +81,20 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 //    return true;
                 //}
 
-                return bestDpsPos != Vector3.Zero && bestDpsPos.Distance(Player.Position) < 50 &&
-                       (bestDpsPos.Distance(Player.Position) > 10 && (Player.PrimaryResourcePct > 0.99 || Skills.Monk.DashingStrike.TimeSinceUse > 3750));
+                if (Skills.Monk.DashingStrike.TimeSinceUse < 3500)
+                    return false;
+
+                if (bestDpsPos != Vector3.Zero && bestDpsPos.Distance(Player.Position) < 50)
+                {
+                    return true;
+                }
+
+                target = TargetUtil.GetClosestUnit(50f);
+
+                if (target == null) return false;
+
+                bestDpsPos = target.Position;
+                return true;
             }
 
             private static TrinityPower CastDashingStrike(Vector3 location)
