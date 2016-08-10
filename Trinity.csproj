@@ -255,8 +255,10 @@
     <Compile Include="Components\Adventurer\Util\PluginTime.cs" />
     <Compile Include="Components\Adventurer\Util\Randomizer.cs" />
     <Compile Include="Components\Adventurer\Util\SafeFrameLock.cs" />
-    <Compile Include="Components\Combat\Abilities\PhelonsPlayground\Monk\Rainment.cs" />
-    <Compile Include="Components\Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.Helltooth.cs" />
+    <Compile Include="Components\Combat\Abilities\PhelonsPlayground\Monk\Monk.Rainment.cs" />
+    <Compile Include="Components\Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.Helltooth.AcidCloud.cs" />
+    <Compile Include="Components\Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.Helltooth.ColdGarg.cs" />
+    <Compile Include="Components\Combat\Abilities\PhelonsPlayground\WitchDoctor\WitchDoctor.JadeHarvester.PlagueBearer.cs" />
     <Compile Include="Components\Combat\CombatManager.cs" />
     <Compile Include="Components\Combat\CombatMode.cs" />
     <Compile Include="Components\Combat\TargettingInfo.cs" />
