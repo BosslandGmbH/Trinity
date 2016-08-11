@@ -82,7 +82,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 //}
 
 
-                if ((IszDPS || ZetaDia.Service.Party.NumPartyMembers > 1) && bestDpsPos != Vector3.Zero && bestDpsPos.Distance(target.Position) < 50 && bestDpsPos.Distance(Player.Position) > 6f)
+                if ((IszDPS || Player.IsInParty) && bestDpsPos != Vector3.Zero && bestDpsPos.Distance(target.Position) < 50 && bestDpsPos.Distance(Player.Position) > 6f)
                     return true;
 
                 if (Skills.Monk.DashingStrike.TimeSinceUse < 3500)

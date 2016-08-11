@@ -714,6 +714,7 @@ namespace Trinity.Components.Combat
 
                     if (!Core.Player.IsInTown)
                     {
+                        Logger.Log(LogCategory.Behavior, "Player is Attempting Special Movement!");
                         RunStatus specialMovementResult;
                         if (TrySpecialMovement(out specialMovementResult)) 
                             return specialMovementResult;
@@ -1594,10 +1595,11 @@ namespace Trinity.Components.Combat
                         lastMoveResult = MoveResult.Moved;
                         // just "Click" 
                         Navigator.PlayerMover.MoveTowards(destination);
-                        Logger.LogVerbose(LogCategory.Movement, "Straight line pathing to {0}", destname);
+                        Logger.LogVerbose(LogCategory.Movement, "MoveTowards Straight line pathing to {0}", destname);
                     }                    
                     else
                     {
+                        Logger.LogVerbose(LogCategory.Movement, "NavigateTo Straight line pathing to {0}", destname);
                         lastMoveResult = PlayerMover.NavigateTo(destination, destname);
                     }
 

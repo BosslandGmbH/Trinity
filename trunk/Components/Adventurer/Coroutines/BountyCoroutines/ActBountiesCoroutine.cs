@@ -8,6 +8,8 @@ using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 {
+    using Framework;
+
     public class ActBountiesCoroutine
     {
         public readonly Act Act;
@@ -131,7 +133,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                     {
                         try
                         {
-                            if (ZetaDia.Service.Party.NumPartyMembers > 1)
+                            if (Core.Player.IsInParty)
                             {
                                 if (BountyCoroutine.currentRandomizedBounty < 0 ||
                                     BountyCoroutine.currentRandomizedBounty > _bountyCoroutines.Count)
