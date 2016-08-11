@@ -2,6 +2,8 @@
 
 namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 {
+    using Framework;
+
     partial class WitchDoctor : CombatBase
     {
         private static bool IszDPS => Legendary.AquilaCuirass.IsEquipped && Legendary.LastBreath.IsEquipped;
@@ -39,7 +41,6 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 
             if (Player.IsInTown)
                 return null;
-
             if (power == null && CurrentTarget != null)
             {
                 if (IszDPS)
@@ -50,8 +51,10 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 {
                     if (Skills.WitchDoctor.Gargantuan.IsActive)
                         power = Helltooth.ColdGarg.PowerSelector();
-                    else
+                    if (Skills.WitchDoctor.AcidCloud.IsActive)
                         power = Helltooth.AcidCloud.PowerSelector();
+                    if (Skills.WitchDoctor.Firebats.IsActive)
+                        power = Helltooth.Firebats.PowerSelector();
                 }
             }
             return power;

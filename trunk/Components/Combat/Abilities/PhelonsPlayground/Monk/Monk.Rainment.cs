@@ -55,7 +55,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             {
                 var target = PhelonTargeting.BestTarget(45f, true);
 
-                bestDpsPos = PhelonUtils.BestDpsPosition(target.Position);
+                bestDpsPos = PhelonUtils.BestDpsPosition(target.Position, 15f);
                 var charges = Skills.Monk.DashingStrike.Charges;
 
                 if (!Skills.Monk.DashingStrike.CanCast() ||
@@ -81,14 +81,17 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 //    return true;
                 //}
 
+
+                if ((IszDPS || ZetaDia.Service.Party.NumPartyMembers > 1) && bestDpsPos != Vector3.Zero && bestDpsPos.Distance(target.Position) < 50 && bestDpsPos.Distance(Player.Position) > 6f)
+                    return true;
+
                 if (Skills.Monk.DashingStrike.TimeSinceUse < 3500)
                     return false;
-
-                if (bestDpsPos != Vector3.Zero && bestDpsPos.Distance(Player.Position) < 50)
+                if (target.Distance < 45)
                 {
+                    bestDpsPos = target.Position;
                     return true;
                 }
-
                 target = TargetUtil.GetClosestUnit(50f);
 
                 if (target == null) return false;
