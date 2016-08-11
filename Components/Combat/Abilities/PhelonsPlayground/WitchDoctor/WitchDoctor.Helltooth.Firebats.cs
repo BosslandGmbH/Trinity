@@ -13,7 +13,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
     {
         partial class Helltooth
         {
-            public class AcidCloud
+            public class Firebats
             {
                 public static TrinityPower PowerSelector()
                 {

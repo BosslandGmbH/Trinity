@@ -22,7 +22,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     if (ShouldSoulHarvest)
                         return SoulHarvest;
 
-                    var bestDpsTarget = PhelonTargeting.BestAoeUnit(25f, true);
+                    var bestDpsTarget = PhelonTargeting.BestAoeUnit(35f, true);
                     Vector3 bestDpsPosition;
 
                     if (GetHasBuff(SNOPower.Witchdoctor_SpiritWalk))
@@ -36,7 +36,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     }
 
                     if (PhelonUtils.BestBuffPosition(35f, bestDpsTarget.Position, false, out bestDpsPosition) &&
-                        PhelonUtils.UnitsBetweenLocations(Player.Position, bestDpsPosition).Count < 3 &&
+                        PhelonUtils.UnitsBetweenLocations(Player.Position, bestDpsPosition).Count < 5 &&
                         bestDpsPosition.Distance2D(Player.Position) > 6f)
                         return new TrinityPower(SNOPower.Walk, 3f, bestDpsPosition);
 

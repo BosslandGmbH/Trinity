@@ -87,6 +87,7 @@ namespace Trinity.Framework.Modules
         public bool IsFrozen { get; set; }
         public bool IsCasting { get; set; }
         public bool IsCastingPortal { get; set; }
+        public bool IsInParty { get; set; }
 
         public bool IsInventoryLockedForGreaterRift { get; set; }
 
@@ -201,6 +202,7 @@ namespace Trinity.Framework.Modules
 
         internal void UpdateFastChangingData()
         {
+            IsInParty = ZetaDia.Service.Party.NumPartyMembers > 1;
             AcdId = _me.ACDId;
             RActorGuid = _me.RActorId;
             LastUpdated = DateTime.UtcNow;
