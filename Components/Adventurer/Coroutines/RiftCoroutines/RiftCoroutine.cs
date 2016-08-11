@@ -27,6 +27,8 @@ using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 {
+    using Framework;
+
     public class RiftCoroutine : IDisposable, ICoroutine
     {
         public class RiftOptions
@@ -515,7 +517,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
             if (TrinityPluginSettings.Settings.Advanced.BetaPlayground)
             {
-                if (ZetaDia.Service.Party.NumPartyMembers > 1 &&
+                if (Core.Player.IsInParty &&
                     ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count() < ZetaDia.Service.Party.NumPartyMembers)
                 {
                     Logger.Info("Waiting until all party is present.");
@@ -525,7 +527,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                                 ZetaDia.Service.Party.NumPartyMembers);
                 }
 
-                if (ZetaDia.Service.Party.NumPartyMembers > 1 && ZetaDia.Service.Party.NumPartyMembers < partysize)
+                if (Core.Player.IsInParty && ZetaDia.Service.Party.NumPartyMembers < partysize)
                 {
                     Logger.Info("Waiting until we have a party of " + partysize + ".");
                     await Coroutine.Wait(TimeSpan.FromMinutes(60),
@@ -744,7 +746,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
-            if (ZetaDia.Service.Party.NumPartyMembers > 1 && RiftData.GetGreaterRiftLevel() > 55 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
+            if (Core.Player.IsInParty && RiftData.GetGreaterRiftLevel() > 55 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
             {
                 var deadPlayer =
                     ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
@@ -797,7 +799,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
-            if (ZetaDia.Service.Party.NumPartyMembers > 1 && RiftData.GetGreaterRiftLevel() > 55 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
+            if (Core.Player.IsInParty && RiftData.GetGreaterRiftLevel() > 55 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
             {
                 var deadPlayer =
                     ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
@@ -1246,7 +1248,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             {
                 if (!EnteringRiftStates.Contains(State))
                 {
-                    if (ZetaDia.Service.Party.NumPartyMembers > 1 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
+                    if (Core.Player.IsInParty && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
                     {
                         State = States.MoveToOrek;
                         return;

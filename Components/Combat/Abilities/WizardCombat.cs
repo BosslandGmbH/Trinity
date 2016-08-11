@@ -215,7 +215,7 @@ namespace Trinity.Components.Combat.Abilities
                 (TargetUtil.ClusterExists(blackholeRadius, 45f, Core.Settings.Combat.Wizard.BlackHoleAoECount) || CurrentTarget.IsElite))
             {
                 // Botting with 2+ wizards, stagger blackholes.
-                if (ZetaDia.Service.Party.NumPartyMembers > 1)
+                if (Player.IsInParty)
                 {
                     var blackHoleExists = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).Any(a => DataDictionary.BlackHoleIds.Contains(a.ActorSnoId));
                     if (!blackHoleExists)
