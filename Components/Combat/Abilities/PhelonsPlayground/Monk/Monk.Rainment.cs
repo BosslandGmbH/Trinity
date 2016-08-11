@@ -55,11 +55,12 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             {
                 var target = PhelonTargeting.BestTarget(45f, true);
 
-                bestDpsPos = PhelonUtils.BestDpsPosition(target.Position, 15f);
                 var charges = Skills.Monk.DashingStrike.Charges;
 
-                if (!Skills.Monk.DashingStrike.CanCast() ||
-                    CombatManager.TargetHandler.ShouldWaitForLootDrop || charges < 1)
+                bestDpsPos = target.Position;
+
+                if (!Skills.Monk.DashingStrike.CanCast() || CombatManager.TargetHandler.ShouldWaitForLootDrop ||
+                    charges < 1)
                     return false;
 
                 // Ports to Closest HealthGlobe
@@ -82,7 +83,10 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 //}
 
 
-                if ((IszDPS || Player.IsInParty) && bestDpsPos != Vector3.Zero && bestDpsPos.Distance(target.Position) < 50 && bestDpsPos.Distance(Player.Position) > 6f)
+                if ((IszDPS || Player.IsInParty) &&
+                    PhelonUtils.BestBuffPosition(20, target.Position, Player.IsInParty, out bestDpsPos) &&
+                    bestDpsPos.Distance(Player.Position) < 45 && bestDpsPos.Distance(Player.Position) > 6f &&
+                    !target.IsBoss)
                     return true;
 
                 if (Skills.Monk.DashingStrike.TimeSinceUse < 3500)

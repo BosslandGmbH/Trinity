@@ -19,9 +19,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 {
                     //if (Player.IsIncapacitated) return null;
                     TrinityActor target;
-
-                    if (ShouldSoulHarvest)
-                        return SoulHarvest;
+                    
                     var bestDpsTarget = PhelonTargeting.BestAoeUnit(25f, true);
                     Vector3 bestDpsPosition;
 
@@ -41,8 +39,8 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                         }
                     }
 
-                    if (PhelonUtils.BestBuffPosition(35f, bestDpsTarget.Position, false, out bestDpsPosition) &&
-                        //PhelonUtils.UnitsBetweenLocations(Player.Position, bestDpsPosition).Count < 3 &&
+                    if (PhelonUtils.BestBuffPosition(12f, bestDpsTarget.Position, false, out bestDpsPosition) &&
+                        (PhelonUtils.UnitsBetweenLocations(Player.Position, bestDpsPosition).Count < 6 || Legendary.IllusoryBoots.IsEquipped) &&
                         bestDpsPosition.Distance2D(Player.Position) > 6f)
                     {
                         Logger.LogNormal("Moving to DPS Location - No Spirit Walk " + bestDpsPosition.Distance2D(Player.Position));
@@ -123,11 +121,6 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     return target != null;
                 }
 
-                private static bool ShouldSoulHarvest => CanCast(SNOPower.Witchdoctor_SoulHarvest) &&
-                                                         (TargetUtil.AnyMobsInRange(18f, 3) ||
-                                                          TargetUtil.AnyBossesInRange(18f) ||
-                                                          TargetUtil.AnyElitesInRange(18f));
-
                 private static bool ShouldHaunt(out TrinityActor target)
                 {
                     target = null;
@@ -146,9 +139,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 #endregion
 
                 #region Expressions
-
-                private static TrinityPower SoulHarvest => new TrinityPower(SNOPower.Witchdoctor_SoulHarvest);
-
+                
                 private static TrinityPower Piranhas(TrinityActor target)
                     => new TrinityPower(SNOPower.Witchdoctor_Piranhas, 55f, target.Position);
 
