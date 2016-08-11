@@ -224,7 +224,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             {
                 get
                 {
-                    return Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResource > cycloneStrikeSpirit && Skills.Monk.CycloneStrike.TimeSinceUse > 3750;
+                    return Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResource > cycloneStrikeSpirit && (Skills.Monk.CycloneStrike.TimeSinceUse > 3750 || SpellHistory.LastPowerUsed == SNOPower.X1_Monk_DashingStrike);
                 }
             }
 
