@@ -4,6 +4,10 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 {
+    using System;
+    using Zeta.Common;
+    using Logger = Technicals.Logger;
+
     partial class WitchDoctor
     {
         partial class Helltooth
@@ -12,26 +16,28 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
             {
                 public static TrinityPower PowerSelector()
                 {
-                    if (Player.IsIncapacitated) return null;
+                    //if (Player.IsIncapacitated) return null;
                     TrinityActor target;
 
                     if (ShouldSoulHarvest)
                         return SoulHarvest;
 
-                    var bestDpsPosition =
-                        PhelonUtils.BestDpsPosition(PhelonTargeting.BestAoeUnit(45, true).Position, 45f, true);
+                    var bestDpsTarget = PhelonTargeting.BestAoeUnit(25f, true);
+                    Vector3 bestDpsPosition;
 
                     if (GetHasBuff(SNOPower.Witchdoctor_SpiritWalk))
                     {
                         if (Player.CurrentHealthPct < Settings.Combat.Misc.HealthGlobeLevel &&
-                            PhelonUtils.BestWalkLocation(35f, true).Distance(Player.Position) > 5)
-                            return new TrinityPower(SNOPower.Walk, 3f, PhelonUtils.BestWalkLocation(45f, true));
+                            PhelonUtils.ClosestGlobe(35f, true) != null)
+                            return new TrinityPower(SNOPower.Walk, 3f, PhelonUtils.ClosestGlobe(35f, true).Position);
 
-                        if (bestDpsPosition.Distance2D(Player.Position) > 6f)
+                        if (PhelonUtils.BestBuffPosition(35f, bestDpsTarget.Position, false, out bestDpsPosition) && bestDpsPosition.Distance2D(Player.Position) > 6f)
                             return new TrinityPower(SNOPower.Walk, 3f, bestDpsPosition);
                     }
 
-                    if (PhelonUtils.UnitsBetweenLocations(Player.Position, bestDpsPosition).Count < 3 && bestDpsPosition.Distance2D(Player.Position) > 6f)
+                    if (PhelonUtils.BestBuffPosition(35f, bestDpsTarget.Position, false, out bestDpsPosition) &&
+                        PhelonUtils.UnitsBetweenLocations(Player.Position, bestDpsPosition).Count < 3 &&
+                        bestDpsPosition.Distance2D(Player.Position) > 6f)
                         return new TrinityPower(SNOPower.Walk, 3f, bestDpsPosition);
 
                     if (ShouldPiranhas(out target))
@@ -42,11 +48,8 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 
                     if (ShouldHaunt(out target))
                         return CastHaunt(target);
-
-                    if (PhelonUtils.BestDpsPosition(Player.Position, 45f, true).Distance(Player.Position) > 7f)
-                        return new TrinityPower(SNOPower.Walk, 3f,
-                            PhelonUtils.BestDpsPosition(Player.Position, 45f, true));
-                    return new TrinityPower(SNOPower.Walk, 3f, Player.Position);
+                    
+                    return new TrinityPower(SNOPower.Walk, 3f, TargetUtil.GetLoiterPosition(bestDpsTarget, 25f));
                 }
 
                 #region Conditions
