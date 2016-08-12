@@ -79,7 +79,7 @@ namespace Trinity.Framework.Avoidance
             try
             {
                 if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
-                return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile) && !node.AvoidanceFlags.HasFlag(AvoidanceFlags.RoundedCorner));
+                return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile));
             }
             catch (Exception ex)
             {
@@ -91,7 +91,7 @@ namespace Trinity.Framework.Avoidance
         public override bool CanRayWalk(Vector3 @from, Vector3 to)
         {
             if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
-            return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk) && node.IsWalkable && !node.NodeFlags.HasFlag(NodeFlags.NearWall));
+            return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk) && !node.NodeFlags.HasFlag(NodeFlags.NearWall));
         }
 
         public bool IsIntersectedByFlags(Vector3 @from, Vector3 to, params AvoidanceFlags[] flags)

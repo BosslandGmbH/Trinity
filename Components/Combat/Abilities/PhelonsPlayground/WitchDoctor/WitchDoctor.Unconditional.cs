@@ -10,6 +10,8 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
     {
         internal class Unconditional
         {
+            private static readonly int SoulStacks = Legendary.SacredHarvester.IsEquipped ? 10 : 5;
+
             public static TrinityPower PowerSelector()
             {
 
@@ -31,10 +33,14 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                 return null;
             }
 
-            private static bool ShouldSoulHarvest => CanCast(SNOPower.Witchdoctor_SoulHarvest) &&
-                                                     (TargetUtil.AnyMobsInRange(18f, 3) ||
-                                                      TargetUtil.AnyBossesInRange(18f) ||
-                                                      TargetUtil.AnyElitesInRange(18f));
+            private static bool ShouldSoulHarvest
+                =>
+                    CanCast(SNOPower.Witchdoctor_SoulHarvest) &&
+                    GetBuffStacks(SNOPower.Witchdoctor_SoulHarvest) < SoulStacks ||
+                    Skills.WitchDoctor.SoulHarvest.TimeSinceUse > 8000 &&
+                    (TargetUtil.AnyMobsInRange(18f, 3) ||
+                     TargetUtil.AnyBossesInRange(18f) ||
+                     TargetUtil.AnyElitesInRange(18f));
 
             private static bool ShouldSpiritWalk => Skills.WitchDoctor.SpiritWalk.CanCast() &&
                                                     (PhelonUtils.ClosestGlobe() != null ||
