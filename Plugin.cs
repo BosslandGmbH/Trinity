@@ -62,7 +62,7 @@ namespace Trinity
             }
         }
 
-        public string Author => "xzjv, TarasBulba, rrrix, jubisman, and many more";
+        public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} BETA. Provides Combat, Exploration and much more";
 
         private static bool MouseLeft()

@@ -5,6 +5,7 @@ using Zeta.Game.Internals.Actors;
 namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 {
     using System;
+    using System.Linq;
     using Technicals;
     using Zeta.Common;
     using Logger = Technicals.Logger;
@@ -80,7 +81,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     if (!Skills.WitchDoctor.Firebats.CanCast())
                         return false;
                     
-                    return PhelonTargeting.BestAoeUnit(25f, true).RadiusDistance < 10f;
+                    return PhelonTargeting.BestAoeUnit(25f, true).Distance < 10f;
                 }
 
                 private static bool ShouldLocustSwarm(out TrinityActor target)
@@ -88,6 +89,10 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     target = null;
 
                     if (!Skills.WitchDoctor.LocustSwarm.CanCast())
+                        return false;
+
+                    if ((double)PhelonUtils.AuraUnits(Skills.WitchDoctor.LocustSwarm.SNOPower).Count /
+                        PhelonUtils.SafeList(true).Count(x => x.Distance <= 12f) > 0.80)
                         return false;
 
                     target = PhelonUtils.BestAuraUnit(SNOPower.Witchdoctor_Haunt, 15f, true);
@@ -143,10 +148,9 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
 
                     if (!Skills.WitchDoctor.Haunt.CanCast())
                         return false;
-
-                    if (SpellHistory.LastPowerUsed == Skills.WitchDoctor.Haunt.SNOPower)
+                    if ((double) PhelonUtils.AuraUnits(Skills.WitchDoctor.Haunt.SNOPower).Count/
+                        PhelonUtils.SafeList(true).Count(x => x.Distance <= 12f) > 0.80)
                         return false;
-
                     target = PhelonUtils.BestAuraUnit(SNOPower.Witchdoctor_Haunt, 15f, true);
 
                     return target != null;
