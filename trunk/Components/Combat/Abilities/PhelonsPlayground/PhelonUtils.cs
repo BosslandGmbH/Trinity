@@ -130,6 +130,18 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
             }
         }
 
+        internal static List<TrinityActor> AuraUnits(SNOPower aura, float maxSearchRange = 65f,
+            bool addUnitsInAoE = false)
+        {
+            return (from u in SafeList(addUnitsInAoE)
+                    where u.IsUnit &&
+                          u.RadiusDistance <= maxSearchRange &&
+                          u.HasBeenInLoS && !u.HasDebuff(aura)
+                    orderby u.NearbyUnitsWithinDistance(),
+                        u.Distance
+                    select u).ToList();
+        }
+
         internal static TrinityActor BestAuraUnit(SNOPower aura, float maxSearchRange = 65f,
             bool addUnitsInAoE = false)
         {

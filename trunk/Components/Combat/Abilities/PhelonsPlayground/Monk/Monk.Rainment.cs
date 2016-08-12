@@ -45,8 +45,8 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                     return CastCycloneStrike;
 
                 TrinityActor target;
-                if (ShouldCripplingWave(out target))
-                    return CastCripplingWave(target);
+                if (ShouldGenerate(out target))
+                    return CastGenerator(target);
 
                 return null;
             }
@@ -82,20 +82,22 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 //    return true;
                 //}
 
-
-                if ((IszDPS || Player.IsInParty) &&
-                    PhelonUtils.BestBuffPosition(20, target.Position, Player.IsInParty, out bestDpsPos) &&
+                var pullRange = Runes.Monk.Implosion.IsActive ? 30f : 20f;
+                if ((IszDPS || !Player.IsInParty && Skills.Monk.DashingStrike.TimeSinceUse > 1500) &&
+                    PhelonUtils.BestBuffPosition(pullRange, target.Position, Player.IsInParty, out bestDpsPos) &&
                     bestDpsPos.Distance(Player.Position) < 45 && bestDpsPos.Distance(Player.Position) > 6f &&
                     !target.IsBoss)
                     return true;
 
                 if (Skills.Monk.DashingStrike.TimeSinceUse < 3500)
                     return false;
+
                 if (target.Distance < 45)
                 {
                     bestDpsPos = target.Position;
                     return true;
                 }
+
                 target = TargetUtil.GetClosestUnit(50f);
 
                 if (target == null) return false;
@@ -111,10 +113,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
 
             private static bool ShouldBreathOfHeaven
             {
-                get
-                {
-                    return Skills.Monk.BreathOfHeaven.CanCast();
-                }
+                get { return Skills.Monk.BreathOfHeaven.CanCast(); }
             }
 
             private static TrinityPower CastBreathOfHeaven
@@ -205,7 +204,8 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                         return true;
 
                     // Epiphany mode is 'Whenever in Combat'
-                    if (Settings.Combat.Monk.EpiphanyMode == MonkEpiphanyMode.WhenInCombat && TargetUtil.AnyMobsInRange(12f))
+                    if (Settings.Combat.Monk.EpiphanyMode == MonkEpiphanyMode.WhenInCombat &&
+                        TargetUtil.AnyMobsInRange(12f))
                         return true;
 
                     // Epiphany mode is 'Use when Elites are nearby'
@@ -231,7 +231,9 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             {
                 get
                 {
-                    return Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResource > cycloneStrikeSpirit && (Skills.Monk.CycloneStrike.TimeSinceUse > 3750 || SpellHistory.LastPowerUsed == SNOPower.X1_Monk_DashingStrike);
+                    return Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResource > cycloneStrikeSpirit &&
+                           (Skills.Monk.CycloneStrike.TimeSinceUse > 3750 ||
+                            SpellHistory.LastPowerUsed == SNOPower.X1_Monk_DashingStrike);
                 }
             }
 
@@ -241,11 +243,12 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
 
             }
 
-            private static bool ShouldCripplingWave(out TrinityActor target)
+            private static bool ShouldGenerate(out TrinityActor target)
             {
                 target = null;
 
-                if (!Skills.Monk.CripplingWave.CanCast())
+                if (!Skills.Monk.CripplingWave.CanCast() && !Skills.Monk.WayOfTheHundredFists.CanCast() &&
+                    !Skills.Monk.DeadlyReach.CanCast() && !Skills.Monk.FistsOfThunder.CanCast())
                     return false;
 
                 target = PhelonTargeting.BestAoeUnit(45, true);
@@ -256,9 +259,12 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 return target != null;
             }
 
-            private static TrinityPower CastCripplingWave(TrinityActor target)
+            private static TrinityPower CastGenerator(TrinityActor target)
             {
-                return new TrinityPower(SNOPower.Monk_CripplingWave, 12f, target.AcdId);
+                //Legendary.ConventionOfElements.IsEquipped
+                if (IsInsideCoeTimeSpan(Element.Physical, 250, 0) || !GetHasBuff(Skills.Monk.FistsOfThunder.SNOPower))
+                    return new TrinityPower(Skills.Monk.FistsOfThunder.SNOPower, 12f, target.AcdId);
+                return new TrinityPower(Skills.Monk.CripplingWave.SNOPower, 12f, target.AcdId);
             }
         }
     }
