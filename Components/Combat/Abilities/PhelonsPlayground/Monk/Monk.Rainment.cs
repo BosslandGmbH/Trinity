@@ -232,7 +232,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 get
                 {
                     return Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResource > cycloneStrikeSpirit &&
-                           (Skills.Monk.CycloneStrike.TimeSinceUse > 3750 ||
+                           (Skills.Monk.CycloneStrike.TimeSinceUse > 4750 ||
                             SpellHistory.LastPowerUsed == SNOPower.X1_Monk_DashingStrike);
                 }
             }
@@ -262,8 +262,11 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             private static TrinityPower CastGenerator(TrinityActor target)
             {
                 //Legendary.ConventionOfElements.IsEquipped
-                if (IsInsideCoeTimeSpan(Element.Physical, 250, 0) || !GetHasBuff(Skills.Monk.FistsOfThunder.SNOPower))
-                    return new TrinityPower(Skills.Monk.FistsOfThunder.SNOPower, 12f, target.AcdId);
+                if (IsInsideCoeTimeSpan(Element.Physical, 250, 0) ||
+                    !GetHasBuff(Skills.Monk.WayOfTheHundredFists.SNOPower) ||
+                    //!GetHasBuff(SNOPower.P2_ItemPassive_Unique_Ring_033) ||
+                    Skills.Monk.WayOfTheHundredFists.TimeSinceUse > 4250)
+                    return new TrinityPower(Skills.Monk.WayOfTheHundredFists.SNOPower, 12f, target.AcdId);
                 return new TrinityPower(Skills.Monk.CripplingWave.SNOPower, 12f, target.AcdId);
             }
         }
