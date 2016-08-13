@@ -19,14 +19,19 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
         {
             public static TrinityPower PowerSelector()
             {
-                if (Player.IsIncapacitated) return null;
-
                 Vector3 dashLocation;
-                if (ShouldDashingStrike(out dashLocation))
-                    return CastDashingStrike(dashLocation);
 
                 if (ShouldEpiphany)
                     return CastEpiphany;
+
+                if (ShouldCastSerenity())
+                    return CastSerenity;
+
+                if (ShouldDashingStrike(out dashLocation))
+                    return CastDashingStrike(dashLocation);
+
+                if (ShouldCycloneStrike)
+                    return CastCycloneStrike;
 
                 if (ShouldBreathOfHeaven)
                     return CastBreathOfHeaven;
@@ -41,32 +46,32 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 if (ShouldBlindingFlash)
                     return CastBlindingFlash;
 
-                if (ShouldCycloneStrike)
-                    return CastCycloneStrike;
-
-                TrinityActor target;
+                TrinityActor target = PhelonTargeting.BestTarget(25f, Player.IsInParty);
                 if (ShouldGenerate(out target))
                     return CastGenerator(target);
 
-                return null;
+                if (target == null)
+                    return new TrinityPower(SNOPower.Walk, 3f, Player.Position);
+                return new TrinityPower(SNOPower.Walk, 3f, target.Position);
             }
 
             private static bool ShouldDashingStrike(out Vector3 bestDpsPos)
             {
-                var target = PhelonTargeting.BestTarget(45f, true);
+                var target = PhelonTargeting.BestTarget(25f, Player.IsInParty);
 
                 var charges = Skills.Monk.DashingStrike.Charges;
 
                 bestDpsPos = target.Position;
 
                 if (!Skills.Monk.DashingStrike.CanCast() || CombatManager.TargetHandler.ShouldWaitForLootDrop ||
-                    charges < 1)
+                    charges < 1 || SpellHistory.LastPowerUsed == Skills.Monk.DashingStrike.SNOPower ||
+                    charges < 2 && Player.PrimaryResource < 75)
                     return false;
 
                 // Ports to Closest HealthGlobe
                 if (Core.Player.CurrentHealthPct < Settings.Combat.Monk.HealthGlobeLevel)
                 {
-                    var safePoint = TargetUtil.GetBestHealthGlobeClusterPoint(5, 40);
+                    var safePoint = TargetUtil.GetBestHealthGlobeClusterPoint(5, 45);
                     if (safePoint != Vector3.Zero)
                     {
                         bestDpsPos = safePoint;
@@ -83,27 +88,27 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 //}
 
                 var pullRange = Runes.Monk.Implosion.IsActive ? 30f : 20f;
-                if ((IszDPS || !Player.IsInParty && Skills.Monk.DashingStrike.TimeSinceUse > 1500) &&
+                if (!Player.IsInParty && Skills.Monk.DashingStrike.TimeSinceUse > 1500 &&
+                    Skills.Monk.CycloneStrike.CanCast() &&
                     PhelonUtils.BestBuffPosition(pullRange, target.Position, Player.IsInParty, out bestDpsPos) &&
                     bestDpsPos.Distance(Player.Position) < 45 && bestDpsPos.Distance(Player.Position) > 6f &&
                     !target.IsBoss)
                     return true;
-
-                if (Skills.Monk.DashingStrike.TimeSinceUse < 3500)
+                var useTimer = target.Distance <= 10f ? 3500 : 1500;
+                if (Skills.Monk.DashingStrike.TimeSinceUse < useTimer)
                     return false;
 
-                if (target.Distance < 45)
-                {
-                    bestDpsPos = target.Position;
-                    return true;
-                }
-
-                target = TargetUtil.GetClosestUnit(50f);
+                target = TargetUtil.GetClosestUnit(25f);
 
                 if (target == null) return false;
 
                 bestDpsPos = target.Position;
                 return true;
+            }
+
+            private static bool ShouldCastSerenity()
+            {
+                return (Player.CurrentHealthPct <= Settings.Combat.Monk.SerenityHealthPct || Player.IsIncapacitated && Player.CurrentHealthPct <= 0.90) && Skills.Monk.Serenity.CanCast();
             }
 
             private static TrinityPower CastDashingStrike(Vector3 location)
@@ -127,7 +132,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 get
                 {
                     return Skills.Monk.InnerSanctuary.CanCast() &&
-                           PhelonTargeting.BestAoeUnit(45, true).Distance < 20;
+                           PhelonTargeting.BestAoeUnit(25, Player.IsInParty).Distance < 20;
                 }
             }
 
@@ -142,7 +147,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                 get
                 {
                     return Skills.Monk.BlindingFlash.CanCast() && Skills.Monk.BlindingFlash.TimeSinceUse > 2750 &&
-                           PhelonTargeting.BestAoeUnit(45, true).Distance < 20;
+                           PhelonTargeting.BestAoeUnit(25, Player.IsInParty).Distance < 20;
                 }
             }
 
@@ -224,15 +229,23 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             private static TrinityPower CastEpiphany
             {
                 get { return new TrinityPower(SNOPower.X1_Monk_Epiphany); }
+            }
 
+            private static TrinityPower CastSerenity
+            {
+                get { return new TrinityPower(SNOPower.Monk_Serenity); }
             }
 
             private static bool ShouldCycloneStrike
             {
                 get
                 {
-                    return Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResource > cycloneStrikeSpirit &&
-                           (Skills.Monk.CycloneStrike.TimeSinceUse > 4750 ||
+                    var target = PhelonTargeting.BestTarget(25f, Player.IsInParty);
+                    var pullRange = Runes.Monk.Implosion.IsActive ? 30f : 20f;
+                    return Skills.Monk.CycloneStrike.CanCast() &&
+                           (Skills.Monk.CycloneStrike.TimeSinceUse > 3750 ||
+                            target.Distance > 12f && target.Distance < pullRange &&
+                            Skills.Monk.CycloneStrike.TimeSinceUse > 1500 ||
                             SpellHistory.LastPowerUsed == SNOPower.X1_Monk_DashingStrike);
                 }
             }
@@ -251,8 +264,8 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
                     !Skills.Monk.DeadlyReach.CanCast() && !Skills.Monk.FistsOfThunder.CanCast())
                     return false;
 
-                target = PhelonTargeting.BestAoeUnit(45, true);
-                if (target != null && target.Distance < 12)
+                target = PhelonTargeting.BestAoeUnit(25f, Player.IsInParty);
+                if (target != null && target.Distance < 12f)
                     return true;
 
                 target = TargetUtil.GetClosestUnit(12f);
@@ -262,10 +275,10 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.Monk
             private static TrinityPower CastGenerator(TrinityActor target)
             {
                 //Legendary.ConventionOfElements.IsEquipped
-                if (IsInsideCoeTimeSpan(Element.Physical, 250, 0) ||
+                if (Skills.Monk.WayOfTheHundredFists.IsActive && (IsInsideCoeTimeSpan(Element.Physical, 250, 0) ||
                     !GetHasBuff(Skills.Monk.WayOfTheHundredFists.SNOPower) ||
                     //!GetHasBuff(SNOPower.P2_ItemPassive_Unique_Ring_033) ||
-                    Skills.Monk.WayOfTheHundredFists.TimeSinceUse > 4250)
+                    Skills.Monk.WayOfTheHundredFists.TimeSinceUse > 4250))
                     return new TrinityPower(Skills.Monk.WayOfTheHundredFists.SNOPower, 12f, target.AcdId);
                 return new TrinityPower(Skills.Monk.CripplingWave.SNOPower, 12f, target.AcdId);
             }

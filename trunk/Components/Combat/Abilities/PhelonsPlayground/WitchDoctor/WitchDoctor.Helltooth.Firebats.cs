@@ -81,7 +81,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground.WitchDoctor
                     if (!Skills.WitchDoctor.Firebats.CanCast())
                         return false;
                     
-                    return PhelonTargeting.BestAoeUnit(25f, true).Distance < 10f;
+                    return PhelonTargeting.BestAoeUnit(45f, true).Distance < 10f;
                 }
 
                 private static bool ShouldLocustSwarm(out TrinityActor target)

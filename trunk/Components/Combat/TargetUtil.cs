@@ -1245,7 +1245,7 @@ namespace Trinity.Components.Combat
             var result =
                 (from u in ObjectCache
                  where u.IsUnit && u.IsValid && u.Weight > 0 && u.RadiusDistance <= maxDistance
-                 orderby u.RadiusDistance
+                 orderby u.Distance
                  select u).FirstOrDefault();
 
             return result;
