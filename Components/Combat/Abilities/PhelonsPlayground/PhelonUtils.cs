@@ -61,7 +61,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
         {
             return
                 (from u in SafeList(objectsInAoe)
-                    where u.RadiusDistance <= range &&
+                    where u.Distance <= range &&
                           u.Type == TrinityObjectType.Shrine
                     orderby u.Distance
                     select u).ToList();
@@ -122,7 +122,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
                     (from u in SafeList(includeUnitsInAoe)
                         where ((useWeights && u.Weight > 0) || !useWeights) &&
                               u.IsUnit && u.HasBeenInLoS &&
-                              u.RadiusDistance <= maxRange &&
+                              u.Distance <= maxRange &&
                               u.NearbyUnitsWithinDistance(aoe_radius) >= count
                         orderby u.NearbyUnitsWithinDistance(aoe_radius),
                             u.Distance descending
@@ -135,7 +135,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
         {
             return (from u in SafeList(addUnitsInAoE)
                     where u.IsUnit &&
-                          u.RadiusDistance <= maxSearchRange &&
+                          u.Distance <= maxSearchRange &&
                           u.HasBeenInLoS && !u.HasDebuff(aura)
                     orderby u.NearbyUnitsWithinDistance(),
                         u.Distance
@@ -147,7 +147,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
         {
             return (from u in SafeList(addUnitsInAoE)
                 where u.IsUnit &&
-                      u.RadiusDistance <= maxSearchRange &&
+                      u.Distance <= maxSearchRange &&
                       u.HasBeenInLoS && !u.HasDebuff(aura)
                 orderby u.NearbyUnitsWithinDistance(),
                     u.Distance
@@ -180,7 +180,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
         {
             return (from u in SafeList(ignoreElites)
                 where u.IsUnit &&
-                      u.RadiusDistance <= maxRange && u.IsInLineOfSight &&
+                      u.Distance <= maxRange && u.IsInLineOfSight &&
                       !(ignoreUnitsInAoE && u.IsStandingInAvoidance) &&
                       !(ignoreElites && u.IsElite)
                 orderby u.CountUnitsInFront() descending
@@ -303,7 +303,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
             return (from u in SafeList(objectsInAoe)
                 where
                     (u.Type == TrinityObjectType.HealthGlobe || u.Type == TrinityObjectType.PowerGlobe) &&
-                    u.RadiusDistance <= distance
+                    u.Distance <= distance
                 select u).FirstOrDefault();
         }
 
@@ -328,7 +328,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
         {
             return
                 (from u in SafeList(objectsInAoe)
-                    where u.RadiusDistance <= range &&
+                    where u.Distance <= range &&
                           u.ActorSnoId == actorSNO
                     orderby u.Distance
                     select u).ToList();
@@ -340,7 +340,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
             var clusterUnits =
                 (from u in SafeList(objectsInAoe)
                     where u.ActorSnoId == actorSNO &&
-                          u.RadiusDistance <= maxRange
+                          u.Distance <= maxRange
                     orderby u.NearbyUnitsWithinDistance(radius),
                         u.Distance descending
                     select u.Position).ToList();
@@ -352,7 +352,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
         {
             return
                 (from u in SafeList(objectsInAoe)
-                    where u.RadiusDistance <= range &&
+                    where u.Distance <= range &&
                           u.ActorSnoId == 322236
                     orderby u.Distance
                     select u).ToList();
@@ -369,7 +369,7 @@ namespace Trinity.Components.Combat.Abilities.PhelonsPlayground
             var clusterUnits =
                 (from u in SafeList(objectsInAoe)
                     where u.ActorSnoId == 322236 &&
-                          u.RadiusDistance <= maxRange
+                          u.Distance <= maxRange
                     orderby u.NearbyUnitsWithinDistance(radius),
                         u.Distance descending
                     select u.Position).ToList();
