@@ -354,6 +354,28 @@ namespace Trinity.Reference
 
         // AUTO-GENERATED on Wed, 18 May 2016 21:40:07 GMT
 
+        /// <summary>
+        /// Bottomless Potion of Chaos Teleport to another location based on your missing health. Results may vary.
+        /// </summary>
+        public static Item BottomlessPotionOfChaos = new Item
+        {
+            Id = 451311, //ActorSnoId=451311 GameBalanceId=-2018707766 
+            Name = "Bottomless Potion of Chaos",
+            Quality = ItemQuality.Legendary,
+            Slug = "bottomless-potion-of-chaos",
+            ItemType = ItemType.Potion,
+            TrinityItemType = TrinityItemType.HealthPotion,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Misc,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/bottomless-potion-of-chaos",
+            Url = "http://us.battle.net/d3/en/item/bottomless-potion-of-chaos",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/healthpotionlegendary_10_demonhunter_male.png",
+            RelativeUrl = "",
+            IsCrafted = false,
+            LegendaryAffix = "Teleport to another location based on your missing health. Results may vary.",
+            SetName = "",
+        };
 
         /// <summary>
         /// Bottomless Potion of Fear Fears enemies within 12 yards for 3–4 seconds.

@@ -1,6 +1,7 @@
 ﻿using System;
 using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
@@ -8,6 +9,7 @@ using Trinity.Framework.Objects.Memory.Sno;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
+using Trinity.Technicals;
 
 namespace Trinity.Framework.Actors.Properties
 {
@@ -23,7 +25,7 @@ namespace Trinity.Framework.Actors.Properties
 
             var commonData = actor.CommonData;
             var attributes = actor.Attributes;
-
+            
             actor.InventoryColumn = commonData.InventoryColumn;
             actor.InventoryRow = commonData.InventoryRow;
             actor.IsUnidentified = attributes.IsUnidentified;
@@ -110,6 +112,7 @@ namespace Trinity.Framework.Actors.Properties
             {
                 if (slotChanged && actor.InventorySlot == InventorySlot.None && slot == InventorySlot.BackpackItems)
                 {
+                    actor.Attributes = new ItemAttributes(actor.FastAttributeGroupId);
                     Create(actor);
                     actor.OnPickedUp();
                 }
@@ -123,11 +126,9 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.InventorySlot == InventorySlot.BackpackItems && actor.IsUnidentified && !actor.Attributes.IsUnidentified)
             {
-                if (!actor.Attributes.IsUnidentified)
-                {
-                    Create(actor);
-                    actor.OnIdentified();
-                }
+                actor.Attributes = new ItemAttributes(actor.FastAttributeGroupId);
+                Create(actor);
+                actor.OnIdentified();               
             }
         }
 

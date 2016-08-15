@@ -70,7 +70,7 @@ namespace Trinity.Framework.Actors.Attributes
         public float BlockChanceItem => GetCachedAttribute<float>(ActorAttributeType.BlockChanceItem); // BlockChanceItem (-3834) = i:1040515072 f:0.1298828 v:0.1298828 ModifierType=None Modifier=-1 
         public float BlockChanceBonusItem => GetCachedAttribute<float>(ActorAttributeType.BlockChanceBonusItem); // BlockChanceBonusItem (-3835) = i:1038172160 f:0.1099854 v:0.1099854 ModifierType=None Modifier=-1 
         public float ResourceCostReductionPercentAll => GetCachedAttribute<float>(ActorAttributeType.ResourceCostReductionPercentAll); // ResourceCostReductionPercentAll (-3364) = i:1028440064 f:0.04998779 v:0.04998779 ModifierType=None Modifier=-1 
-        public float AttacksPerSecondPercent => GetCachedAttribute<float>(ActorAttributeType.AttacksPerSecondPercent); // AttacksPerSecondPercent (-3895) = i:1032805417 f:0.07 v:0.07 ModifierType=None Modifier=-1 
+        public float AttacksPerSecondPercent => GetCachedAttribute<float>(ActorAttributeType.AttacksPerSecondItemPercent); // AttacksPerSecondPercent (-3895) = i:1032805417 f:0.07 v:0.07 ModifierType=None Modifier=-1 
         public bool IsAncient => GetAttribute<bool>(ActorAttributeType.AncientRank); // AncientRank (-3691) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1 
         public bool IsUnidentified => GetAttribute<bool>(ActorAttributeType.Unidentified); // AncientRank (-3691) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1 
         public int Post212Drop2 => GetCachedAttribute<int>(ActorAttributeType.Post212Drop2); // Post212Drop2 (-3692) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1 
