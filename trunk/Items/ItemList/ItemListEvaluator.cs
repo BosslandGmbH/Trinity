@@ -355,7 +355,7 @@ namespace Trinity.Items.ItemList
                     if (skill != null)
                     {
                         friendlyVariant = skill.Name;
-                        itemValue = item.Attributes.SkillDamagePercent(skill.SNOPower);
+                        itemValue = item.Attributes.SkillDamagePercent(skill.SNOPower) *100;
                     }
 
                     ruleValue = value;

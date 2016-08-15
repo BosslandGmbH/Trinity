@@ -64,7 +64,6 @@ namespace Trinity.Framework.Actors.ActorTypes
             {
                 CommonProperties.Populate(this);
             }
-
             ItemProperties.Update(this);
         }
 
@@ -80,6 +79,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         }
         public void OnPickedUp()
         {
+            Logger.Log($"{Name} was picked up. (Ann={AnnId} AcdId={AcdId}) Ancient={IsAncient} RawType={RawItemType}");
             ItemEvents.FireItemPickedUp(this);
             Attributes.Update();
         }
