@@ -47,9 +47,9 @@ namespace Trinity.Framework.Modules
         }
 
 
-        public HashSet<SNOPower> ActivePowers { get; private set; }
-        public List<HotbarSkill> ActiveSkills { get; private set; }
-        public HashSet<SNOPower> PassiveSkills { get; private set; }
+        public HashSet<SNOPower> ActivePowers { get; private set; } = new HashSet<SNOPower>();
+        public List<HotbarSkill> ActiveSkills { get; private set; } = new List<HotbarSkill>();
+        public HashSet<SNOPower> PassiveSkills { get; private set; } = new HashSet<SNOPower>();
 
         private Dictionary<SNOPower, HotbarSkill> _skillBySnoPower = new Dictionary<SNOPower, HotbarSkill>();
 
