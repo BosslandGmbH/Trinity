@@ -13,6 +13,8 @@ namespace Trinity.Framework.Modules
     /// </summary>
     public class PlayerHistory : Module
     {
+        public const int MeasurementSeconds = 2;
+
         public class PositionHistory : IEquatable<PositionHistory>
         {
             public PositionHistory()
@@ -93,6 +95,37 @@ namespace Trinity.Framework.Modules
         public Vector3 Centroid
         {
             get { return _centroid.GetValue(() => MathUtil.Centroid(RecentPositions)); }
+        }
+
+        public double MoveSpeed => GetYardsPerSecond();
+
+        public double GetYardsPerSecond()
+        {
+            if (!Cache.Any())
+                return 0;
+
+            var entriesWithinTimeframe = Cache.Where(m => DateTime.UtcNow.Subtract(m.RecordedAt).TotalSeconds < MeasurementSeconds);
+            var entriesByTime = entriesWithinTimeframe.OrderByDescending(m => m.RecordedAt.Ticks);
+            var totalDistance = 0f;
+            var previous = Core.Player.Position;
+
+            foreach (var entry in entriesByTime)
+            {
+                totalDistance += entry.Position.Distance(previous);
+                previous = entry.Position;
+            }
+
+            if (!entriesByTime.Any())
+                return 0;
+
+            var timeframe = entriesByTime.First().RecordedAt - entriesByTime.Last().RecordedAt;
+            var speedPerTimeframe = totalDistance / timeframe.TotalSeconds;   
+            var speedperSecond = speedPerTimeframe / MeasurementSeconds;
+
+            if (double.IsInfinity(speedperSecond) || double.IsNaN(speedperSecond))
+                return 0;
+
+            return speedperSecond;
         }
 
 

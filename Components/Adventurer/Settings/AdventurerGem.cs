@@ -60,12 +60,12 @@ namespace Trinity.Components.Adventurer.Settings
 
         public static Dictionary<int, int> GemCaps = new Dictionary<int, int>
         {
-            {428355, 50},
+            {428355, 50}, // iceblink
             //{405796, 50}, //ActorId: 405796, Type: Item, Name: Gogok of Swiftness
-            {405797, 50},
+            //{405797, 50}, // invigorating gemstone
             {405803, 50}, // Boon of the Hoarder
             //{405783, 25}, //ActorId: 405783, Type: Item, Name: Gem of Ease
-            {428033, 100},//ActorId: 428033, Type: Item, Name: Esoteric Alteration            
+            {428033, 100},//ActorId: 428033, Type: Item, Name: Esoteric Alteration        
         };
 
         /// <summary>

@@ -53,8 +53,13 @@
                         </UniformGrid>
                     <Border Height="1" Background="DarkSlateGray" />
                     <CheckBox Name="GetXPShrine" IsChecked="{Binding NormalRiftForXPShrine}" Content="Run normal rift until XP Shrine found" Margin="2" ToolTip="Whenever bonus XP is not found, bot will run normal rifts to fine an XP shrine"></CheckBox>
-
-                    </StackPanel>
+                    <UniformGrid Columns="2">
+                        <Label ToolTip="Ensure that greater rifts are not opened when keys are below this amount">Minimum Keys:</Label>
+                        <TextBox  ToolTip="Ensure that greater rifts are not opened when keys are below this amount" HorizontalAlignment="Right" Width="50" Text="{Binding MinimumKeys}" />
+                        <Label ToolTip="Ensure that empowered rifts are not used when gold is below this amount">Minimum Gold</Label>
+                        <TextBox  ToolTip="Ensure that empowered rifts are not used when gold is below this amount" HorizontalAlignment="Right" Width="50" Text="{Binding MinimumGold}" />                        
+                    </UniformGrid>
+                </StackPanel>
 
                 </GroupBox>
                 <GroupBox Header="Bounties" Margin="2 0 0 0">

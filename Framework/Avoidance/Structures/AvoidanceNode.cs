@@ -96,6 +96,7 @@ namespace Trinity.Framework.Avoidance.Structures
 
         public AvoidanceNode Reset()
         {
+            HostileMonsterCount = 0;
             Weight = 0;
             ResetFlags();
             return this;
@@ -146,6 +147,8 @@ namespace Trinity.Framework.Avoidance.Structures
         }
 
         public float NearbyWeightPct { get; set; }
+        public int HostileMonsterCount { get; set; }
+
 
 
         //public List<AvoidanceNode> AdjacentNodes = new List<AvoidanceNode>();

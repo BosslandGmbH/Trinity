@@ -27,7 +27,7 @@ namespace Trinity.Framework.Actors
     {
         private Stopwatch _timer = new Stopwatch();
         private ExpandoContainer<RActor> _rActorContainer;
-        private ExpandoContainer<ActorCommonData> _commonDataContainer;
+        internal ExpandoContainer<ActorCommonData> _commonDataContainer;
         private readonly ConcurrentDictionary<int, ActorBase> _rActors = new ConcurrentDictionary<int, ActorBase>();
         private readonly ConcurrentDictionary<int, ActorCommonData> _commonData = new ConcurrentDictionary<int, ActorCommonData>();
         private readonly ConcurrentDictionary<int, TrinityItem> _inventory = new ConcurrentDictionary<int, TrinityItem>();
@@ -332,6 +332,16 @@ namespace Trinity.Framework.Actors
             {
                 var bones = ActorFactory.GetActorSeed(acd);
                 return ActorFactory.CreateActor<TrinityItem>(bones);
+            }
+            return null;
+        }
+
+        public ACDItem GetAcdItemByAcdId(int acdId)
+        {
+            var acd = _commonDataContainer[(short)acdId];
+            if (acd != null && acd.IsValid)
+            {
+                return acd.BaseAddress.UnsafeCreate<ACDItem>();
             }
             return null;
         }

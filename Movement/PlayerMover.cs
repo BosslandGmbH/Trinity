@@ -37,14 +37,14 @@ namespace Trinity.DbProvider
     {
         static PlayerMover()
         {
-            Pulsator.OnPulse += Pulsator_OnPulse; ;
+            Pulsator.OnPulse += Pulsator_OnPulse;
         }
 
         public bool MovementRequested { get; set; }
 
         private static void Pulsator_OnPulse(object sender, EventArgs e)
         {
-            GetIsBlocked();
+            //GetIsBlocked();
 
             try
             {
@@ -74,14 +74,14 @@ namespace Trinity.DbProvider
 
         #region IsBlocked
 
-        private static readonly Stopwatch BlockedTimer = new Stopwatch();
-        private static readonly Stopwatch BlockedCheckTimer = new Stopwatch();
+        //private static readonly Stopwatch BlockedTimer = new Stopwatch();
+        //private static readonly Stopwatch BlockedCheckTimer = new Stopwatch();
 
-        private static int TimeToBlockMs => Core.Settings.Combat.Misc.TimeToBlockMs; //1000;
+        //private static int TimeToBlockMs => Core.Settings.Combat.Misc.TimeToBlockMs; //1000;
 
-        private const int TimeToCheckBlockingMs = 25;
+        //private const int TimeToCheckBlockingMs = 25;
 
-        public static bool IsBlocked = false;
+        public static bool IsBlocked => Core.BlockedCheck.IsBlocked;
 
         public static bool IsCompletelyBlocked 
         {
@@ -97,86 +97,86 @@ namespace Trinity.DbProvider
             }
         }
 
-        internal static bool GetIsBlocked()
-        {
-            if (ZetaDia.Me == null || !ZetaDia.Me.IsValid || ZetaDia.Me.IsDead)
-                return false;
+        //internal static bool GetIsBlocked()
+        //{
+        //    if (ZetaDia.Me == null || !ZetaDia.Me.IsValid || ZetaDia.Me.IsDead)
+        //        return false;
 
-            if (CanMoveUnhindered)
-                return false;
+        //    if (CanMoveUnhindered)
+        //        return false;
 
-            if (!BlockedCheckTimer.IsRunning)
-                BlockedCheckTimer.Start();
+        //    if (!BlockedCheckTimer.IsRunning)
+        //        BlockedCheckTimer.Start();
 
-            if (BlockedCheckTimer.ElapsedMilliseconds < TimeToCheckBlockingMs)
-                return IsBlocked;
+        //    if (BlockedCheckTimer.ElapsedMilliseconds < TimeToCheckBlockingMs)
+        //        return IsBlocked;
 
-            BlockedCheckTimer.Restart();
+        //    BlockedCheckTimer.Restart();
 
-            var moveSpeed = GetMovementSpeed();
-            if (moveSpeed > 2)
-            {
-                Logger.LogVerbose(LogCategory.Movement, "Not blocked because moving fast! CurrentSpeed={0}", moveSpeed);
-                BlockedTimer.Stop();
-                BlockedTimer.Reset();
-                IsBlocked = false;
-                return IsBlocked;
-            }
+        //    var moveSpeed = GetMovementSpeed();
+        //    if (moveSpeed > 2)
+        //    {
+        //        Logger.LogVerbose(LogCategory.Movement, "Not blocked because moving fast! CurrentSpeed={0}", moveSpeed);
+        //        BlockedTimer.Stop();
+        //        BlockedTimer.Reset();
+        //        IsBlocked = false;
+        //        return IsBlocked;
+        //    }
 
-            var testObjects = TrinityPlugin.Targets.Where(o => o.IsUnit && o.HitPoints > 0 && o.Distance <= 14f).ToList();
-            var surrounded = false;
-            var myPosition = ZetaDia.Me.Position;
-            var testPoints = MathUtil.GetCirclePoints(10, 10f, myPosition).Where(p => Core.Avoidance.Grid.CanRayWalk(myPosition, p)).ToList();
-            var halfPoints = Math.Round(testPoints.Count * 0.60, 0, MidpointRounding.AwayFromZero);
-            var blockedPoints = testPoints.Count(p => testObjects.Any(o => MathUtil.PositionIsInCircle(p, o.Position, o.CollisionRadius / 2)));
-            if (blockedPoints > halfPoints)
-            {
-                Logger.LogVerbose(LogCategory.Movement, "Surrounded BlockedPoints={0} Required={1} TotalPoints={2}", blockedPoints, halfPoints, testPoints.Count);
-                surrounded = true;
-            }
+        //    var testObjects = TrinityPlugin.Targets.Where(o => o.IsUnit && o.HitPoints > 0 && o.Distance <= 14f).ToList();
+        //    var surrounded = false;
+        //    var myPosition = ZetaDia.Me.Position;
+        //    var testPoints = MathUtil.GetCirclePoints(10, 10f, myPosition).Where(p => Core.Avoidance.Grid.CanRayWalk(myPosition, p)).ToList();
+        //    var halfPoints = Math.Round(testPoints.Count * 0.60, 0, MidpointRounding.AwayFromZero);
+        //    var blockedPoints = testPoints.Count(p => testObjects.Any(o => MathUtil.PositionIsInCircle(p, o.Position, o.CollisionRadius / 2)));
+        //    if (blockedPoints > halfPoints)
+        //    {
+        //        Logger.LogVerbose(LogCategory.Movement, "Surrounded BlockedPoints={0} Required={1} TotalPoints={2}", blockedPoints, halfPoints, testPoints.Count);
+        //        surrounded = true;
+        //    }
 
-            var blocked = false;
-            if (CurrentTarget != null && CurrentTarget.Distance > 10f)
-            {
-                var pointInFacingDirection0 = MathEx.GetPointAt(Core.Player.Position, 8f, Core.Player.Rotation);
-                var numMonstersInFront = (from u in TrinityPlugin.Targets
-                                          where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, Core.Player.Position, pointInFacingDirection0)
-                                          select u).Count();
+        //    var blocked = false;
+        //    if (CurrentTarget != null && CurrentTarget.Distance > 10f)
+        //    {
+        //        var pointInFacingDirection0 = MathEx.GetPointAt(Core.Player.Position, 8f, Core.Player.Rotation);
+        //        var numMonstersInFront = (from u in TrinityPlugin.Targets
+        //                                  where !u.IsMe && u.IsUnit && MathUtil.IntersectsPath(u.Position, u.CollisionRadius, Core.Player.Position, pointInFacingDirection0)
+        //                                  select u).Count();
 
-                blocked = numMonstersInFront > 0;
-            }
+        //        blocked = numMonstersInFront > 0;
+        //    }
 
-            if (BlockedTimer.IsRunning && (surrounded || blocked) && BlockedTimer.ElapsedMilliseconds > TimeToBlockMs)
-            {
-                Logger.LogVerbose(LogCategory.Movement, "IsBlocked! Timer={0}ms TestObjects={1} TestPoints={2}", BlockedTimer.ElapsedMilliseconds, testObjects.Count, testPoints.Count());
-                IsBlocked = true;
-                return IsBlocked;
-            }
+        //    if (BlockedTimer.IsRunning && (surrounded || blocked) && BlockedTimer.ElapsedMilliseconds > TimeToBlockMs)
+        //    {
+        //        Logger.LogVerbose(LogCategory.Movement, "IsBlocked! Timer={0}ms TestObjects={1} TestPoints={2}", BlockedTimer.ElapsedMilliseconds, testObjects.Count, testPoints.Count());
+        //        IsBlocked = true;
+        //        return IsBlocked;
+        //    }
 
-            if (BlockedTimer.IsRunning && !(surrounded || blocked))
-            {
-                Logger.LogVerbose(LogCategory.Movement, "No Longer Blocked!");
-                BlockedTimer.Stop();
-                BlockedTimer.Reset();
-                IsBlocked = false;
-                return IsBlocked;
-            }
+        //    if (BlockedTimer.IsRunning && !(surrounded || blocked))
+        //    {
+        //        Logger.LogVerbose(LogCategory.Movement, "No Longer Blocked!");
+        //        BlockedTimer.Stop();
+        //        BlockedTimer.Reset();
+        //        IsBlocked = false;
+        //        return IsBlocked;
+        //    }
 
-            if ((surrounded || blocked))
-            {
-                if (!BlockedTimer.IsRunning)
-                    BlockedTimer.Restart();
+        //    if ((surrounded || blocked))
+        //    {
+        //        if (!BlockedTimer.IsRunning)
+        //            BlockedTimer.Restart();
 
-                Logger.LogVerbose(LogCategory.Movement, "Probably Blocked - Timer={0}ms TestObjects={1}", BlockedTimer.ElapsedMilliseconds, testObjects.Count());
-            }
+        //        Logger.LogVerbose(LogCategory.Movement, "Probably Blocked - Timer={0}ms TestObjects={1}", BlockedTimer.ElapsedMilliseconds, testObjects.Count());
+        //    }
 
-            return IsBlocked;
-        }
+        //    return IsBlocked;
+        //}
 
-        public static long BlockedTimeMs
-        {
-            get { return BlockedTimer.ElapsedMilliseconds; }
-        }
+        //public static long BlockedTimeMs
+        //{
+        //    get { return BlockedTimer.ElapsedMilliseconds; }
+        //}
 
         #endregion
 

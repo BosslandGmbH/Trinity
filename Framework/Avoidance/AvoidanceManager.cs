@@ -201,7 +201,7 @@ namespace Trinity.Framework.Avoidance
 
                 var nodePool = Grid.GetNodesInRadius(Core.Player.Position, node => node.IsWalkable, MaxDistance).Select(n => n.Reset()).ToList();
                 //var allNodes = Grid.GetNodesInRadius(Core.Player.Position, node => node != null, MaxDistance).ToList();
-                var nearestNodes = Grid.GetNodesInRadius(Core.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), Core.Settings.Avoidance.AvoiderLocalRadius);
+                var nearestNodes = Grid.GetNodesInRadius(Core.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), Core.Settings.Avoidance.AvoiderLocalRadius).ToList();
                 var weightSettings = Core.Settings.Avoidance.WeightingOptions;
 
                 try
@@ -392,7 +392,11 @@ namespace Trinity.Framework.Avoidance
 
             foreach (var node in Grid.GetNodesInRadius(actor.Position, actor.CollisionRadius * MonsterWeightRadiusFactor))
             {
-                node.Weight += 2;  
+                node.Weight += 2;
+
+                if(actor.IsHostile)
+                { node.HostileMonsterCount ++;}
+
                 node.AddNodeFlags(AvoidanceFlags.Monster);
                 layer.Add(node);
 

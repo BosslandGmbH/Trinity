@@ -2,13 +2,16 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Technicals;
 using TrinityCoroutines;
+using TrinityCoroutines.Resources;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Coroutines.Town
 {
@@ -16,10 +19,16 @@ namespace Trinity.Coroutines.Town
     {
         public static async Task<bool> Execute(List<TrinityItem> transmuteGroup)
         {
-            ZetaDia.Actors.Clear();
-            ZetaDia.Actors.Update();
-            
-            var acds = transmuteGroup.Select(i => i.ToAcdItem()).ToList();
+            if (!UIElements.TransmuteItemsDialog.IsVisible)
+            {
+                await MoveToAndInteract.Execute(TownInfo.KanaisCube);
+                await Coroutine.Sleep(1000);
+            }
+
+            //ZetaDia.Actors.Clear();
+            //ZetaDia.Actors.Update();
+
+            var acds = transmuteGroup.Select(i => Core.Actors.GetAcdItemByAcdId(i.AcdId)).ToList();
             //var acds = transmuteGroup.Select(i => ZetaDia.Actors.GetACDByAnnId(i.AnnId) as ACDItem).ToList();
             //var acds = transmuteGroup.Select(i => i.ToAcdItem()).ToList();
 
@@ -33,11 +42,13 @@ namespace Trinity.Coroutines.Town
 
             if (transmuteGroup.Count > 9)
             {
-                Logger.Log(" --> Can't convert more than 9 items!");
+                Logger.Log(" --> Can't convert with more than 9 items!");
                 return false;
             }
 
             Logger.Log("Transmuting:");
+
+            //var testItems = ZetaDia.Actors.GetActorsOfType<ACDItem>();
 
             foreach (var item in transmuteGroup)
             {
@@ -47,16 +58,16 @@ namespace Trinity.Coroutines.Town
                     return false;
                 }
 
-                var testItem = ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(a =>
-                    a.InventoryColumn == item.InventoryColumn &&
-                    a.InventoryRow == item.InventoryRow &&
-                    a.InventorySlot == item.InventorySlot);
+                //var itemCountAtLocation = testItems.Count(a =>
+                //    a.InventoryColumn == item.InventoryColumn &&
+                //    a.InventoryRow == item.InventoryRow &&
+                //    a.InventorySlot == item.InventorySlot);
 
-                if (testItem == null || testItem.InternalName != item.InternalName || testItem.AnnId != item.AnnId)
-                {
-                    Logger.Log($" --> Error - item mismatch detected in Col={item.InventoryColumn} Row={item.InventoryColumn} item={item.Name}");
-                    return false;
-                }
+                //if (itemCountAtLocation > 1)
+                //{
+                //    Logger.Log($" --> Error - item mismatch detected in Col={item.InventoryColumn} Row={item.InventoryColumn} item={item.Name}");
+                //    return false;
+                //}
 
                 //var isVendorWhite = item.IsVendorBought && item.ItemQualityLevel <= ItemQuality.Superior;
                 if (!item.IsCraftingReagent && item.Level < 70)
@@ -71,27 +82,36 @@ namespace Trinity.Coroutines.Town
 
             if (!UIElements.TransmuteItemsDialog.IsVisible)
             {
-                await Coroutine.Sleep(500);
-
-                await MoveToAndInteract.Execute(TownInfo.KanaisCube);
-
-                await Coroutine.Sleep(1000);
-
-                if (!UIElements.TransmuteItemsDialog.IsVisible)
-                {
-                    Logger.Log("Cube window needs to be open before you can transmute anything.");
-                    return false;
-                }
+                Logger.Log("Cube window needs to be open before you can transmute anything.");
+                return false;
             }
 
-            Logger.Log("Zip Zap!");
 
+            //if (item == null)
+            //    return false;
+
+            Logger.Log("Zip Zap!");
+            //transmuteGroup.Add(item);
+            //Inventory.InvalidItemDynamicIds.Add(item.AnnId);
             ZetaDia.Me.Inventory.TransmuteItems(transmuteGroup);
+
+            //await Coroutine.Sleep(1500);
+
+            var first = transmuteGroup.FirstOrDefault();
+
+            var zetaItems = ZetaDia.Actors.GetActorsOfType<ACDItem>().Where(a => a.InventorySlot == InventorySlot.BackpackItems && a.ItemQualityLevel >= ItemQuality.Rare4 && a.ItemQualityLevel <= ItemQuality.Rare6);
+            var trinItems = Core.Actors._commonDataContainer.Where(a => a.InventorySlot == InventorySlot.BackpackItems && a.ActorType == ActorType.Item);
+
+            var firstNewByAcd = Core.Actors.GetCommonDataById(first.ACDId);
+            var firstNewByAnn = Core.Actors.GetAcdByAnnId(first.AnnId);
+            var firstCommonByAnn = Core.Actors.GetCommonDataByAnnId(first.AnnId);
+            var itemByAnn = Core.Actors.GetItemByAnnId(first.AnnId);
+            var valid = Core.Actors.IsAnnIdValid(first.AnnId);
+
             //new TransmuteItemsMessage(transmuteGroup.Select(i => i.AnnId).ToArray()).Initialize();
 
-            ZetaDia.Actors.Clear();
-            ZetaDia.Actors.Update();
-
+            //ZetaDia.Actors.Clear();
+            //ZetaDia.Actors.Update();
             return true;
         }
     }
