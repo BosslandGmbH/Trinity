@@ -49,7 +49,10 @@ namespace Trinity.Framework
         public static GridHelper Grids { get; } = new GridHelper();
         public static PlayerMover PlayerMover { get; } = new PlayerMover();
         public static StuckHandler StuckHandler { get; } = new StuckHandler();
+        public static BlockedCheck BlockedCheck { get; } = new BlockedCheck();
+
         public static TrinitySetting Settings => TrinityPlugin.Settings;
+
 
         public static void Enable()
         {

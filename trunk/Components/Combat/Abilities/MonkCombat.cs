@@ -4,6 +4,7 @@ using Buddy.Coroutines;
 using Trinity.Config.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
@@ -48,6 +49,18 @@ namespace Trinity.Components.Combat.Abilities
                        Legendary.LefebvresSoliloquy.IsEquipped && Legendary.BindingsOfTheLesserGods.IsEquipped &&
                        !Sets.MonkeyKingsGarb.IsFirstBonusActive && 
                        (Legendary.TheFistOfAzturrasq.IsEquipped || Legendary.Ingeom.IsEquipped);
+            }
+        }
+
+        public static bool IsThousandStormsGenerator
+        {
+            get
+            {
+                return Sets.ThousandStorms.IsFullyEquipped && Sets.ShenlongsSpirit.IsFullyEquipped &&
+                       Legendary.LefebvresSoliloquy.IsEquipped && Legendary.FlyingDragon.IsEquipped && 
+                       Skills.Monk.CycloneStrike.IsActive && Skills.Monk.BreathOfHeaven.IsActive &&
+                       Skills.Monk.DashingStrike.IsActive && Skills.Monk.Epiphany.IsActive &&                       
+                       (Skills.Monk.CripplingWave.IsActive || Skills.Monk.WayOfTheHundredFists.IsActive);
             }
         }
 
@@ -252,9 +265,62 @@ namespace Trinity.Components.Combat.Abilities
 
             return power;
         }
+
+        public static TrinityPower GetThousandStormsGeneratorPower()
+        {
+            if (UseOOCBuff)
+            {
+                // Breath of Heaven OOC
+                if (CanCast(SNOPower.Monk_BreathOfHeaven) && !GetHasBuff(SNOPower.Monk_BreathOfHeaven) &&
+                    Settings.Combat.Monk.BreathOfHeavenOOC)
+                    return new TrinityPower(SNOPower.Monk_BreathOfHeaven);
+            }
+            if (CurrentTarget != null)
+            {
+                // Dashing Strike
+                if (CanCast(SNOPower.X1_Monk_DashingStrike) && Skills.Monk.DashingStrike.Charges > 1 &&
+                    TimeSincePowerUse(SNOPower.X1_Monk_DashingStrike) >= Settings.Combat.Monk.DashingStrikeDelay)
+                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 45f, TargetUtil.GetBestPierceTarget(45f).Position);
+
+                if (CanCastEpiphany())
+                    return new TrinityPower(SNOPower.X1_Monk_Epiphany);
+
+                // Breath of Heaven when needing healing or the buff
+                if (CanCastBreathOfHeavenForHealing())
+                    return new TrinityPower(SNOPower.Monk_BreathOfHeaven);
+
+                // Breath of Heaven for spirit - Infused with Light
+                if (CanCastBreathOfHeavenInfusedWithLight())
+                    return new TrinityPower(SNOPower.Monk_BreathOfHeaven);
+
+                var cycloneStrikeRange = Runes.Monk.Implosion.IsActive ? 34f : 24f;
+                var cycloneStrikeSpirit = Runes.Monk.EyeOfTheStorm.IsActive ? 30 : 50;
+
+                TrinityPower power;
+                if (TryMoveToBuffedSpot(out power, 30f, 20f, false))
+                    return power;
+
+                if (Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResourcePct < 0.85f
+                    && Skills.Monk.CycloneStrike.TimeSinceUse >= Settings.Combat.Monk.CycloneStrikeDelay
+                    && Player.PrimaryResource > cycloneStrikeSpirit 
+                    && (TargetUtil.IsPercentUnitsWithinBand(10f, cycloneStrikeRange, 0.25) || CurrentTarget.IsElite))
+                {
+                    return new TrinityPower(SNOPower.Monk_CycloneStrike);
+                }
+
+                if (CanCast(SNOPower.Monk_CripplingWave))
+                    return new TrinityPower(SNOPower.Monk_CripplingWave, 10f, CurrentTarget.AcdId);
+
+                if (CanCast(SNOPower.Monk_WayOfTheHundredFists))
+                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 10f, CurrentTarget.AcdId);
+            }
+
+            return null;
+        }
+
         public static TrinityPower GetPower()
         {
-            TrinityPower power;
+            TrinityPower power = null;
 
             ParameterSetup();
 
@@ -264,19 +330,24 @@ namespace Trinity.Components.Combat.Abilities
                 return new TrinityPower(SNOPower.Monk_Serenity);
             }
 
+            // Destructibles
+            if (UseDestructiblePower)
+                return GetMonkDestroyPower();
+
             if (!IsCurrentlyAvoiding)
             {
+                if (IsThousandStormsGenerator)
+                {
+                    return GetThousandStormsGeneratorPower();
+                }
                 if (IsWolMonk)
+                {
                     return GetWolPower();
-
+                }
                 if (IsInnasEP)
+                {
                     return GetInnasPower();
-            }
-
-            // Destructible objects
-            if (UseDestructiblePower)
-            {
-                return GetMonkDestroyPower();
+                }
             }
 
             if(Settings.Combat.Monk.AlwaysBlindingFlash && CanCast(SNOPower.Monk_BlindingFlash))

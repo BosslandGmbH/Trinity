@@ -438,7 +438,7 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (!Core.Settings.WorldObject.UseShrine)
+            if (!Core.Settings.WorldObject.UseShrine && cacheObject.Type == TrinityObjectType.Shrine)
             {
                 cacheObject.AddCacheInfo("UseShrineSetting");
                 return false;

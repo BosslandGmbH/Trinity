@@ -200,15 +200,19 @@ namespace Trinity.Coroutines.Town
                     var itemName = item.Name;
                     var itemDynamicId = item.AnnId;
                     var itemInternalName = item.InternalName;
-                    var transmuteGroup = new List<TrinityItem>
-                    {
-                        item,
-                    };
+                    var transmuteGroup = new List<TrinityItem>();
 
+                    // Position in the cube matters; it looks like it will fail if
+                    // stacks are added after the required amount of ingredient is met, 
+                    // as the cube encounters them from top left to bottom right.
+
+                    transmuteGroup.Add(item);
                     transmuteGroup.AddRange(Inventory.GetStacksUpToQuantity(Inventory.Backpack.ArcaneDust, 50));
                     transmuteGroup.AddRange(Inventory.GetStacksUpToQuantity(Inventory.Backpack.VeiledCrystals, 50));
                     transmuteGroup.AddRange(Inventory.GetStacksUpToQuantity(Inventory.Backpack.ReusableParts, 50));
                     transmuteGroup.AddRange(Inventory.GetStacksUpToQuantity(Inventory.Backpack.DeathsBreath, 25));
+
+                    
 
                     await Transmute.Execute(transmuteGroup);
                     await Coroutine.Sleep(1500);

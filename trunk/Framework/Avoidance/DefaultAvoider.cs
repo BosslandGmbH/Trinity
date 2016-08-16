@@ -83,7 +83,7 @@ namespace Trinity.Framework.Avoidance
                 if (Core.Avoidance.Grid.IsStandingInFlags(AvoidanceFlags.NoAvoid) && PlayerMover.IsBlocked)
                     return false;
 
-                if (PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 8000)
+                if (PlayerMover.IsBlocked && Core.BlockedCheck.BlockedTime.TotalMilliseconds > 8000)
                 {
                     Logger.Log(LogCategory.Avoidance, "Not Avoiding because blocked");
                     return false;
@@ -261,7 +261,7 @@ namespace Trinity.Framework.Avoidance
                 return false;
             }
 
-            if (PlayerMover.IsBlocked && PlayerMover.BlockedTimeMs > 8000 && !Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position))
+            if (PlayerMover.IsBlocked && Core.BlockedCheck.BlockedTime.TotalMilliseconds > 8000 && !Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position))
             {
                 Logger.Log(LogCategory.Avoidance, "Not kiting because blocked");
                 return false;

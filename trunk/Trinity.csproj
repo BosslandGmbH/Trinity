@@ -513,6 +513,7 @@
     <Compile Include="Helpers\WindowsVirtualKey.cs" />
     <Compile Include="Framework\Helpers\Internals.cs" />
     <Compile Include="Movement\ClassMover.cs" />
+    <Compile Include="Framework\Modules\BlockedCheck.cs" />
     <Compile Include="Objects\SkillSettings.cs" />
     <Compile Include="Objects\IFindable.cs" />
     <Content Include="Profiles\Bounties.xml" />

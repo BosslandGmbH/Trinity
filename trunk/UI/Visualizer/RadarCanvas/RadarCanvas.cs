@@ -1081,6 +1081,13 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 {
                     DrawNavNode(dc, canvas, node);
                 }
+
+                foreach (var node in Core.BlockedCheck.Nodes)
+                {
+                    dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), 2 * Scale, 2 * Scale);                
+                }
+
+
             }
             catch (Exception ex)
             {

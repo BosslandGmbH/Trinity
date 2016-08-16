@@ -47,6 +47,8 @@ namespace Trinity.Components.Adventurer.Settings
         private bool _useGemAutoLevel;
         private string _greaterRiftLevelMax;
         private int _gemAutoLevelReductionLimit;
+        private int _minimumKeys;
+        private int _minimumGold;
 
         public static PluginSettings Current { get { return _settings.GetOrAdd(AdvDia.BattleNetHeroId, LoadCurrent()); } }
 
@@ -66,6 +68,20 @@ namespace Trinity.Components.Adventurer.Settings
                 return level == 0 ? 120 : level;
             }
             set { }
+        }
+
+        [DataMember]
+        public int MinimumKeys
+        {
+            get { return _minimumKeys; }
+            set { SetField(ref _minimumKeys, value); }
+        }
+
+        [DataMember]
+        public int MinimumGold
+        {
+            get { return _minimumGold; }
+            set { SetField(ref _minimumGold, value); }
         }
 
         [DataMember]
