@@ -67,6 +67,12 @@ namespace Trinity.Coroutines.Town
                     return false;
                 }
 
+                if (Core.Player.CurrentQuestSNO == 87700)
+                {
+                    // Campaign quest start of ACT1
+                    return false;
+                }
+
                 if (Core.CastStatus.StoneOfRecall.LastResult == CastResult.Casting)
                 {
                     Logger.LogDebug("Casting");

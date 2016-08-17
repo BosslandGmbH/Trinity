@@ -259,7 +259,7 @@ namespace Trinity.Components.Combat.Abilities
                 if (!_isCombatAllowed)
                     return false;
 
-                if (CombatMode == CombatMode.On)
+                if (CombatMode == CombatMode.Normal || CombatMode == CombatMode.Questing)
                     return true;
 
                 if (CombatMode == CombatMode.Off || CombatMode == CombatMode.SafeZerg && TargetUtil.NumMobsInRangeOfPosition(Core.Player.Position, 10f) > 4)

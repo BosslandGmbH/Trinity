@@ -61,7 +61,7 @@ namespace Trinity.DbProvider
             {
                 Logger.Log("Stopped Clearing Area");
                 IsClearing = false;
-                CombatBase.CombatMode = CombatMode.On;
+                CombatBase.CombatMode = CombatMode.Normal;
             }
         }
 

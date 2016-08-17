@@ -181,7 +181,7 @@ namespace Trinity.Components.Combat
                         else
                         {
                             Logger.LogVerbose($"Reverting rift progression kill all mode back to normal combat");
-                            CombatBase.CombatMode = CombatMode.On;
+                            CombatBase.CombatMode = CombatMode.Normal;
                         }
                     }
 
@@ -586,9 +586,14 @@ namespace Trinity.Components.Combat
                                                     cacheObject.InternalName);
                                             break;
                                         }
+                                        else if (CombatBase.CombatMode == CombatMode.Questing)
+                                        {
+                                            cacheObject.WeightInfo += $"Questing Mode - Ignoring Trash Pack Size Setting.";
+                                        }
                                         else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize && !Core.Minimap.MinimapIconAcdIds.Contains(cacheObject.AcdId) && 
                                                  !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat)
                                         {
+
                                             cacheObject.WeightInfo +=
                                                 $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {CombatBase.CombatOverrides.EffectiveTrashSize})";
                                             break;

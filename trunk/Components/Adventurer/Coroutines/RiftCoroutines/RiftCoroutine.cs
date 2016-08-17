@@ -240,8 +240,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             return false;
         }
 		
-		private long minimumRiftKeys = 50; // todo make accessible through UI and save in settings etc
-
         private long CurrentRiftKeyCount
         {
             get
@@ -261,14 +259,14 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             {
                 _level = RiftData.GetGreaterRiftLevel();
             }
-            if (_runningNephalemInsteadOfGreaterRift && CurrentRiftKeyCount > minimumRiftKeys)
+            if (_runningNephalemInsteadOfGreaterRift && CurrentRiftKeyCount > PluginSettings.Current.MinimumKeys)
             {
                 _level = RiftData.GetGreaterRiftLevel();
                 _RiftType = RiftType.Greater;
                 _runningNephalemInsteadOfGreaterRift = false;
                 return false;
             }
-            if (AdvDia.RiftQuest.State == QuestState.NotStarted && _RiftType == RiftType.Greater && CurrentRiftKeyCount <= minimumRiftKeys)
+            if (AdvDia.RiftQuest.State == QuestState.NotStarted && _RiftType == RiftType.Greater && CurrentRiftKeyCount <= PluginSettings.Current.MinimumKeys)
             {
                 if (PluginSettings.Current.GreaterRiftRunNephalem)
                 {
@@ -500,8 +498,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             return false;
         }
-		
-		private long minimumCoinageKept = 1000000000; // todo add to GUI and settings, keeping gold for reforges and empowering self-run rifts
 
         private async Task<bool> OpeningRift()
         {
@@ -522,9 +518,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
             long empoweredCost = 0;
             bool shouldEmpower = _options.IsEmpowered;
-			bool haveMoneyForEmpower = RiftData.EmpoweredRiftCost.TryGetValue(_level, out empoweredCost) && ZetaDia.PlayerData.Coinage >= (empoweredCost + minimumCoinageKept);
+			bool haveMoneyForEmpower = RiftData.EmpoweredRiftCost.TryGetValue(_level, out empoweredCost) && ZetaDia.PlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold);
             bool canEmpower = (_RiftType == RiftType.Greater && haveMoneyForEmpower);
-            var settings = global::Trinity.Components.Adventurer.Settings.PluginSettings.Current;
+            var settings = PluginSettings.Current;
 
             _riftStartTime = DateTime.UtcNow;
             const int waittime = 45;
@@ -601,7 +597,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                             Util.Logger.Info("Update chance at max level is 60%, checking if we can take a few levels off still!");
                             for (; _level > minLevel; _level--)
                             {
-                                var couldEmpower = (RiftData.EmpoweredRiftCost.TryGetValue(_level - 1, out empoweredCost) && ZetaDia.PlayerData.Coinage >= (empoweredCost + minimumCoinageKept));
+                                var couldEmpower = (RiftData.EmpoweredRiftCost.TryGetValue(_level - 1, out empoweredCost) && ZetaDia.PlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold));
                                 var upgradeAttempts = (couldEmpower && (shouldEmpower || _level - 1 <= settings.EmpoweredRiftLevelLimit) ? 4 : 3);
                                 var possibleUpgrades = gems.Gems.Sum(g => g.GetUpgrades(_level - 1, upgradeAttempts, 60));
 
@@ -619,7 +615,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 }
 
 
-                if (_RiftType == RiftType.Greater && shouldEmpower && canEmpower && global::Trinity.Components.Adventurer.Settings.PluginSettings.Current.UseEmpoweredRifts)
+                if (_RiftType == RiftType.Greater && shouldEmpower && canEmpower && PluginSettings.Current.UseEmpoweredRifts)
                 {
                     Util.Logger.Info("Opening Empowered Greater Rift (Cost={0})", empoweredCost);
                     ZetaDia.Me.OpenRift(Math.Min(_level, ZetaDia.Me.CommonData.HighestUnlockedRiftLevel), true);

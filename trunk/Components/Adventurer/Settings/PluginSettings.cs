@@ -48,7 +48,7 @@ namespace Trinity.Components.Adventurer.Settings
         private string _greaterRiftLevelMax;
         private int _gemAutoLevelReductionLimit;
         private int _minimumKeys;
-        private int _minimumGold;
+        private long _minimumGold;
 
         public static PluginSettings Current { get { return _settings.GetOrAdd(AdvDia.BattleNetHeroId, LoadCurrent()); } }
 
@@ -78,7 +78,7 @@ namespace Trinity.Components.Adventurer.Settings
         }
 
         [DataMember]
-        public int MinimumGold
+        public long MinimumGold
         {
             get { return _minimumGold; }
             set { SetField(ref _minimumGold, value); }

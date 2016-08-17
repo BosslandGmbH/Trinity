@@ -1,0 +1,15 @@
+﻿<Profile>
+  <Name>WaitForCombatTag Test</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams quest="-1" step="-1" act="A1" resumeFromSave="False" isPrivate="True" numGames="-1" />
+  <Order>
+    <ToggleTargeting questId="1" combat="True" killRadius="90" looting="True" lootRadius="300" />
+    <SetCombatMode mode="Questing" />
+
+    <WaitForCombat />
+
+    <LogMessage message=">> Profile Finished" />
+    <WaitTimer questId="1" stepId="1" waitTime="500" />    
+  </Order>  
+</Profile>

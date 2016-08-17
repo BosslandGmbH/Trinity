@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Cache;
+using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Game;
@@ -11,7 +12,7 @@ using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
-    public sealed class InteractionCoroutine
+    public sealed class InteractionCoroutine : ISubroutine
     {
 
         #region State
@@ -70,6 +71,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
         }
 
+        public bool IsDone => State == States.Failed || State == States.Completed;
 
         public async Task<bool> GetCoroutine()
         {
@@ -268,6 +270,11 @@ namespace Trinity.Components.Adventurer.Coroutines
             _interactionStartedAt = default(DateTime);
             _timeoutCheckEnabled = false;
             State = States.NotStarted;
+        }
+
+        public void DisablePulse()
+        {
+            
         }
     }
 }

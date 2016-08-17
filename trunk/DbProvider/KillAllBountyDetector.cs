@@ -18,7 +18,7 @@ namespace Trinity.DbProvider
     {
         public static DateTime LastCheckTime = DateTime.MinValue;
 
-        private static CombatMode _previousCombatMode = CombatMode.On;
+        private static CombatMode _previousCombatMode = CombatMode.Normal;
         private static bool _isCombatModeChanged;
         private static int _currentQuestId;
         private static int _currentQuestStep;

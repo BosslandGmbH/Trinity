@@ -1865,6 +1865,9 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.PT_Blacksmith,
+            (int)SNOActor.trOut_OldTristram_AdriaCellar_Cauldron, //-6946 (131123)
+
             (int)SNOActor.trDun_Cath_Chandelier_Trap, //Name = trDun_Cath_Chandelier_Trap - 25291.SNO = 5744,
 
             (int)SNOActor.a2dun_Spider_Ground_Spawner, //

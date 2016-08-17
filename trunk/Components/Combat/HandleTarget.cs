@@ -1779,20 +1779,26 @@ namespace Trinity.Components.Combat
                     Logger.LogVerbose(LogCategory.Targetting, "Target is Dead ({0})", Trinity.TrinityPlugin.CurrentTarget.InternalName);
                     return;
                 }
-                
-                if (Trinity.TrinityPlugin.CurrentTarget.IsQuestGiver)
-                {
-                    if (Trinity.TrinityPlugin.CurrentTarget.RadiusDistance > 0)
+
+                var questTarget = Trinity.TrinityPlugin.CurrentTarget;
+                if (questTarget.IsQuestGiver)
+                {                    
+                    InteractionCooldowns.RemoveAll(t => t < DateTime.UtcNow);
+                    var annId = questTarget.AnnId;
+
+                    if (!InteractionCooldowns.ContainsKey(annId))
                     {
-                        HandleTargetBasicMovement(Trinity.TrinityPlugin.CurrentTarget.Position, true);
-                    }
-                    else
-                    {
+                        if (questTarget.RadiusDistance > 1)
+                        {
+                            HandleTargetBasicMovement(questTarget.Position, true);
+                            return;
+                        }
+                        InteractionCooldowns.Add(annId, DateTime.UtcNow.AddSeconds(30));
                         InteractionWaitUntilTime = DateTime.UtcNow.AddMilliseconds(500);
-                        Logger.LogVerbose(LogCategory.Targetting, $"Interacting with quest giver {Trinity.TrinityPlugin.CurrentTarget}");
-                        Trinity.TrinityPlugin.CurrentTarget.Interact();
+                        Logger.LogVerbose(LogCategory.Targetting, $"Interacting with quest giver {questTarget}");
+                        questTarget.Interact();
+                        return;
                     }
-                    return;
                 }
 
                 float distance;
@@ -2045,7 +2051,9 @@ namespace Trinity.Components.Combat
             }
         }
 
+        public Dictionary<int,DateTime> InteractionCooldowns { get; set; } = new Dictionary<int, DateTime>();
         public DateTime InteractionWaitUntilTime { get; set; } = DateTime.MinValue;
+
 
 
         public string GetTargetName()

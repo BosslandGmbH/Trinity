@@ -78,13 +78,10 @@
       <!-- The Fallen Star -->
       <SafeMoveTo questId="87700" stepId="-1" actorId="3739" x="2837" y="2931" z="24" />
     
-	  <WaitTimer questId="87700" stepId="-1" waitTime="8000" />
-	
+	  <WaitTimer questId="87700" stepId="-1" waitTime="8000" />	
       <!-- Pickup the quest from Captain Rumford -->
-      <MoveToActor questId="87700" stepId="-1" actorId="3739" x="2837" y="2931" z="24" />
-      
-      <MoveToActor questId="87700" stepId="-1" x="2840" y="2910" z="24"  actorId="3739" interactRange="7"  pathPrecision="5" pathPointLimit="250" statusText="" />
-      
+      <MoveToActor questId="87700" stepId="-1" actorId="3739" x="2837" y="2931" z="24" />      
+      <MoveToActor questId="87700" stepId="-1" x="2840" y="2910" z="24"  actorId="3739" interactRange="7"  pathPrecision="5" pathPointLimit="250" statusText="" />     
       <WaitTimer questId="87700" stepId="-1" waitTime="1000" />
     </If>
 	
