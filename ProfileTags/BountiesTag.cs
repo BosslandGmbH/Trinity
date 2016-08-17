@@ -8,6 +8,8 @@ using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
@@ -44,6 +46,7 @@ namespace Trinity.Components.Adventurer.Tags
                 return;
             }
 
+            CombatBase.CombatMode = CombatMode.Questing;
             PluginEvents.CurrentProfileType = ProfileType.Bounty;
 
             ResetAll();

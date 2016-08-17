@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
@@ -6,6 +7,7 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Common;
+using Zeta.Game;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
@@ -117,7 +119,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            if (!await ExplorationCoroutine.Explore(BountyData.LevelAreaIds)) return false;
+            var areaIds = BountyData != null ? BountyData.LevelAreaIds : new HashSet<int> {AdvDia.CurrentLevelAreaId};
+            if (!await ExplorationCoroutine.Explore(areaIds)) return false;
             ScenesStorage.Reset();
             return false;
         }

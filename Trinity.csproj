@@ -200,21 +200,25 @@
     <Compile Include="Components\Adventurer\Settings\AdventurerGem.cs" />
     <Compile Include="Components\Adventurer\Settings\AdventurerGems.cs" />
     <Compile Include="Components\Adventurer\Settings\PluginSettings.cs" />
-    <Compile Include="Components\Adventurer\Tags\BountiesTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\ClearAreaTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\ExploreLevelAreaTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\GreaterRiftTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\KeywardensTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\MoveToPositionTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\NephalemRiftTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\RiftTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\RunActBountiesTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\RunBountyTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\StopBotTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\TakeWaypointTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\TestTag.cs" />
-    <Compile Include="Components\Adventurer\Tags\TestTag2.cs" />
-    <Compile Include="Components\Adventurer\Tags\WaitForNSecondsTag.cs" />
+    <Compile Include="ProfileTags\BountiesTag.cs" />
+    <Compile Include="ProfileTags\ClearAreaTag.cs" />
+    <Compile Include="ProfileTags\ExploreLevelAreaTag.cs" />
+    <Compile Include="ProfileTags\GreaterRiftTag.cs" />
+    <Compile Include="ProfileTags\KeywardensTag.cs" />
+    <Compile Include="ProfileTags\InteractTag.cs" />
+    <Compile Include="ProfileTags\MoveToPositionTag.cs" />
+    <Compile Include="ProfileTags\SetCombatMode.cs" />
+    <Compile Include="ProfileTags\NephalemRiftTag.cs" />
+    <Compile Include="ProfileTags\RiftTag.cs" />
+    <Compile Include="ProfileTags\RunActBountiesTag.cs" />
+    <Compile Include="ProfileTags\RunBountyTag.cs" />
+    <Compile Include="ProfileTags\StopBotTag.cs" />
+    <Compile Include="ProfileTags\TakeWaypointTag.cs" />
+    <Compile Include="ProfileTags\TestTag.cs" />
+    <Compile Include="ProfileTags\TestTag2.cs" />
+    <Compile Include="ProfileTags\TrinityProfileBehavior.cs" />
+    <Compile Include="ProfileTags\WaitForCombat.cs" />
+    <Compile Include="ProfileTags\WaitForNSecondsTag.cs" />
     <Compile Include="Components\Adventurer\UI\AdventurerProxy.cs" />
     <Compile Include="Components\Adventurer\UI\ConfigWindow.cs" />
     <Compile Include="Components\Adventurer\UI\DeveloperUI.cs" />
@@ -520,12 +524,13 @@
     <Content Include="Components\Adventurer\Game\Quests\Incompletes.txt" />
     <Content Include="Components\Adventurer\Game\Quests\SNOBounties.txt" />
     <Content Include="Components\Adventurer\Game\Quests\SpecialBounties.txt" />
+    <Content Include="Profiles\Debug\WaitForCombatTag.xml" />
     <Content Include="Profiles\GreaterRift.xml" />
     <Content Include="Profiles\Keywardens.xml" />
     <Content Include="Profiles\NephalemRift.xml" />
-    <Content Include="Profiles\FollowerCombat.xml" />
-    <Content Include="Profiles\FollowerPowerLevel.xml" />
-    <Content Include="Profiles\LeaderManual.xml" />
+    <Content Include="Profiles\AutoFollow\FollowerCombat.xml" />
+    <Content Include="Profiles\AutoFollow\FollowerPowerLevel.xml" />
+    <Content Include="Profiles\AutoFollow\LeaderManual.xml" />
     <Content Include="Framework\Objects\Memory\readme.txt" />
     <Content Include="Profiles\Questing\Act1.xml" />
     <Content Include="Profiles\Questing\Act1_StartNew.xml" />
@@ -540,8 +545,13 @@
     <Content Include="Profiles\Questing\AllActs_Relogger.xml" />
     <Content Include="Profiles\Questing\AllActs_RestartCurrentAct.xml" />
     <Content Include="Profiles\Questing\AllActs_RestartCurrentAct_Relogger.xml" />
+    <Content Include="Profiles\InDevelopment\Story_A5.xml" />
+    <Content Include="Profiles\InDevelopment\Story_A4.xml" />
+    <Content Include="Profiles\InDevelopment\Story_A3.xml" />
+    <Content Include="Profiles\InDevelopment\Story_A2.xml" />
     <Content Include="Version.xml" />
     <Compile Include="Framework\Objects\Memory\Misc\ItemTypeRecord.cs" />
+    <Content Include="Profiles\InDevelopment\Story_A1.xml" />
     <Compile Include="Settings\Mock\SkillSettingsMockData.cs" />
     <Compile Include="Settings\Paragon\ParagonSetting.cs" />
     <Compile Include="Settings\Paragon\ParagonItem.cs" />
@@ -1099,6 +1109,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Components\Adventurer\Tags\" />
     <Folder Include="ItemRules\Rules\custom\" />
     <Folder Include="WTV\" />
   </ItemGroup>

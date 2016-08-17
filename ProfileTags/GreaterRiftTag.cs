@@ -4,6 +4,8 @@ using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
 using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
@@ -53,6 +55,7 @@ namespace Trinity.Components.Adventurer.Tags
                 NormalRiftForXPShrine = IsGetXPShrine || PluginSettings.Current.NormalRiftForXPShrine,
             };
 
+            CombatBase.CombatMode = CombatMode.Normal;
             PluginEvents.CurrentProfileType = ProfileType.Rift;
 
             _stopwatch.Start();

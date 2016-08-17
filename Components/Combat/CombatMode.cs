@@ -8,8 +8,9 @@ namespace Trinity.Components.Combat
 {
     public enum CombatMode
     {
-        On,
+        Normal,
         Off,
+        Questing,
         KillAll,
         SafeZerg,
     }

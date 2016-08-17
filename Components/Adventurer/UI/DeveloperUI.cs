@@ -98,6 +98,15 @@ namespace Trinity.Components.Adventurer.UI
                     coroutineHelpers.Children.Add(CreateButton("Clear Level Area", ClearLevelArea_Click));
                     coroutineHelpers.Children.Add(CreateButton("Clear Area For N Seconds", ClearAreaForNSeconds_Click));
 
+                    var coroutineHelpers3 = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(0, 2, 2, 2) };
+                    coroutineHelpers3.Children.Add(CreateTitle("Profile Tags"));
+                    coroutineHelpers3.Children.Add(CreateButton("Move To Position", MoveToPositionTag_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("Interact", InteractTag_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("Move To Actor", MoveToActorTag_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("Enter Level Area", EnterLevelAreaTag_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("Clear Level Area", ClearLevelAreaTag_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("Clear Area For N Seconds", ClearAreaForNSecondsTag_Click));
+
                     var coroutineHelpers2 = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(0, 2, 2, 2) };
                     coroutineHelpers2.Children.Add(CreateTitle(" "));
                     coroutineHelpers2.Children.Add(CreateButton("Wait For N Seconds", WaitForNSeconds_Click, new Thickness(0, 2.5, 5, 2.5)));
@@ -142,11 +151,12 @@ namespace Trinity.Components.Adventurer.UI
                     };
 
                     //uniformGrid.Children.Add(mapUiContainer);
-                    //uniformGrid.Children.Add(settings);
+                    
                     uniformGrid.Children.Add(dumpers);
                     uniformGrid.Children.Add(coroutineHelpers);
                     uniformGrid.Children.Add(coroutineHelpers2);
-                    
+                    uniformGrid.Children.Add(coroutineHelpers3);
+
 
 
                     _tabItem = new TabItem
@@ -1020,43 +1030,6 @@ namespace Trinity.Components.Adventurer.UI
             }
         }
 
-        static void Test_Click(object sender, RoutedEventArgs e)
-        {
-            if (BotEvents.IsBotRunning)
-            {
-                BotMain.Stop();
-                Thread.Sleep(500);
-            }
-            try
-            {
-                if (!ZetaDia.IsInGame)
-                    return;
-                ScenesStorage.Update();
-                SafeFrameLock.ExecuteWithinFrameLock(() =>
-                {
-
-                    if (ZetaDia.Me == null)
-                        return;
-                    if (!ZetaDia.Me.IsValid)
-                        return;
-
-                    var activeBounty = ZetaDia.ActInfo.ActiveBounty != null
-                        ? (int)ZetaDia.ActInfo.ActiveBounty.Quest
-                        : 0;
-                    //AdvDia.Update();
-                    Logger.Raw(" ");
-                    var currentScenePosition = AdvDia.CurrentWorldScene.GetRelativePosition(AdvDia.MyPosition);
-                    Logger.Raw("new MoveToScenePositionCoroutine({0}, {1}, \"{2}\", new Vector3({3}f, {4}f, {5}f)),", activeBounty,
-                        AdvDia.CurrentWorldId, AdvDia.CurrentWorldScene.Name, currentScenePosition.X,
-                        currentScenePosition.Y, currentScenePosition.Z);
-                }, true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex.ToString());
-            }
-        }
-
         static void MoveToMapMarker_Click(object sender, RoutedEventArgs e)
         {
             if (BotEvents.IsBotRunning)
@@ -1252,6 +1225,363 @@ namespace Trinity.Components.Adventurer.UI
         }
 
         static void ClearAreaForNSeconds_Click(object sender, RoutedEventArgs e)
+        {
+            if (BotEvents.IsBotRunning)
+            {
+                BotMain.Stop();
+                Thread.Sleep(500);
+            }
+            try
+            {
+                if (!ZetaDia.IsInGame)
+                    return;
+                using (ZetaDia.Memory.AcquireFrame(true))
+                {
+
+                    if (ZetaDia.Me == null)
+                        return;
+                    if (!ZetaDia.Me.IsValid)
+                        return;
+
+                    int seconds;
+                    var mbox = InputBox.Show("How many seconds?", "Adventurer", "60");
+                    if (mbox.ReturnCode == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(mbox.Text))
+                    {
+                        seconds = 60;
+                    }
+                    else
+                    {
+                        if (!int.TryParse(mbox.Text, out seconds))
+                        {
+                            Logger.Raw("// Invalid number");
+                            return;
+                        }
+                    }
+
+                    ZetaDia.Actors.Update();
+                    //AdvDia.Update();
+
+                    var activeBounty = ZetaDia.ActInfo.ActiveBounty != null
+                        ? (int)ZetaDia.ActInfo.ActiveBounty.Quest
+                        : 0;
+
+                    //ClearAreaForNSecondsCoroutine(int questId, int seconds, int actorId, int marker, int radius = 30, bool increaseRadius = true)
+                    Logger.Raw("new ClearAreaForNSecondsCoroutine({0}, {1}, {2}, {3}, {4}),", activeBounty, seconds, 0,
+                        0, 45);
+                    Logger.Raw(" ");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
+        }
+
+        static void MoveToPositionTag_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!ZetaDia.IsInGame || ZetaDia.Me == null)
+                    return;
+
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    ZetaDia.Actors.Update();
+                    var quest = ZetaDia.CurrentQuest;
+                    var questId = quest?.QuestSnoId ?? 1;
+                    var questStep = quest?.StepId ?? 1;
+                    var sceneId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
+                    var sceneName = ZetaDia.Me.CurrentScene.Name;
+
+                    Logger.Raw($@"     <MoveToPosition questId=""{questId}"" stepId=""{questStep}"" x=""{ZetaDia.Me.Position.X:F0}"" y=""{ZetaDia.Me.Position.Y:F0}"" z=""{ZetaDia.Me.Position.Z:F0}"" worldSnoId=""{ZetaDia.CurrentWorldSnoId}"" levelAreaSnoId=""{ZetaDia.CurrentLevelAreaSnoId}"" sceneSnoId=""{sceneId}"" sceneName=""{sceneName}"" />");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
+        }
+
+        static void InteractTag_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!ZetaDia.IsInGame || ZetaDia.Me == null)
+                    return;
+
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    ZetaDia.Actors.Update();
+                    var quest = ZetaDia.CurrentQuest;
+                    var questId = quest?.QuestSnoId ?? 1;
+                    var questStep = quest?.StepId ?? 1;
+                    var sceneId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
+                    var sceneName = ZetaDia.Me.CurrentScene.Name;
+
+                    Logger.Raw("");
+
+                    var actors = new List<DiaObject>();
+                    var bestActor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).OrderBy(a => a.Distance).FirstOrDefault(u => u.IsInteractableQuestObject());
+                    if (bestActor == null)
+                    {
+                        Logger.Raw($@"-- Listing all potential interact targets --");
+                        actors.AddRange(ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).Where(g => g.Distance < 15f).OrderBy(a => a.Distance));
+                        actors.AddRange(ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Where(u => u.Distance < 15f && u.PetType <= 0).OrderBy(a => a.Distance));     
+                    }
+                    else
+                    {
+                        actors.Add(bestActor);
+                    }
+
+                    foreach (var actor in actors)
+                    {
+                        var actorId = actor?.ActorSnoId ?? 0;
+                        var actorName = actor?.Name.Split('-').First() ?? string.Empty;
+                        var scenePosition = actor != null ? AdvDia.CurrentWorldScene.GetRelativePosition(actor.Position) : Vector3.Zero;
+                        Logger.Raw($@"     <Interact questId=""{questId}"" stepId=""{questStep}"" actorId=""{actorId}"" actorName=""{actorName}"" x=""{ZetaDia.Me.Position.X:F0}"" y=""{ZetaDia.Me.Position.Y:F0}"" z=""{ZetaDia.Me.Position.Z:F0}"" worldSnoId=""{ZetaDia.CurrentWorldSnoId}"" levelAreaSnoId=""{ZetaDia.CurrentLevelAreaSnoId}"" sceneSnoId=""{sceneId}"" sceneName=""{sceneName}"" sceneX=""{scenePosition.X:F0}"" sceneY=""{scenePosition.Y:F0}"" sceneZ=""{scenePosition.Z:F0}"" />");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
+            //if (BotEvents.IsBotRunning)
+            //{
+            //    BotMain.Stop();
+            //    Thread.Sleep(500);
+            //}
+            //try
+            //{
+            //    if (!ZetaDia.IsInGame)
+            //        return;
+            //    ScenesStorage.Update();
+            //    SafeFrameLock.ExecuteWithinFrameLock(() =>
+            //    {
+
+            //        if (ZetaDia.Me == null)
+            //            return;
+            //        if (!ZetaDia.Me.IsValid)
+            //            return;
+
+            //        var activeBounty = ZetaDia.ActInfo.ActiveBounty != null
+            //            ? (int)ZetaDia.ActInfo.ActiveBounty.Quest
+            //            : 0;
+            //        //AdvDia.Update();
+            //        Logger.Raw(" ");
+            //        var currentScenePosition = AdvDia.CurrentWorldScene.GetRelativePosition(AdvDia.MyPosition);
+            //        Logger.Raw("new MoveToScenePositionCoroutine({0}, {1}, \"{2}\", new Vector3({3}f, {4}f, {5}f)),", activeBounty,
+            //            AdvDia.CurrentWorldId, AdvDia.CurrentWorldScene.Name, currentScenePosition.X,
+            //            currentScenePosition.Y, currentScenePosition.Z);
+            //    }, true);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logger.Error(ex.ToString());
+            //}
+        }
+
+        static void MoveToMapMarkerTag_Click(object sender, RoutedEventArgs e)
+        {
+            if (BotEvents.IsBotRunning)
+            {
+                BotMain.Stop();
+                Thread.Sleep(500);
+            }
+            try
+            {
+                if (!ZetaDia.IsInGame)
+                    return;
+                using (ZetaDia.Memory.AcquireFrame(true))
+                {
+
+                    if (ZetaDia.Me == null)
+                        return;
+                    if (!ZetaDia.Me.IsValid)
+                        return;
+
+                    ZetaDia.Actors.Update();
+                    //AdvDia.Update();
+                    var objectiveMarkers = AdvDia.CurrentWorldMarkers.Where(m => m.Id >= 0 && m.Id <= 200);
+
+                    var activeBounty = ZetaDia.ActInfo.ActiveBounty != null
+                        ? (int)ZetaDia.ActInfo.ActiveBounty.Quest
+                        : 0;
+
+
+                    Logger.Raw(" ");
+                    foreach (var objectiveMarker in objectiveMarkers)
+                    {
+                        Logger.Raw("new MoveToMapMarkerCoroutine({0}, {1}, {2}),", activeBounty, AdvDia.CurrentWorldId,
+                            objectiveMarker.NameHash);
+                        Logger.Raw(" ");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
+        }
+
+        static void MoveToActorTag_Click(object sender, RoutedEventArgs e)
+        {
+            if (BotEvents.IsBotRunning)
+            {
+                BotMain.Stop();
+                Thread.Sleep(500);
+            }
+            try
+            {
+                if (!ZetaDia.IsInGame)
+                    return;
+                using (ZetaDia.Memory.AcquireFrame(true))
+                {
+
+                    if (ZetaDia.Me == null)
+                        return;
+                    if (!ZetaDia.Me.IsValid)
+                        return;
+
+                    ZetaDia.Actors.Update();
+                    var activeBounty = ZetaDia.ActInfo.ActiveBounty != null
+                        ? (int)ZetaDia.ActInfo.ActiveBounty.Quest
+                        : 0;
+                    var actors =
+                        ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
+                            .Where(
+                                a =>
+                                    a.IsFullyValid() &&
+                                    (a.IsInteractableQuestObject() ||
+                                     (a is DiaUnit && (a as DiaUnit).CommonData.IsUnique)))
+                            .OrderBy(a => a.Distance)
+                            .ToList();
+
+                    if (actors.Count == 0)
+                    {
+                        Logger.Raw("// Could not detect an active quest actors, you must be out of range.");
+                    }
+                    foreach (var actor in actors)
+                    {
+                        Logger.Raw("// {0} ({1}) Distance: {2}", (SNOActor)actor.ActorSnoId, actor.ActorSnoId,
+                            actor.Distance);
+                        Logger.Raw("new MoveToActorCoroutine({0}, {1}, {2}),", activeBounty, AdvDia.CurrentWorldId,
+                            actor.ActorSnoId);
+                        Logger.Raw(" ");
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
+        }
+
+        static void EnterLevelAreaTag_Click(object sender, RoutedEventArgs e)
+        {
+            if (BotEvents.IsBotRunning)
+            {
+                BotMain.Stop();
+                Thread.Sleep(500);
+            }
+            try
+            {
+                if (!ZetaDia.IsInGame)
+                    return;
+                using (ZetaDia.Memory.AcquireFrame(true))
+                {
+
+                    if (ZetaDia.Me == null)
+                        return;
+                    if (!ZetaDia.Me.IsValid)
+                        return;
+
+                    ZetaDia.Actors.Update();
+                    //AdvDia.Update();
+
+                    var activeBounty = ZetaDia.ActInfo.ActiveBounty != null
+                        ? (int)ZetaDia.ActInfo.ActiveBounty.Quest
+                        : 0;
+
+                    var objectiveMarkers = AdvDia.CurrentWorldMarkers.Where(m => m.Id >= 0 && m.Id <= 200).ToList();
+
+                    if (objectiveMarkers.Count == 0)
+                    {
+                        Logger.Raw(
+                            "// Could not detect an active objective marker, you are either out of range or to close to it.");
+                    }
+                    foreach (var marker in objectiveMarkers)
+                    {
+                        //new EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, int portalActorId)
+                        var portal =
+                            ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
+                                .FirstOrDefault(
+                                    a => a.IsFullyValid() && a.IsPortal && a.Position.Distance(marker.Position) <= 5);
+                        if (portal != null)
+                        {
+                            Logger.Raw("new EnterLevelAreaCoroutine({0}, {1}, {2}, {3}, {4}),", activeBounty,
+                                AdvDia.CurrentWorldId, 0, marker.NameHash, portal.ActorSnoId);
+                        }
+                        else
+                        {
+                            Logger.Raw(
+                                "// Could not detect the portal near the marker. You need to get a bit closer to the level entrance");
+                        }
+                    }
+                    Logger.Raw(" ");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
+        }
+
+        static void ClearLevelAreaTag_Click(object sender, RoutedEventArgs e)
+        {
+            if (BotEvents.IsBotRunning)
+            {
+                BotMain.Stop();
+                Thread.Sleep(500);
+            }
+            try
+            {
+                if (!ZetaDia.IsInGame)
+                    return;
+                using (ZetaDia.Memory.AcquireFrame(true))
+                {
+
+                    if (ZetaDia.Me == null)
+                        return;
+                    if (!ZetaDia.Me.IsValid)
+                        return;
+
+                    ZetaDia.Actors.Update();
+                    //AdvDia.Update();
+
+                    var activeBounty = ZetaDia.ActInfo.ActiveBounty != null
+                        ? (int)ZetaDia.ActInfo.ActiveBounty.Quest
+                        : 0;
+
+                    Logger.Raw("new ClearLevelAreaCoroutine({0}),", activeBounty);
+                    Logger.Raw(" ");
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.ToString());
+            }
+        }
+
+        static void ClearAreaForNSecondsTag_Click(object sender, RoutedEventArgs e)
         {
             if (BotEvents.IsBotRunning)
             {

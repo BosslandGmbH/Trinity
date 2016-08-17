@@ -1,0 +1,92 @@
+﻿<Profile>
+  <Name>Story Mode - Act 1</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams quest="-1" step="-1" act="A1" resumeFromSave="False" isPrivate="True" numGames="-1" />
+  <Order>
+    <ToggleTargeting questId="1" combat="True" killRadius="90" looting="True" lootRadius="300" />
+    <SetCombatMode mode="Questing" />
+
+    <WaitTimer questId="87700" stepId="-1" waitTime="500" />
+
+    <If condition="ZetaDia.CurrentActSnoId == 70016">
+      <LogMessage message="We're in the wrong act, loading Act 2" />
+      <LoadProfile profile="Story_A2.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70017">
+      <LogMessage message="We're in the wrong act, loading Act 3" />
+      <LoadProfile profile="Story_A3.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70018">
+      <LogMessage message="We're in the wrong act, loading Act 4" />
+      <LoadProfile profile="Story_A4.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 236915">
+      <LogMessage message="We're in the wrong act, loading Act 5" />
+      <LoadProfile profile="Story_A5.xml" />
+    </If>
+
+    <If condition="IsActiveQuest(87700) and IsActiveQuestStep(-1) and CurrentWorldId == 71150">
+      <LogMessage message=">> Tristram Gate Event" />
+      <MoveToPosition questId="87700" stepId="-1" x="2844" y="2944" z="24" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
+      <Interact questId="87700" stepId="-1" actorId="3739" actorName="CaptainRumfoord" x="2841" y="2937" z="24" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
+      <WaitForCombat />
+    </If>
+
+    <If condition="IsActiveQuest(87700) and IsActiveQuestStep(42) and CurrentWorldId == 71150">
+      <LogMessage message=">> The Fallen Star - Enter Slaughtered Calf Inn" />
+      <Interact questId="87700" stepId="42" actorId="178293" actorName="g_Portal_Rectangle_Orange_IconDoor" x="2993" y="2784" z="25" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
+    </If>
+
+    <If condition="IsActiveQuest(87700) and (IsActiveQuestStep(42) or IsActiveQuestStep(46) or IsActiveQuestStep(50)) and CurrentWorldId == 109362">
+      <LogMessage message=">> The Falle Star - Inside Slaughtered Calf Inn" />
+      <Interact questId="87700" stepId="42" actorId="4580" actorName="Leah" x="111" y="59" z="0" worldSnoId="109362" levelAreaSnoId="109457" sceneSnoId="109359" sceneName="trOut_Tristram_Inn" />
+      <WaitForCombat />
+      <Interact questId="87700" stepId="46" actorId="4580" actorName="Leah" x="115" y="58" z="0" worldSnoId="109362" levelAreaSnoId="109457" sceneSnoId="109359" sceneName="trOut_Tristram_Inn" />
+      <Interact questId="87700" stepId="50" actorId="178293" actorName="g_Portal_Rectangle_Orange_IconDoor" x="83" y="124" z="0" worldSnoId="109362" levelAreaSnoId="109457" sceneSnoId="109359" sceneName="trOut_Tristram_Inn" />
+    </If>
+
+    <If condition="IsActiveQuest(87700) and IsActiveQuestStep(50) and CurrentWorldId == 71150">
+      <LogMessage message=">> Clear Zombie Mothers" />
+      <Interact questId="87700" stepId="50" actorId="3739" actorName="CaptainRumfoord" x="2844" y="2935" z="24" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
+      <MoveToPosition questId="87700" stepId="60" x="2804" y="2930" z="24" worldSnoId="71150" levelAreaSnoId="202446" sceneSnoId="33347" sceneName="trOut_Tristram_E10_S14" />
+      <MoveToPosition questId="87700" stepId="27" x="2717" y="2862" z="12" worldSnoId="71150" levelAreaSnoId="202446" sceneSnoId="33347" sceneName="trOut_Tristram_E10_S14" />
+      <MoveToPosition questId="87700" stepId="27" x="2521" y="2880" z="27" worldSnoId="71150" levelAreaSnoId="91324" sceneSnoId="90279" sceneName="trOut_Old_Tristram_E03_S04" />
+      <MoveToPosition questId="87700" stepId="27" x="2406" y="2803" z="27" worldSnoId="71150" levelAreaSnoId="91324" sceneSnoId="90279" sceneName="trOut_Old_Tristram_E03_S04" />
+      <MoveToPosition questId="87700" stepId="27" x="2256" y="2736" z="27" worldSnoId="71150" levelAreaSnoId="91324" sceneSnoId="90200" sceneName="trOut_Old_Tristram_E02_S03" />
+      <MoveToPosition questId="87700" stepId="27" x="2319" y="2539" z="27" worldSnoId="71150" levelAreaSnoId="91324" sceneSnoId="90200" sceneName="trOut_Old_Tristram_E02_S03" />
+      <MoveToPosition questId="87700" stepId="27" x="2177" y="2494" z="27" worldSnoId="71150" levelAreaSnoId="91324" sceneSnoId="103257" sceneName="trOut_oldTristram_Sub80_Generic_A" />
+      <MoveToPosition questId="87700" stepId="27" x="2110" y="2475" z="27" worldSnoId="71150" levelAreaSnoId="91324" sceneSnoId="90299" sceneName="trOut_Old_Tristram_E01_S03" />
+      <MoveToPosition questId="87700" stepId="27" x="1988" y="2610" z="27" worldSnoId="71150" levelAreaSnoId="101351" sceneSnoId="90198" sceneName="trOut_Old_Tristram_E02_S02" />
+      <MoveToPosition questId="87700" stepId="27" x="2020" y="2777" z="40" worldSnoId="71150" levelAreaSnoId="101351" sceneSnoId="90196" sceneName="trOut_Old_Tristram_E03_S02" />
+      <TakeWaypoint waypointNumber="0" />
+      <Interact questId="87700" stepId="55" actorId="3739" actorName="CaptainRumfoord" x="2962" y="2807" z="24" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
+    </If>
+
+    <If condition="IsActiveQuest(72095) and IsActiveQuestStep(-1) and CurrentWorldId == 71150">
+      <LogMessage message=">> The Legacy of Cain - Find the Cathedral" />
+      <Interact questId="72095" stepId="-1" actorId="4580" actorName="Leah" x="2939" y="2798" z="24" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
+      <TakeWaypoint waypointNumber="1" />
+      <MoveToPosition questId="72095" stepId="49" x="1877" y="2778" z="27" worldSnoId="71150" levelAreaSnoId="101351" sceneSnoId="90196" sceneName="trOut_Old_Tristram_E03_S02" />
+      <MoveToPosition questId="72095" stepId="39" x="1788" y="2942" z="20" worldSnoId="71150" levelAreaSnoId="101351" sceneSnoId="90293" sceneName="trOut_Old_Tristram_E03_S01" />
+      <Interact questId="72095" stepId="41" actorId="191886" actorName="g_Portal_Square_Blue_Cellar" x="1771" y="2921" z="20" worldSnoId="71150" levelAreaSnoId="101351" sceneSnoId="90293" sceneName="trOut_Old_Tristram_E03_S01" />
+      <MoveToPosition questId="72095" stepId="43" x="71" y="110" z="0" worldSnoId="62751" levelAreaSnoId="62968" sceneSnoId="81866" sceneName="trOut_oldTristram_AdriasCellar" />
+      <Interact questId="72095" stepId="45" actorId="203030" actorName="Leah_AdriaCellar" x="75" y="72" z="0" worldSnoId="62751" levelAreaSnoId="62968" sceneSnoId="81866" sceneName="trOut_oldTristram_AdriasCellar" />
+      <Interact questId="72095" stepId="47" actorId="221031" actorName="g_Portal_Ladder_Tall_Blue" x="154" y="44" z="0" worldSnoId="62751" levelAreaSnoId="62968" sceneSnoId="81866" sceneName="trOut_oldTristram_AdriasCellar" />
+      <MoveToPosition questId="72095" stepId="47" x="1687" y="2914" z="23" worldSnoId="71150" levelAreaSnoId="101351" sceneSnoId="90293" sceneName="trOut_Old_Tristram_E03_S01" />
+      <MoveToPosition questId="72095" stepId="47" x="1667" y="2746" z="39" worldSnoId="71150" levelAreaSnoId="101351" sceneSnoId="90295" sceneName="trOut_Old_Tristram_E02_S01" />
+      <MoveToPosition questId="72095" stepId="47" x="1540" y="2722" z="55" worldSnoId="71150" levelAreaSnoId="19933" sceneSnoId="93994" sceneName="trOut_Old_Tristram_E02_N01" />
+      <Interact questId="72095" stepId="47" actorId="167289" actorName="trdun_Cath_CathedralDoorExterior" x="1528" y="2723" z="57" worldSnoId="71150" levelAreaSnoId="19933" sceneSnoId="93994" sceneName="trOut_Old_Tristram_E02_N01" />
+      <Interact questId="72095" stepId="23" actorId="182738" actorName="g_Portal_Oval_Blue_Saturated" x="1451" y="2722" z="54" worldSnoId="71150" levelAreaSnoId="19933" sceneSnoId="93994" sceneName="trOut_Old_Tristram_E02_N01" sceneX="45.81128" sceneY="196.384" sceneZ="44.07326" />      
+    </If>
+
+    <If condition="IsActiveQuest(72095) and IsActiveQuestStep(23) and CurrentWorldId == 71150">
+      <LogMessage message=">> The Legacy of Cain - Cathedral Level 1" />
+      
+    </If>
+
+    <LogMessage message=">> Profile Finished" />
+    <WaitTimer questId="1" stepId="1" waitTime="500" />
+    
+  </Order>  
+</Profile>

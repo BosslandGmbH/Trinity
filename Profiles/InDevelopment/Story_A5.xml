@@ -1,0 +1,34 @@
+﻿<Profile>
+  <Name>Story Mode - Act 1</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams quest="-1" step="-1" act="A1" resumeFromSave="False" isPrivate="True" numGames="-1" />
+  <Order>
+    <ToggleTargeting questId="1" combat="True" killRadius="90" looting="True" lootRadius="300" />
+ 
+    <If condition="not (IsInTown)">
+      <TakeWaypoint waypointNumber="0" />
+    </If>
+
+    <!-- Select profile for current act -->
+    <If condition="ZetaDia.CurrentActSnoId == 70015">
+      <LogMessage message="We're in the wrong act, loading Act 1" />
+      <LoadProfile profile="Act1.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70016">
+      <LogMessage message="We're in the wrong act, loading Act 2" />
+      <LoadProfile profile="Story_A2.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70017">
+      <LogMessage message="We're in the wrong act, loading Act 3" />
+      <LoadProfile profile="Story_A3.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70018">
+      <LogMessage message="We're in the wrong act, loading Act 4" />
+      <LoadProfile profile="Story_A4.xml" />
+    </If>
+
+    
+
+  </Order>
+</Profile>
