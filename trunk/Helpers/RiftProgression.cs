@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects.Memory;
 using Zeta.Game;
+using Zeta.Game.Internals;
 
 namespace Trinity.Cache
 {
@@ -24,6 +26,10 @@ namespace Trinity.Cache
                 return ZetaDia.CurrentRift.IsStarted && DataDictionary.RiftWorldIds.Contains(ZetaDia.CurrentWorldSnoId);
             }
         }
+
+        public static bool IsGreaterRift => ZetaDia.CurrentRift?.Type == RiftType.Greater;
+        public static bool IsNephalemRift => ZetaDia.CurrentRift?.Type == RiftType.Nephalem;
+        public static RiftQuest Quest => new RiftQuest();
 
         public static bool IsGaurdianSpawned
         {
