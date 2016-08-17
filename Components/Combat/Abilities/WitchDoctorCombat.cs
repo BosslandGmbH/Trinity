@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Trinity.Cache;
+using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Modules;
@@ -11,6 +13,7 @@ using Trinity.Technicals;
 using Zeta.Common;
 using Zeta.Common.Helpers;
 using Zeta.Game;
+using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Technicals.Logger;
 
@@ -90,6 +93,15 @@ namespace Trinity.Components.Combat.Abilities
                 if (CanCast(SNOPower.Witchdoctor_SummonZombieDog) && (Core.Player.Summons.ZombieDogCount < dogCount ||
                     TargetUtil.AnyElitesInRange(30f)))
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
+
+                // Sacrafice Spam
+                var hasDogs = (Legendary.Homunculus.IsEquipped || Skills.WitchDoctor.SummonZombieDogs.IsActive) && Player.Summons.ZombieDogCount > 1;
+                var canCastSacrifice = Skills.WitchDoctor.Sacrifice.IsActive && Skills.WitchDoctor.Sacrifice.CanCast();
+                var shouldCastSacrifice = RiftProgression.IsNephalemRift || RiftProgression.IsGreaterRift && (TargetUtil.AnyElitesInRange(30f) || TargetUtil.ClusterExists(20f, 10));
+                if (hasDogs && canCastSacrifice && shouldCastSacrifice)
+                {
+                    return new TrinityPower(SNOPower.Witchdoctor_Sacrifice);                  
+                }
 
                 // Spirit Walk when rooted
                 if (CanCast(SNOPower.Witchdoctor_SpiritWalk) && (Player.IsIncapacitated || Player.IsRooted))
