@@ -473,7 +473,7 @@ namespace Trinity.Movement
 
         public static bool WitchdoctorMover(Vector3 destination)
         {
-            if (CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk) &&
+            if (CombatBase.CanCast(SNOPower.Witchdoctor_SpiritWalk) && !Core.Player.IsChannelling &&
                 !CombatBase.GetHasBuff(SNOPower.Witchdoctor_SpiritWalk))
             {
                 Skills.WitchDoctor.SpiritWalk.Cast(destination);

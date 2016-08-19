@@ -714,7 +714,6 @@ namespace Trinity.Components.Combat
 
                     if (!Core.Player.IsInTown)
                     {
-                        Logger.Log(LogCategory.Behavior, "Player is Attempting Special Movement!");
                         RunStatus specialMovementResult;
                         if (TrySpecialMovement(out specialMovementResult)) 
                             return specialMovementResult;
