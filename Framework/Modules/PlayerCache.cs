@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Components.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects.Enums;
@@ -378,6 +379,36 @@ namespace Trinity.Framework.Modules
             ElementImmunity = GetElementImmunity();
             LastVerySlowUpdate = DateTime.UtcNow;
         }
+
+        public HashSet<SNOAnim> ChannelAnimations = new HashSet<SNOAnim>
+        {
+            SNOAnim.WitchDoctor_Female_HTH_spell_channel, // = 11001,
+            SNOAnim.WitchDoctor_Male_HTH_Spell_Channel, // = 11111,
+            SNOAnim.Wizard_Female_1HS_Orb_SpellCast_Channel, // = 11196,
+            SNOAnim.Wizard_Female_1HS_SpellCast_Channel, // = 11208,
+            SNOAnim.Wizard_Female_HTH_Orb_SpellCast_Channel, // = 11254,
+            SNOAnim.Wizard_Female_HTH_SpellCast_Channel, // = 11266,
+            SNOAnim.Wizard_Female_STF_SpellCast_Channel, // = 11293,
+            SNOAnim.Wizard_Male_HTH_SpellCast_Channel_01, // = 11353,
+            SNOAnim.Wizard_Female_Archon_cast_Channel_01, // = 108813,
+            SNOAnim.WitchDoctor_Female_2HT_spell_channel, // = 144685,
+            SNOAnim.WitchDoctor_Female_1HT_spell_channel, // = 144747,
+            SNOAnim.Wizard_Female_HTH_SpellCast_OmniChannel_01, // = 148433,
+            SNOAnim.Wizard_Male_HTH_SpellCast_OmniChannel_01, // = 159244,
+            SNOAnim.Wizard_Male_Archon_cast_Channel_01, // = 169173,
+            SNOAnim.Monk_Female_recall_channel, // = 198326,
+            SNOAnim.Monk_Male_recall_channel, // = 198329,
+            SNOAnim.Barbarian_Female_HTH_Recall_Channel_01, // = 198435,
+            SNOAnim.barbarian_male_HTH_Recall_Channel_01, // = 198479,
+            SNOAnim.WitchDoctor_Male_recall_channel, // = 198593,
+            SNOAnim.WitchDoctor_Female_recall_channel, // = 198661,
+            SNOAnim.Demonhunter_Male_HTH_recall_channel, // = 198860,
+            SNOAnim.Demonhunter_Female_HTH_recall_channel, // = 198861,
+            SNOAnim.Wizard_Male_HTH_recall_channel, // = 198862,
+            SNOAnim.Wizard_Female_HTH_recall_channel, // = 198863,
+        };
+
+        public bool IsChannelling => ChannelAnimations.Contains(CurrentAnimation);
 
         //private float GetMaxPrimaryResource(DiaActivePlayer player)
         //{

@@ -71,7 +71,7 @@ namespace Trinity.Components.Combat
             return Name.GetHashCode();
         }
 
-
+        public override string ToString() => $"{Status?.LastStatus} Distance={Status?.DistanceToObjective} Speed={Status?.ChangeInDistance}";
     }
 
     public class CombatMovementStatus

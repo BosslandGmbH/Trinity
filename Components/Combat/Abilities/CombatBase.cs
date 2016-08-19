@@ -1502,6 +1502,30 @@ namespace Trinity.Components.Combat.Abilities
             return false;
         }
 
+        public static bool IsValidBuffedSpot(float maxDistance)
+        {
+            if (!IsInCombat || IsCurrentlyKiting || IsCurrentlyAvoiding)
+                return false;
+
+            Vector3 buffedLocation;
+            if (PhelonUtils.BestBuffPosition(maxDistance, Player.Position, true, out buffedLocation))
+            {
+                if (buffedLocation == Vector3.Zero)
+                     return false;
+                
+                if (buffedLocation.Distance(Player.Position) > 20f)
+                    return false;
+           
+                if (!Core.Avoidance.Grid.CanRayWalk(Player.Position, buffedLocation))
+                    return false;
+
+                if (!Core.Avoidance.Grid.CanRayWalk(CurrentTarget.Position, buffedLocation))
+                    return false;
+
+                return true;
+            }
+            return false;
+        }
 
     }
 

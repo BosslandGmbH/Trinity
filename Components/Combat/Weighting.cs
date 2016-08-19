@@ -1533,6 +1533,14 @@ namespace Trinity.Components.Combat
                                 #endregion
                         }
 
+
+                        // Anti-Flip flop. A new target needs to be 15% better than current.
+                        if (CombatBase.CurrentTarget != null && CombatBase.CurrentTarget.AnnId == cacheObject.AnnId)
+                        {
+                            cacheObject.Weight *= 1.15; 
+                            cacheObject.WeightInfo += " Last Target Boost "; 
+                        }
+
                         bestTarget = GetNewBestTarget(cacheObject, bestTarget);
                     }
 
@@ -1581,10 +1589,7 @@ namespace Trinity.Components.Combat
                 if (bestTarget == null)
                     bestTarget = cacheObject;
 
-                // Use the highest weight, and if at max weight, the closest
-                var pickNewTarget = cacheObject.Weight > 0 &&
-                                    (cacheObject.Weight > Trinity.TrinityPlugin.HighestWeightFound ||
-                                     (cacheObject.Weight == Trinity.TrinityPlugin.HighestWeightFound && (Trinity.TrinityPlugin.CurrentTarget == null || cacheObject.Distance < Trinity.TrinityPlugin.CurrentTarget.Distance)));
+                var pickNewTarget = cacheObject.Weight > 0 && cacheObject.Weight > Trinity.TrinityPlugin.HighestWeightFound;
 
                 if (!pickNewTarget) return bestTarget;
                 bestTarget = cacheObject;

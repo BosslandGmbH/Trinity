@@ -305,6 +305,12 @@ namespace Trinity.Framework.Modules
                         return true;
                     break;
 
+                case TrinityObjectType.Barricade:
+                case TrinityObjectType.Destructible:
+                    if (Core.BlockedCheck.MoveSpeed < 5f && cacheObject.Distance < 10f)
+                        return true;
+                    break;
+
                 case TrinityObjectType.Unit:
                     if (CombatBase.CombatMode == CombatMode.KillAll && cacheObject.IsWalkable)
                         return true;
