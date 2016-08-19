@@ -95,9 +95,9 @@ namespace Trinity.Components.Combat.Abilities
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
 
                 // Sacrafice Spam
-                var hasDogs = (Legendary.Homunculus.IsEquipped || Skills.WitchDoctor.SummonZombieDogs.IsActive) && Player.Summons.ZombieDogCount > 1;
+                var hasDogs = Player.Summons.ZombieDogCount > 0;
                 var canCastSacrifice = Skills.WitchDoctor.Sacrifice.IsActive && Skills.WitchDoctor.Sacrifice.CanCast();
-                var shouldCastSacrifice = RiftProgression.IsNephalemRift || RiftProgression.IsGreaterRift && (TargetUtil.AnyElitesInRange(30f) || TargetUtil.ClusterExists(20f, 10));
+                var shouldCastSacrifice = Settings.Combat.WitchDoctor.ZeroDogs || RiftProgression.IsNephalemRift || RiftProgression.IsGreaterRift && (TargetUtil.AnyElitesInRange(30f) || TargetUtil.ClusterExists(20f, 4));
                 if (hasDogs && canCastSacrifice && shouldCastSacrifice)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Sacrifice);                  
@@ -160,6 +160,19 @@ namespace Trinity.Components.Combat.Abilities
                 {
                     Logger.Log(LogCategory.Routine, "Tryna spiritwalk to to safe point!");
                     return new TrinityPower(SNOPower.Witchdoctor_SpiritWalk, 45f, safeWalkPoint);
+                }
+
+                // Big Bad Voodoo
+                if (CanCast(SNOPower.Witchdoctor_BigBadVoodoo) &&
+                    (Settings.Combat.WitchDoctor.UseBigBadVoodooOffCooldown || TargetUtil.AnyMobsInRange(30f)) &&
+                    !GetHasBuff(SNOPower.Witchdoctor_BigBadVoodoo))
+                {
+                    return new TrinityPower(SNOPower.Witchdoctor_BigBadVoodoo, 30f, Core.Clusters.BestCluster.Position);
+                }
+
+                if (CanCast(SNOPower.Witchdoctor_Horrify) && Settings.Combat.WitchDoctor.SpamHorrify)
+                {
+                    return new TrinityPower(SNOPower.Witchdoctor_Horrify);
                 }
 
                 if (CurrentTarget.IsUnit)

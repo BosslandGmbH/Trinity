@@ -84,7 +84,7 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.IsSummoned)
             {
-                actor.IsSummonedByPlayer = summonedByAnnId == Core.Player.MyDynamicID || effectOwnerAnnId == Core.Player.MyDynamicID || actor.PetType != PetType.None;
+                actor.IsSummonedByPlayer = summonedByAnnId == Core.Player.MyDynamicID || effectOwnerAnnId == Core.Player.MyDynamicID;
             }
             else
             {
