@@ -51,6 +51,8 @@ namespace Trinity.Config.Combat
         private float _AvoidWormholeHealth;
         private float _AvoidZoltBubbleHealth;
         private float _AvoidZoltTwisterHealth;
+        private bool _spamSacrafice;
+
         #endregion Fields
 
         #region Events
@@ -822,7 +824,6 @@ namespace Trinity.Config.Combat
                 }
             }
         }
-        
 
         #endregion Properties
 

@@ -68,15 +68,11 @@ namespace Trinity.Config
         {
             get
             {
-                return _betaPlayground;
+                return false;
             }
             set
             {
-                if (_betaPlayground != value)
-                {
-                    _betaPlayground = value;
-                    OnPropertyChanged("BetaPlayground");
-                }
+
             }
         }
 
