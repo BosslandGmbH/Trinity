@@ -8,6 +8,7 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Game.Actors;
+using TrinityCoroutines.Resources;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
@@ -16,6 +17,7 @@ using Zeta.Common.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
+using RiftStep = Trinity.Components.Adventurer.Game.Rift.RiftStep;
 
 namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 {
@@ -72,6 +74,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 PulseChecks();
             }
 
+            await HandleDeath();
+
             switch (State)
             {
                 case States.NotStarted:
@@ -92,6 +96,16 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     return Failed();
             }
             return false;
+        }
+
+        private async Task HandleDeath()
+        {
+            if (ZetaDia.Me.IsDead)
+            {
+                State = States.Failed;
+                GameUI.ReviveAtCorpseButton.Click();
+                await Coroutine.Sleep(500);
+            }
         }
 
         public Guid Id { get; set; }

@@ -79,8 +79,8 @@ namespace Trinity.Framework.Actors.Properties
                 if (actor.GizmoType == GizmoType.PowerUp && attributes.GizmoState == 1)
                     return true;
 
-                if (actor.GizmoType == GizmoType.Door && attributes.GizmoState == 1)
-                    return false;
+                //if (actor.GizmoType == GizmoType.Door && attributes.GizmoState == 1)
+                //    return false;
 
                 if (attributes.GizmoState == 1)
                     return true;

@@ -322,11 +322,9 @@ namespace Trinity.Components.Combat
                                         //Formula:   MaxWeight-(Distance * Distance * RangeFactor)
                                         //           RangeFactor effects how quickly weights go into negatives on far distances.                                                                    
 
-                                        var ignoreTrashTooFarAway = cacheObject.IsTrashMob &&
-                                                                    cacheObject.Distance >
-                                                                    Core.Settings.Combat.Misc.NonEliteRange;
-                                        var ignoreElitesTooFarAway = cacheObject.IsElite &&
-                                                                     cacheObject.Distance > Core.Settings.Combat.Misc.EliteRange;
+                                        var ignoreTrashTooFarAway = cacheObject.IsTrashMob && cacheObject.Distance > Core.Settings.Combat.Misc.NonEliteRange;
+                                        var ignoreElitesTooFarAway = cacheObject.IsElite && cacheObject.Distance > Core.Settings.Combat.Misc.EliteRange;
+
                                         if (ignoreTrashTooFarAway || ignoreElitesTooFarAway)
                                         {
                                             cacheObject.WeightInfo +=
@@ -1902,11 +1900,19 @@ namespace Trinity.Components.Combat
                 // not units (items etc) shouldnt be impacted by the trash/non-trash slider setting.
                 var range = 80f;
 
+                // Overriding these settings required for questing profiles acts1-5.
+                var isQuesting = CombatBase.CombatMode == CombatMode.Questing;
+                var questingEliteRange = 120f;
+                var questingTrashRange = 100f;
+
                 if (cacheObject.Type == TrinityObjectType.Unit)
                 {
+                    var eliteRange = isQuesting ? questingEliteRange : Core.Settings.Combat.Misc.EliteRange;
+                    var nonEliteRange= isQuesting ? questingTrashRange : Core.Settings.Combat.Misc.NonEliteRange;
+
                     range = cacheObject.IsElite
-                        ? Core.Settings.Combat.Misc.EliteRange
-                        : Core.Settings.Combat.Misc.NonEliteRange;
+                        ? eliteRange
+                        : nonEliteRange;
 
                     if (cacheObject.IsMinimapActive)
                         range *= 1.5f;
