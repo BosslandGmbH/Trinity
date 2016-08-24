@@ -48,6 +48,7 @@
     <LogMessage message="Loaded Act 1 by rrrix" />
     <ToggleTargeting questId="1" combat="True" killRadius="90" looting="True" lootRadius="300" />
     <QuestToolsSetVariable questId="1" key="DebugLogging" value="True" />
+    <SetCombatMode mode="Questing" />
 
     <SetQuesting questId="1" mode="true" />
     
