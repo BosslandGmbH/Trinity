@@ -1891,6 +1891,7 @@ namespace Trinity
             (int)SNOActor.a1dun_Leor_Jail_Door_SuperLocked_A_Fake,
             (int)SNOActor.a3dun_Keep_BucketMetal_A_Breakable,
             (int)SNOActor.x1_Catacombs_Breakable_Half_Bridge_Walkway_A,
+            (int)SNOActor.x1_PandExt_Breakable_Angel_B, // x1_PandExt_Breakable_Angel_B-159982 (338281) 
 
             (int)SNOActor.a4dunSpire_Interactives_Izual_Ice_Barrier_A,
             //209133, //TentacleLord

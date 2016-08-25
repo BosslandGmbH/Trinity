@@ -1166,7 +1166,7 @@
     <None Include="ItemRules\Rules\soft\set.dis" />
     <None Include="ItemRules\translation.dis" />
     <Compile Include="Settings\AvoidanceSetting.cs" />
-    <Compile Include="Routines\DemonHunter\DemoHunterRoutine.cs" />
+    <Compile Include="Routines\DemonHunter\DemonHunterRoutine.cs" />
     <Page Include="UI\Modals\SettingsSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
