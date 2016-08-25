@@ -108,7 +108,7 @@ namespace Trinity.Framework.Actors.Properties
 
                 if (actor.IsInLineOfSight)
                 {
-                    var isWalkable = Core.Avoidance.Grid.CanRayWalk(Core.Player.Position, actor.Position);
+                    var isWalkable = Core.Avoidance.Grid.CanRayWalk(actor);                    
                     actor.IsWalkable = isWalkable;
                     if (!actor.HasBeenWalkable && isWalkable)
                         actor.HasBeenWalkable = true;

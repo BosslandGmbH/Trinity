@@ -192,7 +192,7 @@ namespace Trinity
 
             if (isTarget)
             {
-                return await new Action(ret => CombatManager.TargetHandler.HandleTarget()).ExecuteCoroutine();
+                return await CombatManager.TargetHandler.HandleTarget();
             }
 
             //new MoveToMarkerBehavior(() => )

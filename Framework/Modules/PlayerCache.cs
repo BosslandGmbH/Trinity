@@ -94,6 +94,9 @@ namespace Trinity.Framework.Modules
 
         public List<float> HealthHistory { get; set; } = new List<float>();
 
+        public bool HasBuff(SNOPower power)
+            => Core.Buffs.HasBuff(power);
+
         public class SceneInfo
         {
             public DateTime LastUpdate { get; set; }

@@ -1032,6 +1032,34 @@ namespace Trinity.Components.Combat
                     select u).FirstOrDefault();
         }
 
+        public static Vector3 BestSentryPosition()
+        {
+            var sentries = SpellHistory.History.Where(s => s.Power.SNOPower == SNOPower.DemonHunter_Sentry && s.TimeSinceUse.TotalSeconds < 12).ToList();
+            var sentryPositions = new HashSet<Vector3>(sentries.Select(b => b.TargetPosition));
+            Func<Vector3, bool> IsValidPosition = pos => !sentryPositions.Any(b => b.Distance(pos) <= 12f);
+
+            var clusterPosition = TargetUtil.GetBestClusterPoint();
+            if (IsValidPosition(clusterPosition))
+            {
+                return clusterPosition;
+            }
+            if (IsValidPosition(CombatBase.CurrentTarget.Position))
+            {
+                return CombatBase.CurrentTarget.Position;
+            }
+            if (IsValidPosition(CombatBase.Player.Position))
+            {
+                return CombatBase.Player.Position;
+            }
+
+            var closestUnit = TargetUtil.GetClosestUnit().Position;
+            if (IsValidPosition(closestUnit))
+            {
+                return closestUnit;
+            }
+            return CombatBase.Player.Position;
+        }
+
         internal static bool IsPercentOfMobsDebuffed(SNOPower power, float maxRange = 30f, float minPercent = 0.5f)
         {
             return PercentOfMobsDebuffed(power, maxRange) >= minPercent;

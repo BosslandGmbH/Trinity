@@ -175,6 +175,15 @@ namespace Trinity.Components.Combat.Abilities
                     return new TrinityPower(SNOPower.Witchdoctor_BigBadVoodoo, 30f, Core.Clusters.BestCluster.Position);
                 }
 
+                // Grasp of the Dead
+                if (CanCast(SNOPower.Witchdoctor_GraspOfTheDead) &&
+                    (TargetUtil.AnyMobsInRange(30, 2) || TargetUtil.EliteOrTrashInRange(30f)) &&
+                    Player.PrimaryResource >= 150)
+                {
+                    var bestClusterPoint = TargetUtil.GetBestClusterPoint();
+                    return new TrinityPower(SNOPower.Witchdoctor_GraspOfTheDead, 25f, bestClusterPoint);
+                }
+
                 if (CanCast(SNOPower.Witchdoctor_Horrify) && Settings.Combat.WitchDoctor.SpamHorrify)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Horrify);
