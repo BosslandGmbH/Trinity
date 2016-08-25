@@ -98,6 +98,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Routines\RoutineBase.cs" />
+    <Compile Include="Routines\IRoutine.cs" />
     <Compile Include="Components\Adventurer\Adventurer.cs" />
     <Compile Include="Components\Adventurer\Cache\AdvDia.cs" />
     <Compile Include="Components\Adventurer\Coroutines\BountyCoroutines\ActBountiesCoroutine.cs" />
@@ -200,6 +202,7 @@
     <Compile Include="Components\Adventurer\Settings\AdventurerGem.cs" />
     <Compile Include="Components\Adventurer\Settings\AdventurerGems.cs" />
     <Compile Include="Components\Adventurer\Settings\PluginSettings.cs" />
+    <Compile Include="Components\Combat\TargetHandler.cs" />
     <Compile Include="ProfileTags\BountiesTag.cs" />
     <Compile Include="ProfileTags\ClearAreaTag.cs" />
     <Compile Include="ProfileTags\ExploreLevelAreaTag.cs" />
@@ -552,6 +555,7 @@
     <Content Include="Version.xml" />
     <Compile Include="Framework\Objects\Memory\Misc\ItemTypeRecord.cs" />
     <Content Include="Profiles\InDevelopment\Story_A1.xml" />
+    <Compile Include="Routines\RoutineManager.cs" />
     <Compile Include="Settings\Mock\SkillSettingsMockData.cs" />
     <Compile Include="Settings\Paragon\ParagonSetting.cs" />
     <Compile Include="Settings\Paragon\ParagonItem.cs" />
@@ -1111,6 +1115,11 @@
   <ItemGroup>
     <Folder Include="Components\Adventurer\Tags\" />
     <Folder Include="ItemRules\Rules\custom\" />
+    <Folder Include="Routines\Barbarian\" />
+    <Folder Include="Routines\Crusader\" />
+    <Folder Include="Routines\Monk\" />
+    <Folder Include="Routines\Witchdoctor\" />
+    <Folder Include="Routines\Wizard\" />
     <Folder Include="WTV\" />
   </ItemGroup>
   <ItemGroup>
@@ -1157,6 +1166,7 @@
     <None Include="ItemRules\Rules\soft\set.dis" />
     <None Include="ItemRules\translation.dis" />
     <Compile Include="Settings\AvoidanceSetting.cs" />
+    <Compile Include="Routines\DemonHunter\DemoHunterRoutine.cs" />
     <Page Include="UI\Modals\SettingsSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

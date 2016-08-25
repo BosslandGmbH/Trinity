@@ -722,7 +722,7 @@ namespace Trinity.Components.Combat.Abilities
         /// </summary>
         private static bool MarkedForDeathCondition(SkillMeta meta)
         {
-            meta.CastRange = 100f;
+            meta.CastRange = 80f;
             meta.CastFlags = CanCastFlags.NoTimer;
 
             if (!CurrentTarget.HasDebuff(SNOPower.DemonHunter_MarkedForDeath) && !SpellTracker.IsUnitTracked(CurrentTarget, SNOPower.DemonHunter_MarkedForDeath))                
@@ -782,7 +782,7 @@ namespace Trinity.Components.Combat.Abilities
         {
             meta.CastRange = 85f;
             meta.CastFlags = CanCastFlags.NoTimer;
-            meta.TargetPositionSelector = ret => GetSentryPosition();
+            meta.TargetPositionSelector = ret => TargetUtil.BestSentryPosition();
             meta.ReUseDelay = 250;
 
             if (meta.Skill.Charges == 0)
@@ -794,38 +794,7 @@ namespace Trinity.Components.Combat.Abilities
             return false;
         }
 
-        private static Vector3 GetSentryPosition()
-        {
-            var sentries = SpellHistory.History.Where(s => s.Power.SNOPower == SNOPower.DemonHunter_Sentry && s.TimeSinceUse.TotalSeconds < 12).ToList();
-            var sentryPositions = new HashSet<Vector3>(sentries.Select(b => b.TargetPosition)); 
-            Func<Vector3, bool> IsValidPosition = pos => !sentryPositions.Any(b => b.Distance(pos) <= 12f);
 
-
-
-            var clusterPosition = TargetUtil.GetBestClusterPoint();            
-            if (IsValidPosition(clusterPosition))
-            {
-                return clusterPosition;
-            }
-
-            if (IsValidPosition(CurrentTarget.Position))
-            {
-                return CurrentTarget.Position;
-            }
-
-            if (IsValidPosition(Player.Position))
-            {
-                return Player.Position;
-            }
-
-            var closestUnit = TargetUtil.GetClosestUnit().Position;
-            if (IsValidPosition(closestUnit))
-            {
-                return closestUnit;
-            }
-
-            return Player.Position;
-        }
 
         /// <summary>
         /// When Rain of Vengeance should be cast
@@ -956,10 +925,6 @@ namespace Trinity.Components.Combat.Abilities
         /// <summary>
         /// Maximum number of sentries allowed from Equipped items and Passives
         /// </summary>
-        public static int MaxSentryCount 
-        {
-            get { return 2 + (Legendary.BombardiersRucksack.IsEquipped ? 2 : 0) + (Passives.DemonHunter.CustomEngineering.IsActive ? 1 : 0); }
-        }
-
+        public static int MaxSentryCount => 2 + (Legendary.BombardiersRucksack.IsEquipped ? 2 : 0) + (Passives.DemonHunter.CustomEngineering.IsActive ? 1 : 0);
     }
 }

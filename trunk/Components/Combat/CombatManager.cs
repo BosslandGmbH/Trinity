@@ -10,11 +10,11 @@ namespace Trinity.Components.Combat
     {
         public static Weighting Weighting { get;  } = new Weighting();
 
+        //public static HandleTarget TargetHandler { get; } = new HandleTarget();
+
         public static TargetHandler TargetHandler { get; } = new TargetHandler();
 
         public static AbilitySelector AbilitySelector { get; } = new AbilitySelector();
 
-
-        
     }
 }

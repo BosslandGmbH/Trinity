@@ -1128,6 +1128,7 @@ namespace Trinity.Reference
                     meta.IsCombatOnly = true;
                     meta.IsOffensiveSkill = true;
                     meta.IsAreaEffectSkill = true;
+                    meta.IsDestructableSkill = true;
                     meta.AreaEffectShape = AreaEffectShapeType.Cone;
                     meta.CastRange = 30f;
                 }
@@ -1236,6 +1237,7 @@ namespace Trinity.Reference
                     meta.IsAreaEffectSkill = true;
                     meta.AreaEffectShape = AreaEffectShapeType.Cone;
                     meta.MaxTargetDistance = 90f;
+                    meta.IsDestructableSkill = true;
                     skill.AreaEffectRadius = 50f;
                 }
             };

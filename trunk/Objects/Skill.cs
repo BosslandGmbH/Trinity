@@ -294,7 +294,7 @@ namespace Trinity.Objects
         }
 
         /// <summary>
-        /// Time since last used
+        /// Time since last used in milliseconds
         /// </summary>
         public double TimeSinceUse
         {

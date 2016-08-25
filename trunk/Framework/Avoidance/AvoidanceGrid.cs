@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.DbProvider;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Zeta.Common;
 using Zeta.Game;
@@ -86,6 +87,15 @@ namespace Trinity.Framework.Avoidance
                 Logger.LogError($"Exception in CanRayCast from={@from} to={to} {ex}");
             }
             return false;
+        }
+
+        public bool CanRayWalk(TrinityActor targetActor)
+        {
+            var playerPosition = MathEx.GetPointAt(Core.Player.Position, Core.Player.Radius, Core.Player.Rotation);
+            var targetPosition = MathEx.GetPointAt(Core.Player.Position, Core.Player.Radius, MathEx.WrapAngle((float)(Core.Player.Rotation + Math.PI)));
+
+            if (!IsValidGridWorldPosition(playerPosition) || !IsValidGridWorldPosition(targetPosition)) return false;
+            return GetRayLine(playerPosition, targetPosition).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk));
         }
 
         public override bool CanRayWalk(Vector3 @from, Vector3 to)

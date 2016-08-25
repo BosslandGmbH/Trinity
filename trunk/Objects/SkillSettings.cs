@@ -201,6 +201,9 @@ namespace Trinity.Objects
         [Description("Cast on closest target")]
         ClosestMonster,
 
+        [Description("Cast on elite targets")]
+        ElitesOnly,
+
         [Description("Cast on the best cluster")]
         BestCluster,
     }

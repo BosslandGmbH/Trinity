@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Trinity.Components.Combat.Abilities;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Objects;
 using Trinity.Reference;
 using Zeta.Bot;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Combat
@@ -267,6 +269,27 @@ namespace Trinity.Components.Combat
             TargetAcdId = targetAcdId;
             WaitTicksBeforeUse = waitTicksBeforeUse;
             WaitTicksAfterUse = waitTicksAfterUse;
+            PowerAssignmentTime = DateTime.UtcNow;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TrinityPower" /> class.
+        /// </summary>
+        /// <param name="snoPower">The SNOPower to be used</param>
+        /// <param name="minimumRange">The minimum range required from the Position or Target to be used</param>
+        /// <param name="position">The Position to use the power at</param>
+        /// <param name="targetDynamicWorldId">Usually the CurrentDynamicWorlID</param>
+        /// <param name="targetAcdId">The Unit we are targetting</param>
+        /// <param name="waitTicksBeforeUse">The number of "ticks" to wait before using a power - logically 1/10th of a second</param>
+        /// <param name="waitTicksAfterUse">The number of "ticks" to wait after using a power - logically 1/10th of a second</param>
+        public TrinityPower(SNOPower snoPower, float minimumRange, TrinityActor actor)
+        {
+            IsCastOnSelf = false;
+            SNOPower = snoPower;
+            MinimumRange = minimumRange;
+            TargetPosition = actor.Position;
+            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetAcdId = actor.AcdId;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 

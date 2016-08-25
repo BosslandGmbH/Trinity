@@ -52,6 +52,11 @@ namespace Trinity.Components.Combat.Abilities
             }
         }
 
+        public static bool IsLTK => Sets.MonkeyKingsGarb.IsFullyEquipped 
+                                    && Skills.Monk.LashingTailKick.IsActive 
+                                    && Legendary.Genzaniku.IsEquipped
+                                    && Legendary.KyoshirosSoul.IsEquipped;
+
         public static bool IsThousandStormsGenerator
         {
             get
@@ -82,7 +87,7 @@ namespace Trinity.Components.Combat.Abilities
             {
                 // Sweeping Wind
                 if (CanCast(SNOPower.Monk_SweepingWind) &&
-                    !GetHasBuff(SNOPower.Monk_SweepingWind) && Player.PrimaryResource >= 75)
+                    !GetHasBuff(SNOPower.Monk_SweepingWind) && Player.PrimaryResource >= 75 && (!Legendary.KyoshirosSoul.IsEquipped || Skills.Monk.SweepingWind.BuffStacks <= 2))
                     return new TrinityPower(SNOPower.Monk_SweepingWind);
 
                 // Breath of Heaven OOC
@@ -105,7 +110,7 @@ namespace Trinity.Components.Combat.Abilities
             if (CurrentTarget != null)
             {
                 if (CanCast(SNOPower.Monk_SweepingWind) && !GetHasBuff(SNOPower.Monk_SweepingWind) &&
-                    Player.PrimaryResource >= 75)
+                    Player.PrimaryResource >= 75 && (!Legendary.KyoshirosSoul.IsEquipped || Skills.Monk.SweepingWind.BuffStacks <= 2))
                     return new TrinityPower(SNOPower.Monk_SweepingWind);
 
                 if (CanCastEpiphany())
@@ -145,7 +150,7 @@ namespace Trinity.Components.Combat.Abilities
                     ? TargetUtil.GetBestRiftValueClusterPoint(60f, .1)
                     : TargetUtil.GetBestClusterPoint(60f);
 
-                if (CanCast(SNOPower.Monk_WaveOfLight) && Player.PrimaryResource >= 45 &&
+                if (CanCast(SNOPower.Monk_WaveOfLight) && Player.PrimaryResource >= 45 && (!Legendary.KyoshirosSoul.IsEquipped || Skills.Monk.SweepingWind.BuffStacks <= 2) && 
                     (!Skills.Monk.SweepingWind.IsActive || GetBuffStacks(SNOPower.Monk_SweepingWind) > 1))
                     return new TrinityPower(SNOPower.Monk_WaveOfLight, 60f, wolTarget);
 
@@ -383,7 +388,7 @@ namespace Trinity.Components.Combat.Abilities
                 }
 
                 // Sweeping Wind
-                if (CanCast(SNOPower.Monk_SweepingWind) &&
+                if (CanCast(SNOPower.Monk_SweepingWind) && (!Legendary.KyoshirosSoul.IsEquipped || Skills.Monk.SweepingWind.BuffStacks <= 2) &&
                     !GetHasBuff(SNOPower.Monk_SweepingWind) && Player.PrimaryResource >= 75)
                     return new TrinityPower(SNOPower.Monk_SweepingWind);
 
@@ -478,7 +483,7 @@ namespace Trinity.Components.Combat.Abilities
             }
 
             // Sweeping Wind
-            if (CanCast(SNOPower.Monk_SweepingWind) &&
+            if (CanCast(SNOPower.Monk_SweepingWind) && (!Legendary.KyoshirosSoul.IsEquipped || Skills.Monk.SweepingWind.BuffStacks <= 2) && 
                 !GetHasBuff(SNOPower.Monk_SweepingWind) && Player.PrimaryResource >= 75)
             {
                 return new TrinityPower(SNOPower.Monk_SweepingWind);
@@ -791,6 +796,10 @@ namespace Trinity.Components.Combat.Abilities
 
         private static bool CanCastLashingTailKick()
         {
+            if (IsLTK && CanCast(SNOPower.Monk_LashingTailKick) && Player.PrimaryResource >= 50)
+                return true;
+                
+
             return !IsCurrentlyAvoiding && CanCast(SNOPower.Monk_LashingTailKick) &&
                    (Player.PrimaryResource >= 50 || Player.PrimaryResource >= EnergyReserve);
         }
