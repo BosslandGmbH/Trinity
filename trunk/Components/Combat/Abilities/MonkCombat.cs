@@ -150,7 +150,7 @@ namespace Trinity.Components.Combat.Abilities
                     ? TargetUtil.GetBestRiftValueClusterPoint(60f, .1)
                     : TargetUtil.GetBestClusterPoint(60f);
 
-                if (CanCast(SNOPower.Monk_WaveOfLight) && Player.PrimaryResource >= 45 && (!Legendary.KyoshirosSoul.IsEquipped || Skills.Monk.SweepingWind.BuffStacks <= 2) && 
+                if (CanCast(SNOPower.Monk_WaveOfLight) && Player.PrimaryResource >= 45 &&
                     (!Skills.Monk.SweepingWind.IsActive || GetBuffStacks(SNOPower.Monk_SweepingWind) > 1))
                     return new TrinityPower(SNOPower.Monk_WaveOfLight, 60f, wolTarget);
 
