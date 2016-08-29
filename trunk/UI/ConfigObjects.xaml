@@ -125,7 +125,7 @@
                 </StackPanel>
             </GroupBox>
             <!--Corpses Settings-->
-            <GroupBox Header="Non-blocking Destructibles">
+            <GroupBox Header="Destructibles">
                 <StackPanel>
                     <!--Desctructible Settings-->
                     <Grid Margin="5">
@@ -133,17 +133,17 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Destructible attack range:" FontWeight="Bold" TextAlignment="Center"/>
+                        <!--<TextBlock Text="Destructible attack range:" FontWeight="Bold" TextAlignment="Center"/>
                         <Slider Grid.Row="1" Template="{DynamicResource SliderEditable}" 
                     Interval="500" Maximum="30" Minimum="1" 
                     SmallChange="1" LargeChange="5" TickFrequency="1" 
                     TickPlacement="BottomRight" Value="{Binding Path=WorldObject.DestructibleRange}" 
-                    HorizontalAlignment="Stretch" Margin="25,0,25,0"/>
+                    HorizontalAlignment="Stretch" Margin="25,0,25,0"/>-->
                     </Grid>
                     <UniformGrid Grid.Row="1" Margin="0,0,0,0" Columns="1" HorizontalAlignment="Center">
-                        <RadioButton GroupName="WorldObjectDestructibles" Content="Force Ignore Destructibles" IsChecked="{Binding Path=WorldObject.DestructibleOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter=ForceIgnore}" Margin="5"/>
+                        <RadioButton GroupName="WorldObjectDestructibles" Content="Ignore Destructibles" IsChecked="{Binding Path=WorldObject.DestructibleOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter=ForceIgnore}" Margin="5"/>
                         <RadioButton GroupName="WorldObjectDestructibles" Content="Skip Destructibles unless Stuck" IsChecked="{Binding Path=WorldObject.DestructibleOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter=OnlyIfStuck}" Margin="5"/>
-                        <RadioButton GroupName="WorldObjectDestructibles" Content="Destroy Destructibles" IsChecked="{Binding Path=WorldObject.DestructibleOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter=DestroyAll}" Margin="5"/>
+                        <RadioButton GroupName="WorldObjectDestructibles" Content="Destroy All Destructibles" IsChecked="{Binding Path=WorldObject.DestructibleOption, Converter={StaticResource enumBooleanConverter}, ConverterParameter=DestroyAll}" Margin="5"/>
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>

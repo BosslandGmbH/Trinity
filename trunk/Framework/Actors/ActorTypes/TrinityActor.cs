@@ -135,7 +135,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public string WeightInfo { get; set; }
         public bool HasBeenPrimaryTarget { get; set; }
         public double RiftValueInRadius { get; set; }
-        public float RequiredRange { get; set; }
+        public float RequiredRadiusDistance { get; set; }
         public bool NpcHasInteractOptions { get; set; }
         public bool IsLockedDoor { get; set; }
         public int MinimapIconOverride { get; set; }

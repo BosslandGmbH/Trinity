@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Text;
+using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Technicals;
@@ -59,7 +60,7 @@ namespace Trinity.Framework.Modules
             statusText.Append(" R-Dist=");
             statusText.Append(currentTarget.RadiusDistance.ToString("0.0"));
             statusText.Append(" RangeReq'd=");
-            statusText.Append(currentTarget.RequiredRange.ToString("0.0"));
+            statusText.Append(currentTarget.RequiredRadiusDistance.ToString("0.0"));
             statusText.Append(" DistfromTrgt=");
             statusText.Append(currentTarget.Distance.ToString("0"));
             statusText.Append(" tHP=");
@@ -70,7 +71,7 @@ namespace Trinity.Framework.Modules
             statusText.Append((player.PrimaryResource).ToString("0"));
             statusText.Append(" InLoS=");
             statusText.Append(currentTarget.IsInLineOfSight.ToString());
-            statusText.Append($" Duration={DateTime.UtcNow.Subtract(TrinityPlugin.LastPickedTargetTime).TotalSeconds:0}");
+            statusText.Append($" Duration={DateTime.UtcNow.Subtract(TargetHandler.LastPickedTargetTime).TotalSeconds:0}");
 
             BotMain.StatusText = statusText.ToString();
 

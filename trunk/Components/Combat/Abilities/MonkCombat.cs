@@ -54,7 +54,7 @@ namespace Trinity.Components.Combat.Abilities
 
         public static bool IsLTK => Sets.MonkeyKingsGarb.IsFullyEquipped 
                                     && Skills.Monk.LashingTailKick.IsActive 
-                                    && Legendary.Genzaniku.IsEquipped
+                                    && Legendary.GyanaNaKashu.IsEquipped
                                     && Legendary.KyoshirosSoul.IsEquipped;
 
         public static bool IsThousandStormsGenerator
@@ -109,6 +109,15 @@ namespace Trinity.Components.Combat.Abilities
 
             if (CurrentTarget != null)
             {
+                if (DataDictionary.CorruptGrowthIds.Contains(CurrentTarget.ActorSnoId))
+                {
+                    if (CanCastSevenSidedStrike())
+                    {
+                        return new TrinityPower(SNOPower.Monk_SevenSidedStrike, 16f, CurrentTarget.Position); 
+                        
+                    }
+                }
+
                 if (CanCast(SNOPower.Monk_SweepingWind) && !GetHasBuff(SNOPower.Monk_SweepingWind) &&
                     Player.PrimaryResource >= 75 && (!Legendary.KyoshirosSoul.IsEquipped || Skills.Monk.SweepingWind.BuffStacks <= 2))
                     return new TrinityPower(SNOPower.Monk_SweepingWind);
@@ -280,12 +289,13 @@ namespace Trinity.Components.Combat.Abilities
                     Settings.Combat.Monk.BreathOfHeavenOOC)
                     return new TrinityPower(SNOPower.Monk_BreathOfHeaven);
             }
+
             if (CurrentTarget != null)
             {
-                // Dashing Strike
+                // Dashing Strike - its only for the buff so charge current target.
                 if (CanCast(SNOPower.X1_Monk_DashingStrike) && Skills.Monk.DashingStrike.Charges > 1 &&
                     TimeSincePowerUse(SNOPower.X1_Monk_DashingStrike) >= Settings.Combat.Monk.DashingStrikeDelay)
-                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 45f, TargetUtil.GetBestPierceTarget(45f).Position);
+                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 45f, CurrentTarget.Position);
 
                 if (CanCastEpiphany())
                     return new TrinityPower(SNOPower.X1_Monk_Epiphany);
@@ -300,10 +310,14 @@ namespace Trinity.Components.Combat.Abilities
 
                 var cycloneStrikeRange = Runes.Monk.Implosion.IsActive ? 34f : 24f;
                 var cycloneStrikeSpirit = Runes.Monk.EyeOfTheStorm.IsActive ? 30 : 50;
-
-                TrinityPower power;
-                if (TryMoveToBuffedSpot(out power, 30f, 20f, false))
-                    return power;
+                
+                if (!Core.BlockedCheck.IsBlocked && (DateTime.UtcNow - LastWithinBuffedSpot).TotalSeconds > 3)
+                {
+                    TrinityPower power;
+                    if (TryMoveToBuffedSpot(out power, 30f, 20f, false)) {
+                        return power;
+                    }
+                }
 
                 if (Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResourcePct < 0.85f
                     && Skills.Monk.CycloneStrike.TimeSinceUse >= Settings.Combat.Monk.CycloneStrikeDelay

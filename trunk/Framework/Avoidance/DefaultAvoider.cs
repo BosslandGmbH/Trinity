@@ -27,7 +27,7 @@ namespace Trinity.Framework.Avoidance
         Vector3 SafeSpot { get; }
 
         bool TryGetSafeSpot(out Vector3 position,
-            float minDistance = 10f,
+            float minDistance = 15f,
             float maxDistance = 100f,
             Vector3 origin = default(Vector3),
             Func<AvoidanceNode, bool> condition = null);

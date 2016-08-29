@@ -75,25 +75,7 @@ namespace Trinity
         /// </summary>
         public static bool _shouldPickNewAbilities;
 
-        /// <summary>
-        /// Flag used to indicate if we are simply waiting for a power to go off - so don't do any new target checking or anything
-        /// </summary>
-        public static bool _isWaitingForPower;
 
-        /// <summary>
-        /// A special post power use pause, causes targetHandler to wait on any new decisions
-        /// </summary>
-        public static bool _isWaitingAfterPower;
-
-        /// <summary>
-        /// A special post power use pause, causes targetHandler to wait on any new decisions
-        /// </summary>
-        public static bool _isWaitingBeforePower;
-
-        /// <summary>
-        /// If TargetHandle is waiting waiting before popping a potion - we won't refresh cache/change targets/unstuck/etc
-        /// </summary>
-        public static bool _isWaitingForPotion;
 
         /// <summary>
         /// Status text for DB main window status
@@ -193,10 +175,7 @@ namespace Trinity
         // This is used so we don't use certain skills until we "top up" our primary resource by enough
         internal static double MinEnergyReserve = 0d;
 
-        /// <summary>
-        /// Store the date-time when we *FIRST* picked this target, so we can blacklist after X period of time targeting
-        /// </summary>
-        public static DateTime LastPickedTargetTime = DateTime.MinValue;
+
 
         // These values below are set on a per-class basis later on, so don't bother changing them here! These are the old default values
         public static double PlayerEmergencyHealthPotionLimit = 0.35;
@@ -433,20 +412,8 @@ namespace Trinity
         /// </summary>
         //internal static PathFinder pf;
 
-        /// <summary>
-        /// Behaviors: How close we need to get to the target before we consider it "reached"
-        /// </summary>
-        public static float TargetRangeRequired = 1f;
 
-        /// <summary>
-        /// An adjusted distance from the current target />
-        /// </summary>
-        public static float TargetCurrentDistance;
 
-        /// <summary>
-        /// If our current target is in LoS for use in Behavior handling
-        /// </summary>
-        public static bool CurrentTargetWithinRange;
 
         // Darkfriend's Looting Rule
         public static Interpreter StashRule = null; // = new Interpreter();

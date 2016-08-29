@@ -95,6 +95,11 @@ namespace Trinity.Components.Combat.Abilities
                 return null;
             }
 
+            //if (CurrentTarget.IsSafeSpot)
+            //{
+            //    return null;
+            //}
+
             if (CurrentTarget != null)
             {
                 // Zombie Dogs
@@ -338,7 +343,7 @@ namespace Trinity.Components.Combat.Abilities
             //Logger.LogNormal("Fetish Count = {0}", TrinityPlugin.PlayerOwnedFetishArmyCount);
 
             // Destructible objects
-            if (UseDestructiblePower)
+            if (UseDestructiblePower || CurrentTarget != null && DataDictionary.CorruptGrowthIds.Contains(CurrentTarget.ActorSnoId))
             {
                 return DestroyObjectPower;
             }
@@ -1054,7 +1059,7 @@ namespace Trinity.Components.Combat.Abilities
                     return new TrinityPower(SNOPower.Witchdoctor_SummonZombieDog);
                 }
 
-                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && !hasRestlessGiant && !hasWrathfulProtector && Player.Summons.ZombieDogCount == 0)
+                if (CanCast(SNOPower.Witchdoctor_Gargantuan) && !hasRestlessGiant && !hasWrathfulProtector && Player.Summons.GargantuanCount == 0)
                 {
                     return new TrinityPower(SNOPower.Witchdoctor_Gargantuan);
                 }
@@ -1264,26 +1269,32 @@ namespace Trinity.Components.Combat.Abilities
         {
             get
             {
+                if (CurrentTarget == null)
+                    return DefaultPower;
 
-                if (Hotbar.Contains(SNOPower.Witchdoctor_Firebomb))
+                if (CanCast(SNOPower.Witchdoctor_Firebomb))
                     return new TrinityPower(SNOPower.Witchdoctor_Firebomb, 12f, CurrentTarget.Position);
-                if (Hotbar.Contains(SNOPower.Witchdoctor_PoisonDart))
+                if (CanCast(SNOPower.Witchdoctor_PoisonDart))
                     return new TrinityPower(SNOPower.Witchdoctor_PoisonDart, 15f, CurrentTarget.Position);
-                if (Hotbar.Contains(SNOPower.Witchdoctor_ZombieCharger) && Player.PrimaryResource >= 150)
+                if (CanCast(SNOPower.Witchdoctor_ZombieCharger) && Player.PrimaryResource >= 150)
                     return new TrinityPower(SNOPower.Witchdoctor_ZombieCharger, 12f, CurrentTarget.Position);
-                if (Hotbar.Contains(SNOPower.Witchdoctor_CorpseSpider))
+                if (CanCast(SNOPower.Witchdoctor_CorpseSpider))
                     return new TrinityPower(SNOPower.Witchdoctor_CorpseSpider, 12f, CurrentTarget.Position);
-                if (Hotbar.Contains(SNOPower.Witchdoctor_PlagueOfToads))
+                if (CanCast(SNOPower.Witchdoctor_PlagueOfToads))
                     return new TrinityPower(SNOPower.Witchdoctor_PlagueOfToads, 12f, CurrentTarget.Position);
-                if (Hotbar.Contains(SNOPower.Witchdoctor_AcidCloud) && Player.PrimaryResource >= 175)
+                if (CanCast(SNOPower.Witchdoctor_AcidCloud) && Player.PrimaryResource >= 175)
                     return new TrinityPower(SNOPower.Witchdoctor_PlagueOfToads, 12f, CurrentTarget.Position);
-                if (Hotbar.Contains(SNOPower.Witchdoctor_Firebats) && Player.PrimaryResource >= 75 && CurrentTarget != null && CurrentTarget.Distance < 15f)
-                    return new TrinityPower(SNOPower.Witchdoctor_AcidCloud, 12f, CurrentTarget.Position);
-                if (Hotbar.Contains(SNOPower.Witchdoctor_Sacrifice) && Hotbar.Contains(SNOPower.Witchdoctor_SummonZombieDog) &&
+                if (CanCast(SNOPower.Witchdoctor_Firebats) && Player.PrimaryResource >= 75 && CurrentTarget != null && CurrentTarget.Distance < 15f)
+                    return new TrinityPower(SNOPower.Witchdoctor_Firebats, 12f, CurrentTarget.Position);
+                if (CanCast(SNOPower.Witchdoctor_Sacrifice) && Hotbar.Contains(SNOPower.Witchdoctor_SummonZombieDog) &&
                     Player.Summons.ZombieDogCount > 0 && Settings.Combat.WitchDoctor.ZeroDogs)
                     return new TrinityPower(SNOPower.Witchdoctor_Sacrifice, 12f, CurrentTarget.Position);
-                if (Hotbar.Contains(SNOPower.Witchdoctor_SpiritBarrage) && Player.PrimaryResource > 100)
+                if (CanCast(SNOPower.Witchdoctor_SpiritBarrage) && Player.PrimaryResource > 100)
                     return new TrinityPower(SNOPower.Witchdoctor_SpiritBarrage, 12f, CurrentTarget.AcdId);
+                if (CanCast(SNOPower.Witchdoctor_Haunt) && Player.PrimaryResource > 50 && LastPowerUsed != SNOPower.Witchdoctor_Haunt)
+                    return new TrinityPower(SNOPower.Witchdoctor_Haunt, 12f, CurrentTarget.AcdId);
+                if (CanCast(SNOPower.Witchdoctor_SoulHarvest))
+                    return new TrinityPower(SNOPower.Witchdoctor_SoulHarvest, 12f, CurrentTarget.AcdId);
 
                 return DefaultPower;
             }

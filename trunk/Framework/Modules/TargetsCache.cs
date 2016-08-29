@@ -272,10 +272,13 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (!cacheObject.HasBeenInLoS && !ShouldIgnoreLoS(cacheObject))
+            if (!cacheObject.HasBeenInLoS)
             {
-                cacheObject.AddCacheInfo("HasntBeenInLoS");
-                return false;
+                if (!ShouldIgnoreLoS(cacheObject))
+                {
+                    cacheObject.AddCacheInfo("HasntBeenInLoS");
+                    return false;
+                }
             }
 
             return true;
@@ -324,6 +327,7 @@ namespace Trinity.Framework.Modules
             if (cacheObject.Distance < 4) return true;
             if (cacheObject.ItemQualityLevel >= ItemQuality.Legendary) return true;
             if (DataDictionary.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId)) return true;
+
             return false;
         }
 
