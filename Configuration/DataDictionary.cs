@@ -646,7 +646,7 @@ namespace Trinity
         {
             202446, // A1 New Tristram "Attack Area"
             //19947, // A1 New Tristram "Attack Area"
-
+            175738, // A4 Bounty Quest with moving floor panels.
             284069, // A5 Westmarch Overlook
             308323, // A5 Westmarch Wolf Gate
             315938, // A5 Westmarch Wolf Gate

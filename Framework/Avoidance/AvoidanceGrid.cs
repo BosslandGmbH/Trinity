@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
@@ -75,10 +76,13 @@ namespace Trinity.Framework.Avoidance
             return position.X > 0 && position.Y > 0 && position != Vector3.Zero && position.X < (MaxX * BoxSize) && position.Y < (MaxY * BoxSize);
         }
 
+        public bool IsPopulated { get; set; }
+
         public override bool CanRayCast(Vector3 @from, Vector3 to)
         {
             try
             {
+                if (!IsPopulated) return false;
                 if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
                 return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile));
             }
@@ -91,8 +95,9 @@ namespace Trinity.Framework.Avoidance
 
         public bool CanRayWalk(TrinityActor targetActor)
         {
+            if (!IsPopulated) return false;
             var playerPosition = MathEx.GetPointAt(Core.Player.Position, Core.Player.Radius, Core.Player.Rotation);
-            var targetPosition = MathEx.GetPointAt(Core.Player.Position, Core.Player.Radius, MathEx.WrapAngle((float)(Core.Player.Rotation + Math.PI)));
+            var targetPosition = MathEx.GetPointAt(targetActor.Position, targetActor.Radius, MathEx.WrapAngle((float)(Core.Player.Rotation + Math.PI)));
 
             if (!IsValidGridWorldPosition(playerPosition) || !IsValidGridWorldPosition(targetPosition)) return false;
             return GetRayLine(playerPosition, targetPosition).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk));
@@ -108,6 +113,28 @@ namespace Trinity.Framework.Avoidance
         {
             if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Any(node => node != null && flags != null && flags.Any(f => node.AvoidanceFlags.HasFlag(f)));
+        }
+        
+        public bool RayFromTargetMissingFlagsCount(Vector3 origin, Vector3 target, int requiredFlagCount, params AvoidanceFlags[] flags)
+        {            
+            var flagTolerenceCounts = flags.ToDictionary(k => k, v => 0);
+            if (!IsValidGridWorldPosition(origin) || !IsValidGridWorldPosition(target)) return false;
+            foreach (var node in GetRayLine(target, origin).Select(point => InnerGrid[point.X, point.Y]))
+            {
+                if (node == null || flags == null)
+                    break;
+
+                foreach (var flag in flags)
+                {
+                    if (!node.AvoidanceFlags.HasFlag(flag))
+                    {
+                        flagTolerenceCounts[flag]++;
+                        if (flagTolerenceCounts[flag] >= requiredFlagCount)
+                            return true;
+                    }
+                }
+            }
+            return false;
         }
 
         internal IEnumerable<AvoidanceNode> GetRayLineAsNodes(Vector3 from, Vector3 to)
@@ -155,6 +182,7 @@ namespace Trinity.Framework.Avoidance
             }
 
             IsUpdatingNodes = false;
+            IsPopulated = true;
 
             sw.Stop();
             Logger.LogVerbose($"Avoidance Grid updated NewNodes={newNodes.ExplorationNodes.Count} NearestNodeFound={NearestNode != null} Time={sw.Elapsed.TotalMilliseconds}ms");

@@ -136,7 +136,7 @@ namespace Trinity.Components.Combat.Abilities
                 }
 
                 // Ensure steed charge isn't interrupted by Punish.
-                if (IsSteedCharging && CurrentTarget != null && !IsDoingGoblinKamakazi)
+                if (Settings.Combat.Crusader.SpamSteedCharge && IsSteedCharging && CurrentTarget != null && !IsDoingGoblinKamakazi)
                 {
                     return new TrinityPower(SNOPower.Walk, 100f, TargetUtil.GetZigZagTarget(CurrentTarget.Position, 16f));
                 }

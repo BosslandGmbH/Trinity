@@ -1450,6 +1450,7 @@ namespace Trinity.Components.Combat.Abilities
         };
 
         private static CombatMode _combatMode;
+        public static DateTime LastWithinBuffedSpot = DateTime.MinValue;
 
         /// <summary>
         /// Walk towards a location with positional bonuses e.g. occulus damage bonus / serenity defensive bonus.
@@ -1472,6 +1473,7 @@ namespace Trinity.Components.Combat.Abilities
 
                     if (buffedLocation.Distance(Player.Position) < arriveDistance)
                     {
+                        LastWithinBuffedSpot = DateTime.UtcNow;
                         Logger.Log(LogCategory.Routine, $"Standing in Buffed Position {buffedLocation} Dist={distance}");
                     }
                     else if (!Core.Avoidance.Grid.CanRayWalk(Player.Position, buffedLocation))

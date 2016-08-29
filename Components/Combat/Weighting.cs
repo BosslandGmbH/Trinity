@@ -190,7 +190,7 @@ namespace Trinity.Components.Combat
                     TrinityActor bestTarget = null;
                     foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
                     {
-                        if (cacheObject == null || !cacheObject.IsValid)
+                        if (cacheObject == null || !cacheObject.IsValid || cacheObject.Type == TrinityObjectType.Unknown)
                             continue;
 
                         cacheObject.Weight = 0;
@@ -237,6 +237,31 @@ namespace Trinity.Components.Combat
                         {
                             cacheObject.Weight = 0;
                             cacheObject.WeightInfo += "Ignoring Unwalkable by Death Gate ";
+                            continue;
+                        }
+
+                        if (cacheObject.IsUnit && cacheObject.Distance < 35f)
+                        {                    
+                            if (!cacheObject.HasBeenInLoS)
+                            {
+                                cacheObject.Weight = 0;
+                                cacheObject.WeightInfo += "Ignoring - Hasn't been in line of sight";
+                                continue;
+                            }                        
+                        }
+                        else if (cacheObject.IsDestroyable && cacheObject.Distance < 35f)
+                        {
+                            if (!cacheObject.IsWalkable)
+                            {
+                                cacheObject.Weight = 0;
+                                cacheObject.WeightInfo += "Ignoring - Unreachable";
+                                continue;
+                            }
+                        }
+                        else if (!cacheObject.IsItem && cacheObject.Type != TrinityObjectType.ProgressionGlobe && !cacheObject.HasBeenWalkable)
+                        {
+                            cacheObject.Weight = 0;
+                            cacheObject.WeightInfo += "Ignoring Unwalkable";
                             continue;
                         }
 
@@ -1371,8 +1396,7 @@ namespace Trinity.Components.Combat
 
                                     // Not Stuck, skip!
                                     if (Core.Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.OnlyIfStuck &&
-                                        cacheObject.RadiusDistance > 0 &&
-                                        (DateTime.UtcNow.Subtract(PlayerMover.LastGeneratedStuckPosition).TotalSeconds > 3))
+                                        cacheObject.RadiusDistance > 0 && !Core.StuckHandler.IsStuck)
                                     {
                                         cacheObject.WeightInfo +=
                                             $"Ignoring {cacheObject.InternalName} - Destructible Settings.";
@@ -1390,12 +1414,13 @@ namespace Trinity.Components.Combat
                                     //// Fix for WhimsyShire Pinata
                                     if (DataDictionary.ResplendentChestIds.Contains(cacheObject.ActorSnoId))
                                         cacheObject.Weight += 500d;
-                                    cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+
+                                    cacheObject.Weight += 0.5*(ObjectDistanceFormula(cacheObject) +
                                                           //LastTargetFormula(cacheObject) +
                                                           EliteMonsterNearFormula(cacheObject, elites) -
                                                           PackDensityFormula(cacheObject, objects) +
                                                           AoENearFormula(cacheObject) +
-                                                          AoEInPathFormula(cacheObject);
+                                                          AoEInPathFormula(cacheObject));
                                     break;
                                 }
 

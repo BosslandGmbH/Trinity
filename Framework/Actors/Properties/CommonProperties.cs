@@ -35,7 +35,7 @@ namespace Trinity.Framework.Actors.Properties
                 actor.Radius = rActor.CollisionSphere.Radius;
                 var axialRadius = actorInfo.AxialCylinder.Ax1;
                 actor.AxialRadius = axialRadius;
-                actor.CollisionRadius = axialRadius * 0.6f;
+                actor.CollisionRadius = Math.Max(1f, axialRadius * 0.55f);
             }
 
             var type = GetObjectType(
@@ -49,7 +49,7 @@ namespace Trinity.Framework.Actors.Properties
 
             actor.ObjectHash = actor.InternalName + actor.AcdId + actor.RActorId;
             actor.Distance = actor.Position.Distance(Core.Player.Position);
-            actor.RadiusDistance = Math.Max(actor.Distance - actor.AxialRadius, 0f);
+            actor.RadiusDistance = Math.Max(actor.Distance - actor.CollisionRadius, 0f);
 
             if (actor.IsAcdBased && actor.IsAcdValid)
             {
@@ -80,7 +80,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsGroundItem = actor.IsItem && actor.InventorySlot == InventorySlot.None;
             
 
-            actor.RequiredRange = GetRequiredRange(actor);
+            actor.RequiredRadiusDistance = GetRequiredRange(actor);
 
             if (actor.Attributes != null)
             {
@@ -99,7 +99,7 @@ namespace Trinity.Framework.Actors.Properties
             if(actor.ActorType == ActorType.Item && !actor.IsGroundItem)
                 return;
 
-            if (actor.Position != Vector3.Zero || Core.Avoidance.Grid.GridBounds == 0)
+            if (actor.Position != Vector3.Zero && Core.Avoidance.Grid.GridBounds != 0)
             {
                 var inLineOfSight = Core.Avoidance.Grid.CanRayCast(Core.Player.Position, actor.Position);
                 actor.IsInLineOfSight = inLineOfSight;
@@ -107,10 +107,9 @@ namespace Trinity.Framework.Actors.Properties
                     actor.HasBeenInLoS = true;
 
                 if (actor.IsInLineOfSight)
-                {
-                    var isWalkable = Core.Avoidance.Grid.CanRayWalk(actor);                    
-                    actor.IsWalkable = isWalkable;
-                    if (!actor.HasBeenWalkable && isWalkable)
+                {            
+                    actor.IsWalkable = Core.Avoidance.Grid.CanRayWalk(actor);
+                    if (actor.IsWalkable)
                         actor.HasBeenWalkable = true;
                 }
                 else
@@ -303,22 +302,20 @@ namespace Trinity.Framework.Actors.Properties
                             result = range;
                         }
                         if (result <= 0)
-                            result = actor.Radius;
+                            result = actor.AxialRadius;
                         break;
                     }
                 // * Destructible - need to pick an ability and attack it
                 case TrinityObjectType.Destructible:
-                    {
-                        result = CombatBase.CurrentPower.MinimumRange;
-                        actor.Radius = 1f;
-                        break;
-                    }
+                {
+                    result = actor.CollisionRadius;
+                    break;
+                }
                 case TrinityObjectType.Barricade:
-                    {
-                        result = CombatBase.CurrentPower.MinimumRange;
-                        actor.Radius = 1f;
-                        break;
-                    }
+                {
+                    result = actor.AxialRadius;
+                    break;
+                }
                 // * Avoidance - need to pick an avoid location and move there
                 case TrinityObjectType.Avoidance:
                     {
@@ -326,7 +323,7 @@ namespace Trinity.Framework.Actors.Properties
                         break;
                     }
                 case TrinityObjectType.Door:
-                    result = 2f;
+                    result = Math.Max(2f, actor.AxialRadius);
                     break;
                 default:
                     result = actor.Radius;

@@ -54,6 +54,11 @@ namespace Trinity.Components.Combat.Abilities
                 return power;
             }
 
+            if (CurrentTarget != null && CurrentTarget.IsSafeSpot)
+            {
+                return null;
+            }
+
             if (ShouldImpaleHighValueTarget(out target))
             {
                 Logger.LogVerbose(LogCategory.SkillSelection, "ShouldImpaleHighValueTarget");
