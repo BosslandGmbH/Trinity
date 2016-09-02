@@ -64,8 +64,8 @@ namespace Trinity.Components.Combat.Abilities
         {
             get
             {
-                return Sets.HelltoothHarness.IsFullyEquipped && Legendary.StaffOfChiroptera.IsEquipped &&
-                       Legendary.CoilsOfTheFirstSpider.IsEquipped && Skills.WitchDoctor.Firebats.IsActive;
+                return Sets.HelltoothHarness.IsFullyEquipped && Legendary.StaffOfChiroptera.IsEquipped
+                       && Skills.WitchDoctor.Firebats.IsActive;
             }
         }
 

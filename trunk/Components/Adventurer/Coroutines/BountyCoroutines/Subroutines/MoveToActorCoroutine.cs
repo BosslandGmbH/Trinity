@@ -119,7 +119,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            var areaIds = BountyData != null ? BountyData.LevelAreaIds : new HashSet<int> {AdvDia.CurrentLevelAreaId};
+            var areaIds = BountyData != null ? BountyData.LevelAreaIds : new HashSet<int> { AdvDia.CurrentLevelAreaId };
             if (!await ExplorationCoroutine.Explore(areaIds)) return false;
             ScenesStorage.Reset();
             return false;
@@ -176,17 +176,17 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 {
                     using (new PerformanceLogger("[MoveToObject] Path to Objective Check", true))
                     {
-                        if (await AdvDia.DefaultNavigationProvider.CanFullyClientPathTo(_objectiveLocation))
-                        {
-                            Logger.Info("[MoveToObject] Found the objective at distance {0}",
-                            AdvDia.MyPosition.Distance(_objectiveLocation));
-                        }
-                        else
-                        {
-                            Logger.Debug("[MoveToObject] Found the objective at distance {0}, but cannot get a path to it.",
-                                AdvDia.MyPosition.Distance(_objectiveLocation));
-                            _objectiveLocation = Vector3.Zero;                            
-                        }
+                        //if (await AdvDia.DefaultNavigationProvider.CanFullyClientPathTo(_objectiveLocation))
+                        //{
+                        Logger.Info("[MoveToObject] Found the objective at distance {0}",
+                        AdvDia.MyPosition.Distance(_objectiveLocation));
+                        //}
+                        //else
+                        //{
+                        //    Logger.Debug("[MoveToObject] Found the objective at distance {0}, but cannot get a path to it.",
+                        //        AdvDia.MyPosition.Distance(_objectiveLocation));
+                        //    _objectiveLocation = Vector3.Zero;                            
+                        //}
                     }
                 }
             }

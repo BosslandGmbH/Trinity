@@ -35,7 +35,7 @@ namespace Trinity.Framework.Actors.Properties
                 actor.Radius = rActor.CollisionSphere.Radius;
                 var axialRadius = actorInfo.AxialCylinder.Ax1;
                 actor.AxialRadius = axialRadius;
-                actor.CollisionRadius = Math.Max(1f, axialRadius * 0.55f);
+                actor.CollisionRadius = Math.Max(1f, axialRadius * 0.60f);
             }
 
             var type = GetObjectType(
@@ -245,14 +245,14 @@ namespace Trinity.Framework.Actors.Properties
                         }
                         else
                         {
-                            result = CombatBase.CurrentPower.MinimumRange;
+                            result = Math.Max(CombatBase.CurrentPower.MinimumRange, actor.CollisionRadius);
                         }
                         break;
                     }
                 // * Item - need to get within 6 feet and then interact with it
                 case TrinityObjectType.Item:
                     {
-                        result = 2f;
+                        result = 3f;
                         break;
                     }
                 // * Gold - need to get within pickup radius only
@@ -313,7 +313,7 @@ namespace Trinity.Framework.Actors.Properties
                 }
                 case TrinityObjectType.Barricade:
                 {
-                    result = actor.AxialRadius;
+                    result = actor.AxialRadius * 0.8f;
                     break;
                 }
                 // * Avoidance - need to pick an avoid location and move there

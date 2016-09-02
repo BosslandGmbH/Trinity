@@ -5,7 +5,7 @@ using Zeta.Bot.Profile;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("TakeWaypoint")]
     public class TakeWaypointTag : ProfileBehavior

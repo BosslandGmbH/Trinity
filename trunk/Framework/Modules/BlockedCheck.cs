@@ -23,7 +23,7 @@ namespace Trinity.Framework.Modules
             BlockedPct = (ClearNodeCount / (double) Nodes.Count)*100;
             MoveSpeed = Core.PlayerHistory.GetYardsPerSecond();
 
-            var isBlocked = MoveSpeed <= 5f && BlockedPct <= 50;
+            var isBlocked = MoveSpeed <= 8f && BlockedPct <= 65;
             if (IsBlocked != isBlocked)
             {
                 BlockedStart = isBlocked ? DateTime.UtcNow : default(DateTime);

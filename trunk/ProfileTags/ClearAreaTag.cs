@@ -7,7 +7,7 @@ using Zeta.Common;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("ClearArea")]
     public class ClearAreaTag : ProfileBehavior

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines;
 using Trinity.Components.Adventurer.Game.Events;
-using Trinity.Components.Adventurer.Util;
 using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
@@ -11,7 +10,7 @@ using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("Keywardens")]
     public class KeywardensTag : ProfileBehavior

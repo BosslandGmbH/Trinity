@@ -1,20 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines;
-using Trinity.Components.Adventurer.Util;
 using Zeta.Bot;
-using Zeta.Bot.Profile;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
+using Logger = Trinity.Components.Adventurer.Util.Logger;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
+    [XmlElement("Explore")]
     [XmlElement("ExploreLevelArea")]
-    public class ExploreLevelAreaTag : ProfileBehavior
+    public class ExploreTag : TrinityProfileBehavior
     {
         private Stopwatch _stopwatch = new Stopwatch();
 
@@ -22,25 +24,33 @@ namespace Trinity.Components.Adventurer.Tags
         [DefaultValue(0)]
         public int LevelAreaId { get; set; }
 
-        private bool _isDone;
+        [XmlAttribute("stopCondition")]
+        public string StopCondition { get; set; }
 
-        public override bool IsDone
-        {
-            get
-            {
-                return _isDone;
-            }
-        }
+        private bool _isDone;
+        public override bool IsDone => _isDone;
 
         public override void OnStart()
         {
             _stopwatch.Start();
-            //AdvDia.Update(true);
             if (LevelAreaId == 0)
             {
+                Pulsator.OnPulse += OnPulse;
                 LevelAreaId = AdvDia.CurrentLevelAreaId;
             }
-            Logger.Info("[ExploreLevelArea] Starting to explore {0} ({1})", (SNOLevelArea)LevelAreaId, LevelAreaId);
+            base.OnStart();
+        }
+
+        private void OnPulse(object sender, EventArgs eventArgs)
+        {
+            if (string.IsNullOrEmpty(StopCondition))
+                return;
+
+            if (ScriptManager.GetCondition(StopCondition).Invoke())
+            {
+                Logger.Info($"[ExploreLevelArea] Stop condition was met: ({StopCondition})");
+                _isDone = true;
+            }
         }
 
         protected override Composite CreateBehavior()
@@ -56,11 +66,12 @@ namespace Trinity.Components.Adventurer.Tags
                 return true;
             }
             return false;
-        }
+        }        
 
         public override void OnDone()
         {
-            Logger.Info("[ExploreLevelArea] It took {0} ms to explore {1}", _stopwatch.ElapsedMilliseconds, (SNOLevelArea)LevelAreaId);
+            Pulsator.OnPulse -= OnPulse;
+            Logger.Info($"[ExploreLevelArea] It took {_stopwatch.Elapsed.ToString(@"mm\:ss")} ms to explore {(SNOLevelArea)LevelAreaId}");
             base.OnDone();
         }
 

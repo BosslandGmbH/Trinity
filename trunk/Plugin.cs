@@ -23,6 +23,7 @@ using Trinity.Framework.Objects.Memory;
 using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Movement;
+using Trinity.ProfileTags;
 using Trinity.Settings.Loot;
 using Trinity.Technicals;
 using Trinity.UI;
@@ -412,6 +413,7 @@ namespace Trinity
                 Thread.CurrentThread.Name, Application.Current.CheckAccess());
 
             Core.Init();
+            TrinityConditions.Initialize();
         }
 
         public string Name

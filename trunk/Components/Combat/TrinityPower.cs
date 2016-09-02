@@ -197,6 +197,21 @@ namespace Trinity.Components.Combat
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
+        public TrinityPower(SNOPower snoPower, float minimumRange, int targetAcdId, int waitTicksBeforeUse, int waitTicksAfterUse)
+        {
+            IsCastOnSelf = false;
+            SNOPower = snoPower;
+            MinimumRange = minimumRange;
+            TargetPosition = Vector3.Zero;
+            TargetDynamicWorldId = CombatBase.Player.WorldDynamicID;
+            TargetAcdId = targetAcdId;
+            WaitTicksBeforeUse = waitTicksBeforeUse;
+            WaitTicksAfterUse = waitTicksAfterUse;
+            PowerAssignmentTime = DateTime.UtcNow;
+        }
+
+        
+
         /// <summary>
         /// Create a TrinityPower for generic use with a range
         /// </summary>

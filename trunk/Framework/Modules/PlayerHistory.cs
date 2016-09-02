@@ -13,7 +13,7 @@ namespace Trinity.Framework.Modules
     /// </summary>
     public class PlayerHistory : Module
     {
-        public const int MeasurementSeconds = 2;
+        public const int MeasurementSeconds = 1;
 
         public class PositionHistory : IEquatable<PositionHistory>
         {

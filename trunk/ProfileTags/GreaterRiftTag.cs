@@ -13,7 +13,7 @@ using Zeta.Game.Internals;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("GreaterRift")]
     public class GreaterRiftTag : ProfileBehavior

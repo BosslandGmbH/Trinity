@@ -1,17 +1,12 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Components.Adventurer.Coroutines;
 using Zeta.Bot;
-using Zeta.Bot.Profile.Common;
-using Zeta.Bot.Profile.Composites;
 using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("WaitForCombat")]
     public class WaitForCombatTag : TrinityProfileBehavior

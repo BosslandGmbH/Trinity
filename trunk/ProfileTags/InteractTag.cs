@@ -1,23 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
-using Trinity.Technicals;
+using Trinity.Components.Adventurer.Game.Actors;
 using Zeta.Bot;
-using Zeta.Bot.Profile;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals.Actors;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 using Logger = Trinity.Technicals.Logger;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("Interact")]
     public class InteractTag : TrinityProfileBehavior
@@ -41,6 +37,10 @@ namespace Trinity.Components.Adventurer.Tags
         [XmlAttribute("worldSnoId")]
         [DefaultValue(0)]
         public int WorldSnoId { get; set; }
+
+        [XmlAttribute("explore")]
+        [DefaultValue(true)]
+        public bool Explore { get; set; }
 
         public string State { get; set; } = "Not Started";
 
@@ -86,32 +86,24 @@ namespace Trinity.Components.Adventurer.Tags
                 }
             }
 
-            //If an actor wasn't specified try to find something to click on nearby.
-            //if (ActorId == 0)
-            //{
-            //    var closestActor = ZetaDia.Actors.GetActorsOfType<DiaGizmo>().OrderBy(a => a.Distance).FirstOrDefault();
-            //    if (closestActor != null)
-            //    {
-            //        Logger.Log($"Selected nearby actor {closestActor.Name} ({closestActor.ActorSnoId})");
-            //        ActorId = closestActor.ActorSnoId;
-            //    }
-            //}
-
             // Find the actor without a position specified
 
             if (Position == Vector3.Zero)
             {
-                if (_moveToActorTask == null)
+                var actor = ActorFinder.FindObject(ActorId);
+                if (actor != null || Explore)
                 {
-                    _moveToActorTask = new MoveToActorCoroutine(QuestId, AdvDia.CurrentWorldId, ActorId);
-                }
-
-                if (!_moveToActorTask.IsDone)
-                {
-                    if (!await _moveToActorTask.GetCoroutine())
+                    if (_moveToActorTask == null)
                     {
-                        State = "MoveToActor." + _moveToActorTask.State;
-                        return true;
+                        _moveToActorTask = new MoveToActorCoroutine(QuestId, AdvDia.CurrentWorldId, ActorId);
+                    }
+                    if (!_moveToActorTask.IsDone)
+                    {
+                        if (!await _moveToActorTask.GetCoroutine())
+                        {
+                            State = "MoveToActor." + _moveToActorTask.State;
+                            return true;
+                        }
                     }
                 }
             }
