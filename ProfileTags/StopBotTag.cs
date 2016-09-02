@@ -4,7 +4,7 @@ using Zeta.Bot.Profile;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("StopBot")]
     public class StopBotTag : ProfileBehavior

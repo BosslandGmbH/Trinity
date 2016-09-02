@@ -41,11 +41,11 @@ namespace Trinity.Coroutines.Town
             await MoveToAndInteract.Execute(TownInfo.Stash);
 
             if (!UIElements.StashWindow.IsVisible && TownInfo.Stash.Distance <= 10f)
-            {                
+            {
                 Logger.Log("[TakeItemsFromStash] Stash window not open, interacting");
                 stash.Interact();
             }
-                
+
             var itemIdsHashSet = new HashSet<int>(itemIds);
             var amountWithdrawn = itemIdsHashSet.ToDictionary(k => k, v => (long)0);
             var overageTaken = itemIdsHashSet.ToDictionary(k => k, v => false);
@@ -56,7 +56,7 @@ namespace Trinity.Coroutines.Town
                 amountWithdrawn[item.ActorSnoId] += item.ItemStackQuantity;
                 lastStackTaken[item.ActorSnoId] = item;
             }
-            
+
             foreach (var item in ZetaDia.Me.Inventory.StashItems.Where(i => i.ACDId != 0 && i.IsValid && itemIdsHashSet.Contains(i.ActorSnoId)).ToList())
             {
                 try
@@ -64,7 +64,7 @@ namespace Trinity.Coroutines.Town
                     if (!item.IsValid || item.IsDisposed)
                         continue;
 
-                    var stackSize = item.ItemStackQuantity;
+                    var stackSize = Math.Max(1,item.ItemStackQuantity);
                     var numTakenAlready = amountWithdrawn[item.ActorSnoId];
 
                     // We have enough of this material already
@@ -77,7 +77,7 @@ namespace Trinity.Coroutines.Town
                         break;
 
                     // Only take up to the required amount.
-                    var willBeOverMax = numTakenAlready + stackSize > maxAmount;                        
+                    var willBeOverMax = numTakenAlready + stackSize > maxAmount;
                     if (!willBeOverMax || !overageTaken[item.ActorSnoId])
                     {
                         var lastItem = lastStackTaken[item.ActorSnoId];
@@ -87,7 +87,7 @@ namespace Trinity.Coroutines.Town
                         {
                             // Tried InventoryManager.SplitStack but it didnt work, reverting to moving onto existing stacks.
 
-                            var amountToSplit = stackSize - lastItem.ItemStackQuantity;                        
+                            var amountToSplit = stackSize - lastItem.ItemStackQuantity;
                             Logger.Log($"[TakeItemsFromStash] Merging Stash Stack {item.Name} ({item.ActorSnoId}) onto Backpack Stack. StackSize={amountToSplit} WithdrawnAlready={numTakenAlready} InternalName={item.InternalName} Id={item.ActorSnoId} Quality={item.ItemQualityLevel} AncientRank={item.AncientRank}");
 
                             ZetaDia.Me.Inventory.MoveItem(item.AnnId, ZetaDia.Me.CommonData.AnnId, InventorySlot.BackpackItems, lastItem.InventoryColumn, lastItem.InventoryRow);
@@ -105,9 +105,9 @@ namespace Trinity.Coroutines.Town
                                 lastStackTaken[item.ActorSnoId] = item;
                             }
                         }
-                                                    
+
                         await Coroutine.Sleep(25);
-                        await Coroutine.Yield();                        
+                        await Coroutine.Yield();
                     }
 
 
@@ -156,7 +156,7 @@ namespace Trinity.Coroutines.Town
                     }
 
                     Logger.LogVerbose($"[TakeItemsFromStash] QuickWithdrawing: {item.InternalName} Id={item.ActorSnoId} AnnId={item.AnnId} Name={item.Name} Quality={item.ItemQualityLevel} IsAncient={item.IsAncient}");
-                    ZetaDia.Me.Inventory.QuickWithdraw(item.ToAcdItem());                    
+                    ZetaDia.Me.Inventory.QuickWithdraw(item.ToAcdItem());
                 }
                 catch (Exception ex)
                 {

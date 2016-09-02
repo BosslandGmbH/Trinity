@@ -1,19 +1,12 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
-using Trinity.Components.Adventurer.Game.Events;
-using Trinity.Components.Adventurer.Settings;
-using Trinity.Components.Adventurer.Util;
+﻿using System.Threading.Tasks;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
-using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
-using Zeta.Game.Internals;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("SetCombatMode")]
     public class SetCombatModeTag : ProfileBehavior

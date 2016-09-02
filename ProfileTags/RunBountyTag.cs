@@ -8,7 +8,7 @@ using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("RunBounty")]
     public class RunBountyTag : ProfileBehavior

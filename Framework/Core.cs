@@ -9,6 +9,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Movement;
+using Trinity.ProfileTags;
 using Trinity.UI.UIComponents;
 using Zeta.Bot;
 using Zeta.Game.Internals;

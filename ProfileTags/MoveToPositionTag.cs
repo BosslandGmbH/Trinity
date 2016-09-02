@@ -1,22 +1,21 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Cache;
-using Trinity.Components.Adventurer.Coroutines;
+using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Zeta.Bot;
-using Zeta.Bot.Profile;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
-using Trinity.Technicals;
 using Logger = Trinity.Technicals.Logger;
 
-namespace Trinity.Components.Adventurer.Tags
+namespace Trinity.ProfileTags
 {
     [XmlElement("MoveToPosition")]
-    public class MoveToPositionTag : ProfileBehavior
+    public class MoveToPositionTag : TrinityProfileBehavior
     {
+        #region Position
 
         [XmlAttribute("x")]
         [DefaultValue(0)]
@@ -30,6 +29,35 @@ namespace Trinity.Components.Adventurer.Tags
         [DefaultValue(0)]
         public float Z { get; set; }
 
+        #endregion
+
+        #region ScenePosition
+
+        [XmlAttribute("x")]
+        [XmlAttribute("sceneX")]
+        [DefaultValue(0)]
+        public float RelativeSceneX { get; set; }
+
+        [XmlAttribute("y")]
+        [XmlAttribute("sceneY")]
+        [DefaultValue(0)]
+        public float RelativeSceneY { get; set; }
+
+        [XmlAttribute("z")]
+        [XmlAttribute("sceneZ")]
+        [DefaultValue(0)]
+        public float RelativeSceneZ { get; set; }
+
+        [XmlAttribute("sceneSnoId")]
+        [DefaultValue(0)]
+        public int SceneSnoId { get; set; }
+
+        [XmlAttribute("sceneName")]
+        [DefaultValue("")]
+        public string SceneName { get; set; }
+
+        #endregion
+
         private bool _isDone;
         public override bool IsDone => _isDone;
 
@@ -38,15 +66,35 @@ namespace Trinity.Components.Adventurer.Tags
             return new ActionRunCoroutine(ctx => Routine());
         }
 
-        public override void OnStart() => Logger.LogVerbose($"Started Tag: {GetType().Name}");
-        public override void OnDone() => Logger.LogVerbose($"Finished Tag: {GetType().Name}");
-
         private ISubroutine _task;
 
         public async Task<bool> Routine()
         {
-            if(_task == null)
-                _task = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, new Vector3(X, Y, Z), 3);
+            if (_task == null)
+            {
+                if (!ZetaDia.WorldInfo.IsGenerated)
+                {
+                    _task = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, new Vector3(X, Y, Z), 3);
+                }
+                else
+                {
+                    var relativeScenePosition = new Vector3(RelativeSceneX, RelativeSceneY, RelativeSceneZ);
+                    if (SceneSnoId > 0)
+                    {
+                        _task = new MoveToScenePositionCoroutine(SceneSnoId, relativeScenePosition);
+                    }
+                    else if (!string.IsNullOrEmpty(SceneName))
+                    {
+                        _task = new MoveToScenePositionCoroutine(SceneName, relativeScenePosition);
+                    }
+                    else
+                    {
+                        Logger.LogError("[MoveToPosition] A sceneName or sceneSnoId, and a relative position (sceneX,sceneY,sceneZ) are required for dynamically generated worlds");
+                        _isDone = true;
+                        return false;
+                    }
+                }
+            }
 
             if (!await _task.GetCoroutine()) return true;
             _isDone = true;

@@ -322,6 +322,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 case GizmoType.PowerUp:                
                     return false;
                 case GizmoType.LootRunSwitch:
+                case GizmoType.MultiClick:
                     return true;
                 case GizmoType.Switch:
                     if (gizmo.ActorSnoId == 328830) return true;

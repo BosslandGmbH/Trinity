@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Actors;
@@ -7,6 +8,7 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Common;
+using Zeta.Game;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
@@ -72,7 +74,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             _sceneSnoId = sceneSnoId;
             _position = position;
-        }        
+        }
+
+        public MoveToScenePositionCoroutine(string sceneName, Vector3 position)
+        {
+            _sceneName = sceneName;
+            _position = position;
+        }   
 
         public async Task<bool> GetCoroutine()
         {
@@ -136,7 +144,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.Moving;
                 return false;
             }
-            if (!await ExplorationCoroutine.Explore(BountyData.LevelAreaIds)) return false;
+
+            var bountyData = BountyData;
+
+            var levelAreaIds = bountyData?.LevelAreaIds != null && bountyData.LevelAreaIds.Any()
+                ? bountyData.LevelAreaIds : new HashSet<int> { ZetaDia.CurrentLevelAreaSnoId };
+
+            if (!await ExplorationCoroutine.Explore(levelAreaIds))
+                return false;
+
             ScenesStorage.Reset();
             return false;
         }
@@ -208,7 +224,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 else if (!string.IsNullOrEmpty(_sceneName))
                 {
-                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name.Contains(_sceneName));
+                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name.ToLowerInvariant().Contains(_sceneName.ToLowerInvariant()));
                     if (scene != null)
                     {
                         _worldScene = scene;
@@ -217,7 +233,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 else if (!string.IsNullOrEmpty(_tempSceneName))
                 {
-                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name==_tempSceneName);
+                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name == _tempSceneName);
                     if (scene != null)
                     {
                         _worldScene = scene;

@@ -287,7 +287,7 @@ namespace Trinity.Components.Combat.Abilities
                 // Breath of Heaven OOC
                 if (CanCast(SNOPower.Monk_BreathOfHeaven) && !GetHasBuff(SNOPower.Monk_BreathOfHeaven) &&
                     Settings.Combat.Monk.BreathOfHeavenOOC)
-                    return new TrinityPower(SNOPower.Monk_BreathOfHeaven);
+                    return new TrinityPower(SNOPower.Monk_BreathOfHeaven, 0, 0);
             }
 
             if (CurrentTarget != null)
@@ -295,23 +295,23 @@ namespace Trinity.Components.Combat.Abilities
                 // Dashing Strike - its only for the buff so charge current target.
                 if (CanCast(SNOPower.X1_Monk_DashingStrike) && Skills.Monk.DashingStrike.Charges > 1 &&
                     TimeSincePowerUse(SNOPower.X1_Monk_DashingStrike) >= Settings.Combat.Monk.DashingStrikeDelay)
-                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 45f, CurrentTarget.Position);
+                    return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 45f, CurrentTarget.Position, 0, 0);
 
                 if (CanCastEpiphany())
-                    return new TrinityPower(SNOPower.X1_Monk_Epiphany);
+                    return new TrinityPower(SNOPower.X1_Monk_Epiphany,0,0);
 
                 // Breath of Heaven when needing healing or the buff
                 if (CanCastBreathOfHeavenForHealing())
-                    return new TrinityPower(SNOPower.Monk_BreathOfHeaven);
+                    return new TrinityPower(SNOPower.Monk_BreathOfHeaven, 0, 0);
 
                 // Breath of Heaven for spirit - Infused with Light
                 if (CanCastBreathOfHeavenInfusedWithLight())
-                    return new TrinityPower(SNOPower.Monk_BreathOfHeaven);
+                    return new TrinityPower(SNOPower.Monk_BreathOfHeaven, 0, 0);
 
                 var cycloneStrikeRange = Runes.Monk.Implosion.IsActive ? 34f : 24f;
                 var cycloneStrikeSpirit = Runes.Monk.EyeOfTheStorm.IsActive ? 30 : 50;
                 
-                if (!Core.BlockedCheck.IsBlocked && (DateTime.UtcNow - LastWithinBuffedSpot).TotalSeconds > 3)
+                if (!Core.BlockedCheck.IsBlocked && (DateTime.UtcNow - LastWithinBuffedSpot).TotalSeconds > 5)
                 {
                     TrinityPower power;
                     if (TryMoveToBuffedSpot(out power, 30f, 20f, false)) {
@@ -324,14 +324,14 @@ namespace Trinity.Components.Combat.Abilities
                     && Player.PrimaryResource > cycloneStrikeSpirit 
                     && (TargetUtil.IsPercentUnitsWithinBand(10f, cycloneStrikeRange, 0.25) || CurrentTarget.IsElite))
                 {
-                    return new TrinityPower(SNOPower.Monk_CycloneStrike);
+                    return new TrinityPower(SNOPower.Monk_CycloneStrike,0,0);
                 }
 
                 if (CanCast(SNOPower.Monk_CripplingWave))
-                    return new TrinityPower(SNOPower.Monk_CripplingWave, 10f, CurrentTarget.AcdId);
+                    return new TrinityPower(SNOPower.Monk_CripplingWave, 10f, CurrentTarget.AcdId, 0, 0);
 
                 if (CanCast(SNOPower.Monk_WayOfTheHundredFists))
-                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 10f, CurrentTarget.AcdId);
+                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 10f, CurrentTarget.AcdId, 0, 0);
             }
 
             return null;

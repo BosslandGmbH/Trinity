@@ -35,6 +35,7 @@ namespace Trinity.Routines.DemonHunter
         public string Author => "XZJV";
         public string DisplayName => "DemonHunter Generic Routine";
         public string Description => "Generic class support, casts all spells whenever possible";
+        public Build RequiredBuild => null;
         public bool IsEquipped => true;
 		public KiteMode KiteMode => KiteMode.Always;
         public float KiteDistance => 15f;
@@ -157,7 +158,7 @@ namespace Trinity.Routines.DemonHunter
             return CombatBase.DefaultPower;
         }
 
-        public virtual TrinityPower GetMovementPower()
+        public virtual TrinityPower GetMovementPower(Vector3 destination)
         {
             Vector3 position;
 

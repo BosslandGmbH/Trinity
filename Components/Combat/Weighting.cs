@@ -249,9 +249,9 @@ namespace Trinity.Components.Combat
                                 continue;
                             }                        
                         }
-                        else if (cacheObject.IsDestroyable && cacheObject.Distance < 35f)
+                        else if (cacheObject.IsDestroyable)
                         {
-                            if (!cacheObject.IsWalkable)
+                            if (!cacheObject.HasBeenWalkable)
                             {
                                 cacheObject.Weight = 0;
                                 cacheObject.WeightInfo += "Ignoring - Unreachable";

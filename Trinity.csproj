@@ -98,6 +98,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProfileTags\TakeItemsFromStash.cs" />
+    <Compile Include="ProfileTags\TownRunTag.cs" />
+    <Compile Include="ProfileTags\TrinityConditions.cs" />
     <Compile Include="Routines\RoutineBase.cs" />
     <Compile Include="Routines\IRoutine.cs" />
     <Compile Include="Components\Adventurer\Adventurer.cs" />
@@ -205,7 +208,7 @@
     <Compile Include="Components\Combat\TargetHandler.cs" />
     <Compile Include="ProfileTags\BountiesTag.cs" />
     <Compile Include="ProfileTags\ClearAreaTag.cs" />
-    <Compile Include="ProfileTags\ExploreLevelAreaTag.cs" />
+    <Compile Include="ProfileTags\ExploreTag.cs" />
     <Compile Include="ProfileTags\GreaterRiftTag.cs" />
     <Compile Include="ProfileTags\KeywardensTag.cs" />
     <Compile Include="ProfileTags\InteractTag.cs" />
@@ -1125,7 +1128,9 @@
   <ItemGroup>
     <Content Include="ItemRules\ItemRules2.txt" />
     <Content Include="Profiles\ExploreCowLevel.xml" />
-    <Content Include="Profiles\ExploreGoblinRealm.xml" />
+    <Content Include="Profiles\ExploreGoblinRealm.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\JS Class Generator\create_class_passives.htm" />
     <Content Include="Resources\JS Class Generator\create_class_runes.htm" />
     <Content Include="Resources\JS Class Generator\create_class_skills.htm" />

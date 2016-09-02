@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Profile>
-  <Name>Cow Level Explorer 1.0 by xzjv [REQUIRES QUESTTOOLS 3.5.13+]</Name>
+  <Name>Cow Level Explorer 1.1 by xzjv [REQUIRES QUESTTOOLS 3.5.13+]</Name>
   <KillMonsters>True</KillMonsters>
   <PickupLoot>True</PickupLoot>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" />
@@ -13,7 +13,7 @@
 
     <!-- Quest: x1_OpenWorld_quest (312429) World: p2_TotallyNotACowLevel (434649) LevelArea: p2_TotallyNotACowLevel (434650) -->
     
-    <If condition="CurrentLevelAreaSnoId != 332339 and CurrentWorldSnoId != 434649">      
+    <If condition="ZetaDia.CurrentLevelAreaSnoId != 332339 and ZetaDia.CurrentWorldSnoId != 434649">      
       <UseWaypoint waypointNumber="0" questId="1" />
       <WaitWhile condition="IsCastingOrLoading()" />
       <WaitTimer questId="1" stepId="1" waitTime="3000" />
@@ -21,7 +21,7 @@
     
     <TownRun minFreeBagSlots="50" />
     
-    <If condition="CurrentLevelAreaSnoId == 332339 and not ActorExistsAt(434659, 403, 575, 24, 50) and ItemCount(272056) > 0">
+    <If condition="ZetaDia.CurrentLevelAreaSnoId == 332339 and not ActorExistsAt(434659, 403, 575, 24, 50) and ItemCount(272056) > 0">
 
       <LogMessage Output="Getting Bovine Bardiche from Stash" />
 
@@ -50,7 +50,7 @@
 
     <WaitTimer questId="1" stepId="1" waitTime="1000" />
 
-    <If condition="CurrentLevelAreaSnoId == 332339 and ActorExistsAt(434659, 403, 575, 24, 50)">
+    <If condition="ZetaDia.CurrentLevelAreaSnoId == 332339 and ActorExistsAt(434659, 403, 575, 24, 50)">
 
       <LogMessage Output="Entering to Cow Level" />
 
@@ -62,7 +62,7 @@
 
     </If>
 
-    <If condition="CurrentWorldSnoId == 434649">
+    <If condition="ZetaDia.CurrentWorldSnoId == 434649">
 
       <LogMessage questId="1" output="Exploring Cow Level!" />
 
@@ -91,7 +91,7 @@
 
       <WaitTimer questId="1" stepId="1" waitTime="3000" />
 
-      <While condition="CurrentWorldSnoId == 434649 and IsActiveQuestAndStep(434753, 1)">        
+      <While condition="ZetaDia.CurrentWorldSnoId == 434649 and IsActiveQuestAndStep(434753, 1)">        
         <ClearArea questId="434753" stepId="1" radius="100" points="15" timeout="60" />
         <WaitTimer questId="1" stepId="1" waitTime="1000" />
         <WaitTimer questId="1" stepId="1" waitTime="1000" />        
