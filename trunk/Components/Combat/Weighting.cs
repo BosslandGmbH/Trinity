@@ -185,6 +185,8 @@ namespace Trinity.Components.Combat
                         }
                     }
 
+                    var ignoreTrashPackSize = CombatBase.IsIgnoringPackSize();
+
                     #region Foreach Loop
 
                     TrinityActor bestTarget = null;
@@ -195,6 +197,12 @@ namespace Trinity.Components.Combat
 
                         cacheObject.Weight = 0;
                         cacheObject.WeightInfo = string.Empty;
+
+                        if (CombatBase.IsFocussingUnits() && !cacheObject.IsUnit)
+                        {
+                            cacheObject.WeightInfo += "FocussingUnits";
+                            continue;
+                        }
 
                         if (PlayerMover.IsCompletelyBlocked)
                         {
@@ -612,6 +620,10 @@ namespace Trinity.Components.Combat
                                         else if (CombatBase.CombatMode == CombatMode.Questing)
                                         {
                                             cacheObject.WeightInfo += $"Questing Mode - Ignoring Trash Pack Size Setting.";
+                                        }
+                                        else if (ignoreTrashPackSize)
+                                        {
+                                            cacheObject.WeightInfo += $"CombatBase Ignore Trash Pack Size.";
                                         }
                                         else if (nearbyTrashCount < CombatBase.CombatOverrides.EffectiveTrashSize && !Core.Minimap.MinimapIconAcdIds.Contains(cacheObject.AcdId) && 
                                                  !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat)

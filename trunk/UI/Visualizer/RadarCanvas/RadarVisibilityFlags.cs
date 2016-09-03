@@ -30,7 +30,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         NotInCache = 1 << 21,
         RadarDebug = 1 << 22,
         KiteFromNodes = 1 << 23,
-        All = ~(1 << 24),        
+        ExploreNodes = 1 << 24,
+        All = ~(1 << 25),        
     }
 }
 

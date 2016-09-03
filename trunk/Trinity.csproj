@@ -98,6 +98,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Framework\Helpers\ObjectComparer.cs" />
     <Compile Include="ProfileTags\TakeItemsFromStash.cs" />
     <Compile Include="ProfileTags\TownRunTag.cs" />
     <Compile Include="ProfileTags\TrinityConditions.cs" />
@@ -957,7 +958,6 @@
     <Compile Include="UI\UIComponents\UIControlType.cs" />
     <Compile Include="UI\UILoader.cs" />
     <Compile Include="Components\Combat\Weighting.cs" />
-    <Compile Include="Components\Combat\TargetCheck.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Configuration\Variables.cs" />
     <Compile Include="Configuration\Enums.cs" />

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Trinity.Cache;
 using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
+using Trinity.Components.Combat.Abilities.PhelonsPlayground;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Modules;
@@ -224,87 +225,321 @@ namespace Trinity.Components.Combat.Abilities
         public static bool TryGetHellToothFirebatsPower(out TrinityPower power)
         { 
             power = null;
-            if (CurrentTarget == null)
-                return false;           
 
-            // Soul harvest for the damage reduction of Okumbas Ornament
-            if (TrySoulHarvest(out power))
-                return true;                 
+            var allUnits = Core.Targets.ByType[TrinityObjectType.Unit].Where(u => u.IsUnit && u.RadiusDistance <= 50f).ToList();
 
-            // Stand in occulus circles
-            if (TryMoveToBuffedSpot(out power, 20f, 20f, false) && !Player.IsChannelling)
-                return true;
+            var clusterUnits =
+                (from u in allUnits
+                 where u.IsUnit && u.Weight > 0 && !u.IsPlayer
+                 orderby                 
+                 u.NearbyUnitsWithinDistance(15f) descending,
+                 u.Distance,
+                 u.HitPointsPct descending
+                 select u).ToList();
 
-            // Move in close to clusters.
-            if (CanCast(SNOPower.Witchdoctor_Firebats) && TargetUtil.AnyMobsInRange(40f) && !Player.IsChannelling)
+            // Turn avoidance off when channelling
+            IsAvoidanceDisabled = () => Player.IsChannelling && Player.CurrentHealthPct > 0.4 && !Core.Avoidance.InCriticalAvoidance(Player.Position);
+
+            // Dont get distracted by shiny objects
+            IsFocussingUnits = () => Player.IsChannelling && Player.CurrentHealthPct > 0.4;
+
+            // Keep killing stuff until everything is dead.
+            IsIgnoringPackSize = () => Player.IsChannelling;
+
+            var bestClusterUnit = clusterUnits.FirstOrDefault();
+
+            //10 second 60% damage reduction should always be on to survive
+            if (!GetHasBuff(JeramsRevenge) && (ZetaDia.Me.IsInCombat || Player.CurrentHealthPct < 0.4) && bestClusterUnit != null) 
             {
-                Logger.Log("Moving into firebat position");
-                MoveToFirebatsPoint(Core.Clusters.BestCluster);
+                Logger.Warn($"Casting Wall of Death on {allUnits.FirstOrDefault()}");
+                Skills.WitchDoctor.WallOfDeath.Cast(allUnits.FirstOrDefault());
             }
 
-            if (TryBigBadVoodoo(out power))
-                return true;
-
-            // Only use wall of death for the helltooth set buff.
-            if (!GetHasBuff(JeramsRevenge) && TryWallOfDeath(out power))
-                return true;           
-
-            // Piranhas
-            if (CanCast(SNOPower.Witchdoctor_Piranhas) && Player.PrimaryResource >= 250 &&
-                (TargetUtil.ClusterExists(15f, 40f) || TargetUtil.AnyElitesInRange(40f)) &&
-                LastPowerUsed != SNOPower.Witchdoctor_Piranhas &&
-                Player.PrimaryResource >= 250)
+            if (bestClusterUnit != null)
             {
-                power = new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Core.Clusters.BestCluster.Position);
-                return true;
-            }
-
-            // Locust Swarm for the ring of emptyness debuff only 
-            if (!CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm) && CanCast(SNOPower.Witchdoctor_Locust_Swarm) && !Player.IsChannelling)
-            {
-                // Avoid trying to put debuffs on all monsters, or monsters that are too far away = more time spent firebatting close units.
-                if (TargetUtil.NumMobsInRange(10f) < 3 || TargetUtil.IsPercentOfMobsDebuffed(SNOPower.Witchdoctor_Locust_Swarm, 20f, 0.75f))
+                if (!GetHasBuff(JeramsRevenge) && ZetaDia.Me.IsInCombat && Skills.WitchDoctor.WallOfDeath.CanCast())
                 {
-                    power = new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 20f, CurrentTarget.AcdId);
+                    Logger.Warn($"Casting Wall of Death on {allUnits.FirstOrDefault()}");
+                    Skills.WitchDoctor.WallOfDeath.Cast(allUnits.FirstOrDefault());
+                }
+
+                var percentTargetsWithHaunt = TargetUtil.PercentOfMobsDebuffed(SNOPower.Witchdoctor_Haunt, 8f);
+                var percentTargetsWithLocust = TargetUtil.PercentOfMobsDebuffed(SNOPower.Witchdoctor_Locust_Swarm, 12f);
+                var isEliteWithoutHaunt = clusterUnits.Any(u => u.IsElite && !u.HasDebuff(SNOPower.Witchdoctor_Haunt));
+                var isElitewithoutLocust = clusterUnits.Any(u => u.IsElite && !u.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm));
+                var harvestStacks = Skills.WitchDoctor.SoulHarvest.BuffStacks;
+                var harvestBuffCooldown = Core.Cooldowns.GetBuffCooldown(SNOPower.Witchdoctor_SoulHarvest);
+                var harvestPossibleStackGain = 10 - harvestStacks;
+                var harvestUnitsInRange = allUnits.Count(u => u.Distance < 12f);
+
+                var interruptForHarvest = CanCast(SNOPower.Witchdoctor_SoulHarvest) && harvestPossibleStackGain <= harvestUnitsInRange && harvestBuffCooldown?.Remaining.TotalSeconds < 5;
+                var interruptForHaunt = percentTargetsWithHaunt < 0.2f || isEliteWithoutHaunt;
+                var interruptForLocust = percentTargetsWithLocust < 0.2f || isElitewithoutLocust && Player.PrimaryResource > 300 && Skills.WitchDoctor.LocustSwarm.CanCast();
+                var interruptForHealth = Player.CurrentHealthPct < 0.4;
+
+                // continue channelling firebats?
+                if (Player.IsChannelling)
+                {
+                    if (!interruptForHealth && !interruptForHaunt && !interruptForLocust && !interruptForHarvest)
+                    {
+                        Logger.Warn("Continuation of Firebats.");
+                        power = new TrinityPower(SNOPower.Witchdoctor_Firebats, 30f, Player.Position, 0, 0);
+                        return true;
+                    }
+
+                    if (interruptForHaunt)
+                        Logger.Warn("Interrupted Firebats to haunt");
+
+                    if (interruptForLocust)
+                        Logger.Warn("Interrupted Firebats to locust");
+
+                    if (interruptForHarvest)
+                        Logger.Warn("Interrupted Firebats to harvest");
+                }
+
+                // Emergency health situation
+                if (Player.CurrentHealthPct < 0.4)
+                {
+                    if (Skills.WitchDoctor.SpiritWalk.CanCast())
+                    {
+                        Logger.Warn($"Defensive Spirit Walking");
+                        Skills.WitchDoctor.SpiritWalk.Cast();
+                    }
+
+                    if (Player.CurrentHealthPct < 0.4 && TargetUtil.AnyMobsInRange(12f) && Skills.WitchDoctor.SoulHarvest.CanCast())
+                    {
+                        Logger.Warn("Emergency Harvest");
+                        power = new TrinityPower(SNOPower.Witchdoctor_SoulHarvest, 0, 0);
+                        return true;
+                    }
+
+                    if (!GetHasBuff(JeramsRevenge) && Skills.WitchDoctor.WallOfDeath.CanCast() && allUnits.Any())
+                    {
+                        Logger.Warn($"Casting Defensive WallOfDeath on {allUnits.FirstOrDefault()}");
+                        Skills.WitchDoctor.WallOfDeath.Cast(allUnits.FirstOrDefault());
+                    }
+                }
+
+                var targetsWithoutLocust = clusterUnits.Where(u => !u.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm)).OrderBy(u => u.Distance);
+                var isAnyTargetWithLocust = clusterUnits.Any(u => u.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm));
+
+                // Locust
+                if (Skills.WitchDoctor.LocustSwarm.CanCast() && Skills.WitchDoctor.LocustSwarm.TimeSinceUse > 1000 && targetsWithoutLocust.Any() && (!Runes.WitchDoctor.Pestilence.IsActive || !isAnyTargetWithLocust))
+                {                    
+                    if ((percentTargetsWithLocust < 0.5f || isElitewithoutLocust) && Player.PrimaryResource > 300 && targetsWithoutLocust.Any()) {
+                        Logger.Warn("Locust");
+                        power = new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 10f, targetsWithoutLocust.First().Position, 0, 0);
+                        return true;
+                    }
+                }                 
+        
+                // Soul harvest for the damage reduction of Okumbas Ornament
+                if (CanCast(SNOPower.Witchdoctor_SoulHarvest) && (bestClusterUnit.Distance < 12f || harvestStacks < 4 && TargetUtil.AnyMobsInRange(10f))  && harvestStacks < 10)
+                {
+                    Logger.Warn($"Harvest State: StackGainPossible={harvestPossibleStackGain} Units={harvestUnitsInRange} BuffRemainingSecs:{harvestBuffCooldown?.Remaining.TotalSeconds:N2}");    
+                     
+                    if (harvestPossibleStackGain <= harvestUnitsInRange)
+                    {
+                        Logger.Warn($"Soul Harvest.");
+                        power = new TrinityPower(SNOPower.Witchdoctor_SoulHarvest, 0, 0);
+                        return true;
+                    }               
+                }
+
+                if (TryBigBadVoodoo(out power))
                     return true;
+
+                // Piranhas
+                if (CanCast(SNOPower.Witchdoctor_Piranhas) && Player.PrimaryResource >= 250 &&
+                    (TargetUtil.ClusterExists(15f, 40f) || TargetUtil.AnyElitesInRange(40f)) && Player.PrimaryResource >= 250)
+                {
+                    power = new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Core.Clusters.BestCluster.Position, 0, 0);
+                    return true;
+                }
+
+                // .80 of mobs give or take. Spelltracker check is to prevent repeat casts ont he same target before the projectile arrives.                 
+                var targetsWithoutHaunt = clusterUnits.Where(u => !u.HasDebuff(SNOPower.Witchdoctor_Haunt) && !SpellTracker.IsUnitTracked(u,SNOPower.Witchdoctor_Haunt)).OrderBy(u => u.Distance);
+                if ((percentTargetsWithHaunt < 0.45f || isEliteWithoutHaunt) && targetsWithoutHaunt.Any() && Player.PrimaryResource > 50)
+                {
+                    var target = targetsWithoutHaunt.First();
+                    Logger.Warn($"Haunt on {target}");
+                    power = new TrinityPower(SNOPower.Witchdoctor_Haunt, 50f, target.AcdId, 0, 0);
+                    return true;
+                }
+
+                Vector3 bestBuffedPosition;
+                PhelonUtils.BestBuffPosition(16f, bestClusterUnit.Position, true, out bestBuffedPosition);
+                var bestClusterUnitRadiusPosition = MathEx.GetPointAt(bestClusterUnit.Position, bestClusterUnit.CollisionRadius * 1.1f, bestClusterUnit.Rotation);
+                var bestFirebatsPosition = bestBuffedPosition != Vector3.Zero ? bestBuffedPosition : bestClusterUnitRadiusPosition;
+                var distance = bestFirebatsPosition.Distance(Player.Position);
+
+                // Walk into cluster or buffed location.
+                if (distance > 3f && !PlayerMover.IsBlocked)
+                {
+                    if (distance > 20f && Skills.WitchDoctor.SpiritWalk.CanCast())
+                    {
+                        Logger.Warn($"Spirit Walking");
+                        Skills.WitchDoctor.SpiritWalk.Cast();
+                    }
+
+                    Logger.Warn($"Walking to cluster position. Dist: {bestFirebatsPosition.Distance(Player.Position)}");
+                    power = new TrinityPower(SNOPower.Walk, 3f, bestFirebatsPosition,0,0);
+                    return true;
+                }
+
+                if (Skills.WitchDoctor.Firebats.CanCast())
+                {
+                    var closestUnit = allUnits.OrderBy(u => u.Distance).FirstOrDefault();
+                    if (closestUnit != null)
+                    {
+                        Logger.Warn($"Casting Firebats");
+                        power = new TrinityPower(SNOPower.Witchdoctor_Firebats, 15f, closestUnit.AcdId, 0, 0);
+                        return true;
+                    }
                 }
             }
 
-            // Haunt for the ring of emptyness debuff only 
-            if (!CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Haunt) && CanCast(SNOPower.Witchdoctor_Haunt) && !Player.IsChannelling)
-            {
-                // Avoid trying to put debuffs on all monsters, or monsters that are too far away = more time spent firebatting close units.
-                if (TargetUtil.NumMobsInRange(10f) < 3 || TargetUtil.IsPercentOfMobsDebuffed(SNOPower.Witchdoctor_Haunt, 20f, 0.75f))
-                {
-                    power = new TrinityPower(SNOPower.Witchdoctor_Haunt, 20f, CurrentTarget.AcdId);
-                    return true;
-                }
-            }
+            return true;
 
-            // If resource is really low, try to save up some before starting channelling stacks
-            var batMana = TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) < 125 ? 75 : 225;
+            /*
 
-            // Firebats: Cloud of bats 
-            if (Runes.WitchDoctor.CloudOfBats.IsActive && TargetUtil.AnyMobsInRange(Settings.Combat.WitchDoctor.FirebatsRange) &&
-                CanCast(SNOPower.Witchdoctor_Firebats) && Player.PrimaryResource >= batMana)
-            {
-                power = new TrinityPower(SNOPower.Witchdoctor_Firebats);
-                return true;
-            }
+            Check best position within mobs (highest density is smallest radius)
+            If Illusory boots, travel up to X yards to get there (too far = death)
+            If distance is greater that X yards and Spirit Walk is available, use Spirit Walk
+            If no illusory or Spirit walk, limit travel distance when health drops below 60%
+            Check to see if there is a beneficial ground effect within 20 yards of best position
 
-            // Firebats: Plague Bats
-            if (Runes.WitchDoctor.PlagueBats.IsActive && TargetUtil.AnyMobsInRange(15f) &&
-                CanCast(SNOPower.Witchdoctor_Firebats) && Player.PrimaryResource >= batMana)
-            {
-                var bestClusterPoint = TargetUtil.GetBestClusterPoint(15f, 30f);
-                var range = Settings.Combat.WitchDoctor.FirebatsRange > 20f ? 20f : Settings.Combat.WitchDoctor.FirebatsRange;
+            Check for Necrosis (Wall of Death)
+            10 second 60% damage reduction should always be on to survive
+            Basically always needs to be up when in combat.
+            Should also be cast when buf drops and out of comabt with health under 40%
 
-                power = new TrinityPower(SNOPower.Witchdoctor_Firebats, range, bestClusterPoint, 0, 0);
-                return true;
-            }
+            Check for Locust Swarm on enemies
+            .80 of mobs give or take. Prioritize Elites if in range.
+            If Pestilence rune, cast only once
+            Mana is above 300 (will be lower if wearing Topaz in helm, but I prefer amethyst)
 
-            power = null;
-            return false;
+            Check for Haunt on enemies
+            .80 of mobs give or take. Prioritize Elites if in range.
+            *No Mana check. Rush of essence is a required passive for this build.
+
+            Check for best position in mobs again
+            Is there a ground effect within X yards that I should stand in before channeling?
+            Inner Sanctuary
+            Oculus circle
+            Big Bad Voodoo
+            etc.
+
+            Check for Soul Harvest Stacks
+            Will stacks end within the next 5 seconds? Re-Cast before channeling.
+            If stack expiration is >5 seconds but enemies withing range are greater than current stacks, recast. 
+            Stack expiriation >5 seconds, current mob count is lower than current stacks, do not cast.
+            Criteria above met, Channel Firebats
+            Do not recast Locust Swarm or Haunt unless <.20 of mobs have them both
+            Pestilence spreads so fast that you probably don't need to recast
+            Haunt moves to another enemy when the first one dies so it doesn't need to be recast often
+            Recast for Elites without them both
+            Lower Avoidance Setting if standing in survival ground effect and currently channeling.
+            Do not move unless emergency health situation arises
+            If 10 second Necrosis debuff ends and above 80% health, continue to channel
+            If Necrosis debuff ends and health is below 80%, break channeling to recast
+
+
+
+            In emergency Health situations (<.40) Don't just kite blindly:
+            If standing in Inner Sanctuary, wait until <.30 or <.20
+            Check for Necrosis (60% damage reduction)
+            Cast if not already up
+            Check for Soul Harvest stacks,
+            If no stacks and enemies in range, cast.
+            Check for Spirit Walk availability
+            Check for Inner Sanctuary or other sustain ground effect and if it can be reached
+            10 yards? 20 yards if illusory boots? 30+ Yards if can cast Spirit walk?
+            Attempt to continue channeling unless
+            Health drops below 20%
+            Avoidance is also triggering
+            Safe area is within X yards
+
+                */
+
+            //// Soul harvest for the damage reduction of Okumbas Ornament
+            //if (TrySoulHarvest(out power))
+            //    return true;                 
+
+            //// Stand in occulus circles
+            //if (TryMoveToBuffedSpot(out power, 20f, 20f, false) && !Player.IsChannelling)
+            //    return true;
+
+            //// Move in close to clusters.
+            //if (CanCast(SNOPower.Witchdoctor_Firebats) && TargetUtil.AnyMobsInRange(40f) && !Player.IsChannelling)
+            //{
+            //    Logger.Log("Moving into firebat position");
+            //    MoveToFirebatsPoint(Core.Clusters.BestCluster);
+            //}
+
+            //if (TryBigBadVoodoo(out power))
+            //    return true;
+
+            //// Only use wall of death for the helltooth set buff.
+            //if (!GetHasBuff(JeramsRevenge) && TryWallOfDeath(out power))
+            //    return true;           
+
+            //// Piranhas
+            //if (CanCast(SNOPower.Witchdoctor_Piranhas) && Player.PrimaryResource >= 250 &&
+            //    (TargetUtil.ClusterExists(15f, 40f) || TargetUtil.AnyElitesInRange(40f)) &&
+            //    LastPowerUsed != SNOPower.Witchdoctor_Piranhas &&
+            //    Player.PrimaryResource >= 250)
+            //{
+            //    power = new TrinityPower(SNOPower.Witchdoctor_Piranhas, 25f, Core.Clusters.BestCluster.Position);
+            //    return true;
+            //}
+
+            //// Locust Swarm for the ring of emptyness debuff only 
+            //if (!CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Locust_Swarm) && CanCast(SNOPower.Witchdoctor_Locust_Swarm) && !Player.IsChannelling)
+            //{
+            //    // Avoid trying to put debuffs on all monsters, or monsters that are too far away = more time spent firebatting close units.
+            //    if (TargetUtil.NumMobsInRange(10f) < 3 || TargetUtil.IsPercentOfMobsDebuffed(SNOPower.Witchdoctor_Locust_Swarm, 20f, 0.75f))
+            //    {
+            //        power = new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 20f, CurrentTarget.AcdId);
+            //        return true;
+            //    }
+            //}
+
+            //// Haunt for the ring of emptyness debuff only 
+            //if (!CurrentTarget.HasDebuff(SNOPower.Witchdoctor_Haunt) && CanCast(SNOPower.Witchdoctor_Haunt) && !Player.IsChannelling)
+            //{
+            //    // Avoid trying to put debuffs on all monsters, or monsters that are too far away = more time spent firebatting close units.
+            //    if (TargetUtil.NumMobsInRange(10f) < 3 || TargetUtil.IsPercentOfMobsDebuffed(SNOPower.Witchdoctor_Haunt, 20f, 0.75f))
+            //    {
+            //        power = new TrinityPower(SNOPower.Witchdoctor_Haunt, 20f, CurrentTarget.AcdId);
+            //        return true;
+            //    }
+            //}
+
+            //// If resource is really low, try to save up some before starting channelling stacks
+            //var batMana = TimeSincePowerUse(SNOPower.Witchdoctor_Firebats) < 125 ? 75 : 225;
+
+            //// Firebats: Cloud of bats 
+            //if (Runes.WitchDoctor.CloudOfBats.IsActive && TargetUtil.AnyMobsInRange(Settings.Combat.WitchDoctor.FirebatsRange) &&
+            //    CanCast(SNOPower.Witchdoctor_Firebats) && Player.PrimaryResource >= batMana)
+            //{
+            //    power = new TrinityPower(SNOPower.Witchdoctor_Firebats);
+            //    return true;
+            //}
+
+            //// Firebats: Plague Bats
+            //if (Runes.WitchDoctor.PlagueBats.IsActive && TargetUtil.AnyMobsInRange(15f) &&
+            //    CanCast(SNOPower.Witchdoctor_Firebats) && Player.PrimaryResource >= batMana)
+            //{
+            //    var bestClusterPoint = TargetUtil.GetBestClusterPoint(15f, 30f);
+            //    var range = Settings.Combat.WitchDoctor.FirebatsRange > 20f ? 20f : Settings.Combat.WitchDoctor.FirebatsRange;
+
+            //    power = new TrinityPower(SNOPower.Witchdoctor_Firebats, range, bestClusterPoint, 0, 0);
+            //    return true;
+            //}
+
+            //power = null;
+            //return false;
         }
 
         private static bool TrySoulHarvest(out TrinityPower power)
@@ -347,6 +582,9 @@ namespace Trinity.Components.Combat.Abilities
             {
                 return DestroyObjectPower;
             }
+
+            if (IsHellToothFirebats && TryGetHellToothFirebatsPower(out power))
+                return power;
 
             bool hasRestlessGiant = Runes.WitchDoctor.RestlessGiant.IsActive;
             bool hasWrathfulProtector = Runes.WitchDoctor.WrathfulProtector.IsActive;
@@ -418,9 +656,6 @@ namespace Trinity.Components.Combat.Abilities
                     }
                 }
             }
-
-            if (IsHellToothFirebats && TryGetHellToothFirebatsPower(out power))
-                return power;
 
             // Combat Avoidance Spells
             if (!UseOOCBuff && IsCurrentlyAvoiding)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Items;
@@ -142,9 +143,117 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             return result;
         }
 
+        public ulong LastUpdatedFrame { get; set; }
+
+        internal Dictionary<TModifier, TValue> GetAttributes<TModifier, TValue>(AttributeParameterType parameterType) where TModifier : IConvertible
+        {
+            var shouldUpdate = LastUpdatedFrame != ZetaDia.Memory.Executor.FrameCount && (LastUpdatedFrame = ZetaDia.Memory.Executor.FrameCount) != 0;
+
+            var result = new Dictionary<TModifier, TValue>();     
+            foreach (var a in Items)
+            {
+                if (shouldUpdate)
+                {
+                    a.Value.Update();
+                }
+
+                if (a.Value.Descripter.ParameterType == AttributeParameterType.PowerSnoId && a.Value.GetValue<int>() != 0)
+                {
+                    var key = a.Value.Key.ModifierId.To<TModifier>();
+                    if (!result.ContainsKey(key))
+                    {
+                        result.Add(key, a.Value.GetValue<TValue>());
+                    }
+                }
+            }            
+            return result;
+        }
+
+        //public class PowerCooldown
+        //{
+        //    public SNOPower Power;
+        //    public AttributeKey Key;
+        //    public int EndTick;
+        //}
+
+        //public List<PowerCooldown> _cooldowns;
+
+        //internal List<PowerCooldown> GetCooldowns()
+        //{
+        //    var shouldUpdate = LastUpdatedFrame != ZetaDia.Memory.Executor.FrameCount && (LastUpdatedFrame = ZetaDia.Memory.Executor.FrameCount) != 0;
+        //    if (!shouldUpdate)
+        //    {
+        //        return _cooldowns;
+        //    }
+
+        //    var result = new List<PowerCooldown>();
+        //    foreach (var a in Items)
+        //    {
+        //        a.Value.Update();
+        //        if (a.Value.Descripter.ParameterType == AttributeParameterType.PowerSnoId && a.Value.Integer > 0)
+        //        {
+        //            var index = GetEndTickIndex(a.Value.Key.BaseAttribute);
+        //            var endTickAttr = 
+        //            var slot = a.Value.Key.BaseAttribute.ToString().Split("BuffIconEndTick").LastOrDefault();
+        //            if (string.IsNullOrEmpty())
+        //                continue;
+
+        //            var cd = new PowerCooldown
+        //            {
+        //                Key = a.Value.Key,
+        //                Power = a.Value.Key.ModifierId.To<SNOPower>(),
+        //                EndTick = GetAttribute<int>(ActorAttributeType.BuffIconEndTick0)
+        //            };
+        //        }
+        //    }
+
+        //    _cooldowns = result;
+        //    return _cooldowns;
+        //}
+
+        //private int GetEndTickIndex(ActorAttributeType type)
+        //{
+        //    switch ((int)type)
+        //    {
+        //        case -3478: return 0;
+        //        case -3477: return 1;
+        //        case -3476: return 2;
+        //        case -3475: return 3;
+        //        case -3474: return 4;
+        //        case -3473: return 5;
+        //        case -3472: return 6;
+        //        case -3471: return 7;
+        //        case -3470: return 8;
+        //        case -3469: return 9;
+        //        case -3468: return 10;
+        //        case -3467: return 11;
+        //        case -3466: return 12;
+        //        case -3465: return 13;
+        //        case -3464: return 14;
+        //        case -3463: return 15;
+        //        case -3462: return 16;
+        //        case -3461: return 17;
+        //        case -3460: return 18;
+        //        case -3459: return 19;
+        //        case -3458: return 20;
+        //        case -3457: return 21;
+        //        case -3456: return 22;
+        //        case -3455: return 23;
+        //        case -3454: return 24;
+        //        case -3453: return 25;
+        //        case -3452: return 26;
+        //        case -3451: return 27;
+        //        case -3450: return 28;
+        //        case -3449: return 29;
+        //        case -3448: return 30;
+        //        case -3447: return 31;
+        //    }
+        //    return -1;
+        //}
+
         internal Dictionary<TModifier, TValue> GetCachedAttributes<TModifier, TValue>(ActorAttributeType attr) where TModifier : IConvertible
         {
-            var result = new Dictionary<TModifier, TValue>();
+            var result = new Dictionary<TModifier, TValue>();            
             foreach (var a in Items)
             {
                 if (a.Value.Key.BaseAttribute == attr)

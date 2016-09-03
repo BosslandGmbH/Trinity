@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -47,13 +48,14 @@ namespace Trinity.Components.Adventurer
         }
 
         public static bool IsAdventurerTagRunning()
-        {
-            const string tagsNameSpace = "Trinity.Components.Adventurer.Tags";
-            if (ProfileManager.OrderManager == null || ProfileManager.OrderManager.CurrentBehavior == null)
-            {
-                return false;
-            }
-            return ProfileManager.OrderManager.CurrentBehavior.GetType().Namespace == tagsNameSpace;
+        {            
+            //const string tagsNameSpace = "Trinity.Components.Adventurer.Tags";
+            //if (ProfileManager.OrderManager == null || ProfileManager.OrderManager.CurrentBehavior == null)
+            //{
+            //    return false;
+            //}
+            //return ProfileManager.OrderManager.CurrentBehavior.GetType().Namespace == tagsNameSpace;
+            return true;
         }
 
         public static string GetCurrentTag()

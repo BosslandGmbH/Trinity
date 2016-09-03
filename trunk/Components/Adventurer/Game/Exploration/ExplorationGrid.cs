@@ -163,7 +163,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         var worldScene = AdvDia.CurrentWorldScene;
                         if (worldScene != null && worldScene.Name.Contains("Exit"))
                         {
-                            radius = 25;
+                            radius = 30;
                         }
                         break;
                     case ProfileType.Bounty:

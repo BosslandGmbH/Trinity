@@ -211,6 +211,10 @@ namespace Trinity
             {
                 Logger.Log("New Game - resetting everything");
 
+                CombatBase.IsFocussingUnits = () => false;
+                CombatBase.IsAvoidanceDisabled = () => false;
+                CombatBase.IsIgnoringPackSize = () => false;
+                                
                 TrinityItemManager.ResetBackPackCheck();
                 WantToTownRun = false;
                 ForceVendorRunASAP = false;

@@ -40,6 +40,19 @@ namespace Trinity.Framework.Helpers
             return (Func<T>)lambda.Compile();
         }
 
+        public static Func<T> GetPrivateStaticFieldAccessor<T>(Type containingType, int index)
+        {
+            var type = typeof(T);
+            var members = PrivateStaticFieldExpressions(containingType, type);
+            var member = members.ElementAtOrDefault(index);
+            if (member != null)
+            {
+                var lambda = Expression.Lambda(member);
+                return (Func<T>)lambda.Compile();
+            }
+            return () => default(T);
+        }
+
         public static T CreateNonPublicInstance<T>(params object[] args)
         {
             return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, args, null);
@@ -171,6 +184,16 @@ namespace Trinity.Framework.Helpers
             return (from propInfo in parentType.GetProperties(BindingFlags.FlattenHierarchy | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Static)
                     where propInfo.PropertyType == propertyOrFieldType
                     select Expression.Property(null, propInfo)).FirstOrDefault();
+        }
+
+        public static IEnumerable<MemberExpression> PrivateStaticFieldExpressions(Type parentType, Type propertyOrFieldType)
+        {
+            if (parentType == null)
+                throw new ArgumentNullException(nameof(parentType));
+
+            return (from fieldInfo in parentType.GetFields(BindingFlags.FlattenHierarchy | BindingFlags.NonPublic | BindingFlags.IgnoreCase | BindingFlags.Static)
+                    where fieldInfo.FieldType == propertyOrFieldType
+                    select Expression.Field(null, fieldInfo));
         }
 
         public static MemberExpression StaticFieldExressionByType(Type parentType, Type propertyOrFieldType)
