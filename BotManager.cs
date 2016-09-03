@@ -171,6 +171,8 @@ namespace Trinity
 
 
             var isTarget = CombatManager.TargetHandler.TargetCheck(null);
+                        
+            CombatBase.CurrentPower = CombatManager.AbilitySelector.SelectAbility();
 
             if (CombatBase.CombatMovement.IsQueuedMovement & CombatBase.IsCombatAllowed)
             {

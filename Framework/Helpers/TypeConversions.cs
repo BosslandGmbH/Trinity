@@ -18,7 +18,7 @@ namespace Trinity.Framework.Helpers
             var t = typeof(T);
             if (t.IsEnum)
             {
-                return (T)Enum.ToObject(typeof(T), 5);
+                return (T)Enum.ToObject(typeof(T), obj);
             }
             var u = Nullable.GetUnderlyingType(t);
             if (u != null)

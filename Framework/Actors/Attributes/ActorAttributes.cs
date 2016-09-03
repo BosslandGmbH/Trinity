@@ -1,4 +1,6 @@
-﻿using Trinity.Framework.Objects.Memory.Misc;
+﻿using System.Collections.Generic;
+using Trinity.Framework.Objects.Memory.Attributes;
+using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Helpers;
 using Zeta.Game.Internals.Actors;
 
@@ -9,6 +11,8 @@ namespace Trinity.Framework.Actors.Attributes
         public ActorAttributes() { }
 
         public ActorAttributes(int groupId) : base(groupId) { }
+
+        public Dictionary<SNOPower, float> Powers => GetAttributes<SNOPower, float>(AttributeParameterType.PowerSnoId);
 
         public int GizmoState => GetAttribute<int>(ActorAttributeType.GizmoState);
 

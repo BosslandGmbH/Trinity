@@ -214,7 +214,7 @@ namespace Trinity.Framework.Avoidance
             if (ShouldAvoidCritical)
                 return true;
 
-            if (CombatBase.IsWaitingForPower())
+            if (CombatBase.IsAvoidanceDisabled())
             {
                 Logger.Log(LogCategory.Avoidance, "Not Avoiding because routine needs to cast a power");
                 return false;
@@ -243,7 +243,7 @@ namespace Trinity.Framework.Avoidance
                 return false;
             }
 
-            if (CombatBase.IsWaitingForPower())
+            if (CombatBase.IsAvoidanceDisabled())
             {
                 Logger.Log(LogCategory.Avoidance, "Not Kiting because routine needs to cast a power");
                 return false;

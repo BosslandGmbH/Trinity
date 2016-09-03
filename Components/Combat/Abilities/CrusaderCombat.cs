@@ -215,7 +215,7 @@ namespace Trinity.Components.Combat.Abilities
             var supressSteedCharge = TargetUtil.AnyElitesInRange(100f) && IsSteedSupressionWindow();
 
             // Special delegate that can inform logic elsewhere that we want need control to cast an important spell.
-            IsWaitingForPower = () => TargetUtil.AnyElitesInRange(100f) && IsBombardmentWindow();
+            IsAvoidanceDisabled = () => TargetUtil.AnyElitesInRange(100f) && IsBombardmentWindow();
 
             if (CurrentTarget == null)
             {
@@ -474,6 +474,8 @@ namespace Trinity.Components.Combat.Abilities
             {
                 return GetInvokerPower();
             }
+
+
 
             TrinityPower power = null;
 

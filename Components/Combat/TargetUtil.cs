@@ -1073,15 +1073,14 @@ namespace Trinity.Components.Combat
         internal static float PercentOfMobsDebuffed(SNOPower power, float maxRange = 30f)
         {
             var debuffed = (from u in ObjectCache
-                            where u.IsUnit && u.IsValid &&
-                            u.Weight > 0 &&
+                            where u.IsUnit && u.IsValid && !u.IsPlayer &&
                             u.RadiusDistance <= maxRange &&
-                            u.HasDebuff(power) &&
+                            u.Attributes.Powers.ContainsKey(power) &&
                             u.HasBeenInLoS
                             select u).Count();
 
             var all = (from u in ObjectCache
-                       where u.IsUnit &&
+                       where u.IsUnit && !u.IsPlayer &&
                        u.RadiusDistance <= maxRange &&
                        u.HasBeenInLoS
                        select u).Count();

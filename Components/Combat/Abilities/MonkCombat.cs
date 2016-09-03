@@ -2,13 +2,16 @@ using System;
 using System.Linq;
 using Buddy.Coroutines;
 using Trinity.Config.Combat;
+using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Logic;
+using Zeta.Bot.Navigation;
 using Zeta.Bot.Profile.Common;
 using Zeta.Common;
 using Zeta.Game;
@@ -280,8 +283,19 @@ namespace Trinity.Components.Combat.Abilities
             return power;
         }
 
+        public static float MeleeAttackRange = Core.Buffs.HasBuff(SNOPower.X1_Monk_Epiphany) ? 50f : 10f;
+
         public static TrinityPower GetThousandStormsGeneratorPower()
         {
+            var isShenlongsBuffActive = Core.Buffs.HasBuff(SNOPower.P3_ItemPassive_Unique_Ring_026, 1);
+            var endlessWalkOffensiveStacks = Core.Buffs.GetBuffStacks(447541, 1);
+            var endlessWalkDefensiveStacks = Core.Buffs.GetBuffStacks(447541, 2);
+            var shouldConserveSpirit = isShenlongsBuffActive && Player.PrimaryResourcePct < 0.25 && Player.CurrentHealthPct > 0.65;
+
+            IsIgnoringPackSize = () => isShenlongsBuffActive && Player.CurrentHealthPct > 0.4f && TargetUtil.NumMobsInRange(Settings.Combat.Misc.TrashPackClusterRadius) >= Settings.Combat.Misc.TrashPackSize*0.5;
+            IsFocussingUnits = () => isShenlongsBuffActive && Player.CurrentHealthPct > 0.4f && Core.Targets.Items.All(i => i.Type != TrinityObjectType.ProgressionGlobe);
+            IsAvoidanceDisabled = () => isShenlongsBuffActive && Player.CurrentHealthPct > 0.4f && !Core.Avoidance.InCriticalAvoidance(Player.Position);
+
             if (UseOOCBuff)
             {
                 // Breath of Heaven OOC
@@ -294,7 +308,7 @@ namespace Trinity.Components.Combat.Abilities
             {
                 // Dashing Strike - its only for the buff so charge current target.
                 if (CanCast(SNOPower.X1_Monk_DashingStrike) && Skills.Monk.DashingStrike.Charges > 1 &&
-                    TimeSincePowerUse(SNOPower.X1_Monk_DashingStrike) >= Settings.Combat.Monk.DashingStrikeDelay)
+                    TimeSincePowerUse(SNOPower.X1_Monk_DashingStrike) >= 2750)
                     return new TrinityPower(SNOPower.X1_Monk_DashingStrike, 45f, CurrentTarget.Position, 0, 0);
 
                 if (CanCastEpiphany())
@@ -305,21 +319,24 @@ namespace Trinity.Components.Combat.Abilities
                     return new TrinityPower(SNOPower.Monk_BreathOfHeaven, 0, 0);
 
                 // Breath of Heaven for spirit - Infused with Light
-                if (CanCastBreathOfHeavenInfusedWithLight())
+                if (Skills.Monk.BreathOfHeaven.CanCast() && !GetHasBuff(SNOPower.Monk_BreathOfHeaven) && Runes.Monk.InfusedWithLight.IsActive &&
+                    (TargetUtil.AnyMobsInRange(20) || TargetUtil.IsEliteTargetInRange(20)) && Player.PrimaryResourcePct < 0.9)
+                {
                     return new TrinityPower(SNOPower.Monk_BreathOfHeaven, 0, 0);
+                }
 
                 var cycloneStrikeRange = Runes.Monk.Implosion.IsActive ? 34f : 24f;
                 var cycloneStrikeSpirit = Runes.Monk.EyeOfTheStorm.IsActive ? 30 : 50;
                 
-                if (!Core.BlockedCheck.IsBlocked && (DateTime.UtcNow - LastWithinBuffedSpot).TotalSeconds > 5)
+                if (!isShenlongsBuffActive && !Core.BlockedCheck.IsBlocked && (DateTime.UtcNow - LastWithinBuffedSpot).TotalSeconds > 5)
                 {
                     TrinityPower power;
-                    if (TryMoveToBuffedSpot(out power, 30f, 20f, false)) {
+                    if (TryMoveToBuffedSpot(out power, 30f)) {
                         return power;
                     }
                 }
 
-                if (Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResourcePct < 0.85f
+                if (!shouldConserveSpirit && Skills.Monk.CycloneStrike.CanCast() && Player.PrimaryResourcePct < 0.85f
                     && Skills.Monk.CycloneStrike.TimeSinceUse >= Settings.Combat.Monk.CycloneStrikeDelay
                     && Player.PrimaryResource > cycloneStrikeSpirit 
                     && (TargetUtil.IsPercentUnitsWithinBand(10f, cycloneStrikeRange, 0.25) || CurrentTarget.IsElite))
@@ -328,10 +345,10 @@ namespace Trinity.Components.Combat.Abilities
                 }
 
                 if (CanCast(SNOPower.Monk_CripplingWave))
-                    return new TrinityPower(SNOPower.Monk_CripplingWave, 10f, CurrentTarget.AcdId, 0, 0);
+                    return new TrinityPower(SNOPower.Monk_CripplingWave, MeleeAttackRange, CurrentTarget.AcdId, 0, 0);
 
                 if (CanCast(SNOPower.Monk_WayOfTheHundredFists))
-                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 10f, CurrentTarget.AcdId, 0, 0);
+                    return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, MeleeAttackRange, CurrentTarget.AcdId, 0, 0);
             }
 
             return null;
@@ -349,16 +366,19 @@ namespace Trinity.Components.Combat.Abilities
                 return new TrinityPower(SNOPower.Monk_Serenity);
             }
 
+            if (IsThousandStormsGenerator)
+            {
+                return GetThousandStormsGeneratorPower();
+            }
+
             // Destructibles
             if (UseDestructiblePower)
+            {
                 return GetMonkDestroyPower();
+            }
 
             if (!IsCurrentlyAvoiding)
-            {
-                if (IsThousandStormsGenerator)
-                {
-                    return GetThousandStormsGeneratorPower();
-                }
+            {  
                 if (IsWolMonk)
                 {
                     return GetWolPower();
@@ -1224,19 +1244,19 @@ namespace Trinity.Components.Combat.Abilities
                 return new TrinityPower(SNOPower.X1_Monk_DashingStrike, MaxDashingStrikeRange);
 
             if (CanCast(SNOPower.Monk_FistsofThunder))
-                return new TrinityPower(SNOPower.Monk_FistsofThunder, 6f);
+                return new TrinityPower(SNOPower.Monk_FistsofThunder, MeleeAttackRange);
 
             if (IsTempestRushReady())
-                return new TrinityPower(SNOPower.Monk_TempestRush, 6f);
+                return new TrinityPower(SNOPower.Monk_TempestRush, MeleeAttackRange);
 
             if (CanCast(SNOPower.Monk_DeadlyReach))
-                return new TrinityPower(SNOPower.Monk_DeadlyReach, 6f);
+                return new TrinityPower(SNOPower.Monk_DeadlyReach, MeleeAttackRange);
 
             if (CanCast(SNOPower.Monk_CripplingWave))
-                return new TrinityPower(SNOPower.Monk_CripplingWave, 6f);
+                return new TrinityPower(SNOPower.Monk_CripplingWave, MeleeAttackRange);
 
             if (CanCast(SNOPower.Monk_WayOfTheHundredFists))
-                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, 5f);
+                return new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, MeleeAttackRange);
             return DefaultPower;
         }
 

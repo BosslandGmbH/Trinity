@@ -72,6 +72,10 @@ namespace Trinity.Framework.Modules
             HasInvulnerableShrine = HasBuff(SNOPower.Pages_Buff_Invulnerable);
             HasCastingShrine = HasBuff(SNOPower.Pages_Buff_Infinite_Casting);
             HasConduitShrine = HasBuff(SNOPower.Pages_Buff_Electrified) || HasBuff(SNOPower.Pages_Buff_Electrified_TieredRift);
+
+            //P4_ItemPassive_Unique_Ring_057:1:\:0 dlg.icon == walking endlessly 
+            //P4_ItemPassive_Unique_Ring_057:2:\:0 dlg.icon == stopping for directions
+            //P3_ItemPassive_Unique_Ring_026:1:\:1 dlg.icon == shenlongs spirit
         }
 
         public bool HasBuff(SNOPower power, int variantId)
@@ -110,14 +114,19 @@ namespace Trinity.Framework.Modules
             return HasBuff((int)id);
         }
 
-        public int GetBuffStacks(int id)
+        public int GetBuffStacks(int id, int variantId = -1)
         {
-            return GetBuff(id).StackCount;
+            if (variantId >= 0)
+            {
+                var buff = GetBuff(id, variantId);
+                return buff?.StackCount ?? 0;
+            }
+            return GetBuff(id).StackCount;            
         }
 
-        public int GetBuffStacks(SNOPower id)
+        public int GetBuffStacks(SNOPower id, int variantId = -1)
         {
-            return GetBuffStacks((int)id);
+            return GetBuffStacks((int)id, variantId);
         }
 
         public void Clear()

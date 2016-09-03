@@ -149,7 +149,7 @@ namespace Trinity.Movement
                                (Runes.Barbarian.Gangway.IsActive || !PlayerMover.IsBlocked) ||
                                CombatBase.CanCast(SNOPower.Barbarian_FuriousCharge);
                     case ActorClass.Crusader:
-                        return CombatBase.CanCast(SNOPower.X1_Crusader_SteedCharge) && !CombatBase.IsWaitingForPower();
+                        return CombatBase.CanCast(SNOPower.X1_Crusader_SteedCharge) && !CombatBase.IsAvoidanceDisabled();
                     case ActorClass.DemonHunter:
                         return Core.Player.PrimaryResource > 12 &&
                                CombatBase.CanCast(SNOPower.DemonHunter_Strafe) ||

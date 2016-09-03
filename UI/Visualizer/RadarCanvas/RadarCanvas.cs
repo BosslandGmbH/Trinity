@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
 using Trinity.DbProvider;
@@ -537,6 +538,8 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                         Player = radarObject;
                 }
 
+                UpdateExplorationData();
+
                 UpdateRelativeDrawings();
 
                 //UpdateAvoidanceGridData();
@@ -563,6 +566,11 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             {
                 Logger.Log("Exception in RadarUI.UpdateData(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
+        }
+
+        private void UpdateExplorationData()
+        {
+            _explorationNodes = ExplorationGrid.Instance.WalkableNodes;            
         }
 
         #region ValueCluster
@@ -700,6 +708,11 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.CurrentTarget))
                     {
                         DrawTargetting(dc, CanvasData);
+                    }
+
+                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.ExploreNodes))
+                    {
+                        DrawExploreNodes(dc, CanvasData);
                     }
 
                     foreach (var actor in Objects)
@@ -1002,6 +1015,26 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 var targetPoint = targetPosition.ToCanvasPoint();
                 dc.DrawEllipse(HotPinkBrush, null, targetPoint, GridSize, GridSize);
                 dc.DrawLine(RadarResources.TargetPen, Player.Point, targetPoint);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+            }
+        }
+
+        private void DrawExploreNodes(DrawingContext dc, CanvasData canvas)
+        {
+            try
+            {
+
+                foreach (var node in _explorationNodes)
+                {
+                    var color = node.IsVisited ? HotPinkBrush : node.IsBlacklisted ? BlackBrush : node.HasEnoughNavigableCells ? GreenBrush : null;
+                    if (color != null)
+                    {
+                        dc.DrawEllipse(color, null, node.NavigableCenter.ToCanvasPoint(), 5, 5);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1866,6 +1899,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         //}
 
         private bool _isSceneInfoVisible;
+        private List<ExplorationNode> _explorationNodes;
 
         private void DrawScenes(DrawingContext dc, CanvasData canvas, bool sceneborders, bool sceneLabels)
         {

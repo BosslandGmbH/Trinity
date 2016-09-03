@@ -1436,7 +1436,11 @@ namespace Trinity.Components.Combat.Abilities
         public static TrinityActor KamakaziGoblin { get; set; }
         public static bool IsSettingsLoaded { get; set; }
 
-        public static Func<bool> IsWaitingForPower = () => false;
+        public static Func<bool> IsAvoidanceDisabled = () => false;
+
+        public static Func<bool> IsFocussingUnits = () => false;
+
+        public static Func<bool> IsIgnoringPackSize = () => false;
 
         public static HashSet<string> HighHitPointTrashMobNames = new HashSet<string>
         {
