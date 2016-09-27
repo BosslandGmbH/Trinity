@@ -27,15 +27,15 @@
             <TabItem Header="Gambling" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\Gambling.xaml"/>
             </TabItem>
-            <TabItem Header="ItemRules" Foreground="{DynamicResource TextBrush}" Visibility="{Binding Loot.Pickup.ItemFilterMode, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=TrinityWithItemRules}">
+            <!--<TabItem Header="ItemRules" Foreground="{DynamicResource TextBrush}" Visibility="{Binding Loot.Pickup.ItemFilterMode, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=TrinityWithItemRules}">
                 <Border Tag="Items\ConfigItemRules.xaml"/>
-            </TabItem>
+            </TabItem>-->
             <TabItem Header="Town Run" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\ConfigScoring.xaml"/>
             </TabItem>
-            <TabItem Header="Alerts" Foreground="{DynamicResource TextBrush}">
+            <!--<TabItem Header="Alerts" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items\ConfigNotification.xaml"/>
-            </TabItem>
+            </TabItem>-->
         </TabControl>
     </Grid>
 </UserControl>

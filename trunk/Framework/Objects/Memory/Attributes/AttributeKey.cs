@@ -11,6 +11,11 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         public int Value;
 
+        public AttributeKey(ActorAttributeType attribute, SNOPower power)
+        {
+            Value = ((int)power << 12) + ((int)attribute & 0xFFF);
+        }
+
         public AttributeKey(int attribute, int modifier)
         {
             Value = (modifier << 12) + (attribute & 0xFFF);

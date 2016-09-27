@@ -53,7 +53,7 @@ namespace Trinity.Helpers
                 case (int)SNOActor.x1_LR_Shrine_Damage:
                     return ShrineTypes.Damage;
                 default:
-                    return ShrineTypes.Unknown;
+                    return ShrineTypes.None;
             }
         }
 

@@ -197,6 +197,24 @@ namespace Trinity.Framework.Avoidance
             }
         }
 
+        public void FlagAvoidanceNodes(IEnumerable<AvoidanceNode> nodes, AvoidanceFlags flags, Structures.Avoidance avoidance, int weightModification = 0)
+        {
+            var type = avoidance.Definition.Type;
+            var hashCode = avoidance.GetHashCode();
+
+            foreach (var node in nodes.Where(node => node != null && node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk)))
+            {
+                if (type != AvoidanceType.None)
+                {
+                    node.AvoidanceTypes.Add(type);
+                }
+
+                node.AvoidanceHashCodes.Add(hashCode);
+                node.Weight += weightModification;
+                node.AddNodeFlags(AvoidanceFlags.Avoidance);
+            }
+        }
+
         public AvoidanceNode GetClosestWalkableNodeTo(Vector3 position)
         {
             return GetNodesInRadius(position, node => node.IsWalkable).OrderBy(n => n.NavigableCenter.Distance(position)).FirstOrDefault();
@@ -383,7 +401,7 @@ namespace Trinity.Framework.Avoidance
                 return false;
 
             var playerPosition = ZetaDia.Me.Position;
-            var currentPath = PlayerMover.NavigationProvider.CurrentPath.TakeWhile(p => p.Distance(playerPosition) < AvoidanceManager.MaxDistance);
+            var currentPath = PlayerMover.NavigationProvider.CurrentPath.TakeWhile(p => p.Distance(playerPosition) < GridEnricher.MaxDistance);
             if (!currentPath.Any())
                 return false;
 

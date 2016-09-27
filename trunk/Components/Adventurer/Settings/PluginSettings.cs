@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -353,7 +354,7 @@ namespace Trinity.Components.Adventurer.Settings
             LoadDefaults();
         }
 
-        public void LoadDefaults()
+        public bool LoadDefaults()
         {
             GreaterRiftLevel = 1;
             GreaterRiftRunNephalem = true;
@@ -374,6 +375,7 @@ namespace Trinity.Components.Adventurer.Settings
             BountyPrioritizeBonusAct = true;
             NephalemRiftFullExplore = false;
             KeywardenZergMode = false;
+            return true;
         }
 
         [IgnoreDataMember]
@@ -458,10 +460,22 @@ namespace Trinity.Components.Adventurer.Settings
             return LoadSettingsFromJsonString(FileUtils.ReadFromTextFile(FileUtils.SettingsPath));
         }
 
-        public void ApplySettingsCode(string code)
+        public bool ApplySettingsCode(string code)
         {
-            var settings = LoadSettingsFromJsonString(ExportHelper.Decompress(code));
-            ApplySettings(settings);
+            try
+            {
+                if (!code.StartsWith("{"))
+                    code = ExportHelper.Decompress(code);
+
+                var settings = LoadSettingsFromJsonString(code);
+                ApplySettings(settings);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Debug($"Error parsing Adventurer settings code {ex}");
+            }
+            return false;
         }
 
         private void ApplySettings(PluginSettings settings)
@@ -522,17 +536,18 @@ namespace Trinity.Components.Adventurer.Settings
             }
         }
 
-        public void Save()
+        public bool Save()
         {
             var result = JsonSerializer.Serialize(this);
             FileUtils.WriteToTextFile(FileUtils.SettingsPath, result);
             Logger.Verbose("FileUtils.SettingsPath {0}", FileUtils.SettingsPath);
             Logger.Info("Settings saved.");
+            return false;
         }
 
         public string GenerateCode()
         {
-            return ExportHelper.Compress(JsonSerializer.Serialize(this));
+            return JsonSerializer.Serialize(this);
         }
     }
 

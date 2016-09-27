@@ -3,6 +3,7 @@ using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Routines;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -13,16 +14,16 @@ namespace Trinity.DbProvider
     {
         public List<DiaObject> GetObjectsByWeight() => new List<DiaObject> { ZetaDia.Actors.GetActorById(CurrentTargetRActorId) };
 
-        public float CurrentCastRange => CurrentPower?.MinimumRange ?? CombatBase.DefaultWeaponDistance;
+        public float CurrentCastRange => CurrentPower?.MinimumRange ?? RoutineBase.DefaultWeaponDistance;
 
-        public TrinityPower CurrentPower => CombatBase.CurrentPower;
+        public TrinityPower CurrentPower => Combat.Targeting.CurrentPower;
 
-        public TrinityActor CurrentTarget => CombatBase.CurrentTarget;
+        public TrinityActor CurrentTarget => Combat.Targeting.CurrentTarget;
 
         public int CurrentTargetRActorId => CurrentTarget?.RActorId ?? -1;
 
-        public bool IsAvoiding => CombatBase.IsCurrentlyAvoiding;
+        public bool IsAvoiding => Combat.IsCurrentlyAvoiding;
 
-        public bool IsKiting => CombatBase.IsCurrentlyKiting;
+        public bool IsKiting => Combat.IsCurrentlyKiting;
     }
 }

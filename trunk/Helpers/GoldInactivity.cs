@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Framework;
 using Trinity.Technicals;
 using Zeta.Bot;
@@ -70,7 +72,7 @@ namespace Trinity.Helpers
                 _lastCheckBag = DateTime.UtcNow;
 
                 // sometimes bosses take a LONG time
-                if (TrinityPlugin.CurrentTarget != null && TrinityPlugin.CurrentTarget.IsBoss)
+                if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.IsBoss)
                 {
                     Logger.Log("Current target is boss, gold inactivity reset");
                     ResetCheckGold();

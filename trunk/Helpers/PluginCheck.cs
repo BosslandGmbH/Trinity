@@ -87,7 +87,7 @@ namespace Trinity.Helpers
                     PassedAllChecks = false;
                 }
 
-                if (!TrinityPlugin.IsPluginEnabled)
+                if (!TrinityPlugin.IsEnabled)
                 {
                     Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "#################################################################");
                     Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "WARNING: TrinityPlugin Plugin is NOT YET ENABLED. Bot start detected");
@@ -111,7 +111,7 @@ namespace Trinity.Helpers
                         SelectTrinityRoutine();
                     }
 
-                    if (TrinityPlugin.IsPluginEnabled && latestTrinityRoutineSelected && BotMain.IsRunning)
+                    if (TrinityPlugin.IsEnabled && latestTrinityRoutineSelected && BotMain.IsRunning)
                     {
                         PassedAllChecks = true;
                     }
@@ -140,10 +140,7 @@ namespace Trinity.Helpers
         private static void InstallTrinityRoutine()
         {
             FileManager.CleanupOldRoutines();
-
-            Logger.LogNormal("Combat routine is not installed or is not latest version, installing! {0}", FileManager.GetFileHeader(FileManager.CombatRoutineSourcePath));
             FileManager.CopyFile(FileManager.CombatRoutineSourcePath, FileManager.CombatRoutineDestinationPath);
-
             RoutineManager.Reload();
         }
 

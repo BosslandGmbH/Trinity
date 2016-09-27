@@ -78,6 +78,15 @@ namespace Trinity.Framework.Objects.Memory.UX
             {
                 case ControlType.Text:
                     return MemoryWrapper.Create<UXLabel>(ptr);
+
+                case ControlType.Button:
+                    return MemoryWrapper.Create<UXButton>(ptr);
+
+                case ControlType.ItemButton:
+                    return MemoryWrapper.Create<UXItemButton>(ptr);
+
+                case ControlType.ListItem:
+                    return MemoryWrapper.Create<UXListItem>(ptr);
             }
             return MemoryWrapper.Create<UXControl>(ptr);
         }

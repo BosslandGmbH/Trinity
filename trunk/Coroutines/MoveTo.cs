@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity;
+using Trinity.Coroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Helpers;
-using TrinityCoroutines.Resources;
-using Zeta.Bot;
-using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals;
-using Zeta.Game.Internals.Actors;
-using Zeta.TreeSharp;
 using Logger = Trinity.Technicals.Logger;
-using TrinityPlugin = Trinity.TrinityPlugin;
 
-namespace TrinityCoroutines
+namespace Trinity.Coroutines
 {
     public class MoveTo
     {
@@ -70,7 +62,7 @@ namespace TrinityCoroutines
                 }
 
                 Logger.LogVerbose("Moving to " + destinationName);
-                PlayerMover.NavigateTo(location, destinationName);
+                PlayerMover.MoveTo(location);
                 await Coroutine.Yield();
             }
 

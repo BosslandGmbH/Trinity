@@ -519,7 +519,10 @@
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Path=ItemProperty}" Value="PassivePower">
                         <Setter Property="ContentTemplate" Value="{DynamicResource SliderFormDecimalTemplate}" />
-                    </DataTrigger>                    
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=ItemProperty}" Value="Attribute">
+                        <Setter Property="ContentTemplate" Value="{DynamicResource AttributeFormTemplate}" />
+                    </DataTrigger>
                 </Style.Triggers>
             </Style>
 
@@ -544,11 +547,39 @@
                 </Border>
             </DataTemplate>
 
+            <DataTemplate x:Key="AttributeFormTemplate">
+                <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2" BorderThickness="1,1,0,0">
+                    <Grid Width="Auto" HorizontalAlignment="Stretch">
+                        <Grid Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,25,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="2*" MinWidth="25" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="1*" MinWidth="25" MaxWidth="60" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="1*" MinWidth="25" MaxWidth="60" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" >Key</Label>
+                            <TextBox Grid.Column="1"  Text="{Binding AttributeKey}" VerticalContentAlignment="Center" />
+                            <Label Grid.Column="2" >Mod#</Label>
+                            <TextBox Grid.Column="3" Text="{Binding AttributeModifier}" VerticalContentAlignment="Center" />
+                            <Label Grid.Column="4" >Val</Label>
+                            <TextBox Grid.Column="5"  Text="{Binding AttributeValue}" VerticalContentAlignment="Center" />
+                        </Grid>
+                        <Button HorizontalAlignment="Right" Content=" X " Height="21" Width="25" Margin="10,-1,0,0"
+                                Background="Transparent"
+                                Command="{Binding Path=DataContext.RemoveRuleCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding}"
+                                BorderBrush="Transparent" FontWeight="Heavy" BorderThickness="0" />
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
             <DataTemplate x:Key="SliderFormTemplate">
                 <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2"
                         BorderThickness="1,1,0,0">
                     <Grid Width="Auto" HorizontalAlignment="Stretch">
-                        <Grid Margin="0,0,10,0">
+                        <Grid Margin="4,0,10,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -585,7 +616,7 @@
                 <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2"
                         BorderThickness="1,1,0,0">
                     <Grid Width="Auto" HorizontalAlignment="Stretch">
-                        <Grid Margin="0,0,10,0">
+                        <Grid Margin="4,0,10,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -621,7 +652,7 @@
                 <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2"
                         BorderThickness="1,1,0,0">
                     <Grid Width="Auto" HorizontalAlignment="Stretch">
-                        <Grid Margin="0,0,10,0">
+                        <Grid Margin="4,0,10,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>

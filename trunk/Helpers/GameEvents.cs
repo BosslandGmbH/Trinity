@@ -22,7 +22,6 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Technicals.Logger;
-using BotManager = Trinity.BotManager;
 
 namespace Trinity
 {
@@ -81,12 +80,12 @@ namespace Trinity
             BeginInvoke(UsedProfileManager.RefreshProfileBlacklists);
             UsedProfileManager.SetProfileInWindowTitle();
 
-            BotManager.ReplaceTreeHooks();
-            TreeHooks.Instance.OnHooksCleared += BotManager.InstanceOnOnHooksCleared;
+            HookManager.ReplaceTreeHooks();
+            TreeHooks.Instance.OnHooksCleared += HookManager.InstanceOnOnHooksCleared;
 
 
-            PlayerMover.TimeLastRecordedPosition = DateTime.UtcNow;
-            PlayerMover.LastRestartedGame = DateTime.UtcNow;
+            //PlayerMover.TimeLastRecordedPosition = DateTime.UtcNow;
+            //PlayerMover.LastRestartedGame = DateTime.UtcNow;
             Logger.Log("Bot Starting, Resetting Gold Inactivity Timer");
             GoldInactivity.Instance.ResetCheckGold();
             XpInactivity.Instance.ResetCheckXp();
@@ -157,12 +156,12 @@ namespace Trinity
             XpInactivity.Instance.ResetCheckXp();
             // Issue final reports
             ItemDropStats.OutputReport();
-            PlayerMover.TotalAntiStuckAttempts = 1;
-            PlayerMover.vSafeMovementLocation = Vector3.Zero;
-            PlayerMover.LastPosition = Vector3.Zero;
-            PlayerMover.TimesReachedStuckPoint = 0;
-            PlayerMover.TimeLastRecordedPosition = DateTime.MinValue;
-            PlayerMover.LastGeneratedStuckPosition = DateTime.MinValue;
+            //PlayerMover.TotalAntiStuckAttempts = 1;
+            //PlayerMover.vSafeMovementLocation = Vector3.Zero;
+            //PlayerMover.LastPosition = Vector3.Zero;
+            //PlayerMover.TimesReachedStuckPoint = 0;
+            //PlayerMover.TimeLastRecordedPosition = DateTime.MinValue;
+            //PlayerMover.LastGeneratedStuckPosition = DateTime.MinValue;
             DeathsThisRun = 0;
             Clear();
         }
@@ -175,8 +174,8 @@ namespace Trinity
                 TotalDeaths++;
                 DeathsThisRun++;
                 Clear();
-                PlayerMover.TotalAntiStuckAttempts = 1;
-                PlayerMover.vSafeMovementLocation = Vector3.Zero;
+                //PlayerMover.TotalAntiStuckAttempts = 1;
+                //PlayerMover.vSafeMovementLocation = Vector3.Zero;
 
                 // Reset pre-townrun position if we die
                 //TownRun.PreTownRunPosition = Vector3.Zero;
@@ -211,10 +210,6 @@ namespace Trinity
             {
                 Logger.Log("New Game - resetting everything");
 
-                CombatBase.IsFocussingUnits = () => false;
-                CombatBase.IsAvoidanceDisabled = () => false;
-                CombatBase.IsIgnoringPackSize = () => false;
-                                
                 TrinityItemManager.ResetBackPackCheck();
                 WantToTownRun = false;
                 ForceVendorRunASAP = false;
@@ -237,15 +232,15 @@ namespace Trinity
                 Blacklist90Seconds = new HashSet<int>();
                 Blacklist15Seconds = new HashSet<int>();
            
-                PlayerMover.TotalAntiStuckAttempts = 1;
-                PlayerMover.vSafeMovementLocation = Vector3.Zero;
-                PlayerMover.LastPosition = Vector3.Zero;
-                PlayerMover.TimesReachedStuckPoint = 0;
-                PlayerMover.TimeLastRecordedPosition = DateTime.MinValue;
-                PlayerMover.LastGeneratedStuckPosition = DateTime.MinValue;
-                PlayerMover.TimesReachedMaxUnstucks = 0;
-                PlayerMover.CancelUnstuckerForSeconds = 0;
-                PlayerMover.LastCancelledUnstucker = DateTime.MinValue;
+                //PlayerMover.TotalAntiStuckAttempts = 1;
+                //PlayerMover.vSafeMovementLocation = Vector3.Zero;
+                //PlayerMover.LastPosition = Vector3.Zero;
+                //PlayerMover.TimesReachedStuckPoint = 0;
+                //PlayerMover.TimeLastRecordedPosition = DateTime.MinValue;
+                //PlayerMover.LastGeneratedStuckPosition = DateTime.MinValue;
+                //PlayerMover.TimesReachedMaxUnstucks = 0;
+                //PlayerMover.CancelUnstuckerForSeconds = 0;
+                //PlayerMover.LastCancelledUnstucker = DateTime.MinValue;
                 //NavHelper.UsedStuckSpots = new List<GridPoint3>();
 
                 //CacheData.WorldChangedClear();
@@ -258,7 +253,6 @@ namespace Trinity
                 Logger.Log("New Game, resetting Gold Inactivity Timer");
                 GoldInactivity.Instance.ResetCheckGold();
 
-                CombatBase.IsQuestingMode = false;
 
                 Clear();
                 AttributeManager.Reset();

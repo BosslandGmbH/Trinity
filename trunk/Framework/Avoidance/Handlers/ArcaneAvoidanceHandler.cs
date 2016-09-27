@@ -1,33 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Objects.Attributes;
 using Trinity.Helpers;
-using Trinity.Objects;
-using Trinity.UIComponents;
 using Zeta.Common;
-using Extensions = Zeta.Common.Extensions;
-using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
-    [DataContract(Namespace = "")]
-    internal class ArcaneAvoidanceHandler : NotifyBase, IAvoidanceHandler
+    internal class ArcaneAvoidanceHandler : IAvoidanceHandler
     {
-        public ArcaneAvoidanceHandler()
-        {
-            base.LoadDefaults();
-        }
-
         private static Dictionary<int,Rotator> _rotators = new Dictionary<int, Rotator>();
-
-        private int _healthThresholdPct;
 
         public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
         {
@@ -40,7 +24,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                     continue;
                 }
 
-                var part = avoidance.Data.GetPart(actor.ActorSnoId);
+                var part = avoidance.Definition.GetPart(actor.ActorSnoId);
 
                 if (part.MovementType == MovementType.Rotation)
                 {
@@ -53,21 +37,19 @@ namespace Trinity.Framework.Avoidance.Handlers
                     }
                     
                     var centerNodes = grid.GetNodesInRadius(actor.Position, 6f);
-                    grid.FlagNodes(centerNodes, AvoidanceFlags.Avoidance, 10);
-
                     var radAngle = MathUtil.ToRadians(rotator.Angle);
-                    var beamNodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 26f, radAngle)).SelectMany(n => n.AdjacentNodes).ToList();
+                    var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 26f, radAngle)).SelectMany(n => n.AdjacentNodes).ToList();
                        
                     var futureRadAngle = MathUtil.ToRadians((float)rotator.GetFutureAngle(TimeSpan.FromMilliseconds(500)));
-                    beamNodes.AddRange(grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 26f, futureRadAngle)).SelectMany(n => n.AdjacentNodes));
-
-                    beamNodes = beamNodes.Distinct().ToList();
-                    grid.FlagNodes(beamNodes, AvoidanceFlags.Avoidance, 30);
+                    nodes.AddRange(grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 26f, futureRadAngle)).SelectMany(n => n.AdjacentNodes));
+                    nodes.AddRange(centerNodes);
+                    nodes = nodes.Distinct().ToList();
+                    grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 30);
                 }
                 else
                 {
                     var telegraphNodes = grid.GetNodesInRadius(actor.Position, 10f);
-                    grid.FlagNodes(telegraphNodes, AvoidanceFlags.Avoidance, 10);
+                    grid.FlagAvoidanceNodes(telegraphNodes, AvoidanceFlags.Avoidance, avoidance, 10);
                 }
             }
 
@@ -83,8 +65,6 @@ namespace Trinity.Framework.Avoidance.Handlers
 
         private Rotator CreateNewRotator(TrinityActor actor)
         {
-            //Logger.Log("Creating New Rotator");
-
             return new Rotator
             {
                 RotateDuration = TimeSpan.FromSeconds(10),
@@ -93,21 +73,6 @@ namespace Trinity.Framework.Avoidance.Handlers
                 DebugLogging = false,
                 StartAngleDegrees = actor.RotationDegrees
             };
-        }
-
-        public bool IsAllowed
-        {
-            get { return Core.Player.CurrentHealthPct <= HealthThresholdPct; }
-        }
-
-        [DataMember]
-        [Setting, DefaultValue(90)]
-        [UIControl(UIControlType.Slider), Limit(1, 100)]
-        [Description("Player health must be below value for this to be avoided (Default=90)")]
-        public int HealthThresholdPct
-        {
-            get { return _healthThresholdPct; }
-            set { SetField(ref _healthThresholdPct, value); }
         }
 
     }

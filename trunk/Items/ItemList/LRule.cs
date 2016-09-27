@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Trinity.Helpers;
 using Trinity.Objects;
 using Trinity.Reference;
 
@@ -16,7 +17,7 @@ namespace Trinity.UIComponents
     /// Rule for an item
     /// </summary>
     [DataContract(Namespace = "")]
-    public class LRule : INotifyPropertyChanged
+    public class LRule : NotifyBase
     {
         public LRule()
         {
@@ -34,16 +35,16 @@ namespace Trinity.UIComponents
         private List<object> _variants = new List<object>();
         private RuleType _type;
         private RuleType _ruleType;
+        private string _attributeValue;
+        private string _attributeModifier;
+        private string _attributeKey;
 
-        public string Name { get { return ItemProperty.ToString(); }}
+        public string Name => ItemProperty.ToString();
 
         [DataMember]
         public int Id { get; set; }
 
-        public ItemProperty ItemProperty
-        {
-            get { return (ItemProperty)Id; }
-        }
+        public ItemProperty ItemProperty => (ItemProperty)Id;
 
         [DataMember]        
         public double Value
@@ -98,6 +99,27 @@ namespace Trinity.UIComponents
             }
         }
 
+        [DataMember(EmitDefaultValue = false, Name = "AttKey")]
+        public string AttributeKey
+        {
+            get { return _attributeKey; }
+            set { SetField(ref _attributeKey, value); }
+        }
+
+        [DataMember(EmitDefaultValue = false, Name = "AttMod")]
+        public string AttributeModifier
+        {
+            get { return _attributeModifier; }
+            set { SetField(ref _attributeModifier, value); }
+        }
+
+        [DataMember(EmitDefaultValue = false, Name = "AttVal")]
+        public string AttributeValue
+        {
+            get { return _attributeValue; }
+            set { SetField(ref _attributeValue, value); }
+        }
+
         public List<object> Variants
         {
             get
@@ -134,29 +156,11 @@ namespace Trinity.UIComponents
             set { TypeId = (int)value; }
         }
 
-        public double Min
-        {
-            get { return ItemStatRange.AbsMin; }
-        }
+        public double Min => ItemStatRange.AbsMin;
 
-        public double Max
-        {
-            get { return ItemStatRange.AbsMax; }
-        }
+        public double Max => ItemStatRange.AbsMax;
 
-        public double Step
-        {
-            get { return ItemStatRange.AbsStep; }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
+        public double Step => ItemStatRange.AbsStep;
 
         public ItemStatRange ItemStatRange { get; set; }
 

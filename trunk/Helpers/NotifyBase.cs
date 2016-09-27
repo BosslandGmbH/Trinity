@@ -29,13 +29,13 @@ namespace Trinity.Helpers
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected bool ThrottleChangeNotifications { get; set; }
+        protected bool SupressChangeNotifications { get; set; }
 
         protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
             field = value;
-            if(!ThrottleChangeNotifications)
+            if(!SupressChangeNotifications)
                 OnPropertyChanged(propertyName);
             return true;
         }

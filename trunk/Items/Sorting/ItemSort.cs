@@ -5,9 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Coroutines;
+using Trinity.Coroutines.Resources;
 using Trinity.Coroutines.Town;
-using TrinityCoroutines;
-using TrinityCoroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Helpers;
 using Zeta.Bot;
@@ -418,7 +417,7 @@ namespace Trinity.Items
                 if (inventoryButton != null && inventoryButton.IsEnabled && inventoryButton.IsVisible)
                 {
                     inventoryButton.Click();
-                    await Coroutine.Sleep(50);
+                    await Coroutine.Sleep(100);
                     await Coroutine.Yield();
                 }
                 else
@@ -598,14 +597,14 @@ namespace Trinity.Items
                     if (i.Item.MaxStackCount > 1 && ZetaDia.Me.Inventory.CanStackItemInStashPage(i.Item, desiredStashPage) && GetNumberOfStacks(i.Item, inventorySlot) > 1)
                     {
                         ZetaDia.Me.Inventory.QuickWithdraw(i.Item);
-                        await Coroutine.Sleep(50);
+                        await Coroutine.Sleep(100);
                         await Coroutine.Yield();
 
                         var sameItem = ZetaDia.Me.Inventory.Backpack.FirstOrDefault(item => item.ActorSnoId == i.ActorSnoId && item.Name.StartsWith(i.Name.Substring(0, 4)));
                         if (sameItem != null)
                         {
                             ZetaDia.Me.Inventory.QuickStash(sameItem);
-                            await Coroutine.Sleep(50);
+                            await Coroutine.Sleep(100);
                         }
                         continue;
                     }
@@ -656,7 +655,7 @@ namespace Trinity.Items
             if (ZetaDia.Me.Inventory.CurrentStashPage != desiredStashPage)
             {
                 ZetaDia.Me.Inventory.SwitchStashPage(desiredStashPage);
-                await Coroutine.Sleep(50);
+                await Coroutine.Sleep(100);
                 await Coroutine.Yield();
             }
             return desiredStashPage;

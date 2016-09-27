@@ -4,17 +4,16 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Coroutines.Resources;
 using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.ProfileTags.EmbedTags;
-using TrinityCoroutines.Resources;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 using Trinity.Technicals;
-using TrinityCoroutines;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.ProfileTags

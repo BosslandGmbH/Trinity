@@ -44,7 +44,6 @@ namespace Trinity.Framework.Modules
                 EquippedCount = p.CurrentBonuses,
                 MaxCount = p.MaxBonuses
             });
-
          
             var build = new Build
             {

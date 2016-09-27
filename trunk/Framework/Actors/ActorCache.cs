@@ -387,7 +387,10 @@ namespace Trinity.Framework.Actors
         }
 
         public T GetActorByAcdId<T>(int acdId) where T : TrinityActor
-        {          
+        {
+            if (acdId == 0 || acdId == -1)
+                return default(T);
+
             if (!_acdToRActorIndex.ContainsKey(acdId))
                 return default(T);
 
@@ -397,7 +400,6 @@ namespace Trinity.Framework.Actors
 
             return _rActors[rActorId] as T;
         }
+
     }
-
-
 }

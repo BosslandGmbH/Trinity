@@ -8,7 +8,7 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Game.Actors;
-using TrinityCoroutines.Resources;
+using Trinity.Coroutines.Resources;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;

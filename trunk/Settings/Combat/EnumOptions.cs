@@ -95,4 +95,13 @@ namespace Trinity.Config.Combat
         Legendary,
         Set
     }
+
+    public enum SettingMode
+    {
+        None = 0,
+        Enabled,
+        Disabled,
+        Selective
+    }
 }
+

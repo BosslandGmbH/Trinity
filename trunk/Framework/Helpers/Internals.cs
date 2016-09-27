@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Trinity.Technicals;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -35,6 +37,9 @@ namespace Trinity.Framework.Helpers
 
             public static IntPtr ObjectManagerAddr => _storageAddr.Value - (int)ObjectManagerOffsets.Storage;
             private static readonly StaticRouter<IntPtr> _storageAddr = new StaticRouter<IntPtr>(typeof(ZetaDia), 0);
+
+            public static IntPtr PlayerDataAddr => _playerData.Value.Value;
+            private static readonly StaticRouter<DynamicPointer<CPlayer>> _playerData = new StaticRouter<DynamicPointer<CPlayer>>(typeof(ZetaDia), 0);
         }
 
         public static class Addresses
@@ -45,7 +50,8 @@ namespace Trinity.Framework.Helpers
                 var d3Version = new Version(ZetaDia.Memory.Process.MainModule.FileVersionInfo.FileVersion.Replace(", ", "."));
                 _currentBuild = SupportedBuilds.Where(o => o.Version <= d3Version).OrderBy(o => o.Version).LastOrDefault();
                 Logger.LogDebug($"D3: {d3Version}; Data: {_currentBuild?.Version}");
-                test();
+
+                var test = DemonBuddyOffsets.SNOGroups;
             }
 
             public static IntPtr ObjectManager => DemonBuddyObjects.ObjectManagerAddr;
@@ -55,17 +61,68 @@ namespace Trinity.Framework.Helpers
             public static IntPtr SymbolManager => ZetaDia.Memory.Read<IntPtr>(_currentBuild.SymbolManagerPtr);
             public static IntPtr Hero => ZetaDia.Service.Hero.BaseAddress;
             public static IntPtr Globals => ObjectManager + (int)ObjectManagerOffsets.Globals;
-            public static IntPtr SnoGroups => _currentBuild.SnoGroupsAddr;
-            public static IntPtr AttributeDescripters => _currentBuild.AttributeDescripterAddr;
+            public static IntPtr SnoGroups => DemonBuddyOffsets.SNOGroups; //_currentBuild.SnoGroupsAddr;
+            public static IntPtr AttributeDescripters => DemonBuddyOffsets.AttributeDescripter; //_currentBuild.AttributeDescripterAddr;
             public static IntPtr Storage => ObjectManager + (int)ObjectManagerOffsets.Storage;
+            public static IntPtr PlayerData => DemonBuddyObjects.PlayerDataAddr;
         }
 
-        public static void test()
+        private static class DemonBuddyOffsets
         {
-            ZetaDia.Actors.Update();
-            var t = typeof(Zeta.Game.ZetaDia).GetFields(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-            var v = t.Select(r => r.GetValue(null));
+            // Here's the thing, i need AttributeDescripter and SNOGroups pointers,
+            // you really don't want to have to rely on me to update these manually every patch.
 
+            private static List<IntPtr> _offsetsA;
+            private static List<IntPtr> _offsetsB;
+            private static List<IntPtr> _offsetsC;
+            private static List<IntPtr> _offsetsD;
+            private static List<IntPtr> _offsetsE;
+
+            static DemonBuddyOffsets()
+            {
+                foreach (var field in typeof(ZetaDia).GetFields(BindingFlags.NonPublic | BindingFlags.Static))
+                {
+                    var val = field.GetValue(null);
+                    if (val == null)
+                        continue;
+
+                    var type = val.GetType();
+                    if (type.IsPublic)
+                        continue;
+
+                    var fields = type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+                    if (fields.Count() != 5)
+                        continue;
+
+                    try
+                    {
+                        _offsetsA = FieldToList<IntPtr>(fields[0], val);
+                        _offsetsB = FieldToList<IntPtr>(fields[1], val);
+                        _offsetsC = FieldToList<IntPtr>(fields[2], val);
+                        _offsetsD = FieldToList<IntPtr>(fields[3], val);
+                        _offsetsE = FieldToList<IntPtr>(fields[4], val);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }
+
+            public static List<T> FieldToList<T>(FieldInfo fieldInfo, object parent)
+            {
+                var value = fieldInfo.GetValue(parent);
+                var valEnumerable = value as IEnumerable<T>;
+                if (valEnumerable != null)
+                {
+                    return valEnumerable.ToList();
+                }
+                var fields = value.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public);
+                return fields.Select(t => t.GetValue(value)).Cast<T>().ToList();
+            }
+
+            public static IntPtr SNOGroups => _offsetsC.ElementAtOrDefault(12) + 0x38;
+
+            public static IntPtr AttributeDescripter => _offsetsC.ElementAtOrDefault(15) - 0x04;
         }
 
         public enum ObjectManagerOffsets

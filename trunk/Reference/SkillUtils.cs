@@ -12,80 +12,96 @@ namespace Trinity.Reference
 {
     public class SkillUtils
     {
-        #region SkillMeta
+        //#region SkillMeta
 
-        /// <summary>
-        /// Dictionary mapping Skills to SkillMeta
-        /// </summary>
-        private static Dictionary<Skill, SkillMeta> _skillMetas = new Dictionary<Skill, SkillMeta>();
+        ///// <summary>
+        ///// Dictionary mapping Skills to SkillMeta
+        ///// </summary>
+        //private static Dictionary<Skill, SkillMeta> _skillMetas = new Dictionary<Skill, SkillMeta>();
 
-        /// <summary>
-        /// Set skill to use an SkillMeta object
-        /// </summary>
-        public static void SetSkillMeta(SkillMeta newMeta)
-        {
-            if (newMeta.Skill == null)
-            {
-                Logger.Log("SkillInfo set attempt without a reference to a skill");
-                return;
-            }
+        ///// <summary>
+        ///// Set skill to use an SkillMeta object
+        ///// </summary>
+        //public static void SetSkillMeta(SkillMeta newMeta)
+        //{
+        //    if (newMeta.Skill == null)
+        //    {
+        //        Logger.Log("SkillInfo set attempt without a reference to a skill");
+        //        return;
+        //    }
 
-            SkillMeta oldMeta;
-            if (_skillMetas.TryGetValue(newMeta.Skill, out oldMeta))
-            {
-                oldMeta.Apply(newMeta);
-            }
-            else
-            {
-                _skillMetas.Add(newMeta.Skill, newMeta);
-            }
-        }
+        //    SkillMeta oldMeta;
+        //    if (_skillMetas.TryGetValue(newMeta.Skill, out oldMeta))
+        //    {
+        //        oldMeta.Apply(newMeta);
+        //    }
+        //    else
+        //    {
+        //        _skillMetas.Add(newMeta.Skill, newMeta);
+        //    }
+        //}
 
-        /// <summary>
-        /// Set skills to use SkillMeta objects
-        /// </summary>
-        public static void SetSkillMeta(IEnumerable<SkillMeta> metas)
-        {
-            metas.ForEach(SetSkillMeta);
-        }
+        ///// <summary>
+        ///// Set skills to use SkillMeta objects
+        ///// </summary>
+        //public static void SetSkillMeta(IEnumerable<SkillMeta> metas)
+        //{
+        //    metas.ForEach(SetSkillMeta);
+        //}
 
-        /// <summary>
-        /// Get a SkillMeta object
-        /// </summary>
-        /// <param name="skill"></param>
-        /// <returns></returns>
-        public static SkillMeta GetSkillMeta(Skill skill)
-        {
-            SkillMeta s;
-            if (_skillMetas.TryGetValue(skill, out s))
-                return s;
+        ///// <summary>
+        ///// Get a SkillMeta object
+        ///// </summary>
+        ///// <param name="skill"></param>
+        ///// <returns></returns>
+        //public static SkillMeta GetSkillMeta(Skill skill)
+        //{
+        //    SkillMeta s;
+        //    if (_skillMetas.TryGetValue(skill, out s))
+        //        return s;
 
-            //Logger.LogVerbose("GetSkillInfo found no SkillMeta for {0}", skill.Name);
+        //    //Logger.LogVerbose("GetSkillInfo found no SkillMeta for {0}", skill.Name);
             
-            var newMeta = new SkillMeta(skill);
-            SetSkillMeta(newMeta);
+        //    var newMeta = new SkillMeta(skill);
+        //    SetSkillMeta(newMeta);
 
-            return newMeta;
-        }
+        //    return newMeta;
+        //}
 
-        #endregion
+        //#endregion
 
-        /// <summary>
-        /// Fast lookup for a Skill by SNOPower
-        /// </summary>
-        public static Skill ById(SNOPower power)
+        public static Skill GetSkillByPower(SNOPower power)
         {
             if (!_allSkillBySnoPower.Any())
-                _allSkillBySnoPower = All.ToDictionary(s => s.SNOPower, s => s);
+            {
+                CreateSkillsBySnoPowerDictionary();
+            }
 
             Skill skill;
-            var result = _allSkillBySnoPower.TryGetValue(power, out skill);
-            if (!result)
-            {
-                //Logger.LogDebug("Unable to find skill for power {0}", power);
-            }
-            return result ? skill : new Skill();
+            if (_allSkillBySnoPower.TryGetValue(power, out skill))
+                return skill;
+
+            return null;
         }
+
+        private static void CreateSkillsBySnoPowerDictionary()
+        {
+            foreach (var s in All)
+            {
+                if (s.SNOPowers != null && s.SNOPowers.Any())
+                {
+                    foreach (var p in s.SNOPowers)
+                    {
+                        _allSkillBySnoPower.Add(p, s);
+                    }
+                }
+                else
+                {
+                    _allSkillBySnoPower.Add(s.SNOPower, s);
+                }
+            }
+        }
+
         private static Dictionary<SNOPower, Skill> _allSkillBySnoPower = new Dictionary<SNOPower, Skill>();
 
         /// <summary>
@@ -165,7 +181,7 @@ namespace Trinity.Reference
         /// </summary>
         private static bool ShouldUpdateActiveSkills
         {
-            get { return DateTime.UtcNow.Subtract(_lastUpdatedActiveSkills) > TimeSpan.FromMilliseconds(250); }
+            get { return DateTime.UtcNow.Subtract(_lastUpdatedActiveSkills) > TimeSpan.FromMilliseconds(100); }
         }
 
         /// <summary>

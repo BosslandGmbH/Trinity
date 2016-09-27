@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Trinity.Framework.Helpers
 {
+
+
     /// <summary>
     /// Non-generic class allowing properties to be copied from one instance
     /// to another existing instance of a potentially different type.
@@ -23,12 +26,36 @@ namespace Trinity.Framework.Helpers
         /// <typeparam name="TTarget">Type of the target</typeparam>
         /// <param name="source">Source to copy properties from</param>
         /// <param name="target">Target to copy properties to</param>
-        public static void Copy<TSource, TTarget>(TSource source, TTarget target)
+        public static void Copy<TSource, TTarget>(TSource source, TTarget target, PropertyCopyOptions options = null)
             where TSource : class
             where TTarget : class
-        {
-            PropertyCopier<TSource, TTarget>.Copy(source, target);
+        {            
+            PropertyCopier<TSource, TTarget>.Copy(source, target, options ?? new PropertyCopyOptions());
         }
+
+        public static object CopyDerived(object obj, object otherObject)
+        {
+            var srcFields = otherObject.GetType().GetProperties(
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.GetProperty);
+
+            var destFields = obj.GetType().GetProperties(
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty);
+
+            foreach (var property in srcFields)
+            {
+                var dest = destFields.FirstOrDefault(x => x.Name == property.Name);
+                if (dest != null && dest.CanWrite)
+                {
+                    dest.SetValue(obj, property.GetValue(otherObject, null), null);
+                }
+            }
+            return obj;
+        }
+    }
+
+    public class PropertyCopyOptions
+    {
+        public bool IgnoreNulls;
     }
 
     /// <summary>
@@ -48,6 +75,25 @@ namespace Trinity.Framework.Helpers
             return PropertyCopier<TSource, TTarget>.Copy(source);
         }
     }
+
+    //public static class DefaultValueCache
+    //{
+    //    private static Dictionary<Type, object> defaultMap = new Dictionary<Type, object>();
+
+    //    public static object GetDefault(Type type)
+    //    {
+    //        object value;
+    //        if (!defaultMap.TryGetValue(type, out value))
+    //        {
+    //            var body = Expression.Default(type);
+    //            var lambda = Expression.Lambda(body);
+    //            var func = lambda.Compile();
+    //            value = func.DynamicInvoke();
+    //            defaultMap[type] = value;
+    //        }
+    //        return value;
+    //    }
+    //}
 
     /// <summary>
     /// Static class to efficiently store the compiled delegate which can
@@ -84,12 +130,12 @@ namespace Trinity.Framework.Helpers
             }
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             return creator(source);
         }
 
-        internal static void Copy(TSource source, TTarget target)
+        internal static void Copy(TSource source, TTarget target, PropertyCopyOptions options)
         {
             if (initializationException != null)
             {
@@ -97,11 +143,18 @@ namespace Trinity.Framework.Helpers
             }
             if (source == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
             }
             for (int i = 0; i < sourceProperties.Count; i++)
             {
-                targetProperties[i].SetValue(target, sourceProperties[i].GetValue(source, null), null);
+                var value = sourceProperties[i].GetValue(source, null);
+                if (options != null && !options.IgnoreNulls || !ReferenceEquals(value, null))
+                {
+                    if (target != null)
+                    {
+                        targetProperties[i].SetValue(target, value, null);
+                    }
+                }
             }
 
         }
@@ -133,7 +186,8 @@ namespace Trinity.Framework.Helpers
                 PropertyInfo targetProperty = typeof(TTarget).GetProperty(sourceProperty.Name);
                 if (targetProperty == null)
                 {
-                    throw new ArgumentException("Property " + sourceProperty.Name + " is not present and accessible in " + typeof(TTarget).FullName);
+                    continue;
+                    //throw new ArgumentException("Property " + sourceProperty.Name + " is not present and accessible in " + typeof(TTarget).FullName);
                 }
                 if (targetProperty.GetCustomAttribute(typeof(IgnoreDataMemberAttribute)) != null)
                 {
@@ -141,15 +195,18 @@ namespace Trinity.Framework.Helpers
                 }
                 if (!targetProperty.CanWrite)
                 {
-                    throw new ArgumentException("Property " + sourceProperty.Name + " is not writable in " + typeof(TTarget).FullName);
+                    continue;
+                    //throw new ArgumentException("Property " + sourceProperty.Name + " is not writable in " + typeof(TTarget).FullName);
                 }
                 if ((targetProperty.GetSetMethod().Attributes & MethodAttributes.Static) != 0)
                 {
-                    throw new ArgumentException("Property " + sourceProperty.Name + " is static in " + typeof(TTarget).FullName);
+                    continue;
+                    //throw new ArgumentException("Property " + sourceProperty.Name + " is static in " + typeof(TTarget).FullName);
                 }
                 if (!targetProperty.PropertyType.IsAssignableFrom(sourceProperty.PropertyType))
                 {
-                    throw new ArgumentException("Property " + sourceProperty.Name + " has an incompatible type in " + typeof(TTarget).FullName);
+                    continue;
+                    //throw new ArgumentException("Property " + sourceProperty.Name + " has an incompatible type in " + typeof(TTarget).FullName);
                 }
                 bindings.Add(Expression.Bind(targetProperty, Expression.Property(sourceParameter, sourceProperty)));
                 sourceProperties.Add(sourceProperty);

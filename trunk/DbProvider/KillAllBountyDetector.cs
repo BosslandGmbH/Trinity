@@ -99,10 +99,10 @@ namespace Trinity.DbProvider
 
         private static void SetCombatMode()
         {
-            if (CombatBase.CombatMode != CombatMode.KillAll && !_isCombatModeChanged)
+            if (Combat.CombatMode != CombatMode.KillAll && !_isCombatModeChanged)
             {
-                _previousCombatMode = CombatBase.CombatMode;
-                CombatBase.CombatMode = CombatMode.KillAll;
+                _previousCombatMode = Combat.CombatMode;
+                Combat.CombatMode = CombatMode.KillAll;
             }
         }
 
@@ -110,9 +110,9 @@ namespace Trinity.DbProvider
         {
             if (_isCombatModeChanged)
             {
-                if (CombatBase.CombatMode != _previousCombatMode)
+                if (Combat.CombatMode != _previousCombatMode)
                 {
-                    CombatBase.CombatMode = _previousCombatMode;
+                    Combat.CombatMode = _previousCombatMode;
                 }
                 _isCombatModeChanged = false;
             }

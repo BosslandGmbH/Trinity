@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Coroutines.Town;
-using TrinityCoroutines.Resources;
 using Trinity.Helpers;
 using Zeta.Bot;
 using Trinity.Technicals;

@@ -38,32 +38,29 @@ namespace Trinity.Framework
             ModuleManager.Instances.Add(new WeakReference<Module>(this));
         }
 
-        public void FireEvent(ModuleEventType moduleEventType)
+        public void FireEvent(ModuleEvent moduleEvent)
         {
-            if (!IsEnabled)
-                return;
-
-            switch (moduleEventType)
+            switch (moduleEvent)
             {
-                case ModuleEventType.ForcedPulse:
+                case ModuleEvent.ForcedPulse:
                     FirePulse(true);
                     break;
-                case ModuleEventType.Pulse:
+                case ModuleEvent.Pulse:
                     FirePulse();
                     break;
-                case ModuleEventType.WorldChanged:
+                case ModuleEvent.WorldChanged:
                     OnWorldChanged();
                     break;
-                case ModuleEventType.GameJoined:
+                case ModuleEvent.GameJoined:
                     OnGameJoined();
                     break;
-                case ModuleEventType.PluginDisabled:
+                case ModuleEvent.PluginDisabled:
                     OnPluginDisabled();
                     break;
-                case ModuleEventType.PluginEnabled:
+                case ModuleEvent.PluginEnabled:
                     OnPluginEnabled();
                     break;
-                case ModuleEventType.Shutdown:
+                case ModuleEvent.Shutdown:
                     OnShutdown();
                     break;
             }

@@ -49,6 +49,7 @@
             </Grid>
         </Border>
         <Border DockPanel.Dock="Bottom" Padding="12">
+            <ScrollViewer Padding="0,5,10,5">
             <Grid>
                 <StackPanel>
                     <TextBlock Margin="0,0,0,15" FontSize="14" Foreground="LightGray" Text="{Binding Description, FallbackValue=Description}" TextWrapping="Wrap"/>
@@ -84,6 +85,7 @@
                     </Grid>
                 </StackPanel>
             </Grid>
+            </ScrollViewer>
         </Border>
     </DockPanel>
 </UserControl>

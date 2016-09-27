@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Coroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Helpers;
-using TrinityCoroutines;
-using TrinityCoroutines.Resources;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Game;

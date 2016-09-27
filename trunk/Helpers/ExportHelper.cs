@@ -58,5 +58,6 @@ namespace Trinity.Helpers
                 return Encoding.UTF8.GetString(buffer);
             }
         }
+
     }
 }

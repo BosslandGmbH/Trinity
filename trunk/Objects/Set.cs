@@ -8,6 +8,14 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Objects
 {
+    public enum SetBonus
+    {
+        None = 0,
+        First,
+        Second,
+        Third,
+    }
+
     /// <summary>
     /// A collection of items that when equipped together provide special bonuses
     /// </summary>
@@ -43,10 +51,7 @@ namespace Trinity.Objects
         /// <summary>
         /// If this set may only be used by a specific class
         /// </summary>
-        public bool IsClassRestricted
-        {
-            get { return ClassRestriction != ActorClass.Invalid; }
-        } 
+        public bool IsClassRestricted => ClassRestriction != ActorClass.Invalid;
 
         /// <summary>
         /// All items in this set
@@ -67,7 +72,7 @@ namespace Trinity.Objects
         /// </summary>
         public List<Item> EquippedItems
         {
-            get { return Items.Where(i => Core.Inventory.EquippedIds.Contains(i.Id)).ToList(); }
+            get { return Items.Where(i => Core.Inventory.PlayerEquippedIds.Contains(i.Id)).ToList(); }
         }
 
         /// <summary>
@@ -78,89 +83,64 @@ namespace Trinity.Objects
             get { return Core.Inventory.Equipped.Where(i => ItemIds.Contains(i.ActorSnoId)).ToList(); }
         }
 
-        public bool IsFirstBonusActive
+        public bool IsFirstBonusActive => IsBonusActive(FirstBonusItemCount);
+
+        public bool IsSecondBonusActive => IsBonusActive(SecondBonusItemCount);
+
+        public bool IsThirdBonusActive => IsBonusActive(ThirdBonusItemCount);
+
+        public bool IsBonusActive(SetBonus setBonus)
         {
-            get { return IsBonusActive(FirstBonusItemCount); }
+            switch (setBonus)
+            {
+                case SetBonus.First:
+                    return IsFirstBonusActive;
+                case SetBonus.Second:
+                    return IsSecondBonusActive;
+                case SetBonus.Third:
+                    return IsThirdBonusActive;
+            }
+            return false;
         }
 
-        public bool IsSecondBonusActive
-        {
-            get { return IsBonusActive(SecondBonusItemCount); }
-        }
-
-        public bool IsThirdBonusActive
-        {
-            get { return IsBonusActive(ThirdBonusItemCount); }
-        }
-
-        private bool IsBonusActive(int requiredItemCountForBonus)
+        public bool IsBonusActive(int requiredItemCountForBonus)
         {
             var actualRequired = requiredItemCountForBonus - (Legendary.RingOfRoyalGrandeur.IsEquipped ? 1 : 0);
             if (actualRequired < 2) actualRequired = 2;
             return requiredItemCountForBonus > 0 && EquippedItems.Count >= actualRequired;
         }
 
-        public bool IsOneBonusSet
-        {
-            get { return !IsThreeBonusSet && !IsTwoBonusSet; }
-        }
+        public bool IsOneBonusSet => !IsThreeBonusSet && !IsTwoBonusSet;
 
-        public bool IsTwoBonusSet
-        {
-            get { return !IsThreeBonusSet && SecondBonusItemCount > 0; }
-        }
+        public bool IsTwoBonusSet => !IsThreeBonusSet && SecondBonusItemCount > 0;
 
-        public bool IsThreeBonusSet
-        {
-            get { return ThirdBonusItemCount > 0; }
-        }
+        public bool IsThreeBonusSet => ThirdBonusItemCount > 0;
 
         /// <summary>
         /// Items required to get the maximum set bonus
         /// </summary>
-        public int MaxBonusItemCount
-        {
-            get { return IsThreeBonusSet ? ThirdBonusItemCount : (IsTwoBonusSet ? SecondBonusItemCount : FirstBonusItemCount); }
-        }
+        public int MaxBonusItemCount => IsThreeBonusSet ? ThirdBonusItemCount : (IsTwoBonusSet ? SecondBonusItemCount : FirstBonusItemCount);
 
-        public bool IsMaxBonusActive
-        {
-            get { return IsBonusActive(MaxBonusItemCount); }
-        }
+        public bool IsMaxBonusActive => IsBonusActive(MaxBonusItemCount);
 
         /// <summary>
         /// Items required to get the maximum set bonus
         /// </summary>
-        public int MaxBonuses
-        {
-            get { return IsThreeBonusSet ? 3 : (IsTwoBonusSet ? 2 : 1); }
-        }
+        public int MaxBonuses => IsThreeBonusSet ? 3 : (IsTwoBonusSet ? 2 : 1);
 
         /// <summary>
         /// Items required to get the maximum set bonus
         /// </summary>
-        public int CurrentBonuses
-        {
-            get
-            {
-                return IsThirdBonusActive ? 3 : (IsSecondBonusActive ? 2 : (IsFirstBonusActive) ? 1 : 0);
-            }
-        }
+        public int CurrentBonuses => IsThirdBonusActive ? 3 : (IsSecondBonusActive ? 2 : (IsFirstBonusActive) ? 1 : 0);
 
         /// <summary>
         /// Is this set is equipped enough for the maximum set bonus
         /// </summary>
-        public bool IsFullyEquipped
-        {
-            get { return IsThreeBonusSet ? IsThirdBonusActive : (IsTwoBonusSet ? IsSecondBonusActive : IsFirstBonusActive); }
-        }
+        public bool IsFullyEquipped => IsThreeBonusSet ? IsThirdBonusActive : (IsTwoBonusSet ? IsSecondBonusActive : IsFirstBonusActive);
 
         /// <summary>
         /// Is this set is equipped enough for any set bonus
         /// </summary>
-        public bool IsEquipped
-        {
-            get { return IsThirdBonusActive || IsSecondBonusActive || IsFirstBonusActive; }
-        }
+        public bool IsEquipped => IsThirdBonusActive || IsSecondBonusActive || IsFirstBonusActive;
     }
 }

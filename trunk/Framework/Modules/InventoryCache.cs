@@ -23,6 +23,7 @@ namespace Trinity.Framework.Modules
 
         public HashSet<int> KanaisCubeIds { get; private set; } = new HashSet<int>();
         public List<TrinityItem> Backpack { get; private set; } = new List<TrinityItem>();
+        public HashSet<int> PlayerEquippedIds { get; private set; } = new HashSet<int>();
         public HashSet<int> EquippedIds { get; private set; } = new HashSet<int>();
         public List<TrinityItem> Equipped { get; private set; } = new List<TrinityItem>();
 
@@ -40,12 +41,15 @@ namespace Trinity.Framework.Modules
         {
             using (new PerformanceLogger("UpdateCachedInventoryData"))
             {
-                Clear();
+                //Clear();
 
                 if (!ZetaDia.IsInGame)
                     return;
 
-                KanaisCubeIds = new HashSet<int>(ZetaDia.PlayerData.KanaisPowersAssignedActorSnoIds);
+                var kanaisCubeIds = new HashSet<int>(ZetaDia.PlayerData.KanaisPowersAssignedActorSnoIds);
+                var equipped = new List<TrinityItem>();
+                var equippedIds = new HashSet<int>();
+                var playerEquippedIds = new HashSet<int>();
 
                 foreach (var item in Core.Actors.Inventory)
                 {
@@ -76,31 +80,44 @@ namespace Trinity.Framework.Modules
                         case InventorySlot.Legs:
                         case InventorySlot.Neck:
                         case InventorySlot.Socket:
-                            Equipped.Add(item);
-                            EquippedIds.Add(item.ActorSnoId);
+                            equipped.Add(item);
+                            equippedIds.Add(item.ActorSnoId);
+                            playerEquippedIds.Add(item.ActorSnoId);
                             break;
 
                         //case InventorySlot.Buyback:
                         //case InventorySlot.None:
                         default:
-                            if ((int)item.InventorySlot == 19)
+                            if ((int)item.InventorySlot == 19) // WTF is this?
                             {
-                                Equipped.Add(item);
-                                EquippedIds.Add(item.ActorSnoId);
+                                equipped.Add(item);
+                                equippedIds.Add(item.ActorSnoId);
+                                playerEquippedIds.Add(item.ActorSnoId);
                             }
                             //Other.Add(item);
                             break;
                     }
                 }
+
+                foreach (var id in kanaisCubeIds)
+                {
+                    equippedIds.Add(id);
+                }
+
+                KanaisCubeIds = kanaisCubeIds;
+                Equipped = equipped;
+                EquippedIds = equippedIds;
+                PlayerEquippedIds = playerEquippedIds;
             }
         }
 
         public void Clear()
-        {            
-            Backpack.Clear();
-            Equipped.Clear();
-            EquippedIds.Clear();
-            KanaisCubeIds.Clear();
+        {
+            //Backpack.Clear();
+            //Equipped.Clear();
+            //PlayerEquippedIds.Clear();
+            //KanaisCubeIds.Clear();
+            //EquippedIds.Clear();
         }
 
 

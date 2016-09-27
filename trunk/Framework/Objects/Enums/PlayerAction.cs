@@ -14,6 +14,6 @@ namespace Trinity.Framework.Objects.Enums
         Attacking,        
         Interacting,
         Waiting,
-        Kiting
+        Kiting,
     }
 }

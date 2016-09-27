@@ -23,13 +23,13 @@ namespace Trinity.Framework.Modules
             if (!Core.Settings.Advanced.DebugInStatusBar)
                 return;
 
-            if (CombatBase.CurrentTarget == null)
+            if (Combat.Targeting.CurrentTarget == null)
                 return;
 
             // todo: moved from handle target due to 5% of cpu usage, refactor
 
             var statusText = new StringBuilder();
-            var currentTarget = CombatBase.CurrentTarget;
+            var currentTarget = Combat.Targeting.CurrentTarget;
             var player = Core.Player;
 
             //if(!CombatBase.IsInCombat)
@@ -39,10 +39,10 @@ namespace Trinity.Framework.Modules
             statusText.Append(" Target=");
             statusText.Append(currentTarget.InternalName);
 
-            if (currentTarget.IsUnit && CombatBase.CurrentPower.SNOPower != SNOPower.None)
+            if (currentTarget.IsUnit && Combat.Targeting.CurrentPower.SNOPower != SNOPower.None)
             {
                 statusText.Append(" Power=");
-                statusText.Append(CombatBase.CurrentPower.SNOPower);
+                statusText.Append(Combat.Targeting.CurrentPower.SNOPower);
             }
 
             //statusText.Append(" Speed=");
@@ -71,7 +71,8 @@ namespace Trinity.Framework.Modules
             statusText.Append((player.PrimaryResource).ToString("0"));
             statusText.Append(" InLoS=");
             statusText.Append(currentTarget.IsInLineOfSight.ToString());
-            statusText.Append($" Duration={DateTime.UtcNow.Subtract(TargetHandler.LastPickedTargetTime).TotalSeconds:0}");
+
+            //statusText.Append($" Duration={DateTime.UtcNow.Subtract(TargetHandler.LastPickedTargetTime).TotalSeconds:0}");
 
             BotMain.StatusText = statusText.ToString();
 

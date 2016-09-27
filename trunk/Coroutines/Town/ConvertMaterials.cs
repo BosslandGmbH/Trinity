@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
 using Trinity.Technicals;
-using TrinityCoroutines.Resources;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 

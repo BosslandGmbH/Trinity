@@ -11,6 +11,7 @@ namespace Trinity.Framework.Modules
 {
     /// <summary>
     /// Keep track of cooldowns for buffs and skills
+    /// todo refactor now that i have the proper game tick @ Core.MemoryModel.Storage.GameTick, which matches the EndTick.    
     /// </summary>
     public sealed class Cooldowns : Module
     {
@@ -87,8 +88,8 @@ namespace Trinity.Framework.Modules
 
             public override string ToString()
             {
-                return String.Format("Power={0} ({1}) Start={2} End={3} Duration={4} ({5}s) StartAttr={6} Remaining={7}s ({8:00.00}%) Finished={9} Offset={10} EndOffset={11} CurrentTime={12} EndCurrentTime={13} Key={14}",
-                    (SNOPower)SnoId, SnoId, StartGameTime, EndGameTime, DurationGameTime, Duration.TotalSeconds, StartAttribute, Remaining.TotalSeconds, Percent*100, IsFinished, Offset, EndOffset, ZetaDia.CurrentTime, EndCurrentTime, StorageKey);
+                return String.Format("Power={0} ({1}) Start={2} End={3} Duration={4} ({5}s) StartAttr={6} Remaining={7}s ({8:00.00}%) Finished={9} Offset={10} EndOffset={11} CurrentTime={12} EndCurrentTime={13} Key={14} EnvironmentTick={15}",
+                    (SNOPower)SnoId, SnoId, StartGameTime, EndGameTime, DurationGameTime, Duration.TotalSeconds, StartAttribute, Remaining.TotalSeconds, Percent*100, IsFinished, Offset, EndOffset, ZetaDia.CurrentTime, EndCurrentTime, StorageKey, Environment.TickCount);
             }
         }
 
@@ -111,6 +112,9 @@ namespace Trinity.Framework.Modules
 
         protected override void OnPulse()
         {
+            if (ZetaDia.Me == null)
+                return;
+
             using (new PerformanceLogger("Utility.Cooldowns.Pulse"))
             {
                 CurrentTime = ZetaDia.CurrentTime;
@@ -180,13 +184,13 @@ namespace Trinity.Framework.Modules
         public TimeSpan GetSkillCooldownRemaining(SNOPower power)
         {
             var cd = GetSkillCooldown(power);
-            return cd != null ? cd.Remaining : TimeSpan.Zero;
+            return cd?.Remaining ?? TimeSpan.Zero;
         }
 
         public TimeSpan GetSkillCooldownElapsed(SNOPower power)
         {
             var cd = GetSkillCooldown(power);            
-            return cd != null ? cd.Elapsed : TimeSpan.Zero;
+            return cd?.Elapsed ?? TimeSpan.Zero;
         }
 
         private const int NoAttributeKey = -2;

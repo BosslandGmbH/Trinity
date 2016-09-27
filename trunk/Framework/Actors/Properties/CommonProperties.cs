@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Common;
@@ -245,14 +246,17 @@ namespace Trinity.Framework.Actors.Properties
                         }
                         else
                         {
-                            result = Math.Max(CombatBase.CurrentPower.MinimumRange, actor.CollisionRadius);
+                            if (Combat.Targeting.CurrentPower != null)
+                                result = Math.Max(Combat.Targeting.CurrentPower.MinimumRange, actor.CollisionRadius);
+                            else
+                                result = actor.CollisionRadius;
                         }
                         break;
                     }
                 // * Item - need to get within 6 feet and then interact with it
                 case TrinityObjectType.Item:
                     {
-                        result = 3f;
+                        result = 5f;
                         break;
                     }
                 // * Gold - need to get within pickup radius only

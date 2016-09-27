@@ -46,7 +46,7 @@ namespace Trinity.ProfileTags
                 return;
             }
 
-            CombatBase.CombatMode = CombatMode.Questing;
+            Combat.CombatMode = CombatMode.Questing;
             PluginEvents.CurrentProfileType = ProfileType.Bounty;
 
             ResetAll();

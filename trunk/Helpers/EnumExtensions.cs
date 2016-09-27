@@ -69,6 +69,16 @@ namespace Trinity.Helpers
             return Enum.GetValues(input.GetType()).Cast<T>().Where(e => !defaultValue.Equals(e)).ToList();
         }
 
+        public static HashSet<T> ToHashSet<T>(this Enum input, bool skipDefault = false)
+        {
+            return new HashSet<T>(input.ToList<T>(skipDefault));
+        }
+
+        public static bool Contains<T>(this Enum input, T value)
+        {
+            return new HashSet<T>(input.ToList<T>(true)).Contains(value);
+        }
+
         public static IEnumerable<T> GetFlags<T>(this Enum input, bool excludeDefault = true) where T : struct
         {
             var defaultValue = default(T);

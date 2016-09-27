@@ -34,9 +34,9 @@ namespace Trinity.Settings
                 result.Add(new SettingsSelectionItem(item));
             }
 
-            foreach (var item in ModuleManager.DynamicSettings)
+            foreach (var item in SettingsManager.GetDynamicSettings())
             {                
-                result.Add(new SettingsSelectionItem(SettingsSection.Dynamic, item.Name));
+                result.Add(new SettingsSelectionItem(SettingsSection.Dynamic, item.GetName()));
             }            
 
             return result;

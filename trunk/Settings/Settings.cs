@@ -1,8 +1,12 @@
-﻿﻿using System.IO;
+﻿﻿using System;
+﻿using System.IO;
+﻿using System.Threading;
 ﻿using System.Windows;
 ﻿using Trinity.Components.Combat.Abilities;
+﻿using Trinity.Config;
 ﻿using Trinity.Technicals;
 ﻿using Trinity.UI;
+﻿using Zeta.Game;
 
 namespace Trinity
 {
@@ -11,12 +15,15 @@ namespace Trinity
         // Save Configuration
         private void SaveConfiguration()
         {
-            Settings.Save();
+            TrinityPluginSettings.Settings.Save();
         }
+
         // Load Configuration
-        private void LoadConfiguration()
+        private void InitializeSettings()
         {
-            Settings.Load();
+            Logger.Log("Initializing TrinitySettings");
+            TrinityPluginSettings.Settings = new TrinitySetting();
+            TrinityPluginSettings.Settings.Load();
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Technicals;
@@ -11,13 +12,15 @@ namespace Trinity.Framework.Modules
 {
     public class HotbarCache : Module
     {
+        protected override int UpdateIntervalMs => 50;
+
         public class HotbarSkill
         {
             public Skill Skill { get; set; }
             public HotbarSlot Slot { get; set; }
             public SNOPower Power { get; set; }
             public int RuneIndex { get; set; }
-            public bool HasRuneEquipped { get; set; }
+            public bool HasRuneEquipped { get; set; }            
 
             public Rune Rune
             {
@@ -51,7 +54,7 @@ namespace Trinity.Framework.Modules
         public List<HotbarSkill> ActiveSkills { get; private set; } = new List<HotbarSkill>();
         public HashSet<SNOPower> PassiveSkills { get; private set; } = new HashSet<SNOPower>();
 
-        private Dictionary<SNOPower, HotbarSkill> _skillBySnoPower = new Dictionary<SNOPower, HotbarSkill>();
+        private Dictionary<SNOPower, HotbarSkill> _hotbarSkillBySnoPower = new Dictionary<SNOPower, HotbarSkill>();
 
         private Dictionary<HotbarSlot, HotbarSkill> _skillBySlot = new Dictionary<HotbarSlot, HotbarSkill>();
 
@@ -69,13 +72,48 @@ namespace Trinity.Framework.Modules
         {
             Clear();
 
+            if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid)
+                return;
+
             var cPlayer = ZetaDia.PlayerData;
+            if (cPlayer == null || !cPlayer.IsValid)
+                return;
 
             PassiveSkills = new HashSet<SNOPower>(cPlayer.PassiveSkills);
 
+            var activePowers = new HashSet<SNOPower>();
+            var activeHotbarSkills = new List<HotbarSkill>();
+
+            bool isOverrideActive = false;
+            try
+            {
+                isOverrideActive = ZetaDia.Me.SkillOverrideActive;
+            }
+            catch (ArgumentException ex)
+            {
+                // nesox?
+
+                /*[Trinity 2.55.238] Error in OnEnable: System.ArgumentException: An item with the same key has already been added.
+                   at System.ThrowHelper.ThrowArgumentException(ExceptionResource resource)
+                   at System.Collections.Generic.Dictionary`2.Insert(TKey key, TValue value, Boolean add)
+                   at System.Linq.Enumerable.ToDictionary[TSource,TKey,TElement](IEnumerable`1 source, Func`2 keySelector, Func`2 elementSelector, IEqualityComparer`1 comparer)
+                   at Zeta.Game.Internals.FastAttribGroupsEntry.‌⁫‭⁫⁪⁮⁮⁮⁪‌‮‌‪‭‬‌‍‍‫‬‏‌⁫‏‌‏⁯⁯‬⁭‌‪⁬⁫‬⁫⁪⁭‬‭‮()
+                   at Zeta.Game.PerFrameCachedValue`1.get_Value()
+                   at Zeta.Game.Internals.FastAttribGroupsEntry.get_AttributeMapA()
+                   at Zeta.Game.Internals.FastAttribGroupsEntry.⁯⁫‌‭⁬‫‪⁬‮⁪⁬⁭⁮‪⁮⁭‬‮‬⁪‪⁪⁭‮‏​‎⁯‌‎‎⁭⁯‬⁪⁪‫‎‫⁭‮[](Int32 , ACD , & )
+                   at Zeta.Game.Internals.FastAttribGroupsEntry.‏⁫⁫​⁮‏⁮​‍⁮⁪⁯⁪⁯‍‫‏‎⁫‌‬⁫⁯⁮‮⁮​‪⁭‎‏‌⁮‎⁬‮‬‍​‪‮[](Int32 , ACD )
+                   at Zeta.Game.Internals.Actors.ACD.‌‍‬‌⁭⁫‪⁭⁭⁫‍‪‪‭⁯‍⁯‏⁪‭‪‮‬‮⁫‭⁫‫‫‫‭‎⁬‫‫​‪‭⁬⁫‮()
+                   at Zeta.Game.PerFrameCachedValue`1.get_Value()
+                   at Zeta.Game.Internals.Actors.ACD.get_SkillOverrideActive()
+                   at Zeta.Game.Internals.Actors.DiaPlayer.get_SkillOverrideActive()
+                   at Trinity.Framework.Modules.HotbarCache.Update()
+                   at Trinity.Framework.Core.Enable()
+                   at Trinity.TrinityPlugin.OnEnabled()*/
+            }
+
             for (int i = 0; i <= 5; i++)
             {
-                var diaActiveSkill = cPlayer.GetActiveSkillByIndex(i, ZetaDia.Me.SkillOverrideActive);
+                var diaActiveSkill = cPlayer.GetActiveSkillByIndex(i, isOverrideActive);
                 if (diaActiveSkill == null || diaActiveSkill.Power == SNOPower.None)
                     continue;
 
@@ -88,14 +126,14 @@ namespace Trinity.Framework.Modules
                     Slot = (HotbarSlot) i,
                     RuneIndex = runeIndex,
                     HasRuneEquipped = diaActiveSkill.HasRuneEquipped,
-                    Skill = SkillUtils.ById(power),
+                    Skill = SkillUtils.GetSkillByPower(power),
                 };
 
-                if (!ActivePowers.Contains(power))
+                if (!activePowers.Contains(power))
                 {
-                    ActivePowers.Add(power);
-                    ActiveSkills.Add(hotbarskill);
-                    _skillBySnoPower.Add(power, hotbarskill);
+                    activePowers.Add(power);
+                    activeHotbarSkills.Add(hotbarskill);
+                    _hotbarSkillBySnoPower.Add(power, hotbarskill);
                     _skillBySlot.Add((HotbarSlot)i, hotbarskill);
                 }
 
@@ -103,19 +141,22 @@ namespace Trinity.Framework.Modules
                     DataDictionary.LastUseAbilityTimeDefaults.Add(power, DateTime.MinValue);
             }
 
+            ActivePowers = activePowers;
+            ActiveSkills = activeHotbarSkills;
+
             Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement,
                 "Refreshed Hotbar: ActiveSkills={0} PassiveSkills={1}",
                 ActiveSkills.Count,
                 PassiveSkills.Count);
         }
 
-        internal HotbarSkill GetSkill(SNOPower power)
+        internal HotbarSkill GetHotbarSkill(SNOPower power)
         {
             HotbarSkill skill;
-            return _skillBySnoPower.TryGetValue(power, out skill) ? skill : new HotbarSkill();
+            return _hotbarSkillBySnoPower.TryGetValue(power, out skill) ? skill : new HotbarSkill();
         }
 
-        internal HotbarSkill GetSkill(HotbarSlot slot)
+        internal HotbarSkill GetHotbarSkill(HotbarSlot slot)
         {
             HotbarSkill skill;
             return _skillBySlot.TryGetValue(slot, out skill) ? skill : new HotbarSkill();
@@ -123,7 +164,7 @@ namespace Trinity.Framework.Modules
 
         public int GetSkillStacks(int id)
         {
-            return GetSkill((SNOPower) id).Charges;
+            return GetHotbarSkill((SNOPower) id).Charges;
         }
 
         public int GetSkillCharges(SNOPower id)
@@ -136,7 +177,7 @@ namespace Trinity.Framework.Modules
             ActivePowers = new HashSet<SNOPower>();
             ActiveSkills = new List<HotbarSkill>();
             PassiveSkills = new HashSet<SNOPower>();
-            _skillBySnoPower = new Dictionary<SNOPower, HotbarSkill>();
+            _hotbarSkillBySnoPower = new Dictionary<SNOPower, HotbarSkill>();
             _skillBySlot = new Dictionary<HotbarSlot, HotbarSkill>();
         }
     }

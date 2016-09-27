@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Trinity.Components.Combat;
 using Trinity.Config;
@@ -8,18 +9,21 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Modules;
 using Trinity.ItemRules;
+using Trinity.Technicals;
+using Trinity.UI;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Common.Plugins;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity
 {
     public static class TrinityPluginSettings
     {
-        public static TrinitySetting Settings = new TrinitySetting();
+        public static TrinitySetting Settings;
     }
 
     public partial class TrinityPlugin
@@ -28,16 +32,6 @@ namespace Trinity
         /// Settings of the plugin
         /// </summary>
         public static TrinitySetting Settings => TrinityPluginSettings.Settings;
-
-        /// <summary>
-        /// Used for letting noobs know they started the bot without TrinityPlugin enabled in the plugins tab.
-        /// </summary>
-        public static bool IsPluginEnabled
-        {
-            get { return _isPluginEnabled; }
-            set { _isPluginEnabled = value; }
-        }
-        public static bool _isPluginEnabled;
 
         /// <summary>
         /// Used for a global bot-pause
@@ -259,12 +253,7 @@ namespace Trinity
         // Variables used to actually hold powers the power-selector has picked to use, for buffing and main power use
         public static TrinityPower powerBuff;
 
-        public static SNOPower lastPowerUsed = SNOPower.None;
-        public static SNOPower LastPowerUsed
-        {
-            get { return TrinityPlugin.lastPowerUsed; }
-            set { TrinityPlugin.lastPowerUsed = value; }
-        }
+
 
         public static bool DisableOutofCombatSprint = false;
         public static bool OnlyTarget = false;
@@ -336,7 +325,8 @@ namespace Trinity
         /// <summary>
         /// This contains the active cache of valid objects 
         /// </summary>
-        internal static List<TrinityActor> Targets => Core.Targets.Items;
+        internal static List<TrinityActor> Targets => Core.Targets.Entries;
+
 
         // From main RefreshDiaobjects
         /// <summary>

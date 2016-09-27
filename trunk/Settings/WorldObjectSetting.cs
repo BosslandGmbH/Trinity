@@ -1,11 +1,17 @@
 ﻿using System.ComponentModel;
+using System.Configuration;
 using System.Runtime.Serialization;
+using Trinity.Components.Combat;
 using Trinity.Config.Combat;
+using Trinity.Framework.Objects.Attributes;
+using Trinity.Helpers;
+using Trinity.UIComponents;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Config
 {
     [DataContract(Namespace = "")]
-    public class WorldObjectSetting : ITrinitySetting<WorldObjectSetting>, INotifyPropertyChanged
+    public class WorldObjectSetting : NotifyBase, ITrinitySetting<WorldObjectSetting>
     {
 
         #region Fields
@@ -36,24 +42,17 @@ namespace Trinity.Config
         private DestructibleIgnoreOption _DestructibleOption;
         private bool _EnableBountyEvents;
         private bool _AllowPlayerResurection;
+        private SettingMode _shrineWeighting;
+        private ShrineTypes _shrineTypes;
+        private SettingMode _containerWeighting;
+        private ShrineTypes _containerTypes;
+
         #endregion Fields
 
-        #region Events
-        /// <summary>
-        /// Occurs when property changed.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-        #endregion Events
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorldObjectSetting" /> class.
-        /// </summary>
         public WorldObjectSetting()
         {
             Reset();
         }
-        #endregion Constructors
 
         #region Properties
         [DataMember(IsRequired = false)]
@@ -92,24 +91,26 @@ namespace Trinity.Config
             }
         }
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(true)]
-        public bool UseShrine
-        {
-            get
-            {
-                return _UseShrine;
-            }
-            set
-            {
-                if (_UseShrine != value)
-                {
-                    _UseShrine = value;
-                    OnPropertyChanged("UseShrine");
-                }
-            }
-        }
-        
+        //[DataMember(IsRequired = false)]
+        //[DefaultValue(true)]
+        //public bool UseShrine
+        //{
+        //    get
+        //    {
+        //        return _UseShrine;
+        //    }
+        //    set
+        //    {
+        //        if (_UseShrine != value)
+        //        {
+        //            _UseShrine = value;
+        //            OnPropertyChanged("UseShrine");
+        //        }
+        //    }
+        //}
+
+
+
         [DataMember(IsRequired = false)]
         [DefaultValue(true)]
         public bool UseEnlightenedShrine
@@ -540,7 +541,9 @@ namespace Trinity.Config
                 }
             }
         }
-        
+
+
+
         #endregion Properties
 
         #region Methods
@@ -559,17 +562,7 @@ namespace Trinity.Config
             return TrinitySetting.Clone(this);
         }
 
-        /// <summary>
-        /// Called when property changed.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+
         /// <summary>
         /// This will set default values for new settings if they were not present in the serialized XML (otherwise they will be the type defaults)
         /// </summary>
@@ -577,6 +570,8 @@ namespace Trinity.Config
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {
+            LoadDefaults();
+
             UseEmpoweredShrine = true;
             UseEnlightenedShrine = true;
             UseFleetingShrine = true;

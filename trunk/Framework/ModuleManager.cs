@@ -9,7 +9,7 @@ namespace Trinity.Framework
 {
     public class ModuleManager
     {
-        public static List<WeakReference<Module>> Instances = new List<WeakReference<Module>>();    
+        public static List<WeakReference<Module>> Instances = new List<WeakReference<Module>>();            
 
         public static void EnableAll()
         {
@@ -21,9 +21,9 @@ namespace Trinity.Framework
             ExecuteOnInstances(util => util.IsEnabled = false);
         }
 
-        public static void FireEventAll(ModuleEventType moduleEventType)
+        public static void FireEvent(ModuleEvent moduleEvent)
         {
-            ExecuteOnInstances(util => util.FireEvent(moduleEventType));
+            ExecuteOnInstances(util => util.FireEvent(moduleEvent));
         }
 
         private static void ExecuteOnInstances(Action<Module> action)
@@ -58,11 +58,6 @@ namespace Trinity.Framework
             }
         }
 
-        //private static readonly InterfaceLoader<IDynamicSetting> _dynamicSettings = new InterfaceLoader<IDynamicSetting>();
-        //public static List<IDynamicSetting> DynamicSettings => _dynamicSettings.Items.Values.ToList();
-
-        public static IEnumerable<IDynamicSetting> DynamicSettings => GetModules().OfType<IDynamicSetting>();
-
-
+        public static IEnumerable<IDynamicSetting> DynamicSettings => GetModules().OfType<IDynamicSetting>();        
     }
 }

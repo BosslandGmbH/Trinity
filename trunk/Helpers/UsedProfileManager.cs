@@ -31,8 +31,7 @@ namespace Trinity
 
                     if (currentProfile != TrinityPlugin.CurrentProfile)
                     {
-                        CombatBase.IsQuestingMode = false;
-
+            
                         // See if we appear to have started a new game
                         if (TrinityPlugin.FirstProfile != "" && currentProfile == TrinityPlugin.FirstProfile)
                         {

@@ -108,7 +108,11 @@ namespace Trinity.Components.Adventurer.Cache
 
         public static IEnumerable<ACDItem> StashAndBackpackItems
         {
-            get { return ZetaDia.Me.Inventory.Backpack.Union(ZetaDia.Me.Inventory.StashItems); }
+            get
+            {
+                ZetaDia.Actors.Update();
+                return ZetaDia.Me.Inventory.Backpack.Union(ZetaDia.Me.Inventory.StashItems);
+            }
         }
 
         public static SNOAnim MyCurrentAnimation

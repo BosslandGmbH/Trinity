@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Game;
@@ -26,7 +27,7 @@ namespace Trinity.Framework.Avoidance.Structures
         /// <summary>
         /// Containing Avoidance Data.
         /// </summary>
-        public AvoidanceData Parent;
+        public AvoidanceDefinition Parent;
 
         /// <summary>
         /// If / how this moves
@@ -60,15 +61,14 @@ namespace Trinity.Framework.Avoidance.Structures
         /// </summary>
         public MonsterAffixes Affix { get; set; }
 
-        /// <summary>
-        /// Generally speaking how seriously should we take this.
-        /// </summary>
-        public Severity Severity { get; set; }
-
         public ActorAttributeType Attribute { get; set; }
 
         public SNOPower Power { get; set; }
+
         public SNOAnim Animation { get; set; }
+
+        public List<SNOAnim> Animations { get; set; }
+
         public float AngleDegrees { get; set; }
 
         public Func<TrinityActor, bool> Filter { get; set; }

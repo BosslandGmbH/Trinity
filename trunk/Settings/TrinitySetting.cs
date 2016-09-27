@@ -2,12 +2,12 @@
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Configuration;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
@@ -15,13 +15,13 @@ using System.Windows;
 using System.Xml;
 using Trinity.Config.Combat;
 using Trinity.Framework;
-using Trinity.Framework.Objects;
 using Trinity.Helpers;
+using Trinity.Routines.DemonHunter;
+using Trinity.Settings;
 using Trinity.Settings.Loot;
 using Trinity.Technicals;
 using Zeta.Bot.Settings;
 using Zeta.Game;
-using Extensions = Zeta.Common.Extensions;
 
 namespace Trinity.Config
 {
@@ -38,8 +38,10 @@ namespace Trinity.Config
         private DateTime _LastLoadedSettings;
         private KanaisCubeSetting _kanaisCube;
         private GamblingSetting _gambling;
-        private AvoidanceSetting _avoidance;
+        //private AvoidanceSetting _avoidance;
         private ParagonSetting _paragon;
+        //private RoutineSettingsViewModel _routine;
+        private WeightingSettings _weighting;
 
         #endregion Fields
 
@@ -55,16 +57,17 @@ namespace Trinity.Config
         public static event SettingsEvent OnReset = () => { };
         public static event SettingsEvent OnUserRequestedReset = () => { };
 
-        #endregion Events
+        #endregion Events  
 
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TrinitySetting" /> class.
-        /// </summary>
-        public TrinitySetting(bool initialize = true)
+        public TrinitySetting(bool initialize = true, 
+            [CallerMemberName] string callerName = "", 
+            [CallerFilePath] string callerFile = "", 
+            [CallerLineNumber] int callerLine = 0)
         {
             if (initialize)
             {
+                Logger.LogRaw($"TrinitySetting Initializing by ThreadId={Thread.CurrentThread.ManagedThreadId} by {callerName} File {callerFile} Line {callerLine}");
+
                 Combat = new CombatSetting();
                 WorldObject = new WorldObjectSetting();
                 Loot = new ItemSetting();
@@ -72,9 +75,11 @@ namespace Trinity.Config
                 Notification = new NotificationSetting();
                 KanaisCube = new KanaisCubeSetting();
                 Gambling = new GamblingSetting();
-                Avoidance = new AvoidanceSetting();
+                //Avoidance = new AvoidanceSetting();
                 Paragon = new ParagonSetting();
                 Dynamic = new DynamicSettingGroup();
+                //Routine = new RoutineSettingsViewModel();
+                Weighting = new WeightingSettings();
             }
 
             _FSWatcher = new FileSystemWatcher()
@@ -89,8 +94,6 @@ namespace Trinity.Config
             _LastLoadedSettings = DateTime.MinValue;
         }
 
-        #endregion Constructors
-
         #region Properties
 
         [DataMember(IsRequired = false)]
@@ -98,6 +101,21 @@ namespace Trinity.Config
         {
             get { return _dynamic; }
             set { SetField(ref _dynamic, value); }
+        }
+
+
+        //[DataMember(IsRequired = false)]
+        //public RoutineSettingsViewModel Routine
+        //{
+        //    get { return _routine; }
+        //    set { SetField(ref _routine, value); }
+        //}
+
+        [DataMember(IsRequired = false)]
+        public WeightingSettings Weighting
+        {
+            get { return _weighting; }
+            set { SetField(ref _weighting, value); }
         }
 
         [DataMember(IsRequired = false)]
@@ -134,22 +152,22 @@ namespace Trinity.Config
             }
         }
 
-        [DataMember(IsRequired = false)]
-        public AvoidanceSetting Avoidance
-        {
-            get
-            {
-                return _avoidance;
-            }
-            set
-            {
-                if (_avoidance != value)
-                {
-                    _avoidance = value;
-                    OnPropertyChanged("Avoidance");
-                }
-            }
-        }
+        //[DataMember(IsRequired = false)]
+        //public AvoidanceSetting Avoidance
+        //{
+        //    get
+        //    {
+        //        return _avoidance;
+        //    }
+        //    set
+        //    {
+        //        if (_avoidance != value)
+        //        {
+        //            _avoidance = value;
+        //            OnPropertyChanged("Avoidance");
+        //        }
+        //    }
+        //}
 
 
         [DataMember(IsRequired = false)]
@@ -403,8 +421,6 @@ namespace Trinity.Config
                 }
 
             }
-
-            Logger.UpdatePrefix();
         }
 
         public void FireOnLoadedEvents()
@@ -542,7 +558,7 @@ namespace Trinity.Config
                 });
 
             }
-            Logger.UpdatePrefix();
+
         }
 
         /// <summary>
@@ -551,11 +567,11 @@ namespace Trinity.Config
         public void SaveDynamicSettings()
         {
             Dynamic.Settings.Clear();
-            foreach (var item in ModuleManager.DynamicSettings)
+            foreach (var item in SettingsManager.GetDynamicSettings())
             {
                 Dynamic.Settings.Add(new DynamicSettingNode
                 {
-                    Name = item.Name,
+                    Name = item.GetName(),
                     Code = item.GetCode()
                 });
             }
@@ -713,7 +729,6 @@ namespace Trinity.Config
             }
         }
 
-        private static IEnumerable<string> _ignorePropertyNames = new List<string>();
 
         internal static void CopyTo<T>(ITrinitySetting<T> source, ITrinitySetting<T> destination, IEnumerable<string> ignorePropertyNames = null) where T : class, ITrinitySetting<T>
         {
@@ -819,6 +834,17 @@ namespace Trinity.Config
             }
         }
 
+        internal static void LoadDefaults<T>(ITrinitySetting<T> setting) where T : ITrinitySetting<T>
+        {
+            foreach (var p in setting.GetType().GetProperties())
+            {
+                foreach (var dv in p.GetCustomAttributes(true).OfType<DefaultValueAttribute>())
+                {
+                    p.SetValue(setting, dv.Value);
+                }
+            }
+        }
+
         /// <summary>
         /// Converts a settings object to Xml
         /// </summary>
@@ -861,78 +887,4 @@ namespace Trinity.Config
         #endregion Static Methods
 
     }
-
-    [DataContract(Namespace = "")]
-    [KnownType(typeof(DynamicNodeCollection))]
-    public class DynamicSettingGroup : NotifyBase, ITrinitySetting<DynamicSettingGroup>
-    {
-        private DynamicNodeCollection _settings = new DynamicNodeCollection();
-
-        [DataMember]        
-        public DynamicNodeCollection Settings
-        {
-            get { return _settings; }
-            set { SetField(ref _settings, value); }
-        }
-
-        public void Reset() => Extensions.ForEach(_settings, s => s.Setting.Reset());
-
-        public void CopyTo(DynamicSettingGroup setting)
-        {
-            setting.Settings = new DynamicNodeCollection();
-            foreach (var item in _settings)
-            {
-                setting.Settings.Add(new DynamicSettingNode
-                {
-                    Name = item.Name,
-                    Code = item.Code
-                });
-            }
-        }
-
-        public DynamicSettingGroup Clone()
-        {
-            var settings = new DynamicSettingGroup();
-            foreach (var item in _settings)
-            {
-                settings.Settings.Add(new DynamicSettingNode
-                {
-                    Name = item.Name,
-                    Code = item.Code
-                });
-            }
-            return settings;
-        }
-    }
-
-    [CollectionDataContract(Namespace = "", ItemName = "Node")]
-    public class DynamicNodeCollection : ObservableCollection<DynamicSettingNode> { }
-
-    [DataContract(Namespace = "")]
-    public class DynamicSettingNode : NotifyBase
-    {
-        private string _name;
-        private string _code;
-
-        [IgnoreDataMember]
-        public IDynamicSetting Setting => ModuleManager.DynamicSettings.FirstOrDefault(s => s.Name == Name);
-
-        [DataMember]
-        public string Name
-        {
-            get { return _name; }
-            set { SetField(ref _name, value); }
-        }
-
-        [DataMember]
-        public string Code
-        {
-            get { return _code; }
-            set { SetField(ref _code, value); }
-        }
-    }
-
-
-
-
 }

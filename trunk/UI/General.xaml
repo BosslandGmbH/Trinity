@@ -1,0 +1,140 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ut="clr-namespace:Trinity.UIComponents"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop"
+             xmlns:cc="clr-namespace:CustomControls"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" Background="#474747" Padding="10,0,0,0"
+             d:DesignHeight="1500" d:DesignWidth="450">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <ut:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <ut:PercentConverter x:Key="PercentConverter" />
+            <ut:SliderValueToVisibilityConverter x:Key="SliderValueToVisibilityConverter" />
+            <ut:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
+            <ut:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed"/>
+            <ut:PropertyValueConverter x:Key="propertyValueConverter" />
+            <ut:BoolInverterConverter x:Key="BoolInverterConverter" />
+            <ut:EnumVisibilityConverter x:Key="EnumVisibilityConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer>
+        <StackPanel Margin="0,10,5,0">
+
+            <GroupBox Header="Shrines and Pylons">
+                <StackPanel Margin="0,6,10,0">
+                    <WrapPanel Margin="0,0,0,0">
+                        <RadioButton Foreground="White" Content="Use Shrines" IsChecked="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
+                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                    </WrapPanel>
+                    <StackPanel Margin="0,5,0,0" Visibility="{Binding Weighting.ShrineWeighting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=ShrineTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Containers">
+                <StackPanel Margin="0,6,10,0">
+                    <WrapPanel Margin="0,0,0,0">
+                        <RadioButton Foreground="White" Content="Open Containers" IsChecked="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
+                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                    </WrapPanel>
+                    <StackPanel Margin="0,5,0,0" Visibility="{Binding Weighting.ContainerWeighting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=ContainerTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Globes">
+                <StackPanel Margin="0,6,10,0">
+                    <WrapPanel Margin="0,0,0,0">
+                        <RadioButton Foreground="White" Content="Collect Globes" IsChecked="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
+                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                    </WrapPanel>
+                    <StackPanel Margin="0,5,0,0" Visibility="{Binding Weighting.GlobeWeighting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=GlobeTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <GroupBox.Header>
+                    Paragon
+                </GroupBox.Header>
+                <StackPanel>
+                    <CheckBox Margin="3,10,3,10" IsChecked="{Binding Paragon.IsEnabled}">Spend paragon points</CheckBox>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Auto-Equip">
+                <StackPanel>
+                    <UniformGrid Columns="2">
+                        <CheckBox Content="Items" IsChecked="{Binding Pickup.AutoEquipItems}" Margin="5"/>
+                        <CheckBox Content="Skills" IsChecked="{Binding Pickup.AutoEquipSkills}" Margin="5"/>
+                        <CheckBox Content="Don't Equip Weapons" IsChecked="{Binding Pickup.AutoEquipIgnoreWeapons}" Margin="5"/>
+                        <CheckBox Content="Disable at level 70" IsChecked="{Binding Pickup.DisableAutoEquipAtMaxLevel}" Margin="5"/>
+                    </UniformGrid>
+                </StackPanel>
+            </GroupBox>            
+            
+            <StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0">
+                <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <GroupBox.Header>
+                        Boss Fights
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <WrapPanel Margin="10,10,10,0">
+                            <RadioButton Foreground="White" GroupName="BossMode" Margin="0,0,10,0" Content="Accept" IsChecked="{Binding Path=Misc.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysAccept}" />
+                            <RadioButton Foreground="White" GroupName="BossMode" Margin="0,0,10,0" Content="Decline" IsChecked="{Binding Path=Misc.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysDecline}" />
+                            <RadioButton Foreground="White" GroupName="BossMode" Margin="0,0,10,0" Content="Decline while on Bounty" IsChecked="{Binding Path=Misc.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=DeclineInBounty}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+
+            <StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0">
+                <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <GroupBox.Header>
+                        Goblins
+                    </GroupBox.Header>
+                    <StackPanel Margin="0,6,0,0">
+                        <WrapPanel>
+                            <RadioButton Foreground="White" Content="Attack Goblins" IsChecked="{Binding Path=Misc.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}" />
+                            <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Path=Misc.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}" />
+                            <RadioButton Foreground="White" Content="Prioritize" IsChecked="{Binding Path=Misc.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Prioritize}" />
+                            <RadioButton Foreground="White" Content="Kamikaze" IsChecked="{Binding Path=Misc.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Kamikaze}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+
+            <GroupBox Header="Elites">
+                <StackPanel Margin="0,6,10,0">
+                    <WrapPanel Margin="0,0,0,0">
+                        <RadioButton Foreground="White" Content="Attack Elites" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
+                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                    </WrapPanel>
+                    <StackPanel Margin="0,5,0,0" Visibility="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
+                        <UniformGrid Columns="2" Margin="0,8,0,0" >
+                            <CheckBox IsChecked="{Binding Path=Misc.IgnoreElites}" ToolTip="Attack trash mobs only">Ignore Elite/Rare/Unique</CheckBox>
+                            <CheckBox IsChecked="{Binding Misc.IgnoreRares}" Content="Ignore Yellow/Rare Packs"/>
+                            <CheckBox IsChecked="{Binding Misc.IgnoreMinions}" Content="Ignore Minions"/>
+                            <CheckBox IsChecked="{Binding Misc.IgnoreChampions}" Content="Ignore Blue/Champ Packs"/>
+                        </UniformGrid>
+                        <Label Margin="0,8,0,-2" FontWeight="Bold">Ignore By Affix:</Label>
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Misc, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=IgnoreAffixes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

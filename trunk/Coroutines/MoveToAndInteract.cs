@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Components.Combat;
+using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Helpers;
 using Trinity.Objects;
-using TrinityCoroutines.Resources;
 using Zeta.Bot.Navigation;
-using Zeta.Bot.Profile.Common;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Technicals.Logger;
 
-namespace TrinityCoroutines
+namespace Trinity.Coroutines
 {
     public class MoveToAndInteract
     {

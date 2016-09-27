@@ -13,6 +13,8 @@ namespace Trinity.Framework.Objects.Memory
         public int CurrentGameLevel => ReadOffset<int>(0x30);
 
         public Difficulty CurrentDifficulty => (Difficulty)ReadOffset<int>(0x04)+1;
+
+        public int GameTick => ReadOffset<int>(0x118);
     }
 
 }

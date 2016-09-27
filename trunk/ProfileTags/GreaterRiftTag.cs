@@ -55,7 +55,7 @@ namespace Trinity.ProfileTags
                 NormalRiftForXPShrine = IsGetXPShrine || PluginSettings.Current.NormalRiftForXPShrine,
             };
 
-            CombatBase.CombatMode = CombatMode.Normal;
+            Combat.CombatMode = CombatMode.Normal;
             PluginEvents.CurrentProfileType = ProfileType.Rift;
 
             _stopwatch.Start();

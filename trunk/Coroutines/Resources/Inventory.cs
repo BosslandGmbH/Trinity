@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Buddy.Coroutines;
-using Trinity.Components.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Helpers;
-using Trinity.Items;
 using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Game;
-using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using ActorManager = Trinity.Framework.Actors;
 
-namespace TrinityCoroutines.Resources
+namespace Trinity.Coroutines.Resources
 {
     /// <summary>
     /// Enum InventoryItemType - this is not finalized, i don't have all the items

@@ -764,10 +764,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
 
                     //}
 
-                    if (VisibilityFlags.HasFlag(RadarVisibilityFlags.CombatRadius))
-                    {
-                        DrawCombatRadius(dc, CanvasData);
-                    }
+                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.CombatRadius))
+                    //{
+                    //    DrawCombatRadius(dc, CanvasData);
+                    //}
 
                     //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.UnwalkableNodes))
                     //{
@@ -783,7 +783,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     {
                         foreach (var actor in avoidance.Actors)
                         {
-                            var part = avoidance.Data.GetPart(actor.ActorSnoId);
+                            var part = avoidance.Definition.GetPart(actor.ActorSnoId);
                             if (part != null)
                             {
                                 var r = part.Radius * GridSize;
@@ -1004,7 +1004,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         {
             try
             {
-                var target = CombatBase.CurrentTarget;
+                var target = Combat.Targeting.CurrentTarget;
                 if (target == null)
                     return;
 
@@ -1046,10 +1046,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         {
             try
             {
-                if (!Core.Avoidance.KiteNodeLayer.Any())
+                if (!Core.Avoidance.GridEnricher.KiteNodeLayer.Any())
                     return;
 
-                foreach (var pos in Core.Avoidance.KiteNodeLayer)
+                foreach (var pos in Core.Avoidance.GridEnricher.KiteNodeLayer)
                 {
                     dc.DrawEllipse(null, new Pen(LineGreenBrush, 1 * Scale), pos.NavigableCenter.ToCanvasPoint(), 4 * Scale, 4 * Scale);
                 }
@@ -1064,10 +1064,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
         {
             try
             {
-                if (!Core.Avoidance.KiteFromLayer.Any())
+                if (!Core.Avoidance.GridEnricher.KiteFromLayer.Any())
                     return;
 
-                foreach (var pos in Core.Avoidance.KiteFromLayer)
+                foreach (var pos in Core.Avoidance.GridEnricher.KiteFromLayer)
                 {
                     dc.DrawEllipse(null, new Pen(RadarResources.LabelBrush, 1 * Scale), pos.NavigableCenter.ToCanvasPoint(), 4 * Scale, 4 * Scale);
                 }
@@ -1084,7 +1084,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             {
                 Vector3 position;
 
-                foreach (var node in Core.Avoidance.SafeNodeLayer)
+                foreach (var node in Core.Avoidance.GridEnricher.SafeNodeLayer)
                 {
                     dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), 3 * Scale, 3 * Scale);
                 }
@@ -1107,10 +1107,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 if (Core.Avoidance.IsUpdatingNodes)
                     return;
 
-                if (Core.Avoidance.CurrentNodes == null)
+                if (Core.Avoidance.GridEnricher.CurrentNodes == null)
                     return;
 
-                foreach (var node in Core.Avoidance.CurrentNodes)
+                foreach (var node in Core.Avoidance.GridEnricher.CurrentNodes)
                 {
                     DrawNavNode(dc, canvas, node);
                 }
@@ -1167,7 +1167,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             {
                 var weightedBrush = RadarResources.GetWeightedBrush(node.Weight, node.WeightPct);
 
-                if (node.Weight > 2 && Core.Avoidance.HighestNodeWeight > 2)
+                if (node.Weight > 2 && Core.Avoidance.GridEnricher.HighestNodeWeight > 2)
                 {
                     dc.DrawEllipse(weightedBrush, null, node.NavigableCenter.ToCanvasPoint(), size * 1.5, size * 1.5);
                 }
@@ -1199,10 +1199,10 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                 dc.DrawEllipse(DarkGrayBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
             }
 
-            if (!node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk) && VisibilityFlags.HasFlag(RadarVisibilityFlags.UnwalkableNodes))
-            {
-                dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
-            }
+            //if (!node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk) && VisibilityFlags.HasFlag(RadarVisibilityFlags.UnwalkableNodes))
+            //{
+            //    dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
+            //}
         }
 
         ///// <summary>

@@ -11,13 +11,12 @@ namespace Trinity.UIComponents
         {
             string parameterString = parameter as string;
             if (parameterString == null)
-                return DependencyProperty.UnsetValue;
+                return Binding.DoNothing;
 
             if (Enum.IsDefined(value.GetType(), value) == false)
-                return DependencyProperty.UnsetValue;
+                return Binding.DoNothing;
 
             object parameterValue = Enum.Parse(value.GetType(), parameterString);
-
 
             return parameterValue.Equals(value);
         }
@@ -25,8 +24,8 @@ namespace Trinity.UIComponents
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             string parameterString = parameter as string;
-            if (parameterString == null)
-                return DependencyProperty.UnsetValue;
+            if (parameterString == null || value.Equals(false))
+                return Binding.DoNothing;
 
             return Enum.Parse(targetType, parameterString);
         }

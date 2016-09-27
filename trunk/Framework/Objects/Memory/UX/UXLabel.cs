@@ -7,4 +7,5 @@
         public int FontSize => ReadOffset<int>(0xA28);
         public int TextLength => ReadOffset<int>(0xA30);
     }
+
 }

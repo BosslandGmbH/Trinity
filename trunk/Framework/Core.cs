@@ -10,8 +10,12 @@ using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Movement;
 using Trinity.ProfileTags;
+using Trinity.Routines;
+using Trinity.Technicals;
+using Trinity.UI;
 using Trinity.UI.UIComponents;
 using Zeta.Bot;
+using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 
@@ -20,16 +24,20 @@ namespace Trinity.Framework
     public static class Core
     {
         public static bool IsEnabled { get; private set; }
+
         public static MemoryModel MemoryModel { get; } = new MemoryModel();
 
         // Components
         public static Adventurer Adventurer { get; } = new Adventurer();
-        //public static AutoFollow AutoFollow { get; } = new AutoFollow();
+
+        public static RoutineManager Routines => RoutineManager.Instance;
+
+        public static InventoryCache Inventory { get; } = new InventoryCache();
 
         // Modules
         public static ActorCache Actors { get; } = new ActorCache();
         public static HotbarCache Hotbar { get; } = new HotbarCache();
-        public static InventoryCache Inventory { get; } = new InventoryCache();
+
         public static PlayerCache Player { get; } = new PlayerCache();
         public static BuffsCache Buffs { get; } = new BuffsCache();
         public static TargetsCache Targets { get; } = new TargetsCache();
@@ -51,30 +59,15 @@ namespace Trinity.Framework
         public static PlayerMover PlayerMover { get; } = new PlayerMover();
         public static StuckHandler StuckHandler { get; } = new StuckHandler();
         public static BlockedCheck BlockedCheck { get; } = new BlockedCheck();
+        public static ChangeMonitor ChangeMonitor { get; } = new ChangeMonitor();
 
         public static TrinitySetting Settings => TrinityPlugin.Settings;        
 
-        public static void Enable()
-        {
-            if (!IsEnabled)
-            {
-                IsEnabled = true;                
-                Pulsator.OnPulse += Pulse;
-                GameEvents.OnWorldChanged += OnWorldChanged;
-                GameEvents.OnGameJoined += OnGameJoined;
-                ModuleManager.EnableAll();
-            }
-        }
+        private static void OnGameJoined(object sender, EventArgs e) => ModuleManager.FireEvent(ModuleEvent.GameJoined);        
+        private static void OnWorldChanged(object sender, EventArgs eventArgs) => ModuleManager.FireEvent(ModuleEvent.WorldChanged);
 
-        private static void OnGameJoined(object sender, EventArgs e)
-        {
-            ModuleManager.FireEventAll(ModuleEventType.GameJoined);
-        }
+        public static bool GameIsReady => ZetaDia.IsInGame && ZetaDia.Me.IsValid && !ZetaDia.IsLoadingWorld && !ZetaDia.IsPlayingCutscene;
 
-        private static void OnWorldChanged(object sender, EventArgs eventArgs)
-        {
-            ModuleManager.FireEventAll(ModuleEventType.WorldChanged);
-        }
 
         private static void Pulse(object sender, EventArgs eventArgs)
         {
@@ -92,14 +85,34 @@ namespace Trinity.Framework
 
         public static void Update(bool force = false)
         {
-            ModuleManager.FireEventAll(force ? ModuleEventType.ForcedPulse : ModuleEventType.Pulse);
+            ModuleManager.FireEvent(force ? ModuleEvent.ForcedPulse : ModuleEvent.Pulse);
         }
 
         public static void Init()
-        {            
-            Enable();
+        {
+            
         }
 
+        public static void Enable()
+        {                  
+            if (!IsEnabled)
+            {
+                ZetaDia.Actors.Update();
+                Pulsator.OnPulse += Pulse;
+                GameEvents.OnWorldChanged += OnWorldChanged;
+                GameEvents.OnGameJoined += OnGameJoined;
+                ModuleManager.EnableAll();
+
+                ZetaDia.Actors.Update();
+                Actors.Update();
+                Inventory.Update();
+                Hotbar.Update();
+                Routines.AutoSelectRoutine();
+
+                Logger.Log("Trinity Framework Enabled");
+                IsEnabled = true;
+            }
+        }
     }
 
 }

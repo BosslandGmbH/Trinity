@@ -274,6 +274,12 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             return default(T);
         }
 
+        internal AttributeItem GetFirstCachedAttributeItem(ActorAttributeType attr)
+        {
+            var foundAttribute = Items.FirstOrDefault(IsAttributeMatch(attr));
+            return foundAttribute.Value;
+        }
+
         internal T GetCachedAttribute<T>(Predicate<AttributeItem> condition = null)
         {
             foreach (var item in Items.Where(item => condition == null || condition(item.Value)))
@@ -296,7 +302,6 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal T GetCachedAttribute<T>(AttributeKey key)
         {
-
             AttributeItem foundAttribute;
             if (!Items.TryGetValue(key.Value, out foundAttribute))
                 return default(T);

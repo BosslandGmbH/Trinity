@@ -21,6 +21,9 @@ namespace Trinity.Framework.Modules
 
         public void SpendPoints()
         {
+            if (ZetaDia.Me == null)
+                return;
+
             if (!Core.Settings.Paragon.IsEnabled)
                 return;
 

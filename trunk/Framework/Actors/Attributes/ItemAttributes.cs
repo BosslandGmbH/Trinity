@@ -42,9 +42,10 @@ namespace Trinity.Framework.Actors.Attributes
         public Dictionary<DamageType, float> DamageDeltas => GetCachedAttributes<DamageType, float>(ActorAttributeType.DamageDelta); // DamageDelta (210) = i:1120927744 f:104 v:104 ModifierType=DamageType Modifier=0 
         public Dictionary<DamageType, float> DamageWeaponMaxTotals => GetCachedAttributes<DamageType, float>(ActorAttributeType.DamageWeaponMaxTotal); // 223: DamageWeaponMaxTotal(-3873) [DamageType: Poison: 4 ]  i:0 f:1825 Value=1825 
 
-
         public float DamageWeaponMin => GetFirstCachedAttribute<float>(ActorAttributeType.DamageWeaponMin); // DamageWeaponMin (16613) = i:1151246336 f:1269 v:1269 ModifierType=DamageType Modifier=4 
         public float DamageWeaponDelta => GetFirstCachedAttribute<float>(ActorAttributeType.DamageWeaponDelta); // DamageWeaponDelta (220) = i:1129709568 f:214 v:214 ModifierType=DamageType Modifier=0 
+
+        public float DamageWeaponMax => GetFirstCachedAttribute<float>(ActorAttributeType.DamageWeaponMax); // 223: DamageWeaponMaxTotal(-3873) [DamageType: Poison: 4 ]  i:0 f:1825 Value=1825 
         public float DamageWeaponMaxTotal => GetFirstCachedAttribute<float>(ActorAttributeType.DamageWeaponMaxTotal); // 223: DamageWeaponMaxTotal(-3873) [DamageType: Poison: 4 ]  i:0 f:1825 Value=1825 
         public float DamageDealtPercentBonus => GetFirstCachedAttribute<float>(ActorAttributeType.DamageDealtPercentBonus); // DamageDealtPercentBonus (242) = i:1044549468 f:0.19 v:0.19 ModifierType=DamageType Modifier=0 
         public float DamageWeaponPercentTotal => GetFirstCachedAttribute<float>(ActorAttributeType.DamageWeaponPercentTotal); // DamageWeaponPercentTotal (240) = i:1035489772 f:0.09 v:0.09 ModifierType=DamageType Modifier=0 
@@ -70,7 +71,8 @@ namespace Trinity.Framework.Actors.Attributes
         public float BlockChanceItem => GetCachedAttribute<float>(ActorAttributeType.BlockChanceItem); // BlockChanceItem (-3834) = i:1040515072 f:0.1298828 v:0.1298828 ModifierType=None Modifier=-1 
         public float BlockChanceBonusItem => GetCachedAttribute<float>(ActorAttributeType.BlockChanceBonusItem); // BlockChanceBonusItem (-3835) = i:1038172160 f:0.1099854 v:0.1099854 ModifierType=None Modifier=-1 
         public float ResourceCostReductionPercentAll => GetCachedAttribute<float>(ActorAttributeType.ResourceCostReductionPercentAll); // ResourceCostReductionPercentAll (-3364) = i:1028440064 f:0.04998779 v:0.04998779 ModifierType=None Modifier=-1 
-        public float AttacksPerSecondPercent => GetCachedAttribute<float>(ActorAttributeType.AttacksPerSecondItemPercent); // AttacksPerSecondPercent (-3895) = i:1032805417 f:0.07 v:0.07 ModifierType=None Modifier=-1 
+        public float AttacksPerSecondItemPercent => GetCachedAttribute<float>(ActorAttributeType.AttacksPerSecondItemPercent) * 100; // AttacksPerSecondPercent (-3895) = i:1032805417 f:0.07 v:0.07 ModifierType=None Modifier=-1 
+        public float AttacksPerSecondPercent => GetCachedAttribute<float>(ActorAttributeType.AttacksPerSecondPercent) * 100; // AttacksPerSecondPercent (-3895) = i:1032805417 f:0.07 v:0.07 ModifierType=None Modifier=-1 
         public bool IsAncient => GetAttribute<bool>(ActorAttributeType.AncientRank); // AncientRank (-3691) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1 
         public bool IsUnidentified => GetAttribute<bool>(ActorAttributeType.Unidentified); // AncientRank (-3691) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1 
         public int Post212Drop2 => GetCachedAttribute<int>(ActorAttributeType.Post212Drop2); // Post212Drop2 (-3692) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1 
@@ -141,7 +143,6 @@ namespace Trinity.Framework.Actors.Attributes
         public float ResistanceAll => GetCachedAttribute<float>(ActorAttributeType.ResistanceAll); // ResistanceAll (-4000) = i:1120141312 f:98 v:98 ModifierType=None Modifier=-1 
         public float DamagePercentReductionFromRanged => GetCachedAttribute<float>(ActorAttributeType.DamagePercentReductionFromRanged); // DamagePercentReductionFromRanged (-2980) = i:1031127696 f:0.06 v:0.06 ModifierType=None Modifier=-1 
         public float ArmorBonusItem => GetCachedAttribute<float>(ActorAttributeType.ArmorBonusItem); // ArmorBonusItem (-4062) = i:1137082368 f:397 v:397 ModifierType=None Modifier=-1 
-        public float AttacksPerSecondItemPercent => GetCachedAttribute<float>(ActorAttributeType.AttacksPerSecondItemPercent); // AttacksPerSecondItemPercent (-3903) = i:1031127695 f:0.06 v:0.06 ModifierType=None Modifier=-1 
         public float WeaponOnHitFearProcChance => GetCachedAttribute<float>(ActorAttributeType.WeaponOnHitFearProcChance); // WeaponOnHitFearProcChance (-2968) = i:1037590528 f:0.1056519 v:0.1056519 ModifierType=None Modifier=-1 
         public int ItemStackQuantity => (int)((long)ItemStackQuantityHi << 32 | (uint)ItemStackQuantityLo);
         public bool IsTradeable => GetCachedAttribute<bool>(ActorAttributeType.ItemTradeEndTime);
@@ -206,7 +207,7 @@ namespace Trinity.Framework.Actors.Attributes
         public float ChanceToBlind => GetCachedAttribute<float>(ActorAttributeType.OnHitBlindProcChance);
         public float ChanceToImmobilize => GetCachedAttribute<float>(ActorAttributeType.OnHitImmobilizeProcChance);
         public float ChanceToStun => GetCachedAttribute<float>(ActorAttributeType.OnHitStunProcChance);
-        public float MaxDiscipline => GetCachedAttribute<float>(ActorAttributeType.ResourceMaxPercentBonusDiscipline);
+        public float MaxDiscipline => GetCachedAttribute<float>(ActorAttributeType.ResourceMaxBonus, (int)ResourceType.Discipline);
         public float MaxMana => GetCachedAttribute<float>(ActorAttributeType.ResourceMaxPercentBonusMana);
         public float MaxArcanePower => GetCachedAttribute<float>(ActorAttributeType.ResourceMaxPercentBonusArcanum);
         public float MaxSpirit => GetCachedAttribute<float>(ActorAttributeType.ResourceMaxPercentBonusSpirit);
@@ -250,21 +251,16 @@ namespace Trinity.Framework.Actors.Attributes
         {
             get
             {
-                var dmg = DamageWeaponBonusMinX1;
-                if (Math.Abs(dmg) > float.Epsilon)
-                {
-                    return dmg + DamageWeaponBonusDeltaX1;
-                }
-                var max = DamageWeaponMaxTotal;
-                if (Math.Abs(max) > float.Epsilon)
-                {
-                    return max;
-                }
-                return DamageWeaponMin + DamageWeaponDeltaTotalMainHand;
+                var minAttr = GetFirstCachedAttributeItem(ActorAttributeType.DamageWeaponMin);
+                var min = minAttr.GetValue<float>();
+                var damageTypeId = (int)minAttr.Modifer;
+                var delta = GetCachedAttribute<float>(ActorAttributeType.DamageWeaponDeltaSubTotal, damageTypeId);
+                return min + delta;
+
             }
         }
-        public float MinDamage => DamageWeaponMaxTotal - DamageWeaponDelta;
 
+        public float MinDamage => DamageWeaponMin;
 
         public string Summary()
         {
