@@ -1,104 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Demonbuddy.Routines.Generic;
-using Trinity.Framework.Objects.Memory.Misc;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
+using Trinity.Framework.Helpers;
 using Trinity.Helpers;
 using Trinity.Reference;
-using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Objects
 {
+    [DataContract(Namespace = "")]
     public class SkillSettings : NotifyBase
     {
-        public SkillSettings()
-        {
-            Items = new FullyObservableCollection<SkillUsage>();            
-        }
-
-        private ActorClass _actorClass;
-        private string _name;
-        private string _description;
-        private string _author;
-        private string _version;
-        private FullyObservableCollection<SkillUsage> _items;
-
-        public ActorClass ActorClass
-        {
-            get { return _actorClass; }
-            set { SetField(ref _actorClass, value); }
-        }
-
-        public string Name
-        {
-            get { return _name; }
-            set { SetField(ref _name, value); }
-        }
-
-        public string Description
-        {
-            get { return _description; }
-            set { SetField(ref _description, value); }
-        }
-
-        public string Author
-        {
-            get { return _author; }
-            set { SetField(ref _author, value); }
-        }
-
-        public string Version
-        {
-            get { return _version; }
-            set { SetField(ref _version, value); }
-        }
-
-        public override void LoadDefaults()
-        {
-            var items = new FullyObservableCollection<SkillUsage>();
-            foreach (var skill in SkillUtils.ByActorClass(ActorClass))
-            {
-                items.Add(skill.GetDefaultSetting());
-            }
-            Items = items;
-        }
-
-        public FullyObservableCollection<SkillUsage> Items
-        {
-            get { return _items; }
-            set { SetField(ref _items, value); }
-        }        
-    }
-
-    public class SkillUsage : NotifyBase
-    {
-        private SNOPower _snoPower;
         private float _castRange;
         private float _clusterSize;
-        private float _resourcePct;
+        private float _primaryResourcePct;
+        private float _secondaryResourcePct;
         private float _healthPct;
-        private float _recastDelayMs;
-        private SkillUseTime _useTime;
-        private SkillUseReasons _reasons;
-        private SkillUseTarget _target;
-
-        /// <summary>
-        /// Skill these settings are for.
-        /// </summary>
-        public SNOPower SnoPower
-        {
-            get { return _snoPower; }
-            set { SetField(ref _snoPower, value); }
-        }
+        private int _recastDelayMs;
+        private UseTime _useTime;
+        private UseReasons _reasons;
+        private UseTarget _target;
+        private ConventionMode _waitForConvention;
 
         /// <summary>
         /// Monster must be this close before a spell is cast.
         /// </summary>
+        [DataMember(EmitDefaultValue = false)]
         public float CastRange
         {
             get { return _castRange; }
@@ -108,6 +36,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Monsters must be in a group of this many before spell can be cast.
         /// </summary>
+        [DataMember(EmitDefaultValue = false)]
         public float ClusterSize
         {
             get { return _clusterSize; }
@@ -115,17 +44,29 @@ namespace Trinity.Objects
         }
 
         /// <summary>
-        /// Player resource must be above (generally) or below (in some cases) this amount to cast spell.
+        /// Player resource must be above this to cast spell.
         /// </summary>
-        public float ResourcePct
+        [DataMember(EmitDefaultValue = false)]
+        public float PrimaryResourcePct
         {
-            get { return _resourcePct; }
-            set { SetField(ref _resourcePct, value); }
+            get { return _primaryResourcePct; }
+            set { SetField(ref _primaryResourcePct, value); }
+        }
+
+        /// <summary>
+        /// Player resource must be above this to cast spell.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public float SecondaryResourcePct
+        {
+            get { return _secondaryResourcePct; }
+            set { SetField(ref _secondaryResourcePct, value); }
         }
 
         /// <summary>
         /// Player health must be below this amount to cast spell
         /// </summary>
+        [DataMember(EmitDefaultValue = false)]
         public float HealthPct
         {
             get { return _healthPct; }
@@ -135,7 +76,8 @@ namespace Trinity.Objects
         /// <summary>
         /// Minimum time that must pass before casting again is allowed
         /// </summary>
-        public float RecastDelayMs
+        [DataMember(EmitDefaultValue = false)]
+        public int RecastDelayMs
         {
             get { return _recastDelayMs; }
             set { SetField(ref _recastDelayMs, value); }
@@ -144,16 +86,28 @@ namespace Trinity.Objects
         /// <summary>
         /// When this spell can be used.
         /// </summary>
-        public SkillUseTime UseTime
+        [DataMember(EmitDefaultValue = false)]
+        public UseTime UseTime
         {
             get { return _useTime; }
             set { SetField(ref _useTime, value); }
         }
 
         /// <summary>
+        /// How convention of elements ring should be handled.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        public ConventionMode WaitForConvention
+        {
+            get { return _waitForConvention; }
+            set { SetField(ref _waitForConvention, value); }
+        }
+
+        /// <summary>
         /// Situations when the spell should be used.
         /// </summary>
-        public SkillUseReasons Reasons
+        [DataMember(EmitDefaultValue = false)]
+        public UseReasons Reasons
         {
             get { return _reasons; }
             set { SetField(ref _reasons, value); }
@@ -162,35 +116,53 @@ namespace Trinity.Objects
         /// <summary>
         /// When this spell can be used.
         /// </summary>
-        public SkillUseTarget Target
+        [DataMember(EmitDefaultValue = false)]
+        public UseTarget Target
         {
             get { return _target; }
             set { SetField(ref _target, value); }
         }
 
-        public override void LoadDefaults()
-        {
-            SkillUtils.ById(SnoPower).GetDefaultSetting();
-        }
+        #region Delegates
 
+        [IgnoreDataMember]
+        public Func<bool> BuffCondition { get; set; }
+
+        [IgnoreDataMember]
+        public Func<bool> ConventionCondition { get; set; }
+
+        #endregion
+
+        public SkillSettings Clone()
+        {
+            var newObj = new SkillSettings();
+            PropertyCopy.Copy(this, newObj);
+            return newObj;
+        }
     }
 
-    public enum SkillUseTime
+    public enum UseTime
     {
         [Description("Use when it seems like a good idea")]
         AnyTime = 0,
 
-        [Description("Use when not on cooldown")]
+        [Description("Whenever Possible")]
         Always,
+
+        [Description("Dont use it")]
+        Never,
 
         [Description("Use when in combat only")]
         InCombat,
 
         [Description("Use when not in combat only")]
-        OutOfCombat
+        OutOfCombat,
+
+        [Description("Use restricted by other settings")]
+        Selective,
     }
 
-    public enum SkillUseTarget
+    public enum UseTarget
     {
         [Description("Use on default target")]
         Default = 0,
@@ -206,41 +178,50 @@ namespace Trinity.Objects
 
         [Description("Cast on the best cluster")]
         BestCluster,
+
+        [Description("Cast on a safe location")]
+        SafeSpot,
     }
 
     [Flags]
-    public enum SkillUseReasons
+    public enum UseReasons : uint
     {
         None = 0,
 
         [Description("Use when avoiding")]
-        Avoidance = 1 << 0,
+        Avoiding = 1,
 
         [Description("Use for movement")]
-        Movement = 1 << 1,
+        Movement = 2,
 
         [Description("Use when surrounded by monsters")]
-        Surrounded = 1 << 2,
+        Surrounded = 4,
 
         [Description("Use when elites are nearby or targetted")]
-        Elites = 1 << 3,
+        Elites = 8,
 
         [Description("Use to continually spend player resource")]
-        DumpResource = 1 << 4,
+        DumpResource = 16,
 
         [Description("Use when goblins are nearby or targetted")]
-        Goblins = 1 << 5,
+        Goblins = 32,
 
         [Description("Use when player is in trouble")]
-        HealthEmergency = 1 << 6,
+        HealthEmergency = 64,
 
         [Description("Use when the target's movement is blocked")]
-        Blocked = 1 << 7,
+        Blocked = 128,
 
-        All = ~(1 << 8),
+        [Description("Use associated with a buff")]
+        Buff = 256,
     }
+
+    public enum ConventionMode
+    {
+        Always,
+        GreaterRift,
+        Never,
+    }
+
 }
-
-
-
 

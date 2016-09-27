@@ -94,11 +94,13 @@
             </GroupBox.Header>
             <StackPanel>
 
-                <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">TrinityPlugin will spend your paragon points automatically every now and then. Drag the items below within each group to prioritize how they are spent.</TextBlock>
+                <CheckBox Margin="3,10,3,10" IsChecked="{Binding Paragon.IsEnabled}">Spend paragon points</CheckBox>
+                <CheckBox Margin="3,0,3,10" IsChecked="{Binding Paragon.IsCustomize}">Customize priority and limits</CheckBox>
 
-                <CheckBox Margin="3,0,3,10" IsChecked="{Binding Paragon.IsEnabled}">Spend Paragon Points</CheckBox>
+                <StackPanel Visibility="{Binding Paragon.IsCustomize, Converter={StaticResource VisibleWhenTrueConverter}}">
 
-                <StackPanel Visibility="{Binding Paragon.IsEnabled, Converter={StaticResource VisibleWhenTrueConverter}}">
+                    <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">Drag the items below within each group to prioritize how they are spent.</TextBlock>
+
                     <Label>Core:</Label>
                     <ListBox Grid.Row="1" Grid.Column="0" Padding="5"
                         ItemsSource="{Binding Paragon.CoreParagonPriority}"

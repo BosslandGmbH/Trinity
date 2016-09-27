@@ -8,6 +8,7 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Trinity.Technicals;
+using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -27,6 +28,7 @@ namespace Trinity.Objects
         private Element _element;
         private bool _isDamaging;
         private float _areaEffectRadius;
+        private SNOPower _snoPower;
 
         public Skill()
         {
@@ -56,7 +58,22 @@ namespace Trinity.Objects
         /// <summary>
         /// DBs internal enum value for this skill
         /// </summary>
-        public SNOPower SNOPower { get; set; }
+        public SNOPower SNOPower
+        {
+            get
+            {
+                if (SNOPowers != null && SNOPowers.Any())
+                {
+                    var activePower = Core.Hotbar.ActivePowers.FirstOrDefault(p => SNOPowers.Contains(p));
+                    if (activePower != default(SNOPower))
+                    {
+                        return activePower;
+                    }
+                }
+                return _snoPower;
+            }
+            set { _snoPower = value; }
+        }
 
         /// <summary>
         /// Name of the group of skills this belongs to as listed in d3 skill selection menu
@@ -92,6 +109,7 @@ namespace Trinity.Objects
 
         /// <summary>
         /// Blizzards game guide classifies some skills with a primary flag
+        /// This is used for whether a skill can be assigned to the mouse buttons.
         /// </summary>
         public bool IsPrimary { get; set; }
 
@@ -151,10 +169,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Milliseconds until spell is off cooldown
         /// </summary>
-        public int CooldownRemaining
-        {
-            get { return (int)Core.Cooldowns.GetSkillCooldownRemaining(SNOPower).TotalMilliseconds; }
-        }    
+        public int CooldownRemaining => (int)Core.Cooldowns.GetSkillCooldownRemaining(SNOPower).TotalMilliseconds;
 
         /// <summary>
         /// Element for this skill (lightning/fire etc); uses rune value when applicable.
@@ -168,10 +183,7 @@ namespace Trinity.Objects
         /// <summary>
         /// If this passive is currently selected in the Diablo3 skills menu (skill is on the hotbar).
         /// </summary>
-        public bool IsActive
-        {
-            get { return SkillUtils.ActiveIds.Contains(SNOPower); }
-        }
+        public bool IsActive => SkillUtils.ActiveIds.Contains(SNOPower);
 
         /// <summary>
         /// Check if skill spend primary ressource
@@ -218,18 +230,12 @@ namespace Trinity.Objects
         /// <summary>
         /// If the skill's associated buff is currently active, ie, archon, warcry etc.
         /// </summary>
-        public bool IsBuffActive
-        {
-            get { return CombatBase.GetHasBuff(SNOPower); }
-        }
+        public bool IsBuffActive => Core.Player.HasBuff(SNOPower);
 
         /// <summary>
         /// Gets the current buff stack count
         /// </summary>
-        public int BuffStacks
-        {
-            get { return CombatBase.GetBuffStacks(SNOPower); }
-        }
+        public int BuffStacks => Core.Buffs.GetBuffStacks(SNOPower);
 
         /// <summary>
         /// The currently selected rune for this skill.        
@@ -263,26 +269,18 @@ namespace Trinity.Objects
             get
             {
                 if (ZetaDia.IsInGame && ZetaDia.Me.IsValid && IsActive)
-                    return Core.Hotbar.GetSkill(SNOPower).Rune != null;
+                    return Core.Hotbar.GetHotbarSkill(SNOPower).Rune != null;
 
                 return false;
             }
         }
 
         /// <summary>
-        /// Check if skill can and should be cast
+        /// Check if the spell is can be cast
         /// </summary>
         public bool CanCast()
         {
-            return CombatBase.CanCast(this);
-        }
-
-        /// <summary>
-        /// Performs basic checks to see if we have and can cast a power (hotbar, power manager). Checks use timer for Wiz, DH, Monk
-        /// </summary>
-        public bool CanCast(CombatBase.CanCastFlags flags)
-        {
-            return CombatBase.CanCast(SNOPower, flags);
+            return Combat.Spells.CanCast(this);
         }
 
         /// <summary>
@@ -296,10 +294,11 @@ namespace Trinity.Objects
         /// <summary>
         /// Time since last used in milliseconds
         /// </summary>
-        public double TimeSinceUse
-        {
-            get { return DateTime.UtcNow.Subtract(LastUsed).TotalMilliseconds; }
-        }
+        public double TimeSinceUse => DateTime.UtcNow.Subtract(LastUsed).TotalMilliseconds;
+
+        public float DistanceFromLastUsePosition => SpellHistory.DistanceFromLastUsePosition(SNOPower);
+
+        public bool IsLastUsed => SpellHistory.LastPowerUsed == SNOPower;
 
         /// <summary>
         /// When this spell was last used
@@ -309,7 +308,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Gets the current skill charge count
         /// </summary>
-        public int Charges { get{ return CombatBase.GetSkillCharges(SNOPower); }}
+        public int Charges => Core.Hotbar.GetSkillCharges(SNOPower);
 
         /// <summary>
         /// This skill as TrinityPower
@@ -341,7 +340,7 @@ namespace Trinity.Objects
         /// </summary>
         public TrinityPower ToPower(float minimumRange, Vector3 targetPosition, int AcdId, int waitTicksBeforeUse, int waitTicksAfterUse)
         {
-            return new TrinityPower(SNOPower, minimumRange, targetPosition, Core.Player.WorldDynamicID, AcdId, waitTicksBeforeUse, waitTicksAfterUse);
+            return new TrinityPower(SNOPower, minimumRange, targetPosition, AcdId, waitTicksBeforeUse, waitTicksAfterUse);
         }
 
         /// <summary>
@@ -371,6 +370,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Cast this skill at the current position
         /// </summary>
+        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
         public bool Cast()
         {
             return Cast(Core.Player.Position, -1);
@@ -379,6 +379,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Cast this skill at the specified position
         /// </summary>
+        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
         public bool Cast(Vector3 position)
         {
             return Cast(position, -1);
@@ -387,6 +388,7 @@ namespace Trinity.Objects
         /// <summary>
         /// Cast this skill at the specified target
         /// </summary>
+        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
         public bool Cast(TrinityActor target)
         {
             return Cast(target.Position, target.AcdId);
@@ -395,41 +397,18 @@ namespace Trinity.Objects
         /// <summary>
         /// Cast this speed using TrinityPower
         /// </summary>
+        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
         public bool Cast(TrinityPower power)
         {
             return Cast(power.TargetPosition, power.TargetAcdId);
         }
 
-        /// <summary>
-        /// Cast this skill
-        /// </summary>
+        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
         public bool Cast(Vector3 clickPosition, int targetAcdId)
         {
-            if (SNOPower != SNOPower.None && clickPosition != Vector3.Zero && IsActive && GameIsReady)
-            {
-                Logger.LogVerbose(LogCategory.Behavior, "Skill.cs: Using {0}", Name);
-
-                if (ZetaDia.Me.UsePower(SNOPower, clickPosition, TrinityPlugin.CurrentWorldDynamicId, targetAcdId))
-                {
-                    TrinityPlugin.LastPowerUsed = SNOPower;
-                    if (CombatBase.CurrentTarget != null)
-                        SpellTracker.TrackSpellOnUnit(CombatBase.CurrentTarget.AcdId, SNOPower);
-                    SpellHistory.RecordSpell(SNOPower);
-                    return true;
-                }
-                CombatManager.TargetHandler.LastActionTimes.Add(DateTime.UtcNow);
-            }
-
-            return false;
+            return Combat.Spells.CastPower(SNOPower, clickPosition, targetAcdId);
         }
 
-        /// <summary>
-        /// Game client is not doing anything weird.
-        /// </summary>
-        private bool GameIsReady
-        {
-            get { return ZetaDia.IsInGame && ZetaDia.Me.IsValid && !ZetaDia.IsLoadingWorld && !ZetaDia.IsInTown && !ZetaDia.IsPlayingCutscene; }
-        }
 
         /// <summary>
         /// Unique Identifier so that dictionarys can compare Skill objects.
@@ -442,33 +421,24 @@ namespace Trinity.Objects
         /// <summary>
         /// A unique identifier for IUnique
         /// </summary>
-        public int Id
-        {
-            get { return (int)SNOPower; }
-        }
+        public int Id => (int)SNOPower;
 
-        /// <summary>
-        /// Skill metadata
-        /// </summary>
-        public SkillMeta Meta
-        {
-            get { return SkillUtils.GetSkillMeta(this); }
-            set { SkillUtils.SetSkillMeta(value); }
-        }
+        public List<SNOPower> SNOPowers { get; set; }
 
         public static explicit operator Skill(ActiveSkillEntry x)
         {
-            return SkillUtils.ById((SNOPower)x.SNOPower);
+            return SkillUtils.GetSkillByPower((SNOPower)x.SNOPower);
         }
 
-        public SkillUsage GetDefaultSetting()
-        {
-            return new SkillUsage
-            {
-                SnoPower = this.SNOPower,
-            };
-        }
+        //public SkillSettings GetDefaultSetting()
+        //{
+        //    return new SkillSettings
+        //    {
+        //        SnoPower = this.SNOPower,
+        //    };
+        //}
 
+        public override string ToString() => $"{GetType().Name}: {Name} {SNOPower} {(Id)}";
     }
 }
 

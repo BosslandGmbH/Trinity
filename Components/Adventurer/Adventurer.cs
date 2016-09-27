@@ -18,13 +18,6 @@ namespace Trinity.Components.Adventurer
 {
     public class Adventurer : Component, IDynamicSetting
     {
-        public static Adventurer Instance;
-
-        public Adventurer()
-        {
-            Instance = this;
-        }
-
         protected override int UpdateIntervalMs => 50;
 
         protected override void OnPulse()
@@ -75,8 +68,9 @@ namespace Trinity.Components.Adventurer
 
         #region Explicit IDynamicSetting Implementation
 
-        UserControl IDynamicSetting.Control => ConfigWindow.Instance.Content as UserControl;
-        object IDynamicSetting.DataContext => ConfigWindow.Instance.DataContext;
+        string IDynamicSetting.GetName() => Name;
+        UserControl IDynamicSetting.GetControl() => ConfigWindow.Instance.Content as UserControl;
+        object IDynamicSetting.GetDataContext() => ConfigWindow.Instance.DataContext;
         string IDynamicSetting.GetCode() => PluginSettings.Current.GenerateCode();
         void IDynamicSetting.ApplyCode(string code) => PluginSettings.Current.ApplySettingsCode(code);
         void IDynamicSetting.Reset() => PluginSettings.Current.LoadDefaults();

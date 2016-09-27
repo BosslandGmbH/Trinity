@@ -1,18 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Markup;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using Trinity.Helpers;
 using Trinity.Technicals;
 using Trinity.UI.UIComponents;
+using Zeta.Bot;
 using Zeta.Common.Xml;
+using Zeta.Game;
 using Application = System.Windows.Application;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -20,9 +25,21 @@ namespace Trinity.UI
 {
     public class UILoader
     {
+
+        private static Dictionary<string, string> _paths;
+        private static Dictionary<string, byte[]> _xaml;
+
+        static UILoader()
+        {
+            _xaml = new Dictionary<string, byte[]>();
+            var paths = Directory.GetFiles(FileManager.PluginPath, "*.xaml", SearchOption.AllDirectories);
+            _paths = paths.DistinctBy(Path.GetFileName).ToDictionary(k => Path.GetFileName(k)?.ToLower(), v => v);
+        }
+
         public static Window ConfigWindow;
         private static UserControl _windowContent;
         private static readonly object ContentLock = new object();
+
         public static ConfigViewModel DataContext { get; set; }
 
         public static void CloseWindow()
@@ -32,6 +49,14 @@ namespace Trinity.UI
 
         public static Window GetDisplayWindow()
         {
+            if (!BotMain.IsRunning)
+            { 
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    Core.ChangeMonitor.Update();
+                }                    
+            }
+
             return GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
         }
 
@@ -197,44 +222,63 @@ namespace Trinity.UI
             }
         }
 
-        /// <summary>Loads the and transform xaml file.</summary>
-        /// <param name="filename">The absolute path to xaml file.</param>
-        /// <returns><see cref="Stream"/> which contains transformed XAML file.</returns>
-        internal static T LoadAndTransformXamlFile<T>(string filename)
+        internal static T LoadXamlByFileName<T>(string fileName)
         {
+            if (fileName != null)
+            {
+                var fileNameLower = fileName.ToLower();
+                if (_paths.ContainsKey(fileNameLower))
+                {                    
+                    return LoadAndTransformXamlFile<T>(_paths[fileNameLower]);
+                }
+            }
+            return default(T);
+        }
+
+        /// <summary>Loads the and transform xaml file.</summary>
+        /// <param name="filePath">The absolute path to xaml file.</param>
+        /// <returns><see cref="Stream"/> which contains transformed XAML file.</returns>
+        internal static T LoadAndTransformXamlFile<T>(string filePath)
+        {
+            if (_xaml.ContainsKey(filePath))
+            {
+                return (T)XamlReader.Load(new MemoryStream(_xaml[filePath]));
+            }
+
             try
             {
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Load XAML file : {0}", filename);
-                string filecontent = File.ReadAllText(filename);
+                    Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Load XAML file : {0}", filePath);
+                    string filecontent = File.ReadAllText(filePath);
 
-                // Change reference to custom TrinityPlugin class
-                filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UIComponents;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:objects=\"clr-namespace:Trinity.Objects\"", "xmlns:objects=\"clr-namespace:Trinity.Objects;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:mock=\"clr-namespace:Trinity.Settings.Mock\"", "xmlns:mock=\"clr-namespace:Trinity.Settings.Mock;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:settings=\"clr-namespace:Trinity.Settings\"", "xmlns:settings=\"clr-namespace:Trinity.Settings;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:charts=\"clr-namespace:LineChartLib\"", "xmlns:charts=\"clr-namespace:LineChartLib;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas\"", "xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays\"", "xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop\"", "xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:cc=\"clr-namespace:CustomControls\"", "xmlns:cc=\"clr-namespace:CustomControls;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                filecontent = filecontent.Replace("xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums\"", "xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    // Change reference to custom TrinityPlugin class
+                    filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UIComponents;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:objects=\"clr-namespace:Trinity.Objects\"", "xmlns:objects=\"clr-namespace:Trinity.Objects;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:mock=\"clr-namespace:Trinity.Settings.Mock\"", "xmlns:mock=\"clr-namespace:Trinity.Settings.Mock;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:settings=\"clr-namespace:Trinity.Settings\"", "xmlns:settings=\"clr-namespace:Trinity.Settings;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:charts=\"clr-namespace:LineChartLib\"", "xmlns:charts=\"clr-namespace:LineChartLib;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas\"", "xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays\"", "xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop\"", "xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:cc=\"clr-namespace:CustomControls\"", "xmlns:cc=\"clr-namespace:CustomControls;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                    filecontent = filecontent.Replace("xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums\"", "xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
 
-                
+                    // Remove Template designer reference
+                    //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"..\\Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
+                    //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
 
-                // Remove Template designer reference
-                //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"..\\Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
-                //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
+                    filecontent = Regex.Replace(filecontent, "<ResourceDictionary.MergedDictionaries>.*</ResourceDictionary.MergedDictionaries>", string.Empty, RegexOptions.Singleline | RegexOptions.Compiled);
 
-                filecontent = Regex.Replace(filecontent, "<ResourceDictionary.MergedDictionaries>.*</ResourceDictionary.MergedDictionaries>", string.Empty, RegexOptions.Singleline | RegexOptions.Compiled);
-
-                return (T)XamlReader.Load(new MemoryStream(Encoding.UTF8.GetBytes(filecontent)));
+                    var bytes = Encoding.UTF8.GetBytes(filecontent);
+                    _xaml[filePath] = bytes;
+                    return (T)XamlReader.Load(new MemoryStream(bytes));
+         
             }
             catch (Exception ex)
             {
                 Logger.LogError("Error loading/transforming XAML {0}", ex);
-                return default(T);
             }
+            return default(T);
         }
 
         /// <summary>Call when Config Window is closed.</summary>

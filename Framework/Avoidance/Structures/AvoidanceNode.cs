@@ -99,6 +99,7 @@ namespace Trinity.Framework.Avoidance.Structures
             HostileMonsterCount = 0;
             Weight = 0;
             ResetFlags();
+            AvoidanceTypes.Clear();
             return this;
         }
 
@@ -110,7 +111,7 @@ namespace Trinity.Framework.Avoidance.Structures
         {
             get
             {
-                var max = Core.Avoidance.HighestNodeWeight;
+                var max = Core.Avoidance.GridEnricher.HighestNodeWeight;
                 return max != 0 ? Weight / (float)max : 0;
             }
         }
@@ -130,15 +131,6 @@ namespace Trinity.Framework.Avoidance.Structures
             }
         }
 
-        //internal void Reset()
-        //{
-        //    MonsterIds.Clear();
-        //    AvoidanceIds.Clear();
-        //    ObstacleIds.Clear();
-        //    Weight = 0;
-        //    ResetNodeFlags();
-        //}
-
         private List<AvoidanceNode> _adjacentNodes;
         public List<AvoidanceNode> AdjacentNodes
         {
@@ -148,10 +140,8 @@ namespace Trinity.Framework.Avoidance.Structures
 
         public float NearbyWeightPct { get; set; }
         public int HostileMonsterCount { get; set; }
-
-
-
-        //public List<AvoidanceNode> AdjacentNodes = new List<AvoidanceNode>();
+        public List<AvoidanceType> AvoidanceTypes { get; set; } = new List<AvoidanceType>();
+        public List<int> AvoidanceHashCodes { get; set; } = new List<int>();
 
         public override int GetHashCode()
         {

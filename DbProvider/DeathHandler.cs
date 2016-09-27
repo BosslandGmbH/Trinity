@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Cache;
 using Trinity.Framework;
-using TrinityCoroutines.Resources;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
@@ -54,10 +53,10 @@ namespace Trinity.DbProvider
                 {
                     Logger.Log("[Death] No Longer Dead");
 
-                    if (Core.Settings.Combat.Misc.FleeInGhostMode)
-                    {
+                    //if (Core.Settings.Combat.Misc.FleeInGhostMode)
+                    //{
                         await MoveWhileGhosted();
-                    }
+                    //}
 
                     if (EquipmentNeedsEmergencyRepair(5))
                     {
@@ -121,9 +120,9 @@ namespace Trinity.DbProvider
             {
                 Logger.Log("[Death] Waiting while being resurrected");
             }
-            else if (ZetaDia.Me.IsInBossEncounter && !RiftProgression.IsInRift && Core.Settings.Combat.Misc.WaitForResInBossEncounters && IsAlivePlayerNearby)
+            else if (ZetaDia.Me.IsInBossEncounter && !RiftProgression.IsInRift && IsAlivePlayerNearby)
             {
-                Logger.Log("[Death] Waiting because of wait for resurrect in boss encounter setting");
+                Logger.Log("[Death] Waiting because of boss fight");
             }
             else if (corpseButtonReady && !needRepair && !waitingForCorpseResurrect && !noMoreCorpseRevives && !corpseResurrectDisabled)
             {
@@ -156,9 +155,9 @@ namespace Trinity.DbProvider
 
         public async static Task<bool> MoveWhileGhosted()
         {
-            var safespot = Core.Avoidance.SafeNodeLayer.Positions.OrderBy(d =>
-                d.Distance(Core.Avoidance.MonsterCentroid) + 
-                d.Distance(Core.Avoidance.AvoidanceCentroid)).FirstOrDefault();
+            var safespot = Core.Avoidance.GridEnricher.SafeNodeLayer.Positions.OrderBy(d =>
+                d.Distance(Core.Avoidance.GridEnricher.MonsterCentroid) + 
+                d.Distance(Core.Avoidance.GridEnricher.AvoidanceCentroid)).FirstOrDefault();
 
             if (safespot == Vector3.Zero)
             {
@@ -201,7 +200,7 @@ namespace Trinity.DbProvider
 
         public static bool IsAlivePlayerNearby
         {
-            get { return ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).FirstOrDefault(p => p?.CommonData != null && p.Distance < 100f) != null; }
+            get { return ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).FirstOrDefault(p => p?.CommonData != null && p.RActorId != Core.Player.RActorGuid && p.Distance < 100f) != null; }
         }
 
 

@@ -23,26 +23,22 @@
                 <StackPanel>
                     <Border BorderBrush="White" BorderThickness="1" Margin="5">
                         <ComboBox FontSize="14" HorizontalAlignment="Stretch" SelectedValuePath="Tag" SelectedValue="{Binding Path=Pickup.ItemFilterMode, Mode=TwoWay}">
-                            <ComboBoxItem Content="Simple Scoring (Default)" Tag="TrinityOnly" IsSelected="True" ToolTip="Uses TrinityPlugin Scoring Only (see TrinityPlugin Town-Runs Tab)" />
-                            <ComboBoxItem Content="File Based Rules (Obsolete)" Tag="TrinityWithItemRules" ToolTip="This is outdated and not supported" />
+                            <ComboBoxItem Content="Default Looting" Tag="TrinityOnly" IsSelected="True" ToolTip="Stores all Legendary Items" />
+                            <!--<ComboBoxItem Content="File Based Rules (Obsolete)" Tag="TrinityWithItemRules" ToolTip="This is outdated and not supported" />-->
                             <ComboBoxItem Content="Item List" Tag="ItemList" ToolTip="Use custom list of items" />
                         </ComboBox>
                     </Border>
                 </StackPanel>
-            </GroupBox>            
-            <GroupBox Header="Equipment Pickup Options">
-                <StackPanel HorizontalAlignment="Center">
-                    <CheckBox IsChecked="{Binding Path=Pickup.PickupLegendaries}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock FontSize="14" Text="Pickup Legendaries" ToolTip="Applies to ALL ITEMS - including Crafting Plans" FontWeight="Bold" Foreground="#FFA73B1E" />
-                    </CheckBox>
-                    <CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" Content="Legendary Follower Items" IsChecked="{Binding Path=Pickup.PickupLegendaryFollowerItems}" />
-                    <UniformGrid HorizontalAlignment="Center">
-                        <CheckBox Content="Magic Follower Items" IsChecked="{Binding Path=Pickup.PickupBlueFollowerItems}" VerticalAlignment="Center" />
-                        <CheckBox Content="Rare Follower Items" IsChecked="{Binding Path=Pickup.PickupYellowFollowerItems}" VerticalAlignment="Center" />
+            </GroupBox>
+            <GroupBox Header="Pickup Quality">
+                <StackPanel>
+                    <UniformGrid Margin="5">
                         <CheckBox Content="Pickup Gray Items" ToolTip="Gray Items" IsChecked="{Binding Path=Pickup.PickupGrayItems}" />
                         <CheckBox Content="Pickup White Items" ToolTip="White Items" IsChecked="{Binding Path=Pickup.PickupWhiteItems}" />
+                        <CheckBox Content="Pickup Blue Items" ToolTip="Blue Items" IsChecked="{Binding Path=Pickup.PickupBlueItems}" />
+                        <CheckBox Content="Pickup Yellow Items" ToolTip="Yellow Items" IsChecked="{Binding Path=Pickup.PickupYellowItems}" />
                     </UniformGrid>
-                    <Grid HorizontalAlignment="Center">
+                    <!--<Grid HorizontalAlignment="Center">
                         <Grid MinWidth="375">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -72,26 +68,15 @@
                             <CheckBox Grid.Row="4" Grid.Column="1" IsChecked="{Binding Path=Pickup.PickupBlueJewlery}" VerticalAlignment="Center">Pickup Blue Jewlery</CheckBox>
                             <CheckBox Grid.Row="4" Grid.Column="2" IsChecked="{Binding Path=Pickup.PickupYellowJewlery}" VerticalAlignment="Center">Pickup Yellow Jewlery</CheckBox>
                         </Grid>
-                    </Grid>
+                    </Grid>-->
                 </StackPanel>
             </GroupBox>
-            <GroupBox Header="Auto-Equip while levelling">
-                <StackPanel>
-                    <UniformGrid Columns="2">
-                        <CheckBox Content="Items" IsChecked="{Binding Pickup.AutoEquipItems}" Margin="5"/>
-                    <CheckBox Content="Skills" IsChecked="{Binding Pickup.AutoEquipSkills}" Margin="5"/>                    
-                </UniformGrid>
-                <CheckBox Content="Don't Equip Weapon/Offhand Slots" IsChecked="{Binding Pickup.AutoEquipIgnoreWeapons}" Margin="5"/>
-                 <CheckBox Content="Disable at level 70" IsChecked="{Binding Pickup.DisableAutoEquipAtMaxLevel}" Margin="5"/>
-                </StackPanel>
-            </GroupBox>            
             <GroupBox Header="Misc Pickup Options">
                 <UniformGrid Columns="2">
                     <CheckBox Content="Designs" IsChecked="{Binding Path=Pickup.Designs}" Margin="5"/>
                     <CheckBox Content="Plans" IsChecked="{Binding Path=Pickup.Plans}" Margin="5"/>
-                    <CheckBox Content="Legendary Plans" IsChecked="{Binding Path=Pickup.LegendaryPlans}" Margin="5"/>
+                    <!--<CheckBox Content="Legendary Plans" IsChecked="{Binding Path=Pickup.LegendaryPlans}" Margin="5"/>-->
                     <CheckBox Content="Craft Materials" IsChecked="{Binding Path=Pickup.CraftMaterials}" Margin="5"/>
-                    
                     <CheckBox Content="Low Level Items" IsChecked="{Binding Path=Pickup.PickupLowLevel}" Margin="5" ToolTip="Pickup Grey and White Items to level 6/11 (for questing)"/>
                     <CheckBox Content="Blood Shards" IsChecked="{Binding Path=Pickup.BloodShards}" Margin="5" ToolTip="Pickup Blood Shards"/>
                     <CheckBox Content="Rift Keys" IsChecked="{Binding Path=Pickup.LootRunKey}" Margin="5" ToolTip="Pickup Rift Key Fragments"/>
@@ -104,7 +89,8 @@
                     <CheckBox Content="Stash Transmog Whites" IsChecked="{Binding Pickup.StashTransmog}" Margin="5" ToolTip="If enabled transmog items are picked up and stashed"/>
                     <CheckBox Content="Stash Wings" IsChecked="{Binding Pickup.StashWings}" Margin="5" ToolTip="If enabled Wings are picked up and stashed"/>
                     <CheckBox Content="Staff of Herding Parts" IsChecked="{Binding Pickup.PickupStaffOfHerdingParts}" Margin="5" ToolTip="If enabled staff of herding crafting materials will be picked up and stashed"/>
-                    
+                    <CheckBox Content="Follower Items" ToolTip="Follower Items" Margin="5" IsChecked="{Binding Path=Pickup.PickupFollowerItems}" />
+
                     <!--<CheckBox Content="Always Pickup Nearby" IsChecked="{Binding Pickup.AlwaysVacuumItems}" Margin="5" ToolTip="Bot will try to pickup items within range while walking to other places"/>-->
                 </UniformGrid>
             </GroupBox>
@@ -144,7 +130,7 @@
                               Margin="0" VerticalAlignment="Center"/>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Crafting Materials: Grey / White / Blue / Yellow ">
+            <GroupBox Header="Crafting Materials">
                 <Grid Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -152,7 +138,7 @@
                         <!--<ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />-->
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" DockPanel.Dock="Left" Text="Crafting Mats Min Quality:" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="0" DockPanel.Dock="Left" Text="Minimum Quality:" Margin="0,0,10,0" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center" />
                     <Border Grid.Column="1" BorderBrush="White" BorderThickness="1">
                         <ComboBox SelectedValuePath="Tag" SelectedValue="{Binding Path=Pickup.MiscItemQuality}" Padding="5">
                             <ComboBoxItem Content="None" Tag="None" />
@@ -184,7 +170,7 @@
                         Value="{Binding Path=Pickup.MinimumGoldStack}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                 </DockPanel>
             </GroupBox>
-            <GroupBox Header="Ignore Item Situations">
+            <!--<GroupBox Header="Ignore Item Situations">
                 <UniformGrid Columns="2" >
                     <CheckBox Content="Ignore Two Handed Weapons" IsChecked="{Binding Path=Pickup.IgnoreTwoHandedWeapons}" />
                     <TextBlock Text="" />
@@ -201,12 +187,12 @@
                     <CheckBox Content="Ignore Progression Globes in Aoe" ToolTip="Includes all progression globes when they're positioned in an avoidance" IsChecked="{Binding Path=Pickup.IgnoreProgressionGlobesInAoE}" />
                     <CheckBox Content="Ignore Health Globes in Aoe" ToolTip="Includes all health globes when they're positioned in an avoidance" IsChecked="{Binding Path=Pickup.IgnoreHealthGlobesInAoE}" />
                 </UniformGrid>
-            </GroupBox>
-            <GroupBox Header="Reset">
+            </GroupBox>-->
+            <!--<GroupBox Header="Reset">
                 <StackPanel>
                     <Button HorizontalAlignment="Center" Command="{Binding ResetItemCommand}">Reset All Item Settings to Defaults</Button>
                 </StackPanel>
-            </GroupBox>
+            </GroupBox>-->
         </StackPanel>
     </ScrollViewer>
 </UserControl>

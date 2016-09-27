@@ -21,6 +21,7 @@ using System.Xml.Serialization;
 
 
 using JetBrains.Annotations;
+using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
 using Trinity.Config;
 using Trinity.Configuration;
@@ -153,6 +154,7 @@ namespace Trinity.UI.RadarUI
                 ScenesStorage.Update();
                 AdvDia.MyPosition = ZetaDia.Me.Position;
                 Core.Update();
+                Combat.Weighting.WeightActors(Core.Targets);
                 UpdateVisualizer();
                 return false;
             }
@@ -227,7 +229,7 @@ namespace Trinity.UI.RadarUI
                 //    Logger.LogVerbose("Skipping grid update so grid items can be clicked properly");
                 //}
 
-                CurrentTarget = CombatBase.CurrentTarget;                
+                CurrentTarget = Combat.Targeting.CurrentTarget;                
 
                 Player = Core.Player.Actor;
                 PlayerPositionX = Player.Position.X;
@@ -690,7 +692,7 @@ namespace Trinity.UI.RadarUI
             set { SetField(ref _showUncategorized, value); }
         }
 
-        [Zeta.XmlEngine.XmlElement("VisibilityFlags")]
+        [Zeta.XmlEngine.XmlElement("VisibilityFlags1")]
         [Setting, DefaultValue(
             RadarVisibilityFlags.Terrain |
             RadarVisibilityFlags.CurrentPath |

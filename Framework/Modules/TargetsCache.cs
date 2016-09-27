@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Trinity.Framework.Modules
     /// <summary>
     /// Creates a list of good target candidates (removing all the rubbish actors) to reduce combat processing time for weighting and target selection.
     /// </summary>
-    public class TargetsCache : Module
+    public class TargetsCache : Module, IEnumerable<TrinityActor>
     {
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace Trinity.Framework.Modules
         internal Dictionary<int, int> InteractAttempts { get; } = new Dictionary<int, int>();
 
         public ulong LastUpdatedTick;
-        public List<TrinityActor> Items = new List<TrinityActor>();
+        public List<TrinityActor> Entries = new List<TrinityActor>();
         public List<TrinityActor> Ignored = new List<TrinityActor>();
         public ILookup<TrinityObjectType, TrinityActor> ByType = EmptyLookup<TrinityObjectType, TrinityActor>.Instance;
         public ILookup<MonsterQuality, TrinityActor> ByMonsterQuality = EmptyLookup<MonsterQuality, TrinityActor>.Instance;
@@ -48,12 +49,12 @@ namespace Trinity.Framework.Modules
         private static void PreUpdateTasks()
         {
             TrinityPlugin.LastRefreshedCache = DateTime.UtcNow;
-           TrinityPlugin.LastTargetPosition = TrinityPlugin.CurrentTarget != null ? TrinityPlugin.CurrentTarget.Position : Vector3.Zero;
+           TrinityPlugin.LastTargetPosition = Combat.Targeting.CurrentTarget != null ? Combat.Targeting.CurrentTarget.Position : Vector3.Zero;
 
-            if (TrinityPlugin.CurrentTarget != null)
-                TrinityPlugin.LastTargetRactorGUID = TrinityPlugin.CurrentTarget.RActorId;
+            if (Combat.Targeting.CurrentTarget != null)
+                TrinityPlugin.LastTargetRactorGUID = Combat.Targeting.CurrentTarget.RActorId;
 
-            TrinityPlugin.LastTargetAcdId = CombatBase.CurrentTarget != null ? CombatBase.CurrentTarget.AcdId : -1;
+            TrinityPlugin.LastTargetAcdId = Combat.Targeting.CurrentTarget != null ? Combat.Targeting.CurrentTarget.AcdId : -1;
                                     
         }
 
@@ -120,15 +121,15 @@ namespace Trinity.Framework.Modules
                     }                   
                 }
 
-                CombatManager.Weighting.RefreshDiaGetWeights(included);
-
                 ByType = included.ToLookup(k => k.Type);
                 ByMonsterQuality = included.ToLookup(k => k.MonsterQuality);
 
-                Items = included;
+                Entries = included;
                 Ignored = ignored;
             }
         }
+
+
 
         private bool ShouldTargetActor(TrinityActor cacheObject)
         {
@@ -315,7 +316,7 @@ namespace Trinity.Framework.Modules
                     break;
 
                 case TrinityObjectType.Unit:
-                    if (CombatBase.CombatMode == CombatMode.KillAll && cacheObject.IsWalkable)
+                    if (Combat.CombatMode == CombatMode.KillAll && cacheObject.IsWalkable)
                         return true;
                     if (cacheObject.IsElite && cacheObject.Distance < 40f || cacheObject.IsWalkable)
                         return true;
@@ -448,12 +449,6 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (!Core.Settings.WorldObject.UseShrine && cacheObject.Type == TrinityObjectType.Shrine)
-            {
-                cacheObject.AddCacheInfo("UseShrineSetting");
-                return false;
-            }
-
             if (!DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSnoId) && Core.Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.ForceIgnore)
             {
                 cacheObject.AddCacheInfo("ForceIgnoreDestructibles");
@@ -466,11 +461,11 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (cacheObject.IsContainer && !cacheObject.IsMinimapActive && cacheObject.RadiusDistance > Core.Settings.WorldObject.ContainerOpenRange)
-            {
-                cacheObject.AddCacheInfo("ContainerOpenRange");
-                return false;
-            }
+            //if (cacheObject.IsContainer && !cacheObject.IsMinimapActive && cacheObject.RadiusDistance > Core.Settings.WorldObject.ContainerOpenRange)
+            //{
+            //    cacheObject.AddCacheInfo("ContainerOpenRange");
+            //    return false;
+            //}
 
             if (cacheObject.IsDestroyable && !cacheObject.HasBeenWalkable && cacheObject.Distance > 5f)
             {
@@ -478,44 +473,44 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (!Core.Settings.WorldObject.OpenAnyContainer && !cacheObject.IsMinimapActive)
-            {
-                if (cacheObject.IsRareChest && !Core.Settings.WorldObject.OpenRareChests)
-                {
-                    cacheObject.AddCacheInfo("OpenRareChestsSetting");
-                    return false;
-                }
+            //if (!Core.Settings.WorldObject.OpenAnyContainer && !cacheObject.IsMinimapActive)
+            //{
+            //    if (cacheObject.IsRareChest && !Core.Settings.WorldObject.OpenRareChests)
+            //    {
+            //        cacheObject.AddCacheInfo("OpenRareChestsSetting");
+            //        return false;
+            //    }
 
-                if (cacheObject.IsChest && !Core.Settings.WorldObject.OpenChests && !cacheObject.IsQuestMonster)
-                {
-                    cacheObject.AddCacheInfo("OpenChestsSetting");
-                    return false;
-                }
+            //    if (cacheObject.IsChest && !Core.Settings.WorldObject.OpenChests && !cacheObject.IsQuestMonster)
+            //    {
+            //        cacheObject.AddCacheInfo("OpenChestsSetting");
+            //        return false;
+            //    }
 
-                if (cacheObject.IsCorpse && !Core.Settings.WorldObject.InspectCorpses)
-                {
-                    cacheObject.AddCacheInfo("InspectCorpsesSetting");
-                    return false;
-                }
+            //    if (cacheObject.IsCorpse && !Core.Settings.WorldObject.InspectCorpses)
+            //    {
+            //        cacheObject.AddCacheInfo("InspectCorpsesSetting");
+            //        return false;
+            //    }
 
-                if (cacheObject.IsGroundClicky && !Core.Settings.WorldObject.InspectGroundClicky)
-                {
-                    cacheObject.AddCacheInfo("GroundClickySetting");
-                    return false;
-                }
+            //    if (cacheObject.IsGroundClicky && !Core.Settings.WorldObject.InspectGroundClicky)
+            //    {
+            //        cacheObject.AddCacheInfo("GroundClickySetting");
+            //        return false;
+            //    }
 
-                if (cacheObject.IsWeaponRack && !Core.Settings.WorldObject.InspectWeaponRacks)
-                {
-                    cacheObject.AddCacheInfo("WeaponRacksSetting");
-                    return false;
-                }
+            //    if (cacheObject.IsWeaponRack && !Core.Settings.WorldObject.InspectWeaponRacks)
+            //    {
+            //        cacheObject.AddCacheInfo("WeaponRacksSetting");
+            //        return false;
+            //    }
 
-                if (cacheObject.IsWeaponRack && !Core.Settings.WorldObject.InspectWeaponRacks)
-                {
-                    cacheObject.AddCacheInfo("WeaponRacksSetting");
-                    return false;
-                }
-            }
+            //    if (cacheObject.IsWeaponRack && !Core.Settings.WorldObject.InspectWeaponRacks)
+            //    {
+            //        cacheObject.AddCacheInfo("WeaponRacksSetting");
+            //        return false;
+            //    }
+            //}
 
             return true;
         }
@@ -565,8 +560,11 @@ namespace Trinity.Framework.Modules
 
         public void Clear()
         {
-            Items.Clear();
+            Entries.Clear();
             Ignored.Clear();
         }
+
+        public IEnumerator<TrinityActor> GetEnumerator() => Entries.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

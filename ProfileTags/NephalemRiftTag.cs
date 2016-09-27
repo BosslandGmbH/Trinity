@@ -42,7 +42,7 @@ namespace Trinity.ProfileTags
                 return;
             }
                    
-            CombatBase.CombatMode = CombatMode.Normal;                
+            Combat.CombatMode = CombatMode.Normal;                
             var riftOptions = new RiftCoroutine.RiftOptions
             {
                 RiftCount = RiftCount > 0 ? RiftCount : PluginSettings.Current.RiftCount,

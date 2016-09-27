@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Combat.Abilities;
+using Trinity.Coroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Modules;
@@ -12,8 +13,6 @@ using Trinity.Helpers;
 using Trinity.Items;
 using Trinity.Notifications;
 using Trinity.Technicals;
-using TrinityCoroutines;
-using TrinityCoroutines.Resources;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
@@ -50,7 +49,8 @@ namespace Trinity.Coroutines.Town
         {
             try
             {
-                //Logger.Log("VendorRun Hook Executing");
+                if (!ZetaDia.IsInGame)
+                    return false;
 
                 if (await ClearArea.Execute())
                 {
@@ -363,7 +363,7 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (CombatBase.IsInCombat)
+            if (ZetaDia.Me.IsInCombat)
             {
                 Logger.Log("Not portaling because in combat.");
                 return false;

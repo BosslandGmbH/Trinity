@@ -19,33 +19,33 @@ namespace Trinity.Settings.Mock
 {
     public class SkillSettingsMockData
     {
-        public SkillSettings Settings { get; set; }
+        //public SkillViewModel Settings { get; set; }
 
-        public SkillSettingsMockData()
-        {
-            var skills = new FullyObservableCollection<SkillUsage>();            
-            Settings = new SkillSettings
-            {
-                Name = "Default DH Skill Settings",
-                Author = "xzjv",
-                ActorClass = ActorClass.DemonHunter,
-                Description = "Mock data for testing interface design",
-                Version = "1.0",
-                Items = skills
-            };
-            Settings.Items.Add(new SkillUsage
-            {
-                CastRange = 80f,
-                SnoPower = SNOPower.X1_DemonHunter_EvasiveFire,
-                ClusterSize = 4,
-                HealthPct = 80,
-                Reasons = SkillUseReasons.Avoidance | SkillUseReasons.Elites | SkillUseReasons.HealthEmergency,
-                RecastDelayMs = 2000,
-                ResourcePct = 50,                
-                UseTime = SkillUseTime.AnyTime
-            });
-            //Settings.LoadDefaults();
-        }
+        //public SkillSettingsMockData()
+        //{
+        //    var skills = new FullyObservableCollection<SkillSettings>();            
+        //    Settings = new SkillViewModel
+        //    {
+        //        Name = "Default DH Skill Settings",
+        //        Author = "xzjv",
+        //        ActorClass = ActorClass.DemonHunter,
+        //        Description = "Mock data for testing interface design",
+        //        Version = "1.0",
+        //        Items = skills
+        //    };
+        //    Settings.Items.Add(new SkillSettings
+        //    {
+        //        CastRange = 80f,
+        //        SnoPower = SNOPower.X1_DemonHunter_EvasiveFire,
+        //        ClusterSize = 4,
+        //        HealthPct = 80,
+        //        Reasons = UseReasons.Avoiding | UseReasons.Elites | UseReasons.HealthEmergency,
+        //        RecastDelayMs = 2000,
+        //        PrimaryResourcePct = 50,                
+        //        UseTime = UseTime.AnyTime
+        //    });
+        //    //Settings.LoadDefaults();
+        //}
     }
 }
 

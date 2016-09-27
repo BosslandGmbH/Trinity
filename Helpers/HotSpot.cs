@@ -2,6 +2,8 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using Trinity.Components.Combat;
+using Trinity.Components.Combat.Abilities;
 using Trinity.Framework;
 using Zeta.Common;
 
@@ -106,13 +108,13 @@ namespace Trinity
             {
                 try
                 {
-                    if (TrinityPlugin.CurrentTarget == null)
+                    if (Combat.Targeting.CurrentTarget == null)
                         return null;
-                    else if (TrinityPlugin.CurrentTarget.Type != TrinityObjectType.Unit)
+                    else if (Combat.Targeting.CurrentTarget.Type != TrinityObjectType.Unit)
                         return null;
                     else
                     {
-                        return HotSpot.Serialize(new HotSpot(TrinityPlugin.CurrentTarget.Position, Core.Player.WorldSnoId));
+                        return HotSpot.Serialize(new HotSpot(Combat.Targeting.CurrentTarget.Position, Core.Player.WorldSnoId));
                     }
                 }
                 catch

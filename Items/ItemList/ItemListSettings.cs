@@ -60,6 +60,7 @@ namespace Trinity.Settings.Loot
 
         public ItemListSettings()
         {
+            Logger.Log($"Itemlist ViewModel Created from Thread {Thread.CurrentThread.ManagedThreadId}");
             _displayItems = new FullyObservableCollection<LItem>();
             _collection = new CollectionViewSource();
             _itemTypes = new FullyObservableCollection<LItem>();

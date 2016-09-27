@@ -72,18 +72,12 @@ namespace Trinity.Objects
         /// <summary>
         /// If the associated buff is currently active, ie, barbarian rampage, wizard dominance.
         /// </summary>
-        public bool IsBuffActive
-        {
-            get { return CombatBase.GetHasBuff(SNOPower); }
-        }
+        public bool IsBuffActive => Core.Player.HasBuff(SNOPower);
 
         /// <summary>
         /// Gets the associated buff stack count
         /// </summary>
-        public int BuffStacks
-        {
-            get { return CombatBase.GetBuffStacks(SNOPower); }
-        }
+        public int BuffStacks => Core.Buffs.GetBuffStacks(SNOPower);
 
         /// <summary>
         /// Unique Identifier so that dictionarys can compare  this object properly.
@@ -93,10 +87,7 @@ namespace Trinity.Objects
             return Index.GetHashCode() ^ Name.GetHashCode();
         }
 
-        public int Id
-        {
-            get { return (int)SNOPower; }
-        }
+        public int Id => (int)SNOPower;
 
         public string IconSlug { get; set; }
 

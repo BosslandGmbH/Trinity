@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Combat.Abilities;
+using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Items;
 using Trinity.Objects;
 using Trinity.Reference;
@@ -23,30 +25,33 @@ namespace Trinity.Coroutines
     {
         static VacuumItems()
         {
-            GameEvents.OnWorldChanged += (sender, args) =>  VacuumedGuids.Clear();
+            GameEvents.OnWorldChanged += (sender, args) =>  VacuumedAcdIds.Clear();
         }
 
         public static void Execute()
         {
+            if (Core.Player.IsCasting)
+                return;
+
             var count = 0;
 
             // Items that shouldn't be picked up are currently excluded from cache.
-            // a pickup evaluation should be added if that changes.            
+            // a pickup evaluation should be added here if that changes.            
 
-            foreach(var item in TrinityPlugin.Targets)
+            foreach(var item in TrinityPlugin.Targets.OfType<TrinityItem>())
             {
-                if (item == null || !item.IsValid)
+                if (item.Distance > 8f || VacuumedAcdIds.Contains(item.AcdId))
                     continue;
 
-                if (item.Distance > 8f || VacuumedGuids.Contains(item.AcdId))
+                if (!ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, item.Position, Core.Player.WorldDynamicID, item.AcdId))
+                {
+                    Logger.LogVerbose($"Failed to vacuum item {item.Name} AcdId={item.AcdId}");
                     continue;
-
-                if (!ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, Vector3.Zero, 0, item.AcdId))
-                    continue;
+                }
 
                 count++;       
                 SpellHistory.RecordSpell(SNOPower.Axe_Operate_Gizmo);
-                VacuumedGuids.Add(item.AcdId);            
+                VacuumedAcdIds.Add(item.AcdId);            
             }
 
             if (count > 0)
@@ -54,11 +59,13 @@ namespace Trinity.Coroutines
                 Logger.LogVerbose($"Vacuumed {count} items");
             }
 
-            if(VacuumedGuids.Count > 1000)
-                VacuumedGuids.Clear();
+            if (VacuumedAcdIds.Count > 1000)
+            {
+                VacuumedAcdIds.Clear();
+            }
         }
 
-        public static HashSet<int> VacuumedGuids { get; } = new HashSet<int>();
+        public static HashSet<int> VacuumedAcdIds { get; } = new HashSet<int>();
     }
 
 

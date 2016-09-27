@@ -27,6 +27,8 @@ namespace Trinity.Framework.Modules
         public int ConventionElementRemainingMs { get; set; }
         public int ConventionElementElapsedMs { get; set; }
 
+        protected override int UpdateIntervalMs => 25;
+
         protected override void OnPulse()
         {
             UpdateBuffs();

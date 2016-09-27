@@ -338,6 +338,9 @@ namespace Trinity.Reference
             if (prop == ItemProperty.Ancient)
                 return true;
 
+            if (prop == ItemProperty.Attribute)
+                return true;
+
             if (ItemPropertyLimitsByItemType.TryGetValue(new KeyValuePair<TrinityItemType, ItemProperty>(item.TrinityItemType, prop), out statRange))
                 return true;
 
@@ -368,6 +371,8 @@ namespace Trinity.Reference
             {
                 props.Add(ItemProperty.Ancient);
             }
+
+            props.Add(ItemProperty.Attribute);
 
             props.Sort();
             return props;
@@ -1478,7 +1483,7 @@ namespace Trinity.Reference
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Witchdoctor), Skills.WitchDoctor.SummonZombieDogs},
 
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Monk), Skills.Monk.DashingStrike},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Monk), Skills.Monk.SevensidedStrike},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Monk), Skills.Monk.SevenSidedStrike},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Monk), Skills.Monk.MysticAlly},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Monk), Skills.Monk.SweepingWind},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Shoulder, ActorClass.Monk), Skills.Monk.CycloneStrike},
@@ -1526,7 +1531,7 @@ namespace Trinity.Reference
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Witchdoctor), Skills.WitchDoctor.SummonZombieDogs},
 
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Monk), Skills.Monk.DashingStrike},
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Monk), Skills.Monk.SevensidedStrike},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Monk), Skills.Monk.SevenSidedStrike},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Monk), Skills.Monk.MysticAlly},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Monk), Skills.Monk.SweepingWind},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.Chest, ActorClass.Monk), Skills.Monk.CycloneStrike},
@@ -1734,7 +1739,7 @@ namespace Trinity.Reference
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.TwoHandMighty, ActorClass.Barbarian), Skills.Barbarian.CallOfTheAncients},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.TwoHandMighty, ActorClass.Barbarian), Skills.Barbarian.FuriousCharge},
 
-            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.TwoHandDaibo, ActorClass.Monk), Skills.Monk.SevensidedStrike},
+            {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.TwoHandDaibo, ActorClass.Monk), Skills.Monk.SevenSidedStrike},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.TwoHandDaibo, ActorClass.Monk), Skills.Monk.LashingTailKick},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.TwoHandDaibo, ActorClass.Monk), Skills.Monk.WaveOfLight},
             {new KeyValuePair<TrinityItemType, ActorClass>(TrinityItemType.TwoHandDaibo, ActorClass.Monk), Skills.Monk.ExplodingPalm},

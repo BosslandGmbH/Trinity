@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Components.Combat.Abilities;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -49,12 +50,14 @@ namespace Trinity.Objects
             ItemType = acdItem.ItemType;
         }
 
+        public TrinityItem GetEquippedItem() => Core.Inventory.Equipped.FirstOrDefault(u => u.ActorSnoId == Id);
+
         /// <summary>
         /// If this item is currently equipped
         /// </summary>
         public bool IsEquipped
         {
-            get { return Core.Inventory.EquippedIds.Contains(Id) || IsEquippedInCube; }
+            get { return Core.Inventory.PlayerEquippedIds.Contains(Id) || IsEquippedInCube; }
         }
 
         /// <summary>
@@ -102,7 +105,7 @@ namespace Trinity.Objects
                 // Item Creates Buff
                 SNOPower power;
                 if (DataDictionary.PowerByItem.TryGetValue(this, out power))
-                    return CombatBase.GetHasBuff(power);
+                    return Core.Player.HasBuff(power);
 
                 // Item Spawns Minions
                 string internalNameToken;

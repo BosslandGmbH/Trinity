@@ -1101,7 +1101,7 @@ namespace Trinity.Coroutines
                     {  Skills.Monk.ExplodingPalm, Runes.Monk.None },
                     {  Skills.Monk.BlindingFlash, Runes.Monk.SelfReflection },
                     {  Skills.Monk.DashingStrike, Runes.Monk.WayOfTheFallingStar },
-                    {  Skills.Monk.SevensidedStrike, Runes.Monk.None },
+                    {  Skills.Monk.SevenSidedStrike, Runes.Monk.None },
                 },
                 Passives = new List<Passive>
                 {
@@ -1116,7 +1116,7 @@ namespace Trinity.Coroutines
                     {  Skills.Monk.ExplodingPalm, Runes.Monk.TheFleshIsWeak },
                     {  Skills.Monk.BlindingFlash, Runes.Monk.SelfReflection },
                     {  Skills.Monk.DashingStrike, Runes.Monk.WayOfTheFallingStar },
-                    {  Skills.Monk.SevensidedStrike, Runes.Monk.None },
+                    {  Skills.Monk.SevenSidedStrike, Runes.Monk.None },
                 },
                 Passives = new List<Passive>
                 {
@@ -1131,7 +1131,7 @@ namespace Trinity.Coroutines
                     {  Skills.Monk.ExplodingPalm, Runes.Monk.TheFleshIsWeak },
                     {  Skills.Monk.BlindingFlash, Runes.Monk.MystifyingLight },
                     {  Skills.Monk.DashingStrike, Runes.Monk.WayOfTheFallingStar },
-                    {  Skills.Monk.SevensidedStrike, Runes.Monk.None },
+                    {  Skills.Monk.SevenSidedStrike, Runes.Monk.None },
                     {  Skills.Monk.MantraOfSalvation, Runes.Monk.None }
                 },
                 Passives = new List<Passive>
@@ -1148,7 +1148,7 @@ namespace Trinity.Coroutines
                     {  Skills.Monk.ExplodingPalm, Runes.Monk.TheFleshIsWeak },
                     {  Skills.Monk.MysticAlly, Runes.Monk.None },
                     {  Skills.Monk.DashingStrike, Runes.Monk.WayOfTheFallingStar },
-                    {  Skills.Monk.SevensidedStrike, Runes.Monk.None },
+                    {  Skills.Monk.SevenSidedStrike, Runes.Monk.None },
                     {  Skills.Monk.MantraOfSalvation, Runes.Monk.None }
                 },
                 Passives = new List<Passive>
@@ -1165,7 +1165,7 @@ namespace Trinity.Coroutines
                     {  Skills.Monk.ExplodingPalm, Runes.Monk.TheFleshIsWeak },
                     {  Skills.Monk.MysticAlly, Runes.Monk.None },
                     {  Skills.Monk.DashingStrike, Runes.Monk.BlindingSpeed },
-                    {  Skills.Monk.SevensidedStrike, Runes.Monk.SuddenAssault },
+                    {  Skills.Monk.SevenSidedStrike, Runes.Monk.SuddenAssault },
                     {  Skills.Monk.MantraOfSalvation, Runes.Monk.HardTarget }
                 },
                 Passives = new List<Passive>
@@ -1182,7 +1182,7 @@ namespace Trinity.Coroutines
                     {  Skills.Monk.ExplodingPalm, Runes.Monk.StrongSpirit },
                     {  Skills.Monk.MysticAlly, Runes.Monk.None },
                     {  Skills.Monk.DashingStrike, Runes.Monk.BlindingSpeed },
-                    {  Skills.Monk.SevensidedStrike, Runes.Monk.SuddenAssault },
+                    {  Skills.Monk.SevenSidedStrike, Runes.Monk.SuddenAssault },
                     {  Skills.Monk.MantraOfSalvation, Runes.Monk.HardTarget }
                 },
                 Passives = new List<Passive>
@@ -1199,7 +1199,7 @@ namespace Trinity.Coroutines
                     {  Skills.Monk.ExplodingPalm, Runes.Monk.StrongSpirit },
                     {  Skills.Monk.MysticAlly, Runes.Monk.WaterAlly },
                     {  Skills.Monk.DashingStrike, Runes.Monk.BlindingSpeed },
-                    {  Skills.Monk.SevensidedStrike, Runes.Monk.SuddenAssault },
+                    {  Skills.Monk.SevenSidedStrike, Runes.Monk.SuddenAssault },
                     {  Skills.Monk.MantraOfConviction, Runes.Monk.None }
                 },
                 Passives = new List<Passive>
@@ -1217,7 +1217,7 @@ namespace Trinity.Coroutines
                     {  Skills.Monk.ExplodingPalm, Runes.Monk.StrongSpirit },
                     {  Skills.Monk.MysticAlly, Runes.Monk.AirAlly },
                     {  Skills.Monk.DashingStrike, Runes.Monk.BlindingSpeed },
-                    {  Skills.Monk.SevensidedStrike, Runes.Monk.Pandemonium },
+                    {  Skills.Monk.SevenSidedStrike, Runes.Monk.Pandemonium },
                     {  Skills.Monk.MantraOfConviction, Runes.Monk.Overawe }
                 },
                 Passives = new List<Passive>

@@ -25,7 +25,7 @@ namespace Trinity.ProfileTags
 
         private async Task<bool> GetCoroutine()
         {
-            CombatBase.CombatMode = Mode;
+            Combat.CombatMode = Mode;
             _isDone = true;
             return true;
         }

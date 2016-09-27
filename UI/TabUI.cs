@@ -13,9 +13,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 using Trinity.Cache;
+using Trinity.Coroutines.Resources;
 using Trinity.Coroutines.Town;
-using TrinityCoroutines;
-using TrinityCoroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
@@ -612,6 +611,18 @@ namespace Trinity.UI
             {
                 using (new Helpers.AquireFrameHelper())
                 {
+                    var uiMapT = UXHelper.UIMapByType;
+
+                    var recipieRadios = uiMapT[ControlType.RecipeListRadioButton].Where(u => u.IsVisible);
+
+                    var text = uiMapT[ControlType.Text].Where(u => u.IsVisible);
+
+                    var ibuttons = uiMapT[ControlType.ItemButton].Where(u => u.IsVisible);
+
+                    var hotbarButtons = uiMapT[ControlType.HotbarButton].Where(u => u.IsVisible);
+
+                    var allVisible = UXHelper.UIMap.Where(u => u.Value.IsVisible);
+
                     // [23194B50] Mouseover: 0xE062F8B5040F3076, Name: Root.NormalLayer.vendor_dialog_mainPage.tab_3
 
                     var test = GameUI.GamePotion;
@@ -1354,6 +1365,9 @@ namespace Trinity.UI
         {
             try
             {
+                Logger.Log("This must be started with stash open.");
+                Logger.Warn("Please wait - this may take up to 30 seconds before starting.");
+
                 ItemSort.SortStash();
             }
             catch (Exception ex)

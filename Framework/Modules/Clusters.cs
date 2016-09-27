@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Web.Configuration;
 using Trinity.Components.Combat;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Common;
@@ -14,16 +15,16 @@ namespace Trinity.Framework.Modules
         public TargetArea Nearby { get; private set; } = new TargetArea(80f);
         public TargetArea CloseNearby { get; private set; } = new TargetArea(16f);
         public TargetCluster BestCluster { get; private set; } = new TargetCluster(20f);
-        public TargetCluster BestLargeCluster { get; private set; } = new TargetCluster(24f, 8);
-        public TargetCluster BestRiftValueCluster { get; private set; } = new TargetCluster(50f);
+        public TargetCluster Cluster { get; private set; } = new TargetCluster(24f, 5);
+        public TargetCluster LargeCluster { get; private set; } = new TargetCluster(24f, 10);
 
         protected override void OnPulse()
         {
             Nearby.Update();
+            Cluster.Update();
             CloseNearby.Update();
             BestCluster.Update();
-            BestLargeCluster.Update();
-            BestRiftValueCluster.Update();
+            LargeCluster.Update();
         }
     }
 
@@ -38,7 +39,6 @@ namespace Trinity.Framework.Modules
             UnitsAcdId = new HashSet<int>();
             Position = position;
             Range = range;
-            Update();
         }
 
         public Vector3 Position { get; set; }
@@ -63,9 +63,9 @@ namespace Trinity.Framework.Modules
             if (Position == Vector3.Zero)
                 return;
 
-            Units = TargetUtil.ListUnitsInRangeOfPosition(Position, Range);
+            Units = TargetUtil.UnitsInRangeOfPosition(Position, Range).ToList();
             UnitsAcdId = new HashSet<int>(Units.Select(u => u.AcdId));
-            EliteCount = TargetUtil.NumElitesInRangeOfPosition(Position, Range);
+            EliteCount = TargetUtil.ElitesInRange(Range, Position);
             UnitCount = TargetUtil.NumMobsInRangeOfPosition(Position, Range);
             BossCount = TargetUtil.NumBossInRangeOfPosition(Position, Range);
         }
@@ -82,7 +82,7 @@ namespace Trinity.Framework.Modules
 
         public int DebuffedCount (IEnumerable<SNOPower> powers)
         {
-            return Units.Any() ? TargetUtil.MobsWithDebuff(powers, Units) : 0;
+            return Units.Any() ? TargetUtil.UnitsWithDebuff(powers, Units).Count() : 0;
         }
 
         public float DebuffedPercent (IEnumerable<SNOPower> powers)
@@ -97,7 +97,6 @@ namespace Trinity.Framework.Modules
         {
             Radius = radiusOfCluster > 5 ? radiusOfCluster : 5;
             Size = minUnitsInCluster > 1 ? minUnitsInCluster : 1;
-            Update();
         }
 
         public float Radius { get; set; }

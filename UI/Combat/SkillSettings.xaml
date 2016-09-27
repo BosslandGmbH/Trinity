@@ -48,7 +48,7 @@
                                     Converter={StaticResourceExtension PropertyValueConverter}, 
                                     ConverterParameter=VisibilityFlags}" />
 
-                                <Label Content="{Binding ResourcePct}" />
+                                <Label Content="{Binding PrimaryResourcePct}" />
                                 <Label Content="{Binding Target}" />
                                 <Label Content="{Binding UseTime}" />
                             </UniformGrid>

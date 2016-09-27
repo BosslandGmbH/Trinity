@@ -38,14 +38,16 @@ namespace Trinity.Technicals
         /// <param name="args">The parameters used when format message.</param>
         public static void Log(TrinityLogLevel level, LogCategory category, string formatMessage, params object[] args)
         {
-            if (string.IsNullOrEmpty(prefix) && Core.Settings != null)
+            if (string.IsNullOrEmpty(prefix))
             {
-                UpdatePrefix();
+                prefix = $"[Trinity {TrinityPlugin.Instance.Version}]";
             }
 
-            if (category == LogCategory.UserInformation || level >= TrinityLogLevel.Error || (Core.Settings != null && Core.Settings.Advanced.LogCategories.HasFlag(category)))
+            var isCategory = TrinityPlugin.IsEnabled && Core.Settings != null && Core.Settings.Advanced.LogCategories.HasFlag(category);
+
+            if (category == LogCategory.UserInformation || level >= TrinityLogLevel.Error || isCategory)
             {
-                string msg = string.Format(prefix + "{0} {1}", category != LogCategory.UserInformation ? "[" + category.ToString() + "]" : string.Empty, formatMessage);
+                string msg = string.Format(prefix + "{0} {1}", category != LogCategory.UserInformation ? "[" + category + "]" : string.Empty, formatMessage);
 
                 try
                 {
@@ -56,17 +58,17 @@ namespace Trinity.Technicals
                 {
                     msg = msg + " || " + args;
                 }
-                var key = new Tuple<LogCategory, TrinityLogLevel>(category, level);
+                //var key = new Tuple<LogCategory, TrinityLogLevel>(category, level);
 
-                if (!LastLogMessages.ContainsKey(key))
-                    LastLogMessages.Add(key, "");
+                //if (!LastLogMessages.ContainsKey(key))
+                //    LastLogMessages[key] = string.Empty;
 
-                var allowDuplicates = Core.Settings != null && Core.Settings.Advanced != null && Core.Settings.Advanced.AllowDuplicateMessages;
+                //var allowDuplicates = Core.Settings != null && Core.Settings.Advanced != null && Core.Settings.Advanced.AllowDuplicateMessages;
 
-                string lastMessage;
-                if (LastLogMessages.TryGetValue(key, out lastMessage) && (allowDuplicates || lastMessage != msg))
-                {
-                    LastLogMessages[key] = msg;
+                //string lastMessage;
+                //if (LastLogMessages.TryGetValue(key, out lastMessage) && (allowDuplicates || lastMessage != msg))
+                //{
+                    //LastLogMessages[key] = msg;
 
                     switch (level)
                     {
@@ -83,14 +85,8 @@ namespace Trinity.Technicals
                             LogToTrinityDebug(msg);
                             break;
                     }
-                }
+                //}
             }
-        }
-
-        public static void UpdatePrefix()
-        {
-            var pluginStamp = Core.Settings.Advanced.BetaPlayground ? "Trinity:Beta" : "Trinity";
-            prefix = $"[{pluginStamp} {TrinityPlugin.Instance.Version}]";
         }
 
         public static void Log(TrinityLogLevel level, string formatMessage, params object[] args)

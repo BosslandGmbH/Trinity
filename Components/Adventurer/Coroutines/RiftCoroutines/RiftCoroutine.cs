@@ -526,36 +526,36 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             const int waittime = 45;
             const int partysize = 3; // ToDo: Add slider for party size under beta playground checkbox
 
-            if (TrinityPluginSettings.Settings.Advanced.BetaPlayground)
-            {
-                if (Core.Player.IsInParty &&
-                    ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count() < ZetaDia.Service.Party.NumPartyMembers)
-                {
-                    Logger.Info("Waiting until all party is present.");
-                    await Coroutine.Wait(TimeSpan.FromMinutes(60),
-                            () =>
-                                ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count() >=
-                                ZetaDia.Service.Party.NumPartyMembers);
-                }
+            //if (TrinityPluginSettings.Settings.Advanced.BetaPlayground)
+            //{
+            //    if (Core.Player.IsInParty &&
+            //        ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count() < ZetaDia.Service.Party.NumPartyMembers)
+            //    {
+            //        Logger.Info("Waiting until all party is present.");
+            //        await Coroutine.Wait(TimeSpan.FromMinutes(60),
+            //                () =>
+            //                    ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count() >=
+            //                    ZetaDia.Service.Party.NumPartyMembers);
+            //    }
 
-                if (Core.Player.IsInParty && ZetaDia.Service.Party.NumPartyMembers < partysize)
-                {
-                    Logger.Info("Waiting until we have a party of " + partysize + ".");
-                    await Coroutine.Wait(TimeSpan.FromMinutes(60),
-                            () => ZetaDia.Service.Party.NumPartyMembers >= partysize || !ZetaDia.IsInGame);
-                }
+            //    if (Core.Player.IsInParty && ZetaDia.Service.Party.NumPartyMembers < partysize)
+            //    {
+            //        Logger.Info("Waiting until we have a party of " + partysize + ".");
+            //        await Coroutine.Wait(TimeSpan.FromMinutes(60),
+            //                () => ZetaDia.Service.Party.NumPartyMembers >= partysize || !ZetaDia.IsInGame);
+            //    }
 
-                if (ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count(u => u.Distance >= 5f) <=
-                    ZetaDia.Service.Party.NumPartyMembers)
-                {
-                    Logger.Info("Party member(s) father than 5 yards away. Waiting " + waittime +
-                                " seconds before opening rift. If party stacks, Starting rift.");
-                    await Coroutine.Wait(TimeSpan.FromSeconds(waittime),
-                            () =>
-                                ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count(u => u.Distance <= 5) >=
-                                ZetaDia.Service.Party.NumPartyMembers);
-                }
-            }
+            //    if (ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count(u => u.Distance >= 5f) <=
+            //        ZetaDia.Service.Party.NumPartyMembers)
+            //    {
+            //        Logger.Info("Party member(s) father than 5 yards away. Waiting " + waittime +
+            //                    " seconds before opening rift. If party stacks, Starting rift.");
+            //        await Coroutine.Wait(TimeSpan.FromSeconds(waittime),
+            //                () =>
+            //                    ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).Count(u => u.Distance <= 5) >=
+            //                    ZetaDia.Service.Party.NumPartyMembers);
+            //    }
+            //}
 
             var maximizeXp = _RiftType == RiftType.Greater && _options.NormalRiftForXPShrine && (ZetaDia.Me.RestExperience < 5000000000 && ZetaDia.Me.RestExperience > -1);
             if (maximizeXp)
@@ -757,43 +757,43 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
-            if (Core.Player.IsInParty && RiftData.GetGreaterRiftLevel() > 55 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
-            {
-                var deadPlayer =
-                    ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
-                        .FirstOrDefault(u => u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.IsAlive);
+            //if (Core.Player.IsInParty && RiftData.GetGreaterRiftLevel() > 55 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
+            //{
+            //    var deadPlayer =
+            //        ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
+            //            .FirstOrDefault(u => u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.IsAlive);
 
-                if (deadPlayer != null && deadPlayer.Distance > 15)
-                {
-                    if (!await NavigationCoroutine.MoveTo(deadPlayer.Position, 15)) return false;
-                }
+            //    if (deadPlayer != null && deadPlayer.Distance > 15)
+            //    {
+            //        if (!await NavigationCoroutine.MoveTo(deadPlayer.Position, 15)) return false;
+            //    }
 
-                var players =
-                        ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
-                            .Where(
-                                u =>
-                                    u.IsValid && u.CommonData != null && u.CommonData.IsValid &&
-                                    u.WorldId == ZetaDia.Me.WorldId && u.HitpointsMaxTotal < 999999999);
+            //    var players =
+            //            ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
+            //                .Where(
+            //                    u =>
+            //                        u.IsValid && u.CommonData != null && u.CommonData.IsValid &&
+            //                        u.WorldId == ZetaDia.Me.WorldId && u.HitpointsMaxTotal < 999999999);
 
-                var diaPlayers = players as DiaPlayer[] ?? players.ToArray();
-                var maxhpplayer = diaPlayers.OrderByDescending(x => x.HitpointsMaxTotal).FirstOrDefault();
+            //    var diaPlayers = players as DiaPlayer[] ?? players.ToArray();
+            //    var maxhpplayer = diaPlayers.OrderByDescending(x => x.HitpointsMaxTotal).FirstOrDefault();
 
-                if (!PluginManager.GetEnabledPlugins().Any(u => u.Contains("AutoFollow")) && maxhpplayer != null && maxhpplayer.HitpointsMaxTotal > ZetaDia.Me.HitpointsMaxTotal)
-                {
-                    if (maxhpplayer.Distance > 20 && ZetaDia.Me.IsInCombat || !ZetaDia.Me.IsInCombat)
-                    {
-                        var say = "[Follower] Got to far away.  Trying to follow the Tank with HPs: " +
-                                  maxhpplayer.HitpointsMaxTotal + "!";
-                        if (lastError == null || say != lastError)
-                        {
-                            Logger.Info(say);
-                            lastError = say;
-                            Logger.Info(lastError);
-                        }
-                        if (!await NavigationCoroutine.MoveTo(maxhpplayer.Position, 5)) return false;
-                    }
-                }
-            }
+            //    if (!PluginManager.GetEnabledPlugins().Any(u => u.Contains("AutoFollow")) && maxhpplayer != null && maxhpplayer.HitpointsMaxTotal > ZetaDia.Me.HitpointsMaxTotal)
+            //    {
+            //        if (maxhpplayer.Distance > 20 && ZetaDia.Me.IsInCombat || !ZetaDia.Me.IsInCombat)
+            //        {
+            //            var say = "[Follower] Got to far away.  Trying to follow the Tank with HPs: " +
+            //                      maxhpplayer.HitpointsMaxTotal + "!";
+            //            if (lastError == null || say != lastError)
+            //            {
+            //                Logger.Info(say);
+            //                lastError = say;
+            //                Logger.Info(lastError);
+            //            }
+            //            if (!await NavigationCoroutine.MoveTo(maxhpplayer.Position, 5)) return false;
+            //        }
+            //    }
+            //}
 
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
             ScenesStorage.Reset();
@@ -810,43 +810,43 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
-            if (Core.Player.IsInParty && RiftData.GetGreaterRiftLevel() > 55 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
-            {
-                var deadPlayer =
-                    ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
-                        .FirstOrDefault(u => u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.IsAlive);
+            //if (Core.Player.IsInParty && RiftData.GetGreaterRiftLevel() > 55 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
+            //{
+            //    var deadPlayer =
+            //        ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
+            //            .FirstOrDefault(u => u.IsValid && u.CommonData != null && u.CommonData.IsValid && !u.IsAlive);
 
-                if (deadPlayer != null && deadPlayer.Distance > 15)
-                {
-                    if (!await NavigationCoroutine.MoveTo(deadPlayer.Position, 15)) return false;
-                }
+            //    if (deadPlayer != null && deadPlayer.Distance > 15)
+            //    {
+            //        if (!await NavigationCoroutine.MoveTo(deadPlayer.Position, 15)) return false;
+            //    }
 
-                var players =
-                        ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
-                            .Where(
-                                u =>
-                                    u.IsValid && u.CommonData != null && u.CommonData.IsValid &&
-                                    u.WorldId == ZetaDia.Me.WorldId && u.HitpointsMaxTotal < 999999999);
+            //    var players =
+            //            ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true)
+            //                .Where(
+            //                    u =>
+            //                        u.IsValid && u.CommonData != null && u.CommonData.IsValid &&
+            //                        u.WorldId == ZetaDia.Me.WorldId && u.HitpointsMaxTotal < 999999999);
 
-                var diaPlayers = players as DiaPlayer[] ?? players.ToArray();
-                var maxhpplayer = diaPlayers.OrderByDescending(x => x.HitpointsMaxTotal).FirstOrDefault();
+            //    var diaPlayers = players as DiaPlayer[] ?? players.ToArray();
+            //    var maxhpplayer = diaPlayers.OrderByDescending(x => x.HitpointsMaxTotal).FirstOrDefault();
 
-                if (!PluginManager.GetEnabledPlugins().Any(u => u.Contains("AutoFollow")) && maxhpplayer != null && maxhpplayer.HitpointsMaxTotal > ZetaDia.Me.HitpointsMaxTotal)
-                {
-                    if (maxhpplayer.Distance > 20 && ZetaDia.Me.IsInCombat || !ZetaDia.Me.IsInCombat)
-                    {
-                        var say = "[Follower] Got to far away.  Trying to follow the Tank with HPs: " +
-                                  maxhpplayer.HitpointsMaxTotal + "!";
-                        if (lastError == null || say != lastError)
-                        {
-                            Logger.Info(say);
-                            lastError = say;
-                            Logger.Info(lastError);
-                        }
-                        if (!await NavigationCoroutine.MoveTo(maxhpplayer.Position, 5)) return false;
-                    }
-                }
-            }
+            //    if (!PluginManager.GetEnabledPlugins().Any(u => u.Contains("AutoFollow")) && maxhpplayer != null && maxhpplayer.HitpointsMaxTotal > ZetaDia.Me.HitpointsMaxTotal)
+            //    {
+            //        if (maxhpplayer.Distance > 20 && ZetaDia.Me.IsInCombat || !ZetaDia.Me.IsInCombat)
+            //        {
+            //            var say = "[Follower] Got to far away.  Trying to follow the Tank with HPs: " +
+            //                      maxhpplayer.HitpointsMaxTotal + "!";
+            //            if (lastError == null || say != lastError)
+            //            {
+            //                Logger.Info(say);
+            //                lastError = say;
+            //                Logger.Info(lastError);
+            //            }
+            //            if (!await NavigationCoroutine.MoveTo(maxhpplayer.Position, 5)) return false;
+            //        }
+            //    }
+            //}
 
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
             ScenesStorage.Reset();

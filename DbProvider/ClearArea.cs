@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
+using Trinity.Coroutines;
 using Trinity.Coroutines.Town;
 using Trinity.Framework;
 using Trinity.Framework.Objects.Memory.Misc;
@@ -14,7 +15,6 @@ using Trinity.Helpers;
 using Trinity.Movement;
 using Trinity.Reference;
 using Trinity.Technicals;
-using TrinityCoroutines;
 using Zeta.Bot;
 using Zeta.Bot.Logic;
 using Zeta.Bot.Navigation;
@@ -49,7 +49,7 @@ namespace Trinity.DbProvider
                 Logger.Log("Started Clearing Area");
                 IsClearing = true;
                 TrinityTownRun.IsVendoring = false;
-                CombatBase.CombatMode = CombatMode.KillAll;
+                Combat.CombatMode = CombatMode.KillAll;
                 StartWorld = ZetaDia.CurrentWorldSnoId;
                 StartPosition = ZetaDia.Me.Position;
             }
@@ -61,7 +61,7 @@ namespace Trinity.DbProvider
             {
                 Logger.Log("Stopped Clearing Area");
                 IsClearing = false;
-                CombatBase.CombatMode = CombatMode.Normal;
+                Combat.CombatMode = CombatMode.Normal;
             }
         }
 
@@ -76,7 +76,7 @@ namespace Trinity.DbProvider
             if (noMonsters)
             {
                 Logger.LogDebug($"No Monsters nearby, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
-                await MoveTo.Execute(StartPosition, "Town Portal Position", 15f, () => ZetaDia.CurrentWorldSnoId != StartWorld || Navigator.StuckHandler.IsStuck);
+                await MoveTo.Execute(StartPosition, "Town Portal Position", 15f, () => ZetaDia.CurrentWorldSnoId != StartWorld || Navigator.StuckHandler.IsStuck || PlayerMover.IsBlocked);
                 Stop();
                 return false;
             }
@@ -85,7 +85,7 @@ namespace Trinity.DbProvider
             if (clearFinished)
             {
                 Logger.LogDebug("Clear timer finished, go back to portal position. Distance={StartPosition.Distance(ZetaDia.Me.Position)}");
-                await MoveTo.Execute(StartPosition, "Town Portal Position", 15f, () => ZetaDia.CurrentWorldSnoId != StartWorld || Navigator.StuckHandler.IsStuck);
+                await MoveTo.Execute(StartPosition, "Town Portal Position", 15f, () => ZetaDia.CurrentWorldSnoId != StartWorld || Navigator.StuckHandler.IsStuck || PlayerMover.IsBlocked);
                 Stop();
                 return false;
             }

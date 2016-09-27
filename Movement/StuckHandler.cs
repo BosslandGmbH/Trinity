@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Routines;
 using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
@@ -169,19 +171,19 @@ namespace Trinity.Movement
                 return true;
             }
 
-            if (CombatBase.IsCurrentlyAvoiding)
+            if (Combat.IsCurrentlyAvoiding)
             {
                 Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Currently Avoiding");
                 return false;
             }
 
-            if (CombatBase.IsCurrentlyKiting)
+            if (Combat.IsCurrentlyKiting)
             {
                 Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Currently Kiting");
                 return false;
             }
 
-            var isWaiting = CombatBase.CurrentTarget != null && CombatBase.CurrentPower.SNOPower == SNOPower.Walk && PlayerMover.MovementSpeed < 4 && Core.Grids.CanRayWalk(ZetaDia.Me.Position, CombatBase.CurrentTarget.Position);
+            var isWaiting = Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentPower?.SNOPower == SNOPower.Walk && Core.Player.MovementSpeed < 4 && Core.Grids.CanRayWalk(ZetaDia.Me.Position, Combat.Targeting.CurrentTarget.Position);
             if (isWaiting)
             {
                 Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Waiting (Routine Walk)");
@@ -189,7 +191,7 @@ namespace Trinity.Movement
             }
           
             var secondsSincePowerUse = DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds;
-            if (secondsSincePowerUse < 4 && !_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && CombatBase.IsInCombat)
+            if (secondsSincePowerUse < 4 && !_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && Combat.IsInCombat)
             {
                 Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Recently cast power in combat ({SpellHistory.LastPowerUsed}, {secondsSincePowerUse}s ago)");
                 return true;
@@ -209,9 +211,9 @@ namespace Trinity.Movement
                 return true;
             }
 
-            if (PlayerMover.GetMovementSpeed() > 2)
+            if (Core.Player.MovementSpeed > 2)
             {
-                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Moving (Speed: {PlayerMover.GetMovementSpeed()})");
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Moving (Speed: {Core.Player.MovementSpeed})");
                 return true;
             }
 

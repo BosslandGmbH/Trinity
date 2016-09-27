@@ -19,6 +19,37 @@ namespace Trinity
     /// </summary>
     internal partial class DataDictionary
     {
+        public static List<TrinityObjectType> PlayerBlockingTypes = new List<TrinityObjectType>
+        {
+            TrinityObjectType.Barricade,
+            TrinityObjectType.Door
+        };
+
+        public static List<SNOPower> InteractPowers = new List<SNOPower>
+        {
+            SNOPower.Axe_Operate_Gizmo,
+            SNOPower.Axe_Operate_NPC,
+        };
+
+        public static List<SNOPower> AlwaysCanCastPowers = new List<SNOPower>
+        {
+            SNOPower.Weapon_Ranged_Wand,
+            SNOPower.Weapon_Ranged_Projectile,
+            SNOPower.Weapon_Melee_Instant,
+            SNOPower.Axe_Operate_Gizmo,
+            SNOPower.Axe_Operate_NPC,
+            SNOPower.Walk,
+        };
+
+        public static List<SNOPower> ChargeBasedPowers = new List<SNOPower>
+        {
+            SNOPower.Barbarian_Revenge,
+            SNOPower.Barbarian_FuriousCharge,
+            SNOPower.X1_Monk_DashingStrike,
+            SNOPower.DemonHunter_Sentry,
+            SNOPower.DemonHunter_SpikeTrap,
+        };
+
         public static readonly HashSet<int> KeywardenSno = new HashSet<int>
         {
             (int)SNOActor.DuneDervish_B_Unique_Uber
@@ -1054,6 +1085,12 @@ namespace Trinity
             {159369, TimeSpan.FromSeconds(3)}, // Morlu Meteor
         };
 
+        public HashSet<SNOPower> NonCombatPowers = new HashSet<SNOPower>
+        {
+            SNOPower.None,
+            SNOPower.Walk
+        };
+
         public static Dictionary<int, float> DefaultAvoidanceCustomRadius { get { return defaultAvoidanceCustomRadius; } }
         private static readonly Dictionary<int, float> defaultAvoidanceCustomRadius = new Dictionary<int, float>()
         {
@@ -1865,7 +1902,11 @@ namespace Trinity
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.x1_Malthael_DeathFogMonster, //x1_Malthael_DeathFogMonster-23399 (325136) 
+
             444403, //p4_Leoric_Chandelier - 30646.SNO = 444403,
+            53628, //iron railing destuctible
+            (int)SNOActor.x1_BogCave_Stalagmite_Fungus_A, //255245, 
 
             (int)SNOActor.PT_Blacksmith,
             (int)SNOActor.trOut_OldTristram_AdriaCellar_Cauldron, //-6946 (131123)
@@ -1882,8 +1923,6 @@ namespace Trinity
             (int)SNOActor.a1dun_leor_firewall2, //(89579) fire floor tiles
 
             (int)SNOActor.a2dun_Zolt_Random_Breakable_Statue,
-
-            (int)SNOActor.a3dun_Keep_Bridge,
 
             (int)SNOActor.x1_Catacombs_Breakable_Corner_Wall,
             (int)SNOActor.x1_Catacombs_Breakable_Wall_A,
@@ -2363,72 +2402,72 @@ namespace Trinity
             5212
         };
 
-        public static Dictionary<int, AvoidanceType> AvoidanceTypeSNO = new Dictionary<int, AvoidanceType>
-        {
-            {349774, AvoidanceType.FrozenPulse},
-            {343539, AvoidanceType.Orbiter},
-            {316389, AvoidanceType.PoisonEnchanted},
-            {340319, AvoidanceType.PoisonEnchanted},
-            {341512, AvoidanceType.Thunderstorm},
-            {337109, AvoidanceType.Wormhole},
-            {123839, AvoidanceType.AzmodanBody},
-            {123124, AvoidanceType.AzmodanPool},
-            {123842, AvoidanceType.AzmoFireball},
-            {219702, AvoidanceType.Arcane},
-            {221225, AvoidanceType.Arcane},
-            {3337, AvoidanceType.BeastCharge},
-            {5212, AvoidanceType.BeeWasp},
-            {161822, AvoidanceType.Belial},
-            {161833, AvoidanceType.Belial},
-            {201454, AvoidanceType.ButcherFloorPanel},
-            {201464, AvoidanceType.ButcherFloorPanel},
-            {201426, AvoidanceType.ButcherFloorPanel},
-            {201438, AvoidanceType.ButcherFloorPanel},
-            {200969, AvoidanceType.ButcherFloorPanel},
-            {201423, AvoidanceType.ButcherFloorPanel},
-            {201242, AvoidanceType.ButcherFloorPanel},
-            {226350, AvoidanceType.DiabloRingOfFire},
-            {226525, AvoidanceType.DiabloRingOfFire},
-            {84608, AvoidanceType.Desecrator},
-            {93837, AvoidanceType.GhomGas},
-            {3847, AvoidanceType.Grotesque},
-            {168031, AvoidanceType.DiabloPrison},
-            {214845, AvoidanceType.DiabloMeteor},
-            {402, AvoidanceType.IceBall},
-            {223675, AvoidanceType.IceBall},
-            {260377, AvoidanceType.IceTrail},
-            {432, AvoidanceType.MageFire},
-            {166686, AvoidanceType.MaghdaProjectille},
-            {160154, AvoidanceType.MoltenBall},
-            {4803, AvoidanceType.MoltenCore},
-            {4804, AvoidanceType.MoltenCore},
-            {224225, AvoidanceType.MoltenCore},
-            {247987, AvoidanceType.MoltenCore},
-            {95868, AvoidanceType.MoltenTrail},
-            {250031, AvoidanceType.Mortar},
-            {108869, AvoidanceType.PlagueCloud},
-            {3865, AvoidanceType.PlagueHand},
-            {5482, AvoidanceType.PoisonTree},
-            {6578, AvoidanceType.PoisonTree},
-            {4103, AvoidanceType.ShamanFire},
-            //{185924, AvoidanceType.ZoltBubble},
-            {139741, AvoidanceType.ZoltTwister}
-        };
+        //public static Dictionary<int, AvoidanceType> AvoidanceTypeSNO = new Dictionary<int, AvoidanceType>
+        //{
+        //    {349774, AvoidanceType.FrozenPulse},
+        //    {343539, AvoidanceType.Orbiter},
+        //    {316389, AvoidanceType.PoisonEnchanted},
+        //    {340319, AvoidanceType.PoisonEnchanted},
+        //    {341512, AvoidanceType.Thunderstorm},
+        //    {337109, AvoidanceType.Wormhole},
+        //    {123839, AvoidanceType.AzmodanBody},
+        //    {123124, AvoidanceType.AzmodanPool},
+        //    {123842, AvoidanceType.AzmoFireball},
+        //    {219702, AvoidanceType.Arcane},
+        //    {221225, AvoidanceType.Arcane},
+        //    {3337, AvoidanceType.BeastCharge},
+        //    {5212, AvoidanceType.BeeWasp},
+        //    {161822, AvoidanceType.Belial},
+        //    {161833, AvoidanceType.Belial},
+        //    {201454, AvoidanceType.ButcherFloorPanel},
+        //    {201464, AvoidanceType.ButcherFloorPanel},
+        //    {201426, AvoidanceType.ButcherFloorPanel},
+        //    {201438, AvoidanceType.ButcherFloorPanel},
+        //    {200969, AvoidanceType.ButcherFloorPanel},
+        //    {201423, AvoidanceType.ButcherFloorPanel},
+        //    {201242, AvoidanceType.ButcherFloorPanel},
+        //    {226350, AvoidanceType.DiabloRingOfFire},
+        //    {226525, AvoidanceType.DiabloRingOfFire},
+        //    {84608, AvoidanceType.Desecrator},
+        //    {93837, AvoidanceType.GhomGas},
+        //    {3847, AvoidanceType.Grotesque},
+        //    {168031, AvoidanceType.DiabloPrison},
+        //    {214845, AvoidanceType.DiabloMeteor},
+        //    {402, AvoidanceType.IceBall},
+        //    {223675, AvoidanceType.IceBall},
+        //    {260377, AvoidanceType.IceTrail},
+        //    {432, AvoidanceType.MageFire},
+        //    {166686, AvoidanceType.MaghdaProjectille},
+        //    {160154, AvoidanceType.MoltenBall},
+        //    {4803, AvoidanceType.MoltenCore},
+        //    {4804, AvoidanceType.MoltenCore},
+        //    {224225, AvoidanceType.MoltenCore},
+        //    {247987, AvoidanceType.MoltenCore},
+        //    {95868, AvoidanceType.MoltenTrail},
+        //    {250031, AvoidanceType.Mortar},
+        //    {108869, AvoidanceType.PlagueCloud},
+        //    {3865, AvoidanceType.PlagueHand},
+        //    {5482, AvoidanceType.PoisonTree},
+        //    {6578, AvoidanceType.PoisonTree},
+        //    {4103, AvoidanceType.ShamanFire},
+        //    //{185924, AvoidanceType.ZoltBubble},
+        //    {139741, AvoidanceType.ZoltTwister}
+        //};
 
-        public static Dictionary<int, AvoidanceType> AvoidanceProjectileSNO = new Dictionary<int, AvoidanceType>
-        {
-            { 343539, AvoidanceType.Orbiter },
-            { 316389, AvoidanceType.PoisonEnchanted },
-            { 340319, AvoidanceType.PoisonEnchanted },
-            { 5212, AvoidanceType.BeeWasp },
-            { 4103, AvoidanceType.ShamanFire },
-            { 160154, AvoidanceType.MoltenBall },
-            { 123842, AvoidanceType.AzmoFireball },
-            { 139741, AvoidanceType.ZoltTwister },
-            { 166686, AvoidanceType.MaghdaProjectille },
-            { 185999, AvoidanceType.DiabloRingOfFire },
-            { 136533, AvoidanceType.DiabloLightning },
-        };
+        //public static Dictionary<int, AvoidanceType> AvoidanceProjectileSNO = new Dictionary<int, AvoidanceType>
+        //{
+        //    { 343539, AvoidanceType.Orbiter },
+        //    { 316389, AvoidanceType.PoisonEnchanted },
+        //    { 340319, AvoidanceType.PoisonEnchanted },
+        //    { 5212, AvoidanceType.BeeWasp },
+        //    { 4103, AvoidanceType.ShamanFire },
+        //    { 160154, AvoidanceType.MoltenBall },
+        //    { 123842, AvoidanceType.AzmoFireball },
+        //    { 139741, AvoidanceType.ZoltTwister },
+        //    { 166686, AvoidanceType.MaghdaProjectille },
+        //    { 185999, AvoidanceType.DiabloRingOfFire },
+        //    { 136533, AvoidanceType.DiabloLightning },
+        //};
 
         public static HashSet<SNOPower> CheckVariantBuffs = new HashSet<SNOPower>
         {

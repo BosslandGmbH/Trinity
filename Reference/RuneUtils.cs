@@ -91,7 +91,7 @@ namespace Trinity.Reference
         /// <returns>-999 on failure</returns> 
         public static int GetProperRuneIndex(int dbRuneIndex, SNOPower power)
         {
-            var firstOrDefault = SkillUtils.ById(power).Runes.FirstOrDefault(r => r.RuneIndex == dbRuneIndex);
+            var firstOrDefault = SkillUtils.GetSkillByPower(power).Runes.FirstOrDefault(r => r.RuneIndex == dbRuneIndex);
             if (firstOrDefault != null) return firstOrDefault.Index;
             return -999;
         }
@@ -102,7 +102,7 @@ namespace Trinity.Reference
         /// <returns>-999 on failure</returns>
         public static int GetDBRuneIndex(int properRuneIndex, SNOPower power)
         {
-            var firstOrDefault = SkillUtils.ById(power).Runes.FirstOrDefault(r => r.Index == properRuneIndex);
+            var firstOrDefault = SkillUtils.GetSkillByPower(power).Runes.FirstOrDefault(r => r.Index == properRuneIndex);
             if (firstOrDefault != null) return firstOrDefault.RuneIndex;
             return -999;
         }

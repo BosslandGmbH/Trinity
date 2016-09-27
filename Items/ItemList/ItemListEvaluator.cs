@@ -10,6 +10,7 @@ using Trinity.Reference;
 using Trinity.Technicals;
 using Trinity.UI.UIComponents;
 using Trinity.UIComponents;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Items.ItemList
 {
@@ -70,9 +71,18 @@ namespace Trinity.Items.ItemList
 
                 foreach (var prop in props)
                 {
+                    if (prop == ItemProperty.Attribute)
+                        continue;
+
                     var range = ItemDataUtils.GetItemStatRange(referenceItem, prop);
                     float newValue;
-                    EvaluateProperty(cItem, prop, (float)range.AncientMax, 0, out newValue);
+
+                    var testrule = new LRule(prop)
+                    {
+                        Value = (float) range.AncientMax,
+                    };
+
+                    EvaluateProperty(testrule, cItem, out newValue);
                 }
 
                 Logger.LogVerbose("------- Finished Test for {0} against max value", cItem.Name);
@@ -172,13 +182,12 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        internal static bool EvaluateProperty(LRule itemRule, TrinityItem cItem, out float newValue)
+        internal static bool EvaluateProperty(LRule itemRule, TrinityItem item, out float newValue)
         {
-            return EvaluateProperty(cItem, itemRule.ItemProperty, (float)itemRule.Value, itemRule.Variant, out newValue);
-        }
+            var prop = itemRule.ItemProperty;            
+            var value = (float) itemRule.Value;
+            var variant = itemRule.Variant;
 
-        private static bool EvaluateProperty(TrinityItem item, ItemProperty prop, float value, int variant, out float newValue)
-        {
             var result = false;
             string friendlyVariant = string.Empty;
             float itemValue = 0;
@@ -223,7 +232,10 @@ namespace Trinity.Items.ItemList
                     break;
 
                 case ItemProperty.AttackSpeed:
-                    itemValue = item.Attributes.AttackSpeedBonusPercent;
+                    if(item.ItemBaseType == ItemBaseType.Armor)
+                        itemValue = item.Attributes.AttacksPerSecondPercent;
+                    else
+                        itemValue = item.Attributes.AttacksPerSecondItemPercent;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
@@ -560,6 +572,48 @@ namespace Trinity.Items.ItemList
                     returnValue = itemValue;
                     break;
 
+                case ItemProperty.Attribute:
+
+                    try
+                    {
+                        friendlyVariant = $"{itemRule.AttributeKey} {itemRule.AttributeModifier} {itemRule.AttributeValue}";
+
+                        var error = string.Empty;
+                        var key = itemRule.AttributeKey.Trim();
+                        var mod = itemRule.AttributeModifier.Trim();
+                        var val = itemRule.AttributeValue.Trim();
+
+                        ActorAttributeType attribute;
+                        if (!Enum.TryParse(key, true, out attribute))
+                            error += $"No ActorAttributeType exists with key '{itemRule.AttributeKey}'. ";
+
+                        var modifierId = -1;
+                        if (!string.IsNullOrEmpty(mod))
+                        {
+                            if (!int.TryParse(mod, out modifierId))
+                                error += $"Modifier '{itemRule.AttributeModifier}' is not a number. ";
+                        }
+                                      
+                        if (!float.TryParse(val, out value))
+                            error += $"Value '{itemRule.AttributeModifier}' is not a number. ";
+
+                        if (!string.IsNullOrEmpty(error))
+                        {
+                            Logger.Warn($"Attribute specified in ItemList is invalid. {friendlyVariant} - {error}");
+                            break;
+                        }
+                        
+                        itemValue = item.Attributes.GetCachedAttribute<float>(attribute, modifierId);
+                        ruleValue = value;
+                        result = itemValue >= ruleValue;
+                        returnValue = itemValue;
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError($"Exception evaluating ItemList rule Attribute {ex}");
+                    }
+                    break;
             }
 
             Logger.LogVerbose($"  >>  Evaluated {item.Name} -- {prop.ToString().AddSpacesToSentence()} {friendlyVariant} (Item: {itemValue} -v- Rule: {ruleValue}) = {result}");

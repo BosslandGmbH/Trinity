@@ -219,6 +219,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                         case Mover.StraightLine:
                             Navigator.PlayerMover.MoveTowards(_destination);
                             LastMoveResult = MoveResult.Moved;
+                            Logger.DebugSetting($"MoveTowards Destination={_destination} Dist3D={AdvDia.MyPosition.Distance(_destination)} Dist2D={AdvDia.MyPosition.Distance2D(_destination)}");
                             return false;
                         case Mover.Navigator:
 
@@ -230,10 +231,10 @@ namespace Trinity.Components.Adventurer.Coroutines
                             {
                                 LastMoveResult = await Navigator.MoveTo(_destination);
                             }
+                            Logger.DebugSetting($"Navigator MoveResult = {LastMoveResult}, Destination={_destination} Dist3D={AdvDia.MyPosition.Distance(_destination)} Dist2D={AdvDia.MyPosition.Distance2D(_destination)}");
                             break;
                     }
 
-                    Logger.DebugSetting($"Navigation Task MoveResult = {LastMoveResult}, Destination={_destination} Dist3D={AdvDia.MyPosition.Distance(_destination)} Dist2D={AdvDia.MyPosition.Distance2D(_destination)}");
 
                 }
                 switch (LastMoveResult)

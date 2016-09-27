@@ -113,6 +113,13 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override string ToString() => $"{GetType().Name}: AcdId={AcdId}, {InventorySlot}, [{InventoryColumn},{InventoryRow}], {Name}";
 
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash * 7) + AnnId.GetHashCode();
+            hash = (hash * 7) + ActorSnoId.GetHashCode();
+            return hash;
+        }
     }
 
 }

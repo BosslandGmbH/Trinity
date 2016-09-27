@@ -11,18 +11,20 @@ using Trinity.Config;
 using Trinity.Config.Combat;
 using Trinity.Config.Loot;
 using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Helpers;
 using Trinity.Helpers.AutoFollow.Resources;
 using Trinity.ItemRules;
 using Trinity.Items;
+using Trinity.Routines;
+using Trinity.Settings;
 using Trinity.Settings.Loot;
 using Trinity.Technicals;
 using Trinity.UIComponents;
 using Zeta.Bot;
 using Zeta.Game;
 using Application = System.Windows.Application;
-using BotManager = Trinity.BotManager;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Trinity.UI.UIComponents
@@ -34,7 +36,9 @@ namespace Trinity.UI.UIComponents
     {
         private readonly TrinitySetting _Model;
         private readonly TrinitySetting _OriginalModel;
-        private InterfaceLoader<IDynamicSetting> _componentSettings;
+
+        private RoutineSettingsViewModel _routine;
+        public RoutineSettingsViewModel Routine => _routine;
 
         public TrinitySetting ViewModel => _Model;
 
@@ -55,7 +59,7 @@ namespace Trinity.UI.UIComponents
 
             if (model.Advanced.TPSEnabled != _OriginalModel.Advanced.TPSEnabled ||
                 model.Advanced.TPSEnabled && _OriginalModel.Advanced.TPSLimit != BotMain.TicksPerSecond)
-                BotManager.SetBotTicksPerSecond();
+                TrinityPlugin.SetBotTicksPerSecond();
 
             Logger.Log("TPSActual={0}", BotMain.TicksPerSecond);
 
@@ -81,8 +85,21 @@ namespace Trinity.UI.UIComponents
                 var advSettings = Adventurer.Instance as IDynamicSetting;
                 return new System.Windows.Controls.UserControl
                 {
-                    Content = advSettings.Control,
-                    DataContext = advSettings.DataContext
+                    Content = advSettings.GetControl(),
+                    DataContext = advSettings.GetDataContext()
+                };
+            }
+        }
+
+        public System.Windows.Controls.UserControl AvoidanceSettings
+        {
+            get
+            {
+                var advSettings = Core.Avoidance as IDynamicSetting;
+                return new System.Windows.Controls.UserControl
+                {
+                    Content = advSettings.GetControl(),
+                    DataContext = advSettings.GetDataContext()
                 };
             }
         }
@@ -95,6 +112,8 @@ namespace Trinity.UI.UIComponents
         {
             try
             {
+                _routine = new RoutineSettingsViewModel();
+
                 _OriginalModel = model;
                 _Model = new TrinitySetting();
                 _OriginalModel.CopyTo(_Model);
@@ -584,10 +603,12 @@ namespace Trinity.UI.UIComponents
             get { return _Model.Advanced; }
         }
 
-        public AvoidanceSetting Avoidance
-        {
-            get { return _Model.Avoidance; }
-        }
+        //public AvoidanceSetting Avoidance
+        //{
+        //    get { return _Model.Avoidance; }
+        //}
+
+        public WeightingSettings Weighting => _Model.Weighting;
 
         /// <summary>
         ///     Gets the Advanced Configuration Model.
@@ -735,6 +756,11 @@ namespace Trinity.UI.UIComponents
         public NotificationSetting Notification
         {
             get { return _Model.Notification; }
+        }
+
+        public GameInfo GameInfo
+        {
+            get { return GameInfo.Instance; }
         }
 
         internal static Grid MainWindowGrid()

@@ -1,15 +1,12 @@
 ﻿using System;
-using Trinity.Components.Combat;
 using Trinity.Config.Combat;
 using Trinity.Framework;
-using Trinity.Movement;
 using Trinity.Technicals;
 using Zeta.Bot;
-using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
 
-namespace TrinityCoroutines.Resources
+namespace Trinity.Coroutines.Resources
 {
     public class GameUI
     {

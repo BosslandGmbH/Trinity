@@ -176,7 +176,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         /// <summary>
         /// Includes temporary avoidances like monsters with telgraphing charge animations.
         /// </summary>
-        public bool IsActiveAvoidance => Type == TrinityObjectType.Avoidance || Core.Avoidance.ActiveAvoidanceSnoIds.Contains(ActorSnoId);
+        public bool IsActiveAvoidance => Type == TrinityObjectType.Avoidance || Core.Avoidance.GridEnricher.ActiveAvoidanceSnoIds.Contains(ActorSnoId);
 
         /// <summary>
         /// Is blacklisted by GenericBlacklist.
@@ -212,7 +212,7 @@ namespace Trinity.Framework.Actors.ActorTypes
             GizmoProperties.Populate(this);   
         }
 
-        public override string ToString() => $"{InternalName} ({ActorSnoId}) Type={Type} Dist={Distance}";
+        public override string ToString() => $"{InternalName} ({ActorSnoId}) Type={Type} Dist={Distance:N2}";
 
         public bool Interact()
         {

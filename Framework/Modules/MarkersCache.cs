@@ -61,6 +61,9 @@ namespace Trinity.Framework.Modules
 
         protected override void OnPulse()
         {
+            if (ZetaDia.Me == null)
+                return;
+
             _cache.Update();
         }
     }

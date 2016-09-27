@@ -79,7 +79,8 @@
         ElementalDamage = 74,
         ElementalResist,
         ChanceToBlockTotal,
-        PassivePower
+        PassivePower,
+        Attribute
     }
 }
 

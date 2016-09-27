@@ -15,7 +15,6 @@ using Trinity.Framework.Avoidance.Handlers;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Helpers;
 using Trinity.Settings.Loot;
-using TrinityCoroutines.Resources;
 using Trinity.Technicals;
 using log4net;
 using Zeta.Common;
@@ -32,7 +31,9 @@ namespace Trinity.Config
         private ParagonCollection _utilityParagonPriority;
         private ParagonCollection _defenseParagonPriority;
         private ParagonCollection _offenseParagonPriority;
+
         private bool _isEnabled;
+        private bool _isCustomize;
 
         public class ParagonCollection : FullyObservableCollection<ParagonItem>
         {
@@ -67,6 +68,14 @@ namespace Trinity.Config
         {
             get { return _isEnabled; }
             set { SetField(ref _isEnabled, value); }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool IsCustomize
+        {
+            get { return _isCustomize; }
+            set { SetField(ref _isCustomize, value); }
         }
 
         [DataMember(IsRequired = false)]
@@ -114,12 +123,15 @@ namespace Trinity.Config
 
         public override void LoadDefaults()
         {
+            IsEnabled = true;
+            IsCustomize = false;
+
             CoreParagonPriority = new ParagonCollection(ParagonCategory.PrimaryAttributes)
             {
+                new ParagonItem(TrinityParagonBonusType.MovementSpeed),
                 new ParagonItem(TrinityParagonBonusType.PrimaryStat),
                 new ParagonItem(TrinityParagonBonusType.Vitality),
                 new ParagonItem(TrinityParagonBonusType.Resource),
-                new ParagonItem(TrinityParagonBonusType.MovementSpeed),
             };
 
             UtilityParagonPriority = new ParagonCollection(ParagonCategory.Utility)

@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Coroutines.Town;
 using Trinity.Framework;
-using TrinityCoroutines;
-using TrinityCoroutines.Resources;
 using Trinity.Helpers;
 using Trinity.Technicals;
 using Zeta.Bot;

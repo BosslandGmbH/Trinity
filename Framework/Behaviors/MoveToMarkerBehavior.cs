@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
 using Trinity.Coroutines;
 using Trinity.Framework.Modules;
@@ -34,7 +35,7 @@ namespace Trinity.Framework.Behaviors
                 .OrderBy(m => m.Distance)
                 .FirstOrDefault(m => m.Position != Vector3.Zero && markerSelector(m) && !VisitedMarkerPositions.Contains(m.Position) && m.Distance > 10f);
 
-            if (marker != null && (IsRunning || (!CombatBase.IsInCombat && marker.Distance < 500)) && !Navigator.StuckHandler.IsStuck)
+            if (marker != null && (IsRunning || (!Combat.IsInCombat && marker.Distance < 500)) && !Navigator.StuckHandler.IsStuck)
             {
                 Marker = marker;
                 return true;

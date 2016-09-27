@@ -24,27 +24,33 @@
         </Grid.RowDefinitions>
         <Border Padding="0,0,0,10" Background="#343434">
             <TabControl Background="#1d1d1d" Foreground="#343434" >
+                <TabItem Header="General" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="General.xaml"/>
+                </TabItem>
                 <TabItem Header="Combat" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="Routine.xaml"/>
+                </TabItem>                
+                <!--<TabItem Header="General" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="ConfigCombat.xaml"/>
                 </TabItem>
-                <TabItem Header="Objects" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
-                    <Border Tag="ConfigObjects.xaml"/>
-                </TabItem>
+                <TabItem Header="My Build" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="Routine.xaml"/>
+                </TabItem>-->                
                 <TabItem Header="Items" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="ConfigItems.xaml"/>
                 </TabItem>
                 <TabItem Header="Avoidance" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="Avoidance.xaml"/>
                 </TabItem>
-                <TabItem Header="Paragon" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                <!--<TabItem Header="Paragon" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="Paragon.xaml"/>
+                </TabItem>-->
+                <TabItem Header="Profiles" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                    <Border Tag="Adventurer.xaml"/>
                 </TabItem>
                 <TabItem Header="Advanced" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="ConfigAdvanced.xaml"/>
                 </TabItem>
-                <TabItem Header="Adventurer" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
-                    <Border Tag="Adventurer.xaml"/>
-                </TabItem>                
             </TabControl>
         </Border>
         <Border Grid.Row="1" Padding="6,0,6,4" Background="#343434">
@@ -54,9 +60,9 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <WrapPanel Grid.Column="0">
-                    <Button Height="26" ToolTip="Replace all current settings with the settings from an XML file." DataContext="{StaticResource SettingsManager}" Command="{Binding ImportSettingsCommand}" Margin="4" Width="65">Import</Button>
-                    <Button Height="26" ToolTip="Copy all the current settings to a different file; it is an export - the current settings for this hero will NOT point to / be linked to the new file." DataContext="{StaticResource SettingsManager}" Command="{Binding ExportSettingsCommand}" Margin="4" Width="65">Export</Button>
-                    <Button Height="26" Command="{Binding ResetAllCommand}" Margin="4" Width="65">Reset</Button>
+                    <Button Height="26" ToolTip="Replace all current settings with the settings from an XML file." DataContext="{StaticResource SettingsManager}" Command="{Binding ImportSettingsCommand}" Margin="4"  Padding="7,0">Import</Button>
+                    <Button Height="26" ToolTip="Copy all the current settings to a different file; it is an export - the current settings for this hero will NOT point to / be linked to the new file." DataContext="{StaticResource SettingsManager}" Command="{Binding ExportSettingsCommand}" Margin="4"  Padding="7,0">Export</Button>
+                    <Button Height="26" Command="{Binding ResetAllCommand}" Margin="4"  Padding="7,0">Reset Everything</Button>
                 </WrapPanel>
 
                 <!--<demonbuddy:SplitButton Grid.Column="1" Height="26" HorizontalAlignment="Right" Content="Save" Margin="4" Width="120">

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Controls;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Technicals;
+using Zeta.Game;
 
 namespace Trinity.Framework.Modules
 {

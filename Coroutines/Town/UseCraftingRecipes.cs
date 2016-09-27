@@ -2,8 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using TrinityCoroutines;
-using TrinityCoroutines.Resources;
+using Trinity.Coroutines.Resources;
 using Zeta.Game;
 using Logger = Trinity.Technicals.Logger;
 

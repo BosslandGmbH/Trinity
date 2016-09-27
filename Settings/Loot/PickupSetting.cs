@@ -60,6 +60,9 @@ namespace Trinity.Config.Loot
         private bool _stashTransmog;
         private ItemFilterMode _itemFilterMode;
         private bool _pickupStaffOfHerdingParts;
+        private bool _pickupFollowerItems;
+        private bool _pickupYellowItems;
+        private bool _pickupBlueItems;
 
         #endregion Fields
 
@@ -245,7 +248,61 @@ namespace Trinity.Config.Loot
                 }
             }
         }
-        
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool PickupFollowerItems
+        {
+            get
+            {
+                return _pickupFollowerItems;
+            }
+            set
+            {
+                if (_pickupFollowerItems != value)
+                {
+                    _pickupFollowerItems = value;
+                    OnPropertyChanged("PickupFollowerItems");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool PickupBlueItems
+        {
+            get
+            {
+                return _pickupBlueItems;
+            }
+            set
+            {
+                if (_pickupBlueItems != value)
+                {
+                    _pickupBlueItems = value;
+                    OnPropertyChanged("PickupBlueItems");
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool PickupYellowItems
+        {
+            get
+            {
+                return _pickupYellowItems;
+            }
+            set
+            {
+                if (_pickupYellowItems != value)
+                {
+                    _pickupYellowItems = value;
+                    OnPropertyChanged("PickupYellowItems");
+                }
+            }
+        }
+
         [DataMember(IsRequired = false)]
         [DefaultValue(true)]
         public bool PickupBlueWeapons
@@ -1014,6 +1071,7 @@ namespace Trinity.Config.Loot
             Designs = true;
             GemLevel = 0;
             Plans = true;
+            
             LegendaryPlans = true;
             PickupLowLevel = true;
             IgnoreTwoHandedWeapons = false;

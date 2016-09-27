@@ -94,59 +94,59 @@ namespace Trinity.Config.Combat
 
         #region Properties
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(0.40f)]
-        public float PotionLevel
-        {
-            get
-            {
-                return _PotionLevel;
-            }
-            set
-            {
-                if (_PotionLevel != value)
-                {
-                    _PotionLevel = value;
-                    OnPropertyChanged(nameof(PotionLevel));
-                }
-            }
-        }
+        //[DataMember(IsRequired = false)]
+        //[DefaultValue(0.40f)]
+        //public float PotionLevel
+        //{
+        //    get
+        //    {
+        //        return _PotionLevel;
+        //    }
+        //    set
+        //    {
+        //        if (_PotionLevel != value)
+        //        {
+        //            _PotionLevel = value;
+        //            OnPropertyChanged(nameof(PotionLevel));
+        //        }
+        //    }
+        //}
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(0.45f)]
-        public float HealthGlobeLevel
-        {
-            get
-            {
-                return _HealthGlobeLevel;
-            }
-            set
-            {
-                if (_HealthGlobeLevel != value)
-                {
-                    _HealthGlobeLevel = value;
-                    OnPropertyChanged(nameof(HealthGlobeLevel));
-                }
-            }
-        }
+        //[DataMember(IsRequired = false)]
+        //[DefaultValue(0.45f)]
+        //public float HealthGlobeLevel
+        //{
+        //    get
+        //    {
+        //        return _HealthGlobeLevel;
+        //    }
+        //    set
+        //    {
+        //        if (_HealthGlobeLevel != value)
+        //        {
+        //            _HealthGlobeLevel = value;
+        //            OnPropertyChanged(nameof(HealthGlobeLevel));
+        //        }
+        //    }
+        //}
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(35f)]
-        public float HealthGlobeSearchDistance
-        {
-            get
-            {
-                return _healthGlobeSearchDistance;
-            }
-            set
-            {
-                if (_healthGlobeSearchDistance != value)
-                {
-                    _healthGlobeSearchDistance = value;
-                    OnPropertyChanged(nameof(HealthGlobeSearchDistance));
-                }
-            }
-        }
+        //[DataMember(IsRequired = false)]
+        //[DefaultValue(35f)]
+        //public float HealthGlobeSearchDistance
+        //{
+        //    get
+        //    {
+        //        return _healthGlobeSearchDistance;
+        //    }
+        //    set
+        //    {
+        //        if (_healthGlobeSearchDistance != value)
+        //        {
+        //            _healthGlobeSearchDistance = value;
+        //            OnPropertyChanged(nameof(HealthGlobeSearchDistance));
+        //        }
+        //    }
+        //}
 
         [DataMember(IsRequired = false)]
         [DefaultValue(0.5f)]
@@ -382,23 +382,23 @@ namespace Trinity.Config.Combat
             }
         }
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(1)]
-        public int TrashPackSize
-        {
-            get
-            {
-                return _trashPackSize;
-            }
-            set
-            {
-                if (_trashPackSize != value)
-                {
-                    _trashPackSize = value;
-                    OnPropertyChanged(nameof(TrashPackSize));
-                }
-            }
-        }
+        //[DataMember(IsRequired = false)]
+        //[DefaultValue(1)]
+        //public int TrashPackSize
+        //{
+        //    get
+        //    {
+        //        return _trashPackSize;
+        //    }
+        //    set
+        //    {
+        //        if (_trashPackSize != value)
+        //        {
+        //            _trashPackSize = value;
+        //            OnPropertyChanged(nameof(TrashPackSize));
+        //        }
+        //    }
+        //}
 
         [DataMember(IsRequired = false)]
         [DefaultValue(1)]
@@ -418,23 +418,23 @@ namespace Trinity.Config.Combat
             }
         }
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(40f)]
-        public float TrashPackClusterRadius
-        {
-            get
-            {
-                return _TrashPackClusterRadius;
-            }
-            set
-            {
-                if (_TrashPackClusterRadius != value)
-                {
-                    _TrashPackClusterRadius = value;
-                    OnPropertyChanged(nameof(TrashPackClusterRadius));
-                }
-            }
-        }
+        //[DataMember(IsRequired = false)]
+        //[DefaultValue(40f)]
+        //public float TrashPackClusterRadius
+        //{
+        //    get
+        //    {
+        //        return _TrashPackClusterRadius = 20f;
+        //    }
+        //    set
+        //    {
+        //        //if (_TrashPackClusterRadius != value)
+        //        //{
+        //        //    _TrashPackClusterRadius = value;
+        //        //    OnPropertyChanged(nameof(TrashPackClusterRadius));
+        //        //}
+        //    }
+        //}
 
         [DataMember(IsRequired = false)]
         [DefaultValue(true)]
@@ -1088,6 +1088,8 @@ namespace Trinity.Config.Combat
             }
         }
 
+        public const MonsterAffixes IgnoreAffixesExclusions = MonsterAffixes.Elite | MonsterAffixes.Minion | MonsterAffixes.Rare | MonsterAffixes.Unique;
+
         [DataMember(IsRequired = false)]
         [Setting, UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]          
         [FlagExclusion(IgnoreAffixesExclusions)]
@@ -1115,7 +1117,7 @@ namespace Trinity.Config.Combat
             }
         }
 
-        public const MonsterAffixes IgnoreAffixesExclusions = MonsterAffixes.Elite | MonsterAffixes.Minion | MonsterAffixes.Rare | MonsterAffixes.Unique;
+
 
         #endregion Properties
 
@@ -1159,8 +1161,8 @@ namespace Trinity.Config.Combat
             IgnoreHighHitPointTrash = false;
             IgnoreRares = false;
             UseNavMeshTargeting = true;
-            TrashPackClusterRadius = 40f;
-            TrashPackSize = 1;
+            //TrashPackClusterRadius = 40f;
+            //TrashPackSize = 1;
             KillMonstersInAoE = true;
             EliteRange = 120;
             NonEliteRange = 60;
@@ -1177,7 +1179,7 @@ namespace Trinity.Config.Combat
             HiPriorityHG = false;
             SnapshotAttackSpeed = 4;
             TryToSnapshot = true;
-            HealthGlobeSearchDistance = 35f;
+            //HealthGlobeSearchDistance = 35f;
 
             ForceKillClusterElites = false;
             RiftValueAlwaysKillClusterValue = 10;

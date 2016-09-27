@@ -14,7 +14,7 @@ namespace Trinity.Framework.Avoidance.Structures
 
         public void Update(IList<AvoidanceNode> nodes)
         {
-            ThrottleChangeNotifications = DateTime.UtcNow.Subtract(_lastUpdated).TotalMilliseconds < 250;
+            SupressChangeNotifications = DateTime.UtcNow.Subtract(_lastUpdated).TotalMilliseconds < 250;
 
             NodesTotal = nodes.Count;
 

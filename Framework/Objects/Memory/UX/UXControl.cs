@@ -14,9 +14,23 @@ namespace Trinity.Framework.Objects.Memory.UX
         public UXControl Next => ReadPointer<UXControl>(0x01C);
         public UXReference Self => ReadObject<UXReference>(0x020);
         public UXReference Parent => ReadObject<UXReference>(0x228);
+        public UXControl NextControl => UXHelper.GetControl(Next.BaseAddress);
+        public UXControl ParentControl => UXHelper.GetControl(Parent.BaseAddress);
+        public UXControl PreviousControl => UXHelper.GetControl(Previous.BaseAddress);
         public ControlType Type => ReadOffset<ControlType>(0x430);
         public int Tag => ReadOffset<int>(0x434);
-        public override string ToString() => $"[{Type}] {Self.Name}";    
+        public override string ToString() => $"[{Type}] {Self.Name}";
+
+        public int _x004 => ReadOffset<int>(0x004);
+        public IntPtr x008_Ptr_20Bytes => ReadOffset<IntPtr>(0x008);
+        public int x00C => ReadOffset<int>(0x00C);
+        public int x010 => ReadOffset<int>(0x010);
+        public int x430 => ReadOffset<int>(0x430);
+        public int x434_Tag => ReadOffset<int>(0x434);
+        public int x438_UISnoId_StructStart_Min16Bytes => ReadOffset<int>(0x438);
+        public int x43C => ReadOffset<int>(0x43C);
+        public int x440 => ReadOffset<int>(0x440);
+        public int x444 => ReadOffset<int>(0x444);
     }
 
     [Flags]

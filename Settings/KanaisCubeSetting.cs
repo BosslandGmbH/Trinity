@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Config.Combat;
+using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Settings.Loot;
-using TrinityCoroutines.Resources;
 using Trinity.Technicals;
 
 namespace Trinity.Config

@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using Buddy.Coroutines;
 using log4net;
 using Trinity.Framework;
-using Trinity.Helpers;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.TreeSharp;
 using Action = System.Action;
 
-namespace TrinityCoroutines
+namespace Trinity.Coroutines.Resources
 {
     public static class CoroutineHelper
     {

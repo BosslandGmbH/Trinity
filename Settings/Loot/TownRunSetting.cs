@@ -83,95 +83,13 @@ namespace Trinity.Config.Loot
             }
         }
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(500000)]
-        public int MaxStackForgottenSoul
-        {
-            get
-            {
-                return _maxStackForgottenSoul;
-            }
-            set
-            {
-                if (_maxStackForgottenSoul != value)
-                {
-                    _maxStackForgottenSoul = value;
-                    OnPropertyChanged("MaxStackForgottenSoul");
-                }
-            }
-        }
+        public int MaxStackForgottenSoul { get; set; } = 5000000;
+        public int MaxStackDeathsBreath { get; set; } = 5000000;
+        public int MaxStackReusableParts { get; set; } = 5000000;
+        public int MaxStackArcaneDust { get; set; } = 5000000;
+        public int MaxStackVeiledCrystal { get; set; } = 5000000;
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(500000)]
-        public int MaxStackDeathsBreath
-        {
-            get
-            {
-                return _maxStackDeathsBreath;
-            }
-            set
-            {
-                if (_maxStackDeathsBreath != value)
-                {
-                    _maxStackDeathsBreath = value;
-                    OnPropertyChanged("MaxStackDeathsBreath");
-                }
-            }
-        }
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(500000)]
-        public int MaxStackReusableParts
-        {
-            get
-            {
-                return _maxStackReusableParts;
-            }
-            set
-            {
-                if (_maxStackReusableParts != value)
-                {
-                    _maxStackReusableParts = value;
-                    OnPropertyChanged("MaxStackReusableParts");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(500000)]
-        public int MaxStackArcaneDust
-        {
-            get
-            {
-                return _maxStackArcaneDust;
-            }
-            set
-            {
-                if (_maxStackArcaneDust != value)
-                {
-                    _maxStackArcaneDust = value;
-                    OnPropertyChanged("MaxStackArcaneDust");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(500000)]
-        public int MaxStackVeiledCrystal
-        {
-            get
-            {
-                return _maxStackVeiledCrystal;
-            }
-            set
-            {
-                if (_maxStackVeiledCrystal != value)
-                {
-                    _maxStackVeiledCrystal = value;
-                    OnPropertyChanged("MaxStackVeiledCrystal");
-                }
-            }
-        }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(70000)]
@@ -227,23 +145,8 @@ namespace Trinity.Config.Loot
             }
         }
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(SalvageOption.Salvage)]
-        public SalvageOption SalvageWhiteItemOption
-        {
-            get
-            {
-                return _SalvageWhiteItemOption;
-            }
-            set
-            {
-                if (_SalvageWhiteItemOption != value)
-                {
-                    _SalvageWhiteItemOption = value;
-                    OnPropertyChanged("SalvageWhiteItemOption");
-                }
-            }
-        }
+
+
 
 
         [DataMember(IsRequired = false)]
@@ -264,59 +167,12 @@ namespace Trinity.Config.Loot
             }
         }
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(SalvageOption.Salvage)]
-        public SalvageOption SalvageBlueItemOption
-        {
-            get
-            {
-                return _SalvageBlueItemOption;
-            }
-            set
-            {
-                if (_SalvageBlueItemOption != value)
-                {
-                    _SalvageBlueItemOption = value;
-                    OnPropertyChanged("SalvageBlueItemOption");
-                }
-            }
-        }
+        public SalvageOption SalvageWhiteItemOption { get; set; } = SalvageOption.Salvage;
+        public SalvageOption SalvageBlueItemOption { get; set; } = SalvageOption.Salvage;
+        public SalvageOption SalvageYellowItemOption { get; set; } = SalvageOption.Salvage;
+        public SalvageOption SalvageLegendaryItemOption { get; set; } = SalvageOption.Salvage;
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(SalvageOption.Salvage)]
-        public SalvageOption SalvageYellowItemOption
-        {
-            get
-            {
-                return _SalvageYellowItemOption;
-            }
-            set
-            {
-                if (_SalvageYellowItemOption != value)
-                {
-                    _SalvageYellowItemOption = value;
-                    OnPropertyChanged("SalvageYellowItemOption");
-                }
-            }
-        }
 
-        [DataMember(IsRequired = false)]
-        [DefaultValue(SalvageOption.Salvage)]
-        public SalvageOption SalvageLegendaryItemOption
-        {
-            get
-            {
-                return _SalvageLegendaryItemOption;
-            }
-            set
-            {
-                if (_SalvageLegendaryItemOption != value)
-                {
-                    _SalvageLegendaryItemOption = value;
-                    OnPropertyChanged("SalvageLegendaryItemOption");
-                }
-            }
-        }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(10)]

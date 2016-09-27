@@ -33,6 +33,9 @@ namespace Trinity.Framework.Modules
 
         protected override void OnPulse()
         {
+            if (ZetaDia.Me == null)
+                return;
+
             var minimap = Core.MemoryModel.Minimap;
             var minimapIcons = new List<TrinityMinimapIcon>();
             var minimapIconAcdIds = new HashSet<int>();

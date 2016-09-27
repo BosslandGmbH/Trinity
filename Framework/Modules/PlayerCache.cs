@@ -22,8 +22,9 @@ namespace Trinity.Framework.Modules
     public class PlayerCache : Module
     {
         public SummonInfo Summons = new SummonInfo();
-        public TrinityActor Actor { get; set; } = new TrinityActor();
+        public TrinityPlayer Actor { get; set; } = new TrinityPlayer();
         public int AcdId { get; private set; }
+        public float CriticalChancePct { get; set; }
         public int RActorGuid { get; private set; }
         public bool IsIncapacitated { get; private set; }
         public bool IsRooted { get; private set; }
@@ -96,6 +97,9 @@ namespace Trinity.Framework.Modules
 
         public bool HasBuff(SNOPower power)
             => Core.Buffs.HasBuff(power);
+
+        public bool HasBuff(SNOPower power, int variantId)
+            => Core.Buffs.HasBuff(power, variantId);
 
         public class SceneInfo
         {
@@ -213,7 +217,7 @@ namespace Trinity.Framework.Modules
             IsInTown = DataDictionary.TownLevelAreaIds.Contains(LevelAreaId);
             IsInRift = DataDictionary.RiftWorldIds.Contains(WorldSnoId);
             IsDead = _me.IsDead;
-            IsIncapacitated = (_me.IsFeared || _me.IsStunned || _me.IsFrozen || _me.IsBlind);
+            IsIncapacitated = _me.IsFeared || _me.IsStunned || _me.IsFrozen || _me.IsBlind || IsPowerUseDisabled;
             IsRooted = _me.IsRooted;
             CurrentHealthPct = _me.HitpointsCurrentPct;
             PrimaryResource = _me.CurrentPrimaryResource;
@@ -225,11 +229,12 @@ namespace Trinity.Framework.Modules
             Position = _me.Position;
             Rotation = _me.Movement.Rotation;
             DirectionVector = _me.Movement.DirectionVector;
-            MovementSpeed = (float)PlayerMover.GetMovementSpeed(); //_me.Movement.SpeedXY;
+            MovementSpeed = (float)Core.PlayerHistory.MoveSpeed;
             IsMoving = _me.Movement.IsMoving;
             IsInCombat = _me.IsInCombat;
             MaxBloodShards = 500 + ZetaDia.Me.CommonData.GetAttribute<int>(ActorAttributeType.HighestSoloRiftLevel) * 10;
-            IsMaxCriticalChance = _me.CritPercentBonusUncapped > 0;
+            IsMaxCriticalChance = _me.CritPercentBonusUncapped > 0 || Math.Abs(_me.CritDamagePercent - 100) < float.Epsilon;
+            CriticalChancePct = _me.CritDamagePercent;
             IsJailed = _me.HasDebuff(SNOPower.MonsterAffix_JailerCast);
             IsFrozen = _me.IsFrozen;
             ParticipatingInTieredLootRun = _me.IsParticipatingInTieredLootRun;
@@ -270,6 +275,10 @@ namespace Trinity.Framework.Modules
             // For WD Angry Chicken
             IsHidden = _me.IsHidden;
         }
+
+
+
+        public bool IsPowerUseDisabled => _me.CommonData.GetAttribute<bool>(ActorAttributeType.PowerImmobilize);
 
         private SummonInfo GetPlayerSummonCounts()
         {
@@ -374,7 +383,7 @@ namespace Trinity.Framework.Modules
             ParagonCurrentExperience = (long)ZetaDia.Me.ParagonCurrentExperience;
             ParagonExperienceNextLevel = (long)ZetaDia.Me.ParagonExperienceNextLevel;
             //GameDifficulty = ZetaDia.Service.Hero.CurrentDifficulty;
-            SecondaryResourceMax = GetMaxSecondaryResource(_me);
+            SecondaryResourceMax = _me.MaxSecondaryResource;//GetMaxSecondaryResource(_me);
             PrimaryResourceMax = _me.MaxPrimaryResource; //GetMaxPrimaryResource(_me);
             TeamId = _me.CommonData.TeamId;
             Radius = _me.CollisionSphere.Radius;
@@ -521,6 +530,13 @@ namespace Trinity.Framework.Modules
             return false;
         }
 
+
+        // Attributes while flying.
+        //295: PowerImmobilize(-3801) i: 1 f: 0 Value = 1
+        //842: HasLookOverride(-3254) i: 1 f: 0 Value = 1
+        //1058: PowerDisabled(-3038)[PowerSnoId: X1_Crusader_FallingSword: 239137] i: 1 f: 0 Value = 1
+
+
         internal bool CheckVisualEffectNoneForPower(ACD commonData, SNOPower power)
         {
             if (commonData.GetAttribute<int>(((int)power << 12) + ((int)ActorAttributeType.PowerBuff0VisualEffectNone & 0xFFF)) == 1)
@@ -555,6 +571,7 @@ namespace Trinity.Framework.Modules
         public float Radius { get; set; }
         public int CurrentSceneSnoId { get; set; }
         public PlayerAction CurrentAction { get; set; }
+
 
         private float GetMaxSecondaryResource(DiaActivePlayer player)
         {

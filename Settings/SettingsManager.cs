@@ -11,39 +11,57 @@ using System.Windows.Input;
 using System.Xml.Serialization;
 using Trinity.Config;
 using Trinity.Framework;
+using Trinity.Framework.Objects;
 using Trinity.Helpers;
+using Trinity.Helpers.AutoFollow.Resources;
 using Trinity.Technicals;
 using Trinity.UI;
 using Trinity.UI.RadarUI;
 using Trinity.UI.UIComponents;
 using Trinity.UIComponents;
+using Zeta.Common;
+using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Settings
 {
     public class SettingsManager
     {
+        public static IEnumerable<IDynamicSetting> GetDynamicSettings()
+        {
+            var result = new List<IDynamicSetting>();
+            result.AddRange(RoutineManager.Instance.DynamicSettings);
+            result.AddRange(ModuleManager.DynamicSettings);
+            return result;
+        }
+
         public static string SaveDirectory => Path.Combine(FileManager.SettingsPath, "Saved");
 
         public static TrinitySetting GetCurrentSettingsForExport(IEnumerable<SettingsSelectionItem> sections = null)
         {
-            var settings = new TrinitySetting();
-            Core.Settings.CopyTo(settings);
-            settings.Notification = null;
+            //if (TrinityPluginSettings.Settings == null)
+            //    return null;
 
-            if (sections != null)
-            {
-                RemoveSections(settings, sections);
-            }
+            //var settings = new TrinitySetting();
+            //Core.Settings.CopyTo(settings);
+            //settings.Notification = null;
 
-            return settings;
+            //if (sections != null)
+            //{
+            //    RemoveSections(settings, sections);
+            //}
+            //return settings;
+
+            return new TrinitySetting();
         }
 
         public static string GetCurrrentSettingsExportCode(IEnumerable<SettingsSelectionItem> sections = null)
         {
-            var settings = GetCurrentSettingsForExport(sections);
-            var xml = TrinitySetting.GetSettingsXml(settings);
-            var code = ExportHelper.Compress(xml);;
-            return code;
+            //var settings = GetCurrentSettingsForExport(sections);
+            //var xml = TrinitySetting.GetSettingsXml(settings);
+            //var code = ExportHelper.Compress(xml);;
+            //return code;
+
+            return string.Empty;
         }
 
         /// <summary>
@@ -255,8 +273,8 @@ namespace Trinity.Settings
                 result.Add(new SettingsSelectionItem(SettingsSection.Paragon));
             if (settings.Advanced != null)
                 result.Add(new SettingsSelectionItem(SettingsSection.Advanced));
-            if (settings.Avoidance != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.Avoidance));
+            //if (settings.Avoidance != null)
+            //    result.Add(new SettingsSelectionItem(SettingsSection.Avoidance));
             if (settings.Loot?.Pickup != null)
                  result.Add(new SettingsSelectionItem(SettingsSection.ItemPickup));
             if (settings.Loot?.ItemRules != null)
@@ -341,9 +359,9 @@ namespace Trinity.Settings
                 case SettingsSection.Advanced:
                     settings.Advanced = null;
                     break;
-                case SettingsSection.Avoidance:
-                    settings.Avoidance = null;
-                    break;
+                //case SettingsSection.Avoidance:
+                //    settings.Avoidance = null;
+                //    break;
                 case SettingsSection.ItemRules:
                     if (settings.Loot != null)
                         settings.Loot.ItemRules = null;
@@ -372,6 +390,7 @@ namespace Trinity.Settings
                 }
             }
         }
+
 
     }
 }

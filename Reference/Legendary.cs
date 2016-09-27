@@ -14451,7 +14451,7 @@ namespace Trinity.Reference
         }
 
         /// <summary>
-        /// Gets equipped legendaries as ACDItems
+        /// Gets equipped legendaries
         /// </summary>
         public static List<TrinityItem> EquippedTrinityItems
         {
