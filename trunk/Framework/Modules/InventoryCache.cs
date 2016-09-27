@@ -50,6 +50,7 @@ namespace Trinity.Framework.Modules
                 var equipped = new List<TrinityItem>();
                 var equippedIds = new HashSet<int>();
                 var playerEquippedIds = new HashSet<int>();
+                var backpack = new List<TrinityItem>();
 
                 foreach (var item in Core.Actors.Inventory)
                 {
@@ -59,7 +60,7 @@ namespace Trinity.Framework.Modules
                     switch (item.InventorySlot)
                     {
                         case InventorySlot.BackpackItems:
-                            Backpack.Add(item);
+                            backpack.Add(item);
                             break;
 
                         //case InventorySlot.SharedStash:
@@ -108,6 +109,7 @@ namespace Trinity.Framework.Modules
                 Equipped = equipped;
                 EquippedIds = equippedIds;
                 PlayerEquippedIds = playerEquippedIds;
+                Backpack = backpack;
             }
         }
 
