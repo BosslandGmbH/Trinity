@@ -15,7 +15,7 @@ namespace Trinity.Framework.Objects.Memory.Misc
         public Vector3 Position => ReadOffset<Vector3>(0xA8);
         public int ActorSnoId => ReadOffset<int>(0x8C);
         public Sphere CollisionSphere => ReadOffset<Sphere>(0xB8);
-        public int WorldSnoId => ReadOffset<int>(0xE0);
+        public int WorldDynamicId => ReadOffset<int>(0xE0);
         public int SceneId => ReadOffset<int>(0x84);
         public int AcdId => ReadOffset<int>(0x88);
         public int MonsterSnoId => ReadOffset<int>(0x90);

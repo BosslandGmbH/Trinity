@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Party;
 using Trinity.Config.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
@@ -143,7 +144,7 @@ namespace Trinity.Routines.Monk
 
             if (ShouldConserveSpirit)
                 return false;
-            
+
             if (HasRaimentDashBuff)
             {                
                 position = CurrentTarget.Position;
@@ -228,12 +229,13 @@ namespace Trinity.Routines.Monk
         public TrinityPower GetMovementPower(Vector3 destination)
         {
             var enoughTimeDelay = Skills.Monk.DashingStrike.TimeSinceUse > 750;
-            var charges = Skills.Monk.DashingStrike.Charges;
-            
-            // Only dash when it won't cost spirit.
-            var isResourceEfficient = charges == MaxDashingStrikeCharges && Player.PrimaryResource < 75;  
+            var charges = Skills.Monk.DashingStrike.Charges;           
 
-            if (CanDashTo(destination) && isResourceEfficient && !ShouldConserveSpirit && enoughTimeDelay)
+            // Only dash when it won't cost spirit.
+            var isResourceEfficient = charges == MaxDashingStrikeCharges && Player.PrimaryResource < 75;
+            var followingLeader = !IsInCombat && IsBlocked && MyPartyObjective == PartyObjective.FollowLeader;
+
+            if (CanDashTo(destination) && (isResourceEfficient || followingLeader) && !ShouldConserveSpirit && enoughTimeDelay)
             {
                 Logger.Log(LogCategory.Routine, $"Movement Dash {destination} Dist: {destination.Distance(Core.Player.Position)}");
                 return DashingStrike(destination);

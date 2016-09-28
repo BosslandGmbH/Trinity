@@ -637,7 +637,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
             var keysToRemove = new List<string>();
             foreach (var drawing in Drawings.Relative)
             {
-                if (drawing.Value.WorldId != Core.Player.WorldDynamicID)
+                if (drawing.Value.WorldId != Core.Player.WorldDynamicId)
                 {
                     keysToRemove.Add(drawing.Key);
                     continue;
@@ -1915,7 +1915,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     _isSceneInfoVisible = sceneInfoVisibility;
                 }
 
-                var worldId = Core.Player.WorldDynamicID;
+                var worldId = Core.Player.WorldDynamicId;
 
                 foreach (var adventurerScene in ScenesStorage.CurrentWorldScenes.Where(s => s.DynamicWorldId == worldId).ToList())
                 {
@@ -2000,7 +2000,7 @@ namespace Trinity.UI.UIComponents.RadarCanvas
                     if (pair.Value.Type != DrawingType.Scene)
                         continue;
 
-                    if (pair.Value.WorldId != Core.Player.WorldDynamicID)
+                    if (pair.Value.WorldId != Core.Player.WorldDynamicId)
                         continue;
 
                     if (!pair.Value.Drawing.Bounds.IntersectsWith(CanvasData.ClipRegion.Rect))

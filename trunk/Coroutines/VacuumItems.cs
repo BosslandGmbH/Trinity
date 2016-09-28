@@ -43,7 +43,7 @@ namespace Trinity.Coroutines
                 if (item.Distance > 8f || VacuumedAcdIds.Contains(item.AcdId))
                     continue;
 
-                if (!ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, item.Position, Core.Player.WorldDynamicID, item.AcdId))
+                if (!ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, item.Position, Core.Player.WorldDynamicId, item.AcdId))
                 {
                     Logger.LogVerbose($"Failed to vacuum item {item.Name} AcdId={item.AcdId}");
                     continue;

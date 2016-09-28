@@ -20,7 +20,7 @@ using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Components.Combat
 {
-    public interface ISpellHandler
+    public interface ISpellProvider
     {
         bool CanCast(SNOPower power);
         bool CanCast(Skill power);
@@ -28,7 +28,7 @@ namespace Trinity.Components.Combat
         bool CastPower(SNOPower power, Vector3 clickPosition, int targetAcdId);
     }
 
-    public class SpellHandler : ISpellHandler
+    public class DefaultSpellProvider : ISpellProvider
     {
         public async Task<bool> CastTrinityPower(TrinityPower power, string type = "")
         {
@@ -182,7 +182,7 @@ namespace Trinity.Components.Combat
                     power.TargetPosition = Core.Player.Position;
                 }
 
-                if (ZetaDia.Me.UsePower(power.SNOPower, power.TargetPosition, Core.Player.WorldDynamicID, power.TargetAcdId))
+                if (ZetaDia.Me.UsePower(power.SNOPower, power.TargetPosition, Core.Player.WorldDynamicId, power.TargetAcdId))
                 {
                     SpellHistory.RecordSpell(power);
                     return true;
@@ -204,7 +204,7 @@ namespace Trinity.Components.Combat
                     clickPosition = Core.Player.Position;
                 }
 
-                if (ZetaDia.Me.UsePower(power, clickPosition, Core.Player.WorldDynamicID, targetAcdId))
+                if (ZetaDia.Me.UsePower(power, clickPosition, Core.Player.WorldDynamicId, targetAcdId))
                 {
                     SpellHistory.RecordSpell(power, clickPosition, targetAcdId);
                     return true;

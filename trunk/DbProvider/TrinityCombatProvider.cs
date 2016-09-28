@@ -7,6 +7,7 @@ using Trinity.Routines;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using ITargetingProvider = Zeta.Bot.ITargetingProvider;
 
 namespace Trinity.DbProvider
 {

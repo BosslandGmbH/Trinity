@@ -23,7 +23,7 @@ namespace Trinity.Components.Combat
         IRoutine Current { get; }
     }
 
-    public class RoutineProvider : IRoutineProvider
+    public class DefaultRoutineProvider : IRoutineProvider
     {
         public IRoutine Current => Core.Routines.CurrentRoutine;
     }

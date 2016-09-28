@@ -1,6 +1,7 @@
 ﻿using System;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory;
+using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.UX;
 using Trinity.Helpers;
 using Zeta.Game;
@@ -33,6 +34,18 @@ namespace Trinity.Framework
                     _storage = new Storage(Internals.Addresses.Storage);
 
                 return _storage;
+            }
+        }
+
+        private Allocator _movementManager;
+        public Allocator MovementManager
+        {
+            get
+            {
+                if (_storage != null && !_storage.IsValid) return _movementManager;
+                var movementPtr = ZetaDia.Memory.Read<IntPtr>(Internals.Addresses.ObjectManager + 0xA0C);
+                _movementManager = MemoryWrapper.Create<Allocator>(movementPtr);
+                return _movementManager;
             }
         }
 

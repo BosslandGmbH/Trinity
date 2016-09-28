@@ -1,6 +1,7 @@
 using System;
 using Trinity.Cache;
 using Trinity.Components.Combat;
+using Trinity.Components.Combat.Party;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Trinity.Framework.Avoidance.Structures;
@@ -17,7 +18,7 @@ using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Framework.Actors.ActorTypes
 {
-    public class TrinityActor : ActorBase
+    public class TrinityActor : ActorBase, ITargetable
     {
         public virtual ActorAttributes Attributes { get; set; }
         public bool IsAllowedClientEffect { get; set; }
@@ -26,7 +27,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public string InternalNameLowerCase { get; set; }
         public GizmoType GizmoType { get; set; } = GizmoType.None;
         public bool IsObstacle { get; set; }
-        public int WorldSnoId { get; set; }
+        public int WorldDynamicId { get; set; }
         public float Radius { get; set; }
         public string ObjectHash { get; set; }
         public TrinityObjectType Type { get; set; }
@@ -106,6 +107,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public int SummonedByAnnId { get; set; }
         public string CacheInfo { get; set; }
         public float Distance { get; set; }
+
         public float RadiusDistance { get; set; }
         public TargetCategory TargetCategory { get; set; }
         public double Weight { get; set; }
@@ -195,7 +197,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsFacingPlayer => TargetUtil.IsFacing(this, Core.Player.Position, 30f);
         public double CacheTime => Math.Abs(UpdateTime) < double.Epsilon ? CreateTime : UpdateTime;
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;
-
 
 
         public void AddCacheInfo(string reason)

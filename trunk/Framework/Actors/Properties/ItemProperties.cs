@@ -71,7 +71,7 @@ namespace Trinity.Framework.Actors.Properties
                 actor.Position,
                 actor.ActorSnoId,
                 actor.InternalName,
-                actor.WorldSnoId,
+                actor.WorldDynamicId,
                 actor.ItemQualityLevel,
                 actor.ItemLevel);
 

@@ -54,7 +54,7 @@ namespace Trinity.Framework.Modules
 
         private TrinityMarker Update(Vector3 key, TrinityMarker existingItem, MinimapMarker newItem, out bool success)
         {
-            success = existingItem.WorldSnoId == Core.Player.WorldDynamicID;
+            success = existingItem.WorldSnoId == Core.Player.WorldDynamicId;
             existingItem.Distance = Core.Player.Position.Distance(existingItem.Position);         
             return existingItem;
         }
