@@ -1,4 +1,5 @@
-﻿using Trinity.Framework.Actors.ActorTypes;
+﻿using System.Linq;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
@@ -19,7 +20,26 @@ namespace Trinity.Framework.Actors.Properties
             actor.ActorClass = GetActorClass(actor.ActorSnoId);
             actor.IsMe = actor.RActorId == Core.Actors.ActivePlayerRActorId;
 
-            // todo move caching from PlayerCache to here.
+            var cPlayer = ZetaDia.Players.FirstOrDefault(p => p.ACDId == actor.AcdId);
+            if (cPlayer != null)
+            {
+                actor.HeroId = cPlayer.HeroId;
+                actor.HeroName = cPlayer.HeroName;
+            }
+        }
+
+        public static int GetAcdIdByHeroId(int heroId)
+        {
+            // Only works if player is in the same area.
+            var player = ZetaDia.Players.FirstOrDefault(p => p.HeroId == heroId);
+            return player?.ACDId ?? -1;
+        }
+
+        public static int GetHeroIdByAcdId(int acdId)
+        {
+            // Only works if player is in the same area.
+            var player = ZetaDia.Players.FirstOrDefault(p => p.ACDId == acdId);
+            return player?.HeroId ?? -1;
         }
 
         public static ActorClass GetActorClass(int actorSnoId)

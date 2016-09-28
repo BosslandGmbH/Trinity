@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls.WebParts;
 using Buddy.Coroutines;
+using GreyMagic;
 using IronPython.Modules;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework.Actors.ActorTypes;
@@ -87,13 +88,24 @@ namespace Trinity.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || item.IsAccountBound)
                 return false;
 
-            Logger.Log("[DropItems] --> Dropping {0} ({1}) in town. AnnId={2} ", item.Name, item.ActorSnoId, item.AnnId);
+            Logger.Log($"[DropItems] --> Dropping {item.Name} ({item.ActorSnoId}) in town. AnnId={item.AnnId} ");
 
-            if (item.Drop())
+            bool dropResult = false;
+            try
+            {
+                dropResult = item.Drop();
+            }
+            catch (InjectionSEHException)
+            {
+                Logger.Log($"[DropItems] --> Failed to Drop {item.Name} ({item.ActorSnoId}) in town. AnnId={item.AnnId} ");
+                DroppedItemAnnIds.Add(item.AnnId);
+            }
+            
+            if (dropResult)
             {
                 DroppedItemAnnIds.Add(item.AnnId);
                 ItemEvents.FireItemDropped(item);
-                await Coroutine.Sleep(250);
+                await Coroutine.Sleep(500);
                 return true;
             }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Party;
 using Trinity.Config.Combat;
 using Trinity.DbProvider;
 using Trinity.Framework;

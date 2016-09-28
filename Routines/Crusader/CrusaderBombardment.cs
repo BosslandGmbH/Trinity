@@ -56,8 +56,17 @@ namespace Trinity.Routines.Crusader
 
             // Make sure we cast Bombardment when IronSkin and CoE is Up.
             // Note iron skin is gated below by Convention of Elements check,            
-            if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin) && ShouldBombardment(out target))
-                return Bombardment(target);
+            if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
+            {
+                if(ShouldBombardment(out target))
+                    return Bombardment(target);
+
+                if (ShouldShieldGlare(out target))
+                    return ShieldGlare(target);
+
+                if (ShouldConsecration())
+                    return Consecration();
+            }
 
             // Wait for CoE to Cast Damage CD's
             if (Skills.Crusader.Bombardment.CanCast() && AllowedToUse(Settings.Bombardment, Skills.Crusader.Bombardment) 
@@ -65,15 +74,6 @@ namespace Trinity.Routines.Crusader
             {
                 if (ShouldIronSkin())
                     return IronSkin();
-
-                if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
-                {
-                    if (ShouldShieldGlare(out target))
-                        return ShieldGlare(target);
-
-                    if (ShouldConsecration())
-                        return Consecration();
-                }
             }
 
             if (ShouldSteedCharge())
@@ -90,6 +90,15 @@ namespace Trinity.Routines.Crusader
             }
 
             return null;
+        }
+
+        protected override bool ShouldSteedCharge()
+        {
+            // Steed disables all skills for a second so make sure it doesn't prevent bombardment.
+            if (TimeToElementStart(Element.Physical) < 3000)
+                return false;
+
+            return base.ShouldSteedCharge();
         }
 
         protected override bool ShouldIronSkin()

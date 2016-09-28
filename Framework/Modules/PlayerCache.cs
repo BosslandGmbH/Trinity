@@ -49,7 +49,7 @@ namespace Trinity.Framework.Modules
         public int LevelAreaId { get; private set; }
         public double PlayerDamagePerSecond { get; private set; }
         public SceneInfo Scene { get; private set; }
-        public int WorldDynamicID { get; private set; }
+        public int WorldDynamicId { get; private set; }
         public int WorldSnoId { get; private set; }
         public bool IsInGame { get; private set; }
         public bool IsDead { get; private set; }
@@ -158,10 +158,10 @@ namespace Trinity.Framework.Modules
                     IsLoadingWorld = false;
 
 
-                    WorldDynamicID = ZetaDia.WorldId;
+                    WorldDynamicId = ZetaDia.WorldId;
                     WorldSnoId = ZetaDia.CurrentWorldSnoId;
 
-                    TrinityPlugin.CurrentWorldDynamicId = WorldDynamicID;
+                    TrinityPlugin.CurrentWorldDynamicId = WorldDynamicId;
                     TrinityPlugin.CurrentWorldId = WorldSnoId;
 
 

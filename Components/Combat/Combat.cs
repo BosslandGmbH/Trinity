@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Party;
 using Trinity.Coroutines;
 using Trinity.DbProvider;
 using Trinity.Framework;
@@ -29,30 +30,32 @@ namespace Trinity.Components.Combat
 {
     public class Combat : Component
     {
+        public static CombatMode CombatMode { get; set; }
+
         /// <summary>
         /// Handles fighting a target.
         /// </summary>
-        public static ITargetHandler Targeting { get; } = new TargetHandler();
+        public static ITargetingProvider Targeting { get; } = DefaultProviders.Targeting;
 
         /// <summary>
         /// Handles casting for spells
         /// </summary>
-        public static ISpellHandler Spells { get; } = new SpellHandler();
+        public static ISpellProvider Spells { get; } = DefaultProviders.Spells;
 
         /// <summary>
         /// Access point for the current routine.
         /// </summary>
-        public static IRoutineProvider Routines { get; } = new RoutineProvider();
+        public static IRoutineProvider Routines { get; } = DefaultProviders.Routines;
 
         /// <summary>
         /// Prioritizes targets
         /// </summary>
-        public static IWeightingProvider Weighting { get; } = new WeightingProvider();
+        public static IWeightingProvider Weighting { get; } = DefaultProviders.Weighting;
 
         /// <summary>
-        /// 
+        /// Access point for information on other bots in the party, and coordination.
         /// </summary>
-        public static CombatMode CombatMode { get; set; }
+        public static IPartyProvider Party { get; set; } = DefaultProviders.Party;
 
         /// <summary>
         /// Combat Hook entry-point, manages when lower-level hooks can run and executes trinity features.
@@ -73,20 +76,16 @@ namespace Trinity.Components.Combat
     
                 VacuumItems.Execute();           
 
-                if (!IsCombatAllowed && (Targeting.CurrentTarget == null || Targeting.CurrentTarget.IsUnit))
-                {
-                    return false;
-                }
-
                 var target = Weighting.WeightActors(Core.Targets);
-
+       
                 if (await CastBuffs())
                     return true;
 
+                if (!IsCombatAllowed && IsUnitOrInvalid(target))
+                    return false;
+
                 if (target != null)
-                {
                     return await Targeting.HandleTarget(target);
-                }
 
                 if (!Core.Player.IsCasting)
                 {
@@ -112,6 +111,13 @@ namespace Trinity.Components.Combat
 
         }
 
+        private static bool IsUnitOrInvalid(TrinityActor target)
+        {
+            if (target == null || target.IsUnit) return true;
+            if (target.Weight < 0 || Math.Abs(target.Weight) < float.Epsilon) return true;
+            return !target.IsValid || target.IsUsed;
+        }
+
         private static async Task<bool> CastBuffs()
         {
             var power = Routines.Current.GetBuffPower();
@@ -122,9 +128,6 @@ namespace Trinity.Components.Combat
             return false;
         }
 
-        /// <summary>
-        /// Allows for completely disabling combat. Settable through API only.
-        /// </summary>
         public static bool IsCombatAllowed
         {
             get
@@ -153,7 +156,8 @@ namespace Trinity.Components.Combat
 
         public static bool IsCurrentlyKiting
             => Targeting.CurrentTarget != null && Targeting.CurrentTarget.IsSafeSpot && Core.Avoidance.Avoider.ShouldKite;
+
+
+
     }
-
-
 }

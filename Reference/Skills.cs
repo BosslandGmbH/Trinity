@@ -2664,7 +2664,7 @@ namespace Trinity.Reference
             {
                 try
                 {
-                    return ZetaDia.Me.UsePower(SNOPower.Wizard_Archon_Cancel, Core.Player.Position, Core.Player.WorldDynamicID, Core.Player.AcdId);
+                    return ZetaDia.Me.UsePower(SNOPower.Wizard_Archon_Cancel, Core.Player.Position, Core.Player.WorldDynamicId, Core.Player.AcdId);
                 }
                 catch (Exception ex)
                 {

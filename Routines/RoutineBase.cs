@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Trinity.Cache;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Party;
 using Trinity.Config.Combat;
 using Trinity.DbProvider;
 using Trinity.Framework;
@@ -37,11 +38,26 @@ namespace Trinity.Routines
         protected static TrinityActor CurrentTarget
             => Combat.Targeting.CurrentTarget;
 
+        protected static IPartyProvider Party
+            => Combat.Party;
+
+        protected static IPartyMember PartyMe
+            => Combat.Party.Members.FirstOrDefault(m => m.IsMe);
+
+        protected static IPartyMember PartyLeader
+            => Combat.Party.Leader;
+
+        protected static PartyObjective MyPartyObjective
+            => Combat.Party.Members.FirstOrDefault(m => m.IsMe)?.Objective ?? default(PartyObjective);
+
+        protected static TrinityActor PartyTarget
+            => PartyLeader.Target != null ? PartyHelper.FindLocalActor(PartyLeader.Target) : null;
+
         protected static TrinityPower CurrentPower
             => Combat.Targeting.CurrentPower;
 
         protected static IAvoider Avoider
-            => Core.Avoidance.Avoider;
+            => Core.Avoidance.Avoider;        
 
         protected static IEnumerable<TrinityActor> Units
             => Core.Targets.Entries.Where(u => u.IsUnit && u.Weight > 0);

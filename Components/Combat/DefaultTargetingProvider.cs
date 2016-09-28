@@ -38,7 +38,7 @@ using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity.Components.Combat
 {
-    public interface ITargetHandler
+    public interface ITargetingProvider
     {
         Task<bool> HandleTarget(TrinityActor target);
         bool IsTargetInRange(TrinityActor target, TrinityPower power);
@@ -47,7 +47,7 @@ namespace Trinity.Components.Combat
         TrinityPower CurrentPower { get; } 
     }
 
-    public class TargetHandler : ITargetHandler
+    public class DefaultTargetingProvider : ITargetingProvider
     {
         public TrinityActor CurrentTarget { get; private set; }
 

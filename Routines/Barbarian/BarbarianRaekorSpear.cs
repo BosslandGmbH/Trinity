@@ -72,9 +72,8 @@ namespace Trinity.Routines.Barbarian
 
             if (TryPrimaryPower(out power))
                 return power;
-            
-            // Build has no primary, so if charge stacks get exhausted we'll have a problem.
-            return null;
+
+            return Walk(TargetUtil.GetLoiterPosition(TargetUtil.GetBestClusterUnit(), 16f));
         }
 
         protected override bool ShouldAncientSpear(out TrinityActor target)

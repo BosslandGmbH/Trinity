@@ -32,7 +32,7 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.IsRActorBased)
             {
                 actor.GizmoType = actorInfo.GizmoType;
-                actor.WorldSnoId = rActor.WorldSnoId;
+                actor.WorldDynamicId = rActor.WorldDynamicId;
                 actor.Radius = rActor.CollisionSphere.Radius;
                 var axialRadius = actorInfo.AxialCylinder.Ax1;
                 actor.AxialRadius = axialRadius;

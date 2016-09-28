@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Cache;
 using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Party;
 using Trinity.Config.Combat;
+using Trinity.Coroutines.Resources;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
 using Trinity.Framework;
@@ -30,7 +32,7 @@ namespace Trinity.Components.Combat
         TrinityActor WeightActors(IEnumerable<TrinityActor> objects);
     }
 
-    public class WeightingProvider : IWeightingProvider
+    public class DefaultWeightingProvider : IWeightingProvider
     {
         /// <summary>
         /// todo refactor this is a mess
@@ -197,6 +199,9 @@ namespace Trinity.Components.Combat
                 var routine = Combat.Routines.Current;
 
                 TrinityActor bestTarget = null;
+
+                var leaderTarget = PartyHelper.FindLocalActor(Combat.Party.Leader.Target);
+                var isLeader = Combat.Party.Leader.IsMe;
 
                 foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
                 {
@@ -599,6 +604,10 @@ namespace Trinity.Components.Combat
                                     else if (Combat.CombatMode == CombatMode.Questing)
                                     {
                                         cacheObject.WeightInfo += $"Questing Mode - Ignoring Trash Pack Size Setting.";
+                                    }     
+                                    else if (leaderTarget != null && !isLeader && leaderTarget.Distance < 60f && Combat.Party.Leader.IsInCombat)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring Trash Pack Size for Leader's Target";
                                     }
                                     else if (shouldIgnorePackSize)
                                     {
@@ -731,7 +740,14 @@ namespace Trinity.Components.Combat
                                 var elite = EliteMonsterNearFormula(cacheObject, elites);
                                 var aoe = AoENearFormula(cacheObject) + AoEInPathFormula(cacheObject);
 
-                                cacheObject.Weight += dist + last + pack + health + path + reflect + elite + aoe;
+                                var leaderTargetBoost = 1;
+                                if (leaderTarget != null && !isLeader && cacheObject.AcdId == leaderTarget.AcdId)
+                                {
+                                    cacheObject.WeightInfo += $"Doubled weight for Leaders Target";
+                                    leaderTargetBoost = 2;
+                                }
+
+                                cacheObject.Weight += (dist + last + pack + health + path + reflect + elite + aoe) * leaderTargetBoost;
 
                                 cacheObject.WeightInfo +=
                                     $" dist={dist:0.0} last={last:0.0} pack={pack:0.0} health={health:0.0} path={path:0.0} reflect={reflect:0.0} elite={elite:0.0} aoe={aoe:0.0}";
@@ -1906,7 +1922,9 @@ namespace Trinity.Components.Combat
             if (cacheObject.ActorSnoId == 3349) // Belial, can't be pathed to.
                 return 0;
 
-            if (cacheObject.IsUnit)
+            var isInRift = RiftProgression.IsInRift || RiftProgression.IsGreaterRift;
+
+            if (cacheObject.IsUnit && !(isInRift && cacheObject.IsElite))
             {
                 if (!cacheObject.IsWalkable && cacheObject.IsInLineOfSight && cacheObject.Distance > 40f && !cacheObject.IsMinimapActive && !cacheObject.IsBoss && !cacheObject.IsTreasureGoblin)
                     return -MaxWeight;
