@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Data;
-using Trinity.UI.UIComponents;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     /// <summary>
     /// Converts a collection of items into useful objects that UI controls can bind to.
@@ -44,6 +44,7 @@ namespace Trinity.UIComponents
                 }).Select(ev => new PropertyValueFlagBindingItem
                 {
                     Name = ev.ToString(),
+                    Description = GetDescription(type, ev),
                     Type = type,
                     Source = pv,
                     Flag = ev,
@@ -62,6 +63,13 @@ namespace Trinity.UIComponents
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return Binding.DoNothing;
+        }
+
+        private static string GetDescription(Type type, object enumValue)
+        {
+            var memInfo = type.GetMember(enumValue.ToString());
+            var attributes = memInfo[0].GetCustomAttributes(typeof(DescriptionAttribute),false);
+            return (attributes.FirstOrDefault() as DescriptionAttribute)?.Description;
         }
     }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Helpers;
 
 namespace Trinity.Framework.Objects.Memory.Sno
 {

@@ -1,4 +1,4 @@
-namespace Trinity.Config
+namespace Trinity.Settings
 {
     internal interface ITrinitySettingEvents
     {

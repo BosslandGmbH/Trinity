@@ -1,6 +1,6 @@
 using System;
 
-namespace Trinity.Components.Combat
+namespace Trinity.Components.Combat.Resources
 {
     public class TargettingInfo
     {

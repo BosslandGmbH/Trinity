@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {

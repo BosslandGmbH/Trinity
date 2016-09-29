@@ -1,6 +1,6 @@
 ﻿using Buddy.Overlay.Controls;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     class RadarOverlayControl : OverlayControl
     {

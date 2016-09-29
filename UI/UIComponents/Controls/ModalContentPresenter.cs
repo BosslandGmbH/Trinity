@@ -21,6 +21,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 using System;
 using System.Collections;
 using System.Windows;
@@ -29,7 +30,7 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Controls
 {
     /// <summary>
     /// Allows the display of modal content over another piece of content.

@@ -2,12 +2,10 @@ using System.Runtime.Serialization;
 using System.Security.Policy;
 using System.Threading;
 using System.Windows.Input;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.Objects;
 using Trinity.Routines;
-using Trinity.Technicals;
-using Trinity.UIComponents;
+using Trinity.UI.UIComponents;
 using Zeta.Game;
 
 namespace Trinity.Settings

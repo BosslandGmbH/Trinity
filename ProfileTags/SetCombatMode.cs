@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Resources;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
 using Zeta.TreeSharp;

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Windows;
-using GongSolutions.Wpf.DragDrop.Utilities;
+using Trinity.UI.UIComponents.Utilities;
 
-namespace GongSolutions.Wpf.DragDrop
+namespace Trinity.UI.UIComponents
 {
   public class DefaultDragHandler : IDragSource
   {

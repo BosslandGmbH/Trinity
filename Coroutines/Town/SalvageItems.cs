@@ -7,14 +7,14 @@ using Buddy.Coroutines;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Helpers;
 using Trinity.Items;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Trinity.Framework.Actors;
+using Trinity.Framework.Helpers;
+using Trinity.Reference;
 
 namespace Trinity.Coroutines.Town
 {
@@ -83,7 +83,7 @@ namespace Trinity.Coroutines.Town
                 var blacksmithNpc = TownInfo.Blacksmith;
                 if (blacksmithNpc != null)
                 {
-                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(blacksmithNpc.ActorId, 4);
+                    Core.DBGridProvider.AddCellWeightingObstacle(blacksmithNpc.ActorId, 4);
                 }
 
                 if (!await MoveTo.Execute(blacksmith.InteractPosition))

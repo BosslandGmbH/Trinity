@@ -1,16 +1,10 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Objects;
 using Zeta.Common;
-using Zeta.Game.Internals.SNO;
-using Trinity.Technicals;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     /// <summary>
     /// RadarObject wraps a TrinityObject to add a canvas plot location.

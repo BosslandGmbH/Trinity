@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using Trinity.Components.Combat;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.TreeSharp;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity
 {
     public class HookManager
     {
         private static readonly Dictionary<string, Composite> OriginalHooks = new Dictionary<string, Composite>();
-
         private static Composite _goldInactiveComposite;
         private static Composite _xpInactiveComposite;
 
@@ -33,7 +32,6 @@ namespace Trinity
                 Logger.Log("Adding Trinity's Hooks");
                 ReplaceCombatHook();
                 ReplaceVendorRunHook();
-                //ReplaceLootHook();
                 ReplaceDeathHook();
                 InsertOutOfGameHooks();
                 HooksAttached = true;
@@ -43,9 +41,7 @@ namespace Trinity
                 Logger.Log("Removing Trinity's Hooks");
                 ReplaceHookWithOriginal("Combat");
                 ReplaceHookWithOriginal("VendorRun");
-                ReplaceHookWithOriginal("Loot");
                 ReplaceHookWithOriginal("Death");
-                ReplaceHookWithOriginal("IdentifyItems");
 
                 if(TreeHooks.Instance.Hooks.ContainsKey("BotBehavior") && _goldInactiveComposite != null)
                     TreeHooks.Instance.RemoveHook("BotBehavior", _goldInactiveComposite);
@@ -65,12 +61,6 @@ namespace Trinity
         {
             StoreAndReplaceHook("VendorRun", new ActionRunCoroutine(ret => TrinityTownRun.Execute()));
         }
-
-        //private static void ReplaceLootHook()
-        //{
-        //    Composite lootComposite = TreeHooks.Instance.Hooks["Loot"][0];
-        //    StoreAndReplaceHook("Loot", Composites.CreateLootBehavior(lootComposite));
-        //}
 
         private static void ReplaceDeathHook()
         {

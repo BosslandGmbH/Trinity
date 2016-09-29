@@ -3,7 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
-             xmlns:ut="clr-namespace:Trinity.UIComponents"     
+             xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
              mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"   Background="#434343"
              d:DesignHeight="750" d:DesignWidth="400">
     <UserControl.Resources>
@@ -11,8 +11,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <ut:BoolInverterConverter x:Key="boolInverterConverter" />
-            <ut:EnumBooleanConverter x:Key="enumBooleanConverter" />
+            <converters:BoolInverterConverter x:Key="boolInverterConverter" />
+            <converters:EnumBooleanConverter x:Key="enumBooleanConverter" />
             <Style TargetType="{x:Type UserControl}">
                 <Style.Triggers>
                     <Trigger Property="ComponentModel:DesignerProperties.IsInDesignMode"

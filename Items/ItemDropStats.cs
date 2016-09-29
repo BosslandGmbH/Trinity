@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-using log4net.Core;
+using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
-using Trinity.Helpers;
-using Trinity.Technicals;
 using Zeta.Game;
 
-namespace Trinity
+namespace Trinity.Items
 {
     /// <summary>
     /// Item Stats Class and Variables - for the detailed item drop/pickup etc. stats
@@ -239,22 +238,22 @@ namespace Trinity
                             logWriter.WriteLine("===== Misc Statistics =====");
                             logWriter.WriteLine("Total tracking time: " + ((int)totalRunningTime.TotalHours) + "h " + totalRunningTime.Minutes +
                                                 "m " + totalRunningTime.Seconds + "s");
-                            logWriter.WriteLine("Total deaths: " + TrinityPlugin.TotalDeaths + " [" + Math.Round(TrinityPlugin.TotalDeaths / totalRunningTime.TotalHours, 2) + " per hour]");
-                            logWriter.WriteLine("Total games (approx): " + TrinityPlugin.TotalLeaveGames + " [" + Math.Round(TrinityPlugin.TotalLeaveGames / totalRunningTime.TotalHours, 2) + " per hour]");
-                            logWriter.WriteLine("Total Caches Opened:" + TrinityPlugin.TotalBountyCachesOpened);
-                            if (TrinityPlugin.TotalLeaveGames == 0 && TrinityPlugin.TotalGamesJoined > 0)
-                            {
-                                if (TrinityPlugin.TotalGamesJoined == 1 && TrinityPlugin.TotalProfileRecycles > 1)
-                                {
-                                    logWriter.WriteLine("(a profile manager/death handler is interfering with join/leave game events, attempting to guess total runs based on profile-loops)");
-                                    logWriter.WriteLine("Total full profile cycles: " + TrinityPlugin.TotalProfileRecycles + " [" + Math.Round(TrinityPlugin.TotalProfileRecycles / totalRunningTime.TotalHours, 2) + " per hour]");
-                                }
-                                else
-                                {
-                                    logWriter.WriteLine("(your games left value may be bugged @ 0 due to profile managers/routines etc., now showing games joined instead:)");
-                                    logWriter.WriteLine("Total games joined: " + TrinityPlugin.TotalGamesJoined + " [" + Math.Round(TrinityPlugin.TotalGamesJoined / totalRunningTime.TotalHours, 2) + " per hour]");
-                                }
-                            }
+                            logWriter.WriteLine("Total deaths: " + DeathHandler.DeathsThisSession + " [" + Math.Round(DeathHandler.DeathsThisSession / totalRunningTime.TotalHours, 2) + " per hour]");
+
+                            //logWriter.WriteLine("Total games (approx): " + Framework.Helpers.TrinityPlugin.TotalLeaveGames + " [" + Math.Round(Framework.Helpers.TrinityPlugin.TotalLeaveGames / totalRunningTime.TotalHours, 2) + " per hour]");
+                            //if (Framework.Helpers.TrinityPlugin.TotalLeaveGames == 0 && Framework.Helpers.TrinityPlugin.TotalGamesJoined > 0)
+                            //{
+                            //    if (Framework.Helpers.TrinityPlugin.TotalGamesJoined == 1 && Framework.Helpers.TrinityPlugin.TotalProfileRecycles > 1)
+                            //    {
+                            //        logWriter.WriteLine("(a profile manager/death handler is interfering with join/leave game events, attempting to guess total runs based on profile-loops)");
+                            //        logWriter.WriteLine("Total full profile cycles: " + Framework.Helpers.TrinityPlugin.TotalProfileRecycles + " [" + Math.Round(Framework.Helpers.TrinityPlugin.TotalProfileRecycles / totalRunningTime.TotalHours, 2) + " per hour]");
+                            //    }
+                            //    else
+                            //    {
+                            //        logWriter.WriteLine("(your games left value may be bugged @ 0 due to profile managers/routines etc., now showing games joined instead:)");
+                            //        logWriter.WriteLine("Total games joined: " + Framework.Helpers.TrinityPlugin.TotalGamesJoined + " [" + Math.Round(Framework.Helpers.TrinityPlugin.TotalGamesJoined / totalRunningTime.TotalHours, 2) + " per hour]");
+                            //    }
+                            //}
 
                             logWriter.WriteLine("Total XP gained: " + Math.Round(TotalXP / (float)1000000, 2) + " million [" + Math.Round(TotalXP / totalRunningTime.TotalHours / 1000000, 2) + " million per hour]");
                             if (LastGold == 0)

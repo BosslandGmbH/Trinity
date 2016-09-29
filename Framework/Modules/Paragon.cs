@@ -1,8 +1,9 @@
 ﻿using System;
-using Trinity.Config;
+using Trinity.Framework.Objects;
+using Trinity.Settings.Paragon;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 using UIElement = Zeta.Game.Internals.UIElement;
 
 namespace Trinity.Framework.Modules

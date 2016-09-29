@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Web.UI.WebControls;
 
-namespace Trinity.UIComponents 
+namespace Trinity.UI.UIComponents.Behaviors 
 {
     public class ComboAlwaysFireSelection : DependencyObject
     {
@@ -48,7 +48,7 @@ namespace Trinity.UIComponents
             }
         }
 
-        [AttachedPropertyBrowsableForChildrenAttribute(IncludeDescendants = false)]
+        [AttachedPropertyBrowsableForChildren(IncludeDescendants = false)]
         [AttachedPropertyBrowsableForType(typeof(ComboBox))]
         public static bool GetActive(DependencyObject @object)
         {

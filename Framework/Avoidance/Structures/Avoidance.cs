@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Settings;
-using Trinity.Objects;
 using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Structures

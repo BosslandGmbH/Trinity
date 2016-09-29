@@ -3,23 +3,21 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.Movement;
-using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Routines.Crusader;
 using Trinity.Routines.DemonHunter;
-using Trinity.Technicals;
 using Trinity.UI;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Barbarian
 {
@@ -73,7 +71,7 @@ namespace Trinity.Routines.Barbarian
             if (TryPrimaryPower(out power))
                 return power;
 
-            return Walk(TargetUtil.GetLoiterPosition(TargetUtil.GetBestClusterUnit(), 16f));
+            return Walk(TargetUtil.GetLoiterPosition(TargetUtil.GetBestClusterUnit(), 10f));
         }
 
         protected override bool ShouldAncientSpear(out TrinityActor target)

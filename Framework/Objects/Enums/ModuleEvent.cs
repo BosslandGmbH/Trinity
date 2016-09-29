@@ -1,4 +1,4 @@
-namespace Trinity.Framework
+namespace Trinity.Framework.Objects.Enums
 {
     public enum ModuleEvent
     {

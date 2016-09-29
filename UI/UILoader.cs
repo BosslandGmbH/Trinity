@@ -12,8 +12,6 @@ using System.Windows.Forms;
 using System.Windows.Markup;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
-using Trinity.Helpers;
-using Trinity.Technicals;
 using Trinity.UI.UIComponents;
 using Zeta.Bot;
 using Zeta.Common.Xml;
@@ -152,8 +150,6 @@ namespace Trinity.UI
             try
             {
                 TrinityPlugin.BeginInvoke(() => LoadWindowContent(Path.Combine(FileManager.PluginPath, "UI")));
-
-
             }
             catch (Exception ex)
             {
@@ -247,31 +243,37 @@ namespace Trinity.UI
 
             try
             {
-                    Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Load XAML file : {0}", filePath);
-                    string filecontent = File.ReadAllText(filePath);
+                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Load XAML file : {0}", filePath);
+                string filecontent = File.ReadAllText(filePath);
+                var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
-                    // Change reference to custom TrinityPlugin class
-                    filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UIComponents;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:objects=\"clr-namespace:Trinity.Objects\"", "xmlns:objects=\"clr-namespace:Trinity.Objects;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:mock=\"clr-namespace:Trinity.Settings.Mock\"", "xmlns:mock=\"clr-namespace:Trinity.Settings.Mock;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:settings=\"clr-namespace:Trinity.Settings\"", "xmlns:settings=\"clr-namespace:Trinity.Settings;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:charts=\"clr-namespace:LineChartLib\"", "xmlns:charts=\"clr-namespace:LineChartLib;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas\"", "xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays\"", "xmlns:overlays=\"clr-namespace:Trinity.UI.Overlays;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop\"", "xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:cc=\"clr-namespace:CustomControls\"", "xmlns:cc=\"clr-namespace:CustomControls;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
-                    filecontent = filecontent.Replace("xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums\"", "xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums;assembly=" + Assembly.GetExecutingAssembly().GetName().Name + "\"");
+                
+                filecontent = filecontent.Replace("xmlns:itemlist=\"clr-namespace:Trinity.Items.ItemList\"", "xmlns:itemlist=\"clr-namespace:Trinity.Items.ItemList;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.Input\"", "xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:input=\"clr-namespace:Trinity.UI.UIComponents.Input\"", "xmlns:input=\"clr-namespace:Trinity.UI.UIComponents.Input;assembly=" + assemblyName + "\"");            
+                filecontent = filecontent.Replace("xmlns:behaviors=\"clr-namespace:Trinity.UI.UIComponents.Behaviors\"", "xmlns:behaviors=\"clr-namespace:Trinity.UI.UIComponents.Behaviors;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:controls=\"clr-namespace:Trinity.UI.UIComponents.Controls\"", "xmlns:controls=\"clr-namespace:Trinity.UI.UIComponents.Controls;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:objects=\"clr-namespace:Trinity.Framework.Objects\"", "xmlns:objects=\"clr-namespace:Trinity.Framework.Objects;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:mock=\"clr-namespace:Trinity.Settings.Mock\"", "xmlns:mock=\"clr-namespace:Trinity.Settings.Mock;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:settings=\"clr-namespace:Trinity.Settings\"", "xmlns:settings=\"clr-namespace:Trinity.Settings;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:charts=\"clr-namespace:LineChartLib\"", "xmlns:charts=\"clr-namespace:LineChartLib;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:converters=\"clr-namespace:Trinity.UI.UIComponents.Converters\"", "xmlns:converters=\"clr-namespace:Trinity.UI.UIComponents.Converters;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas\"", "xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:ui=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ui=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop\"", "xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums\"", "xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums;assembly=" + assemblyName + "\"");
 
-                    // Remove Template designer reference
-                    //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"..\\Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
-                    //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
+                // Remove Template designer reference
+                //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"..\\Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
+                //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
 
-                    filecontent = Regex.Replace(filecontent, "<ResourceDictionary.MergedDictionaries>.*</ResourceDictionary.MergedDictionaries>", string.Empty, RegexOptions.Singleline | RegexOptions.Compiled);
+                filecontent = Regex.Replace(filecontent, "<ResourceDictionary.MergedDictionaries>.*</ResourceDictionary.MergedDictionaries>", string.Empty, RegexOptions.Singleline | RegexOptions.Compiled);
 
-                    var bytes = Encoding.UTF8.GetBytes(filecontent);
-                    _xaml[filePath] = bytes;
-                    return (T)XamlReader.Load(new MemoryStream(bytes));
+                var bytes = Encoding.UTF8.GetBytes(filecontent);
+                _xaml[filePath] = bytes;
+                return (T)XamlReader.Load(new MemoryStream(bytes));
          
             }
             catch (Exception ex)

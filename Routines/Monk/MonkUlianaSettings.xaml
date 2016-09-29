@@ -4,18 +4,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
-    xmlns:ut="clr-namespace:Trinity.UIComponents" d:FontSize="14"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+    d:FontSize="14"
     mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../UI/Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <ut:PercentConverter x:Key="PercentConverter" />
-            <ut:EnumBooleanConverter x:Key="EnumBooleanConverter" />
-            <ut:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True"/>
-            <ut:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter" />
-            <ut:FlagsToBoolConverter x:Key="FlagsToValueConverter" />
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True"/>
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter" />
+            <converters:FlagsToBoolConverter x:Key="FlagsToValueConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Border Padding="10">
@@ -52,11 +53,11 @@
                         </WrapPanel>
                         <StackPanel Margin="0,5,0,0" Visibility="{Binding DataContext.Epiphany.UseTime, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}">
                             <CheckBox ToolTip="Use when there are elites close nearby" 
-                                      IsChecked="{Binding DataContext.Epiphany.Reasons, ConverterParameter=Elites, Converter={ut:FlagsToBoolConverter}}">Elites nearby</CheckBox>
+                                      IsChecked="{Binding DataContext.Epiphany.Reasons, ConverterParameter=Elites, Converter={converters:FlagsToBoolConverter}}">Elites nearby</CheckBox>
                             <CheckBox ToolTip="Use when you are surrounded by enemies" 
-                                      IsChecked="{Binding DataContext.Epiphany.Reasons, ConverterParameter=Surrounded, Converter={ut:FlagsToBoolConverter}}">Surrounded</CheckBox>
+                                      IsChecked="{Binding DataContext.Epiphany.Reasons, ConverterParameter=Surrounded, Converter={converters:FlagsToBoolConverter}}">Surrounded</CheckBox>
                             <CheckBox ToolTip="Use when you're low on health" 
-                                      IsChecked="{Binding DataContext.Epiphany.Reasons, ConverterParameter=HealthEmergency, Converter={ut:FlagsToBoolConverter}}">Health emergency</CheckBox>
+                                      IsChecked="{Binding DataContext.Epiphany.Reasons, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Health emergency</CheckBox>
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>

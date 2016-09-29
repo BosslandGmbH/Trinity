@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Items.ItemList;
 
 namespace Trinity.Settings.Mock
 {
@@ -28,10 +29,7 @@ namespace Trinity.Settings.Mock
         static MockData()
         {
             ItemList = new ItemListMockData();
-            SkillSettings = new SkillSettingsMockData();
         }
-
-        public static SkillSettingsMockData SkillSettings { get; set; }
 
         public static ItemListMockData ItemList { get; set; }
     }

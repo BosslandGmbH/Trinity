@@ -3,8 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Trinity.Helpers;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 namespace Trinity.UI.UIComponents.Input

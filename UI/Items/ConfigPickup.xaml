@@ -1,8 +1,8 @@
 ﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:ut="clr-namespace:Trinity.UIComponents"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
              mc:Ignorable="d" Foreground="{DynamicResource TextBrush}"  Background="#434343" Padding="10,0,0,0"
              d:DesignHeight="1200" d:DesignWidth="390">
     <UserControl.Resources>
@@ -11,10 +11,10 @@
                 <ResourceDictionary Source="..\Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <ut:FlagsEnumValueConverter x:Key="flagsEnumValueConverter"/>
-            <ut:EnumVisibilityConverter x:Key="enumVisibilityConverter" />
-            <ut:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
-            <ut:IntToStringConverter x:Key="intToStringConverter"/>
+            <converters:FlagsEnumValueConverter x:Key="flagsEnumValueConverter"/>
+            <converters:EnumVisibilityConverter x:Key="enumVisibilityConverter" />
+            <converters:BoolToVisibilityConverter x:Key="boolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
+            <converters:IntToStringConverter x:Key="intToStringConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>

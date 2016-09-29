@@ -1,5 +1,4 @@
 ﻿using Trinity.Framework.Objects.Memory.Containers;
-using Trinity.Framework.Objects.Memory.Items;
 using Trinity.Framework.Objects.Memory.Misc;
 
 namespace Trinity.Framework.Objects.Memory.Attributes

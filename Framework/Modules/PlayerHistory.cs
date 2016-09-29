@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Helpers;
-using Trinity.Technicals;
 using Zeta.Common;
 using Zeta.Game;
 

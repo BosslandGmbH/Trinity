@@ -6,27 +6,24 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using JetBrains.Annotations;
-using Trinity.Config;
-using Trinity.Framework;
 using Trinity.Framework.Helpers;
-using Trinity.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
+using Trinity.Settings;
+using Trinity.Settings.Loot;
 using Trinity.UI;
 using Trinity.UI.UIComponents;
-using Trinity.UIComponents;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.Settings.Loot
+namespace Trinity.Items.ItemList
 {
     /// <summary>
     /// Settings for ItemList looting

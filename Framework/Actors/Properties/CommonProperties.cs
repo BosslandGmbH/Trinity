@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Objects;
+using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Actors.Properties
 {
@@ -21,11 +22,11 @@ namespace Trinity.Framework.Actors.Properties
             var actorInfo = actor.ActorInfo;
 
             actor.LastSeenTime = DateTime.UtcNow;
-            actor.IsExcludedId = DataDictionary.ExcludedActorIds.Contains(actor.ActorSnoId) || DataDictionary.BlackListIds.Contains(actor.ActorSnoId);
-            actor.IsExcludedType = DataDictionary.ExcludedActorTypes.Contains(actor.ActorType);
+            actor.IsExcludedId = GameData.ExcludedActorIds.Contains(actor.ActorSnoId) || GameData.BlackListIds.Contains(actor.ActorSnoId);
+            actor.IsExcludedType = GameData.ExcludedActorTypes.Contains(actor.ActorType);
             actor.InternalNameLowerCase = actor.InternalName.ToLower();
-            actor.IsAllowedClientEffect = DataDictionary.AllowedClientEffects.Contains(actor.ActorSnoId);
-            actor.IsObstacle = DataDictionary.NavigationObstacleIds.Contains(actor.ActorSnoId) || DataDictionary.PathFindingObstacles.ContainsKey(actor.ActorSnoId);
+            actor.IsAllowedClientEffect = GameData.AllowedClientEffects.Contains(actor.ActorSnoId);
+            actor.IsObstacle = GameData.NavigationObstacleIds.Contains(actor.ActorSnoId) || GameData.PathFindingObstacles.ContainsKey(actor.ActorSnoId);
 
             actor.Name = actor.InternalName; // todo get real name for everything (currently only items have this working)
 
@@ -63,7 +64,7 @@ namespace Trinity.Framework.Actors.Properties
 
                 var animation = commonData.Animation;
                 actor.Animation = animation;
-                actor.AnimationNameLowerCase = DataDictionary.GetAnimationNameLowerCase(animation);
+                actor.AnimationNameLowerCase = GameData.GetAnimationNameLowerCase(animation);
                 actor.AnimationState = commonData.AnimationState;
                 actor.InventorySlot = actor.CommonData.InventorySlot;
             }
@@ -121,40 +122,40 @@ namespace Trinity.Framework.Actors.Properties
         }
         public static TrinityObjectType GetObjectType(ActorType actorType, int actorSno, GizmoType gizmoType, string internalName)
         {
-            if (DataDictionary.ObjectTypeOverrides.ContainsKey(actorSno))
-                return DataDictionary.ObjectTypeOverrides[actorSno];
+            if (GameData.ObjectTypeOverrides.ContainsKey(actorSno))
+                return GameData.ObjectTypeOverrides[actorSno];
 
-            if (DataDictionary.CursedChestSNO.Contains(actorSno))
+            if (GameData.CursedChestSNO.Contains(actorSno))
                 return TrinityObjectType.CursedChest;
 
-            if (DataDictionary.CursedShrineSNO.Contains(actorSno))
+            if (GameData.CursedShrineSNO.Contains(actorSno))
                 return TrinityObjectType.CursedShrine;
 
-            if (DataDictionary.ShrineSNO.Contains(actorSno))
+            if (GameData.ShrineSNO.Contains(actorSno))
                 return TrinityObjectType.Shrine;
 
-            if (DataDictionary.HealthGlobeSNO.Contains(actorSno))
+            if (GameData.HealthGlobeSNO.Contains(actorSno))
                 return TrinityObjectType.HealthGlobe;
 
-            if (DataDictionary.PowerGlobeSNO.Contains(actorSno))
+            if (GameData.PowerGlobeSNO.Contains(actorSno))
                 return TrinityObjectType.PowerGlobe;
 
-            if (DataDictionary.ProgressionGlobeSNO.Contains(actorSno))
+            if (GameData.ProgressionGlobeSNO.Contains(actorSno))
                 return TrinityObjectType.ProgressionGlobe;
 
-            if (DataDictionary.GoldSNO.Contains(actorSno))
+            if (GameData.GoldSNO.Contains(actorSno))
                 return TrinityObjectType.Gold;
 
-            if (DataDictionary.BloodShardSNO.Contains(actorSno))
+            if (GameData.BloodShardSNO.Contains(actorSno))
                 return TrinityObjectType.BloodShard;
 
-            if (actorType == ActorType.Item || DataDictionary.ForceToItemOverrideIds.Contains(actorSno))
+            if (actorType == ActorType.Item || GameData.ForceToItemOverrideIds.Contains(actorSno))
                 return TrinityObjectType.Item;
 
-            if (DataDictionary.AvoidanceSNO.Contains(actorSno))
+            if (GameData.AvoidanceSNO.Contains(actorSno))
                 return TrinityObjectType.Avoidance;
 
-            if (DataDictionary.ForceTypeAsBarricade.Contains(actorSno))
+            if (GameData.ForceTypeAsBarricade.Contains(actorSno))
                 return TrinityObjectType.Barricade;
 
             if (actorType == ActorType.Monster)
@@ -203,7 +204,7 @@ namespace Trinity.Framework.Actors.Properties
             if (actorType == ActorType.Projectile)
                 return TrinityObjectType.Projectile;
 
-            if (DataDictionary.BuffedLocationSno.Contains(actorSno))
+            if (GameData.BuffedLocationSno.Contains(actorSno))
                 return TrinityObjectType.BuffedRegion;
 
             if (actorType == ActorType.ClientEffect)
@@ -212,7 +213,7 @@ namespace Trinity.Framework.Actors.Properties
             if (actorType == ActorType.Player)
                 return TrinityObjectType.Player;
 
-            if (DataDictionary.PlayerBannerSNO.Contains(actorSno))
+            if (GameData.PlayerBannerSNO.Contains(actorSno))
                 return TrinityObjectType.Banner;
 
             if (internalName != null && internalName.StartsWith("Waypoint-"))
@@ -279,7 +280,7 @@ namespace Trinity.Framework.Actors.Properties
                         result = 4f;
 
                         float range;
-                        if (DataDictionary.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out range))
+                        if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out range))
                         {
                             result = range;
                         }
@@ -291,7 +292,7 @@ namespace Trinity.Framework.Actors.Properties
                         result = 6f;
 
                         float range;
-                        if (DataDictionary.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out range))
+                        if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out range))
                         {
                             result = range;
                         }
@@ -301,7 +302,7 @@ namespace Trinity.Framework.Actors.Properties
                 {
                         result = 5f;
                         float range;
-                        if (DataDictionary.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out range))
+                        if (GameData.CustomObjectRadius.TryGetValue(actor.ActorSnoId, out range))
                         {
                             result = range;
                         }

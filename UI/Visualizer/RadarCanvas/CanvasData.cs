@@ -3,7 +3,7 @@ using System.Windows.Media;
 using System.Windows.Media.Media3D;
 using Zeta.Common;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     /// <summary>
     /// Houses canvas information, so a bunch of structs can be accessed by reference.

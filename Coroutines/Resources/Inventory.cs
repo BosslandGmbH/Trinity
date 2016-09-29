@@ -3,17 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Helpers;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Coroutines.Resources
 {
-    /// <summary>
-    /// Enum InventoryItemType - this is not finalized, i don't have all the items
-    /// </summary>
     public enum InventoryItemType
     {
         None = 0,
@@ -440,57 +436,7 @@ namespace Trinity.Coroutines.Resources
 
         public static string LastLogInfo;
 
-        public static IEnumerable<TrinityItem> AllItems
-        {
-            get
-            {
-                //var items = ZetaDia.Actors.GetActorsOfType<ACDItem>(true).Where(i =>
-                //var items = Core.Actors.Inventory.Where(i =>
-                //{
-                //    //if (!i.IsValid || i.IsDisposed)
-                //    //{
-                //    //    Logger.LogVerbose($"Inventory Skipping: {i.InternalName} ({i.ActorSnoId}) due to not valid or disposed");
-                //    //    return false;
-                //    //}
-
-                //    if (i.InventorySlot != InventorySlot.BackpackItems && i.InventorySlot != InventorySlot.SharedStash)
-                //    {
-                //        return false;
-                //    }
-
-                //    //if (InvalidItemDynamicIds.Contains(i.AnnId))
-                //    //{
-                //    //    Logger.LogVerbose($"Inventory Skipping: {i.Name} ({i.ActorSnoId}) due to InvalidItemDynamicId ({i.AnnId})");
-                //    //    return false;
-                //    //}
-
-                //    if (!i.IsValid)
-                //    {
-                //        Logger.LogVerbose($"Inventory Skipping: {i.Name} ({i.ActorSnoId}) is invalid or disposed");
-                //    }
-
-                //    //todo: perf optimize
-                //    var stackQuantity = i.ItemStackQuantity;
-                //    var isEquipment = !i.IsCraftingReagent && stackQuantity == 0;
-                //    var isCraftingMaterial = i.IsCraftingReagent && stackQuantity > 0;
-                //    var isGem = i.IsGem && stackQuantity > 0;
-                //    var isPotion = i.IsPotion && stackQuantity == 0;
-                //    var isMisc = i.IsMiscItem || i.ItemBaseType == ItemBaseType.Misc;
-                //    var isCraftingBook = i.ItemType == ItemType.CraftingPage || i.ItemType == ItemType.CraftingPlan;
-                //    var isCraftingPlan = i.ItemType == ItemType.CraftingPlan && stackQuantity == 1;
-
-                //    var isValid = isEquipment || isCraftingMaterial || isCraftingPlan || isPotion || isGem || isMisc || isCraftingBook;
-
-                //    if (!isValid)                 
-                //        Logger.LogVerbose($"Inventory Skipping: {i.Name} ({i.ActorSnoId}), unknown item");
-
-                //    return isValid;
-
-                //}).ToList();
-
-                return Core.Actors.Inventory.Where(i => !InvalidItemDynamicIds.Contains(i.AnnId));
-            }
-        }
+        public static IEnumerable<TrinityItem> AllItems => Core.Actors.Inventory.Where(i => !InvalidItemDynamicIds.Contains(i.AnnId));
 
         public static bool IsBadData(ACDItem i)
         {

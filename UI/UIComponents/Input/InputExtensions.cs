@@ -1,12 +1,9 @@
 using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Windows.Input;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Input
 {
     public static class InputExtensions
     {

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using Trinity.Framework.Helpers;
-using Trinity.Helpers;
-using Trinity.Objects;
-using Trinity.Technicals;
+using Trinity.Framework.Objects;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Items
+namespace Trinity.Items.Sorting
 {
     public class ItemWrapper : IComparable<ItemWrapper>, IEquatable<ItemWrapper>
     {

@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory.Containers;
-using Trinity.Framework.Objects.Memory.Items;
-using Trinity.Helpers;
-using Trinity.Technicals;
 using Zeta.Game;
 
 namespace Trinity.Framework.Objects.Memory.Attributes

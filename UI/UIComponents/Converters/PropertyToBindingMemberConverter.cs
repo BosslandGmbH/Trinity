@@ -2,9 +2,8 @@
 using System.Configuration;
 using System.Globalization;
 using System.Windows.Data;
-using Trinity.UI.UIComponents;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class PropertyToBindingMemberConverter : IValueConverter
     {

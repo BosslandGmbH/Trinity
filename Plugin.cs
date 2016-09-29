@@ -6,87 +6,61 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using Buddy.Overlay;
-using Trinity.Cache;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Configuration;
-using Trinity.Coroutines;
-using Trinity.Coroutines.Resources;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Memory;
-using Trinity.Helpers;
-using Trinity.Helpers.AutoFollow.Resources;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Items;
-using Trinity.Movement;
 using Trinity.ProfileTags;
-using Trinity.Routines;
-using Trinity.Settings.Loot;
-using Trinity.Technicals;
+using Trinity.Reference;
+using Trinity.Settings;
 using Trinity.UI;
-using Trinity.UI.Overlays;
-using Trinity.UI.RadarUI;
+using Trinity.UI.Visualizer;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
-using Zeta.Common;
 using Zeta.Common.Plugins;
 using Zeta.Game;
-using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
-using Zeta.TreeSharp;
-using Action = System.Action;
 using Application = System.Windows.Application;
-using Logger = Trinity.Technicals.Logger;
 
 namespace Trinity
 {
-    /// <summary>
-    /// TrinityPlugin DemonBuddy Plugin 
-    /// </summary>
-    public partial class TrinityPlugin : IPlugin
+    public class TrinityPlugin : IPlugin
     {
-        public const bool IsDeveloperLoggingEnabled = false;
-
-
-
-        private Version _version;
-        public Version Version
-        {
-            get
-            {
-                if (_version != null) return _version;
-                var verXml = XDocument.Load(FileManager.VersionPath).Descendants("Revision").FirstOrDefault();
-                if (verXml != null) return new Version(2, 55, Int32.Parse(verXml.Value));
-                return new Version(2, 55, 0);
-            }
-        }
-
+        public string Name => "Trinity";
+        public Version Version => new Version(2, 55, 243);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
-        public string Description => $"v{Version} BETA. Provides Combat, Exploration and much more";
+        public string Description => $"v{Version} provides combat, exploration and much more";
+        public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
 
-        private static bool MouseLeft()
+
+        private static TrinityPlugin _instance;
+        private static DateTime _lastWindowTitleTick = DateTime.MinValue;
+        private static Window _mainWindow;
+        private static bool _hasLoggedCurrentBuild;
+
+        public TrinityPlugin()
         {
-            var result = (Control.MouseButtons & MouseButtons.Left) == MouseButtons.Left;
-            if (result)
-                Logger.Log("Mouse Left Down LazyRaider Pause");
-            return result;
-        }
+            _instance = this;
 
-        private DateTime _lastTestPulseTime = DateTime.MinValue;
+            PluginCheck.CheckAndInstallTrinityRoutine();
+
+            if (CharacterSettings.Instance.EnabledPlugins == null)
+                CharacterSettings.Instance.EnabledPlugins = new List<string>();
+
+            if (!CharacterSettings.Instance.EnabledPlugins.Contains("Trinity"))
+                CharacterSettings.Instance.EnabledPlugins.Add("Trinity");
+        }
 
         public DateTime LastPulse { get; set; }
+        public static bool IsEnabled { get; private set; }
+        public bool IsInitialized { get; private set; }
+        public static TrinityPlugin Instance => _instance ?? (_instance = new TrinityPlugin());
 
-        /// <summary>
-        /// Receive Pulse event from DemonBuddy.
-        /// </summary>
         public void OnPulse()
         {
             try
@@ -103,15 +77,8 @@ namespace Trinity
                     if (!ZetaDia.IsInGame || !ZetaDia.Me.IsValid || ZetaDia.IsLoadingWorld)
                         return;
 
-                    if (RiftProgression.IsInRift && DateTime.UtcNow.Subtract(_lastTestPulseTime).TotalMilliseconds > 5000)
-                    {
-                        _lastTestPulseTime = DateTime.UtcNow;
-                        Logger.LogSpecial(() => $"RiftProgression%={Core.MemoryModel.Globals.RiftProgressionPct} RiftSouls={Core.MemoryModel.Globals.RiftSouls}");
-                    }
-
                     GameUI.SafeClickUIButtons();
 
-                    //Core.Avoidance.UpdateGrid();
                     VisualizerViewModel.Instance.UpdateVisualizer();
 
                     if (ZetaDia.Me.IsDead)
@@ -119,32 +86,27 @@ namespace Trinity
 
                     using (new PerformanceLogger("LazyRaiderClickToPause"))
                     {
-
-                        if (Settings.Advanced.LazyRaiderClickToPause && !BotMain.IsPaused && MouseLeft())
+                        if (Core.Settings.Advanced.LazyRaiderClickToPause && !BotMain.IsPaused && MouseLeft())
                         {
                             BotMain.PauseWhile(MouseLeft);
                         }
                     }
 
-                    // See if we should update the stats file
                     if (DateTime.UtcNow.Subtract(ItemDropStats.ItemStatsLastPostedReport).TotalSeconds > 10)
                     {
                         ItemDropStats.ItemStatsLastPostedReport = DateTime.UtcNow;
                         ItemDropStats.OutputReport();
                     }
 
-                    // Recording of all the XML's in use this run
-                    UsedProfileManager.RecordProfile();
-
                     DebugUtil.LogOnPulse();
 
-                    if (!Settings.Advanced.IsDBInactivityEnabled)
+                    if (!Core.Settings.Advanced.IsDBInactivityEnabled)
                     {
                         GlobalSettings.Instance.LogoutInactivityTime = 0;
                     }
                     else
                     {
-                        GlobalSettings.Instance.LogoutInactivityTime = (float)TimeSpan.FromSeconds(Settings.Advanced.InactivityTimer).TotalMinutes;
+                        GlobalSettings.Instance.LogoutInactivityTime = (float) TimeSpan.FromSeconds(Core.Settings.Advanced.InactivityTimer).TotalMinutes;
                     }
 
                     if (GoldInactivity.Instance.GoldInactive())
@@ -159,20 +121,11 @@ namespace Trinity
 
                     Gamble.CheckShouldTownRunForGambling();
 
-
-
-                    KillAllBountyDetector.Check();
-
-                    //RiftProgression.Pulse();
-
-                    if (!HasLoggedCurrentBuild && BotMain.IsRunning && Core.Inventory.PlayerEquippedIds.Any())
+                    if (!_hasLoggedCurrentBuild && BotMain.IsRunning && Core.Inventory.PlayerEquippedIds.Any())
                     {
-                        // Requires Inventory Cache to be up to date.                
                         DebugUtil.LogBuildAndItems();
-                        HasLoggedCurrentBuild = true;
+                        _hasLoggedCurrentBuild = true;
                     }
-
-
                 }
             }
             catch (AccessViolationException)
@@ -184,18 +137,6 @@ namespace Trinity
                 Logger.Log(LogCategory.UserInformation, $"Exception in Pulse: {ex}");
             }
         }
-
-        private static void LeaveGame(string reason)
-        {
-            Logger.Log(reason);
-            GameEvents.FireWorldTransferStart();
-            ZetaDia.Service.Party.LeaveGame();
-            BotMain.PauseWhile(() => ZetaDia.IsInGame);
-        }
-
-        public static bool IsEnabled { get; private set; }
-
-        public bool IsInitialized { get; private set; }
 
         public void OnEnabled()
         {
@@ -219,24 +160,14 @@ namespace Trinity
 
             try
             {
-
                 Core.Init();
-
-                InitializeSettings();
-
+                TrinityPluginSettings.InitializeSettings();
                 Core.Enable();
-    
-                // Kickstart Navigation Server
-                PlayerMover.MoveTowards(Player.Position);
-
+                Core.PlayerMover.MoveTowards(Core.Player.Position);
                 Logger.Log("OnEnable start");
-                DateTime dateOnEnabledStart = DateTime.UtcNow;
-
-                BotMain.OnStart += TrinityBotStart;
-                BotMain.OnStop += TrinityBotStop;
-
-               
-
+                var dateOnEnabledStart = DateTime.UtcNow;
+                BotMain.OnStart += TrinityEventHandlers.TrinityBotStart;
+                BotMain.OnStop += TrinityEventHandlers.TrinityBotStop;
                 SetWindowTitle();
                 TabUi.InstallTab();
 
@@ -248,60 +179,28 @@ namespace Trinity
                 }
                 else
                 {
-                    
-
-                    //PluginCheck.Start();
-
-
-
-
                     Navigator.PlayerMover = Core.PlayerMover;
                     Navigator.StuckHandler = Core.StuckHandler;
-                    GameEvents.OnPlayerDied += TrinityOnDeath;
-                    GameEvents.OnGameJoined += TrinityOnJoinGame;
-                    GameEvents.OnGameLeft += TrinityOnLeaveGame;
-                    //GameEvents.OnItemSold += ItemEvents.TrinityOnItemSold;
-                    //GameEvents.OnItemSalvaged += ItemEvents.TrinityOnItemSalvaged;
-                    //GameEvents.OnItemDropped += ItemEvents.TrinityOnItemDropped;
-                    //GameEvents.OnItemStashed += ItemEvents.TrinityOnItemStashed;
-                    //GameEvents.OnItemIdentificationRequest += ItemEvents.TrinityOnOnItemIdentificationRequest;
-                    GameEvents.OnGameChanged += GameEvents_OnGameChanged;
-                    GameEvents.OnWorldChanged += GameEvents_OnWorldChanged;
+                    GameEvents.OnPlayerDied += TrinityEventHandlers.TrinityOnDeath;
+                    GameEvents.OnGameJoined += TrinityEventHandlers.TrinityOnJoinGame;
+                    GameEvents.OnGameLeft += TrinityEventHandlers.TrinityOnLeaveGame;
+                    GameEvents.OnGameChanged += TrinityEventHandlers.GameEvents_OnGameChanged;
+                    GameEvents.OnWorldChanged += TrinityEventHandlers.GameEvents_OnWorldChanged;
 
                     CombatTargeting.Instance.Provider = new TrinityCombatProvider();
                     LootTargeting.Instance.Provider = new BlankLootProvider();
                     ObstacleTargeting.Instance.Provider = new BlankObstacleProvider();
 
-                    //if (Settings.Loot.ItemFilterMode != ItemFilterMode.DemonBuddy)
-                    //{
-                    //    ItemManager.Current = new TrinityItemManager();
-                    //}
-
-                    // Safety check incase DB "OnStart" event didn't fire properly
                     if (BotMain.IsRunning)
                     {
-                        TrinityBotStart(null);
+                        TrinityEventHandlers.TrinityBotStart(null);
                         if (ZetaDia.IsInGame)
-                            TrinityOnJoinGame(null, null);
+                            TrinityEventHandlers.TrinityOnJoinGame(null, null);
                     }
 
                     SetBotTicksPerSecond();
-
                     UILoader.PreLoadWindowContent();
-
-                    //OverlayLoader.Enable();
-
-                    //ClearArea.Enable();
-
-                    //Core.Enable();
-
                     Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "ENABLED: {0} now in action!", Description);
-                }
-
-                if (StashRule != null)
-                {
-                    // reseting stash rules
-                    BeginInvoke(() => StashRule.reset());
                 }
 
                 Logger.LogDebug("OnEnable took {0}ms", DateTime.UtcNow.Subtract(dateOnEnabledStart).TotalMilliseconds);
@@ -315,60 +214,37 @@ namespace Trinity
             ModuleManager.FireEvent(ModuleEvent.PluginEnabled);
         }
 
-        /// <summary>
-        /// Called when user disable the plugin.
-        /// </summary>
         public void OnDisabled()
         {
             IsEnabled = false;
-
             TabUi.RemoveTab();
             HookManager.ReplaceTreeHooks();
-
-
-
             Navigator.PlayerMover = new DefaultPlayerMover();
             Navigator.StuckHandler = new DefaultStuckHandler();
             CombatTargeting.Instance.Provider = new DefaultCombatTargetingProvider();
             LootTargeting.Instance.Provider = new DefaultLootTargetingProvider();
             ObstacleTargeting.Instance.Provider = new DefaultObstacleTargetingProvider();
-            //Navigator.SearchGridProvider = new MainGridProvider();
-
-            GameEvents.OnPlayerDied -= TrinityOnDeath;
-            BotMain.OnStop -= TrinityBotStop;
-            GameEvents.OnPlayerDied -= TrinityOnDeath;
-            GameEvents.OnGameJoined -= TrinityOnJoinGame;
-            GameEvents.OnGameLeft -= TrinityOnLeaveGame;
-            GameEvents.OnGameChanged -= GameEvents_OnGameChanged;
-            GameEvents.OnWorldChanged -= GameEvents_OnWorldChanged;
-
+            GameEvents.OnPlayerDied -= TrinityEventHandlers.TrinityOnDeath;
+            BotMain.OnStop -= TrinityEventHandlers.TrinityBotStop;
+            GameEvents.OnPlayerDied -= TrinityEventHandlers.TrinityOnDeath;
+            GameEvents.OnGameJoined -= TrinityEventHandlers.TrinityOnJoinGame;
+            GameEvents.OnGameLeft -= TrinityEventHandlers.TrinityOnLeaveGame;
+            GameEvents.OnGameChanged -= TrinityEventHandlers.GameEvents_OnGameChanged;
+            GameEvents.OnWorldChanged -= TrinityEventHandlers.GameEvents_OnWorldChanged;
             ItemManager.Current = new LootRuleItemManager();
-
-            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "");
-            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "DISABLED: TrinityPlugin is now shut down...");
-            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "");
-            //GenericCache.Shutdown();
             GenericBlacklist.Shutdown();
-            //ClearArea.Disable();
-            OverlayLoader.Disable();
             Core.Disable();
-
             ModuleManager.FireEvent(ModuleEvent.PluginDisabled);
+            Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "DISABLED: TrinityPlugin is now shut down...");
         }
 
-        /// <summary>
-        /// Called when DemonBuddy shut down.
-        /// </summary>
         public void OnShutdown()
         {
             ModuleManager.FireEvent(ModuleEvent.Shutdown);
             GenericBlacklist.Shutdown();
             PluginCheck.Shutdown();
         }
-        
-        /// <summary>
-        /// Called when DemonBuddy initialize the plugin.
-        /// </summary>
+
         public void OnInitialize()
         {
             if (IsInitialized)
@@ -379,63 +255,30 @@ namespace Trinity
             if (!Application.Current.CheckAccess())
                 return;
 
-            //Application.Current.Dispatcher.Invoke(() =>
-            //{
-            //    Logger.LogVerbose("TrinityPlugin Initializing with PID: {0} CurrentThread={1} '{2}' CanAccessApplication={3}",
-            //        Process.GetCurrentProcess().Id, Thread.CurrentThread.ManagedThreadId,
-            //        Thread.CurrentThread.Name, Application.Current.CheckAccess());
-
             TrinityConditions.Initialize();
-
-            //    Logger.Log("Initialized v{0}", Version);
-            //    IsInitialized = true;
-
-            //    var trinityPluginContainer = PluginManager.Plugins.FirstOrDefault(p => p.Plugin == this);
-            //    if (trinityPluginContainer != null && !trinityPluginContainer.Enabled)
-            //    {
-            //        trinityPluginContainer.Enabled = true;
-            //    }
-            //});
+            IsInitialized = true;
         }
-
-        public string Name => "Trinity";
 
         public bool Equals(IPlugin other)
         {
             return (other.Name == Name) && (other.Version == Version);
         }
 
-        private static TrinityPlugin _instance;
-        public static TrinityPlugin Instance
+        private static bool MouseLeft()
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new TrinityPlugin();
-                }
-                return _instance;
-            }
+            var result = (Control.MouseButtons & MouseButtons.Left) == MouseButtons.Left;
+            if (result)
+                Logger.Log("Mouse Left Down LazyRaider Pause");
+            return result;
         }
 
-        public TrinityPlugin()
+        private static void LeaveGame(string reason)
         {
-            _instance = this;
-
-            PluginCheck.CheckAndInstallTrinityRoutine();
-            
-            if (CharacterSettings.Instance.EnabledPlugins == null)
-                CharacterSettings.Instance.EnabledPlugins = new List<string>();
-
-            if (!CharacterSettings.Instance.EnabledPlugins.Contains("Trinity"))
-                CharacterSettings.Instance.EnabledPlugins.Add("Trinity");
+            Logger.Log(reason);
+            GameEvents.FireWorldTransferStart();
+            ZetaDia.Service.Party.LeaveGame();
+            BotMain.PauseWhile(() => ZetaDia.IsInGame);
         }
-
-
-        private static DateTime _lastWindowTitleTick = DateTime.MinValue;
-        private static Window _mainWindow;
-        private static bool HasLoggedCurrentBuild;
-        private bool _postedWarnings;
 
         internal static void SetWindowTitle(string profileName = "")
         {
@@ -452,39 +295,44 @@ namespace Trinity
             if (_mainWindow == null || !ZetaDia.Service.IsValid || !ZetaDia.Service.Platform.IsValid || !ZetaDia.Service.Platform.IsConnected)
                 return;
 
-            string battleTagName = "";
-            if (Settings.Advanced.ShowBattleTag)
+            var battleTagName = "";
+            if (Core.Settings.Advanced.ShowBattleTag)
             {
                 try
                 {
                     battleTagName = "- " + FileManager.BattleTagName + " ";
                 }
                 catch
-                { }
+                {
+                }
             }
-            string heroName = "";
-            if (Settings.Advanced.ShowHeroName)
+            var heroName = "";
+            if (Core.Settings.Advanced.ShowHeroName)
             {
                 try
                 {
                     heroName = "- " + ZetaDia.Service.Hero.Name;
                 }
-                catch { }
+                catch
+                {
+                }
             }
-            string heroClass = "";
-            if (Settings.Advanced.ShowHeroClass)
+            var heroClass = "";
+            if (Core.Settings.Advanced.ShowHeroClass)
             {
                 try
                 {
                     heroClass = "- " + ZetaDia.Service.Hero.Class;
                 }
-                catch { }
+                catch
+                {
+                }
             }
 
 
-            string windowTitle = "DB " + battleTagName + heroName + heroClass + "- PID:" + Process.GetCurrentProcess().Id;
+            var windowTitle = "DB " + battleTagName + heroName + heroClass + "- PID:" + Process.GetCurrentProcess().Id;
 
-            if (profileName.Trim() != String.Empty)
+            if (profileName.Trim() != string.Empty)
             {
                 windowTitle += " - " + profileName;
             }
@@ -493,7 +341,7 @@ namespace Trinity
             {
                 try
                 {
-                    if (_mainWindow != null && !String.IsNullOrWhiteSpace(windowTitle))
+                    if (_mainWindow != null && !string.IsNullOrWhiteSpace(windowTitle))
                     {
                         _mainWindow.Title = windowTitle;
                     }
@@ -514,14 +362,11 @@ namespace Trinity
             Application.Current.Dispatcher.Invoke(action);
         }
 
-        public static TimeSpan RunningTime => DateTime.UtcNow.Subtract(BotStartTime);
-
         internal static void SetBotTicksPerSecond()
         {
             if (Core.Settings.Advanced.TPSEnabled)
             {
                 BotMain.TicksPerSecond = Core.Settings.Advanced.TPSLimit;
-                //ActorManager.TickDelayMs = Settings.Advanced.TPSLimit < 0 ? 0 : 1000 / Settings.Advanced.TPSLimit;
                 Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Bot TPS set to {0}", Core.Settings.Advanced.TPSLimit);
             }
             else
@@ -539,7 +384,7 @@ namespace Trinity
             {
                 if (Thread.CurrentThread != Application.Current.Dispatcher.Thread)
                 {
-                    Application.Current.Dispatcher.Invoke(new System.Action(Exit));
+                    Application.Current.Dispatcher.Invoke(Exit);
                     return;
                 }
 

@@ -10,48 +10,35 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml.Serialization;
-
-
 using JetBrains.Annotations;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Config;
-using Trinity.Configuration;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Attributes;
-using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Helpers;
-using Trinity.Objects;
-using Trinity.Technicals;
+using Trinity.Settings;
 using Trinity.UI.UIComponents;
-using Trinity.UI.UIComponents.RadarCanvas;
-using Trinity.UIComponents;
+using Trinity.UI.Visualizer.RadarCanvas;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
+using Zeta.Common;
 using Zeta.Common.Xml;
 using Zeta.Game;
-using Zeta.Common;
-using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
 using AdvDia = Trinity.Components.Adventurer.Cache.AdvDia;
 using Expression = System.Linq.Expressions.Expression;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
-namespace Trinity.UI.RadarUI
+namespace Trinity.UI.Visualizer
 {
     [Zeta.XmlEngine.XmlElement("VisualizerViewModel")]
     public class VisualizerViewModel : XmlSettings, INotifyPropertyChanged
@@ -185,7 +172,7 @@ namespace Trinity.UI.RadarUI
 
                 LastRefresh = DateTime.UtcNow;
 
-                var objects = TrinityPlugin.Targets.ToList();
+                var objects = Core.Targets.ToList();
 
 
                 foreach (var obj in objects)

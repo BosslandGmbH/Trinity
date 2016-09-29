@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using Trinity.Coroutines.Resources;
 using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
 using Trinity.ProfileTags.EmbedTags;
+using Trinity.Reference;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
-using Trinity.Technicals;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.ProfileTags

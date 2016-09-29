@@ -5,20 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using IronPython.Modules;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Objects;
+using Trinity.Framework.Helpers;
 using Trinity.Reference;
-using Trinity.Technicals;
+using Trinity.Settings.Combat;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Wizard
 {
@@ -57,6 +56,7 @@ namespace Trinity.Routines.Wizard
         public virtual Func<bool> ShouldIgnorePackSize { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreAvoidance { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreKiting { get; } = () => false;
+        public virtual Func<bool> ShouldIgnoreFollowing { get; } = () => false;
 
         #endregion
 
@@ -686,10 +686,10 @@ namespace Trinity.Routines.Wizard
         // Misc
 
         protected static bool IsArchonActive
-            => Core.Hotbar.ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int)p));
+            => Core.Hotbar.ActivePowers.Any(p => GameData.ArchonSkillIds.Contains((int)p));
 
         protected bool IsSlowTimeActive
-            => ZetaDia.Actors.GetActorsOfType<DiaObject>().Any(a => DataDictionary.SlowTimeSNO.Contains(a.ActorSnoId));
+            => ZetaDia.Actors.GetActorsOfType<DiaObject>().Any(a => GameData.SlowTimeSNO.Contains(a.ActorSnoId));
 
         protected static float BlizzardRadius
             => Runes.Wizard.Apocalypse.IsActive ? 30f : 16f;

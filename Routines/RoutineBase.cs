@@ -3,26 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel.Configuration;
 using System.Threading.Tasks;
-using Trinity.Cache;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Components.Combat.Party;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
-using Trinity.Helpers;
-using Trinity.Objects;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
-using Trinity.Technicals;
+using Trinity.Settings.Combat;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines
 {

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Controls;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Technicals;
+using Trinity.Framework.Objects;
 using Zeta.Game;
 
 namespace Trinity.Framework.Modules

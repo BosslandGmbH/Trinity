@@ -1,6 +1,5 @@
 ﻿using System;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Memory.Items;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Objects.Memory.Attributes

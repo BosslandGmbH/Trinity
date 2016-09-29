@@ -2,12 +2,13 @@
 using Buddy.Coroutines;
 using Trinity.Coroutines.Resources;
 using Trinity.DbProvider;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
+using Trinity.Reference;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Coroutines.Town
 {

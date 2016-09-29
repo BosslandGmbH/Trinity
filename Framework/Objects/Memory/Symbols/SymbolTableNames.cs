@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Trinity.Framework.Objects.Memory.Misc
+namespace Trinity.Framework.Objects.Memory.Symbols
 {
     public static class SymbolTableNames
     {

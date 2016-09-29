@@ -3,8 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Coroutines.Resources;
+using Trinity.Reference;
 using Zeta.Game;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Coroutines.Town
 {

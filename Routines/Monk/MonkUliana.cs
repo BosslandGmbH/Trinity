@@ -3,20 +3,18 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Routines.DemonHunter;
-using Trinity.Technicals;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Monk
 {
@@ -28,7 +26,7 @@ namespace Trinity.Routines.Monk
         public string Description => "Uliana's Strategem set puts one of the coolest looking Monk skills — Seven-Sided Strike Seven-Sided Strike — in the Greater Rifting spotlight, along with the helpful push of the class trademark, Exploding Palm Exploding Palm. This high burst, AoE centric playstyle is available in both solo progression and speedfarming";
         public string Author => "xzjv";
         public string Version => "0.1";
-        public string Url => "http://www.icy-veins.com/d3/demon-hunter-fan-of-knives-build-with-legacy-of-nightmares-patch-2-4-2-season-7";
+        public string Url => "http://www.icy-veins.com/d3/monk-ulianas-strategem-seven-sided-strike-build-patch-2-4-2-season-7";
 
         public override int PrimaryEnergyReserve => 100;
 

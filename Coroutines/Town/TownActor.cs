@@ -1,5 +1,5 @@
 using System.Linq;
-using Trinity.Objects;
+using Trinity.Framework.Objects;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;

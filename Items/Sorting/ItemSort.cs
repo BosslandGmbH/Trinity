@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Coroutines;
-using Trinity.Coroutines.Resources;
 using Trinity.Coroutines.Town;
-using Trinity.DbProvider;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
+using Trinity.Reference;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
-using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.TreeSharp;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.Items
+namespace Trinity.Items.Sorting
 {
     public static class ItemSort
     {

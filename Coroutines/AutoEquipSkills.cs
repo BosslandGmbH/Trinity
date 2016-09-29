@@ -6,10 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Framework;
-using Trinity.Objects;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Zeta.Game;
-using Trinity.Technicals;
 
 namespace Trinity.Coroutines
 {
@@ -45,8 +44,8 @@ namespace Trinity.Coroutines
 
             _lastSkillChange = DateTime.UtcNow;
 
-            if (DateTime.UtcNow.Subtract(TrinityPlugin.BotStartTime).TotalSeconds < 10)
-                return false;
+            //if (DateTime.UtcNow.Subtract(Settings.TrinityPlugin.BotStartTime).TotalSeconds < 10)
+            //    return false;
        
             if (_lastLevel == level)
                 return false;

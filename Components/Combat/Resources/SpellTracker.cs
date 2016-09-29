@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Components.Combat
+namespace Trinity.Components.Combat.Resources
 {
     /// <summary>
     /// Track DoT and duration/expiration spells on monsters

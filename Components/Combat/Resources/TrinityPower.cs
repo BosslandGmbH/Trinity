@@ -1,25 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Buddy.Coroutines;
-using Trinity.Components.Combat.Abilities;
-using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Helpers;
-using Trinity.Objects;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
-using Trinity.Technicals;
-using Zeta.Bot;
-using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
 
-namespace Trinity.Components.Combat
+namespace Trinity.Components.Combat.Resources
 {
     /// <summary>
     /// 'TrinityPower' holds instructions on how a spell should be cast in a combat situation.
@@ -58,7 +46,7 @@ namespace Trinity.Components.Combat
 
         public double WaitTimeAfterRemaining => Math.Max(0, WaitAfterUseMs - TimeSinceUseMs);
 
-        public bool IsInteractPower => DataDictionary.InteractPowers.Contains(SNOPower);
+        public bool IsInteractPower => GameData.InteractPowers.Contains(SNOPower);
 
         public TrinityPower()
         {

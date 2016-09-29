@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Components.Combat.Party;
-using Trinity.Config.Combat;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
-using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Movement;
+using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Trinity.Reference;
 using Trinity.Routines;
-using Trinity.Technicals;
-using Trinity.UI.UIComponents.RadarCanvas;
+using Trinity.Settings.Combat;
+using Trinity.UI.Visualizer.RadarCanvas;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.Components.Combat
+namespace Trinity.Components.Combat.Resources
 {
     public static class TargetUtil
     {
@@ -31,7 +29,7 @@ namespace Trinity.Components.Combat
             {
                 try
                 {
-                    var monk = Trinity.TrinityPlugin.Targets.FirstOrDefault(x => x.InternalName.ToLower().Contains("monk"));
+                    var monk = Core.Targets.FirstOrDefault(x => x.InternalName.ToLower().Contains("monk"));
                     //if (monk == null)
                     //    Logger.Log("Unable to find Monk.  Where did he go?");
                     return monk;
@@ -50,7 +48,7 @@ namespace Trinity.Components.Combat
             get
             {
                 return
-                    Trinity.TrinityPlugin.Targets.OrderBy(y => y.NearbyUnitsWithinDistance(20))
+                    Core.Targets.OrderBy(y => y.NearbyUnitsWithinDistance(20))
                         .FirstOrDefault(x => x.IsPlayer);
             }
         }
@@ -109,7 +107,7 @@ namespace Trinity.Components.Combat
         internal static List<TrinityActor> SafeList(bool objectsInAoe = false)
         {
             return
-                TrinityPlugin.Targets.Where(x => !x.IsPlayer && (!x.IsUnit || x.IsUnit && x.HitPoints > 0) &&
+                Core.Targets.Where(x => !x.IsPlayer && (!x.IsUnit || x.IsUnit && x.HitPoints > 0) &&
                                                      (objectsInAoe || !Core.Avoidance.InAvoidance(x.Position))).ToList();
         }
 
@@ -285,7 +283,7 @@ namespace Trinity.Components.Combat
         public static List<TrinityActor> UnitsBetweenLocations(Vector3 fromLocation, Vector3 toLocation)
         {
             return
-                (from u in TrinityPlugin.Targets
+                (from u in Core.Targets
                  where u.IsUnit &&
                        MathUtil.IntersectsPath(u.Position, u.Radius, fromLocation, toLocation)
                  select u).ToList();
@@ -512,27 +510,17 @@ namespace Trinity.Components.Combat
                 var clearString = "Clearing CURRENT TARGET: " + reason +
                         $"{Environment.NewLine} Name: {CurrentTarget.InternalName} Type: {CurrentTarget.Type} SNO: {CurrentTarget.ActorSnoId} Distance: {CurrentTarget.Distance} " +
                         $"{Environment.NewLine} Weight: {CurrentTarget.Weight} Info: {CurrentTarget.WeightInfo}";
-                Logger.LogVerbose(clearString);
+                Logger.LogVerbose(LogCategory.Weight, clearString);
                 //Combat.Targeting.CurrentTarget = null;
             }
         }
 
         #region Helper fields
 
-        private static List<TrinityActor> ObjectCache
-        {
-            get
-            {
-                return TrinityPlugin.Targets;
-            }
-        }
-        private static PlayerCache Player
-        {
-            get
-            {
-                return Core.Player;
-            }
-        }
+        private static List<TrinityActor> ObjectCache => Core.Targets.Entries;
+
+        private static PlayerCache Player => Core.Player;
+
         private static bool AnyTreasureGoblinsPresent
         {
             get
@@ -543,20 +531,9 @@ namespace Trinity.Components.Combat
                     return false;
             }
         }
-        private static TrinityActor CurrentTarget
-        {
-            get
-            {
-                return Combat.Targeting.CurrentTarget;
-            }
-        }
-        private static HashSet<SNOPower> Hotbar
-        {
-            get
-            {
-                return Core.Hotbar.ActivePowers;
-            }
-        }
+        private static TrinityActor CurrentTarget => Combat.Targeting.CurrentTarget;
+
+        private static HashSet<SNOPower> Hotbar => Core.Hotbar.ActivePowers;
 
         #endregion
 
@@ -573,7 +550,7 @@ namespace Trinity.Components.Combat
         public static int CountUnitsInFront(TrinityActor actor)
         {
             return
-                (from u in TrinityPlugin.Targets
+                (from u in Core.Targets
                  where u.RActorId != actor.RActorId &&
                        u.IsUnit &&
                        MathUtil.IntersectsPath(u.Position, u.Radius, Core.Player.Position, actor.Position)
@@ -600,7 +577,7 @@ namespace Trinity.Components.Combat
                 if (actor.Type != TrinityObjectType.Unit)
                     return 0;
 
-                return TrinityPlugin.Targets
+                return Core.Targets
                     .Count(u => u.RActorId != actor.RActorId && u.IsUnit && u.Position.Distance(actor.Position) <= range && u.HasBeenInLoS);
             }
         }
@@ -1277,7 +1254,7 @@ namespace Trinity.Components.Combat
                 if (zigZagTargetList.Count() >= minTargets)
                 {
                     zigZagPoint = zigZagTargetList.OrderByDescending(u => u.Distance).FirstOrDefault().Position;
-                    if (NavHelper.CanRayCast(zigZagPoint) && zigZagPoint.Distance(Player.Position) >= minDistance)
+                    if (Core.Grids.CanRayCast(zigZagPoint) && zigZagPoint.Distance(Player.Position) >= minDistance)
                     {
                         Logger.Log(LogCategory.Movement, "Returning ZigZag: TargetBased {0} r-dist={1} t-dist={2}", zigZagPoint, ringDistance, zigZagPoint.Distance(Player.Position));
                         return zigZagPoint;
@@ -1309,7 +1286,7 @@ namespace Trinity.Components.Combat
                     // Find a new XY
                     zigZagPoint = MathEx.GetPointAt(origin, distance, (float)direction);
                     // Get the Z
-                    zigZagPoint.Z = TrinityPlugin.MainGridProvider.GetHeight(zigZagPoint.ToVector2());
+                    zigZagPoint.Z = Core.DBGridProvider.GetHeight(zigZagPoint.ToVector2());
 
                     // Make sure we're actually zig-zagging our target, except if we're kiting
 
@@ -1356,7 +1333,7 @@ namespace Trinity.Components.Combat
 
                         if (Core.Settings.Combat.Misc.UseNavMeshTargeting)
                         {
-                            bestLocation = new Vector3(zigZagPoint.X, zigZagPoint.Y, TrinityPlugin.MainGridProvider.GetHeight(zigZagPoint.ToVector2()));
+                            bestLocation = new Vector3(zigZagPoint.X, zigZagPoint.Y, Core.DBGridProvider.GetHeight(zigZagPoint.ToVector2()));
                         }
                         else
                         {
@@ -1384,7 +1361,7 @@ namespace Trinity.Components.Combat
             if (position == Vector3.Zero)
                 return false;
 
-            return TrinityPlugin.Targets.Any(m => m.IsUnit && m.IsHostile && m.Position.Distance(position) <= m.CollisionRadius + radiusDistance);
+            return Core.Targets.Any(m => m.IsUnit && m.IsHostile && m.Position.Distance(position) <= m.CollisionRadius + radiusDistance);
         }
 
         /// <summary>
@@ -1929,7 +1906,7 @@ namespace Trinity.Components.Combat
             var circlePositions = StuckHandler.GetCirclePoints(16, target.AxialRadius + radiusDistance, target.Position);
             circlePositions.AddRange(StuckHandler.GetCirclePoints(16, target.AxialRadius + radiusDistance + 15f, target.Position));
 
-            Func<Vector3, bool> isValid = p => NavHelper.CanRayCast(p) && !IsPositionOnMonster(p, radiusDistance);
+            Func<Vector3, bool> isValid = p => Core.Grids.CanRayCast(p) && !IsPositionOnMonster(p, radiusDistance);
 
             var validPositions = circlePositions.Where(isValid).ToList();
             if (!validPositions.Any())
@@ -1980,7 +1957,7 @@ namespace Trinity.Components.Combat
             if (_lastSafeSpotPosition != Vector3.Zero && safeSpotIsClose && safeSpotHasNoMonster)
                 return _lastSafeSpotPosition;
 
-            Func<Vector3, bool> isValid = p => NavHelper.CanRayCast(p) && !IsPositionOnMonster(p);
+            Func<Vector3, bool> isValid = p => Core.Grids.CanRayCast(p) && !IsPositionOnMonster(p);
 
             var circlePositions = StuckHandler.GetCirclePoints(8, 10, Player.Position);
 

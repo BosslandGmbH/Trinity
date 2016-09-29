@@ -7,21 +7,16 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.UI;
-using Trinity.Config;
-using Trinity.Config.Combat;
-using Trinity.Config.Loot;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.Helpers.AutoFollow.Resources;
-using Trinity.ItemRules;
 using Trinity.Items;
+using Trinity.Items.ItemList;
 using Trinity.Routines;
 using Trinity.Settings;
+using Trinity.Settings.Combat;
 using Trinity.Settings.Loot;
-using Trinity.Technicals;
-using Trinity.UIComponents;
+using Trinity.Settings.Paragon;
 using Zeta.Bot;
 using Zeta.Game;
 using Application = System.Windows.Application;
@@ -48,23 +43,12 @@ namespace Trinity.UI.UIComponents
         /// </summary>
         private void SaveSettings(TrinitySetting model)
         {
-            if (TrinityPlugin.StashRule == null && model.Loot.Pickup.ItemFilterMode == ItemFilterMode.TrinityWithItemRules)
-            {
-                // Load interpreter for the first time if needed
-                TrinityPlugin.StashRule = new Interpreter();
-            }
-
             model.CopyTo(_OriginalModel);
             _OriginalModel.Save();
 
             if (model.Advanced.TPSEnabled != _OriginalModel.Advanced.TPSEnabled ||
                 model.Advanced.TPSEnabled && _OriginalModel.Advanced.TPSLimit != BotMain.TicksPerSecond)
                 TrinityPlugin.SetBotTicksPerSecond();
-
-            Logger.Log("TPSActual={0}", BotMain.TicksPerSecond);
-
-            //Core.Clear();
-            UsedProfileManager.SetProfileInWindowTitle();
         }
 
         /// <summary>
@@ -307,15 +291,7 @@ namespace Trinity.UI.UIComponents
                 TestScoreCommand = new RelayCommand(
                     parameter =>
                     {
-                        try
-                        {
-                            ItemValuation.TestScoring();
-                            //UILoader.CloseWindow();
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Log(LogCategory.UserInformation, "{0}", ex);
-                        }
+
                     });
                 HelpLinkCommand = new RelayCommand(
                     parameter =>
@@ -696,14 +672,6 @@ namespace Trinity.UI.UIComponents
             get { return _Model.Combat.Wizard; }
         }
 
-        /// <summary>
-        ///     Gets the World Object Configuration Model.
-        /// </summary>
-        /// <value>The World Object Configuration Model.</value>
-        public WorldObjectSetting WorldObject
-        {
-            get { return _Model.WorldObject; }
-        }
 
         /// <summary>Gets the TownRun Configuration Model.</summary>
         /// <value>The TownRun Configuration Model.</value>
@@ -747,15 +715,6 @@ namespace Trinity.UI.UIComponents
         public ItemRuleSetting ItemRules
         {
             get { return _Model.Loot.ItemRules; }
-        }
-
-        /// <summary>
-        ///     Gets the Pickup Configuration Model.
-        /// </summary>
-        /// <value>The Pickup Configuration Model.</value>
-        public NotificationSetting Notification
-        {
-            get { return _Model.Notification; }
         }
 
         public GameInfo GameInfo
@@ -813,8 +772,6 @@ namespace Trinity.UI.UIComponents
                         _Model.Combat.DemonHunter.Reset();
                         _Model.Combat.AvoidanceRadius.Reset();
                     });
-                ResetWorldObjectCommand = new RelayCommand(
-                    parameter => _Model.WorldObject.Reset());
                 ResetItemCommand = new RelayCommand(
                     parameter => _Model.Loot.Pickup.Reset());
                 ResetItemRulesCommand = new RelayCommand(
@@ -822,31 +779,13 @@ namespace Trinity.UI.UIComponents
                 ReloadScriptRulesCommand = new RelayCommand(
                     parameter =>
                     {
-                        try
-                        {
-                            _Model.CopyTo(_OriginalModel);
-                            _OriginalModel.Save();
-                            if (TrinityPlugin.StashRule == null)
-                                TrinityPlugin.StashRule = new Interpreter();
 
-                            if (TrinityPlugin.StashRule != null)
-                            {
-                                BotMain.PauseWhile(TrinityPlugin.StashRule.reloadFromUI);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Log("Exception in ReloadScriptRulesCommand: {0}", ex);
-                        }
                     }
                     );
                 ResetTownRunCommand = new RelayCommand(
                     parameter => _Model.Loot.TownRun.Reset());
                 ResetAdvancedCommand = new RelayCommand(
                     parameter => _Model.Advanced.Reset());
-                ResetNotificationCommand = new RelayCommand(
-                    parameter => _Model.Notification.Reset());
-
                 ResetAllCommand = new RelayCommand(
                     parameter => _Model.UserRequestedReset());
             }

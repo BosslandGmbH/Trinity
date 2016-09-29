@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Web.Configuration;
 using Trinity.Components.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Objects;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 

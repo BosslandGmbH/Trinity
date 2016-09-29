@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
-using Trinity.Objects;
 
 namespace Trinity.Settings.Loot
 {

@@ -9,6 +9,7 @@ using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Coroutines.Resources;
+using Trinity.Reference;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;

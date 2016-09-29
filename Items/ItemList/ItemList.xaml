@@ -2,10 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:ut="clr-namespace:Trinity.UIComponents"
              xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              xmlns:mock="clr-namespace:Trinity.Settings.Mock"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+             xmlns:itemlist="clr-namespace:Trinity.Items.ItemList"
+             xmlns:behaviors="clr-namespace:Trinity.UI.UIComponents.Behaviors"
+             xmlns:controls="clr-namespace:Trinity.UI.UIComponents.Controls"
              mc:Ignorable="d" Foreground="{DynamicResource TextBrush}"   Background="#434343" Padding="10,0,0,0"
              d:DesignHeight="800" d:DesignWidth="420">
     <UserControl.Resources>
@@ -16,11 +19,11 @@
             </ResourceDictionary.MergedDictionaries>
 
 
-            <ut:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
-            <ut:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
-            <ut:EnumVisibilityConverter x:Key="EnumVisibilityConverter"  />
-            <ut:EnumVisibilityConverter x:Key="EnumTrueToCollapsedConverter" Reverse="True" />
-            <ut:UriToCachedImageConverter x:Key="UrlToCachedImageConverter" />
+            <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
+            <converters:EnumVisibilityConverter x:Key="EnumVisibilityConverter"  />
+            <converters:EnumVisibilityConverter x:Key="EnumTrueToCollapsedConverter" Reverse="True" />
+            <converters:UriToCachedImageConverter x:Key="UrlToCachedImageConverter" />
 
             <!--<Style TargetType="{x:Type TabItem}" />-->
 
@@ -28,7 +31,7 @@
 
             <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="ItemPropertyProvider">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type TypeName="ut:ItemProperty" />
+                    <x:Type TypeName="itemlist:ItemProperty" />
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 
@@ -246,7 +249,7 @@
                                             </WrapPanel>
                                         </StackPanel>
                                         <Border Grid.Row="1" Grid.Column="2" Grid.RowSpan="2"
-                                                ut:CancelMouseBubbling.Active="True" Background="#55171717"
+                                                behaviors:CancelMouseBubbling.Active="True" Background="#55171717"
                                                 BorderBrush="#55666666" BorderThickness="0,0,1,1" Margin="0,5,0,0">
                                             <Border Padding="10,5,10,10" Background="Transparent"
                                                     BorderBrush="#FF222222" BorderThickness="1,1,0,0">
@@ -267,8 +270,8 @@
                                                                 HorizontalAlignment="Right"
                                                                 Name="AddRuleComboBox"
                                                                 FontWeight="Normal"
-                                                                ut:ComboAlwaysFireSelection.Active="True"
-                                                                ut:SelectionChangedBehaviour.Command="{Binding AddRequiredRuleCommand}"
+                                                                behaviors:ComboAlwaysFireSelection.Active="True"
+                                                                behaviors:SelectionChangedBehaviour.Command="{Binding AddRequiredRuleCommand}"
                                                                 ItemsSource="{Binding ItemProperties}"
                                                                 Width="Auto"
                                                                 Height="23" IsSynchronizedWithCurrentItem="False"
@@ -323,8 +326,8 @@
                                                                 HorizontalAlignment="Right"
                                                                 Name="OptionalAddRuleComboBox"
                                                                 FontWeight="Normal"
-                                                                ut:ComboAlwaysFireSelection.Active="True"
-                                                                ut:SelectionChangedBehaviour.Command="{Binding AddOptionalRuleCommand}"
+                                                                behaviors:ComboAlwaysFireSelection.Active="True"
+                                                                behaviors:SelectionChangedBehaviour.Command="{Binding AddOptionalRuleCommand}"
                                                                 ItemsSource="{Binding ItemProperties}"
                                                                 Width="Auto" Height="23"
                                                                 IsSynchronizedWithCurrentItem="False"
@@ -733,7 +736,7 @@
     </UserControl.Resources>
 
 
-    <ut:ModalContentPresenter x:Name="modalPresenter" IsModal="{Binding ItemList.IsModalVisible}"  OpenCommand="{Binding ItemList.LoadModalCommand}">
+    <controls:ModalContentPresenter x:Name="modalPresenter" IsModal="{Binding ItemList.IsModalVisible}"  OpenCommand="{Binding ItemList.LoadModalCommand}">
 
         <DockPanel LastChildFill="True" VerticalAlignment="Stretch" Margin="0,10,10,0">
             <StackPanel DockPanel.Dock="Top" Background="DarkRed"  Visibility="{Binding Loot.Pickup.ItemFilterMode, Converter={StaticResource EnumTrueToCollapsedConverter}, ConverterParameter=ItemList, Mode=TwoWay}">
@@ -767,11 +770,11 @@
                     <ComboBoxItem Content="Selected" Tag="IsSelected" Foreground="White" Background="Black" />
                 </ComboBox>
 
-                <Button Command="{Binding Source={x:Static ut:ModalContentCommands.ShowModalContent}}"
+                <Button Command="{Binding Source={x:Static controls:ModalContentCommands.ShowModalContent}}"
                         CommandParameter="Export" Width="Auto" Padding="7,0" Margin="10,7,5,7">
                     Export
                 </Button>
-                <Button Command="{Binding Source={x:Static ut:ModalContentCommands.ShowModalContent}}"
+                <Button Command="{Binding Source={x:Static controls:ModalContentCommands.ShowModalContent}}"
                         CommandParameter="Import" Width="Auto" Padding="7,0" Margin="0,7,5,7">
                     Import
                 </Button>
@@ -810,7 +813,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Label Margin="4,0,0,0" Grid.ColumnSpan="2">Select the legendary items you want to keep/stash.</Label>
                                 <ComboBox Background="Transparent" HorizontalAlignment="Right" FontWeight="Normal" 
-                                      ut:ComboAlwaysFireSelection.Active="False" ut:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}" 
+                                      behaviors:ComboAlwaysFireSelection.Active="False" behaviors:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}" 
                                        Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False" 
                                       Template="{DynamicResource ActionsComboBoxControlTemplate}" Tag="More Options..." Grid.Column="1" Margin="0,2">
                                     <ComboBoxItem Content="Select None" Tag="SelectNoneCommand" Foreground="White" Background="Black" />
@@ -878,7 +881,7 @@
                             <Grid>
                                 <Label Margin="4,0,0,0">Select the types  you want to keep/stash.</Label>
                                 <ComboBox Background="Transparent" HorizontalAlignment="Right" FontWeight="Normal" 
-                                      ut:ComboAlwaysFireSelection.Active="False" ut:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}" 
+                                      behaviors:ComboAlwaysFireSelection.Active="False" behaviors:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}" 
                                        Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False" 
                                       Template="{DynamicResource ActionsComboBoxControlTemplate}" Tag="More Options...">
 
@@ -956,7 +959,7 @@
         </DockPanel>
 
         <!-- Import/Export Modal -->
-        <ut:ModalContentPresenter.ModalContent>
+        <controls:ModalContentPresenter.ModalContent>
             <Grid Margin="45,45,45,45">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
@@ -976,23 +979,23 @@
                             Command="{Binding ItemList.ImportCommand}" />
                     <Button Content="Close" Margin="0,0,0,-22.5" VerticalContentAlignment="Center"
                             HorizontalContentAlignment="Center" Width="Auto" Height="Auto"
-                            Command="{Binding Source={x:Static ut:ModalContentCommands.HideModalContent}}" />
+                            Command="{Binding Source={x:Static controls:ModalContentCommands.HideModalContent}}" />
                 </UniformGrid>
 
                 <!-- Export -->
                 <TextBox Grid.Row="0"
                          Visibility="{Binding Path=ItemList.SelectedModalPage, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=Export}"
                          Text="{Binding ItemList.ExportCode, FallbackValue='Export Code Error'}" MinHeight="200"
-                         Height="Auto" TextWrapping="Wrap" ut:SelectTextOnFocus.Active="True"
+                         Height="Auto" TextWrapping="Wrap" behaviors:SelectTextOnFocus.Active="True"
                          VerticalScrollBarVisibility="Auto" IsReadOnly="True" />
 
                 <StackPanel Grid.Row="1"
                             Visibility="{Binding Path=ItemList.SelectedModalPage, Converter={StaticResource EnumVisibilityConverter}, ConverterParameter=Export}">
                     <Button Content="Close" Margin="0" Padding="10" Height="45"
-                            Command="{Binding Source={x:Static ut:ModalContentCommands.HideModalContent}}" />
+                            Command="{Binding Source={x:Static controls:ModalContentCommands.HideModalContent}}" />
                 </StackPanel>
 
             </Grid>
-        </ut:ModalContentPresenter.ModalContent>
-    </ut:ModalContentPresenter>
+        </controls:ModalContentPresenter.ModalContent>
+    </controls:ModalContentPresenter>
 </UserControl>

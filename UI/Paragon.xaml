@@ -3,8 +3,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
-             xmlns:ut="clr-namespace:Trinity.UIComponents"
-             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop"
+             xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+             xmlns:uiComponents="clr-namespace:Trinity.UI.UIComponents"
              mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" Background="#434343"
              d:DesignHeight="650" d:DesignWidth="400">
     <UserControl.Resources>
@@ -14,11 +14,11 @@
                 <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <ut:BoolInverterConverter x:Key="boolInverterConverter" />
-            <ut:EnumBooleanConverter x:Key="enumBooleanConverter" />
-            <ut:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
-            <ut:PropertyValueConverter x:Key="propertyValueConverter" />
-            <ut:DebugDataBindingConverter  x:Key="DebugDataBindingConverter" />
+            <converters:BoolInverterConverter x:Key="boolInverterConverter" />
+            <converters:EnumBooleanConverter x:Key="enumBooleanConverter" />
+            <converters:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
+            <converters:PropertyValueConverter x:Key="propertyValueConverter" />
+            <converters:DebugDataBindingConverter  x:Key="DebugDataBindingConverter" />
 
             <Style TargetType="{x:Type UserControl}">
                 <Style.Triggers>
@@ -108,10 +108,10 @@
                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
                         SelectedItem="{Binding Paragon.CoreParagonPrioritySelectedItem}"                         
                         SelectionMode="Single"
-                        dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.IsDropTarget="True"
-                        dd:DragDrop.DragDropContext="Core"
-                        dd:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                        uiComponents:DragDrop.IsDragSource="True"
+                        uiComponents:DragDrop.IsDropTarget="True"
+                        uiComponents:DragDrop.DragDropContext="Core"
+                        uiComponents:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
                         VerticalAlignment="Top"
                         ItemTemplate="{DynamicResource ParagonListBoxItemTemplate}"
                         ItemContainerStyle="{DynamicResource ParagonListBoxItemStyle}"
@@ -126,10 +126,10 @@
                     <Label>Offense:</Label>
                     <ListBox Padding="5"
                         ItemsSource="{Binding Paragon.OffenseParagonPriority}"
-                        dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.IsDropTarget="True"
-                        dd:DragDrop.DragDropContext="Offense"
-                        dd:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                        uiComponents:DragDrop.IsDragSource="True"
+                        uiComponents:DragDrop.IsDropTarget="True"
+                        uiComponents:DragDrop.DragDropContext="Offense"
+                        uiComponents:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
                         VerticalAlignment="Top"
                         ItemTemplate="{DynamicResource ParagonListBoxItemTemplate}"
                         ItemContainerStyle="{DynamicResource ParagonListBoxItemStyle}"
@@ -144,10 +144,10 @@
                     <Label>Defense:</Label>
                     <ListBox Padding="5"
                         ItemsSource="{Binding Paragon.DefenseParagonPriority}"
-                        dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.IsDropTarget="True"
-                        dd:DragDrop.DragDropContext="Offense"
-                        dd:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                        uiComponents:DragDrop.IsDragSource="True"
+                        uiComponents:DragDrop.IsDropTarget="True"
+                        uiComponents:DragDrop.DragDropContext="Offense"
+                        uiComponents:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
                         VerticalAlignment="Top"
                         ItemTemplate="{DynamicResource ParagonListBoxItemTemplate}"
                         ItemContainerStyle="{DynamicResource ParagonListBoxItemStyle}"
@@ -162,10 +162,10 @@
                     <Label>Utility:</Label>
                     <ListBox Padding="5"
                         ItemsSource="{Binding Paragon.UtilityParagonPriority}"
-                        dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.IsDropTarget="True"
-                        dd:DragDrop.DragDropContext="Offense"
-                        dd:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                        uiComponents:DragDrop.IsDragSource="True"
+                        uiComponents:DragDrop.IsDropTarget="True"
+                        uiComponents:DragDrop.DragDropContext="Offense"
+                        uiComponents:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
                         VerticalAlignment="Top"
                         ItemTemplate="{DynamicResource ParagonListBoxItemTemplate}"
                         ItemContainerStyle="{DynamicResource ParagonListBoxItemStyle}"

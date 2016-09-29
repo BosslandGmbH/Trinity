@@ -1,6 +1,6 @@
 ﻿using System;
-using Trinity.Helpers;
-using Trinity.Objects;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 

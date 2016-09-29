@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents
 {
     public static class NavigationService
     {

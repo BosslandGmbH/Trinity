@@ -1,14 +1,16 @@
 ﻿using System;
 using Trinity.Components.Combat;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
+using Trinity.Settings.Combat;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Barbarian
 {
@@ -48,6 +50,7 @@ namespace Trinity.Routines.Barbarian
         public virtual Func<bool> ShouldIgnorePackSize { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreAvoidance { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreKiting { get; } = () => false;
+        public virtual Func<bool> ShouldIgnoreFollowing { get; } = () => false;
 
         #endregion
 

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Technicals;
 using Zeta.Game.Internals.SNO;
 
-namespace Trinity.Framework.Objects.Memory.Sno
+namespace Trinity.Framework.Objects.Memory.Sno.Helpers
 {
     public class GameBalanceHelper
     {

@@ -55,7 +55,7 @@ namespace Trinity.Framework.Behaviors
         protected virtual async Task<bool> OnStopped() => true;
         protected virtual async Task<bool> OnStarted() => true;
 
-        public async Task<bool> Stop()
+        protected async Task<bool> Stop()
         {
             await OnStopped();
             IsRunning = false;
@@ -63,7 +63,7 @@ namespace Trinity.Framework.Behaviors
             return true;
         }
 
-        public async Task<bool> Start(int timeoutMs)
+        protected async Task<bool> Start(int timeoutMs)
         {
             IsRunning = true;
             Timeout = DateTime.UtcNow.AddMilliseconds(timeoutMs);

@@ -2,12 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Trinity.Framework;
-using Trinity.Helpers;
-using Trinity.UIComponents;
+using Trinity.Framework.Helpers;
+using Trinity.UI.UIComponents;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
 
-namespace Trinity.Settings
+namespace Trinity.Settings.Modals
 {
     public class SettingsSelectionViewModel : NotifyBase
     {

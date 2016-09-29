@@ -8,10 +8,10 @@ using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Util;
 using Trinity.Framework.Helpers;
-using Trinity.Helpers;
 using Zeta.Bot;
 using Zeta.Game;
 using JsonSerializer = Trinity.Components.Adventurer.Util.JsonSerializer;
+using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Settings
 {

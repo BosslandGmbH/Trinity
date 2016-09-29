@@ -4,10 +4,11 @@ using Buddy.Coroutines;
 using Trinity.Coroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
+using Trinity.Reference;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Coroutines
 {

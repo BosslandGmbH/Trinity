@@ -1,4 +1,4 @@
-namespace Trinity.Settings
+namespace Trinity.Settings.Modals
 {
     public enum SettingsSection
     {

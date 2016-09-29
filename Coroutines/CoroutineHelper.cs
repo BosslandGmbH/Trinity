@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Buddy.Coroutines;
 using log4net;
-using Trinity.Helpers;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Game;

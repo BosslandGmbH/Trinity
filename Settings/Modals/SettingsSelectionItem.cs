@@ -1,8 +1,8 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
 
-namespace Trinity.Settings
+namespace Trinity.Settings.Modals
 {
     [DataContract(Namespace = "")]
     public class SettingsSelectionItem : NotifyBase

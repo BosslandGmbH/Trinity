@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.Serialization;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
 
-namespace Trinity.Config
+namespace Trinity.Settings
 {
     [DataContract(Namespace = "")]
     public class AdvancedSetting : ITrinitySetting<AdvancedSetting>, INotifyPropertyChanged

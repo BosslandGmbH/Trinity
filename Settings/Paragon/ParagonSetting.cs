@@ -1,28 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Windows;
-
-using GongSolutions.Wpf.DragDrop;
-using JetBrains.Annotations;
-using Trinity.Config.Combat;
-using Trinity.Framework;
-using Trinity.Framework.Avoidance;
-using Trinity.Framework.Avoidance.Handlers;
-using Trinity.Framework.Avoidance.Structures;
-using Trinity.Helpers;
-using Trinity.Settings.Loot;
-using Trinity.Technicals;
-using log4net;
+using Trinity.Framework.Helpers;
 using Zeta.Common;
-using Zeta.Common.Plugins;
 using Zeta.Game;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.Config
+namespace Trinity.Settings.Paragon
 {
     [DataContract(Namespace = "")]
     public class ParagonSetting : NotifyBase, ITrinitySetting<ParagonSetting>, ITrinitySettingEvents

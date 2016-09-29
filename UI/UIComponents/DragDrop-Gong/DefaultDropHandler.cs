@@ -5,9 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using GongSolutions.Wpf.DragDrop.Utilities;
+using Trinity.UI.UIComponents.Utilities;
 
-namespace GongSolutions.Wpf.DragDrop
+namespace Trinity.UI.UIComponents
 {
   /// <summary>
   /// A default insertion drop handler for the most common usages

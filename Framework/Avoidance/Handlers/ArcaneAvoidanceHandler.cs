@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
 using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Handlers

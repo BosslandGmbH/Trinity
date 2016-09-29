@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Zeta.Game;
 
-namespace Trinity.Framework.Objects.Memory.Misc
+namespace Trinity.Framework.Objects.Memory.Symbols
 {
     public class SymbolTable : MemoryWrapper
     {

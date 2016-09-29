@@ -8,26 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Config;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Attributes;
-using Trinity.Helpers;
-using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Settings;
-using Trinity.Technicals;
 using Trinity.UI;
-using Trinity.UIComponents;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.DemonHunter
 {

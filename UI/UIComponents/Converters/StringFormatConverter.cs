@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     [ValueConversion(typeof(object), typeof(string))]    
     public class StringFormatConverter : IValueConverter    

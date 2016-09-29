@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
 using Zeta.Bot.Coroutines;
 using Zeta.Game;
 
@@ -34,7 +35,7 @@ namespace Trinity.Coroutines
             }
 
             // We keep dying because we're spawning in AoE and next to 50 elites and we need to just leave the game
-            if (DateTime.UtcNow.Subtract(TrinityPlugin.LastDeathTime).TotalSeconds < 30 && !ZetaDia.IsInTown && needEmergencyRepair && !Core.Settings.Advanced.UseTrinityDeathHandler)
+            if (DateTime.UtcNow.Subtract(DeathHandler.LastDeathTime).TotalSeconds < 30 && !ZetaDia.IsInTown && needEmergencyRepair && !Core.Settings.Advanced.UseTrinityDeathHandler)
             {
                 Logger.Log("Durability is zero, emergency leave game");
                 ZetaDia.Service.Party.LeaveGame(true);

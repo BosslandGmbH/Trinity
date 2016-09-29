@@ -1,16 +1,16 @@
 ﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-              xmlns:ut="clr-namespace:Trinity.UIComponents"
-              mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" Background="#343434"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+             mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}" Background="#343434"
              d:DesignHeight="350" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <ut:EnumVisibilityConverter x:Key="EnumVisibilityConverter" Reverse="False" />
+            <converters:EnumVisibilityConverter x:Key="EnumVisibilityConverter" Reverse="False" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="10,10,10,0">

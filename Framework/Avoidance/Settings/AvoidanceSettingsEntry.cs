@@ -4,7 +4,6 @@ using System.Runtime.Serialization;
 using Trinity.Framework.Avoidance.Handlers;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
-using Trinity.Helpers;
 
 namespace Trinity.Framework.Avoidance.Settings
 {

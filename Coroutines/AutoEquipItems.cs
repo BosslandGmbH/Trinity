@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Framework;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Items;
-using Trinity.Objects;
 using Trinity.Reference;
 using Zeta.Game;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Game.Internals.Actors;
@@ -48,8 +48,8 @@ namespace Trinity.Coroutines
             if (DateTime.UtcNow.Subtract(_lastEquipCheckTime).TotalSeconds < 5)
                 return false;
 
-            if (DateTime.UtcNow.Subtract(TrinityPlugin.BotStartTime).TotalSeconds < 10)
-                return false;
+            //if (DateTime.UtcNow.Subtract(Settings.TrinityPlugin.BotStartTime).TotalSeconds < 10)
+            //    return false;
 
             if (!ZetaDia.Me.IsValid || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed || ZetaDia.Me.Level == 0 || ZetaDia.Me.Level >= 70 && Core.Settings.Loot.Pickup.DisableAutoEquipAtMaxLevel)
                 return false;

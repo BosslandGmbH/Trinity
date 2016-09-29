@@ -9,9 +9,6 @@ using System.Threading.Tasks;
 using Buddy.Auth.Math;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Framework.Objects.Memory.Items;
-using Trinity.Helpers;
-using Trinity.Technicals;
 using Zeta.Game;
 
 namespace Trinity.Framework.Objects.Memory

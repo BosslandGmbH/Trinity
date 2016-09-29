@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
 
 namespace Trinity.Framework.Avoidance.Structures
 {

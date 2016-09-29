@@ -4,13 +4,12 @@ using System.Windows.Controls;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Settings;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.Technicals;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Avoidance
 {

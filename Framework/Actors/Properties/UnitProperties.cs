@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Trinity.Cache;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Actors.Properties
 {
@@ -58,7 +59,7 @@ namespace Trinity.Framework.Actors.Properties
 
 
             actor.NpcIsOperable = attributes.NPCIsOperatable;
-            actor.IsUntargetable = attributes.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
+            actor.IsUntargetable = attributes.IsUntargetable && !GameData.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
             actor.IsInvulnerable = attributes.IsInvulnerable;
             actor.MarkerType = attributes.MarkerType;
             actor.NpcHasInteractOptions = attributes.NpcHasInteractOptions;            
@@ -71,7 +72,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.Team = (TeamType)actor.TeamId;
             actor.IsFriendly = actor.TeamId == 1 || actor.TeamId == 2 || actor.TeamId == 17;
             actor.IsHostile = actor.TeamId == 10 || actor.Attributes.LastDamageAnnId == Core.Player.MyDynamicID;  //!actor.IsFriendly;
-            actor.IsSameTeam = actor.IsFriendly || actor.TeamId == Core.Player.TeamId || DataDictionary.AllyMonsterTypes.Contains(actor.MonsterType);
+            actor.IsSameTeam = actor.IsFriendly || actor.TeamId == Core.Player.TeamId || GameData.AllyMonsterTypes.Contains(actor.MonsterType);
             actor.IsHidden = attributes.IsHidden || attributes.IsBurrowed;
             actor.IsSpawningBoss = actor.IsBoss && actor.IsUntargetable;
             actor.IsNpc = attributes.IsNPC;
@@ -108,7 +109,7 @@ namespace Trinity.Framework.Actors.Properties
         {
             if (monster.ActorType == ActorType.Monster)
             {
-                if (DataDictionary.FakeDeathMonsters.Contains(monster.ActorSnoId))
+                if (GameData.FakeDeathMonsters.Contains(monster.ActorSnoId))
                 {
                     return false;
                 }

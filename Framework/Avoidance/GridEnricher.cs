@@ -4,17 +4,17 @@ using System.Linq;
 using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Combat;
-using Trinity.Config;
-using Trinity.Config.Combat;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Settings;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Settings;
-using Trinity.Technicals;
+using Trinity.Settings.Combat;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Avoidance
 {
@@ -106,7 +106,7 @@ namespace Trinity.Framework.Avoidance
                     if (!nodePool.Any())
                         return;
 
-                    foreach (var obj in TrinityPlugin.Targets)
+                    foreach (var obj in Core.Targets)
                     {
                         if (obj.IsMe)
                             continue;
@@ -150,7 +150,7 @@ namespace Trinity.Framework.Avoidance
                                 avoidance.Actors.ForEach(a =>
                                 {
                                     activeAvoidanceSnoIds.Add(a.ActorSnoId);
-                                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(a.ActorSnoId, a.CollisionRadius);                                
+                                    Core.DBGridProvider.AddCellWeightingObstacle(a.ActorSnoId, a.CollisionRadius);                                
                                 });
 
                                 handler.UpdateNodes(Grid, avoidance);
@@ -367,7 +367,7 @@ namespace Trinity.Framework.Avoidance
         {
             foreach (var cachedPos in Core.PlayerHistory.Cache)
             {
-                if (cachedPos.WorldId != TrinityPlugin.CurrentWorldId)
+                if (cachedPos.WorldId != Core.Player.WorldSnoId)
                     continue;
 
                 var nearestNode = Grid.GetNearestNode(cachedPos.Position);

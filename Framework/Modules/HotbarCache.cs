@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Trinity.Objects;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
-using Trinity.Technicals;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -60,7 +60,7 @@ namespace Trinity.Framework.Modules
 
         public bool IsArchonActive
         {
-            get { return ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int) p)); }
+            get { return ActivePowers.Any(p => GameData.ArchonSkillIds.Contains((int) p)); }
         }
 
         protected override void OnPulse()
@@ -137,8 +137,8 @@ namespace Trinity.Framework.Modules
                     _skillBySlot.Add((HotbarSlot)i, hotbarskill);
                 }
 
-                if (!DataDictionary.LastUseAbilityTimeDefaults.ContainsKey(power))
-                    DataDictionary.LastUseAbilityTimeDefaults.Add(power, DateTime.MinValue);
+                if (!GameData.LastUseAbilityTimeDefaults.ContainsKey(power))
+                    GameData.LastUseAbilityTimeDefaults.Add(power, DateTime.MinValue);
             }
 
             ActivePowers = activePowers;

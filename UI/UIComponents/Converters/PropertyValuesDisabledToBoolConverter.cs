@@ -3,9 +3,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using Trinity.UI.UIComponents;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     /// <summary>
     /// Used to check against children in a GroupStyle

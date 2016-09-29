@@ -1,17 +1,11 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Memory.Attributes;
 using Trinity.Framework.Objects.Memory.Containers;
-using Trinity.Technicals;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using static System.Int32;
-using AttributeKey = Trinity.Framework.Objects.Memory.Attributes.AttributeKey;
 
-namespace Trinity.Framework.Objects.Memory.Items
+namespace Trinity.Framework.Objects.Memory.Attributes
 {
     public class AttributeItem : MemoryWrapper, ITableItem
     {
@@ -69,7 +63,7 @@ namespace Trinity.Framework.Objects.Memory.Items
                         return (T)Convert.ChangeType(Integer, TypeUtil<T>.TypeOf);
                     }
 
-                    if (Single > MinValue && Single < MaxValue)
+                    if (Single > Int32.MinValue && Single < Int32.MaxValue)
                     {
                         return (T)Convert.ChangeType(Single, type);
                     }

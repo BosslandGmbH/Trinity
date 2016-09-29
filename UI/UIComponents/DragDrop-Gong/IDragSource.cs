@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace GongSolutions.Wpf.DragDrop
+namespace Trinity.UI.UIComponents
 {
   /// <summary>
   /// Interface implemented by Drag Handlers.

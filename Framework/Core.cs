@@ -1,20 +1,20 @@
 ﻿using System;
 //using Trinity.Components.AutoFollow;
 using Trinity.Components.Adventurer;
-using Trinity.Config;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Movement;
 using Trinity.ProfileTags;
 using Trinity.Routines;
-using Trinity.Technicals;
+using Trinity.Settings;
 using Trinity.UI;
 using Trinity.UI.UIComponents;
 using Zeta.Bot;
+using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
@@ -24,20 +24,16 @@ namespace Trinity.Framework
     public static class Core
     {
         public static bool IsEnabled { get; private set; }
-
         public static MemoryModel MemoryModel { get; } = new MemoryModel();
 
         // Components
         public static Adventurer Adventurer { get; } = new Adventurer();
-
         public static RoutineManager Routines => RoutineManager.Instance;
-
         public static InventoryCache Inventory { get; } = new InventoryCache();
 
         // Modules
         public static ActorCache Actors { get; } = new ActorCache();
         public static HotbarCache Hotbar { get; } = new HotbarCache();
-
         public static PlayerCache Player { get; } = new PlayerCache();
         public static BuffsCache Buffs { get; } = new BuffsCache();
         public static TargetsCache Targets { get; } = new TargetsCache();
@@ -61,7 +57,8 @@ namespace Trinity.Framework
         public static BlockedCheck BlockedCheck { get; } = new BlockedCheck();
         public static ChangeMonitor ChangeMonitor { get; } = new ChangeMonitor();
 
-        public static TrinitySetting Settings => TrinityPlugin.Settings;        
+        public static TrinitySetting Settings => TrinityPluginSettings.Settings;
+        internal static MainGridProvider DBGridProvider => (MainGridProvider)Navigator.SearchGridProvider;
 
         private static void OnGameJoined(object sender, EventArgs e) => ModuleManager.FireEvent(ModuleEvent.GameJoined);        
         private static void OnWorldChanged(object sender, EventArgs eventArgs) => ModuleManager.FireEvent(ModuleEvent.WorldChanged);

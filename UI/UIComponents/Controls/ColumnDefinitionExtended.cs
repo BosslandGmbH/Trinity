@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Controls
 {
-    using System;
-    using System.Windows;
-    using System.Windows.Controls;
-
- 
     public class ColumnDefinitionExtended : ColumnDefinition
     {
         // Variables

@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Coroutines.Town
 {
@@ -40,7 +39,7 @@ namespace Trinity.Coroutines.Town
 
                 Logger.Log("Identifying Items");
 
-                if (!NavHelper.CanRayCast(ZetaDia.Me.Position, TownInfo.BookOfCain.Position))
+                if (!Core.Grids.CanRayCast(ZetaDia.Me.Position, TownInfo.BookOfCain.Position))
                 {
                     await MoveTo.Execute(TownInfo.NearestSafeSpot);
                 }

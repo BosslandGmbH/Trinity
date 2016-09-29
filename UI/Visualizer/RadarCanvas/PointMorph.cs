@@ -2,10 +2,9 @@
 using System.Windows;
 using Trinity.Framework.Helpers;
 using Zeta.Common;
-using Trinity.Technicals;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     /// <summary>
     /// PointMorph handles the translation of a Vector3 world space position into Canvas space.

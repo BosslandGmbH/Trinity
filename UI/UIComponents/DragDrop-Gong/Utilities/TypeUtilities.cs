@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace GongSolutions.Wpf.DragDrop.Utilities
+namespace Trinity.UI.UIComponents.Utilities
 {
   public static class TypeUtilities
   {

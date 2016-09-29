@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents
 {
     public class RelayCommand : ICommand
     {

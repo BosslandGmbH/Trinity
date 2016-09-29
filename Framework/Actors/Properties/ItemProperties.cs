@@ -3,13 +3,14 @@ using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno;
+using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Trinity.Technicals;
 
 namespace Trinity.Framework.Actors.Properties
 {
@@ -77,7 +78,7 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.IsGroundItem)
             {
-                actor.IsPickupNoClick = DataDictionary.NoPickupClickItemTypes.Contains(actor.TrinityItemType) || DataDictionary.NoPickupClickTypes.Contains(actor.Type);
+                actor.IsPickupNoClick = GameData.NoPickupClickItemTypes.Contains(actor.TrinityItemType) || GameData.NoPickupClickTypes.Contains(actor.Type);
                 actor.IsMyDroppedItem = DropItems.DroppedItemAnnIds.Contains(actor.AnnId);
                 actor.CanPickupItem = CanPickupItem(actor);
                 actor.IsItemAssigned = actor.Attributes.ItemBoundToAnnId == 0 && actor.Attributes.ItemAssignedHero == ZetaDia.Service.Hero.HeroId;

@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Trinity.Reference;
-using Trinity.Technicals;
+using Trinity.Settings.Combat;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Witchdoctor
 {
@@ -51,6 +52,7 @@ namespace Trinity.Routines.Witchdoctor
         public virtual Func<bool> ShouldIgnorePackSize { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreAvoidance { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreKiting { get; } = () => false;
+        public virtual Func<bool> ShouldIgnoreFollowing { get; } = () => false;
 
         #endregion
 

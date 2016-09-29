@@ -2,12 +2,11 @@ using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Text;
-using GongSolutions.Wpf.DragDrop;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Config
+namespace Trinity.Settings.Paragon
 {
     [DataContract(Namespace = "")]
     public class ParagonItem : NotifyBase

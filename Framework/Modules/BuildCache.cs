@@ -4,9 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Objects.API;
+using Trinity.Framework.Objects;
 using Zeta.Game;
-using Logger = Trinity.Technicals.Logger;
+using Build = Trinity.Framework.Objects.API.Build;
+using Item = Trinity.Framework.Objects.API.Item;
+using Logger = Trinity.Framework.Helpers.Logger;
+using Passive = Trinity.Framework.Objects.API.Passive;
+using Set = Trinity.Framework.Objects.API.Set;
+using Skill = Trinity.Framework.Objects.API.Skill;
 
 namespace Trinity.Framework.Modules
 {
@@ -73,7 +78,7 @@ namespace Trinity.Framework.Modules
             };
         }
 
-        public static Item CreateItem(Trinity.Objects.Item i)
+        public static Item CreateItem(Objects.Item i)
         {
             var iconSlug = !string.IsNullOrEmpty(i.IconUrl) ? TrimEnd(i.IconUrl.Split('/').LastOrDefault(), ".png") : string.Empty;
 

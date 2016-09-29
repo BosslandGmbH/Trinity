@@ -1,6 +1,6 @@
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Config
+namespace Trinity.Settings.Paragon
 {
     /// <summary>
     /// Paragon bonus type for friendly UI Display.

@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class ValueToCollectionConverter : IValueConverter
     {

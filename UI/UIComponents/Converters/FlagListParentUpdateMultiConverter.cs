@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using Trinity.Framework.Helpers;
-using Trinity.UI.UIComponents;
-using Trinity.UIComponents;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class FlagListParentUpdateMultiConverter : IMultiValueConverter
     {

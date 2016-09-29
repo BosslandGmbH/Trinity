@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ArrayExtensions;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,12 +6,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using JetBrains.Annotations;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Attributes;
 using Trinity.Framework.Objects.Memory.Sno.Types;
-using Trinity.UIComponents;
-using UnconstrainedMelody;
-using Trinity.Helpers;
-using Trinity.Technicals;
 
 namespace Trinity.UI.UIComponents
 {
@@ -42,6 +38,8 @@ namespace Trinity.UI.UIComponents
         private bool _value;
 
         public object Name { get; set; }
+
+        public string Description { get; set; }
 
         public object Flag { get; set; }
 

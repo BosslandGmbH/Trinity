@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Helpers;
-using Trinity.Items;
-using Trinity.Objects;
-using Trinity.Technicals;
-using Trinity.UIComponents;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
+using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Trinity.Framework.Objects;
 
-namespace Trinity.Reference
+namespace Trinity.Items.ItemList
 {
     /// <summary>
     /// Utilities and info about items and item properties
@@ -39,7 +35,7 @@ namespace Trinity.Reference
         public static int GetMinBaseDamage(ACDItem item)
         {
             var min = Math.Min(item.Stats.MinDamageElemental, item.Stats.MaxDamageElemental);
-            return (min != 0) ? (int)min : (int)item.WeaponBaseMinPhysicalDamage();
+            return (min != 0) ? (int)min :  (int)item.GetAttribute<float>(ActorAttributeType.DamageWeaponMinPhysical);
         }
 
 

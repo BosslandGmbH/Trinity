@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -13,7 +14,7 @@ using Zeta.Game.Internals.SNO;
 using MonsterRace = Zeta.Game.Internals.SNO.MonsterRace;
 using MonsterSize = Zeta.Game.Internals.SNO.MonsterSize;
 using MonsterType = Zeta.Game.Internals.SNO.MonsterType;
-using ResourceType = Trinity.Framework.Objects.Memory.Misc.ResourceType;
+using ResourceType = Trinity.Framework.Objects.Memory.Symbols.Types.ResourceType;
 
 namespace Trinity.Framework.Objects.Memory.Sno.Types
 {

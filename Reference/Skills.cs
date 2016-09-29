@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Trinity.Helpers;
-using Trinity.Objects;
 using System.Collections.Generic;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Trinity.Technicals;
 using Trinity.Framework;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 
 namespace Trinity.Reference
 {
@@ -2793,12 +2792,12 @@ namespace Trinity.Reference
 
             public static bool IsArchonActive()
             {
-                return Core.Hotbar.ActivePowers.Any(p => DataDictionary.ArchonSkillIds.Contains((int)p));
+                return Core.Hotbar.ActivePowers.Any(p => GameData.ArchonSkillIds.Contains((int)p));
             }
 
             public static bool IsSlowTimeActive()
             {
-                return ZetaDia.Actors.GetActorsOfType<DiaObject>().Any(a => DataDictionary.SlowTimeSNO.Contains(a.ActorSnoId));
+                return ZetaDia.Actors.GetActorsOfType<DiaObject>().Any(a => GameData.SlowTimeSNO.Contains(a.ActorSnoId));
             }
 
             #endregion

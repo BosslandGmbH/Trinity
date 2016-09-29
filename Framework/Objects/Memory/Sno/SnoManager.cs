@@ -3,8 +3,8 @@ using System.Linq;
 using System.Web.UI.WebControls.Expressions;
 using System.Windows.Media;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Objects.Memory.Sno.Helpers;
 using Trinity.Framework.Objects.Memory.Sno.Types;
-using Trinity.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals;
 

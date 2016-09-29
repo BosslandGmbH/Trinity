@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Reference;
-using Trinity.Technicals;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 

@@ -2,9 +2,9 @@
 using System;
 using System.Linq;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
 using Zeta.Common;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {

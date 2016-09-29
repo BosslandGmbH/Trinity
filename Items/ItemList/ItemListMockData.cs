@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using Trinity.Reference;
-using Trinity.Settings.Loot;
-using Trinity.UI.UIComponents;
-using Trinity.UIComponents;
-using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Settings.Mock
+namespace Trinity.Items.ItemList
 {
     public class ItemListMockData
     {

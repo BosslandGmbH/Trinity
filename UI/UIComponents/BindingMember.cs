@@ -5,12 +5,9 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Attributes;
-using Trinity.Helpers;
-using Trinity.Objects;
-using Trinity.Technicals;
-using Trinity.UIComponents;
 using Zeta.Bot;
 
 namespace Trinity.UI.UIComponents

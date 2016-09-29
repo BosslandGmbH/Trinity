@@ -13,13 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using System.Windows.Input;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Controls
 {
     /// <summary>
     /// Defines common commands for use with the ModalContentPresenter.

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Trinity.Framework.Objects.Memory.Attributes;
 using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Helpers;
+using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Actors.Attributes

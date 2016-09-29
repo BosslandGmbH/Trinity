@@ -1,4 +1,4 @@
-﻿using Trinity.Technicals;
+﻿using Trinity.Framework.Helpers;
 using Zeta.Bot.Profile;
 
 namespace Trinity.ProfileTags

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace GongSolutions.Wpf.DragDrop.Utilities
+namespace Trinity.UI.UIComponents.Utilities
 {
   public static class DragDropExtensions
   {

@@ -14,15 +14,13 @@ using System.Windows.Shapes;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Avoidance;
-using Trinity.Objects;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
 using LineSegment = System.Windows.Media.LineSegment;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 using Edge = System.Tuple<int, int>;
 
 namespace Trinity.UI.Visualizer.RadarCanvas

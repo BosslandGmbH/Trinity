@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -32,7 +33,7 @@ namespace Trinity.Coroutines.Town
             ServiceType.Peddler,
         };
 
-        public static IEnumerable<TownActor> CurrentAct => TownActorLibrary.Where(i => i.LevelAreaId == ZetaDia.CurrentLevelAreaSnoId);
+        public static IEnumerable<TownActor> CurrentAct => TownActors.Where(i => i.LevelAreaId == ZetaDia.CurrentLevelAreaSnoId);
 
         public static TownActor NearestMerchant => CurrentAct.Where(i => VendorServiceTypes.Contains(i.ServiceType)).OrderBy(i => i.Distance).FirstOrDefault();
 

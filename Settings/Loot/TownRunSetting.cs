@@ -1,11 +1,9 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Trinity.Settings.Loot;
 
-namespace Trinity.Config.Loot
+namespace Trinity.Settings.Loot
 {
     [DataContract(Namespace = "")]
     public class TownRunSetting : ITrinitySetting<TownRunSetting>, INotifyPropertyChanged, IExtensibleDataObject

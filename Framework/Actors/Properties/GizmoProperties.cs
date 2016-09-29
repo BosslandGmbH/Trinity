@@ -1,5 +1,7 @@
 ﻿using System;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Objects;
+using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game.Internals.SNO;
 
@@ -19,19 +21,19 @@ namespace Trinity.Framework.Actors.Properties
             var commonData = actor.CommonData;
             var rActor = actor.RActor;
 
-            actor.IsPlayerHeadstone = actor.ActorSnoId == DataDictionary.PLAYER_HEADSTONE_SNO;
-            actor.IsRareChest = actor.InternalNameLowerCase.Contains("chest_rare") || DataDictionary.ResplendentChestIds.Contains(actor.ActorSnoId);
+            actor.IsPlayerHeadstone = actor.ActorSnoId == GameData.PLAYER_HEADSTONE_SNO;
+            actor.IsRareChest = actor.InternalNameLowerCase.Contains("chest_rare") || GameData.ResplendentChestIds.Contains(actor.ActorSnoId);
             actor.IsCorpse = actor.InternalNameLowerCase.Contains("corpse");
             actor.IsWeaponRack = actor.InternalNameLowerCase.Contains("rack");
             actor.IsGroundClicky = actor.InternalNameLowerCase.Contains("ground_clicky");
             actor.IsContainer = actor.IsRareChest || actor.IsChest || actor.IsCorpse || actor.IsWeaponRack || actor.IsGroundClicky;
             actor.IsCursedChest = actor.Type == TrinityObjectType.CursedChest;
             actor.IsCursedShrine = actor.Type == TrinityObjectType.CursedShrine;
-            actor.IsChest = actor.IsCursedChest || actor.IsRareChest || actor.InternalNameLowerCase.Contains("chest") || DataDictionary.ContainerWhiteListIds.Contains(actor.ActorSnoId);
+            actor.IsChest = actor.IsCursedChest || actor.IsRareChest || actor.InternalNameLowerCase.Contains("chest") || GameData.ContainerWhiteListIds.Contains(actor.ActorSnoId);
             actor.IsDestroyable = actor.Type == TrinityObjectType.Barricade || actor.Type == TrinityObjectType.Destructible;
             actor.IsEventObject = actor.IsCursedChest || actor.IsCursedShrine;
-            actor.IsInteractableType = DataDictionary.InteractableTypes.Contains(actor.Type);
-            actor.IsUntargetable = actor.Attributes.IsUntargetable && !DataDictionary.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
+            actor.IsInteractableType = GameData.InteractableTypes.Contains(actor.Type);
+            actor.IsUntargetable = actor.Attributes.IsUntargetable && !GameData.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
             actor.IsInvulnerable = actor.Attributes.IsInvulnerable;
             actor.IsUsed = GetIsGizmoUsed(actor);
             actor.IsLockedDoor = actor.Attributes.IsDoorLocked || actor.Attributes.IsDoorTimed;
@@ -99,7 +101,7 @@ namespace Trinity.Framework.Actors.Properties
             }
 
             int endAnimation;
-            if (actor.IsInteractableType && DataDictionary.InteractEndAnimations.TryGetValue(actor.ActorSnoId, out endAnimation)
+            if (actor.IsInteractableType && GameData.InteractEndAnimations.TryGetValue(actor.ActorSnoId, out endAnimation)
                 && endAnimation == (int)actor.Animation)
                 return true;
 

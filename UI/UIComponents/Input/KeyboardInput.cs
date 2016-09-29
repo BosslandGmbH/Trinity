@@ -8,8 +8,6 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using Trinity.Helpers;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Game;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;

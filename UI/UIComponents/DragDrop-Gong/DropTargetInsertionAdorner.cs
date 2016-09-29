@@ -7,7 +7,7 @@ using System.Windows.Media;
 using GongSolutions.Wpf.DragDrop.Utilities;
 #endif
 
-namespace GongSolutions.Wpf.DragDrop
+namespace Trinity.UI.UIComponents
 {
   public class DropTargetInsertionAdorner : DropTargetAdorner
   {
