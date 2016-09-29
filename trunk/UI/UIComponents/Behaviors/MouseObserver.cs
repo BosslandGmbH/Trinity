@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
-using Trinity.Technicals;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Behaviors
 {
     public static class MouseObserver
     {

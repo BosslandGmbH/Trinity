@@ -1,29 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Management;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using Trinity.Helpers;
-using Zeta.Common;
-using Trinity.Technicals;
 using Trinity.UI.UIComponents.Input;
 using Zeta.Game;
-using KeyEventHandler = System.Windows.Forms.KeyEventHandler;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 using TextBox = System.Windows.Controls.TextBox;
-using TextBoxBase = System.Windows.Controls.Primitives.TextBoxBase;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Behaviors
 {
     public class CaptureTextboxInput : DependencyObject
     {
@@ -224,7 +208,7 @@ namespace Trinity.UIComponents
             );
         }
 
-        [AttachedPropertyBrowsableForChildrenAttribute(IncludeDescendants = false)]
+        [AttachedPropertyBrowsableForChildren(IncludeDescendants = false)]
         [AttachedPropertyBrowsableForType(typeof(TextBox))]
         public static bool GetActive(DependencyObject @object)
         {

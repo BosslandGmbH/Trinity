@@ -1,4 +1,4 @@
-namespace Trinity.Framework.Objects.Memory.Misc
+namespace Trinity.Framework.Objects.Memory.Symbols.Types
 {
     public enum AnimationType // 2.4.0.36090 @26709464 index:86
     {

@@ -8,12 +8,11 @@ using System.Runtime.Serialization;
 using System.Windows.Controls;
 using System.Windows.Input;
 using JetBrains.Annotations;
-using Trinity.Objects;
-using Trinity.Reference;
-using Trinity.Technicals;
-using Trinity.UIComponents;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
+using Trinity.UI.UIComponents;
 
-namespace Trinity.UI.UIComponents
+namespace Trinity.Items.ItemList
 {
     /// <summary>
     /// Item Object wrapped for use in SettingsUI

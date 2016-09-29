@@ -5,7 +5,6 @@ using System.Dynamic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Trinity.Technicals;
 using Zeta.Game;
 
 namespace Trinity.Framework.Helpers
@@ -45,13 +44,13 @@ namespace Trinity.Framework.Helpers
         }
 
         private Func<T> ValueProducer { get; }
-
         public T Value { get; private set; }
         public DateTime LastCheck { get; private set; }
         public TimeSpan Interval { get; set; }
         public int HashValue { get; private set; }
         public bool IsEnumerable { get; }
         public bool IsEnabled { get; set; }
+        public DateTime LastChanged { get; private set; }
         public string Name { get; }
         public bool HasSubscribers => Changed != null;
 
@@ -91,6 +90,7 @@ namespace Trinity.Framework.Helpers
 
         private void SetValue(T oldVal, T newVal)
         {
+            LastChanged = DateTime.UtcNow;
             Value = newVal;
             Changed?.Invoke(new ChangeDetectorEventArgs<T>
             {

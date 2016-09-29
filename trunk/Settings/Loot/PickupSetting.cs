@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.Serialization;
-using Trinity.Config.Combat;
-using Trinity.Settings.Loot;
+using Trinity.Settings.Combat;
 
-namespace Trinity.Config.Loot
+namespace Trinity.Settings.Loot
 {
     [DataContract(Namespace = "")]
     public class PickupSetting : ITrinitySetting<PickupSetting>, INotifyPropertyChanged

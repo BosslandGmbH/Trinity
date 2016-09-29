@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Coroutines.Town;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
 using Zeta.Game;

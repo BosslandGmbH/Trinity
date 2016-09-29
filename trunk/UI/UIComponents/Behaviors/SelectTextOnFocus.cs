@@ -1,13 +1,9 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Zeta.Common;
-using Trinity.Technicals;
-using Logger = Trinity.Technicals.Logger;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Behaviors
 {
     public class SelectTextOnFocus : DependencyObject
     {
@@ -72,7 +68,7 @@ namespace Trinity.UIComponents
             }
         }
 
-        [AttachedPropertyBrowsableForChildrenAttribute(IncludeDescendants = false)]
+        [AttachedPropertyBrowsableForChildren(IncludeDescendants = false)]
         [AttachedPropertyBrowsableForType(typeof(TextBox))]
         public static bool GetActive(DependencyObject @object)
         {

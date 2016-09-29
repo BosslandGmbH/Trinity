@@ -5,19 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Items;
-using Trinity.Objects;
 using Trinity.Reference;
 using Zeta.Game;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Coroutines
 {
@@ -38,7 +36,7 @@ namespace Trinity.Coroutines
             // Items that shouldn't be picked up are currently excluded from cache.
             // a pickup evaluation should be added here if that changes.            
 
-            foreach(var item in TrinityPlugin.Targets.OfType<TrinityItem>())
+            foreach(var item in Core.Targets.OfType<TrinityItem>())
             {
                 if (item.Distance > 8f || VacuumedAcdIds.Contains(item.AcdId))
                     continue;

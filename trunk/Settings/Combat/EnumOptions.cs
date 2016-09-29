@@ -1,5 +1,5 @@
 ﻿
-namespace Trinity.Config.Combat
+namespace Trinity.Settings.Combat
 {
     public enum GoblinPriority
     {

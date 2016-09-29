@@ -7,12 +7,10 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Components.Combat;
-using Trinity.Config;
-using Trinity.Config.Combat;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Attributes;
-using Trinity.Helpers;
-using Trinity.Technicals;
-using Trinity.UIComponents;
+using Trinity.Settings.Combat;
+using Trinity.UI.UIComponents;
 
 namespace Trinity.Settings
 {
@@ -31,6 +29,7 @@ namespace Trinity.Settings
         private GlobeTypes _globeTypes;
         private SettingMode _globeWeighting;
         private SettingMode _eliteWeighting;
+        private EliteTypes _eliteTypes;
 
         [DataMember]
         [DefaultValue(SettingMode.Enabled)]
@@ -86,6 +85,14 @@ namespace Trinity.Settings
         {
             get { return _eliteWeighting; }
             set { SetField(ref _eliteWeighting, value); }
+        }
+
+        [DataMember]
+        [Setting, UIControl(UIControlType.FlagsCheckboxes)]
+        public EliteTypes EliteTypes
+        {
+            get { return _eliteTypes; }
+            set { SetField(ref _eliteTypes, value); }
         }
 
         #region ITrinitySetting

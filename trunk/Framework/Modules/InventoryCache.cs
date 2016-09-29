@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;

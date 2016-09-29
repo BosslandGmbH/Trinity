@@ -4,19 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Objects;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
-using Trinity.Technicals;
+using Trinity.Settings.Combat;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.DemonHunter
 {
@@ -64,6 +63,7 @@ namespace Trinity.Routines.DemonHunter
         public virtual Func<bool> ShouldIgnorePackSize { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreAvoidance { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreKiting { get; } = () => false;
+        public virtual Func<bool> ShouldIgnoreFollowing { get; } = () => false;
 
         #endregion
 

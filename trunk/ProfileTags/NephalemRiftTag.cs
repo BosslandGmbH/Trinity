@@ -5,7 +5,7 @@ using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Bot.Profile;

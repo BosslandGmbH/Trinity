@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class BoolToValueConverter<T> : IValueConverter
     {

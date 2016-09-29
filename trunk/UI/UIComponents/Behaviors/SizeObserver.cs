@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Behaviors
 {
     /// <summary>
     /// http://stackoverflow.com/questions/1083224/pushing-read-only-gui-properties-back-into-viewmodel

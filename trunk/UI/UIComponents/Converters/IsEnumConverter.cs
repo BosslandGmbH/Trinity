@@ -2,9 +2,8 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
-using Trinity.Framework.Helpers;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class IsEnumConverter : MarkupExtension, IValueConverter
     {

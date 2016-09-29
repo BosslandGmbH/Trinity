@@ -24,14 +24,17 @@ namespace Trinity.Framework
         public static TrinityChangeDetector<bool> IsInGame = new TrinityChangeDetector<bool>(()
             => ZetaDia.IsInGame);
 
-        //public static TrinityChangeDetector<GameState> GameState = new TrinityChangeDetector<GameState>(()
-        //    => Core.MemoryModel.GameInfo.GameState);
-
         public static TrinityChangeDetector<HashSet<int>> EquippedItems = new TrinityChangeDetector<HashSet<int>>(()
             => Core.Inventory.EquippedIds, SlowUpdateInterval);
 
         public static TrinityChangeDetector<HashSet<SNOPower>> Skills = new TrinityChangeDetector<HashSet<SNOPower>>(()
             => Core.Hotbar.ActivePowers, SlowUpdateInterval);
+
+        public static TrinityChangeDetector<int> WorldId = new TrinityChangeDetector<int>(()
+            => ZetaDia.CurrentWorldSnoId);
+
+        public static TrinityChangeDetector<int> LevelAreaId = new TrinityChangeDetector<int>(()
+            => ZetaDia.CurrentLevelAreaSnoId);
 
     }
 }

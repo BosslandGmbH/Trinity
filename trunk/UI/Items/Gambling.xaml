@@ -1,8 +1,8 @@
 ﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:ut="clr-namespace:Trinity.UIComponents"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
              mc:Ignorable="d" Foreground="{DynamicResource TextBrush}" Background="#434343" Padding="10,0,0,0"
              d:DesignHeight="1002" d:DesignWidth="390">
     <UserControl.Resources>
@@ -10,8 +10,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <ut:EnumBooleanConverter x:Key="enumBooleanConverter" />
-            <ut:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
+            <converters:EnumBooleanConverter x:Key="enumBooleanConverter" />
+            <converters:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
             <Style TargetType="TextBlock">
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="FontSize" Value="12"/>

@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace GongSolutions.Wpf.DragDrop.Icons
+namespace Trinity.UI.UIComponents.Icons
 {
     /// <summary>
     /// Static class to provide access to standard application images

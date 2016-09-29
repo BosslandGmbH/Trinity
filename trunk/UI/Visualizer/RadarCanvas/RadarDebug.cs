@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
-using Trinity.UI.Visualizer.RadarCanvas;
 using Zeta.Bot;
 using Zeta.Common;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
 
     public class DrawOptions

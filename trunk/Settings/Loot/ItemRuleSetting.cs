@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Runtime.Serialization;
-using Trinity.Config;
-using Trinity.Config.Loot;
 
 namespace Trinity.Settings.Loot
 {

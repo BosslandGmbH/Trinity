@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Trinity.Framework.Objects.Enums;
 using Trinity.UI.UIComponents;
-using Trinity.UIComponents;
 
 namespace Trinity.Framework.Objects.Attributes
 {

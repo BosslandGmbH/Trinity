@@ -5,8 +5,7 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Trinity.Technicals;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.ProfileTags
 {

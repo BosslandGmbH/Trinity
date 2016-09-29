@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
-using Trinity.Objects;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Trinity.Technicals;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Components.Combat
 {
@@ -34,7 +34,7 @@ namespace Trinity.Components.Combat
         {
             if (power == null || power.SNOPower == SNOPower.None)
             {
-                Logger.Log($"Power was null or SNOPower.None");
+                Logger.Log(LogCategory.Spells, $"Power was null or SNOPower.None");
                 return false;
             }
 
@@ -42,14 +42,14 @@ namespace Trinity.Components.Combat
             {
                 if (!Core.Player.IsPowerUseDisabled)
                 {
-                    Logger.Log($"CanCast failed for {power.SNOPower}");
+                    Logger.Log(LogCategory.Spells, $"CanCast failed for {power.SNOPower}");
                 }
                 return false;
             }
 
             if (power.TargetDynamicWorldId != ZetaDia.WorldId)
             {
-                Logger.Log($"World has changed since power was created");
+                Logger.Log(LogCategory.Spells, $"World has changed since power was created");
                 return false;
             }
 
@@ -63,9 +63,9 @@ namespace Trinity.Components.Combat
                 // Store found unit's position for SpellHistory queries.
                 power.TargetPosition = target.Position;
 
-                if (!Combat.Targeting.IsTargetInRange(target, power))
+                if (!Combat.Targeting.IsInRange(target, power))
                 {
-                    Logger.Log($"Moving to {castInfo}");
+                    Logger.Log(LogCategory.Movement, $"Moving to {castInfo}");
                     PlayerMover.MoveTo(target.Position);
                     return true;
                 }
@@ -74,9 +74,9 @@ namespace Trinity.Components.Combat
             {
                 castInfo += $" Dist:{Core.Player.Position.Distance(power.TargetPosition)}";
 
-                if (!Combat.Targeting.IsPositionInRange(power.TargetPosition, power))
+                if (!Combat.Targeting.IsInRange(power.TargetPosition, power))
                 {
-                    Logger.Log($"Moving to position for {castInfo}");
+                    Logger.Log(LogCategory.Movement, $"Moving to position for {castInfo}");
                     PlayerMover.MoveTo(power.TargetPosition);
                     return true;
                 }
@@ -90,27 +90,27 @@ namespace Trinity.Components.Combat
 
             if (power.SNOPower == SNOPower.Walk)
             {
-                Logger.LogVerbose($"Walk - arrived at Destination doing nothing {castInfo}");
+                Logger.LogVerbose(LogCategory.Movement, $"Walk - arrived at Destination doing nothing {castInfo}");
                 return true;
             }
 
             if (!CastPower(power.SNOPower, power.TargetPosition, power.TargetAcdId))
             {
-                Logger.LogVerbose($"Failed to cast {castInfo}");
+                Logger.LogVerbose(LogCategory.Spells, $"Failed to cast {castInfo}");
                 return false;
             }
             
-            Logger.Warn($"Cast {castInfo}");
+            Logger.Warn(LogCategory.Spells, $"Cast {castInfo}");
 
             if (power.ShouldWaitAfterUse)
             {
-                Logger.LogVerbose($"Waiting after power for {power.WaitTimeAfterRemaining}");
+                Logger.LogVerbose(LogCategory.Spells, $"Waiting after power for {power.WaitTimeAfterRemaining}");
                 await Coroutine.Sleep((int)power.WaitTimeAfterRemaining);
             }
 
             if (power.ShouldWaitForAttackToFinish)
             {
-                Logger.Log($"Waiting for Attack to Finish");
+                Logger.Log(LogCategory.Spells, $"Waiting for Attack to Finish");
                 await Coroutine.Wait(1000, () => Core.Player.IsCasting);
             }
             return true;
@@ -118,7 +118,7 @@ namespace Trinity.Components.Combat
 
         public bool CanCast(SNOPower power)
         {
-            if (DataDictionary.AlwaysCanCastPowers.Contains(power))
+            if (GameData.AlwaysCanCastPowers.Contains(power))
                 return true;
 
             var skill = SkillUtils.GetSkillByPower(power);
@@ -150,7 +150,7 @@ namespace Trinity.Components.Combat
             if (skill == Skills.Barbarian.Avalanche && Runes.Barbarian.TectonicRift.IsActive)
                 return Core.Hotbar.GetSkillCharges(skill.SNOPower) > 0;
 
-            if (DataDictionary.ChargeBasedPowers.Contains(skill.SNOPower))
+            if (GameData.ChargeBasedPowers.Contains(skill.SNOPower))
                 return Core.Hotbar.GetSkillCharges(skill.SNOPower) > 0;
    
             return true;
@@ -173,7 +173,7 @@ namespace Trinity.Components.Combat
         {
             if (power.SNOPower != SNOPower.None && Core.GameIsReady)
             {
-                if (DataDictionary.InteractPowers.Contains(power.SNOPower))
+                if (GameData.InteractPowers.Contains(power.SNOPower))
                 {
                     power.TargetPosition = Vector3.Zero;
                 }
@@ -195,7 +195,7 @@ namespace Trinity.Components.Combat
         {
             if (power != SNOPower.None && Core.GameIsReady)
             {
-                if (DataDictionary.InteractPowers.Contains(power))
+                if (GameData.InteractPowers.Contains(power))
                 {
                     clickPosition = Vector3.Zero;
                 }

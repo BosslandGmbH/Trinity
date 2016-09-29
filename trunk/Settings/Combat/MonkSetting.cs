@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.Serialization;
-using System.Windows.Forms;
 
-namespace Trinity.Config.Combat
+namespace Trinity.Settings.Combat
 {
     [DataContract(Namespace = "")]
     public class MonkSetting : ITrinitySetting<MonkSetting>, IAvoidanceHealth, INotifyPropertyChanged

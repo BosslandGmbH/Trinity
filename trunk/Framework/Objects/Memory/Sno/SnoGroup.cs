@@ -3,6 +3,7 @@ using Buddy.Auth.Math;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Containers;
+using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno;
 
 namespace Trinity.Framework.Objects.Memory.Sno

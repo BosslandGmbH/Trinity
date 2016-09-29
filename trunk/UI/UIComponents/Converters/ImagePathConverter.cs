@@ -4,9 +4,8 @@ using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using Trinity.Framework.Helpers;
-using Trinity.Technicals;
 
-namespace Trinity.UI.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class ImagePathConverter : IValueConverter
     {

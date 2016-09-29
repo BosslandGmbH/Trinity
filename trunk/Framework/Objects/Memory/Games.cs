@@ -4,10 +4,8 @@ using System.Linq;
 using System.Management.Instrumentation;
 using System.Text;
 using System.Threading.Tasks;
-using Trinity.Cache;
 using Trinity.Framework.Objects.Memory.Debug;
 using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals;
 

@@ -4,9 +4,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using GongSolutions.Wpf.DragDrop.Utilities;
+using Trinity.UI.UIComponents.Utilities;
 
-namespace GongSolutions.Wpf.DragDrop
+namespace Trinity.UI.UIComponents
 {
   /// <summary>
   /// Holds information about a the source of a drag drop operation.

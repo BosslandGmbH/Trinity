@@ -5,9 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Org.BouncyCastle.Crypto.Tls;
-using Trinity.Config;
-using Trinity.Config.Loot;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
+using Trinity.Items.ItemList;
 
 namespace Trinity.Settings.Loot
 {

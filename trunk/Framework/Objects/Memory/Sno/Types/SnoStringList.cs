@@ -1,14 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Helpers.Exporter;
-using Trinity.Helpers;
 
-namespace Trinity.Framework.Objects.Memory.Sno
+namespace Trinity.Framework.Objects.Memory.Sno.Types
 {
     public class SnoStringList : SnoTableEntry
     {

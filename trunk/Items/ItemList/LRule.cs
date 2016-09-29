@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
-using Trinity.Helpers;
-using Trinity.Objects;
-using Trinity.Reference;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 
-namespace Trinity.UIComponents
+namespace Trinity.Items.ItemList
 {
     /// <summary>
     /// Rule for an item

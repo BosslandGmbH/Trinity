@@ -28,7 +28,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                 if (avoidance.Settings.Prioritize)
                 {
-                    TrinityPlugin.MainGridProvider.AddCellWeightingObstacle(actor.ActorSnoId, finalRadius);
+                    Core.DBGridProvider.AddCellWeightingObstacle(actor.ActorSnoId, finalRadius);
                     grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance | AvoidanceFlags.CriticalAvoidance, avoidance, 50);
                 }
                 else

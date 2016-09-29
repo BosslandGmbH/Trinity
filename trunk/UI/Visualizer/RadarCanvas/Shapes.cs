@@ -1,4 +1,4 @@
-﻿namespace Trinity.UI.UIComponents.RadarCanvas
+﻿namespace Trinity.UI.Visualizer.RadarCanvas
 {
     public static class Shapes
     {

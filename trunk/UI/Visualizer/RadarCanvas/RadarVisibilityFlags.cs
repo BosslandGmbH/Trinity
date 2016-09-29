@@ -1,6 +1,6 @@
 using System;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     [Flags]
     public enum RadarVisibilityFlags

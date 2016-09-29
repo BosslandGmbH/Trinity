@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Trinity.Components.Combat.Abilities;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Helpers;
 using Trinity.Reference;
-using Trinity.Technicals;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Modules
 {
@@ -161,10 +160,6 @@ namespace Trinity.Framework.Modules
                     WorldDynamicId = ZetaDia.WorldId;
                     WorldSnoId = ZetaDia.CurrentWorldSnoId;
 
-                    TrinityPlugin.CurrentWorldDynamicId = WorldDynamicId;
-                    TrinityPlugin.CurrentWorldId = WorldSnoId;
-
-
                     if (DateTime.UtcNow.Subtract(LastVerySlowUpdate).TotalMilliseconds > 5000)
                         UpdateVerySlowChangingData();
 
@@ -214,8 +209,8 @@ namespace Trinity.Framework.Modules
             AcdId = _me.ACDId;
             RActorGuid = _me.RActorId;
             LastUpdated = DateTime.UtcNow;
-            IsInTown = DataDictionary.TownLevelAreaIds.Contains(LevelAreaId);
-            IsInRift = DataDictionary.RiftWorldIds.Contains(WorldSnoId);
+            IsInTown = GameData.TownLevelAreaIds.Contains(LevelAreaId);
+            IsInRift = GameData.RiftWorldIds.Contains(WorldSnoId);
             IsDead = _me.IsDead;
             IsIncapacitated = _me.IsFeared || _me.IsStunned || _me.IsFrozen || _me.IsBlind || IsPowerUseDisabled;
             IsRooted = _me.IsRooted;
@@ -297,31 +292,31 @@ namespace Trinity.Framework.Modules
                 switch (ActorClass)
                 {
                     case ActorClass.Monk:
-                        if (DataDictionary.MysticAllyIds.Contains(actorSnoId))
+                        if (GameData.MysticAllyIds.Contains(actorSnoId))
                             info.MysticAllyCount++;
                         break;
                     case ActorClass.DemonHunter:
-                        if (DataDictionary.DemonHunterPetIds.Contains(actorSnoId))
+                        if (GameData.DemonHunterPetIds.Contains(actorSnoId))
                             info.DHPetsCount++;
-                        if (DataDictionary.DemonHunterSentryIds.Contains(actorSnoId) && distance < 60f)
+                        if (GameData.DemonHunterSentryIds.Contains(actorSnoId) && distance < 60f)
                             info.DHSentryCount++;
                         break;
                     case ActorClass.Wizard:
-                        if (DataDictionary.WizardHydraIds.Contains(actorSnoId) && distance < 60f)
+                        if (GameData.WizardHydraIds.Contains(actorSnoId) && distance < 60f)
                             info.HydraCount++;
                         break;
                     case ActorClass.Witchdoctor:
-                        if (DataDictionary.SpiderPetIds.Contains(actorSnoId) && distance < 100f)
+                        if (GameData.SpiderPetIds.Contains(actorSnoId) && distance < 100f)
                             info.SpiderPetCount++;
-                        if (DataDictionary.GargantuanIds.Contains(actorSnoId))
+                        if (GameData.GargantuanIds.Contains(actorSnoId))
                             info.GargantuanCount++;
-                        if (DataDictionary.ZombieDogIds.Contains(actorSnoId))
+                        if (GameData.ZombieDogIds.Contains(actorSnoId))
                             info.ZombieDogCount++;
-                        if (DataDictionary.FetishArmyIds.Contains(actorSnoId))
+                        if (GameData.FetishArmyIds.Contains(actorSnoId))
                             info.FetishArmyCount++;
                         break;
                     case ActorClass.Barbarian:
-                        if (DataDictionary.AncientIds.Contains(actorSnoId))
+                        if (GameData.AncientIds.Contains(actorSnoId))
                             info.AncientCount++;
                         break;
                 }
@@ -341,8 +336,8 @@ namespace Trinity.Framework.Modules
             Coinage = ZetaDia.PlayerData.Coinage;
             CurrentExperience = (long)ZetaDia.Me.CurrentExperience;
 
-            IsInPandemoniumFortress = DataDictionary.PandemoniumFortressWorlds.Contains(WorldSnoId) ||
-                    DataDictionary.PandemoniumFortressLevelAreaIds.Contains(LevelAreaId);
+            IsInPandemoniumFortress = GameData.PandemoniumFortressWorlds.Contains(WorldSnoId) ||
+                    GameData.PandemoniumFortressLevelAreaIds.Contains(LevelAreaId);
 
             if (CurrentHealthPct > 0)
                 IsGhosted = _me.CommonData.GetAttribute<int>(ActorAttributeType.Ghosted) > 0;
@@ -354,8 +349,8 @@ namespace Trinity.Framework.Modules
             // Step 1 is event in progress, kill stuff
             // Step 2 is event completed
             // Step -1 is not started
-            InActiveEvent = ZetaDia.ActInfo.ActiveQuests.Any(q => DataDictionary.EventQuests.Contains(q.QuestSNO) && q.QuestStep != 13);
-            HasEventInspectionTask = ZetaDia.ActInfo.ActiveQuests.Any(q => DataDictionary.EventQuests.Contains(q.QuestSNO) && q.QuestStep == 13);
+            InActiveEvent = ZetaDia.ActInfo.ActiveQuests.Any(q => GameData.EventQuests.Contains(q.QuestSNO) && q.QuestStep != 13);
+            HasEventInspectionTask = ZetaDia.ActInfo.ActiveQuests.Any(q => GameData.EventQuests.Contains(q.QuestSNO) && q.QuestStep == 13);
 
             FreeBackpackSlots = _me.Inventory.NumFreeBackpackSlots;
 

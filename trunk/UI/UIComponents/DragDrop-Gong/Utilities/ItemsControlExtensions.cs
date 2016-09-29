@@ -14,7 +14,7 @@ using Microsoft.Windows.Controls;
 using Microsoft.Windows.Controls.Primitives;
 #endif
 
-namespace GongSolutions.Wpf.DragDrop.Utilities
+namespace Trinity.UI.UIComponents.Utilities
 {
   public static class ItemsControlExtensions
   {

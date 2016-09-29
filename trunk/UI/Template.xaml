@@ -1,42 +1,43 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                    xmlns:ut="clr-namespace:Trinity.UIComponents" 
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options" 
                     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
                     xmlns:ui="clr-namespace:Trinity.UI"
-                    xmlns:cc="clr-namespace:CustomControls"
+                    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+                    xmlns:behaviors="clr-namespace:Trinity.UI.UIComponents.Behaviors"
+                    xmlns:controls="clr-namespace:Trinity.UI.UIComponents.Controls"
+                    xmlns:ut="clr-namespace:Trinity.UI.UIComponents"
+                    xmlns:markupExtensions="clr-namespace:Trinity.UI.UIComponents.MarkupExtensions">
 
-                    >
 
-
-    <ut:IntToStringConverter x:Key="intToStringConverter" />
-    <ut:ValueToCollectionConverter x:Key="ValueToCollectionConverter" />
-    <ut:DebugDataBindingConverter x:Key="DebugDataBindingConverter" />
-    <ut:IsEnumConverter x:Key="IsEnumConverter" />
-    <ut:ObjectToTypeStringConverter x:Key="ObjectToTypeStringConverter" />
-    <ut:TypeToStringConverter x:Key="TypeToStringConverter" />
-    <ut:UriToCachedImageConverter x:Key="UrlToCachedImageConverter" />
-    <ut:BoolMultiValueConverter x:Key="BoolMultiValueConverter" />
-    <ut:BoolToMarginConverter x:Key="BoolToMarginConverter" Left="23" FallbackLeft="0" Invert="False" />
-    <ut:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
-    <ut:BoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" TrueValue="Collapsed" FalseValue="Visible" />
-    <ut:PropertyValueSourceControlTypeConverter x:Key="PropertyValueSourceControlTypeConverter" />
-    <ut:FlagsEnumValueConverter x:Key="flagsEnumValueConverter" />
-    <ut:FlagsEnumValueConverterBasic x:Key="HasFlagConverter" />
-    <ut:FlagListParentUpdateMultiConverter x:Key="FlagListParentUpdateMultiConverter" />
-    <ut:PropertyValueToCollectionConverter x:Key="PropertyValueToCollectionConverter" />
-    <ut:EnumVisibilityConverter x:Key="EnumVisibilityConverter" />
-    <ut:EnumVisibilityConverter x:Key="InverseEnumVisibilityConverter" Reverse="True" />
-    <ut:EnumVisibilityConverter x:Key="EmptyStringToBoolConverter" Reverse="True" />
-    <ut:StringFormatConverter x:Key="StringFormatConverter" />
-    <ut:DisplayNameAttributeConverter x:Key="displayNameAttributeConverter" />
-    <ut:PropertyValueConverter x:Key="PropertyValueConverter" />
-    <ut:PropertyValuesDisabledToVisibilityConverter x:Key="PropertyValuesDisabledToVisibilityConverter" />
-    <ut:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+    <converters:IntToStringConverter x:Key="intToStringConverter" />
+    <converters:ValueToCollectionConverter x:Key="ValueToCollectionConverter" />
+    <converters:DebugDataBindingConverter x:Key="DebugDataBindingConverter" />
+    <converters:IsEnumConverter x:Key="IsEnumConverter" />
+    <converters:ObjectToTypeStringConverter x:Key="ObjectToTypeStringConverter" />
+    <converters:TypeToStringConverter x:Key="TypeToStringConverter" />
+    <converters:UriToCachedImageConverter x:Key="UrlToCachedImageConverter" />
+    <converters:BoolMultiValueConverter x:Key="BoolMultiValueConverter" />
+    <converters:BoolToMarginConverter x:Key="BoolToMarginConverter" Left="23" FallbackLeft="0" Invert="False" />
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
+    <converters:BoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" TrueValue="Collapsed" FalseValue="Visible" />
+    <converters:PropertyValueSourceControlTypeConverter x:Key="PropertyValueSourceControlTypeConverter" />
+    <converters:FlagsEnumValueConverter x:Key="flagsEnumValueConverter" />
+    <converters:FlagsEnumValueConverterBasic x:Key="HasFlagConverter" />
+    <converters:FlagListParentUpdateMultiConverter x:Key="FlagListParentUpdateMultiConverter" />
+    <converters:PropertyValueToCollectionConverter x:Key="PropertyValueToCollectionConverter" />
+    <converters:EnumVisibilityConverter x:Key="EnumVisibilityConverter" />
+    <converters:EnumVisibilityConverter x:Key="InverseEnumVisibilityConverter" Reverse="True" />
+    <converters:EnumVisibilityConverter x:Key="EmptyStringToBoolConverter" Reverse="True" />
+    <converters:StringFormatConverter x:Key="StringFormatConverter" />
+    <converters:DisplayNameAttributeConverter x:Key="displayNameAttributeConverter" />
+    <converters:PropertyValueConverter x:Key="PropertyValueConverter" />
+    <converters:PropertyValuesDisabledToVisibilityConverter x:Key="PropertyValuesDisabledToVisibilityConverter" />
+    <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
 
     <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
     <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
@@ -1063,7 +1064,7 @@
                     LargeChange="{TemplateBinding LargeChange}" Orientation="{TemplateBinding Orientation}" SmallChange="{TemplateBinding SmallChange}" TickFrequency="{TemplateBinding TickFrequency}" 
                     TickPlacement="{TemplateBinding TickPlacement}" Ticks="{TemplateBinding Ticks}" ToolTip="{TemplateBinding ToolTip}" 
                     Maximum="{TemplateBinding Maximum}" Minimum="{TemplateBinding Minimum}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,2,0" Style="{x:Null}" x:Name="MySlider" />
-            <TextBox Grid.Column="2" Grid.Row="1" ut:SelectTextOnFocus.Active="True" ut:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" 
+            <TextBox Grid.Column="2" Grid.Row="1" behaviors:SelectTextOnFocus.Active="True" behaviors:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" 
                      Text="{Binding Value, 
                 Converter={StaticResource intToStringConverter}, 
                 UpdateSourceTrigger=Default, 
@@ -1086,7 +1087,7 @@
                     LargeChange="{TemplateBinding LargeChange}" Orientation="{TemplateBinding Orientation}" SmallChange="{TemplateBinding SmallChange}" TickFrequency="{TemplateBinding TickFrequency}" 
                     TickPlacement="{TemplateBinding TickPlacement}" Ticks="{TemplateBinding Ticks}" ToolTip="{TemplateBinding ToolTip}" 
                     Maximum="{TemplateBinding Maximum}" Minimum="{TemplateBinding Minimum}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,2,0" Style="{x:Null}" x:Name="MySlider" />
-            <TextBox Grid.Column="1" Grid.Row="1" ut:SelectTextOnFocus.Active="True" ut:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" 
+            <TextBox Grid.Column="1" Grid.Row="1" behaviors:SelectTextOnFocus.Active="True" behaviors:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" 
                      Text="{Binding Value, 
                 Converter={StaticResource intToStringConverter}, 
                 UpdateSourceTrigger=Default, 
@@ -1102,14 +1103,14 @@
                 <Track x:Name="PART_Track">
                     <Track.Thumb>
                         <Thumb x:Name="Thumb" Style="{x:Null}" VerticalAlignment="Center" Height="{TemplateBinding Height}" 
-                                   Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type cc:RangeSlider}}, Path=ThumbWidth}">
+                                   Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type controls:RangeSlider}}, Path=ThumbWidth}">
                         </Thumb>
                     </Track.Thumb>
                 </Track>
             </Grid>
         </Border>
     </ControlTemplate>
-    <ControlTemplate x:Key="SliderRange" TargetType="{x:Type cc:RangeSlider}">
+    <ControlTemplate x:Key="SliderRange" TargetType="{x:Type controls:RangeSlider}">
         <Grid VerticalAlignment="Top" Background="Transparent">
             <Border BorderThickness="0,1,0,0" BorderBrush="Black" VerticalAlignment="Center" Height="1" Margin="5,0,5,0"/>
             <Border HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gold" BorderBrush="#333333" 
@@ -1912,8 +1913,8 @@
         </Border>
     </DataTemplate>
 
-    <ut:BoolToIntConverter TrueValue="0" FalseValue="130" x:Key="BoolColumnMinWidthConverter" />
-    <ut:BoolToIntConverter TrueValue="0" FalseValue="500" x:Key="BoolColumnMaxWidthConverter" />
+    <converters:BoolToIntConverter TrueValue="0" FalseValue="130" x:Key="BoolColumnMinWidthConverter" />
+    <converters:BoolToIntConverter TrueValue="0" FalseValue="500" x:Key="BoolColumnMaxWidthConverter" />
 
     <DataTemplate x:Key="EnumDropdownFormTemplate">
         <Border Background="Transparent" Effect="{x:Null}" BorderBrush="#444" CornerRadius="1" Padding="0,2,2,2" BorderThickness="0,1,0,0" Visibility="{Binding IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -1987,13 +1988,13 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0" ToolTip="{Binding Description}" Foreground="White" Style="{StaticResource UnselectedTitleLabelStyle}" Content="{Binding DisplayName}" />
-                <TextBox Grid.Column="1" IsEnabled="{Binding IsEnabled}" Text="{Binding Value, UpdateSourceTrigger=LostFocus}" ut:SelectTextOnFocus.Active="True" ut:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" MinWidth="75" />
+                <TextBox Grid.Column="1" IsEnabled="{Binding IsEnabled}" Text="{Binding Value, UpdateSourceTrigger=LostFocus}" behaviors:SelectTextOnFocus.Active="True" behaviors:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" MinWidth="75" />
             </Grid>
         </Border>
     </DataTemplate>
 
     <DataTemplate x:Key="InlineTextboxFormTemplate">
-        <TextBox IsEnabled="{Binding IsEnabled}" Text="{Binding Value, UpdateSourceTrigger=LostFocus}" ut:SelectTextOnFocus.Active="True" ut:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" MinWidth="75" />
+        <TextBox IsEnabled="{Binding IsEnabled}" Text="{Binding Value, UpdateSourceTrigger=LostFocus}" behaviors:SelectTextOnFocus.Active="True" behaviors:InputBindingBehavior.UpdatePropertySourceWhenEnterPressed="TextBox.Text" MinWidth="75" />
     </DataTemplate>
 
     <DataTemplate x:Key="PropertyValueSliderField">
@@ -2090,13 +2091,13 @@
                     <ItemsControl Tag="{Binding Value}" ItemsSource="{Binding Converter={StaticResource PropertyValueToCollectionConverter}}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Margin="8,3,0,0"  Columns="{Binding Path=ActualWidth, ElementName=Container, Converter={ut:WidthToColumnCountExtension}, ConverterParameter='175'}"/>
+                                <UniformGrid Margin="8,3,0,0"  Columns="{Binding Path=ActualWidth, ElementName=Container, Converter={markupExtensions:WidthToColumnCountExtension}, ConverterParameter='175'}"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel>
-                                    <CheckBox x:Name="CheckBoxFieldCheckbox" Command="{Binding Path=FlagCheckboxSetCommand}" CommandParameter="{Binding Tag, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" IsEnabled="{Binding IsEnabled}" Margin="0,0,6,0" IsChecked="{Binding Value}" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                    <CheckBox x:Name="CheckBoxFieldCheckbox" Command="{Binding Path=FlagCheckboxSetCommand}" ToolTip="{Binding Description}" CommandParameter="{Binding Tag, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" IsEnabled="{Binding IsEnabled}" Margin="0,0,6,0" IsChecked="{Binding Value}" HorizontalAlignment="Left" VerticalAlignment="Center" />
                                     <CheckBox Command="{Binding Path=FlagCheckboxSetCommand}" CommandParameter="{Binding Tag, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}" IsEnabled="{Binding IsEnabled}" ToolTip="{Binding Description}" Style="{DynamicResource TextBlockCheckBox}" FontWeight="Regular" IsChecked="{Binding IsChecked, ElementName=CheckBoxFieldCheckbox}" Content="{Binding Name}" Margin="0,0,0,0" />
                                 </WrapPanel>
                             </DataTemplate>

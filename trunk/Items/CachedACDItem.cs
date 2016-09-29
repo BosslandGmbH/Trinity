@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Web.Caching;
-using Trinity.Helpers;
-using Trinity.Items;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
 
-namespace Trinity
+namespace Trinity.Items
 {
     // CachedACDItem - Special caching class to help with backpack-item handling
     // So we can make an object, read all item stats from a backpack item *ONCE*, then store it here while my behavior trees process everything

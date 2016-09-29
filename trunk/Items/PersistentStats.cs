@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Technicals;
-using Zeta.Common.Plugins;
+using Trinity.Framework.Helpers;
 using Zeta.Game;
 
-namespace Trinity
+namespace Trinity.Items
 {
     public class PersistentStats
     {
@@ -199,10 +199,10 @@ namespace Trinity
             updated.IsReset = false;
             updated.WhenStartedSession = ItemDropStats.ItemStatsWhenStartedBot;
             updated.TotalRunningTime += TotalRunningTime - PersistentLastSaved.TotalRunningTime;
-            updated.TotalDeaths += TrinityPlugin.TotalDeaths - PersistentLastSaved.TotalDeaths;
-            updated.TotalLeaveGames += TrinityPlugin.TotalLeaveGames - PersistentLastSaved.TotalLeaveGames;
-            updated.TotalJoinGames += TrinityPlugin.TotalGamesJoined - PersistentLastSaved.TotalJoinGames;
-            updated.TotalProfileRecycles += TrinityPlugin.TotalProfileRecycles - PersistentLastSaved.TotalProfileRecycles;
+            updated.TotalDeaths += DeathHandler.DeathsThisSession - PersistentLastSaved.TotalDeaths;
+            //updated.TotalLeaveGames += Framework.Helpers.TrinityPlugin.TotalLeaveGames - PersistentLastSaved.TotalLeaveGames;
+            //updated.TotalJoinGames += Framework.Helpers.TrinityPlugin.TotalGamesJoined - PersistentLastSaved.TotalJoinGames;
+            //updated.TotalProfileRecycles += Framework.Helpers.TrinityPlugin.TotalProfileRecycles - PersistentLastSaved.TotalProfileRecycles;
             updated.TotalXp += ItemDropStats.TotalXP - PersistentLastSaved.TotalXp;
             updated.LastXp += ItemDropStats.LastXP - PersistentLastSaved.LastXp;
             updated.NextLvXp += ItemDropStats.NextLevelXP - PersistentLastSaved.NextLvXp;
@@ -234,7 +234,7 @@ namespace Trinity
                 return;
 
             // Total stats
-            string filename = Path.Combine(FileManager.LoggingPath, String.Format("FullStats - {0}.xml", Core.Player.ActorClass));
+            string filename = Path.Combine(FileManager.LoggingPath, $"FullStats - {Core.Player.ActorClass}.xml");
             PersistentTotalStats = PersistentUpdateOne(filename);
 
             // World ID stats
@@ -246,10 +246,10 @@ namespace Trinity
             // Sets LastSaved to now for the rest of the things
             TimeSpan TotalRunningTime = DateTime.UtcNow.Subtract(ItemDropStats.ItemStatsWhenStartedBot);
             PersistentLastSaved.TotalRunningTime = TotalRunningTime;
-            PersistentLastSaved.TotalDeaths = TrinityPlugin.TotalDeaths;
-            PersistentLastSaved.TotalLeaveGames = TrinityPlugin.TotalLeaveGames;
-            PersistentLastSaved.TotalJoinGames = TrinityPlugin.TotalGamesJoined;
-            PersistentLastSaved.TotalProfileRecycles = TrinityPlugin.TotalProfileRecycles;
+            PersistentLastSaved.TotalDeaths = DeathHandler.DeathsThisSession;
+            //PersistentLastSaved.TotalLeaveGames = Framework.Helpers.TrinityPlugin.TotalLeaveGames;
+            //PersistentLastSaved.TotalJoinGames = Framework.Helpers.TrinityPlugin.TotalGamesJoined;
+            //PersistentLastSaved.TotalProfileRecycles = Framework.Helpers.TrinityPlugin.TotalProfileRecycles;
             PersistentLastSaved.TotalXp = ItemDropStats.TotalXP;
             PersistentLastSaved.LastXp = ItemDropStats.LastXP;
             PersistentLastSaved.NextLvXp = ItemDropStats.NextLevelXP;

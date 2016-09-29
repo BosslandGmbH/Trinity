@@ -4,15 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Components.Combat.Abilities;
 using Trinity.Coroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Modules;
-using Trinity.Helpers;
 using Trinity.Items;
-using Trinity.Notifications;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
@@ -24,7 +20,9 @@ using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Trinity.Framework.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Trinity.Framework.Helpers;
+using Trinity.Reference;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Coroutines.Town
 {
@@ -124,7 +122,7 @@ namespace Trinity.Coroutines.Town
 
                 IsInTownVendoring = true;
 
-                while (DateTime.UtcNow.Subtract(TrinityPlugin.LastWorldChangeTime).TotalMilliseconds < 2000 || ZetaDia.IsLoadingWorld || ZetaDia.CurrentWorldSnoId <= 0)
+                while (DateTime.UtcNow.Subtract(ChangeEvents.WorldId.LastChanged).TotalMilliseconds < 2000 || ZetaDia.IsLoadingWorld || ZetaDia.CurrentWorldSnoId <= 0)
                 {
                     await Coroutine.Sleep(2000);
                 }
@@ -209,9 +207,7 @@ namespace Trinity.Coroutines.Town
 
                 Logger.Log("Finished Town Run woo!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(15);
-                Helpers.Notifications.SendEmailNotification();
-                Helpers.Notifications.SendMobileNotifications();
-                //TownRun.LastTownRunFinishTime = DateTime.UtcNow;
+
 
                 if (StartedOutOfTown)
                 {
@@ -330,14 +326,14 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (DataDictionary.BossLevelAreaIDs.Contains(Core.Player.LevelAreaId))
+            if (GameData.BossLevelAreaIDs.Contains(Core.Player.LevelAreaId))
             {
                 Logger.Log("Unable to Town Portal - Boss Area!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
                 return false;
             }
 
-            if (DataDictionary.NeverTownPortalLevelAreaIds.Contains(Core.Player.LevelAreaId))
+            if (GameData.NeverTownPortalLevelAreaIds.Contains(Core.Player.LevelAreaId))
             {
                 Logger.Log("Unable to Town Portal in this area!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
@@ -395,7 +391,7 @@ namespace Trinity.Coroutines.Town
             if (DateTime.UtcNow.Subtract(lastTownPortalCheckTime).TotalMilliseconds < 100)
                 return lastTownPortalCheckResult;
 
-            if (!ZetaDia.Me.CanUseTownPortal() || DataDictionary.NeverTownPortalLevelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
+            if (!ZetaDia.Me.CanUseTownPortal() || GameData.NeverTownPortalLevelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
             {
                 lastTownPortalCheckTime = DateTime.UtcNow;
                 lastTownPortalCheckResult = false;
@@ -432,7 +428,7 @@ namespace Trinity.Coroutines.Town
 
             lastTownPortalCheckTime = DateTime.UtcNow;
             lastTownPortalCheckResult = false;
-            return TrinityPlugin.WantToTownRun;
+            return false;
         }
 
         private async static Task<bool> TakeReturnPortal()

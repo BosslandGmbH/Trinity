@@ -8,7 +8,6 @@ using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.UI;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
 using Trinity.UI;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;

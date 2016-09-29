@@ -1,4 +1,4 @@
-namespace Trinity.Framework.Objects.Memory.Misc
+namespace Trinity.Framework.Objects.Memory.Symbols.Types
 {
     public enum CollisionResult // 2.4.0.36090 @26702808 index:43
     {

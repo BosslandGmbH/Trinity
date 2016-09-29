@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IronPython.Modules;
 using Trinity.Framework.Objects;
-using Trinity.Helpers.AutoFollow.Resources;
+using Trinity.Framework.Objects.Enums;
 
 namespace Trinity.Framework
 {

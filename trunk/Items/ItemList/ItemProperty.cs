@@ -1,4 +1,4 @@
-﻿namespace Trinity.UIComponents
+﻿namespace Trinity.Items.ItemList
 {
     public enum ItemProperty
     {

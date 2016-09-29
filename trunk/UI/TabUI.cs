@@ -11,8 +11,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-
-using Trinity.Cache;
 using Trinity.Coroutines.Resources;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
@@ -21,15 +19,10 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Debug;
-using Trinity.Framework.Objects.Memory.Items;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno;
-using Trinity.Helpers;
-using Trinity.ItemRules;
 using Trinity.Items;
 using Trinity.Reference;
-using Trinity.Technicals;
-using Trinity.UI.RadarUI;
 using Trinity.UI.UIComponents;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
@@ -41,9 +34,9 @@ using Zeta.Game.Internals.SNO;
 using Zeta.TreeSharp;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Actors.ActorTypes;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 using MemoryHelper = Trinity.Framework.Helpers.MemoryHelper;
-using TrinityItemQuality = Trinity.Config.Combat.TrinityItemQuality;
+using TrinityItemQuality = Trinity.Settings.Combat.TrinityItemQuality;
 using UIElement = Zeta.Game.Internals.UIElement;
 
 // For Debug Watch Panel Namespace.
@@ -56,6 +49,8 @@ using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Attributes;
 using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Items.Sorting;
+using Trinity.UI.Visualizer;
 using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
 namespace Trinity.UI
@@ -567,7 +562,7 @@ namespace Trinity.UI
             string logFile = "";
             try
             {
-                using (new Helpers.AquireFrameHelper())
+                using (new AquireFrameHelper())
                 {
                     var nearestActor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
                         .Where(a => a.IsFullyValid() && (a is DiaUnit || a is DiaGizmo) && a.CommonData.SummonedByACDId <= 0 &&
@@ -609,7 +604,7 @@ namespace Trinity.UI
             string logFile = "";
             try
             {
-                using (new Helpers.AquireFrameHelper())
+                using (new AquireFrameHelper())
                 {
                     var uiMapT = UXHelper.UIMapByType;
 
@@ -1281,7 +1276,7 @@ namespace Trinity.UI
                 //[1E8E8E20] Last clicked: 0x80E63C97B008F590, Name: Root.NormalLayer.vendor_dialog_mainPage.training_dialog
                 //[1E94FCC0] Mouseover: 0x244BD04C84DF92F1, Name: Root.NormalLayer.vendor_dialog_mainPage
 
-                using (new Helpers.AquireFrameHelper())
+                using (new AquireFrameHelper())
                 {
                     UIElement.FromHash(0x244BD04C84DF92F1).FindDecedentsWithText("jeweler");
                 }
@@ -1347,7 +1342,7 @@ namespace Trinity.UI
         {
             try
             {
-                using (new Helpers.AquireFrameHelper())
+                using (new AquireFrameHelper())
                 {
                     ZetaDia.Me.Inventory.Backpack.Where(i => i.ItemQualityLevel == ItemQuality.Legendary).ForEach(i => i.Drop());
 
@@ -1398,23 +1393,6 @@ namespace Trinity.UI
             }
         }
 
-        private static void ReloadItemRulesEventHandler(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (TrinityPlugin.StashRule == null)
-                    TrinityPlugin.StashRule = new Interpreter();
-
-                if (TrinityPlugin.StashRule != null)
-                {
-                    BotMain.PauseWhile(TrinityPlugin.StashRule.reloadFromUI);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError("Error Reloading Item Rules:" + ex);
-            }
-        }
 
         #region TabMethods
 

@@ -2,8 +2,8 @@
 using System.Linq;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Helpers;
-using Trinity.Objects;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Reference

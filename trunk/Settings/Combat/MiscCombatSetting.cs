@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
-using System.Linq;
 using System.Runtime.Serialization;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Attributes;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Helpers;
-using Trinity.Technicals;
-using Trinity.UIComponents;
+using Trinity.UI.UIComponents;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Config.Combat
+namespace Trinity.Settings.Combat
 {
     [DataContract(Namespace = "")]
     public class MiscCombatSetting : NotifyBase, ITrinitySetting<MiscCombatSetting>, INotifyPropertyChanged, ITrinitySettingEvents

@@ -7,7 +7,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno;
-using Trinity.Technicals;
+using Trinity.Framework.Objects.Memory.Symbols;
 
 namespace Trinity.Framework.Objects.Memory.Debug
 {

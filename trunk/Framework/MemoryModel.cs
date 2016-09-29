@@ -3,7 +3,6 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.UX;
-using Trinity.Helpers;
 using Zeta.Game;
 
 namespace Trinity.Framework

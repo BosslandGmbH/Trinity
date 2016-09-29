@@ -2,27 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.DbProvider;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Objects;
-using Trinity.Technicals;
-using Trinity.UI.RadarUI;
-using Trinity.UI.Visualizer.RadarCanvas;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
@@ -31,12 +24,11 @@ using Zeta.Game.Internals.SNO;
 using CombineType = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.CombineType;
 using DeathGates = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.DeathGates;
 using LineSegment = System.Windows.Media.LineSegment;
-using Logger = Trinity.Technicals.Logger;
-using Edge = System.Tuple<int, int>;
+using Logger = Trinity.Framework.Helpers.Logger;
 using RectangularRegion = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.RectangularRegion;
 using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     public class RadarCanvas : Canvas
     {

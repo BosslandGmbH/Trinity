@@ -1,10 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace Trinity.Config.Combat
+namespace Trinity.Settings.Combat
 {
     [DataContract(Namespace = "")]
     public class BarbarianSetting : ITrinitySetting<BarbarianSetting>, IAvoidanceHealth, INotifyPropertyChanged

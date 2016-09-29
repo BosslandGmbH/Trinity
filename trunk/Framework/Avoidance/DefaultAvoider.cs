@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Cache;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Config;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework.Avoidance.Settings;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Routines;
-using Trinity.Technicals;
+using Trinity.Settings.Combat;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Avoidance
 {

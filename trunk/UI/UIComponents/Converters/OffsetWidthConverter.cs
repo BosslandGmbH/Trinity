@@ -1,16 +1,9 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
-using Trinity.UI.UIComponents;
-using Zeta.Bot;
-using Trinity.Technicals;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class OffsetWidthConverter : IValueConverter
     {

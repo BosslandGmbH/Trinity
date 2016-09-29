@@ -5,11 +5,10 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using Trinity.UI.UIComponents;
+using Trinity.Framework.Helpers;
 using Zeta.Bot;
-using Trinity.Technicals;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class PropertyGridConverter : IValueConverter
     {

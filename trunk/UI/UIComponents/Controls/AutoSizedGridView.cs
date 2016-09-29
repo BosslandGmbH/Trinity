@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Collections.Generic;
 using System.Windows.Controls;
-using Zeta.Common;
-using Logger = Trinity.Technicals.Logger;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Controls
 {
     /// <summary>
     /// GridViewColumns set to "Auto" will be resized when underlying data is updated.

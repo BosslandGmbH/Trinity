@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Avoidance.Structures;
 using Zeta.Common;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {

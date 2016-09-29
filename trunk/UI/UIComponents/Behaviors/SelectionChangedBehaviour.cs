@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
-using Trinity.Technicals;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Behaviors
 {
     public class SelectionChangedBehaviour
     {

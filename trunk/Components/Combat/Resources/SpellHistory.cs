@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework;
-using Trinity.Objects;
-using Trinity.Reference;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.Components.Combat.Abilities
+namespace Trinity.Components.Combat.Resources
 {
     public static class SpellHistory
     {

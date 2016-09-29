@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GongSolutions.Wpf.DragDrop
+namespace Trinity.UI.UIComponents
 {
   public class DropTargetAdorners
   {

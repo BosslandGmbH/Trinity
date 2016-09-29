@@ -1,5 +1,3 @@
-using Trinity.Components.Combat.Party;
-
 namespace Trinity.Components.Combat
 {
     public static class DefaultProviders

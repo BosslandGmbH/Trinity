@@ -3,18 +3,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=PresentationFramework"
-             xmlns:ut="clr-namespace:Trinity.UIComponents"
+             xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
              mc:Ignorable="d"  Foreground="{DynamicResource TextBrush}"
              d:DesignHeight="1050" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
 
  
-            <ut:BoolInverterConverter x:Key="boolInverterConverter" />
-            <ut:EnumBooleanConverter x:Key="enumBooleanConverter" />
-            <ut:PropertyValueConverter x:Key="propertyValueConverter" />
-            <ut:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
-            <ut:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
+            <converters:BoolInverterConverter x:Key="boolInverterConverter" />
+            <converters:EnumBooleanConverter x:Key="enumBooleanConverter" />
+            <converters:PropertyValueConverter x:Key="propertyValueConverter" />
+            <converters:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
             
             <Style TargetType="{x:Type UserControl}">
                 <Style.Triggers>

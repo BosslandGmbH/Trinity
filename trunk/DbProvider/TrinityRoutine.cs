@@ -11,7 +11,7 @@ using Zeta.Game.Internals.Actors;
 using Zeta.TreeSharp;
 using Action = Zeta.TreeSharp.Action;
 
-namespace Trinity.Components.Combat.Routine
+namespace Trinity.DbProvider
 {
     public class TrinityRoutine : CombatRoutine
     {

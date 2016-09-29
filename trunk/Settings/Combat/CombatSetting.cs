@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.Serialization;
 
-namespace Trinity.Config.Combat
+namespace Trinity.Settings.Combat
 {
     [DataContract(Namespace = "")]
     public class CombatSetting : ITrinitySetting<CombatSetting>, INotifyPropertyChanged

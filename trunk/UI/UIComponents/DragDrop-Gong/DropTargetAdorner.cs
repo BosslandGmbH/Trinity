@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Documents;
 
-namespace GongSolutions.Wpf.DragDrop
+namespace Trinity.UI.UIComponents
 {
   public abstract class DropTargetAdorner : Adorner
   {

@@ -1,21 +1,14 @@
 ﻿#region
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Coroutines.Town;
-using Trinity.Helpers;
-using Zeta.Bot;
-using Trinity.Technicals;
-using Zeta.Game;
-using Zeta.Game.Internals;
-using Zeta.Game.Internals.Actors;
 
 #endregion
 
-namespace Trinity.Config
+namespace Trinity.Settings
 {
     [DataContract(Namespace = "")]
     public class GamblingSetting : ITrinitySetting<GamblingSetting>, INotifyPropertyChanged

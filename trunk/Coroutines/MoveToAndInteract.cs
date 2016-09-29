@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
-using Trinity.Helpers;
-using Trinity.Objects;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
+using Trinity.Reference;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Coroutines
 {

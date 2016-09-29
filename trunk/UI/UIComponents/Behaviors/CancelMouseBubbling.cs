@@ -1,12 +1,8 @@
-﻿
-using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using Trinity.Technicals;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Behaviors
 {
     public class CancelMouseBubbling : DependencyObject
     {
@@ -56,7 +52,7 @@ namespace Trinity.UIComponents
             mouseButtonEventArgs.Handled = true;
         }
 
-        [AttachedPropertyBrowsableForChildrenAttribute(IncludeDescendants = false)]
+        [AttachedPropertyBrowsableForChildren(IncludeDescendants = false)]
         [AttachedPropertyBrowsableForType(typeof(FrameworkElement))]
         public static bool GetActive(DependencyObject @object)
         {

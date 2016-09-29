@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Objects;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Trinity.Technicals;
 
 namespace Trinity.Reference
 {

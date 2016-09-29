@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using Trinity.Framework.Helpers;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class TypeToStringConverter : IValueConverter
     {

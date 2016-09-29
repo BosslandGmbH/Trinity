@@ -4,19 +4,19 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Routines.Crusader;
+using Trinity.Settings.Combat;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Wizard
 {

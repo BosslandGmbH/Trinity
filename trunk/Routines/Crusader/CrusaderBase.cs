@@ -1,12 +1,13 @@
 ﻿using System;
 using Trinity.Components.Combat;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Reference;
+using Trinity.Settings.Combat;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Crusader
 {
@@ -45,6 +46,7 @@ namespace Trinity.Routines.Crusader
         public virtual Func<bool> ShouldIgnorePackSize { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreAvoidance { get; } = () => false;
         public virtual Func<bool> ShouldIgnoreKiting { get; } = () => false;
+        public virtual Func<bool> ShouldIgnoreFollowing { get; } = () => false;
 
         #endregion
 
@@ -381,7 +383,7 @@ namespace Trinity.Routines.Crusader
         #region Expressions 
 
         public bool IsSteedCharging
-            => DataDictionary.SteedChargeAnimations.Contains(Player.CurrentAnimation);
+            => GameData.SteedChargeAnimations.Contains(Player.CurrentAnimation);
 
         // Generator
 

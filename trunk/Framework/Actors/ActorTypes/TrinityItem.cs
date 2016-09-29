@@ -1,12 +1,12 @@
 using System.Linq;
-using Trinity.Config.Combat;
 using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Objects;
 using Trinity.Reference;
-using Trinity.Technicals;
+using Trinity.Settings.Combat;
 using Zeta.Bot;
 using Zeta.Bot.Settings;
 using Zeta.Game.Internals.Actors;

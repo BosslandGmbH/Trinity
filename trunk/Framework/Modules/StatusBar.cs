@@ -2,14 +2,13 @@ using System;
 using System.Globalization;
 using System.Text;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Modules
 {

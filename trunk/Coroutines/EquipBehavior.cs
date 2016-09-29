@@ -8,13 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Framework;
-using Trinity.Helpers;
-using Trinity.Objects;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Trinity.Technicals;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Coroutines

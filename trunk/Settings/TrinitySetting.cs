@@ -1,11 +1,8 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Net.Configuration;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
@@ -13,34 +10,27 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Xml;
-using Trinity.Config.Combat;
-using Trinity.Framework;
-using Trinity.Helpers;
-using Trinity.Routines.DemonHunter;
-using Trinity.Settings;
+using Trinity.Framework.Helpers;
+using Trinity.Settings.Combat;
 using Trinity.Settings.Loot;
-using Trinity.Technicals;
+using Trinity.Settings.Paragon;
 using Zeta.Bot.Settings;
 using Zeta.Game;
 
-namespace Trinity.Config
+namespace Trinity.Settings
 {
     [DataContract(Namespace = "")]
     public class TrinitySetting : NotifyBase, ITrinitySetting<TrinitySetting>
     {
         #region Fields
         private CombatSetting _Combat;
-        private WorldObjectSetting _WorldObject;
         private ItemSetting _Loot;
         private AdvancedSetting _Advanced;
-        private NotificationSetting _Notification;
         private FileSystemWatcher _FSWatcher;
         private DateTime _LastLoadedSettings;
         private KanaisCubeSetting _kanaisCube;
         private GamblingSetting _gambling;
-        //private AvoidanceSetting _avoidance;
         private ParagonSetting _paragon;
-        //private RoutineSettingsViewModel _routine;
         private WeightingSettings _weighting;
 
         #endregion Fields
@@ -69,16 +59,12 @@ namespace Trinity.Config
                 Logger.LogRaw($"TrinitySetting Initializing by ThreadId={Thread.CurrentThread.ManagedThreadId} by {callerName} File {callerFile} Line {callerLine}");
 
                 Combat = new CombatSetting();
-                WorldObject = new WorldObjectSetting();
                 Loot = new ItemSetting();
                 Advanced = new AdvancedSetting();
-                Notification = new NotificationSetting();
                 KanaisCube = new KanaisCubeSetting();
                 Gambling = new GamblingSetting();
-                //Avoidance = new AvoidanceSetting();
                 Paragon = new ParagonSetting();
                 Dynamic = new DynamicSettingGroup();
-                //Routine = new RoutineSettingsViewModel();
                 Weighting = new WeightingSettings();
             }
 
@@ -171,23 +157,6 @@ namespace Trinity.Config
 
 
         [DataMember(IsRequired = false)]
-        public WorldObjectSetting WorldObject
-        {
-            get
-            {
-                return _WorldObject;
-            }
-            set
-            {
-                if (_WorldObject != value)
-                {
-                    _WorldObject = value;
-                    OnPropertyChanged("WorldObject");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
         public ItemSetting Loot
         {
             get
@@ -252,23 +221,6 @@ namespace Trinity.Config
                 {
                     _gambling = value;
                     OnPropertyChanged("Gambling");
-                }
-            }
-        }
-
-        [DataMember(IsRequired = false)]
-        public NotificationSetting Notification
-        {
-            get
-            {
-                return _Notification;
-            }
-            set
-            {
-                if (_Notification != value)
-                {
-                    _Notification = value;
-                    OnPropertyChanged("Notification");
                 }
             }
         }
@@ -454,9 +406,7 @@ namespace Trinity.Config
                 {
                     DataContractSerializer serializer = new DataContractSerializer(this.GetType());
                     XmlReader reader = XmlReader.Create(stream);
-                    XmlReader migrator = new SettingsMigrator(reader);
-
-                    loadedSettings = (TrinitySetting)serializer.ReadObject(migrator);
+                    loadedSettings = (TrinitySetting)serializer.ReadObject(reader);
 
                     if (applyToThis)
                     {
@@ -878,8 +828,7 @@ namespace Trinity.Config
             var serializer = new DataContractSerializer(typeof(T));
             using (var reader = XmlReader.Create(new StringReader(xml)))
             {
-                XmlReader migrator = new SettingsMigrator(reader);
-                var loadedSetting = (T)serializer.ReadObject(migrator);
+                var loadedSetting = (T)serializer.ReadObject(reader);
                 return loadedSetting;
             }
         }

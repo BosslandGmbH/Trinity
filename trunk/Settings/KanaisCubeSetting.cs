@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
-using Trinity.Config.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
+using Trinity.Framework.Objects;
 using Trinity.Settings.Loot;
-using Trinity.Technicals;
 
-namespace Trinity.Config
+namespace Trinity.Settings
 {
     [DataContract(Namespace = "")]
     public class KanaisCubeSetting : ITrinitySetting<KanaisCubeSetting>, INotifyPropertyChanged

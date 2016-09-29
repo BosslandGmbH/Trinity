@@ -4,17 +4,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
-    xmlns:ut="clr-namespace:Trinity.UIComponents" d:FontSize="14"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+    d:FontSize="14"
     mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../../UI/Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <ut:PercentConverter x:Key="PercentConverter" />
-            <ut:EnumBooleanConverter x:Key="EnumBooleanConverter" />
-            <ut:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
-            <ut:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
         </ResourceDictionary>
     </UserControl.Resources>
     <Border Padding="10">

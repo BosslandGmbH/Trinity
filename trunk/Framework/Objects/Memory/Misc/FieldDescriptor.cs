@@ -1,8 +1,7 @@
 using System;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Memory.Debug;
 
-namespace Trinity.Framework.Objects.Memory.Sno
+namespace Trinity.Framework.Objects.Memory.Misc
 {
     public class FieldDescriptor : MemoryWrapper, IEquatable<FieldDescriptor>
     {

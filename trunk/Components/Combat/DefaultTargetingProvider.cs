@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using Buddy.Coroutines;
-using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Resources;
 using Trinity.Coroutines;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
@@ -17,14 +17,11 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Helpers;
 using Trinity.Items;
-using Trinity.Movement;
-using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Routines;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
@@ -32,7 +29,7 @@ using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Zeta.TreeSharp;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 #endregion
 
@@ -41,10 +38,12 @@ namespace Trinity.Components.Combat
     public interface ITargetingProvider
     {
         Task<bool> HandleTarget(TrinityActor target);
-        bool IsTargetInRange(TrinityActor target, TrinityPower power);
-        bool IsPositionInRange(Vector3 position, TrinityPower power);
+        bool IsInRange(TrinityActor target, TrinityPower power);
+        bool IsInRange(Vector3 position, TrinityPower power);
         TrinityActor CurrentTarget { get; }
-        TrinityPower CurrentPower { get; } 
+        TrinityPower CurrentPower { get; }
+        TrinityActor LastTarget { get; }
+        TrinityPower LastPower { get; }
     }
 
     public class DefaultTargetingProvider : ITargetingProvider
@@ -52,6 +51,10 @@ namespace Trinity.Components.Combat
         public TrinityActor CurrentTarget { get; private set; }
 
         public TrinityPower CurrentPower { get; private set; }
+
+        public TrinityActor LastTarget { get; private set; }
+
+        public TrinityPower LastPower { get; private set; }
 
         public async Task<bool> HandleTarget(TrinityActor target)
         {
@@ -61,7 +64,9 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
-            CurrentTarget = target;            
+            LastTarget = CurrentTarget;
+            CurrentTarget = target;
+            LastPower = CurrentPower;
             CurrentPower = GetPowerForTarget(target);
 
             if (await HandleAvoidance())
@@ -181,7 +186,7 @@ namespace Trinity.Components.Combat
             return false;
         }
 
-        public bool IsTargetInRange(TrinityActor target, TrinityPower power)
+        public bool IsInRange(TrinityActor target, TrinityPower power)
         {
             if (target == null || target.IsSafeSpot)
                 return false;
@@ -199,7 +204,7 @@ namespace Trinity.Components.Combat
             return targetRadiusDistance <= targetRangeRequired && IsInLineOfSight(target);
         }
 
-        public bool IsPositionInRange(Vector3 position, TrinityPower power)
+        public bool IsInRange(Vector3 position, TrinityPower power)
         {
             if (position == Vector3.Zero)
                 return false;
@@ -219,7 +224,7 @@ namespace Trinity.Components.Combat
 
         private bool IsInLineOfSight(TrinityActor currentTarget)
         {            
-            if (DataDictionary.LineOfSightWhitelist.Contains(currentTarget.ActorSnoId))
+            if (GameData.LineOfSightWhitelist.Contains(currentTarget.ActorSnoId))
                 return true;
 
             if (currentTarget.RadiusDistance <= 2f)

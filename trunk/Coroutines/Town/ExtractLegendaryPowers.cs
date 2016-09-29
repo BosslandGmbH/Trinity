@@ -6,7 +6,8 @@ using Buddy.Coroutines;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Items;
 using Trinity.Items.ItemList;
 using Trinity.Reference;
@@ -14,7 +15,7 @@ using Trinity.Settings.Loot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Coroutines.Town
 {

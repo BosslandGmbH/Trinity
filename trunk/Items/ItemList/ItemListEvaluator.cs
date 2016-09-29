@@ -4,12 +4,9 @@ using System.Linq;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
-using Trinity.Helpers;
-using Trinity.Objects;
+using Trinity.Framework.Objects;
 using Trinity.Reference;
-using Trinity.Technicals;
 using Trinity.UI.UIComponents;
-using Trinity.UIComponents;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Items.ItemList

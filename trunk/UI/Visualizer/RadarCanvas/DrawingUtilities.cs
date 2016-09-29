@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Trinity.Framework.Helpers;
 using Zeta.Common;
 using Zeta.Game.Internals.SNO;
 using Color = System.Drawing.Color;
@@ -12,10 +11,9 @@ using Color = System.Drawing.Color;
 using Pen = System.Drawing.Pen;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
-using Trinity.Technicals;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     /// <summary>
     /// Useful tools for drawing stuff

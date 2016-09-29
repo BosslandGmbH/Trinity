@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.Objects;
 using Trinity.Reference;
+using Trinity.Settings.Combat;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Witchdoctor
 {

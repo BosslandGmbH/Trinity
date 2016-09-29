@@ -1,4 +1,4 @@
-﻿namespace Trinity.UIComponents
+﻿namespace Trinity.UI.UIComponents
 {
     public enum UIControlType
     {

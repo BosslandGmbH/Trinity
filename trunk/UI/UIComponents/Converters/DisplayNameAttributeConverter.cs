@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Windows.Data;
 using Trinity.Framework.Helpers;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class DisplayNameAttributeConverter : IValueConverter
     {

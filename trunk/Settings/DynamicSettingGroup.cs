@@ -1,8 +1,8 @@
 using System.Runtime.Serialization;
-using Trinity.Helpers;
+using Trinity.Framework.Helpers;
 using Extensions = Zeta.Common.Extensions;
 
-namespace Trinity.Config
+namespace Trinity.Settings
 {
     [DataContract(Namespace = "")]
     [KnownType(typeof(DynamicNodeCollection))]

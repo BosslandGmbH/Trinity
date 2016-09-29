@@ -5,15 +5,14 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Trinity.Framework.Helpers;
-using Trinity.Technicals;
+using Trinity.Framework.Objects;
 using Zeta.Bot;
 
 namespace Trinity.Framework.Modules
 {
     public class TrinityChangeDetector<T> : ChangeDetector<T>
     {
-        public TrinityChangeDetector(Func<T> valueProducer, TimeSpan interval = default(TimeSpan), [CallerMemberName] string name = "") 
-            : base(valueProducer, interval, name)
+        public TrinityChangeDetector(Func<T> valueProducer, TimeSpan interval = default(TimeSpan), [CallerMemberName] string name = "") : base(valueProducer, interval, name)
         {
             ChangeMonitor.Store.Add(this);
         }

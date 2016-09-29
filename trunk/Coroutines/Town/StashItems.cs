@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ArrayExtensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +10,7 @@ using IronPython.Modules;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Helpers;
 using Trinity.Items;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
@@ -25,6 +22,8 @@ using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Actors.Gizmos;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
+using Trinity.Reference;
 using Extensions = Zeta.Common.Extensions;
 
 namespace Trinity.Coroutines.Town

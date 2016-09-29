@@ -1,10 +1,9 @@
 using System.Linq;
 using System.Runtime.Serialization;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.Settings;
 
-namespace Trinity.Config
+namespace Trinity.Settings
 {
     [DataContract(Namespace = "")]
     public class DynamicSettingNode : NotifyBase

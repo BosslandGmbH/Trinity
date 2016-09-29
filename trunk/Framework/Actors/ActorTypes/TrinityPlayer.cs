@@ -2,11 +2,10 @@ using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Party;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Trinity.Framework.Helpers;
-using Trinity.Technicals;
 using Zeta.Game;
 
 namespace Trinity.Framework.Actors.ActorTypes

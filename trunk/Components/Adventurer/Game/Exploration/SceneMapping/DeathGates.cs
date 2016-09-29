@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Trinity.Cache;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Rift;
 using Zeta.Common;

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using Trinity.Cache;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Components.Combat.Party;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Coroutines.Resources;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
@@ -12,10 +10,10 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
-using Trinity.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Items;
 using Trinity.Reference;
-using Trinity.Technicals;
+using Trinity.Settings.Combat;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Bot.Profile.Common;
@@ -23,7 +21,7 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Components.Combat
 {
@@ -77,14 +75,6 @@ namespace Trinity.Components.Combat
 
                 var isHealthEmergency = (Core.Player.CurrentHealthPct <= Combat.Routines.Current.EmergencyHealthPct);
 
-                var hiPriorityShrine = Core.Settings.WorldObject.HiPriorityShrines;
-
-                //var getHiPriorityShrine = objects.Any(s => s.Type == TrinityObjectType.Shrine) &&
-                //                          hiPriorityShrine;
-
-                //var getHiPriorityContainer = Core.Settings.WorldObject.HiPriorityContainers &&
-                //                             objects.Any(c => c.Type == TrinityObjectType.Container);
-
                 var isGateNearby = Core.Actors.AllRActors.Any(r => r.Distance <= 40f && r.ActorSnoId == (int)SNOActor.x1_Fortress_Portal_Switch);
 
                 var shouldIgnorePackSize = Combat.Routines.Current.ShouldIgnorePackSize();
@@ -125,20 +115,23 @@ namespace Trinity.Components.Combat
                 var usingTownPortal = TrinityTownRun.IsWantingTownRun;
 
                 // Highest weight found as we progress through, so we can pick the best target at the end (the one with the highest weight)
-                Trinity.TrinityPlugin.HighestWeightFound = 0;
+                HighestWeightFound = 0;
 
                 var isStuck = Navigator.StuckHandler.IsStuck;
 
                 var elites = new List<TrinityActor>();
-                var eliteswithAffixes = new List<TrinityActor>();
+                var ignoredByAffixElites = new List<TrinityActor>();
+                _ignoredAffixes = Core.Settings.Combat.Misc.IgnoreAffixes.GetFlags<MonsterAffixes>().ToList();
 
-                var ignoredAffixes = Core.Settings.Combat.Misc.IgnoreAffixes.GetFlags<MonsterAffixes>().ToList();
-                foreach (var unit in objects.Where(u => u.IsUnit))
+                foreach (var unit in objects.Where(u => u.IsUnit && u.IsElite))
                 {
-                    if ((unit.IsRare || unit.IsChampion || unit.IsMinion) &&
-                        ignoredAffixes.Any(a => unit.MonsterAffixes.HasFlag(a)))
-                        eliteswithAffixes.Add(unit);
-                    if (unit.IsElite)
+                    if (_ignoredAffixes.Any(a => unit.MonsterAffixes.HasFlag(a)))
+                    {
+                        ignoredByAffixElites.Add(unit);
+                    }
+
+                    string reason;
+                    if(!ShouldIgnoreElite(unit, out reason))
                         elites.Add(unit);
                 }
 
@@ -202,6 +195,7 @@ namespace Trinity.Components.Combat
 
                 var leaderTarget = PartyHelper.FindLocalActor(Combat.Party.Leader.Target);
                 var isLeader = Combat.Party.Leader.IsMe;
+                
 
                 foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
                 {
@@ -210,6 +204,7 @@ namespace Trinity.Components.Combat
 
                     cacheObject.Weight = 0;
                     cacheObject.WeightInfo = string.Empty;
+                    var reason = string.Empty;
 
                     if (routine.SetWeight(cacheObject))
                     {
@@ -443,8 +438,10 @@ namespace Trinity.Components.Combat
                                 //Monster is in cache but not within kill range
                                 var killRange = DistanceForObjectType(cacheObject);
                                 var isQuestNpc = cacheObject.IsNpc && cacheObject.IsQuestGiver;
+
                                 if (!cacheObject.IsBoss && !cacheObject.IsTreasureGoblin &&
-                                    Trinity.TrinityPlugin.LastTargetRactorGUID != cacheObject.RActorId &&
+                                    LastTargetRActorGuid != cacheObject.RActorId &&
+                                    !cacheObject.IsMinimapActive && 
                                     !cacheObject.IsQuestMonster && !cacheObject.IsBountyObjective &&
                                     cacheObject.RadiusDistance > killRange && !isQuestNpc)
                                 {
@@ -614,7 +611,7 @@ namespace Trinity.Components.Combat
                                         cacheObject.WeightInfo += $"Routine Ignoring Trash Pack Size.";
                                     }
                                     else if (nearbyTrashCount < Combat.Routines.Current.ClusterSize && !Core.Minimap.MinimapIconAcdIds.Contains(cacheObject.AcdId) &&
-                                                !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat)
+                                                !GameData.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat)
                                     {
 
                                         cacheObject.WeightInfo += $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {Combat.Routines.Current.ClusterSize})";
@@ -672,31 +669,11 @@ namespace Trinity.Components.Combat
 
                                     if (!cacheObject.IsBoss)
                                     {
-                                        if (Core.Settings.Weighting.EliteWeighting == SettingMode.Disabled)
+                                        if (ShouldIgnoreElite(cacheObject, out reason))
                                         {
-                                            cacheObject.WeightInfo += $"Ignoring Elites Setting";
+                                            Logger.Log($"{reason}");
+                                            cacheObject.WeightInfo += reason;
                                             break;
-                                        }
-
-                                        if (Core.Settings.Weighting.EliteWeighting == SettingMode.Selective)
-                                        {
-                                            if ((Core.Settings.Combat.Misc.IgnoreElites ||
-                                                    Core.Settings.Combat.Misc.IgnoreRares && isRare ||
-                                                    Core.Settings.Combat.Misc.IgnoreMinions && isMinion ||
-                                                    Core.Settings.Combat.Misc.IgnoreChampions && isChampion) &&
-                                                !cacheObject.IsBoss)
-                                            {
-                                                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for Ignore Elite/Minion cThreshold.";
-                                                break;
-                                            }
-
-                                            var ignoredAffixMatches = ignoredAffixes.Where(a => cacheObject.MonsterAffixes.HasFlag(a)).ToList();
-                                            if (ignoredAffixMatches.Any())
-                                            {
-                                                //Logger.Log($"Ignoring {cacheObject.InternalName} due to {string.Join(",", ignoredAffixMatches)}");
-                                                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} due to {ignoredAffixMatches.FirstOrDefault()} Affix ";
-                                                break;
-                                            }
                                         }
                                     }
 
@@ -736,7 +713,7 @@ namespace Trinity.Components.Combat
                                 var pack = PackDensityFormula(cacheObject, objects);
                                 var health = UnitHealthFormula(cacheObject);
                                 var path = PathBlockedFormula(cacheObject);
-                                var reflect = AffixMonsterNearFormula(cacheObject, eliteswithAffixes);
+                                var reflect = AffixMonsterNearFormula(cacheObject, ignoredByAffixElites);
                                 var elite = EliteMonsterNearFormula(cacheObject, elites);
                                 var aoe = AoENearFormula(cacheObject) + AoEInPathFormula(cacheObject);
 
@@ -1330,7 +1307,7 @@ namespace Trinity.Components.Combat
                                     break;
                             }
 
-                            if (DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSnoId))
+                            if (GameData.ForceDestructibles.Contains(cacheObject.ActorSnoId))
                             {
                                 cacheObject.Weight = 100d;
                                 break;
@@ -1349,7 +1326,7 @@ namespace Trinity.Components.Combat
                             }
 
                             // Fix for WhimsyShire Pinata
-                            if (DataDictionary.ResplendentChestIds.Contains(cacheObject.ActorSnoId))
+                            if (GameData.ResplendentChestIds.Contains(cacheObject.ActorSnoId))
                                 cacheObject.Weight += 500d;
 
                             cacheObject.Weight += 0.5 * (ObjectDistanceFormula(cacheObject) +
@@ -1408,7 +1385,7 @@ namespace Trinity.Components.Combat
                                     break;
                                 }
 
-                                if (DataDictionary.HighPriorityInteractables.Contains(cacheObject.ActorSnoId) &&
+                                if (GameData.HighPriorityInteractables.Contains(cacheObject.ActorSnoId) &&
                                     cacheObject.RadiusDistance <= 30f)
                                 {
                                     cacheObject.WeightInfo +=
@@ -1494,6 +1471,56 @@ namespace Trinity.Components.Combat
             }
         }
 
+        public double HighestWeightFound { get; set; }
+
+        private bool ShouldIgnoreElite(TrinityActor unit, out string reason)
+        {
+            reason = string.Empty;
+
+            if (!unit.IsElite)
+                return false;
+
+            if (unit.IsBoss)
+                return false;
+
+            if (unit.IsMinimapActive)
+            {
+                reason = "Keep(IsMinimapActive)";
+                return false;
+            }
+
+            if (Core.Settings.Weighting.EliteWeighting == SettingMode.Enabled)
+            {
+                reason = "Keep(Elites=Enabled)";
+                return false;
+            }
+
+            if (Core.Settings.Weighting.EliteWeighting == SettingMode.Disabled)
+            {
+                reason = "Ignore(Elites=Disabled)";
+                return true;
+            }
+            
+            if (Core.Settings.Weighting.EliteWeighting == SettingMode.Selective)
+            {
+                var eliteType = GetEliteType(unit);
+                if (!Core.Settings.Weighting.EliteTypes.HasFlag(eliteType))
+                {
+                    reason = $"Ignore(EliteType:{eliteType}=Disabled)";
+                    return true;
+                }
+
+                var ignoredAffixMatches = _ignoredAffixes.Where(a => unit.MonsterAffixes.HasFlag(a)).ToList();
+                if (ignoredAffixMatches.Any())
+                {
+                    var ignoredTypes = ignoredAffixMatches.Aggregate(string.Empty, (s, affixes) => s + $",{affixes}");
+                    reason = $"Ignore(Affix:{ignoredTypes}=Disabled)";
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public TrinityActor KamakaziGoblin { get; set; }
 
         public bool IsDoingGoblinKamakazi { get; set; }
@@ -1543,15 +1570,9 @@ namespace Trinity.Components.Combat
             // Set Record History
             if (bestTarget?.InternalName != null && bestTarget.ActorSnoId > 0 && bestTarget.Weight > 0)
             {
-                //TargetUtil.ClearCurrentTarget("Clearing for Weight");
-                Trinity.TrinityPlugin.LastTargetIsSafeSpot = bestTarget != null && Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.IsSafeSpot;
-                //Combat.Targeting.CurrentTarget = bestTarget;
-
-                //Logger.Log($"Last Guid = {LastTargetRactorGUID}");
-
                 var timesTargetted = RecordTargetHistory(bestTarget);
 
-                if (bestTarget.RActorId != Trinity.TrinityPlugin.LastTargetRactorGUID || bestTarget != null && bestTarget.IsMarker)
+                if (bestTarget.RActorId != LastTargetRActorGuid || bestTarget != null && bestTarget.IsMarker)
                 {
                     Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation,
                         $"Target changed to {bestTarget.ActorSnoId} // {bestTarget.InternalName} RActorGuid={bestTarget.RActorId} " +
@@ -1578,13 +1599,25 @@ namespace Trinity.Components.Combat
             if (bestTarget == null)
                 bestTarget = cacheObject;
 
-            var pickNewTarget = cacheObject.Weight > 0 && cacheObject.Weight > Trinity.TrinityPlugin.HighestWeightFound;
+            var pickNewTarget = cacheObject.Weight > 0 && cacheObject.Weight > HighestWeightFound;
 
             if (!pickNewTarget) return bestTarget;
             bestTarget = cacheObject;
-            Trinity.TrinityPlugin.HighestWeightFound = cacheObject.Weight;
+            HighestWeightFound = cacheObject.Weight;
             return bestTarget;
         }
+
+        /// <summary>
+        /// Contains an RActorGUID and count of the number of times we've switched to this target
+        /// todo evaluate, temporary placement here
+        /// </summary>
+        internal Dictionary<string, TargettingInfo> TargetHistory { get; } = new Dictionary<string, TargettingInfo>();
+
+        /// <summary>
+        /// How many times the player tried to interact with this object in total
+        /// todo evaluate, temporary placement here
+        /// </summary>
+        internal Dictionary<int, int> InteractAttempts { get; } = new Dictionary<int, int>();
 
         /// <summary>
         /// Update history of targetting for an actor and blacklist target if nessedsary
@@ -1597,12 +1630,12 @@ namespace Trinity.Components.Combat
             if (bestTarget == null)
                 return 0;
 
-            if (Core.Targets.TargetHistory.Count > 200)
-                Core.Targets.TargetHistory.RemoveAll(o => DateTime.UtcNow.Subtract(o.CreatedTime).TotalSeconds > 30);
+            if (TargetHistory.Count > 200)
+                TargetHistory.RemoveAll(o => DateTime.UtcNow.Subtract(o.CreatedTime).TotalSeconds > 30);
 
-            if (Core.Targets.TargetHistory.TryGetValue(bestTarget.ObjectHash, out info))
+            if (TargetHistory.TryGetValue(bestTarget.ObjectHash, out info))
             {
-                var isNewTarget = Combat.Targeting.CurrentTarget == null || bestTarget.ObjectHash != Combat.Targeting.CurrentTarget.ObjectHash && !Trinity.TrinityPlugin.LastTargetIsSafeSpot && Trinity.TrinityPlugin.LastTargetRactorGUID > 0;
+                var isNewTarget = Combat.Targeting.CurrentTarget == null || bestTarget.ObjectHash != Combat.Targeting.CurrentTarget.ObjectHash && !LastTargetIsSafeSpot && LastTargetRActorGuid > 0;
                 if (isNewTarget)
                 {
                     // Targeted times is used primarily for blacklisting, 
@@ -1643,7 +1676,7 @@ namespace Trinity.Components.Combat
                 return info.TargetedTimes;
             }
 
-            Core.Targets.TargetHistory.Add(bestTarget.ObjectHash, new TargettingInfo
+            TargetHistory.Add(bestTarget.ObjectHash, new TargettingInfo
             {
                 ObjectHash = bestTarget.ObjectHash,
                 RActorGuid = bestTarget.RActorId,
@@ -1654,6 +1687,10 @@ namespace Trinity.Components.Combat
 
             return 1;
         }
+
+        private int LastTargetRActorGuid => Combat.Targeting.LastTarget?.RActorId ?? -1;
+
+        private bool LastTargetIsSafeSpot => Combat.Targeting.LastTarget?.IsSafeSpot ?? false;
 
         private static int GetBlacklistTargetTimes(TrinityActor currentTarget)
         {
@@ -1676,11 +1713,8 @@ namespace Trinity.Components.Combat
         private const double MinWeight = -1d;
         private static bool _riftProgressionKillAll;
 
-        private double GetLastHadUnitsInSights()
-        {
-            return Math.Max(DateTime.UtcNow.Subtract(Trinity.TrinityPlugin.lastHadUnitInSights).TotalMilliseconds,
-                DateTime.UtcNow.Subtract(Trinity.TrinityPlugin.lastHadEliteUnitInSights).TotalMilliseconds);
-        }
+        private List<MonsterAffixes> _ignoredAffixes;
+
 
         /// <summary>
         ///     Gets the settings distances based on elite or not.
@@ -1805,13 +1839,9 @@ namespace Trinity.Components.Combat
         /// <param name="cacheObject"></param>
         /// <param name="eliteMonsters"></param>
         /// <returns></returns>
-        public double EliteMonsterNearFormula(TrinityActor cacheObject,
-            List<TrinityActor> eliteMonsters)
+        public double EliteMonsterNearFormula(TrinityActor cacheObject, List<TrinityActor> eliteMonsters)
         {
             double weight = 0;
-            if (!Core.Settings.Combat.Misc.IgnoreElites && !Core.Settings.Combat.Misc.IgnoreChampions &&
-                !Core.Settings.Combat.Misc.IgnoreRares)
-                return 0;
             var monsters = eliteMonsters.Where(u => u.Position.Distance(cacheObject.Position) < 10f);
             foreach (var monster in monsters)
             {
@@ -2063,7 +2093,7 @@ namespace Trinity.Components.Combat
             switch (cacheObject.Type)
             {
                 case TrinityObjectType.ProgressionGlobe:
-                    if (DataDictionary.GreaterProgressionGlobeSNO.Contains(cacheObject.ActorSnoId))
+                    if (GameData.GreaterProgressionGlobeSNO.Contains(cacheObject.ActorSnoId))
                         return GlobeTypes.GreaterRift;
                     return GlobeTypes.NephalemRift;
 
@@ -2074,6 +2104,22 @@ namespace Trinity.Components.Combat
                     return GlobeTypes.Health;
             }
             return GlobeTypes.None;
+        }
+
+        public EliteTypes GetEliteType(TrinityActor cacheObject)
+        {
+            switch (cacheObject.MonsterQuality)
+            {
+                case MonsterQuality.Champion:
+                    return EliteTypes.Champion;
+
+                case MonsterQuality.Minion:
+                    return EliteTypes.Minion;
+
+                case MonsterQuality.Rare:
+                    return EliteTypes.Rare;
+            }
+            return EliteTypes.None;
         }
 
     }
@@ -2118,6 +2164,20 @@ namespace Trinity.Components.Combat
         GreaterRift = 1 << 3,
     }
 
+    [Flags]
+    public enum EliteTypes
+    {
+        None = 0,
+
+        [Description("Yellow Elites")]
+        Rare = 1 << 0,
+
+        [Description("Subordinates of Rare Elites")]
+        Minion = 1 << 1,
+
+        [Description("Blue Elites")]
+        Champion = 1 << 2,
+    }
 
 
 

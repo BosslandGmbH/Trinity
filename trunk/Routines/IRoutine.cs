@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Trinity.Components.Combat;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
-using Trinity.Objects;
+using Trinity.Settings.Combat;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -63,6 +63,7 @@ namespace Trinity.Routines
         Func<bool> ShouldIgnorePackSize { get; }
         Func<bool> ShouldIgnoreAvoidance { get; }
         Func<bool> ShouldIgnoreKiting { get; }
+        Func<bool> ShouldIgnoreFollowing { get; }
 
     }
 

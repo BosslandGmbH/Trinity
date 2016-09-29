@@ -4,6 +4,7 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
+using GizmoType = Trinity.Framework.Objects.Memory.Symbols.Types.GizmoType;
 
 namespace Trinity.Framework.Objects.Memory.Misc
 {

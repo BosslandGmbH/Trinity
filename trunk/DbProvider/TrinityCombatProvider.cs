@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Routines;

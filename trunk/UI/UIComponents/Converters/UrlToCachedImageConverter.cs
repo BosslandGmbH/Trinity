@@ -5,9 +5,9 @@ using System.IO;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     /// <summary>
     ///     Attempts to use local file in the trinity images folder.

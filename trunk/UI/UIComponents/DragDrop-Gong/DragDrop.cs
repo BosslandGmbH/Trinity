@@ -7,10 +7,10 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using GongSolutions.Wpf.DragDrop.Icons;
-using GongSolutions.Wpf.DragDrop.Utilities;
+using Trinity.UI.UIComponents.Icons;
+using Trinity.UI.UIComponents.Utilities;
 
-namespace GongSolutions.Wpf.DragDrop
+namespace Trinity.UI.UIComponents
 {
   public static class DragDrop
   {

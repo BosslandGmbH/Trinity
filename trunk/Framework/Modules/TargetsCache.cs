@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Config.Combat;
+using Trinity.Components.Combat.Resources;
 using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Helpers;
 using Trinity.Items;
-using Trinity.Technicals;
+using Trinity.Reference;
 using Zeta.Bot;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Modules
 {
@@ -28,35 +28,13 @@ namespace Trinity.Framework.Modules
     public class TargetsCache : Module, IEnumerable<TrinityActor>
     {
 
-        /// <summary>
-        /// Contains an RActorGUID and count of the number of times we've switched to this target
-        /// todo evaluate, temporary placement here
-        /// </summary>
-        internal Dictionary<string, TargettingInfo> TargetHistory { get; } = new Dictionary<string, TargettingInfo>();
 
-        /// <summary>
-        /// How many times the player tried to interact with this object in total
-        /// todo evaluate, temporary placement here
-        /// </summary>
-        internal Dictionary<int, int> InteractAttempts { get; } = new Dictionary<int, int>();
 
         public ulong LastUpdatedTick;
         public List<TrinityActor> Entries = new List<TrinityActor>();
         public List<TrinityActor> Ignored = new List<TrinityActor>();
         public ILookup<TrinityObjectType, TrinityActor> ByType = EmptyLookup<TrinityObjectType, TrinityActor>.Instance;
         public ILookup<MonsterQuality, TrinityActor> ByMonsterQuality = EmptyLookup<MonsterQuality, TrinityActor>.Instance;
-
-        private static void PreUpdateTasks()
-        {
-            TrinityPlugin.LastRefreshedCache = DateTime.UtcNow;
-           TrinityPlugin.LastTargetPosition = Combat.Targeting.CurrentTarget != null ? Combat.Targeting.CurrentTarget.Position : Vector3.Zero;
-
-            if (Combat.Targeting.CurrentTarget != null)
-                TrinityPlugin.LastTargetRactorGUID = Combat.Targeting.CurrentTarget.RActorId;
-
-            TrinityPlugin.LastTargetAcdId = Combat.Targeting.CurrentTarget != null ? Combat.Targeting.CurrentTarget.AcdId : -1;
-                                    
-        }
 
         protected override void OnPulse()
         {
@@ -79,9 +57,6 @@ namespace Trinity.Framework.Modules
 
                 var included = new List<TrinityActor>();
                 var ignored = new List<TrinityActor>();
-                var timer = new Stopwatch();
-
-                PreUpdateTasks();
 
                 foreach (var actor in Core.Actors.GetActorsOfType<TrinityActor>())
                 {
@@ -254,7 +229,7 @@ namespace Trinity.Framework.Modules
                     return false;
                 }
 
-                if (cacheObject.IsMonster && !DataDictionary.CorruptGrowthIds.Contains(cacheObject.ActorSnoId))
+                if (cacheObject.IsMonster && !GameData.CorruptGrowthIds.Contains(cacheObject.ActorSnoId))
                 {
                     cacheObject.AddCacheInfo("MonsterObstacle");
                     return false;
@@ -327,7 +302,7 @@ namespace Trinity.Framework.Modules
 
             if (cacheObject.Distance < 4) return true;
             if (cacheObject.ItemQualityLevel >= ItemQuality.Legendary) return true;
-            if (DataDictionary.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId)) return true;
+            if (GameData.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId)) return true;
 
             return false;
         }
@@ -437,22 +412,16 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (DataDictionary.InteractWhiteListIds.Contains(cacheObject.ActorSnoId))
+            if (GameData.InteractWhiteListIds.Contains(cacheObject.ActorSnoId))
             {
                 cacheObject.AddCacheInfo("Interact Whitelist");
                 return true;
             }
 
-            if (cacheObject.IsPlayerHeadstone && !Core.Settings.WorldObject.AllowPlayerResurection)
+            if (GameData.ForceDestructibles.Contains(cacheObject.ActorSnoId))
             {
-                cacheObject.AddCacheInfo("AllowResurectionSetting");
-                return false;
-            }
-
-            if (!DataDictionary.ForceDestructibles.Contains(cacheObject.ActorSnoId) && Core.Settings.WorldObject.DestructibleOption == DestructibleIgnoreOption.ForceIgnore)
-            {
-                cacheObject.AddCacheInfo("ForceIgnoreDestructibles");
-                return false;
+                cacheObject.AddCacheInfo("ForceDestructibles");
+                return true;
             }
 
             if (TrinityTownRun.IsWantingTownRun && cacheObject.Distance > 10f)
@@ -461,57 +430,11 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            //if (cacheObject.IsContainer && !cacheObject.IsMinimapActive && cacheObject.RadiusDistance > Core.Settings.WorldObject.ContainerOpenRange)
-            //{
-            //    cacheObject.AddCacheInfo("ContainerOpenRange");
-            //    return false;
-            //}
-
             if (cacheObject.IsDestroyable && !cacheObject.HasBeenWalkable && cacheObject.Distance > 5f)
             {
                 cacheObject.AddCacheInfo("CantReachDestructible");
                 return false;
             }
-
-            //if (!Core.Settings.WorldObject.OpenAnyContainer && !cacheObject.IsMinimapActive)
-            //{
-            //    if (cacheObject.IsRareChest && !Core.Settings.WorldObject.OpenRareChests)
-            //    {
-            //        cacheObject.AddCacheInfo("OpenRareChestsSetting");
-            //        return false;
-            //    }
-
-            //    if (cacheObject.IsChest && !Core.Settings.WorldObject.OpenChests && !cacheObject.IsQuestMonster)
-            //    {
-            //        cacheObject.AddCacheInfo("OpenChestsSetting");
-            //        return false;
-            //    }
-
-            //    if (cacheObject.IsCorpse && !Core.Settings.WorldObject.InspectCorpses)
-            //    {
-            //        cacheObject.AddCacheInfo("InspectCorpsesSetting");
-            //        return false;
-            //    }
-
-            //    if (cacheObject.IsGroundClicky && !Core.Settings.WorldObject.InspectGroundClicky)
-            //    {
-            //        cacheObject.AddCacheInfo("GroundClickySetting");
-            //        return false;
-            //    }
-
-            //    if (cacheObject.IsWeaponRack && !Core.Settings.WorldObject.InspectWeaponRacks)
-            //    {
-            //        cacheObject.AddCacheInfo("WeaponRacksSetting");
-            //        return false;
-            //    }
-
-            //    if (cacheObject.IsWeaponRack && !Core.Settings.WorldObject.InspectWeaponRacks)
-            //    {
-            //        cacheObject.AddCacheInfo("WeaponRacksSetting");
-            //        return false;
-            //    }
-            //}
-
             return true;
         }
 
@@ -519,10 +442,10 @@ namespace Trinity.Framework.Modules
         {
             var defaultValue = 50f;
 
-            if (DataDictionary.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId))
+            if (GameData.LineOfSightWhitelist.Contains(cacheObject.ActorSnoId))
                 return defaultValue;
 
-            if (cacheObject.RActorId == TrinityPlugin.LastTargetRactorGUID)
+            if (cacheObject.IsLastTarget)
                 return defaultValue;
 
             if (cacheObject.IsBoss)

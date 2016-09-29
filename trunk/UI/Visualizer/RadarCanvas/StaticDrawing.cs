@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     /// <summary>
     /// Object for saving and reusing static drawings.

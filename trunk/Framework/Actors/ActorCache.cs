@@ -5,16 +5,15 @@ using System.Diagnostics;
 using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Technicals;
-using Trinity.Helpers;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Actors
 {

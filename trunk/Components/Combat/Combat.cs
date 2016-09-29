@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
-using Trinity.Components.Combat.Abilities;
-using Trinity.Components.Combat.Party;
+using Trinity.Components.Combat.Resources;
 using Trinity.Coroutines;
 using Trinity.DbProvider;
 using Trinity.Framework;
@@ -14,17 +13,15 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Behaviors;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Objects;
 using Trinity.Reference;
 using Trinity.Routines;
-using Trinity.Technicals;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Zeta.TreeSharp;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Components.Combat
 {
@@ -81,6 +78,7 @@ namespace Trinity.Components.Combat
                 if (await CastBuffs())
                     return true;
 
+                // Combat Allowed only effects units, Trinity may still pick up items etc.
                 if (!IsCombatAllowed && IsUnitOrInvalid(target))
                     return false;
 
@@ -107,7 +105,8 @@ namespace Trinity.Components.Combat
                 Instance.Stats.Stop();
             }
 
-            return false; // Allow Profile to Run.   
+            // Allow Profile to Run. 
+            return false;  
 
         }
 
@@ -156,8 +155,6 @@ namespace Trinity.Components.Combat
 
         public static bool IsCurrentlyKiting
             => Targeting.CurrentTarget != null && Targeting.CurrentTarget.IsSafeSpot && Core.Avoidance.Avoider.ShouldKite;
-
-
 
     }
 }

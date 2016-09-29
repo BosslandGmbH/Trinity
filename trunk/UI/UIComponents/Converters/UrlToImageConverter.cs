@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     /// <summary>
     /// Downloads image from URL and returns it for display

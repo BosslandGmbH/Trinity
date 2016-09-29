@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace GongSolutions.Wpf.DragDrop
+namespace Trinity.UI.UIComponents
 {
   public interface IDragInfo
   {

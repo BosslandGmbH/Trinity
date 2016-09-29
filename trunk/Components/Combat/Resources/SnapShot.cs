@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework.Helpers;
 using Zeta.Game;
 
-namespace Trinity.Components.Combat
+namespace Trinity.Components.Combat.Resources
 {
     public class SnapShot
     {
@@ -27,7 +28,7 @@ namespace Trinity.Components.Combat
                 SnapShotTime = DateTime.UtcNow
             };
 
-            Technicals.Logger.LogVerbose("Recorded Snapshot {0} AttacksPerSecond={1}",
+            Logger.LogVerbose("Recorded Snapshot {0} AttacksPerSecond={1}",
                 snapshotRecord.SnapShotTime, snapshotRecord.AttacksPerSecond);
 
             SnapShots.Add(snapshotRecord);

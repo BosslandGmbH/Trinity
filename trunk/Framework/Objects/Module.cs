@@ -1,11 +1,9 @@
 ﻿using System;
-using Trinity.Coroutines.Town;
 using Trinity.Framework.Helpers;
-using Trinity.Technicals;
-using Zeta.Bot;
+using Trinity.Framework.Objects.Enums;
 using Zeta.Game;
 
-namespace Trinity.Framework
+namespace Trinity.Framework.Objects
 {
     public class Module
     {

@@ -1,4 +1,4 @@
-namespace Trinity.Framework.Objects.Memory.Misc
+namespace Trinity.Framework.Objects.Memory.Symbols.Types
 {
     //public enum MonsterQuality // 2.4.0.36090 @26701376 index:21
     //{

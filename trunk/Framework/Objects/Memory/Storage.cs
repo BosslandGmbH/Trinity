@@ -1,5 +1,6 @@
 ﻿using System;
 using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Zeta.Game;
 
 namespace Trinity.Framework.Objects.Memory

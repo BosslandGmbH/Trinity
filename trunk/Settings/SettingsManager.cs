@@ -9,18 +9,14 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Serialization;
-using Trinity.Config;
 using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.Helpers.AutoFollow.Resources;
-using Trinity.Technicals;
+using Trinity.Settings.Modals;
 using Trinity.UI;
-using Trinity.UI.RadarUI;
 using Trinity.UI.UIComponents;
-using Trinity.UIComponents;
 using Zeta.Common;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Settings
 {
@@ -267,8 +263,6 @@ namespace Trinity.Settings
                 result.Add(new SettingsSelectionItem(SettingsSection.KanaisCube));
             if (settings.Loot?.TownRun != null)
                 result.Add(new SettingsSelectionItem(SettingsSection.TownRun));
-            if (settings.WorldObject != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.Objects));
             if (settings.Paragon != null)
                 result.Add(new SettingsSelectionItem(SettingsSection.Paragon));
             if (settings.Advanced != null)
@@ -294,8 +288,6 @@ namespace Trinity.Settings
 
         public static void RemoveSections(TrinitySetting settings, IEnumerable<SettingsSelectionItem> sections)
         {
-            settings.Notification = null;
-
             if (sections != null)
             {
                 foreach (var section in sections)
@@ -310,8 +302,6 @@ namespace Trinity.Settings
         /// </summary>
         public static void UpdateSections(string actionDescripter, TrinitySetting settings, SettingsSelectionViewModel selectionsViewModel)
         {
-            settings.Notification = null;
-
             foreach (var sectionEntry in selectionsViewModel.Selections)
             {
                 if (sectionEntry.IsSelected)
@@ -349,9 +339,6 @@ namespace Trinity.Settings
                 case SettingsSection.TownRun:
                     if (settings.Loot != null)
                         settings.Loot.TownRun = null;
-                    break;
-                case SettingsSection.Objects:
-                    settings.WorldObject = null;
                     break;
                 case SettingsSection.Paragon:
                     settings.Paragon = null;

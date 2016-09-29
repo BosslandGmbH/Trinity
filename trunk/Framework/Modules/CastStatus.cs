@@ -1,9 +1,10 @@
 using System;
-using Trinity.Technicals;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Modules
 {

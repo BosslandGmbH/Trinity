@@ -1,20 +1,21 @@
 using System;
-using Trinity.Cache;
 using Trinity.Components.Combat;
-using Trinity.Components.Combat.Party;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using GizmoType = Zeta.Game.Internals.SNO.GizmoType;
-using Logger = Trinity.Technicals.Logger;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Actors.ActorTypes
 {
@@ -190,7 +191,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         /// </summary>
         public float ZDiff => Math.Abs(Position.Z - Core.Player.Position.Z);
 
-        public bool IsLastTarget => RActorId == TrinityPlugin.LastTargetRactorGUID;
+        public bool IsLastTarget => RActorId == (Combat.Targeting.LastTarget?.RActorId ?? -1);
         public string DebugAvoidanceFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.AvoidanceFlags.ToString();
         public string DebugNavCellFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.NodeFlags.ToString();
         public bool IsStandingInAvoidance => Core.Avoidance.Grid.IsLocationInFlags(Position, AvoidanceFlags.Avoidance);

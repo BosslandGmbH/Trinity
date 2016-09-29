@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     /// <summary>
     /// Helper for debugging DataBinding

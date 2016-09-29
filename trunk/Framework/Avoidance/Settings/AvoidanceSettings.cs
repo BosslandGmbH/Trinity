@@ -7,8 +7,7 @@ using System.Windows.Input;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Helpers;
-using Trinity.UIComponents;
+using Trinity.UI.UIComponents;
 using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Settings

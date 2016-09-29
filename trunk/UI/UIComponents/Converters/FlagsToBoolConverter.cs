@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
-using Trinity.Technicals;
 
-namespace Trinity.UIComponents
+namespace Trinity.UI.UIComponents.Converters
 {
     public class FlagsToBoolConverter : MarkupExtension, IValueConverter
     {

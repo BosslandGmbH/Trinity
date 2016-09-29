@@ -1,21 +1,10 @@
 using System;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Globalization;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using Trinity.Framework.Helpers;
-using Zeta.Bot.Navigation;
-using Zeta.Common;
-using LineSegment = System.Windows.Media.LineSegment;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     /// <summary>
     /// Provides basic hit testing

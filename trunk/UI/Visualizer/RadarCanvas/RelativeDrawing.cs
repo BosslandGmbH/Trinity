@@ -1,6 +1,6 @@
 ﻿using Zeta.Common;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     /// <summary>    
     /// Object for saving and reusing relative drawings.

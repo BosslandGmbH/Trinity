@@ -17,6 +17,11 @@ namespace Trinity.Framework.Helpers
             return Navigation.CanRayCast(@from, to);
         }
 
+        public bool CanRayCast(Vector3 to)
+        {
+            return Navigation.CanRayCast(Core.Player.Position, to);
+        }
+
         public bool CanRayWalk(Vector3 @from, Vector3 to)
         {
             return Navigation.CanRayCast(@from, to);

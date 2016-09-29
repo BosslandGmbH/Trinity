@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Windows.Media;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Technicals;
-using DashStyle = System.Windows.Media.DashStyle;
+using Trinity.Framework.Objects;
 
-namespace Trinity.UI.UIComponents.RadarCanvas
+namespace Trinity.UI.Visualizer.RadarCanvas
 {
     /// <summary>
     /// OnRender doesnt like creating Brushes, Pens etc; this class allows us to pre-create and reuse them.
