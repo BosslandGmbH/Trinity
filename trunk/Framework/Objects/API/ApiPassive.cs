@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Trinity.Framework.Objects.API
+namespace Trinity.Framework.Objects.Api
 {
     [DataContract]
-    public class Passive
+    public class ApiPassive
     {
         [DataMember(Name = "id")]
         public int Id { get; set; }
@@ -13,5 +13,8 @@ namespace Trinity.Framework.Objects.API
 
         [DataMember(Name = "iconSlug")]
         public string IconSlug { get; set; }
+
+        public override string ToString()
+            => $"{GetType().Name}: {Name} ({Id})";
     }
 }

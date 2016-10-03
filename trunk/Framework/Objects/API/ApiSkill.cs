@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Trinity.Framework.Objects.API
+namespace Trinity.Framework.Objects.Api
 {
     [DataContract]
-    public class Skill
+    public class ApiSkill
     {
         [DataMember(Name = "id")]
         public int Id { get; set; }

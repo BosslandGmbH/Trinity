@@ -1,10 +1,10 @@
 ﻿using System.Runtime.Serialization;
 using Zeta.Game;
 
-namespace Trinity.Framework.Objects.API
+namespace Trinity.Framework.Objects.Api
 {
     [DataContract]    
-    public class Item
+    public class ApiItem
     {
         [DataMember(Name = "slot")]
         public InventorySlot Slot { get; set; }
@@ -20,6 +20,9 @@ namespace Trinity.Framework.Objects.API
 
         [DataMember(Name = "iconSlug")]
         public string IconSlug { get; set; }
+
+        public override string ToString()
+            => $"{GetType().Name}: {Name} ({Id}) {Slot}";
     }
 }
 
