@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:BoolInverterConverter x:Key="BoolInverterConverter" />
             <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
             <converters:EnumVisibilityConverter x:Key="EnumVisibilityConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
@@ -26,15 +27,47 @@
     </UserControl.Resources>
     <ScrollViewer>
         <StackPanel Margin="0,10,5,0">
+            <GroupBox>
+                <StackPanel>
+                    <WrapPanel Margin="0,-10,0,0">
+                        <TextBlock Margin="0,0,15,0">Routine Mode:</TextBlock>
+                        <RadioButton IsChecked="{Binding Routine.RoutineMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Automatic}">Auto-Select</RadioButton>
+                        <RadioButton IsChecked="{Binding Routine.RoutineMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Manual}">Force Specific Routine</RadioButton>
+                    </WrapPanel>
+                    <Border Margin="0,10,10,0" Background="#333333" CornerRadius="2"  Visibility="{Binding Routine.RoutineMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Manual}">
+                       <StackPanel>
+                            <ListBox ItemsSource="{Binding Routine.ClassRoutines}" SelectedItem="{Binding Routine.SelectedRoutine}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Background="Transparent">
+                                            <Border Padding="2" CornerRadius="3" ClipToBounds="True">
+                                                <WrapPanel>
+                                                    <TextBlock>
+                                                        <Run Text="{Binding DisplayName}" />
+                                                        <Run> by </Run>
+                                                        <Run Text="{Binding Author}"/>
+                                                    </TextBlock>
+                                                </WrapPanel>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </GroupBox>
+            <!--<GroupBox Header="Available Routines" Visibility="{Binding Routine.RoutineMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Manual}">
 
+            </GroupBox>-->
             <StackPanel Margin="0,0,0,10">
-                <Border BorderThickness="3" BorderBrush="#222" CornerRadius="2">
+                <Border BorderThickness="1" BorderBrush="#222" CornerRadius="0">
                     <StackPanel>
                         <Border Background="#333333" Padding="10,6,10,3">
                             <StackPanel>
                                 <Grid Margin="0,0,0,0">
-                                    <TextBlock Margin="0,0,0,-5" Foreground="Gold" FontSize="13" FontWeight="SemiBold">
-                                        Build: <Run Text="{Binding Routine.SelectedRoutine.DisplayName, FallbackValue=Unknown}"/>
+                                    <TextBlock Margin="0,2,0,-5" Foreground="Gold" FontSize="13" FontWeight="SemiBold">
+                                        Current Routine: <Run Text="{Binding Routine.SelectedRoutine.DisplayName, FallbackValue=Unknown}"/>
                                     </TextBlock>
                                     <StackPanel Visibility="{Binding GameInfo.IsInGame, Converter={StaticResource VisibleWhenTrueConverter}}">
                                         <TextBlock Margin="0,2,0,-5" Foreground="LightGray" HorizontalAlignment="Right" FontSize="11">
@@ -68,6 +101,13 @@
                         <Border Padding="10,10,10,15">
                             <Grid>
                                 <StackPanel Visibility="{Binding GameInfo.IsInGame, Converter={StaticResource VisibleWhenFalseConverter}}">
+                                <!--<StackPanel>
+                                    <StackPanel.Visibility>
+                                        <MultiBinding Converter="{StaticResource convAnd}">
+                                            <Binding ElementName="chkValue11" Path="IsChecked"/>
+                                            <Binding Path="IsRowChecked"/>
+                                        </MultiBinding>
+                                    </StackPanel.Visibility>-->
                                     <TextBlock TextDecorations="Underline" HorizontalAlignment="Center" Foreground="Gold">You must be in game to see build-specific settings</TextBlock>
                                 </StackPanel>
                                 <StackPanel Visibility="{Binding GameInfo.IsInGame, Converter={StaticResource VisibleWhenTrueConverter}}">
@@ -81,15 +121,14 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-
-            <StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0">
+            <!--<StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0"   Visibility="{Binding Routine.RoutineMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Automatic}">
                 <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                     <GroupBox.Header>
                         Other Specialized Builds
                     </GroupBox.Header>
                     <StackPanel Margin="0,6,0,0">
                         <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">Trinity has special handling of the following builds. Builds are selected automatically when you equip the required items and skills on your hero.</TextBlock>
-                        <ItemsControl ItemsSource="{Binding Routine.ClassRoutines}">
+                        <ItemsControl ItemsSource="{Binding Routine.ClassAvailableRoutines}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -115,7 +154,7 @@
                         
                     </StackPanel>
                 </GroupBox>
-            </StackPanel>
+            </StackPanel>-->
 
 
 

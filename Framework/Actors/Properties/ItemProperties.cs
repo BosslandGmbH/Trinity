@@ -8,6 +8,7 @@ using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Reference;
+using Trinity.Settings;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -132,6 +133,25 @@ namespace Trinity.Framework.Actors.Properties
                 actor.OnIdentified();               
             }
         }
+
+        public GlobeTypes GetGlobeType(TrinityActor cacheObject)
+        {
+            switch (cacheObject.Type)
+            {
+                case TrinityObjectType.ProgressionGlobe:
+                    if (GameData.GreaterProgressionGlobeSNO.Contains(cacheObject.ActorSnoId))
+                        return GlobeTypes.GreaterRift;
+                    return GlobeTypes.NephalemRift;
+
+                case TrinityObjectType.PowerGlobe:
+                    return GlobeTypes.Power;
+
+                case TrinityObjectType.HealthGlobe:
+                    return GlobeTypes.Health;
+            }
+            return GlobeTypes.None;
+        }
+
 
 
         public static FollowerType GetFollowerType(int actorSnoId)

@@ -24,15 +24,15 @@ namespace Trinity.Framework.Modules
             if (!BotMain.IsRunning)
                 return;
 
-            if (Core.Settings.Advanced.StopOnGoblins)
-            {
-                var goblin = Core.Actors.AllRActors.FirstOrDefault(g => g.IsTreasureGoblin);
-                if (goblin != null)
-                {
-                    Logger.Warn($"Stopping Bot because: Goblin Found! {goblin}");
-                    BotMain.Stop();
-                }
-            }
+            //if (Core.Settings.Advanced.StopOnGoblins)
+            //{
+            //    var goblin = Core.Actors.AllRActors.FirstOrDefault(g => g.IsTreasureGoblin);
+            //    if (goblin != null)
+            //    {
+            //        Logger.Warn($"Stopping Bot because: Goblin Found! {goblin}");
+            //        BotMain.Stop();
+            //    }
+            //}
         }
 
     }

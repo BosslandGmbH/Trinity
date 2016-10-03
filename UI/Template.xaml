@@ -11,7 +11,7 @@
                     xmlns:behaviors="clr-namespace:Trinity.UI.UIComponents.Behaviors"
                     xmlns:controls="clr-namespace:Trinity.UI.UIComponents.Controls"
                     xmlns:ut="clr-namespace:Trinity.UI.UIComponents"
-                    xmlns:markupExtensions="clr-namespace:Trinity.UI.UIComponents.MarkupExtensions">
+                    xmlns:markup="clr-namespace:Trinity.UI.UIComponents.MarkupExtensions">
 
 
     <converters:IntToStringConverter x:Key="intToStringConverter" />
@@ -214,7 +214,7 @@
                 <ControlTemplate TargetType="{x:Type CheckBox}">
                     <BulletDecorator Background="Transparent">
                         <BulletDecorator.Bullet>
-                            <Border x:Name="Border" Width="13" Height="13" CornerRadius="0" BorderThickness="1">
+                            <Border x:Name="Border" Margin="0,1,0,0" Width="13" Height="13" CornerRadius="0" BorderThickness="1">
                                 <Border.BorderBrush>
                                     <LinearGradientBrush po:Freeze="True" StartPoint="0,0" EndPoint="0,1">
                                         <LinearGradientBrush.GradientStops>
@@ -313,7 +313,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <ContentPresenter Margin="4,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" RecognizesAccessKey="True" />
+                        <ContentPresenter Margin="4,-1,8,0" VerticalAlignment="Center" HorizontalAlignment="Left" RecognizesAccessKey="True" />
                     </BulletDecorator>
                 </ControlTemplate>
             </Setter.Value>
@@ -987,7 +987,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <TextBlock TextDecorations="Underline" Margin="0,5,0,0">
+                    <TextBlock TextDecorations="Underline" VerticalAlignment="Center" Margin="0,0,0,0">
                         <InlineUIContainer>
                             <ContentPresenter />
                         </InlineUIContainer>
@@ -998,7 +998,7 @@
         <Setter Property="Foreground" Value="#FF00AAFF" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Foreground" Value="Blue" />
+                <Setter Property="Foreground" Value="Yellow" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -2091,7 +2091,7 @@
                     <ItemsControl Tag="{Binding Value}" ItemsSource="{Binding Converter={StaticResource PropertyValueToCollectionConverter}}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Margin="8,3,0,0"  Columns="{Binding Path=ActualWidth, ElementName=Container, Converter={markupExtensions:WidthToColumnCountExtension}, ConverterParameter='175'}"/>
+                                <UniformGrid Margin="8,3,0,0"  Columns="{Binding Path=ActualWidth, ElementName=Container, Converter={markup:WidthToColumnCountExtension}, ConverterParameter='175'}"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>

@@ -10,7 +10,6 @@ using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
-using Trinity.Settings.Combat;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;

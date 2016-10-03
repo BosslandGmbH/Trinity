@@ -25,14 +25,14 @@ namespace Trinity.Coroutines
 
         public static bool ShouldSnapshot()
         {
-            if (!Core.Settings.Combat.Misc.TryToSnapshot || !Gems.BaneOfTheStricken.IsEquipped ||
-                ZetaDia.Me.AttacksPerSecond < Core.Settings.Combat.Misc.SnapshotAttackSpeed || Core.Player.CurrentHealthPct >= 1)
-                return false;
+            //if (!Core.Settings.Combat.Misc.TryToSnapshot || !Gems.BaneOfTheStricken.IsEquipped ||
+            //    ZetaDia.Me.AttacksPerSecond < Core.Settings.Combat.Misc.SnapshotAttackSpeed || Core.Player.CurrentHealthPct >= 1)
+            //    return false;
 
-            if (SnapShot.Last.AttacksPerSecond >= Core.Settings.Combat.Misc.SnapshotAttackSpeed)
-                return false;
+            //if (SnapShot.Last.AttacksPerSecond >= Core.Settings.Combat.Misc.SnapshotAttackSpeed)
+            //    return false;
 
-            return true;
+            return false;
         }
 
         public static bool ShouldUsePotion()

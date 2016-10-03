@@ -74,10 +74,10 @@
             <GroupBox Header="Auto-Equip">
                 <StackPanel>
                     <UniformGrid Columns="2">
-                        <CheckBox Content="Items" IsChecked="{Binding Pickup.AutoEquipItems}" Margin="5"/>
-                        <CheckBox Content="Skills" IsChecked="{Binding Pickup.AutoEquipSkills}" Margin="5"/>
-                        <CheckBox Content="Don't Equip Weapons" IsChecked="{Binding Pickup.AutoEquipIgnoreWeapons}" Margin="5"/>
-                        <CheckBox Content="Disable at level 70" IsChecked="{Binding Pickup.DisableAutoEquipAtMaxLevel}" Margin="5"/>
+                        <CheckBox Content="Items" IsChecked="{Binding Items.AutoEquipItems}" Margin="5"/>
+                        <CheckBox Content="Skills" IsChecked="{Binding Items.AutoEquipSkills}" Margin="5"/>
+                        <CheckBox Content="Don't Equip Weapons" IsChecked="{Binding Items.AutoEquipIgnoreWeapons}" Margin="5"/>
+                        <CheckBox Content="Disable at level 70" IsChecked="{Binding Items.AutoEquipAutoDisable}" Margin="5"/>
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>            
@@ -89,9 +89,9 @@
                     </GroupBox.Header>
                     <StackPanel>
                         <WrapPanel Margin="10,10,10,0">
-                            <RadioButton Foreground="White" GroupName="BossMode" Margin="0,0,10,0" Content="Accept" IsChecked="{Binding Path=Misc.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysAccept}" />
-                            <RadioButton Foreground="White" GroupName="BossMode" Margin="0,0,10,0" Content="Decline" IsChecked="{Binding Path=Misc.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysDecline}" />
-                            <RadioButton Foreground="White" GroupName="BossMode" Margin="0,0,10,0" Content="Decline while on Bounty" IsChecked="{Binding Path=Misc.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=DeclineInBounty}" />
+                            <RadioButton Foreground="White" Margin="0,0,10,0" Content="Accept" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysAccept}" />
+                            <RadioButton Foreground="White" Margin="0,0,10,0" Content="Decline" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysDecline}" />
+                            <RadioButton Foreground="White" Margin="0,0,10,0" Content="Decline while on Bounty" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=DeclineInBounty}" />
                         </WrapPanel>
                     </StackPanel>
                 </GroupBox>
@@ -104,10 +104,10 @@
                     </GroupBox.Header>
                     <StackPanel Margin="0,6,0,0">
                         <WrapPanel>
-                            <RadioButton Foreground="White" Content="Attack Goblins" IsChecked="{Binding Path=Misc.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}" />
-                            <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Path=Misc.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}" />
-                            <RadioButton Foreground="White" Content="Prioritize" IsChecked="{Binding Path=Misc.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Prioritize}" />
-                            <RadioButton Foreground="White" Content="Kamikaze" IsChecked="{Binding Path=Misc.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Kamikaze}" />
+                            <RadioButton Foreground="White" Content="Attack Goblins" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}" />
+                            <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}" />
+                            <RadioButton Foreground="White" Content="Prioritize" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Prioritize}" />
+                            <RadioButton Foreground="White" Content="Kamikaze" IsChecked="{Binding Path=Weighting.GoblinPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Kamikaze}" />
                         </WrapPanel>
                     </StackPanel>
                 </GroupBox>
@@ -129,7 +129,7 @@
                         </UniformGrid>-->
                         <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=EliteTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />
                         <Label Margin="0,8,0,-2" FontWeight="Bold">Ignore By Affix:</Label>
-                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Misc, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=IgnoreAffixes}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=IgnoreAffixes}" Style="{DynamicResource SimpleItemsControlSelector}" />
                     </StackPanel>
                 </StackPanel>
             </GroupBox>

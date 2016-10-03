@@ -57,13 +57,13 @@ namespace Trinity.Routines.Barbarian
             if (ShouldAncientSpear(out target))
                 return AncientSpear(target);
 
+            if (TrySpecialPower(out power))
+                return power;
+
             if (ShouldFuriousCharge(out position))
                 return FuriousCharge(position);
 
             // Fallback to defaults in case of minor variations.
-
-            if (TrySpecialPower(out power))
-                return power;
 
             if (TrySecondaryPower(out power))
                 return power;
@@ -120,7 +120,7 @@ namespace Trinity.Routines.Barbarian
                 {
                     if (bestTargetCount == 1 || bestTargetCount >= targetGoal)
                     {
-                        position = bestTarget.Position;
+                        position = GetPositionBehind(bestTarget.Position);
                         return true;
                     }
                 }
@@ -132,16 +132,16 @@ namespace Trinity.Routines.Barbarian
                     {
                         if (bestClusterCount > bestPierceCount)
                         {
-                            position = bestCluster.Position;
+                            position = GetPositionBehind(bestCluster.Position);
                             return true;
                         }
-                        position = bestPierce.Position;
+                        position = GetPositionBehind(bestPierce.Position);
                         return true;
                     }
                     if (bestPierceCount != 1 && bestPierceCount < targetGoal &&
                         (bestClusterCount == 1 || bestClusterCount >= targetGoal))
                     {
-                        position = bestCluster.Position;
+                        position = GetPositionBehind(bestCluster.Position);
                         return true;
                     }
                 }
@@ -151,17 +151,21 @@ namespace Trinity.Routines.Barbarian
                     if (bestClusterCount != 1 && bestClusterCount < targetGoal &&
                         (bestPierceCount == 1 || bestPierceCount >= targetGoal))
                     {
-                        position = bestPierce.Position;
+                        position = GetPositionBehind(bestPierce.Position);
                         return true;
                     }
                 }
 
             }
 
-            position = CurrentTarget.Position;
+            position = GetPositionBehind(CurrentTarget.Position);
             return true;
         }
- 
+
+        private static Vector3 GetPositionBehind(Vector3 position)
+        {
+            return MathEx.CalculatePointFrom(position, Player.Position, Player.Position.Distance(position) + 4f);
+        }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
 

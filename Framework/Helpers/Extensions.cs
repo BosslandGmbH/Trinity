@@ -12,7 +12,7 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Items;
 using Trinity.Reference;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -462,7 +462,7 @@ namespace Trinity.Framework.Helpers
 
         public static TrinityItemType GetTrinityItemType(this ACDItem item)
         {
-            return TrinityItemManager.DetermineItemType(item);
+            return TypeConversions.DetermineItemType(item.InternalName, item.ItemType);
         }
 
         public static ItemSelectionType GetItemSelectionType(this ACDItem item)

@@ -5,6 +5,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Reference;
+using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -55,7 +56,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.HitPointsPct = actor.HitPoints / actor.HitPointsMax;
             actor.HasDotDps = attributes.HasDotDps;
             actor.IsReflectingDamage = actor.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage) && attributes.IsReflecting;
-
+            actor.EliteType = GetEliteType(actor);
 
 
             actor.NpcIsOperable = attributes.NPCIsOperatable;
@@ -313,6 +314,22 @@ namespace Trinity.Framework.Actors.Properties
                 Collection = hash,
                 Flags = flags
             };
+        }
+
+        public static EliteTypes GetEliteType(TrinityActor cacheObject)
+        {
+            switch (cacheObject.MonsterQuality)
+            {
+                case MonsterQuality.Champion:
+                    return EliteTypes.Champion;
+
+                case MonsterQuality.Minion:
+                    return EliteTypes.Minion;
+
+                case MonsterQuality.Rare:
+                    return EliteTypes.Rare;
+            }
+            return EliteTypes.None;
         }
 
 

@@ -55,34 +55,21 @@ namespace Trinity.Framework.Helpers
                 {
                     msg = msg + " || " + args;
                 }
-                //var key = new Tuple<LogCategory, TrinityLogLevel>(category, level);
-
-                //if (!LastLogMessages.ContainsKey(key))
-                //    LastLogMessages[key] = string.Empty;
-
-                //var allowDuplicates = Core.Settings != null && Core.Settings.Advanced != null && Core.Settings.Advanced.AllowDuplicateMessages;
-
-                //string lastMessage;
-                //if (LastLogMessages.TryGetValue(key, out lastMessage) && (allowDuplicates || lastMessage != msg))
-                //{
-                    //LastLogMessages[key] = msg;
-
-                    switch (level)
-                    {
-                        case TrinityLogLevel.Error:
-                            _Logger.Error(msg);
-                            break;
-                        case TrinityLogLevel.Info:
-                            _Logger.Info(msg);
-                            break;
-                        case TrinityLogLevel.Verbose:
-                            _Logger.Debug(msg);
-                            break;
-                        case TrinityLogLevel.Debug:
-                            LogToTrinityDebug(msg);
-                            break;
-                    }
-                //}
+                switch (level)
+                {
+                    case TrinityLogLevel.Error:
+                        _Logger.Error(msg);
+                        break;
+                    case TrinityLogLevel.Info:
+                        _Logger.Info(msg);
+                        break;
+                    case TrinityLogLevel.Verbose:
+                        _Logger.Debug(msg);
+                        break;
+                    case TrinityLogLevel.Debug:
+                        LogToTrinityDebug(msg);
+                        break;
+                }               
             }
         }
 

@@ -55,59 +55,50 @@ namespace Trinity.Components.Combat
         public static IPartyProvider Party { get; set; } = DefaultProviders.Party;
 
         /// <summary>
+        /// Loot information, if items should be picked up, stashed etc.
+        /// </summary>
+        public static ILootProvider Loot { get; set; } = DefaultProviders.Loot;
+
+        /// <summary>
         /// Combat Hook entry-point, manages when lower-level hooks can run and executes trinity features.
         /// </summary>
         public static async Task<bool> MainCombatTask()
         {
-            Instance.Stats.Start();
-            try
-            {
-                if (!ZetaDia.IsInGame || ZetaDia.IsLoadingWorld || !ZetaDia.Me.IsValid)
-                    return false;
+            if (!ZetaDia.IsInGame || ZetaDia.IsLoadingWorld || !ZetaDia.Me.IsValid)
+                return false;
 
-                if (Core.Player.IsDead)
-                    return false;
+            if (Core.Player.IsDead)
+                return false;
 
-                await UsePotion.Execute();
-                await OpenTreasureBags.Execute();
+            await UsePotion.Execute();
+            await OpenTreasureBags.Execute();
     
-                VacuumItems.Execute();           
+            VacuumItems.Execute();           
 
-                var target = Weighting.WeightActors(Core.Targets);
+            var target = Weighting.WeightActors(Core.Targets);
        
-                if (await CastBuffs())
+            if (await CastBuffs())
+                return true;
+
+            // Combat Allowed only effects units, Trinity may still pick up items etc.
+            if (!IsCombatAllowed && IsUnitOrInvalid(target))
+                return false;
+
+            if (target != null)
+                return await Targeting.HandleTarget(target);
+
+            if (!Core.Player.IsCasting)
+            {
+                if (await Behaviors.MoveToMarker.While(m => m.MarkerType == WorldMarkerType.LegendaryItem || m.MarkerType == WorldMarkerType.SetItem))
                     return true;
 
-                // Combat Allowed only effects units, Trinity may still pick up items etc.
-                if (!IsCombatAllowed && IsUnitOrInvalid(target))
-                    return false;
-
-                if (target != null)
-                    return await Targeting.HandleTarget(target);
-
-                if (!Core.Player.IsCasting)
-                {
-                    if (await Behaviors.MoveToMarker.While(m => m.MarkerType == WorldMarkerType.LegendaryItem || m.MarkerType == WorldMarkerType.SetItem))
-                        return true;
-
-                    await EmergencyRepair.Execute();
-                    await AutoEquipSkills.Instance.Execute();
-                    await AutoEquipItems.Instance.Execute();
-                }
-                    
+                await EmergencyRepair.Execute();
+                await AutoEquipSkills.Instance.Execute();
+                await AutoEquipItems.Instance.Execute();
             }
-            catch (Exception ex)
-            {
-                Logger.LogError($"Exception in MainCombatTask {ex}");
-            }
-            finally
-            {
-                Instance.Stats.Stop();
-            }
-
+                                
             // Allow Profile to Run. 
             return false;  
-
         }
 
         private static bool IsUnitOrInvalid(TrinityActor target)

@@ -25,10 +25,10 @@
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap">Set below 10 to reduce CPU use (but dumb the bot down). You can experiment above 10 (Default), but this will eat CPU)</TextBlock>
                         <UniformGrid Columns="2"  VerticalAlignment="Center">
-                            <CheckBox IsChecked="{Binding Path=Advanced.TPSEnabled}">Enable TPS modification</CheckBox>
-                            <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding Path=Advanced.TPSEnabled}"
+                            <CheckBox IsChecked="{Binding Advanced.TpsEnabled}" VerticalAlignment="Center">Enable TPS modification</CheckBox>
+                            <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding Advanced.TpsEnabled}"
                     Interval="500" Maximum="30" Minimum="1" SmallChange="1" TickFrequency="3" TickPlacement="BottomRight"
-                    Value="{Binding Path=Advanced.TPSLimit}" 
+                    Value="{Binding Advanced.TpsLimit}" 
                     HorizontalAlignment="Stretch" Margin="5,0,5,0"
                         ToolTip="Set below 10 to reduce CPU use (but dumb the bot down). You can experiment above 10 (Db Default), but this will eat CPU)"/>
                         </UniformGrid>
@@ -44,24 +44,11 @@
                 	Interval="500" Maximum="1800" Minimum="0" SmallChange="1" TickFrequency="10" TickPlacement="BottomRight"
                 	Value="{Binding Advanced.InactivityTimer}" IsSnapToTickEnabled="True"
                 	ToolTip="Number of seconds after which if no gold or XP is collected the game will restart" Margin="5,0,5,0"/>
-                        <CheckBox IsChecked="{Binding Advanced.IsDBInactivityEnabled}" Content="Enable DemonBuddy Inactivity" Height="20"/>
+                        <!--<CheckBox IsChecked="{Binding Advanced.IsDBInactivityEnabled}" Content="Enable DemonBuddy Inactivity" Height="20"/>-->
 
                     </UniformGrid>
                 </GroupBox>
-                    
-                <!-- Misc Advanced -->
-                <GroupBox Header="TrinityPlugin Support Required Logs:">
-                    <UniformGrid Columns="2" HorizontalAlignment="Stretch">
-                        <CheckBox IsChecked="{Binding Path=Advanced.DebugInStatusBar}" ToolTip="Update the DB Status bar with Combat Info">Use TrinityPlugin Status Bar</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ProfileTag}">Use Profile Tag Logging</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Targetting}">Log Targetting System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Weight}">Log Target Weight System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=CacheManagement}">Log Cache System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Behavior}">Log Behavior System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Routine}">Log Routine</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Spells}">Spell Casting</CheckBox>                    
-                    </UniformGrid>
-                </GroupBox>
+
                 <GroupBox Header="Misc Settings">
                     <UniformGrid Columns="2">
                         <CheckBox IsChecked="{Binding Advanced.ShowBattleTag}" Content="Show BattleTag in Title bar"/>
@@ -69,14 +56,30 @@
                         <CheckBox IsChecked="{Binding Advanced.ShowHeroClass}" Content="Show Hero Class in Title bar"/>
                         <CheckBox IsChecked="{Binding Advanced.LazyRaiderClickToPause}" Content="Lazy Raider Click to Pause"/>
                         <CheckBox IsChecked="{Binding Advanced.DisableAllMovement}" Content="Disable All Movement"/>
-                        <CheckBox IsChecked="{Binding Advanced.AllowDuplicateMessages}" Content="Allow Duplicate Messages"/>
-                        <CheckBox IsChecked="{Binding Advanced.StopOnGoblins}" Content="Stop When Goblins Found"/>
-
+                        <!--<CheckBox IsChecked="{Binding Advanced.AllowDuplicateMessages}" Content="Allow Duplicate Messages"/>-->
+                        <!--<CheckBox IsChecked="{Binding Advanced.StopOnGoblins}" Content="Stop When Goblins Found"/>-->
                         <!--<CheckBox IsChecked="{Binding Advanced.UseTrinityDeathHandler}" Content="Use Trinity Death Handler"/>-->
                         <!--<CheckBox IsChecked="{Binding Advanced.UseExperimentalTownRun}" Content="Use Experimental Town Run"/>-->
                         <!--<CheckBox IsChecked="{Binding Advanced.UseExperimentalAvoidance}" Content="Use Experimental Avoidance"/>-->
                     </UniformGrid>
                 </GroupBox>
+
+                <!-- Misc Advanced -->
+                <GroupBox Header="TrinityPlugin Support Required Logs:">
+                    <UniformGrid Columns="2" HorizontalAlignment="Stretch">
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.DebugInStatusBar}" ToolTip="Update the DB Status bar with Combat Info">Use TrinityPlugin Status Bar</CheckBox>-->
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ProfileTag}">Use Profile Tag Logging</CheckBox>-->
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Targetting}">Log Targetting System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Weight}">Log Target Weight System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=CacheManagement}">Log Cache System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Behavior}">Log Behavior System</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Routine}">Log Routine</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Spells}">Log Spell Casting</CheckBox>
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Avoidance}">Log Avoidance System</CheckBox>
+
+                    </UniformGrid>
+                </GroupBox>
+
                 <!--<GroupBox Header="Unstucker">
                     <UniformGrid VerticalAlignment="Top">
                         <CheckBox IsChecked="{Binding Advanced.UnstuckerEnabled}" Content="Enable TrinityPlugin Unstucker"/>
@@ -94,31 +97,26 @@
 
 
 
-                <GroupBox Header="TrinityPluginLogs Directory:">
+                <!--<GroupBox Header="TrinityPluginLogs Directory:">
                     <UniformGrid Columns="2" HorizontalAlignment="Stretch">
-                        <CheckBox IsChecked="{Binding Path=Advanced.ItemRulesLogs}" ToolTip="Record ItemRules logs">ItemRules logs</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.OutputReports}" ToolTip="Output Reports to TrinityPluginLogs">Output Reports</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogDroppedItems}" ToolTip="Create a CSV file for all dropped items">Log dropped Items</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogStuckLocation}" ToolTip="Create a separated file for stuck locations">Log stuck locations</CheckBox>
-
                     </UniformGrid>
-                </GroupBox>
+                </GroupBox>-->
+                    
                 <GroupBox Header="TrinityPlugin Support Specialized logs">
                     <UniformGrid Columns="2" HorizontalAlignment="Stretch">
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Performance}">Log System Performance</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=GlobalHandler}">Log Global Handling System</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Movement}">Log Movement System</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Navigator}">Log Navigation System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ItemValuation}">Log Item Valuations</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Configuration}">Log Configuration System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=UI}">Log UI Loading</CheckBox>
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Configuration}">Log Configuration System</CheckBox>-->
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=UI}">Log UI Loading</CheckBox>-->
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ScriptRule}">Log Script Rules System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Avoidance}">Log Avoidance System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Animation}">Log Monster Animations</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=UnknownObjects}">Log Unknown Objects</CheckBox>
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Animation}">Log Monster Animations</CheckBox>-->
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ActiveBuffs}">Log Active Buffs</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=SkillSelection}">Log Skill Selection</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cooldowns}">Cooldowns</CheckBox>
+                        <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=SkillSelection}">Log Skill Selection</CheckBox>-->
+                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cooldowns}">Log Cooldowns</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=StuckHandler}">Log Stuck Handler</CheckBox>
 
                     </UniformGrid>

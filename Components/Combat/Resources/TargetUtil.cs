@@ -11,7 +11,7 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Trinity.Reference;
 using Trinity.Routines;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Trinity.UI.Visualizer.RadarCanvas;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
@@ -745,21 +745,21 @@ namespace Trinity.Components.Combat.Resources
             return GetBestClusterUnit(15f, maxRange);
         }
 
-        private static Vector3 GetBestAoEMovementPosition()
-        {
-            Vector3 _bestMovementPosition = Vector3.Zero;
+        //private static Vector3 GetBestAoEMovementPosition()
+        //{
+        //    Vector3 _bestMovementPosition = Vector3.Zero;
 
-            if (HealthGlobeExists(25) && Player.CurrentHealthPct < Core.Settings.Combat.Barbarian.HealthGlobeLevel)
-                _bestMovementPosition = GetBestHealthGlobeClusterPoint(7, 25);
-            else if (PowerGlobeExists(25))
-                _bestMovementPosition = GetBestPowerGlobeClusterPoint(7, 25);
-            else if (GetFarthestClusterUnit(7, 25, 4) != null && !CurrentTarget.IsElite && !CurrentTarget.IsTreasureGoblin)
-                _bestMovementPosition = GetFarthestClusterUnit(7, 25).Position;
-            else if (_bestMovementPosition == Vector3.Zero)
-                _bestMovementPosition = CurrentTarget.Position;
+        //    if (HealthGlobeExists(25) && Player.CurrentHealthPct < Core.Settings.Combat.Barbarian.HealthGlobeLevel)
+        //        _bestMovementPosition = GetBestHealthGlobeClusterPoint(7, 25);
+        //    else if (PowerGlobeExists(25))
+        //        _bestMovementPosition = GetBestPowerGlobeClusterPoint(7, 25);
+        //    else if (GetFarthestClusterUnit(7, 25, 4) != null && !CurrentTarget.IsElite && !CurrentTarget.IsTreasureGoblin)
+        //        _bestMovementPosition = GetFarthestClusterUnit(7, 25).Position;
+        //    else if (_bestMovementPosition == Vector3.Zero)
+        //        _bestMovementPosition = CurrentTarget.Position;
 
-            return _bestMovementPosition;
-        }
+        //    return _bestMovementPosition;
+        //}
 
         //internal static TrinityActor GetFarthestClusterUnit(float aoe_radius = 25f, float maxRange = 65f, int count = 1, bool useWeights = true, bool includeUnitsInAoe = true)
         //{
@@ -949,8 +949,7 @@ namespace Trinity.Components.Combat.Resources
             if (maxRange > 300f)
                 maxRange = 300f;
 
-            bool includeHealthGlobes = Core.Settings.Combat.Misc.CollectHealthGlobe &&
-                                       ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0) &&
+            bool includeHealthGlobes = ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0) &&
                                        (!PlayerMover.IsBlocked);
 
 
@@ -1217,16 +1216,16 @@ namespace Trinity.Components.Combat.Resources
             {
                 maxDistance = 20f;
                 minTargets = 3;
-                useTargetBasedZigZag = Core.Settings.Combat.Monk.TargetBasedZigZag;
+                useTargetBasedZigZag = true;
             }
             if (Core.Player.ActorClass == ActorClass.Barbarian)
             {
-                useTargetBasedZigZag = Core.Settings.Combat.Barbarian.TargetBasedZigZag;
+                useTargetBasedZigZag = true;
             }
 
             if (useTargetBasedZigZag && ObjectCache.Count(o => o.IsUnit) >= minTargets)
             {
-                bool attackInAoe = Core.Settings.Combat.Misc.KillMonstersInAoE;
+                bool attackInAoe = true;
                 var clusterPoint = GetBestClusterPoint(ringDistance, ringDistance, false, attackInAoe);
                 if (clusterPoint.Distance(Player.Position) >= minDistance)
                 {
@@ -1331,14 +1330,14 @@ namespace Trinity.Components.Combat.Resources
                     {
                         highestWeightFound = pointWeight;
 
-                        if (Core.Settings.Combat.Misc.UseNavMeshTargeting)
-                        {
+                        //if (Core.Settings.Combat.Misc.UseNavMeshTargeting)
+                        //{
                             bestLocation = new Vector3(zigZagPoint.X, zigZagPoint.Y, Core.DBGridProvider.GetHeight(zigZagPoint.ToVector2()));
-                        }
-                        else
-                        {
-                            bestLocation = new Vector3(zigZagPoint.X, zigZagPoint.Y, zigZagPoint.Z + 4);
-                        }
+                        //}
+                        //else
+                        //{
+                        //    bestLocation = new Vector3(zigZagPoint.X, zigZagPoint.Y, zigZagPoint.Z + 4);
+                        //}
                     }
                 }
             }
@@ -1768,17 +1767,7 @@ namespace Trinity.Components.Combat.Resources
             if (maxRange > 300f)
                 maxRange = 300f;
 
-            bool includeHealthGlobes = Core.Settings.Combat.Misc.CollectHealthGlobe &&
-                                       ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0) &&
-                                       (!PlayerMover.IsBlocked);
-            //switch (Core.Player.ActorClass)
-            //{
-            //    case ActorClass.Barbarian:
-            //        includeHealthGlobes = CombatBase.Hotbar.Contains(SNOPower.Barbarian_Whirlwind) &&
-            //                              Core.Settings.Combat.Misc.CollectHealthGlobe &&
-            //                              ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0);
-            //        break;
-            //}
+            bool includeHealthGlobes = false;
 
             Vector3 bestClusterPoint;
             var clusterUnits =
@@ -2143,6 +2132,13 @@ namespace Trinity.Components.Combat.Resources
         {
             var petLocations = FindPets(type, 80f, Core.Player.Position).Select(p => p.Position).ToList();
             return Core.Targets.Where(u => u.IsUnit && petLocations.Any(p => p.Distance(u.Position) <= rangeFromPet));
+        }
+
+        private static IEnumerable<TrinityPlayer> Players => Core.Actors.AllRActors.OfType<TrinityPlayer>();
+
+        public static bool AnyPlayer(Func<TrinityPlayer, bool> condition)
+        {
+            return Players.Any(condition);
         }
 
     }

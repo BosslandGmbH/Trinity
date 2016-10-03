@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading;
+using System.Web.Script.Serialization;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -25,13 +26,34 @@ using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Items.ItemList
 {
-    /// <summary>
-    /// Settings for ItemList looting
-    /// </summary>
     [DataContract(Namespace = "")]
-    public class ItemListSettings : ITrinitySetting<ItemListSettings>, INotifyPropertyChanged, ITrinitySettingEvents
+    public sealed class ItemListSettings : NotifyBase
     {
-        #region Fields
+        public ItemListSettings()
+        {
+            _displayItems = new FullyObservableCollection<LItem>();
+            _collection = new CollectionViewSource();
+            _itemTypes = new FullyObservableCollection<LItem>();
+
+            CacheReferenceItems();
+            DisplayItems = new FullyObservableCollection<LItem>(_TrinityItems, true);
+            BindEvents();
+            LoadCommands();
+            Grouping = GroupingType.None;
+            GroupsExpandedByDefault = false;
+            CreateView();
+            UpdateSelectedItems();
+            OnPropertyChanged("");
+        }
+
+        public void CreateView()
+        {
+            Collection = new CollectionViewSource();
+            Collection.Source = DisplayItems;
+            ChangeGrouping(Grouping);
+            ChangeSorting(SortingType.Name);
+            CreateItemTypes();
+        }
 
         private static List<LItem> _TrinityItems;
         private FullyObservableCollection<LItem> _displayItems;
@@ -50,55 +72,6 @@ namespace Trinity.Items.ItemList
         private FullyObservableCollection<LItem> _itemTypes;
         private int _selectedTabIndex;
         private bool _upgradeRules;
-
-        #endregion
-
-        #region Constructors
-
-        public ItemListSettings()
-        {
-            Logger.Log($"Itemlist ViewModel Created from Thread {Thread.CurrentThread.ManagedThreadId}");
-            _displayItems = new FullyObservableCollection<LItem>();
-            _collection = new CollectionViewSource();
-            _itemTypes = new FullyObservableCollection<LItem>();
-            CacheReferenceItems();
-            Grouping = GroupingType.None;
-            Reset();
-        }
-
-        /// <summary>
-        /// Setup work called on Construction / Reset
-        /// </summary>
-        private void Initialization()
-        {
-            CacheReferenceItems();
-            DisplayItems = new FullyObservableCollection<LItem>(_TrinityItems, true);
-            BindEvents();
-            LoadCommands();
-            GroupsExpandedByDefault = false;
-        }
-
-        /// <summary>
-        /// Selected settings is always available for loot rule processing etc via ItemList.Selected property.
-        /// But we only care about the UI Control being properly populated if the settings window is open.
-        /// </summary>
-        private void SettingsWindowOpened()
-        {
-            CreateView();
-            UpdateSelectedItems();
-        }
-
-        /// <summary>
-        /// Configure the CollectionViewSource
-        /// </summary>
-        public void CreateView()
-        {
-            Collection = new CollectionViewSource();
-            Collection.Source = DisplayItems;
-            ChangeGrouping(Grouping);
-            ChangeSorting(SortingType.Name);
-            CreateItemTypes();
-        }
 
         private void CreateItemTypes()
         {
@@ -149,9 +122,6 @@ namespace Trinity.Items.ItemList
             ItemTypes.Sort(itr => itr.Name);
         }
 
-        /// <summary>
-        /// Property used for saving/loading from settings file.
-        /// </summary>
         [DataMember(IsRequired = false)]
         public List<LItem> SelectedItemTypes
         {
@@ -273,45 +243,30 @@ namespace Trinity.Items.ItemList
             return ItemTypes.FirstOrDefault(sr => sr.TrinityItemType == itemType);
         }
 
-        /// <summary>
-        /// Convert Legendary items to SettingsItem objects only once to a static collection.
-        /// </summary>
         public static void CacheReferenceItems()
         {
             if (_TrinityItems == null)
                 _TrinityItems = Legendary.ToList().Where(i => !i.IsCrafted && i.Id != 0).Select(i => new LItem(i)).ToList();
         }
 
-        /// <summary>
-        /// Wire up for events
-        /// </summary>
         public void BindEvents()
         {
-            UILoader.OnSettingsWindowOpened -= SettingsWindowOpened;
-            UILoader.OnSettingsWindowOpened += SettingsWindowOpened;
+            //UILoader.OnSettingsWindowOpened -= SettingsWindowOpened;
+            //UILoader.OnSettingsWindowOpened += SettingsWindowOpened;
 
             DisplayItems.ChildElementPropertyChanged -= SyncSelectedItem;
             DisplayItems.ChildElementPropertyChanged += SyncSelectedItem;
 
-            TrinitySetting.OnUserRequestedReset -= OnUserRequestedReset;
-            TrinitySetting.OnUserRequestedReset += OnUserRequestedReset;
+            //TrinityStorage.OnUserRequestedReset -= OnUserRequestedReset;
+            //TrinityStorage.OnUserRequestedReset += OnUserRequestedReset;
         }
 
-        /// <summary>
-        /// Reset is called many times for many reasons, we need to only reset selected
-        /// when the user has clicked the reset button in the settings window
-        /// because running UpdateSelectedItems() 4-5 times during load is costly.
-        /// </summary>
         private void OnUserRequestedReset()
         {
             SelectedItems.Clear();
             CreateView();
             UpdateSelectedItems();
         }
-
-        #endregion
-
-        #region Enums
 
         public enum GroupingType
         {
@@ -340,25 +295,6 @@ namespace Trinity.Items.ItemList
             None,
             Import,
             Export
-        }
-
-        #endregion
-
-        #region Properties
-
-        [DataMember(IsRequired = false)]
-        [DefaultValue(false)]
-        public bool AlwaysStashAncients
-        {
-            get { return _alwaysStashAncients; }
-            set
-            {
-                if (_alwaysStashAncients != value)
-                {
-                    _alwaysStashAncients = value;
-                    OnPropertyChanged();
-                }
-            }
         }
 
         [DataMember(IsRequired = false)]
@@ -391,10 +327,7 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// The CollectionView runs on top of the DisplayItems and adds additional functionality for grouping, sorting and
-        /// filtering.
-        /// </summary>
+        [IgnoreDataMember]
         public CollectionViewSource Collection
         {
             get { return _collection; }
@@ -408,6 +341,7 @@ namespace Trinity.Items.ItemList
             }
         }
 
+        [IgnoreDataMember]
         public FullyObservableCollection<LItem> ItemTypes
         {
             get
@@ -440,9 +374,6 @@ namespace Trinity.Items.ItemList
             ItemType
         }
 
-        /// <summary>
-        /// Current grouping
-        /// </summary>
         [DataMember]
         public GroupingType Grouping
         {
@@ -458,9 +389,6 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// Filtering text
-        /// </summary>
         [IgnoreDataMember]
         public string FilterText
         {
@@ -477,19 +405,12 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// If the view is currently filtered
-        /// </summary>
         [IgnoreDataMember]
         public bool IsFiltered
         {
             get { return !string.IsNullOrEmpty(FilterText); }
         }
 
-        /// <summary>
-        /// Main collection for all items, underlies CollectionViewSource
-        /// This is only used for displaying the UI and user interaction.
-        /// </summary>
         [IgnoreDataMember]
         public FullyObservableCollection<LItem> DisplayItems
         {
@@ -504,11 +425,6 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// Contains the currently selected items; this is persisted to the settings file.
-        /// Code elsewhere in trinity (such as loot engien) can check items against it at any time.
-        /// LItems here have a minimal set of data; only Ids of the items and rules are are saved.
-        /// </summary>
         [DataMember(IsRequired = false)]
         public List<LItem> SelectedItems
         {
@@ -523,14 +439,8 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// Whether the groupings are automatically expanded
-        /// </summary>
         public bool GroupsExpandedByDefault { get; set; }
 
-        /// <summary>
-        /// Compressed/Encoded string of selected items and their rules
-        /// </summary>
         public string ExportCode
         {
             get { return _exportCode; }
@@ -544,73 +454,54 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// Message for Import/Export user information
-        /// </summary>
         public string ValidationMessage
         {
             get { return _validationMessage; }
-            set
-            {
-                if (_validationMessage != value)
-                {
-                    _validationMessage = value;
-                    OnPropertyChanged();
-                }
-            }
+            set { SetField(ref _validationMessage, value); }
         }
 
-        /// <summary>
-        /// Selected panel for the import/export modal
-        /// </summary>
+
         public ModalPage SelectedModalPage
         {
             get { return _selectedModalPage; }
-            set
-            {
-                if (_selectedModalPage != value)
-                {
-                    _selectedModalPage = value;
-                    OnPropertyChanged();
-                }
-            }
+            set { SetField(ref _selectedModalPage, value); }
         }
 
-        /// <summary>
-        /// Hides/Shows the modal
-        /// </summary>
         public bool IsModalVisible
         {
             get { return _isModalVisible; }
-            set
-            {
-                if (_isModalVisible != value)
-                {
-                    _isModalVisible = value;
-                    OnPropertyChanged();
-                }
-            }
+            set { SetField(ref _isModalVisible, value); }
         }
-
-        #endregion
-
-        #region Commands
-
+        
+        [IgnoreDataMember]
         public ICommand ResetFilterCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand ExportCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand ImportCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand LoadModalCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand CloseModalCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand EnableItemListCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand AdvancedOptionCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand SelectAllCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand SelectNoneCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand ClearRulesCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand AddAllSetsCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand AddAllLegendaryAffixCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand Add24ItemsCommand { get; set; }
-
+        [IgnoreDataMember]
         public ICommand LoadEquippedItemsCommand { get; set; }
+        [IgnoreDataMember]
         public ICommand LoadStashedItemsCommand { get; set; }
 
         public void LoadCommands()
@@ -858,7 +749,7 @@ namespace Trinity.Items.ItemList
             EnableItemListCommand = new RelayCommand(parameter =>
             {
                 Logger.Log("Setting ItemFilterMode to ItemList");
-                UILoader.DataContext.Loot.Pickup.ItemFilterMode = ItemFilterMode.ItemList;
+                UILoader.DataContext.Items.LegendaryMode = LegendaryMode.ItemList;
             });
 
             LoadModalCommand = new RelayCommand(parameter =>
@@ -927,22 +818,11 @@ namespace Trinity.Items.ItemList
             CreateView();
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Generates an export code of the current state
-        /// </summary>
         public string CreateExportCode()
         {
-            var settingsXml = TrinitySetting.GetSettingsXml(this);
-            return ExportHelper.Compress(settingsXml);
+            return ExportHelper.Compress(JsonSerializer.Serialize(this));
         }
 
-        /// <summary>
-        /// Decodes an export code and applies it to the current state.
-        /// </summary>
         public ItemListSettings ImportFromCode(string code)
         {
             if (string.IsNullOrEmpty(code) || string.IsNullOrWhiteSpace(code))
@@ -952,8 +832,18 @@ namespace Trinity.Items.ItemList
             }
             try
             {
+                ItemListSettings newSettings;
+
                 var decompressedXml = ExportHelper.Decompress(ExportCode);
-                var newSettings = TrinitySetting.GetSettingsInstance<ItemListSettings>(decompressedXml);
+
+                if (decompressedXml.StartsWith("<"))
+                {
+                    newSettings = TrinityStorage.GetSettingsInstance<ItemListSettings>(decompressedXml);
+                }
+                else
+                {
+                    newSettings = JsonSerializer.Deserialize(decompressedXml, this);
+                }
 
                 Grouping = GroupingType.None;
 
@@ -964,20 +854,15 @@ namespace Trinity.Items.ItemList
                 }
 
                 ItemTypes = newSettings.ItemTypes;
-
             }
             catch (Exception ex)
             {
-                ValidationMessage = string.Format("Error importing itemlist. {0} {1}", ex.Message, ex.InnerException);
+                ValidationMessage = $"Error importing itemlist. {ex.Message} {ex.InnerException}";
                 Logger.Log("Error importing itemlist. {0} {1}", ex.Message, ex.InnerException);
             }
             return this;
         }
 
-        /// <summary>
-        /// Change the grouping property
-        /// </summary>
-        /// <param name="groupingType"></param>
         internal void ChangeGrouping(GroupingType groupingType)
         {
             if (Collection == null)
@@ -1003,10 +888,6 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// Change the sorting order
-        /// </summary>
-        /// <param name="sortingType"></param>
         internal void ChangeSorting(SortingType sortingType)
         {
             if (Collection == null)
@@ -1019,10 +900,7 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// Change the search filter when the user stops typing
-        /// </summary>
-        /// <param name="property"></param>
+
         internal void ChangeFilterPending(string property)
         {
             if (_deferredAction == null)
@@ -1031,18 +909,12 @@ namespace Trinity.Items.ItemList
             _deferredAction.Defer(TimeSpan.FromMilliseconds(250));
         }
 
-        /// <summary>
-        /// Rebind the filter to get it to fire
-        /// </summary>
         private void ExecuteFilter()
         {
             Collection.Filter -= FilterHandler;
             Collection.Filter += FilterHandler;
         }
 
-        /// <summary>
-        /// Expression that is run against every item in the collection to filter
-        /// </summary>
         private void FilterHandler(object sender, FilterEventArgs e)
         {
             if (string.IsNullOrEmpty(FilterText))
@@ -1080,10 +952,6 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// Updates the selected collection whenever an object is set to selected.
-        /// </summary>
-        /// <param name="args"></param>
         public void SyncSelectedItem(ChildElementPropertyChangedEventArgs args)
         {
             var item = args.ChildElement as LItem;
@@ -1107,9 +975,6 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        /// <summary>
-        /// Updates the DisplayItems collection to match the Selected collection.
-        /// </summary>
         public void UpdateSelectedItems()
         {
             if (_selectedItems == null || _displayItems == null || _collection == null || _collection.View == null || _collection.View.SourceCollection == null)
@@ -1158,68 +1023,5 @@ namespace Trinity.Items.ItemList
             }
         }
 
-        #endregion
-
-        #region ITrinitySetting
-
-        public void Reset()
-        {
-            TrinitySetting.Reset(this);
-            Initialization();
-        }
-
-        public void CopyTo(ItemListSettings setting)
-        {
-            TrinitySetting.CopyTo(this, setting);
-            setting.SelectedItems = SelectedItems;
-        }
-
-        public ItemListSettings Clone()
-        {
-            return TrinitySetting.Clone(this);
-        }
-
-        [OnDeserializing]
-        internal void OnDeserializingMethod(StreamingContext context)
-        {
-
-        }
-
-        #endregion
-
-        #region INotifyPropertyChanged
-
-        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-            field = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-
-        public void OnSave()
-        {
-            Logger.Log("Saving ItemList Data");
-        }
-
-        public void OnLoaded()
-        {
-            Logger.Log("Loading ItemList Data");
-            CreateView();
-            UpdateSelectedItems();
-            OnPropertyChanged(nameof(Collection));
-        }
     }
 }

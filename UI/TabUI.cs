@@ -36,7 +36,7 @@ using Trinity.Framework.Actors;
 using Trinity.Framework.Actors.ActorTypes;
 using Logger = Trinity.Framework.Helpers.Logger;
 using MemoryHelper = Trinity.Framework.Helpers.MemoryHelper;
-using TrinityItemQuality = Trinity.Settings.Combat.TrinityItemQuality;
+using TrinityItemQuality = Trinity.Settings.TrinityItemQuality;
 using UIElement = Zeta.Game.Internals.UIElement;
 
 // For Debug Watch Panel Namespace.
@@ -107,7 +107,7 @@ namespace Trinity.UI
                         {
                             CreateButton("Sort Backpack", SortBackEventHandler),
                             CreateButton("Sort Stash", SortStashEventHandler),
-                            CreateButton("Clean Stash", CleanStashEventHandler),
+                            //CreateButton("Clean Stash", CleanStashEventHandler),
                             CreateButton("Convert to Magic", btnClick_ConvertToBlue),
                             CreateButton("Convert to Common", btnClick_ConvertToCommon),
                             CreateButton("Convert to Rare", btnClick_ConvertToRare),
@@ -120,7 +120,7 @@ namespace Trinity.UI
                             CreateButton("> Gizmo Attribtues", StartGizmoTestHandler),
                             CreateButton("> Unit Attribtues", StartUnitTestHandler),
                             CreateButton("> Player Attribtues", StartPlayerTestHandler),
-                            CreateButton("Dump Item Powers", StartDataTestHandler),
+                            //CreateButton("Dump Item Powers", StartDataTestHandler),
                             //CreateButton("> Buff Test", StartBuffTestHandler),
                             //CreateButton("> Stop Tests", StopTestHandler),
 
@@ -142,7 +142,7 @@ namespace Trinity.UI
 
                       
 
-                            CreateButton("Test", TestUIElement),
+                            //CreateButton("Test", TestUIElement),
 
                             CreateButton("Upgrade Rares", UpgradeBackpackRares),
                             //CreateButton("Extract Powers", ExtractBackpackPowers),
@@ -1124,12 +1124,6 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack VeiledCrystals to Magic Dust.");
 
-                if (Core.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
-                {
-                    Logger.LogError("Aborting - Dangerous to pull craftin items to backpack when MiscItemQuality setting is set above common");
-                    return;
-                }
-
                 var result = ConvertMaterials(new[] { InventoryItemType.VeiledCrystal, InventoryItemType.ReusableParts }, InventoryItemType.ArcaneDust);
 
                 Logger.Log("Finished Result={0}", result);
@@ -1198,12 +1192,6 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack VeiledCrystals to ReusableParts");
 
-                if (Core.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
-                {
-                    Logger.LogError("Aborting - Too dangerous to put crafting items into backpack when MiscItemQuality setting is set above common");
-                    return;
-                }
-
                 var result = ConvertMaterials(new[] { InventoryItemType.ArcaneDust, InventoryItemType.VeiledCrystal }, InventoryItemType.ReusableParts);
 
                 Logger.Log("Finished Result={0}", result);
@@ -1220,12 +1208,6 @@ namespace Trinity.UI
             {
                 Logger.Log("Starting Conversion of Backpack ReusableParts/ArcaneDust to VeiledCrystals");
 
-                if (Core.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
-                {
-                    Logger.LogError("Aborting - Too dangerous to put crafting items into backpack when MiscItemQuality setting is set above common");
-                    return;
-                }
-
                 var result = ConvertMaterials(new[] { InventoryItemType.ArcaneDust, InventoryItemType.ReusableParts }, InventoryItemType.VeiledCrystal);
 
                 Logger.Log("Finished Result={0}", result);
@@ -1241,12 +1223,6 @@ namespace Trinity.UI
             try
             {
                 Logger.Log("Starting Conversion of Backpack VeiledCrystals to ArcaneDust");
-
-                if (Core.Settings.Loot.Pickup.MiscItemQuality > TrinityItemQuality.Common)
-                {
-                    Logger.LogError("Aborting - Too dangerous to put crafting items into backpack when MiscItemQuality setting is set above common");
-                    return;
-                }
 
                 var from = InventoryItemType.VeiledCrystal;
                 var to = InventoryItemType.ArcaneDust;

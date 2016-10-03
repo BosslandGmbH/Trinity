@@ -27,7 +27,9 @@ namespace Trinity.Routines.Monk
         public string Description => "Following several set reworks and the addition of a handful synergistic items over the course of the Patch 2.4 lifetime, Lashing Tail Kick Lashing Tail Kick finally comes into form for Patch 2.4.2. This is a high speed, visceral melee spec.";
         public string Author => "xzjv";
         public string Version => "0.1";
-        public string Url => "http://www.icy-veins.com/d3/monk-lashing-tail-kick-build-with-the-sunwuko-set-patch-2-4-2-season-7";
+
+        public string Url => "http://www.diablofans.com/builds/82587-sunwuko-ltk-solo-gr90-now-with-less-stack";
+        //public string Url => "http://www.icy-veins.com/d3/monk-lashing-tail-kick-build-with-the-sunwuko-set-patch-2-4-2-season-7";
 
         public Build BuildRequirements => new Build
         {
@@ -93,11 +95,13 @@ namespace Trinity.Routines.Monk
             // Speed farming variation is with in-geom and vengeful wind in cube.       
             // Sweeping armada for LTK == more monsters hit == more stacks.
 
+            //http://www.diablofans.com/builds/82587-sunwuko-ltk-solo-gr90-now-with-less-stack
+
             // 853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: ItemPassive_Unique_Ring_903_x1: 402411 ] i:1 f:0 Value=1 
             // 865: PowerBuff2VisualEffectNone (-3231) [ PowerSnoId: ItemPassive_Unique_Ring_922_x1: 402461 ] i:0 f:0 Value=0 
             // 588: BuffIconStartTick2(-3508)[PowerSnoId: ItemPassive_Unique_Gem_018_x1: 428348] i: 79817 f: 0 Value = 79817
             // 863: PowerBuff1VisualEffectD (-3233) [ PowerSnoId: Monk_LashingTailKick: 111676 ] i:1 f:0 Value=1 
-            
+
             TrinityPower power;
 
             //FireballTracker.Update();
@@ -144,7 +148,6 @@ namespace Trinity.Routines.Monk
                     }
                 }
             }
-
             return null;
         }
 
@@ -189,6 +192,8 @@ namespace Trinity.Routines.Monk
             return Player.PrimaryResourcePct < 0.2f;
         }
 
+        private int MinSweepingWindStacks => Legendary.VengefulWind.IsEquipped ? 3 : 1;
+
         protected override bool ShouldLashingTailKick(out TrinityActor target)
         {
             target = null;
@@ -201,8 +206,8 @@ namespace Trinity.Routines.Monk
 
             if (Skills.Monk.LashingTailKick.TimeSinceUse < 500)
                 return false;
-
-            if (Skills.Monk.SweepingWind.BuffStacks <= 3)
+        
+            if (Skills.Monk.SweepingWind.BuffStacks <= MinSweepingWindStacks)
                 return false;
 
             target = TargetUtil.GetBestClusterUnit(50f);

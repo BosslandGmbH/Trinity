@@ -6,7 +6,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Reference;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Bot.Settings;
 using Zeta.Game.Internals.Actors;

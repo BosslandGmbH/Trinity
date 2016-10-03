@@ -32,5 +32,8 @@ namespace Trinity.Settings.Mock
         }
 
         public static ItemListMockData ItemList { get; set; }
+
     }
+
+
 }

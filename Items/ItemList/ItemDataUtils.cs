@@ -198,7 +198,7 @@ namespace Trinity.Items.ItemList
 
             var statType = GetMainStatType(item);
             var actorClasses = new List<ActorClass>();
-            var itemType = TrinityItemManager.DetermineItemType(item);
+            var itemType = TypeConversions.DetermineItemType(item.InternalName, item.ItemType);
 
             switch (statType)
             {

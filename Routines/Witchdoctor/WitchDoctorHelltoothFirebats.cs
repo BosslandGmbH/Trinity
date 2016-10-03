@@ -46,7 +46,7 @@ namespace Trinity.Routines.Witchdoctor
         public override Func<bool> ShouldIgnoreKiting => IgnoreCondition;
         public override Func<bool> ShouldIgnoreAvoidance => IgnoreCondition;
         public override Func<bool> ShouldIgnorePackSize => () => Player.IsChannelling;
-        public override Func<bool> ShouldIgnoreNonUnits => () => Player.IsChannelling && Player.CurrentHealthPct > 0.4;
+        public override Func<bool> ShouldIgnoreNonUnits => () => Player.IsChannelling && Player.CurrentHealthPct > 0.35;
 
         #endregion
 
@@ -57,7 +57,7 @@ namespace Trinity.Routines.Witchdoctor
             if (isFirebatsSelected && TargetUtil.AnyMobsInRange(FireBatsRange) && Player.CurrentHealthPct > 0.5f && !isInAvoidance)
                 return true;
 
-            return Player.IsChannelling && Player.CurrentHealthPct > 0.4 && !Core.Avoidance.InCriticalAvoidance(Player.Position);
+            return Player.IsChannelling && Player.CurrentHealthPct > 0.35 && !Core.Avoidance.InCriticalAvoidance(Player.Position);
         }
 
         public TrinityPower GetOffensivePower()
@@ -107,16 +107,14 @@ namespace Trinity.Routines.Witchdoctor
                 var harvestBuffCooldown = Core.Cooldowns.GetBuffCooldown(SNOPower.Witchdoctor_SoulHarvest);
                 var harvestPossibleStackGain = 10 - harvestStacks;
                 var harvestUnitsInRange = allUnits.Count(u => u.Distance < 12f);
-
-                var interruptForHarvest = Skills.WitchDoctor.SoulHarvest.CanCast() && harvestPossibleStackGain <= harvestUnitsInRange && harvestBuffCooldown?.Remaining.TotalSeconds < 5;
+                var interruptForHarvest = Skills.WitchDoctor.SoulHarvest.CanCast() && harvestPossibleStackGain >= harvestUnitsInRange && harvestBuffCooldown?.Remaining.TotalSeconds < 1;
                 var interruptForHaunt = percentTargetsWithHaunt < 0.2f || isEliteWithoutHaunt;
                 var interruptForLocust = percentTargetsWithLocust < 0.2f || isElitewithoutLocust && Player.PrimaryResource > 300 && Skills.WitchDoctor.LocustSwarm.CanCast();
-                var interruptForHealth = Player.CurrentHealthPct < 0.4;
 
                 // continue channelling firebats?
                 if (Player.IsChannelling)
                 {
-                    if (!interruptForHealth && !interruptForHaunt && !interruptForLocust && !interruptForHarvest)
+                    if (!interruptForHaunt && !interruptForLocust && !interruptForHarvest)
                     {
                         Logger.Log(LogCategory.Routine, "Continuation of Firebats.");
                         return new TrinityPower(SNOPower.Witchdoctor_Firebats, 30f, Player.Position, 0, 0);
@@ -133,7 +131,7 @@ namespace Trinity.Routines.Witchdoctor
                 }
 
                 // Emergency health situation
-                if (Player.CurrentHealthPct < 0.4)
+                if (Player.CurrentHealthPct < 0.35)
                 {
                     if (Skills.WitchDoctor.SpiritWalk.CanCast())
                     {
@@ -205,7 +203,7 @@ namespace Trinity.Routines.Witchdoctor
                 var distance = bestFirebatsPosition.Distance(Player.Position);
 
                 // Walk into cluster or buffed location.
-                if (distance > 3f && !PlayerMover.IsBlocked)
+                if (distance > 10f && !PlayerMover.IsBlocked)
                 {
                     if (distance > 20f && Skills.WitchDoctor.SpiritWalk.CanCast())
                     {

@@ -30,27 +30,18 @@
                 </TabItem>
                 <TabItem Header="Combat" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="Routine.xaml"/>
-                </TabItem>                
-                <!--<TabItem Header="General" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
-                    <Border Tag="ConfigCombat.xaml"/>
-                </TabItem>
-                <TabItem Header="My Build" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
-                    <Border Tag="Routine.xaml"/>
-                </TabItem>-->                
+                </TabItem>                            
                 <TabItem Header="Items" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
-                    <Border Tag="ConfigItems.xaml"/>
+                    <Border Tag="ItemsTabs.xaml"/>
                 </TabItem>
                 <TabItem Header="Avoidance" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="Avoidance.xaml"/>
                 </TabItem>
-                <!--<TabItem Header="Paragon" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
-                    <Border Tag="Paragon.xaml"/>
-                </TabItem>-->
                 <TabItem Header="Profiles" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="Adventurer.xaml"/>
                 </TabItem>
                 <TabItem Header="Advanced" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
-                    <Border Tag="ConfigAdvanced.xaml"/>
+                    <Border Tag="Advanced.xaml"/>
                 </TabItem>
             </TabControl>
         </Border>

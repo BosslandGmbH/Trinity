@@ -342,8 +342,7 @@ namespace Trinity.Framework.Modules
             if (CurrentHealthPct > 0)
                 IsGhosted = _me.CommonData.GetAttribute<int>(ActorAttributeType.Ghosted) > 0;
 
-            if (Core.Settings.Combat.Misc.UseNavMeshTargeting)
-                SceneId = _me.SceneId;
+            SceneId = _me.SceneId;
 
             // Step 13 is used when the player needs to go "Inspect the cursed shrine"
             // Step 1 is event in progress, kill stuff

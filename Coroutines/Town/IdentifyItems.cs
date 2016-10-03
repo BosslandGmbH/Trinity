@@ -24,7 +24,7 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (Core.Settings.Loot.TownRun.KeepLegendaryUnid)
+            if (Core.Settings.Items.KeepLegendaryUnid)
             {
                 Logger.LogVerbose("[IdentifyItems] Town run setting 'Keep Legendary Unidentified' - Skipping ID");
                 return false;

@@ -6,6 +6,7 @@ using Trinity.Framework.Avoidance.Settings;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;

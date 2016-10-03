@@ -8,9 +8,11 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Items;
 using Trinity.Items.ItemList;
+using Trinity.Items.Sorting;
 using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Helpers
@@ -463,7 +465,7 @@ namespace Trinity.Framework.Helpers
             {
                 var sno = values[i];
                 var name = names[i];
-                var type = TrinityItemManager.DetermineItemType(name, ItemType.Unknown);
+                var type = TypeConversions.DetermineItemType(name, ItemType.Unknown);
                 if (type != TrinityItemType.Unknown || GameData.GoldSNO.Contains(sno) ||
                     GameData.ForceToItemOverrideIds.Contains(sno) || GameData.HealthGlobeSNO.Contains(sno) || Legendary.ItemIds.Contains(sno))
                 {
@@ -528,6 +530,181 @@ namespace Trinity.Framework.Helpers
             Logger.Log("Finished ItemList Backpack Test");
 
             Logger.Log("Finished - Stash {0} / {1}", toBeStashed, total);
+        }
+
+        public enum DumpItemLocation
+        {
+            All,
+            Equipped,
+            Backpack,
+            Ground,
+            Stash,
+            Merchant,
+        }
+
+        public static void DumpQuickItems()
+        {
+            List<ACDItem> itemList;
+            try
+            {
+                itemList = ZetaDia.Actors.GetActorsOfType<ACDItem>(true).OrderBy(i => i.InventorySlot).ThenBy(i => i.Name).ToList();
+            }
+            catch
+            {
+                Logger.LogError("QuickDump: Item Errors Detected!");
+                itemList = ZetaDia.Actors.GetActorsOfType<ACDItem>(true).ToList();
+            }
+            StringBuilder sbTopList = new StringBuilder();
+            foreach (var item in itemList)
+            {
+                try
+                {
+                    sbTopList.AppendFormat("\nName={0} InternalName={1} ActorSnoId={2} DynamicID={3} InventorySlot={4}",
+                        item.Name, item.InternalName, item.ActorSnoId, item.AnnId, item.InventorySlot);
+                }
+                catch (Exception)
+                {
+                    sbTopList.AppendFormat("Exception reading data from ACDItem ACDId={0}", item.ACDId);
+                }
+            }
+            Logger.Log(sbTopList.ToString());
+        }
+
+
+        public static void DumpItems(DumpItemLocation location)
+        {
+            using (ZetaDia.Memory.SaveCacheState())
+            {
+                ZetaDia.Memory.TemporaryCacheState(false);
+
+                List<ItemWrapper> itemList = new List<ItemWrapper>();
+
+                switch (location)
+                {
+                    case DumpItemLocation.All:
+                        itemList = ZetaDia.Actors.GetActorsOfType<ACDItem>(true).Select(i => new ItemWrapper(i)).OrderBy(i => i.InventorySlot).ThenBy(i => i.Name).ToList();
+                        break;
+                    case DumpItemLocation.Backpack:
+                        itemList = ZetaDia.Me.Inventory.Backpack.Select(i => new ItemWrapper(i)).ToList();
+                        break;
+                    case DumpItemLocation.Merchant:
+                        itemList = ZetaDia.Me.Inventory.MerchantItems.Select(i => new ItemWrapper(i)).ToList();
+                        break;
+                    case DumpItemLocation.Ground:
+                        itemList = ZetaDia.Actors.GetActorsOfType<DiaItem>(true).Select(i => new ItemWrapper(i.CommonData)).ToList();
+                        break;
+                    case DumpItemLocation.Equipped:
+                        itemList = ZetaDia.Me.Inventory.Equipped.Select(i => new ItemWrapper(i)).ToList();
+                        break;
+                    case DumpItemLocation.Stash:
+                        if (UIElements.StashWindow.IsVisible)
+                        {
+                            itemList = ZetaDia.Me.Inventory.StashItems.Select(i => new ItemWrapper(i)).ToList();
+                        }
+                        else
+                        {
+                            Logger.Log("Stash window not open!");
+                        }
+                        break;
+                }
+
+                itemList.RemoveAll(i => i == null);
+                //itemList.RemoveAll(i => !i.IsValid);
+
+                foreach (var item in itemList.OrderBy(i => i.InventorySlot).ThenBy(i => i.Name))
+                {
+                    try
+                    {
+                        string itemName = String.Format("\nName={0} InternalName={1} ActorSnoId={2} DynamicID={3} InventorySlot={4}",
+                        item.Name, item.InternalName, item.ActorSnoId, item.DynamicId, item.InventorySlot);
+
+                        Logger.Log(itemName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log("Exception reading Basic Item Info\n{0}", ex.ToString());
+                    }
+                    try
+                    {
+                        foreach (object val in Enum.GetValues(typeof(ActorAttributeType)))
+                        {
+                            int iVal = item.Item.GetAttribute<int>((ActorAttributeType)val);
+                            float fVal = item.Item.GetAttribute<float>((ActorAttributeType)val);
+
+                            if (iVal > 0 || fVal > 0)
+                                Logger.Log("Attribute: {0}, iVal: {1}, fVal: {2}", val, iVal, (fVal != fVal) ? "" : fVal.ToString());
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log("Exception reading attributes for {0}\n{1}", item.Name, ex.ToString());
+                    }
+
+                    try
+                    {
+                        foreach (var stat in Enum.GetValues(typeof(ItemStats.Stat)).Cast<ItemStats.Stat>())
+                        {
+                            float fStatVal = item.Stats.GetStat<float>(stat);
+                            int iStatVal = item.Stats.GetStat<int>(stat);
+                            if (fStatVal > 0 || iStatVal > 0)
+                                Logger.Log("Stat {0}={1}f ({2})", stat, fStatVal, iStatVal);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log("Exception reading Item Stats\n{0}", ex.ToString());
+                    }
+
+                    try
+                    {
+                        Logger.Log("Link Color ItemQuality=" + item.Item.GetItemQuality());
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log("Exception reading Item Link\n{0}", ex.ToString());
+                    }
+
+                    try
+                    {
+                        PrintObjectProperties(item);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log("Exception reading Item PropertyLoader\n{0}", ex.ToString());
+                    }
+
+                }
+            }
+
+        }
+
+        private static void PrintObjectProperties<T>(T item)
+        {
+            PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            foreach (PropertyInfo property in properties.ToList().OrderBy(p => p.Name))
+            {
+                try
+                {
+                    object val = property.GetValue(item, null);
+                    if (val != null)
+                    {
+                        Logger.Log(typeof(T).Name + "." + property.Name + "=" + val);
+
+                        // Special cases!
+                        if (property.Name == "ValidInventorySlots")
+                        {
+                            foreach (var slot in ((InventorySlot[])val))
+                            {
+                                Logger.Log(slot.ToString());
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    Logger.Log("Exception reading {0} from object", property.Name);
+                }
+            }
         }
     }
 }

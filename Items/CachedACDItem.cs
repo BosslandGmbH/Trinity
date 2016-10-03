@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Components.Combat;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Game;
@@ -210,12 +211,12 @@ namespace Trinity.Items
                     InventoryColumn = item.InventoryColumn,
                     ItemLink = item.ItemLink,
                     GameBalanceId = item.GameBalanceId,
-                    TrinityItemType = TrinityItemManager.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType),
+                    TrinityItemType = TypeConversions.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType),
                     IsAncient = item.GetAttribute<int>(ActorAttributeType.AncientRank) > 0,
                     InventorySlot = item.InventorySlot,
                 };
 
-                TrinityItemBaseType trinityItemBaseType = TrinityItemManager.DetermineBaseType(TrinityItemManager.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType));
+                TrinityItemBaseType trinityItemBaseType = TypeConversions.DetermineBaseType(TypeConversions.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType));
                 cItem.TrinityItemBaseType = trinityItemBaseType;
                 cItem.IsEquipment = GetIsEquipment(trinityItemBaseType);
                 cItem.IsSalvageable = GetIsSalvageable(cItem);

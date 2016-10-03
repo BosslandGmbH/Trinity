@@ -3,7 +3,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:behaviors="clr-namespace:Trinity.UI.UIComponents.Behaviors"
-             xmlns:uiComponents="clr-namespace:Trinity.UI.UIComponents"
+             xmlns:ui="clr-namespace:Trinity.UI.UIComponents"
              xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
              xmlns:radarCanvas="clr-namespace:Trinity.UI.Visualizer.RadarCanvas"
              xmlns:controls="clr-namespace:Trinity.UI.UIComponents.Controls"
@@ -14,7 +14,7 @@
              behaviors:SizeObserver.ObservedWidth="{Binding WindowWidth, Mode=OneWayToSource}"
              behaviors:SizeObserver.ObservedHeight="{Binding WindowHeight, Mode=OneWayToSource}">
     <UserControl.Resources>
-        <uiComponents:BindingProxy x:Key="Proxy" Data="{Binding}" />
+        <ui:BindingProxy x:Key="Proxy" Data="{Binding}" />
         <!--<Style TargetType="TabControl" />
         <Style TargetType="TabItem" />
         <Style TargetType="TabPanel" />

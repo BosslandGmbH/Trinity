@@ -13,9 +13,6 @@ namespace Trinity.Framework.Helpers
     [KnownType("DerivedTypes")]
     public class NotifyBase : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Called by KnownType Attribute, avoids having to specify all known types for DataContract in derived types.
-        /// </summary>
         private static Type[] DerivedTypes()
         {
             return GetDerivedTypes(typeof(NotifyBase), Assembly.GetExecutingAssembly()).ToArray();
@@ -40,14 +37,10 @@ namespace Trinity.Framework.Helpers
             return true;
         }
 
-        public static IEnumerable<Type> GetDerivedTypes(Type baseType, Assembly assembly)
-        {
-            var types = from t in assembly.GetTypes()
-                        where t.IsSubclassOf(baseType)
-                        select t;
-
-            return types;
-        }
+        public static IEnumerable<Type> GetDerivedTypes(Type baseType, Assembly assembly) => 
+            from t in assembly.GetTypes()
+            where t.IsSubclassOf(baseType)
+            select t;
 
         public virtual void LoadDefaults()
         {

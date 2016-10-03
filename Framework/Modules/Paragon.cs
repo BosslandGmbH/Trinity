@@ -76,7 +76,7 @@ namespace Trinity.Framework.Modules
             return paragonCoreTab != null && paragonCoreTab.IsVisible;
         }
 
-        private static void ApplyPoints(ParagonSetting.ParagonCollection source, int pointsAvailable)
+        private static void ApplyPoints(ParagonSettings.ParagonCollection source, int pointsAvailable)
         {
             var pointsSpent = 0;
 

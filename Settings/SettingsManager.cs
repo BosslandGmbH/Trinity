@@ -22,41 +22,37 @@ namespace Trinity.Settings
 {
     public class SettingsManager
     {
+        private static List<IDynamicSetting> _settings = new List<IDynamicSetting>();
+
+        public static void Add(IDynamicSetting dynamicSettings)
+        {
+            _settings.Add(dynamicSettings);
+        }
+
+        public static void AddRange(IEnumerable<IDynamicSetting> dynamicSettings)
+        {
+            _settings.AddRange(dynamicSettings);
+        }
+
         public static IEnumerable<IDynamicSetting> GetDynamicSettings()
         {
             var result = new List<IDynamicSetting>();
             result.AddRange(RoutineManager.Instance.DynamicSettings);
             result.AddRange(ModuleManager.DynamicSettings);
+            result.AddRange(TrinitySettings.Settings.DynamicSettings);
+            result.AddRange(_settings);
             return result;
         }
 
         public static string SaveDirectory => Path.Combine(FileManager.SettingsPath, "Saved");
 
-        public static TrinitySetting GetCurrentSettingsForExport(IEnumerable<SettingsSelectionItem> sections = null)
+        public static TrinityStorage GetCurrentSettingsForExport(IEnumerable<SettingsSelectionItem> sections = null)
         {
-            //if (TrinityPluginSettings.Settings == null)
-            //    return null;
-
-            //var settings = new TrinitySetting();
-            //Core.Settings.CopyTo(settings);
-            //settings.Notification = null;
-
-            //if (sections != null)
-            //{
-            //    RemoveSections(settings, sections);
-            //}
-            //return settings;
-
-            return new TrinitySetting();
+            return new TrinityStorage();
         }
 
         public static string GetCurrrentSettingsExportCode(IEnumerable<SettingsSelectionItem> sections = null)
         {
-            //var settings = GetCurrentSettingsForExport(sections);
-            //var xml = TrinitySetting.GetSettingsXml(settings);
-            //var code = ExportHelper.Compress(xml);;
-            //return code;
-
             return string.Empty;
         }
 
@@ -76,8 +72,8 @@ namespace Trinity.Settings
                         return;
 
                     Logger.LogNormal($"Saving file to {filePath}");
-                    var exportSettings = new TrinitySetting();
-                    UILoader.DataContext.ViewModel.CopyTo(exportSettings);
+                    var exportSettings = new TrinityStorage();
+                    UILoader.DataContext.ViewStorage.CopyTo(exportSettings);
 
                     UpdateSections("Exporting", exportSettings, selectionViewModel);
                     exportSettings.SaveToFile(filePath);
@@ -109,7 +105,7 @@ namespace Trinity.Settings
                 // Load settings into Settings window view model only
                 // User still has to click save for it to actually be applied.    
 
-                var settings = TrinitySetting.GetSettingsFromFile(filePath);
+                var settings = TrinityStorage.GetSettingsFromFile(filePath);
                 var importedSections = GetSections(settings);
                 SettingsSelectionViewModel selectionViewModel;
 
@@ -250,33 +246,12 @@ namespace Trinity.Settings
         /// <summary>
         /// Look through a TrinitySetting object and return a list of the sections that are populated with data.
         /// </summary>
-        public static HashSet<SettingsSelectionItem> GetSections(TrinitySetting settings)
+        public static HashSet<SettingsSelectionItem> GetSections(TrinityStorage storages)
         {
             var result = new HashSet<SettingsSelectionItem>();
-            if (settings.Combat != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.Combat));
-            if (settings.Loot?.ItemList != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.ItemList));
-            if (settings.Gambling != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.Gambling));
-            if (settings.KanaisCube != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.KanaisCube));
-            if (settings.Loot?.TownRun != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.TownRun));
-            if (settings.Paragon != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.Paragon));
-            if (settings.Advanced != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.Advanced));
-            //if (settings.Avoidance != null)
-            //    result.Add(new SettingsSelectionItem(SettingsSection.Avoidance));
-            if (settings.Loot?.Pickup != null)
-                 result.Add(new SettingsSelectionItem(SettingsSection.ItemPickup));
-            if (settings.Loot?.ItemRules != null)
-                result.Add(new SettingsSelectionItem(SettingsSection.ItemRules));
-
-            if (settings.Dynamic?.Settings != null)
+            if (storages.Dynamic?.Settings != null)
             {
-                foreach (var item in settings.Dynamic.Settings)
+                foreach (var item in storages.Dynamic.Settings)
                 {
                     result.Add(new SettingsSelectionItem(SettingsSection.Dynamic, item.Name));
                 }
@@ -286,13 +261,13 @@ namespace Trinity.Settings
             return result;
         }
 
-        public static void RemoveSections(TrinitySetting settings, IEnumerable<SettingsSelectionItem> sections)
+        public static void RemoveSections(TrinityStorage storages, IEnumerable<SettingsSelectionItem> sections)
         {
             if (sections != null)
             {
                 foreach (var section in sections)
                 {
-                    ClearSection(settings, section);
+                    ClearSection(storages, section);
                 }
             }
         }
@@ -300,7 +275,7 @@ namespace Trinity.Settings
         /// <summary>
         /// Clear the specified parts of a TrinitySetting object so that they have no data.
         /// </summary>
-        public static void UpdateSections(string actionDescripter, TrinitySetting settings, SettingsSelectionViewModel selectionsViewModel)
+        public static void UpdateSections(string actionDescripter, TrinityStorage storages, SettingsSelectionViewModel selectionsViewModel)
         {
             foreach (var sectionEntry in selectionsViewModel.Selections)
             {
@@ -311,53 +286,19 @@ namespace Trinity.Settings
 
                     continue;
                 }
-                ClearSection(settings, sectionEntry);
+                ClearSection(storages, sectionEntry);
             }
         }
 
-        private static void ClearSection(TrinitySetting settings, SettingsSelectionItem sectionDefinition)
+        private static void ClearSection(TrinityStorage storages, SettingsSelectionItem sectionDefinition)
         {
             switch (sectionDefinition.Section)
             {
-                case SettingsSection.Combat:
-                    settings.Combat = null;
-                    break;
-                case SettingsSection.ItemList:
-                    if (settings.Loot != null)
-                        settings.Loot.ItemList = null;
-                    break;
-                case SettingsSection.Gambling:
-                    settings.Gambling = null;
-                    break;
-                case SettingsSection.KanaisCube:
-                    settings.KanaisCube = null;
-                    break;
-                case SettingsSection.ItemPickup:
-                    if (settings.Loot != null)
-                        settings.Loot.Pickup = null;
-                    break;
-                case SettingsSection.TownRun:
-                    if (settings.Loot != null)
-                        settings.Loot.TownRun = null;
-                    break;
-                case SettingsSection.Paragon:
-                    settings.Paragon = null;
-                    break;
-                case SettingsSection.Advanced:
-                    settings.Advanced = null;
-                    break;
-                //case SettingsSection.Avoidance:
-                //    settings.Avoidance = null;
-                //    break;
-                case SettingsSection.ItemRules:
-                    if (settings.Loot != null)
-                        settings.Loot.ItemRules = null;
-                    break;
                 case SettingsSection.Dynamic:
-                    var foundItem = settings.Dynamic?.Settings.FirstOrDefault(s => s.Name == sectionDefinition.SectionName);
+                    var foundItem = storages.Dynamic?.Settings.FirstOrDefault(s => s.Name == sectionDefinition.SectionName);
                     if (foundItem != null)
                     {
-                        settings.Dynamic.Settings.Remove(foundItem);
+                        storages.Dynamic.Settings.Remove(foundItem);
                     }
                     break;
             }
@@ -377,7 +318,5 @@ namespace Trinity.Settings
                 }
             }
         }
-
-
     }
 }

@@ -108,12 +108,8 @@ namespace Trinity.Framework.Modules
         public bool Exists => TargetUtil.ClusterExists(Radius, Size);
 
         public new void Update()
-        {            
-            Position = Exists ?
-                TargetUtil.GetClusterPoint(Radius, Size) :
-                TargetUtil.GetBestClusterPoint(Radius);
-                TargetUtil.GetBestRiftValueClusterPoint(Radius, Core.Settings.Combat.Misc.RiftValueAlwaysKillUnitsAbove);
-
+        {
+            Position = Exists ? TargetUtil.GetClusterPoint(Radius, Size) : TargetUtil.GetBestClusterPoint(Radius);
             NearMe = false;
             Range = Radius;
             base.Update();

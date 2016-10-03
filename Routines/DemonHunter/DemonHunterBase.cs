@@ -10,7 +10,7 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -178,9 +178,6 @@ namespace Trinity.Routines.DemonHunter
             // Prevent trying to vault up walls; spider man he is not.
             if (Math.Abs(destination.Z - Core.Player.Position.Z) > 5)
                 return false;
-
-            if (CanAcquireFreeVaultBuff && Core.Player.PrimaryResource > 20)
-                Skills.DemonHunter.Impale.Cast(MathEx.GetPointAt(Core.Player.Position, 5f, Core.Player.Rotation));
 
             return true;
         }
@@ -707,9 +704,6 @@ namespace Trinity.Routines.DemonHunter
             // Prevent trying to vault up walls; spider man he is not.
             if (Math.Abs(destination.Z - Core.Player.Position.Z) > 5)
                 return false;
-
-            if (CanAcquireFreeVaultBuff && Core.Player.PrimaryResource > 20)
-                Skills.DemonHunter.Impale.Cast(MathEx.GetPointAt(Core.Player.Position, 5f, Core.Player.Rotation));
 
             return true;
         }

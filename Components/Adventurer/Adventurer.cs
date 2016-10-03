@@ -8,6 +8,7 @@ using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.UI;
 using Trinity.Framework.Objects;
+using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
@@ -15,8 +16,16 @@ using JsonSerializer = Trinity.Components.Adventurer.Util.JsonSerializer;
 
 namespace Trinity.Components.Adventurer
 {
-    public class Adventurer : Component, IDynamicSetting
+    public sealed class Adventurer : Component, IDynamicSetting
     {
+        private static readonly Lazy<Adventurer> _instance = new Lazy<Adventurer>(() => new Adventurer());
+        public static Adventurer Instance => _instance.Value;
+
+        private Adventurer()
+        {
+    
+        }
+
         protected override int UpdateIntervalMs => 50;
 
         protected override void OnPulse()

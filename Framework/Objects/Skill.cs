@@ -306,106 +306,6 @@ namespace Trinity.Framework.Objects
         public int Charges => Core.Hotbar.GetSkillCharges(SNOPower);
 
         /// <summary>
-        /// This skill as TrinityPower
-        /// </summary>
-        public TrinityPower ToPower(float minimumRange, int AcdId)
-        {
-            return new TrinityPower(SNOPower, minimumRange, AcdId);
-        }
-
-
-        /// <summary>
-        /// This skill as TrinityPower
-        /// </summary>
-        public TrinityPower ToPower(float minimumRange, Vector3 targetPosition)
-        {
-            return new TrinityPower(SNOPower, minimumRange, targetPosition);
-        }
-
-        /// <summary>
-        /// This skill as TrinityPower
-        /// </summary>
-        public TrinityPower ToPower(float minimumRange, Vector3 targetPosition, int waitTicksBeforeUse, int waitTicksAfterUse)
-        {
-            return new TrinityPower(SNOPower, minimumRange, targetPosition, waitTicksBeforeUse, waitTicksAfterUse);
-        }
-
-        /// <summary>
-        /// This skill as TrinityPower
-        /// </summary>
-        public TrinityPower ToPower(float minimumRange, Vector3 targetPosition, int AcdId, int waitTicksBeforeUse, int waitTicksAfterUse)
-        {
-            return new TrinityPower(SNOPower, minimumRange, targetPosition, AcdId, waitTicksBeforeUse, waitTicksAfterUse);
-        }
-
-        /// <summary>
-        /// This skill as TrinityPower
-        /// </summary>
-        public TrinityPower ToPower(int waitTicksBeforeUse, int waitTicksAfterUse)
-        {
-            return new TrinityPower(SNOPower, waitTicksBeforeUse, waitTicksAfterUse);
-        }
-
-        /// <summary>
-        /// This skill as TrinityPower
-        /// </summary>
-        public TrinityPower ToPower(float minimumRange)
-        {
-            return new TrinityPower(SNOPower, minimumRange);
-        }
-
-        /// <summary>
-        /// This skill as TrinityPower
-        /// </summary>
-        public TrinityPower ToPower()
-        {
-            return new TrinityPower(SNOPower);
-        }
-
-        /// <summary>
-        /// Cast this skill at the current position
-        /// </summary>
-        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
-        public bool Cast()
-        {
-            return Cast(Core.Player.Position, -1);
-        }
-
-        /// <summary>
-        /// Cast this skill at the specified position
-        /// </summary>
-        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
-        public bool Cast(Vector3 position)
-        {
-            return Cast(position, -1);
-        }
-
-        /// <summary>
-        /// Cast this skill at the specified target
-        /// </summary>
-        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
-        public bool Cast(TrinityActor target)
-        {
-            return Cast(target.Position, target.AcdId);
-        }
-
-        /// <summary>
-        /// Cast this speed using TrinityPower
-        /// </summary>
-        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
-        public bool Cast(TrinityPower power)
-        {
-            return Cast(power.TargetPosition, power.TargetAcdId);
-        }
-
-        [Obsolete("Don't use this because its not recording TargetPosition in SpellHistory when cast by targetAcdId only, solution is tbd")]
-        public bool Cast(Vector3 clickPosition, int targetAcdId)
-        {
-            return Combat.Spells.CastPower(SNOPower, clickPosition, targetAcdId);
-        }
-
-
-        /// <summary>
         /// Unique Identifier so that dictionarys can compare Skill objects.
         /// </summary>        
         public override int GetHashCode()
@@ -424,14 +324,6 @@ namespace Trinity.Framework.Objects
         {
             return SkillUtils.GetSkillByPower((SNOPower)x.SNOPower);
         }
-
-        //public SkillSettings GetDefaultSetting()
-        //{
-        //    return new SkillSettings
-        //    {
-        //        SnoPower = this.SNOPower,
-        //    };
-        //}
 
         public override string ToString() => $"{GetType().Name}: {Name} {SNOPower} {(Id)}";
     }

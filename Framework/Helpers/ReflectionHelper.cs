@@ -15,6 +15,18 @@ namespace Trinity.Framework.Helpers
 {
     public static class ReflectionHelper
     {
+        private static IEnumerable<T> GetInterfaceMembers<T>(object obj)
+        {
+            var type = obj.GetType();
+            return from property in type.GetProperties()
+                   where typeof(T).IsAssignableFrom(property.PropertyType)
+                   select GetValue<T>(obj, property);
+        }
+
+        private static T GetValue<T>(object obj, PropertyInfo propertyInfo)
+        {
+            return (T)propertyInfo.GetValue(obj, null);
+        }
 
         public static Func<T> GetStaticAccessor<T>(Type containingClassType, string memberName)
         {

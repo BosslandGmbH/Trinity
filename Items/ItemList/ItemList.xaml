@@ -9,8 +9,8 @@
              xmlns:itemlist="clr-namespace:Trinity.Items.ItemList"
              xmlns:behaviors="clr-namespace:Trinity.UI.UIComponents.Behaviors"
              xmlns:controls="clr-namespace:Trinity.UI.UIComponents.Controls"
-             mc:Ignorable="d" Foreground="{DynamicResource TextBrush}"   Background="#434343" Padding="10,0,0,0"
-             d:DesignHeight="800" d:DesignWidth="420">
+             mc:Ignorable="d" Foreground="{DynamicResource TextBrush}" Background="#434343" Padding="0,0,0,0"
+             d:DesignHeight="800" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
 
@@ -20,8 +20,9 @@
 
 
             <converters:EmptyStringToVisibilityConverter x:Key="EmptyStringToVisibilityConverter" />
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
-            <converters:EnumVisibilityConverter x:Key="EnumVisibilityConverter"  />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible"
+                                                  FalseValue="Collapsed" />
+            <converters:EnumVisibilityConverter x:Key="EnumVisibilityConverter" />
             <converters:EnumVisibilityConverter x:Key="EnumTrueToCollapsedConverter" Reverse="True" />
             <converters:UriToCachedImageConverter x:Key="UrlToCachedImageConverter" />
 
@@ -150,15 +151,16 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ListView}">
                             <themes:ListBoxChrome x:Name="Bd"
-                                                          BorderBrush="{TemplateBinding BorderBrush}"
-                                                          BorderThickness="{TemplateBinding BorderThickness}"
-                                                          Background="{TemplateBinding Background}"
-                                                          RenderMouseOver="{TemplateBinding IsMouseOver}"
-                                                          RenderFocused="{TemplateBinding IsKeyboardFocusWithin}"
-                                                          SnapsToDevicePixels="False">
+                                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                                  Background="{TemplateBinding Background}"
+                                                  RenderMouseOver="{TemplateBinding IsMouseOver}"
+                                                  RenderFocused="{TemplateBinding IsKeyboardFocusWithin}"
+                                                  SnapsToDevicePixels="False">
                                 <ScrollViewer VerticalScrollBarVisibility="Visible"
-                                                      Padding="{TemplateBinding Padding}" Uid="ScrollViewer_11">
-                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Uid="ItemsPresenter_6" />
+                                              Padding="{TemplateBinding Padding}" Uid="ScrollViewer_11">
+                                    <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                    Uid="ItemsPresenter_6" />
                                 </ScrollViewer>
                             </themes:ListBoxChrome>
                             <ControlTemplate.Triggers>
@@ -166,7 +168,7 @@
                                     <MultiTrigger.Conditions>
                                         <Condition Property="IsGrouping" Value="true" />
                                         <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping"
-                                                           Value="false" />
+                                                   Value="false" />
                                     </MultiTrigger.Conditions>
                                     <Setter Property="ScrollViewer.CanContentScroll" Value="false" />
                                 </MultiTrigger>
@@ -175,22 +177,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-
-
-            <!--<LinearGradientBrush x:Key="LightBrush" StartPoint="0,0" EndPoint="0,1">
-                <GradientBrush.GradientStops>
-                    <GradientStopCollection>
-                        <GradientStop Color="#FFF" Offset="0.0"/>
-                        <GradientStop Color="#EEE" Offset="1.0"/>
-                    </GradientStopCollection>
-                </GradientBrush.GradientStops>
-            </LinearGradientBrush>
-            <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
-            <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFF" />
-            <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
-            <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
-            <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />-->
-
+            
             <DataTemplate x:Key="SelectedRowTemplate">
                 <Border Margin="0" Background="#333333" Padding="5,0,5,2">
                     <Border Padding="0">
@@ -551,7 +538,8 @@
             </DataTemplate>
 
             <DataTemplate x:Key="AttributeFormTemplate">
-                <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2" BorderThickness="1,1,0,0">
+                <Border Background="#55999999" BorderBrush="#CC999999" CornerRadius="1" Padding="2"
+                        BorderThickness="1,1,0,0">
                     <Grid Width="Auto" HorizontalAlignment="Stretch">
                         <Grid Width="Auto" HorizontalAlignment="Stretch" Margin="0,0,25,0">
                             <Grid.ColumnDefinitions>
@@ -562,12 +550,13 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="1*" MinWidth="25" MaxWidth="60" />
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" >Key</Label>
-                            <TextBox Grid.Column="1"  Text="{Binding AttributeKey}" VerticalContentAlignment="Center" />
-                            <Label Grid.Column="2" >Mod#</Label>
-                            <TextBox Grid.Column="3" Text="{Binding AttributeModifier}" VerticalContentAlignment="Center" />
-                            <Label Grid.Column="4" >Val</Label>
-                            <TextBox Grid.Column="5"  Text="{Binding AttributeValue}" VerticalContentAlignment="Center" />
+                            <Label Grid.Column="0">Key</Label>
+                            <TextBox Grid.Column="1" Text="{Binding AttributeKey}" VerticalContentAlignment="Center" />
+                            <Label Grid.Column="2">Mod#</Label>
+                            <TextBox Grid.Column="3" Text="{Binding AttributeModifier}"
+                                     VerticalContentAlignment="Center" />
+                            <Label Grid.Column="4">Val</Label>
+                            <TextBox Grid.Column="5" Text="{Binding AttributeValue}" VerticalContentAlignment="Center" />
                         </Grid>
                         <Button HorizontalAlignment="Right" Content=" X " Height="21" Width="25" Margin="10,-1,0,0"
                                 Background="Transparent"
@@ -632,7 +621,7 @@
                             <Label Grid.Row="0" Foreground="White" VerticalContentAlignment="Center"
                                    Style="{StaticResource UnselectedTitleLabelStyle}" Content="{Binding Name}" />
 
-                            <Slider Grid.Row="0" Grid.Column="1" Template="{DynamicResource SliderEditable}"                           
+                            <Slider Grid.Row="0" Grid.Column="1" Template="{DynamicResource SliderEditable}"
                                     Maximum="{Binding Max, Mode=OneWay}"
                                     Minimum="{Binding Min, Mode=OneWay}"
                                     SmallChange="0.1"
@@ -736,231 +725,277 @@
     </UserControl.Resources>
 
 
-    <controls:ModalContentPresenter x:Name="modalPresenter" IsModal="{Binding ItemList.IsModalVisible}"  OpenCommand="{Binding ItemList.LoadModalCommand}">
+    <controls:ModalContentPresenter x:Name="modalPresenter" IsModal="{Binding ItemList.IsModalVisible}"
+                                    OpenCommand="{Binding ItemList.LoadModalCommand}">
 
-        <DockPanel LastChildFill="True" VerticalAlignment="Stretch" Margin="0,10,10,0">
-            <StackPanel DockPanel.Dock="Top" Background="DarkRed"  Visibility="{Binding Loot.Pickup.ItemFilterMode, Converter={StaticResource EnumTrueToCollapsedConverter}, ConverterParameter=ItemList, Mode=TwoWay}">
-                <WrapPanel Margin="10">
-                    <Label VerticalAlignment="Center" Background="Transparent" Foreground="White" Content="Item list is NOT the active Rules Engine!" Margin="0,0,10,0"/>
-                    <Button VerticalAlignment="Center" Style="{DynamicResource LinkButton}" Content="Enable ItemList" Command="{Binding ItemList.EnableItemListCommand}"/>
-                </WrapPanel>
+        <DockPanel LastChildFill="True" VerticalAlignment="Stretch" Margin="10,0,10,10">
+            <StackPanel DockPanel.Dock="Top" Background="DarkRed" Margin="0,10,0,0"
+                        Visibility="{Binding Items.LegendaryMode, Converter={StaticResource EnumTrueToCollapsedConverter}, ConverterParameter=ItemList, Mode=TwoWay}">
+                <StackPanel Margin="10">
+                    <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Background="Transparent"
+                               Foreground="White" Margin="0,0,10,0">
+                        <Run>Legendary handling is currently set to: </Run>
+                        <Run Text="{Binding Items.LegendaryMode, FallbackValue=[LegendaryMode]}" />
+                    </TextBlock>
+                    <Button Margin="0,5,0,0" VerticalAlignment="Center" Style="{DynamicResource LinkButton}"
+                            Content="Enable ItemList" Command="{Binding ItemList.EnableItemListCommand}" />
+                </StackPanel>
             </StackPanel>
 
-            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,0" Orientation="Horizontal" Background="#FF6A6A6A"
-                        Height="38" VerticalAlignment="Center">
-                <Label Style="{StaticResource StatusLabelStyle}" VerticalContentAlignment="Center" Margin="5,0,0,0"
-                       Content="Search:" />
-                <TextBox Width="140" Height="22"
-                         Text="{Binding ItemList.FilterText, UpdateSourceTrigger=PropertyChanged}" Margin="0,8"
-                         ToolTip="Search by Item Name or Id" />
-                <Button Content=" X " Height="21" Width="25" Margin="-27,-1,0,0" Background="Transparent"
-                        Command="{Binding ItemList.ResetFilterCommand}" BorderBrush="Transparent" FontWeight="Heavy"
-                        BorderThickness="1"
-                        Visibility="{Binding ItemList.IsFiltered, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <Grid>
 
-                <Label Style="{StaticResource StatusLabelStyle}" VerticalContentAlignment="Center" Margin="5,0,0,0"
-                       Content="Group By:" />
-                <ComboBox Tag="" SelectedValuePath="Tag" SelectedValue="{Binding ItemList.Grouping}" x:Name="GroupingDropdown" MaxHeight="25" Padding="0,0,15,0">
-                    <ComboBoxItem Content="None" Tag="None" Foreground="White" Background="Black" />
-                    <ComboBoxItem Content="LegendaryAffix" Tag="IsLegendaryAffixed" Foreground="White" Background="Black" />
-                    <ComboBoxItem Content="BaseType" Tag="BaseType" Foreground="White" Background="Black" />
-                    <ComboBoxItem Content="ItemType" Tag="ItemType" Foreground="White" Background="Black" />
-                    <ComboBoxItem Content="Sets" Tag="SetName" Foreground="White" Background="Black" />
-                    <ComboBoxItem Content="Class" Tag="ClassRestriction" Foreground="White" Background="Black" />
-                    <ComboBoxItem Content="Selected" Tag="IsSelected" Foreground="White" Background="Black" />
-                </ComboBox>
+                <DockPanel>
+                    <TabControl Margin="0,10,0,0" Padding="0,10,5,2" Background="Transparent"
+                                SelectedIndex="{Binding ItemList.SelectedTabIndex}">
 
-                <Button Command="{Binding Source={x:Static controls:ModalContentCommands.ShowModalContent}}"
-                        CommandParameter="Export" Width="Auto" Padding="7,0" Margin="10,7,5,7">
-                    Export
-                </Button>
-                <Button Command="{Binding Source={x:Static controls:ModalContentCommands.ShowModalContent}}"
-                        CommandParameter="Import" Width="Auto" Padding="7,0" Margin="0,7,5,7">
-                    Import
-                </Button>
+                        <!-- List of Legendary Items -->
+                        <TabItem Header="Legendary Item" Style="{DynamicResource TertiaryTabItem}">
+                            <DockPanel Background="#333333">
+                                <Border DockPanel.Dock="Top" Padding="0,0,0,0" BorderThickness="0,0,0,1" BorderBrush="#55555555">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0" DockPanel.Dock="Top" Margin="0,0,0,0" Orientation="Horizontal"
+                                                    Background="Transparent"
+                                                    Height="38" VerticalAlignment="Center">
+                                        <Label Style="{StaticResource StatusLabelStyle}"
+                                                   VerticalContentAlignment="Center" Margin="5,0,0,0"
+                                                   Content="Search:" />
+                                        <TextBox Width="140" Height="22" BorderBrush="DarkSlateGray"
+                                                     Text="{Binding ItemList.FilterText, UpdateSourceTrigger=PropertyChanged}"
+                                                     Margin="0,8"
+                                                     ToolTip="Search by Item Name or Id" />
+                                        <Button Content=" X " Height="21" Width="25" Margin="-27,-1,0,0"
+                                                    Background="Transparent"
+                                                    Command="{Binding ItemList.ResetFilterCommand}"
+                                                    BorderBrush="Transparent" FontWeight="Heavy"
+                                                    BorderThickness="1"
+                                                    Visibility="{Binding ItemList.IsFiltered, Converter={StaticResource BoolToVisibilityConverter}}" />
+
+                                        <Label Style="{StaticResource StatusLabelStyle}"
+                                                   VerticalContentAlignment="Center" Margin="5,0,0,0"
+                                                   Content="Group By:" />
+                                        <ComboBox Tag="" SelectedValuePath="Tag"
+                                                      SelectedValue="{Binding ItemList.Grouping}"
+                                                      x:Name="GroupingDropdown" MaxHeight="25" Padding="0,0,15,0">
+                                            <ComboBoxItem Content="None" Tag="None" Foreground="White"
+                                                              Background="Black" />
+                                            <ComboBoxItem Content="LegendaryAffix" Tag="IsLegendaryAffixed"
+                                                              Foreground="White" Background="Black" />
+                                            <ComboBoxItem Content="BaseType" Tag="BaseType" Foreground="White"
+                                                              Background="Black" />
+                                            <ComboBoxItem Content="ItemType" Tag="ItemType" Foreground="White"
+                                                              Background="Black" />
+                                            <ComboBoxItem Content="Sets" Tag="SetName" Foreground="White"
+                                                              Background="Black" />
+                                            <ComboBoxItem Content="Class" Tag="ClassRestriction" Foreground="White"
+                                                              Background="Black" />
+                                            <ComboBoxItem Content="Selected" Tag="IsSelected" Foreground="White"
+                                                              Background="Black" />
+                                        </ComboBox>
+                                      
+                                    </StackPanel>
+                                        <ComboBox Grid.Column="1"  Background="Transparent" HorizontalAlignment="Right" 
+                                                      FontWeight="Normal"
+                                                      behaviors:ComboAlwaysFireSelection.Active="False"
+                                                      behaviors:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}"
+                                                      Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False"
+                                                      Template="{DynamicResource ActionsComboBoxControlTemplate}"
+                                                      Tag="More Options..." Margin="0,2,8,2">
+                                            <ComboBoxItem Content="Select None" Tag="SelectNoneCommand"
+                                                              Foreground="White" Background="Black" />
+                                            <ComboBoxItem Content="Select All" Tag="SelectAllCommand"
+                                                              Foreground="White" Background="Black" />
+                                            <ComboBoxItem Content="Add 2.4 Items" Tag="Add24ItemsCommand"
+                                                              Foreground="White" Background="Black" />
+                                            <ComboBoxItem Content="Add Set Items" Tag="AddAllSetsCommand"
+                                                              Foreground="White" Background="Black" />
+                                            <ComboBoxItem Content="Add Legendary Affix Items"
+                                                              Tag="AddAllLegendaryAffixCommand" Foreground="White"
+                                                              Background="Black" />
+                                            <ComboBoxItem Content="Clear All Rules" Tag="ClearRulesCommand"
+                                                              Foreground="White" Background="Black" />
+                                        </ComboBox>
+                                    </Grid>
+                                </Border>
+                                <ListView Padding="8,5,8,0" DockPanel.Dock="Top"
+                                          d:DataContext="{Binding Source={StaticResource DesignViewModel}}"
+                                          SelectionMode="Multiple"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                          VirtualizingPanel.IsVirtualizing="True"
+                                          VirtualizingPanel.VirtualizationMode="Standard"
+                                          VirtualizingPanel.IsVirtualizingWhenGrouping="False"
+                                          VirtualizingPanel.CacheLengthUnit="Page"
+                                          VirtualizingPanel.CacheLength="2"
+                                          ScrollViewer.IsDeferredScrollingEnabled="False"
+                                          ItemContainerStyle="{DynamicResource ListViewItemStyle}"
+                                          Background="#333333"
+                                          ItemsSource="{Binding ItemList.Collection.View}"
+                                          VerticalContentAlignment="Stretch"
+                                          Style="{DynamicResource ListViewStyle1}">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                    <ListView.GroupStyle>
+                                        <GroupStyle>
+                                            <GroupStyle.ContainerStyle>
+                                                <Style TargetType="{x:Type GroupItem}">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
+                                                                <Expander FontWeight="Bold" Foreground="LightSkyBlue"
+                                                                          Header="{Binding Name}" IsExpanded="False">
+                                                                    <Expander.HeaderTemplate>
+                                                                        <DataTemplate>
+                                                                            <!--<StackPanel Orientation="Horizontal">-->
+                                                                            <Label
+                                                                                Style="{StaticResource GroupHeaderPrimaryLabelStyle}"
+                                                                                Content="{Binding}" />
+                                                                            <!--</StackPanel>-->
+                                                                        </DataTemplate>
+                                                                    </Expander.HeaderTemplate>
+                                                                    <ItemsPresenter />
+                                                                </Expander>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </GroupStyle.ContainerStyle>
+                                        </GroupStyle>
+                                    </ListView.GroupStyle>
+                                </ListView>
+                            </DockPanel>
+                        </TabItem>
+
+                        <!-- List of Item Slots -->
+                        <TabItem Header="Item Type" Style="{DynamicResource TertiaryTabItem}">
+                            <DockPanel Background="#333333">
+                                <Border DockPanel.Dock="Top">
+                                    <Grid>
+                                        <Label Margin="4,0,0,0">Select the types  you want to keep/stash.</Label>
+                                        <ComboBox Background="Transparent" HorizontalAlignment="Right"
+                                                  FontWeight="Normal"
+                                                  behaviors:ComboAlwaysFireSelection.Active="False"
+                                                  behaviors:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}"
+                                                  Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False"
+                                                  Template="{DynamicResource ActionsComboBoxControlTemplate}"
+                                                  Tag="More Options...">
+
+                                            <ComboBoxItem Content="Select None" Tag="SelectNoneCommand"
+                                                          Foreground="White" Background="Black" />
+                                            <ComboBoxItem Content="Select All" Tag="SelectAllCommand"
+                                                          Foreground="White" Background="Black" />
+                                            <ComboBoxItem Content="Clear All Rules" Tag="ClearRulesCommand"
+                                                          Foreground="White" Background="Black" />
+                                        </ComboBox>
+                                    </Grid>
+                                </Border>
+
+                                <!-- VirtualizingPanel.IsVirtualizing="True" causes the UI to not update properly when source is updated with IsSelected=false outside of the current page of items.
+                                     then for some unknown but rediculous reason, the UI then tries to write its dirty state back onto the source. -->
+
+                                <ListView Padding="5,5,0,0" DockPanel.Dock="Top"
+                                          SelectionMode="Multiple"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                          ScrollViewer.VerticalScrollBarVisibility="Visible"
 
 
+                                          VirtualizingPanel.IsVirtualizing="False"
+                                          ScrollViewer.IsDeferredScrollingEnabled="False"
+                                          ItemContainerStyle="{DynamicResource ListViewItemStyle}"
+                                          Background="#333333"
+                                          ItemsSource="{Binding ItemList.ItemTypes.View}"
+                                          VerticalContentAlignment="Stretch"
+                                          Style="{DynamicResource ListViewStyle1}" />
+                            </DockPanel>
+                        </TabItem>
+                        
 
-            </StackPanel>
+                            <TabItem Header="Advanced" Style="{DynamicResource TertiaryTabItem}">
+                            <Border Padding="10" Background="#333333">
+                                <StackPanel>
+                                    <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                              Background="#474747">
+                                        <GroupBox.Header>
+                                            Load Items from Character
+                                        </GroupBox.Header>
+                                        <StackPanel Margin="0,10,0,0">
+                                            <UniformGrid Rows="1">
+                                                <Button Height="25"
+                                                        Command="{Binding ItemList.LoadEquippedItemsCommand}">
+                                                    Select Equipped
+                                                </Button>
+                                                <Button Height="25"
+                                                        Command="{Binding ItemList.LoadStashedItemsCommand}">
+                                                    Select Stashed
+                                                </Button>
+                                            </UniformGrid>
+                                        </StackPanel>
+                                    </GroupBox>
+                                    <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                              Background="#474747">
+                                        <GroupBox.Header>
+                                            Overrides
+                                        </GroupBox.Header>
+                                        <StackPanel>
+                                            <CheckBox
+                                                ToolTip="Avoids you having to add an ancient rule to every selected item"
+                                                Content="Always Trash Non-Ancients"
+                                                IsChecked="{Binding ItemList.AlwaysTrashNonAncients}" />
+                                        </StackPanel>
+                                    </GroupBox>
+                                    <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                                              Background="#474747">
+                                        <GroupBox.Header>
+                                            Auto-Upgrade Rules
+                                        </GroupBox.Header>
+                                        <StackPanel>
+                                            <TextBlock Margin="0,0,0,10" TextWrapping="Wrap">Items that are evaluated to be stashed will apply their current stat values to any rules you have setup for the item. This will prevent weaker versions of the item being kept in future.</TextBlock>
+                                            <CheckBox
+                                                ToolTip="Rule sliders will automatically be increased as you find more powerful items."
+                                                Content="Enable Auto-Upgrade"
+                                                IsChecked="{Binding ItemList.UpgradeRules}" />
+                                        </StackPanel>
+                                    </GroupBox>
+                                </StackPanel>
+                            </Border>
+                        </TabItem>
 
-            <!-- Override Settings --><!--
-            <StackPanel Height="Auto" DockPanel.Dock="Top" Margin="0,0,0,0">
-                <Grid Background="Transparent">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Border BorderThickness="0" Padding="8,8" Background="#555">
-                        <UniformGrid Columns="2">
-                            <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL ancients to be stashed." Content="Always Keep Ancient Items" IsChecked="{Binding Path=ItemList.AlwaysStashAncients}" />
-                            <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL non-ancients to be trashed." Content="Always Sell/Salvage Non-Ancients" IsChecked="{Binding Path=ItemList.AlwaysTrashNonAncients}" />
-                            <CheckBox ToolTip="Rule sliders will automatically be increased as you find more powerful items." Content="Auto-Upgrade Rules" IsChecked="{Binding Path=ItemList.UpgradeRules}" />
-                        </UniformGrid>
-                    </Border>
-                </Grid>
-            </StackPanel>-->
-
-            <TabControl Margin="0,10,0,0" Padding="0,10,5,2" Background="#434343" SelectedIndex="{Binding ItemList.SelectedTabIndex}">
-
-                <!-- List of Legendary Items -->
-                <TabItem Header="Legendary Item" Style="{DynamicResource TertiaryTabItem}">
-                    <DockPanel Background="#333333">
-                        <Border DockPanel.Dock="Top" Padding="0,0,0,0">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="131*"/>
-                                    <ColumnDefinition Width="274*"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Margin="4,0,0,0" Grid.ColumnSpan="2">Select the legendary items you want to keep/stash.</Label>
-                                <ComboBox Background="Transparent" HorizontalAlignment="Right" FontWeight="Normal" 
-                                      behaviors:ComboAlwaysFireSelection.Active="False" behaviors:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}" 
-                                       Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False" 
-                                      Template="{DynamicResource ActionsComboBoxControlTemplate}" Tag="More Options..." Grid.Column="1" Margin="0,2">
-                                    <ComboBoxItem Content="Select None" Tag="SelectNoneCommand" Foreground="White" Background="Black" />
-                                    <ComboBoxItem Content="Select All" Tag="SelectAllCommand" Foreground="White" Background="Black" />
-                                    <ComboBoxItem Content="Add 2.4 Items" Tag="Add24ItemsCommand" Foreground="White" Background="Black" />
-                                    <ComboBoxItem Content="Add Set Items" Tag="AddAllSetsCommand" Foreground="White" Background="Black" />
-                                    <ComboBoxItem Content="Add Legendary Affix Items" Tag="AddAllLegendaryAffixCommand" Foreground="White" Background="Black" />
-                                    <ComboBoxItem Content="Clear All Rules" Tag="ClearRulesCommand" Foreground="White" Background="Black" />
-                                </ComboBox>
-                            </Grid>
-                        </Border>
-                        <ListView Padding="0,5,0,0" DockPanel.Dock="Top" 
-                              d:DataContext="{Binding Source={StaticResource DesignViewModel}}"
-                              SelectionMode="Multiple"                                
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible"
-                              VirtualizingPanel.IsVirtualizing="True"
-                              VirtualizingPanel.VirtualizationMode="Standard"
-                              VirtualizingPanel.IsVirtualizingWhenGrouping="False"
-                              VirtualizingPanel.CacheLengthUnit="Page"
-                              VirtualizingPanel.CacheLength="2"
-                              ScrollViewer.IsDeferredScrollingEnabled="False"
-                              ItemContainerStyle="{DynamicResource ListViewItemStyle}"
-                              Background="#333333"
-                              ItemsSource="{Binding ItemList.Collection.View}"
-                              VerticalContentAlignment="Stretch"
-                              Style="{DynamicResource ListViewStyle1}">
-                            <ListView.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <VirtualizingStackPanel/>
-                                </ItemsPanelTemplate>
-                            </ListView.ItemsPanel>
-                            <ListView.GroupStyle>
-                                <GroupStyle>
-                                    <GroupStyle.ContainerStyle>
-                                        <Style TargetType="{x:Type GroupItem}">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate>
-                                                        <Expander FontWeight="Bold" Foreground="LightSkyBlue" Header="{Binding Name}" IsExpanded="False">
-                                                            <Expander.HeaderTemplate>
-                                                                <DataTemplate>
-                                                                    <!--<StackPanel Orientation="Horizontal">-->
-                                                                        <Label Style="{StaticResource GroupHeaderPrimaryLabelStyle}" Content="{Binding}" />
-                                                                    <!--</StackPanel>-->
-                                                                </DataTemplate>
-                                                            </Expander.HeaderTemplate>
-                                                            <ItemsPresenter />
-                                                        </Expander>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </GroupStyle.ContainerStyle>
-                                </GroupStyle>
-                            </ListView.GroupStyle>
-                        </ListView>
-                    </DockPanel>
-                </TabItem>
-
-                <!-- List of Item Slots -->
-                <TabItem Header="Item Type" Style="{DynamicResource TertiaryTabItem}">
-                    <DockPanel Background="#333333">
-                        <Border DockPanel.Dock="Top">
-                            <Grid>
-                                <Label Margin="4,0,0,0">Select the types  you want to keep/stash.</Label>
-                                <ComboBox Background="Transparent" HorizontalAlignment="Right" FontWeight="Normal" 
-                                      behaviors:ComboAlwaysFireSelection.Active="False" behaviors:SelectionChangedBehaviour.Command="{Binding ItemList.AdvancedOptionCommand}" 
-                                       Width="Auto" Height="23" IsSynchronizedWithCurrentItem="False" 
-                                      Template="{DynamicResource ActionsComboBoxControlTemplate}" Tag="More Options...">
-
-                                    <ComboBoxItem Content="Select None" Tag="SelectNoneCommand" Foreground="White" Background="Black" />
-                                    <ComboBoxItem Content="Select All" Tag="SelectAllCommand" Foreground="White" Background="Black" />
-                                    <ComboBoxItem Content="Clear All Rules" Tag="ClearRulesCommand" Foreground="White" Background="Black" />
-                                </ComboBox>
-                            </Grid>
-                        </Border>
-
-                        <!-- VirtualizingPanel.IsVirtualizing="True" causes the UI to not update properly when source is updated with IsSelected=false outside of the current page of items.
-                             then for some unknown but rediculous reason, the UI then tries to write its dirty state back onto the source. -->
-
-                        <ListView Padding="5,5,0,0" DockPanel.Dock="Top"
-                          SelectionMode="Multiple"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                          ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                  
-                          
-                          VirtualizingPanel.IsVirtualizing="False"                       
-                          ScrollViewer.IsDeferredScrollingEnabled="False"
-                          ItemContainerStyle="{DynamicResource ListViewItemStyle}"
-                          Background="#333333"
-                          ItemsSource="{Binding ItemList.ItemTypes.View}"
-                          VerticalContentAlignment="Stretch"                              
-                          Style="{DynamicResource ListViewStyle1}" />
-                    </DockPanel>
-                </TabItem>
-
-                <TabItem Header="Misc" Style="{DynamicResource TertiaryTabItem}">
-                    <Border Padding="10"  Background="#333333">
-                    <StackPanel>
-                        <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#474747">
-                            <GroupBox.Header>
-                                Overrides
-                            </GroupBox.Header>
-                            <StackPanel>
-                                    <TextBlock Margin="0,0,0,10" TextWrapping="Wrap">These settings will override any selections or rules you may have set up.</TextBlock>
-                                <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL ancients to be stashed." Content="Always Keep Ancient Items" IsChecked="{Binding ItemList.AlwaysStashAncients}" />
-                                <CheckBox ToolTip="This will OVERRIDE specific item selections below and cause ALL non-ancients to be trashed." Content="Always Sell/Salvage Non-Ancients" IsChecked="{Binding ItemList.AlwaysTrashNonAncients}" />
-                                
-                                
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#474747">
-                            <GroupBox.Header>
-                                Auto-Upgrade Rules
-                            </GroupBox.Header>
-                            <StackPanel>
-                                <TextBlock Margin="0,0,0,10" TextWrapping="Wrap">Items that are evaluated to be stashed will apply their current stat values to any rules you have setup for the item. This will prevent weaker versions of the item being kept in future.</TextBlock>
-                                <CheckBox ToolTip="Rule sliders will automatically be increased as you find more powerful items." Content="Enable Auto-Upgrade" IsChecked="{Binding ItemList.UpgradeRules}" />
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top" Background="#474747">
-                            <GroupBox.Header>
-                                Load Items from Character
-                            </GroupBox.Header>
-                                <StackPanel Margin="0,10,0,0">
-                                    <UniformGrid Rows="1">
-                                        <Button Command="{Binding ItemList.LoadEquippedItemsCommand}">Select Equipped</Button>
-                                        <Button Command="{Binding ItemList.LoadStashedItemsCommand}">Select Stashed</Button>
-                                    </UniformGrid>
-                             </StackPanel>
-                        </GroupBox>
-                        </StackPanel>
-                    </Border>
-                </TabItem>
+                        <!--VirtualizingPanel.IsVirtualizing="True"
+                                  VirtualizingPanel.VirtualizationMode="Standard"
+                                  VirtualizingPanel.IsVirtualizingWhenGrouping="False"
+                                  VirtualizingPanel.CacheLengthUnit="Page"
+                                  VirtualizingPanel.CacheLength="2"-->
+                    </TabControl>
+                </DockPanel>
                 
-                <!--VirtualizingPanel.IsVirtualizing="True"
-                          VirtualizingPanel.VirtualizationMode="Standard"
-                          VirtualizingPanel.IsVirtualizingWhenGrouping="False"
-                          VirtualizingPanel.CacheLengthUnit="Page"
-                          VirtualizingPanel.CacheLength="2"-->
-            </TabControl>
+                <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,10,0,0" Height="25">
+                    <Button
+                                                Command="{Binding Source={x:Static controls:ModalContentCommands.ShowModalContent}}"
+                                                CommandParameter="Export" Width="Auto" Padding="7,2" Margin="10,0,5,0">
+                        Export
+                    </Button>
+                    <Button
+                                                Command="{Binding Source={x:Static controls:ModalContentCommands.ShowModalContent}}"
+                                                CommandParameter="Import" Width="Auto" Padding="7,2" Margin="0,0,5,0">
+                        Import
+                    </Button>
+                </WrapPanel>
+
+                <Border d:IsHidden="true" Background="#99222222"
+                        Visibility="{Binding Items.LegendaryMode, Converter={StaticResource EnumTrueToCollapsedConverter}, ConverterParameter=ItemList, Mode=TwoWay}" />
+            </Grid>
+
         </DockPanel>
 
         <!-- Import/Export Modal -->
         <controls:ModalContentPresenter.ModalContent>
-            <Grid Margin="45,45,45,45">
+            <Grid Margin="25,25,25,25">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="45" />
