@@ -51,7 +51,7 @@ namespace Trinity.Components.Adventurer.Settings
         private int _minimumKeys;
         private long _minimumGold;
 
-        public static PluginSettings Current { get { return _settings.GetOrAdd(AdvDia.BattleNetHeroId, LoadCurrent()); } }
+        public static PluginSettings Current => _settings.GetOrAdd(AdvDia.BattleNetHeroId, LoadCurrent());
 
         [DataMember]
         public int HighestUnlockedRiftLevel
@@ -383,6 +383,7 @@ namespace Trinity.Components.Adventurer.Settings
         {
             get
             {
+                
                 var unlockedRiftLevel = HighestUnlockedRiftLevel;
 
                 var levels = new List<string>();
@@ -520,7 +521,7 @@ namespace Trinity.Components.Adventurer.Settings
                     }
                     return current;
                 }
-            }
+            }            
             return new PluginSettings(true);
         }
 

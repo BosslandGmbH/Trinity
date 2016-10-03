@@ -443,9 +443,9 @@ namespace Trinity.UI.Visualizer
             set { SetField(ref _windowWidth, value); }
         }
 
-        public TrinitySetting Settings
+        public TrinityStorage Storage
         {
-            get { return Core.Settings; }
+            get { return Core.Storage; }
         }
 
         [Zeta.XmlEngine.XmlElement("WindowHeight")]
@@ -854,7 +854,7 @@ namespace Trinity.UI.Visualizer
                 {
                     try
                     {
-                        Core.Settings.Save();
+                        Core.Storage.Save();
                     }
                     catch (Exception ex)
                     {

@@ -9,7 +9,7 @@ using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Routines;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -210,8 +210,8 @@ namespace Trinity.Framework.Avoidance
             if (Core.Player.IsInTown)
                 return false;
 
-            if (!Core.Settings.Combat.Misc.AvoidAoEOutOfCombat && !Combat.IsInCombat)
-                return false;
+            //if (!Core.Settings.Combat.Misc.AvoidAoEOutOfCombat && !Combat.IsInCombat)
+            //    return false;
 
             if (ShouldAvoidCritical)
                 return true;

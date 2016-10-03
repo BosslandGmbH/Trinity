@@ -19,9 +19,6 @@ namespace Trinity.Framework.Modules
 
         private void Update()
         {
-            if (!Core.Settings.Advanced.DebugInStatusBar)
-                return;
-
             if (Combat.Targeting.CurrentTarget == null)
                 return;
 
@@ -29,16 +26,20 @@ namespace Trinity.Framework.Modules
 
             var statusText = new StringBuilder();
             var currentTarget = Combat.Targeting.CurrentTarget;
+            if (currentTarget == null)
+                return;
+
             var player = Core.Player;
 
             //if(!CombatBase.IsInCombat)
             //    BotMain.StatusText = "No more targets";
 
             statusText.Append(Core.Player.CurrentAction);
+
             statusText.Append(" Target=");
             statusText.Append(currentTarget.InternalName);
 
-            if (currentTarget.IsUnit && Combat.Targeting.CurrentPower.SNOPower != SNOPower.None)
+            if (currentTarget.IsUnit && Combat.Targeting.CurrentPower != null && Combat.Targeting.CurrentPower.SNOPower != SNOPower.None)
             {
                 statusText.Append(" Power=");
                 statusText.Append(Combat.Targeting.CurrentPower.SNOPower);

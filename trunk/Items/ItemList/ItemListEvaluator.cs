@@ -32,7 +32,7 @@ namespace Trinity.Items.ItemList
 
         internal static bool ShouldStashItemType(TrinityItem cItem, bool test = false)
         {
-            var typeEntry = Core.Settings.Loot.ItemList.GetitemTypeRule(cItem.TrinityItemType);
+            var typeEntry = Core.Settings.ItemList.GetitemTypeRule(cItem.TrinityItemType);
 
             if (typeEntry == null)
             {
@@ -85,7 +85,7 @@ namespace Trinity.Items.ItemList
                 Logger.LogVerbose("------- Finished Test for {0} against max value", cItem.Name);
             }
 
-            var itemSetting = Core.Settings.Loot.ItemList.SelectedItems.FirstOrDefault(i => referenceItem.Id == i.Id);
+            var itemSetting = Core.Settings.ItemList.SelectedItems.FirstOrDefault(i => referenceItem.Id == i.Id);
             if (itemSetting != null)
             {
                 return EvaluateRules(cItem, itemSetting, test);
@@ -169,7 +169,7 @@ namespace Trinity.Items.ItemList
 
         private static void UpgradeRules(Dictionary<LRule, float> ruleUpgrades)
         {
-            if (!Core.Settings.Loot.ItemList.UpgradeRules)
+            if (!Core.Settings.ItemList.UpgradeRules)
                 return;
 
             foreach (var pair in ruleUpgrades)

@@ -7,6 +7,7 @@ using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Trinity.Routines.Crusader;
 using Trinity.Routines.DemonHunter;
+using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
 using Logger = Trinity.Framework.Helpers.Logger;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
@@ -174,7 +175,7 @@ namespace Trinity.Coroutines.Town
                     if (!await ExtractLegendaryPowers.Execute())
                         continue;
 
-                    if (TrinityItemManager.IsAnyTwoSlotBackpackLocation)
+                    if (DefaultLootProvider.IsAnyTwoSlotBackpackLocation)
                     {
                         if (!await Gamble.Execute())
                             continue;
@@ -266,7 +267,7 @@ namespace Trinity.Coroutines.Town
                 }
             }
 
-            var validLocation = TrinityItemManager.FindValidBackpackLocation(true);
+            var validLocation = DefaultLootProvider.FindBackpackLocation(true);
             if (validLocation.X < 0 || validLocation.Y < 0)
             {
                 Logger.Log("No more space to pickup a 2-slot item, now running town-run routine. (TownRun)");
@@ -306,7 +307,7 @@ namespace Trinity.Coroutines.Town
                 }
 
                 // Close Greater rift before doing a town run.
-                if (!Core.Settings.Loot.TownRun.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                if (!Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     return false;
                 }

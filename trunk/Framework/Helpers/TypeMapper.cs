@@ -2,6 +2,7 @@
 using Trinity.Components.Combat;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
+using Trinity.Settings;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 

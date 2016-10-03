@@ -29,7 +29,7 @@ namespace Trinity.Coroutines
 
         public async Task<bool> Execute()
         {
-            if (!Core.Settings.Loot.Pickup.AutoEquipSkills)
+            if (!Core.Settings.Items.AutoEquipSkills)
                 return false;
 
             if (!Core.Player.IsValid || ZetaDia.Me == null || !ZetaDia.IsInGame || !ZetaDia.Me.IsValid || ZetaDia.Me.CommonData == null || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed)

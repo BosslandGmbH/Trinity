@@ -13,7 +13,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Items;
 using Trinity.Reference;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Bot.Profile.Common;
@@ -42,6 +42,7 @@ namespace Trinity.Components.Combat
             using (new PerformanceLogger("RefreshDiaObjectCache.Weighting"))
             {
                 #region Variables
+
 
                 var deadPlayer = false;
                 try
@@ -121,7 +122,7 @@ namespace Trinity.Components.Combat
 
                 var elites = new List<TrinityActor>();
                 var ignoredByAffixElites = new List<TrinityActor>();
-                _ignoredAffixes = Core.Settings.Combat.Misc.IgnoreAffixes.GetFlags<MonsterAffixes>().ToList();
+                _ignoredAffixes = Core.Settings.Weighting.IgnoreAffixes.GetFlags<MonsterAffixes>().ToList();
 
                 foreach (var unit in objects.Where(u => u.IsUnit && u.IsElite))
                 {
@@ -146,7 +147,7 @@ namespace Trinity.Components.Combat
                 //    DataDictionary.QuestLevelAreaIds.Contains(Core.Player.LevelAreaId), Core.Player.Level,
                 //    CombatBase.IsQuestingMode, isHealthEmergency, hiPriorityHealthGlobes, hiPriorityShrine);
 
-                if (Core.Settings.Combat.Misc.GoblinPriority == GoblinPriority.Kamikaze)
+                if (Core.Settings.Weighting.GoblinPriority == GoblinPriority.Kamikaze)
                 {
                     var goblin = objects.FirstOrDefault(u => u.IsTreasureGoblin && u.Distance <= 200f);
                     if (goblin != null && !isStuck && !PlayerMover.IsCompletelyBlocked && !Core.Grids.Avoidance.IsIntersectedByFlags(Core.Player.Position, goblin.Position, AvoidanceFlags.ClosedDoor))
@@ -187,16 +188,23 @@ namespace Trinity.Components.Combat
                 //    }
                 //}
 
-                #region Foreach Loop
-
-                var routine = Combat.Routines.Current;
+                var routine = Combat.Routines.Current;                
 
                 TrinityActor bestTarget = null;
 
-                var leaderTarget = PartyHelper.FindLocalActor(Combat.Party.Leader.Target);
-                var isLeader = Combat.Party.Leader.IsMe;
-                
+                try
+                {
 
+                #region Foreach Loop
+
+
+
+
+
+                var leaderTarget = Combat.Party.Leader != null ? PartyHelper.FindLocalActor(Combat.Party.Leader.Target) : null;
+                var isLeader = Combat.Party.Leader?.IsMe ?? false;
+
+                
                 foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
                 {
                     if (cacheObject == null || !cacheObject.IsValid || cacheObject.Type == TrinityObjectType.Unknown)
@@ -206,7 +214,7 @@ namespace Trinity.Components.Combat
                     cacheObject.WeightInfo = string.Empty;
                     var reason = string.Empty;
 
-                    if (routine.SetWeight(cacheObject))
+                    if (routine != null && routine.SetWeight(cacheObject))
                     {
                         bestTarget = GetNewBestTarget(cacheObject, bestTarget);
                         continue;
@@ -373,7 +381,7 @@ namespace Trinity.Components.Combat
 
                                     if (ignoreTrashTooFarAway || ignoreElitesTooFarAway)
                                     {
-                                        cacheObject.WeightInfo += $"Ignore Far Away Stuff TrashRange={Core.Settings.Combat.Misc.NonEliteRange} EliteRange={Core.Settings.Combat.Misc.EliteRange}";
+                                        cacheObject.WeightInfo += $"Ignore Far Away Stuff TrashRange={Combat.Routines.Current.TrashRange} EliteRange={Combat.Routines.Current.EliteRange}";
                                         cacheObject.Weight = 0;
                                         break;
                                     }
@@ -452,7 +460,7 @@ namespace Trinity.Components.Combat
                                 if (cacheObject.IsTreasureGoblin)
                                 {
                                     // Original Trinity stuff for priority handling now
-                                    switch (Core.Settings.Combat.Misc.GoblinPriority)
+                                    switch (Core.Settings.Weighting.GoblinPriority)
                                     {
                                         case GoblinPriority.Normal:
                                             cacheObject.WeightInfo += "GoblinNormal ";
@@ -774,7 +782,7 @@ namespace Trinity.Components.Combat
                                     var trinityItem = Core.Actors.GetItemByAnnId(cacheObject.AnnId);
                                     if (trinityItem != null)
                                     {
-                                        if (Core.Settings.Loot.Pickup.DontPickupInTown && !trinityItem.IsItemAssigned)
+                                        if (Core.Settings.Items.DontPickupInTown && !trinityItem.IsItemAssigned)
                                         {
                                             cacheObject.WeightInfo += $"Ignoring DontPickUpInTown Setting.";
                                             break;
@@ -793,7 +801,7 @@ namespace Trinity.Components.Combat
                                 }
 
                                 // Don't pickup items if we're doing a TownRun
-                                if (!TrinityItemManager.CachedIsValidTwoSlotBackpackLocation && !item.IsPickupNoClick)
+                                if (!Combat.Loot.IsBackpackFull && !item.IsPickupNoClick)
                                 {
                                     cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for TownRun";
                                     break;
@@ -805,12 +813,6 @@ namespace Trinity.Components.Combat
                                     if (IgnoreWhenInAvoidance(cacheObject))
                                         break;
 
-                                    if (!Core.Settings.Loot.Pickup.PickupDeathsBreath)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} due to settings";
-                                        break;
-                                    }
-
                                     cacheObject.Weight = MaxWeight;
                                     cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - Death's Breath";
                                     break;
@@ -819,26 +821,6 @@ namespace Trinity.Components.Combat
                                 // Give legendaries max weight, always
                                 if (cacheObject.ItemQualityLevel >= ItemQuality.Legendary)
                                 {
-                                    //// Ignore Legendaries in AoE
-                                    //if (Core.Settings.Loot.Pickup.IgnoreLegendaryInAoE && Core.Avoidance.InAvoidance(cacheObject.Position) ||
-                                    //        Core.Avoidance.InCriticalAvoidance(cacheObject.Position))
-                                    //{
-                                    //    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Legendary in AoE";
-                                    //    break;
-                                    //}
-
-                                    //// Ignore Legendaries near Elites
-                                    //if (Core.Settings.Loot.Pickup.IgnoreLegendaryNearElites &&
-                                    //    objects.Any(
-                                    //        u =>
-                                    //            u.IsElite &&
-                                    //            u.Position.Distance(cacheObject.Position) <= 15f))
-                                    //{
-                                    //    cacheObject.WeightInfo +=
-                                    //        $"Ignoring {cacheObject.InternalName} - Legendary near Elite";
-                                    //    break;
-                                    //}
-
                                     cacheObject.Weight = MaxWeight;
                                     cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - Legendary";
                                     break;
@@ -861,16 +843,6 @@ namespace Trinity.Components.Combat
                                     break;
                                 }
 
-                                //if (cacheObject.Type == TrinityObjectType.Item)
-                                //{
-                                //    if (!TrinityItemManager.ShouldPickupItem(cacheObject as TrinityItem))
-                                //    {
-                                //        cacheObject.Weight = 0;
-                                //        cacheObject.WeightInfo += $"Failed pickup settings";
-                                //        break;
-                                //    }
-                                //}
-
                                 cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
                                                         EliteMonsterNearFormula(cacheObject, elites) +
                                                         AoENearFormula(cacheObject) +
@@ -884,7 +856,7 @@ namespace Trinity.Components.Combat
                         #region Gold
                         case TrinityObjectType.Gold:
 
-                            if (!Core.Settings.Loot.Pickup.PickupGold)
+                            if (!Core.Settings.Items.PickupGold)
                             {
                                 cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Pick Up Gold Setting.";
                                 break;
@@ -1464,7 +1436,13 @@ namespace Trinity.Components.Combat
                     bestTarget = GetNewBestTarget(cacheObject, bestTarget);
                 }
 
-                #endregion Foreach loop
+                    #endregion Foreach loop
+
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"Exception Inside Weighting Foreach Loop {ex}");    
+                }
 
                 return SetTarget(bestTarget);
 
@@ -1472,6 +1450,12 @@ namespace Trinity.Components.Combat
         }
 
         public double HighestWeightFound { get; set; }
+
+        private bool ShouldIgnoreElite(TrinityActor unit)
+        {
+            string reason;
+            return ShouldIgnoreElite(unit, out reason);
+        }
 
         private bool ShouldIgnoreElite(TrinityActor unit, out string reason)
         {
@@ -1893,7 +1877,7 @@ namespace Trinity.Components.Combat
                 return 0;
 
             var pack = objects.Where(
-                x => x.IsUnit && x.IsHostile && x.Position.Distance(cacheObject.Position) < Combat.Routines.Current.TrashRange && (!Core.Settings.Combat.Misc.IgnoreElites || !x.IsElite))
+                x => x.IsUnit && x.IsHostile && x.Position.Distance(cacheObject.Position) < Combat.Routines.Current.TrashRange && (!ShouldIgnoreElite(cacheObject) || !x.IsElite))
                 .ToList();
 
             var packDistanceValue = pack.Sum(mob => 100d * ((Combat.Routines.Current.TrashRange - cacheObject.RadiusDistance) / Combat.Routines.Current.TrashRange));
@@ -1905,20 +1889,20 @@ namespace Trinity.Components.Combat
         {
             var result = 0d;
 
-            if (!RiftProgression.IsInRift || !cacheObject.IsUnit)
-                return result;
+            //if (!RiftProgression.IsInRift || !cacheObject.IsUnit)
+            //    return result;
 
-            // get all other units within cluster radius of this unit.
-            var pack = objects.Where(x =>
-                x.Position.Distance(cacheObject.Position) < Combat.Routines.Current.TrashRange &&
-                (!Core.Settings.Combat.Misc.IgnoreElites || !x.IsElite))
-                .ToList();
+            //// get all other units within cluster radius of this unit.
+            //var pack = objects.Where(x =>
+            //    x.Position.Distance(cacheObject.Position) < Combat.Routines.Current.TrashRange &&
+            //    (!Core.Settings.Combat.Misc.IgnoreElites || !x.IsElite))
+            //    .ToList();
 
-            cacheObject.RiftValueInRadius = pack.Sum(mob => mob.RiftValuePct);
+            //cacheObject.RiftValueInRadius = pack.Sum(mob => mob.RiftValuePct);
 
-            // Only boost weight of this unit if above the total weight setting.
-            if (cacheObject.RiftValueInRadius > Core.Settings.Combat.Misc.RiftValueAlwaysKillClusterValue)
-                result = 100d * ((Combat.Routines.Current.TrashRange - cacheObject.RadiusDistance) / Combat.Routines.Current.TrashRange);
+            //// Only boost weight of this unit if above the total weight setting.
+            //if (cacheObject.RiftValueInRadius > Core.Settings.Combat.Misc.RiftValueAlwaysKillClusterValue)
+            //    result = 100d * ((Combat.Routines.Current.TrashRange - cacheObject.RadiusDistance) / Combat.Routines.Current.TrashRange);
 
 
             return result <= 0 ? 0 : result;
@@ -2124,60 +2108,7 @@ namespace Trinity.Components.Combat
 
     }
 
-    [Flags]
-    public enum ShrineTypes
-    {
-        None = 0,
-        Fortune = 1 << 0,
-        Frenzied = 1 << 1,
-        Reloaded = 1 << 2,
-        Enlightened = 1 << 3,
-        Glow = 1 << 4,
-        RunSpeed = 1 << 5,
-        Goblin = 1 << 6,
-        Hoarder = 1 << 7,
-        Shield = 1 << 8,
-        Speed = 1 << 9,
-        Casting = 1 << 10,
-        Damage = 1 << 11,
-        Conduit = 1 << 12,
-    }
 
-    [Flags]
-    public enum ContainerTypes
-    {
-        None = 0,
-        Corpse = 1 << 0,
-        Chest = 1 << 1,
-        WeaponRack = 1 << 2,
-        GroundClicky = 1 << 3,
-        Other = 1 << 4,
-    }
-
-    [Flags]
-    public enum GlobeTypes
-    {
-        None = 0,
-        Health = 1 << 0,
-        Power = 1 << 1,
-        NephalemRift = 1 << 2,
-        GreaterRift = 1 << 3,
-    }
-
-    [Flags]
-    public enum EliteTypes
-    {
-        None = 0,
-
-        [Description("Yellow Elites")]
-        Rare = 1 << 0,
-
-        [Description("Subordinates of Rare Elites")]
-        Minion = 1 << 1,
-
-        [Description("Blue Elites")]
-        Champion = 1 << 2,
-    }
 
 
 

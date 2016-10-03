@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.UI.WebControls.WebParts;
 using Buddy.Coroutines;
 using IronPython.Modules;
+using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Objects.Enums;
@@ -46,7 +47,7 @@ namespace Trinity.Coroutines.Town
             if (Cache.ContainsKey(i.AnnId))
                 return Cache[i.AnnId];
 
-            var decision = TrinityItemManager.TrinityStash(i);
+            var decision = Combat.Loot.ShouldStash(i);
             Cache.Add(i.AnnId, decision);
             return decision;
         }
@@ -400,10 +401,10 @@ namespace Trinity.Coroutines.Town
         /// </summary>
         public static int GetIdealStashPage(TrinityItem item)
         {
-            if (Core.Settings.Loot.TownRun.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
-            {
-                return ItemLocationMap[item.RawItemType];
-            }
+            //if (Core.Settings.Items.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
+            //{
+            //    return ItemLocationMap[item.RawItemType];
+            //}
             if (item.ItemBaseType >= ItemBaseType.Misc)
             {
                 return TotalStashPages - 1;
@@ -429,29 +430,29 @@ namespace Trinity.Coroutines.Town
             col = 0;
             row = 0;
 
-            if (Core.Settings.Loot.TownRun.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
-            {
-                var stashPageOffset = ItemLocationMap[item.RawItemType];
+            //if (Core.Settings.Loot.TownRun.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
+            //{
+            //    var stashPageOffset = ItemLocationMap[item.RawItemType];
 
-                int stashpage;
-                if (stashPageOffset < 0)
-                {
-                    stashpage = (-1 + TotalStashPages) + stashPageOffset;
-                }
-                else if (stashPageOffset > TotalStashPages - 1)
-                {
-                    stashpage = TotalStashPages - 1;
-                }
-                else
-                {
-                    stashpage = stashPageOffset;
-                }
+            //    int stashpage;
+            //    if (stashPageOffset < 0)
+            //    {
+            //        stashpage = (-1 + TotalStashPages) + stashPageOffset;
+            //    }
+            //    else if (stashPageOffset > TotalStashPages - 1)
+            //    {
+            //        stashpage = TotalStashPages - 1;
+            //    }
+            //    else
+            //    {
+            //        stashpage = stashPageOffset;
+            //    }
 
-                if (CanPutItemInStashPage(item, stashpage, out col, out row))
-                {
-                    return stashpage;
-                }
-            }
+            //    if (CanPutItemInStashPage(item, stashpage, out col, out row))
+            //    {
+            //        return stashpage;
+            //    }
+            //}
             if (item.ItemBaseType >= ItemBaseType.Misc)
             {
                 for (int i = TotalStashPages - 1; i >= 0; i--)

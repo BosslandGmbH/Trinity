@@ -1,26 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Routines;
-using Zeta.Bot;
+using Trinity.UI.UIComponents;
 using Zeta.Game;
 
 namespace Trinity.Settings
 {
     [DataContract(Namespace = "")]
-    public class RoutineSettingsViewModel : NotifyBase
+    public class RoutineSettings : NotifyBase
     {
+        private string _selectedRoutineClassName;
+        private RoutineMode _routineMode;
+
+        [DataMember(IsRequired = false)]
+        public string SelectedRoutineClassName
+        {
+            get { return _selectedRoutineClassName; }
+            set { SetField(ref _selectedRoutineClassName, value); }
+        }
+
+        [DataMember(IsRequired = false)]
+        public RoutineMode RoutineMode
+        {
+            get { return _routineMode; }
+            set
+            {
+                if (SetField(ref _routineMode, value))
+                {
+                    RoutineManager.Instance?.SelectRoutine();
+                }          
+            }
+        }
+
         private RoutineViewModel _selectedRoutine;
         private RoutineViewModel _currentRoutine;
 
         private List<RoutineViewModel> _allRoutines = new List<RoutineViewModel>();
+        private List<RoutineViewModel> _classAvailableRoutines;
         private List<RoutineViewModel> _classRoutines;
 
         [IgnoreDataMember]
@@ -31,14 +51,25 @@ namespace Trinity.Settings
         }
 
         [IgnoreDataMember]
+        public List<RoutineViewModel> ClassAvailableRoutines
+        {
+            get { return _classAvailableRoutines; }
+            set { SetField(ref _classAvailableRoutines, value); }
+        }
+
+        [IgnoreDataMember]
         public List<RoutineViewModel> ClassRoutines
         {
             get { return _classRoutines; }
             set { SetField(ref _classRoutines, value); }
         }
 
-        public RoutineSettingsViewModel()
+        public bool IsInGameOrManual => GameInfo.Instance.IsInGame || RoutineMode == RoutineMode.Manual;
+
+        public RoutineSettings()
         {
+            base.LoadDefaults();
+
             Core.Routines.Changed += OnRoutineChanged;
             var current = Core.Routines.CurrentRoutine;
 
@@ -51,11 +82,22 @@ namespace Trinity.Settings
                 {
                     CurrentRoutine = routineViewModel;
                     SelectedRoutine = routineViewModel;
-                    
                 }
             }
 
-            ClassRoutines = AllRoutines.Where(r => r.Class == CurrentRoutine.Class && r != CurrentRoutine && r.RequiredBuild != null).ToList();
+            UpdateRoutineLists();
+
+            if (_routineMode == RoutineMode.None)
+                _routineMode = RoutineMode.Automatic;
+        }
+
+        public ActorClass GetCurrentClass() => Core.Routines.CurrentRoutine?.Class ?? ZetaDia.Service.Hero.Class;
+
+        private void UpdateRoutineLists()
+        {
+            var actorClass = GetCurrentClass();
+            ClassRoutines = AllRoutines.Where(r => r.Class == actorClass || r.Class == ActorClass.Invalid).ToList();
+            ClassAvailableRoutines = ClassRoutines.Where(r => r != CurrentRoutine && r.RequiredBuild != null).ToList();
         }
 
         private void OnRoutineChanged(IRoutine newRoutine)
@@ -65,10 +107,11 @@ namespace Trinity.Settings
             {
                 CurrentRoutine = routineViewModel;
                 SelectedRoutine = routineViewModel;
-                ClassRoutines = AllRoutines.Where(r => r.Class == CurrentRoutine.Class && r != CurrentRoutine && r.RequiredBuild != null).ToList();
+                UpdateRoutineLists();
             }
         }
 
+        [IgnoreDataMember]
         public RoutineViewModel CurrentRoutine
         {
             get { return _currentRoutine; }
@@ -83,24 +126,25 @@ namespace Trinity.Settings
             }
         }
 
+        [IgnoreDataMember]
         public RoutineViewModel SelectedRoutine
         {
             get { return _selectedRoutine; }
             set
             {
-                if (value != null)
+                if (value != null && _selectedRoutine != value)
                 {
                     AllRoutines.ForEach(r => r.IsSelected = false);
                     value.IsSelected = true;
                     SetField(ref _selectedRoutine, value);
+
+                    if (RoutineMode == RoutineMode.Manual)
+                    {
+                        RoutineManager.Instance.ManualSelectRoutine(value.RoutineTypeName);
+                    }
                 }
             }
         }
 
     }
-
 }
-
-
-
-

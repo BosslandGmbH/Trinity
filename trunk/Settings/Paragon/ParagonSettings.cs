@@ -9,12 +9,17 @@ using Logger = Trinity.Framework.Helpers.Logger;
 namespace Trinity.Settings.Paragon
 {
     [DataContract(Namespace = "")]
-    public class ParagonSetting : NotifyBase, ITrinitySetting<ParagonSetting>, ITrinitySettingEvents
+    public sealed class ParagonSettings : NotifyBase
     {
-        private ParagonCollection _coreParagonPriority;
-        private ParagonCollection _utilityParagonPriority;
-        private ParagonCollection _defenseParagonPriority;
-        private ParagonCollection _offenseParagonPriority;
+        public ParagonSettings()
+        {
+            LoadDefaults();
+        }
+
+        private ParagonCollection _coreParagonPriority = new ParagonCollection(ParagonCategory.PrimaryAttributes);
+        private ParagonCollection _utilityParagonPriority = new ParagonCollection(ParagonCategory.Utility);
+        private ParagonCollection _defenseParagonPriority = new ParagonCollection(ParagonCategory.Defense);
+        private ParagonCollection _offenseParagonPriority = new ParagonCollection(ParagonCategory.Offense);
 
         private bool _isEnabled;
         private bool _isCustomize;
@@ -31,22 +36,14 @@ namespace Trinity.Settings.Paragon
             public ParagonCategory Category { get; set; }
         }
 
-        public ParagonSetting()
-        {
-            _coreParagonPriority = new ParagonCollection(ParagonCategory.PrimaryAttributes);
-            _utilityParagonPriority = new ParagonCollection(ParagonCategory.Utility);
-            _defenseParagonPriority = new ParagonCollection(ParagonCategory.Defense);
-            _offenseParagonPriority = new ParagonCollection(ParagonCategory.Offense);
-        }
-
-        [DataMember(IsRequired = false)]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ParagonCollection CoreParagonPriority
         {
             get { return _coreParagonPriority; }
             set { SetField(ref _coreParagonPriority, value); }
         }
 
-        [DataMember(IsRequired = false)]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         [DefaultValue(true)]
         public bool IsEnabled
         {
@@ -54,7 +51,7 @@ namespace Trinity.Settings.Paragon
             set { SetField(ref _isEnabled, value); }
         }
 
-        [DataMember(IsRequired = false)]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         [DefaultValue(false)]
         public bool IsCustomize
         {
@@ -62,48 +59,48 @@ namespace Trinity.Settings.Paragon
             set { SetField(ref _isCustomize, value); }
         }
 
-        [DataMember(IsRequired = false)]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ParagonCollection OffenseParagonPriority
         {
             get { return _offenseParagonPriority; }
             set { SetField(ref _offenseParagonPriority, value); }
         }
 
-        [DataMember(IsRequired = false)]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ParagonCollection DefenseParagonPriority
         {
             get { return _defenseParagonPriority; }
             set { SetField(ref _defenseParagonPriority, value); }
         }
 
-        [DataMember(IsRequired = false)]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public ParagonCollection UtilityParagonPriority
         {
             get { return _utilityParagonPriority; }
             set { SetField(ref _utilityParagonPriority, value); }
         }
 
-        public void OnSave()
-        {
-            Logger.LogVerbose("Saving Paragon Priority");
-        }
+        //public void OnSave()
+        //{
+        //    Logger.LogVerbose("Saving Paragon Priority");
+        //}
 
-        public void OnLoaded()
-        {
-            Logger.LogVerbose("Loading Paragon Priority");
+        //public void OnLoaded()
+        //{
+        //    Logger.LogVerbose("Loading Paragon Priority");
 
-            if (!CoreParagonPriority.Any() || !UtilityParagonPriority.Any() || !DefenseParagonPriority.Any() || !OffenseParagonPriority.Any())
-            {
-                LoadDefaults();
-            }
-            else
-            {
-                CoreParagonPriority.ForEach(i => i.Populate());
-                OffenseParagonPriority.ForEach(i => i.Populate());
-                DefenseParagonPriority.ForEach(i => i.Populate());
-                UtilityParagonPriority.ForEach(i => i.Populate());
-            }
-        }
+        //    if (!CoreParagonPriority.Any() || !UtilityParagonPriority.Any() || !DefenseParagonPriority.Any() || !OffenseParagonPriority.Any())
+        //    {
+        //        LoadDefaults();
+        //    }
+        //    else
+        //    {
+        //        CoreParagonPriority.ForEach(i => i.Populate());
+        //        OffenseParagonPriority.ForEach(i => i.Populate());
+        //        DefenseParagonPriority.ForEach(i => i.Populate());
+        //        UtilityParagonPriority.ForEach(i => i.Populate());
+        //    }
+        //}
 
         public override void LoadDefaults()
         {
@@ -143,37 +140,6 @@ namespace Trinity.Settings.Paragon
             };
         }
 
-        public void Reset()
-        {
-            TrinitySetting.Reset(this);
-            LoadDefaults();
-        }
-
-        public void CopyTo(ParagonSetting setting)
-        {
-            TrinitySetting.CopyTo(this, setting);
-        }
-
-        public ParagonSetting Clone()
-        {
-            return TrinitySetting.Clone(this);
-        }
-
-        /// <summary>
-        /// This will set default values for new settings if they were not present in the serialized XML (otherwise they will be the type defaults)
-        /// </summary>
-        /// <param name="context"></param>
-        [OnDeserializing]
-        internal void OnDeserializingMethod(StreamingContext context)
-        {
-            foreach (var p in GetType().GetProperties())
-            {
-                foreach (var dv in p.GetCustomAttributes(true).OfType<DefaultValueAttribute>())
-                {
-                    p.SetValue(this, dv.Value);
-                }
-            }
-        }
 
     }
 

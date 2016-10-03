@@ -8,6 +8,7 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
+using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
@@ -52,6 +53,12 @@ namespace Trinity.Routines.Crusader
             if (ShouldCondemn())
                 return Condemn();
 
+            if (ShouldProvoke())
+                return Provoke();
+
+            if (ShouldJudgement())
+                return Judgement();
+
             // Make sure we cast Bombardment when IronSkin and CoE is Up.
             // Note iron skin is gated below by Convention of Elements check,            
             if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
@@ -88,6 +95,14 @@ namespace Trinity.Routines.Crusader
             }
 
             return null;
+        }
+
+        protected override bool ShouldJudgement()
+        {
+            if (!Skills.Crusader.Judgment.CanCast())
+                return false;
+
+            return TargetUtil.GetBestClusterUnit()?.Distance < 10f;
         }
 
         protected override bool ShouldSteedCharge()

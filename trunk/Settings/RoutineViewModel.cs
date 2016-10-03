@@ -1,7 +1,12 @@
+using System;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Security.Policy;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Documents;
 using System.Windows.Input;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Routines;
@@ -18,6 +23,7 @@ namespace Trinity.Settings
 
         public RoutineViewModel(IRoutine routine)
         {
+            RoutineTypeName = routine.GetType().Name;
             DisplayName = routine.DisplayName;
             Description = routine.Description;
             RequiredBuild = routine.BuildRequirements;
@@ -66,32 +72,56 @@ namespace Trinity.Settings
         public object DataContext { get; set; }
 
         [DataMember]
+        public string RoutineTypeName { get; set; }
+
+        [IgnoreDataMember]
         public string Description { get; set; }
 
-        [DataMember]
+        [IgnoreDataMember]
         public string DisplayName { get; set; }
 
-        [DataMember]
+        [IgnoreDataMember]
         public string Author { get; set; }
 
-        [DataMember]
+        [IgnoreDataMember]
         public string Version { get; set; }
 
-        [DataMember]
+        [IgnoreDataMember]
         public string Url { get; set; }
 
-        [DataMember]
+        [IgnoreDataMember]
         public bool IsSelected
         {
             get { return _isSelected; }
             set { SetField(ref _isSelected, value); }
         }
 
-        [DataMember]
+        [IgnoreDataMember]
         public bool IsCurrent
         {
             get { return _isCurrent; }
             set { SetField(ref _isCurrent, value); }
         }
+
+        [IgnoreDataMember]
+        public ICommand SelectRoutineCommand => new RelayCommand(parameter =>
+        {
+            RoutineManager.Instance.ManualSelectRoutine(RoutineTypeName);
+        });
+
+        [IgnoreDataMember]
+        public ICommand OpenLinkCommand => new RelayCommand(parameter =>
+        {
+            var url = parameter as string;
+            if (string.IsNullOrEmpty(url))
+                return;
+
+            var linkmatch = RE_URL.Match(url);
+            var uri = new Uri(linkmatch.Value);
+            Process.Start(uri.ToString());
+        });
+
+        private static readonly Regex RE_URL = new Regex(@"(?#Protocol)(?:(?:ht|f)tp(?:s?)\:\/\/|~/|/)?(?#Username:Password)(?:\w+:\w+@)?(?#Subdomains)(?:(?:[-\w]+\.)+(?#TopLevel Domains)(?:com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum|travel|[a-z]{2}))(?#Port)(?::[\d]{1,5})?(?#Directories)(?:(?:(?:/(?:[-\w~!$+|.,=]|%[a-f\d]{2})+)+|/)+|\?|#)?(?#Query)(?:(?:\?(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)(?:&(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)*)*(?#Anchor)(?:#(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)?");
+
     }
 }

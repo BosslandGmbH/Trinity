@@ -6,16 +6,18 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Attributes;
-using Trinity.Settings.Combat;
 using Trinity.UI.UIComponents;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Settings
 {
     [DataContract(Namespace = "")]
-    public class WeightingSettings : NotifyBase, ITrinitySetting<WeightingSettings>
+    public class WeightingSettings : NotifyBase
     {
         public WeightingSettings()
         {
@@ -30,6 +32,8 @@ namespace Trinity.Settings
         private SettingMode _globeWeighting;
         private SettingMode _eliteWeighting;
         private EliteTypes _eliteTypes;
+        private MonsterAffixes _ignoreAffixes;
+        private GoblinPriority _goblinPriority;
 
         [DataMember]
         [DefaultValue(SettingMode.Enabled)]
@@ -95,12 +99,24 @@ namespace Trinity.Settings
             set { SetField(ref _eliteTypes, value); }
         }
 
-        #region ITrinitySetting
+        public const MonsterAffixes IgnoreAffixesExclusions = MonsterAffixes.Elite | MonsterAffixes.Minion | MonsterAffixes.Rare | MonsterAffixes.Unique;
 
-        public void Reset() => TrinitySetting.Reset(this);        
-        public void CopyTo(WeightingSettings setting) => TrinitySetting.CopyTo(this, setting);
-        public WeightingSettings Clone() => TrinitySetting.Clone(this);
+        [DataMember(IsRequired = false)]
+        [Setting, UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]
+        [FlagExclusion(IgnoreAffixesExclusions)]
+        public MonsterAffixes IgnoreAffixes
+        {
+            get { return _ignoreAffixes; }
+            set { SetField(ref _ignoreAffixes, value); }
+        }
 
-        #endregion
+        [DataMember]
+        [DefaultValue(GoblinPriority.Kamikaze)]
+        public GoblinPriority GoblinPriority
+        {
+            get { return _goblinPriority; }
+            set { SetField(ref _goblinPriority, value); }
+        }
+
     }
 }

@@ -446,7 +446,7 @@ namespace Trinity.Coroutines.Resources
             if (!i.IsValid || i.IsDisposed)
                 return true;
 
-            if (i.IsUnidentified && Core.Settings.Loot.TownRun.KeepLegendaryUnid)
+            if (i.IsUnidentified && Core.Settings.Items.KeepLegendaryUnid)
                 return false;
 
             return i.Name == i.ItemType.ToString() || isCraftingReagent && stackQuantity == 0 || !isCraftingReagent && !i.IsGem && i.ItemBaseType != ItemBaseType.Misc && stackQuantity > 0;

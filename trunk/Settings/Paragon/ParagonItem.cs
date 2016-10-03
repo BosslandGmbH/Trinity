@@ -24,7 +24,8 @@ namespace Trinity.Settings.Paragon
             Limit = MaxLimit;
         }
 
-        public void Populate()
+        [OnDeserialized]
+        public void OnDeserialized(StreamingContext context)
         {
             TrinityParagonBonusType type;
             if (Enum.TryParse(TypeName, out type))
@@ -36,14 +37,14 @@ namespace Trinity.Settings.Paragon
             }
         }
 
-        [DataMember(IsRequired = false)]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public int Limit
         {
             get { return _limit; }
             set { SetField(ref _limit, value); }
         }
 
-        [DataMember(IsRequired = false)]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         [DefaultValue(false)]
         public bool IsLimited
         {
@@ -51,7 +52,7 @@ namespace Trinity.Settings.Paragon
             set { SetField(ref _isLimited, value); }
         }
 
-        [DataMember]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public string TypeName { get; set; } // not storing Id in Case ParagonBonusType Enum changes.
 
         [IgnoreDataMember]

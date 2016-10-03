@@ -12,7 +12,7 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 using Trinity.Reference;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;

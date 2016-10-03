@@ -132,7 +132,7 @@ namespace Trinity.Items.ItemList
         /// <summary>
         /// The number of optional rules that must be True
         /// </summary>
-        [DataMember]
+        [DataMember(IsRequired = false, EmitDefaultValue = false)]
         public int Ops
         {
             get

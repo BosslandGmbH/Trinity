@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Items;
@@ -29,12 +30,7 @@ namespace Trinity.Coroutines.Town
 
         public static bool ShouldSell(TrinityItem i)
         {
-            //if (Cache.ContainsKey(i.AnnId))
-            //    return Cache[i.AnnId];
-            
-            var decision = TrinityItemManager.TrinitySell(i) && !TrinityItemManager.TrinitySalvage(i) && !TrinityItemManager.TrinityStash(i);
-            //Cache.Add(i.AnnId, decision);
-            return decision;
+            return Combat.Loot.ShouldSell(i) && !Combat.Loot.ShouldSalvage(i) && !Combat.Loot.ShouldStash(i);
         }
 
         public async static Task<bool> Execute()

@@ -1,3 +1,5 @@
+using Trinity.Items;
+
 namespace Trinity.Components.Combat
 {
     public static class DefaultProviders
@@ -7,5 +9,6 @@ namespace Trinity.Components.Combat
         public static ISpellProvider Spells { get; } = new DefaultSpellProvider();
         public static IRoutineProvider Routines { get; } = new DefaultRoutineProvider();
         public static IWeightingProvider Weighting { get; } = new DefaultWeightingProvider();
+        public static ILootProvider Loot { get; } = new DefaultLootProvider();
     }
 }

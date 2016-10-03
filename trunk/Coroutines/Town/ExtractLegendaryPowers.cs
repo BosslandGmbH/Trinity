@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
@@ -11,6 +12,7 @@ using Trinity.Framework.Objects;
 using Trinity.Items;
 using Trinity.Items.ItemList;
 using Trinity.Reference;
+using Trinity.Settings;
 using Trinity.Settings.Loot;
 using Zeta.Common;
 using Zeta.Game;
@@ -147,12 +149,10 @@ namespace Trinity.Coroutines.Town
                 if (_blacklistedActorSnoIds.Contains(item.ActorSnoId))
                     continue;
 
-                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed &&
-                    (ItemListEvaluator.ShouldStashItem(item) || Core.Settings.Loot.Pickup.ItemFilterMode != ItemFilterMode.ItemList))
+                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed && Combat.Loot.ShouldStash(item))
                     continue;
 
-                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient &&
-                    item.IsAncient)
+                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient && !item.IsAncient)
                     continue;
 
                 if (string.IsNullOrEmpty(Legendary.GetItem(item)?.LegendaryAffix))

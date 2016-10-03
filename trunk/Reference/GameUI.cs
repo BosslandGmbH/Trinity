@@ -1,7 +1,7 @@
 ﻿using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -410,8 +410,8 @@ namespace Trinity.Reference
 
             if (IsElementVisible(PartyFollowerBossDecline))
             {
-                var declineInBounty = Core.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.DeclineInBounty && ZetaDia.ActInfo.ActiveBounty != null;
-                var alwaysDecline = Core.Settings.Combat.Misc.FollowerBossFightDialogMode == MiscCombatSetting.FollowerBossFightMode.AlwaysDecline;
+                var declineInBounty = Core.Settings.Combat.FollowerBossFightDialogMode == FollowerBossFightMode.DeclineInBounty && ZetaDia.ActInfo.ActiveBounty != null;
+                var alwaysDecline = Core.Settings.Combat.FollowerBossFightDialogMode == FollowerBossFightMode.AlwaysDecline;
 
                 if (declineInBounty || alwaysDecline)
                 {

@@ -21,8 +21,9 @@ namespace Trinity.Framework
     public sealed class RoutineManager
     {
         private static Lazy<RoutineManager> _instance = new Lazy<RoutineManager>(() => new RoutineManager());
-
         public static RoutineManager Instance => _instance.Value;
+
+        public RoutineSettings Settings => Core.Settings.Routine;
 
         private RoutineManager()
         {
@@ -51,7 +52,7 @@ namespace Trinity.Framework
         {
             if (ChangeEvents.IsInGame.Value && !ZetaDia.Me.SkillOverrideActive)
             {
-                AutoSelectRoutine();
+                SelectRoutine();
             }
         }
 
@@ -59,7 +60,7 @@ namespace Trinity.Framework
         {
             if (ChangeEvents.IsInGame.Value)
             {
-                AutoSelectRoutine();
+                SelectRoutine();
             }
         }
 
@@ -68,7 +69,7 @@ namespace Trinity.Framework
             if (item.NewValue)
             {
                 Thread.Sleep(500);                
-                AutoSelectRoutine();
+                SelectRoutine();
             }
         }
 
@@ -101,9 +102,26 @@ namespace Trinity.Framework
 
         public IEnumerable<IDynamicSetting> DynamicSettings => _routineLoader.Items.Values.Select(r => r.RoutineSettings);
 
-        public void AutoSelectRoutine()
+
+        public void SelectRoutine()
         {
+            if (Core.Settings.Routine == null)
+                return;
+
             var genericRoutines = new List<IRoutine>();
+            var manualSelectionName = Core.Settings.Routine.SelectedRoutineClassName;
+
+            if (Settings.RoutineMode == RoutineMode.Manual && !string.IsNullOrEmpty(manualSelectionName))
+            {
+                Logger.Log($"Loading Selected Routine: {manualSelectionName}");
+                var routine = AllRoutines.FirstOrDefault(r => r.GetType().Name == manualSelectionName);
+                if (routine != null)
+                {
+                    CurrentRoutine = routine;
+                    return;
+                }
+            }
+            
             foreach (var routine in CurrentClassRoutines.OrderBy(r => r.BuildRequirements?.RequirementCount))
             {
                 if (routine.BuildRequirements == null)
@@ -113,12 +131,37 @@ namespace Trinity.Framework
                 }
                 if (routine.BuildRequirements.IsEquipped())
                 {
+                    Logger.Log($"Auto-Selecting special routine: {routine.Class} (Build Requirements Matched)");
                     CurrentRoutine = routine;
                     return;
                 }
             }
-            CurrentRoutine = genericRoutines.FirstOrDefault();
+
+            Logger.Log($"Auto-Selecting default routine for class");
+            CurrentRoutine = genericRoutines.FirstOrDefault();           
         }
+
+        public void ManualSelectRoutine(IRoutine routine)
+        {
+            CurrentRoutine = routine;
+            Settings.SelectedRoutineClassName = routine.GetType().Name;
+            Settings.RoutineMode = RoutineMode.Manual;
+            Logger.Log($"Set Routine Selection: {Settings.SelectedRoutineClassName}");
+
+        }
+
+        public void ManualSelectRoutine(string typeName)
+        {
+            var routine = AllRoutines.FirstOrDefault(r => r.GetType().Name == typeName);
+            if (routine != null)
+            {
+                CurrentRoutine = routine;
+                Settings.SelectedRoutineClassName = routine.GetType().Name;
+                Settings.RoutineMode = RoutineMode.Manual;
+                Logger.Log($"Set Routine Selection: {Settings.SelectedRoutineClassName}");
+            }
+        }
+
     }
 }
 

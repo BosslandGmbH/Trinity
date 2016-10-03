@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Items;
 using Trinity.Reference;
+using Trinity.Settings;
 using Zeta.Bot.Logic;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -25,24 +27,10 @@ namespace Trinity.Coroutines.Town
         public static int TimeoutSeconds = 60;
         public static DateTime LastTimeStarted = DateTime.MinValue;
         private static DateTime _lastGambleTime = DateTime.MinValue;
-        private static List<TownInfo.VendorSlot> _gambleRotation = new List<TownInfo.VendorSlot>();
+        private static List<GambleSlotTypes> _gambleRotation = new List<GambleSlotTypes>();
         private static readonly Random Rnd = new Random();
         public static DateTime LastCanRunCheck = DateTime.MinValue;
         public static bool LastCanRunResult;
-
-        public static void CheckShouldTownRunForGambling()
-        {
-            if (!ZetaDia.IsInTown)
-                IsDumpingShards = false;
-
-            if (Core.Settings.Gambling.ShouldTownRun && ZetaDia.PlayerData.BloodshardCount >= Math.Min(Core.Settings.Gambling.SaveShardsThreshold, Core.Player.MaxBloodShards))
-            {
-                if (CanRun() && !ShouldSaveShards && !TrinityTownRun.IsTryingToTownPortal() && !BrainBehavior.IsVendoring)
-                {
-                    BrainBehavior.ForceTownrun("Bloodshard Spending Threshold");
-                }
-            }
-        }
 
         /// <summary>
         /// If bot can actually purchase something from vendor right now.
@@ -56,20 +44,23 @@ namespace Trinity.Coroutines.Town
                     if (!ZetaDia.IsInTown || ZetaDia.WorldType != Act.OpenWorld || Core.Player.IsCastingOrLoading)
                         return false;
 
+                    if (Core.Settings.Items.GamblingMode == SettingMode.Disabled)
+                        return false;
+
                     var kadala = TownInfo.Kadala?.GetActor();
                     if (!UIElements.VendorWindow.IsVisible || kadala == null || kadala.Distance > 12f)
                     {
-                        LogVerbose("Vendor window is not open or can't find kadala or shes not close enough");
+                        LogVerbose("Vendor window is not open or can't find kadala or she's not close enough");
                         return false;
                     }
 
-                    if (!TrinityItemManager.IsAnyTwoSlotBackpackLocation)
+                    if (!DefaultLootProvider.IsAnyTwoSlotBackpackLocation)
                     {
                         LogVerbose("No bag space");
                         return false;
                     }
 
-                    if (ZetaDia.PlayerData.BloodshardCount < Core.Settings.Gambling.MinimumBloodShards || !CanAffordMostExpensiveItem)
+                    if (ZetaDia.PlayerData.BloodshardCount < GambleMinimumShards || !CanAffordMostExpensiveItem)
                     {
                         LogVerbose("Not enough shards!");
                         return false;
@@ -93,15 +84,10 @@ namespace Trinity.Coroutines.Town
 
         public static async Task<bool> Execute()
         {
-            if (!ZetaDia.IsInTown)
-                IsDumpingShards = false;
-
             try
             {
-                while (CanRun() && (!ShouldSaveShards || IsDumpingShards))
+                while (CanRun())
                 {
-                    IsDumpingShards = true;
-
                     if ((TownInfo.Kadala.Distance > 8f || !UIElements.VendorWindow.IsVisible) && !await MoveToAndInteract.Execute(TownInfo.Kadala))
                     {
                         Logger.Log("[Gamble] Failed to move to Kadala, quite unfortunate.");
@@ -109,11 +95,15 @@ namespace Trinity.Coroutines.Town
                     }
 
                     if (CanBuyItems)
+                    {
                         await BuyItem();
+                    }
                     else
+                    {
                         GameUI.CloseVendorWindow();
+                    }
 
-                    if (!TrinityItemManager.IsAnyTwoSlotBackpackLocation)
+                    if (!DefaultLootProvider.IsAnyTwoSlotBackpackLocation)
                     {
                         BrainBehavior.ForceTownrun();
                     }
@@ -135,6 +125,8 @@ namespace Trinity.Coroutines.Town
             return true;           
         }
 
+        private static int GambleMinimumShards => Core.Settings.Items.GamblingMode == SettingMode.Enabled ? 0 : Core.Settings.Items.GamblingMinShards;
+
         private static async Task<bool> BuyItem()
         {
             try
@@ -146,10 +138,10 @@ namespace Trinity.Coroutines.Town
                 if (!UIElements.VendorWindow.IsVisible)
                     return false;
 
-
-
                 if (!_gambleRotation.Any())
-                    _gambleRotation = Core.Settings.Gambling.SelectedGambleSlots;
+                {
+                    _gambleRotation = NewGambleRotation();
+                }
 
                 var slot = _gambleRotation[Rnd.Next(_gambleRotation.Count)];
                 var itemId = TownInfo.MysterySlotTypeAndId[slot];
@@ -182,6 +174,14 @@ namespace Trinity.Coroutines.Town
             return false;
         }
 
+        public static IEnumerable<GambleSlotTypes> Types 
+            => Core.Settings.Items.GamblingTypes.ToList<GambleSlotTypes>();
+       
+        public static List<GambleSlotTypes> NewGambleRotation() 
+            => Core.Settings.Items.GamblingMode != SettingMode.Enabled 
+            ? Types.Where(t => Core.Settings.Items.GamblingTypes.HasFlag(t)).ToList()
+            : Types.ToList();
+
         public static bool CanRun(bool ignoreSaveThreshold = false)
         {
             if (!ZetaDia.IsInGame)
@@ -194,16 +194,22 @@ namespace Trinity.Coroutines.Town
                     return false;
                 }
 
-                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Loot.TownRun.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
+                if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     LogVerbose("No gambling during greater rift due to backpack items being disabled ");
                     return false;
                 }
 
-                if (Core.Settings.Gambling.SelectedGambleSlots.Count <= 0)
-                {
-                    LogVerbose("Select at least one thing to buy in settings");
+                if (Core.Settings.Items.GamblingMode == SettingMode.Disabled)
                     return false;
+
+                if (Core.Settings.Items.GamblingMode == SettingMode.Selective)
+                {
+                    if (Core.Settings.Items.GamblingTypes == GambleSlotTypes.None)
+                    {
+                        LogVerbose("Select at least one thing to buy in settings");
+                        return false;
+                    }
                 }
 
                 if (BelowMinimumShards)
@@ -218,7 +224,7 @@ namespace Trinity.Coroutines.Town
                     return false;
                 }
 
-                if (!TrinityItemManager.IsAnyTwoSlotBackpackLocation || ZetaDia.Me.Inventory.NumFreeBackpackSlots < 5)
+                if (!DefaultLootProvider.IsAnyTwoSlotBackpackLocation || ZetaDia.Me.Inventory.NumFreeBackpackSlots < 5)
                 {
                     LogVerbose("No Backpack space!");
                     return false;
@@ -242,13 +248,7 @@ namespace Trinity.Coroutines.Town
 
         private static void LogVerbose(string msg, params object[] args)
         {
-            var debugInfo = string.Format(" Shards={0} SaveShards={1} SaveThreshold={2} CanAffordItem={3} SelectedSlots={4}",
-                ZetaDia.PlayerData.BloodshardCount,
-                Core.Settings.Gambling.ShouldSaveShards,
-                Math.Min(Core.Settings.Gambling.SaveShardsThreshold, Core.Player.MaxBloodShards),
-                CanAffordMostExpensiveItem,
-                Core.Settings.Gambling.SelectedGambleSlots.Count);
-
+            var debugInfo = $" Shards={ZetaDia.PlayerData.BloodshardCount} GambleMode={Core.Settings.Items.GamblingMode} ShardMinimum={Core.Settings.Items.GamblingMinShards}";
             Logger.LogVerbose("[Gamble]" + msg + debugInfo, args);
         }
 
@@ -265,31 +265,14 @@ namespace Trinity.Coroutines.Town
         {
             get
             {
-                var slotAndPrice = TownInfo.MysterySlotTypeAndPrice.Where(pair => Core.Settings.Gambling.SelectedGambleSlots.Contains(pair.Key)).ToList();
+                if (Core.Settings.Items.GamblingMode == SettingMode.Enabled)
+                    return TownInfo.MysterySlotTypeAndPrice.Max(pair => pair.Value) <= ZetaDia.PlayerData.BloodshardCount;
+
+                var slotAndPrice = TownInfo.MysterySlotTypeAndPrice.Where(pair => Core.Settings.Items.GamblingTypes.HasFlag(pair.Key)).ToList();
                 return slotAndPrice.Any() && slotAndPrice.Max(pair => pair.Value) <= ZetaDia.PlayerData.BloodshardCount;
             }
         }
 
-        private static bool IsDumpingShards { get; set; }
-
-        private static bool BelowMinimumShards
-        {
-            get { return ZetaDia.PlayerData.BloodshardCount < Core.Settings.Gambling.MinimumBloodShards; }
-        }
-
-        private static bool ShouldSaveShards
-        {
-            get
-            {
-                if (Core.Settings.Gambling.ShouldSaveShards && ZetaDia.PlayerData.BloodshardCount < Math.Min(Core.Settings.Gambling.SaveShardsThreshold, Core.Player.MaxBloodShards))
-                {
-                    LogVerbose("Should Save Shards!");
-                    return true;
-                }
-                return false;
-            }
-        }
-
-
+        private static bool BelowMinimumShards => ZetaDia.PlayerData.BloodshardCount < GambleMinimumShards;
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
@@ -39,7 +40,7 @@ namespace Trinity.Coroutines
 
         public async Task<bool> Execute()
         {
-            if (!Core.Settings.Loot.Pickup.AutoEquipItems)
+            if (!Core.Settings.Items.AutoEquipItems)
                 return false;
 
             if (!Core.Player.IsValid || Core.Player.IsInCombat || !ZetaDia.IsInGame || ZetaDia.IsLoadingWorld)
@@ -48,10 +49,7 @@ namespace Trinity.Coroutines
             if (DateTime.UtcNow.Subtract(_lastEquipCheckTime).TotalSeconds < 5)
                 return false;
 
-            //if (DateTime.UtcNow.Subtract(Settings.TrinityPlugin.BotStartTime).TotalSeconds < 10)
-            //    return false;
-
-            if (!ZetaDia.Me.IsValid || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed || ZetaDia.Me.Level == 0 || ZetaDia.Me.Level >= 70 && Core.Settings.Loot.Pickup.DisableAutoEquipAtMaxLevel)
+            if (!ZetaDia.Me.IsValid || !ZetaDia.Me.CommonData.IsValid || ZetaDia.Me.CommonData.IsDisposed || ZetaDia.Me.Level == 0 || ZetaDia.Me.Level >= 70 && Core.Settings.Items.AutoEquipAutoDisable)
                 return false;
 
             if (_lastFreeBackpackSlots == Core.Player.FreeBackpackSlots)
@@ -135,8 +133,8 @@ namespace Trinity.Coroutines
 
         private void UnequipItem(CachedACDItem item)
         {
-            var location = TrinityItemManager.FindValidBackpackLocation(true);
-            if (location == TrinityItemManager.NoFreeSlot)
+            var location = DefaultLootProvider.FindBackpackLocation(true);
+            if (location == DefaultLootProvider.NoFreeSlot)
                 return;
 
             Logger.Log("Unequipping Item {0} ({1}) from slot {2}", item.RealName, item.ActorSnoId, item.InventorySlot);
@@ -322,13 +320,13 @@ namespace Trinity.Coroutines
                     return BackpackEquipment.Where(i => i.ItemType == ItemType.Ring);
 
                 case InventorySlot.RightHand:
-                    if (Core.Settings.Loot.Pickup.AutoEquipIgnoreWeapons)
+                    if (Core.Settings.Items.AutoEquipIgnoreWeapons)
                         return null;
 
                     return BackpackEquipment.Where(i => i.TrinityItemBaseType == TrinityItemBaseType.Offhand || i.TrinityItemType == TrinityItemType.CrusaderShield);
 
                 case InventorySlot.LeftHand:
-                    if (Core.Settings.Loot.Pickup.AutoEquipIgnoreWeapons)
+                    if (Core.Settings.Items.AutoEquipIgnoreWeapons)
                         return null;
 
                     return BackpackEquipment.Where(i => i.BaseType == ItemBaseType.Weapon && (i.OneHanded || i.TwoHanded));

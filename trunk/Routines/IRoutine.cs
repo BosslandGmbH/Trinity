@@ -4,7 +4,7 @@ using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
 

@@ -13,7 +13,7 @@ namespace Trinity.UI.UIComponents
 
         private bool _isInGame;
 
-        public GameInfo()
+        private GameInfo()
         {
             ChangeEvents.IsInGame.Changed += IsInGameOnChanged;
             IsInGame = ChangeEvents.IsInGame.Value;

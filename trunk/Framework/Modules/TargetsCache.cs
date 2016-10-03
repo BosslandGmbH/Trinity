@@ -356,12 +356,12 @@ namespace Trinity.Framework.Modules
 
         private bool ShouldIncludeGold(TrinityItem cacheObject)
         {
-            if (!Core.Settings.Loot.Pickup.PickupGold)
+            if (!Core.Settings.Items.PickupGold)
             {
                 cacheObject.AddCacheInfo("GoldPickupDisabled");
                 return false;
             }
-            if (cacheObject.GoldAmount < Core.Settings.Loot.Pickup.MinimumGoldStack)
+            if (cacheObject.GoldAmount < Core.Settings.Items.MinGoldStack)
             {
                 cacheObject.AddCacheInfo("NotEnoughGold");
                 return false;
@@ -371,7 +371,7 @@ namespace Trinity.Framework.Modules
 
         private bool ShouldCacheItem(TrinityItem cacheObject)
         {
-            if (!cacheObject.IsPickupNoClick && !TrinityItemManager.CachedIsValidTwoSlotBackpackLocation)
+            if (!cacheObject.IsPickupNoClick && !Combat.Loot.IsBackpackFull)
             {
                 cacheObject.AddCacheInfo("BackpackFull");
                 return false;
@@ -389,15 +389,15 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (cacheObject.ItemQualityLevel <= ItemQuality.Rare4 && cacheObject.Distance > CharacterSettings.Instance.LootRadius)
+            if (cacheObject.ItemQualityLevel <= ItemQuality.Rare4 && cacheObject.Distance > 60f)
             {
                 cacheObject.AddCacheInfo($"OutOfRange Limit={CharacterSettings.Instance.LootRadius}");
                 return false;
             }
 
-            if (!TrinityItemManager.ShouldPickupItem(cacheObject))
+            if (!Combat.Loot.ShouldPickup(cacheObject))
             {
-                cacheObject.AddCacheInfo("TrinityItemManager");
+                cacheObject.AddCacheInfo("LootProvider.ShouldPickup");
                 return false;
             }
 

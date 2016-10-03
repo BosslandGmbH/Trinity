@@ -119,6 +119,15 @@
     <Compile Include="Framework\Helpers\ObjectComparer.cs" />
     <Compile Include="Framework\Helpers\ProjectionEqualityComparer.cs" />
     <Compile Include="Framework\Modules\ChangeMonitor.cs" />
+    <Compile Include="Framework\Objects\Api\ApiBuild.cs" />
+    <Compile Include="Framework\Objects\Api\ApiRoutineBuilder.cs" />
+    <Compile Include="Framework\Objects\Api\ApiBuildBuilder.cs" />
+    <Compile Include="Framework\Objects\Api\ApiItem.cs" />
+    <Compile Include="Framework\Objects\Api\ApiPassive.cs" />
+    <Compile Include="Framework\Objects\Api\ApiRoutine.cs" />
+    <Compile Include="Framework\Objects\Api\ApiSet.cs" />
+    <Compile Include="Framework\Objects\Api\ApiSkill.cs" />
+    <Compile Include="Framework\Objects\DynamicSetting.cs" />
     <Compile Include="Framework\Objects\Memory\ActivePlayer.cs" />
     <Compile Include="Framework\Objects\Memory\Containers\Allocator.cs" />
     <Compile Include="Framework\Objects\Memory\Games.cs" />
@@ -409,7 +418,6 @@
     <Compile Include="Framework\Actors\ActorCache.cs" />
     <Compile Include="Framework\ModuleManager.cs" />
     <Compile Include="Framework\Helpers\ConcurrentCache.cs" />
-    <Compile Include="Framework\Modules\BuildCache.cs" />
     <Compile Include="Framework\Modules\GameStopper.cs" />
     <Compile Include="Framework\Modules\MinimapCache.cs" />
     <Compile Include="Framework\Modules\WorldCache.cs" />
@@ -555,11 +563,6 @@
     <Compile Include="Framework\Avoidance\DefaultAvoider.cs" />
     <Compile Include="Framework\Avoidance\Handlers\AnimationCircularAvoidanceHandler.cs" />
     <Compile Include="Framework\Helpers\GridHelper.cs" />
-    <Compile Include="Framework\Objects\API\Build.cs" />
-    <Compile Include="Framework\Objects\API\Item.cs" />
-    <Compile Include="Framework\Objects\API\Passive.cs" />
-    <Compile Include="Framework\Objects\API\Set.cs" />
-    <Compile Include="Framework\Objects\API\Skill.cs" />
     <Compile Include="Framework\Objects\Enums\ControlType.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXControl.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXHelper.cs" />
@@ -626,13 +629,11 @@
     <Compile Include="Routines\Wizard\WizardFlashfire.cs" />
     <Compile Include="Routines\Wizard\WizardFirebirdArchon.cs" />
     <Compile Include="Routines\Wizard\WizardDefault.cs" />
-    <Compile Include="Settings\DynamicNodeCollection.cs" />
-    <Compile Include="Settings\DynamicSettingGroup.cs" />
-    <Compile Include="Settings\DynamicSettingNode.cs" />
-    <Compile Include="Settings\Paragon\ParagonSetting.cs" />
+    <Compile Include="Settings\RoutineSettings.cs" />
+    <Compile Include="Settings\ItemSettings.cs" />
+    <Compile Include="Settings\Paragon\ParagonSettings.cs" />
     <Compile Include="Settings\Paragon\ParagonItem.cs" />
     <Compile Include="Settings\Paragon\TrinityParagonBonusType.cs" />
-    <Compile Include="Settings\RoutineSettingsViewModel.cs" />
     <Compile Include="Settings\RoutineViewModel.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\Modals\SettingsSelectionViewModel.cs" />
@@ -643,6 +644,7 @@
     <Compile Include="Framework\Helpers\TypeCrawler.cs" />
     <Compile Include="UI\UIComponents\Behaviors\MouseObserver.cs" />
     <Compile Include="UI\UIComponents\Controls\RangeSlider.cs" />
+    <Compile Include="UI\UIComponents\Converters\BoolToValueMultiConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\EnumToValueConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\FlagEnumValueConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\ValueToStringConverter.cs" />
@@ -757,7 +759,7 @@
     <Compile Include="Framework\Helpers\HashGenerator.cs" />
     <Compile Include="Framework\Helpers\MathUtil.cs" />
     <Compile Include="Components\Combat\Resources\TargetUtil.cs" />
-    <Compile Include="Items\TrinityItemManager.cs" />
+    <Compile Include="Components\Combat\DefaultLootProvider.cs" />
     <Compile Include="Framework\Objects\Item.cs" />
     <Compile Include="Framework\Objects\Passive.cs" />
     <Compile Include="Framework\Objects\Rune.cs" />
@@ -772,21 +774,16 @@
     <Compile Include="Reference\Sets.cs" />
     <Compile Include="Reference\Skills.cs" />
     <Compile Include="Reference\SkillUtils.cs" />
-    <Compile Include="Settings\Combat\CrusaderSetting.cs" />
-    <Compile Include="Settings\GamblingSetting.cs" />
     <Compile Include="Settings\ITrinitySettingEvents.cs" />
     <Compile Include="Settings\KanaisCubeSetting.cs" />
-    <Compile Include="Settings\Loot\PresetLists.cs" />
+    <Compile Include="Items\ItemList\PresetLists.cs" />
     <Compile Include="Items\ItemList\ItemListSettings.cs" />
-    <Compile Include="Settings\Loot\ItemRankSettings.cs" />
     <Compile Include="Items\ItemList\ItemListMockData.cs" />
     <Compile Include="Settings\Mock\MockData.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Components\Combat\DefaultRoutineProvider.cs" />
     <Compile Include="Items\PersistentStats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\Loot\ItemEnumOptions.cs" />
-    <Compile Include="Settings\Loot\ItemRuleSetting.cs" />
     <Compile Include="Framework\Helpers\FileManager.cs" />
     <Compile Include="Framework\Helpers\Logger.cs" />
     <Compile Include="Framework\Helpers\LogCategory.cs" />
@@ -794,32 +791,19 @@
     <Compile Include="DbProvider\TrinityCombatProvider.cs" />
     <Compile Include="DbProvider\BlankLootProvider.cs" />
     <Compile Include="DbProvider\BlankObstacleProvider.cs" />
-    <Compile Include="Settings\AdvancedSetting.cs" />
-    <Compile Include="Settings\Combat\AvoidanceRadiusSetting.cs" />
-    <Compile Include="Settings\Combat\BarbarianSetting.cs" />
-    <Compile Include="Settings\Combat\CombatSetting.cs" />
-    <Compile Include="Settings\Combat\DemonHunterSetting.cs" />
-    <Compile Include="Settings\Combat\EnumOptions.cs" />
-    <Compile Include="Settings\Combat\IAvoidanceHealth.cs" />
-    <Compile Include="Settings\Combat\MiscCombatSetting.cs" />
-    <Compile Include="Settings\Combat\MonkSetting.cs" />
-    <Compile Include="Settings\Combat\WitchDoctorSetting.cs" />
-    <Compile Include="Settings\Combat\WizardSetting.cs" />
+    <Compile Include="Settings\AdvancedSettings.cs" />
+    <Compile Include="Settings\CombatSettings.cs" />
+    <Compile Include="Settings\SettingsEnums.cs" />
     <Compile Include="Settings\ITrinitySetting.cs" />
-    <Compile Include="Settings\Loot\ItemSetting.cs" />
-    <Compile Include="Settings\Loot\PickupSetting.cs" />
-    <Compile Include="Settings\Loot\TownRunSetting.cs" />
-    <Compile Include="Settings\TrinitySetting.cs" />
+    <Compile Include="Settings\TrinityStorage.cs" />
     <Compile Include="Framework\Helpers\PerformanceLogger.cs" />
     <Compile Include="Framework\Helpers\NotifyBase.cs" />
     <Compile Include="UI\UIComponents\Behaviors\SizeObserver.cs" />
     <Compile Include="UI\UIComponents\BindingMember.cs" />
     <Compile Include="UI\UIComponents\BindingProxy.cs" />
-    <Compile Include="UI\UIComponents\CacheUI.cs" />
     <Compile Include="UI\TabUI.cs" />
     <Compile Include="UI\UIComponents\Behaviors\ComboAlwaysFireSelection.cs" />
     <Compile Include="UI\UIComponents\Behaviors\InputBindingBehavior.cs" />
-    <Compile Include="UI\UIComponents\CacheUIDataModel.cs" />
     <Compile Include="UI\UIComponents\Controls\AutoSizedGridView.cs" />
     <Compile Include="UI\UIComponents\Controls\ColumnDefinitionExtended.cs" />
     <Compile Include="UI\UIComponents\Controls\GridViewColumnExtended.cs" />
@@ -875,7 +859,6 @@
     <Compile Include="UI\UIComponents\Input\Macro.cs" />
     <Compile Include="UI\UIComponents\Input\MouseInput.cs" />
     <Compile Include="UI\UIComponents\Input\WindowsHookHelper.cs" />
-    <Compile Include="UI\UIComponents\IntegerStringBinding.cs" />
     <Compile Include="Items\ItemList\ItemProperty.cs" />
     <Compile Include="Items\ItemList\LRule.cs" />
     <Compile Include="UI\UIComponents\Behaviors\CancelMouseBubbling.cs" />
@@ -898,7 +881,6 @@
     <Compile Include="UI\UIComponents\PropertyValueFlagBindingItem.cs" />
     <Compile Include="UI\UIComponents\RelayCommand.cs" />
     <Compile Include="Items\ItemList\LItem.cs" />
-    <Compile Include="UI\UIComponents\ThreadedWindow.cs" />
     <Compile Include="UI\UIComponents\UIControlType.cs" />
     <Compile Include="UI\UILoader.cs" />
     <Compile Include="Components\Combat\DefaultWeightingProvider.cs" />
@@ -977,6 +959,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\Items.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="UI\General.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -989,59 +975,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Combat\SkillSettings.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="UI\Paragon.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\CacheUI.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Combat\ConfigMisc.xaml">
+    <Page Include="UI\ItemsTabs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Combat\ConfigBarb.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Combat\ConfigMonk.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Combat\ConfigDH.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Combat\ConfigWiz.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Combat\ConfigWD.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Combat\Avoidance.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Combat\ConfigCrusader.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\ConfigItems.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Items\Gambling.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Items\KanaisCube.xaml">
+    <Page Include="UI\KanaisCube.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1057,35 +999,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UI\Items\ConfigItemRules.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Items\ConfigNotification.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\ConfigAdvanced.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Items\ConfigScoring.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Items\ConfigPickup.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\ConfigObjects.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\ConfigCombat.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\Items\ConfigItemRank.xaml">
+    <Page Include="UI\Advanced.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

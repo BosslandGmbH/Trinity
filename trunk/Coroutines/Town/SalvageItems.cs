@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
@@ -37,7 +38,7 @@ namespace Trinity.Coroutines.Town
             if (Cache.ContainsKey(i.AnnId))
                 return Cache[i.AnnId];
 
-            var decision = TrinityItemManager.TrinitySalvage(i) && !StashItems.ShouldStash(i);
+            var decision = Combat.Loot.ShouldSalvage(i) && !StashItems.ShouldStash(i);
             Cache.Add(i.AnnId, decision);
             return decision;
         }
@@ -104,7 +105,7 @@ namespace Trinity.Coroutines.Town
             {
                 if (ZetaDia.Me.Level >= 70 && UIElements.SalvageAllWrapper.IsVisible)
                 {
-                    var items = Inventory.Backpack.Items.Where(i => TrinityItemManager.TrinitySalvage(i)).ToList();
+                    var items = Inventory.Backpack.Items.Where(i => Combat.Loot.ShouldSalvage(i)).ToList();
 
                     var normalItemCount = items.Count(i => NormalQualityLevels.Contains(i.ItemQualityLevel));
                     if (normalItemCount > 0)

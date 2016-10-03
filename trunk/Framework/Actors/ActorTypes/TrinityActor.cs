@@ -9,6 +9,7 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Symbols.Types;
+using Trinity.Settings;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -127,6 +128,9 @@ namespace Trinity.Framework.Actors.ActorTypes
         public PetType PetType { get; set; } = PetType.None;
         public bool IsNoDamage { get; set; }
         public TeamType Team { get; set; }
+        public EliteTypes EliteType { get; set; }
+        public ShrineTypes ShrineType { get; set; }
+        public ContainerTypes ContainerType { get; set; }
 
         /// <summary>
         /// Rotation in radians
@@ -198,6 +202,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsFacingPlayer => TargetUtil.IsFacing(this, Core.Player.Position, 30f);
         public double CacheTime => Math.Abs(UpdateTime) < double.Epsilon ? CreateTime : UpdateTime;
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;
+
 
 
         public void AddCacheInfo(string reason)

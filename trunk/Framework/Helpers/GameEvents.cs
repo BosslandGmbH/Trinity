@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework.Objects.Memory.Attributes;
@@ -34,7 +35,7 @@ namespace Trinity.Framework.Helpers
                 ItemDropStats.MaintainStatTracking = true;
             }
 
-            TrinityItemManager.ResetBackPackCheck();
+            DefaultLootProvider.ResetBackPackCheck();
             HookManager.ReplaceTreeHooks();
             TreeHooks.Instance.OnHooksCleared += HookManager.InstanceOnOnHooksCleared;
             GoldInactivity.Instance.ResetCheckGold();
@@ -59,7 +60,7 @@ namespace Trinity.Framework.Helpers
         public static void GameEvents_OnWorldChanged(object sender, EventArgs e)
         {
             SnapShot.Record();
-            TrinityItemManager.ResetBackPackCheck();
+            DefaultLootProvider.ResetBackPackCheck();
         }
 
         public static void TrinityBotStop(IBot bot)
@@ -78,7 +79,7 @@ namespace Trinity.Framework.Helpers
             {
                 Clear();
                 SpellHistory.History.Clear();
-                TrinityItemManager.ResetBackPackCheck();
+                DefaultLootProvider.ResetBackPackCheck();
             }
 
             SnapShot.Record();
@@ -102,7 +103,7 @@ namespace Trinity.Framework.Helpers
             Trinity.TrinityPlugin.BeginInvoke(() =>
             {
                 Logger.Log("New Game - resetting everything");
-                TrinityItemManager.ResetBackPackCheck();
+                DefaultLootProvider.ResetBackPackCheck();
                 SpellHistory.History.Clear();            
                 ItemDropStats._hashsetItemStatsLookedAt = new HashSet<string>();
                 ItemDropStats._hashsetItemPicksLookedAt = new HashSet<string>();

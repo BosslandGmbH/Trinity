@@ -5,16 +5,15 @@ using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings.Loot;
 
 namespace Trinity.Settings
 {
     [DataContract(Namespace = "")]
-    public class KanaisCubeSetting : ITrinitySetting<KanaisCubeSetting>, INotifyPropertyChanged
+    public class KanaisCubeSetting : NotifyBase
     {
-        #region Fields
-
         private ItemSelectionType _rareUpgradeTypes;
         private int _conversionQuantityThreshold;
         private bool _createVeiledCrystals;
@@ -24,115 +23,49 @@ namespace Trinity.Settings
         private CubeExtractOption _extractLegendaryPowers;
         private bool _cubeExtractFromStash;
 
-        #endregion Fields
-
-        #region Events
-        /// <summary>
-        /// Occurs when property changed.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-        #endregion Events
-
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="KanaisCubeSetting" /> class.
-        /// </summary>
         public KanaisCubeSetting()
         {
-            Reset();
+            base.LoadDefaults();
         }
-        #endregion Constructors
-
-        #region Properties
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool CreateReusableParts
         {
-            get
-            {
-                return _createReusableParts;
-            }
-            set
-            {
-                if (_createReusableParts != value)
-                {
-                    _createReusableParts = value;
-                    OnPropertyChanged("CreateReusableParts");
-                }
-            }
+            get { return _createReusableParts; }
+            set { SetField(ref _createReusableParts, value); }
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool CreateVeiledCrystals
         {
-            get
-            {
-                return _createVeiledCrystals;
-            }
-            set
-            {
-                if (_createVeiledCrystals != value)
-                {
-                    _createVeiledCrystals = value;
-                    OnPropertyChanged("CreateVeiledCrystals");
-                }
-            }
+            get { return _createVeiledCrystals; }
+            set { SetField(ref _createVeiledCrystals, value); }
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool CreateArcaneDust
         {
-            get
-            {
-                return _createArcaneDust;
-            }
-            set
-            {
-                if (_createArcaneDust != value)
-                {
-                    _createArcaneDust = value;
-                    OnPropertyChanged("CreateArcaneDust");
-                }
-            }
+            get { return _createArcaneDust; }
+            set { SetField(ref _createArcaneDust, value); }
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(25000)]
         public int ConversionQuantityThreshold
         {
-            get
-            {
-                return _conversionQuantityThreshold;
-            }
-            set
-            {
-                if (_conversionQuantityThreshold != value)
-                {
-                    _conversionQuantityThreshold = value;
-                    OnPropertyChanged("ConversionQuantityThreshold");
-                }
-            }
+            get { return _conversionQuantityThreshold; }
+            set { SetField(ref _conversionQuantityThreshold, value); }
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(0)]
         public int DeathsBreathMinimum
         {
-            get
-            {
-                return _deathsBreathMinimum;
-            }
-            set
-            {
-                if (_deathsBreathMinimum != value)
-                {
-                    _deathsBreathMinimum = value;
-                    OnPropertyChanged("DeathsBreathMinimum");
-                }
-            }
+            get { return _deathsBreathMinimum; }
+            set { SetField(ref _deathsBreathMinimum, value); }
         }
 
 
@@ -140,60 +73,29 @@ namespace Trinity.Settings
         [DefaultValue(default(ItemSelectionType))]
         public ItemSelectionType RareUpgradeTypes
         {
-            get
-            {
-                return _rareUpgradeTypes;
-            }
-            set
-            {
-                if (_rareUpgradeTypes != value)
-                {
-                    _rareUpgradeTypes = value;
-                    OnPropertyChanged("RareUpgradeTypes");
-                }
-            }
+            get { return _rareUpgradeTypes; }
+            set { SetField(ref _rareUpgradeTypes, value); }
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(CubeExtractOption.None)]
         public CubeExtractOption ExtractLegendaryPowers
         {
-            get
-            {
-                return _extractLegendaryPowers;
-            }
-            set
-            {
-                if (_extractLegendaryPowers != value)
-                {
-                    _extractLegendaryPowers = value;
-                    OnPropertyChanged("ExtractLegendaryPowers");
-                }
-            }
+            get { return _extractLegendaryPowers; }
+            set { SetField(ref _extractLegendaryPowers, value); }
         }
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
         public bool CubeExtractFromStash
         {
-            get
-            {
-                return _cubeExtractFromStash;
-            }
-            set
-            {
-                if (_cubeExtractFromStash != value)
-                {
-                    _cubeExtractFromStash = value;
-                    OnPropertyChanged("CubeExtractFromStash");
-                }
-            }
+            get { return _cubeExtractFromStash; }
+            set { SetField(ref _cubeExtractFromStash, value); }
         }
 
         public HashSet<ItemSelectionType> GetRareUpgradeSettings()
         {
-            var selectedTypes = Core.Settings.KanaisCube.RareUpgradeTypes;
-            return new HashSet<ItemSelectionType>(Enum.GetValues(selectedTypes.GetType()).Cast<Enum>().Where(selectedTypes.HasFlag).Cast<ItemSelectionType>());
+            return new HashSet<ItemSelectionType>(Enum.GetValues(RareUpgradeTypes.GetType()).Cast<Enum>().Where(RareUpgradeTypes.HasFlag).Cast<ItemSelectionType>());
         }
 
         public HashSet<InventoryItemType> GetCraftingMaterialTypes()
@@ -208,51 +110,5 @@ namespace Trinity.Settings
             return result;
         }
 
-        #endregion Properties
-
-        #region Methods
-        public void Reset()
-        {            
-            TrinitySetting.Reset(this);
-        }
-
-        public void CopyTo(KanaisCubeSetting setting)
-        {
-            TrinitySetting.CopyTo(this, setting);
-        }
-
-        public KanaisCubeSetting Clone()
-        {
-            return TrinitySetting.Clone(this);
-        }
-
-        /// <summary>
-        /// Called when property changed.
-        /// </summary>
-        /// <param name="propertyName">Name of the property.</param>
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        /// <summary>
-        /// This will set default values for new settings if they were not present in the serialized XML (otherwise they will be the type defaults)
-        /// </summary>
-        /// <param name="context"></param>
-        [OnDeserializing()]
-        internal void OnDeserializingMethod(StreamingContext context)
-        {
-            foreach (var p in GetType().GetProperties())
-            {
-                foreach (var dv in p.GetCustomAttributes(true).OfType<DefaultValueAttribute>())
-                {
-                    p.SetValue(this, dv.Value);
-                }
-            }
-        }
-        #endregion Methods
     }
 }

@@ -147,6 +147,7 @@ namespace Trinity.Components.Adventurer.UI
             _bountyPrioritizeBonusAct = LogicalTreeHelper.FindLogicalNode(_mainControl, "BountyPrioritizeBonusAct") as CheckBox;
 
             _pluginSettings = PluginSettings.Current;
+
             DataContext = _pluginSettings;
             //BattleNetHeroId = heroId;
         }

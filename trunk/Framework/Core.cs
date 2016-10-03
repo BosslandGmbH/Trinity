@@ -25,13 +25,13 @@ namespace Trinity.Framework
     {
         public static bool IsEnabled { get; private set; }
         public static MemoryModel MemoryModel { get; } = new MemoryModel();
+        public static RoutineManager Routines => RoutineManager.Instance;
 
         // Components
-        public static Adventurer Adventurer { get; } = new Adventurer();
-        public static RoutineManager Routines => RoutineManager.Instance;
-        public static InventoryCache Inventory { get; } = new InventoryCache();
+        public static Adventurer Adventurer { get; } = Adventurer.Instance;
 
         // Modules
+        public static InventoryCache Inventory { get; } = new InventoryCache();
         public static ActorCache Actors { get; } = new ActorCache();
         public static HotbarCache Hotbar { get; } = new HotbarCache();
         public static PlayerCache Player { get; } = new PlayerCache();
@@ -48,7 +48,6 @@ namespace Trinity.Framework
         public static MinimapCache Minimap { get; } = new MinimapCache();
         public static WorldCache World { get; } = new WorldCache();
         public static Clusters Clusters { get; } = new Clusters();
-        public static BuildCache Build { get; } = new BuildCache();
 
         // Misc
         public static GridHelper Grids { get; } = new GridHelper();
@@ -57,7 +56,9 @@ namespace Trinity.Framework
         public static BlockedCheck BlockedCheck { get; } = new BlockedCheck();
         public static ChangeMonitor ChangeMonitor { get; } = new ChangeMonitor();
 
-        public static TrinitySetting Settings => TrinityPluginSettings.Settings;
+        public static SettingsModel Settings => TrinitySettings.Settings;
+        public static TrinityStorage Storage => TrinitySettings.Storage;
+
         internal static MainGridProvider DBGridProvider => (MainGridProvider)Navigator.SearchGridProvider;
 
         private static void OnGameJoined(object sender, EventArgs e) => ModuleManager.FireEvent(ModuleEvent.GameJoined);        
@@ -104,7 +105,7 @@ namespace Trinity.Framework
                 Actors.Update();
                 Inventory.Update();
                 Hotbar.Update();
-                Routines.AutoSelectRoutine();
+                Routines.SelectRoutine();
 
                 Logger.Log("Trinity Framework Enabled");
                 IsEnabled = true;

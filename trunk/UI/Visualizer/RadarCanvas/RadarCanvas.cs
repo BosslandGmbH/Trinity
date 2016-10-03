@@ -919,19 +919,19 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         private void DrawCombatRadius(DrawingContext dc, CanvasData canvasData)
         {
-            try
-            {
-                var combatRadius = Core.Settings.Combat.Misc.NonEliteRange;
-                var radius = combatRadius * GridSize;
-                dc.DrawEllipse(null, RadarResources.GreyPen, Player.Point, radius, radius);
+            //try
+            //{
+            //    var combatRadius = Core.Settings.Combat.Misc.NonEliteRange;
+            //    var radius = combatRadius * GridSize;
+            //    dc.DrawEllipse(null, RadarResources.GreyPen, Player.Point, radius, radius);
 
-                dc.DrawText(new FormattedText($"{combatRadius}", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brushes.LightYellow),
-                    new Point(Player.Point.X, Player.Point.Y - (radius + 20)));
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception in RadarUI.DrawCurrentpath(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            }
+            //    dc.DrawText(new FormattedText($"{combatRadius}", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brushes.LightYellow),
+            //        new Point(Player.Point.X, Player.Point.Y - (radius + 20)));
+            //}
+            //catch (Exception ex)
+            //{
+            //    Logger.Log("Exception in RadarUI.DrawCurrentpath(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+            //}
         }
 
         private DefaultNavigationProvider NavigationProvider { get; set; }

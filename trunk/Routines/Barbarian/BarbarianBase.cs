@@ -6,7 +6,7 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -236,6 +236,9 @@ namespace Trinity.Routines.Barbarian
                 return true;
 
             if (Player.IsIncapacitated)
+                return true;
+
+            if (Runes.Barbarian.MobRule.IsActive && TargetUtil.AnyPlayer(p => p.HitPointsPct < 0.50 && p.Distance < 50f))
                 return true;
 
             if (PlayerMover.IsBlocked && Runes.Barbarian.Bravado.IsActive)

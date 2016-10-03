@@ -14,6 +14,20 @@ namespace Trinity.Reference
     /// </summary>
     internal partial class GameData
     {
+        public static class ItemGameBalanceIds
+        {
+            public const int DeathsBreath = 2087837753;
+            public const int ReusableParts = -363607620;
+            public const int ForgottenSoul = 2073430088;
+            public const int ArcaneDust = -1585802162;
+            public const int VeiledCrystal = -605947593;
+        }
+
+        public Dictionary<SNOActor, string> BossNames = new Dictionary<SNOActor, string>
+        {
+
+        };
+
         public static List<TrinityObjectType> PlayerBlockingTypes = new List<TrinityObjectType>
         {
             TrinityObjectType.Barricade,
@@ -656,8 +670,6 @@ namespace Trinity.Reference
             365133, // x1_Event_WaveFight_KhazraWarband,
             365953, // x1_Event_WaveFight_SunkenGrave,
         };
-
-
 
         public static HashSet<string> VanityItems { get { return GameData.vanityItems; } }
         private static readonly HashSet<string> vanityItems = new HashSet<string>()

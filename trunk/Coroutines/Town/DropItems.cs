@@ -8,6 +8,7 @@ using System.Web.UI.WebControls.WebParts;
 using Buddy.Coroutines;
 using GreyMagic;
 using IronPython.Modules;
+using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
@@ -47,7 +48,7 @@ namespace Trinity.Coroutines.Town
             else if (SalvageItems.ShouldSalvage(i))
                 action = ItemEvaluationType.Salvage;
 
-            var decision = TrinityItemManager.TrinityDrop(i, action) && !i.IsAccountBound;
+            var decision = Combat.Loot.ShouldDrop(i, action) && !i.IsAccountBound;
             Cache.Add(i.AnnId, decision);
             return decision;
         }

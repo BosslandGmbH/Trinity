@@ -87,7 +87,9 @@ namespace Trinity.UI
                         ConfigWindow = new Window();
                     }
                     Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Load Context");
-                    var viewmodel = new ConfigViewModel(Core.Settings);
+
+                    var viewmodel = new ConfigViewModel(Core.Storage, Core.Settings);
+
                     DataContext = viewmodel;
                     ConfigWindow.DataContext = viewmodel;
 
@@ -122,8 +124,6 @@ namespace Trinity.UI
 
                     Application.Current.Exit += WindowClosed;
 
-                    UpdateVolatileSttings();
-
                     ConfigWindow.ContentRendered += (sender, args) => OnSettingsWindowOpened();
 
                     Logger.Log(TrinityLogLevel.Verbose, LogCategory.UI, "Window build finished.");
@@ -135,11 +135,6 @@ namespace Trinity.UI
                 }
                 return ConfigWindow;
             }
-        }
-
-        private static void UpdateVolatileSttings()
-        {
-            Core.Settings.Gambling.OnPropertyChanged("MaximumBloodShards");
         }
 
         /// <summary>
@@ -247,9 +242,9 @@ namespace Trinity.UI
                 string filecontent = File.ReadAllText(filePath);
                 var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
-                
+                filecontent = filecontent.Replace("xmlns:radarCanvas=\"clr-namespace:Trinity.UI.Visualizer.RadarCanvas\"", "xmlns:radarCanvas=\"clr-namespace:Trinity.UI.Visualizer.RadarCanvas;assembly=" + assemblyName + "\"");
                 filecontent = filecontent.Replace("xmlns:itemlist=\"clr-namespace:Trinity.Items.ItemList\"", "xmlns:itemlist=\"clr-namespace:Trinity.Items.ItemList;assembly=" + assemblyName + "\"");
-                filecontent = filecontent.Replace("xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.Input\"", "xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions\"", "xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions;assembly=" + assemblyName + "\"");
                 filecontent = filecontent.Replace("xmlns:input=\"clr-namespace:Trinity.UI.UIComponents.Input\"", "xmlns:input=\"clr-namespace:Trinity.UI.UIComponents.Input;assembly=" + assemblyName + "\"");            
                 filecontent = filecontent.Replace("xmlns:behaviors=\"clr-namespace:Trinity.UI.UIComponents.Behaviors\"", "xmlns:behaviors=\"clr-namespace:Trinity.UI.UIComponents.Behaviors;assembly=" + assemblyName + "\"");
                 filecontent = filecontent.Replace("xmlns:controls=\"clr-namespace:Trinity.UI.UIComponents.Controls\"", "xmlns:controls=\"clr-namespace:Trinity.UI.UIComponents.Controls;assembly=" + assemblyName + "\"");
@@ -264,11 +259,6 @@ namespace Trinity.UI
                 filecontent = filecontent.Replace("xmlns:ui=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ui=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + assemblyName + "\"");
                 filecontent = filecontent.Replace("xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop\"", "xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop;assembly=" + assemblyName + "\"");
                 filecontent = filecontent.Replace("xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums\"", "xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums;assembly=" + assemblyName + "\"");
-
-                // Remove Template designer reference
-                //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"..\\Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
-                //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);
-
                 filecontent = Regex.Replace(filecontent, "<ResourceDictionary.MergedDictionaries>.*</ResourceDictionary.MergedDictionaries>", string.Empty, RegexOptions.Singleline | RegexOptions.Compiled);
 
                 var bytes = Encoding.UTF8.GetBytes(filecontent);

@@ -10,7 +10,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Trinity.Routines.Crusader;
-using Trinity.Settings.Combat;
+using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
 using Logger = Trinity.Framework.Helpers.Logger;

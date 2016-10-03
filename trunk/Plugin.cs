@@ -32,7 +32,7 @@ namespace Trinity
     public class TrinityPlugin : IPlugin
     {
         public string Name => "Trinity";
-        public Version Version => new Version(2, 55, 243);
+        public Version Version => new Version(2, 55, 246);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -86,7 +86,7 @@ namespace Trinity
 
                     using (new PerformanceLogger("LazyRaiderClickToPause"))
                     {
-                        if (Core.Settings.Advanced.LazyRaiderClickToPause && !BotMain.IsPaused && MouseLeft())
+                        if (Core.Settings.Advanced.LazyRaider && !BotMain.IsPaused && MouseLeft())
                         {
                             BotMain.PauseWhile(MouseLeft);
                         }
@@ -100,15 +100,9 @@ namespace Trinity
 
                     DebugUtil.LogOnPulse();
 
-                    if (!Core.Settings.Advanced.IsDBInactivityEnabled)
-                    {
-                        GlobalSettings.Instance.LogoutInactivityTime = 0;
-                    }
-                    else
-                    {
-                        GlobalSettings.Instance.LogoutInactivityTime = (float) TimeSpan.FromSeconds(Core.Settings.Advanced.InactivityTimer).TotalMinutes;
-                    }
-
+                    // Turn off DB's inactivity detection.
+                    GlobalSettings.Instance.LogoutInactivityTime = 0;
+            
                     if (GoldInactivity.Instance.GoldInactive())
                     {
                         LeaveGame("Gold Inactivity Tripped");
@@ -118,8 +112,6 @@ namespace Trinity
                     {
                         LeaveGame("XP Inactivity Tripped");
                     }
-
-                    Gamble.CheckShouldTownRunForGambling();
 
                     if (!_hasLoggedCurrentBuild && BotMain.IsRunning && Core.Inventory.PlayerEquippedIds.Any())
                     {
@@ -161,7 +153,7 @@ namespace Trinity
             try
             {
                 Core.Init();
-                TrinityPluginSettings.InitializeSettings();
+                TrinitySettings.InitializeSettings();
                 Core.Enable();
                 Core.PlayerMover.MoveTowards(Core.Player.Position);
                 Logger.Log("OnEnable start");
@@ -364,10 +356,10 @@ namespace Trinity
 
         internal static void SetBotTicksPerSecond()
         {
-            if (Core.Settings.Advanced.TPSEnabled)
+            if (Core.Settings.Advanced.TpsEnabled)
             {
-                BotMain.TicksPerSecond = Core.Settings.Advanced.TPSLimit;
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Bot TPS set to {0}", Core.Settings.Advanced.TPSLimit);
+                BotMain.TicksPerSecond = Core.Settings.Advanced.TpsLimit;
+                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Bot TPS set to {0}", Core.Settings.Advanced.TpsLimit);
             }
             else
             {

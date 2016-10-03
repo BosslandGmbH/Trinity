@@ -2,7 +2,10 @@
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
+using Trinity.Settings;
 using Zeta.Common;
+using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Actors.Properties
@@ -37,6 +40,8 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsInvulnerable = actor.Attributes.IsInvulnerable;
             actor.IsUsed = GetIsGizmoUsed(actor);
             actor.IsLockedDoor = actor.Attributes.IsDoorLocked || actor.Attributes.IsDoorTimed;
+            actor.ShrineType = GetShrineType(actor);
+            actor.ContainerType = GetContainerType(actor);
 
             var movement = rActor.Movement;
             if (movement != null && movement.IsValid)
@@ -48,6 +53,79 @@ namespace Trinity.Framework.Actors.Properties
                 actor.MovementSpeed = movement.SpeedXY;
             }
         }
+
+        public static ShrineTypes GetShrineType(TrinityActor cacheObject)
+        {
+            switch (cacheObject.ActorSnoId)
+            {
+                case (int)SNOActor.a4_Heaven_Shrine_Global_Fortune:
+                case (int)SNOActor.Shrine_Global_Fortune:
+                    return ShrineTypes.Fortune;
+
+                case (int)SNOActor.a4_Heaven_Shrine_Global_Frenzied:
+                case (int)SNOActor.Shrine_Global_Frenzied:
+                    return ShrineTypes.Frenzied;
+
+                case (int)SNOActor.a4_Heaven_Shrine_Global_Reloaded:
+                case (int)SNOActor.Shrine_Global_Reloaded:
+                    return ShrineTypes.RunSpeed;
+
+                case (int)SNOActor.a4_Heaven_Shrine_Global_Enlightened:
+                case (int)SNOActor.Shrine_Global_Enlightened:
+                    return ShrineTypes.Enlightened;
+
+                case (int)SNOActor.Shrine_Global_Glow:
+                    return ShrineTypes.Glow;
+
+                case (int)SNOActor.a4_Heaven_Shrine_Global_Hoarder:
+                case (int)SNOActor.Shrine_Global_Hoarder:
+                    return ShrineTypes.Hoarder;
+
+                case (int)SNOActor.x1_LR_Shrine_Infinite_Casting:
+                    return ShrineTypes.Casting;
+
+                case (int)SNOActor.x1_LR_Shrine_Electrified_TieredRift:
+                case (int)SNOActor.x1_LR_Shrine_Electrified:
+                    return ShrineTypes.Conduit;
+
+                case (int)SNOActor.x1_LR_Shrine_Invulnerable:
+                    return ShrineTypes.Shield;
+
+                case (int)SNOActor.x1_LR_Shrine_Run_Speed:
+                    return ShrineTypes.Shield;
+
+                case (int)SNOActor.x1_LR_Shrine_Damage:
+                    return ShrineTypes.Damage;
+
+                case (int)SNOActor.Shrine_TreasureGoblin:
+                    return ShrineTypes.Goblin;
+
+                default:
+                    return ShrineTypes.None;
+            }
+        }
+
+        public static ContainerTypes GetContainerType(TrinityActor cacheObject)
+        {
+            if (cacheObject.IsRareChest || cacheObject.IsChest)
+                return ContainerTypes.Chest;
+
+            if (cacheObject.IsWeaponRack)
+                return ContainerTypes.WeaponRack;
+
+            if (cacheObject.IsGroundClicky)
+                return ContainerTypes.GroundClicky;
+
+            if (cacheObject.IsCorpse)
+                return ContainerTypes.Corpse;
+
+            if (cacheObject.IsContainer)
+                return ContainerTypes.Other;
+
+            return ContainerTypes.None;
+        }
+
+
 
         public static bool GetIsGizmoUsed(TrinityActor actor)
         {
