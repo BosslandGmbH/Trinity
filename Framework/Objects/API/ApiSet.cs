@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace Trinity.Framework.Objects.API
+namespace Trinity.Framework.Objects.Api
 {
     [DataContract]
-    public class Set
+    public class ApiSet
     {
         [DataMember(Name = "name")]
         public string Name { get; set; }
@@ -16,3 +15,4 @@ namespace Trinity.Framework.Objects.API
         public int MaxCount { get; set; }
     }
 }
+

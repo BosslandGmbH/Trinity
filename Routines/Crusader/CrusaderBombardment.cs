@@ -74,8 +74,11 @@ namespace Trinity.Routines.Crusader
             }
 
             // Wait for CoE to Cast Damage CD's
-            if (Skills.Crusader.Bombardment.CanCast() && AllowedToUse(Settings.Bombardment, Skills.Crusader.Bombardment) 
-                && !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000))
+
+            var shouldWait = Settings.Bombardment.WaitForConvention == ConventionMode.GreaterRift && RiftProgression.IsGreaterRift || Settings.Bombardment.WaitForConvention == ConventionMode.Always;
+            var isCastWindow = !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000);
+
+            if (Skills.Crusader.Bombardment.CanCast() && (!shouldWait || isCastWindow))
             {
                 if (ShouldIronSkin())
                     return IronSkin();
@@ -200,7 +203,7 @@ namespace Trinity.Routines.Crusader
 
             private static readonly SkillSettings BombardmentDefaults = new SkillSettings
             {
-                WaitForConvention = ConventionMode.Always,
+                WaitForConvention = ConventionMode.Always,              
             };
 
             #endregion

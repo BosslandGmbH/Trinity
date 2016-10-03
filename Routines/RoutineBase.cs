@@ -164,13 +164,10 @@ namespace Trinity.Routines
             if (settings.ClusterSize > 0 && !TargetUtil.ClusterExists(15f, settings.ClusterSize))
                 return true;
 
-            if (settings.WaitForConvention == ConventionMode.Never)
-                return true;
-
             if (settings.WaitForConvention == ConventionMode.GreaterRift && !RiftProgression.IsGreaterRift)
                 return true;
 
-            if (settings.WaitForConvention == ConventionMode.Always && settings.ConventionCondition != null && !settings.ConventionCondition())
+            if (settings.WaitForConvention != ConventionMode.Never && settings.ConventionCondition != null && !settings.ConventionCondition())
                 return true;
 
             return false;
