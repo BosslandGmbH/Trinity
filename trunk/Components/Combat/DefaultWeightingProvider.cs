@@ -1407,7 +1407,7 @@ namespace Trinity.Components.Combat
 
                                 if (Core.Settings.Weighting.ContainerWeighting == SettingMode.Selective)
                                 {
-                                    var type = GetShrineType(cacheObject);
+                                    var type = GetContainerType(cacheObject);
                                     if (!Core.Settings.Weighting.ContainerTypes.HasFlag(type))
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Not a selected container type.";
