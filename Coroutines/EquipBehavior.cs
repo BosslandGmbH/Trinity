@@ -189,7 +189,8 @@ namespace Trinity.Coroutines
             ActiveSkillEntry knownSkillRecord;
             if (!KnownSkills.TryGetValue((int)skill.Key.SNOPower, out knownSkillRecord))
             {
-                Logger.LogError("[Auto Skills] Skill is not known", skill.Key.Name, skill.Key.RequiredLevel);
+                var test = string.Format($"[Auto Skills] Skill is not known: {skill.Key.Name} CurrentLevel={ZetaDia.Me.Level} RequiredLevel={skill.Key.RequiredLevel}");
+                Logger.LogError(test);
                 return false;
             }
 

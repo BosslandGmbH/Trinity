@@ -132,10 +132,22 @@ namespace Trinity.Routines.Monk
             if (IsNoPrimary)
             {
                 // Stay away from units for belt to build stacks.
-                if (Legendary.KyoshirosSoul.IsEquipped && Skills.Monk.SweepingWind.BuffStacks < 3 && Player.PrimaryResourcePct <= 0.75f)
+                if (Legendary.KyoshirosSoul.IsEquipped)
                 {
-                    Logger.Log(LogCategory.Routine, "Moving away to build stacks");
-                    return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 40f));
+                    var needStacks = Skills.Monk.SweepingWind.BuffStacks < 3 && Player.PrimaryResourcePct <= 0.75f;
+                    var needResource = Player.PrimaryResource < PrimaryEnergyReserve;
+                    if (needStacks || needResource)
+                    {
+                        Logger.Log(LogCategory.Routine, "Moving away to build stacks");
+                        return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 40f));
+                    }
+
+                    var needRange = CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.RadiusDistance < 15f;
+                    if (needRange)
+                    {
+                        Logger.Log(LogCategory.Routine, $"Adjusting Range from {CurrentTarget}");
+                        return Walk(MathEx.CalculatePointFrom(Player.Position, CurrentTarget.Position, 20f), 5f);
+                    }
                 }
 
                 var clusterUnit = TargetUtil.GetBestClusterUnit(50f) ?? CurrentTarget;
@@ -186,10 +198,48 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.BlindingFlash.CanCast())
                 return false;
 
-            if (Player.CurrentHealthPct < 0.3f && TargetUtil.AnyMobsInRange(20f))
-                return true;
+            var forDefense = Player.CurrentHealthPct < 0.5f && TargetUtil.AnyMobsInRange(20f);
+            var forDamage = Runes.Monk.FaithInTheLight.IsActive && TargetUtil.AnyMobsInRange(20f);
+                        
+            if (Legendary.TheLawsOfSeph.IsEquipped)
+            {
+                var forResource = Player.PrimaryResource < Player.PrimaryResourceMax - 165;
+                return forResource || forDefense;
+            }
 
-            return Player.PrimaryResourcePct < 0.2f;
+            return forDefense || forDamage;
+        }
+
+        protected override bool ShouldMantraOfConviction()
+        {
+            if (Player.PrimaryResourcePct < 0.3f && Player.CurrentHealthPct > 0.3f)
+                return false;
+
+            return base.ShouldMantraOfConviction();
+        }
+
+        protected override bool ShouldMantraOfSalvation()
+        {
+            if (Player.PrimaryResourcePct < 0.3f && Player.CurrentHealthPct > 0.3f)
+                return false;
+
+            return base.ShouldMantraOfSalvation();
+        }
+
+        protected override bool ShouldMantraOfHealing()
+        {
+            if (Player.PrimaryResourcePct < 0.3f && Player.CurrentHealthPct > 0.3f)
+                return false;
+
+            return base.ShouldMantraOfHealing();
+        }
+
+        protected override bool ShouldMantraOfRetribution()
+        {
+            if (Player.PrimaryResourcePct < 0.3f && Player.CurrentHealthPct > 0.3f)
+                return false;
+
+            return base.ShouldMantraOfRetribution();
         }
 
         private int MinSweepingWindStacks => Legendary.VengefulWind.IsEquipped ? 3 : 1;
@@ -255,10 +305,19 @@ namespace Trinity.Routines.Monk
 
         protected override bool ShouldEpiphany()
         {
+            if (!Skills.Monk.Epiphany.CanCast())
+                return false;
+
+            if (HasInstantCooldowns && !Skills.Monk.Epiphany.IsLastUsed)
+                return true;
+
+            if (Core.Buffs.HasBuff(SNOPower.X1_Monk_Epiphany))
+                return false;
+
             if (!AllowedToUse(Settings.Epiphany, Skills.Monk.Epiphany))
                 return false;
 
-            return base.ShouldEpiphany();
+            return true;
         }
 
         #region Settings
