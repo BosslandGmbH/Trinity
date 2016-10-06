@@ -13,6 +13,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Zeta.Bot;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -184,12 +185,19 @@ namespace Trinity.Components.Combat
 
                 if (ZetaDia.Me.UsePower(power.SNOPower, power.TargetPosition, Core.Player.WorldDynamicId, power.TargetAcdId))
                 {
+                    if (GameData.ResetNavigationPowers.Contains(power.SNOPower))
+                    {
+                        Navigator.Clear();
+                    }
+
                     SpellHistory.RecordSpell(power);
                     return true;
                 }
             }
             return false;
         }
+
+
 
         public bool CastPower(SNOPower power, Vector3 clickPosition, int targetAcdId)
         {
@@ -204,11 +212,18 @@ namespace Trinity.Components.Combat
                     clickPosition = Core.Player.Position;
                 }
 
+                if (GameData.ResetNavigationPowers.Contains(power))
+                {
+                    Navigator.Clear();
+                }
+
                 if (ZetaDia.Me.UsePower(power, clickPosition, Core.Player.WorldDynamicId, targetAcdId))
                 {
                     SpellHistory.RecordSpell(power, clickPosition, targetAcdId);
                     return true;
                 }
+
+
             }
             return false;
         }

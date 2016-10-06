@@ -53,5 +53,8 @@ namespace Trinity.Framework.Helpers
                 }
             }
         }
+
+        public virtual void OnPopulated() { }
+
     }
 }

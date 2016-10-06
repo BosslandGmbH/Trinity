@@ -28,7 +28,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         {
             get
             {
-                switch (Descripter.ParameterType)
+                switch (Descripter?.ParameterType)
                 {
                     case AttributeParameterType.PowerSnoId:
                         return (SNOPower)Key.ModifierId;

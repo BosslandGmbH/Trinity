@@ -24,11 +24,15 @@ namespace Trinity.UI.UIComponents.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return Binding.DoNothing;
+            var parameterString = parameter as string;
+            if (parameterString == null || value.Equals(false))
+                return Binding.DoNothing;
+
+            return Enum.Parse(targetType, parameterString);
         }  
     }
 
     public class EnumToVisibilityConverter : EnumToValueConverter<Visibility> { }
 
-
+    public class EnumToBoolConverter : EnumToValueConverter<bool> { }
 }

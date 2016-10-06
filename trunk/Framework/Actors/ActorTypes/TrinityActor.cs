@@ -109,7 +109,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         public int SummonedByAnnId { get; set; }
         public string CacheInfo { get; set; }
         public float Distance { get; set; }
-
         public float RadiusDistance { get; set; }
         public TargetCategory TargetCategory { get; set; }
         public double Weight { get; set; }
@@ -198,7 +197,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsLastTarget => RActorId == (Combat.Targeting.LastTarget?.RActorId ?? -1);
         public string DebugAvoidanceFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.AvoidanceFlags.ToString();
         public string DebugNavCellFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.NodeFlags.ToString();
-        public bool IsStandingInAvoidance => Core.Avoidance.Grid.IsLocationInFlags(Position, AvoidanceFlags.Avoidance);
+        public bool IsInAvoidance => Core.Avoidance.Grid.IsLocationInFlags(Position, AvoidanceFlags.Avoidance);
         public bool IsFacingPlayer => TargetUtil.IsFacing(this, Core.Player.Position, 30f);
         public double CacheTime => Math.Abs(UpdateTime) < double.Epsilon ? CreateTime : UpdateTime;
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;

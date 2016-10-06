@@ -5,11 +5,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Trinity.Components.Combat;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Items;
 using Trinity.Settings;
-using Trinity.Settings.Loot;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -1080,6 +1080,11 @@ namespace Trinity.Framework.Helpers
 
             return true;
         }
+
+        public static bool IsWeapon(TrinityItem item) => WeaponTypes.Contains(item.ItemType);
+
+        public static bool IsArmor(TrinityItem item) => ArmorTypes.Contains(item.ItemType);
+
 
         internal static HashSet<ItemType> OffHandTypes = new HashSet<ItemType>
         {

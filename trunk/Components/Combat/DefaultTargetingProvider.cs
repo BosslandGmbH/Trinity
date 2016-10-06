@@ -22,6 +22,7 @@ using Trinity.Framework.Objects.Enums;
 using Trinity.Items;
 using Trinity.Reference;
 using Trinity.Routines;
+using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
@@ -129,9 +130,22 @@ namespace Trinity.Components.Combat
             if (target.IsQuestGiver)
                 return InteractPower(target, 100, 250);
 
-            return Combat.IsInCombat 
-                ? routine.GetOffensivePower()  
-                : null; 
+            if (Combat.IsInCombat)
+            {
+                var routinePower = routine.GetOffensivePower();
+
+                // The routine may want us attack something other than current target, like best cluster, whatever.
+                // But for goblin kamakazi we need a special exception to force it to always target the goblin.
+                if (CurrentTarget.IsTreasureGoblin && Core.Settings.Weighting.GoblinPriority == GoblinPriority.Kamikaze)
+                {
+                    Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {CurrentTarget}");
+                    routinePower.SetTarget(CurrentTarget);
+                }
+
+                return routinePower;
+            }
+
+            return null;
         }
 
         public TrinityPower InteractPower(TrinityActor actor, int waitBefore, int waitAfter, float addedRange = 0)
@@ -191,11 +205,11 @@ namespace Trinity.Components.Combat
             if (target == null || target.IsSafeSpot)
                 return false;
 
-            if (Combat.Targeting.CurrentPower != null && Combat.Targeting.CurrentPower.IsCastOnSelf)
+            if (CurrentPower != null && CurrentPower.IsCastOnSelf)
                 return true;
 
             var objectRange = Math.Max(2f, target.RequiredRadiusDistance);
-            var spellRange = Combat.Targeting.CurrentPower != null ? Math.Max(2f, Combat.Targeting.CurrentPower.MinimumRange) : objectRange;
+            var spellRange = CurrentPower != null ? Math.Max(2f, CurrentPower.MinimumRange) : objectRange;
 
             var targetRangeRequired = target.IsHostile || target.IsDestroyable ? Math.Max(spellRange, objectRange) : objectRange;
             var targetRadiusDistance = target.RadiusDistance;

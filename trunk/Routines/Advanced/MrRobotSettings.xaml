@@ -1,0 +1,278 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+    xmlns:mock="clr-namespace:Trinity.Settings.Mock"
+    xmlns:objects="clr-namespace:Trinity.Framework.Objects"
+    xmlns:markup="clr-namespace:Trinity.UI.UIComponents.MarkupExtensions"
+    d:FontSize="14"
+    mc:Ignorable="d" Background="#434343" d:DesignHeight="1820" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../UI/Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+            <converters:UriToCachedImageConverter x:Key="UrlToCachedImageConverter" />
+            <converters:DebugDataBindingConverter x:Key="DebugDataBindingConverter" />
+            <converters:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+
+            <mock:MockData x:Key="DesignViewModel"/>
+
+            <Style x:Key="SkillIconStyle" TargetType="{x:Type Image}">
+                <Setter Property="Width" Value="55" />
+                <Setter Property="Height" Value="40" />
+            </Style>
+
+            <DataTemplate x:Key="SkillTemplate" DataType="objects:SkillSettings">
+                <GroupBox Header="{Binding Skill.Name}">
+                    <DockPanel>
+
+                        <Image DockPanel.Dock="Left" VerticalAlignment="Top" Style="{StaticResource SkillIconStyle}" Margin="-3,5,0,0" HorizontalAlignment="Left"                                
+                                   Source="{Binding Skill.IconUrl, Mode=OneWay, Converter={StaticResource UrlToCachedImageConverter}, IsAsync=true}" />
+                        
+                        <StackPanel Margin="0,4,0,0">
+                            
+                            <ListBox ItemsSource="{Binding Path=UseMode, Converter={converters:EnumToCollectionConverter}, Mode=OneTime, ConverterParameter='Always,Selective'}"
+                                              ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                              Style="{DynamicResource RadioButtonToolTipListBoxStyle}"
+                                              SelectedValuePath="Value"
+                                              DisplayMemberPath="Description"
+                                              SelectedValue="{Binding Path=UseMode}" />
+
+                            <StackPanel Margin="0,8,0,0" Visibility="{markup:Value {Binding UseMode, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}, DesignValue=Visible}">
+
+                                <StackPanel Margin="0,8,0,0">
+                                    <TextBlock FontWeight="SemiBold" Foreground="Tan" Margin="0,0,0,4">Use Reasons</TextBlock>
+                                    <UniformGrid Columns="2">
+                                        <CheckBox ToolTip="Use when there are elites close nearby" 
+                                                        IsChecked="{Binding Reasons, ConverterParameter=Elites, Converter={converters:FlagsToBoolConverter}}">Elites nearby</CheckBox>
+                                        <CheckBox ToolTip="Use when you are surrounded by enemies" 
+                                                        IsChecked="{Binding Reasons, ConverterParameter=Surrounded, Converter={converters:FlagsToBoolConverter}}">Surrounded</CheckBox>
+                                        <CheckBox ToolTip="Use when you're low on health" 
+                                                        IsChecked="{Binding Reasons, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Health emergency</CheckBox>
+                                        <CheckBox ToolTip="Use when avoiding"  
+                                                    IsChecked="{Binding Reasons, ConverterParameter=Avoiding, Converter={converters:FlagsToBoolConverter}}">Avoiding</CheckBox>
+                                        <CheckBox ToolTip="Use to burn off excess resource" 
+                                                    IsChecked="{Binding Reasons, ConverterParameter=DumpResource, Converter={converters:FlagsToBoolConverter}}">Excess Resource</CheckBox>
+                                        <CheckBox ToolTip="Use when movement is blocked" 
+                                                    IsChecked="{Binding Reasons, ConverterParameter=Blocked, Converter={converters:FlagsToBoolConverter}}">Movement Blocked</CheckBox>
+                                    </UniformGrid>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,8,0,8">
+                                    <TextBlock FontWeight="SemiBold" Foreground="Tan" Margin="0,0,0,4">Target</TextBlock>
+                                    <Grid>
+                                        <ComboBox ItemsSource="{Binding Path=Target, Converter={converters:EnumToCollectionConverter}, Mode=OneTime}"
+                                              SelectedValuePath="Value"
+                                              DisplayMemberPath="Description"
+                                              SelectedValue="{Binding Path=Target}" />
+                                    </Grid>
+                                </StackPanel>
+                                
+                                <StackPanel Margin="0,8,0,8">
+                                    <TextBlock FontWeight="SemiBold" Foreground="Tan" Margin="0,0,0,4">Parameters</TextBlock>
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                        Tag="Cast Range"
+                                        ToolTip="Monster must be this close before a spell is cast." 
+                                        Interval="5" Maximum="100" Minimum="0" 
+                                        SmallChange="5" LargeChange="5" 
+                                        TickPlacement="None" TickFrequency="5"
+                                        Value="{Binding CastRange}" 
+                                        HorizontalAlignment="Stretch" Margin="2"
+                                        />
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                        Tag="Cluster Size"
+                                        ToolTip="Monsters must be in a group of this many before spell can be cast." 
+                                        Interval="5" Maximum="30" Minimum="0" 
+                                        SmallChange="5" LargeChange="5" 
+                                        TickPlacement="None" TickFrequency="5"
+                                        Value="{Binding ClusterSize}" 
+                                        HorizontalAlignment="Stretch" Margin="2"
+                                        />
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                        Tag="Health Below"
+                                        ToolTip="Player health must be below this amount to cast spell" 
+                                        Interval="5" Maximum="30" Minimum="0" 
+                                        SmallChange="5" LargeChange="5" 
+                                        TickPlacement="None" TickFrequency="5"
+                                        Value="{Binding HealthPct}" 
+                                        HorizontalAlignment="Stretch" Margin="2"
+                                        />
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                        Tag="Resource Above"
+                                        ToolTip="Player resource must be above this to cast spell." 
+                                        Interval="5" Maximum="100" Minimum="0" 
+                                        SmallChange="5" LargeChange="5" 
+                                        TickPlacement="None" TickFrequency="5"
+                                        Value="{Binding PrimaryResourcePct}" 
+                                        HorizontalAlignment="Stretch" Margin="2"
+                                        />
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                        Tag="Recast delay"
+                                        ToolTip="The time between casts"
+                                        Interval="100" Maximum="6000" Minimum="200" 
+                                        SmallChange="100" LargeChange="100" 
+                                        TickPlacement="None" TickFrequency="250"
+                                        Value="{Binding RecastDelayMs}" 
+                                        HorizontalAlignment="Stretch" Margin="2"
+                                        />
+                                </StackPanel>
+                            </StackPanel>
+                            
+                        </StackPanel>
+                    </DockPanel>
+                </GroupBox>
+            </DataTemplate>
+                        
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Padding="10">
+        <Grid>
+            <StackPanel>
+                
+                <GroupBox>
+                    <GroupBox.Header>General</GroupBox.Header>
+                    <StackPanel>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cluster Size"
+                            ToolTip="Number of monsters that must be grouped up before fighting starts"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="25" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding DataContext.ClusterSize}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                        Tag="Health Emergency %"
+                        ToolTip="How low your health must drop before the potion is used"
+                                Interval="500" Maximum="99" Minimum="0" 
+                                SmallChange="1" LargeChange="5"
+                                TickPlacement="None" 
+                                Value="{Binding DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
+                                HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox>
+                    <GroupBox.Header>Kiting</GroupBox.Header>
+                    <StackPanel>
+                        <WrapPanel>
+                            <RadioButton Content="Always" IsChecked="{Binding DataContext.KiteMode, ConverterParameter=Always, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
+                            <RadioButton Content="Never" IsChecked="{Binding DataContext.KiteMode, ConverterParameter=Never, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+                            <RadioButton Content="Elites" IsChecked="{Binding DataContext.KiteMode, ConverterParameter=Elites, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+                            <RadioButton Content="Bosses" IsChecked="{Binding DataContext.KiteMode, ConverterParameter=Bosses, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+                        </WrapPanel>
+                        <StackPanel Margin="0,5,0,0" Visibility="{Binding DataContext.KiteMode, ConverterParameter=Never, Converter={StaticResource HiddenWhenEnumTrueConverter}}">
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Kite Distance"
+                                ToolTip="How close monsters can be before bot should move away (radius distance)"                  
+                                Maximum="30" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                                Value="{Binding DataContext.KiteDistance}" 
+                                HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                                MinWidth="175"/>
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Kite Stutter Duration"
+                                ToolTip="How long each stutter should last when kiting, during this time the bot attacks"                  
+                                Maximum="30" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                                Value="{Binding DataContext.KiteStutterDuration}" 
+                                HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                                MinWidth="175"/>
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Kite Stutter Delay"
+                                ToolTip="How much kiting can happen before a stutter begins"                  
+                                Maximum="3000" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                                Value="{Binding DataContext.KiteStutterDelay}" 
+                                HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                                MinWidth="175"/>
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Kite Stutter Delay"
+                                ToolTip="Kiting will only happen if your health is equal to or below this amount"                  
+                                Maximum="100" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                                Value="{Binding DataContext.KiteHealthPct}" 
+                                HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                                MinWidth="175"/>                            
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox>
+                    <GroupBox.Header>Sight Range</GroupBox.Header>
+                    <StackPanel>
+                        <StackPanel Margin="0,5,0,0">
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Trash Monsters"
+                                ToolTip="How close it must be before the bot knows it is there."                  
+                                Maximum="100" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                                Value="{Binding DataContext.TrashRange}" 
+                                HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                                MinWidth="175"/>
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Elite Monsters"
+                                ToolTip="How close it must be before the bot knows it is there."                  
+                                Maximum="100" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                                Value="{Binding DataContext.EliteRange}" 
+                                HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                                MinWidth="175"/>
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Health Globes"
+                                ToolTip="How close it must be before the bot knows it is there."                
+                                Maximum="100" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                                Value="{Binding DataContext.HealthGlobeRange}" 
+                                HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                                MinWidth="175"/>
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Shrines"
+                                ToolTip="How close it must be before the bot knows it is there."                 
+                                Maximum="100" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                                Value="{Binding DataContext.ShrineRange}" 
+                                HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                                MinWidth="175"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox>
+                    <GroupBox.Header>Resource Management</GroupBox.Header>
+                    <StackPanel>
+                        <StackPanel Margin="0,5,0,0">
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Primary Reserve"
+                                ToolTip="An amount saved for skills that require resource but have cooldowns and/or restrictive conditions" 
+                                Interval="5" Maximum="100" Minimum="0" 
+                                SmallChange="5" LargeChange="5" 
+                                TickPlacement="BottomRight" TickFrequency="5"
+                                Value="{Binding DataContext.PrimaryEnergyReserve}" 
+                                HorizontalAlignment="Stretch" Margin="2"
+                                />
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                Tag="Secondary Reserve"
+                                ToolTip="An amount saved for skills that require resource but have cooldowns and/or restrictive conditions" 
+                                Interval="5" Maximum="100" Minimum="0" 
+                                SmallChange="5" LargeChange="5" 
+                                TickPlacement="BottomRight" TickFrequency="5"
+                                Value="{Binding DataContext.SecondaryEnergyReserve}" 
+                                HorizontalAlignment="Stretch" Margin="2"
+                                />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <ItemsControl                       
+                    d:DataContext="{Binding Source={StaticResource DesignViewModel}}"
+                    ItemsSource="{Binding DataContext.ActiveSkills}" 
+                    ItemTemplate="{DynamicResource SkillTemplate}" />
+
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
+
+    

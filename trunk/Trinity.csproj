@@ -107,6 +107,7 @@
     <Compile Include="Components\Combat\Resources\PartyRole.cs" />
     <Compile Include="Components\Combat\Resources\SnapShot.cs" />
     <Compile Include="Components\Combat\DefaultSpellProvider.cs" />
+    <Compile Include="Components\Combat\Resources\WeightingUtils.cs" />
     <Compile Include="Coroutines\EmergencyRepair.cs" />
     <Compile Include="Coroutines\OpenBountyCache.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceDefinitions.cs" />
@@ -115,10 +116,17 @@
     <Compile Include="Framework\Avoidance\Settings\AvoidanceSettingsEntry.cs" />
     <Compile Include="Framework\Avoidance\Settings\AvoidanceSettings.cs" />
     <Compile Include="Framework\Avoidance\GridEnricher.cs" />
+    <Compile Include="Framework\Behaviors\MoveToInteractBehavior.cs" />
+    <Compile Include="Framework\Behaviors\MoveToMarkerBehavior.cs" />
     <Compile Include="Framework\ChangeEvents.cs" />
+    <Compile Include="Framework\Events\ActorEvents.cs" />
+    <Compile Include="Framework\Events\ItemEvents.cs" />
     <Compile Include="Framework\Helpers\ObjectComparer.cs" />
     <Compile Include="Framework\Helpers\ProjectionEqualityComparer.cs" />
+    <Compile Include="Framework\Helpers\EasyXmlSerializer.cs" />
     <Compile Include="Framework\Modules\ChangeMonitor.cs" />
+    <Compile Include="Framework\Modules\ItemLogger.cs" />
+    <Compile Include="Framework\Modules\SessionLogger.cs" />
     <Compile Include="Framework\Objects\Api\ApiBuild.cs" />
     <Compile Include="Framework\Objects\Api\ApiRoutineBuilder.cs" />
     <Compile Include="Framework\Objects\Api\ApiBuildBuilder.cs" />
@@ -140,6 +148,10 @@
     <Compile Include="ProfileTags\TownRunTag.cs" />
     <Compile Include="ProfileTags\TrinityConditions.cs" />
     <Page Include="Framework\Avoidance\Settings\AvoidanceSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Advanced\MrRobotSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -191,6 +203,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Compile Include="Routines\Advanced\MrRobotRoutine.cs" />
     <Compile Include="Routines\Barbarian\BarbarianBase.cs" />
     <Compile Include="Routines\Barbarian\BarbarianWastesBulkathos.cs" />
     <Compile Include="Routines\Barbarian\BarbarianEarthLeap.cs" />
@@ -403,7 +416,7 @@
     <Compile Include="Framework\Avoidance\Structures\WeightingOptions.cs" />
     <Compile Include="Framework\Behaviors\BaseBehavior.cs" />
     <Compile Include="Framework\Behaviors\Behaviors.cs" />
-    <Compile Include="Framework\Behaviors\MoveToMarkerBehavior.cs" />
+    <Compile Include="Framework\Behaviors\MoveToActorBehavior.cs" />
     <Compile Include="Framework\Helpers\TrinityChangeDetector.cs" />
     <Compile Include="Framework\Helpers\PropertyCopy.cs" />
     <Compile Include="Framework\MemoryModel.cs" />
@@ -629,6 +642,7 @@
     <Compile Include="Routines\Wizard\WizardFlashfire.cs" />
     <Compile Include="Routines\Wizard\WizardFirebirdArchon.cs" />
     <Compile Include="Routines\Wizard\WizardDefault.cs" />
+    <Compile Include="Settings\Mock\RoutineMockData.cs" />
     <Compile Include="Settings\RoutineSettings.cs" />
     <Compile Include="Settings\ItemSettings.cs" />
     <Compile Include="Settings\Paragon\ParagonSettings.cs" />
@@ -645,8 +659,10 @@
     <Compile Include="UI\UIComponents\Behaviors\MouseObserver.cs" />
     <Compile Include="UI\UIComponents\Controls\RangeSlider.cs" />
     <Compile Include="UI\UIComponents\Converters\BoolToValueMultiConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\EnumToCollectionConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\EnumToValueConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\FlagEnumValueConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\StaticTypeToValueConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\ValueToStringConverter.cs" />
     <Compile Include="UI\UIComponents\GameInfo.cs" />
     <Compile Include="UI\UIComponents\Input\InputExtensions.cs" />
@@ -745,12 +761,9 @@
     <Compile Include="Reference\GameUI.cs" />
     <Compile Include="Framework\Helpers\HotSpot.cs" />
     <Compile Include="Framework\Helpers\PluginCheck.cs" />
-    <Compile Include="Coroutines\Town\ItemEvents.cs" />
     <Compile Include="Framework\Helpers\GenericBlacklist.cs" />
     <Compile Include="Components\Combat\Resources\TrinityPower.cs" />
-    <Compile Include="Items\CachedACDItem.cs" />
-    <Compile Include="Items\ItemDropStats.cs" />
-    <Compile Include="Items\ItemList\ItemListEvaluator.cs" />
+    <Compile Include="Items\ItemListEvaluator.cs" />
     <Compile Include="Items\Sorting\ItemSort.cs" />
     <Compile Include="Items\Sorting\ItemStatsData.cs" />
     <Compile Include="Items\Sorting\ItemStatsDataFactory.cs" />
@@ -765,7 +778,7 @@
     <Compile Include="Framework\Objects\Rune.cs" />
     <Compile Include="Framework\Objects\Set.cs" />
     <Compile Include="Framework\Objects\Skill.cs" />
-    <Compile Include="Items\ItemList\ItemDataUtils.cs" />
+    <Compile Include="Settings\ItemList\ItemDataUtils.cs" />
     <Compile Include="Reference\Legendary.cs" />
     <Compile Include="Reference\Passives.cs" />
     <Compile Include="Reference\PassiveUtils.cs" />
@@ -776,13 +789,12 @@
     <Compile Include="Reference\SkillUtils.cs" />
     <Compile Include="Settings\ITrinitySettingEvents.cs" />
     <Compile Include="Settings\KanaisCubeSetting.cs" />
-    <Compile Include="Items\ItemList\PresetLists.cs" />
-    <Compile Include="Items\ItemList\ItemListSettings.cs" />
-    <Compile Include="Items\ItemList\ItemListMockData.cs" />
+    <Compile Include="Settings\ItemList\ItemListPresets.cs" />
+    <Compile Include="Settings\ItemList\ItemListSettings.cs" />
+    <Compile Include="Settings\Mock\ItemListMockData.cs" />
     <Compile Include="Settings\Mock\MockData.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="Components\Combat\DefaultRoutineProvider.cs" />
-    <Compile Include="Items\PersistentStats.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\Helpers\FileManager.cs" />
     <Compile Include="Framework\Helpers\Logger.cs" />
@@ -859,8 +871,8 @@
     <Compile Include="UI\UIComponents\Input\Macro.cs" />
     <Compile Include="UI\UIComponents\Input\MouseInput.cs" />
     <Compile Include="UI\UIComponents\Input\WindowsHookHelper.cs" />
-    <Compile Include="Items\ItemList\ItemProperty.cs" />
-    <Compile Include="Items\ItemList\LRule.cs" />
+    <Compile Include="Settings\ItemList\ItemProperty.cs" />
+    <Compile Include="Settings\ItemList\LRule.cs" />
     <Compile Include="UI\UIComponents\Behaviors\CancelMouseBubbling.cs" />
     <Compile Include="UI\UIComponents\Controls\ModalContentCommands.cs" />
     <Compile Include="UI\UIComponents\Controls\ModalContentPresenter.cs" />
@@ -874,13 +886,14 @@
     <Compile Include="UI\UIComponents\Converters\FlagsToBoolConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\PercentConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\EnumBooleanConverter.cs" />
-    <Compile Include="Items\ItemList\RuleType.cs" />
+    <Compile Include="Settings\ItemList\RuleType.cs" />
+    <Compile Include="UI\UIComponents\MarkupExtensions\ValueExtension.cs" />
     <Compile Include="UI\UIComponents\MarkupExtensions\WidthToColumnCountExtension.cs" />
     <Compile Include="UI\UIComponents\NavigationService.cs" />
     <Compile Include="UI\UIComponents\PropertyValueBindingItem.cs" />
     <Compile Include="UI\UIComponents\PropertyValueFlagBindingItem.cs" />
     <Compile Include="UI\UIComponents\RelayCommand.cs" />
-    <Compile Include="Items\ItemList\LItem.cs" />
+    <Compile Include="Settings\ItemList\LItem.cs" />
     <Compile Include="UI\UIComponents\UIControlType.cs" />
     <Compile Include="UI\UILoader.cs" />
     <Compile Include="Components\Combat\DefaultWeightingProvider.cs" />
@@ -995,7 +1008,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Items\ItemList\ItemList.xaml">
+    <Page Include="UI\ItemList.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

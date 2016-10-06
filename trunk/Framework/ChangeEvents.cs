@@ -27,6 +27,9 @@ namespace Trinity.Framework
         public static TrinityChangeDetector<HashSet<int>> EquippedItems = new TrinityChangeDetector<HashSet<int>>(()
             => Core.Inventory.EquippedIds, SlowUpdateInterval);
 
+        public static TrinityChangeDetector<List<TrinityItem>> BackpackItems = new TrinityChangeDetector<List<TrinityItem>>(()
+            => Core.Inventory.Backpack, SlowUpdateInterval);
+
         public static TrinityChangeDetector<HashSet<SNOPower>> Skills = new TrinityChangeDetector<HashSet<SNOPower>>(()
             => Core.Hotbar.ActivePowers, SlowUpdateInterval);
 

@@ -243,7 +243,8 @@ namespace Trinity.UI
                 var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
 
                 filecontent = filecontent.Replace("xmlns:radarCanvas=\"clr-namespace:Trinity.UI.Visualizer.RadarCanvas\"", "xmlns:radarCanvas=\"clr-namespace:Trinity.UI.Visualizer.RadarCanvas;assembly=" + assemblyName + "\"");
-                filecontent = filecontent.Replace("xmlns:itemlist=\"clr-namespace:Trinity.Items.ItemList\"", "xmlns:itemlist=\"clr-namespace:Trinity.Items.ItemList;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:itemlist=\"clr-namespace:Trinity.Settings.ItemList\"", "xmlns:itemlist=\"clr-namespace:Trinity.Settings.ItemList;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:markupExtensions=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions\"", "xmlns:markupExtensions=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions;assembly=" + assemblyName + "\"");
                 filecontent = filecontent.Replace("xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions\"", "xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions;assembly=" + assemblyName + "\"");
                 filecontent = filecontent.Replace("xmlns:input=\"clr-namespace:Trinity.UI.UIComponents.Input\"", "xmlns:input=\"clr-namespace:Trinity.UI.UIComponents.Input;assembly=" + assemblyName + "\"");            
                 filecontent = filecontent.Replace("xmlns:behaviors=\"clr-namespace:Trinity.UI.UIComponents.Behaviors\"", "xmlns:behaviors=\"clr-namespace:Trinity.UI.UIComponents.Behaviors;assembly=" + assemblyName + "\"");

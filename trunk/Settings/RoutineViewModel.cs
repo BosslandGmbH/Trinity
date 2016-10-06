@@ -4,6 +4,8 @@ using System.Runtime.Serialization;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using Trinity.Framework;
@@ -19,10 +21,14 @@ namespace Trinity.Settings
     public class RoutineViewModel : NotifyBase
     {
         private bool _isCurrent;
-        private bool _isSelected;        
+        private bool _isSelected;
+        private IRoutine _routine;
+        private object _dataContext;
+        private UserControl _control;
 
         public RoutineViewModel(IRoutine routine)
         {
+            _routine = routine;
             RoutineTypeName = routine.GetType().Name;
             DisplayName = routine.DisplayName;
             Description = routine.Description;
@@ -31,6 +37,14 @@ namespace Trinity.Settings
             Version = routine.Version;
             Class = routine.Class;
             Url = routine.Url;
+            BuildControl(routine);
+        }
+
+        private void BuildControl(IRoutine routine)
+        {
+            if (routine == null)
+                return;
+
             DataContext = routine.RoutineSettings?.GetDataContext();
 
             if (routine.RoutineSettings == null)
@@ -46,7 +60,7 @@ namespace Trinity.Settings
                 return;
             }
 
-            Control = new System.Windows.Controls.UserControl
+            Control = new UserControl
             {
                 Content = control,
                 DataContext = this
@@ -63,13 +77,21 @@ namespace Trinity.Settings
         public Build RequiredBuild { get; set; }
 
         [IgnoreDataMember]
-        public System.Windows.Controls.UserControl Control { get; set; }
+        public System.Windows.Controls.UserControl Control
+        {
+            get { return _control; }
+            set { SetField(ref _control, value); }
+        }
 
         [IgnoreDataMember]
         public string ErrorMessage { get; set; }
 
         [IgnoreDataMember]
-        public object DataContext { get; set; }
+        public object DataContext
+        {
+            get { return _dataContext; }
+            set { SetField(ref _dataContext, value); }
+        }
 
         [DataMember]
         public string RoutineTypeName { get; set; }
@@ -123,5 +145,12 @@ namespace Trinity.Settings
 
         private static readonly Regex RE_URL = new Regex(@"(?#Protocol)(?:(?:ht|f)tp(?:s?)\:\/\/|~/|/)?(?#Username:Password)(?:\w+:\w+@)?(?#Subdomains)(?:(?:[-\w]+\.)+(?#TopLevel Domains)(?:com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|museum|travel|[a-z]{2}))(?#Port)(?::[\d]{1,5})?(?#Directories)(?:(?:(?:/(?:[-\w~!$+|.,=]|%[a-f\d]{2})+)+|/)+|\?|#)?(?#Query)(?:(?:\?(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)(?:&(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)*)*(?#Anchor)(?:#(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)?");
 
+        public void RefreshControl()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                BuildControl(_routine);
+            });                          
+        }
     }
 }

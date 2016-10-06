@@ -23,6 +23,14 @@ namespace Trinity.Reference
             public const int VeiledCrystal = -605947593;
         }
 
+        public static HashSet<SNOPower> ResetNavigationPowers = new HashSet<SNOPower>
+        {
+            SNOPower.X1_Monk_DashingStrike,
+            //SNOPower.Barbarian_FuriousCharge,
+            SNOPower.Wizard_Teleport,
+            SNOPower.Wizard_Archon_Teleport,
+        };
+
         public Dictionary<SNOActor, string> BossNames = new Dictionary<SNOActor, string>
         {
 

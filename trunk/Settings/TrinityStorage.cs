@@ -12,7 +12,6 @@ using System.Windows;
 using System.Xml;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Settings.Loot;
 using Trinity.Settings.Paragon;
 using Zeta.Bot.Settings;
 using Zeta.Game;
@@ -59,14 +58,14 @@ namespace Trinity.Settings
         }
 
         [IgnoreDataMember]
-        internal string BattleTagSettingsFile => Path.Combine(FileManager.SpecificSettingsPath, "Trinity.xml");
+        internal static string BattleTagSettingsFile => Path.Combine(FileManager.SpecificSettingsPath, "Trinity.xml");
 
-        private int _currentHeroId;
+        private static int _currentHeroId;
         private DynamicSettingGroup _dynamic;
 
 
         [IgnoreDataMember]
-        internal string HeroSpecificSettingsFile
+        internal static string HeroSpecificSettingsFile
         {
             get
             {
@@ -80,10 +79,10 @@ namespace Trinity.Settings
         }
 
         [IgnoreDataMember]
-        internal string OldBattleTagSettingsFile => Path.Combine(FileManager.SpecificSettingsPath, "GilesTrinity.xml");
+        internal static string OldBattleTagSettingsFile => Path.Combine(FileManager.SpecificSettingsPath, "GilesTrinity.xml");
 
         [IgnoreDataMember]
-        internal string GlobalSettingsFile => Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Settings", "Trinity.xml");
+        internal static string GlobalSettingsFile => Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "Settings", "Trinity.xml");
 
         private void _FSWatcher_Changed(object sender, FileSystemEventArgs e)
         {
@@ -111,6 +110,27 @@ namespace Trinity.Settings
         public TrinityStorage Clone()
         {
             return Clone(this);
+        }
+
+        public static string GetSettingsFilePath()
+        {
+            if (File.Exists(GlobalSettingsFile))
+            {
+                return GlobalSettingsFile;
+            }
+            if (File.Exists(HeroSpecificSettingsFile))
+            {
+                return HeroSpecificSettingsFile;
+            }
+            if (File.Exists(BattleTagSettingsFile))
+            {
+                return BattleTagSettingsFile;
+            }
+            if (File.Exists(OldBattleTagSettingsFile))
+            {
+                return OldBattleTagSettingsFile;
+            }
+            throw new FileNotFoundException("Unable to find settings file");
         }
 
         public void Load()

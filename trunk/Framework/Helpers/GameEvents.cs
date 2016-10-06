@@ -27,14 +27,6 @@ namespace Trinity.Framework.Helpers
             Logger.Log("Bot Starting");
             BotStartTime = DateTime.UtcNow;
             DebugUtil.LogSystemInformation();
-
-            if (!ItemDropStats.MaintainStatTracking)
-            {
-                ItemDropStats.ItemStatsWhenStartedBot = DateTime.UtcNow;
-                ItemDropStats.ItemStatsLastPostedReport = DateTime.UtcNow;
-                ItemDropStats.MaintainStatTracking = true;
-            }
-
             DefaultLootProvider.ResetBackPackCheck();
             HookManager.ReplaceTreeHooks();
             TreeHooks.Instance.OnHooksCleared += HookManager.InstanceOnOnHooksCleared;
@@ -66,10 +58,8 @@ namespace Trinity.Framework.Helpers
         public static void TrinityBotStop(IBot bot)
         {
             BotStopTime = DateTime.UtcNow;
-
             GoldInactivity.Instance.ResetCheckGold();
             XpInactivity.Instance.ResetCheckXp();
-            ItemDropStats.OutputReport();
             Clear();
         }
 
@@ -105,9 +95,6 @@ namespace Trinity.Framework.Helpers
                 Logger.Log("New Game - resetting everything");
                 DefaultLootProvider.ResetBackPackCheck();
                 SpellHistory.History.Clear();            
-                ItemDropStats._hashsetItemStatsLookedAt = new HashSet<string>();
-                ItemDropStats._hashsetItemPicksLookedAt = new HashSet<string>();
-                ItemDropStats._hashsetItemFollowersIgnored = new HashSet<string>();
                 GoldInactivity.Instance.ResetCheckGold();
                 Clear();
                 AttributeManager.Reset();

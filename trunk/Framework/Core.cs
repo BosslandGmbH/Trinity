@@ -48,6 +48,8 @@ namespace Trinity.Framework
         public static MinimapCache Minimap { get; } = new MinimapCache();
         public static WorldCache World { get; } = new WorldCache();
         public static Clusters Clusters { get; } = new Clusters();
+        public static SessionLogger SessionLogger { get; } = new SessionLogger();
+        public static ItemLogger ItemLogger { get; } = new ItemLogger();
 
         // Misc
         public static GridHelper Grids { get; } = new GridHelper();

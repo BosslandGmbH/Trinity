@@ -154,13 +154,13 @@ namespace Trinity.Routines.Barbarian
 
             private static readonly SkillSettings WrathOfTheBerserkerDefaults = new SkillSettings
             {
-                UseTime = UseTime.Selective,
+                UseMode = UseTime.Selective,
                 Reasons = UseReasons.Elites | UseReasons.HealthEmergency
             };
 
             private static readonly SkillSettings FuriousChargeDefaults = new SkillSettings
             {
-                UseTime = UseTime.AnyTime,
+                UseMode = UseTime.AnyTime,
                 RecastDelayMs = 200,
                 Reasons = UseReasons.Blocked
             };

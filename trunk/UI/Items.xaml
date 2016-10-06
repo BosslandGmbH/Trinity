@@ -67,20 +67,20 @@
             <GroupBox Header="Low Quality Items">
                 <StackPanel>
                     <UniformGrid>
-                        <CheckBox Content="Pickup Gray Items" ToolTip="Gray Items" IsChecked="{Binding Items.PickupItemQualities, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Grey}" />
-                        <CheckBox Content="Pickup White Items" ToolTip="White Items" IsChecked="{Binding Items.PickupItemQualities, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=White}" />
-                        <CheckBox Content="Pickup Blue Items" ToolTip="Blue Items" IsChecked="{Binding Items.PickupItemQualities, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Blue}" />
-                        <CheckBox Content="Pickup Yellow Items" ToolTip="Yellow Items" IsChecked="{Binding Items.PickupItemQualities, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Yellow}" />
+                        <CheckBox Content="Pickup Gray Items" ToolTip="Gray Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Grey}" />
+                        <CheckBox Content="Pickup White Items" ToolTip="White Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=White}" />
+                        <CheckBox Content="Pickup Blue Items" ToolTip="Blue Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Blue}" />
+                        <CheckBox Content="Pickup Yellow Items" ToolTip="Yellow Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Yellow}" />
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>
 
             <GroupBox Header="Special Items">
                 <UniformGrid Columns="2">
-                    <CheckBox Content="Pickup Deaths Breath" IsChecked="{Binding Items.SpecialItems, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=DeathsBreath}" />
-                    <CheckBox Content="Pickup Designs and Plans" IsChecked="{Binding Items.SpecialItems, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=CraftingPlans}" />
-                    <CheckBox Content="Stash Transmog Whites" IsChecked="{Binding Items.SpecialItems, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TransmogWhites}"  ToolTip="If enabled transmog items are picked up and stashed"/>
-                    <CheckBox Content="Pickup Staff of Herding Parts" IsChecked="{Binding Items.SpecialItems, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=StaffOfHeardingParts}" ToolTip="If enabled staff of herding crafting materials will be picked up and stashed"/>
+                    <CheckBox Content="Pickup Deaths Breath" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=DeathsBreath}" />
+                    <CheckBox Content="Pickup Designs and Plans" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=CraftingPlans}" />
+                    <CheckBox Content="Stash Transmog Whites" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=TransmogWhites}"  ToolTip="If enabled transmog items are picked up and stashed"/>
+                    <CheckBox Content="Pickup Staff of Herding Parts" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=StaffOfHeardingParts}" ToolTip="If enabled staff of herding crafting materials will be picked up and stashed"/>
                 </UniformGrid>
             </GroupBox>
 
@@ -140,7 +140,38 @@
                              IsChecked="{Binding Items.DropInTownMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" VerticalAlignment="Center" Margin="1,1,5,1"/>
                     </WrapPanel>
                 
-            </GroupBox>            
+            </GroupBox>
+
+			<GroupBox Grid.Row="1" Header="Free Bag Slots for Town Run">
+                <!-- TownRun Settings -->
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="When not in Town:" />
+                    <Slider Grid.Row="0" Grid.Column="1" Template="{DynamicResource SliderEditable}"
+                        Interval="500" Maximum="59" Minimum="0" SmallChange="1" LargeChange="10"
+                        TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True"
+                        Value="{Binding Items.FreeBagSlots}" />
+     
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="When in Town:" />
+                    
+                    <Slider x:Name="InTownBackpackSpaceSlider" Grid.Row="1" Grid.Column="1" Template="{DynamicResource SliderEditable}"
+                        Interval="500" Maximum="59" Minimum="0" SmallChange="1" LargeChange="10"
+                        TickFrequency="1" TickPlacement="BottomRight" IsSnapToTickEnabled="True"
+                        Value="{Binding Items.FreeBagSlotsInTown}" />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="Warning! a low backpack space setting may cause additional trips back and forth in town and some cube features that rely on having sufficient space may not function properly." FontWeight="Bold" Foreground="OrangeRed" 
+                               Visibility="{Binding Value, ElementName=InTownBackpackSpaceSlider, Converter={StaticResource sliderValueToVisibilityConverter},ConverterParameter=10}" TextAlignment="Center"/>
+
+                </Grid>
+            </GroupBox>
             
             <GroupBox Header="Misc">
                 <UniformGrid Columns="2">

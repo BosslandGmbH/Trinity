@@ -58,11 +58,11 @@
                     <GroupBox.Header>Vault</GroupBox.Header>
                     <StackPanel>
                         <UniformGrid Columns="2" Margin="0,5,0,10">
-                            <RadioButton Content="Anytime" IsChecked="{Binding DataContext.Vault.UseTime, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AnyTime}"  />
-                            <RadioButton Content="In combat" IsChecked="{Binding DataContext.Vault.UseTime, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
-                            <RadioButton Content="Out of combat" IsChecked="{Binding DataContext.Vault.UseTime, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
+                            <RadioButton Content="Anytime" IsChecked="{Binding DataContext.Vault.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AnyTime}"  />
+                            <RadioButton Content="In combat" IsChecked="{Binding DataContext.Vault.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
+                            <RadioButton Content="Out of combat" IsChecked="{Binding DataContext.Vault.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
                         </UniformGrid>
-                        <StackPanel Visibility="{Binding DataContext.Vault.UseTime, Converter={StaticResource HiddenWhenEnumTrueConverter}, ConverterParameter=Never}">
+                        <StackPanel Visibility="{Binding DataContext.Vault.UseMode, Converter={StaticResource HiddenWhenEnumTrueConverter}, ConverterParameter=Never}">
                             <Slider Template="{DynamicResource LabelledSliderEditable}" 
                             Tag="Recast delay"
                             ToolTip="Time between casts"

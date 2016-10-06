@@ -134,7 +134,7 @@ namespace Trinity.Routines.Wizard
 
             private static readonly SkillSettings TeleportDefaults = new SkillSettings
             {
-                UseTime = UseTime.AnyTime,
+                UseMode = UseTime.AnyTime,
                 RecastDelayMs = 200,
                 Reasons = UseReasons.Blocked
             };

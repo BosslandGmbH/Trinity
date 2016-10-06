@@ -39,6 +39,7 @@ namespace Trinity.Framework.Objects
             Class = ActorClass.Invalid;
         }
 
+        public string IconUrl => $"http://media.blizzard.com/d3/icons/skills/42/{IconSlug}.png";
         public string Name { get; set; }
         public string Description { get; set; }
         public string Slug { get; set; }

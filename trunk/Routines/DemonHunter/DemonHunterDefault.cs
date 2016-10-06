@@ -190,14 +190,14 @@ namespace Trinity.Routines.DemonHunter
 
             private static readonly SkillSettings VaultDefaults = new SkillSettings
             {
-                UseTime = UseTime.AnyTime,
+                UseMode = UseTime.AnyTime,
                 RecastDelayMs = 1000,
                 PrimaryResourcePct = 90f,
             };
 
             private static readonly SkillSettings VengeanceDefaults = new SkillSettings
             {
-                UseTime = UseTime.Selective,
+                UseMode = UseTime.Selective,
                 Reasons = UseReasons.Elites | UseReasons.HealthEmergency,
             };
 

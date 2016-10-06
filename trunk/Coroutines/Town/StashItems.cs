@@ -23,6 +23,7 @@ using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Actors.Gizmos;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Events;
 using Trinity.Framework.Helpers;
 using Trinity.Reference;
 using Extensions = Zeta.Common.Extensions;
@@ -142,6 +143,7 @@ namespace Trinity.Coroutines.Town
 
                             Logger.LogVerbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
                             ZetaDia.Me.Inventory.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
+                            item.OnUpdated();
                             ItemEvents.FireItemStashed(item);
                             await Coroutine.Sleep(250);
                         }

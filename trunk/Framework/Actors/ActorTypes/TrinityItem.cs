@@ -2,6 +2,7 @@ using System.Linq;
 using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
+using Trinity.Framework.Events;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
@@ -46,9 +47,12 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsItemAssigned { get; set; }
         public bool IsPickupNoClick { get; set; }
         public bool IsMyDroppedItem { get; set; }
+        public GlobeTypes GlobeType { get; set; }
         public FollowerType FollowerType { get; set; }
         public int ItemStackQuantity { get; set; }
         public bool IsTradeable { get; set; }
+        public bool IsWeapon { get; set; }
+        public bool IsArmor { get; set; }
         public TrinityItemQuality TrinityItemQuality { get; set; }
 
         public override void OnCreated()
@@ -72,11 +76,13 @@ namespace Trinity.Framework.Actors.ActorTypes
             ItemEvents.FireItemMoved(this);
             Logger.Log($"{Name} was moved to [Col={InventoryColumn}, Row={InventoryRow}, Slot={InventorySlot}] (Ann={AnnId} AcdId={AcdId})");
         }
+
         public void OnIdentified()
         {
             ItemEvents.FireItemIdentified(this);
             Logger.Log($"{Name} was identified. (Ann={AnnId} AcdId={AcdId}) Ancient={IsAncient} RawType={RawItemType}");
         }
+
         public void OnPickedUp()
         {
             Logger.Log($"{Name} was picked up. (Ann={AnnId} AcdId={AcdId}) Ancient={IsAncient} RawType={RawItemType}");

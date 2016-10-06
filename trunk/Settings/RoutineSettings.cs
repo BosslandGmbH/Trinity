@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Routines;
+using Trinity.UI;
 using Trinity.UI.UIComponents;
 using Zeta.Game;
 
@@ -73,6 +75,9 @@ namespace Trinity.Settings
             Core.Routines.Changed += OnRoutineChanged;
             var current = Core.Routines.CurrentRoutine;
 
+            UILoader.OnSettingsWindowOpened += UILoaderOnOnSettingsWindowOpened;
+            GameInfo.Instance.PropertyChanged += GameInfoChanged;
+
             foreach (var routine in Core.Routines.AllRoutines)
             {
                 var routineViewModel = new RoutineViewModel(routine);
@@ -91,7 +96,23 @@ namespace Trinity.Settings
                 _routineMode = RoutineMode.Automatic;
         }
 
-        public ActorClass GetCurrentClass() => Core.Routines.CurrentRoutine?.Class ?? ZetaDia.Service.Hero.Class;
+        private void GameInfoChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (propertyChangedEventArgs.PropertyName == nameof(GameInfo.Instance.IsInGame))
+            {
+                SelectedRoutine?.RefreshControl();
+            }
+        }
+
+        private void UILoaderOnOnSettingsWindowOpened()
+        {
+            SelectedRoutine?.RefreshControl();
+        }
+
+        public ActorClass GetCurrentClass()
+        {
+            return ZetaDia.Service.Hero.Class;
+        } 
 
         private void UpdateRoutineLists()
         {

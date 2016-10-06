@@ -274,7 +274,7 @@ namespace Trinity.Components.Combat.Resources
             return (from u in SafeList(ignoreElites)
                     where u.IsUnit &&
                           u.Distance <= maxRange && u.IsInLineOfSight &&
-                          !(ignoreUnitsInAoE && u.IsStandingInAvoidance) &&
+                          !(ignoreUnitsInAoE && u.IsInAvoidance) &&
                           !(ignoreElites && u.IsElite)
                     orderby u.CountUnitsInFront() descending
                     select u).ToList();

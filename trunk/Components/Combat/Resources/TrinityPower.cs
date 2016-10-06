@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
@@ -47,6 +48,18 @@ namespace Trinity.Components.Combat.Resources
         public double WaitTimeAfterRemaining => Math.Max(0, WaitAfterUseMs - TimeSinceUseMs);
 
         public bool IsInteractPower => GameData.InteractPowers.Contains(SNOPower);
+
+        public void SetTarget(TrinityActor target)
+        {
+            if (IsCastOnSelf)
+                return;
+
+            if (TargetAcdId != -1)
+                TargetAcdId = target.AcdId;
+
+            if (TargetPosition != Vector3.Zero)
+                TargetPosition = target.Position;
+        }
 
         public TrinityPower()
         {

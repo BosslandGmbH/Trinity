@@ -136,17 +136,18 @@ namespace Trinity.Routines.Monk
                 {
                     var needStacks = Skills.Monk.SweepingWind.BuffStacks < 3 && Player.PrimaryResourcePct <= 0.75f;
                     var needResource = Player.PrimaryResource < PrimaryEnergyReserve;
-                    if (needStacks || needResource)
+                    if ((needStacks || needResource) && AllUnits.Any(u => u.Distance <= 12f))
                     {
                         Logger.Log(LogCategory.Routine, "Moving away to build stacks");
-                        return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 40f));
-                    }
+                        var pos = TargetUtil.GetLoiterPosition(CurrentTarget, 30f);
 
-                    var needRange = CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.RadiusDistance < 15f;
-                    if (needRange)
-                    {
-                        Logger.Log(LogCategory.Routine, $"Adjusting Range from {CurrentTarget}");
-                        return Walk(MathEx.CalculatePointFrom(Player.Position, CurrentTarget.Position, 20f), 5f);
+                        if (pos.Distance(Player.Position) < 10f)
+                        {
+                            Logger.Log(LogCategory.Routine, ".. Using Avoider Position");
+                            Avoider.TryGetSafeSpot(out pos, 15f, 100f, Player.Position);
+                        }
+
+                        return Walk(pos);
                     }
                 }
 
@@ -160,7 +161,8 @@ namespace Trinity.Routines.Monk
                     }
                 }
             }
-            return null;
+
+            return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, AttackRange + 10f));
         }
 
         public List<SNOAnim> LashingTailkickAnimations = new List<SNOAnim>
@@ -169,15 +171,22 @@ namespace Trinity.Routines.Monk
             SNOAnim.Monk_Female_HTH_LashingTail
         };
 
-        public bool IsBuildingStacks = !TargetUtil.AnyMobsInRange(20f) && Skills.Monk.SweepingWind.BuffStacks > 1;
+        public bool IsBeltBuildingStacks = !AllUnits.Any(u => u.Position.Distance(Player.Position) < 12f) && Skills.Monk.SweepingWind.BuffStacks > 1;
 
         public float AttackRange 
-            => (CurrentTarget.IsBoss || CurrentTarget.IsElite) && IsBuildingStacks ? 50f
-            : (Runes.Monk.SweepingArmada.IsActive ? 15f : 10f);
+            => (CurrentTarget.IsBoss || CurrentTarget.IsElite) && IsBeltBuildingStacks ? 50f
+            : (Runes.Monk.SweepingArmada.IsActive ? 14f : 10f);
 
         protected override TrinityPower LashingTailKick(TrinityActor target)
-            => new TrinityPower(SNOPower.Monk_LashingTailKick, AttackRange, target.AcdId, 0, 0);
+        {
+            // Teleport with Epiphany
+            if (Skills.Monk.Epiphany.IsBuffActive && (IsStuck || IsBlocked || target.Distance > 30f))
+                return new TrinityPower(SNOPower.Monk_LashingTailKick, AttackRange, target.AcdId, 0, 0);
 
+            // Attack at position (Shift+Click) to send fireball from range.
+            return new TrinityPower(SNOPower.Monk_LashingTailKick, AttackRange, target.Position, 0, 0);            
+        }
+            
         public TrinityPower GetDefensivePower() => GetBuffPower();
         public TrinityPower GetBuffPower() => DefaultBuffPower();
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
@@ -198,16 +207,16 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.BlindingFlash.CanCast())
                 return false;
 
-            var forDefense = Player.CurrentHealthPct < 0.5f && TargetUtil.AnyMobsInRange(20f);
-            var forDamage = Runes.Monk.FaithInTheLight.IsActive && TargetUtil.AnyMobsInRange(20f);
-                        
-            if (Legendary.TheLawsOfSeph.IsEquipped)
-            {
-                var forResource = Player.PrimaryResource < Player.PrimaryResourceMax - 165;
-                return forResource || forDefense;
-            }
+            if (!TargetUtil.AnyMobsInRange(20f))
+                return false;
 
-            return forDefense || forDamage;
+            if (Player.CurrentHealthPct < 0.5f)
+                return true;
+                    
+            if (Legendary.TheLawsOfSeph.IsEquipped)
+                return Player.PrimaryResource < Player.PrimaryResourceMax - 165;
+
+            return true;
         }
 
         protected override bool ShouldMantraOfConviction()
@@ -244,24 +253,48 @@ namespace Trinity.Routines.Monk
 
         private int MinSweepingWindStacks => Legendary.VengefulWind.IsEquipped ? 3 : 1;
 
+        private bool IsLTKAnimating => LashingTailkickAnimations.Contains(ZetaDia.Me.CommonData.CurrentAnimation);
+
         protected override bool ShouldLashingTailKick(out TrinityActor target)
         {
             target = null;
 
             if (!Skills.Monk.LashingTailKick.CanCast())
+            {
+                Logger.Log(LogCategory.Routine, "Skipping LTK - Cant Cast.");
                 return false;
+            }
 
             if (!TargetUtil.AnyMobsInRange(50f))
+            {
+                Logger.Log(LogCategory.Routine, "Skipping LTK - No Units in 50yd Range.");
                 return false;
+            }
 
-            if (Skills.Monk.LashingTailKick.TimeSinceUse < 500)
+            // Sometimes ZetaDia UsePower says it was cast but it wasn't
+            var timeSinceUse = Skills.Monk.LashingTailKick.TimeSinceUse;
+            if (timeSinceUse < 25 || IsLTKAnimating && timeSinceUse < 250)
+            {
+                Logger.Log(LogCategory.Routine, $"Skipping LTK - Time Since Use ({timeSinceUse})");
                 return false;
-        
-            if (Skills.Monk.SweepingWind.BuffStacks <= MinSweepingWindStacks)
-                return false;
+            }
 
-            target = TargetUtil.GetBestClusterUnit(50f);
-            return target != null;
+            var stacks = Skills.Monk.SweepingWind.BuffStacks;
+            if (stacks <= MinSweepingWindStacks)
+            {
+                Logger.Log(LogCategory.Routine, $"Skipping LTK - Not Enough SW Stacks ({stacks})");
+                return false;
+            }
+
+            if (IsBlocked || IsStuck)
+            {
+                target = TargetUtil.GetClosestUnit(50f) ?? CurrentTarget;
+            }
+            else
+            {
+                target = TargetUtil.GetBestClusterUnit(50f) ?? CurrentTarget;
+            }
+            return true;
         }
 
         protected override bool ShouldSweepingWind()
@@ -366,13 +399,13 @@ namespace Trinity.Routines.Monk
 
             private static readonly SkillSettings EpiphanyDefaults = new SkillSettings
             {
-                UseTime = UseTime.Selective,
+                UseMode = UseTime.Selective,
                 Reasons = UseReasons.Elites | UseReasons.HealthEmergency
             };
 
             private static readonly SkillSettings DashingStrikeDefaults = new SkillSettings
             {
-                UseTime = UseTime.AnyTime,
+                UseMode = UseTime.AnyTime,
                 RecastDelayMs = 2000,
                 Reasons = UseReasons.Blocked
             };

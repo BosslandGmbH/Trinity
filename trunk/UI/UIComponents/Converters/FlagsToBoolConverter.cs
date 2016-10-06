@@ -9,6 +9,9 @@ namespace Trinity.UI.UIComponents.Converters
     {
         private FlagsToBoolConverter _converter;
 
+        // Using a markup extension causes a new instance to be created for each usage, in this case it allows storage of the flags original total.
+        // IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Blue}"
+
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             _converter = new FlagsToBoolConverter();

@@ -7,6 +7,7 @@ using Buddy.Coroutines;
 using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Events;
 using Trinity.Items;
 using Trinity.Reference;
 using Zeta.Bot;

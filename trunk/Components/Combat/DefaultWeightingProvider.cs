@@ -28,10 +28,23 @@ namespace Trinity.Components.Combat
     public interface IWeightingProvider
     {
         TrinityActor WeightActors(IEnumerable<TrinityActor> objects);
+
+        bool ShouldIgnore(TrinityActor actor);
     }
 
     public class DefaultWeightingProvider : IWeightingProvider
     {
+        public bool ShouldIgnore(TrinityActor actor)
+        {
+            switch (actor.Type)
+            {
+                case TrinityObjectType.ProgressionGlobe:
+                    return WeightingUtils.ShouldIgnoreGlobe(actor as TrinityItem);
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// todo refactor this is a mess
         /// </summary>
@@ -1155,7 +1168,7 @@ namespace Trinity.Components.Combat
                                     }
                                 }
 
-                                if (cacheObject.Distance < 12f)
+                                if (cacheObject.Distance < 20f && cacheObject.IsWalkable && !PlayerMover.IsBlocked)
                                 {
                                     cacheObject.Weight = MaxWeight;
                                     cacheObject.WeightInfo += $"Shrine so close i can touch it {cacheObject.InternalName}";
@@ -1201,10 +1214,16 @@ namespace Trinity.Components.Combat
                                                             AoENearFormula(cacheObject) +
                                                             AoEInPathFormula(cacheObject);
 
-                                if (cacheObject.Distance < 35f && cacheObject.IsWalkable)
+
+                                if (cacheObject.Distance < 50f && cacheObject.IsWalkable)
+                                {
+                                    cacheObject.Weight *= 4;
+                                    cacheObject.WeightInfo += $"Mid-Range Shrine Boost";                      
+                                }
+                                if (cacheObject.Distance < 100f)
                                 {
                                     cacheObject.Weight *= 2;
-                                    cacheObject.WeightInfo += $"Mid-Range Walkable Boost";                      
+                                    cacheObject.WeightInfo += $"Far-Range Shrine Boost";
                                 }
 
                                 break;
@@ -1504,6 +1523,42 @@ namespace Trinity.Components.Combat
             }
             return false;
         }
+
+        //private bool ShouldIgnoreGlobe(TrinityActor actor, out string reason)
+        //{
+        //    reason = string.Empty;
+
+        //    if (Core.Settings.Weighting.EliteWeighting == SettingMode.Enabled)
+        //    {
+        //        reason = "Keep(Elites=Enabled)";
+        //        return false;
+        //    }
+
+        //    if (Core.Settings.Weighting.EliteWeighting == SettingMode.Disabled)
+        //    {
+        //        reason = "Ignore(Elites=Disabled)";
+        //        return true;
+        //    }
+
+        //    if (Core.Settings.Weighting.EliteWeighting == SettingMode.Selective)
+        //    {
+        //        var eliteType = GetEliteType(actor);
+        //        if (!Core.Settings.Weighting.EliteTypes.HasFlag(eliteType))
+        //        {
+        //            reason = $"Ignore(EliteType:{eliteType}=Disabled)";
+        //            return true;
+        //        }
+
+        //        var ignoredAffixMatches = _ignoredAffixes.Where(a => actor.MonsterAffixes.HasFlag(a)).ToList();
+        //        if (ignoredAffixMatches.Any())
+        //        {
+        //            var ignoredTypes = ignoredAffixMatches.Aggregate(string.Empty, (s, affixes) => s + $",{affixes}");
+        //            reason = $"Ignore(Affix:{ignoredTypes}=Disabled)";
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
         public TrinityActor KamakaziGoblin { get; set; }
 
@@ -2104,7 +2159,7 @@ namespace Trinity.Components.Combat
                     return EliteTypes.Rare;
             }
             return EliteTypes.None;
-        }
+        }        
 
     }
 

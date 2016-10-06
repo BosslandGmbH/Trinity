@@ -50,6 +50,7 @@ using Trinity.Framework.Objects.Memory.Attributes;
 using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Items.Sorting;
+using Trinity.Settings;
 using Trinity.UI.Visualizer;
 using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
@@ -132,6 +133,7 @@ namespace Trinity.UI
                             CreateButton("Drop Legendaries", DropLegendariesEventHandler),
                             //CreateButton("Log Run Time", btnClick_LogRunTime),
                             CreateButton("Open Log File", OpenLogFileHandler),
+                            CreateButton("Open Settings File", OpenSettingsFileHandler),
                             //CreateButton("Log Town Actor", LogTownActor),
                             //CreateButton("Test UIElement", TestUIElement),                                                       
                             //CreateButton("Test SNOReader", TestSNOReader),
@@ -182,6 +184,30 @@ namespace Trinity.UI
 
             });
         }
+
+        private static void OpenSettingsFileHandler(object sender, RoutedEventArgs e)
+        {
+            string logFile = "";
+
+            try
+            {
+                logFile = TrinityStorage.GetSettingsFilePath();
+
+                if (File.Exists(logFile))
+                {
+                    Process.Start(logFile);
+                }
+                else
+                {
+                    Logger.LogError("Unable to open settings file {0} - file does not exist", logFile);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Error opening settings file: {0} {1}", logFile, ex.Message);
+            }
+        }
+
 
         /**************
          * 

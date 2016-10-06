@@ -7,7 +7,6 @@ using System.Text;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Items;
-using Trinity.Items.ItemList;
 using Trinity.Items.Sorting;
 using Trinity.Reference;
 using Zeta.Common;
