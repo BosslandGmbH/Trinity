@@ -47,10 +47,10 @@
                     <StackPanel>
 
                         <WrapPanel>
-                            <RadioButton Content="Always" IsChecked="{Binding DataContext.Archon.UseTime, ConverterParameter=Always, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
-                            <RadioButton Content="Selectively" IsChecked="{Binding DataContext.Archon.UseTime, ConverterParameter=Selective, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+                            <RadioButton Content="Always" IsChecked="{Binding DataContext.Archon.UseMode, ConverterParameter=Always, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
+                            <RadioButton Content="Selectively" IsChecked="{Binding DataContext.Archon.UseMode, ConverterParameter=Selective, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
                         </WrapPanel>
-                        <StackPanel Margin="0,5,0,0" Visibility="{Binding DataContext.Archon.UseTime, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}">
+                        <StackPanel Margin="0,5,0,0" Visibility="{Binding DataContext.Archon.UseMode, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}">
                             <CheckBox ToolTip="Use when there are elites close nearby" 
                                       IsChecked="{Binding DataContext.Archon.Reasons, ConverterParameter=Elites, Converter={converters:FlagsToBoolConverter}}">Elites nearby</CheckBox>
                             <CheckBox ToolTip="Use when you are surrounded by enemies" 
@@ -65,11 +65,11 @@
                     <StackPanel>
                         <WrapPanel Margin="0,5,0,10">
                             <RadioButton ToolTip="Use vault whenever it makes sense"
-                                Content="Anytime" IsChecked="{Binding DataContext.Teleport.UseTime, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AnyTime}"  />
+                                Content="Anytime" IsChecked="{Binding DataContext.Teleport.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AnyTime}"  />
                             <RadioButton ToolTip="Use only while fighting monsters"
-                                Content="In combat" IsChecked="{Binding DataContext.Teleport.UseTime, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
+                                Content="In combat" IsChecked="{Binding DataContext.Teleport.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
                             <RadioButton  ToolTip="Use only while NOT fighting monsters"
-                                Content="Out of combat" IsChecked="{Binding DataContext.Teleport.UseTime, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
+                                Content="Out of combat" IsChecked="{Binding DataContext.Teleport.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
                         </WrapPanel>
                         <StackPanel Margin="0,0,0,0">
                             <CheckBox ToolTip="Use when movement is blocked" 

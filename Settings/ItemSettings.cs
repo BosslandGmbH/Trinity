@@ -28,7 +28,7 @@ namespace Trinity.Settings
         private SpecialItemTypes _specialItems;
         private TrinityGemType _gemTypes;
         private int _gemLevel;
-        private PickupItemQualities _pickupItemTypes;
+        private PickupItemQualities _pickupTypes;
         private bool _keepLegendaryUnid;
         private bool _pickupGold;
         private int _minGoldStack;
@@ -44,12 +44,13 @@ namespace Trinity.Settings
             base.LoadDefaults();
         }
 
+        [DataMember]
         [Setting, UIControl(UIControlType.FlagsCheckboxes)]
-        [DefaultValue(PickupItemQualities.Defaults)]
-        public PickupItemQualities PickupItemQualities
+        [DefaultValue(PickupItemQualities.All)]
+        public PickupItemQualities PickupQualities
         {
-            get { return _pickupItemTypes; }
-            set { SetField(ref _pickupItemTypes, value); }
+            get { return _pickupTypes; }
+            set { SetField(ref _pickupTypes, value); }
         }
 
         [DataMember]

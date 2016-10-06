@@ -183,14 +183,14 @@ namespace Trinity.Routines.Wizard
 
             private static readonly SkillSettings TeleportDefaults = new SkillSettings
             {
-                UseTime = UseTime.AnyTime,
+                UseMode = UseTime.AnyTime,
                 RecastDelayMs = 1000,
                 Reasons = UseReasons.Blocked
             };
 
             private static readonly SkillSettings ArchonDefaults = new SkillSettings
             {
-                UseTime = UseTime.Selective,
+                UseMode = UseTime.Selective,
                 Reasons = UseReasons.Elites | UseReasons.Surrounded
             };
 

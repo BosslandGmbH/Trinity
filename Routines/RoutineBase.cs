@@ -69,7 +69,7 @@ namespace Trinity.Routines
             => new TrinityPower(SNOPower.Walk, Math.Max(7f, target.AxialRadius), target.Position);
 
         protected static TrinityPower Walk(Vector3 destination, float range = 7f)
-            => new TrinityPower(SNOPower.Walk, 7f, destination);
+            => new TrinityPower(SNOPower.Walk, range, destination);
 
         protected static bool IsBlocked
             => PlayerMover.IsBlocked;
@@ -126,10 +126,10 @@ namespace Trinity.Routines
             if (settings == null || skill == null)
                 return true;
 
-            if (settings.UseTime == UseTime.Always)
+            if (settings.UseMode == UseTime.Always)
                 return true;
 
-            if (settings.UseTime == UseTime.Never)
+            if (settings.UseMode == UseTime.Never)
                 return false;
 
             if (IsRestricted(settings, skill))
@@ -138,13 +138,13 @@ namespace Trinity.Routines
             if (IsReasonToUse(settings, skill))
                 return true;
 
-            if (settings.UseTime == UseTime.Selective)
+            if (settings.UseMode == UseTime.Selective)
                 return false;
 
-            if (settings.UseTime == UseTime.OutOfCombat && IsInCombat)
+            if (settings.UseMode == UseTime.OutOfCombat && IsInCombat)
                 return false;
 
-            if (settings.UseTime == UseTime.InCombat && !IsInCombat)
+            if (settings.UseMode == UseTime.InCombat && !IsInCombat)
                 return false;
 
             return true;

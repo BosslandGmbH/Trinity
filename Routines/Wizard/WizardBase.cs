@@ -557,7 +557,7 @@ namespace Trinity.Routines.Wizard
             if (!Skills.Wizard.ArchonSlowTime.CanCast())
                 return false;
 
-            if (!IsSlowTimeActive)
+            if (!IsArchonSlowTimeActive)
                 return true;
 
             return false;
@@ -690,6 +690,9 @@ namespace Trinity.Routines.Wizard
 
         protected bool IsSlowTimeActive
             => ZetaDia.Actors.GetActorsOfType<DiaObject>().Any(a => GameData.SlowTimeSNO.Contains(a.ActorSnoId));
+
+        protected bool IsArchonSlowTimeActive
+            => ZetaDia.Actors.GetActorsOfType<DiaObject>().Any(a => GameData.SlowTimeSNO.Contains(a.ActorSnoId) && a.Distance <= 5f);
 
         protected static float BlizzardRadius
             => Runes.Wizard.Apocalypse.IsActive ? 30f : 16f;

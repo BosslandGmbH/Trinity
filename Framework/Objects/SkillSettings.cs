@@ -2,22 +2,54 @@ using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using Trinity.Framework.Helpers;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Objects
 {
     [DataContract(Namespace = "")]
-    public class SkillSettings : NotifyBase
+    public sealed class SkillSettings : NotifyBase
     {
+        public SkillSettings()
+        {
+            LoadDefaults();
+        }
+
+        public SkillSettings(Skill skillSettings)
+        {
+            LoadDefaults();
+            SetReferenceSkill(skillSettings);
+        }
+
+        public void SetReferenceSkill(Skill skill)
+        {
+            if (skill == null)
+                return;
+
+            SNOPower = skill.SNOPower;
+            Skill = skill;
+        }
+
+        [DataMember(EmitDefaultValue = false)]
+        public SNOPower SNOPower
+        {
+            get { return _SNOPower; }
+            set { SetField(ref _SNOPower, value); }
+        }
+
+        [IgnoreDataMember]
+        public Skill Skill { get; set; }
+
         private float _castRange;
         private float _clusterSize;
         private float _primaryResourcePct;
         private float _secondaryResourcePct;
         private float _healthPct;
         private int _recastDelayMs;
-        private UseTime _useTime;
+        private UseTime _useMode;
         private UseReasons _reasons;
         private UseTarget _target;
         private ConventionMode _waitForConvention;
+        private SNOPower _SNOPower;
 
         /// <summary>
         /// Monster must be this close before a spell is cast.
@@ -83,10 +115,11 @@ namespace Trinity.Framework.Objects
         /// When this spell can be used.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
-        public UseTime UseTime
+        [DefaultValue(UseTime.Always)]
+        public UseTime UseMode
         {
-            get { return _useTime; }
-            set { SetField(ref _useTime, value); }
+            get { return _useMode; }
+            set { SetField(ref _useMode, value); }
         }
 
         /// <summary>
@@ -135,6 +168,11 @@ namespace Trinity.Framework.Objects
             PropertyCopy.Copy(this, newObj);
             return newObj;
         }
+
+        public void Refresh()
+        {
+            OnPropertyChanged("");
+        }
     }
 
     public enum UseTime
@@ -160,7 +198,7 @@ namespace Trinity.Framework.Objects
 
     public enum UseTarget
     {
-        [Description("Use on default target")]
+        [Description("Cast on default target")]
         Default = 0,
 
         [Description("Cast on current target")]
@@ -177,6 +215,9 @@ namespace Trinity.Framework.Objects
 
         [Description("Cast on a safe location")]
         SafeSpot,
+
+        [Description("Cast on Self")]
+        Self,        
     }
 
     [Flags]

@@ -119,7 +119,7 @@ namespace Trinity.Framework.Modules
         {
             using (new PerformanceLogger("UpdateCachedPlayerData"))
             {
-                if (DateTime.UtcNow.Subtract(LastUpdated).TotalMilliseconds <= 100)
+                if (DateTime.UtcNow.Subtract(LastUpdated).TotalMilliseconds <= 25)
                     return;
 
                 if (!ZetaDia.IsInGame)

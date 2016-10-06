@@ -11,6 +11,7 @@ using IronPython.Modules;
 using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Events;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Items;

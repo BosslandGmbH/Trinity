@@ -7,7 +7,6 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Items;
-using Trinity.Items.ItemList;
 using Trinity.Reference;
 using Trinity.Settings;
 using Zeta.Bot;
@@ -135,16 +134,16 @@ namespace Trinity.Components.Combat
                 case TrinityItemBaseType.FollowerItem:
 
                     if (item.TrinityItemQuality == TrinityItemQuality.Inferior)
-                        return Core.Settings.Items.PickupItemQualities.HasFlag(PickupItemQualities.Grey);
+                        return Core.Settings.Items.PickupQualities.HasFlag(PickupItemQualities.Grey);
 
                     if (item.TrinityItemQuality == TrinityItemQuality.Common)
-                        return Core.Settings.Items.PickupItemQualities.HasFlag(PickupItemQualities.White);
+                        return Core.Settings.Items.PickupQualities.HasFlag(PickupItemQualities.White);
 
                     if (item.TrinityItemQuality == TrinityItemQuality.Magic)
-                        return Core.Settings.Items.PickupItemQualities.HasFlag(PickupItemQualities.Blue);
+                        return Core.Settings.Items.PickupQualities.HasFlag(PickupItemQualities.Blue);
 
                     if (item.TrinityItemQuality == TrinityItemQuality.Rare)
-                        return Core.Settings.Items.PickupItemQualities.HasFlag(PickupItemQualities.Yellow);
+                        return Core.Settings.Items.PickupQualities.HasFlag(PickupItemQualities.Yellow);
 
                     return false;
 
@@ -859,40 +858,40 @@ namespace Trinity.Components.Combat
 
 
 
-        internal static TrinityItemType DetermineItemType(ACDItem item)
-        {
-            return TypeConversions.DetermineItemType(item.InternalName, item.ItemType);
-        }
+        //internal static TrinityItemType DetermineItemType(ACDItem item)
+        //{
+        //    return TypeConversions.DetermineItemType(item.InternalName, item.ItemType);
+        //}
 
 
 
 
-        internal static bool IsEquipment(CachedACDItem i)
-        {
-            return (i.BaseType == ItemBaseType.Armor || i.BaseType == ItemBaseType.Jewelry || i.BaseType == ItemBaseType.Weapon);
-        }
+        //internal static bool IsEquipment(CachedACDItem i)
+        //{
+        //    return (i.BaseType == ItemBaseType.Armor || i.BaseType == ItemBaseType.Jewelry || i.BaseType == ItemBaseType.Weapon);
+        //}
 
-        internal static Func<ACDItem, TrinityItem, bool> StackItemMatchFunc = (item, cItem) => item.IsValid && item.ActorSnoId == cItem.ActorSnoId;
+        //internal static Func<ACDItem, TrinityItem, bool> StackItemMatchFunc { get; set; } = (item, cItem) => item.IsValid && item.ActorSnoId == cItem.ActorSnoId;
 
-        internal static int GetItemStackCount(TrinityItem cItem, InventorySlot inventorySlot)
-        {
-            try
-            {
-                switch (inventorySlot)
-                {
-                    case InventorySlot.BackpackItems:
-                        return ZetaDia.Me.Inventory.Backpack.Where(i => StackItemMatchFunc(i, cItem)).Sum(i => i.GetItemStackQuantity());
-                    case InventorySlot.SharedStash:
-                        return ZetaDia.Me.Inventory.StashItems.Where(i => StackItemMatchFunc(i, cItem)).Sum(i => i.GetItemStackQuantity());
-                }
-                throw new ArgumentException("InventorySlot " + inventorySlot + " is not supported for GetStackCount method");
-            }
-            catch (Exception ex)
-            {
-                Logger.LogDebug("Error Getting ItemStackQuantity {0}", ex);
-                return -1;
-            }
-        }
+        //internal static int GetItemStackCount(TrinityItem cItem, InventorySlot inventorySlot)
+        //{
+        //    try
+        //    {
+        //        switch (inventorySlot)
+        //        {
+        //            case InventorySlot.BackpackItems:
+        //                return ZetaDia.Me.Inventory.Backpack.Where(i => StackItemMatchFunc(i, cItem)).Sum(i => i.GetItemStackQuantity());
+        //            case InventorySlot.SharedStash:
+        //                return ZetaDia.Me.Inventory.StashItems.Where(i => StackItemMatchFunc(i, cItem)).Sum(i => i.GetItemStackQuantity());
+        //        }
+        //        throw new ArgumentException("InventorySlot " + inventorySlot + " is not supported for GetStackCount method");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger.LogDebug("Error Getting ItemStackQuantity {0}", ex);
+        //        return -1;
+        //    }
+        //}
 
     }
 }

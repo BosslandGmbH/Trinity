@@ -151,7 +151,7 @@ namespace Trinity.Routines.Crusader
 
             private static readonly SkillSettings AkaratsDefaults = new SkillSettings
             {
-                UseTime = UseTime.Selective,
+                UseMode = UseTime.Selective,
                 Reasons = UseReasons.Elites | UseReasons.HealthEmergency,
             };
 

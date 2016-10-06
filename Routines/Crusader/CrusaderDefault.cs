@@ -154,13 +154,13 @@ namespace Trinity.Routines.Crusader
 
             private static readonly SkillSettings AkaratsDefaults = new SkillSettings
             {
-                UseTime = UseTime.Selective,
+                UseMode = UseTime.Selective,
                 Reasons = UseReasons.Elites | UseReasons.HealthEmergency,
             };
 
             private static readonly SkillSettings SteedChargeDefaults = new SkillSettings
             {
-                UseTime = UseTime.AnyTime,
+                UseMode = UseTime.AnyTime,
                 Reasons = UseReasons.Blocked
             };
 

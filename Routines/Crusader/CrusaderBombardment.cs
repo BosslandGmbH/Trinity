@@ -198,7 +198,7 @@ namespace Trinity.Routines.Crusader
 
             private static readonly SkillSettings AkaratsDefaults = new SkillSettings
             {
-                UseTime = UseTime.Always,
+                UseMode = UseTime.Always,
             };
 
             private static readonly SkillSettings BombardmentDefaults = new SkillSettings

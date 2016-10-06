@@ -37,9 +37,15 @@ namespace Trinity.Framework.Objects
         public virtual UserControl GetControl() => UILoader.LoadXamlByFileName<UserControl>(GetName() + ".xaml");
         public virtual object GetDataContext() => Object;
         public virtual string GetCode() => JsonSerializer.Serialize(Object);
-        public virtual void ApplyCode(string code) => JsonSerializer.Deserialize(code, Object);
+        public virtual void ApplyCode(string code) => Update(code);
         public virtual void Reset() => Object.LoadDefaults();
         public virtual void Save() { }
+
+        private void Update(string code)
+        {
+            JsonSerializer.Deserialize(code, Object);
+            Object.OnPopulated();
+        }
     }
 
     [DataContract(Namespace = "")]

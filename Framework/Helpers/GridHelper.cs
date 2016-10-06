@@ -19,6 +19,9 @@ namespace Trinity.Framework.Helpers
 
         public bool CanRayCast(Vector3 to)
         {
+            if (!Avoidance.IsPopulated)
+                return false;
+
             return Navigation.CanRayCast(Core.Player.Position, to);
         }
 

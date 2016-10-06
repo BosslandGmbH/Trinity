@@ -11,6 +11,7 @@ using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Behaviors;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Reference;
@@ -78,6 +79,16 @@ namespace Trinity.Components.Combat
             var target = Weighting.WeightActors(Core.Targets);
        
             if (await CastBuffs())
+                return true;
+
+            // Priority movement for progression globes
+            if (ZetaDia.CurrentRift != null && await Behaviors.MoveToActor.While(
+                a => a.Type == TrinityObjectType.ProgressionGlobe && !Weighting.ShouldIgnore(a) && !a.IsInAvoidance))
+                return true;
+
+            // Priority interaction for doors
+            if (ZetaDia.CurrentRift != null && await Behaviors.MoveToInteract.While(
+                a => a.Type == TrinityObjectType.Door && !a.IsUsed && a.Distance < 15f))
                 return true;
 
             // Combat Allowed only effects units, Trinity may still pick up items etc.

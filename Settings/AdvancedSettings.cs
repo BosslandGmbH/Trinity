@@ -19,7 +19,8 @@ namespace Trinity.Settings
         private bool _showHeroName;
         private bool _showHeroClass;
         private bool _disableAllMovement;
-        private bool _allowDuplicateMessages;
+        private bool _logStats;
+        private bool _logItems;
 
         public AdvancedSettings()
         {
@@ -122,7 +123,23 @@ namespace Trinity.Settings
             get { return _disableAllMovement; }
             set { SetField(ref _disableAllMovement, value); }
         }
-     
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool LogStats
+        {
+            get { return _logStats; }
+            set { SetField(ref _logStats, value); }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool LogItems
+        {
+            get { return _logItems; }
+            set { SetField(ref _logItems, value); }
+        }
+
     }
 }
 

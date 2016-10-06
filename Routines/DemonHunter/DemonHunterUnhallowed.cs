@@ -202,7 +202,7 @@ namespace Trinity.Routines.DemonHunter
             private static readonly SkillSettings DefaultVaultSettings = new SkillSettings
             {                
                 SecondaryResourcePct = 90f,
-                UseTime = UseTime.AnyTime,
+                UseMode = UseTime.AnyTime,
                 RecastDelayMs = 1000,
             };
 

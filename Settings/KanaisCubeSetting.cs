@@ -7,7 +7,6 @@ using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Settings.Loot;
 
 namespace Trinity.Settings
 {

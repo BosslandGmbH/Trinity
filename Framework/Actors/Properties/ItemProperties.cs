@@ -68,6 +68,9 @@ namespace Trinity.Framework.Actors.Properties
             actor.FollowerType = GetFollowerType(actor.ActorSnoId);
             actor.ItemStackQuantity = attributes.ItemStackQuantity;
             actor.TrinityItemQuality = TypeConversions.GetTrinityItemQuality(actor.ItemQualityLevel);
+            actor.GlobeType = GetGlobeType(actor);
+            actor.IsWeapon = TypeConversions.IsWeapon(actor);
+            actor.IsArmor = TypeConversions.IsArmor(actor);
 
             actor.ObjectHash = HashGenerator.GenerateItemHash(
                 actor.Position,
@@ -108,7 +111,10 @@ namespace Trinity.Framework.Actors.Properties
             var columnChanged = col != actor.InventoryColumn;
             var rowChanged = row != actor.InventoryRow;
 
-            actor.ItemStackQuantity = actor.Attributes.ItemStackQuantity;
+            if (!actor.IsEquipment)
+            {
+                actor.ItemStackQuantity = actor.Attributes.ItemStackQuantity;
+            }
 
             if (columnChanged || rowChanged || slotChanged)
             {
@@ -134,7 +140,7 @@ namespace Trinity.Framework.Actors.Properties
             }
         }
 
-        public GlobeTypes GetGlobeType(TrinityActor cacheObject)
+        public static GlobeTypes GetGlobeType(TrinityActor cacheObject)
         {
             switch (cacheObject.Type)
             {

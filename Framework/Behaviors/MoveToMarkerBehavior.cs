@@ -47,7 +47,6 @@ namespace Trinity.Framework.Behaviors
         {
             Logger.LogVerbose($"Moving to Marker: {Marker}");
             await CommonCoroutines.MoveTo(Marker.Position, "ItemMarker");
-            Core.Player.CurrentAction = PlayerAction.Moving;
             return true;
         }
 

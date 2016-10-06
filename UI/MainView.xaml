@@ -28,7 +28,7 @@
                 <TabItem Header="General" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="General.xaml"/>
                 </TabItem>
-                <TabItem Header="Combat" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
+                <TabItem Header="Routine" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">
                     <Border Tag="Routine.xaml"/>
                 </TabItem>                            
                 <TabItem Header="Items" Foreground="{DynamicResource TextBrush}" Style="{DynamicResource MainMenuTabItem}">

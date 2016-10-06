@@ -18,7 +18,7 @@
                 <Border Tag="Items.xaml"/>
             </TabItem>
             <TabItem Header="ItemList" Foreground="{DynamicResource TextBrush}">
-                <Border Tag="..\Items\ItemList\ItemList.xaml"/>
+                <Border Tag="ItemList.xaml"/>
             </TabItem>
             <TabItem Header="Cube" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="KanaisCube.xaml"/>

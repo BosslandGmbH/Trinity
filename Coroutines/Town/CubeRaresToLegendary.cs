@@ -6,6 +6,7 @@ using Buddy.Coroutines;
 using Trinity.Coroutines.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Events;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
@@ -209,9 +210,7 @@ namespace Trinity.Coroutines.Town
                     transmuteGroup.AddRange(Inventory.GetStacksUpToQuantity(Inventory.Backpack.VeiledCrystals, 50));
                     transmuteGroup.AddRange(Inventory.GetStacksUpToQuantity(Inventory.Backpack.ReusableParts, 50));
                     transmuteGroup.AddRange(Inventory.GetStacksUpToQuantity(Inventory.Backpack.DeathsBreath, 25));
-
                     
-
                     await Transmute.Execute(transmuteGroup);
                     await Coroutine.Sleep(1500);
 
@@ -219,6 +218,8 @@ namespace Trinity.Coroutines.Town
                     if (newItem != null)
                     {
                         var newLegendaryItem = Legendary.GetItemByACD(newItem);
+                        var newTrinityItem = Core.Actors.GetItemByAnnId(newItem.AnnId);
+                        ItemEvents.FireItemCubed(newTrinityItem);
 
                         Logger.Log("[CubeRaresToLegendary] Upgraded Rare '{0}' ---> '{1}' ({2})",
                             itemName, newLegendaryItem.Name, newItem.ActorSnoId);

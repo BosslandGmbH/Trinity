@@ -42,7 +42,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public virtual void OnCreated() { }
 
         /// <summary>
-        /// OnUpdated occurs every time the actor is updated by ActorCache
+        /// OnDataLoaded occurs every time the actor is updated by ActorCache
         /// How often depends the UpdateInterval set in the ActorCache.
         /// </summary>
         public virtual void OnUpdated() { }

@@ -32,7 +32,7 @@ namespace Trinity.Framework.Helpers
         Routine = 0x00100000,
         StuckHandler = 0x00200000,
         Spells = 0x00400000,
-        Unused24 = 0x00800000,
+        ItemEvents = 0x00800000,
         Unused25 = 0x01000000,
         Unused26 = 0x02000000,
         Unused27 = 0x04000000,
@@ -72,6 +72,6 @@ namespace Trinity.Framework.Helpers
         Unused61 = 0x1000000000000000,
         Unused62 = 0x2000000000000000,
         Unused63 = 0x4000000000000000,
-        Unused64 = 0x8000000000000000,
+        Unused64 = 0x8000000000000000,        
     }
 }

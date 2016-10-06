@@ -6,7 +6,23 @@ namespace Trinity.Framework.Helpers
 {
     public static class EnumExtensions
     {
-        // todo: refactor extension methods with an central 'operate' method that can perform enum operation XOR/OR for two values handling detection/conversion of signed and unsigmed.
+        public static TEnum AllFlags<TEnum>(this TEnum @enum) where TEnum : struct
+        {
+            var enumType = typeof(TEnum);
+            var enumValues = Enum.GetValues(enumType);
+            var newValue = (
+                from object value in enumValues
+                select Convert.ChangeType(value, TypeCode.Int64) 
+                    into changeType
+                    where changeType != null
+                    select (long) changeType 
+                        into v
+                        where v == 1 || v%2 == 0
+                        select v).Aggregate<long, long>(0, (current, v) => current | v);
+
+            return (TEnum)Enum.ToObject(enumType, newValue);
+        }
+    
 
         private static bool IsSignedTypeCode(TypeCode code)
         {

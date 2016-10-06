@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework;
 using Trinity.Framework.Objects;
+using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -94,6 +95,14 @@ namespace Trinity.Reference
 
         private static void UpdateActiveSkills()
         {
+            if (!BotMain.IsRunning && ZetaDia.Service.IsInGame)
+            {
+                ZetaDia.Actors.Update();
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    Core.Hotbar.Update();
+                }                                    
+            }
             _lastUpdatedActiveSkills = DateTime.UtcNow;
             _active = CurrentClass.Where(s => Core.Hotbar.ActivePowers.Contains(s.SNOPower)).ToList();
             _activeIds = Core.Hotbar.ActivePowers;

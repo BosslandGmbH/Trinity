@@ -252,6 +252,9 @@ namespace Trinity.Framework.Actors.Attributes
             get
             {
                 var minAttr = GetFirstCachedAttributeItem(ActorAttributeType.DamageWeaponMin);
+                if (minAttr == null)
+                    return 0f;
+
                 var min = minAttr.GetValue<float>();
                 var damageTypeId = (int)minAttr.Modifer;
                 var delta = GetCachedAttribute<float>(ActorAttributeType.DamageWeaponDeltaSubTotal, damageTypeId);

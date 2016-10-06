@@ -14,6 +14,7 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Trinity.Framework.Actors;
+using Trinity.Framework.Events;
 using Trinity.Framework.Helpers;
 using Trinity.Reference;
 
@@ -107,28 +108,34 @@ namespace Trinity.Coroutines.Town
                 {
                     var items = Inventory.Backpack.Items.Where(i => Combat.Loot.ShouldSalvage(i)).ToList();
 
-                    var normalItemCount = items.Count(i => NormalQualityLevels.Contains(i.ItemQualityLevel));
-                    if (normalItemCount > 0)
+                    var normals = items.Where(i => NormalQualityLevels.Contains(i.ItemQualityLevel)).ToList();
+                    if (normals.Count > 0)
                     {
-                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {normalItemCount} Normal");
-                        ZetaDia.Me.Inventory.SalvageItemsOfRarity(SalvageRarity.Normal);
-                        //await Coroutine.Sleep(Rnd.Next(125, 350));
+                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {normals} Normal");
+                        if (ZetaDia.Me.Inventory.SalvageItemsOfRarity(SalvageRarity.Normal))
+                        {
+                            normals.ForEach(ItemEvents.FireItemSalvaged);
+                        }
                     }
 
-                    var magicItemCount = items.Count(i => MagicQualityLevels.Contains(i.ItemQualityLevel));
-                    if (magicItemCount > 0)
+                    var magic = items.Where(i => MagicQualityLevels.Contains(i.ItemQualityLevel)).ToList();
+                    if (magic.Count > 0)
                     {
-                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {magicItemCount} Magic");
-                        ZetaDia.Me.Inventory.SalvageItemsOfRarity(SalvageRarity.Magic);
-                        //await Coroutine.Sleep(Rnd.Next(125, 350));
+                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {magic} Magic");
+                        if (ZetaDia.Me.Inventory.SalvageItemsOfRarity(SalvageRarity.Magic))
+                        {
+                            magic.ForEach(ItemEvents.FireItemSalvaged);
+                        }
                     }
 
-                    var rareItemCount = items.Count(i => RareQualityLevels.Contains(i.ItemQualityLevel));
-                    if (rareItemCount > 0)
+                    var rares = items.Where(i => RareQualityLevels.Contains(i.ItemQualityLevel)).ToList();
+                    if (rares.Count > 0)
                     {
-                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {rareItemCount} Rare");
-                        ZetaDia.Me.Inventory.SalvageItemsOfRarity(SalvageRarity.Rare);
-                        //await Coroutine.Sleep(Rnd.Next(125, 350));
+                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {rares} Rare");
+                        if(ZetaDia.Me.Inventory.SalvageItemsOfRarity(SalvageRarity.Rare))
+                        {
+                            rares.ForEach(ItemEvents.FireItemSalvaged);
+                        }
                     }
                 }
 
@@ -143,7 +150,6 @@ namespace Trinity.Coroutines.Town
 
                     await Coroutine.Sleep(Rnd.Next(500, 750));
                     Core.Actors.Update();
-                    //await ActorManager.WaitForUpdate();
 
                     var freshItems = Inventory.Backpack.Items.Where(i => ShouldSalvage(i) && !Inventory.InvalidItemDynamicIds.Contains(i.AnnId)).ToList();
                     if (!freshItems.Any())

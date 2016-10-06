@@ -88,7 +88,6 @@ namespace Trinity.Framework.Helpers
             }
 
             XmlSerializer serializer = new XmlSerializer(typeof(HotSpot));
-
             XmlReaderSettings settings = new XmlReaderSettings();
             // No settings need modifying here
 

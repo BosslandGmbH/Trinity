@@ -10,6 +10,12 @@ namespace Trinity.Framework.Behaviors
 {
     public class BaseBehavior
     {
+        /*
+            Once condition is true, the start task runs.
+            While condition remains true, the work task runs.
+            Once condition is false or Timeout, the stop task runs.
+        */
+
         public string Name => GetType().Name;
         public bool IsRunning;
         public DateTime Timeout;

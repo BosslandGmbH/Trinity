@@ -6,7 +6,7 @@ using System.Windows;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Helpers.AutoFollow.Resources;
 using Trinity.Framework.Objects;
-using Trinity.Items.ItemList;
+using Trinity.Settings.ItemList;
 using Trinity.Settings.Paragon;
 using Zeta.Bot;
 

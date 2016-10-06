@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Trinity.Items.ItemList;
+using Trinity.Settings.ItemList;
 
 namespace Trinity.Settings.Mock
 {
@@ -26,14 +25,7 @@ namespace Trinity.Settings.Mock
     /// </summary>
     public class MockData
     {
-        static MockData()
-        {
-            ItemList = new ItemListMockData();
-        }
-
-        public static ItemListMockData ItemList { get; set; }
-
+        public static ItemListMockData ItemList { get; set; } = new ItemListMockData();
+        public static RoutineMockData DataContext { get; set; } = new RoutineMockData();
     }
-
-
 }

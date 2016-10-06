@@ -84,19 +84,12 @@ namespace Trinity.DbProvider
                     SpellHistory.RecordSpell(power);
                 }
 
-                if (NavigatorResetPowers.Contains(power.SNOPower))
+                if (GameData.ResetNavigationPowers.Contains(power.SNOPower))
                 {
                     Navigator.Clear();
                 }
             }
         }
-
-        private static readonly List<SNOPower> NavigatorResetPowers = new List<SNOPower>
-        {
-            SNOPower.X1_Monk_DashingStrike,
-            SNOPower.Wizard_Archon_Teleport,
-            SNOPower.Wizard_Teleport,
-        };
 
         /// <summary>
         /// Moves to a location with DB's PathFinding
@@ -134,10 +127,9 @@ namespace Trinity.DbProvider
             if (DateTime.UtcNow.Subtract(LastUsedMoveStop).TotalMilliseconds < 250)
                 return;
 
+            Logger.Log(LogCategory.Movement, "MoveStop");
             ZetaDia.Me.UsePower(SNOPower.Walk, ZetaDia.Me.Position, ZetaDia.WorldId);
         }
-
-
 
         private bool ElementIsVisible(UIElement element)
         {

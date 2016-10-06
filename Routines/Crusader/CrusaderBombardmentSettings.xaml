@@ -47,10 +47,10 @@
                     <StackPanel>
 
                         <WrapPanel>
-                            <RadioButton Content="Always" IsChecked="{Binding DataContext.Akarats.UseTime, ConverterParameter=Always, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
-                            <RadioButton Content="Selectively" IsChecked="{Binding DataContext.Akarats.UseTime, ConverterParameter=Selective, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+                            <RadioButton Content="Always" IsChecked="{Binding DataContext.Akarats.UseMode, ConverterParameter=Always, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
+                            <RadioButton Content="Selectively" IsChecked="{Binding DataContext.Akarats.UseMode, ConverterParameter=Selective, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
                         </WrapPanel>
-                        <StackPanel Margin="0,5,0,0" Visibility="{Binding DataContext.Akarats.UseTime, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}">
+                        <StackPanel Margin="0,5,0,0" Visibility="{Binding DataContext.Akarats.UseMode, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}">
                             <CheckBox ToolTip="Use when there are elites close nearby" 
                                       IsChecked="{Binding DataContext.Akarats.Reasons, ConverterParameter=Elites, Converter={converters:FlagsToBoolConverter}}">Elites nearby</CheckBox>
                             <CheckBox ToolTip="Use when you are surrounded by enemies" 

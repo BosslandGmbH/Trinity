@@ -32,7 +32,7 @@ namespace Trinity
     public class TrinityPlugin : IPlugin
     {
         public string Name => "Trinity";
-        public Version Version => new Version(2, 55, 247);
+        public Version Version => new Version(2, 55, 663);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -90,12 +90,6 @@ namespace Trinity
                         {
                             BotMain.PauseWhile(MouseLeft);
                         }
-                    }
-
-                    if (DateTime.UtcNow.Subtract(ItemDropStats.ItemStatsLastPostedReport).TotalSeconds > 10)
-                    {
-                        ItemDropStats.ItemStatsLastPostedReport = DateTime.UtcNow;
-                        ItemDropStats.OutputReport();
                     }
 
                     DebugUtil.LogOnPulse();
