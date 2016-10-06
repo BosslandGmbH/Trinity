@@ -290,8 +290,9 @@ namespace Trinity.Components.Combat
                     if (item.IsAncient)
                     {
                         Logger.Log($"STASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
-                        return false;
+                        return true;
                     }
+
                     Logger.Log($"TRASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
                 }
