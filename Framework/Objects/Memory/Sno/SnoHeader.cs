@@ -1,3 +1,5 @@
+using Trinity.Framework.Objects.Enums;
+
 namespace Trinity.Framework.Objects.Memory.Sno
 {
     public class SnoHeader : MemoryWrapper
@@ -8,3 +10,4 @@ namespace Trinity.Framework.Objects.Memory.Sno
         public int Flags => ReadOffset<int>(0x08); // 1 = DoNotPurge
     }
 }
+

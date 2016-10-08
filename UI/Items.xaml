@@ -41,8 +41,8 @@
                         </WrapPanel>
                     </StackPanel>
                 </StackPanel>
-            </GroupBox>            
-            
+            </GroupBox>
+
             <GroupBox Header="Gambling">
                 <StackPanel Margin="0,6,10,0">
                     <WrapPanel Margin="0,0,0,0">
@@ -58,6 +58,14 @@
                             Interval="100" 
                             Maximum="1000" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="None" 
                             Value="{Binding Items.GamblingMinShards}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Save Until Above"
+                            ToolTip="Number of blood shards to have before spending."
+                            Interval="100" 
+                            Maximum="1500" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                            Value="{Binding Items.GamblingMinSpendingShards}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
                     </StackPanel>
@@ -142,8 +150,8 @@
                 
             </GroupBox>
 
-			<GroupBox Grid.Row="1" Header="Free Bag Slots for Town Run">
-                <!-- TownRun Settings -->
+			<!--<GroupBox Grid.Row="1" Header="Free Bag Slots for Town Run">
+                --><!-- TownRun Settings --><!--
                 <Grid Margin="5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -171,7 +179,7 @@
                                Visibility="{Binding Value, ElementName=InTownBackpackSpaceSlider, Converter={StaticResource sliderValueToVisibilityConverter},ConverterParameter=10}" TextAlignment="Center"/>
 
                 </Grid>
-            </GroupBox>
+            </GroupBox>-->
             
             <GroupBox Header="Misc">
                 <UniformGrid Columns="2">

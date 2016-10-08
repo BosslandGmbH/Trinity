@@ -405,7 +405,7 @@ namespace Trinity.Routines.Monk
 
             private static readonly SkillSettings DashingStrikeDefaults = new SkillSettings
             {
-                UseMode = UseTime.AnyTime,
+                UseMode = UseTime.Default,
                 RecastDelayMs = 2000,
                 Reasons = UseReasons.Blocked
             };

@@ -81,17 +81,28 @@ namespace Trinity.Components.Combat
             if (await CastBuffs())
                 return true;
 
-            // Priority movement for progression globes
-            if (ZetaDia.CurrentRift != null && await Behaviors.MoveToActor.While(
-                a => a.Type == TrinityObjectType.ProgressionGlobe && !Weighting.ShouldIgnore(a) && !a.IsInAvoidance))
-                return true;
+            // Priority movement for progression globes. ** Temporary solution!
+            // Should probably be handled with weighting/target. The issues are:
+            // * The delay on orbs dropping, they're not making it through as valid targets fast enough.
+            // * The ignoring of globes for higher weight things or deweighting of globes due to avoidance/patg - 
+            //   causing movement far away from the globes until out of range of them, at which point they're
+            //   no longer in the actors list, and forgotten.
+            if (ZetaDia.CurrentRift != null && target != null && !target.IsCriticalAvoidanceOnPath)
+            {
+                if (await Behaviors.MoveToActor.While(
+                    a => a.Type == TrinityObjectType.ProgressionGlobe && !Weighting.ShouldIgnore(a) && !a.IsAvoidanceOnPath)) return true;
+            }
 
-            // Priority interaction for doors
+            // Priority interaction for doors. ** Temporary solution!
+            // There are line of sight issues in some situations, like if the player is right up against
+            // the same wall a door is on then line of sight checks will fail. But we should be able
+            // to just click doors that are in range regardless of targetable checks failing.
+            // Maybe use the navigator to check if a path can be made.
             if (ZetaDia.CurrentRift != null && await Behaviors.MoveToInteract.While(
                 a => a.Type == TrinityObjectType.Door && !a.IsUsed && a.Distance < 15f))
                 return true;
 
-            // Combat Allowed only effects units, Trinity may still pick up items etc.
+            // When combat is disabled, we're still allowing trinity to handle non-unit targets.
             if (!IsCombatAllowed && IsUnitOrInvalid(target))
                 return false;
 

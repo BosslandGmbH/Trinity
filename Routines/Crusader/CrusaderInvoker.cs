@@ -157,7 +157,7 @@ namespace Trinity.Routines.Crusader
 
             private static readonly SkillSettings SteedChargeDefaults = new SkillSettings
             {
-                UseMode = UseTime.AnyTime,
+                UseMode = UseTime.Default,
                 Reasons = UseReasons.Blocked
             };
 

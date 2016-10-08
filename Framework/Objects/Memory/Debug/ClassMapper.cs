@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Framework.Objects.Memory.Symbols;
+using Zeta.Common;
+using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Framework.Objects.Memory.Debug
 {
@@ -47,20 +48,34 @@ namespace Trinity.Framework.Objects.Memory.Debug
             }
         }
 
+        private static readonly HashSet<string> OffsetEnumObjects = new HashSet<string>()
+        {
+            "GameBalance",
+        };
+
+        public const string Indent = "    ";
+
         public static string Map(ValueTypeDescriptor valueType)
         {
-            var indent = $"    ";
             var result = new StringBuilder();
+
+            if (OffsetEnumObjects.Contains(valueType.Name))
+            {
+                var offsetEnum = new OffsetEnum(valueType, DataTypeGroup.Object);
+                result.Append(Environment.NewLine);
+                result.Append(offsetEnum);
+                result.Append(Environment.NewLine);
+            }
+
             result.Append(Environment.NewLine);
             result.Append($"[CompilerGenerated] {Environment.NewLine}");
             result.Append($"public class Native{valueType.Name} : MemoryWrapper {Environment.NewLine}");
             result.Append($"{{{Environment.NewLine}");
             var index = 0;
-
             var endMarker = valueType.FieldDescriptors.LastOrDefault(f => f.Type.Name == "DT_NULL" && f.BaseType.Name == "DT_NULL");
             if (endMarker != null)
             {
-                result.Append($"{indent}public int SizeOf = {endMarker.Offset}; // {GetHexOffset(endMarker.Offset)}{Environment.NewLine}");
+                result.Append($"{Indent}public const int SizeOf = {endMarker.Offset}; // {GetHexOffset(endMarker.Offset)}{Environment.NewLine}");
             }
 
             foreach (var field in valueType.FieldDescriptors.OrderBy(f => f.Offset))
@@ -88,42 +103,42 @@ namespace Trinity.Framework.Objects.Memory.Debug
                 {
                     case DataTypeGroup.Simple:
                         var name = baseTypeGroup == DataTypeGroup.Object ? baseTypeName : typeName;
-                        result.AppendLine($"{indent}public {typeName} _{index}_{offsetHex}_{name} => ReadOffset<{typeName}>({offsetHex}); {comment}");
+                        result.AppendLine($"{Indent}public {typeName} _{index}_{offsetHex}_{name} => ReadOffset<{typeName}>({offsetHex}); {comment}");
                         break;
                     case DataTypeGroup.Enum:
-                        result.AppendLine($"{indent}public {typeName} _{index}_{offsetHex}_{group} => ReadOffset<{typeName}>({offsetHex}); {comment}");
+                        result.AppendLine($"{Indent}public {typeName} _{index}_{offsetHex}_{group} => ReadOffset<{typeName}>({offsetHex}); {comment}");
                         break;
                     case DataTypeGroup.Sno:
                         var snoId = (SnoType)field.GroupId;
-                        result.AppendLine($"{indent}public int _{index}_{offsetHex}_{snoId}_{group} => ReadOffset<int>({offsetHex}); {comment}");
+                        result.AppendLine($"{Indent}public int _{index}_{offsetHex}_{snoId}_{group} => ReadOffset<int>({offsetHex}); {comment}");
                         break;
                     case DataTypeGroup.GameBalanceId:
                         var gbId = (SnoGameBalanceType)field.GroupId;
-                        result.AppendLine($"{indent}public int _{index}_{offsetHex}_{gbId}_{group} => ReadOffset<int>({offsetHex}); {comment}");
+                        result.AppendLine($"{Indent}public int _{index}_{offsetHex}_{gbId}_{group} => ReadOffset<int>({offsetHex}); {comment}");
                         break;
                     case DataTypeGroup.FixedArray:
                         var readType = GetSimplePropertyTypeName(field.BaseType.Name) != null ? "ReadArray" : "ReadObjects";
-                        result.AppendLine($"{indent}public List<{baseTypeName}> _{index}_{offsetHex}_{group} => {readType}<{baseTypeName}>({offsetHex}, {field.FixedArrayLength}); {comment}");
+                        result.AppendLine($"{Indent}public List<{baseTypeName}> _{index}_{offsetHex}_{group} => {readType}<{baseTypeName}>({offsetHex}, {field.FixedArrayLength}); {comment}");
                         break;
                     case DataTypeGroup.VariableArray:
                         var serializeDataOffset = GetHexOffset(field.Offset + field.VariableArraySerializeOffsetDiff);
-                        result.AppendLine($"{indent}public List<{baseTypeName}> _{index}_{offsetHex}_{group} => ReadSerializedObjects<{baseTypeName}>({offsetHex}, {serializeDataOffset}); {comment}");
+                        result.AppendLine($"{Indent}public List<{baseTypeName}> _{index}_{offsetHex}_{group} => ReadSerializedObjects<{baseTypeName}>({offsetHex}, {serializeDataOffset}); {comment}");
                         break;
                     case DataTypeGroup.Object:
-                        result.AppendLine($"{indent}public {typeName} _{index}_{offsetHex}_{group} => ReadObject<{typeName}>({offsetHex}); {comment}");
+                        result.AppendLine($"{Indent}public {typeName} _{index}_{offsetHex}_{group} => ReadObject<{typeName}>({offsetHex}); {comment}");
                         break;
                     case DataTypeGroup.SerializeData:
-                        result.AppendLine($"{indent}public NativeSerializeData _{index}_{offsetHex}_SerializeData => ReadObject<NativeSerializeData>({offsetHex}); {comment}");
+                        result.AppendLine($"{Indent}public NativeSerializeData _{index}_{offsetHex}_SerializeData => ReadObject<NativeSerializeData>({offsetHex}); {comment}");
                         break;
                     case DataTypeGroup.SerializedString:
                         var serializeStringDataOffset = GetHexOffset(field.Offset + field.VariableArraySerializeOffsetDiff);
-                        result.AppendLine($"{indent}public string _{index}_{offsetHex}_SerializedString => ReadSerializedString({offsetHex}, {serializeStringDataOffset}); {comment}");
+                        result.AppendLine($"{Indent}public string _{index}_{offsetHex}_SerializedString => ReadSerializedString({offsetHex}, {serializeStringDataOffset}); {comment}");
                         break;
                     case DataTypeGroup.TagMap:
-                        result.AppendLine($"//{indent}public TagMap _{index}_{offsetHex}_TagMap => ReadOffset<TagMap>({offsetHex}); {comment}");
+                        result.AppendLine($"//{Indent}public TagMap _{index}_{offsetHex}_TagMap => ReadOffset<TagMap>({offsetHex}); {comment}");
                         break;
                     case DataTypeGroup.String:
-                        result.AppendLine($"{indent}public string _{index}_{offsetHex}_String => ReadString({offsetHex}); {comment}");
+                        result.AppendLine($"{Indent}public string _{index}_{offsetHex}_String => ReadString({offsetHex}); {comment}");
                         break;
                     default:
                         if (!field.Equals(endMarker))
@@ -142,6 +157,50 @@ namespace Trinity.Framework.Objects.Memory.Debug
                 AlreadyMapped.Add(valueType);
 
             return result.ToString();
+        }
+
+        public class OffsetEnum
+        {
+            public string Name;
+
+            public IndexedList<EnumValue> Values = new IndexedList<EnumValue>();
+
+            public class EnumValue
+            {
+                public string Name;
+                public string Value;
+                public FieldDescriptor Field;
+
+                public override string ToString() => $"   {Name} = {Value},";
+            }
+
+            public EnumValue this[FieldDescriptor field] 
+                => Values.FirstOrDefault(v => Equals(v.Field, field));
+
+            public OffsetEnum(ValueTypeDescriptor valueType, DataTypeGroup groupRestriction)
+            {
+                Name = $"Native{valueType.Name}Offsets";
+                Values.Clear();
+                Values.Add(new EnumValue { Name = "None", Value = "0" });
+                foreach (var field in valueType.FieldDescriptors.OrderBy(f => f.Offset))
+                {
+                    var group = GetTypeGroup(field.Type.Name);
+                    if (groupRestriction != DataTypeGroup.None && group != groupRestriction)
+                        continue;
+                                        
+                    Values.Add(new EnumValue
+                    {
+                        Field = field,
+                        Name = GetTypeName(group, field.Type.Name, field),
+                        Value = GetHexOffset(field.Offset)
+                    });
+                }
+            }
+
+            private string NewLine => Environment.NewLine;
+
+            public override string ToString() 
+                => $"public enum {Name} {{ {NewLine} {string.Join(NewLine, Values)} {NewLine} }}";
         }
 
         private static string GetHexOffset(int intOffset)

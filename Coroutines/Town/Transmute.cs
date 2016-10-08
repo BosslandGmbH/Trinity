@@ -94,16 +94,16 @@ namespace Trinity.Coroutines.Town
 
             //await Coroutine.Sleep(1500);
 
-            var first = transmuteGroup.FirstOrDefault();
+            //var first = transmuteGroup.FirstOrDefault();
 
-            var zetaItems = ZetaDia.Actors.GetActorsOfType<ACDItem>().Where(a => a.InventorySlot == InventorySlot.BackpackItems && a.ItemQualityLevel >= ItemQuality.Rare4 && a.ItemQualityLevel <= ItemQuality.Rare6);
-            var trinItems = Core.Actors._commonDataContainer.Where(a => a.InventorySlot == InventorySlot.BackpackItems && a.ActorType == ActorType.Item);
+            //var zetaItems = ZetaDia.Actors.GetActorsOfType<ACDItem>().Where(a => a.InventorySlot == InventorySlot.BackpackItems && a.ItemQualityLevel >= ItemQuality.Rare4 && a.ItemQualityLevel <= ItemQuality.Rare6);
+            //var trinItems = Core.Actors._commonDataContainer.Where(a => a.InventorySlot == InventorySlot.BackpackItems && a.ActorType == ActorType.Item);
 
-            var firstNewByAcd = Core.Actors.GetCommonDataById(first.ACDId);
-            var firstNewByAnn = Core.Actors.GetAcdByAnnId(first.AnnId);
-            var firstCommonByAnn = Core.Actors.GetCommonDataByAnnId(first.AnnId);
-            var itemByAnn = Core.Actors.GetItemByAnnId(first.AnnId);
-            var valid = Core.Actors.IsAnnIdValid(first.AnnId);
+            //var firstNewByAcd = Core.Actors.GetCommonDataById(first.ACDId);
+            //var firstNewByAnn = Core.Actors.GetAcdByAnnId(first.AnnId);
+            //var firstCommonByAnn = Core.Actors.GetCommonDataByAnnId(first.AnnId);
+            //var itemByAnn = Core.Actors.GetItemByAnnId(first.AnnId);
+            //var valid = Core.Actors.IsAnnIdValid(first.AnnId);
 
             //new TransmuteItemsMessage(transmuteGroup.Select(i => i.AnnId).ToArray()).Initialize();
 

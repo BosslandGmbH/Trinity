@@ -121,6 +121,7 @@
     <Compile Include="Framework\ChangeEvents.cs" />
     <Compile Include="Framework\Events\ActorEvents.cs" />
     <Compile Include="Framework\Events\ItemEvents.cs" />
+    <Compile Include="Framework\Helpers\EasyCache.cs" />
     <Compile Include="Framework\Helpers\ObjectComparer.cs" />
     <Compile Include="Framework\Helpers\ProjectionEqualityComparer.cs" />
     <Compile Include="Framework\Helpers\EasyXmlSerializer.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Framework\Objects\Memory\ActivePlayer.cs" />
     <Compile Include="Framework\Objects\Memory\Containers\Allocator.cs" />
     <Compile Include="Framework\Objects\Memory\Games.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\Types\GameBalanceCollection.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXItemButton.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXButton.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXListItem.cs" />

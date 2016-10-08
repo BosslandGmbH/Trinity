@@ -29,7 +29,7 @@ namespace Trinity.Routines.Barbarian
         public string Description => "This routine uses furious charge to move around and attack, building fury for Ancient Spear.";
         public string Author => "xzjv";
         public string Version => "0.1";
-        public string Url => "http://www.diablofans.com/builds/78024-2-4-1-boulder-raekor-barb-90";
+        public string Url => "http://www.icy-veins.com/d3/barbarian-build-leap-earthquake-with-might-of-the-earth-patch-2-4-2-season-7";
 
         public Build BuildRequirements => new Build
         {

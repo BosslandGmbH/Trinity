@@ -21,6 +21,7 @@
     <Border Padding="10">
         <Grid>
             <StackPanel>
+                
                 <GroupBox>
                     <GroupBox.Header>General</GroupBox.Header>
                     <StackPanel>
@@ -41,13 +42,27 @@
                                 Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
                                 HorizontalAlignment="Stretch" Margin="0"/>
                     </StackPanel>
-                </GroupBox>                
+                </GroupBox>        
+                
                 <GroupBox>
                     <GroupBox.Header>Build Settings</GroupBox.Header>
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Margin="10,5,0,0">This build is highly specialized and so we're using what we believe to be the optimal settings. If there is something specific you think should be configurable please let us know.</TextBlock>
                     </StackPanel>
                 </GroupBox>
+                
+                <GroupBox>
+                    <GroupBox.Header>Spirit Walk</GroupBox.Header>
+                    <StackPanel>
+                        <WrapPanel Margin="0,5,0,0">
+                            <RadioButton ToolTip="Uses it whenever monsters are nearby"
+                                Content="Spam it!" IsChecked="{Binding DataContext.SpiritWalk.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Always}"  />
+                            <RadioButton ToolTip="Casts it often"
+                                Content="Prefer Defensive Use" IsChecked="{Binding DataContext.SpiritWalk.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+                
             </StackPanel>
         </Grid>
     </Border>

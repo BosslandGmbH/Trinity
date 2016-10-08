@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Helpers.Exporter;
+using Trinity.Framework.Objects.Enums;
 
 namespace Trinity.Framework.Objects.Memory.Sno.Types
 {
@@ -9,29 +10,19 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     {
         public const int SizeOf = 0x28; // 40        
         public List<StringTableEntry> StringTableEntries => ReadSerializedObjects<StringTableEntry>(0x10, StringTableSerializeInfo);
-        public SerializeData StringTableSerializeInfo => ReadOffset<SerializeData>(0x18);
+        public NativeSerializeData StringTableSerializeInfo => ReadObject<NativeSerializeData>(0x18);
+        public SnoStringListType Type => (SnoStringListType)Header.SnoId;
+        public override string ToString() => $"{GetType().Name}: {Type}";
 
         public class StringTableEntry : MemoryWrapper
         {
             public const int SizeOf = 0x28; // 40
             public string Key => ReadSerializedString(0x00, KeySerializationData);
-            public SerializeData KeySerializationData => ReadOffset<SerializeData>(0x08);
+            public NativeSerializeData KeySerializationData => ReadObject<NativeSerializeData>(0x08);
             public string Value => ReadSerializedString(0x10, ValueSerializationData);
-            public SerializeData ValueSerializationData => ReadOffset<SerializeData>(0x18);
+            public NativeSerializeData ValueSerializationData => ReadObject<NativeSerializeData>(0x18);
             public int GameBalanceNameNormalHashed => ReadOffset<int>(0x20);
         }
-
-
-    //public SortedList<int, string> ToSortedList()
-    //{
-    //    var dictionary = new SortedList<int, string>();
-    //    foreach (var entry in StringTableEntries)
-    //    {
-    //        //dictionary[MemoryHelper.GameBalanceItemHash(entry.Key)] = entry.Value;
-    //        dictionary[MemoryHelper.GameBalanceNormalHash(entry.Key)] = entry.Value;
-    //    }
-    //    return dictionary;
-    //}
 
         public SnoDictionary<string> ToSnoDictionary()
         {

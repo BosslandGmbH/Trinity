@@ -30,6 +30,9 @@ namespace Trinity.Components.Combat
 
     public class DefaultLootProvider : ILootProvider
     {
+        public static int FreeBagSlots { get; set; } = 5;
+        public static int FreeBagSlotsInTown { get; set; } = 40;
+
         public bool ShouldPickup(TrinityItem item)
         {
             if (item == null || !item.IsValid)
@@ -292,7 +295,6 @@ namespace Trinity.Components.Combat
                         Logger.Log($"STASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                         return true;
                     }
-
                     Logger.Log($"TRASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
                 }
@@ -784,15 +786,15 @@ namespace Trinity.Components.Combat
 
                     // Use count of Unprotected slots if FreeBagSlots is higher than unprotected slots
                     int minFreeSlots = Core.Player.IsInTown ?
-                        Math.Min(Core.Settings.Items.FreeBagSlotsInTown, unprotectedSlots) :
-                        Math.Min(Core.Settings.Items.FreeBagSlots, unprotectedSlots);
+                        Math.Min(FreeBagSlotsInTown, unprotectedSlots) :
+                        Math.Min(FreeBagSlots, unprotectedSlots);
 
 
                     // free bag slots is less than required
                     if (noFreeSlots || freeBagSlots < minFreeSlots && !forceRefresh)
                     {
                         Logger.LogDebug("Free Bag Slots is less than required. FreeSlots={0}, FreeBagSlots={1} FreeBagSlotsInTown={2} IsInTown={3} Protected={4} BackpackCount={5}",
-                            freeBagSlots, Core.Settings.Items.FreeBagSlots, Core.Settings.Items.FreeBagSlotsInTown, Core.Player.IsInTown,
+                            freeBagSlots, FreeBagSlots, FreeBagSlotsInTown, Core.Player.IsInTown,
                             _lastProtectedSlotsCount, _lastBackPackCount);
                         _lastBackPackLocation = NoFreeSlot;
                         return _lastBackPackLocation;
@@ -856,7 +858,6 @@ namespace Trinity.Components.Combat
                 }
             }
         }
-
 
 
         //internal static TrinityItemType DetermineItemType(ACDItem item)

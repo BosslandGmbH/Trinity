@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Buddy.Auth.Math;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Objects.Memory.Sno.Types;
 using Zeta.Game;
 
 namespace Trinity.Framework.Objects.Memory
@@ -17,11 +18,13 @@ namespace Trinity.Framework.Objects.Memory
     {
         public IntPtr BaseAddress { get; private set; }
 
-        public SerializeData BaseSeralizationInfo { get; private set; }
+        public NativeSerializeData BaseSeralizationInfo { get; private set; }
 
         public IntPtr BaseSerializationAddress { get; private set; }
 
         public bool IsValid => BaseAddress != IntPtr.Zero;
+
+        public IntPtr ParentAddress { get; private set; }
 
         public MemoryWrapper() { }
 
@@ -52,7 +55,9 @@ namespace Trinity.Framework.Objects.Memory
                 var type = typeof(T);
                 if (type == typeof(MemoryWrapper) || type.IsSubclassOf(typeof(MemoryWrapper)))
                 {
-                    return Create<T>(BaseAddress + offset);
+                    var item = Create<T>(BaseAddress + offset);
+                    item.ParentAddress = BaseAddress;
+                    return item;
                 }
             }
             catch (Exception ex)
@@ -99,6 +104,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             return default(T);
         }
+
         protected List<T> ReadArray<T>(int offset, int count) where T : struct
         {
             if (!IsValid)
@@ -133,32 +139,33 @@ namespace Trinity.Framework.Objects.Memory
         {
             var size = typeof (T).SizeOf();
             if (size <= 0)
-            {
-                Logger.LogError("ReadObjects<T>(int offset, int count) requires a SizeOf field");
                 return null;
-            }     
+         
             var results = new List<T>();       
             for (var i = 0; i < count; i++)
             {
-                results.Add(Create<T>(BaseAddress + offset + i * size));
+                var item = Create<T>(BaseAddress + offset + i*size);
+                item.ParentAddress = BaseAddress;
+                results.Add(item);
             }
             return results;
         }
 
-        public List<T> ReadObjects<T>(int offset, Predicate<T> invalidItemCondition) where T : MemoryWrapper, new()
+        public List<T> ReadObjects<T>(int offset, int count, Predicate<T> validCondition) where T : MemoryWrapper, new()
         {
             var size = typeof (T).SizeOf();
             if (size <= 0)
-            {
-                Logger.LogError("ReadObjects<T>(int offset, int count) requires a SizeOf field");
                 return null;
-            }     
+       
             var results = new List<T>();       
-            for (var i = 0; i < 255; i++)
+            for (var i = 0; i < count; i++)
             {
-                var item = Create<T>(BaseAddress + offset + i*size);
-                if (invalidItemCondition(item))
-                    break;
+                var item = Create<T>(BaseAddress + offset + i * size);
+                item.ParentAddress = BaseAddress;
+
+                if (!validCondition(item))
+                    continue;
+
                 results.Add(item);
             }
             return results;
@@ -190,11 +197,11 @@ namespace Trinity.Framework.Objects.Memory
 
         protected string ReadSerializedString(int offset, int serializeDataOffset)
         {
-            var serializeData = ReadOffset<SerializeData>(serializeDataOffset);
+            var serializeData = ReadObject<NativeSerializeData>(serializeDataOffset);
             return ReadSerializedString(offset, serializeData);
         }
 
-        protected string ReadSerializedString(int offset, SerializeData serializeData)
+        protected string ReadSerializedString(int offset, NativeSerializeData serializeData)
         {
             if (!IsValid)
             {
@@ -268,13 +275,21 @@ namespace Trinity.Framework.Objects.Memory
             return default(T[]);
         }
 
-        protected List<T> ReadSerializedObjects<T>(int offset, int serializeDataOffset) where T : MemoryWrapper, new()
+        //protected List<T> ReadSerializedObjects<T>(int offset, int dataOffset) where T : MemoryWrapper, new()
+        //{
+        //    var data = ReadObject<NativeSerializeData>(dataOffset);
+        //    var size = typeof(T).SizeOf();
+        //    var count = data.Length / size;
+        //    return ReadObjects<T>(data.FirstEntry, count, size).ToList();
+        //}
+
+        protected List<T> ReadSerializedObjects<T>(int offset, int serializeDataOffset, IntPtr serializeBase = default(IntPtr)) where T : MemoryWrapper, new()
         {
-            var serializeData = ReadOffset<SerializeData>(serializeDataOffset);
-            return ReadSerializedObjects<T>(offset, serializeData);
+            var data = ReadObject<NativeSerializeData>(serializeDataOffset);
+            return ReadSerializedObjects<T>(offset, data);
         }
 
-        protected List<T> ReadSerializedObjects<T>(int offset, SerializeData serializeData) where T : MemoryWrapper, new()
+        protected List<T> ReadSerializedObjects<T>(int offset, NativeSerializeData serializeData, IntPtr serializeBase = default(IntPtr)) where T : MemoryWrapper, new()
         {
             if (!IsValid)
             {
@@ -285,13 +300,34 @@ namespace Trinity.Framework.Objects.Memory
                 var type = typeof(T);
                 if (type == typeof(MemoryWrapper) || type.IsSubclassOf(typeof(MemoryWrapper)))
                 {
-                    var size = type.SizeOf();
+                    var size = TypeUtil<T>.SizeOf;
+                    if (size == 0)
+                    {
+                        Logger.LogError($"ReadSerializedObjects was unable to get a size for {type.Name}");
+                    }
+                    
+                    if (serializeBase == IntPtr.Zero)
+                    {
+                        if (BaseSerializationAddress != IntPtr.Zero)
+                        {
+                            serializeBase = BaseSerializationAddress;
+                        }
+                        else if (ParentAddress != IntPtr.Zero)
+                        {
+                            serializeBase = ParentAddress;
+                        }
+                        else
+                        {
+                            serializeBase = BaseAddress;
+                        }
+                    }
+
                     var count = serializeData.Length / size;
                     var container = new List<T>();
                     for (int i = 0; i < count; i++)
                     {
-                        var item = Create<T>(BaseAddress + serializeData.Offset + i * size);
-                        item.SetSerializationInfo(BaseAddress, serializeData);
+                        var item = Create<T>(serializeBase + serializeData.Offset + i * size);
+                        item.SetSerializationInfo(serializeBase, serializeData);
                         container.Add(item);
                     }
                     return container;
@@ -332,7 +368,7 @@ namespace Trinity.Framework.Objects.Memory
             return ReadAbsoluteObject<T>(ptr);
         }
 
-        public void SetSerializationInfo(IntPtr address, SerializeData info)
+        public void SetSerializationInfo(IntPtr address, NativeSerializeData info)
         {
             BaseSerializationAddress = address;
             BaseSeralizationInfo = info;
@@ -349,11 +385,11 @@ namespace Trinity.Framework.Objects.Memory
         }
     }
 
-    public struct SerializeData
-    {
-        public int Offset;
-        public int Length;
-    }
+    //public struct NativeSerializeData
+    //{
+    //    public int Offset;
+    //    public int Length;
+    //}
 }
 
 

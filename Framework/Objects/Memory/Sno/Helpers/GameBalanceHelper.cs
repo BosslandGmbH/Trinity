@@ -42,5 +42,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Helpers
             }
             return default(T);
         }
+
+        
     }
 }

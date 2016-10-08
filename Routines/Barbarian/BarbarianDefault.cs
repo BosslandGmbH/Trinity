@@ -160,7 +160,7 @@ namespace Trinity.Routines.Barbarian
 
             private static readonly SkillSettings FuriousChargeDefaults = new SkillSettings
             {
-                UseMode = UseTime.AnyTime,
+                UseMode = UseTime.Default,
                 RecastDelayMs = 200,
                 Reasons = UseReasons.Blocked
             };

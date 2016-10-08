@@ -2,6 +2,7 @@ using System.Collections;
 using System.Linq;
 using System.Web.UI.WebControls.Expressions;
 using System.Windows.Media;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory.Sno.Helpers;
 using Trinity.Framework.Objects.Memory.Sno.Types;
@@ -33,11 +34,11 @@ namespace Trinity.Framework.Objects.Memory.Sno
             public SnoGroups()
             {
                 StringList = Core.CreateGroup<SnoStringList>(SnoType.StringList);
-                Monster = Core.CreateGroup<NativeMonster>(SnoType.Monster);
+                //Monster = Core.CreateGroup<NativeMonster>(SnoType.Monster);
                 //Hero = Core.CreateGroup<NativeHero>(SnoType.Hero);
-                //GameBalance = Core.CreateGroup<NativeGameBalance>(SnoType.GameBalance);
-                //Globals = Core.CreateGroup<NativeGlobals>(SnoType.Globals);
-                Actor = Core.CreateGroup<NativeActor>(SnoType.Actor);
+                GameBalance = Core.CreateGroup<GameBalanceCollection>(SnoType.GameBalance);
+                //Globals = Core.CreateGroup<NativeGlobals>(SnoType.Globals);            
+                //Actor = Core.CreateGroup<NativeActor>(SnoType.Actor);
                 //Account = Core.CreateGroup<NativeAccount>(SnoType.Account);
                 //Globals = Core.CreateGroup<NativeGlobals>(SnoType.Globals);
                 //LevelArea = Core.CreateGroup<NativeLevelArea>(SnoType.LevelArea);
@@ -51,6 +52,7 @@ namespace Trinity.Framework.Objects.Memory.Sno
             }
 
             public SnoGroup<SnoStringList> StringList { get; }
+            public SnoGroup<GameBalanceCollection> GameBalance { get; }
             public SnoGroup<NativeScene> Scene { get; }
             public SnoGroup<NativeSceneGroup> SceneGroup { get; }
             public SnoGroup<NativeWorlds> Worlds { get; }
@@ -63,7 +65,7 @@ namespace Trinity.Framework.Objects.Memory.Sno
             public SnoGroup<NativeAccount> Account { get; }
             public SnoGroup<NativeMonster> Monster { get; }
             public SnoGroup<NativeHero> Hero { get; }
-            public SnoGroup<NativeGameBalance> GameBalance { get; }
+
             public SnoGroup<NativeGlobals> Globals { get; }
         }
     }

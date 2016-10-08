@@ -13,7 +13,7 @@ namespace Trinity.Framework.Objects.Memory.Symbols.Types
         RangerDustdevil = 7,
         Pet0 = 8,
         Pet1 = 9,
-        Pet2 = 10,
+        Gargantuan = 10,
         Pet3 = 11,
         Pet4 = 12,
         Pet5 = 13,

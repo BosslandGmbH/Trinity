@@ -54,16 +54,7 @@ namespace Trinity.Routines
             => Combat.Targeting.CurrentPower;
 
         protected static IAvoider Avoider
-            => Core.Avoidance.Avoider;        
-
-        protected static IEnumerable<TrinityActor> Units
-            => Core.Targets.Entries.Where(u => u.IsUnit && u.Weight > 0);
-
-        protected static IEnumerable<TrinityActor> AllUnits
-            => Core.Actors.AllRActors.Where(u => u.IsUnit && u.IsHostile);
-
-        protected static IEnumerable<TrinityActor> AllUnitsInSight
-            => AllUnits.Where(u => u.IsInLineOfSight);
+            => Core.Avoidance.Avoider;
 
         protected static TrinityPower Walk(TrinityActor target)
             => new TrinityPower(SNOPower.Walk, Math.Max(7f, target.AxialRadius), target.Position);
@@ -71,30 +62,83 @@ namespace Trinity.Routines
         protected static TrinityPower Walk(Vector3 destination, float range = 7f)
             => new TrinityPower(SNOPower.Walk, range, destination);
 
+        /// <summary>
+        /// A safe list of units who are valid and have a weight.
+        /// </summary>
+        protected static IEnumerable<TrinityActor> Units
+            => Core.Targets.Entries.Where(u => u.IsUnit && u.Weight > 0);
+
+        /// <summary>
+        /// A raw hostile unit list without being filtered for valid targets. Use with caution.
+        /// </summary>
+        protected static IEnumerable<TrinityActor> AllUnits
+            => Core.Actors.AllRActors.Where(u => u.IsUnit && u.IsHostile);
+
+        /// <summary>
+        /// A safe list of units who are currently in line of sight.
+        /// </summary>
+        protected static IEnumerable<TrinityActor> AllUnitsInSight
+            => AllUnits.Where(u => u.IsInLineOfSight);
+
+        /// <summary>
+        /// If the player is likely unable to move forward at its current facing direction.
+        /// </summary>
         protected static bool IsBlocked
             => PlayerMover.IsBlocked;
 
+        /// <summary>
+        /// if the player is currently 'Stuck' - a serious matter which causes an unstucker to run.
+        /// </summary>
         protected static bool IsStuck
             => Core.StuckHandler.IsStuck;
 
+        /// <summary>
+        /// Trinity's definition of IsInCombat is true only when we are actively targetting a unit.
+        /// IsInCombatOrBeingAttacked will use D3's internal IsInCombat - which is True when any monster 
+        /// has attacked the player recently or player has dealt damage to a monster.
+        /// </summary>
+        protected static bool IsInCombatOrBeingAttacked =>
+            ZetaDia.Me.IsInCombat;
+
+        /// <summary>
+        /// The a number of units somewhat larger than the current cluster size setting.
+        /// </summary>
         protected static int LargeClusterSize
             => (int)Math.Ceiling(Core.Routines.CurrentRoutine.ClusterSize * 1.25d);
 
+        /// <summary>
+        /// Current target is a safespot and avoider is attempting telling us we should avoid.
+        /// </summary>
         protected static bool IsCurrentlyAvoiding
             => Combat.IsCurrentlyAvoiding;
 
+        /// <summary>
+        /// Current target is a safespot and avoider is attempting telling us we should kite.
+        /// </summary>
         protected static bool IsCurrentlyKiting
             => Combat.IsCurrentlyKiting;
 
+        /// <summary>
+        /// If our current target is a hostile unit
+        /// </summary>
         protected static bool IsInCombat
             => Combat.IsInCombat;
 
+        /// <summary>
+        /// Player's current build has multiple free/generator/primary skills equipped
+        /// </summary>
         protected static bool IsMultiPrimary
             => SkillUtils.Active.Count(s => s.IsGeneratorOrPrimary) > 1;
 
+        /// <summary>
+        /// Player's current build has multiple costly/spender/secondary skills equipped.
+        /// </summary>
         protected static bool IsMultiSpender
             => SkillUtils.Active.Count(s => s.IsAttackSpender) > 1;
 
+        /// <summary>
+        /// Players build has no free/generator/primary skills equipped
+        /// </summary>
         protected static bool IsNoPrimary
             => SkillUtils.Active.Count(s => s.IsGeneratorOrPrimary) == 0;
 
@@ -121,6 +165,10 @@ namespace Trinity.Routines
         protected static bool HasInstantCooldowns 
             => HasInfiniteCasting || HasIngeomBuff;
 
+
+        /// <summary>
+        /// A helper utility for checking common skill conditions.
+        /// </summary>
         protected bool AllowedToUse(SkillSettings settings, Skill skill)
         {
             if (settings == null || skill == null)
@@ -202,7 +250,7 @@ namespace Trinity.Routines
             return false;
         }
 
-        protected static TrinityPower DefaultPower
+        public static TrinityPower DefaultPower
         {
             get
             {
@@ -220,7 +268,7 @@ namespace Trinity.Routines
             }
         }
 
-        protected static SNOPower DefaultWeaponPower
+        public static SNOPower DefaultWeaponPower
         {
             get
             {
@@ -241,7 +289,7 @@ namespace Trinity.Routines
             }
         }
 
-        protected internal static float DefaultWeaponDistance
+        public static float DefaultWeaponDistance
         {
             get
             {

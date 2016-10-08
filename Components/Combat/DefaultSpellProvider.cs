@@ -48,12 +48,13 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
-            if (power.TargetDynamicWorldId != ZetaDia.WorldId)
+            if (power.AssignedInDifferentWorld)
             {
                 Logger.Log(LogCategory.Spells, $"World has changed since power was created");
                 return false;
             }
 
+            var distance = power.TargetPosition.Distance(Core.Player.Position);
             var castInfo = $"{type} {power}".Trim();
 
             var target = Core.Actors.GetActorByAcdId<TrinityActor>(power.TargetAcdId);
@@ -73,8 +74,13 @@ namespace Trinity.Components.Combat
             }
             else if (power.TargetPosition != Vector3.Zero)
             {
-                castInfo += $" Dist:{Core.Player.Position.Distance(power.TargetPosition)}";
+                if (distance > 200f)
+                {
+                    Logger.Log(LogCategory.Spells, $"Target is way too far away ({distance}) has changed since power was created");
+                    return false;
+                }
 
+                castInfo += $" Dist:{Core.Player.Position.Distance(power.TargetPosition)}";
                 if (!Combat.Targeting.IsInRange(power.TargetPosition, power))
                 {
                     Logger.Log(LogCategory.Movement, $"Moving to position for {castInfo}");
