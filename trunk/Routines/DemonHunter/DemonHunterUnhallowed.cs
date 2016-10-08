@@ -68,8 +68,9 @@ namespace Trinity.Routines.DemonHunter
             if (TrySpecialPower(out power))
                 return power;
 
-            if (TryMoveToBuffedSpot(out power, 30f, 16f))
-                return power;
+            // todo: fix this, causing bot to stand there doing nothing.
+            //if (TryMoveToBuffedSpot(out power, 30f, 16f))
+            //    return power;
 
             if (ShouldMultishot(out target))
                 return Multishot(target);
@@ -117,7 +118,7 @@ namespace Trinity.Routines.DemonHunter
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (AllowedToUse(Settings.Vault, Skills.DemonHunter.Vault) && CanVaultTo(destination))
+            if (!Player.IsInTown && AllowedToUse(Settings.Vault, Skills.DemonHunter.Vault) && CanVaultTo(destination))
                 return Vault(destination);
 
             return Walk(destination);
@@ -144,7 +145,7 @@ namespace Trinity.Routines.DemonHunter
             if (!Skills.DemonHunter.EvasiveFire.CanCast())
                 return false;
 
-            if (!ShouldRefreshBastiansGenerator)
+            if (!ShouldRefreshBastiansGenerator && Player.PrimaryResource > PrimaryEnergyReserve)
                 return false;
 
             if (!TargetUtil.AnyMobsInRange(60f))
@@ -202,7 +203,7 @@ namespace Trinity.Routines.DemonHunter
             private static readonly SkillSettings DefaultVaultSettings = new SkillSettings
             {                
                 SecondaryResourcePct = 90f,
-                UseMode = UseTime.AnyTime,
+                UseMode = UseTime.Default,
                 RecastDelayMs = 1000,
             };
 

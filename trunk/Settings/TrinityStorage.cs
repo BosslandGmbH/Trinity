@@ -316,6 +316,7 @@ namespace Trinity.Settings
                 }
                 else
                 {
+                    setting.Reset();
                     setting.ApplyCode(item.Code);
                 }
             }

@@ -126,10 +126,10 @@ namespace Trinity.Routines.DemonHunter
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (AllowedToUse(Settings.Vault, Skills.DemonHunter.Vault) && CanVaultTo(destination))
+            if (!Player.IsInTown && AllowedToUse(Settings.Vault, Skills.DemonHunter.Vault) && CanVaultTo(destination))
                 return Vault(destination);            
             
-            if (CanStrafeTo(destination))
+            if (!Player.IsInTown && CanStrafeTo(destination))
                 return Strafe(destination);
 
             return Walk(destination);
@@ -189,7 +189,7 @@ namespace Trinity.Routines.DemonHunter
 
             private static readonly SkillSettings VaultDefaults = new SkillSettings
             {
-                UseMode = UseTime.AnyTime,
+                UseMode = UseTime.Default,
                 RecastDelayMs = 1000,
                 PrimaryResourcePct = 90f,
             };

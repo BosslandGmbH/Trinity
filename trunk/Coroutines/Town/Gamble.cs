@@ -84,10 +84,14 @@ namespace Trinity.Coroutines.Town
 
         public static async Task<bool> Execute()
         {
+			if (!ZetaDia.IsInTown)
+                IsDumpingShards = false;
+				
             try
             {
-                while (CanRun())
+                while (CanRun() && (!StillSavingShards || IsDumpingShards))
                 {
+					IsDumpingShards = true;
                     if ((TownInfo.Kadala.Distance > 8f || !UIElements.VendorWindow.IsVisible) && !await MoveToAndInteract.Execute(TownInfo.Kadala))
                     {
                         Logger.Log("[Gamble] Failed to move to Kadala, quite unfortunate.");
@@ -126,6 +130,7 @@ namespace Trinity.Coroutines.Town
         }
 
         private static int GambleMinimumShards => Core.Settings.Items.GamblingMode == SettingMode.Enabled ? 0 : Core.Settings.Items.GamblingMinShards;
+		private static int GambleMinimumSpendingShards => Core.Settings.Items.GamblingMode == SettingMode.Enabled ? 0 : Core.Settings.Items.GamblingMinSpendingShards;
 
         private static async Task<bool> BuyItem()
         {
@@ -214,12 +219,20 @@ namespace Trinity.Coroutines.Town
 
                 if (BelowMinimumShards)
                 {
+					if(IsDumpingShards)
+					{
+						IsDumpingShards = false;
+					}
                     LogVerbose("Not enough shards!");
                     return false;
                 }
 
                 if (!CanAffordMostExpensiveItem)
                 {
+					if(IsDumpingShards)
+					{
+						IsDumpingShards = false;
+					}
                     LogVerbose("Can't afford desired items!");
                     return false;
                 }
@@ -274,5 +287,7 @@ namespace Trinity.Coroutines.Town
         }
 
         private static bool BelowMinimumShards => ZetaDia.PlayerData.BloodshardCount < GambleMinimumShards;
+		private static bool StillSavingShards => ZetaDia.PlayerData.BloodshardCount < GambleMinimumSpendingShards;
+		private static bool IsDumpingShards { get; set;}
     }
 }

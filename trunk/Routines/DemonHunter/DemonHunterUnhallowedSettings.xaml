@@ -58,7 +58,7 @@
                     <GroupBox.Header>Vault</GroupBox.Header>
                     <StackPanel>
                         <UniformGrid Columns="2" Margin="0,5,0,10">
-                            <RadioButton Content="Anytime" IsChecked="{Binding DataContext.Vault.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AnyTime}"  />
+                            <RadioButton Content="Anytime" IsChecked="{Binding DataContext.Vault.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
                             <RadioButton Content="In combat" IsChecked="{Binding DataContext.Vault.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
                             <RadioButton Content="Out of combat" IsChecked="{Binding DataContext.Vault.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
                         </UniformGrid>

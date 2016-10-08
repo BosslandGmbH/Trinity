@@ -36,8 +36,7 @@ namespace Trinity.Settings
         private bool _autoEquipAutoDisable;
         private bool _autoEquipItems;
         private bool _autoEquipIgnoreWeapons;
-        private int _freeBagSlotsInTown;
-        private int _freeBagSlots;
+        private int _gamblingMinSpendingShards;
 
         public ItemSettings()
         {
@@ -112,19 +111,11 @@ namespace Trinity.Settings
         }
 
         [DataMember]
-        [DefaultValue(5)]
-        public int FreeBagSlots
+        [DefaultValue(100)]
+        public int GamblingMinSpendingShards
         {
-            get { return _freeBagSlots; }
-            set { SetField(ref _freeBagSlots, value); }
-        }    
-
-        [DataMember]
-        [DefaultValue(40)]
-        public int FreeBagSlotsInTown
-        {
-            get { return _freeBagSlotsInTown; }
-            set { SetField(ref _freeBagSlotsInTown, value); }
+            get { return _gamblingMinSpendingShards; }
+            set { SetField(ref _gamblingMinSpendingShards, value); }
         }
 
         [DataMember]

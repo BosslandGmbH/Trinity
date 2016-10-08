@@ -41,7 +41,7 @@
                                 Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
                                 HorizontalAlignment="Stretch" Margin="0"/>
                     </StackPanel>
-                </GroupBox>                
+                </GroupBox>
                 <GroupBox>
                     <GroupBox.Header>Build Settings</GroupBox.Header>
                     <StackPanel>

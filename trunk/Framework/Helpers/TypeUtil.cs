@@ -60,6 +60,7 @@ namespace Trinity.Framework.Helpers
                     BindingFlags.FlattenHierarchy |
                     BindingFlags.Static |
                     BindingFlags.Public);
+
                 if (field == null)
                     return 0;
                 value = field.IsLiteral ? (int) field.GetRawConstantValue() : (int) field.GetValue(null);

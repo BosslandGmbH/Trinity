@@ -4,8 +4,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Framework.Objects.Memory.Sno.Helpers;
 using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Zeta.Common;
 using Zeta.Game;
@@ -22,7 +24,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeActor : SnoTableEntry
     {
-        public int SizeOf = 872; // 0x368
+        public const int SizeOf = 872; // 0x368
         public int _1_0xC_int => ReadOffset<int>(0xC); //      Flags=524289  
         public ActorType _2_0x10_Enum => ReadOffset<ActorType>(0x10); //      Flags=17  SymbolTable=@26705656 Max=11
         public int _3_0x14_Appearance_Sno => ReadOffset<int>(0x14); //      Flags=257  
@@ -58,7 +60,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeAxialCylinder : MemoryWrapper
     {
-        public int SizeOf = 20; // 0x14
+        public const int SizeOf = 20; // 0x14
         public Vector3 _1_0x0_Vector3 => ReadOffset<Vector3>(0x0); //      Flags=1  
         public float _2_0xC_float => ReadOffset<float>(0xC); //      Flags=1  
         public float _3_0x10_float => ReadOffset<float>(0x10); //      Flags=1  
@@ -68,7 +70,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSphere : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public Vector3 _1_0x0_Vector3 => ReadOffset<Vector3>(0x0); //      Flags=1  
         public float _2_0xC_float => ReadOffset<float>(0xC); //      Flags=1  
     }
@@ -77,7 +79,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeAABB : MemoryWrapper
     {
-        public int SizeOf = 24; // 0x18
+        public const int SizeOf = 24; // 0x18
         public Vector3 _1_0x0_Vector3 => ReadOffset<Vector3>(0x0); //      Flags=1  
         public Vector3 _2_0xC_Vector3 => ReadOffset<Vector3>(0xC); //      Flags=1  
     }
@@ -86,16 +88,17 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSerializeData : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
-        public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
-        public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
+        public const int SizeOf = 8; // 0x8
+        public int Offset => ReadOffset<int>(0x0); //      Flags=1  _1_0x0_int
+        public int Length => ReadOffset<int>(0x4); //      Flags=1   _2_0x4_int
+        public IntPtr FirstEntry => ReadOffset<IntPtr>(0x8);
     }
 
 
     [CompilerGenerated]
     public class NativeMsgTriggeredEvent : MemoryWrapper
     {
-        public int SizeOf = 412; // 0x19C
+        public const int SizeOf = 412; // 0x19C
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public NativeTriggerEvent _2_0x4_Object => ReadObject<NativeTriggerEvent>(0x4); //      Flags=1  
     }
@@ -104,7 +107,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeWeightedLook : MemoryWrapper
     {
-        public int SizeOf = 68; // 0x44
+        public const int SizeOf = 68; // 0x44
         public NativeLookLink _1_0x0_Object => ReadObject<NativeLookLink>(0x0); //      Flags=1  
         public int _2_0x40_int => ReadOffset<int>(0x40); //      Flags=1  
     }
@@ -113,7 +116,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeActorCollisionData : MemoryWrapper
     {
-        public int SizeOf = 68; // 0x44
+        public const int SizeOf = 68; // 0x44
         public NativeActorCollisionFlags _1_0x0_Object => ReadObject<NativeActorCollisionFlags>(0x0); //      Flags=1  
         public int _2_0x10_int => ReadOffset<int>(0x10); //      Flags=1  
         public NativeAxialCylinder _3_0x14_Object => ReadObject<NativeAxialCylinder>(0x14); //      Flags=1  
@@ -125,7 +128,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeInventoryImages : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
     }
@@ -134,7 +137,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTriggerEvent : MemoryWrapper
     {
-        public int SizeOf = 408; // 0x198
+        public const int SizeOf = 408; // 0x198
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public NativeTriggerConditions _2_0x4_Object => ReadObject<NativeTriggerConditions>(0x4); //      Flags=1  
         public int _3_0x28_int => ReadOffset<int>(0x28); //      Flags=1  
@@ -171,7 +174,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLookLink : MemoryWrapper
     {
-        public int SizeOf = 64; // 0x40
+        public const int SizeOf = 64; // 0x40
         public string _1_0x0_String => ReadString(0x0); //      Flags=2049  
     }
 
@@ -179,7 +182,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeActorCollisionFlags : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=524289  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=524289  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=524289  
@@ -190,7 +193,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTriggerConditions : MemoryWrapper
     {
-        public int SizeOf = 36; // 0x24
+        public const int SizeOf = 36; // 0x24
                                 // Unknown index=1 @Offset0x0 Type=DT_PERCENT BaseType=DT_NULL //      Flags=1  
                                 // Unknown index=2 @Offset0x4 Type=DT_TIME BaseType=DT_NULL //      Flags=1  
                                 // Unknown index=3 @Offset0x8 Type=DT_TIME BaseType=DT_NULL //      Flags=1  
@@ -206,7 +209,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSNOName : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
                                // Unknown index=1 @Offset0x0 Type=DT_SNO_GROUP BaseType=DT_NULL //      Flags=1  
                                // Unknown index=2 @Offset0x4 Type=DT_SNONAME_HANDLE BaseType=DT_NULL //      Flags=1  
     }
@@ -215,7 +218,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHardpointLink : MemoryWrapper
     {
-        public int SizeOf = 68; // 0x44
+        public const int SizeOf = 68; // 0x44
         public string _1_0x0_String => ReadString(0x0); //      Flags=2049  
         public int _2_0x40_int => ReadOffset<int>(0x40); //      Flags=1  
     }
@@ -224,7 +227,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeConstraintLink : MemoryWrapper
     {
-        public int SizeOf = 64; // 0x40
+        public const int SizeOf = 64; // 0x40
         public string _1_0x0_String => ReadString(0x0); //      Flags=2049  
     }
 
@@ -232,7 +235,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonster : SnoTableEntry
     {
-        public int SizeOf = 1344; // 0x540
+        public const int SizeOf = 1344; // 0x540
         public int _1_0xC_int => ReadOffset<int>(0xC); //      Flags=524289  
         public int _2_0x10_Actor_Sno => ReadOffset<int>(0x10); //      Flags=1  
         public int _3_0x14_int => ReadOffset<int>(0x14); //      Flags=1  
@@ -299,7 +302,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterExtra : MemoryWrapper
     {
-        public int SizeOf = 20; // 0x14
+        public const int SizeOf = 20; // 0x14
         public float _1_0x0_float => ReadOffset<float>(0x0); //      Flags=1  
         public float _2_0x4_float => ReadOffset<float>(0x4); //      Flags=1  
         public float _3_0x8_float => ReadOffset<float>(0x8); //      Flags=1  
@@ -311,7 +314,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHealthDropInfo : MemoryWrapper
     {
-        public int SizeOf = 12; // 0xC
+        public const int SizeOf = 12; // 0xC
         public float _1_0x0_float => ReadOffset<float>(0x0); //      Flags=1  
         public int _2_0x4_Items_GameBalanceId => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -321,7 +324,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSkillDeclaration : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
         public int _1_0x0_Power_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
     }
@@ -330,7 +333,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterSkillDeclaration : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public float _1_0x0_float => ReadOffset<float>(0x0); //      Flags=1  
         public float _2_0x4_float => ReadOffset<float>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -341,7 +344,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterMinionSpawnGroup : MemoryWrapper
     {
-        public int SizeOf = 24; // 0x18
+        public const int SizeOf = 24; // 0x18
         public float _1_0x0_float => ReadOffset<float>(0x0); //      Flags=1  
         public int _2_0x4_NativeMonsterMinionSpawnItem => ReadOffset<int>(0x4); //    VarArrSerializeOffsetDiff=12   Flags=65536  
         public List<NativeMonsterMinionSpawnItem> _3_0x8_VariableArray => ReadSerializedObjects<NativeMonsterMinionSpawnItem>(0x8, 0x10); //    VarArrSerializeOffsetDiff=8   Flags=33  
@@ -352,7 +355,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterChampionSpawnGroup : MemoryWrapper
     {
-        public int SizeOf = 24; // 0x18
+        public const int SizeOf = 24; // 0x18
         public int _1_0x0_NativeMonsterChampionSpawnItem => ReadOffset<int>(0x0); //    VarArrSerializeOffsetDiff=16   Flags=65536  
         public float _2_0x4_float => ReadOffset<float>(0x4); //      Flags=1  
         public List<NativeMonsterChampionSpawnItem> _3_0x8_VariableArray => ReadSerializedObjects<NativeMonsterChampionSpawnItem>(0x8, 0x10); //    VarArrSerializeOffsetDiff=8   Flags=33  
@@ -363,7 +366,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterMinionSpawnItem : MemoryWrapper
     {
-        public int SizeOf = 20; // 0x14
+        public const int SizeOf = 20; // 0x14
         public int _1_0x0_Actor_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -375,7 +378,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterChampionSpawnItem : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
         public int _1_0x0_Actor_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
     }
@@ -384,7 +387,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHero : SnoTableEntry
     {
-        public int SizeOf = 32; // 0x20
+        public const int SizeOf = 32; // 0x20
         public NativeSerializeData _1_0xC_SerializeData => ReadObject<NativeSerializeData>(0xC);
         public string _2_0x18_SerializedString => ReadSerializedString(0x18, 0xC); //    VarArrSerializeOffsetDiff=-12   Flags=32  
     }
@@ -393,7 +396,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeStringList : SnoTableEntry
     {
-        public int SizeOf = 40; // 0x28
+        public const int SizeOf = 40; // 0x28
         public List<NativeStringTableEntry> _1_0x10_VariableArray => ReadSerializedObjects<NativeStringTableEntry>(0x10, 0x18); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _2_0x18_SerializeData => ReadObject<NativeSerializeData>(0x18);
     }
@@ -402,12 +405,12 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeStringTableEntry : MemoryWrapper
     {
-        public int SizeOf = 40; // 0x28
+        public const int SizeOf = 40; // 0x28
         public string _1_0x0_SerializedString => ReadSerializedString(0x0, 0x8); //    VarArrSerializeOffsetDiff=8   Flags=2081  
         public NativeSerializeData _2_0x8_SerializeData => ReadObject<NativeSerializeData>(0x8); //      Flags=2048  
         public string _3_0x10_SerializedString => ReadSerializedString(0x10, 0x18); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _4_0x18_SerializeData => ReadObject<NativeSerializeData>(0x18);
-        public int _5_0x20_int => ReadOffset<int>(0x20);
+        public int _5_0x20_int => ReadOffset<int>(0x20); //GameBalanceNameNormalHashed
         public int _6_0x24_int => ReadOffset<int>(0x24);
     }
 
@@ -415,7 +418,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeGlobals : SnoTableEntry
     {
-        public int SizeOf = 760; // 0x2F8
+        public const int SizeOf = 760; // 0x2F8
         public List<NativeGlobalServerData> _1_0x10_VariableArray => ReadSerializedObjects<NativeGlobalServerData>(0x10, 0x18); //    VarArrSerializeOffsetDiff=8   Flags=1057  
         public NativeSerializeData _2_0x18_SerializeData => ReadObject<NativeSerializeData>(0x18);
         public int _3_0x20_int => ReadOffset<int>(0x20); //      Flags=1  
@@ -505,7 +508,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeGlobalServerData : SnoTableEntry
     {
-        public int SizeOf = 816; // 0x330
+        public const int SizeOf = 816; // 0x330
         public List<NativeActorGroup> _1_0x0_VariableArray => ReadSerializedObjects<NativeActorGroup>(0x0, 0x8); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _2_0x8_SerializeData => ReadObject<NativeSerializeData>(0x8);
         public List<NativeGlobalScriptVariable> _3_0x10_VariableArray => ReadSerializedObjects<NativeGlobalScriptVariable>(0x10, 0x18); //    VarArrSerializeOffsetDiff=8   Flags=33  
@@ -612,7 +615,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeStartLocationName : MemoryWrapper
     {
-        public int SizeOf = 68; // 0x44
+        public const int SizeOf = 68; // 0x44
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public string _2_0x4_String => ReadString(0x4); //      Flags=1  
     }
@@ -621,7 +624,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeBannerParams : MemoryWrapper
     {
-        public int SizeOf = 240; // 0xF0
+        public const int SizeOf = 240; // 0xF0
         public List<NativeBannerTexturePair> _1_0x0_VariableArray => ReadSerializedObjects<NativeBannerTexturePair>(0x0, 0x8); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _2_0x8_SerializeData => ReadObject<NativeSerializeData>(0x8);
         public int _3_0x10_int => ReadOffset<int>(0x10); //      Flags=1  
@@ -656,7 +659,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeAssetList : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public List<NativeAssetListEntry> _1_0x0_VariableArray => ReadSerializedObjects<NativeAssetListEntry>(0x0, 0x8); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _2_0x8_SerializeData => ReadObject<NativeSerializeData>(0x8);
     }
@@ -665,7 +668,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeActorGroup : MemoryWrapper
     {
-        public int SizeOf = 68; // 0x44
+        public const int SizeOf = 68; // 0x44
         public int _1_0x0_int => ReadOffset<int>(0x0);
         public string _2_0x4_String => ReadString(0x4); //      Flags=1  
     }
@@ -674,7 +677,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeGlobalScriptVariable : MemoryWrapper
     {
-        public int SizeOf = 40; // 0x28
+        public const int SizeOf = 40; // 0x28
         public int _1_0x0_int => ReadOffset<int>(0x0);
         public string _2_0x4_String => ReadString(0x4); //      Flags=1  
         public float _3_0x24_float => ReadOffset<float>(0x24); //      Flags=1  
@@ -684,7 +687,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeDifficultyTuningParams : MemoryWrapper
     {
-        public int SizeOf = 52; // 0x34
+        public const int SizeOf = 52; // 0x34
         public float _1_0x0_float => ReadOffset<float>(0x0); //      Flags=1  
         public float _2_0x4_float => ReadOffset<float>(0x4); //      Flags=1  
         public float _3_0x8_float => ReadOffset<float>(0x8); //      Flags=1  
@@ -704,7 +707,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeBannerTexturePair : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public int _1_0x0_Textures_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -714,7 +717,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeBannerColorSet : MemoryWrapper
     {
-        public int SizeOf = 84; // 0x54
+        public const int SizeOf = 84; // 0x54
 
         //public List<TypeNameNotHandled(DT_RGBACOLOR:DT_RGBACOLOR)> _1_0x0_FixedArray => ReadObjects<TypeNameNotHandled(DT_RGBACOLOR:DT_RGBACOLOR)>(0x0, 2); //      Flags=1  
         public string _2_0x8_String => ReadString(0x8); //      Flags=1  
@@ -726,7 +729,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeBannerSigilPlacement : MemoryWrapper
     {
-        public int SizeOf = 68; // 0x44
+        public const int SizeOf = 68; // 0x44
         public string _1_0x0_String => ReadString(0x0); //      Flags=1  
         public int _2_0x40_int => ReadOffset<int>(0x40); //      Flags=1  
     }
@@ -735,7 +738,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeEpicBannerDescription : MemoryWrapper
     {
-        public int SizeOf = 148; // 0x94
+        public const int SizeOf = 148; // 0x94
         public int _1_0x0_Textures_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_Actor_Sno => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_Actor_Sno => ReadOffset<int>(0x8); //      Flags=1  
@@ -747,59 +750,59 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeAssetListEntry : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
     }
 
-
     [CompilerGenerated]
     public class NativeGameBalance : SnoTableEntry
     {
-        public int SizeOf = 552; // 0x228
+        public const int SizeOf = 552; // 0x228
+        public override string ToString() => $"{GetType().Name}: {(GameBalanceTableId)Header.SnoId}";             
         public int _1_0xC_int => ReadOffset<int>(0xC); //      Flags=1  
         public int _2_0x10_int => ReadOffset<int>(0x10); //      Flags=1  
         public int _3_0x14_int => ReadOffset<int>(0x14); //      Flags=1  
-        public NativeItems _4_0x18_Object => ReadObject<NativeItems>(0x18);
-        public NativeItems _5_0x28_Object => ReadObject<NativeItems>(0x28);
-        public NativeExperienceTable _6_0x38_Object => ReadObject<NativeExperienceTable>(0x38);
-        public NativeExperienceTableAlt _7_0x48_Object => ReadObject<NativeExperienceTableAlt>(0x48);
-        public NativeHelpCodes _8_0x58_Object => ReadObject<NativeHelpCodes>(0x58);
-        public NativeMonsterLevelTable _9_0x68_Object => ReadObject<NativeMonsterLevelTable>(0x68);
-        public NativeAffixTable _10_0x78_Object => ReadObject<NativeAffixTable>(0x78);
-        public NativeHeros _11_0x88_Object => ReadObject<NativeHeros>(0x88);
-        public NativeMovementStyles _12_0x98_Object => ReadObject<NativeMovementStyles>(0x98);
-        public NativeLabels _13_0xA8_Object => ReadObject<NativeLabels>(0xA8);
-        public NativeLootDistributionTable _14_0xB8_Object => ReadObject<NativeLootDistributionTable>(0xB8);
-        public NativeRareItemNamesTable _15_0xC8_Object => ReadObject<NativeRareItemNamesTable>(0xC8);
-        public NativeMonsterAffixesTable _16_0xD8_Object => ReadObject<NativeMonsterAffixesTable>(0xD8);
-        public NativeRareMonsterNamesTable _17_0xE8_Object => ReadObject<NativeRareMonsterNamesTable>(0xE8);
-        public NativeSocketedEffectsTable _18_0xF8_Object => ReadObject<NativeSocketedEffectsTable>(0xF8);
-        public NativeItemDropTable _19_0x108_Object => ReadObject<NativeItemDropTable>(0x108);
-        public NativeItemLevelModTable _20_0x118_Object => ReadObject<NativeItemLevelModTable>(0x118);
-        public NativeQualityClassTable _21_0x128_Object => ReadObject<NativeQualityClassTable>(0x128);
-        public NativeHandicapLevelTable _22_0x138_Object => ReadObject<NativeHandicapLevelTable>(0x138);
-        public NativeItemSalvageLevelTable _23_0x148_Object => ReadObject<NativeItemSalvageLevelTable>(0x148);
-        public NativeHirelings _24_0x158_Object => ReadObject<NativeHirelings>(0x158);
-        public NativeSetItemBonusTable _25_0x168_Object => ReadObject<NativeSetItemBonusTable>(0x168);
-        public NativeEliteModifiers _26_0x178_Object => ReadObject<NativeEliteModifiers>(0x178);
-        public NativeItemTiers _27_0x188_Object => ReadObject<NativeItemTiers>(0x188);
-        public NativePowerFormulaTable _28_0x198_Object => ReadObject<NativePowerFormulaTable>(0x198);
-        public NativeRecipesTable _29_0x1A8_Object => ReadObject<NativeRecipesTable>(0x1A8);
-        public NativeScriptedAchievementEventsTable _30_0x1B8_Object => ReadObject<NativeScriptedAchievementEventsTable>(0x1B8);
-        public NativeLootRunQuestTierTable _31_0x1C8_Object => ReadObject<NativeLootRunQuestTierTable>(0x1C8);
-        public NativeParagonBonusesTable _32_0x1D8_Object => ReadObject<NativeParagonBonusesTable>(0x1D8);
-        public NativeLegacyItemConversionTable _33_0x1E8_Object => ReadObject<NativeLegacyItemConversionTable>(0x1E8);
-        public NativeEnchantItemAffixUseCountCostScalarsTable _34_0x1F8_Object => ReadObject<NativeEnchantItemAffixUseCountCostScalarsTable>(0x1F8);
-        public NativeTieredLootRunLevelTable _35_0x208_Object => ReadObject<NativeTieredLootRunLevelTable>(0x208);
-        public NativeTransmuteRecipesTable _36_0x218_Object => ReadObject<NativeTransmuteRecipesTable>(0x218);
+        public NativeItemsTable _4_0x18_NativeItemsTable => ReadObject<NativeItemsTable>(0x18);
+        public NativeItemsTable _5_0x28_NativeItemsTable => ReadObject<NativeItemsTable>(0x28);
+        public NativeExperienceTable _6_0x38_NativeExperienceTable => ReadObject<NativeExperienceTable>(0x38);
+        public NativeExperienceTableAlt _7_0x48_NativeExperienceTableAlt => ReadObject<NativeExperienceTableAlt>(0x48);
+        public NativeHelpCodes _8_0x58_NativeHelpCodes => ReadObject<NativeHelpCodes>(0x58);
+        public NativeMonsterLevelTable _9_0x68_NativeMonsterLevelTable => ReadObject<NativeMonsterLevelTable>(0x68);
+        public NativeAffixTable _10_0x78_NativeAffixTable => ReadObject<NativeAffixTable>(0x78);
+        public NativeHeros _11_0x88_NativeHeros => ReadObject<NativeHeros>(0x88);
+        public NativeMovementStyles _12_0x98_NativeMovementStyles => ReadObject<NativeMovementStyles>(0x98);
+        public NativeLabels _13_0xA8_NativeLabels => ReadObject<NativeLabels>(0xA8);
+        public NativeLootDistributionTable _14_0xB8_NativeLootDistributionTable => ReadObject<NativeLootDistributionTable>(0xB8);
+        public NativeRareItemNamesTable _15_0xC8_NativeRareItemNamesTable => ReadObject<NativeRareItemNamesTable>(0xC8);
+        public NativeMonsterAffixesTable _16_0xD8_NativeMonsterAffixesTable => ReadObject<NativeMonsterAffixesTable>(0xD8);
+        public NativeRareMonsterNamesTable _17_0xE8_NativeRareMonsterNamesTable => ReadObject<NativeRareMonsterNamesTable>(0xE8);
+        public NativeSocketedEffectsTable _18_0xF8_NativeSocketedEffectsTable => ReadObject<NativeSocketedEffectsTable>(0xF8);
+        public NativeItemDropTable _19_0x108_NativeItemDropTable => ReadObject<NativeItemDropTable>(0x108);
+        public NativeItemLevelModTable _20_0x118_NativeItemLevelModTable => ReadObject<NativeItemLevelModTable>(0x118);
+        public NativeQualityClassTable _21_0x128_NativeQualityClassTable => ReadObject<NativeQualityClassTable>(0x128);
+        public NativeHandicapLevelTable _22_0x138_NativeHandicapLevelTable => ReadObject<NativeHandicapLevelTable>(0x138);
+        public NativeItemSalvageLevelTable _23_0x148_NativeItemSalvageLevelTable => ReadObject<NativeItemSalvageLevelTable>(0x148);
+        public NativeHirelings _24_0x158_NativeHirelings => ReadObject<NativeHirelings>(0x158);
+        public NativeSetItemBonusTable _25_0x168_NativeSetItemBonusTable => ReadObject<NativeSetItemBonusTable>(0x168);
+        public NativeEliteModifiers _26_0x178_NativeEliteModifiers => ReadObject<NativeEliteModifiers>(0x178);
+        public NativeItemTiers _27_0x188_NativeItemTiers => ReadObject<NativeItemTiers>(0x188);
+        public NativePowerFormulaTable _28_0x198_NativePowerFormulaTable => ReadObject<NativePowerFormulaTable>(0x198);
+        public NativeRecipesTable _29_0x1A8_NativeRecipesTable => ReadObject<NativeRecipesTable>(0x1A8);
+        public NativeScriptedAchievementEventsTable _30_0x1B8_NativeScriptedAchievementEventsTable => ReadObject<NativeScriptedAchievementEventsTable>(0x1B8);
+        public NativeLootRunQuestTierTable _31_0x1C8_NativeLootRunQuestTierTable => ReadObject<NativeLootRunQuestTierTable>(0x1C8);
+        public NativeParagonBonusesTable _32_0x1D8_NativeParagonBonusesTable => ReadObject<NativeParagonBonusesTable>(0x1D8);
+        public NativeLegacyItemConversionTable _33_0x1E8_NativeLegacyItemConversionTable => ReadObject<NativeLegacyItemConversionTable>(0x1E8);
+        public NativeEnchantItemAffixUseCountCostScalarsTable _34_0x1F8_NativeEnchantItemAffixUseCountCostScalarsTable => ReadObject<NativeEnchantItemAffixUseCountCostScalarsTable>(0x1F8);
+        public NativeTieredLootRunLevelTable _35_0x208_NativeTieredLootRunLevelTable => ReadObject<NativeTieredLootRunLevelTable>(0x208);
+        public NativeTransmuteRecipesTable _36_0x218_NativeTransmuteRecipesTable => ReadObject<NativeTransmuteRecipesTable>(0x218);
     }
 
 
     [CompilerGenerated]
-    public class NativeItems : MemoryWrapper
+    public class NativeItemsTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeItemType> _2_0x8_VariableArray => ReadSerializedObjects<NativeItemType>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -808,7 +811,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeExperienceTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeExperienceLevel> _2_0x8_VariableArray => ReadSerializedObjects<NativeExperienceLevel>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -817,7 +820,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeExperienceTableAlt : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeExperienceLevelAlt> _2_0x8_VariableArray => ReadSerializedObjects<NativeExperienceLevelAlt>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -826,7 +829,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHelpCodes : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeHelpCode> _2_0x8_VariableArray => ReadSerializedObjects<NativeHelpCode>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -835,7 +838,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterLevelTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeMonsterLevelDefinition> _2_0x8_VariableArray => ReadSerializedObjects<NativeMonsterLevelDefinition>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -844,7 +847,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeAffixTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeAffixTableEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeAffixTableEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -853,7 +856,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHeros : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeHeroData> _2_0x8_VariableArray => ReadSerializedObjects<NativeHeroData>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -862,7 +865,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMovementStyles : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeMovementStyleDefinition> _2_0x8_VariableArray => ReadSerializedObjects<NativeMovementStyleDefinition>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -871,7 +874,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLabels : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeLabelGBID> _2_0x8_VariableArray => ReadSerializedObjects<NativeLabelGBID>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -880,7 +883,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLootDistributionTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeLootDistribution> _2_0x8_VariableArray => ReadSerializedObjects<NativeLootDistribution>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -889,7 +892,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeRareItemNamesTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeRareItemNamesEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeRareItemNamesEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -898,7 +901,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterAffixesTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeMonsterAffixesEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeMonsterAffixesEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -907,7 +910,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeRareMonsterNamesTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeRareMonsterNamesEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeRareMonsterNamesEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -916,7 +919,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSocketedEffectsTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeSocketedEffectsTableEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeSocketedEffectsTableEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -925,7 +928,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeItemDropTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeItemDropTableEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeItemDropTableEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -934,7 +937,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeItemLevelModTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeLootDistribution> _2_0x8_VariableArray => ReadSerializedObjects<NativeLootDistribution>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -943,7 +946,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeQualityClassTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeQualityClass> _2_0x8_VariableArray => ReadSerializedObjects<NativeQualityClass>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -952,7 +955,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHandicapLevelTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeHandicapLevel> _2_0x8_VariableArray => ReadSerializedObjects<NativeHandicapLevel>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -961,7 +964,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeItemSalvageLevelTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeItemSalvageLevel> _2_0x8_VariableArray => ReadSerializedObjects<NativeItemSalvageLevel>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -970,7 +973,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHirelings : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeHirelingEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeHirelingEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -979,7 +982,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSetItemBonusTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeSetItemBonusTableEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeSetItemBonusTableEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -988,7 +991,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeEliteModifiers : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeEliteModifierData> _2_0x8_VariableArray => ReadSerializedObjects<NativeEliteModifierData>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -997,7 +1000,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeItemTiers : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeItemTierData> _2_0x8_VariableArray => ReadSerializedObjects<NativeItemTierData>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1006,7 +1009,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativePowerFormulaTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativePowerFormulaTableEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativePowerFormulaTableEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1015,7 +1018,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeRecipesTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeRecipeEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeRecipeEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1024,7 +1027,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeScriptedAchievementEventsTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeScriptedAchievementEvent> _2_0x8_VariableArray => ReadSerializedObjects<NativeScriptedAchievementEvent>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1033,7 +1036,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLootRunQuestTierTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeLootRunQuestTierEntry> _2_0x8_VariableArray => ReadSerializedObjects<NativeLootRunQuestTierEntry>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1042,7 +1045,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeParagonBonusesTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeParagonBonus> _2_0x8_VariableArray => ReadSerializedObjects<NativeParagonBonus>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1051,7 +1054,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLegacyItemConversionTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeLegacyItemConversion> _2_0x8_VariableArray => ReadSerializedObjects<NativeLegacyItemConversion>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1060,7 +1063,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeEnchantItemAffixUseCountCostScalarsTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeEnchantItemAffixUseCountCostScalar> _2_0x8_VariableArray => ReadSerializedObjects<NativeEnchantItemAffixUseCountCostScalar>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1069,7 +1072,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTieredLootRunLevelTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeTieredLootRunLevel> _2_0x8_VariableArray => ReadSerializedObjects<NativeTieredLootRunLevel>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1078,7 +1081,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTransmuteRecipesTable : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeTransmuteRecipe> _2_0x8_VariableArray => ReadSerializedObjects<NativeTransmuteRecipe>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -1087,7 +1090,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeItemType : MemoryWrapper
     {
-        public int SizeOf = 336; // 0x150
+        public const int SizeOf = 336; // 0x150
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -1125,7 +1128,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeExperienceLevel : MemoryWrapper
     {
-        public int SizeOf = 472; // 0x1D8
+        public const int SizeOf = 472; // 0x1D8
                                  // Unknown index=1 @Offset0x0 Type=DT_INT64 BaseType=DT_NULL //      Flags=1  
         public int _2_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
         public int _3_0xC_int => ReadOffset<int>(0xC); //      Flags=1  
@@ -1243,7 +1246,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeExperienceLevelAlt : MemoryWrapper
     {
-        public int SizeOf = 112; // 0x70
+        public const int SizeOf = 112; // 0x70
                                  // Unknown index=1 @Offset0x0 Type=DT_INT64 BaseType=DT_NULL //      Flags=1  
         public int _2_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
         public int _3_0xC_int => ReadOffset<int>(0xC);
@@ -1277,7 +1280,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHelpCode : MemoryWrapper
     {
-        public int SizeOf = 640; // 0x280
+        public const int SizeOf = 640; // 0x280
         public string _1_0x0_String => ReadString(0x0); //      Flags=1  
         public string _2_0x100_String => ReadString(0x100); //      Flags=1  
         public string _3_0x200_String => ReadString(0x200); //      Flags=1  
@@ -1287,7 +1290,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterLevelDefinition : MemoryWrapper
     {
-        public int SizeOf = 240; // 0xF0
+        public const int SizeOf = 240; // 0xF0
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public float _2_0x4_float => ReadOffset<float>(0x4); //      Flags=1  
         public float _3_0x8_float => ReadOffset<float>(0x8); //      Flags=1  
@@ -1354,7 +1357,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeAffixTableEntry : MemoryWrapper
     {
-        public int SizeOf = 784; // 0x310
+        public const int SizeOf = 784; // 0x310
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -1379,7 +1382,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
         public BonusType _22_0x150_Enum => ReadOffset<BonusType>(0x150); //      Flags=17  SymbolTable=@26700224 Max=14
         public int _23_0x154_int => ReadOffset<int>(0x154); //      Flags=1  
         public int _24_0x158_AffixList_GameBalanceId => ReadOffset<int>(0x158); //      Flags=1  
-        public int _25_0x15C_AffixList_GameBalanceId => ReadOffset<int>(0x15C); //      Flags=1  
+        public int _25_0x15C_AffixList_GameBalanceId => ReadOffset<int>(0x15C); //      Flags=1  *** matches string list affixes.stl gbid (normal hash of gbname)
         public int _26_0x160_StringList_Sno => ReadOffset<int>(0x160); //      Flags=1  
         public int _27_0x164_StringList_Sno => ReadOffset<int>(0x164); //      Flags=1  
         public int _28_0x168_AffixGroup_GameBalanceId => ReadOffset<int>(0x168); //      Flags=1  
@@ -1401,7 +1404,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHeroData : MemoryWrapper
     {
-        public int SizeOf = 504; // 0x1F8
+        public const int SizeOf = 504; // 0x1F8
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -1471,7 +1474,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMovementStyleDefinition : MemoryWrapper
     {
-        public int SizeOf = 392; // 0x188
+        public const int SizeOf = 392; // 0x188
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -1513,7 +1516,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLabelGBID : MemoryWrapper
     {
-        public int SizeOf = 272; // 0x110
+        public const int SizeOf = 272; // 0x110
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -1525,7 +1528,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLootDistribution : MemoryWrapper
     {
-        public int SizeOf = 92; // 0x5C
+        public const int SizeOf = 92; // 0x5C
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -1555,7 +1558,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeRareItemNamesEntry : MemoryWrapper
     {
-        public int SizeOf = 280; // 0x118
+        public const int SizeOf = 280; // 0x118
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -1569,7 +1572,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeMonsterAffixesEntry : MemoryWrapper
     {
-        public int SizeOf = 904; // 0x388
+        public const int SizeOf = 904; // 0x388
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -1771,7 +1774,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeRareMonsterNamesEntry : MemoryWrapper
     {
-        public int SizeOf = 400; // 0x190
+        public const int SizeOf = 400; // 0x190
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -1784,7 +1787,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSocketedEffectsTableEntry : MemoryWrapper
     {
-        public int SizeOf = 1416; // 0x588
+        public const int SizeOf = 1416; // 0x588
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -1817,7 +1820,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeItemDropTableEntry : MemoryWrapper
     {
-        public int SizeOf = 1144; // 0x478
+        public const int SizeOf = 1144; // 0x478
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2046,7 +2049,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeQualityClass : MemoryWrapper
     {
-        public int SizeOf = 360; // 0x168
+        public const int SizeOf = 360; // 0x168
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2079,7 +2082,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHandicapLevel : MemoryWrapper
     {
-        public int SizeOf = 32; // 0x20
+        public const int SizeOf = 32; // 0x20
         public float _1_0x0_float => ReadOffset<float>(0x0); //      Flags=1  
         public float _2_0x4_float => ReadOffset<float>(0x4); //      Flags=1  
         public float _3_0x8_float => ReadOffset<float>(0x8); //      Flags=1  
@@ -2094,7 +2097,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeItemSalvageLevel : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public int _1_0x0_TreasureClass_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_TreasureClass_Sno => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_TreasureClass_Sno => ReadOffset<int>(0x8); //      Flags=1  
@@ -2105,7 +2108,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeHirelingEntry : MemoryWrapper
     {
-        public int SizeOf = 328; // 0x148
+        public const int SizeOf = 328; // 0x148
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2131,7 +2134,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSetItemBonusTableEntry : MemoryWrapper
     {
-        public int SizeOf = 464; // 0x1D0
+        public const int SizeOf = 464; // 0x1D0
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2144,7 +2147,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeEliteModifierData : MemoryWrapper
     {
-        public int SizeOf = 352; // 0x160
+        public const int SizeOf = 352; // 0x160
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2176,7 +2179,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeItemTierData : MemoryWrapper
     {
-        public int SizeOf = 32; // 0x20
+        public const int SizeOf = 32; // 0x20
         public int _1_0x0_Items_GameBalanceId => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_Items_GameBalanceId => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_Items_GameBalanceId => ReadOffset<int>(0x8); //      Flags=1  
@@ -2191,7 +2194,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativePowerFormulaTableEntry : MemoryWrapper
     {
-        public int SizeOf = 1328; // 0x530
+        public const int SizeOf = 1328; // 0x530
         public string _1_0x0_String => ReadString(0x0); //      Flags=1  
         public float _2_0x400_float => ReadOffset<float>(0x400); //      Flags=1  
         public float _3_0x404_float => ReadOffset<float>(0x404); //      Flags=1  
@@ -2275,7 +2278,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeRecipeEntry : MemoryWrapper
     {
-        public int SizeOf = 336; // 0x150
+        public const int SizeOf = 336; // 0x150
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2292,7 +2295,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeScriptedAchievementEvent : MemoryWrapper
     {
-        public int SizeOf = 264; // 0x108
+        public const int SizeOf = 264; // 0x108
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2302,7 +2305,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLootRunQuestTierEntry : MemoryWrapper
     {
-        public int SizeOf = 520; // 0x208
+        public const int SizeOf = 520; // 0x208
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2376,7 +2379,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeParagonBonus : MemoryWrapper
     {
-        public int SizeOf = 640; // 0x280
+        public const int SizeOf = 640; // 0x280
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2392,7 +2395,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLegacyItemConversion : MemoryWrapper
     {
-        public int SizeOf = 280; // 0x118
+        public const int SizeOf = 280; // 0x118
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2406,7 +2409,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeEnchantItemAffixUseCountCostScalar : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public float _2_0x4_float => ReadOffset<float>(0x4); //      Flags=1  
     }
@@ -2415,7 +2418,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTieredLootRunLevel : MemoryWrapper
     {
-        public int SizeOf = 56; // 0x38
+        public const int SizeOf = 56; // 0x38
         public float _1_0x0_float => ReadOffset<float>(0x0); //      Flags=1  
         public float _2_0x4_float => ReadOffset<float>(0x4); //      Flags=1  
         public float _3_0x8_float => ReadOffset<float>(0x8); //      Flags=1  
@@ -2435,7 +2438,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTransmuteRecipe : MemoryWrapper
     {
-        public int SizeOf = 376; // 0x178
+        public const int SizeOf = 376; // 0x178
         public string _1_0x0_String => ReadString(0x0); //      Flags=18437  
         public int _2_0x100_int => ReadOffset<int>(0x100);
         public int _3_0x104_int => ReadOffset<int>(0x104);
@@ -2451,7 +2454,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeAttributeSpecifier : MemoryWrapper
     {
-        public int SizeOf = 24; // 0x18
+        public const int SizeOf = 24; // 0x18
                                 // Unknown index=1 @Offset0x0 Type=DT_TRANSLATEABLE BaseType=DT_NULL //      Flags=1  
                                 // Unknown index=2 @Offset0x4 Type=DT_ATTRIBUTEPARAM BaseType=DT_NULL //      Flags=1  
                                 // Unknown index=3 @Offset0x8 Type=DT_FORMULA BaseType=DT_NULL //    VarArrSerializeOffsetDiff=8    
@@ -2462,7 +2465,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeRecipeIngredient : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
         public int _1_0x0_Items_GameBalanceId => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
     }
@@ -2471,7 +2474,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTransmuteRecipeIngredient : MemoryWrapper
     {
-        public int SizeOf = 12; // 0xC
+        public const int SizeOf = 12; // 0xC
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -2481,7 +2484,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     //[CompilerGenerated]
     //public class NativeActor : MemoryWrapper
     //{
-    //    public int SizeOf = 872; // 0x368
+    //    public const int SizeOf = 872; // 0x368
     //    public int _1_0xC_int => ReadOffset<int>(0xC); //      Flags=524289  
     //    public ActorType _2_0x10_Enum => ReadOffset<ActorType>(0x10); //      Flags=17  SymbolTable=@26705656 Max=11
     //    public int _3_0x14_Appearance_Sno => ReadOffset<int>(0x14); //      Flags=257  
@@ -2517,7 +2520,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLevelArea : SnoTableEntry
     {
-        public int SizeOf = 40; // 0x28
+        public const int SizeOf = 40; // 0x28
         public int _1_0xC_int => ReadOffset<int>(0xC); //      Flags=524289  
         public int _2_0x10_LevelArea_Sno => ReadOffset<int>(0x10); //      Flags=1  
         public int _3_0x14_LevelArea_Sno => ReadOffset<int>(0x14); //      Flags=1  
@@ -2529,7 +2532,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLevelAreaServerData : MemoryWrapper
     {
-        public int SizeOf = 864; // 0x360
+        public const int SizeOf = 864; // 0x360
         public int _1_0x0_LevelArea_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public NativeGizmoLocSet _2_0x8_Object => ReadObject<NativeGizmoLocSet>(0x8); //      Flags=1  
         public int _3_0x348_LevelArea_Sno => ReadOffset<int>(0x348); //      Flags=1  
@@ -2542,7 +2545,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeGizmoLocSet : MemoryWrapper
     {
-        public int SizeOf = 832; // 0x340
+        public const int SizeOf = 832; // 0x340
         public List<NativeGizmoLocSpawnType> _1_0x0_FixedArray => ReadObjects<NativeGizmoLocSpawnType>(0x0, 52); //      Flags=1  
     }
 
@@ -2550,7 +2553,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLevelAreaSpawnPopulation : MemoryWrapper
     {
-        public int SizeOf = 152; // 0x98
+        public const int SizeOf = 152; // 0x98
         public string _1_0x0_String => ReadString(0x0); //      Flags=1  
         public int _2_0x40_int => ReadOffset<int>(0x40); //      Flags=1  
         public float _3_0x44_float => ReadOffset<float>(0x44); //      Flags=1  
@@ -2569,7 +2572,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeGizmoLocSpawnType : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public List<NativeGizmoLocSpawnEntry> _1_0x0_VariableArray => ReadSerializedObjects<NativeGizmoLocSpawnEntry>(0x0, 0x8); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _2_0x8_SerializeData => ReadObject<NativeSerializeData>(0x8);
     }
@@ -2578,7 +2581,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLevelAreaSpawnGroup : MemoryWrapper
     {
-        public int SizeOf = 56; // 0x38
+        public const int SizeOf = 56; // 0x38
         public DensityType _1_0x0_Enum => ReadOffset<DensityType>(0x0); //      Flags=17  SymbolTable=@26702088 Max=1
         public float _2_0x4_float => ReadOffset<float>(0x4); //      Flags=1  
         public float _3_0x8_float => ReadOffset<float>(0x8); //      Flags=1  
@@ -2595,7 +2598,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeGizmoLocSpawnEntry : MemoryWrapper
     {
-        public int SizeOf = 40; // 0x28
+        public const int SizeOf = 40; // 0x28
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -2610,7 +2613,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLevelAreaSpawnItem : MemoryWrapper
     {
-        public int SizeOf = 32; // 0x20
+        public const int SizeOf = 32; // 0x20
         public NativeSNOName _1_0x0_Object => ReadObject<NativeSNOName>(0x0); //      Flags=1  
         public MonsterQuality _2_0x8_Enum => ReadOffset<MonsterQuality>(0x8); //      Flags=17  SymbolTable=@26701376 Max=7
         public int _3_0xC_int => ReadOffset<int>(0xC); //      Flags=1  
@@ -2624,7 +2627,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeGizmoLocSpawnChoice : MemoryWrapper
     {
-        public int SizeOf = 20; // 0x14
+        public const int SizeOf = 20; // 0x14
         public NativeSNOName _1_0x0_Object => ReadObject<NativeSNOName>(0x0); //      Flags=1  
         public int _2_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
         public float _3_0xC_float => ReadOffset<float>(0xC); //      Flags=1  
@@ -2635,7 +2638,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativePower : SnoTableEntry
     {
-        public int SizeOf = 1120; // 0x460
+        public const int SizeOf = 1120; // 0x460
         public string _1_0xC_String => ReadString(0xC); //      Flags=2049  
         public NativePowerDef _2_0x50_Object => ReadObject<NativePowerDef>(0x50); //      Flags=1  
         public int _3_0x328_int => ReadOffset<int>(0x328); //      Flags=17  Max=1
@@ -2653,7 +2656,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativePowerDef : MemoryWrapper
     {
-        public int SizeOf = 728; // 0x2D8
+        public const int SizeOf = 728; // 0x2D8
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         //    public TagMap _2_0x8_TagMap => ReadOffset<TagMap>(0x8); //    VarArrSerializeOffsetDiff=-8   Flags=33  
         public NativeSerializeData _3_0x10_SerializeData => ReadObject<NativeSerializeData>(0x10);
@@ -2686,7 +2689,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeScriptFormulaDetails : MemoryWrapper
     {
-        public int SizeOf = 776; // 0x308
+        public const int SizeOf = 776; // 0x308
         public string _1_0x0_String => ReadString(0x0); //      Flags=1  
         public string _2_0x100_String => ReadString(0x100); //      Flags=1  
         public int _3_0x300_int => ReadOffset<int>(0x300); //      Flags=1  
@@ -2697,7 +2700,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeBuffDef : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeBuffFilterDef> _2_0x8_VariableArray => ReadSerializedObjects<NativeBuffFilterDef>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
     }
@@ -2706,7 +2709,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeBuffFilterDef : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
         public int _1_0x0_Power_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
     }
@@ -2715,7 +2718,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTreasureClass : SnoTableEntry
     {
-        public int SizeOf = 48; // 0x30
+        public const int SizeOf = 48; // 0x30
                                 // Unknown index=1 @Offset0xC Type=DT_HIGHPRECISIONPERCENT BaseType=DT_NULL //      Flags=1  
         public int _2_0x10_int => ReadOffset<int>(0x10); //      Flags=1  
         public int _3_0x14_int => ReadOffset<int>(0x14); //      Flags=1  
@@ -2728,7 +2731,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLootDropModifier : MemoryWrapper
     {
-        public int SizeOf = 132; // 0x84
+        public const int SizeOf = 132; // 0x84
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_TreasureClass_Sno => ReadOffset<int>(0x4); //      Flags=1  
                                                                      // Unknown index=3 @Offset0x8 Type=DT_HIGHPRECISIONPERCENT BaseType=DT_NULL //      Flags=1  
@@ -2751,7 +2754,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeItemSpecifierData : MemoryWrapper
     {
-        public int SizeOf = 56; // 0x38
+        public const int SizeOf = 56; // 0x38
         public int _1_0x0_Items_GameBalanceId => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public List<int> _3_0x8_FixedArray => ReadArray<int>(0x8, 6); //      Flags=1  
@@ -2767,7 +2770,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeAct : SnoTableEntry
     {
-        public int SizeOf = 4192; // 0x1060
+        public const int SizeOf = 4192; // 0x1060
         public NativeSerializeData _1_0xC_SerializeData => ReadObject<NativeSerializeData>(0xC);
         public List<NativeActQuestInfo> _2_0x18_VariableArray => ReadSerializedObjects<NativeActQuestInfo>(0x18, 0xC); //    VarArrSerializeOffsetDiff=-12   Flags=33  
         public List<NativeWaypointInfo> _3_0x20_FixedArray => ReadObjects<NativeWaypointInfo>(0x20, 100); //      Flags=1  
@@ -2779,7 +2782,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeActQuestInfo : MemoryWrapper
     {
-        public int SizeOf = 4; // 0x4
+        public const int SizeOf = 4; // 0x4
         public int _1_0x0_Quest_Sno => ReadOffset<int>(0x0); //      Flags=1  
     }
 
@@ -2787,7 +2790,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeWaypointInfo : MemoryWrapper
     {
-        public int SizeOf = 40; // 0x28
+        public const int SizeOf = 40; // 0x28
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_Worlds_Sno => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_LevelArea_Sno => ReadOffset<int>(0x8); //      Flags=1  
@@ -2803,7 +2806,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeResolvedPortalDestination : MemoryWrapper
     {
-        public int SizeOf = 12; // 0xC
+        public const int SizeOf = 12; // 0xC
         public int _1_0x0_Worlds_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_LevelArea_Sno => ReadOffset<int>(0x8); //      Flags=1  
@@ -2813,7 +2816,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeActStartLocOverride : MemoryWrapper
     {
-        public int SizeOf = 24; // 0x18
+        public const int SizeOf = 24; // 0x18
         public NativeResolvedPortalDestination _1_0x0_Object => ReadObject<NativeResolvedPortalDestination>(0x0); //      Flags=1  
         public int _2_0xC_QuestRange_Sno => ReadOffset<int>(0xC); //      Flags=1  
         public int _3_0x10_Worlds_Sno => ReadOffset<int>(0x10); //      Flags=1  
@@ -2824,7 +2827,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeAccount : SnoTableEntry
     {
-        public int SizeOf = 32; // 0x20
+        public const int SizeOf = 32; // 0x20
         public NativeSerializeData _1_0xC_SerializeData => ReadObject<NativeSerializeData>(0xC);
         public string _2_0x18_SerializedString => ReadSerializedString(0x18, 0xC); //    VarArrSerializeOffsetDiff=-12   Flags=32  
     }
@@ -2833,7 +2836,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeScene : SnoTableEntry
     {
-        public int SizeOf = 528; // 0x210
+        public const int SizeOf = 528; // 0x210
         public int _1_0xC_int => ReadOffset<int>(0xC); //      Flags=524289  
         public NativeAABB _2_0x10_Object => ReadObject<NativeAABB>(0x10);
         public NativeAABB _3_0x28_Object => ReadObject<NativeAABB>(0x28);
@@ -2857,7 +2860,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeNavMeshDef : MemoryWrapper
     {
-        public int SizeOf = 40; // 0x28
+        public const int SizeOf = 40; // 0x28
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -2872,7 +2875,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeNavZoneDefinition : MemoryWrapper
     {
-        public int SizeOf = 136; // 0x88
+        public const int SizeOf = 136; // 0x88
         public int _1_0x0_NativeNavCell => ReadOffset<int>(0x0); //    VarArrSerializeOffsetDiff=16   Flags=65536  
         public List<NativeNavCell> _2_0x8_VariableArray => ReadSerializedObjects<NativeNavCell>(0x8, 0x10); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _3_0x10_SerializeData => ReadObject<NativeSerializeData>(0x10);
@@ -2897,7 +2900,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeNavMeshSquare : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
         public float _1_0x0_float => ReadOffset<float>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
     }
@@ -2906,7 +2909,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeNavCell : MemoryWrapper
     {
-        public int SizeOf = 32; // 0x20
+        public const int SizeOf = 32; // 0x20
         public Vector3 _1_0x0_Vector3 => ReadOffset<Vector3>(0x0); //      Flags=1  
         public Vector3 _2_0xC_Vector3 => ReadOffset<Vector3>(0xC); //      Flags=1  
                                                                    // Unknown index=3 @Offset0x18 Type=DT_WORD BaseType=DT_NULL //      Flags=1  
@@ -2918,7 +2921,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeNavCellLookup : MemoryWrapper
     {
-        public int SizeOf = 4; // 0x4
+        public const int SizeOf = 4; // 0x4
                                // Unknown index=1 @Offset0x0 Type=DT_WORD BaseType=DT_NULL //      Flags=1  
                                // Unknown index=2 @Offset0x2 Type=DT_WORD BaseType=DT_NULL //      Flags=1  
     }
@@ -2927,7 +2930,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeNavGridSquare : MemoryWrapper
     {
-        public int SizeOf = 6; // 0x6
+        public const int SizeOf = 6; // 0x6
                                // Unknown index=1 @Offset0x0 Type=DT_WORD BaseType=DT_NULL //      Flags=1  
                                // Unknown index=2 @Offset0x2 Type=DT_WORD BaseType=DT_NULL //      Flags=1  
                                // Unknown index=3 @Offset0x4 Type=DT_WORD BaseType=DT_NULL //      Flags=1  
@@ -2937,7 +2940,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeNavCellBorderData : MemoryWrapper
     {
-        public int SizeOf = 4; // 0x4
+        public const int SizeOf = 4; // 0x4
                                // Unknown index=1 @Offset0x0 Type=DT_WORD BaseType=DT_NULL //      Flags=1  
                                // Unknown index=2 @Offset0x2 Type=DT_WORD BaseType=DT_NULL //      Flags=1  
     }
@@ -2946,7 +2949,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSceneGroup : SnoTableEntry
     {
-        public int SizeOf = 40; // 0x28
+        public const int SizeOf = 40; // 0x28
         public int _1_0xC_NativeSceneGroupItem => ReadOffset<int>(0xC); //    VarArrSerializeOffsetDiff=4   Flags=65536  
         public NativeSerializeData _2_0x10_SerializeData => ReadObject<NativeSerializeData>(0x10);
         public List<NativeSceneGroupItem> _3_0x18_VariableArray => ReadSerializedObjects<NativeSceneGroupItem>(0x18, 0x10); //    VarArrSerializeOffsetDiff=-8   Flags=33  
@@ -2957,7 +2960,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSceneGroupItem : MemoryWrapper
     {
-        public int SizeOf = 12; // 0xC
+        public const int SizeOf = 12; // 0xC
         public int _1_0x0_Scene_Sno => ReadOffset<int>(0x0); //      Flags=257  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_Labels_GameBalanceId => ReadOffset<int>(0x8); //      Flags=1  
@@ -2967,7 +2970,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeWorlds : SnoTableEntry
     {
-        public int SizeOf = 184; // 0xB8
+        public const int SizeOf = 184; // 0xB8
         public int _1_0xC_int => ReadOffset<int>(0xC); //      Flags=17  Max=1
         public NativeSerializeData _2_0x10_SerializeData => ReadObject<NativeSerializeData>(0x10);
         public List<NativeWorldServerData> _3_0x18_VariableArray => ReadSerializedObjects<NativeWorldServerData>(0x18, 0x10); //    VarArrSerializeOffsetDiff=-8   Flags=1057  
@@ -2983,7 +2986,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeWorldServerData : MemoryWrapper
     {
-        public int SizeOf = 144; // 0x90
+        public const int SizeOf = 144; // 0x90
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeDRLGParams> _2_0x8_VariableArray => ReadSerializedObjects<NativeDRLGParams>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=33  
         public NativeSerializeData _3_0x10_SerializeData => ReadObject<NativeSerializeData>(0x10);
@@ -3003,7 +3006,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeEnvironment : MemoryWrapper
     {
-        public int SizeOf = 76; // 0x4C
+        public const int SizeOf = 76; // 0x4C
                                 // Unknown index=1 @Offset0x0 Type=DT_RGBACOLOR BaseType=DT_NULL //      Flags=1  
         public NativePostFXParams _2_0x4_Object => ReadObject<NativePostFXParams>(0x4); //      Flags=1  
         public int _3_0x24_Actor_Sno => ReadOffset<int>(0x24); //      Flags=1  
@@ -3022,7 +3025,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeDRLGParams : MemoryWrapper
     {
-        public int SizeOf = 120; // 0x78
+        public const int SizeOf = 120; // 0x78
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public List<NativeTileInfo> _2_0x8_VariableArray => ReadSerializedObjects<NativeTileInfo>(0x8, 0x0); //    VarArrSerializeOffsetDiff=-8   Flags=35  
         public int _3_0x40_NativeDRLGCommand => ReadOffset<int>(0x40); //    VarArrSerializeOffsetDiff=4   Flags=65536  
@@ -3038,7 +3041,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSceneParams : MemoryWrapper
     {
-        public int SizeOf = 24; // 0x18
+        public const int SizeOf = 24; // 0x18
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
         public int _2_0x8_NativeSceneChunk => ReadOffset<int>(0x8); //    VarArrSerializeOffsetDiff=-8   Flags=65536  
         public List<NativeSceneChunk> _3_0x10_VariableArray => ReadSerializedObjects<NativeSceneChunk>(0x10, 0x0); //    VarArrSerializeOffsetDiff=-16   Flags=33  
@@ -3048,7 +3051,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLabelRuleSet : MemoryWrapper
     {
-        public int SizeOf = 24; // 0x18
+        public const int SizeOf = 24; // 0x18
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public List<NativeLabelRule> _2_0x8_VariableArray => ReadSerializedObjects<NativeLabelRule>(0x8, 0x10); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _3_0x10_SerializeData => ReadObject<NativeSerializeData>(0x10);
@@ -3058,7 +3061,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSceneClusterSet : MemoryWrapper
     {
-        public int SizeOf = 24; // 0x18
+        public const int SizeOf = 24; // 0x18
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public List<NativeSceneCluster> _2_0x8_VariableArray => ReadSerializedObjects<NativeSceneCluster>(0x8, 0x10); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _3_0x10_SerializeData => ReadObject<NativeSerializeData>(0x10);
@@ -3068,7 +3071,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativePostFXParams : MemoryWrapper
     {
-        public int SizeOf = 32; // 0x20
+        public const int SizeOf = 32; // 0x20
         public List<float> _1_0x0_FixedArray => ReadArray<float>(0x0, 4); //      Flags=1  
         public List<float> _2_0x10_FixedArray => ReadArray<float>(0x10, 4); //      Flags=1  
     }
@@ -3077,7 +3080,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTileInfo : MemoryWrapper
     {
-        public int SizeOf = 80; // 0x50
+        public const int SizeOf = 80; // 0x50
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_Scene_Sno => ReadOffset<int>(0x8); //      Flags=1  
@@ -3092,7 +3095,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeDRLGCommand : MemoryWrapper
     {
-        public int SizeOf = 152; // 0x98
+        public const int SizeOf = 152; // 0x98
         public string _1_0x0_String => ReadString(0x0); //      Flags=1  
         public int _2_0x80_int => ReadOffset<int>(0x80); //      Flags=1  
         public NativeSerializeData _3_0x84_SerializeData => ReadObject<NativeSerializeData>(0x84);
@@ -3103,7 +3106,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSceneChunk : MemoryWrapper
     {
-        public int SizeOf = 256; // 0x100
+        public const int SizeOf = 256; // 0x100
         public NativeSNOName _1_0x0_Object => ReadObject<NativeSNOName>(0x0); //      Flags=1  
         public NativePRTransform _2_0x8_Object => ReadObject<NativePRTransform>(0x8); //      Flags=1  
         public NativeSceneSpecification _3_0x24_Object => ReadObject<NativeSceneSpecification>(0x24); //      Flags=1  
@@ -3113,7 +3116,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLabelRule : MemoryWrapper
     {
-        public int SizeOf = 176; // 0xB0
+        public const int SizeOf = 176; // 0xB0
         public string _1_0x0_String => ReadString(0x0); //      Flags=1  
         public NativeLabelCondition _2_0x80_Object => ReadObject<NativeLabelCondition>(0x80); //      Flags=1  
         public int _3_0x98_int => ReadOffset<int>(0x98); //      Flags=1  
@@ -3126,7 +3129,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSceneCluster : MemoryWrapper
     {
-        public int SizeOf = 184; // 0xB8
+        public const int SizeOf = 184; // 0xB8
         public string _1_0x0_String => ReadString(0x0); //      Flags=1  
         public int _2_0x80_int => ReadOffset<int>(0x80); //      Flags=1  
         public int _3_0x84_int => ReadOffset<int>(0x84); //      Flags=1  
@@ -3139,7 +3142,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeCustomTileInfo : MemoryWrapper
     {
-        public int SizeOf = 40; // 0x28
+        public const int SizeOf = 40; // 0x28
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=17  Max=2
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -3152,7 +3155,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativePRTransform : MemoryWrapper
     {
-        public int SizeOf = 28; // 0x1C
+        public const int SizeOf = 28; // 0x1C
         public NativeQuaternion _1_0x0_Object => ReadObject<NativeQuaternion>(0x0); //      Flags=1  
         public Vector3 _2_0x10_Vector3 => ReadOffset<Vector3>(0x10); //      Flags=1  
     }
@@ -3161,7 +3164,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSceneSpecification : MemoryWrapper
     {
-        public int SizeOf = 220; // 0xDC
+        public const int SizeOf = 220; // 0xDC
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public Vector2 _2_0x4_Vector2 => ReadOffset<Vector2>(0x4); //      Flags=1  
         public List<NativeLevelArea> _3_0xC_FixedArray => ReadObjects<NativeLevelArea>(0xC, 4); //      Flags=1  
@@ -3187,8 +3190,8 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLabelCondition : MemoryWrapper
     {
-        public int SizeOf = 24; // 0x18
-        
+        public const int SizeOf = 24; // 0x18
+
         //public _1_0x0_Enum => ReadOffset<>(0x0); //      Flags=17  SymbolTable=@26705624 Max=3
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=524289  
         public List<int> _3_0x8_FixedArray => ReadArray<int>(0x8, 4); //      Flags=1  
@@ -3198,7 +3201,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeLabelEntry : MemoryWrapper
     {
-        public int SizeOf = 20; // 0x14
+        public const int SizeOf = 20; // 0x14
         public int _1_0x0_Labels_GameBalanceId => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=524289  
         public float _3_0x8_float => ReadOffset<float>(0x8); //      Flags=1  
@@ -3210,7 +3213,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSubSceneGroup : MemoryWrapper
     {
-        public int SizeOf = 32; // 0x20
+        public const int SizeOf = 32; // 0x20
         public int _1_0x0_Condition_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -3222,7 +3225,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeCustomTileCell : MemoryWrapper
     {
-        public int SizeOf = 36; // 0x24
+        public const int SizeOf = 36; // 0x24
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=17  Max=1
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -3235,7 +3238,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeQuaternion : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public Vector3 _1_0x0_Vector3 => ReadOffset<Vector3>(0x0); //      Flags=1  
         public float _2_0xC_float => ReadOffset<float>(0xC); //      Flags=1  
     }
@@ -3244,7 +3247,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSceneCachedValues : MemoryWrapper
     {
-        public int SizeOf = 80; // 0x50
+        public const int SizeOf = 80; // 0x50
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -3258,7 +3261,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSubSceneEntry : MemoryWrapper
     {
-        public int SizeOf = 32; // 0x20
+        public const int SizeOf = 32; // 0x20
         public int _1_0x0_Scene_Sno => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -3270,7 +3273,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSubSceneLabel : MemoryWrapper
     {
-        public int SizeOf = 8; // 0x8
+        public const int SizeOf = 8; // 0x8
         public int _1_0x0_AxeBadData_GameBalanceId => ReadOffset<int>(0x0); //      Flags=1  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
     }
@@ -3279,7 +3282,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeSkillKit : SnoTableEntry
     {
-        public int SizeOf = 64; // 0x40
+        public const int SizeOf = 64; // 0x40
         public List<NativeTraitEntry> _1_0x10_VariableArray => ReadSerializedObjects<NativeTraitEntry>(0x10, 0x18); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _2_0x18_SerializeData => ReadObject<NativeSerializeData>(0x18);
         public List<NativeActiveSkillEntry> _3_0x20_VariableArray => ReadSerializedObjects<NativeActiveSkillEntry>(0x20, 0x28); //    VarArrSerializeOffsetDiff=8   Flags=33  
@@ -3292,7 +3295,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeTraitEntry : MemoryWrapper
     {
-        public int SizeOf = 16; // 0x10
+        public const int SizeOf = 16; // 0x10
         public int _1_0x0_Power_Sno => ReadOffset<int>(0x0); //      Flags=257  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  
@@ -3303,7 +3306,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     [CompilerGenerated]
     public class NativeActiveSkillEntry : MemoryWrapper
     {
-        public int SizeOf = 64; // 0x40
+        public const int SizeOf = 64; // 0x40
         public int _1_0x0_Power_Sno => ReadOffset<int>(0x0); //      Flags=257  
         public int _2_0x4_int => ReadOffset<int>(0x4); //      Flags=1  
         public int _3_0x8_int => ReadOffset<int>(0x8); //      Flags=1  

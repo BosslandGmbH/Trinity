@@ -41,7 +41,7 @@ namespace Trinity.Framework.Objects.Memory.Sno
         }
 
         /// <summary>
-        /// Creates a dictionary to maps SnoEntryId (values given elsewhere to find sno groups) and EntityId (array index in sno group)        
+        /// Creates a dictionary to map SnoEntryId (values given elsewhere to find sno groups) and EntityId (array index in sno group)        
         /// </summary>
         private void CreateIndex<T>(SnoType groupType, SnoGroup<T> snoGroup, int groupNum) where T : SnoTableEntry, new()
         {

@@ -178,7 +178,7 @@ namespace Trinity.Framework.Objects
     public enum UseTime
     {
         [Description("Use when it seems like a good idea")]
-        AnyTime = 0,
+        Default = 0,
 
         [Description("Whenever Possible")]
         Always,

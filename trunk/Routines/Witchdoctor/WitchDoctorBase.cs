@@ -500,10 +500,16 @@ namespace Trinity.Routines.Witchdoctor
         protected virtual TrinityPower WallOfDeath(TrinityActor target)
             => new TrinityPower(Skills.WitchDoctor.WallOfDeath, 65f, target.AcdId);
 
+        protected virtual TrinityPower WallOfDeath(Vector3 position)
+            => new TrinityPower(SNOPower.Witchdoctor_WallOfZombies, 65f, position);
+
         protected virtual TrinityPower Piranhas(TrinityActor target)
             => new TrinityPower(Skills.WitchDoctor.Piranhas, 45f, target.AcdId);
 
         // Voodoo
+
+        protected virtual TrinityPower Gargantuan()
+            => new TrinityPower(Skills.WitchDoctor.Gargantuan);
 
         protected virtual TrinityPower Gargantuan(Vector3 position)
             => new TrinityPower(Skills.WitchDoctor.Gargantuan, 45f, position);
@@ -639,10 +645,10 @@ namespace Trinity.Routines.Witchdoctor
             Vector3 position;
 
             if (ShouldSummonZombieDogs(out position))
-                power = SummonZombieDogs(position);
+                power = IsInCombat ? SummonZombieDogs(position) : SummonZombieDogs();
 
             else if (ShouldGargantuan(out position))
-                power = Gargantuan(position);
+                power = IsInCombat ? Gargantuan(position) : Gargantuan();
 
             else if (ShouldSpiritWalk())
                 power = SpiritWalk();

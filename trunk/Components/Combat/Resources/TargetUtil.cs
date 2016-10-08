@@ -1880,9 +1880,11 @@ namespace Trinity.Components.Combat.Resources
                     select u).Sum(u => u.RiftValuePct);
         }
 
-        public static Vector3 Centroid(List<Vector3> points)
+        public static Vector3 Centroid(IEnumerable<Vector3> points)
         {
-            var result = points.Aggregate(Vector3.Zero, (current, point) => current + point);
+            var result = Vector3.Zero;
+            foreach (var point in points)
+                result = result + point;
             result /= points.Count();
             return result;
         }
@@ -2117,7 +2119,7 @@ namespace Trinity.Components.Combat.Resources
             return result;
         }
 
-        public static IEnumerable<TrinityActor> FindPets(PetType pet0, float withinRange, Vector3 ofLocation = default(Vector3), bool ownedByMe = true)
+        public static IEnumerable<TrinityActor> FindPets(PetType pet0, float withinRange = 500f, Vector3 ofLocation = default(Vector3), bool ownedByMe = true)
         {
             if (ofLocation == Vector3.Zero)
                 ofLocation = Player.Position;
@@ -2140,6 +2142,7 @@ namespace Trinity.Components.Combat.Resources
         {
             return Players.Any(condition);
         }
+
 
     }
 

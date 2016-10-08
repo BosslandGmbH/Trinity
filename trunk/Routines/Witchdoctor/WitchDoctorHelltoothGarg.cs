@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
@@ -8,10 +9,12 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Trinity.Reference;
 using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
+using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Framework.Helpers.Logger;
 
@@ -53,6 +56,12 @@ namespace Trinity.Routines.Witchdoctor
             TrinityPower power;
             TrinityActor target;
 
+            // Recast gargs if they are being lazy.
+            var myGargs = TargetUtil.FindPets(PetType.Gargantuan);
+            var distGargsToTarget = TargetUtil.Centroid(myGargs.Select(g => g.Position)).Distance(CurrentTarget.Position);
+            if (distGargsToTarget > 30f && Player.PrimaryResourcePct > 0.5f && Skills.WitchDoctor.Gargantuan.CanCast())
+                return Gargantuan(CurrentTarget.Position);
+                
             var bestDpsTarget = TargetUtil.BestAoeUnit(35f, true);
             Vector3 bestDpsPosition;
 
@@ -150,12 +159,22 @@ namespace Trinity.Routines.Witchdoctor
         protected override TrinityPower WallOfDeath(TrinityActor target)
             => new TrinityPower(SNOPower.Witchdoctor_WallOfZombies, 45, target.Position);
 
+        protected override TrinityPower WallOfDeath(Vector3 position)
+            => new TrinityPower(SNOPower.Witchdoctor_WallOfZombies, 45, position);
+
         protected override TrinityPower Haunt(TrinityActor target)
             => new TrinityPower(SNOPower.Witchdoctor_Haunt, 35f, target.AcdId);
 
         #endregion
 
-        public TrinityPower GetBuffPower() => DefaultBuffPower();
+        public TrinityPower GetBuffPower()
+        {
+            if (Skills.WitchDoctor.WallOfDeath.CanCast() && IsInCombatOrBeingAttacked)
+                return WallOfDeath(TargetUtil.GetBestClusterPoint());
+
+            return DefaultBuffPower();
+        }
+
         public TrinityPower GetDefensivePower() => null;
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
         public TrinityPower GetMovementPower(Vector3 destination) => Walk(destination);

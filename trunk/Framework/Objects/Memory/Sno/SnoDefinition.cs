@@ -11,5 +11,7 @@ namespace Trinity.Framework.Objects.Memory.Sno
         public int Size => ReadOffset<int>(0x08);
         public T Value => ReadPointer<T>(0x0C);
         public IntPtr ValuePtr => ReadOffset<IntPtr>(0x0C);
+
+        public override string ToString() => $"{GetType().Name}: {Value}";
     }
 }

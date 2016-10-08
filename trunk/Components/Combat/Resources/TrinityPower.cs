@@ -47,6 +47,8 @@ namespace Trinity.Components.Combat.Resources
 
         public double WaitTimeAfterRemaining => Math.Max(0, WaitAfterUseMs - TimeSinceUseMs);
 
+        public bool AssignedInDifferentWorld => TargetDynamicWorldId != Core.Player.WorldDynamicId;
+
         public bool IsInteractPower => GameData.InteractPowers.Contains(SNOPower);
 
         public void SetTarget(TrinityActor target)

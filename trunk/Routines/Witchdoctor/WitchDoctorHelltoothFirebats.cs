@@ -24,7 +24,7 @@ namespace Trinity.Routines.Witchdoctor
         #region Definition
 
         public string DisplayName => "Helltooth Firebats";
-        public string Description => "Specialized combat for channellling firebats with helltooth set.";
+        public string Description => "Specialized combat for channelling firebats with helltooth set.";
         public string Author => "xzjv";
         public string Version => "0.1";
         public string Url => "http://www.diablofans.com/builds/82419-2-4-2-helltooth-firebats-dps-105";
@@ -241,23 +241,27 @@ namespace Trinity.Routines.Witchdoctor
             return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 15f));
         }
 
-        public bool _kamakazi = false;
-
         public TrinityPower GetBuffPower()
         {
             Vector3 position;
 
             if (ShouldSummonZombieDogs(out position))
-                return SummonZombieDogs(position);
+                return IsInCombat ? SummonZombieDogs(position) : SummonZombieDogs();
 
             if (ShouldGargantuan(out position))
-                return Gargantuan(position);
+                return IsInCombat ? Gargantuan(position) : Gargantuan();
+
+            if (Settings.SpiritWalk.UseMode == UseTime.Always && !Player.IsInTown && Skills.WitchDoctor.SpiritWalk.CanCast())
+                return SpiritWalk();
 
             if (ShouldSpiritWalk())
                 return SpiritWalk();
 
             if (ShouldFetishArmy())
                 return FetishArmy();
+
+            if (Skills.WitchDoctor.WallOfDeath.CanCast() && IsInCombatOrBeingAttacked)
+                return WallOfDeath(TargetUtil.GetBestClusterPoint());
 
             return null;
         }
@@ -280,6 +284,7 @@ namespace Trinity.Routines.Witchdoctor
         {
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private SkillSettings _spiritWalk;
 
             [DefaultValue(8)]
             public int ClusterSize
@@ -293,6 +298,23 @@ namespace Trinity.Routines.Witchdoctor
             {
                 get { return _emergencyHealthPct; }
                 set { SetField(ref _emergencyHealthPct, value); }
+            }
+
+            public SkillSettings SpiritWalk
+            {
+                get { return _spiritWalk; }
+                set { SetField(ref _spiritWalk, value); }
+            }
+
+            private static readonly SkillSettings DefaultSpiritWalkSettings = new SkillSettings
+            {
+                UseMode = UseTime.Default,
+            };
+
+            public override void LoadDefaults()
+            {
+                base.LoadDefaults();
+                SpiritWalk = DefaultSpiritWalkSettings.Clone();
             }
 
             #region IDynamicSetting

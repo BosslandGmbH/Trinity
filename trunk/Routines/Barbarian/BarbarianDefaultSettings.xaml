@@ -65,7 +65,7 @@
                     <StackPanel>
                         <WrapPanel Margin="0,5,0,10">
                             <RadioButton ToolTip="Use vault whenever it makes sense"
-                                Content="Anytime" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AnyTime}"  />
+                                Content="Anytime" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
                             <RadioButton ToolTip="Use only while fighting monsters"
                                 Content="In combat" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
                             <RadioButton  ToolTip="Use only while NOT fighting monsters"

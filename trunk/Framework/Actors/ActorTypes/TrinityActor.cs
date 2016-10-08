@@ -198,9 +198,12 @@ namespace Trinity.Framework.Actors.ActorTypes
         public string DebugAvoidanceFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.AvoidanceFlags.ToString();
         public string DebugNavCellFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.NodeFlags.ToString();
         public bool IsInAvoidance => Core.Avoidance.Grid.IsLocationInFlags(Position, AvoidanceFlags.Avoidance);
+        public bool IsInCriticalAvoidance => Core.Avoidance.InCriticalAvoidance(Position);
         public bool IsFacingPlayer => TargetUtil.IsFacing(this, Core.Player.Position, 30f);
         public double CacheTime => Math.Abs(UpdateTime) < double.Epsilon ? CreateTime : UpdateTime;
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;
+        public bool IsAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.Avoidance);
+        public bool IsCriticalAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.CriticalAvoidance);
 
 
 

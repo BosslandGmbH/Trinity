@@ -134,18 +134,37 @@ namespace Trinity.Components.Combat
             {
                 var routinePower = routine.GetOffensivePower();
 
-                // The routine may want us attack something other than current target, like best cluster, whatever.
-                // But for goblin kamakazi we need a special exception to force it to always target the goblin.
-                if (CurrentTarget.IsTreasureGoblin && Core.Settings.Weighting.GoblinPriority == GoblinPriority.Kamikaze)
-                {
-                    Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {CurrentTarget}");
-                    routinePower.SetTarget(CurrentTarget);
-                }
+                TrinityPower kamakaziPower;
+                if (TryKamakaziPower(target, routinePower, out kamakaziPower))
+                    return kamakaziPower;
 
                 return routinePower;
             }
 
             return null;
+        }
+
+        private static bool TryKamakaziPower(TrinityActor target, TrinityPower routinePower, out TrinityPower power)
+        {
+            // The routine may want us attack something other than current target, like best cluster, whatever.
+            // But for goblin kamakazi we need a special exception to force it to always target the goblin.
+
+            power = null;
+            if (target.IsTreasureGoblin && Core.Settings.Weighting.GoblinPriority == GoblinPriority.Kamikaze)
+            {
+                Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
+
+                var kamaKaziPower = RoutineBase.DefaultPower;
+                if (routinePower != null)
+                {
+                    routinePower.SetTarget(target);
+                    kamaKaziPower = routinePower;
+                }
+               
+                power = kamaKaziPower;
+                return true;              
+            }
+            return false;
         }
 
         public TrinityPower InteractPower(TrinityActor actor, int waitBefore, int waitAfter, float addedRange = 0)
