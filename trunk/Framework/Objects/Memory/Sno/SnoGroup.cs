@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Buddy.Auth.Math;
 using Trinity.Framework.Objects.Enums;
@@ -11,7 +13,17 @@ namespace Trinity.Framework.Objects.Memory.Sno
     public class SnoGroup<T> : MemoryWrapper where T : SnoTableEntry, new()
     {
         public Container<SnoDefinition<T>> Container => ReadPointer<Container<SnoDefinition<T>>>(0x10);
-        public SnoType SnoGroupId => ReadOffset<SnoType>(0x3C);
+
+        public IEnumerable<T> Entries
+        {
+            get
+            {
+                var thisGroupId = (int)SnoType;
+                return Container.Where(i => i.SnoGroupId == thisGroupId).Select(v => v.Value);
+            }
+        }
+
+        public SnoType SnoType => ReadOffset<SnoType>(0x3C);
         public int InvalidSnoId => ReadOffset<int>(0x80);
         public int ItemSize => ReadOffset<int>(0x68);
         public int Limit => ReadOffset<int>(0x64);

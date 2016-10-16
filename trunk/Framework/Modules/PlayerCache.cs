@@ -20,6 +20,8 @@ namespace Trinity.Framework.Modules
 {
     public class PlayerCache : Module
     {
+        public int ActorSnoId { get; set; }
+
         public SummonInfo Summons = new SummonInfo();
         public TrinityPlayer Actor { get; set; } = new TrinityPlayer();
         public int AcdId { get; private set; }

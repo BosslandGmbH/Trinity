@@ -7,7 +7,7 @@ namespace Trinity.Framework.Objects
 {
     public class Module
     {
-        public string Name { get; }
+        public string Name { get; set; }
 
         public UpdateStats Stats { get; }
 

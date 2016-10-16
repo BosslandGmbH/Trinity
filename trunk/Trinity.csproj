@@ -126,7 +126,9 @@
     <Compile Include="Framework\Helpers\ProjectionEqualityComparer.cs" />
     <Compile Include="Framework\Helpers\EasyXmlSerializer.cs" />
     <Compile Include="Framework\Modules\ChangeMonitor.cs" />
+    <Compile Include="Framework\Modules\HeroDataCache.cs" />
     <Compile Include="Framework\Modules\ItemLogger.cs" />
+    <Compile Include="Framework\Modules\PowerDataCache.cs" />
     <Compile Include="Framework\Modules\SessionLogger.cs" />
     <Compile Include="Framework\Objects\Api\ApiBuild.cs" />
     <Compile Include="Framework\Objects\Api\ApiRoutineBuilder.cs" />
@@ -137,9 +139,20 @@
     <Compile Include="Framework\Objects\Api\ApiSet.cs" />
     <Compile Include="Framework\Objects\Api\ApiSkill.cs" />
     <Compile Include="Framework\Objects\DynamicSetting.cs" />
+    <Compile Include="Framework\Objects\Enums\TagType.cs" />
     <Compile Include="Framework\Objects\Memory\ActivePlayer.cs" />
     <Compile Include="Framework\Objects\Memory\Containers\Allocator.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\Map.cs" />
+    <Compile Include="Framework\Objects\Memory\Reference\ReferenceGenerator.cs" />
+    <Compile Include="Framework\Objects\Memory\Reference\ReferenceHelper.cs" />
+    <Compile Include="Framework\Objects\Memory\Reference\Tags.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\MapDataType.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\TagMapItem.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\MapManager.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\PtrTable.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\PowerMap.cs" />
     <Compile Include="Framework\Objects\Memory\Games.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\Helpers\PowerHelper.cs" />
     <Compile Include="Framework\Objects\Memory\Sno\Types\GameBalanceCollection.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXItemButton.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXButton.cs" />
@@ -154,6 +167,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Routines\Advanced\MrRobotSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Barbarian\BarbarianIKHotaSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -207,6 +224,7 @@
     </Page>
     <Compile Include="Routines\Advanced\MrRobotRoutine.cs" />
     <Compile Include="Routines\Barbarian\BarbarianBase.cs" />
+    <Compile Include="Routines\Barbarian\BarbarianIKHota.cs" />
     <Compile Include="Routines\Barbarian\BarbarianWastesBulkathos.cs" />
     <Compile Include="Routines\Barbarian\BarbarianEarthLeap.cs" />
     <Compile Include="Routines\Barbarian\BarbarianRaekorSpear.cs" />
@@ -391,7 +409,7 @@
     <Compile Include="Components\Adventurer\Util\SafeFrameLock.cs" />
     <Compile Include="Components\Combat\Combat.cs" />
     <Compile Include="Components\Combat\Resources\CombatMode.cs" />
-    <Compile Include="Components\Combat\Resources\TargettingInfo.cs" />
+    <Compile Include="Components\Combat\Resources\TargetingInfo.cs" />
     <Compile Include="Framework\Actors\ActorTypes\TrinityItem.cs" />
     <Compile Include="Framework\Actors\Properties\ItemProperties.cs" />
     <Compile Include="Framework\Actors\Properties\GizmoProperties.cs" />
@@ -560,7 +578,7 @@
     <Compile Include="Framework\Objects\Memory\Attributes\AttributeItem.cs" />
     <Compile Include="Framework\Objects\Memory\Containers\ExpandoContainer.cs" />
     <Compile Include="Framework\Objects\Memory\Attributes\AttributeManager.cs" />
-    <Compile Include="Framework\Objects\Memory\Containers\Map.cs" />
+    <Compile Include="Framework\Objects\Memory\Containers\BasicMap.cs" />
     <Compile Include="Framework\Objects\Memory\Misc\Ptr.cs" />
     <Compile Include="Framework\Objects\Memory\MemoryWrapper.cs" />
     <Compile Include="Framework\Objects\Memory\Containers\Table.cs" />

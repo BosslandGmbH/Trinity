@@ -12,7 +12,23 @@ namespace Trinity.Framework.Avoidance
 {
     public class AvoidanceDefinitions : FieldCollection<AvoidanceDefinitions, AvoidanceDefinition>
     {
+
         /*
+
+
+        Raziel Boss
+             1388: IsLootRunBoss (-2708) i:1 f:0 Value=1 
+             800: UsingBossbar (-3296) i:1 f:0 Value=1 
+                Proj 
+                InternalName => g_ChargedBolt_Projectile-314133
+                ActorSnoId => 4394
+                 1249: ProjectileDetonateTime (-2847) i:794745 f:0 Value=794745 
+
+        Bone warlock boss projectile
+            InternalName => SkeletonSummoner_projectile-300033
+            ActorSnoId => 5392
+            1249: ProjectileDetonateTime(-2847) i:759285 f:0 Value=759285              
+   
         // Blood Pools
         [Trinity 2.50.238] -- Dumping Attribtues for x1_Bog_bloodSpring_large-301223 (Sno=332923 Ann=-1444543456) at <255.3765, 629.3062, -2> ----
         [Trinity 2.50.238] Attributes (9) Id=1088/2054423616 
@@ -291,6 +307,21 @@ namespace Trinity.Framework.Avoidance
             }
         };
 
+        /*
+        InternalNameLowerCase => monsteraffix_molten_deathstart_proxy-395571
+        Attributes => Attributes (4) Id=136/1543897224 
+         105: Invulnerable (-3991) i:1 f:0 Value=1 
+         103: TeamId (-3993) i:10 f:0 Value=10 
+         877: PowerBuff4VisualEffectNone (-3219) [ PowerSnoId: MonsterAffix_Molten: 90314 ] i:1 f:0 Value=1 
+         585: BuffVisualEffect (-3511) i:1 f:0 Value=1 
+         CollisionRadius => 1
+        AxialRadius => 5.587935E-09
+        ActorType => ServerProp
+        ActorType:ServerProp ApperanceSNO:14322 PhysMeshSNO:-1 Cylinder:Position:<0.007729018, -0.006169997, -0.007890721> 
+        Ax1:5.587935E-09 Ax2:9 Sphere:Center:<0, 0, 0> Radius:9 AABB:Min:<0, 0, 0> Max:<0.1593657, 0.1593657, 3.53863E-17> 
+        AnimSetSNO:-1 SNOMonster:-1
+        */
+
         public static AvoidanceDefinition MoltenCore = new AvoidanceDefinition
         {
             Id = (int) AvoidanceType.MoltenCore,
@@ -315,7 +346,7 @@ namespace Trinity.Framework.Avoidance
                     Name = "Telegraph",
                     InternalName = "monsterAffix_Molten_deathStart_Proxy",
                     ActorSnoId = 4803,
-                    Radius = 20f,
+                    Radius = 22f,
                     Duration = TimeSpan.FromSeconds(3),
                     Type = PartType.Telegraph
                 },
@@ -324,7 +355,7 @@ namespace Trinity.Framework.Avoidance
                     Name = "Explosion",
                     InternalName = "monsterAffix_Molten_deathExplosion_Proxy",
                     ActorSnoId = 4804,
-                    Radius = 20f,
+                    Radius = 22f,
                     Delay = TimeSpan.FromSeconds(3),
                     Duration = TimeSpan.FromSeconds(1),
                     Type = PartType.Main
@@ -334,7 +365,7 @@ namespace Trinity.Framework.Avoidance
                     Name = "Explosion",
                     InternalName = "monsterAffix_molten_fireRing",
                     ActorSnoId = 224225,
-                    Radius = 20f,
+                    Radius = 22f,
                     Delay = TimeSpan.FromSeconds(3),
                     Duration = TimeSpan.FromSeconds(1),
                     Type = PartType.Main
@@ -465,7 +496,7 @@ namespace Trinity.Framework.Avoidance
         //Line 259: [1F4A52DC] Type: ClientEffect Name: X1_Unique_Monster_Generic_AOE_Sphere_Distortion-211338 ActorSnoId: 358917, Distance: 2.384186E-07
         //Line 260: [1F472980] Type: ServerProp Name: X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot-211337 ActorSnoId: 359693, Distance: 2.384186E-07
         //Line 271: [1F490598] Type: ServerProp Name: X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot-211250 ActorSnoId: 359693, Distance: 29.45315
-
+        
         public static AvoidanceDefinition ButcherBoss = new AvoidanceDefinition
         {
             Id = (int) AvoidanceType.ButcherBoss,

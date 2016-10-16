@@ -50,8 +50,8 @@ namespace Trinity.Framework.Behaviors
 
         private async Task<bool> Move()
         {
-            Logger.LogVerbose($"Moving to Actor: {Actor}");
-            await CommonCoroutines.MoveTo(Actor.Position, Actor.Name);
+            Logger.LogVerbose($"Moving to Actor: {Actor} {Actor.Position}");
+            PlayerMover.MoveTo(Actor.Position);
             return true;
         }        
 

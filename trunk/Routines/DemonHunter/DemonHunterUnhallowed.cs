@@ -35,6 +35,18 @@ namespace Trinity.Routines.DemonHunter
         public string Version => "0.1";
         public string Url => "http://www.icy-veins.com/d3/demon-hunter-multishot-fire-build-with-yangs-recurve-patch-2-4-2-season-7";
 
+        /// <summary>
+        /// The amount of time spent pausing between kite movements, during this time the bot will be free to attack.
+        /// A longer duration will result in more damage dealt but also more damage taken.
+        /// </summary>
+        public override int KiteStutterDuration => 1500;
+
+        /// <summary>
+        /// The amount of time spent kiting before pausing to 'stutter'.
+        /// A longer delay will result in the bot moving further away each time it kites.
+        /// </summary>
+        public override int KiteStutterDelay => 1000;
+
         public Build BuildRequirements => new Build
         {            
             Sets = new Dictionary<Set, SetBonus>

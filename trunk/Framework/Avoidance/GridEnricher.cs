@@ -81,6 +81,7 @@ namespace Trinity.Framework.Avoidance
 
                 if (Grid.NearestNode == null || Grid.NearestNode.DynamicWorldId != ZetaDia.WorldId)
                 {
+                    Logger.LogError(LogCategory.Avoidance, $"No Player Nearest Node or WorldId Mismatch");
                     return;
                 }
 
@@ -140,29 +141,29 @@ namespace Trinity.Framework.Avoidance
                             var handler = avoidance.Definition.Handler;
                             if (handler == null)
                             {
-                                Logger.LogError($"Avoidance: {avoidance.Definition.Name} has no handler");
+                                Logger.LogError(LogCategory.Avoidance, $"Avoidance: {avoidance.Definition.Name} has no handler");
                                 continue;
                             }
 
                             if (avoidance.IsAllowed)
                             {
+                                handler.UpdateNodes(Grid, avoidance);
+
                                 avoidance.Actors.ForEach(a =>
                                 {
                                     activeAvoidanceSnoIds.Add(a.ActorSnoId);
-                                    Core.DBGridProvider.AddCellWeightingObstacle(a.ActorSnoId, a.CollisionRadius);                                
-                                });
-
-                                handler.UpdateNodes(Grid, avoidance);
-                                //Logger.Warn($"Avoidance Flagged {avoidance.Definition.Name}");
+                                    Core.DBGridProvider.AddCellWeightingObstacle(a.ActorSnoId, a.CollisionRadius);
+                                    //Logger.Warn(LogCategory.Avoidance, $"Avoidance Flagged {a} for {avoidance.Definition.Name}, handler={avoidance.Definition.Handler.GetType().Name}");
+                                });                                                                
                             }
                             else
                             {
-                                //Logger.Warn($"Avoidance {avoidance.Definition.Name} is not allowed. Enabled={avoidance.Settings.IsEnabled} PlayerHealth={Core.Player.CurrentHealthPct * 100} SettingsHealth={avoidance.Settings.HealthPct} ");
+                                //Logger.Warn(LogCategory.Avoidance, $"Avoidance {avoidance.Definition.Name} is not allowed. Enabled={avoidance.Settings.IsEnabled} IsAllowed={avoidance.IsAllowed} PlayerHealth={Core.Player.CurrentHealthPct * 100} SettingsHealth={avoidance.Settings.HealthPct} ");
                             }
                         }
                         catch (Exception ex)
                         {
-                            Logger.LogError($"Exception in AvoidanceHandler updating nodes. Name={avoidance.Definition?.Name} Handler={avoidance.Definition.Handler?.GetType()} {ex} {Environment.StackTrace}");
+                            Logger.LogError(LogCategory.Avoidance, $"Exception in AvoidanceHandler updating nodes. Name={avoidance.Definition?.Name} Handler={avoidance.Definition?.Handler?.GetType()} {ex} {Environment.StackTrace}");
                         }
                     }
 

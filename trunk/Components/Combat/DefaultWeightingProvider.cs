@@ -56,12 +56,11 @@ namespace Trinity.Components.Combat
             {
                 #region Variables
 
-
                 var deadPlayer = false;
                 try
                 {
                     deadPlayer = ZetaDia.Service.Party.NumPartyMembers < 1 &&
-                                    ZetaDia.Actors.GetActorsOfType<DiaPlayer>().Any(x => x.IsDead);
+                                 ZetaDia.Actors.GetActorsOfType<DiaPlayer>().Any(x => x.IsDead);
                 }
                 catch
                 {
@@ -89,7 +88,7 @@ namespace Trinity.Components.Combat
 
                 var isHealthEmergency = (Core.Player.CurrentHealthPct <= Combat.Routines.Current.EmergencyHealthPct);
 
-                var isGateNearby = Core.Actors.AllRActors.Any(r => r.Distance <= 40f && r.ActorSnoId == (int)SNOActor.x1_Fortress_Portal_Switch);
+                var isGateNearby = Core.Actors.AllRActors.Any(r => r.Distance <= 40f && r.ActorSnoId == (int) SNOActor.x1_Fortress_Portal_Switch);
 
                 var shouldIgnorePackSize = Combat.Routines.Current.ShouldIgnorePackSize();
 
@@ -145,7 +144,7 @@ namespace Trinity.Components.Combat
                     }
 
                     string reason;
-                    if(!ShouldIgnoreElite(unit, out reason))
+                    if (!ShouldIgnoreElite(unit, out reason))
                         elites.Add(unit);
                 }
 
@@ -201,161 +200,156 @@ namespace Trinity.Components.Combat
                 //    }
                 //}
 
-                var routine = Combat.Routines.Current;                
+                var routine = Combat.Routines.Current;
 
                 TrinityActor bestTarget = null;
 
                 try
                 {
+                    #region Foreach Loop
 
-                #region Foreach Loop
+                    var playerInCriticalAvoidance = Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position);
+                    var leaderTarget = Combat.Party.Leader != null ? PartyHelper.FindLocalActor(Combat.Party.Leader.Target) : null;
+                    var isLeader = Combat.Party.Leader?.IsMe ?? false;
 
 
-
-
-
-                var leaderTarget = Combat.Party.Leader != null ? PartyHelper.FindLocalActor(Combat.Party.Leader.Target) : null;
-                var isLeader = Combat.Party.Leader?.IsMe ?? false;
-
-                
-                foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
-                {
-                    if (cacheObject == null || !cacheObject.IsValid || cacheObject.Type == TrinityObjectType.Unknown)
-                        continue;
-
-                    cacheObject.Weight = 0;
-                    cacheObject.WeightInfo = string.Empty;
-                    var reason = string.Empty;
-
-                    if (routine != null && routine.SetWeight(cacheObject))
+                    foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
                     {
-                        bestTarget = GetNewBestTarget(cacheObject, bestTarget);
-                        continue;
-                    }
-
-                    if (Combat.Routines.Current.ShouldIgnoreNonUnits() && !cacheObject.IsUnit)
-                    {
-                        cacheObject.WeightInfo += "FocussingUnits";
-                        continue;
-                    }
-
-                    if (PlayerMover.IsCompletelyBlocked)
-                    {
-                        cacheObject.WeightInfo += "PlayerBlocked";
-
-                        //if (Core.Settings.Combat.Misc.AttackWhenBlocked)
-                        //{
-                        if (!cacheObject.IsUnit)
-                        {
-                            cacheObject.Weight = 0;
-                            cacheObject.WeightInfo += "Ignoring because we are blocked. ";
+                        if (cacheObject == null || !cacheObject.IsValid || cacheObject.Type == TrinityObjectType.Unknown)
                             continue;
-                        }
-                        if (cacheObject.Distance > 12f)
-                        {
-                            cacheObject.Weight = 0;
-                            cacheObject.WeightInfo += "Ignoring Blocked Far Away ";
-                            continue;
-                        }
-                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} because we are Blocked.";
-                        cacheObject.Weight = MaxWeight + ObjectDistanceFormula(cacheObject);
-                        bestTarget = GetNewBestTarget(cacheObject, bestTarget);
-                        continue;
-                        //}
-                    }
 
-                    if (IsDoingGoblinKamakazi)
-                    {
-                        if (cacheObject.RActorId == KamakaziGoblin.RActorId && !isStuck)
+                        cacheObject.Weight = 0;
+                        cacheObject.WeightInfo = string.Empty;
+                        var reason = string.Empty;
+
+                        if (routine != null && routine.SetWeight(cacheObject))
                         {
-                            cacheObject.Weight = MaxWeight;
-                            cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Goblin Kamakazi Run ";
                             bestTarget = GetNewBestTarget(cacheObject, bestTarget);
-                            break;
-                        }
-                        continue;
-                    }
-
-                    if (isGateNearby && !cacheObject.IsWalkable)
-                    {
-                        cacheObject.Weight = 0;
-                        cacheObject.WeightInfo += "Ignoring Unwalkable by Death Gate ";
-                        continue;
-                    }
-
-                    if (cacheObject.IsUnit && cacheObject.Distance < 35f)
-                    {
-                        if (!cacheObject.HasBeenInLoS)
-                        {
-                            cacheObject.Weight = 0;
-                            cacheObject.WeightInfo += "Ignoring - Hasn't been in line of sight";
                             continue;
                         }
-                    }
-                    else if (cacheObject.IsDestroyable)
-                    {
-                        if (!cacheObject.HasBeenWalkable && cacheObject.GizmoType != GizmoType.BreakableDoor && cacheObject.GizmoType != GizmoType.Door && cacheObject.Type != TrinityObjectType.Barricade)
+
+                        if (Combat.Routines.Current.ShouldIgnoreNonUnits() && !cacheObject.IsUnit)
                         {
-                            cacheObject.Weight = 0;
-                            cacheObject.WeightInfo += "Ignoring - Destroyable hasn't been Walkable";
+                            cacheObject.WeightInfo += "FocussingUnits";
                             continue;
                         }
-                    }
-                    else if (cacheObject.Distance > 15f && !cacheObject.HasBeenWalkable && !cacheObject.IsItem && cacheObject.Type != TrinityObjectType.ProgressionGlobe && cacheObject.Type == TrinityObjectType.Door)
-                    {
-                        cacheObject.Weight = 0;
-                        cacheObject.WeightInfo += "Ignoring - Hasn't been Walkable";
-                        continue;
-                    }
 
-                    var item = cacheObject as TrinityItem;
+                        if (PlayerMover.IsCompletelyBlocked)
+                        {
+                            cacheObject.WeightInfo += "PlayerBlocked";
 
-                    //if (!Settings.Advanced.BetaPlayground && Core.Avoidance.InCriticalAvoidance(cacheObject.Position) || Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
-                    //{
-                    //    cacheObject.Weight = 0;
-                    //    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Intersected by Critical Avoidance.";
-                    //    continue;
-                    //}
+                            //if (Core.Settings.Combat.Misc.AttackWhenBlocked)
+                            //{
+                            if (!cacheObject.IsUnit)
+                            {
+                                cacheObject.Weight = 0;
+                                cacheObject.WeightInfo += "Ignoring because we are blocked. ";
+                                continue;
+                            }
+                            if (cacheObject.Distance > 12f)
+                            {
+                                cacheObject.Weight = 0;
+                                cacheObject.WeightInfo += "Ignoring Blocked Far Away ";
+                                continue;
+                            }
+                            cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} because we are Blocked.";
+                            cacheObject.Weight = MaxWeight + ObjectDistanceFormula(cacheObject);
+                            bestTarget = GetNewBestTarget(cacheObject, bestTarget);
+                            continue;
+                            //}
+                        }
 
-                    cacheObject.Weight = MinWeight;
-                    switch (cacheObject.Type)
-                    {
+                        if (IsDoingGoblinKamakazi)
+                        {
+                            if (cacheObject.RActorId == KamakaziGoblin.RActorId && !isStuck)
+                            {
+                                cacheObject.Weight = MaxWeight;
+                                cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Goblin Kamakazi Run ";
+                                bestTarget = GetNewBestTarget(cacheObject, bestTarget);
+                                break;
+                            }
+                            continue;
+                        }
 
-                        #region Unit
+                        if (isGateNearby && !cacheObject.IsWalkable)
+                        {
+                            cacheObject.Weight = 0;
+                            cacheObject.WeightInfo += "Ignoring Unwalkable by Death Gate ";
+                            continue;
+                        }
 
-                        case TrinityObjectType.Unit:
+                        if (cacheObject.IsUnit && cacheObject.Distance < 35f)
+                        {
+                            if (!cacheObject.HasBeenInLoS)
+                            {
+                                cacheObject.Weight = 0;
+                                cacheObject.WeightInfo += "Ignoring - Hasn't been in line of sight";
+                                continue;
+                            }
+                        }
+                        else if (cacheObject.IsDestroyable)
+                        {
+                            if (!cacheObject.HasBeenWalkable && cacheObject.GizmoType != GizmoType.BreakableDoor && cacheObject.GizmoType != GizmoType.Door && cacheObject.Type != TrinityObjectType.Barricade)
+                            {
+                                cacheObject.Weight = 0;
+                                cacheObject.WeightInfo += "Ignoring - Destroyable hasn't been Walkable";
+                                continue;
+                            }
+                        }
+                        else if (cacheObject.Distance > 15f && !cacheObject.HasBeenWalkable && !cacheObject.IsItem && cacheObject.Type != TrinityObjectType.ProgressionGlobe && cacheObject.Type == TrinityObjectType.Door)
+                        {
+                            cacheObject.Weight = 0;
+                            cacheObject.WeightInfo += "Ignoring - Hasn't been Walkable";
+                            continue;
+                        }
+
+                        var item = cacheObject as TrinityItem;
+
+
+                        //if (!Settings.Advanced.BetaPlayground && Core.Avoidance.InCriticalAvoidance(cacheObject.Position) || Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
+                        //{
+                        //    cacheObject.Weight = 0;
+                        //    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Intersected by Critical Avoidance.";
+                        //    continue;
+                        //}
+
+                        cacheObject.Weight = MinWeight;
+                        switch (cacheObject.Type)
+                        {
+                                #region Unit
+
+                            case TrinityObjectType.Unit:
                             {
                                 #region Unit Variables
 
                                 //bool isInHotSpot = GroupHotSpots.CacheObjectIsInHotSpot(cacheObject) || cacheObject.IsNavBlocking();
 
                                 bool elitesInRangeOfUnit = objects.Any(
-                                                                u =>
-                                                                    u.AcdId != cacheObject.AcdId &&
-                                                                    u.IsElite &&
-                                                                    u.Position.Distance2D(cacheObject.Position) <= 15f);
+                                    u =>
+                                        u.AcdId != cacheObject.AcdId &&
+                                        u.IsElite &&
+                                        u.Position.Distance2D(cacheObject.Position) <= 15f);
 
                                 int nearbyTrashCount =
                                     objects.Count(u => u.IsUnit && u.HitPoints > 0 && u.IsTrashMob &&
-                                                            cacheObject.Position.Distance(u.Position) <=
-                                                            20f);
+                                                       cacheObject.Position.Distance(u.Position) <=
+                                                       20f);
 
                                 //bool ignoreSummoner = cacheObject.IsSummoner && !Core.Settings.Combat.Misc.ForceKillSummoners;
                                 //bool ignoreSummoner = cacheObject.IsSummoner && !Core.Settings.Combat.Misc.ForceKillSummoners;
 
                                 var isBoss = cacheObject.MonsterQuality ==
-                                                MonsterQuality.Boss;
+                                             MonsterQuality.Boss;
                                 var isUnique = cacheObject.MonsterQuality ==
-                                                MonsterQuality.Unique;
+                                               MonsterQuality.Unique;
                                 var isRare = cacheObject.MonsterQuality ==
-                                                MonsterQuality.Rare;
+                                             MonsterQuality.Rare;
                                 var isMinion = cacheObject.MonsterQuality ==
-                                                MonsterQuality.Minion;
+                                               MonsterQuality.Minion;
                                 var isChampion = cacheObject.MonsterQuality ==
-                                                    MonsterQuality.Champion;
+                                                 MonsterQuality.Champion;
 
                                 #endregion
-
 
                                 // Only ignore monsters we have a rift value for and below the settings threshold.
                                 //if (RiftProgression.IsInRift && cacheObject.RiftValuePct > 0 &&
@@ -420,6 +414,15 @@ namespace Trinity.Components.Combat
                                     break;
                                 }
 
+                                //TargettingInfo targetingInfo;
+                                //TargetHistory.TryGetValue(bestTarget.ObjectHash, out targetingInfo)
+
+                                if (Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, Core.Player.Position, AvoidanceFlags.ClosedDoor))
+                                {
+                                    cacheObject.WeightInfo += $"Ignoring Behind Closed Door";
+                                    break;
+                                }
+
                                 //if (Core.Player.InActiveEvent && objects.Any(o => o.IsEventObject))
                                 //{
                                 //    Vector3 eventObjectPosition = objects.FirstOrDefault(o => o.IsEventObject).Position;
@@ -462,7 +465,7 @@ namespace Trinity.Components.Combat
 
                                 if (!cacheObject.IsBoss && !cacheObject.IsTreasureGoblin &&
                                     LastTargetRActorGuid != cacheObject.RActorId &&
-                                    !cacheObject.IsMinimapActive && 
+                                    !cacheObject.IsMinimapActive &&
                                     !cacheObject.IsQuestMonster && !cacheObject.IsBountyObjective &&
                                     cacheObject.RadiusDistance > killRange && !isQuestNpc)
                                 {
@@ -492,7 +495,7 @@ namespace Trinity.Components.Combat
 
                                 #endregion
 
-                                if (Core.Player.CurrentSceneSnoId == 28768 && cacheObject.ActorSnoId == (int)SNOActor.x1_Tentacle_Goatman_Melee_A && !cacheObject.IsMinimapActive)
+                                if (Core.Player.CurrentSceneSnoId == 28768 && cacheObject.ActorSnoId == (int) SNOActor.x1_Tentacle_Goatman_Melee_A && !cacheObject.IsMinimapActive)
                                 {
                                     cacheObject.WeightInfo += "Invisible Goat in Cow King rift event ";
                                     cacheObject.Weight = 0;
@@ -514,6 +517,20 @@ namespace Trinity.Components.Combat
                                     cacheObject.Weight = MinWeight;
                                     break;
                                 }
+
+                                //if (!cacheObject.IsElite)
+                                //{
+                                //    if (Core.Settings.Weighting.EliteWeighting == SettingMode.Disabled)
+                                //    {
+                                //        cacheObject.WeightInfo += $"Ignore(Trash=Disabled)";
+                                //        break;
+                                //    }
+                                //    if (Core.Settings.Weighting.EliteWeighting == SettingMode.Selective && !Core.StuckHandler.IsStuck)
+                                //    {
+                                //        cacheObject.WeightInfo += $"Ignore(Trash=DisabledUnlessStuck)";
+                                //        break;
+                                //    }
+                                //}
 
                                 //if (cacheObject.IsInvulnerable &&
                                 //         Core.Settings.Combat.Misc.IgnoreMonstersWhileReflectingDamage)
@@ -560,7 +577,7 @@ namespace Trinity.Components.Combat
                                 //        cacheObject.InternalName);
                                 //}
 
-                                #region Trash Mob
+                                    #region Trash Mob
 
                                 else if (cacheObject.IsTrashMob)
                                 {
@@ -622,7 +639,7 @@ namespace Trinity.Components.Combat
                                     else if (Combat.CombatMode == CombatMode.Questing)
                                     {
                                         cacheObject.WeightInfo += $"Questing Mode - Ignoring Trash Pack Size Setting.";
-                                    }     
+                                    }
                                     else if (leaderTarget != null && !isLeader && leaderTarget.Distance < 60f && Combat.Party.Leader.IsInCombat)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring Trash Pack Size for Leader's Target";
@@ -632,9 +649,8 @@ namespace Trinity.Components.Combat
                                         cacheObject.WeightInfo += $"Routine Ignoring Trash Pack Size.";
                                     }
                                     else if (nearbyTrashCount < Combat.Routines.Current.ClusterSize && !Core.Minimap.MinimapIconAcdIds.Contains(cacheObject.AcdId) &&
-                                                !GameData.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat)
+                                             !GameData.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat)
                                     {
-
                                         cacheObject.WeightInfo += $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {Combat.Routines.Current.ClusterSize})";
                                         break;
                                     }
@@ -642,13 +658,12 @@ namespace Trinity.Components.Combat
                                         cacheObject.WeightInfo += $" All Filters Passed: Adding {cacheObject.InternalName} by Default.";
                                 }
 
-                                #endregion
+                                    #endregion
 
-                                #region Elite / Rares / Uniques
+                                    #region Elite / Rares / Uniques
 
                                 else if (isUnique || isBoss || isRare || isMinion || isChampion)
                                 {
-
                                     //XZ - Please add Ignore below health for elite.
                                     //if ((cacheObject.HitPointsPct <
                                     //     Settings.Combat.Misc.IgnoreEliteBelowHealthDoT) &&
@@ -722,7 +737,6 @@ namespace Trinity.Components.Combat
                                     //}
 
 
-
                                     cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} default Elite ";
                                     cacheObject.Weight += EliteFormula(cacheObject);
                                 }
@@ -745,7 +759,7 @@ namespace Trinity.Components.Combat
                                     leaderTargetBoost = 2;
                                 }
 
-                                cacheObject.Weight += (dist + last + pack + health + path + reflect + elite + aoe) * leaderTargetBoost;
+                                cacheObject.Weight += (dist + last + pack + health + path + reflect + elite + aoe)*leaderTargetBoost;
 
                                 cacheObject.WeightInfo +=
                                     $" dist={dist:0.0} last={last:0.0} pack={pack:0.0} health={health:0.0} path={path:0.0} reflect={reflect:0.0} elite={elite:0.0} aoe={aoe:0.0}";
@@ -753,15 +767,13 @@ namespace Trinity.Components.Combat
                                 break;
                             }
 
+                                #endregion
 
-                        #endregion
+                                #region Item
 
-                        #region Item
-
-                        case TrinityObjectType.BloodShard:
-                        case TrinityObjectType.Item:
+                            case TrinityObjectType.BloodShard:
+                            case TrinityObjectType.Item:
                             {
-
                                 if (item.TrinityItemType == TrinityItemType.HoradricRelic && Core.Player.BloodShards >= Core.Player.MaxBloodShards)
                                 {
                                     cacheObject.Weight = 0;
@@ -857,273 +869,283 @@ namespace Trinity.Components.Combat
                                 }
 
                                 cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                        EliteMonsterNearFormula(cacheObject, elites) +
-                                                        AoENearFormula(cacheObject) +
-                                                        AoEInPathFormula(cacheObject);
+                                                      EliteMonsterNearFormula(cacheObject, elites) +
+                                                      AoENearFormula(cacheObject) +
+                                                      AoEInPathFormula(cacheObject);
 
                                 break;
                             }
 
-                        #endregion
+                                #endregion
 
-                        #region Gold
-                        case TrinityObjectType.Gold:
+                                #region Gold
 
-                            if (!Core.Settings.Items.PickupGold)
-                            {
-                                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Pick Up Gold Setting.";
-                                break;
-                            }
+                            case TrinityObjectType.Gold:
 
-                            if (IgnoreWhenBlocked(cacheObject))
-                                break;
-
-                            if (IgnoreForTownPortal(cacheObject, usingTownPortal))
-                                break;
-
-                            if (IgnoreWhenInAvoidance(cacheObject))
-                                break;
-
-                            cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                    EliteMonsterNearFormula(cacheObject, elites) +
-                                                    AoENearFormula(cacheObject) +
-                                                    AoEInPathFormula(cacheObject);
-                            break;
-                        #endregion
-
-
-                        #region Globes
-
-                        case TrinityObjectType.PowerGlobe:
-                        case TrinityObjectType.HealthGlobe:
-                        case TrinityObjectType.ProgressionGlobe:
-
-                            if (Core.Settings.Weighting.GlobeWeighting == SettingMode.Disabled)
-                            {
-                                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Ignore Globes Setting.";
-                                break;
-                            }
-
-                            if (Core.Settings.Weighting.GlobeWeighting == SettingMode.Selective)
-                            {
-                                var globeType = GetGlobeType(cacheObject);
-                                if (!Core.Settings.Weighting.GlobeTypes.HasFlag(globeType))
+                                if (!Core.Settings.Items.PickupGold)
                                 {
-                                    cacheObject.WeightInfo += $"Ignore globe: {globeType} setting.";
+                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Pick Up Gold Setting.";
                                     break;
                                 }
-                            }
 
-                            if (cacheObject.Type == TrinityObjectType.ProgressionGlobe && cacheObject.Distance <= 180f)
-                            {
-                                cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Progression Globe.";
-                                cacheObject.Weight += MaxWeight;
+                                if (IgnoreWhenBlocked(cacheObject))
+                                    break;
+
+                                if (IgnoreForTownPortal(cacheObject, usingTownPortal))
+                                    break;
+
+                                if (IgnoreWhenInAvoidance(cacheObject))
+                                    break;
+
+                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                      EliteMonsterNearFormula(cacheObject, elites) +
+                                                      AoENearFormula(cacheObject) +
+                                                      AoEInPathFormula(cacheObject);
                                 break;
-                            }
 
-                            if (IgnoreWhenBlocked(cacheObject))
+                                #endregion
+
+                                #region Globes
+
+                            case TrinityObjectType.PowerGlobe:
+                            case TrinityObjectType.HealthGlobe:
+                            case TrinityObjectType.ProgressionGlobe:
+
+                                if (Core.Settings.Weighting.GlobeWeighting == SettingMode.Disabled)
+                                {
+                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Ignore Globes Setting.";
+                                    break;
+                                }
+
+                                if (Core.Settings.Weighting.GlobeWeighting == SettingMode.Selective)
+                                {
+                                    var globeType = GetGlobeType(cacheObject);
+                                    if (!Core.Settings.Weighting.GlobeTypes.HasFlag(globeType))
+                                    {
+                                        cacheObject.WeightInfo += $"Ignore globe: {globeType} setting.";
+                                        break;
+                                    }
+                                }
+
+                                if (playerInCriticalAvoidance)
+                                {
+                                    cacheObject.WeightInfo += "Ignoring: Player in CriticalAvoidance";
+                                    break;
+                                }
+
+                                if (cacheObject.Type == TrinityObjectType.ProgressionGlobe && cacheObject.Distance <= 180f)
+                                {
+                                    cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Progression Globe.";
+                                    cacheObject.Weight += MaxWeight;
+                                    break;
+                                }
+
+                                if (cacheObject.Type == TrinityObjectType.HealthGlobe)
+                                {
+                                    if (isHealthEmergency)
+                                    {
+                                        cacheObject.WeightInfo += $"Health Emergency";
+                                        cacheObject.Weight += (1d - Core.Player.PrimaryResource)*10000d + ObjectDistanceFormula(cacheObject) + EliteMonsterNearFormula(cacheObject, elites); // - PackDensityFormula(cacheObject, objects);
+                                        break;
+                                    }
+
+                                    if (Core.Player.CurrentHealthPct > 0.85f)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring Globe - We have plenty of Health: {Core.Player.CurrentHealthPct}";
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (IgnoreWhenBlocked(cacheObject))
+                                        break;
+
+                                    if (IgnoreForTownPortal(cacheObject, usingTownPortal))
+                                        break;
+                                }
+
+                                if (IgnoreWhenInAvoidance(cacheObject))
+                                    break;
+
+                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                      EliteMonsterNearFormula(cacheObject, elites) +
+                                                      AoENearFormula(cacheObject) +
+                                                      AoEInPathFormula(cacheObject);
                                 break;
 
-                            if (IgnoreForTownPortal(cacheObject, usingTownPortal))
-                                break;
+                                #endregion
 
-                            if (cacheObject.Type == TrinityObjectType.HealthGlobe)
-                            {
+                                #region Health Wells
+
+                            case TrinityObjectType.HealthWell:
+
+                                if (Core.Player.CurrentHealthPct > 0.7)
+                                {
+                                    cacheObject.WeightInfo += $"Ignoring - We have plenty of Health: {Core.Player.CurrentHealthPct}";
+                                    break;
+                                }
+
                                 if (isHealthEmergency)
                                 {
                                     cacheObject.WeightInfo += $"Health Emergency";
-                                    cacheObject.Weight += (1d - Core.Player.PrimaryResource) * 10000d + ObjectDistanceFormula(cacheObject) + EliteMonsterNearFormula(cacheObject, elites); // - PackDensityFormula(cacheObject, objects);
+                                    cacheObject.Weight += (1d - Core.Player.PrimaryResource)*5000d + EliteMonsterNearFormula(cacheObject, elites) - PackDensityFormula(cacheObject, objects);
                                     break;
                                 }
 
-                                if (Core.Player.CurrentHealthPct > 0.85f)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring Globe - We have plenty of Health: {Core.Player.CurrentHealthPct}";
-                                    break;
-                                }
-                            }
-
-                            if (IgnoreWhenInAvoidance(cacheObject))
+                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                      EliteMonsterNearFormula(cacheObject, elites) +
+                                                      AoENearFormula(cacheObject) +
+                                                      AoEInPathFormula(cacheObject);
                                 break;
 
-                            cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                    EliteMonsterNearFormula(cacheObject, elites) +
-                                                    AoENearFormula(cacheObject) +
-                                                    AoEInPathFormula(cacheObject);
-                            break;
-                        #endregion
+                            //case TrinityObjectType.HealthGlobe:
+                            //    {
+                            //        if (!Core.Settings.Combat.Misc.CollectHealthGlobe)
+                            //        {
+                            //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Collect Health Globe Setting.";
+                            //            break;
+                            //        }
 
-                        #region Health Wells
+                            //        if (cacheObject.Distance > Core.Settings.Combat.Misc.HealthGlobeSearchDistance)
+                            //        {
+                            //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Health Globe Search Distance.";
+                            //            break;
+                            //        }
 
-                        case TrinityObjectType.HealthWell:
+                            //        //Ignore because we are blocked by objects or mobs.
+                            //        if (PlayerMover.IsCompletelyBlocked)
+                            //        {
+                            //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                            //            break;
+                            //        }
 
-                            if (Core.Player.CurrentHealthPct > 0.7)
-                            {
-                                cacheObject.WeightInfo += $"Ignoring - We have plenty of Health: {Core.Player.CurrentHealthPct}";
-                                break;
-                            }
+                            //        //Ignore because we are TownPortaling
+                            //        if (usingTownPortal)
+                            //        {
+                            //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                            //            break;
+                            //        }
 
-                            if (isHealthEmergency)
-                            {
-                                cacheObject.WeightInfo += $"Health Emergency";
-                                cacheObject.Weight += (1d - Core.Player.PrimaryResource) * 5000d + EliteMonsterNearFormula(cacheObject, elites) - PackDensityFormula(cacheObject, objects);
-                                break;
-                            }
+                            //        if (Core.Settings.Loot.Pickup.IgnoreHealthGlobesInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
+                            //        {
+                            //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - In Avoidance.";
+                            //            break;
+                            //        }
 
-                            cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                    EliteMonsterNearFormula(cacheObject, elites) +
-                                                    AoENearFormula(cacheObject) +
-                                                    AoEInPathFormula(cacheObject);
-                            break;
+                            //        if (CombatBase.KiteMode != KiteMode.Never)
+                            //        {
+                            //            if (Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, Core.Player.Position, AvoidanceFlags.Avoidance))
+                            //            {
+                            //                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Kiting with Monster Obstacles.";
+                            //                break;
+                            //            }
+                            //            if (Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
+                            //            {
+                            //                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Kiting with Time Bound Avoidance.";
+                            //                break;
+                            //            }
+                            //        }
 
-                        //case TrinityObjectType.HealthGlobe:
-                        //    {
-                        //        if (!Core.Settings.Combat.Misc.CollectHealthGlobe)
-                        //        {
-                        //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Collect Health Globe Setting.";
-                        //            break;
-                        //        }
+                            //        if (Core.Player.CurrentHealthPct > CombatBase.EmergencyHealthGlobeLimit)
+                            //        {
+                            //            //XZ - Add gui Variable for Party MemberHealth
+                            //            if (
+                            //                objects.Any(
+                            //                    p => p.Type == TrinityObjectType.Player && p.RActorId != Core.Player.RActorGuid))
+                            //            {
+                            //                var minPartyHealth =
+                            //                    objects.Where(
+                            //                        p =>
+                            //                            p.Type == TrinityObjectType.Player &&
+                            //                            p.RActorId != Core.Player.RActorGuid)
+                            //                        .Min(p => p.HitPointsPct);
+                            //                if (minPartyHealth <= 25)
+                            //                {
+                            //                    cacheObject.WeightInfo +=
+                            //                        $"Adding {cacheObject.InternalName} - Party Health Below Threshold";
+                            //                    cacheObject.Weight += hiPriorityHealthGlobes
+                            //                        ? MaxWeight
+                            //                        : (1d - minPartyHealth) * 5000d +
+                            //                          EliteMonsterNearFormula(cacheObject, elites) -
+                            //                          PackDensityFormula(cacheObject, objects);
+                            //                    break;
+                            //                }
+                            //            }
 
-                        //        if (cacheObject.Distance > Core.Settings.Combat.Misc.HealthGlobeSearchDistance)
-                        //        {
-                        //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Health Globe Search Distance.";
-                        //            break;
-                        //        }
+                            //            var myHealth = Core.Player.CurrentHealthPct;
+                            //            // DH's logic with Blood Vengeance passive
+                            //            if (Core.Player.ActorClass == ActorClass.DemonHunter &&
+                            //                Core.Player.PrimaryResource <= 10 &&
+                            //                Core.Hotbar.PassiveSkills.Contains(
+                            //                    SNOPower.DemonHunter_Passive_Vengeance))
+                            //            {
+                            //                cacheObject.WeightInfo +=
+                            //                    $"Adding {cacheObject.InternalName} - Reapes Wraps.";
+                            //                cacheObject.Weight += hiPriorityHealthGlobes
+                            //                    ? MaxWeight
+                            //                    : (1d - Core.Player.PrimaryResource) * 5000d +
+                            //                      EliteMonsterNearFormula(cacheObject, elites) -
+                            //                      PackDensityFormula(cacheObject, objects);
+                            //                break;
+                            //            }
 
-                        //        //Ignore because we are blocked by objects or mobs.
-                        //        if (PlayerMover.IsCompletelyBlocked)
-                        //        {
-                        //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
-                        //            break;
-                        //        }
+                            //            // WD's logic with Gruesome Feast passive
+                            //            if (Core.Player.ActorClass == ActorClass.Witchdoctor &&
+                            //                Core.Player.PrimaryResource <= 1200 &&
+                            //                Core.Hotbar.PassiveSkills.Contains(
+                            //                    SNOPower.Witchdoctor_Passive_GruesomeFeast))
+                            //            {
+                            //                cacheObject.WeightInfo +=
+                            //                    $"Adding {cacheObject.InternalName} - Gruesome Feast PickUp.";
+                            //                cacheObject.Weight += hiPriorityHealthGlobes
+                            //                    ? MaxWeight
+                            //                    : (1d - Core.Player.PrimaryResource) * 5000d +
+                            //                      EliteMonsterNearFormula(cacheObject, elites) -
+                            //                      PackDensityFormula(cacheObject, objects);
+                            //                break;
+                            //            }
 
-                        //        //Ignore because we are TownPortaling
-                        //        if (usingTownPortal)
-                        //        {
-                        //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
-                        //            break;
-                        //        }
+                            //            //Reapers Wraps Equipped
+                            //            if (Legendary.ReapersWraps.IsEquipped && Core.Player.PrimaryResource <= 50)
+                            //            {
+                            //                cacheObject.WeightInfo +=
+                            //                    $"Adding {cacheObject.InternalName} - Reapers Wraps.";
+                            //                cacheObject.Weight += hiPriorityHealthGlobes
+                            //                    ? MaxWeight
+                            //                    : (1d - Core.Player.PrimaryResource) * 5000d +
+                            //                      EliteMonsterNearFormula(cacheObject, elites) -
+                            //                      PackDensityFormula(cacheObject, objects);
+                            //                break;
+                            //            }
+                            //            if (ZetaDia.Me.HitpointsCurrentPct > TrinityPluginSettings.Settings.Combat.Misc.HealthGlobeLevel)
+                            //            {
+                            //                cacheObject.WeightInfo +=
+                            //                    $"Ignoring {cacheObject.InternalName} - Over health globe Threshold.";
+                            //                break;
+                            //            }
+                            //        }
+                            //        else
+                            //        {
+                            //            cacheObject.WeightInfo +=
+                            //                $"Maxxing {cacheObject.InternalName} - Player.CurrentHealthPct < CombatBase.EmergencyHealthGlobeLimit.";
+                            //            cacheObject.Weight = MaxWeight;
+                            //            break;
+                            //        }
 
-                        //        if (Core.Settings.Loot.Pickup.IgnoreHealthGlobesInAoE && Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
-                        //        {
-                        //            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - In Avoidance.";
-                        //            break;
-                        //        }
+                            //        cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                            //                              //LastTargetFormula(cacheObject) +
+                            //                              EliteMonsterNearFormula(cacheObject, elites) +
+                            //                              AoENearFormula(cacheObject) +
+                            //                              AoEInPathFormula(cacheObject);
+                            //        break;
+                            //    }
 
-                        //        if (CombatBase.KiteMode != KiteMode.Never)
-                        //        {
-                        //            if (Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, Core.Player.Position, AvoidanceFlags.Avoidance))
-                        //            {
-                        //                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Kiting with Monster Obstacles.";
-                        //                break;
-                        //            }
-                        //            if (Core.Avoidance.Grid.IsLocationInFlags(cacheObject.Position, AvoidanceFlags.Avoidance))
-                        //            {
-                        //                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Kiting with Time Bound Avoidance.";
-                        //                break;
-                        //            }
-                        //        }
+                                #endregion
 
-                        //        if (Core.Player.CurrentHealthPct > CombatBase.EmergencyHealthGlobeLimit)
-                        //        {
-                        //            //XZ - Add gui Variable for Party MemberHealth
-                        //            if (
-                        //                objects.Any(
-                        //                    p => p.Type == TrinityObjectType.Player && p.RActorId != Core.Player.RActorGuid))
-                        //            {
-                        //                var minPartyHealth =
-                        //                    objects.Where(
-                        //                        p =>
-                        //                            p.Type == TrinityObjectType.Player &&
-                        //                            p.RActorId != Core.Player.RActorGuid)
-                        //                        .Min(p => p.HitPointsPct);
-                        //                if (minPartyHealth <= 25)
-                        //                {
-                        //                    cacheObject.WeightInfo +=
-                        //                        $"Adding {cacheObject.InternalName} - Party Health Below Threshold";
-                        //                    cacheObject.Weight += hiPriorityHealthGlobes
-                        //                        ? MaxWeight
-                        //                        : (1d - minPartyHealth) * 5000d +
-                        //                          EliteMonsterNearFormula(cacheObject, elites) -
-                        //                          PackDensityFormula(cacheObject, objects);
-                        //                    break;
-                        //                }
-                        //            }
+                                #region Shrine
 
-                        //            var myHealth = Core.Player.CurrentHealthPct;
-                        //            // DH's logic with Blood Vengeance passive
-                        //            if (Core.Player.ActorClass == ActorClass.DemonHunter &&
-                        //                Core.Player.PrimaryResource <= 10 &&
-                        //                Core.Hotbar.PassiveSkills.Contains(
-                        //                    SNOPower.DemonHunter_Passive_Vengeance))
-                        //            {
-                        //                cacheObject.WeightInfo +=
-                        //                    $"Adding {cacheObject.InternalName} - Reapes Wraps.";
-                        //                cacheObject.Weight += hiPriorityHealthGlobes
-                        //                    ? MaxWeight
-                        //                    : (1d - Core.Player.PrimaryResource) * 5000d +
-                        //                      EliteMonsterNearFormula(cacheObject, elites) -
-                        //                      PackDensityFormula(cacheObject, objects);
-                        //                break;
-                        //            }
-
-                        //            // WD's logic with Gruesome Feast passive
-                        //            if (Core.Player.ActorClass == ActorClass.Witchdoctor &&
-                        //                Core.Player.PrimaryResource <= 1200 &&
-                        //                Core.Hotbar.PassiveSkills.Contains(
-                        //                    SNOPower.Witchdoctor_Passive_GruesomeFeast))
-                        //            {
-                        //                cacheObject.WeightInfo +=
-                        //                    $"Adding {cacheObject.InternalName} - Gruesome Feast PickUp.";
-                        //                cacheObject.Weight += hiPriorityHealthGlobes
-                        //                    ? MaxWeight
-                        //                    : (1d - Core.Player.PrimaryResource) * 5000d +
-                        //                      EliteMonsterNearFormula(cacheObject, elites) -
-                        //                      PackDensityFormula(cacheObject, objects);
-                        //                break;
-                        //            }
-
-                        //            //Reapers Wraps Equipped
-                        //            if (Legendary.ReapersWraps.IsEquipped && Core.Player.PrimaryResource <= 50)
-                        //            {
-                        //                cacheObject.WeightInfo +=
-                        //                    $"Adding {cacheObject.InternalName} - Reapers Wraps.";
-                        //                cacheObject.Weight += hiPriorityHealthGlobes
-                        //                    ? MaxWeight
-                        //                    : (1d - Core.Player.PrimaryResource) * 5000d +
-                        //                      EliteMonsterNearFormula(cacheObject, elites) -
-                        //                      PackDensityFormula(cacheObject, objects);
-                        //                break;
-                        //            }
-                        //            if (ZetaDia.Me.HitpointsCurrentPct > TrinityPluginSettings.Settings.Combat.Misc.HealthGlobeLevel)
-                        //            {
-                        //                cacheObject.WeightInfo +=
-                        //                    $"Ignoring {cacheObject.InternalName} - Over health globe Threshold.";
-                        //                break;
-                        //            }
-                        //        }
-                        //        else
-                        //        {
-                        //            cacheObject.WeightInfo +=
-                        //                $"Maxxing {cacheObject.InternalName} - Player.CurrentHealthPct < CombatBase.EmergencyHealthGlobeLimit.";
-                        //            cacheObject.Weight = MaxWeight;
-                        //            break;
-                        //        }
-
-                        //        cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                        //                              //LastTargetFormula(cacheObject) +
-                        //                              EliteMonsterNearFormula(cacheObject, elites) +
-                        //                              AoENearFormula(cacheObject) +
-                        //                              AoEInPathFormula(cacheObject);
-                        //        break;
-                        //    }
-
-                        #endregion
-
-                        #region Shrine
-
-                        case TrinityObjectType.CursedShrine:
-                        case TrinityObjectType.Shrine:
+                            case TrinityObjectType.CursedShrine:
+                            case TrinityObjectType.Shrine:
                             {
                                 if (cacheObject.IsUsed)
                                 {
@@ -1209,16 +1231,16 @@ namespace Trinity.Components.Combat
                                 //}
 
                                 cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                            //LastTargetFormula(cacheObject) +
-                                                            //EliteMonsterNearFormula(cacheObject, elites) +
-                                                            AoENearFormula(cacheObject) +
-                                                            AoEInPathFormula(cacheObject);
+                                                      //LastTargetFormula(cacheObject) +
+                                                      //EliteMonsterNearFormula(cacheObject, elites) +
+                                                      AoENearFormula(cacheObject) +
+                                                      AoEInPathFormula(cacheObject);
 
 
                                 if (cacheObject.Distance < 50f && cacheObject.IsWalkable)
                                 {
                                     cacheObject.Weight *= 4;
-                                    cacheObject.WeightInfo += $"Mid-Range Shrine Boost";                      
+                                    cacheObject.WeightInfo += $"Mid-Range Shrine Boost";
                                 }
                                 if (cacheObject.Distance < 100f)
                                 {
@@ -1229,17 +1251,17 @@ namespace Trinity.Components.Combat
                                 break;
                             }
 
-                        #endregion
+                                #endregion
 
-                        #region Door and Barricade
+                                #region Door and Barricade
 
-                        case TrinityObjectType.Gate:
-                            cacheObject.Weight = 0;
-                            cacheObject.WeightInfo += "Ignoring Gate";
-                            break;
+                            case TrinityObjectType.Gate:
+                                cacheObject.Weight = 0;
+                                cacheObject.WeightInfo += "Ignoring Gate";
+                                break;
 
-                        case TrinityObjectType.Barricade:
-                        case TrinityObjectType.Door:
+                            case TrinityObjectType.Barricade:
+                            case TrinityObjectType.Door:
                             {
                                 if (cacheObject.IsUsed)
                                 {
@@ -1267,70 +1289,71 @@ namespace Trinity.Components.Combat
                                     cacheObject.Weight = MaxWeight;
                                     cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Door in Close Distance.";
                                 }
-     
-                                cacheObject.Weight +=   0.5 * ((ObjectDistanceFormula(cacheObject) +
-                                                        EliteMonsterNearFormula(cacheObject, elites) +
-                                                        PackDensityFormula(cacheObject, objects) +
-                                                        AoENearFormula(cacheObject) +
-                                                        AoEInPathFormula(cacheObject)));
+
+                                cacheObject.Weight += 0.5*((ObjectDistanceFormula(cacheObject) +
+                                                            EliteMonsterNearFormula(cacheObject, elites) +
+                                                            PackDensityFormula(cacheObject, objects) +
+                                                            AoENearFormula(cacheObject) +
+                                                            AoEInPathFormula(cacheObject)));
                                 break;
                             }
 
-                        #endregion
+                                #endregion
 
-                        #region Destructible
+                                #region Destructible
 
-                        case TrinityObjectType.Destructible:
+                            case TrinityObjectType.Destructible:
 
-                            if (!cacheObject.IsValid || cacheObject.IsUsed)
-                            {
-                                cacheObject.Weight = 0;
-                                cacheObject.WeightInfo += $"Destroyed or Invalid";
-                                break;
-                            }
-
-                            if (!cacheObject.IsQuestMonster)
-                            {
-                                if (IgnoreWhenBlocked(cacheObject))
+                                if (!cacheObject.IsValid || cacheObject.IsUsed)
+                                {
+                                    cacheObject.Weight = 0;
+                                    cacheObject.WeightInfo += $"Destroyed or Invalid";
                                     break;
+                                }
 
-                                if (IgnoreForTownPortal(cacheObject, usingTownPortal))
+                                if (!cacheObject.IsQuestMonster)
+                                {
+                                    if (IgnoreWhenBlocked(cacheObject))
+                                        break;
+
+                                    if (IgnoreForTownPortal(cacheObject, usingTownPortal))
+                                        break;
+                                }
+
+                                if (GameData.ForceDestructibles.Contains(cacheObject.ActorSnoId))
+                                {
+                                    cacheObject.Weight = 100d;
                                     break;
-                            }
+                                }
 
-                            if (GameData.ForceDestructibles.Contains(cacheObject.ActorSnoId))
-                            {
-                                cacheObject.Weight = 100d;
+                                if (cacheObject.RadiusDistance > 0 && !Core.StuckHandler.IsStuck)
+                                {
+                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Not Stuck.";
+                                    break;
+                                }
+
+                                if (cacheObject.Distance < 3f)
+                                {
+                                    cacheObject.Weight = MaxWeight;
+                                    cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Close Distance.";
+                                }
+
+                                // Fix for WhimsyShire Pinata
+                                if (GameData.ResplendentChestIds.Contains(cacheObject.ActorSnoId))
+                                    cacheObject.Weight += 500d;
+
+                                cacheObject.Weight += 0.5*(ObjectDistanceFormula(cacheObject) +
+                                                           EliteMonsterNearFormula(cacheObject, elites) -
+                                                           PackDensityFormula(cacheObject, objects) +
+                                                           AoENearFormula(cacheObject) +
+                                                           AoEInPathFormula(cacheObject));
                                 break;
-                            }
 
-                            if (cacheObject.RadiusDistance > 0 && !Core.StuckHandler.IsStuck)
-                            {
-                                cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Not Stuck.";
-                                break;
-                            }
+                                #endregion
 
-                            if (cacheObject.Distance < 3f)
-                            {
-                                cacheObject.Weight = MaxWeight;
-                                cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Close Distance.";
-                            }
+                                #region Interactables
 
-                            // Fix for WhimsyShire Pinata
-                            if (GameData.ResplendentChestIds.Contains(cacheObject.ActorSnoId))
-                                cacheObject.Weight += 500d;
-
-                            cacheObject.Weight += 0.5 * (ObjectDistanceFormula(cacheObject) +
-                                                    EliteMonsterNearFormula(cacheObject, elites) -
-                                                    PackDensityFormula(cacheObject, objects) +
-                                                    AoENearFormula(cacheObject) +
-                                                    AoEInPathFormula(cacheObject));
-                            break;
-                        #endregion
-
-                        #region Interactables
-
-                        case TrinityObjectType.Interactable:
+                            case TrinityObjectType.Interactable:
                             {
                                 if (cacheObject.IsUsed)
                                 {
@@ -1390,81 +1413,81 @@ namespace Trinity.Components.Combat
                                     cacheObject.Weight += 5000d;
                                 }
                                 cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                        ////LastTargetFormula(cacheObject) +
-                                                        EliteMonsterNearFormula(cacheObject, elites) -
-                                                        PackDensityFormula(cacheObject, objects) +
-                                                        AoENearFormula(cacheObject) +
-                                                        AoEInPathFormula(cacheObject);
+                                                      ////LastTargetFormula(cacheObject) +
+                                                      EliteMonsterNearFormula(cacheObject, elites) -
+                                                      PackDensityFormula(cacheObject, objects) +
+                                                      AoENearFormula(cacheObject) +
+                                                      AoEInPathFormula(cacheObject);
 
                                 break;
                             }
 
-                        #endregion
+                                #endregion
 
-                        #region Container
-                        case TrinityObjectType.Container:
+                                #region Container
 
-                            if (!cacheObject.IsQuestMonster && !cacheObject.IsMinimapActive)
-                            {
-                                if (Core.Settings.Weighting.ContainerWeighting == SettingMode.Disabled)
+                            case TrinityObjectType.Container:
+
+                                if (!cacheObject.IsQuestMonster && !cacheObject.IsMinimapActive)
                                 {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Ignore containers setting.";
-                                    break;
-                                }
-
-                                if (PlayerMover.IsCompletelyBlocked)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
-                                    break;
-                                }
-
-                                if (usingTownPortal)
-                                {
-                                    cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
-                                    break;
-                                }
-
-                                if (Core.Settings.Weighting.ContainerWeighting == SettingMode.Selective)
-                                {
-                                    var type = GetContainerType(cacheObject);
-                                    if (!Core.Settings.Weighting.ContainerTypes.HasFlag(type))
+                                    if (Core.Settings.Weighting.ContainerWeighting == SettingMode.Disabled)
                                     {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Not a selected container type.";
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Ignore containers setting.";
                                         break;
                                     }
+
+                                    if (PlayerMover.IsCompletelyBlocked)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Nav Blocked.";
+                                        break;
+                                    }
+
+                                    if (usingTownPortal)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Town Portal.";
+                                        break;
+                                    }
+
+                                    if (Core.Settings.Weighting.ContainerWeighting == SettingMode.Selective)
+                                    {
+                                        var type = GetContainerType(cacheObject);
+                                        if (!Core.Settings.Weighting.ContainerTypes.HasFlag(type))
+                                        {
+                                            cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Not a selected container type.";
+                                            break;
+                                        }
+                                    }
                                 }
-                            }
 
-                            cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
-                                                    EliteMonsterNearFormula(cacheObject, elites) -
-                                                    PackDensityFormula(cacheObject, objects) +
-                                                    AoENearFormula(cacheObject) +
-                                                    AoEInPathFormula(cacheObject);
-                            break;
-                            #endregion
+                                cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
+                                                      EliteMonsterNearFormula(cacheObject, elites) -
+                                                      PackDensityFormula(cacheObject, objects) +
+                                                      AoENearFormula(cacheObject) +
+                                                      AoEInPathFormula(cacheObject);
+                                break;
+
+                                #endregion
+                        }
+
+
+                        // Anti-Flip flop. A new target needs to be 15% better than current.
+                        if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.AnnId == cacheObject.AnnId)
+                        {
+                            cacheObject.Weight *= 1.15;
+                            cacheObject.WeightInfo += " Last Target Boost ";
+                        }
+
+                        bestTarget = GetNewBestTarget(cacheObject, bestTarget);
                     }
-
-
-                    // Anti-Flip flop. A new target needs to be 15% better than current.
-                    if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.AnnId == cacheObject.AnnId)
-                    {
-                        cacheObject.Weight *= 1.15;
-                        cacheObject.WeightInfo += " Last Target Boost ";
-                    }
-
-                    bestTarget = GetNewBestTarget(cacheObject, bestTarget);
-                }
 
                     #endregion Foreach loop
-
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log($"Exception Inside Weighting Foreach Loop {ex}");    
+                    Logger.Log($"Exception Inside Weighting Foreach Loop {ex}");
                 }
 
                 return SetTarget(bestTarget);
-
             }
         }
 
@@ -1503,7 +1526,7 @@ namespace Trinity.Components.Combat
                 reason = "Ignore(Elites=Disabled)";
                 return true;
             }
-            
+
             if (Core.Settings.Weighting.EliteWeighting == SettingMode.Selective)
             {
                 var eliteType = GetEliteType(unit);
@@ -1650,7 +1673,7 @@ namespace Trinity.Components.Combat
         /// Contains an RActorGUID and count of the number of times we've switched to this target
         /// todo evaluate, temporary placement here
         /// </summary>
-        internal Dictionary<string, TargettingInfo> TargetHistory { get; } = new Dictionary<string, TargettingInfo>();
+        internal Dictionary<string, TargetingInfo> TargetHistory { get; } = new Dictionary<string, TargetingInfo>();
 
         /// <summary>
         /// How many times the player tried to interact with this object in total
@@ -1665,66 +1688,69 @@ namespace Trinity.Components.Combat
         /// <returns>current number of times targetted</returns>
         public int RecordTargetHistory(TrinityActor bestTarget)
         {
-            TargettingInfo info;
-            if (bestTarget == null)
-                return 0;
+            return 0;
 
-            if (TargetHistory.Count > 200)
-                TargetHistory.RemoveAll(o => DateTime.UtcNow.Subtract(o.CreatedTime).TotalSeconds > 30);
+            //TargetingInfo info;
+            //if (bestTarget == null)
+            //    return 0;
 
-            if (TargetHistory.TryGetValue(bestTarget.ObjectHash, out info))
-            {
-                var isNewTarget = Combat.Targeting.CurrentTarget == null || bestTarget.ObjectHash != Combat.Targeting.CurrentTarget.ObjectHash && !LastTargetIsSafeSpot && LastTargetRActorGuid > 0;
-                if (isNewTarget)
-                {
-                    // Targeted times is used primarily for blacklisting, 
-                    // exclude avoidance triggered target switches or things will get blacklisted too fast while kiting.      
+            //if (TargetHistory.Count > 200)
+            //    TargetHistory.RemoveAll(o => DateTime.UtcNow.Subtract(o.CreatedTime).TotalSeconds > 30);
 
-                    info.TargetedTimes++;
-                    bestTarget.HasBeenPrimaryTarget = true;
-                }
+            //if (TargetHistory.TryGetValue(bestTarget.ObjectHash, out info))
+            //{
+            //    var isNewTarget = Combat.Targeting.CurrentTarget == null || bestTarget.ObjectHash != Combat.Targeting.CurrentTarget.ObjectHash && !LastTargetIsSafeSpot && LastTargetRActorGuid > 0;
+            //    if (isNewTarget)
+            //    {
+            //        // Targeted times is used primarily for blacklisting, 
+            //        // exclude avoidance triggered target switches or things will get blacklisted too fast while kiting.      
 
-                var isEliteLowHealth = bestTarget.HitPointsPct <= 0.75 && bestTarget.IsElite;
-                if (isEliteLowHealth)
-                    return info.TargetedTimes;
+            //        info.TargetedTimes++;
+            //        info.TimeLastTargetted = DateTime.UtcNow;
+            //        bestTarget.HasBeenPrimaryTarget = true;
+            //    }
 
-                if (bestTarget.IsBoss || bestTarget.IsSafeSpot || bestTarget.IsWaitSpot)
-                    return info.TargetedTimes;
+            //    var isEliteLowHealth = bestTarget.HitPointsPct <= 0.75 && bestTarget.IsElite;
+            //    if (isEliteLowHealth)
+            //        return info.TargetedTimes;
 
-                if (isNewTarget)
-                {
-                    info.LastTargetedTime = DateTime.UtcNow;
-                }
+            //    if (bestTarget.IsBoss || bestTarget.IsSafeSpot || bestTarget.IsWaitSpot)
+            //        return info.TargetedTimes;
 
-                var isUnusedDoor = bestTarget.Type == TrinityObjectType.Door && !bestTarget.IsUsed;
-                var timeAsCurrentTarget = DateTime.UtcNow.Subtract(info.LastTargetedTime).TotalSeconds;
+            //    if (isNewTarget)
+            //    {
+            //        info.FirstTargetedTime = DateTime.UtcNow;
+            //    }
 
-                if (info.TargetedTimes > GetBlacklistTargetTimes(bestTarget) && !bestTarget.IsElite && !isUnusedDoor)
-                {
-                    GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(60), $"Targetted too many times ({info.TargetedTimes})");
-                    info.TargetedTimes = 0;
-                    info.BlacklistedTimes++;
-                }
-                else if (timeAsCurrentTarget > 120 && !bestTarget.IsElite && !isUnusedDoor && info.TargetedTimes > 25)
-                {
-                    GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TotalTimeAsCurrentTarget.TotalSeconds}s))");
-                    info.TotalTimeAsCurrentTarget = TimeSpan.Zero;
-                    info.BlacklistedTimes++;
-                }
+            //    var isUnusedDoor = bestTarget.Type == TrinityObjectType.Door && !bestTarget.IsUsed;
+            //    var timeAsCurrentTarget = DateTime.UtcNow.Subtract(info.FirstTargetedTime).TotalSeconds;
 
-                return info.TargetedTimes;
-            }
+            //    if (info.TargetedTimes > GetBlacklistTargetTimes(bestTarget) && !bestTarget.IsElite && !isUnusedDoor)
+            //    {
+            //        GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(60), $"Targetted too many times ({info.TargetedTimes})");
+            //        info.TargetedTimes = 0;
+            //        info.BlacklistedTimes++;
+            //    }
+            //    else if (timeAsCurrentTarget > 120 && !bestTarget.IsElite && !isUnusedDoor && info.TargetedTimes > 25)
+            //    {
+            //        GenericBlacklist.Blacklist(bestTarget, TimeSpan.FromSeconds(30), $"Target timeout ({info.TotalTimeAsCurrentTarget.TotalSeconds}s))");
+            //        info.TotalTimeAsCurrentTarget = TimeSpan.Zero;
+            //        info.BlacklistedTimes++;
+            //    }
 
-            TargetHistory.Add(bestTarget.ObjectHash, new TargettingInfo
-            {
-                ObjectHash = bestTarget.ObjectHash,
-                RActorGuid = bestTarget.RActorId,
-                Name = bestTarget.InternalName,
-                TargetedTimes = 1,
-                LastTargetedTime = DateTime.UtcNow,
-            });
+            //    return info.TargetedTimes;
+            //}
 
-            return 1;
+            //TargetHistory.Add(bestTarget.ObjectHash, new TargetingInfo
+            //{
+            //    ObjectHash = bestTarget.ObjectHash,
+            //    RActorGuid = bestTarget.RActorId,
+            //    Name = bestTarget.InternalName,
+            //    TargetedTimes = 1,
+            //    FirstTargetedTime = DateTime.UtcNow,
+            //});
+
+            //return 1;
         }
 
         private int LastTargetRActorGuid => Combat.Targeting.LastTarget?.RActorId ?? -1;
@@ -1743,8 +1769,6 @@ namespace Trinity.Components.Combat
             }
             return 150;
         }
-
-
 
         #region Helper Methods
 
@@ -1773,7 +1797,7 @@ namespace Trinity.Components.Combat
 
         public double GoldFormula(TrinityItem cacheObject)
         {
-            return cacheObject.GoldAmount * 0.05;
+            return cacheObject.GoldAmount*0.05;
         }
 
         /// <summary>
@@ -1869,7 +1893,7 @@ namespace Trinity.Components.Combat
             List<TrinityActor> monstersWithAffix)
         {
             var monsters = monstersWithAffix.Where(u => u.Position.Distance(cacheObject.Position) < 30f);
-            return monsters.Aggregate<TrinityActor, double>(0, (current, monster) => current + 5000 * Math.Max(0, (int)(30 - monster.Distance)));
+            return monsters.Aggregate<TrinityActor, double>(0, (current, monster) => current + 5000*Math.Max(0, (int) (30 - monster.Distance)));
         }
 
         /// <summary>
@@ -1884,7 +1908,7 @@ namespace Trinity.Components.Combat
             var monsters = eliteMonsters.Where(u => u.Position.Distance(cacheObject.Position) < 10f);
             foreach (var monster in monsters)
             {
-                weight -= 50 * (Math.Max(0, 10 - monster.RadiusDistance)) / 10;
+                weight -= 50*(Math.Max(0, 10 - monster.RadiusDistance))/10;
             }
             return weight;
         }
@@ -1913,7 +1937,8 @@ namespace Trinity.Components.Combat
             if (cacheObject.Type == TrinityObjectType.Unit)
             {
                 var eliteRange = isQuesting ? questingEliteRange : Combat.Routines.Current.EliteRange;
-                var nonEliteRange = isQuesting ? questingTrashRange : Combat.Routines.Current.TrashRange; ; //RoutineAdapter.Routine.TrashRange; //Core.Settings.Combat.Misc.NonEliteRange;
+                var nonEliteRange = isQuesting ? questingTrashRange : Combat.Routines.Current.TrashRange;
+                ; //RoutineAdapter.Routine.TrashRange; //Core.Settings.Combat.Misc.NonEliteRange;
 
                 range = cacheObject.IsElite
                     ? eliteRange
@@ -1923,7 +1948,7 @@ namespace Trinity.Components.Combat
                     range *= 1.5f;
             }
 
-            return multipler * ((range - cacheObject.RadiusDistance) / range);
+            return multipler*((range - cacheObject.RadiusDistance)/range);
         }
 
         public double PackDensityFormula(TrinityActor cacheObject, List<TrinityActor> objects)
@@ -1935,7 +1960,7 @@ namespace Trinity.Components.Combat
                 x => x.IsUnit && x.IsHostile && x.Position.Distance(cacheObject.Position) < Combat.Routines.Current.TrashRange && (!ShouldIgnoreElite(cacheObject) || !x.IsElite))
                 .ToList();
 
-            var packDistanceValue = pack.Sum(mob => 100d * ((Combat.Routines.Current.TrashRange - cacheObject.RadiusDistance) / Combat.Routines.Current.TrashRange));
+            var packDistanceValue = pack.Sum(mob => 100d*((Combat.Routines.Current.TrashRange - cacheObject.RadiusDistance)/Combat.Routines.Current.TrashRange));
 
             return packDistanceValue < 0 ? 0 : packDistanceValue;
         }
@@ -1978,7 +2003,7 @@ namespace Trinity.Components.Combat
             if (Math.Abs(cacheObject.HitPointsPct - 1) < double.Epsilon)
                 return 0;
 
-            return 200d * ((1 - cacheObject.HitPointsPct) / 100);
+            return 200d*((1 - cacheObject.HitPointsPct)/100);
         }
 
         /// <summary>
@@ -2046,6 +2071,7 @@ namespace Trinity.Components.Combat
 
             return navigationCount;
         }
+
         //public static double LastTargetFormula(TrinityActor cacheObject)
         //{
         //    if (PlayerMover.IsCompletelyBlocked)
@@ -2060,46 +2086,46 @@ namespace Trinity.Components.Combat
         {
             switch (cacheObject.ActorSnoId)
             {
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Fortune:
-                case (int)SNOActor.Shrine_Global_Fortune:
+                case (int) SNOActor.a4_Heaven_Shrine_Global_Fortune:
+                case (int) SNOActor.Shrine_Global_Fortune:
                     return ShrineTypes.Fortune;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Frenzied:
-                case (int)SNOActor.Shrine_Global_Frenzied:
+                case (int) SNOActor.a4_Heaven_Shrine_Global_Frenzied:
+                case (int) SNOActor.Shrine_Global_Frenzied:
                     return ShrineTypes.Frenzied;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Reloaded:
-                case (int)SNOActor.Shrine_Global_Reloaded:
+                case (int) SNOActor.a4_Heaven_Shrine_Global_Reloaded:
+                case (int) SNOActor.Shrine_Global_Reloaded:
                     return ShrineTypes.RunSpeed;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Enlightened:
-                case (int)SNOActor.Shrine_Global_Enlightened:
+                case (int) SNOActor.a4_Heaven_Shrine_Global_Enlightened:
+                case (int) SNOActor.Shrine_Global_Enlightened:
                     return ShrineTypes.Enlightened;
 
-                case (int)SNOActor.Shrine_Global_Glow:
+                case (int) SNOActor.Shrine_Global_Glow:
                     return ShrineTypes.Glow;
 
-                case (int)SNOActor.a4_Heaven_Shrine_Global_Hoarder:
-                case (int)SNOActor.Shrine_Global_Hoarder:
+                case (int) SNOActor.a4_Heaven_Shrine_Global_Hoarder:
+                case (int) SNOActor.Shrine_Global_Hoarder:
                     return ShrineTypes.Hoarder;
 
-                case (int)SNOActor.x1_LR_Shrine_Infinite_Casting:
+                case (int) SNOActor.x1_LR_Shrine_Infinite_Casting:
                     return ShrineTypes.Casting;
 
-                case (int)SNOActor.x1_LR_Shrine_Electrified_TieredRift:
-                case (int)SNOActor.x1_LR_Shrine_Electrified:
+                case (int) SNOActor.x1_LR_Shrine_Electrified_TieredRift:
+                case (int) SNOActor.x1_LR_Shrine_Electrified:
                     return ShrineTypes.Conduit;
 
-                case (int)SNOActor.x1_LR_Shrine_Invulnerable:
+                case (int) SNOActor.x1_LR_Shrine_Invulnerable:
                     return ShrineTypes.Shield;
 
-                case (int)SNOActor.x1_LR_Shrine_Run_Speed:
+                case (int) SNOActor.x1_LR_Shrine_Run_Speed:
                     return ShrineTypes.Shield;
 
-                case (int)SNOActor.x1_LR_Shrine_Damage:
+                case (int) SNOActor.x1_LR_Shrine_Damage:
                     return ShrineTypes.Damage;
 
-                case (int)SNOActor.Shrine_TreasureGoblin:
+                case (int) SNOActor.Shrine_TreasureGoblin:
                     return ShrineTypes.Goblin;
 
                 default:
@@ -2159,13 +2185,6 @@ namespace Trinity.Components.Combat
                     return EliteTypes.Rare;
             }
             return EliteTypes.None;
-        }        
-
+        }
     }
-
-
-
-
-
-
 }

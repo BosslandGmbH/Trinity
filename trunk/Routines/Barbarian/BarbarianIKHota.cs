@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
@@ -22,25 +21,25 @@ using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Barbarian
 {
-    public sealed class BarbarianEarthLeap : BarbarianBase, IRoutine
+    public sealed class BarbarianIKHota : BarbarianBase, IRoutine
     {
         #region Definition
 
-        public string DisplayName => "Barbarian Earth LeapQuake";
-        public string Description => "This routine uses furious charge to move around and attack, building fury for Ancient Spear.";
+        public string DisplayName => "Barbarian IK Hammer of the Ancients";
+        public string Description => "Empowered by the Immortal King set, this Barbarian build emphasises melee devastation and pulverises his enemies to the ground with Hammer of the Ancients Hammer of the Ancients, while maintaining a vast array of buffs and warriors at his side. ";
         public string Author => "xzjv";
         public string Version => "0.1";
-        public string Url => "http://www.icy-veins.com/d3/barbarian-build-leap-earthquake-with-might-of-the-earth-patch-2-4-2-season-7";
+        public string Url => "http://www.icy-veins.com/d3/barbarian-hota-fire-build-with-immortal-king-patch-2-4-2-season-7";
 
         public Build BuildRequirements => new Build
         {
             Sets = new Dictionary<Set, SetBonus>
             {
-                { Sets.MightOfTheEarth, SetBonus.Third },
+                { Sets.ImmortalKingsCall, SetBonus.Third },
             },
             Skills = new Dictionary<Skill, Rune>
             {
-                { Skills.Barbarian.Earthquake, null },
+                { Skills.Barbarian.HammerOfTheAncients, null },
             },
         };
 
@@ -51,22 +50,13 @@ namespace Trinity.Routines.Barbarian
             TrinityPower power;
             TrinityActor target;
             Vector3 position;
- 
+
+            if (ShouldFuriousCharge(out position))
+                return FuriousCharge(position);
+
             if (ShouldLeap(out position))
                 return Leap(position);
 
-            if (Skills.Barbarian.Avalanche.CanCast())
-                return Avalanche(Player.Position);
-
-            // Use cave in rune to group monsters before spear.
-            if (Skills.Barbarian.Earthquake.CanCast())
-                return Earthquake(Player.Position);
-
-            // Spend resource to reduce leap cooldown
-            if (ShouldAncientSpear(out target))
-                return AncientSpear(target);
-
-            // Fallback to defaults in case of minor variations.
             if (TrySpecialPower(out power))
                 return power;
 
@@ -78,35 +68,23 @@ namespace Trinity.Routines.Barbarian
             
             return Walk(Avoider.SafeSpot);
         }
-     
-        protected override bool ShouldLeap(out Vector3 position)
-        {
-            // Always Leap
 
+        protected override bool ShouldFuriousCharge(out Vector3 position)
+        {
             position = Vector3.Zero;
-            if (!Skills.Barbarian.Leap.CanCast())
+            var skill = Skills.Barbarian.FuriousCharge;           
+
+            if (!skill.CanCast())
+                return false;
+            
+            if (skill.TimeSinceUse < 2000)
+                return false;
+
+            if (!TargetUtil.AnyMobsInRange(60f) && !IsNoPrimary)
                 return false;
 
             position = TargetUtil.GetBestClusterPoint();
             return position != Vector3.Zero;
-        }
-
-        protected override bool ShouldAncientSpear(out TrinityActor target)
-        {
-            target = null;
-
-            if (!Skills.Barbarian.AncientSpear.CanCast())
-                return false;
-
-            target = TargetUtil.BestAoeUnit(60, true).IsInLineOfSight
-                ? TargetUtil.BestAoeUnit(60, true)
-                : TargetUtil.GetBestClusterUnit(10, 60, false, true, false, true);
-
-            // wait for 95% resource would cause max damage on boulder toss
-            // but the cooldown reset time for leap is possibly more important?
-            //return target.Distance <= 60 && Player.PrimaryResourcePct > 0.95;
-
-            return target?.Distance <= 60;
         }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
@@ -114,19 +92,56 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetBuffPower()
         {
-            if (Skills.Barbarian.ThreateningShout.CanCast() && TargetUtil.GetBestClusterUnit()?.Distance < 15f)
-                return ThreateningShout(Player.Position);
-             
+            TrinityPower trinityPower;
+            if (TryProcBandOfMight(out trinityPower))
+                return trinityPower;
+
             return DefaultBuffPower();
+        }        
+
+        private static bool TryProcBandOfMight(out TrinityPower power)
+        {
+            power = null;
+
+            if (Player.IsInTown)
+                return false;
+
+            if (!Legendary.BandOfMight.IsEquipped)
+                return false;
+
+            if (IsBandOfMightBuffActive && Skills.Barbarian.FuriousCharge.TimeSinceUse < 7500)
+                return false;               
+        
+            if (Skills.Barbarian.FuriousCharge.CanCast())
+            {          
+                power = FuriousCharge(TargetUtil.GetBestClusterPoint());
+                return true;               
+            }
+
+            if (Skills.Barbarian.GroundStomp.CanCast())
+            {
+                power = GroundStomp(Player.Position);
+                return true;
+            }
+
+            if (Skills.Barbarian.Leap.CanCast())
+            {
+                power = Leap(TargetUtil.GetBestClusterPoint());
+                return true;
+            }
+
+            return false;
         }
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            // Leap out of combat for the defensive bonuses.
-
-            if (Skills.Barbarian.Leap.CanCast() && (!Player.HasBuff(SNOPower.Barbarian_Leap) || Player.CurrentHealthPct > 0.35f) && !Player.IsInTown && AllUnits.Any(u => u.Distance < 20f))
-                return Leap(destination);
-
+            if (CanChargeTo(destination) && Skills.Barbarian.FuriousCharge.TimeSinceUse > 500)
+            {
+                if (IsInCombat && TargetUtil.PierceHitsMonster(destination) || Player.Position.Distance(destination) > 20f)
+                {   
+                    return FuriousCharge(destination);
+                }
+            }
             return Walk(destination);
         }
 

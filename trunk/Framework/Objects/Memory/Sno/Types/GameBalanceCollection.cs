@@ -15,6 +15,9 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
         public int TableIndex => ReadOffset<int>(0xC);
         public List<GameBalanceVector> Tables => ReadObjects<GameBalanceVector>(0x18, 32, v => v.HasData);
 
+        public IEnumerable<T> OfType<T>() where T : MemoryWrapper, new() 
+            => Tables.SelectMany(i => i.Cast<T>());
+
         public class GameBalanceVector : MemoryWrapper
         {
             public const int SizeOf = 0x10; // 16

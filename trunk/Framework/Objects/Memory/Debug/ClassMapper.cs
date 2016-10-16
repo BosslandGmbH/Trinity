@@ -29,6 +29,11 @@ namespace Trinity.Framework.Objects.Memory.Debug
         SerializeData
     }
 
+    public static class ClassMapperExtensions
+    {
+        
+    }
+
     public class ClassMapper
     {
         private static readonly HashSet<ValueTypeDescriptor> AlreadyMapped = new HashSet<ValueTypeDescriptor>();
@@ -80,10 +85,12 @@ namespace Trinity.Framework.Objects.Memory.Debug
 
             foreach (var field in valueType.FieldDescriptors.OrderBy(f => f.Offset))
             {
+                // todo DT_TAGMAP need to find an indication of what object is in the tag map
+
                 if (!AlreadyMapped.Contains(field.Type) && !ToBeMapped.Contains(field.Type) && !field.Type.Name.StartsWith("DT_"))
                     ToBeMapped.Enqueue(field.Type);
 
-                if (!AlreadyMapped.Contains(field.BaseType) && !ToBeMapped.Contains(field.BaseType) && !field.BaseType.Name.StartsWith("DT_"))
+                if (!AlreadyMapped.Contains(field.BaseType) && !ToBeMapped.Contains(field.BaseType))
                     ToBeMapped.Enqueue(field.BaseType);
 
                 index++;

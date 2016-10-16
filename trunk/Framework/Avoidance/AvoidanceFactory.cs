@@ -12,7 +12,7 @@ using Logger = Trinity.Framework.Helpers.Logger;
 namespace Trinity.Framework.Avoidance
 {
     /// <summary>
-    /// Contains the definition of all types of avoidance.
+    /// Creates Avoidance objects from TrinityActors
     /// </summary>
     public class AvoidanceFactory
     {

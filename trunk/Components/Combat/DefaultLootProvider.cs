@@ -36,7 +36,9 @@ namespace Trinity.Components.Combat
         public bool ShouldPickup(TrinityItem item)
         {
             if (item == null || !item.IsValid)
-                Logger.LogDebug($"Not a valid item {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+            {
+                Logger.LogDebug($"Not a valid item {item?.InternalName} Sno={item?.ActorSnoId} GbId={item?.GameBalanceId}");
+            }
 
             if (item.TrinityItemType == TrinityItemType.ConsumableAddSockets)
                 return true;

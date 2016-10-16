@@ -28,7 +28,7 @@
                             Tag="Cluster Size"
                             ToolTip="Number of monsters that must be grouped up before fighting starts"
                             Interval="100" IsSnapToTickEnabled="True"
-                            Maximum="25" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Maximum="50" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="None" 
                             Value="{Binding Path=DataContext.ClusterSize}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
@@ -64,13 +64,21 @@
                     <GroupBox.Header>Convention of Elements</GroupBox.Header>
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">This setting controls if we should wait until the 'Convention of Elements' ring's buff is at the correct point to maximize the damage of bombardment. Which is, from 1.5s before physical up to 1 second into physical.</TextBlock>
-                        <WrapPanel>
+                        <StackPanel>
                             <RadioButton Content="Always Wait" IsChecked="{Binding DataContext.Bombardment.WaitForConvention, ConverterParameter=Always, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
                             <RadioButton Content="Never Wait" IsChecked="{Binding DataContext.Bombardment.WaitForConvention, ConverterParameter=Never, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
                             <RadioButton Content="In Greater Rifts Only" IsChecked="{Binding DataContext.Bombardment.WaitForConvention, ConverterParameter=GreaterRift, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
-                        </WrapPanel>
+                            <RadioButton Content="Rift Boss Only" IsChecked="{Binding DataContext.Bombardment.WaitForConvention, ConverterParameter=RiftBoss, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Ignoring Trash</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">This option may increase clear times by only attacking elites. But make sure you have steed charge skill and/or illusory boots equipped to avoid getting stuck.</TextBlock>
+                        <CheckBox ToolTip="Dont attack trash monsters while in rifts" IsChecked="{Binding DataContext.IgnoreTrash, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Ignore Trash in Rifts</CheckBox>
+                    </StackPanel>
+                </GroupBox>                
             </StackPanel>
         </Grid>
     </Border>

@@ -60,11 +60,6 @@ namespace Trinity.Framework.Avoidance
             UpdateAvoidances();
             RemoveExpiredAvoidances();
             GridEnricher.UpdateGrid();
-            UpdateStats();
-        }
-
-        private void UpdateStats()
-        {
             NearbyStats.Update(GridEnricher.NearbyNodes);
         }
 
@@ -74,7 +69,7 @@ namespace Trinity.Framework.Avoidance
 
             if (!Settings.Entries.Any(s => s.IsEnabled))
                 return;
-
+  
             var source = Core.Actors.AllRActors.ToList();
 
             foreach (var actor in source)
@@ -98,6 +93,7 @@ namespace Trinity.Framework.Avoidance
                     }
                     else
                     {
+                        //Logger.LogVerbose($"Updated Avoidance Actor {actor}");
                         existingActor.Position = actor.Position;
                         existingActor.Distance = actor.Distance;
                         existingActor.Animation = actor.Animation;
@@ -126,8 +122,6 @@ namespace Trinity.Framework.Avoidance
             }
             CurrentAvoidances.RemoveAll(a => !a.Actors.Any(actor => actor.IsValid));
         }
-
-        public bool IsUpdatingNodes { get; set; }
 
         #region Settings
 

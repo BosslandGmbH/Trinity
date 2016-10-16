@@ -111,7 +111,7 @@ namespace Trinity.Coroutines.Town
                     var normals = items.Where(i => NormalQualityLevels.Contains(i.ItemQualityLevel)).ToList();
                     if (normals.Count > 0)
                     {
-                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {normals} Normal");
+                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {normals.Count} Normal");
                         if (ZetaDia.Me.Inventory.SalvageItemsOfRarity(SalvageRarity.Normal))
                         {
                             normals.ForEach(ItemEvents.FireItemSalvaged);
@@ -121,7 +121,7 @@ namespace Trinity.Coroutines.Town
                     var magic = items.Where(i => MagicQualityLevels.Contains(i.ItemQualityLevel)).ToList();
                     if (magic.Count > 0)
                     {
-                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {magic} Magic");
+                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {magic.Count} Magic");
                         if (ZetaDia.Me.Inventory.SalvageItemsOfRarity(SalvageRarity.Magic))
                         {
                             magic.ForEach(ItemEvents.FireItemSalvaged);
@@ -131,7 +131,7 @@ namespace Trinity.Coroutines.Town
                     var rares = items.Where(i => RareQualityLevels.Contains(i.ItemQualityLevel)).ToList();
                     if (rares.Count > 0)
                     {
-                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {rares} Rare");
+                        Logger.LogVerbose($"[SalvageItems] Bulk Salvaging {rares.Count} Rare");
                         if(ZetaDia.Me.Inventory.SalvageItemsOfRarity(SalvageRarity.Rare))
                         {
                             rares.ForEach(ItemEvents.FireItemSalvaged);

@@ -88,7 +88,7 @@
                         Boss Fights
                     </GroupBox.Header>
                     <StackPanel>
-                        <WrapPanel Margin="10,10,10,0">
+                        <WrapPanel Margin="0,5,0,0">
                             <RadioButton Foreground="White" Margin="0,0,10,0" Content="Accept" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysAccept}" />
                             <RadioButton Foreground="White" Margin="0,0,10,0" Content="Decline" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=AlwaysDecline}" />
                             <RadioButton Foreground="White" Margin="0,0,10,0" Content="Decline while on Bounty" IsChecked="{Binding Combat.FollowerBossFightDialogMode, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=DeclineInBounty}" />
@@ -113,7 +113,7 @@
                 </GroupBox>
             </StackPanel>
 
-            <GroupBox Header="Elites">
+            <GroupBox Header="Elite Monsters">
                 <StackPanel Margin="0,6,10,0">
                     <WrapPanel Margin="0,0,0,0">
                         <RadioButton Foreground="White" Content="Attack Elites" IsChecked="{Binding Weighting.EliteWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
@@ -133,6 +133,16 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
+
+            <!--<GroupBox Header="Trash Monsters">
+                <StackPanel Margin="0,6,10,0">
+                    <WrapPanel Margin="0,0,0,0">
+                        <RadioButton Foreground="White" Content="Attack Trash" IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
+                        <RadioButton Foreground="White" Content="Attack When Stuck" ToolTip="Trash Ignored usually but attacked when bot is stuck." IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                        <RadioButton Foreground="White" Content="Always Ignore" ToolTip="Trash Ignored, except special situations - like clearing area for town run." IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                    </WrapPanel>
+                </StackPanel>
+            </GroupBox>-->
 
         </StackPanel>
     </ScrollViewer>

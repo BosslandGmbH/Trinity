@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
+using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno.Helpers;
 using Trinity.Framework.Objects.Memory.Symbols.Types;
@@ -2640,7 +2641,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     {
         public const int SizeOf = 1120; // 0x460
         public string _1_0xC_String => ReadString(0xC); //      Flags=2049  
-        public NativePowerDef _2_0x50_Object => ReadObject<NativePowerDef>(0x50); //      Flags=1  
+        public NativePowerDef _2_0x50_Object => ReadObject<NativePowerDef>(0x50, BaseAddress); //      Flags=1  
         public int _3_0x328_int => ReadOffset<int>(0x328); //      Flags=17  Max=1
         public int _4_0x32C_int => ReadOffset<int>(0x32C); //      Flags=17  Max=1
         public string _5_0x330_String => ReadString(0x330); //      Flags=2049  
@@ -2658,31 +2659,34 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
     {
         public const int SizeOf = 728; // 0x2D8
         public NativeSerializeData _1_0x0_SerializeData => ReadObject<NativeSerializeData>(0x0);
-        //    public TagMap _2_0x8_TagMap => ReadOffset<TagMap>(0x8); //    VarArrSerializeOffsetDiff=-8   Flags=33  
+
+        //public PowerMap _2_0x18_TagMap => ReadPointer<PowerMap>(0x18);
+
+        public PowerMap _2_0x8_TagMap => ReadPointer<PowerMap>(0x8); //    VarArrSerializeOffsetDiff=-8   Flags=33  
         public NativeSerializeData _3_0x10_SerializeData => ReadObject<NativeSerializeData>(0x10);
-        //    public TagMap _4_0x18_TagMap => ReadOffset<TagMap>(0x18); //    VarArrSerializeOffsetDiff=-8   Flags=33  
+        public PowerMap _4_0x18_TagMap => ReadPointer<PowerMap>(0x18); //    VarArrSerializeOffsetDiff=-8   Flags=33  
         public NativeSerializeData _5_0x20_SerializeData => ReadObject<NativeSerializeData>(0x20);
-        //    public TagMap _6_0x28_TagMap => ReadOffset<TagMap>(0x28); //    VarArrSerializeOffsetDiff=-8   Flags=33  
+        public PowerMap _6_0x28_TagMap => ReadPointer<PowerMap>(0x28); //    VarArrSerializeOffsetDiff=-8   Flags=33  
         public NativeSerializeData _7_0x30_SerializeData => ReadObject<NativeSerializeData>(0x30);
         public NativeSerializeData _8_0x38_SerializeData => ReadObject<NativeSerializeData>(0x38);
         public NativeSerializeData _9_0x40_SerializeData => ReadObject<NativeSerializeData>(0x40);
         public NativeSerializeData _10_0x48_SerializeData => ReadObject<NativeSerializeData>(0x48);
-        //    public TagMap _11_0x50_TagMap => ReadOffset<TagMap>(0x50); //    VarArrSerializeOffsetDiff=-32   Flags=33  
-        //    public TagMap _12_0x58_TagMap => ReadOffset<TagMap>(0x58); //    VarArrSerializeOffsetDiff=-32   Flags=33  
-        //    public TagMap _13_0x60_TagMap => ReadOffset<TagMap>(0x60); //    VarArrSerializeOffsetDiff=-32   Flags=33  
-        //    public TagMap _14_0x68_TagMap => ReadOffset<TagMap>(0x68); //    VarArrSerializeOffsetDiff=-32   Flags=33  
+        public PowerMap _11_0x50_TagMap => ReadPointer<PowerMap>(0x50); //    VarArrSerializeOffsetDiff=-32   Flags=33  
+        public PowerMap _12_0x58_TagMap => ReadPointer<PowerMap>(0x58); //    VarArrSerializeOffsetDiff=-32   Flags=33  
+        public PowerMap _13_0x60_TagMap => ReadPointer<PowerMap>(0x60); //    VarArrSerializeOffsetDiff=-32   Flags=33  
+        public PowerMap _14_0x68_TagMap => ReadPointer<PowerMap>(0x68); //    VarArrSerializeOffsetDiff=-32   Flags=33  
         public NativeSerializeData _15_0x70_SerializeData => ReadObject<NativeSerializeData>(0x70);
         public NativeSerializeData _16_0x78_SerializeData => ReadObject<NativeSerializeData>(0x78);
         public NativeSerializeData _17_0x80_SerializeData => ReadObject<NativeSerializeData>(0x80);
         public NativeSerializeData _18_0x88_SerializeData => ReadObject<NativeSerializeData>(0x88);
-        //    public TagMap _19_0x90_TagMap => ReadOffset<TagMap>(0x90); //    VarArrSerializeOffsetDiff=-32   Flags=33  
-        //    public TagMap _20_0x98_TagMap => ReadOffset<TagMap>(0x98); //    VarArrSerializeOffsetDiff=-32   Flags=33  
-        //    public TagMap _21_0xA0_TagMap => ReadOffset<TagMap>(0xA0); //    VarArrSerializeOffsetDiff=-32   Flags=33  
-        //    public TagMap _22_0xA8_TagMap => ReadOffset<TagMap>(0xA8); //    VarArrSerializeOffsetDiff=-32   Flags=33  
+        public PowerMap _19_0x90_TagMap => ReadPointer<PowerMap>(0x90); //    VarArrSerializeOffsetDiff=-32   Flags=33  
+        public PowerMap _20_0x98_TagMap => ReadPointer<PowerMap>(0x98); //    VarArrSerializeOffsetDiff=-32   Flags=33  
+        public PowerMap _21_0xA0_TagMap => ReadPointer<PowerMap>(0xA0); //    VarArrSerializeOffsetDiff=-32   Flags=33  
+        public PowerMap _22_0xA8_TagMap => ReadPointer<PowerMap>(0xA8); //    VarArrSerializeOffsetDiff=-32   Flags=33  
         public int _23_0xB0_int => ReadOffset<int>(0xB0); //      Flags=524289  
         public NativeActorCollisionFlags _24_0xB4_Object => ReadObject<NativeActorCollisionFlags>(0xB4); //      Flags=1  
         public NativeActorCollisionFlags _25_0xC4_Object => ReadObject<NativeActorCollisionFlags>(0xC4); //      Flags=1  
-        public List<NativeBuffDef> _26_0xD8_FixedArray => ReadObjects<NativeBuffDef>(0xD8, 32); //      Flags=1  
+        public List<NativeBuffDef> _26_0xD8_FixedArray => ReadObjects<NativeBuffDef>(0xD8, 32, BaseSerializationAddress); //      Flags=1  
     }
 
 

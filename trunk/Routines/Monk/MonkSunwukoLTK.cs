@@ -28,8 +28,17 @@ namespace Trinity.Routines.Monk
         public string Author => "xzjv";
         public string Version => "0.1";
 
+        // Also try linked build with:
+        // => Laws of Seph instead of cindercoat in cube.
+        // => Blinding flash - faith in the light instead of epiphany
+        // => mantra of conviction instead of salvation.
+
+        // Speed farming variation is with in-geom and vengeful wind in cube.      
+
         public string Url => "http://www.diablofans.com/builds/82587-sunwuko-ltk-solo-gr90-now-with-less-stack";
-        //public string Url => "http://www.icy-veins.com/d3/monk-lashing-tail-kick-build-with-the-sunwuko-set-patch-2-4-2-season-7";
+        
+        // this was the original build variation, but its tough to sustain with no primary.
+        // http://www.icy-veins.com/d3/monk-lashing-tail-kick-build-with-the-sunwuko-set-patch-2-4-2-season-7
 
         public Build BuildRequirements => new Build
         {
@@ -91,12 +100,6 @@ namespace Trinity.Routines.Monk
 
         public TrinityPower GetOffensivePower()
         {
-            // It's worth trying other variations of this build that produce more spirit. 
-            // Speed farming variation is with in-geom and vengeful wind in cube.       
-            // Sweeping armada for LTK == more monsters hit == more stacks.
-
-            //http://www.diablofans.com/builds/82587-sunwuko-ltk-solo-gr90-now-with-less-stack
-
             // 853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: ItemPassive_Unique_Ring_903_x1: 402411 ] i:1 f:0 Value=1 
             // 865: PowerBuff2VisualEffectNone (-3231) [ PowerSnoId: ItemPassive_Unique_Ring_922_x1: 402461 ] i:0 f:0 Value=0 
             // 588: BuffIconStartTick2(-3508)[PowerSnoId: ItemPassive_Unique_Gem_018_x1: 428348] i: 79817 f: 0 Value = 79817
@@ -122,6 +125,9 @@ namespace Trinity.Routines.Monk
                 if (Skills.Monk.LashingTailKick.CanCast())
                     return LashingTailKick(CurrentTarget);
             }
+
+            if ((ShouldRefreshBastiansGenerator || ShouldRefreshSpiritGuardsBuff) && TryPrimaryPower(out power))
+                return power;
 
             if (TrySecondaryPower(out power))
                 return power;
@@ -221,7 +227,8 @@ namespace Trinity.Routines.Monk
 
         protected override bool ShouldMantraOfConviction()
         {
-            if (Player.PrimaryResourcePct < 0.3f && Player.CurrentHealthPct > 0.3f)
+            // Only use to dump resource.
+            if (Player.PrimaryResourcePct < 0.65f)
                 return false;
 
             return base.ShouldMantraOfConviction();
@@ -265,6 +272,9 @@ namespace Trinity.Routines.Monk
                 return false;
             }
 
+            if (Skills.Monk.SweepingWind.BuffStacks < 1)
+                return false;
+
             if (!TargetUtil.AnyMobsInRange(50f))
             {
                 Logger.Log(LogCategory.Routine, "Skipping LTK - No Units in 50yd Range.");
@@ -279,12 +289,13 @@ namespace Trinity.Routines.Monk
                 return false;
             }
 
-            var stacks = Skills.Monk.SweepingWind.BuffStacks;
-            if (stacks <= MinSweepingWindStacks)
-            {
-                Logger.Log(LogCategory.Routine, $"Skipping LTK - Not Enough SW Stacks ({stacks})");
-                return false;
-            }
+            //// disabled - reports are that its not efficient to let it drop and recast.
+            //var stacks = Skills.Monk.SweepingWind.BuffStacks;
+            //if (stacks <= MinSweepingWindStacks)
+            //{
+            //    Logger.Log(LogCategory.Routine, $"Skipping LTK - Not Enough SW Stacks ({stacks})");
+            //    return false;
+            //}
 
             if (IsBlocked || IsStuck)
             {
@@ -302,7 +313,7 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.SweepingWind.CanCast())
                 return false;
 
-            if (!Skills.Monk.SweepingWind.IsBuffActive && AllUnitsInSight.Any(u => u.Distance < 100f))
+            if (Skills.Monk.SweepingWind.BuffStacks < 1)
                 return true;
 
             var buffCooldownRemanining = Core.Cooldowns.GetBuffCooldownRemaining(SNOPower.Monk_SweepingWind);

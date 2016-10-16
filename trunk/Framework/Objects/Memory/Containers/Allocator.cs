@@ -73,7 +73,10 @@ namespace Trinity.Framework.Objects.Memory.Containers
         public const int SizeOf = 8;
 
         public int x00_Count => ReadOffset<int>(0x00);
-        public Node x04_First => ReadObject<Node>(0x04);
+
+        public Node x04_First => ReadPointer<Node>(0x04);
+
+        //ReadAbsoluteObject<Node>(ReadOffset<IntPtr>(0x04))
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -99,8 +102,8 @@ namespace Trinity.Framework.Objects.Memory.Containers
                 sizeOf += TypeUtil<T>.SizeOf;
                 return sizeOf;
             }
-
-            public Node x00_Next => ReadObject<Node>(0x00);
+            
+            public Node x00_Next => ReadPointer<Node>(0x00);
             public T x04_Element => ReadObject<T>(0x04);
         }
     }

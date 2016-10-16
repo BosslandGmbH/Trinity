@@ -14,6 +14,10 @@ namespace Trinity.Framework.Avoidance.Structures
         public List<TrinityActor> Actors { get; set; } = new List<TrinityActor>();
         public Vector3 StartPosition { get; set; }
         public bool IsImmune { get; set; }
-        public bool IsAllowed => Settings.IsEnabled && Core.Player.CurrentHealthPct*100 < Settings.HealthPct;
+        public bool IsAllowed => Settings.IsEnabled && Core.Player.CurrentHealthPct * 100 <= Settings.HealthPct;
+
+        public override string ToString() 
+            => $"{GetType().Name}: {Definition.Name} Ignored={!IsAllowed} Settings({Settings.HealthPct}/{Settings.DistanceMultiplier}) " +
+               $"Dist={StartPosition.Distance(Core.Player.Position)} Age={CreationTime-DateTime.UtcNow:g} Immune={IsImmune}";
     }
 }
