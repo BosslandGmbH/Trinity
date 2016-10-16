@@ -91,6 +91,14 @@ namespace Trinity.Settings
             set { SetField(ref _eliteWeighting, value); }
         }
 
+        //[DataMember]
+        //[DefaultValue(SettingMode.Enabled)]
+        //public SettingMode TrashWeighting
+        //{
+        //    get { return _eliteWeighting; }
+        //    set { SetField(ref _eliteWeighting, value); }
+        //}
+
         [DataMember]
         [Setting, UIControl(UIControlType.FlagsCheckboxes)]
         public EliteTypes EliteTypes

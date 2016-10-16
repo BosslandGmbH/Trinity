@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
+using Trinity.Coroutines.Town;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
@@ -40,6 +42,17 @@ namespace Trinity.Routines.Crusader
 
         #endregion
 
+        public override bool SetWeight(TrinityActor cacheObject)
+        {
+            if (Settings.IgnoreTrash && cacheObject.IsTrashMob && RiftProgression.IsInRift && !cacheObject.IsMinimapActive && (RiftProgression.IsGreaterRift || !TrinityTownRun.IsTryingToTownPortal()))
+            {
+                cacheObject.WeightInfo += $"Routine(IgnoreTrash)";
+                cacheObject.Weight = 0;
+                return true;
+            }
+            return false;
+        }
+
         public TrinityPower GetOffensivePower()
         {
             TrinityPower power;
@@ -75,10 +88,9 @@ namespace Trinity.Routines.Crusader
 
             // Wait for CoE to Cast Damage CD's
 
-            var shouldWait = Settings.Bombardment.WaitForConvention == ConventionMode.GreaterRift && RiftProgression.IsGreaterRift || Settings.Bombardment.WaitForConvention == ConventionMode.Always;
             var isCastWindow = !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000);
 
-            if (Skills.Crusader.Bombardment.CanCast() && (!shouldWait || isCastWindow))
+            if (Skills.Crusader.Bombardment.CanCast() && (ShouldBombardWheneverPossible || isCastWindow))
             {
                 if (ShouldIronSkin())
                     return IronSkin();
@@ -98,6 +110,23 @@ namespace Trinity.Routines.Crusader
             }
 
             return null;
+        }
+
+        private bool ShouldBombardWheneverPossible
+        {
+            get
+            {
+                if (Settings.Bombardment.WaitForConvention == ConventionMode.GreaterRift && RiftProgression.IsGreaterRift)
+                    return false;
+
+                if (Settings.Bombardment.WaitForConvention == ConventionMode.Always)
+                    return false;
+
+                if (Settings.Bombardment.WaitForConvention == ConventionMode.RiftBoss && RiftProgression.IsInRift && AllUnits.Any(u => u.IsBoss))
+                    return false;
+
+                return true;
+            }
         }
 
         protected override bool ShouldJudgement()
@@ -167,6 +196,14 @@ namespace Trinity.Routines.Crusader
             private SkillSettings _bombardment;
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private bool _ignoreTrash;
+
+            [DefaultValue(false)]
+            public bool IgnoreTrash
+            {
+                get { return _ignoreTrash; }
+                set { SetField(ref _ignoreTrash, value); }
+            }
 
             [DefaultValue(25)]
             public int ClusterSize

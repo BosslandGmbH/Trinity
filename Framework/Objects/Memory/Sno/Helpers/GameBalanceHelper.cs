@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Objects.Memory.Sno.Types;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Objects.Memory.Sno.Helpers
@@ -43,6 +45,10 @@ namespace Trinity.Framework.Objects.Memory.Sno.Helpers
             return default(T);
         }
 
-        
+        public IEnumerable<T> GetRecords<T>(SnoGameBalanceType type) where T : MemoryWrapper, new()
+        {
+            var gbTable = Core.MemoryModel.SnoGroups.GameBalance.Container.FirstOrDefault(gb => gb.Value.GameBalanceType == type);
+            return gbTable?.Value.OfType<T>();
+        }
     }
 }

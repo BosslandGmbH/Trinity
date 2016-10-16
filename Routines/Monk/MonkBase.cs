@@ -455,8 +455,8 @@ namespace Trinity.Routines.Monk
 
         #region Expressions 
 
-        private static bool ShouldRefreshSpiritGuardsBuff
-            => Legendary.SpiritGuards.IsEquipped && SpellHistory.TimeSinceGeneratorCast >= 2200;
+        protected static bool ShouldRefreshSpiritGuardsBuff
+            => Legendary.SpiritGuards.IsEquipped && (SpellHistory.TimeSinceGeneratorCast >= 2500 || !HasSpiritGuardsBuff);
 
         protected bool HasCycled(Skill s) 
             => s.TimeSinceUse > 250 && !s.IsLastUsed;

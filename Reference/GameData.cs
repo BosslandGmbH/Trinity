@@ -2088,6 +2088,8 @@ namespace Trinity.Reference
             //x1_Westm_HeroWorship03_VO = 321479,
             321451, 321454, 321479,
 
+            (int)SNOActor.px_Bounty_Ramparts_Camp_CatapultIdle, // not interactable
+            (int)SNOActor.px_Bounty_Ramparts_Camp_CatapultFiring,
 
             // Bulba
             430733, //A1 Templar Inquisition
@@ -2099,7 +2101,7 @@ namespace Trinity.Reference
             432885, //A2: The Ancient Devices
             433184, //A3: The Lost Patrol
             433295, //A3: The Demon Gates
-            433385, //A3: Catapult Command (It's a switch instead of chest, so might be pre 2.2 bounty)
+            //433385, //A3: Catapult Command (It's a switch instead of chest, so might be pre 2.2 bounty) // needed for quest. 'catapault command'
             433402, //A4: Hell Portals
             433124, //A4: Tormented Angels
             433246, //A5: Death's Embrace

@@ -117,14 +117,15 @@ namespace Trinity.Routines.Barbarian
         protected virtual bool ShouldHammerOfTheAncients(out TrinityActor target)
         {
             target = null;
+            var skill = Skills.Barbarian.HammerOfTheAncients;
 
-            if (!Skills.Barbarian.HammerOfTheAncients.CanCast())
+            if (!skill.CanCast())
                 return false;
 
             if (Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
 
-            if (Skills.Barbarian.HammerOfTheAncients.IsLastUsed && IsMultiSpender)
+            if (skill.IsLastUsed && IsMultiSpender && skill.TimeSinceUse < 250)
                 return false;
 
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
@@ -134,14 +135,15 @@ namespace Trinity.Routines.Barbarian
         protected virtual bool ShouldSeismicSlam(out TrinityActor target)
         {
             target = null;
+            var skill = Skills.Barbarian.SeismicSlam;
 
-            if (!Skills.Barbarian.SeismicSlam.CanCast())
+            if (!skill.CanCast())
                 return false;
 
             if (Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
 
-            if (Skills.Barbarian.SeismicSlam.IsLastUsed && IsMultiSpender)
+            if (skill.IsLastUsed && IsMultiSpender && skill.TimeSinceUse < 250)
                 return false;
 
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
@@ -151,17 +153,18 @@ namespace Trinity.Routines.Barbarian
         protected virtual bool ShouldRend(out Vector3 position)
         {
             position = Vector3.Zero;
+            var skill = Skills.Barbarian.Rend;
 
-            if (!Skills.Barbarian.Rend.CanCast())
+            if (!skill.CanCast())
                 return false;
 
             if (Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
 
-            if (Skills.Barbarian.Rend.IsLastUsed && IsMultiSpender)
+            if (skill.IsLastUsed && IsMultiSpender && skill.TimeSinceUse < 250)
                 return false;
 
-            if (Skills.Barbarian.Rend.TimeSinceUse < 500) 
+            if (skill.TimeSinceUse < 500) 
                 return false;
 
             if (TargetUtil.IsPercentOfMobsDebuffed(SNOPower.Barbarian_Rend, 10f, 0.75f))
@@ -198,11 +201,12 @@ namespace Trinity.Routines.Barbarian
         protected virtual bool ShouldAncientSpear(out TrinityActor target)
         {
             target = null;
+            var skill = Skills.Barbarian.AncientSpear;
 
-            if (!Skills.Barbarian.AncientSpear.CanCast())
+            if (!skill.CanCast())
                 return false;
 
-            if (Skills.Barbarian.AncientSpear.IsLastUsed && IsMultiSpender)
+            if (skill.IsLastUsed && IsMultiSpender && skill.TimeSinceUse < 250)
                 return false;
 
             target = TargetUtil.BestAoeUnit(60, true).IsInLineOfSight
@@ -410,10 +414,13 @@ namespace Trinity.Routines.Barbarian
 
         protected virtual bool ShouldWrathOfTheBerserker()
         {
-            if (!Skills.Barbarian.WrathOfTheBerserker.CanCast())
+            var skill = Skills.Barbarian.WrathOfTheBerserker;
+
+            if (!skill.CanCast())
                 return false;
 
-            if (Skills.Barbarian.WrathOfTheBerserker.IsBuffActive)
+            // For some reason the normal buff check says the buff is always active after first use.
+            if (Core.Cooldowns.GetBuffCooldownRemaining(skill.SNOPower).TotalMilliseconds > 0)
                 return false;
 
             return true;
@@ -533,7 +540,11 @@ namespace Trinity.Routines.Barbarian
         protected static int RaekorDamageStacks 
             => Core.Buffs.GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_026);
 
-       
+        protected static bool IsBandOfMightBuffActive
+            => Player.HasBuff((SNOPower)447060,1); //'P4_ItemPassive_Unique_Ring_049' (447060) Stacks=1 VariantId=1)
+
+
+
         #endregion
 
         #region Helpers
@@ -635,7 +646,7 @@ namespace Trinity.Routines.Barbarian
 
             else if (ShouldCallOfTheAncients())
                 power = CallOfTheAncients();
-
+           
             else if (ShouldWrathOfTheBerserker())
                 power = WrathOfTheBerserker();
 

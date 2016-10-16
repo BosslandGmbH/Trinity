@@ -15,9 +15,9 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         public Dictionary<int, AttributeItem> Items = new Dictionary<int, AttributeItem>();
         public Func<ACD, int> GetFastAttributeGroupId = acd => ZetaDia.Memory.Read<int>(acd.BaseAddress + 0x120);
         public int FastAttributeGroupId;
-        public Map<AttributeItem> PtrMap;
+        public BasicMap<AttributeItem> PtrMap;
         public AttributeGroup Group;
-        private Map<AttributeItem> Map;
+        private BasicMap<AttributeItem> Map;
         private static uint AttributeHasher(int key)
         {
             return unchecked((uint)(key ^ (key >> 12)));

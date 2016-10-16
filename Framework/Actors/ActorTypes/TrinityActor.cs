@@ -22,6 +22,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 {
     public class TrinityActor : ActorBase, ITargetable
     {
+        public TargetingInfo Targeting { get; set; } = new TargetingInfo();
         public virtual ActorAttributes Attributes { get; set; }
         public bool IsAllowedClientEffect { get; set; }
         public bool IsExcludedId { get; set; }
@@ -204,8 +205,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;
         public bool IsAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.Avoidance);
         public bool IsCriticalAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.CriticalAvoidance);
-
-
 
         public void AddCacheInfo(string reason)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Zeta.Game;
@@ -16,7 +17,7 @@ namespace Trinity.Framework.Objects.Memory.Containers
         int ModKey { get; }
     }
 
-    public class Table<T> : MemoryWrapper where T : MemoryWrapper, ITableItem, new()
+    public class Table<T> : MemoryWrapper, IEnumerable<T> where T : MemoryWrapper, ITableItem, new()
     {
         public IntPtr DataPtr => ReadOffset<IntPtr>(0x00);
 
@@ -25,6 +26,8 @@ namespace Trinity.Framework.Objects.Memory.Containers
         public IntPtr[] RowPtrs => ZetaDia.Memory.ReadArray<IntPtr>(DataPtr, Size);
 
         public Dictionary<int, T> Items = new Dictionary<int, T>();
+
+        public Table() { } 
 
         public Table(IntPtr ptr)
         {
@@ -40,7 +43,7 @@ namespace Trinity.Framework.Objects.Memory.Containers
             foreach (var ptr in RowPtrs.Where(p => p != IntPtr.Zero))
             {
                 var item = Create<T>(ptr);
-                Items.Add(item.ModKey, item);
+                Items[item.ModKey] = item;
             }
         }
 
@@ -55,6 +58,9 @@ namespace Trinity.Framework.Objects.Memory.Containers
                 RowPtrs[key] = value;
             }
         }
+
+        public IEnumerator<T> GetEnumerator() => Items.Values.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
 

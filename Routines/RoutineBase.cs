@@ -101,7 +101,7 @@ namespace Trinity.Routines
             ZetaDia.Me.IsInCombat;
 
         /// <summary>
-        /// The a number of units somewhat larger than the current cluster size setting.
+        /// A number of units somewhat larger than the current cluster size setting.
         /// </summary>
         protected static int LargeClusterSize
             => (int)Math.Ceiling(Core.Routines.CurrentRoutine.ClusterSize * 1.25d);

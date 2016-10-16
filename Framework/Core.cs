@@ -7,6 +7,7 @@ using Trinity.Framework.Avoidance;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.ProfileTags;
 using Trinity.Routines;
@@ -51,6 +52,9 @@ namespace Trinity.Framework
         public static SessionLogger SessionLogger { get; } = new SessionLogger();
         public static ItemLogger ItemLogger { get; } = new ItemLogger();
 
+        public static HeroDataCache HeroData { get; } = new HeroDataCache();
+        public static PowerDataCache PowerData { get; } = new PowerDataCache();
+  
         // Misc
         public static GridHelper Grids { get; } = new GridHelper();
         public static PlayerMover PlayerMover { get; } = new PlayerMover();

@@ -43,7 +43,7 @@ namespace Trinity.Framework.Actors.Properties
             var realname = GetName(actor.GameBalanceId);
             actor.Name = string.IsNullOrEmpty(realname) ? actor.InternalName : realname;
 
-            var gbi = SnoManager.GameBalance.GetRecord<SnoGameBalanceItem>(SnoGameBalanceType.Items, actor.GameBalanceId);
+            var gbi = SnoManager.GameBalanceHelper.GetRecord<SnoGameBalanceItem>(SnoGameBalanceType.Items, actor.GameBalanceId);
             actor.ItemLevel = actor.RequiredLevel; //gbi.ItemLevel;
             actor.InternalName = gbi.InternalName;
             actor.MaxStackCount = gbi.StackSize;
@@ -177,7 +177,7 @@ namespace Trinity.Framework.Actors.Properties
             return FollowerType.None;
         }
 
-        public static string GetName(int gameBalanceId) => SnoManager.StringList.GetStringListValue(SnoStringListType.Items, gameBalanceId);
+        public static string GetName(int gameBalanceId) => SnoManager.StringListHelper.GetStringListValue(SnoStringListType.Items, gameBalanceId);
 
         public static bool CanPickupItem(TrinityItem actor)
         {

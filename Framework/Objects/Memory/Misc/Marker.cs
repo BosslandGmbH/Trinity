@@ -13,7 +13,7 @@ namespace Trinity.Framework.Objects.Memory.Misc
 {
     public class Marker : MemoryWrapper
     {
-        public string Name => SnoManager.StringList.GetStringListValue((SnoStringListType)StringListSnoId, NameHash);
+        public string Name => SnoManager.StringListHelper.GetStringListValue((SnoStringListType)StringListSnoId, NameHash);
         public float Distance => ZetaDia.Me.Position.Distance(Position);
         public Vector3 Position => ReadOffset<Vector3>(0x8);
         public int WorldId => ReadOffset<int>(0x14);

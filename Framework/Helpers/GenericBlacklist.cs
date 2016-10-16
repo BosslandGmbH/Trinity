@@ -47,10 +47,10 @@ namespace Trinity.Framework.Helpers
     {
         public static void Blacklist(TrinityActor objectToBlacklist, TimeSpan duration = default(TimeSpan), string reason = "")
         {
-            Logger.Log($@"Blacklisting target {objectToBlacklist.InternalName} due to possible stuck/flipflop!
-                            Reason={reason})                             
-                            ActorSnoId={objectToBlacklist.ActorSnoId} 
-                            RActorId={objectToBlacklist.RActorId}");
+            Logger.Log($@"Blacklisting {objectToBlacklist.InternalName} ActorSnoId: {objectToBlacklist.ActorSnoId} RActorId: {objectToBlacklist.RActorId}
+            Because: {reason}
+            Duration: {duration:g}   
+            ");
 
             DateTime expires;
             if (duration == default(TimeSpan))

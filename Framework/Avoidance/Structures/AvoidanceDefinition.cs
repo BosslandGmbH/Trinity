@@ -48,7 +48,6 @@ namespace Trinity.Framework.Avoidance.Structures
         /// <summary>
         /// enables doing things with this avoidance
         /// </summary>
-        //public Func<IAvoidanceHandler> HandlerProducer { get; set; }
         public IAvoidanceHandler Handler { get; set; }
 
         /// <summary>

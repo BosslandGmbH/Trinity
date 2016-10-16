@@ -807,7 +807,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             foreach (var item in Core.Minimap.MinimapIcons)
             {
                 var radius = 5 * GridSize;
-                dc.DrawEllipse(HotPinkBrush, null, item.Position.ToCanvasPoint(), radius, radius);
+                dc.DrawEllipse(PinkBrush, null, item.Position.ToCanvasPoint(), radius, radius);
             }
         }
 
@@ -991,7 +991,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     ex.Message, ex.InnerException, ex);
             }
         }
-
+        
         private void DrawTargetting(DrawingContext dc, CanvasData canvas)
         {
             try
@@ -1005,8 +1005,30 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     return;
 
                 var targetPoint = targetPosition.ToCanvasPoint();
-                dc.DrawEllipse(HotPinkBrush, null, targetPoint, GridSize, GridSize);
-                dc.DrawLine(RadarResources.TargetPen, Player.Point, targetPoint);
+                dc.DrawEllipse(PinkBrush, null, targetPoint, GridSize, GridSize);
+                dc.DrawLine(PinkPen, Player.Point, targetPoint);
+
+                var power = Combat.Targeting.CurrentPower;
+                if (power == null)
+                    return;
+
+                Point spellPoint;
+
+                if (power.TargetAcdId == -1 && power.TargetPosition != Vector3.Zero)
+                {
+                    spellPoint = power.TargetPosition.ToCanvasPoint();                    
+                }
+                else
+                {
+                    var spellTarget = Core.Actors.GetActorByAcdId<TrinityActor>(power.TargetAcdId);
+                    if (spellTarget == null)
+                        return;
+
+                    spellPoint = spellTarget.Position.ToCanvasPoint();
+                }
+
+                dc.DrawEllipse(DeepPinkBrush, null, spellPoint, GridSize, GridSize);
+                dc.DrawLine(DeepPinkPen, Player.Point, spellPoint);
             }
             catch (Exception ex)
             {
@@ -1021,7 +1043,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 foreach (var node in _explorationNodes)
                 {
-                    var color = node.IsVisited ? HotPinkBrush : node.IsBlacklisted ? BlackBrush : node.HasEnoughNavigableCells ? GreenBrush : null;
+                    var color = node.IsVisited ? PinkBrush : node.IsBlacklisted ? BlackBrush : node.HasEnoughNavigableCells ? GreenBrush : null;
                     if (color != null)
                     {
                         dc.DrawEllipse(color, null, node.NavigableCenter.ToCanvasPoint(), 5, 5);
@@ -1096,9 +1118,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         {
             try
             {
-                if (Core.Avoidance.IsUpdatingNodes)
-                    return;
-
                 if (Core.Avoidance.GridEnricher.CurrentNodes == null)
                     return;
 
@@ -1129,8 +1148,14 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         internal static readonly SolidColorBrush GreenBrush = Brushes.Green;
         internal static readonly SolidColorBrush BlackBrush = Brushes.Black;
         internal static readonly SolidColorBrush DarkGrayBrush = Brushes.DarkGray;
+
+        internal static readonly SolidColorBrush DeepPinkBrush = Brushes.DeepPink;
+        internal static readonly Pen DeepPinkPen = new Pen(DeepPinkBrush, 2);
+
+        internal static readonly SolidColorBrush PinkBrush = Brushes.Pink;
+        internal static readonly Pen PinkPen = new Pen(PinkBrush, 2);
+
         internal static readonly SolidColorBrush LineGreenBrush = Brushes.LimeGreen;
-        internal static readonly SolidColorBrush HotPinkBrush = Brushes.HotPink;
         internal static readonly SolidColorBrush OrangeBrush = Brushes.Orange;
         internal static readonly SolidColorBrush YellowBrush = Brushes.Yellow;
 

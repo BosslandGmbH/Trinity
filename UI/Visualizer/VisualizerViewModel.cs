@@ -186,10 +186,17 @@ namespace Trinity.UI.Visualizer
 
                 Objects = new ObservableCollection<TrinityActor>(queryableObjects);
 
-                if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache) && DateTime.UtcNow.Subtract(LastUpdatedNotInCacheObjects).TotalMilliseconds > 200)
+                if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache))
                 {
-                    NotInCacheObjects = new List<TrinityActor>(Core.Targets.Ignored);
-                    LastUpdatedNotInCacheObjects = DateTime.UtcNow;
+                    if (DateTime.UtcNow.Subtract(LastUpdatedNotInCacheObjects).TotalMilliseconds > 150)
+                    {
+                        NotInCacheObjects = new List<TrinityActor>(Core.Targets.Ignored);
+                        LastUpdatedNotInCacheObjects = DateTime.UtcNow;
+                    }
+                }
+                else
+                {
+                    NotInCacheObjects.Clear();
                 }
 
                 //if (!IsMouseOverGrid)
@@ -216,8 +223,7 @@ namespace Trinity.UI.Visualizer
                 //    Logger.LogVerbose("Skipping grid update so grid items can be clicked properly");
                 //}
 
-                CurrentTarget = Combat.Targeting.CurrentTarget;                
-
+                CurrentTarget = Combat.Targeting.CurrentTarget;
                 Player = Core.Player.Actor;
                 PlayerPositionX = Player.Position.X;
                 PlayerPositionY = Player.Position.Y;

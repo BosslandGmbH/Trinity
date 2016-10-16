@@ -258,6 +258,7 @@ namespace Trinity.Framework.Objects
         Always,
         GreaterRift,
         Never,
+        RiftBoss,
     }
 
 }

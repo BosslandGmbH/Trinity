@@ -419,7 +419,8 @@ namespace Trinity.Reference
                         return;
                 }
             }
-            else
+
+            if (IsElementVisible(PartyFollowerBossAccept))
             {
                 if (isInGame && SafeClickElement(PartyFollowerBossAccept, "Party Follower Boss Accept", true))
                     return;

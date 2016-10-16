@@ -57,21 +57,65 @@ namespace Trinity.Components.Combat
 
         public TrinityPower LastPower { get; private set; }
 
+        private void SetCurrentTarget(TrinityActor target)
+        {
+            if (CurrentTarget != null && CurrentTarget.Targeting.TotalTargetedTime > TimeSpan.FromSeconds(30))
+            {
+                Logger.Log(LogCategory.Targetting, $"Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
+            }
+
+            if (CurrentTarget == target)
+                return;
+
+            if (target == null && CurrentTarget != null)
+            {
+                Logger.Log(LogCategory.Targetting, $"Clearing Target. Was: {CurrentTarget}");
+            }
+         
+            if (CurrentTarget != null)
+            {
+                CurrentTarget.Targeting.IsTargetted = false;
+                LastTarget = CurrentTarget;
+            }
+
+            if (target != null)
+            {
+                target.Targeting.IsTargetted = true;
+                Logger.Log(LogCategory.Targetting, $"New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo}");
+            }
+
+            CurrentTarget = target;                 
+        }
+
+        private void SetCurrentPower(TrinityPower power)
+        {
+            if (CurrentPower != null)
+                LastPower = CurrentPower;
+
+            CurrentPower = power;
+        }
+
         public async Task<bool> HandleTarget(TrinityActor target)
         {
+            if (await HandleAvoidance())
+                return true;
+
             if (target == null || !target.IsValid)
             {
-                Logger.LogError($"No valid target was selected to handle.");
+                SetCurrentTarget(null);
+                SetCurrentPower(null);
                 return false;
             }
 
-            LastTarget = CurrentTarget;
-            CurrentTarget = target;
-            LastPower = CurrentPower;
-            CurrentPower = GetPowerForTarget(target);
+            if (TryBlacklist(target))
+            {
+                SetCurrentTarget(null);
+                SetCurrentPower(null);
+                return false;
+            }
 
-            if (await HandleAvoidance())
-                return true;
+            SetCurrentTarget(target);
+            SetCurrentPower(GetPowerForTarget(target));            
 
             if (await HandleKiting())
                 return true;
@@ -80,7 +124,7 @@ namespace Trinity.Components.Combat
             {
                 if (!Core.Player.IsPowerUseDisabled)
                 {
-                    Logger.LogError($"No valid power was selected for target: {CurrentTarget}");                    
+                    Logger.LogError(LogCategory.Targetting, $"No valid power was selected for target: {CurrentTarget}");                    
                 }
                 return false;
             }
@@ -91,6 +135,47 @@ namespace Trinity.Components.Combat
             }
             
             return true;
+        }
+
+        private bool TryBlacklist(TrinityActor target)
+        {
+            if (target == null)
+                return false;
+
+            if (target.Type == TrinityObjectType.Door && !target.IsUsed)
+                return false;
+
+            if (target.Type == TrinityObjectType.ProgressionGlobe)
+                return false;
+
+            if (target.Type == TrinityObjectType.Shrine)
+                return false;
+
+            if (target.IsElite)
+                return false;
+
+            var times = target.Targeting.TargetedTimes;
+            var duration = target.Targeting.TotalTargetedTime;
+
+            if (duration > TimeSpan.FromSeconds(10) && times > 10)
+            {
+                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(5), $"Micro-Blacklist for reposition / anti-flipflop (Times={times} Duration={duration})");
+                return true;
+            }
+
+            if (duration > TimeSpan.FromMinutes(2))
+            {
+               GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted for too long ({duration})");
+                return true;
+            }
+
+            if (duration > TimeSpan.FromSeconds(30) && target.Targeting.TargetedTimes > 50)
+            {
+                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted too many times ({times})");
+                return true;
+            }
+
+            return false;
         }
 
         private TrinityPower GetPowerForTarget(TrinityActor target)
@@ -233,7 +318,7 @@ namespace Trinity.Components.Combat
             var targetRangeRequired = target.IsHostile || target.IsDestroyable ? Math.Max(spellRange, objectRange) : objectRange;
             var targetRadiusDistance = target.RadiusDistance;
 
-            Logger.LogVerbose(LogCategory.Behavior, $">> CurrentPower={Combat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{targetRadiusDistance}");
+            Logger.LogVerbose(LogCategory.Targetting, $">> CurrentPower={Combat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{targetRadiusDistance}");
             return targetRadiusDistance <= targetRangeRequired && IsInLineOfSight(target);
         }
 
@@ -251,7 +336,7 @@ namespace Trinity.Components.Combat
             var rangeRequired = Math.Max(1f, power.MinimumRange);
             var distance = position.Distance(Core.Player.Position);
 
-            Logger.LogVerbose(LogCategory.Behavior, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
+            Logger.LogVerbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
             return distance <= Math.Max(1f, power.MinimumRange) && IsInLineOfSight(position);
         }
 
@@ -263,7 +348,10 @@ namespace Trinity.Components.Combat
             if (currentTarget.RadiusDistance <= 2f)
                 return true;
 
-            return currentTarget.IsInLineOfSight || currentTarget.IsWalkable;
+            if (currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(15) && currentTarget.IsInLineOfSight)
+                return true;
+
+            return currentTarget.IsWalkable;
         }
 
         private bool IsInLineOfSight(Vector3 position)

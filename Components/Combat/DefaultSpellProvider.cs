@@ -91,7 +91,7 @@ namespace Trinity.Components.Combat
 
             if (power.ShouldWaitBeforeUse)
             {
-                Logger.LogVerbose($"Waiting for before power for {power.WaitTimeBeforeRemaining}");
+                Logger.LogVerbose($"Waiting before power for {power.WaitTimeBeforeRemaining}");
                 await Coroutine.Sleep((int)power.WaitTimeBeforeRemaining);
             }
 

@@ -5666,7 +5666,6 @@ namespace Trinity.Reference
                     TypeId = "e",
                     RuneIndex = 4,
                     SkillIndex = 17,
-                    ModifiedIsDamaging = true,
                     Class = ActorClass.Barbarian
                 };
                 #endregion

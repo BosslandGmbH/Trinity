@@ -209,10 +209,9 @@ namespace Trinity.Framework.Avoidance
                 {
                     node.AvoidanceTypes.Add(type);
                 }
-
                 node.AvoidanceHashCodes.Add(hashCode);
                 node.Weight += weightModification;
-                node.AddNodeFlags(AvoidanceFlags.Avoidance);
+                node.AddNodeFlags(flags);
             }
         }
 

@@ -1,0 +1,55 @@
+namespace Trinity.Framework.Objects.Memory.Misc
+{
+    public enum MapDataType
+    {
+        BuffType = 139,
+        HotBarType = 138,
+        SteeringType = 132,
+        DamageType = 119,
+        TargetFunc = 117,
+        Frame = 112, // ui element?
+        HighPrecision = 0, //Scaling, Angle, %
+        ActorGroup = 20,
+        ActorSno = 12,
+        PowerSno = 17,
+        Animation = 26,
+        Bool = 27,
+        Requirement = 93,
+        IconSno = 38,
+        ShaderMap = 11,
+        Formula = 87,
+        SpellFunc = 89,
+        ActorClass = 100,
+        Template = 88,
+        PowerSno2 = 17,
+        Func = 63,
+        PowerSnoId2 = 4, // Special power?
+        Shader = 2, // Tooltip? Index? Int?
+        Unk105 = 105,
+        Unk92 = 92,
+        Unk90 = 90,
+        ConversationSno = 77,
+        Unk99 = 99,
+        Unk32 =  32,
+        BrainAction = 91,
+        MaterialFunc = 62,
+        Attribute = 24,
+        Unk55 = 55,
+        LocationFunc = 61,
+        OutputFormat = 140,
+        PMAFunc = 64,
+        VBFormat = 65,
+        Title = 45,
+        Description = 44,
+        Force = 10,
+        WeaponClassRequirement = 105,
+        ParticleSno = 18,
+        SoundSetting = 25,
+        DotStackMethod = 97,
+        RopeSno = 31,
+        TargetSno = 18,
+        RopeChainSno = 31,
+        DeliveryMechanism = 123,
+        PayloadType = 95,
+    }
+}
