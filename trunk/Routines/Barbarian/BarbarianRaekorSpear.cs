@@ -252,7 +252,7 @@ namespace Trinity.Routines.Barbarian
             public UserControl GetControl() => UILoader.LoadXamlByFileName<UserControl>(GetName() + ".xaml");
             public object GetDataContext() => this;
             public string GetCode() => JsonSerializer.Serialize(this);
-            public void ApplyCode(string code) => JsonSerializer.Deserialize(code, this);
+            public void ApplyCode(string code) => JsonSerializer.Deserialize(code, this, true);
             public void Reset() => LoadDefaults();
             public void Save() { }
 

@@ -52,7 +52,7 @@ namespace Trinity.Framework.Helpers
             }
         }
 
-        public static void Deserialize<T>(string json, T instance, bool ignoreNulls = false) where T : class, new()
+        public static void Deserialize<T>(string json, T instance, bool ignoreDefaults = false) where T : class, new()
         {
             try
             {
@@ -60,7 +60,10 @@ namespace Trinity.Framework.Helpers
                 {
                     var serializer = new DataContractJsonSerializer(typeof(T));
                     var newObj = serializer.ReadObject(stream) as T;
-                    PropertyCopy.Copy(newObj, instance, new PropertyCopyOptions { IgnoreNulls = ignoreNulls } );
+                    PropertyCopy.Copy(newObj, instance, new PropertyCopyOptions
+                    {
+                        IgnoreDefaults = ignoreDefaults,
+                    } );
                 }
             }
             catch (Exception ex)

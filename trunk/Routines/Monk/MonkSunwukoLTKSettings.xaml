@@ -29,7 +29,7 @@
                             Tag="Cluster Size"
                             ToolTip="Number of monsters that must be grouped up before fighting starts"
                             Interval="100" IsSnapToTickEnabled="True"
-                            Maximum="25" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
                             Value="{Binding Path=DataContext.ClusterSize}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
@@ -86,6 +86,12 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Lashing Tail Kick</GroupBox.Header>
+                    <StackPanel>
+                        <CheckBox IsChecked="{Binding DataContext.LTKFromRange}">Allow shooting fireballs from range</CheckBox>
+                    </StackPanel>
+                </GroupBox>                
             </StackPanel>
         </Grid>
     </Border>

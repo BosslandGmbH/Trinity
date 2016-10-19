@@ -251,7 +251,11 @@ namespace Trinity.Routines.Witchdoctor
             if (!Skills.WitchDoctor.SoulHarvest.CanCast())
                 return false;
 
-            var isMaxHarvestStacks = Skills.WitchDoctor.SoulHarvest.BuffStacks == MaxSoulHarvestStacks;
+            var stacks = Skills.WitchDoctor.SoulHarvest.BuffStacks;
+            if (stacks > 1 && Skills.WitchDoctor.SoulHarvest.TimeSinceUse > 11000 && AllUnits.Any(u => u.Distance <= 18f))
+                return true;
+
+            var isMaxHarvestStacks = stacks == MaxSoulHarvestStacks;
             if (isMaxHarvestStacks && !Sets.RaimentOfTheJadeHarvester.IsEquipped)
                 return false;
 

@@ -28,7 +28,7 @@
                             Tag="Cluster Size"
                             ToolTip="Number of monsters that must be grouped up before fighting starts"
                             Interval="100" IsSnapToTickEnabled="True"
-                            Maximum="25" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
                             Value="{Binding Path=DataContext.ClusterSize}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
@@ -46,6 +46,28 @@
                     <GroupBox.Header>Build Settings</GroupBox.Header>
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Margin="10,5,0,0">This build is highly specialized and so we're using what we believe to be the optimal settings. If there is something specific you think should be configurable please let us know.</TextBlock>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Spirit Walk</GroupBox.Header>
+                    <StackPanel>
+                        <WrapPanel Margin="0,5,0,0">
+                            <RadioButton ToolTip="Uses it whenever monsters are nearby"
+                                Content="Spam it!" IsChecked="{Binding DataContext.SpiritWalk.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Always}"  />
+                            <RadioButton ToolTip="Casts it often"
+                                Content="Prefer Defensive Use" IsChecked="{Binding DataContext.SpiritWalk.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Kiting Style</GroupBox.Header>
+                    <StackPanel>
+                        <WrapPanel Margin="0,5,0,0">
+                            <RadioButton ToolTip="Prefers to hang out far away from danger"
+                                Content="Stay far away" IsChecked="{Binding DataContext.KiteVariation, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=DistantEmptySpace}"  />
+                            <RadioButton ToolTip="Prefers to stay close to monsters to apply buffs/bonuses"
+                                Content="Close to monsters" IsChecked="{Binding DataContext.KiteVariation, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=NearTargetCluster}" />
+                        </WrapPanel>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

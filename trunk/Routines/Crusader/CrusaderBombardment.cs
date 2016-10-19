@@ -72,6 +72,8 @@ namespace Trinity.Routines.Crusader
             if (ShouldJudgement())
                 return Judgement();
 
+
+
             // Make sure we cast Bombardment when IronSkin and CoE is Up.
             // Note iron skin is gated below by Convention of Elements check,            
             if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
@@ -89,8 +91,9 @@ namespace Trinity.Routines.Crusader
             // Wait for CoE to Cast Damage CD's
 
             var isCastWindow = !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000);
+            var isTargetCloseEnough = !CurrentTarget.IsElite || CurrentTarget.IsElite && CurrentTarget.Distance < 30f;
 
-            if (Skills.Crusader.Bombardment.CanCast() && (ShouldBombardWheneverPossible || isCastWindow))
+            if (Skills.Crusader.Bombardment.CanCast() && (ShouldBombardWheneverPossible && isTargetCloseEnough || isCastWindow ))
             {
                 if (ShouldIronSkin())
                     return IronSkin();
@@ -169,6 +172,12 @@ namespace Trinity.Routines.Crusader
                 return power;
 
             return null;
+        }
+
+        protected override bool ShouldLawsOfHope()
+        {
+            // Spam for movement buff.
+            return Skills.Crusader.LawsOfHope.CanCast();
         }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
@@ -258,7 +267,7 @@ namespace Trinity.Routines.Crusader
             public UserControl GetControl() => UILoader.LoadXamlByFileName<UserControl>(GetName() + ".xaml");
             public object GetDataContext() => this;
             public string GetCode() => JsonSerializer.Serialize(this);
-            public void ApplyCode(string code) => JsonSerializer.Deserialize(code, this);
+            public void ApplyCode(string code) => JsonSerializer.Deserialize(code, this, true);
             public void Reset() => LoadDefaults();
             public void Save() { }
 

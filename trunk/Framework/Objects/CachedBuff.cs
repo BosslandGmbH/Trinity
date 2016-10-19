@@ -45,6 +45,8 @@ namespace Trinity.Framework.Objects
         public string VariantName { get; set; }
         public int FrameDuration { get; set; }
 
+        public int GetStackCount() => _buff?.StackCount ?? 0;
+
         public TimeSpan Elapsed
         {
             get { return Core.Cooldowns.GetBuffCooldownElapsed(SNOPower); }

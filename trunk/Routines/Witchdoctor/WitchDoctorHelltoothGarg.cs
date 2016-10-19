@@ -61,7 +61,7 @@ namespace Trinity.Routines.Witchdoctor
             var distGargsToTarget = TargetUtil.Centroid(myGargs.Select(g => g.Position)).Distance(CurrentTarget.Position);
             if (distGargsToTarget > 30f && Player.PrimaryResourcePct > 0.5f && Skills.WitchDoctor.Gargantuan.CanCast())
                 return Gargantuan(CurrentTarget.Position);
-                
+
             var bestDpsTarget = TargetUtil.BestAoeUnit(35f, true);
             Vector3 bestDpsPosition;
 
@@ -97,12 +97,18 @@ namespace Trinity.Routines.Witchdoctor
             if (TryPrimaryPower(out power))
                 return power;
 
-            // Stand still for damage buff - defualt Avoider.SafeSpot includes logic 
-            // to suppress minor variations in safespot position if less than 12f
-            if (Player.CurrentHealthPct > 0.8f && !TargetUtil.AnyMobsInRange(15f))
-                return Walk(Avoider.SafeSpot);                
+            if (Settings.KiteVariation == KiteVariation.DistantEmptySpace)
+            {
+                // Stand still for damage buff - defualt Avoider.SafeSpot includes logic 
+                // to suppress minor variations in safespot position if less than 12f
+                if (Player.CurrentHealthPct > 0.8f && !TargetUtil.AnyMobsInRange(15f))
+                    return Walk(Avoider.SafeSpot);
 
-            return Walk(TargetUtil.GetLoiterPosition(bestDpsTarget, 25f));
+                return Walk(TargetUtil.GetLoiterPosition(bestDpsTarget, 25f));
+            }
+
+            //KiteVariation.NearTargetCluster
+            return Walk(Avoider.SafeSpot);
         }
 
         #region Conditions
@@ -169,6 +175,9 @@ namespace Trinity.Routines.Witchdoctor
 
         public TrinityPower GetBuffPower()
         {
+            if (Settings.SpiritWalk.UseMode == UseTime.Always && !Player.IsInTown && Skills.WitchDoctor.SpiritWalk.CanCast())
+                return SpiritWalk();
+
             if (Skills.WitchDoctor.WallOfDeath.CanCast() && IsInCombatOrBeingAttacked)
                 return WallOfDeath(TargetUtil.GetBestClusterPoint());
 
@@ -189,9 +198,11 @@ namespace Trinity.Routines.Witchdoctor
         public WitchDoctorHelltoothGargSettings Settings { get; } = new WitchDoctorHelltoothGargSettings();
 
         public sealed class WitchDoctorHelltoothGargSettings : NotifyBase, IDynamicSetting
-        {
+        {     
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private SkillSettings _spiritWalk;
+            private KiteVariation _kiteVariation;
 
             [DefaultValue(8)]
             public int ClusterSize
@@ -207,13 +218,37 @@ namespace Trinity.Routines.Witchdoctor
                 set { SetField(ref _emergencyHealthPct, value); }
             }
 
+            [DefaultValue(KiteVariation.NearTargetCluster)]
+            public KiteVariation KiteVariation
+            {
+                get { return _kiteVariation; }
+                set { SetField(ref _kiteVariation, value); }
+            }
+
+            public SkillSettings SpiritWalk
+            {
+                get { return _spiritWalk; }
+                set { SetField(ref _spiritWalk, value); }
+            }
+
+            private static readonly SkillSettings DefaultSpiritWalkSettings = new SkillSettings
+            {
+                UseMode = UseTime.Always,
+            };
+
+            public override void LoadDefaults()
+            {
+                base.LoadDefaults();
+                SpiritWalk = DefaultSpiritWalkSettings.Clone();
+            }
+
             #region IDynamicSetting
 
             public string GetName() => GetType().Name;
             public UserControl GetControl() => UILoader.LoadXamlByFileName<UserControl>(GetName() + ".xaml");
             public object GetDataContext() => this;
             public string GetCode() => JsonSerializer.Serialize(this);
-            public void ApplyCode(string code) => JsonSerializer.Deserialize(code, this);
+            public void ApplyCode(string code) => JsonSerializer.Deserialize(code, this, true);
             public void Reset() => LoadDefaults();
             public void Save() { }
 

@@ -233,6 +233,8 @@ namespace Trinity.Framework.Objects
         /// </summary>
         public int BuffStacks => Core.Buffs.GetBuffStacks(SNOPower);
 
+        public int UncachedBuffStacks => Core.Buffs.GetBuff(SNOPower)?.GetStackCount() ?? 0;
+
         /// <summary>
         /// The currently selected rune for this skill.        
         /// </summary>

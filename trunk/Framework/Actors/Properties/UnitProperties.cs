@@ -50,7 +50,19 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsMinion = monsterQuality == MonsterQuality.Minion;
             actor.IsElite = actor.IsMinion || actor.IsRare || actor.IsChampion || actor.IsUnique || actor.IsBoss;
             actor.IsTrashMob = actor.IsUnit && !(actor.IsElite || actor.IsBoss || actor.IsTreasureGoblin || actor.IsMinion);
-            actor.IsDead = GetIsDead(actor);
+
+            //actor.IsDead = GetIsDead(actor);
+
+            var isDead = GetIsDead(actor);
+            if (isDead != actor.IsDead)
+            {
+                actor.IsDead = isDead;
+                if (isDead && actor.IsUnit)
+                {
+                    actor.OnUnitDeath();
+                }
+            }
+
             actor.HitPoints = attributes.Hitpoints;
             actor.HitPointsMax = attributes.HitpointsMax;
             actor.HitPointsPct = actor.HitPoints / actor.HitPointsMax;
@@ -108,6 +120,11 @@ namespace Trinity.Framework.Actors.Properties
 
         public static bool GetIsDead(TrinityActor monster)
         {
+            if (monster.IsDead)
+            {
+                return true;
+            }
+
             if (monster.ActorType == ActorType.Monster)
             {
                 if (GameData.FakeDeathMonsters.Contains(monster.ActorSnoId))
@@ -132,10 +149,16 @@ namespace Trinity.Framework.Actors.Properties
                     if (mentionsDeath)
                     {
                         if (lowerAnim.Contains("deathmaiden") || lowerAnim.Contains("death_orb") || lowerAnim.Contains("raise_dead"))
+                        {
                             return false;
-
+                        }
                         return true;
                     }
+                }
+
+                if (monster.IsElite && monster.HitPointsPct < 0.25f)
+                {
+                    return monster.Attributes.GetAttributeDirectlyFromTable<bool>(ActorAttributeType.DeletedOnServer);
                 }
 
                 ////if (CurrentCacheObject.CommonData.GetAttribute<int>(ActorAttributeType.DeletedOnServer) > 0)

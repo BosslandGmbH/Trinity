@@ -97,7 +97,7 @@ namespace Trinity.Components.Combat
 
         public async Task<bool> HandleTarget(TrinityActor target)
         {
-            if (await HandleAvoidance())
+            if (await HandleAvoidance(target))
                 return true;
 
             if (target == null || !target.IsValid)
@@ -287,7 +287,7 @@ namespace Trinity.Components.Combat
             return false;
         }
 
-        private async Task<bool> HandleAvoidance()
+        private async Task<bool> HandleAvoidance(TrinityActor newTarget)
         {
             if (Core.Avoidance.Avoider.ShouldAvoid)
             {
