@@ -417,7 +417,7 @@ namespace Trinity.Components.Combat
                                 //TargettingInfo targetingInfo;
                                 //TargetHistory.TryGetValue(bestTarget.ObjectHash, out targetingInfo)
 
-                                if (Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, Core.Player.Position, AvoidanceFlags.ClosedDoor))
+                                if (!cacheObject.IsBoss && Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, Core.Player.Position, AvoidanceFlags.ClosedDoor))
                                 {
                                     cacheObject.WeightInfo += $"Ignoring Behind Closed Door";
                                     break;

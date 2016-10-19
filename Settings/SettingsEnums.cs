@@ -299,6 +299,13 @@ namespace Trinity.Settings
         Elites,
     }
 
+    public enum KiteVariation
+    {
+        None = 0,
+        NearTargetCluster,
+        DistantEmptySpace,
+    }
+
     public enum TrinityItemQuality
     {
         Invalid = -1,

@@ -4,6 +4,7 @@ using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Events;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
@@ -205,6 +206,34 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;
         public bool IsAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.Avoidance);
         public bool IsCriticalAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.CriticalAvoidance);
+
+        public override void OnDestroyed()
+        {
+            if (!IsDead && IsUnit)
+            {
+                OnUnitDeath();
+                IsDead = true;
+            }
+        }
+
+        public virtual void OnUnitDeath()
+        {
+            if (IsExcludedId || IsExcludedType || IsSameTeam)
+                return;
+
+            // this is not reliable for trash due to OnDestroyed()
+            // disposing objects at max distance who havent really died    
+            // should be sufficient for progression globe waiting though.        
+
+            if (IsElite)
+            {
+                Logger.Log(LogCategory.Targetting, $"Elite Died: {Name} Acd={AcdId} Sno={ActorSnoId} Size={MonsterSize} Race={MonsterRace} Quality={MonsterQuality} Type={MonsterType} Affixes={MonsterAffixes} CollisionRadius={CollisionRadius} AxialRadius={AxialRadius} SphereRadius={Radius} RiftValue={RiftValuePct}");
+            }
+            //else
+            //    Logger.Log($"Unit Died: {Name} Acd={AcdId} Sno={ActorSnoId}");
+      
+            ActorEvents.FireUnitKilled(this);
+        }
 
         public void AddCacheInfo(string reason)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -29,7 +30,7 @@ namespace Trinity.Framework.Helpers
         public static void Copy<TSource, TTarget>(TSource source, TTarget target, PropertyCopyOptions options = null)
             where TSource : class
             where TTarget : class
-        {            
+        {
             PropertyCopier<TSource, TTarget>.Copy(source, target, options ?? new PropertyCopyOptions());
         }
 
@@ -56,6 +57,7 @@ namespace Trinity.Framework.Helpers
     public class PropertyCopyOptions
     {
         public bool IgnoreNulls;
+        public bool IgnoreDefaults;
     }
 
     /// <summary>
@@ -76,24 +78,24 @@ namespace Trinity.Framework.Helpers
         }
     }
 
-    //public static class DefaultValueCache
-    //{
-    //    private static Dictionary<Type, object> defaultMap = new Dictionary<Type, object>();
+    public static class DefaultValueCache
+    {
+        private static Dictionary<Type, object> defaultMap = new Dictionary<Type, object>();
 
-    //    public static object GetDefault(Type type)
-    //    {
-    //        object value;
-    //        if (!defaultMap.TryGetValue(type, out value))
-    //        {
-    //            var body = Expression.Default(type);
-    //            var lambda = Expression.Lambda(body);
-    //            var func = lambda.Compile();
-    //            value = func.DynamicInvoke();
-    //            defaultMap[type] = value;
-    //        }
-    //        return value;
-    //    }
-    //}
+        public static object GetDefault(Type type)
+        {
+            object value;
+            if (!defaultMap.TryGetValue(type, out value))
+            {
+                var body = Expression.Default(type);
+                var lambda = Expression.Lambda(body);
+                var func = lambda.Compile();
+                value = func.DynamicInvoke();
+                defaultMap[type] = value;
+            }
+            return value;
+        }
+    }
 
     /// <summary>
     /// Static class to efficiently store the compiled delegate which can
@@ -145,16 +147,26 @@ namespace Trinity.Framework.Helpers
             {
                 throw new ArgumentNullException(nameof(source));
             }
+            if (target == null)
+            {
+                throw new ArgumentNullException(nameof(target));
+            }
+
+            var checkNulls = options != null && options.IgnoreNulls;
+            var checkDefaults = options != null && options.IgnoreDefaults;
+
             for (int i = 0; i < sourceProperties.Count; i++)
             {
-                var value = sourceProperties[i].GetValue(source, null);
-                if (options != null && !options.IgnoreNulls || !ReferenceEquals(value, null))
-                {
-                    if (target != null)
-                    {
-                        targetProperties[i].SetValue(target, value, null);
-                    }
-                }
+                var property = sourceProperties[i];
+                var value = property.GetValue(source, null);
+
+                if (checkDefaults && Equals(value, DefaultValueCache.GetDefault(property.PropertyType)))
+                    continue;
+
+                if (checkNulls && ReferenceEquals(value, null))
+                    continue;
+
+                targetProperties[i].SetValue(target, value, null);
             }
 
         }
