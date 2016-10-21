@@ -41,6 +41,9 @@ namespace Trinity.Framework.Behaviors
 
             if (actor != null && (IsRunning || (!PlayerMover.IsBlocked && actor.Distance < 500)) && !Navigator.StuckHandler.IsStuck)
             {
+                if (VisitedActorPositions.Count > 500)
+                    VisitedActorPositions.Clear();
+
                 Actor = actor;
                 return true;
             }

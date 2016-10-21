@@ -59,7 +59,7 @@ namespace Trinity.Routines
         protected static TrinityPower Walk(TrinityActor target)
             => new TrinityPower(SNOPower.Walk, Math.Max(7f, target.AxialRadius), target.Position);
 
-        protected static TrinityPower Walk(Vector3 destination, float range = 7f)
+        protected static TrinityPower Walk(Vector3 destination, float range = 5f)
             => new TrinityPower(SNOPower.Walk, range, destination);
 
         /// <summary>
@@ -71,14 +71,14 @@ namespace Trinity.Routines
         /// <summary>
         /// A raw hostile unit list without being filtered for valid targets. Use with caution.
         /// </summary>
-        protected static IEnumerable<TrinityActor> AllUnits
+        protected static IEnumerable<TrinityActor> HostileMonsters
             => Core.Actors.AllRActors.Where(u => u.IsUnit && u.IsHostile);
 
         /// <summary>
         /// A safe list of units who are currently in line of sight.
         /// </summary>
         protected static IEnumerable<TrinityActor> AllUnitsInSight
-            => AllUnits.Where(u => u.IsInLineOfSight);
+            => HostileMonsters.Where(u => u.IsInLineOfSight);
 
         /// <summary>
         /// If the player is likely unable to move forward at its current facing direction.

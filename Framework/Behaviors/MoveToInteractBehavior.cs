@@ -33,11 +33,15 @@ namespace Trinity.Framework.Behaviors
                 .OrderBy(m => m.Distance)
                 .FirstOrDefault(m => m.Position != Vector3.Zero 
                     && actorSelector(m) 
+                    && !m.IsExcludedId && !m.IsExcludedType
                     && !VisitedActorPositions.Contains(m.Position) 
                     && (Actor == null || Actor.Distance > m.AxialRadius));
 
             if (actor != null && (IsRunning || (!PlayerMover.IsBlocked && actor.Distance < 500)) && !Navigator.StuckHandler.IsStuck)
             {
+                if(VisitedActorPositions.Count > 500)
+                    VisitedActorPositions.Clear();
+
                 Actor = actor;
                 return true;
             }

@@ -119,7 +119,7 @@ namespace Trinity.Routines.DemonHunter
 
             if (!IsReallyBlocked)
             {
-                var pullingUnit = AllUnits
+                var pullingUnit = HostileMonsters
                     .Where(u => Math.Abs(u.HitPointsPct - 1) < float.Epsilon && (u.IsElite || u.NearbyUnitsWithinDistance(10f) > 3))
                     .OrderByDescending(u => u.Distance).FirstOrDefault();
 

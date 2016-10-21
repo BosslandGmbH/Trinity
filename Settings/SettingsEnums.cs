@@ -49,11 +49,12 @@ namespace Trinity.Settings
     public enum ContainerTypes
     {
         None = 0,
-        Corpse = 1 << 0,
-        Chest = 1 << 1,
+        Corpse = 1 << 0,        
+        NormalChest = 1 << 1,
         WeaponRack = 1 << 2,
         GroundClicky = 1 << 3,
         Other = 1 << 4,
+        RareChest = 1 << 5,
     }
 
     [Flags]

@@ -66,6 +66,7 @@ namespace Trinity.Framework
         public static TrinityStorage Storage => TrinitySettings.Storage;
 
         internal static MainGridProvider DBGridProvider => (MainGridProvider)Navigator.SearchGridProvider;
+        internal static DefaultNavigationProvider DBNavProvider => (DefaultNavigationProvider)Navigator.NavigationProvider;
 
         private static void OnGameJoined(object sender, EventArgs e) => ModuleManager.FireEvent(ModuleEvent.GameJoined);        
         private static void OnWorldChanged(object sender, EventArgs eventArgs) => ModuleManager.FireEvent(ModuleEvent.WorldChanged);

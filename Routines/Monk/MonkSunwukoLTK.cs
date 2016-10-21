@@ -239,7 +239,7 @@ namespace Trinity.Routines.Monk
                 {
                     var needStacks = Skills.Monk.SweepingWind.BuffStacks < 3 && Player.PrimaryResourcePct <= 0.75f;
                     var needResource = Player.PrimaryResource < PrimaryEnergyReserve;
-                    if ((needStacks || needResource) && AllUnits.Any(u => u.Distance <= 12f))
+                    if ((needStacks || needResource) && HostileMonsters.Any(u => u.Distance <= 12f))
                     {
                         Logger.Log(LogCategory.Routine, "Moving away to build stacks");
                         return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 30f));
@@ -280,7 +280,7 @@ namespace Trinity.Routines.Monk
         };
 
         public bool AnyUnitsInRange(float range)
-            => AllUnits.Any(u => u.Position.Distance(Player.Position) < range);
+            => HostileMonsters.Any(u => u.Position.Distance(Player.Position) < range);
 
         public bool IsBeltBuildingStacks 
             => !AnyUnitsInRange(12f) && Skills.Monk.SweepingWind.UncachedBuffStacks >= 1;

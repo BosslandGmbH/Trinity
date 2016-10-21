@@ -34,12 +34,22 @@ namespace Trinity.Components.Combat
 
     public class DefaultWeightingProvider : IWeightingProvider
     {
+
+        /// <summary>
+        /// Check if settings require the actor not be weighted.
+        /// </summary>
         public bool ShouldIgnore(TrinityActor actor)
         {
             switch (actor.Type)
             {
                 case TrinityObjectType.ProgressionGlobe:
                     return WeightingUtils.ShouldIgnoreGlobe(actor as TrinityItem);
+                case TrinityObjectType.Unit:
+
+                    if (actor.IsElite && !actor.IsBoss)
+                        return ShouldIgnoreElite(actor);
+
+                    break;
             }
 
             return false;
@@ -1234,15 +1244,15 @@ namespace Trinity.Components.Combat
                                                       //LastTargetFormula(cacheObject) +
                                                       //EliteMonsterNearFormula(cacheObject, elites) +
                                                       AoENearFormula(cacheObject) +
-                                                      AoEInPathFormula(cacheObject);
+                                                      AoEInPathFormula(cacheObject) + 50;
 
 
-                                if (cacheObject.Distance < 50f && cacheObject.IsWalkable)
+                                if (cacheObject.Distance < 80f && cacheObject.IsWalkable)
                                 {
                                     cacheObject.Weight *= 4;
                                     cacheObject.WeightInfo += $"Mid-Range Shrine Boost";
                                 }
-                                if (cacheObject.Distance < 100f)
+                                if (cacheObject.Distance < 125f)
                                 {
                                     cacheObject.Weight *= 2;
                                     cacheObject.WeightInfo += $"Far-Range Shrine Boost";
@@ -1290,9 +1300,9 @@ namespace Trinity.Components.Combat
                                     cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Door in Close Distance.";
                                 }
 
-                                cacheObject.Weight += 0.5*((ObjectDistanceFormula(cacheObject) +
+                                cacheObject.Weight += 0.3*((ObjectDistanceFormula(cacheObject) +
                                                             EliteMonsterNearFormula(cacheObject, elites) +
-                                                            PackDensityFormula(cacheObject, objects) +
+                                                            //PackDensityFormula(cacheObject, objects) +
                                                             AoENearFormula(cacheObject) +
                                                             AoEInPathFormula(cacheObject)));
                                 break;
@@ -2135,8 +2145,11 @@ namespace Trinity.Components.Combat
 
         public ContainerTypes GetContainerType(TrinityActor cacheObject)
         {
-            if (cacheObject.IsRareChest || cacheObject.IsChest)
-                return ContainerTypes.Chest;
+            if (cacheObject.IsRareChest)
+                return ContainerTypes.RareChest;
+
+            if (cacheObject.IsChest)
+                return ContainerTypes.NormalChest;
 
             if (cacheObject.IsWeaponRack)
                 return ContainerTypes.WeaponRack;

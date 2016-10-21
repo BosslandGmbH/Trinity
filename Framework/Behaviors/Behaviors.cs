@@ -8,11 +8,14 @@ namespace Trinity.Framework.Behaviors
 {
     public static class Behaviors
     { 
-        public static MoveToMarkerBehavior MoveToMarker { get; set; } = new MoveToMarkerBehavior();
+        public static MoveToMarkerBehavior MoveToMarker { get; } = new MoveToMarkerBehavior();
 
-        public static MoveToActorBehavior MoveToActor{ get; set; } = new MoveToActorBehavior();
+        public static MoveToActorBehavior MoveToActor{ get; } = new MoveToActorBehavior();
 
-        public static MoveToInteractBehavior MoveToInteract { get; set; } = new MoveToInteractBehavior();
+        public static MoveToInteractBehavior MoveToInteract { get; } = new MoveToInteractBehavior();
+
+        public static WaitAfterUnitDeathBehavior WaitAfterUnitDeath { get; } = new WaitAfterUnitDeathBehavior();
+
     }
 
 

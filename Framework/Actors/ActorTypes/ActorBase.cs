@@ -36,21 +36,21 @@ namespace Trinity.Framework.Actors.ActorTypes
         public double UpdateTime { get; set; }
 
         /// <summary>
-        /// OnCreated occurs when the actor data is newly existing;
+        /// Occurs when the actor data is newly existing;
         /// Usually when it first comes into range of the player.
         /// </summary>
         public virtual void OnCreated() { }
 
         /// <summary>
-        /// OnDataLoaded occurs every time the actor is updated by ActorCache
+        /// Occurs every time the actor is updated by ActorCache
         /// How often depends the UpdateInterval set in the ActorCache.
         /// </summary>
         public virtual void OnUpdated() { }
 
         /// <summary>
-        /// OnDestroyed occurs whenever the actor's data is no longer valid;
+        /// Occurs whenever the actor's data is no longer valid;
         /// Which doesn't mean the actor is dead, it may just be out of range.
-        /// Actors may be dead but OnDestroyed has not yet been called.
+        /// Actors may also be dead but OnDestroyed has not yet been called.
         /// </summary>
         public virtual void OnDestroyed() { }
 

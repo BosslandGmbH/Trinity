@@ -117,6 +117,7 @@
     <Compile Include="Framework\Avoidance\Settings\AvoidanceSettings.cs" />
     <Compile Include="Framework\Avoidance\GridEnricher.cs" />
     <Compile Include="Framework\Behaviors\MoveToInteractBehavior.cs" />
+    <Compile Include="Framework\Behaviors\WaitAfterUnitDeathBehavior.cs" />
     <Compile Include="Framework\Behaviors\MoveToMarkerBehavior.cs" />
     <Compile Include="Framework\ChangeEvents.cs" />
     <Compile Include="Framework\Events\ActorEvents.cs" />
