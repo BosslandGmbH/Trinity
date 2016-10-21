@@ -36,6 +36,9 @@ namespace Trinity.Framework.Behaviors
 
             if (marker != null && (IsRunning || (!Combat.IsInCombat && marker.Distance < 500)) && !Navigator.StuckHandler.IsStuck)
             {
+                if (VisitedMarkerPositions.Count > 500)
+                    VisitedMarkerPositions.Clear();
+
                 Marker = marker;
                 return true;
             }

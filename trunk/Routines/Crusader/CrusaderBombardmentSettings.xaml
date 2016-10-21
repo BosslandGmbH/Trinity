@@ -59,7 +59,7 @@
                                       IsChecked="{Binding DataContext.Akarats.Reasons, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Health emergency</CheckBox>
                         </StackPanel>
                     </StackPanel>
-                </GroupBox>                
+                </GroupBox>
                 <GroupBox>
                     <GroupBox.Header>Convention of Elements</GroupBox.Header>
                     <StackPanel>
@@ -76,9 +76,15 @@
                     <GroupBox.Header>Ignoring Trash</GroupBox.Header>
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">This option may increase clear times by only attacking elites. But make sure you have steed charge skill and/or illusory boots equipped to avoid getting stuck.</TextBlock>
-                        <CheckBox ToolTip="Dont attack trash monsters while in rifts" IsChecked="{Binding DataContext.IgnoreTrash, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Ignore Trash in Rifts</CheckBox>
+                        <CheckBox ToolTip="Dont attack trash monsters while in rifts" IsChecked="{Binding DataContext.IgnoreTrash}">Ignore Trash in Rifts</CheckBox>
                     </StackPanel>
-                </GroupBox>                
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Bombardment Options</GroupBox.Header>
+                    <StackPanel Margin="0,6,0,0">
+                        <CheckBox ToolTip="Cast iron skin + bombardment + others while running around out of combat" IsChecked="{Binding DataContext.BombardmentOOC}">Enable casting while out of combat</CheckBox>
+                    </StackPanel>
+                </GroupBox>
             </StackPanel>
         </Grid>
     </Border>

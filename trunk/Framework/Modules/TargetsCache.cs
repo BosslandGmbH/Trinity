@@ -271,7 +271,7 @@ namespace Trinity.Framework.Modules
             switch (cacheObject.Type)
             {
                 case TrinityObjectType.Shrine:
-                    if (cacheObject.RadiusDistance < 40f || cacheObject.IsWalkable)
+                    if (cacheObject.RadiusDistance < 40f || cacheObject.IsWalkable || cacheObject.IsNavigable())
                         return true;
                     break;
 

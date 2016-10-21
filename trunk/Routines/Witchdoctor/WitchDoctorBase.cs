@@ -252,7 +252,7 @@ namespace Trinity.Routines.Witchdoctor
                 return false;
 
             var stacks = Skills.WitchDoctor.SoulHarvest.BuffStacks;
-            if (stacks > 1 && Skills.WitchDoctor.SoulHarvest.TimeSinceUse > 11000 && AllUnits.Any(u => u.Distance <= 18f))
+            if (stacks > 1 && Skills.WitchDoctor.SoulHarvest.TimeSinceUse > 11000 && HostileMonsters.Any(u => u.Distance <= 18f))
                 return true;
 
             var isMaxHarvestStacks = stacks == MaxSoulHarvestStacks;

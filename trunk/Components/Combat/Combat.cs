@@ -32,12 +32,12 @@ namespace Trinity.Components.Combat
         public static CombatMode CombatMode { get; set; }
 
         /// <summary>
-        /// Handles fighting a target.
+        /// Handles selecting targets and if we should engage in combat.
         /// </summary>
         public static ITargetingProvider Targeting { get; } = DefaultProviders.Targeting;
 
         /// <summary>
-        /// Handles casting for spells
+        /// Handles casting spells
         /// </summary>
         public static ISpellProvider Spells { get; } = DefaultProviders.Spells;
 
@@ -82,6 +82,12 @@ namespace Trinity.Components.Combat
             if (await CastBuffs())
                 return true;
 
+            // Wait after elite death until progression globe appears as a valid target or x time has passed.
+            if (await Behaviors.WaitAfterUnitDeath.While(
+                u => u.IsElite && !TargetUtil.AnyElitesInRange(150f) && !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe && p.Weight > 0 && p.Distance < 50f),
+                "Wait for Progression Globe", 1500))
+                return true;
+
             // Priority movement for progression globes. ** Temporary solution!
             if (ZetaDia.CurrentRift != null && target != null)
             {
@@ -90,17 +96,19 @@ namespace Trinity.Components.Combat
                     return true;            
             }
 
-            // Priority interaction for doors. ** Temporary solution!
-            if (ZetaDia.CurrentRift != null && await Behaviors.MoveToInteract.While(
+            // Priority interaction for doors. increases door opening reliability for some edge cases ** Temporary solution!
+            if (ZetaDia.CurrentRift != null && ZetaDia.CurrentRift.IsStarted && await Behaviors.MoveToInteract.While(
                 a => a.Type == TrinityObjectType.Door && !a.IsUsed && a.Distance < 15f))
                 return true;
-
+            
             // When combat is disabled, we're still allowing trinity to handle non-unit targets.
             if (!IsCombatAllowed && IsUnitOrInvalid(target))
                 return false;
 
             if (await Targeting.HandleTarget(target))          
                 return true;
+
+            // We're not in combat at this point.
 
             if (!Core.Player.IsCasting)
             {

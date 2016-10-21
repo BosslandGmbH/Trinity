@@ -203,7 +203,7 @@ namespace Trinity.Components.Combat
                 case TrinityObjectType.CursedChest:
                 case TrinityObjectType.Container:
                     return InteractPower(target, 100, 1200);
-
+                
                 case TrinityObjectType.Item:
                     return InteractPower(target, 15, 15, 6f);
 

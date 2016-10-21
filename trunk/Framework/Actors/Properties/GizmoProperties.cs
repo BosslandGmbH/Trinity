@@ -108,7 +108,7 @@ namespace Trinity.Framework.Actors.Properties
         public static ContainerTypes GetContainerType(TrinityActor cacheObject)
         {
             if (cacheObject.IsRareChest || cacheObject.IsChest)
-                return ContainerTypes.Chest;
+                return ContainerTypes.NormalChest;
 
             if (cacheObject.IsWeaponRack)
                 return ContainerTypes.WeaponRack;

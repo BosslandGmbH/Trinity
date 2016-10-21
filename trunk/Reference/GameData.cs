@@ -1647,6 +1647,7 @@ namespace Trinity.Reference
         {
 
 
+
             //328830//x1_Fortress_Portal_Switch (328830)
             309432, // x1_westm_Bridge
             209133, // TentacleLord (209133)  QuestSnoId: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!
@@ -1917,6 +1918,7 @@ namespace Trinity.Reference
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            181195, //a2dun_Cald_Belial_Acid_Attack-1533 (181195) Type=Door 
             (int)SNOActor.x1_Malthael_DeathFogMonster, //x1_Malthael_DeathFogMonster-23399 (325136) 
 
             444403, //p4_Leoric_Chandelier - 30646.SNO = 444403,

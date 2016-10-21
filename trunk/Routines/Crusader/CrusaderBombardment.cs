@@ -12,6 +12,7 @@ using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Trinity.Settings;
 using Trinity.UI;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Framework.Helpers.Logger;
@@ -44,7 +45,7 @@ namespace Trinity.Routines.Crusader
 
         public override bool SetWeight(TrinityActor cacheObject)
         {
-            if (Settings.IgnoreTrash && cacheObject.IsTrashMob && RiftProgression.IsInRift && !cacheObject.IsMinimapActive && (RiftProgression.IsGreaterRift || !TrinityTownRun.IsTryingToTownPortal()))
+            if (Settings.IgnoreTrash && cacheObject.IsTrashMob && RiftProgression.IsInRift && !cacheObject.IsTreasureGoblin && !cacheObject.IsMinimapActive && (RiftProgression.IsGreaterRift || !TrinityTownRun.IsTryingToTownPortal()))
             {
                 cacheObject.WeightInfo += $"Routine(IgnoreTrash)";
                 cacheObject.Weight = 0;
@@ -72,32 +73,8 @@ namespace Trinity.Routines.Crusader
             if (ShouldJudgement())
                 return Judgement();
 
-
-
-            // Make sure we cast Bombardment when IronSkin and CoE is Up.
-            // Note iron skin is gated below by Convention of Elements check,            
-            if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
-            {
-                if(ShouldBombardment(out target))
-                    return Bombardment(target);
-
-                if (ShouldShieldGlare(out target))
-                    return ShieldGlare(target);
-
-                if (ShouldConsecration())
-                    return Consecration();
-            }
-
-            // Wait for CoE to Cast Damage CD's
-
-            var isCastWindow = !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000);
-            var isTargetCloseEnough = !CurrentTarget.IsElite || CurrentTarget.IsElite && CurrentTarget.Distance < 30f;
-
-            if (Skills.Crusader.Bombardment.CanCast() && (ShouldBombardWheneverPossible && isTargetCloseEnough || isCastWindow ))
-            {
-                if (ShouldIronSkin())
-                    return IronSkin();
-            }
+            if (TryBombard(out power))
+                return power;
 
             if (ShouldSteedCharge())
                 return SteedCharge();
@@ -115,6 +92,52 @@ namespace Trinity.Routines.Crusader
             return null;
         }
 
+        private bool TryBombard(out TrinityPower trinityPower)
+        {
+            trinityPower = null;
+
+            // Make sure we cast Bombardment when IronSkin and CoE is Up.
+            // Note iron skin is gated below by Convention of Elements check,            
+            if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
+            {
+                TrinityActor target;
+
+                if (ShouldBombardment(out target))
+                {
+                    trinityPower = Bombardment(target);
+                    return true;
+                }
+
+                if (ShouldShieldGlare(out target))
+                {
+                    trinityPower = ShieldGlare(target);
+                    return true;
+                }
+
+                if (IsInCombat && ShouldConsecration())
+                {
+                    trinityPower = Consecration();
+                    return true;
+                }
+            }
+
+            // Wait for CoE to Cast Damage CD's
+            var isCastWindow = !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000);
+            var eliteExists = HostileMonsters.Any(u => u.IsElite && !Combat.Weighting.ShouldIgnore(u));
+            var isTargetCloseEnough = !eliteExists || CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.Distance < 20f;
+
+            if (Skills.Crusader.Bombardment.CanCast() && (ShouldBombardWheneverPossible && isTargetCloseEnough || isCastWindow))
+            {
+                if (ShouldIronSkin())
+                {
+                    trinityPower = IronSkin();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private bool ShouldBombardWheneverPossible
         {
             get
@@ -125,11 +148,22 @@ namespace Trinity.Routines.Crusader
                 if (Settings.Bombardment.WaitForConvention == ConventionMode.Always)
                     return false;
 
-                if (Settings.Bombardment.WaitForConvention == ConventionMode.RiftBoss && RiftProgression.IsInRift && AllUnits.Any(u => u.IsBoss))
+                if (Settings.Bombardment.WaitForConvention == ConventionMode.RiftBoss && RiftProgression.IsInRift && HostileMonsters.Any(u => u.IsBoss))
                     return false;
 
                 return true;
             }
+        }
+
+        protected override bool ShouldBombardment(out TrinityActor target)
+        {
+            target = null;
+
+            if (!Skills.Crusader.Bombardment.CanCast())
+                return false;
+
+            target = TargetUtil.GetBestClusterUnit() ?? HostileMonsters.OrderBy(u => u.Distance).FirstOrDefault();
+            return target != null;
         }
 
         protected override bool ShouldJudgement()
@@ -157,7 +191,7 @@ namespace Trinity.Routines.Crusader
             if (Player.HasBuff(SNOPower.X1_Crusader_IronSkin))
                 return false;
 
-            if (!TargetUtil.AnyMobsInRange(80f))
+            if (!HostileMonsters.Any(u => u.Distance < 80f))
                 return false;
 
             return true;
@@ -170,6 +204,14 @@ namespace Trinity.Routines.Crusader
 
             if (TryLaw(out power))
                 return power;
+
+            if (!Player.IsInTown && Settings.BombardmentOOC && HostileMonsters.Any(u => u.Distance < 150f))
+            {
+                // Break Steed to bombard OOC only if waiting for CoE
+                var goodTimetoCast = !ShouldBombardWheneverPossible || !IsSteedCharging;
+                if (goodTimetoCast && TryBombard(out power))
+                    return power;
+            }
 
             return null;
         }
@@ -206,6 +248,7 @@ namespace Trinity.Routines.Crusader
             private int _clusterSize;
             private float _emergencyHealthPct;
             private bool _ignoreTrash;
+            private bool _bombardmentOOC;
 
             [DefaultValue(false)]
             public bool IgnoreTrash
@@ -239,6 +282,15 @@ namespace Trinity.Routines.Crusader
                 get { return _bombardment; }
                 set { SetField(ref _bombardment, value); }
             }
+
+
+            [DefaultValue(false)]
+            public bool BombardmentOOC
+            {
+                get { return _bombardmentOOC; }
+                set { SetField(ref _bombardmentOOC, value); }
+            }
+
 
             #region Skill Defaults
 

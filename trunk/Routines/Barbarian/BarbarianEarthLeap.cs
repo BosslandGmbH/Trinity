@@ -124,7 +124,7 @@ namespace Trinity.Routines.Barbarian
         {
             // Leap out of combat for the defensive bonuses.
 
-            if (Skills.Barbarian.Leap.CanCast() && (!Player.HasBuff(SNOPower.Barbarian_Leap) || Player.CurrentHealthPct > 0.35f) && !Player.IsInTown && AllUnits.Any(u => u.Distance < 20f))
+            if (Skills.Barbarian.Leap.CanCast() && (!Player.HasBuff(SNOPower.Barbarian_Leap) || Player.CurrentHealthPct > 0.35f) && !Player.IsInTown && HostileMonsters.Any(u => u.Distance < 20f))
                 return Leap(destination);
 
             return Walk(destination);
