@@ -263,7 +263,7 @@ namespace Trinity.Routines.Witchdoctor
             if (Skills.WitchDoctor.WallOfDeath.CanCast() && IsInCombatOrBeingAttacked)
                 return WallOfDeath(TargetUtil.GetBestClusterPoint());
 
-            if (Skills.WitchDoctor.SoulHarvest.CanCast() && (!IsChannellingFirebats || Player.CurrentHealthPct < 0.4f) && TargetUtil.AnyMobsInRange(16f))
+            if (Skills.WitchDoctor.SoulHarvest.CanCast() && (!IsChannellingFirebats || Player.CurrentHealthPct < 0.4f) && HostileMonsters.Any(u => u.Distance < 16f))
             {
                 // Refresh the buff time to avoid losing 10 stacks.
                 if (Skills.WitchDoctor.SoulHarvest.TimeSinceUse > 4500)
