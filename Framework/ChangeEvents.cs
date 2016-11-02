@@ -39,6 +39,9 @@ namespace Trinity.Framework
         public static TrinityChangeDetector<int> LevelAreaId = new TrinityChangeDetector<int>(()
             => ZetaDia.CurrentLevelAreaSnoId);
 
+        public static TrinityChangeDetector<int> HeroId = new TrinityChangeDetector<int>(()
+            => ZetaDia.Service.Hero.HeroId);
+
     }
 }
 

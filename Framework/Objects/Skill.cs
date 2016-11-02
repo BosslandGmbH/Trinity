@@ -4,6 +4,8 @@ using System.Linq;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Modules;
+using Trinity.Framework.Objects.Memory.Sno.Helpers;
 using Trinity.Reference;
 using Zeta.Common;
 using Zeta.Game;
@@ -315,6 +317,9 @@ namespace Trinity.Framework.Objects
         {
             return Index.GetHashCode() ^ Name.GetHashCode();
         }
+
+        private PowerData _powerData;
+        public PowerData Data => _powerData ?? (_powerData = Core.MemoryModel.PowerHelper.GetPowerData(SNOPower));
 
         /// <summary>
         /// A unique identifier for IUnique

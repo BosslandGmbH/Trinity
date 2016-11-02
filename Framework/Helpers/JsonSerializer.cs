@@ -17,6 +17,7 @@ namespace Trinity.Framework.Helpers
                 if (ignoreTypes)
                 {
                     settings.EmitTypeInformation = EmitTypeInformation.Never;
+                    settings.UseSimpleDictionaryFormat = true;
                 }
                 var serializer = new DataContractJsonSerializer(typeof(T), settings);
                 string output;
@@ -72,7 +73,7 @@ namespace Trinity.Framework.Helpers
             }
         }
 
-        static string FormatJson(string json)
+        public static string FormatJson(string json)
         {
             int indent = 0, quote = 0;
             var result =

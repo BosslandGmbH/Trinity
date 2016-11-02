@@ -6,6 +6,17 @@ using Zeta.Game;
 
 namespace Trinity.Framework.Modules
 {
+    public enum HeroDataSnoId
+    {
+        None = 0,
+        DemonHunter = -930376119,
+        Barbarian = 1337532130,
+        Wizard = 491159985,
+        WitchDoctor = 54772266,
+        Monk = 4041749,
+        Crusader = -1104684007,
+    }
+
     public class HeroDataCache : Module
     {
         public class HeroData
@@ -31,6 +42,20 @@ namespace Trinity.Framework.Modules
             public int GameBalanceId { get; set; }
             public ActorClass ActorClass { get; set; }
             public override string ToString() => $"{GetType().Name}: {Name}";
+        }
+
+        public ActorClass GetActorClass(int gameBalanceId)
+        {
+            switch ((HeroDataSnoId)gameBalanceId)
+            {
+                case HeroDataSnoId.DemonHunter: return ActorClass.DemonHunter;
+                case HeroDataSnoId.Barbarian: return ActorClass.Barbarian;
+                case HeroDataSnoId.Wizard: return ActorClass.Wizard;
+                case HeroDataSnoId.WitchDoctor: return ActorClass.Witchdoctor;
+                case HeroDataSnoId.Monk: return ActorClass.Monk;
+                case HeroDataSnoId.Crusader: return ActorClass.Crusader;
+            }
+            return ActorClass.Invalid;
         }
 
         private readonly Dictionary<ActorClass, HeroData> _entries = new Dictionary<ActorClass, HeroData>();
@@ -76,31 +101,6 @@ namespace Trinity.Framework.Modules
                 };
                 _entries.Add(actorClass, heroData);
             }
-        }
-
-        public enum HeroDataGameBalanceType
-        {
-            None = 0,
-            DemonHunter = -930376119,
-            Barbarian = 1337532130,
-            Wizard = 491159985,
-            WitchDoctor = 54772266,
-            Monk = 4041749,
-            Crusader = -1104684007,
-        }
-
-        private ActorClass GetActorClass(int gameBalanceId)
-        {
-            switch ((HeroDataGameBalanceType)gameBalanceId)
-            {
-                case HeroDataGameBalanceType.DemonHunter: return ActorClass.DemonHunter;
-                case HeroDataGameBalanceType.Barbarian: return ActorClass.Barbarian;
-                case HeroDataGameBalanceType.Wizard: return ActorClass.Wizard;
-                case HeroDataGameBalanceType.WitchDoctor: return ActorClass.Witchdoctor;
-                case HeroDataGameBalanceType.Monk: return ActorClass.Monk;
-                case HeroDataGameBalanceType.Crusader: return ActorClass.Crusader;
-            }
-            return ActorClass.Invalid;
         }
     }
 

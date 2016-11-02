@@ -137,6 +137,9 @@ namespace Trinity.Framework.Objects.Memory.Containers
                 }
             }
 
+            public bool ContainsLink => Data.Tokens.Any(t => t.Type == FormulaCode.TokenType.Link);
+            public bool RequiresEvaluation => Data.Tokens.Count > 3 || ContainsLink;
+
             public override string ToString() => Formula;
             object IMapValue.Value => Value;
         }

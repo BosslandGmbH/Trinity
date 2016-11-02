@@ -19,7 +19,6 @@ namespace Trinity.Components.Adventurer.Settings
     [DataContract]
     public class PluginSettings : NotifyBase
     {
-        private static ConcurrentDictionary<int, PluginSettings> _settings = new ConcurrentDictionary<int, PluginSettings>();
         private AdventurerGems _gems;
         private int highestUnlockedRiftLevel;
         private int _highestUnlockedRiftLevel;
@@ -51,7 +50,8 @@ namespace Trinity.Components.Adventurer.Settings
         private int _minimumKeys;
         private long _minimumGold;
 
-        public static PluginSettings Current => _settings.GetOrAdd(AdvDia.BattleNetHeroId, LoadCurrent());
+        private static Lazy<PluginSettings> _instance = new Lazy<PluginSettings>(() => new PluginSettings());
+        public static PluginSettings Current => _instance.Value;
 
         [DataMember]
         public int HighestUnlockedRiftLevel
@@ -69,6 +69,12 @@ namespace Trinity.Components.Adventurer.Settings
                 return level == 0 ? 120 : level;
             }
             set { }
+        }
+
+        public PluginSettings GetDataContext()
+        {
+           UpdateGemList();
+           return this;
         }
 
         [DataMember]

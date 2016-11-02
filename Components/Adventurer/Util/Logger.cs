@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
 using log4net;
 using Trinity.Components.Adventurer.Settings;
 using Zeta.Common;
@@ -38,7 +41,7 @@ namespace Trinity.Components.Adventurer.Util
             {
                 message = " " + message;
             }
-            message = "[Adventurer]" + message;
+            message = ClassTag + message;
             DbLog.ErrorFormat(message, args);
         }
 
@@ -48,7 +51,7 @@ namespace Trinity.Components.Adventurer.Util
             {
                 message = " " + message;
             }
-            message = "[Adventurer]" + message;
+            message = ClassTag + message;
             DbLog.InfoFormat(message, args);
         }
 
@@ -60,7 +63,7 @@ namespace Trinity.Components.Adventurer.Util
                 {
                     message = " " + message;
                 }
-                message = "[Adventurer][Debug]" + message;
+                message = ClassTag + message;
                 DbLog.InfoFormat(message, args);
             }
         }
@@ -71,7 +74,7 @@ namespace Trinity.Components.Adventurer.Util
             {
                 message = " " + message;
             }
-            message = "[Adventurer]" + message;
+            message = ClassTag + message;
             DbLog.DebugFormat(message, args);
         }
         
@@ -81,7 +84,7 @@ namespace Trinity.Components.Adventurer.Util
             {
                 message = " " + message;
             }
-            message = "[Adventurer]" + message;
+            message = ClassTag + message;
             DbLog.WarnFormat(message, args);
         }
 
@@ -91,7 +94,7 @@ namespace Trinity.Components.Adventurer.Util
             {
                 message = " " + message;
             }
-            message = "[Adventurer]" + message;
+            message = ClassTag + message;
             if (args.Any())
             {
                 message = string.Format(message, args);
@@ -142,6 +145,26 @@ namespace Trinity.Components.Adventurer.Util
                 DbLog.Error(message);
             }
         }
+
+        private static string ClassTag
+        {
+            get
+            {
+                var frame = new StackFrame(2);
+                var method = frame.GetMethod();
+                var type = method.DeclaringType;
+
+                if (type == null)
+                    return "[Adventurer] ";
+
+                if ((type.Namespace == type.Name || type.Name.ToLowerInvariant().Contains("displayclass")) && !string.IsNullOrEmpty(type.Namespace))
+                    return "[" + TaskNameRegex.Replace(type.Namespace, match => string.Empty) + "] ";
+
+                return "[" + type.Namespace?.Split('.').LastOrDefault() + "][" + TaskNameRegex.Replace(type.Name, match => string.Empty) + "] ";
+            }
+        }
+
+        private static Regex TaskNameRegex { get; } = new Regex(@"d__\d+", RegexOptions.Compiled);
 
     }
 

@@ -123,7 +123,6 @@
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Navigator}">Log Navigation System</CheckBox>
                         <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Configuration}">Log Configuration System</CheckBox>-->
                         <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=UI}">Log UI Loading</CheckBox>-->
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ScriptRule}">Log Script Rules System</CheckBox>
                         <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Animation}">Log Monster Animations</CheckBox>-->
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ActiveBuffs}">Log Active Buffs</CheckBox>
                         <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=SkillSelection}">Log Skill Selection</CheckBox>-->

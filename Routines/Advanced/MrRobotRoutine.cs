@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Scripting.Utils;
 using Trinity.Components.Combat;
@@ -11,11 +13,13 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Attributes;
 using Trinity.Reference;
 using Logger = Trinity.Framework.Helpers.Logger;
 using Trinity.Routines.Barbarian;
 using Trinity.Settings;
 using Trinity.UI;
+using Trinity.UI.UIComponents;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -38,89 +42,122 @@ namespace Trinity.Routines.Advanced
 
         public TrinityPower GetOffensivePower()
         {
-            var primarySkills = new List<Skill>(); 
-            var secondarySkills = new List<Skill>();
-            var otherSkills = new List<Skill>();
+            TrinityPower trinityPower;
+            ValidatedSkill vSkill;
 
-            foreach (var skill in SkillUtils.Active)
+            foreach (var skill in Settings.ActiveSkills)
             {
-                if (skill.IsGeneratorOrPrimary)
+                if (TryValidateSkill(skill, out vSkill))
                 {
-                    primarySkills.Add(skill);
-                    continue;
+                    return ToPower(vSkill);
                 }
-                if (skill.IsAttackSpender)
-                {
-                    secondarySkills.Add(skill);
-                    continue;
-                }
-                otherSkills.Add(skill);          
             }
 
-            var other = FindSkill(otherSkills);
-            if (other != null)
-            {
-                var otherPower = ToPower(other);
-                Logger.Log(LogCategory.Routine, $"Selecting Other Power {otherPower}");
-                return otherPower;
-            }
-
-            var secondary = FindSkill(secondarySkills);
-            if (secondary != null)
-            {
-                var secondaryPower = ToPower(secondary);
-                Logger.Log(LogCategory.Routine, $"Selecting Other Power {secondaryPower}");
-                return secondaryPower;
-            }
-
-            var primary = FindSkill(primarySkills);
-            if (primary != null)
-            {
-                var primaryPower = ToPower(primary);
-                Logger.Log(LogCategory.Routine, $"Selecting Other Power {primaryPower}");
-                return primaryPower;
-            }
+            //if (TryAutoSelectSkill(out trinityPower))
+            //    return trinityPower;
 
             return null;
         }
 
-        private SkillFindResult FindSkill(IEnumerable<Skill> skills, Func<Skill, SkillSettings, bool> condition = null)
+        //private bool TryAutoSelectSkill(out TrinityPower trinityPower)
+        //{
+        //    trinityPower = null;
+
+        //    var primarySkills = new List<Skill>();
+        //    var secondarySkills = new List<Skill>();
+        //    var otherSkills = new List<Skill>();
+
+        //    foreach (var skill in SkillUtils.Active)
+        //    {
+        //        if (skill.IsGeneratorOrPrimary)
+        //        {
+        //            primarySkills.Add(skill);
+        //            continue;
+        //        }
+        //        if (skill.IsAttackSpender)
+        //        {
+        //            secondarySkills.Add(skill);
+        //            continue;
+        //        }
+        //        otherSkills.Add(skill);
+        //    }
+
+        //    var other = FindSkill(otherSkills);
+        //    if (other != null)
+        //    {
+        //        var otherPower = ToPower(other);
+        //        Logger.Log(LogCategory.Routine, $"Selecting Other Power {otherPower}");
+        //        {
+        //            trinityPower = otherPower;
+        //            return true;
+        //        }
+        //    }
+
+        //    var secondary = FindSkill(secondarySkills);
+        //    if (secondary != null)
+        //    {
+        //        var secondaryPower = ToPower(secondary);
+        //        Logger.Log(LogCategory.Routine, $"Selecting Other Power {secondaryPower}");
+        //        {
+        //            trinityPower = secondaryPower;
+        //            return true;
+        //        }
+        //    }
+
+        //    var primary = FindSkill(primarySkills);
+        //    if (primary != null)
+        //    {
+        //        var primaryPower = ToPower(primary);
+        //        Logger.Log(LogCategory.Routine, $"Selecting Other Power {primaryPower}");
+        //        {
+        //            trinityPower = primaryPower;
+        //            return true;
+        //        }
+        //    }
+
+        //    return false;
+        //}
+
+        private ValidatedSkill FindSkill(IEnumerable<Skill> skills, Predicate<SkillSettings> condition = null)
         {
-            foreach (var skill in skills)
-            {
-                if (skill == null)
-                    return null;
-
-                if (!skill.CanCast())
-                    return null;
-
-                var settings = GetSettingsForSkill(skill);
-                if (settings == null)
-                    return null;
-
-                if (condition != null && !condition(skill, settings))
-                    return null;
-
-                if (!AllowedToUse(settings, skill))
-                    return null;
-
-                var target = GetTarget(settings, skill);
-                if (target == null)
-                    return null;
-
-                var result = new SkillFindResult
-                {
-                    Skill = skill,
-                    Settings = settings,
-                    Target = target,
-                };
-
-                return result;
-            }
-            return null;
+            return skills.Select(s => ValidateSkill(GetSettingsForSkill(s), condition)).FirstOrDefault();
+        }
+        
+        private bool TryValidateSkill(SkillSettings skillSettings, out ValidatedSkill validatedSkill)
+        {
+            return (validatedSkill = ValidateSkill(skillSettings)) != null;
         }
 
-        private Target GetTarget(SkillSettings settings, Skill skill)
+        private ValidatedSkill ValidateSkill(SkillSettings settings, Predicate<SkillSettings> condition = null)
+        {
+            var skill = settings.Skill;
+            if (skill == null)
+                return null;
+
+            if (!skill.CanCast())
+                return null;
+
+            if (condition != null && !condition(settings))
+                return null;
+
+            if (!AllowedToUse(settings, skill))
+                return null;
+
+            var target = GetTarget(settings);
+            if (target == null)
+                return null;
+
+            var result = new ValidatedSkill
+            {
+                Skill = skill,
+                Settings = settings,
+                Target = target,
+            };
+
+            return result;
+        }
+
+        private Target GetTarget(SkillSettings settings)
         {
             var maxRange = Math.Max(TrashRange, EliteRange);
             Target target = null;
@@ -149,7 +186,7 @@ namespace Trinity.Routines.Advanced
             return target;
         }
 
-        private TrinityPower ToPower(SkillFindResult s)
+        private TrinityPower ToPower(ValidatedSkill s)
         {
             var onSelf = !s.Skill.IsDamaging;
             var power = new TrinityPower
@@ -165,7 +202,7 @@ namespace Trinity.Routines.Advanced
 
         #region Supporting Objects
 
-        public class SkillFindResult
+        public class ValidatedSkill
         {
             public Skill Skill;
             public SkillSettings Settings;
@@ -193,18 +230,43 @@ namespace Trinity.Routines.Advanced
 
         #endregion
 
+        #region Conditions
+
+        //public interface IRobotCondition
+        //{
+        //    bool Check();
+        //}
+
+        //[DataContract(Namespace = "", Name = "HealthPct")]
+        //public class HealthPctCondition : NotifyBase, IRobotCondition
+        //{
+        //    private int _healthPct;
+
+        //    [DataMember]
+        //    [DefaultValue(8)]
+        //    public int HealthPct
+        //    {
+        //        get { return _healthPct; }
+        //        set { SetField(ref _healthPct, value); }
+        //    }
+
+        //    public bool Check() => Player.CurrentHealthPct <= HealthPct;
+        //}
+
+        #endregion
+
         public TrinityPower GetDefensivePower() => null;
 
         public TrinityPower GetBuffPower()
         {
-            var buffs = SkillUtils.Active.Where(s => s.Cooldown == TimeSpan.Zero && !s.IsGeneratorOrPrimary);
-            var buff = FindSkill(buffs);
-            if (buff != null)
-            {
-                var buffPower = ToPower(buff);
-                Logger.Log($"Selecting Buff Power {buffPower}");
-                return buffPower;
-            }
+            //var buffs = SkillUtils.Active.Where(s => s.Cooldown == TimeSpan.Zero && !s.IsGeneratorOrPrimary);
+            //var buff = FindSkill(buffs);
+            //if (buff != null)
+            //{
+            //    var buffPower = ToPower(buff);
+            //    Logger.Log($"Selecting Buff Power {buffPower}");
+            //    return buffPower;
+            //}
             return null;
         }
 
@@ -287,7 +349,28 @@ namespace Trinity.Routines.Advanced
 
         [DataContract]
         public sealed class MrRobotSettings : NotifyBase, IDynamicSetting
-        {                                  
+        {
+            #region DragDrop Handler
+
+            public class UpdateOrderDropHandler : DefaultDropHandler
+            {
+                public override void Drop(IDropInfo dropInfo)
+                {
+                    base.Drop(dropInfo);                   
+                    var items = dropInfo.TargetCollection.OfType<SkillSettings>().ToList();
+                    for (var index = 0; index < items.Count; index++)
+                    {
+                        var skillSettings = items[index];
+                        skillSettings.Order = index;                  
+                    }
+                }
+            }
+
+            [IgnoreDataMember]
+            public UpdateOrderDropHandler DropHandler { get; set; } = new UpdateOrderDropHandler();
+
+            #endregion
+
             private int _clusterSize;
             private float _emergencyHealthPct;
             private KiteMode _kiteMode;
@@ -450,7 +533,7 @@ namespace Trinity.Routines.Advanced
                     Skills.AddRange(activeSettings.Where(b => Skills.All(a => a.SNOPower != b.SNOPower)));
                 }
 
-                var availableSkills = Skills.Where(s => Core.Hotbar.ActivePowers.Any(p => s.SNOPower == p));
+                var availableSkills = Skills.Where(s => Core.Hotbar.ActivePowers.Any(p => s.SNOPower == p)).OrderBy(s => s.Order);
                 ActiveSkills = new FullyObservableCollection<SkillSettings>(availableSkills);
             }
 

@@ -59,14 +59,14 @@ namespace Trinity.Routines
         protected static TrinityPower Walk(TrinityActor target)
             => new TrinityPower(SNOPower.Walk, Math.Max(7f, target.AxialRadius), target.Position);
 
-        protected static TrinityPower Walk(Vector3 destination, float range = 5f)
+        protected static TrinityPower Walk(Vector3 destination, float range = 7f)
             => new TrinityPower(SNOPower.Walk, range, destination);
 
         /// <summary>
         /// A safe list of units who are valid and have a weight.
         /// </summary>
-        protected static IEnumerable<TrinityActor> Units
-            => Core.Targets.Entries.Where(u => u.IsUnit && u.Weight > 0);
+        protected static IEnumerable<TrinityActor> WeightedUnits
+            => Core.Targets.Entries.Where(u => u.IsUnit && u.Weight > 0 && u.IsHostile);
 
         /// <summary>
         /// A raw hostile unit list without being filtered for valid targets. Use with caution.
@@ -75,7 +75,7 @@ namespace Trinity.Routines
             => Core.Actors.AllRActors.Where(u => u.IsUnit && u.IsHostile);
 
         /// <summary>
-        /// A safe list of units who are currently in line of sight.
+        /// A safe list of units who are currently in line of sight without being filtered for valid targets. Use with caution.
         /// </summary>
         protected static IEnumerable<TrinityActor> AllUnitsInSight
             => HostileMonsters.Where(u => u.IsInLineOfSight);
@@ -206,6 +206,9 @@ namespace Trinity.Routines
             if (Player.SecondaryResourcePct < settings.SecondaryResourcePct / 100)
                 return true;
 
+            if (Player.CurrentHealthPct <= settings.HealthPct)
+                return true;
+
             if (SpellHistory.TimeSinceUse(skill.SNOPower).TotalMilliseconds < settings.RecastDelayMs)
                 return true;
   
@@ -223,7 +226,12 @@ namespace Trinity.Routines
 
         protected bool IsReasonToUse(SkillSettings settings, Skill skill)
         {
+            var routine = Core.Routines.CurrentRoutine;
+
             if (settings.Reasons.HasFlag(UseReasons.Elites) && TargetUtil.AnyElitesInRange(40f))
+                return true;
+
+            if (settings.Reasons.HasFlag(UseReasons.Trash) && TargetUtil.ClusterExists(routine.ClusterRadius, routine.TrashRange, routine.ClusterSize))
                 return true;
 
             if (settings.Reasons.HasFlag(UseReasons.Surrounded) && TargetUtil.NumMobsInRange(25f) >= Math.Max(ClusterSize, 5))
@@ -238,7 +246,7 @@ namespace Trinity.Routines
             if (settings.Reasons.HasFlag(UseReasons.DumpResource) && Player.PrimaryResourcePct < 0.8f)
                 return true;
 
-            if (settings.Reasons.HasFlag(UseReasons.Goblins) && Units.Any(u => u.IsTreasureGoblin))
+            if (settings.Reasons.HasFlag(UseReasons.Goblins) && WeightedUnits.Any(u => u.IsTreasureGoblin))
                 return true;
 
             if (settings.Reasons.HasFlag(UseReasons.HealthEmergency) && Player.CurrentHealthPct < Combat.Routines.Current.EmergencyHealthPct)
@@ -362,6 +370,10 @@ namespace Trinity.Routines
             {
                 case "Iron Skin":
                     baseCd = 30000;
+                    break;
+                case "Provoke":
+                    baseCd = 20000;
+                    reduc = reduc * (1 - 0.35);
                     break;
                 case "Bombardment":
                     baseCd = 60000;

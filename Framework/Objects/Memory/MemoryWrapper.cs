@@ -443,6 +443,15 @@ namespace Trinity.Framework.Objects.Memory
 
         }
 
+        public T ReadPointer<T>(IntPtr address) where T : MemoryWrapper, new()
+        {
+            if (!IsValid)
+                return default(T);
+
+            var ptr = Read<IntPtr>(address);
+            return ReadAbsoluteObject<T>(ptr);
+        }
+
         public T ReadPointer<T>(int offset) where T : MemoryWrapper, new()
         {
             if (!IsValid)

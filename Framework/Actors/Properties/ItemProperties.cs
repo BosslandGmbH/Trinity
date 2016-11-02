@@ -184,15 +184,19 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.InventorySlot != InventorySlot.None)
                 return false;
 
-            if (actor.Attributes.ItemBoundToAnnId != 0)
+            if (actor.Attributes != null)
             {
-                return actor.Attributes.ItemBoundToAnnId == Core.Actors.Me.AnnId;
+                if (actor.Attributes.ItemBoundToAnnId != 0)
+                {
+                    return actor.Attributes.ItemBoundToAnnId == Core.Actors.Me?.AnnId;
+                }
+
+                if (actor.Attributes.ItemAssignedHero == ZetaDia.Service.Hero?.HeroId)
+                {
+                    return true;
+                }
             }
 
-            if (actor.Attributes.ItemAssignedHero == ZetaDia.Service.Hero.HeroId)
-            {
-                return true;
-            }
 
             if (actor.ItemQualityLevel >= ItemQuality.Legendary || actor.IsCraftingReagent)
             {

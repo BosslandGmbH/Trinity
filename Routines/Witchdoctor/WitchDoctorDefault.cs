@@ -84,18 +84,12 @@ namespace Trinity.Routines.Witchdoctor
         /// <summary>
         /// Only cast on destructibles/barricades
         /// </summary>
-        public TrinityPower GetDestructiblePower()
-        {
-            return DefaultDestructiblePower();
-        }
+        public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
 
         /// <summary>
         /// Cast by all plugins for all movement.        
         /// </summary>
-        public TrinityPower GetMovementPower(Vector3 destination)
-        {
-            return Walk(destination);
-        }
+        public TrinityPower GetMovementPower(Vector3 destination) => DefaultMovementPower(destination);
 
         #region Settings
 

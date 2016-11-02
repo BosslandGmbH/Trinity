@@ -78,11 +78,11 @@ namespace Trinity.Components.Adventurer
 
         string IDynamicSetting.GetName() => Name;
         UserControl IDynamicSetting.GetControl() => ConfigWindow.Instance.Content as UserControl;
-        object IDynamicSetting.GetDataContext() => ConfigWindow.Instance.DataContext;
+        object IDynamicSetting.GetDataContext() => PluginSettings.Current.GetDataContext();
         string IDynamicSetting.GetCode() => PluginSettings.Current.GenerateCode();
         void IDynamicSetting.ApplyCode(string code) => PluginSettings.Current.ApplySettingsCode(code);
         void IDynamicSetting.Reset() => PluginSettings.Current.LoadDefaults();
-        void IDynamicSetting.Save() => PluginSettings.Current.Save();
+        void IDynamicSetting.Save() { }
 
         #endregion
     }

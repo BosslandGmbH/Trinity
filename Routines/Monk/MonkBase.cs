@@ -130,7 +130,7 @@ namespace Trinity.Routines.Monk
             if (Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
 
-            if (Skills.Monk.ExplodingPalm.IsActive && !Units.Any(u => u.IsUnit && u.Distance < 35f && u.HasDebuff(SNOPower.Monk_ExplodingPalm)))
+            if (Skills.Monk.ExplodingPalm.IsActive && !WeightedUnits.Any(u => u.IsUnit && u.Distance < 35f && u.HasDebuff(SNOPower.Monk_ExplodingPalm)))
                 return false;
 
             var isElitesInRange = TargetUtil.AnyElitesInRange(15, 1);
@@ -388,7 +388,7 @@ namespace Trinity.Routines.Monk
             if (buffCooldownRemanining.TotalMilliseconds > 750)
                 return false;
 
-            if (!Units.Any(u => u.Distance < 100f))
+            if (!WeightedUnits.Any(u => u.Distance < 100f))
                 return false;
 
             return true;
@@ -421,9 +421,6 @@ namespace Trinity.Routines.Monk
 
             if (HasInstantCooldowns && !Skills.Monk.Epiphany.IsLastUsed)
                 return true;
-
-            if (Core.Buffs.HasBuff(SNOPower.X1_Monk_Epiphany))
-                return false;
 
             if (Player.CurrentHealthPct > 0.9 && !TargetUtil.AnyElitesInRange(30f))
                 return false;

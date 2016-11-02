@@ -41,7 +41,7 @@ namespace Trinity.Coroutines.Town
 
             if (UIElements.VendorWindow.IsVisible)
             {
-                await Coroutine.Sleep(2000);
+                await Coroutine.Sleep(1000);
                 Logger.LogVerbose("[RepairItems] Repairing equipment while at this vendor");
                 Repair(shouldRepairAll);
                 return true;
@@ -63,23 +63,23 @@ namespace Trinity.Coroutines.Town
             if (repairActor.Distance <= 10f)
             {
                 Navigator.PlayerMover.MoveStop();
-                await Coroutine.Sleep(2000);
+                await Coroutine.Sleep(1500);
             }
 
             if (GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible)
             {
-                await Coroutine.Sleep(2000);
+                await Coroutine.Sleep(1500);
                 Logger.LogVerbose($"[RepairItems] Repairing Equipment at {repairActor.Name} :)");
                 Repair(shouldRepairAll);
                 return true;
             }
 
             repairActor.GetActor().Interact();
-            await Coroutine.Sleep(2000);
+            await Coroutine.Sleep(1000);
 
             if (GameUI.IsBlackSmithWindowOpen || UIElements.VendorWindow.IsVisible)
             {
-                await Coroutine.Sleep(2000);
+                await Coroutine.Sleep(1000);
                 Logger.LogVerbose($"[RepairItems] Repairing Equipment at {repairActor.Name} :) (Attempt Two)");
                 Repair(shouldRepairAll);
                 return true;

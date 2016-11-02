@@ -4,11 +4,12 @@ using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
-using Trinity.Components.Adventurer.Util;
+using Trinity.Framework.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
+using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
@@ -105,13 +106,13 @@ namespace Trinity.Components.Adventurer.Coroutines
             var actor = ActorFinder.FindObject(_actorId);
             if (actor == null)
             {
-                Logger.Debug("[Interaction] Nothing to interact, failing. ");
+                Logger.Debug("Nothing to interact, failing. ");
                 State = States.Failed;
                 return false;
             }
             if (!actor.IsInteractableQuestObject())
             {
-                Logger.Debug("[Interaction] The object is not valid or not interactable, failing.");
+                Logger.Debug("The object is not valid or not interactable, failing.");
                 State = States.Failed;
                 return false;
             }
@@ -154,7 +155,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             if (ZetaDia.Me.IsFullyValid() && (ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting || ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling))
             {
-                Logger.Debug("[Interaction] Waiting for the cast to end");
+                Logger.Debug("Waiting for the cast to end");
                 await Coroutine.Sleep(500);
                 return false;
             }
@@ -162,10 +163,17 @@ namespace Trinity.Components.Adventurer.Coroutines
             var actor = ActorFinder.FindObject(_actorId);
             if (actor == null)
             {
-                Logger.Debug("[Interaction] Nothing to interact, failing. ");
+                Logger.Debug("Nothing to interact, failing. ");
                 State = States.Failed;
                 return false;
             }
+            if (actor.Distance > 75f)
+            {
+                Logger.Debug($"Actor is way too far away. {actor.Distance}");
+                State = States.Failed;
+                return false;
+            }
+
             // Assume done
             if (!actor.IsInteractableQuestObject())
             {
@@ -188,14 +196,24 @@ namespace Trinity.Components.Adventurer.Coroutines
                 {
                     if (DateTime.UtcNow - _interactionStartedAt > _timeOut)
                     {
-                        Logger.Debug("[Interaction] Interaction timed out after {0} seconds", (DateTime.UtcNow - _interactionStartedAt).TotalSeconds);
+                        Logger.Debug("Interaction timed out after {0} seconds", (DateTime.UtcNow - _interactionStartedAt).TotalSeconds);
                         State = States.TimedOut;
                         return false;
                     }
                 }
             }
+            var interactionResult = await Interact(actor);
 
-            if (await Interact(actor))
+            if (ZetaDia.Me.IsUsingDeathGate())
+            {
+                Logger.Debug("Used Death Gate!");
+                await Coroutine.Wait(5000, () => !ZetaDia.Me.IsUsingDeathGate());
+                Logger.Debug("Arrived at Gate Destination");
+                State = States.Completed;
+                return true;
+            }
+
+            if (interactionResult)
             {
                 if (_currentInteractAttempt < _interactAttempts)
                 {
@@ -236,7 +254,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interact(DiaObject actor)
         {
-            Logger.Debug("[Interaction] Attempting to interact with {0} at distance {1}", ((SNOActor)actor.ActorSnoId).ToString(), actor.Distance);
+            Logger.Debug("Attempting to interact with {0} at distance {1}", ((SNOActor)actor.ActorSnoId).ToString(), actor.Distance);
             bool retVal = false;
             switch (actor.ActorType)
             {

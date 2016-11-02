@@ -55,6 +55,10 @@ namespace Trinity.Routines.Barbarian
             if (ShouldLeap(out position))
                 return Leap(position);
 
+            // Siesemic Slam variant - Make sure damage buff is up before earthquake
+            if (Legendary.GirdleOfGiants.IsEquipped && (Skills.Barbarian.Earthquake.CanCast() || Skills.Barbarian.Leap.IsActive) && !IsGirdleOfGiantsBuffActive)
+                return SeismicSlam(TargetUtil.GetBestClusterUnit(30f) ?? CurrentTarget);
+
             if (Skills.Barbarian.Avalanche.CanCast())
                 return Avalanche(Player.Position);
 
@@ -114,9 +118,15 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetBuffPower()
         {
-            if (Skills.Barbarian.ThreateningShout.CanCast() && TargetUtil.GetBestClusterUnit()?.Distance < 15f)
-                return ThreateningShout(Player.Position);
-             
+            if (!Player.IsInTown)
+            {
+                if (Skills.Barbarian.ThreateningShout.CanCast() && TargetUtil.GetBestClusterUnit()?.Distance < 15f)
+                    return ThreateningShout(Player.Position);
+
+                if (Skills.Barbarian.WarCry.CanCast())
+                    return WarCry();
+            }
+
             return DefaultBuffPower();
         }
 

@@ -7,8 +7,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
+using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
@@ -16,6 +19,7 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.UI.Visualizer.SceneEditor;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
@@ -53,7 +57,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             GameEvents.OnWorldChanged += (s, e) =>
             {
                 Drawings.Relative.Clear();
-                Drawings.Static.Clear();
             };
         }
 
@@ -196,7 +199,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         private void Clear()
         {
             Drawings.Relative.Clear();
-            Drawings.Static.Clear();
             Clip = CanvasData.ClipRegion;
             CanvasData.PanOffset = new Point();
         }
@@ -721,6 +723,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                     DrawDeathGates(dc, CanvasData);
 
+                    DrawAdventurerNavigation(dc, CanvasData);
+
                     DrawMarkers(dc, CanvasData);
 
                     //DrawMinimap(dc, CanvasData);
@@ -800,6 +804,11 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     Logger.Log("Exception in RadarUI.OnRender(). {0} {1}", ex.Message, ex.InnerException);
                 }
             }
+        }
+
+        private void DrawAdventurerNavigation(DrawingContext dc, CanvasData canvasData)
+        {
+            dc.DrawLine(RadarResources.BorderPen, CanvasData.CenterVector.ToCanvasPoint(), NavigationCoroutine.LastDestination.ToCanvasPoint());
         }
 
         private void DrawMinimap(DrawingContext dc, CanvasData canvasData)
@@ -1936,11 +1945,12 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 foreach (var adventurerScene in ScenesStorage.CurrentWorldScenes.Where(s => s.DynamicWorldId == worldId).ToList())
                 {
-
                     // Combine navcells into one drawing and store it; because they don't change relative to each other
                     // And because translating geometry for every navcell on every frame is waaaaay too slow.
                     if (Drawings.Relative.ContainsKey(adventurerScene.HashName))
                         continue;
+                    
+                    //SceneDrawings.Instance.Record(adventurerScene);
 
                     var drawing = new DrawingGroup();
 
@@ -2010,7 +2020,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                         WorldId = adventurerScene.DynamicWorldId,
                     });
                 }
-
 
                 foreach (var pair in Drawings.Relative)
                 {

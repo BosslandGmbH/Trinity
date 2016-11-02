@@ -47,11 +47,19 @@ namespace Trinity.Routines.Witchdoctor
             TrinityActor target;
             Vector3 position;
 
+            if (Settings.HarvestModeIC == HarvestMode.NonStop && Skills.WitchDoctor.SoulHarvest.CanCast() && TargetUtil.AnyMobsInRange(14f))
+                return SoulHarvest();
+                
             if (ShouldPiranhas(out target))
                 return Piranhas(target);
 
             if (ShouldSoulHarvest(out position))
+            {
+                if (Skills.WitchDoctor.SpiritWalk.CanCast())
+                    return SpiritWalk();
+
                 return SoulHarvest(position);
+            }
 
             if (ShouldWallOfDeath(out target))
                 return WallOfDeath(target);
@@ -169,7 +177,6 @@ namespace Trinity.Routines.Witchdoctor
             return true;
         }
 
-
         protected override TrinityPower Piranhas(TrinityActor target)
             => new TrinityPower(SNOPower.Witchdoctor_Piranhas, 45, target.Position);
 
@@ -184,12 +191,47 @@ namespace Trinity.Routines.Witchdoctor
             if (ShouldHorrify())
                 return Horrify();
 
+            if (Settings.SpiritWalk.UseMode == UseTime.Always && !Player.IsInTown && Skills.WitchDoctor.SpiritWalk.CanCast())
+                return SpiritWalk();
+
+            var closeUnit = HostileMonsters.FirstOrDefault(u => u.Distance < 16f);
+            if (closeUnit != null && !Player.IsInTown && !IsInCombat && Skills.WitchDoctor.SoulHarvest.CanCast())
+            {                
+                if (Settings.HarvestModeOOC == HarvestMode.NonStop)
+                {                                
+                    if (Skills.WitchDoctor.Haunt.CanCast() && Skills.WitchDoctor.Haunt.TimeSinceUse > 1000)
+                        return Haunt(closeUnit);
+
+                    if(HostileMonsters.Any(u => u.Distance < 16f && u.HasDebuff(SNOPower.Witchdoctor_Haunt)))
+                        return SoulHarvest();                                         
+                }
+
+                // Refresh the buff time to avoid losing 10 stacks.
+                if (Skills.WitchDoctor.SoulHarvest.TimeSinceUse > 4500)
+                    return SoulHarvest();
+
+                // Build some stacks
+                if (Skills.WitchDoctor.SoulHarvest.BuffStacks < 10)
+                    return SoulHarvest();                                   
+            }
+
             return DefaultBuffPower();
         }
 
         public TrinityPower GetDefensivePower() => null;
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
-        public TrinityPower GetMovementPower(Vector3 destination) => Walk(destination);
+        public TrinityPower GetMovementPower(Vector3 destination)
+        {
+            Vector3 position;
+
+            if (!Player.IsInTown)
+            {
+                if (Runes.WitchDoctor.AngryChicken.IsActive && ShouldHex(out position))
+                    return Hex(position);
+            }
+
+            return Walk(destination);
+        }
 
         #region Settings
 
@@ -200,10 +242,34 @@ namespace Trinity.Routines.Witchdoctor
         IDynamicSetting IRoutine.RoutineSettings => Settings;
         public WitchDoctorJadeHarvesterSettings Settings { get; } = new WitchDoctorJadeHarvesterSettings();
 
+        public enum HarvestMode
+        {
+            None = 0,
+            Default,
+            NonStop,
+        }
+
         public sealed class WitchDoctorJadeHarvesterSettings : NotifyBase, IDynamicSetting
         {
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private HarvestMode _harvestModeOoc;
+            private HarvestMode _harvestModeIc;
+            private SkillSettings _spiritWalk;
+
+            [DefaultValue(HarvestMode.Default)]
+            public HarvestMode HarvestModeOOC
+            {
+                get { return _harvestModeOoc; }
+                set { SetField(ref _harvestModeOoc, value); }
+            }
+
+            [DefaultValue(HarvestMode.Default)]
+            public HarvestMode HarvestModeIC
+            {
+                get { return _harvestModeIc; }
+                set { SetField(ref _harvestModeIc, value); }
+            }
 
             [DefaultValue(8)]
             public int ClusterSize
@@ -217,6 +283,23 @@ namespace Trinity.Routines.Witchdoctor
             {
                 get { return _emergencyHealthPct; }
                 set { SetField(ref _emergencyHealthPct, value); }
+            }
+
+            public SkillSettings SpiritWalk
+            {
+                get { return _spiritWalk; }
+                set { SetField(ref _spiritWalk, value); }
+            }
+
+            private static readonly SkillSettings DefaultSpiritWalkSettings = new SkillSettings
+            {
+                UseMode = UseTime.Default,
+            };
+
+            public override void LoadDefaults()
+            {
+                base.LoadDefaults();
+                SpiritWalk = DefaultSpiritWalkSettings.Clone();
             }
 
             #region IDynamicSetting

@@ -10,6 +10,7 @@ using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Trinity.Reference;
 using Trinity.Settings;
+using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -238,8 +239,32 @@ namespace Trinity.Routines.Witchdoctor
             if (!Skills.WitchDoctor.Hex.CanCast())
                 return false;
 
-            position = TargetUtil.GetBestClusterPoint();
-            return true;
+            position = Runes.WitchDoctor.AngryChicken.IsActive ? Player.Position : TargetUtil.GetBestClusterPoint();
+            return position != Vector3.Zero;
+        }
+
+        protected virtual bool ShouldExplodeChicken(out Vector3 position)
+        {
+            position = Vector3.Zero;
+
+            if (!IsChicken)
+                return false;
+
+            if (!PowerManager.CanCast(SNOPower.Witchdoctor_Hex_Explode))
+                return false;
+
+            if (!IsInCombat)
+                return false;
+
+            var timeAsChicken = Skills.WitchDoctor.Hex.TimeSinceUse;
+            var chickenDuration = (Sets.ManajumasWay.IsEquipped ? 15000 : 2000);
+
+            var unit = TargetUtil.GetBestClusterUnit();
+            if (unit == null)
+                return false;
+
+            position = unit.Position;
+            return position != Vector3.Zero;
         }
 
         // Terror
@@ -474,7 +499,10 @@ namespace Trinity.Routines.Witchdoctor
             => new TrinityPower(Skills.WitchDoctor.SpiritWalk);
 
         protected virtual TrinityPower Hex(Vector3 position)
-            => new TrinityPower(Skills.WitchDoctor.Hex, 65f, position);
+            => new TrinityPower(Skills.WitchDoctor.Hex, 65f, position) { CastWhenBlocked = true };
+
+        protected virtual TrinityPower ExplodeChicken(Vector3 position)
+            => new TrinityPower(SNOPower.Witchdoctor_Hex_Explode, 10f, position);
 
         // Terror
 
@@ -557,6 +585,9 @@ namespace Trinity.Routines.Witchdoctor
         public static bool HasJeramsRevengeBuff
             => Player.HasBuff(SNOPower.P3_ItemPassive_Unique_Ring_010);
 
+        public static bool IsChicken
+            => Player.HasBuff(SNOPower.Witchdoctor_Hex, 2);
+
         #endregion
 
         #region Helpers
@@ -622,6 +653,9 @@ namespace Trinity.Routines.Witchdoctor
             else if (ShouldWallOfDeath(out target))
                 power = WallOfDeath(target);
 
+            else if (ShouldExplodeChicken(out position))
+                power = ExplodeChicken(position);
+
             else if (ShouldHex(out position))
                 power = Hex(position);
 
@@ -667,6 +701,22 @@ namespace Trinity.Routines.Witchdoctor
         {
             TrinityPower power;
             return TryBuffPower(out power) ? power : null;
+        }
+
+        public TrinityPower DefaultMovementPower(Vector3 destination)
+        {
+            Vector3 position;
+
+            if (!Player.IsInTown)
+            {
+                if (Runes.WitchDoctor.Severance.IsActive && Skills.WitchDoctor.SpiritWalk.CanCast())
+                    return SpiritWalk();
+
+                if (Runes.WitchDoctor.AngryChicken.IsActive && ShouldHex(out position))
+                    return Hex(position);
+            }
+
+            return Walk(destination);
         }
 
         public TrinityPower DefaultDestructiblePower()

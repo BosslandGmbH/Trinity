@@ -10,11 +10,13 @@ using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Framework.Helpers;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Common.Helpers;
 using Zeta.Game;
+using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Actors.Gizmos;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
@@ -44,7 +46,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 _navigationCoroutine = new NavigationCoroutine(destination, distance);
 
-                Util.Logger.DebugSetting($"Created Navigation Task for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
+                Logger.DebugSetting($"Created Navigation Task for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
 
                 _moveToDestination = destination;
                 _moveToDistance = distance;
@@ -58,7 +60,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                 if (_navigationCoroutine.State == States.Failed)
                 {
-                    Util.Logger.DebugSetting($"_navigationCoroutine.State=Failed for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
+                    Logger.DebugSetting($"_navigationCoroutine.State=Failed for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
                     return true;
                 } 
 
@@ -86,7 +88,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 if (_state == value) return;
 
-                Util.Logger.DebugSetting($"Navigation State Changed from {_state} to {value}, Destination={_destination} Dist3D={AdvDia.MyPosition.Distance(_destination)} Dist2D={AdvDia.MyPosition.Distance2D(_destination)}");
+                Logger.DebugSetting($"Navigation State Changed from {_state} to {value}, Destination={_destination} Dist3D={AdvDia.MyPosition.Distance(_destination)} Dist2D={AdvDia.MyPosition.Distance2D(_destination)}");
 
                 switch (value)
                 {
@@ -98,7 +100,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                     case States.InteractingWithDeathGate:
                     case States.Completed:
                     case States.Failed:
-                        Util.Logger.Debug("[Navigation] " + value);
+                        Logger.Debug("[Navigation] " + value);
                         break;
                 }
                 if (value != States.NotStarted)
@@ -134,7 +136,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 case States.Completed:
                     return Completed();
                 case States.Failed:
-                    Util.Logger.DebugSetting($"CanFullyClientPath={await AdvDia.DefaultNavigationProvider.CanFullyClientPathTo(_destination)}");
+                    Logger.DebugSetting($"CanFullyClientPath={await AdvDia.DefaultNavigationProvider.CanFullyClientPathTo(_destination)}");
                     return Failed();
             }
             return false;
@@ -162,20 +164,32 @@ namespace Trinity.Components.Adventurer.Coroutines
                 _mover = Mover.Navigator;
             }
 
-            if (DeathGates.IsInDeathGateWorld && DeathGates.IsInOutsideRegion)
+            // Intercept destinations that require a gate to be used to reach them, and redirect to gate position.
+            if (DeathGates.IsInDeathGateWorld)
             {
                 var gatePosition = DeathGates.GetBestGatePosition(_destination);
-                if (gatePosition != Vector3.Zero)
+                if (DeathGates.IsInOutsideRegion && !IsDeathGateIgnored(gatePosition, _deathGateIgnoreList))
                 {
-                    Logger.Warn($"Moving to use Death Gate {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)}");
+                    Logger.DebugSetting($"Moving to use Death Gate (Currently in Outside Region) {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)}");
                     _deathGatePosition = gatePosition;
                     State = States.MovingToDeathGate;
                     _pathGenetionTimer.Reset();
                     return false;
                 }
+
+                var destinationIsGate = _destination.Distance(gatePosition) < 5f;
+                if (destinationIsGate)
+                {
+                    Logger.DebugSetting($"Current Destination is Death Gate. {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)}");
+                    _deathGatePosition = gatePosition;
+                    State = States.MovingToDeathGate;
+                    _pathGenetionTimer.Reset();
+                    return false;
+                }
+
             }
 
-            Logger.Debug("[Navigation] {0} {1} (Distance: {2})", (_mover == Mover.StraightLine ? "Moving towards" : "Moving to"), _destination, distanceToDestination);
+            Logger.Debug("{0} {1} (Distance: {2})", (_mover == Mover.StraightLine ? "Moving towards" : "Moving to"), _destination, distanceToDestination);
             State = States.Moving;
             _pathGenetionTimer.Reset();
             return false;
@@ -240,29 +254,26 @@ namespace Trinity.Components.Adventurer.Coroutines
                 switch (LastMoveResult)
                 {
                     case MoveResult.ReachedDestination:
+
                         if (_distance != 0 && distanceToDestination <= _distance || distanceToDestination <= 5f)
                         {
-                            Logger.Debug("[Navigation] Completed (Distance to destination: {0})", distanceToDestination);
+                            Logger.Debug("Completed (Distance to destination: {0})", distanceToDestination);
                             State = States.Completed;
                         }
                         else
                         {
-                            //_deathGate = ActorFinder.FindNearestDeathGate(_deathGateIgnoreList);
-                            //if (_deathGate != null)
-                            //{
-                            //    Logger.Warn($"Moving to use Death Gate {_deathGate.Name} Dist: {_deathGate.Distance}");
-                            //    State = States.MovingToDeathGate;
-                            //} 
+                            // DB Navigator will report ReachedDestination when failing to navigate to positions that require a death gate to reach. Redirect to gate position.
                             var gatePosition = DeathGates.GetBestGatePosition(_destination);
-                            if (gatePosition != Vector3.Zero)
+                            if (gatePosition != Vector3.Zero && (!DeathGates.IsInOutsideRegion || !IsDeathGateIgnored(gatePosition, _deathGateIgnoreList)))
                             {
-                                Logger.Warn($"Moving to use Death Gate {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)}");
+                                Logger.DebugSetting($"Moving to use Death Gate {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)} IgnoreListCount={_deathGateIgnoreList.Count}");
                                 _deathGatePosition = gatePosition;
+                                _deathGateIgnoreList[_deathGatePosition] = DateTime.UtcNow;
                                 State = States.MovingToDeathGate;
                             }
                             else
                             {
-                                Logger.Debug($"Navigator reports DestinationReached but we're not at destination, failing. Mover={_mover}");
+                                Logger.DebugSetting($"Navigator reports DestinationReached but we're not at destination, failing. Mover={_mover}");
                                 State = States.Failed;
                                 LastMoveResult = MoveResult.Failed;
                             }
@@ -309,11 +320,18 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         private DiaGizmo _deathGate;
-        private List<int> _deathGateIgnoreList = new List<int>();
+
+        private static Dictionary<Vector3, DateTime> _deathGateIgnoreList = new Dictionary<Vector3, DateTime>();
 
         private InteractionCoroutine _interactionCoroutine;
         private DateTime _timeout = DateTime.MaxValue;
         private Vector3 _deathGatePosition;
+
+
+        public static bool IsDeathGateIgnored(Vector3 position, IReadOnlyDictionary<Vector3, DateTime> ignoreList, int seconds = 30)
+        {
+            return position == Vector3.Zero || ignoreList.ContainsKey(position) && DateTime.UtcNow.Subtract(ignoreList[position]).TotalSeconds < seconds;
+        }
 
         private async Task<bool> MovingToDeathGate()
         {
@@ -322,22 +340,32 @@ namespace Trinity.Components.Adventurer.Coroutines
                 State = States.Moving;
                 return false;
             }
-   
-            _deathGate = ActorFinder.FindNearestDeathGate(_deathGateIgnoreList);
+         
+            _deathGate = ActorFinder.FindNearestDeathGateToPosition(_deathGatePosition, _deathGateIgnoreList);
 
             if (_deathGate == null)
             {
+                if (_deathGatePosition.Distance(AdvDia.MyPosition) < 20f)
+                {
+                    Logger.DebugSetting($"No Gate found near position {_deathGatePosition}");
+                    LastMoveResult = MoveResult.Failed;
+                    State = States.Failed;
+                    return false;
+                }
+
+                Logger.DebugSetting($"Moving to Gate Position, Distance={_deathGatePosition.Distance(AdvDia.MyPosition)}");
                 LastMoveResult = await CommonCoroutines.MoveTo(_deathGatePosition);
             }
-            else if (AdvDia.MyPosition.Distance(_deathGate.Position) <= 7f && _deathGate.Position.Distance(_deathGatePosition) < 15f)
+            else if (AdvDia.MyPosition.Distance(_deathGate.Position) <= 5f && _deathGate.Position.Distance(_deathGatePosition) < 10f)
             {
                 Navigator.PlayerMover.MoveTowards(_deathGate.Position);
                 await Coroutine.Sleep(500);
-                Logger.Warn($"Arrived at Gate, Distance={_deathGate.Distance}");
+                Logger.DebugSetting($"Arrived at Gate, Distance={_deathGate.Distance}");
                 LastMoveResult = MoveResult.ReachedDestination;
             }
             else
             {
+                Logger.DebugSetting($"Moving to Gate, {_deathGate.Name} Distance={_deathGate.Distance}");
                 LastMoveResult = await CommonCoroutines.MoveTo(_deathGate.Position);
             }
 
@@ -355,24 +383,9 @@ namespace Trinity.Components.Adventurer.Coroutines
                     Navigator.PlayerMover.MoveTowards(_deathGate.Position);
                     await Coroutine.Sleep(500);
 
-                    _interactionCoroutine = new InteractionCoroutine(_deathGate.ActorSnoId, TimeSpan.FromMilliseconds(2000), new TimeSpan(0, 0, 3));
+                    _interactionCoroutine = new InteractionCoroutine(_deathGate.ActorSnoId, TimeSpan.FromMilliseconds(8000), TimeSpan.FromMilliseconds(500));
                     State = States.InteractingWithDeathGate;       
                     break;
-
-                    //var distance = AdvDia.MyPosition.Distance(_deathGate.Position);
-                    //if (_deathGate != null && distance <= 12f)
-                    //{
-                    //    Navigator.PlayerMover.MoveTowards(_deathGate.Position);
-                    //    _interactionCoroutine = new InteractionCoroutine(_deathGate.ActorSnoId, new TimeSpan(0, 0, 1), new TimeSpan(0, 0, 3));
-                    //    State = States.InteractingWithDeathGate;
-                    //}
-                    //else
-                    //{
-                    //    _deathGateIgnoreList.Add(_deathGate.ACDId);
-                    //    State = States.Moving;
-                    //}
-                    //break;
-
                 case MoveResult.Failed:
                 case MoveResult.PathGenerationFailed:
                     State = States.Failed;
@@ -380,7 +393,19 @@ namespace Trinity.Components.Adventurer.Coroutines
                 case MoveResult.PathGenerated:
                     break;
                 case MoveResult.UnstuckAttempt:
-                    if (_unstuckAttemps > 1)
+
+                    // DB navigation has issues with death gate scene x1_fortress_island_NE_01
+
+                    if (_unstuckAttemps%2 == 0)
+                    {
+                        Navigator.PlayerMover.MoveTowards(LastDestination);
+                        await Coroutine.Sleep(2000);
+                    }
+                    else
+                    {
+                        await Navigator.StuckHandler.DoUnstick();
+                    }
+                    if (_unstuckAttemps > 4)
                     {
                         State = States.Failed;
                         return false;
@@ -398,41 +423,60 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> InteractingWithDeathGate()
         {
-            if (await _interactionCoroutine.GetCoroutine())
+            if (!await _interactionCoroutine.GetCoroutine())
+                return false;
+
+            if (_interactionCoroutine.State == InteractionCoroutine.States.Completed)
             {
-                if (_interactionCoroutine.State == InteractionCoroutine.States.TimedOut)
-                {
-                    Logger.Debug("[Bounty] Near death gate, but interaction timed out.");
+                await SetUsedGatesToIgnored();
+                ClearGateDestination();
+                State = States.Completed;
+                return true;
+            }
 
-                    var gate = ActorFinder.FindNearestDeathGate(new IndexedList<int>());
-                    if (gate.Distance > 15f && gate.InLineOfSight)
-                    {
-                        Logger.Debug("[Bounty] Starting fallback death gate interaction.");
-                        await CommonCoroutines.MoveTo(gate.Position, "Death Gate");
-                        await CommonCoroutines.MoveAndStop(gate.Position, 2f, "Death Gate");
-                        await Coroutine.Sleep(500);
-                        var startPosition = ZetaDia.Me.Position;
-                        gate.Interact();
-                        await Coroutine.Sleep(2000);
-                        if (ZetaDia.Me.Position.Distance(startPosition) > 10f)
-                        {
-                            Logger.Debug("[Bounty] Successfully used death gate");
-                            State = States.Completed;                            
-                            return false;
-                        }
-                    }
+            ClearGateDestination();
+            State = States.Failed;
+            return false;
+        }
 
-                    State = States.Failed;
-                    _interactionCoroutine = null;
-                }
-                else
-                {
-                    _deathGate = null;
-                    _deathGatePosition = Vector3.Zero;
-                    _deathGateIgnoreList = new List<int>();
-                    State = States.Moving;
-                    _interactionCoroutine = null;
-                }
+        private void ClearGateDestination()
+        {
+            _deathGate = null;
+            _deathGatePosition = Vector3.Zero;
+            _deathGateIgnoreList.RemoveAll(dt => DateTime.UtcNow.Subtract(dt).TotalMinutes > 5);
+            _interactionCoroutine = null;
+        }
+
+        private async Task<bool> SetUsedGatesToIgnored()
+        {
+            // 'Reference' positions are hardcoded gate positions by SceneSnoId.
+            // These allow gate nativation as soon as a scene is discovered. 
+            // And may be slightly off from actual gate actor positions.
+
+            if (_deathGate != null)
+            {
+                Logger.DebugSetting($"Added origin gate to ignore list. (DiaGizmo) {_deathGate.Position}");
+                _deathGateIgnoreList[_deathGate.Position] = DateTime.UtcNow;
+            }
+
+            if (_deathGate?.Position != _deathGatePosition)
+            {
+                Logger.DebugSetting($"Added origin gate position to ignore list. (Reference) {_deathGatePosition}");
+                _deathGateIgnoreList[_deathGatePosition] = DateTime.UtcNow;
+            }
+
+            var destinationGate = ActorFinder.FindNearestDeathGate();
+            if (destinationGate != null)
+            {
+                Logger.DebugSetting($"Added destination gate to ignore list (DiaGizmo) {destinationGate}");
+                _deathGateIgnoreList[destinationGate.Position] = DateTime.UtcNow;
+            }
+
+            var destinationGateReferencePosition = DeathGates.NearestGateToPosition(AdvDia.MyPosition);
+            if (destinationGateReferencePosition != Vector3.Zero)
+            {
+                Logger.DebugSetting($"Added destination gate to ignore list (Reference) {destinationGateReferencePosition}");
+                _deathGateIgnoreList[destinationGateReferencePosition] = DateTime.UtcNow;
             }
 
             return false;

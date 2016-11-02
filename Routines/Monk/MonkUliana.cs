@@ -57,16 +57,17 @@ namespace Trinity.Routines.Monk
             if (ShouldCycloneStrike())
                 return CycloneStrike();
 
+            if (Player.CurrentHealthPct < 0.35)
+                return SevenSidedStrike(CurrentTarget);
+                    
+            var isEPReady = Legendary.Madstone.IsEquipped || WeightedUnits.Any(u => u.Distance < 15f && u.HasDebuff(SNOPower.Monk_ExplodingPalm));
             var isEnoughTime = TimeToElementStart(Element.Cold) > SevenSidedStrikeCooldownMs;
             var isColdElement = Core.Buffs.ConventionElement == Element.Cold;            
 
             Logger.Log(LogCategory.Routine, $"TimeToCold={TimeToElementStart(Element.Cold)} SSSCD={SevenSidedStrikeCooldownMs} IsCold={isColdElement}");
 
-            if (Player.CurrentHealthPct < 0.35)
-                return SevenSidedStrike(CurrentTarget);
-
-            if (ShouldSevenSidedStrike(out target) && (!Legendary.ConventionOfElements.IsEquipped || isColdElement || isEnoughTime))
-                return SevenSidedStrike(target);
+            if (isEPReady && ShouldSevenSidedStrike(out target) && (!Legendary.ConventionOfElements.IsEquipped || isColdElement || isEnoughTime))
+                return SevenSidedStrike(target);      
 
             return GetExplodingPalmPrimary();
         }
@@ -99,7 +100,7 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.SevenSidedStrike.CanCast())
                 return false;
 
-            if (!TargetUtil.AnyMobsInRange(45f))
+            if (!TargetUtil.AnyMobsInRange(45f) && !CurrentTarget.IsTreasureGoblin)
                 return false;
 
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;

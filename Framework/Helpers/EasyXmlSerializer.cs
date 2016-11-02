@@ -31,5 +31,14 @@ namespace Trinity.Framework.Helpers
             }
         }
 
+        public static T Deserialize<T>(string input)
+        {
+            var serializer = new XmlSerializer(typeof(T));
+            using (var reader = new StringReader(input))
+            {                
+                return (T)serializer.Deserialize(reader);
+            }
+        }
+
     }
 }

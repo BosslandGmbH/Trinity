@@ -85,6 +85,11 @@ namespace Trinity.Framework.Helpers
             return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { instance }, null);
         }
 
+        public static T UnsafeCreate<T>(this IntPtr instance, params object[] parameters)
+        {
+            return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new List<object> { instance }.Concat(parameters).ToArray(), null);
+        }
+
         public static T To<T>(this ActorCommonData instance) where T : ACD
         {
             return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { instance.BaseAddress }, null);

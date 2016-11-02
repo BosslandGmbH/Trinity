@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Containers;
@@ -12,6 +13,7 @@ using Trinity.Framework.Objects.Memory.Sno.Helpers;
 using Trinity.Framework.Objects.Memory.Symbols.Types;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using MonsterRace = Zeta.Game.Internals.SNO.MonsterRace;
@@ -21,6 +23,20 @@ using ResourceType = Trinity.Framework.Objects.Memory.Symbols.Types.ResourceType
 
 namespace Trinity.Framework.Objects.Memory.Sno.Types
 {
+
+    public class TestItem : MemoryWrapper, ITableItem
+    {
+        public int ModKey => ReadOffset<int>(0x00);
+        public string Value => ReadString(0x34);
+    }
+
+    public class TestObject : NativeObject
+    {
+        public TestObject(IntPtr ptr) : base(IntPtr.Zero)
+        {
+
+        }
+    }
 
     [CompilerGenerated]
     public class NativeActor : SnoTableEntry
@@ -34,7 +50,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
         public NativeSphere _6_0x30_Object => ReadObject<NativeSphere>(0x30); //      Flags=1  
         public NativeAABB _7_0x40_Object => ReadObject<NativeAABB>(0x40);
         public NativeSerializeData _8_0x58_SerializeData => ReadObject<NativeSerializeData>(0x58);
-        //    public TagMap _9_0x60_TagMap => ReadOffset<TagMap>(0x60); //    VarArrSerializeOffsetDiff=-8   Flags=33  
+        //public TagMap _9_0x60_TagMap => ReadOffset<TagMap>(0x60); //    VarArrSerializeOffsetDiff=-8   Flags=33  
         public int _10_0x68_AnimSet_Sno => ReadOffset<int>(0x68); //      Flags=1  
         public int _11_0x6C_Monster_Sno => ReadOffset<int>(0x6C); //      Flags=1  
         public NativeSerializeData _12_0x70_SerializeData => ReadObject<NativeSerializeData>(0x70);
@@ -2651,6 +2667,8 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
         public string _9_0x448_SerializedString => ReadSerializedString(0x448, 0x450); //    VarArrSerializeOffsetDiff=8   Flags=32  
         public NativeSerializeData _10_0x450_SerializeData => ReadObject<NativeSerializeData>(0x450);
         public int _11_0x458_Quest_Sno => ReadOffset<int>(0x458); //      Flags=1  
+
+        public override string ToString() => $"{Header.SnoId}, {(NativePowerSno)Header.SnoId} {_1_0xC_String} {_5_0x330_String}";
     }
 
 
