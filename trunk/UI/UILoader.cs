@@ -45,6 +45,8 @@ namespace Trinity.UI
             ConfigWindow.Close();
         }
 
+        private static int _currentHeroId;
+
         public static Window GetDisplayWindow()
         {
             if (!BotMain.IsRunning)

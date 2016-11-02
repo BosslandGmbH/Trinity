@@ -9,7 +9,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
     /// When we save the final drawing the parts can no longer be translated individually. 
     /// For example: a drawing of a scene composed of many navcells.
     /// </summary>
-    internal class RelativeDrawing : StaticDrawing
+    public class RelativeDrawing : StaticDrawing
     {
         /// <summary>
         /// The origin point is the center position at the time the drawing was created.

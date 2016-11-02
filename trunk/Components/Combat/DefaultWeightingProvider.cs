@@ -174,17 +174,20 @@ namespace Trinity.Components.Combat
                     var goblin = objects.FirstOrDefault(u => u.IsTreasureGoblin && u.Distance <= 200f);
                     if (goblin != null && !isStuck && !PlayerMover.IsCompletelyBlocked && !Core.Grids.Avoidance.IsIntersectedByFlags(Core.Player.Position, goblin.Position, AvoidanceFlags.ClosedDoor))
                     {
+                        objects.Where(x => !x.IsPlayer).ForEach(o =>
+                        {
+                            o.WeightInfo = string.Empty;
+                            o.Weight = 0;
+                        });
+
                         IsDoingGoblinKamakazi = true;
                         KamakaziGoblin = goblin;
-                        Logger.Log("Going Kamakazi on Goblin '{0} ({1})' Distance={2}", goblin.InternalName,
-                            goblin.ActorSnoId, goblin.Distance);
-
+                        Logger.Log("Going Kamakazi on Goblin '{0} ({1})' Distance={2}", goblin.InternalName, goblin.ActorSnoId, goblin.Distance);
+                        goblin.WeightInfo = "Kamakazi Target";
+                        goblin.Weight = MaxWeight;
                         return goblin;
                     }
-                    else
-                    {
-                        IsDoingGoblinKamakazi = false;
-                    }
+                    IsDoingGoblinKamakazi = false;
                 }
                 else
                 {

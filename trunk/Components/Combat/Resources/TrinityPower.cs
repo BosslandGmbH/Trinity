@@ -249,6 +249,13 @@ namespace Trinity.Components.Combat.Resources
 
         public bool ShouldWaitForAttackToFinish => _waitForAttackToFinishPowers.Contains(this.SNOPower);
 
+        /// <summary>
+        /// In the event that the destination cannot be reached because player is blocked from moving there
+        /// this will cause the power to be cast while out of range. Its useful in rare situations like Chicken 
+        /// transform where not exploding would prevent further spell casting.
+        /// </summary>
+        public bool CastWhenBlocked { get; set; }
+
         public Skill GetSkill() => SkillUtils.GetSkillByPower(SNOPower);
 
     }

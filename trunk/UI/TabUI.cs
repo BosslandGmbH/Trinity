@@ -49,6 +49,8 @@ using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Attributes;
 using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Framework.Objects.Memory.Sno.Helpers;
+using Trinity.Framework.Objects.Memory.Sno.Types;
 using Trinity.Items.Sorting;
 using Trinity.Settings;
 using Trinity.UI.Visualizer;
@@ -121,6 +123,7 @@ namespace Trinity.UI
                             CreateButton("> Gizmo Attribtues", StartGizmoTestHandler),
                             CreateButton("> Unit Attribtues", StartUnitTestHandler),
                             CreateButton("> Player Attribtues", StartPlayerTestHandler),
+                            CreateButton("> Log Power Data", LogPowerDataHandler),
                             //CreateButton("Dump Item Powers", StartDataTestHandler),
                             //CreateButton("> Buff Test", StartBuffTestHandler),
                             //CreateButton("> Stop Tests", StopTestHandler),
@@ -387,6 +390,42 @@ namespace Trinity.UI
                     var atts = new Trinity.Framework.Objects.Memory.Attributes.Attributes(acd.FastAttributeGroupId);
                     Logger.Log($"-- Dumping Attribtues for {acd.Name} (Sno={acd.ActorSnoId} Ann={acd.AnnId}) at {acd.Position} ----");
                     Logger.Log(atts + "\r\n");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Error Starting LazyCache: " + ex);
+            }
+        }
+
+        private static void LogPowerDataHandler(object sender, RoutedEventArgs routedEventArgs)
+        {
+            try
+            {
+                if (!ZetaDia.IsInGame)
+                    return;
+
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    ZetaDia.Actors.Update();
+                    Core.Update();
+
+                    Logger.Log($"--- Dumping Power Data ---");
+
+                    foreach (var power in Core.Hotbar.ActivePowers)
+                    {
+                        Logger.Log($"--- Dumping Tags for {power} ---");
+                        var data = PowerHelper.Instance.GetPowerData(power);
+                        data.Tags.ForEach(t => Logger.Log($"{t.Key} = {t.Value}"));
+                    }
+
+                    foreach (var power in Core.Hotbar.PassivePowers)
+                    {
+                        Logger.Log($"--- Dumping Tags for {power} ---");
+                        var data = PowerHelper.Instance.GetPowerData(power);
+                        data.Tags.ForEach(t => Logger.Log($"{t.Key} = {t.Value}"));
+                    }
                 }
 
             }

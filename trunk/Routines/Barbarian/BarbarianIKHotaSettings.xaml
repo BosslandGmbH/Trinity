@@ -41,7 +41,31 @@
                                 Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
                                 HorizontalAlignment="Stretch" Margin="0"/>
                     </StackPanel>
-                </GroupBox>                
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Furious Charge      </GroupBox.Header>
+                    <StackPanel>
+                        <WrapPanel Margin="0,5,0,10">
+                            <RadioButton ToolTip="Use vault whenever it makes sense"
+                                Content="Anytime" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
+                            <RadioButton ToolTip="Use only while fighting monsters"
+                                Content="In combat" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
+                            <RadioButton  ToolTip="Use only while NOT fighting monsters"
+                                Content="Out of combat" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
+                        </WrapPanel>
+                        <StackPanel>
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Recast delay"
+                            ToolTip="The time between casts"
+                            Interval="100" Maximum="6000" Minimum="250" 
+                            SmallChange="100" LargeChange="100" 
+                            TickPlacement="BottomRight" TickFrequency="100"
+                            Value="{Binding DataContext.FuriousCharge.RecastDelayMs}" 
+                            HorizontalAlignment="Stretch" Margin="2"
+                            />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
                 <GroupBox>
                     <GroupBox.Header>Build Settings</GroupBox.Header>
                     <StackPanel>

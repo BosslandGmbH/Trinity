@@ -18,8 +18,6 @@ namespace Trinity.Framework
         private Storage _storage { get; set; }
         private Globals _globals { get; set; }
 
-        public Hero Hero { get; } = new Hero(Internals.Addresses.Hero);
-
         public Globals Globals
         {
             get
@@ -42,29 +40,14 @@ namespace Trinity.Framework
             }
         }
 
-        //private Allocator _movementManager;
-        //public Allocator MovementManager
-        //{
-        //    get
-        //    {
-        //        if (_storage != null && !_storage.IsValid) return _movementManager;
-        //        var movementPtr = ZetaDia.Memory.Read<IntPtr>(Internals.Addresses.ObjectManager + 0xA0C);
-        //        _movementManager = MemoryWrapper.Create<Allocator>(movementPtr);
-        //        return _movementManager;
-        //    }
-        //}
-
         public SnoManager.SnoGroups SnoGroups => SnoManager.Groups;
-        public PowerHelper PowerHelper => SnoManager.PowerHelper;
+        public PowerHelper PowerHelper => PowerHelper.Instance;
         public GameBalanceHelper GameBalanceHelper => SnoManager.GameBalanceHelper;
         public StringListHelper StringListHelper => SnoManager.StringListHelper;
-
-        //public GameInfo GameInfo { get; } = new GameInfo(ZetaDia.Memory.Read<IntPtr>(ZetaDia.Service.Games.BaseAddress + 0x28));
-
         public ActivePlayer ActivePlayer { get; } = new ActivePlayer(Internals.Addresses.ActivePlayerData);
-
         public UXMinimap Minimap => UXHelper.GetControl<UXMinimap>(10917491887468455961);
         public MapManager MapManager { get; } = new MapManager(Internals.Addresses.MapManager);
+        public Hero Hero { get; } = new Hero(Internals.Addresses.Hero);
 
     }
 

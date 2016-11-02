@@ -42,6 +42,8 @@ namespace Trinity.Framework.Helpers
             public static IntPtr Storage => ObjectManager + (int)ObjectManagerOffsets.Storage;
             public static IntPtr PlayerData => DemonBuddyObjects.PlayerDataAddr;
             public static IntPtr MapManager => ZetaDia.Memory.Read<IntPtr>(DemonBuddyOffsets.MapManagerPtr);
+            public static IntPtr ActorSnoTable => DemonBuddyOffsets.SNOTableActor;
+            public static IntPtr PowerSnoTable => DemonBuddyOffsets.SNOTablePower;
         }
 
         private static class DemonBuddyOffsets
@@ -100,6 +102,10 @@ namespace Trinity.Framework.Helpers
             public static IntPtr MapManagerPtr => _offsetsC.ElementAtOrDefault(12) - 0x68;
             public static IntPtr SNOGroups => _offsetsC.ElementAtOrDefault(12) + 0x38;
             public static IntPtr AttributeDescripter => _offsetsC.ElementAtOrDefault(15) - 0x04;
+            public static IntPtr SNOTableGameBalance => _offsetsC.ElementAtOrDefault(16);
+            public static IntPtr SNOTableActor => _offsetsC.ElementAtOrDefault(18);
+            public static IntPtr SNOTablePower => _offsetsC.ElementAtOrDefault(19);
+
         }
 
         public enum ObjectManagerOffsets

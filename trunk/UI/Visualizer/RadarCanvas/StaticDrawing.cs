@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Windows.Markup;
+using System.Windows.Media;
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
@@ -7,7 +8,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
     /// Static drawings like you might assume, do not move.
     /// Example: Grid Lines.
     /// </summary>
-    internal class StaticDrawing
+    public class StaticDrawing
     {
         public DrawingGroup Drawing { get; set; }
         public int WorldId { get; set; }

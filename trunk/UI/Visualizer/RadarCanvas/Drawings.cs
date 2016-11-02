@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using IronPython.Modules;
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
@@ -10,7 +11,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
     internal static class Drawings
     {
-        public static ConcurrentDictionary<string, RelativeDrawing> Relative = new ConcurrentDictionary<string, RelativeDrawing>();
-        public static ConcurrentDictionary<string, StaticDrawing> Static = new ConcurrentDictionary<string, StaticDrawing>();        
+        public static ConcurrentDictionary<string, RelativeDrawing> Relative { get; } = new ConcurrentDictionary<string, RelativeDrawing>();   
     }
 }

@@ -124,7 +124,7 @@ namespace Trinity.Components.Combat
             {
                 if (!Core.Player.IsPowerUseDisabled)
                 {
-                    Logger.LogError(LogCategory.Targetting, $"No valid power was selected for target: {CurrentTarget}");                    
+                    Logger.Log(LogCategory.Targetting, $"No valid power was selected for target: {CurrentTarget}");                    
                 }
                 return false;
             }
@@ -331,6 +331,9 @@ namespace Trinity.Components.Combat
                 return false;
 
             if (power.IsCastOnSelf)
+                return true;
+
+            if (power.CastWhenBlocked && PlayerMover.IsBlocked)
                 return true;
 
             var rangeRequired = Math.Max(1f, power.MinimumRange);

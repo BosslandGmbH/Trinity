@@ -148,7 +148,7 @@ namespace Trinity.Framework.Actors.Properties
                     var mentionsDeath = lowerAnim.Contains("_dead") || lowerAnim.Contains("_death");
                     if (mentionsDeath)
                     {
-                        if (lowerAnim.Contains("deathmaiden") || lowerAnim.Contains("death_orb") || lowerAnim.Contains("raise_dead"))
+                        if (lowerAnim.Contains("deathmaiden") || lowerAnim.Contains("death_orb") || lowerAnim.Contains("deathorb") || lowerAnim.Contains("raise_dead"))
                         {
                             return false;
                         }
@@ -156,7 +156,7 @@ namespace Trinity.Framework.Actors.Properties
                     }
                 }
 
-                if (monster.IsElite && monster.HitPointsPct < 0.25f)
+                if (monster.IsElite && !monster.IsBoss && monster.HitPointsPct < 0.25f)
                 {
                     return monster.Attributes.GetAttributeDirectlyFromTable<bool>(ActorAttributeType.DeletedOnServer);
                 }

@@ -214,7 +214,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnDestroyed()
         {
-            if (!IsDead && IsUnit && Distance < 150f)
+            if (!IsDead && IsUnit && Distance < 150f && !IsBoss)
             {
                 OnUnitDeath();
                 IsDead = true;

@@ -52,7 +52,7 @@ namespace Trinity.Framework.Modules
 
         public HashSet<SNOPower> ActivePowers { get; private set; } = new HashSet<SNOPower>();
         public List<HotbarSkill> ActiveSkills { get; private set; } = new List<HotbarSkill>();
-        public HashSet<SNOPower> PassiveSkills { get; private set; } = new HashSet<SNOPower>();
+        public HashSet<SNOPower> PassivePowers { get; private set; } = new HashSet<SNOPower>();
 
         private Dictionary<SNOPower, HotbarSkill> _hotbarSkillBySnoPower = new Dictionary<SNOPower, HotbarSkill>();
 
@@ -79,7 +79,7 @@ namespace Trinity.Framework.Modules
             if (cPlayer == null || !cPlayer.IsValid)
                 return;
 
-            PassiveSkills = new HashSet<SNOPower>(cPlayer.PassiveSkills);
+            PassivePowers = new HashSet<SNOPower>(cPlayer.PassiveSkills);
 
             var activePowers = new HashSet<SNOPower>();
             var activeHotbarSkills = new List<HotbarSkill>();
@@ -147,7 +147,7 @@ namespace Trinity.Framework.Modules
             Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement,
                 "Refreshed Hotbar: ActiveSkills={0} PassiveSkills={1}",
                 ActiveSkills.Count,
-                PassiveSkills.Count);
+                PassivePowers.Count);
         }
 
         internal HotbarSkill GetHotbarSkill(SNOPower power)
@@ -176,7 +176,7 @@ namespace Trinity.Framework.Modules
         {
             ActivePowers = new HashSet<SNOPower>();
             ActiveSkills = new List<HotbarSkill>();
-            PassiveSkills = new HashSet<SNOPower>();
+            PassivePowers = new HashSet<SNOPower>();
             _hotbarSkillBySnoPower = new Dictionary<SNOPower, HotbarSkill>();
             _skillBySlot = new Dictionary<HotbarSlot, HotbarSkill>();
         }

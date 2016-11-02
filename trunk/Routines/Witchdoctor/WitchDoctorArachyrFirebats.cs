@@ -19,12 +19,12 @@ using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Witchdoctor
 {
-    public sealed class WitchDoctorHelltoothFirebats : WitchDoctorBase, IRoutine
+    public sealed class WitchDoctorArachyrFirebats : WitchDoctorBase, IRoutine
     {
         #region Definition
 
-        public string DisplayName => "Helltooth Firebats";
-        public string Description => "Specialized combat for channelling firebats with helltooth set.";
+        public string DisplayName => "Arachyr Firebats";
+        public string Description => "Specialized combat for channelling firebats with Arachyr set.";
         public string Author => "xzjv";
         public string Version => "0.1";
         public string Url => "http://www.diablofans.com/builds/82419-2-4-2-helltooth-firebats-dps-105";
@@ -35,7 +35,7 @@ namespace Trinity.Routines.Witchdoctor
         {
             Sets = new Dictionary<Set, SetBonus>
             {
-                { Sets.HelltoothHarness, SetBonus.Third },
+                { Sets.SpiritOfArachnyr, SetBonus.Third },
             },
             Skills = new Dictionary<Skill, Rune>
             {
@@ -300,9 +300,9 @@ namespace Trinity.Routines.Witchdoctor
         public override int KiteHealthPct => 90;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
-        public WitchDoctorHelltoothFirebatsSettings Settings { get; } = new WitchDoctorHelltoothFirebatsSettings();
+        public WitchDoctorArachyrFirebatsSettings Settings { get; } = new WitchDoctorArachyrFirebatsSettings();
 
-        public sealed class WitchDoctorHelltoothFirebatsSettings : NotifyBase, IDynamicSetting
+        public sealed class WitchDoctorArachyrFirebatsSettings : NotifyBase, IDynamicSetting
         {
             private int _clusterSize;
             private float _emergencyHealthPct;

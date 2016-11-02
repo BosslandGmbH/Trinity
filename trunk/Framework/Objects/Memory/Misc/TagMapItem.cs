@@ -16,4 +16,7 @@ namespace Trinity.Framework.Objects.Memory.Misc
         public int _0x1C => ReadOffset<int>(0x1C);
         public override string ToString() => $"{InternalName} = {Id} // DataType={_DataTypeId}, {DisplayName},";
     }
+
+
+
 }

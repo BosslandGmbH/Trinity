@@ -443,6 +443,8 @@ namespace Trinity.Framework.Modules
             return -1;
         }
 
+        
+
         public ACDItem EquippedHealthPotion
         {
             get

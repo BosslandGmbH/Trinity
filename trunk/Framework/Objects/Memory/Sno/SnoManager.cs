@@ -12,6 +12,8 @@ using Trinity.Framework.Objects.Memory.Sno.Helpers;
 using Trinity.Framework.Objects.Memory.Sno.Types;
 using Zeta.Game;
 using Zeta.Game.Internals;
+using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Objects.Memory.Sno
 {
@@ -23,35 +25,34 @@ namespace Trinity.Framework.Objects.Memory.Sno
             Groups = new SnoGroups();
             StringListHelper = new StringListHelper();
             GameBalanceHelper = new GameBalanceHelper();
-            PowerHelper = new PowerHelper();
         }
 
         public static SnoCore Core { get; set; }
         public static SnoGroups Groups { get; set; }
         public static StringListHelper StringListHelper { get; set; }
         public static GameBalanceHelper GameBalanceHelper { get; set; }
-        public static PowerHelper PowerHelper { get; set; }
 
         public class SnoGroups
         {
+            private Dictionary<int, NativePower> _d;
+
             public SnoGroups()
             {
                 StringList = Core.CreateGroup<SnoStringList>(SnoType.StringList);
-                Monster = Core.CreateGroup<NativeMonster>(SnoType.Monster);
+                //Monster = Core.CreateGroup<NativeMonster>(SnoType.Monster);
                 Hero = Core.CreateGroup<NativeHero>(SnoType.Hero);
                 GameBalance = Core.CreateGroup<GameBalanceCollection>(SnoType.GameBalance);
-                Globals = Core.CreateGroup<NativeGlobals>(SnoType.Globals);
+                //Globals = Core.CreateGroup<NativeGlobals>(SnoType.Globals);
                 Actor = Core.CreateGroup<NativeActor>(SnoType.Actor);
-                Account = Core.CreateGroup<NativeAccount>(SnoType.Account);
-                LevelArea = Core.CreateGroup<NativeLevelArea>(SnoType.LevelArea);
-                Act = Core.CreateGroup<NativeAct>(SnoType.Act);
-                TreasureClass = Core.CreateGroup<NativeTreasureClass>(SnoType.TreasureClass);
+                //Account = Core.CreateGroup<NativeAccount>(SnoType.Account);
+                //LevelArea = Core.CreateGroup<NativeLevelArea>(SnoType.LevelArea);
+                //Act = Core.CreateGroup<NativeAct>(SnoType.Act);
+                //TreasureClass = Core.CreateGroup<NativeTreasureClass>(SnoType.TreasureClass);
                 Power = Core.CreateGroup<NativePower>(SnoType.Power);
-                SkillKit = Core.CreateGroup<NativeSkillKit>(SnoType.SkillKit);
-                Worlds = Core.CreateGroup<NativeWorlds>(SnoType.Worlds);
-                Scene = Core.CreateGroup<NativeScene>(SnoType.Scene);
-                SceneGroup = Core.CreateGroup<NativeSceneGroup>(SnoType.SceneGroup);
-                Powers = Power.Container.Where(p => p.SnoGroupId == (int)SnoType.Power).Select(p => p.Value).ToList();
+                //SkillKit = Core.CreateGroup<NativeSkillKit>(SnoType.SkillKit);
+                //Worlds = Core.CreateGroup<NativeWorlds>(SnoType.Worlds);
+                //Scene = Core.CreateGroup<NativeScene>(SnoType.Scene);
+                //SceneGroup = Core.CreateGroup<NativeSceneGroup>(SnoType.SceneGroup);
             }
 
             public List<NativePower> Powers { get; set; }

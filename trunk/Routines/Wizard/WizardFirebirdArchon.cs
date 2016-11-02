@@ -65,7 +65,7 @@ namespace Trinity.Routines.Wizard
                 if (Skills.Wizard.ArchonDisintegrationWave.CanCast())
                 {
                     // Use Wave to pull and ignite monsters that are lined up nicely and are not burning.
-                    var pierceUnits = Units.Where(u => u.Distance < 50f && !u.Attributes.HasFirebirdPermanent && !u.Attributes.HasFirebirdTemporary && (u.CountUnitsInFront() + u.CountUnitsBehind(15f)) > 5).ToList();
+                    var pierceUnits = WeightedUnits.Where(u => u.Distance < 50f && !u.Attributes.HasFirebirdPermanent && !u.Attributes.HasFirebirdTemporary && (u.CountUnitsInFront() + u.CountUnitsBehind(15f)) > 5).ToList();
                     var bestPierceUnit = pierceUnits.OrderBy(u => u.Distance).FirstOrDefault(u => u.Distance <= 15f);
                     if (bestPierceUnit != null)
                         return ArchonDisintegrationWave(bestPierceUnit);

@@ -71,12 +71,8 @@ namespace Trinity.Framework.Objects.Memory.Containers
     public class SinglyLinkedList<T> : MemoryWrapper, IEnumerable<T> where T : MemoryWrapper, new()
     {
         public const int SizeOf = 8;
-
         public int x00_Count => ReadOffset<int>(0x00);
-
         public Node x04_First => ReadPointer<Node>(0x04);
-
-        //ReadAbsoluteObject<Node>(ReadOffset<IntPtr>(0x04))
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -88,10 +84,7 @@ namespace Trinity.Framework.Objects.Memory.Containers
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public class Node : MemoryWrapper
         {

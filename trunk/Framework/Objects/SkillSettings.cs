@@ -50,6 +50,7 @@ namespace Trinity.Framework.Objects
         private UseTarget _target;
         private ConventionMode _waitForConvention;
         private SNOPower _SNOPower;
+        private int _order;
 
         /// <summary>
         /// Monster must be this close before a spell is cast.
@@ -160,6 +161,13 @@ namespace Trinity.Framework.Objects
         [IgnoreDataMember]
         public Func<bool> ConventionCondition { get; set; }
 
+        [DataMember(EmitDefaultValue = false)]
+        public int Order
+        {
+            get { return _order; }
+            set { SetField(ref _order, value); }
+        } 
+
         #endregion
 
         public SkillSettings Clone()
@@ -251,6 +259,9 @@ namespace Trinity.Framework.Objects
 
         [Description("Use associated with a buff")]
         Buff = 256,
+
+        [Description("Use when trash are nearby above cluster size")]
+        Trash = 512,
     }
 
     public enum ConventionMode

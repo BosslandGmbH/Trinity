@@ -40,11 +40,11 @@
                                 Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
                                 HorizontalAlignment="Stretch" Margin="0"/>
                     </StackPanel>
-                </GroupBox>                
+                </GroupBox>
                 <GroupBox>
-                    <GroupBox.Header>Build Settings</GroupBox.Header>
+                    <GroupBox.Header>Options</GroupBox.Header>
                     <StackPanel>
-                        <TextBlock TextWrapping="Wrap" Margin="10,5,0,0">This build is highly specialized and so we're using what we believe to be the optimal settings. If there is something specific you think should be configurable please let us know.</TextBlock>
+                        <CheckBox IsChecked="{Binding DataContext.SpamBreathHeaven}">Spam Breath of Heaven</CheckBox>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

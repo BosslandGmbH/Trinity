@@ -803,6 +803,26 @@ namespace Trinity.Framework.Avoidance
             }
         };
 
+        public static AvoidanceDefinition PerendiDefaultAttack = new AvoidanceDefinition
+        {
+            Id = (int)AvoidanceType.PerendiDefaultAttack,
+            Type = AvoidanceType.PerendiDefaultAttack,
+            Name = "Perendi Melee Attack",
+            Description = "Rift boss default attack",
+            Handler = new AnimationBeamAvoidanceHandler(),
+            Element = Element.Physical,
+            Parts = new List<AvoidancePart>
+            {
+                new AvoidancePart
+                {
+                    Name = "Perendi Melee Attack",
+                    Animation = SNOAnim.malletDemon_attack_01,
+                    Type = PartType.ActorAnimation,
+                    Radius = 20f
+                },
+            }
+        };
+
         //Line 33558: 15:14:39.491 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_idle_01 State=Idle By: x1_LR_Boss_MalletDemon (343767)
         //Line 33579: 15:14:40.446 INFO  Logger [Trinity 2.41.51][Animation] malletDemon_run_01 State=Running By: x1_LR_Boss_MalletDemon (343767)
         //Line 33624: 15:14:42.916 INFO  Logger [Trinity 2.41.51][Animation] coreEliteDemon_spawn_from_pod_01 State=Transform By: CoreEliteDemon_B_LR_Boss (369412)
@@ -1280,12 +1300,63 @@ namespace Trinity.Framework.Avoidance
          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_PhaseOne_AIState: 330358 ] i:1 f:0 Value=1 
          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_SwordShieldStart: 325648 ] i:0 f:0 Value=0 
           853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_SickleThrowTeleport: 327847 ] i:0 f:0 Value=0 
+
+            Animation => x1_Malthael_sword_sheild // spinning blades aura
+            x1_malthael_drainSoul_ghost
+            x1_Malthael_drain_soul_outtro
+            x1_malthael_gratesOfHell_darkBall_glowOuter // fire gates arrainged in outer ring
+            x1_Malthael_DeathFogMonster
+            x1_Malthael_Diablo_Fire_Projectile // fireballs before fire gate ring appears
+
             */
+
+        public static AvoidanceDefinition MalthaelDeathFog = new AvoidanceDefinition
+        {
+            Id = (int)AvoidanceType.MalthaelDeathFog,
+            Group = "Malthael",
+            Type = AvoidanceType.MalthaelDeathFog,
+            Name = "Malthael Death Fog",
+            Description = "Fog that hurts",
+            Element = Element.Physical,
+            Handler = new CircularAvoidanceHandler(),
+            Parts = new List<AvoidancePart>
+            {
+                new AvoidancePart
+                {
+                    Name = "Death Fog Actor",
+                    ActorSnoId = (int)SNOActor.x1_Malthael_DeathFogMonster,
+                    Type = PartType.Main,
+                    Radius = 18f
+                },
+            }
+        };
+
+        public static AvoidanceDefinition MalthaelHellGates = new AvoidanceDefinition
+        {
+            Id = (int)AvoidanceType.MalthaelHellGates,
+            Group = "Malthael",
+            Type = AvoidanceType.MalthaelHellGates,
+            Name = "Malthael Hell Gates",
+            Description = "Fire gates arrainged in outer ring",
+            Element = Element.Fire,
+            Handler = new CircularAvoidanceHandler(),
+            Parts = new List<AvoidancePart>
+            {
+                new AvoidancePart
+                {
+                    Name = "Fire Gate Actor",
+                    ActorSnoId = (int)SNOActor.x1_malthael_gratesOfHell_darkBall_glowOuter,
+                    Type = PartType.Main,
+                    Radius = 20f
+                },
+            }
+        };
 
         public static AvoidanceDefinition MalthealTeleport = new AvoidanceDefinition
         {
-            Id = (int)AvoidanceType.MalthealTeleport,
-            Type = AvoidanceType.MalthealTeleport,
+            Id = (int)AvoidanceType.MalthaelTeleport,
+            Type = AvoidanceType.MalthaelTeleport,
+            Group = "Malthael",
             Name = "Maltheal Teleport Attack",       
             Description = "Maltheal teleports to you and owns you with his sickle",
             Element = Element.Physical,            

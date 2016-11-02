@@ -106,7 +106,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             return flag;
         }
 
-        public HashSet<Vector3> BlacklistedPositions = new HashSet<Vector3>();
+        public HashSet<Vector3> BlacklistedPositions { get; set; }= new HashSet<Vector3>();
 
         public int SnoId { get; set; }
 

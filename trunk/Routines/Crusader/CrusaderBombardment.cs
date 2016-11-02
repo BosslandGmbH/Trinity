@@ -62,34 +62,60 @@ namespace Trinity.Routines.Crusader
             // Credit: Phelon's LoN Bombardment routine.
 
             if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) && ShouldAkaratsChampion())
-                return AkaratsChampion();
-
-            if (ShouldCondemn())
-                return Condemn();
-
-            if (ShouldProvoke())
-                return Provoke();
-
-            if (ShouldJudgement())
-                return Judgement();
-
-            if (TryBombard(out power))
-                return power;
-
-            if (ShouldSteedCharge())
-                return SteedCharge();
-
-            if (!IsCurrentlyAvoiding)
             {
-                //Logger.Log("Steed Charge Damage");
-                return TargetUtil.BestAoeUnit(45, true).Distance < 15
-                    ? new TrinityPower(SNOPower.Walk, 7f,
-                        TargetUtil.GetZigZagTarget(TargetUtil.BestAoeUnit(45, true).Position, 15f, false)
-                        , -1, 0, 1)
-                    : new TrinityPower(SNOPower.Walk, 3f, TargetUtil.BestAoeUnit(45, true).Position);
+                Logger.LogVerbose(LogCategory.Routine, $"Akarats");
+                return AkaratsChampion();
             }
 
-            return null;
+            if (ShouldCondemn())
+            {
+                Logger.LogVerbose(LogCategory.Routine, $"Condemn");
+                return Condemn();
+            }
+
+            if (ShouldProvoke())
+            {
+                Logger.LogVerbose(LogCategory.Routine, $"Provoke");
+                return Provoke();
+            }
+
+            if (ShouldJudgement())
+            {
+                Logger.LogVerbose(LogCategory.Routine, $"Judgement");
+                return Judgement();
+            }
+
+            if (TryBombard(out power))
+            {
+                Logger.LogVerbose(LogCategory.Routine, $"Bombard");
+                return power;
+            }
+
+            if (ShouldSteedCharge())
+            {
+                Logger.LogVerbose(LogCategory.Routine, $"Steed");
+                return SteedCharge();
+            }
+
+            //if (!IsCurrentlyAvoiding)
+            //{
+            //    //Logger.Log("Steed Charge Damage");
+
+            //    //return TargetUtil.GetZigZagTarget(CurrentTarget.Position, 15f);
+
+            //    //return TargetUtil.BestAoeUnit(45, true).Distance < 15
+            //    //    ? new TrinityPower(SNOPower.Walk, 7f, TargetUtil.GetZigZagTarget(TargetUtil.BestAoeUnit(45, true).Position, 15f), -1, 0, 1)
+            //    //    : new TrinityPower(SNOPower.Walk, 3f, TargetUtil.BestAoeUnit(45, true).Position);
+            //}
+
+            if (CurrentTarget.Distance < 16f)
+            {
+                Logger.Log(LogCategory.Routine,$"ZigZag");
+                return Walk(TargetUtil.GetZigZagTarget(CurrentTarget.Position), 3f);
+            }
+
+            Logger.Log(LogCategory.Routine, $"Walk");
+            return Walk(CurrentTarget.Position);
         }
 
         private bool TryBombard(out TrinityPower trinityPower)
@@ -121,11 +147,19 @@ namespace Trinity.Routines.Crusader
                 }
             }
 
+            var eliteExists = HostileMonsters.Any(u => u.IsElite && !Combat.Weighting.ShouldIgnore(u));
+
+            // Provoke with Votoyias spiker.
+            var inProvokeRange = !eliteExists || CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.Distance < 15f;
+            if (!ShouldWaitForConventionofElements(Skills.Crusader.Provoke, Element.Physical,0,1000) && Skills.Crusader.Provoke.CanCast() && inProvokeRange)
+            {
+                trinityPower = Provoke();
+                return true;
+            }
+
             // Wait for CoE to Cast Damage CD's
             var isCastWindow = !ShouldWaitForConventionofElements(Skills.Crusader.Bombardment, Element.Physical, 1500, 1000);
-            var eliteExists = HostileMonsters.Any(u => u.IsElite && !Combat.Weighting.ShouldIgnore(u));
             var isTargetCloseEnough = !eliteExists || CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.Distance < 20f;
-
             if (Skills.Crusader.Bombardment.CanCast() && (ShouldBombardWheneverPossible && isTargetCloseEnough || isCastWindow))
             {
                 if (ShouldIronSkin())
@@ -162,7 +196,7 @@ namespace Trinity.Routines.Crusader
             if (!Skills.Crusader.Bombardment.CanCast())
                 return false;
 
-            target = TargetUtil.GetBestClusterUnit() ?? HostileMonsters.OrderBy(u => u.Distance).FirstOrDefault();
+            target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
             return target != null;
         }
 
@@ -203,10 +237,15 @@ namespace Trinity.Routines.Crusader
             TrinityPower power;
 
             if (TryLaw(out power))
+            {
+                //Logger.LogVerbose(LogCategory.Routine, $"Buff Law");
                 return power;
+            }
 
             if (!Player.IsInTown && Settings.BombardmentOOC && HostileMonsters.Any(u => u.Distance < 150f))
             {
+                //Logger.LogVerbose(LogCategory.Routine, $"Buff Bombard Func");
+
                 // Break Steed to bombard OOC only if waiting for CoE
                 var goodTimetoCast = !ShouldBombardWheneverPossible || !IsSteedCharging;
                 if (goodTimetoCast && TryBombard(out power))
@@ -222,13 +261,21 @@ namespace Trinity.Routines.Crusader
             return Skills.Crusader.LawsOfHope.CanCast();
         }
 
-        public TrinityPower GetDefensivePower() => GetBuffPower();
-        public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
+        public TrinityPower GetDefensivePower() => null;
+
+        public TrinityPower GetDestructiblePower()
+        {
+            Logger.LogVerbose(LogCategory.Routine, $"GetDestructiblePower");
+            return DefaultDestructiblePower();
+        }
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
             if (ShouldSteedCharge())
+            {
+                Logger.LogVerbose(LogCategory.Routine, $"SteedCharge MovementPower");
                 return SteedCharge();
+            }
 
             return Walk(destination);
         }

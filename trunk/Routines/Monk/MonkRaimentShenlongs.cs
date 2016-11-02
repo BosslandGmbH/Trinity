@@ -180,11 +180,11 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.BreathOfHeaven.CanCast())
                 return false;
 
-            if (Core.Buffs.HasBuff(SNOPower.Monk_BreathOfHeaven))
-                return false;
-
             if (!TargetUtil.AnyMobsInRange(20))
                 return false;
+
+            if (Settings.SpamBreathHeaven)
+                return true;
 
             var needSpiritBuff = Runes.Monk.InfusedWithLight.IsActive && (Player.PrimaryResourcePct < 0.5f || !HasShenLongBuff);
             var needDamage = Runes.Monk.BlazingWrath.IsActive && TargetUtil.AnyMobsInRange(20);
@@ -252,6 +252,7 @@ namespace Trinity.Routines.Monk
         {
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private bool _spamBreathHeaven;
 
             [DefaultValue(6)]
             public int ClusterSize
@@ -265,6 +266,13 @@ namespace Trinity.Routines.Monk
             {
                 get { return _emergencyHealthPct; }
                 set { SetField(ref _emergencyHealthPct, value); }
+            }
+
+            [DefaultValue(false)]
+            public bool SpamBreathHeaven
+            {
+                get { return _spamBreathHeaven; }
+                set { SetField(ref _spamBreathHeaven, value); }
             }
 
             #region IDynamicSetting

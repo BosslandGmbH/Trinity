@@ -181,12 +181,34 @@ namespace Trinity.Routines.Witchdoctor
             if (Skills.WitchDoctor.WallOfDeath.CanCast() && IsInCombatOrBeingAttacked)
                 return WallOfDeath(TargetUtil.GetBestClusterPoint());
 
+            if (Skills.WitchDoctor.SoulHarvest.CanCast() && TargetUtil.AnyMobsInRange(16f))
+            {
+                // Refresh the buff time to avoid losing 10 stacks.
+                if (Skills.WitchDoctor.SoulHarvest.TimeSinceUse > 4500)
+                    return SoulHarvest();
+
+                // Build some stacks
+                if (Skills.WitchDoctor.SoulHarvest.BuffStacks < MaxSoulHarvestStacks)
+                    return SoulHarvest();
+            }
+
             return DefaultBuffPower();
         }
 
         public TrinityPower GetDefensivePower() => null;
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
-        public TrinityPower GetMovementPower(Vector3 destination) => Walk(destination);
+        public TrinityPower GetMovementPower(Vector3 destination)
+        {
+            Vector3 position;
+
+            if (!Player.IsInTown)
+            {
+                if (Runes.WitchDoctor.AngryChicken.IsActive && ShouldHex(out position))
+                    return Hex(position);
+            }
+
+            return Walk(destination);
+        }
 
         #region Settings
 

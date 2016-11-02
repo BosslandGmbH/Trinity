@@ -38,7 +38,7 @@ namespace Trinity.Routines.Wizard
             Sets = new Dictionary<Set, SetBonus>
             {
                 { Sets.TalRashasElements, SetBonus.Third },
-                { Sets.FirebirdsFinery, SetBonus.Second }
+                //{ Sets.FirebirdsFinery, SetBonus.Second }
             },
             Skills = new Dictionary<Skill, Rune>
             {
@@ -75,11 +75,16 @@ namespace Trinity.Routines.Wizard
 
         public TrinityPower GetDefensivePower() => null;
 
-        public TrinityPower GetBuffPower()
+        public TrinityPower GetBuffPower() 
         {
-            if(Skills.Wizard.ExplosiveBlast.CanCast())
-                return ExplosiveBlast();
+            // ty RobbenHoschi
 
+            if (Skills.Wizard.ExplosiveBlast.CanCast())
+                return ExplosiveBlast();
+            if (Skills.Wizard.DiamondSkin.CanCast())
+                return DiamondSkin();
+            if (Skills.Wizard.FrostNova.CanCast() && (TargetUtil.ClusterExists(25f, ClusterSize) || TargetUtil.AnyElitesInRange(40f)))
+                return FrostNova();
             return DefaultBuffPower();
         }
 

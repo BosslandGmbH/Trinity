@@ -50,6 +50,7 @@ namespace Trinity.Reference
 
         public static List<SNOPower> AlwaysCanCastPowers = new List<SNOPower>
         {
+            SNOPower.Witchdoctor_Hex_Explode,
             SNOPower.Weapon_Ranged_Wand,
             SNOPower.Weapon_Ranged_Projectile,
             SNOPower.Weapon_Melee_Instant,

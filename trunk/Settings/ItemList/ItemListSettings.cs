@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Web.Script.Serialization;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -54,8 +55,11 @@ namespace Trinity.Settings.ItemList
 
         public override void OnPopulated()
         {
-            UpdateSelectedItems();
-            OnPropertyChanged("");
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                UpdateSelectedItems();
+                OnPropertyChanged("");
+            });
         }
 
         private static List<LItem> _TrinityItems;

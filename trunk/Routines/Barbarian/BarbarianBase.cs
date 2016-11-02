@@ -447,7 +447,7 @@ namespace Trinity.Routines.Barbarian
         //Secondary
 
         protected static TrinityPower HammerOfTheAncients(TrinityActor target)
-            => new TrinityPower(Skills.Barbarian.HammerOfTheAncients, 15f, target.AcdId);
+            => new TrinityPower(Skills.Barbarian.HammerOfTheAncients, 16f, target.AcdId);
 
         protected static TrinityPower SeismicSlam(TrinityActor target)
             => new TrinityPower(Skills.Barbarian.SeismicSlam, 20f, target.AcdId);
@@ -543,6 +543,8 @@ namespace Trinity.Routines.Barbarian
         protected static bool IsBandOfMightBuffActive
             => Player.HasBuff((SNOPower)447060,1); //'P4_ItemPassive_Unique_Ring_049' (447060) Stacks=1 VariantId=1)
 
+        protected static bool IsGirdleOfGiantsBuffActive
+            => Player.HasBuff((SNOPower)451237); //P42_ItemPassive_Unique_Ring_002' (451237) 
 
 
         #endregion

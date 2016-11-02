@@ -122,14 +122,15 @@
     <Compile Include="Framework\ChangeEvents.cs" />
     <Compile Include="Framework\Events\ActorEvents.cs" />
     <Compile Include="Framework\Events\ItemEvents.cs" />
+    <Compile Include="Framework\Helpers\CData.cs" />
     <Compile Include="Framework\Helpers\EasyCache.cs" />
+    <Compile Include="Framework\Helpers\ExpressionEvaluator.cs" />
     <Compile Include="Framework\Helpers\ObjectComparer.cs" />
     <Compile Include="Framework\Helpers\ProjectionEqualityComparer.cs" />
     <Compile Include="Framework\Helpers\EasyXmlSerializer.cs" />
     <Compile Include="Framework\Modules\ChangeMonitor.cs" />
     <Compile Include="Framework\Modules\HeroDataCache.cs" />
     <Compile Include="Framework\Modules\ItemLogger.cs" />
-    <Compile Include="Framework\Modules\PowerDataCache.cs" />
     <Compile Include="Framework\Modules\SessionLogger.cs" />
     <Compile Include="Framework\Objects\Api\ApiBuild.cs" />
     <Compile Include="Framework\Objects\Api\ApiRoutineBuilder.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Framework\Objects\Memory\ActivePlayer.cs" />
     <Compile Include="Framework\Objects\Memory\Containers\Allocator.cs" />
     <Compile Include="Framework\Objects\Memory\Containers\Map.cs" />
+    <Compile Include="Framework\Objects\Memory\Misc\StringMapItem.cs" />
     <Compile Include="Framework\Objects\Memory\Reference\ReferenceGenerator.cs" />
     <Compile Include="Framework\Objects\Memory\Reference\ReferenceHelper.cs" />
     <Compile Include="Framework\Objects\Memory\Reference\Tags.cs" />
@@ -154,7 +156,9 @@
     <Compile Include="Framework\Objects\Memory\Containers\PowerMap.cs" />
     <Compile Include="Framework\Objects\Memory\Games.cs" />
     <Compile Include="Framework\Objects\Memory\Sno\Helpers\PowerHelper.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\Helpers\SnoSearchProxy.cs" />
     <Compile Include="Framework\Objects\Memory\Sno\Types\GameBalanceCollection.cs" />
+    <Compile Include="Framework\Objects\Memory\Sno\Types\GeneratedSnoTypes.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXItemButton.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXButton.cs" />
     <Compile Include="Framework\Objects\Memory\UX\UXListItem.cs" />
@@ -655,6 +659,7 @@
     <Content Include="Profiles\InDevelopment\Story_A1.xml" />
     <Compile Include="Framework\RoutineManager.cs" />
     <Compile Include="Routines\Witchdoctor\WitchDoctorBase.cs" />
+    <Compile Include="Routines\Witchdoctor\WitchDoctorArachyrFirebats.cs" />
     <Compile Include="Routines\Witchdoctor\WitchDoctorJadeHarvester.cs" />
     <Compile Include="Routines\Witchdoctor\WitchDoctorHelltoothGarg.cs" />
     <Compile Include="Routines\Witchdoctor\WitchDoctorHelltoothFirebats.cs" />
@@ -674,6 +679,7 @@
     <Compile Include="Settings\Modals\SettingsSelectionViewModel.cs" />
     <Compile Include="Settings\Modals\SettingsSelectionItem.cs" />
     <Compile Include="Settings\Modals\SettingsSection.cs" />
+    <Compile Include="Settings\ExplorationSettings.cs" />
     <Compile Include="Settings\WeightingSettings.cs" />
     <Compile Include="UI\UIComponents\Behaviors\CaptureTextboxInput.cs" />
     <Compile Include="Framework\Helpers\TypeCrawler.cs" />
@@ -683,6 +689,7 @@
     <Compile Include="UI\UIComponents\Converters\EnumToCollectionConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\EnumToValueConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\FlagEnumValueConverter.cs" />
+    <Compile Include="UI\UIComponents\Converters\IndexOfConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\StaticTypeToValueConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\ValueToStringConverter.cs" />
     <Compile Include="UI\UIComponents\GameInfo.cs" />
@@ -934,6 +941,7 @@
     <Compile Include="UI\Visualizer\RadarCanvas\RadarObject.cs" />
     <Compile Include="UI\Visualizer\RadarCanvas\RadarOverlayControl.cs" />
     <Compile Include="UI\Visualizer\RadarCanvas\RadarVisibilityFlags.cs" />
+    <Compile Include="UI\Visualizer\SceneEditor\SceneDrawings.cs" />
     <Compile Include="UI\Visualizer\RadarCanvas\RelativeDrawing.cs" />
     <Compile Include="UI\Visualizer\RadarCanvas\Resources.cs" />
     <Compile Include="UI\Visualizer\RadarCanvas\Shapes.cs" />
@@ -962,6 +970,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Routines\Monk\MonkDefaultSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Witchdoctor\WitchDoctorArachyrSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

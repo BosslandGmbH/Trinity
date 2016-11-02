@@ -41,11 +41,36 @@
                                 Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
                                 HorizontalAlignment="Stretch" Margin="0"/>
                     </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>In-Combat Harvest</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">How Soul Harvest is used in combat.</TextBlock>
+                        <StackPanel Margin="0,6,0,0">
+                            <RadioButton Content="Default - Make sure targets have Haunt/Locust" IsChecked="{Binding DataContext.HarvestModeIC, ConverterParameter=Default, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
+                            <RadioButton Content="NonStop - Spams constantly." IsChecked="{Binding DataContext.HarvestModeIC, ConverterParameter=NonStop, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Out of Combat Harvest/Haunt</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">How soul harvest and haunt are used out of combat.</TextBlock>
+                        <StackPanel Margin="0,6,0,0">
+                            <RadioButton Content="Default - Build/Keep harvest stacks only" IsChecked="{Binding DataContext.HarvestModeOOC, ConverterParameter=Default, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
+                            <RadioButton Content="NonStop - Spams constantly." IsChecked="{Binding DataContext.HarvestModeOOC, ConverterParameter=NonStop, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+                        </StackPanel>
+                    </StackPanel>
                 </GroupBox>                
                 <GroupBox>
-                    <GroupBox.Header>Build Settings</GroupBox.Header>
+                    <GroupBox.Header>Spirit Walk</GroupBox.Header>
                     <StackPanel>
-                        <TextBlock TextWrapping="Wrap" Margin="10,5,0,0">This build is highly specialized and so we're using what we believe to be the optimal settings. If there is something specific you think should be configurable please let us know.</TextBlock>
+                        <WrapPanel Margin="0,5,0,0">
+                            <RadioButton ToolTip="Uses it whenever monsters are nearby"
+                                Content="Spam it!" IsChecked="{Binding DataContext.SpiritWalk.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Always}"  />
+                            <RadioButton ToolTip="Casts it often, before running in to harvest, and defensively"
+                                Content="Default" IsChecked="{Binding DataContext.SpiritWalk.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}" />
+                        </WrapPanel>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>

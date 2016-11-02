@@ -11,6 +11,8 @@ using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
+using Trinity.DbProvider;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
 
@@ -360,7 +362,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                         _deathGateLocation = DeathGates.GetBestGatePosition(_objectiveLocation);
                         if (_deathGateLocation != Vector3.Zero)
                         {
-                            Logger.Warn("Found death gate location");                      
+                            if (Navigator.StuckHandler.IsStuck && _deathGateLocation.Distance(AdvDia.MyPosition) < 125f)
+                            {
+                                var nearestGate = ActorFinder.FindNearestDeathGate();
+                                if (nearestGate != null)
+                                {                                    
+                                    Logger.Warn("Found death gate location");
+                                    _objectiveLocation = nearestGate.Position;
+                                }
+                            }
                         }
                     }
                 }

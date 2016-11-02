@@ -1203,6 +1203,9 @@ namespace Trinity.Components.Combat.Resources
             if (CurrentTarget == null)
                 return Player.Position;
 
+            if (origin.Distance(Player.Position) > ringDistance)
+                return origin;
+
             const float minDistance = 5f;
             Vector3 myPos = Player.Position;
 
@@ -1211,6 +1214,11 @@ namespace Trinity.Components.Combat.Resources
             bool useTargetBasedZigZag = false;
             float maxDistance = 35f;
             int minTargets = 2;
+
+            //if (Core.Player.ActorClass == ActorClass.Crusader)
+            //{
+            //    useTargetBasedZigZag = true;
+            //}
 
             if (Core.Player.ActorClass == ActorClass.Monk)
             {
@@ -1239,7 +1247,7 @@ namespace Trinity.Components.Combat.Resources
                 {
                     zigZagTargetList =
                         (from u in ObjectCache
-                         where u.IsUnit && u.Distance < maxDistance
+                         where u.IsUnit && u.Distance < maxDistance && u.Weight > 0
                          select u).ToList();
                 }
                 else
@@ -1318,7 +1326,7 @@ namespace Trinity.Components.Combat.Resources
                     pointWeight *= distanceToPoint;
 
                     // Add weight for any units in this point
-                    int monsterCount = ObjectCache.Count(u => u.IsUnit && u.Position.Distance(zigZagPoint) <= Math.Max(u.Radius, 10f));
+                    int monsterCount = ObjectCache.Count(u => u.IsUnit && u.Position.Distance(zigZagPoint) <= Math.Max(u.Radius, 10f) && u.Weight > 0);
                     if (monsterCount > 0)
                         pointWeight *= monsterCount;
 

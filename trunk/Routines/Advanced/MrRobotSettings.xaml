@@ -8,6 +8,7 @@
     xmlns:mock="clr-namespace:Trinity.Settings.Mock"
     xmlns:objects="clr-namespace:Trinity.Framework.Objects"
     xmlns:markup="clr-namespace:Trinity.UI.UIComponents.MarkupExtensions"
+    xmlns:ui="clr-namespace:Trinity.UI.UIComponents"    
     d:FontSize="14"
     mc:Ignorable="d" Background="#434343" d:DesignHeight="1820" d:DesignWidth="390">
     <UserControl.Resources>
@@ -31,6 +32,65 @@
                 <Setter Property="Height" Value="40" />
             </Style>
 
+            <Style x:Key="SkillOrderListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="Focusable" Value="False"/>
+            </Style>
+
+            <DataTemplate x:Key="DragAdorner">
+                <Border Background="Silver"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="2"
+                        Margin="1">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding}" Margin="0,0,2,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </DataTemplate>            
+            
+            <DataTemplate  x:Key="SkillOrderListBoxItemTemplate">
+                <Grid Style="{x:Null}" HorizontalAlignment="Stretch" Margin="0,0,0,0" MinHeight="22" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel Grid.Column="0" VerticalAlignment="Center">
+                        <Path Style="{DynamicResource GrabHandlePath}" Cursor="SizeNS" />
+                        <TextBlock Foreground="White">                           
+                            <Run Text="{Binding Order}" />    
+                            <Run Text=" - " />
+                            <Run Text="{Binding Skill.Name, Mode=OneWay}" />
+                        </TextBlock>
+                    </WrapPanel>
+                    <!--<Grid Grid.Column="1" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Background="Transparent" Margin="0,-2,15,-2"
+                              Visibility="{Binding IsLimited, Converter={StaticResource VisibleWhenTrueConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Slider  Grid.Column="0" Template="{DynamicResource SliderEditable}"  
+                                        Margin="0,0,0,0"
+                                        Interval="500" Maximum="{Binding MaxLimit}" Minimum="0" 
+                                        SmallChange="1" LargeChange="5"
+                                        TickPlacement="None" IsMoveToPointEnabled="True"                                       
+                                        Value="{Binding Limit}" 
+                                        HorizontalAlignment="Stretch" />
+                            <Label Grid.Column="1">points</Label>
+                        </Grid>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding IsLimited}"  
+                              VerticalAlignment="Center" VerticalContentAlignment="Center">
+                            <TextBlock Text="Limit" Margin="0,-1,5,0"/>
+                        </CheckBox>
+                    </Grid>-->
+                </Grid>
+            </DataTemplate>            
+            
             <DataTemplate x:Key="SkillTemplate" DataType="objects:SkillSettings">
                 <GroupBox Header="{Binding Skill.Name}">
                     <DockPanel>
@@ -40,21 +100,25 @@
                         
                         <StackPanel Margin="0,4,0,0">
                             
-                            <ListBox ItemsSource="{Binding Path=UseMode, Converter={converters:EnumToCollectionConverter}, Mode=OneTime, ConverterParameter='Always,Selective'}"
+                            <ListBox ItemsSource="{Binding Path=UseMode, Converter={converters:EnumToCollectionConverter}, Mode=OneTime, ConverterParameter='Always,InCombat,OutOfCombat'}"
                                               ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                              Style="{DynamicResource RadioButtonToolTipListBoxStyle}"
+                                              Style="{DynamicResource RadioButtonToolTipListBoxStyle}"                                     
                                               SelectedValuePath="Value"
                                               DisplayMemberPath="Description"
                                               SelectedValue="{Binding Path=UseMode}" />
 
-                            <StackPanel Margin="0,8,0,0" Visibility="{markup:Value {Binding UseMode, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}, DesignValue=Visible}">
+                            <!--<StackPanel Margin="0,8,0,0" Visibility="{markup:Value {Binding UseMode, ConverterParameter=Always, Converter={StaticResource HiddenWhenEnumTrueConverter}}, DesignValue=Visible}">-->
+                            
+                            <StackPanel Margin="0,8,0,0">
 
                                 <StackPanel Margin="0,8,0,0">
                                     <TextBlock FontWeight="SemiBold" Foreground="Tan" Margin="0,0,0,4">Use Reasons</TextBlock>
                                     <UniformGrid Columns="2">
                                         <CheckBox ToolTip="Use when there are elites close nearby" 
                                                         IsChecked="{Binding Reasons, ConverterParameter=Elites, Converter={converters:FlagsToBoolConverter}}">Elites nearby</CheckBox>
+                                        <CheckBox ToolTip="Use when movement is blocked" 
+                                                    IsChecked="{Binding Reasons, ConverterParameter=Trash, Converter={converters:FlagsToBoolConverter}}">Trash nearby</CheckBox>
                                         <CheckBox ToolTip="Use when you are surrounded by enemies" 
                                                         IsChecked="{Binding Reasons, ConverterParameter=Surrounded, Converter={converters:FlagsToBoolConverter}}">Surrounded</CheckBox>
                                         <CheckBox ToolTip="Use when you're low on health" 
@@ -68,27 +132,8 @@
                                     </UniformGrid>
                                 </StackPanel>
 
-                                <StackPanel Margin="0,8,0,8">
-                                    <TextBlock FontWeight="SemiBold" Foreground="Tan" Margin="0,0,0,4">Target</TextBlock>
-                                    <Grid>
-                                        <ComboBox ItemsSource="{Binding Path=Target, Converter={converters:EnumToCollectionConverter}, Mode=OneTime}"
-                                              SelectedValuePath="Value"
-                                              DisplayMemberPath="Description"
-                                              SelectedValue="{Binding Path=Target}" />
-                                    </Grid>
-                                </StackPanel>
-                                
-                                <StackPanel Margin="0,8,0,8">
+                                <StackPanel Margin="0,8,0,0">
                                     <TextBlock FontWeight="SemiBold" Foreground="Tan" Margin="0,0,0,4">Parameters</TextBlock>
-                                    <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                                        Tag="Cast Range"
-                                        ToolTip="Monster must be this close before a spell is cast." 
-                                        Interval="5" Maximum="100" Minimum="0" 
-                                        SmallChange="5" LargeChange="5" 
-                                        TickPlacement="None" TickFrequency="5"
-                                        Value="{Binding CastRange}" 
-                                        HorizontalAlignment="Stretch" Margin="2"
-                                        />
                                     <Slider Template="{DynamicResource LabelledSliderEditable}" 
                                         Tag="Cluster Size"
                                         ToolTip="Monsters must be in a group of this many before spell can be cast." 
@@ -100,11 +145,11 @@
                                         />
                                     <Slider Template="{DynamicResource LabelledSliderEditable}" 
                                         Tag="Health Below"
-                                        ToolTip="Player health must be below this amount to cast spell" 
-                                        Interval="5" Maximum="30" Minimum="0" 
-                                        SmallChange="5" LargeChange="5" 
+                                        ToolTip="Player health must be at or below this amount to cast spell" 
+                                        Interval="5" Maximum="100" Minimum="0" 
+                                        SmallChange="5" LargeChange="5"                                             
                                         TickPlacement="None" TickFrequency="5"
-                                        Value="{Binding HealthPct}" 
+                                        Value="{Binding HealthPct, Converter={StaticResource PercentConverter}}" 
                                         HorizontalAlignment="Stretch" Margin="2"
                                         />
                                     <Slider Template="{DynamicResource LabelledSliderEditable}" 
@@ -126,8 +171,31 @@
                                         HorizontalAlignment="Stretch" Margin="2"
                                         />
                                 </StackPanel>
+
                             </StackPanel>
                             
+                            <StackPanel Margin="0,8,0,0">
+                                    <TextBlock FontWeight="SemiBold" Foreground="Tan" Margin="0,0,0,4">Target</TextBlock>
+                                    <Grid>
+                                        <ComboBox ItemsSource="{Binding Path=Target, Converter={converters:EnumToCollectionConverter}, Mode=OneTime}"
+                                              SelectedValuePath="Value"
+                                              DisplayMemberPath="Description"
+                                              SelectedValue="{Binding Path=Target}" />
+                                    </Grid>
+                               
+                            </StackPanel>
+
+                            <StackPanel Margin="0,8,0,0">
+                                <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                            Tag="Cast Range"
+                                            ToolTip="Monster must be this close before a spell is cast." 
+                                            Interval="5" Maximum="100" Minimum="0" 
+                                            SmallChange="5" LargeChange="5" 
+                                            TickPlacement="None" TickFrequency="5"
+                                            Value="{Binding CastRange}" 
+                                            HorizontalAlignment="Stretch" Margin="2"
+                                            />
+                            </StackPanel>
                         </StackPanel>
                     </DockPanel>
                 </GroupBox>
@@ -264,6 +332,36 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
+
+                <GroupBox>
+                    <GroupBox.Header>Skill Order</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">Drag the items below to prioritize the order they're cast in.</TextBlock>
+                        <ListBox Padding="5"
+                            d:DataContext="{Binding Source={StaticResource DesignViewModel}}"
+                            ItemsSource="{Binding DataContext.ActiveSkills}"   
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Disabled"       
+                            AlternationCount="100000"
+                            SelectionMode="Single"
+                            ui:DragDrop.IsDragSource="True"
+                            ui:DragDrop.IsDropTarget="True"
+                            ui:DragDrop.DropHandler="{Binding DataContext.DropHandler}"
+                            ui:DragDrop.DragDropContext="SkillOrder"
+                            ui:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                            VerticalAlignment="Top"
+                            ItemTemplate="{DynamicResource SkillOrderListBoxItemTemplate}"
+                            ItemContainerStyle="{DynamicResource SkillOrderListBoxItemStyle}"
+                            >
+                            <ListBox.Template>
+                                <ControlTemplate>
+                                    <ItemsPresenter />
+                                </ControlTemplate>
+                            </ListBox.Template>
+                        </ListBox>
+                </StackPanel>
+                </GroupBox>
+               
 
                 <ItemsControl                       
                     d:DataContext="{Binding Source={StaticResource DesignViewModel}}"

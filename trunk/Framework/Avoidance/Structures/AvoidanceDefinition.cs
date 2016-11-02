@@ -62,6 +62,7 @@ namespace Trinity.Framework.Avoidance.Structures
         public string InfoUrl { get; set; }
         public AvoidanceType Type { get; set; }
         public AvoidanceSettingsEntry Defaults { get; set; }
+        public string Group { get; set; }
 
         /// <summary>
         /// Retrieve a part by ActorSnoId

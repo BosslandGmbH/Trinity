@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Adventurer.Cache;
+using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Util;
+using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
@@ -142,25 +144,43 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 ).OrderBy(u => u.Distance).FirstOrDefault();
         }
 
-        public static DiaGizmo FindNearestDeathGate(List<int> ignoreList)
+        public static DiaGizmo FindNearestDeathGate()
+        {
+            //328830
+            if (!ExplorationData.FortressLevelAreaIds.Contains(AdvDia.CurrentLevelAreaId) &&
+                !ExplorationData.FortressWorldIds.Contains(AdvDia.CurrentWorldId))
+                return null;
+
+            var gizmo = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
+                    .Where(u => u.IsValid && u.ActorSnoId == 328830 && u.Distance < 200)
+                    .OrderBy(u => u.Distance)
+                    .FirstOrDefault();
+
+            return gizmo as DiaGizmo;
+        }
+
+        public static DiaGizmo FindNearestDeathGateToPosition(Vector3 position, Dictionary<Vector3, DateTime> ignoreList)
         {
             if (ignoreList == null)
             {
-                ignoreList = new List<int>();
+                ignoreList = new Dictionary<Vector3, DateTime>();
             }
             //328830
             if (ExplorationData.FortressLevelAreaIds.Contains(AdvDia.CurrentLevelAreaId) || ExplorationData.FortressWorldIds.Contains(AdvDia.CurrentWorldId))
             {
                 var gizmo =
                     ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
-                        //                        .Where(u => u.IsValid && u.ActorSnoId == 328830 && !ignoreList.Contains(u.ACDId))
-                        .Where(u => u.IsValid && u.ActorSnoId == 328830 && u.Distance < 200)
-                        .OrderBy(u => u.Distance)
+                        .Where(u => u.IsValid && u.ActorSnoId == 328830 && !NavigationCoroutine.IsDeathGateIgnored(u.Position, ignoreList))
+                        .OrderBy(u => u.Position.Distance(position))
                         .FirstOrDefault();
-                return gizmo != null ? gizmo as DiaGizmo : null;
+                return gizmo as DiaGizmo;
             }
             return null;
         }
+
+
+        //public static Func<DiaObject, bool> CanPathTo = actor 
+        //    => actor.Distance < 10f || ((AdvDia.Navigator as DefaultNavigationProvider)?.CanPathWithinDistance(actor.Position, 10f).Result ?? false);
 
         public static bool IsFullyValid<T>(this T actor) where T : DiaObject
         {
@@ -368,7 +388,5 @@ namespace Trinity.Components.Adventurer.Game.Actors
 
             return false;
         }
-
-
     }
 }

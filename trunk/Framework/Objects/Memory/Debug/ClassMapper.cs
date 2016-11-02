@@ -85,8 +85,6 @@ namespace Trinity.Framework.Objects.Memory.Debug
 
             foreach (var field in valueType.FieldDescriptors.OrderBy(f => f.Offset))
             {
-                // todo DT_TAGMAP need to find an indication of what object is in the tag map
-
                 if (!AlreadyMapped.Contains(field.Type) && !ToBeMapped.Contains(field.Type) && !field.Type.Name.StartsWith("DT_"))
                     ToBeMapped.Enqueue(field.Type);
 

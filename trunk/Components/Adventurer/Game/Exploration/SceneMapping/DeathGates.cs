@@ -3,6 +3,7 @@ using System.Linq;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Rift;
 using Zeta.Common;
+using Zeta.Game;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
@@ -163,7 +164,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                     Max = new Vector2(maxX, maxY)
                 };
 
-                var group = new RegionGroup {mainRegion};
+                var group = new RegionGroup { mainRegion };
 
                 foreach (var region in entranceScene.Regions)
                 {
@@ -194,10 +195,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 var mainRegion = new RectangularRegion
                 {
                     Min = new Vector2(minX, minY),
-                    Max = new Vector2(grid.MaxX*grid.BoxSize, grid.MaxY*grid.BoxSize)
+                    Max = new Vector2(grid.MaxX * grid.BoxSize, grid.MaxY * grid.BoxSize)
                 };
 
-                var group = new RegionGroup {mainRegion};
+                var group = new RegionGroup { mainRegion };
 
                 foreach (var region in entranceScene.Regions)
                 {
@@ -269,6 +270,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
         public static DeathGateScene NearestGateSceneToPosition(Vector3 position)
         {
             return Scenes.Where(s => s.IsValid).OrderBy(s => s.WorldScene.Center.Distance(position.ToVector2())).FirstOrDefault();
+        }
+
+        public static Vector3 NearestGateToPosition(Vector3 position)
+        {
+            return NearestGateSceneToPosition(position).PortalPositions.OrderBy(g => g.Distance(position)).FirstOrDefault();
         }
 
         public static SceneDepth CompareDepth(DeathGateScene thisScene, DeathGateScene otherScene)
@@ -355,9 +361,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             }
 
             var targetDepth = CompareDepth(currentScene, targetScene);
-            var side = GetSide(currentScene, AdvDia.MyPosition);
+            var mySide = GetSide(currentScene, AdvDia.MyPosition);
 
-            if (playerInExitRegion && side == GateSide.DeepSide && targetDepth == SceneDepth.Same)
+            if (playerInExitRegion && mySide == GateSide.DeepSide && targetDepth == SceneDepth.Same)
                 return Vector3.Zero;
 
             var leaveEntranceRegion = playerInEnterRegion && !destinationInEnterRegion;
@@ -368,7 +374,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             if (leaveEntranceRegion || leaveExitRegion || withinExitRegion || withinEntranceRegion)
             {
                 Vector3 bestGatePosition;
-                if (TrySelectGate(side, targetDepth, out bestGatePosition))
+                if (TrySelectGate(mySide, targetDepth, out bestGatePosition))
                     return bestGatePosition;
             }
 
@@ -378,15 +384,15 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
         /// <summary>
         /// Pick the correct gate from the current sequence for a given target direction and current position.        
         /// </summary>
-        /// <param name="side">indicates which side of a death gate devide the player is currently, DeepSide is towards 0,0/exit; ShallowSide is towards the world entrance</param>
+        /// <param name="mySide">indicates which side of a death gate devide the player is currently, DeepSide is towards 0,0/exit; ShallowSide is towards the world entrance</param>
         /// <param name="targetDepth">indicates which direction the destination is in, Deeper is towards 0,0/exit; Shallower is towards the world entrance</param>
         /// <param name="bestGatePosition">the position of the gate that is required to reach the destination</param>
         /// <returns></returns>
-        private static bool TrySelectGate(GateSide side, SceneDepth targetDepth, out Vector3 bestGatePosition)
+        private static bool TrySelectGate(GateSide mySide, SceneDepth targetDepth, out Vector3 bestGatePosition)
         {
-            Util.Logger.DebugSetting($"TrySelectGate Side={side} Depth={targetDepth}");
+            Util.Logger.DebugSetting($"TrySelectGate MyCurrentSide={mySide} TargetDepth={targetDepth}");
 
-            if (side == GateSide.DeepSide)
+            if (mySide == GateSide.DeepSide)
             {
                 switch (targetDepth)
                 {
@@ -405,7 +411,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             }
 
-            if (side == GateSide.ShallowSide)
+            if (mySide == GateSide.ShallowSide)
             {
                 switch (targetDepth)
                 {

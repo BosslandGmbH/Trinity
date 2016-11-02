@@ -76,8 +76,8 @@ namespace Trinity.Routines.Barbarian
 
             if (!skill.CanCast())
                 return false;
-            
-            if (skill.TimeSinceUse < 2000)
+
+            if (!AllowedToUse(Settings.FuriousCharge, Skills.Barbarian.FuriousCharge))
                 return false;
 
             if (!TargetUtil.AnyMobsInRange(60f) && !IsNoPrimary)
@@ -135,7 +135,7 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (CanChargeTo(destination) && Skills.Barbarian.FuriousCharge.TimeSinceUse > 500)
+            if (CanChargeTo(destination) && AllowedToUse(Settings.FuriousCharge, Skills.Barbarian.FuriousCharge))
             {
                 if (IsInCombat && TargetUtil.PierceHitsMonster(destination) || Player.Position.Distance(destination) > 20f)
                 {   
@@ -151,9 +151,9 @@ namespace Trinity.Routines.Barbarian
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
-        public BarbarianEarthLeapSettings Settings { get; } = new BarbarianEarthLeapSettings();
+        public BarbarianIKHotaSettings Settings { get; } = new BarbarianIKHotaSettings();
 
-        public sealed class BarbarianEarthLeapSettings : NotifyBase, IDynamicSetting
+        public sealed class BarbarianIKHotaSettings : NotifyBase, IDynamicSetting
         {
             private int _clusterSize;
             private float _emergencyHealthPct;
@@ -171,6 +171,31 @@ namespace Trinity.Routines.Barbarian
                 get { return _emergencyHealthPct; }
                 set { SetField(ref _emergencyHealthPct, value); }
             }
+
+            #region FuriousCharge
+
+            public SkillSettings FuriousCharge
+            {
+                get { return _furiousCharge; }
+                set { SetField(ref _furiousCharge, value); }
+            }
+
+            private static readonly SkillSettings VaultDefaults = new SkillSettings
+            {
+                UseMode = UseTime.Default,
+                RecastDelayMs = 1000,
+                Reasons = UseReasons.Blocked
+            };
+
+            private SkillSettings _furiousCharge;
+
+            public override void LoadDefaults()
+            {
+                base.LoadDefaults();
+                FuriousCharge = VaultDefaults.Clone();
+            }
+
+            #endregion
 
             #region IDynamicSetting
 

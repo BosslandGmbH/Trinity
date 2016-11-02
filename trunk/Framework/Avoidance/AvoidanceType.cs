@@ -30,6 +30,9 @@ namespace Trinity.Framework.Avoidance
         MageFire,
         PoisonEnchanted,
         Mortar,
-        MalthealTeleport
+        MalthaelTeleport,
+        PerendiDefaultAttack,
+        MalthaelDeathFog,
+        MalthaelHellGates
     }
 }
