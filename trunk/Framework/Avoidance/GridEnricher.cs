@@ -81,7 +81,7 @@ namespace Trinity.Framework.Avoidance
 
                 if (Grid.NearestNode == null || Grid.NearestNode.DynamicWorldId != ZetaDia.WorldId)
                 {
-                    Logger.LogError(LogCategory.Avoidance, $"No Player Nearest Node or WorldId Mismatch");
+                    Logger.LogDebug(LogCategory.Avoidance, $"No Player Nearest Node or WorldId Mismatch");
                     return;
                 }
 

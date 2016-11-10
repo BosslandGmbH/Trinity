@@ -167,6 +167,19 @@ namespace Trinity.Components.Adventurer.Game.Quests
             }
             return result;
         }
+		
+		public static bool AnyUnsupportedBounties()
+		{
+			List<Act> _acts = new List<Act> { Act.A1, Act.A2, Act.A3, Act.A4, Act.A5 };
+			for (int i = 0; i < 5; i++)
+			{
+				if (!AreAllActBountiesSupported(_acts[i]))
+				{
+					return true;
+				}
+			}			
+			return false;
+		}
 
         public static bool IsActEnabledOnSettings(Act act)
         {
