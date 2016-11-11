@@ -86,7 +86,8 @@ namespace Trinity.Framework.Actors.Attributes
 
         public bool IsGizmoDisabledByScript => GetAttribute<bool>(ActorAttributeType.GizmoDisabledByScript);
 
-        public bool IsDeletedOnServer => GetAttributeDirectlyFromTable<bool>(ActorAttributeType.DeletedOnServer);
+        //public bool IsDeletedOnServer => GetAttributeDirectlyFromTable<bool>(ActorAttributeType.DeletedOnServer);
+        public bool IsDeletedOnServer => GetAttribute<bool>(ActorAttributeType.DeletedOnServer);
 
         public int LastDamageAnnId => GetAttribute<int>(ActorAttributeType.LastDamageACD);
 
