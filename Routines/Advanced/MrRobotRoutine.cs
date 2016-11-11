@@ -519,7 +519,7 @@ namespace Trinity.Routines.Advanced
                 // But we still need to persist settings for all skills used to-date.
                 // Also need to populate with reference skill info for the pretty UI Icons etc.
 
-                if (!ZetaDia.Service.IsInGame)
+                if (!Player.IsInGame)
                     return;
 
                 var activeSettings = SkillUtils.Active.Select(s => new SkillSettings(s)).ToList();

@@ -173,8 +173,8 @@ namespace Trinity.Framework.Actors.Properties
                     if (actor.IsUntargetable || actor.IsInvulnerable || Math.Abs(actor.HitPointsMax - actor.HitPoints) > 0.0001)
                          return true;
 
-                    //if (attributes.IsDeletedOnServer)
-                    //    return true;
+                    if (attributes.IsDeletedOnServer)
+                        return true;
                 }
             }
 

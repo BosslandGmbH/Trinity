@@ -12,6 +12,7 @@ using Trinity.Settings.ItemList;
 using Trinity.Settings.Paragon;
 using Trinity.UI;
 using Zeta.Bot;
+using Zeta.Game;
 
 namespace Trinity.Settings
 {
@@ -30,11 +31,9 @@ namespace Trinity.Settings
         }
 
         public static void InitializeSettings()
-        {
-            Logger.Log("Initializing TrinitySettings");
+        {            
             Storage = new TrinityStorage();
             Storage.Load();
-
             ChangeEvents.HeroId.Changed += HeroIdOnChanged;
         }
 

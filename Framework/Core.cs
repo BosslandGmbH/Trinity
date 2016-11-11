@@ -100,13 +100,13 @@ namespace Trinity.Framework
         {                  
             if (!IsEnabled)
             {
-                ZetaDia.Actors.Update();
+                //ZetaDia.Actors.Update();
                 Pulsator.OnPulse += Pulse;
                 GameEvents.OnWorldChanged += OnWorldChanged;
                 GameEvents.OnGameJoined += OnGameJoined;
                 ModuleManager.EnableAll();
 
-                ZetaDia.Actors.Update();
+                //ZetaDia.Actors.Update();
                 Actors.Update();
                 Inventory.Update();
                 Hotbar.Update();
