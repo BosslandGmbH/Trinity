@@ -50,7 +50,7 @@ namespace Trinity.Framework
 
         private void SkillsOnChanged(ChangeDetectorEventArgs<HashSet<SNOPower>> args)
         {
-            if (ChangeEvents.IsInGame.Value && !ZetaDia.Me.SkillOverrideActive)
+            if (ChangeEvents.IsInGame.Value && ZetaDia.Me != null && !ZetaDia.Me.SkillOverrideActive)
             {
                 SelectRoutine();
             }

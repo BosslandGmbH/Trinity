@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Components.Combat;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Modules;
@@ -41,6 +42,9 @@ namespace Trinity.Framework
 
         public static TrinityChangeDetector<int> HeroId = new TrinityChangeDetector<int>(()
             => ZetaDia.Service.Hero.HeroId);
+
+        public static TrinityChangeDetector<ILootProvider> LootProvider = new TrinityChangeDetector<ILootProvider>(()
+            => Combat.Loot);
 
     }
 }

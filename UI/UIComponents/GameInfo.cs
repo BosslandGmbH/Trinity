@@ -1,4 +1,6 @@
-﻿using Trinity.Framework;
+﻿using System;
+using Trinity.Components.Combat;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
 
 namespace Trinity.UI.UIComponents
@@ -16,8 +18,20 @@ namespace Trinity.UI.UIComponents
         private GameInfo()
         {
             ChangeEvents.IsInGame.Changed += IsInGameOnChanged;
+            ChangeEvents.LootProvider.Changed += LootProviderOnChanged;
             IsInGame = ChangeEvents.IsInGame.Value;
         }
+
+        private void LootProviderOnChanged(ChangeDetectorEventArgs<ILootProvider> args)
+        {
+            var name = args.NewValue.GetType().Name;
+            Logger.Warn($"LootProvider changed to {name}");
+            LootProviderName = name;
+            IsDefaultLootProvider = args.NewValue is DefaultLootProvider;
+        }
+
+        public bool IsDefaultLootProvider { get; set; }
+        public string LootProviderName { get; set; }
 
         private void IsInGameOnChanged(ChangeDetectorEventArgs<bool> args)
         {

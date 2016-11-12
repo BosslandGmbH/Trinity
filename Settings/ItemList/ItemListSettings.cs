@@ -321,6 +321,21 @@ namespace Trinity.Settings.ItemList
 
         [DataMember(IsRequired = false)]
         [DefaultValue(false)]
+        public bool AlwaysStashAncients
+        {
+            get { return _alwaysStashAncients; }
+            set
+            {
+                if (_alwaysStashAncients != value)
+                {
+                    _alwaysStashAncients = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
         public bool UpgradeRules
         {
             get { return _upgradeRules; }

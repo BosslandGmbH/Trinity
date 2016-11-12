@@ -25,12 +25,23 @@
             <converters:IntToStringConverter x:Key="intToStringConverter"/>
             <converters:EnumBooleanConverter x:Key="enumBooleanConverter" />
             <converters:SliderValueToVisibilityConverter x:Key="sliderValueToVisibilityConverter" />
+            <converters:BoolToVisibilityConverter x:Key="HiddenWhenTrueConverter" TrueValue="Collapsed" FalseValue="Visible"/>
+
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
         <StackPanel Margin="0,10,5,0">
-            
-            <GroupBox Header="Legendaries" DockPanel.Dock="Top">
+
+            <GroupBox Header="External Loot System Detected" DockPanel.Dock="Top" Visibility="{Binding GameInfo.IsDefaultLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+                <StackPanel>
+                    <StackPanel Margin="0,6,10,0">
+                        <TextBlock TextWrapping="Wrap">Loot system is being controlled by another plugin: <Run Text="{Binding GameInfo.LootProviderName}"/></TextBlock>
+                        <TextBlock>Item settings impacted by this have been hidden.</TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Legendaries" DockPanel.Dock="Top" Visibility="{Binding GameInfo.IsDefaultLootProvider, Converter={StaticResource VisibleWhenTrueConverter}}">
                 <StackPanel>
                     <StackPanel Margin="0,6,10,0">
                         <WrapPanel Margin="0,0,0,0">
@@ -72,7 +83,7 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Low Quality Items">
+            <GroupBox Header="Low Quality Items" Visibility="{Binding GameInfo.IsDefaultLootProvider, Converter={StaticResource VisibleWhenTrueConverter}}">
                 <StackPanel>
                     <UniformGrid>
                         <CheckBox Content="Pickup Gray Items" ToolTip="Gray Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Grey}" />
@@ -83,7 +94,7 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Special Items">
+            <GroupBox Header="Special Items" Visibility="{Binding GameInfo.IsDefaultLootProvider, Converter={StaticResource VisibleWhenTrueConverter}}">
                 <UniformGrid Columns="2">
                     <CheckBox Content="Pickup Deaths Breath" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=DeathsBreath}" />
                     <CheckBox Content="Pickup Designs and Plans" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=CraftingPlans}" />
@@ -92,7 +103,7 @@
                 </UniformGrid>
             </GroupBox>
 
-            <GroupBox Header="Gems">
+            <GroupBox Header="Gems" Visibility="{Binding GameInfo.IsDefaultLootProvider, Converter={StaticResource VisibleWhenTrueConverter}}">
                 <Border Padding="0,0,0,0">
                     <WrapPanel>
                         <Border BorderThickness="1" Margin="0,0,15,0">
@@ -122,7 +133,7 @@
                         </Border>
             </GroupBox>
 
-            <GroupBox Header="Gold">
+            <GroupBox Header="Gold" Visibility="{Binding GameInfo.IsDefaultLootProvider, Converter={StaticResource VisibleWhenTrueConverter}}">
                 <DockPanel LastChildFill="True">
                     <CheckBox DockPanel.Dock="Left" IsChecked="{Binding Items.PickupGold}" Content="Pickup Gold" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,5,15,5"  />
                     <Slider Template="{DynamicResource SliderEditable}" IsEnabled="{Binding Items.PickupGold}"
@@ -134,20 +145,19 @@
 
             <GroupBox Header="Item Sharing">
                 <WrapPanel HorizontalAlignment="Left" Margin="0,5,0,0">
-                        <TextBlock Margin="2,2,20,2" Text="Drop In Town: " VerticalAlignment="Center"/>
-                        <RadioButton GroupName="DropInTown" Content="None" ToolTip="Drop nothing in town"
+                    <TextBlock Margin="2,2,20,2" Text="Drop In Town: " VerticalAlignment="Center"/>
+                    <RadioButton GroupName="DropInTown" Content="None" ToolTip="Drop nothing in town"
                              IsChecked="{Binding Items.DropInTownMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=None}" VerticalAlignment="Center" Margin="1,1,5,1"/>
 
-                        <RadioButton GroupName="DropInTown" Content="Stash" ToolTip="Drop items that would normally be kept/stashed"
+                    <RadioButton GroupName="DropInTown" Content="Stash" ToolTip="Drop items that would normally be kept/stashed"
                              IsChecked="{Binding Items.DropInTownMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Keep}" VerticalAlignment="Center" Margin="1,1,5,1"/>
 
-                        <RadioButton GroupName="DropInTown" Content="Trash" ToolTip="Drop items that woudl normally be salvaged/sold"
+                    <RadioButton GroupName="DropInTown" Content="Trash" ToolTip="Drop items that woudl normally be salvaged/sold"
                              IsChecked="{Binding Items.DropInTownMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Vendor}" VerticalAlignment="Center" Margin="1,1,5,1"/>
 
-                        <RadioButton GroupName="DropInTown" Content="All" ToolTip="Drop it like its hot!"
+                    <RadioButton GroupName="DropInTown" Content="All" ToolTip="Drop it like its hot!"
                              IsChecked="{Binding Items.DropInTownMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=All}" VerticalAlignment="Center" Margin="1,1,5,1"/>
-                    </WrapPanel>
-                
+                </WrapPanel>
             </GroupBox>
 
 			<!--<GroupBox Grid.Row="1" Header="Free Bag Slots for Town Run">
@@ -180,8 +190,8 @@
 
                 </Grid>
             </GroupBox>-->
-            
-            <GroupBox Header="Misc">
+
+            <GroupBox Header="Misc" Visibility="{Binding GameInfo.IsDefaultLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <UniformGrid Columns="2">
                     <CheckBox Content="Don't Pickup Items in Town" IsChecked="{Binding Items.DontPickupInTown}" />
                     <CheckBox ToolTip="Item list needs items to be identified to check their properties." IsChecked="{Binding Items.KeepLegendaryUnid}" HorizontalAlignment="Left" Content="Keep Legendaries Unidentified" />

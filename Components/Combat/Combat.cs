@@ -27,7 +27,7 @@ using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Components.Combat
 {
-    public class Combat : Component
+    public static class Combat 
     {
         public static CombatMode CombatMode { get; set; }
 
