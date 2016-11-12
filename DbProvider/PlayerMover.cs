@@ -62,7 +62,7 @@ namespace Trinity.DbProvider
             if (Core.Settings.Advanced.DisableAllMovement)
                 return;
 
-            if (!ZetaDia.IsInGame || !ZetaDia.Me.IsValid || ZetaDia.Me.IsDead || ZetaDia.IsLoadingWorld)
+            if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me .IsValid || ZetaDia.Me.IsDead || ZetaDia.IsLoadingWorld)
                 return;
 
             if (UiSafetyCheck())
