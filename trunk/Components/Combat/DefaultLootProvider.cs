@@ -38,7 +38,11 @@ namespace Trinity.Components.Combat
             if (item == null || !item.IsValid)
             {
                 Logger.LogDebug($"Not a valid item {item?.InternalName} Sno={item?.ActorSnoId} GbId={item?.GameBalanceId}");
+                return false;
             }
+
+            if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
+                return true;
 
             if (item.TrinityItemType == TrinityItemType.ConsumableAddSockets)
                 return true;
@@ -226,6 +230,12 @@ namespace Trinity.Components.Combat
 
         public bool ShouldStash(TrinityItem item)
         {
+            if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
+            {
+                Logger.LogDebug($"Stashing due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                return true;
+            }
+
             if (item.IsProtected())
             {
                 Logger.LogDebug($"Not stashing due to item being in a protected slot (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
@@ -462,6 +472,12 @@ namespace Trinity.Components.Combat
                     return false;
                 }
 
+                if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
+                {
+                    reason = "ItemList Stash Ancients";
+                    return false;
+                }
+
                 if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     reason = "Rift Locked Inventory";
@@ -543,6 +559,12 @@ namespace Trinity.Components.Combat
                 if (item.IsProtected())
                 {
                     reason = $"Protected Slot [col:{item.InventoryColumn}, row:{item.InventoryRow}]";
+                    return false;
+                }
+
+                if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
+                {
+                    Logger.LogDebug($"Not Selling due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
                 }
 

@@ -946,6 +946,10 @@
                                                 ToolTip="Avoids you having to add an ancient rule to every selected item"
                                                 Content="Always Trash Non-Ancients"
                                                 IsChecked="{Binding ItemList.AlwaysTrashNonAncients}" />
+                                            <CheckBox
+                                                ToolTip="Allows you to keep itemlist selections AND ancients"
+                                                Content="Always Keep Ancients"
+                                                IsChecked="{Binding ItemList.AlwaysStashAncients}" />                                            
                                         </StackPanel>
                                     </GroupBox>
                                     <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top"

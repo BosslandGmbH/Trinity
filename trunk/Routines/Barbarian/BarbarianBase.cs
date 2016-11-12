@@ -356,6 +356,12 @@ namespace Trinity.Routines.Barbarian
             if (!Skills.Barbarian.WarCry.CanCast())
                 return false;
 
+            if (Legendary.ChilaniksChain.IsEquipped)
+                return true;
+
+            if (Legendary.BladeOfTheTribes.IsEquipped)
+                return true;
+
             if (Player.PrimaryResourcePct < 0.5f)
                 return true;
 

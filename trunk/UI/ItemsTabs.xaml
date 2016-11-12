@@ -10,6 +10,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Template.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <converters:BoolToVisibilityConverter x:Key="HiddenWhenTrueConverter" TrueValue="Collapsed" FalseValue="Visible"/>
+            <converters:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="10,10,10,0">
@@ -17,7 +19,7 @@
             <TabItem Header="Items" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items.xaml"/>
             </TabItem>
-            <TabItem Header="ItemList" Foreground="{DynamicResource TextBrush}">
+            <TabItem Header="ItemList" Foreground="{DynamicResource TextBrush}"  Visibility="{Binding GameInfo.IsDefaultLootProvider, Converter={StaticResource VisibleWhenTrueConverter}}" >
                 <Border Tag="ItemList.xaml"/>
             </TabItem>
             <TabItem Header="Cube" Foreground="{DynamicResource TextBrush}">
