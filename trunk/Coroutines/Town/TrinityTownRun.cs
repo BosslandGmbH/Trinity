@@ -61,7 +61,7 @@ namespace Trinity.Coroutines.Town
 
                 if (DateTime.UtcNow < DontAttemptTownRunUntil)
                 {
-                    Logger.LogDebug("Town run cooldown");
+                    Logger.LogVerbose(LogCategory.GlobalHandler, "Town run cooldown");
                     IsVendoring = false;
                     return false;
                 }
@@ -74,7 +74,7 @@ namespace Trinity.Coroutines.Town
 
                 if (Core.CastStatus.StoneOfRecall.LastResult == CastResult.Casting)
                 {
-                    Logger.LogDebug("Casting");
+                    Logger.LogVerbose(LogCategory.GlobalHandler, "Casting");
                     return true;
                 }
 

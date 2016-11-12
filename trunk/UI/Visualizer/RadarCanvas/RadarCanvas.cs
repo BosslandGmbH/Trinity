@@ -2104,8 +2104,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         private void DrawNotInCacheObjects(DrawingContext dc, CanvasData canvas)
         {
             foreach (var actor in VisualizerViewModel.Instance.NotInCacheObjects)
-            {
-                var brush = RadarResources.GreyBrush;
+            {          
+                var brush = actor.IsElite ? RadarResources.EliteBrush : RadarResources.GreyBrush;
                 brush.Opacity = 0.75;
                 var actorRadius = Math.Min(30, Math.Max(4, actor.CollisionRadius * GridSize));
                 var radarObject = new RadarObject(actor, canvas);
@@ -2128,10 +2128,13 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 var res = RadarResources.GetActorResourceSet(radarObject);
 
                 Pen pen = RadarResources.GreyPen;
+
                 if (radarObject.Actor.IsInLineOfSight)
                     pen = RadarResources.LineOfSightPen;
+                
                 if (SelectedRadarObject == radarObject)
                     pen = RadarResources.SelectionPen;
+
                 if (radarObject.Actor.IsBlacklisted)
                     pen = RadarResources.BlacklistedPen;
 
@@ -2193,7 +2196,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     dc.DrawEllipse(res.Brush, null, radarObject.Point, GridSize / 2, GridSize / 2);
 
                     // Draw a circle representing the size of the actor
-                    res.Brush.Opacity = 0.15;
+                    res.Brush.Opacity = radarObject.Actor.IsElite ? 0.75 : 0.15;
 
                     dc.DrawEllipse(res.Brush, pen, radarObject.Point, gridRadius, gridRadius);
 
