@@ -210,7 +210,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         /// <summary>
         /// [Severely costly method] If a path can be made by DB's Navigator to the actor 
         /// </summary>
-        public bool IsNavigable() => Core.DBNavProvider.CanPathWithinDistance(Position, 15f).Result;
+        public bool IsNavigable() => Core.DBGridProvider.Height > 0 && Core.DBNavProvider.CanPathWithinDistance(Position, 15f).Result;
 
         public override void OnDestroyed()
         {

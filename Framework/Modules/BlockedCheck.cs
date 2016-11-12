@@ -16,12 +16,10 @@ namespace Trinity.Framework.Modules
 
         protected override void OnPulse()
         {
+            MoveSpeed = Core.PlayerHistory.GetYardsPerSecond();
+
             if (PlayerMover.CanMoveUnhindered)
-            {
-                BlockedStart = default(DateTime);
-                IsBlocked = false;
                 return;
-            }
 
             Nodes = Core.Grids.Avoidance.GetNodesInRadius(Core.Player.Position, 10f)
                 .Where(n => n.IsWalkable && Core.Grids.Avoidance.IsInPlayerFacingDirection(n.NavigableCenter,90d)).ToList();
@@ -29,8 +27,7 @@ namespace Trinity.Framework.Modules
             NodeCount = Nodes.Count;
             ClearNodeCount = Nodes.Count(n => n.IsWalkable && !n.AvoidanceFlags.HasFlag(AvoidanceFlags.Monster));
             BlockedPct = (ClearNodeCount / (double) Nodes.Count)*100;
-            MoveSpeed = Core.PlayerHistory.GetYardsPerSecond();
-
+            
             var isBlocked = MoveSpeed <= 5f && BlockedPct <= 65;
             if (IsBlocked != isBlocked)
             {
@@ -49,6 +46,16 @@ namespace Trinity.Framework.Modules
         public int NodeCount { get; private set; }
         public int ClearNodeCount { get; private set; }
         public bool IsBlocked { get; private set; }
+
+        public void Clear()
+        {
+            BlockedStart = default(DateTime);
+            Nodes.Clear();
+            NodeCount = 0;
+            BlockedPct = 0;
+            ClearNodeCount = 0;
+            IsBlocked = false;
+        }
 
         public override string ToString() => $"{GetType().Name}: {(IsBlocked ? "BLOCKED" : "")} ClearNodes={ClearNodeCount} ({BlockedPct:N2}%) Speed:{MoveSpeed:N2} Duration:{BlockedTime}";
     }

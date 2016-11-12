@@ -149,8 +149,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
             ProjectilePen = new Pen(new SolidColorBrush(Colors.IndianRed), 3);
             
-            EliteBrush = new SolidColorBrush(Colors.Blue);
-            EliteLightPen = new Pen(new SolidColorBrush(ControlPaint.Light(EliteBrush.Color.ToDrawingColor(), 50).ToMediaColor()), 1);
+            EliteBrush = new SolidColorBrush(Colors.DarkGoldenrod);
+            EliteLightPen = new Pen(new SolidColorBrush(ControlPaint.Light(EliteBrush.Color.ToDrawingColor(), 50).ToMediaColor()), 2);
 
             SceneFrameInclude = new Pen(new SolidColorBrush(Colors.LightGreen), 2)
             {
