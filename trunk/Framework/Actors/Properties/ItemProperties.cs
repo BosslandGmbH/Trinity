@@ -68,7 +68,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.FollowerType = GetFollowerType(actor.ActorSnoId);
             actor.ItemStackQuantity = attributes.ItemStackQuantity;
             actor.TrinityItemQuality = TypeConversions.GetTrinityItemQuality(actor.ItemQualityLevel);
-            actor.GlobeType = GetGlobeType(actor);
+            actor.GlobeType = GetGlobeType(actor);            
             actor.IsWeapon = TypeConversions.IsWeapon(actor);
             actor.IsArmor = TypeConversions.IsArmor(actor);
 

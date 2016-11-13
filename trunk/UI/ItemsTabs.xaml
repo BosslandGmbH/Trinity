@@ -19,7 +19,7 @@
             <TabItem Header="Items" Foreground="{DynamicResource TextBrush}">
                 <Border Tag="Items.xaml"/>
             </TabItem>
-            <TabItem Header="ItemList" Foreground="{DynamicResource TextBrush}"  Visibility="{Binding GameInfo.IsDefaultLootProvider, Converter={StaticResource VisibleWhenTrueConverter}}" >
+            <TabItem Header="ItemList" Foreground="{DynamicResource TextBrush}"  Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}" >
                 <Border Tag="ItemList.xaml"/>
             </TabItem>
             <TabItem Header="Cube" Foreground="{DynamicResource TextBrush}">

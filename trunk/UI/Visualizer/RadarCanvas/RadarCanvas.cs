@@ -193,7 +193,11 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             Cursor = Cursors.Arrow;
             CanvasData.PanOffset = DragOffset;
 
-            HandleMapClicked(sender, e);
+            using (new AquireFrameHelper())
+            {
+                HandleMapClicked(sender, e);
+
+            }
         }
 
         private void Clear()

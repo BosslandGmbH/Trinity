@@ -589,17 +589,17 @@ namespace Trinity.UI.UIComponents
                 try
                 {
                     object value;
-                    if (!BotMain.IsRunning || BotMain.IsPausedForStateExecution)
-                    {
-                        using (new AquireFrameHelper())
-                        {
-                            value = _propertyInfo.GetValue(_baseObject, null);
-                        }                            
-                    }
-                    else
-                    {
+                    //if (!BotMain.IsRunning || BotMain.IsPausedForStateExecution)
+                    //{
+                        //using (new AquireFrameHelper())
+                        //{
+                            //value = _propertyInfo.GetValue(_baseObject, null);
+                        //}                            
+                    //}
+                    //else
+                    //{
                         value = _propertyInfo.GetValue(_baseObject, null);
-                    }
+                    //}
 
                     // Slider controls need a value within range or they dont work properly.
                     //if (Range != null && UIControl == UIControlType.Slider && IsNumericType(PropertyType))

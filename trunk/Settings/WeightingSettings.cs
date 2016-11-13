@@ -34,6 +34,7 @@ namespace Trinity.Settings
         private EliteTypes _eliteTypes;
         private MonsterAffixes _ignoreAffixes;
         private GoblinPriority _goblinPriority;
+        private SpecialTypes _specialTypes;
 
         [DataMember]
         [DefaultValue(SettingMode.Enabled)]
@@ -84,6 +85,14 @@ namespace Trinity.Settings
         }
 
         [DataMember]
+        [Setting, UIControl(UIControlType.FlagsCheckboxes)]     
+        public SpecialTypes SpecialTypes
+        {
+            get { return _specialTypes; }
+            set { SetField(ref _specialTypes, value); }
+        }
+
+        [DataMember]
         [DefaultValue(SettingMode.Enabled)]
         public SettingMode EliteWeighting
         {
@@ -125,6 +134,7 @@ namespace Trinity.Settings
             get { return _goblinPriority; }
             set { SetField(ref _goblinPriority, value); }
         }
+
 
     }
 }
