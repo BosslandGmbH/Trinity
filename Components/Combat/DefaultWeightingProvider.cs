@@ -318,6 +318,11 @@ namespace Trinity.Components.Combat
 
                         var item = cacheObject as TrinityItem;
 
+                        if (WeightingUtils.ShouldIgnoreSpecialTarget(cacheObject, out reason))
+                        {
+                            cacheObject.WeightInfo += reason;
+                            continue;
+                        }
 
                         //if (!Settings.Advanced.BetaPlayground && Core.Avoidance.InCriticalAvoidance(cacheObject.Position) || Core.Avoidance.Grid.IsIntersectedByFlags(cacheObject.Position, ZetaDia.Me.Position, AvoidanceFlags.CriticalAvoidance))
                         //{

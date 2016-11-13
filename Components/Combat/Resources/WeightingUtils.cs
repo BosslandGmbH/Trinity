@@ -47,6 +47,27 @@ namespace Trinity.Components.Combat.Resources
 
             return false;
         }
+
+        public static bool ShouldIgnoreSpecialTarget(TrinityActor cacheObject)
+        {
+            string reason;
+            return ShouldIgnoreSpecialTarget(cacheObject, out reason);
+        }
+
+        public static bool ShouldIgnoreSpecialTarget(TrinityActor cacheObject, out string reason)
+        {
+            reason = string.Empty;
+
+            if (cacheObject == null)
+                return false;
+
+            if (!Core.Settings.Weighting.SpecialTypes.HasFlag(cacheObject.SpecialType))
+            {
+                reason = $"Ignore({cacheObject.SpecialType}=Disabled)";
+                return true;
+            }
+
+            return false;
+        }
     }
 }
-

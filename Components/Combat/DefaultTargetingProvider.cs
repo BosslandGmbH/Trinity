@@ -115,7 +115,10 @@ namespace Trinity.Components.Combat
             }
 
             SetCurrentTarget(target);
-            SetCurrentPower(GetPowerForTarget(target));            
+            SetCurrentPower(GetPowerForTarget(target));
+
+            if (HandleInteractionChannelling())
+                return true;
 
             if (await HandleKiting())
                 return true;
@@ -135,6 +138,16 @@ namespace Trinity.Components.Combat
             }
             
             return true;
+        }
+
+        private bool HandleInteractionChannelling()
+        {
+            if (Core.Player.IsCasting && !Core.Player.IsTakingDamage && CurrentTarget != null && CurrentTarget.IsGizmo)
+            {
+                Logger.LogVerbose(LogCategory.Targetting, "Waiting while channelling spell");
+                return true;
+            }
+            return false;
         }
 
         private bool TryBlacklist(TrinityActor target)

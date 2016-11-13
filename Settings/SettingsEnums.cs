@@ -68,6 +68,15 @@ namespace Trinity.Settings
     }
 
     [Flags]
+    public enum SpecialTypes
+    {
+        None = 0,
+
+        [Description("Resurrect Dead Players")]
+        PlayerTombstone = 1 << 0,
+    }
+
+    [Flags]
     public enum PickupItemQualities
     {
         None = 0,

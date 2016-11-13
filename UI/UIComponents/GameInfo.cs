@@ -27,10 +27,10 @@ namespace Trinity.UI.UIComponents
             var name = args.NewValue.GetType().Name;
             Logger.Warn($"LootProvider changed to {name}");
             LootProviderName = name;
-            IsDefaultLootProvider = args.NewValue is DefaultLootProvider;
+            IsExternalLootProvider = !(args.NewValue is DefaultLootProvider);
         }
 
-        public bool IsDefaultLootProvider { get; set; }
+        public bool IsExternalLootProvider { get; set; }
         public string LootProviderName { get; set; }
 
         private void IsInGameOnChanged(ChangeDetectorEventArgs<bool> args)
