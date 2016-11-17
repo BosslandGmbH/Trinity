@@ -100,6 +100,7 @@
                     <CheckBox Content="Pickup Designs and Plans" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=CraftingPlans}" />
                     <CheckBox Content="Stash Transmog Whites" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=TransmogWhites}"  ToolTip="If enabled transmog items are picked up and stashed"/>
                     <CheckBox Content="Pickup Staff of Herding Parts" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=StaffOfHeardingParts}" ToolTip="If enabled staff of herding crafting materials will be picked up and stashed"/>
+                    <CheckBox Content="Pickup Greater Rift Keys" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=TieredLootrunKey}" ToolTip="If enabled, will pick up greater rift keys"/>
                 </UniformGrid>
             </GroupBox>
 

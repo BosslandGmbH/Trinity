@@ -104,6 +104,7 @@ namespace Trinity.Reference
             214603, //"liquid-rainbow": ["Liquid Rainbow", 214603, "Cow_Water"],
             180697, //"wirts-bell": ["Wirt's Bell", 180697, "CowBell"],
         };
+
         public static GameBalanceTable PetTable = new GameBalanceTable
         {
             { 2390, 95923716, -1080354364, "Cosmetic_Pet_gluttony_01" },
@@ -3278,5 +3279,7 @@ namespace Trinity.Reference
                 return false;
         }
         #endregion
+
+  
     }
 }

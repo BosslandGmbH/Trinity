@@ -259,6 +259,7 @@ namespace Trinity.Framework.Modules
             IsCastingPortal = IsCasting && wasCastingPortal || IsCastingTownPortalOrTeleport();
 
             CurrentHealth = _me.HitpointsCurrent;
+            IsInBossEncounter = _me.IsInBossEncounter;
 
             HealthHistory.Add(CurrentHealth);
             while (HealthHistory.Count > 5)
@@ -569,6 +570,7 @@ namespace Trinity.Framework.Modules
         public float Radius { get; set; }
         public int CurrentSceneSnoId { get; set; }
         public PlayerAction CurrentAction { get; set; }
+        public bool IsInBossEncounter { get; set; }
 
 
         private float GetMaxSecondaryResource(DiaActivePlayer player)

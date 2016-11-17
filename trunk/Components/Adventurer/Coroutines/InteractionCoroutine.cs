@@ -167,12 +167,12 @@ namespace Trinity.Components.Adventurer.Coroutines
                 State = States.Failed;
                 return false;
             }
-            if (actor.Distance > 75f)
-            {
-                Logger.Debug($"Actor is way too far away. {actor.Distance}");
-                State = States.Failed;
-                return false;
-            }
+            //if (actor.Distance > 75f)
+            //{
+            //    Logger.Debug($"Actor is way too far away. {actor.Distance}");
+            //    State = States.Failed;
+            //    return false;
+            //}
 
             // Assume done
             if (!actor.IsInteractableQuestObject())

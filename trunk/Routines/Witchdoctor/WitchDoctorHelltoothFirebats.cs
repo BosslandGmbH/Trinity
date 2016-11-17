@@ -112,7 +112,7 @@ namespace Trinity.Routines.Witchdoctor
                 var interruptForHarvest = Skills.WitchDoctor.SoulHarvest.CanCast() && harvestPossibleStackGain >= harvestUnitsInRange && harvestBuffCooldown?.Remaining.TotalMilliseconds < 500;
                 var interruptForHaunt = percentTargetsWithHaunt < 0.2f || isEliteWithoutHaunt;  
                 var needToSwarmElite = isElitewithoutLocust && !((Legendary.VileHive.IsEquipped || Runes.WitchDoctor.Pestilence.IsActive) && isAnyTargetWithLocust);
-                var interruptForLocust = (percentTargetsWithLocust < 0.1f || needToSwarmElite) && Player.PrimaryResource > 300 && Skills.WitchDoctor.LocustSwarm.CanCast();
+                var interruptForLocust = targetsWithoutLocust.Any() && (percentTargetsWithLocust < 0.1f || needToSwarmElite) && Player.PrimaryResource > 300 && Skills.WitchDoctor.LocustSwarm.CanCast();
 
                 // continue channelling firebats?
                 if (Player.IsChannelling)
@@ -131,6 +131,12 @@ namespace Trinity.Routines.Witchdoctor
 
                     if (interruptForHarvest)
                         Logger.Log(LogCategory.Routine, "Interrupted Firebats to harvest");
+                }
+
+                if (interruptForLocust && Skills.WitchDoctor.LocustSwarm.CanCast() && targetsWithoutLocust.Any())
+                {
+                    Logger.Log(LogCategory.Routine, "Interupt Locust Cast");
+                    return new TrinityPower(SNOPower.Witchdoctor_Locust_Swarm, 15f, targetsWithoutLocust.First().AcdId, 0, 0);
                 }
 
                 // Emergency health situation

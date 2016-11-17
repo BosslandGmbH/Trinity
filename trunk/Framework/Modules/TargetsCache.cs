@@ -333,7 +333,7 @@ namespace Trinity.Framework.Modules
                 return false;
             }
 
-            if (cacheObject.IsInvulnerable && !cacheObject.IsQuestGiver)
+            if (cacheObject.IsInvulnerable && !cacheObject.IsQuestGiver && !cacheObject.IsElite)
             {
                 cacheObject.AddCacheInfo("Invulnerable");
                 return false;

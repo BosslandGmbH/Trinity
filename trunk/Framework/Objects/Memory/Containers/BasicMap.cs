@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Trinity.Framework.Objects.Memory.Containers
 {
@@ -17,6 +18,12 @@ namespace Trinity.Framework.Objects.Memory.Containers
 
         public bool TryGetItemByKey<TKey>(TKey modKey, out T value, Func<TKey, uint> hasher)
         {
+            value = default(T);
+
+            var data = Data;
+            if (!IsValid || data == null || !data.IsValid || Count == 0)
+                return false;
+
             var hash = hasher(modKey);
             var bucketIndex = unchecked((int)(hash & Mask));
             var bucketEntry = Create<TableItem>(Data[bucketIndex]);
@@ -28,8 +35,7 @@ namespace Trinity.Framework.Objects.Memory.Containers
                     return true;
                 }
                 bucketEntry = Create<TableItem>(bucketEntry.Next);
-            }
-            value = default(T);
+            }            
             return false;
         }
     }

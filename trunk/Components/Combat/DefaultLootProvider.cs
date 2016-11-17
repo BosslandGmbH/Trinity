@@ -30,8 +30,8 @@ namespace Trinity.Components.Combat
 
     public class DefaultLootProvider : ILootProvider
     {
-        public static int FreeBagSlots { get; set; } = 5;
-        public static int FreeBagSlotsInTown { get; set; } = 40;
+        public static int FreeBagSlots { get; set; } = 4;
+        public static int FreeBagSlotsInTown { get; set; } = 10;
 
         public bool ShouldPickup(TrinityItem item)
         {
@@ -84,7 +84,7 @@ namespace Trinity.Components.Combat
             }
 
             if (item.TrinityItemType == TrinityItemType.TieredLootrunKey || item.TrinityItemType == TrinityItemType.LootRunKey)
-                return true;
+                return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TieredLootrunKey);
 
             if (item.TrinityItemType == TrinityItemType.HealthPotion && item.ItemQualityLevel >= ItemQuality.Legendary)
                 return true;
@@ -93,9 +93,6 @@ namespace Trinity.Components.Combat
                 return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.KeywardenIngredients);
 
             if (item.TrinityItemType == TrinityItemType.UberReagent)
-                return true;
-
-            if (item.TrinityItemType == TrinityItemType.LootRunKey)
                 return true;
 
             if (item.TrinityItemType == TrinityItemType.HoradricRelic && ZetaDia.PlayerData.BloodshardCount < Core.Player.MaxBloodShards)

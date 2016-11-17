@@ -179,6 +179,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Routines\Barbarian\BarbarianWastesRollingSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Routines\Barbarian\BarbarianWastesBulkathosSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -230,6 +234,7 @@
     <Compile Include="Routines\Advanced\MrRobotRoutine.cs" />
     <Compile Include="Routines\Barbarian\BarbarianBase.cs" />
     <Compile Include="Routines\Barbarian\BarbarianIKHota.cs" />
+    <Compile Include="Routines\Barbarian\BarbarianWastesRolling.cs" />
     <Compile Include="Routines\Barbarian\BarbarianWastesBulkathos.cs" />
     <Compile Include="Routines\Barbarian\BarbarianEarthLeap.cs" />
     <Compile Include="Routines\Barbarian\BarbarianRaekorSpear.cs" />
