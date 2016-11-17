@@ -582,6 +582,9 @@ namespace Trinity.Routines.Crusader
             if (Skills.Crusader.FistOfTheHeavens.CanCast())
                 return FistOfTheHeavens(CurrentTarget);
 
+            if (Skills.Crusader.Bombardment.CanCast())
+                return Bombardment(CurrentTarget);
+
             return DefaultPower;
         }
 
