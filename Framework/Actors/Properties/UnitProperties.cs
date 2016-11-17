@@ -81,7 +81,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.PetType = attributes.PetType;
 
             var teamOverride = attributes.TeamOverride;
-            actor.TeamId = teamOverride > 0 ? teamOverride : attributes.TeamId;
+            actor.TeamId = teamOverride > 0 ? teamOverride : attributes.TeamId; 
             actor.Team = (TeamType)actor.TeamId;
             actor.IsFriendly = actor.TeamId == 1 || actor.TeamId == 2 || actor.TeamId == 17;
             actor.IsHostile = actor.TeamId == 10 || actor.Attributes.LastDamageAnnId == Core.Player.MyDynamicID;  //!actor.IsFriendly;

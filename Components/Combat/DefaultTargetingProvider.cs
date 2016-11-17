@@ -352,8 +352,17 @@ namespace Trinity.Components.Combat
             var rangeRequired = Math.Max(1f, power.MinimumRange);
             var distance = position.Distance(Core.Player.Position);
 
+            if (Core.Player.IsInBossEncounter && Combat.Targeting.CurrentTarget != null)
+            {
+                var positionIsBoss = Combat.Targeting.CurrentTarget.IsBoss && Combat.Targeting.CurrentTarget.Position.Distance(position) < 10f;
+                if (positionIsBoss)
+                {
+                    rangeRequired += Combat.Targeting.CurrentTarget.CollisionRadius;
+                }
+            }
+
             Logger.LogVerbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
-            return distance <= Math.Max(1f, power.MinimumRange) && IsInLineOfSight(position);
+            return distance <= rangeRequired && IsInLineOfSight(position);
         }
 
         private bool IsInLineOfSight(TrinityActor currentTarget)

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Events;
 using Trinity.Items;
@@ -31,6 +32,15 @@ namespace Trinity.Coroutines.Town
 
         public static bool ShouldSell(TrinityItem i)
         {
+            if (i.IsProtected())
+                return false;
+
+            if (Core.Player.IsInventoryLockedForGreaterRift)
+                return false;
+
+            if (i.IsUnidentified)
+                return false;
+
             return Combat.Loot.ShouldSell(i) && !Combat.Loot.ShouldSalvage(i) && !Combat.Loot.ShouldStash(i);
         }
 

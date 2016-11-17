@@ -64,7 +64,8 @@ namespace Trinity.Framework.Actors.Attributes
 
         public int TeamOverride => GetAttribute<int>(ActorAttributeType.TeamOverride);
 
-        public int TeamId => GetAttribute<int>(ActorAttributeType.TeamId);//GetAttributeDirectlyFromTable<int>(ActorAttributeType.TeamId);
+        //public int TeamId => GetAttribute<int>(ActorAttributeType.TeamId);
+        public int TeamId => GetAttributeDirectlyFromTable<int>(ActorAttributeType.TeamId);
 
         public MarkerType MarkerType => GetAttribute<MarkerType>(ActorAttributeType.ConversationIcon,0); // 483: ConversationIcon(-3613)
 

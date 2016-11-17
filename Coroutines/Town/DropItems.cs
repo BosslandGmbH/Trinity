@@ -41,6 +41,9 @@ namespace Trinity.Coroutines.Town
             if (Cache.ContainsKey(i.AnnId))
                 return Cache[i.AnnId];
 
+            if (i.IsProtected())
+                return false;
+
             var action = ItemEvaluationType.Keep;
             if (StashItems.ShouldStash(i))
                 action = ItemEvaluationType.Keep;

@@ -102,9 +102,10 @@ namespace Trinity.Settings
         StaffOfHeardingParts = 1 << 7,
         Pets = 1 << 8,
         Wings = 1 << 9,
+        TieredLootrunKey = 1 << 10,
 
         Defaults = CraftingPlans | DeathsBreath | VeiledCrystals | ReusableParts | ArcaneDust | BloodShards | 
-            KeywardenIngredients | StaffOfHeardingParts | Pets | Wings
+            KeywardenIngredients | StaffOfHeardingParts | Pets | Wings | TieredLootrunKey
     }
 
     [Flags]

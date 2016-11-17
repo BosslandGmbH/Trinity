@@ -102,6 +102,8 @@ namespace Trinity.Components.Combat
 
                 var shouldIgnorePackSize = Combat.Routines.Current.ShouldIgnorePackSize();
 
+                var bossNearby = !Core.Player.IsInBossEncounter || Core.Targets.Any(u => u.IsBoss && u.Distance < 60f);
+
                 //var killQuestStepTypes = new HashSet<QuestStepObjectiveType>
                 //{
                 //    QuestStepObjectiveType.KillAllMonstersInWorld,
@@ -667,7 +669,7 @@ namespace Trinity.Components.Combat
                                         cacheObject.WeightInfo += $"Routine Ignoring Trash Pack Size.";
                                     }
                                     else if (nearbyTrashCount < Combat.Routines.Current.ClusterSize && !Core.Minimap.MinimapIconAcdIds.Contains(cacheObject.AcdId) &&
-                                             !GameData.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat)
+                                             !GameData.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat && !bossNearby)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {Combat.Routines.Current.ClusterSize})";
                                         break;
@@ -725,7 +727,7 @@ namespace Trinity.Components.Combat
                                     {
                                         if (ShouldIgnoreElite(cacheObject, out reason))
                                         {
-                                            Logger.Log($"{reason}");
+                                            Logger.Log(LogCategory.Weight, $"{reason}");
                                             cacheObject.WeightInfo += reason;
                                             break;
                                         }
@@ -1654,7 +1656,7 @@ namespace Trinity.Components.Combat
 
                 if (bestTarget.RActorId != LastTargetRActorGuid || bestTarget != null && bestTarget.IsMarker)
                 {
-                    Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation,
+                    Logger.Log(LogCategory.Targetting,
                         $"Target changed to {bestTarget.ActorSnoId} // {bestTarget.InternalName} RActorGuid={bestTarget.RActorId} " +
                         $"({bestTarget.Type}) {bestTarget.WeightInfo} TargetTimes={timesTargetted}");
                 }

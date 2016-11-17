@@ -56,7 +56,7 @@ namespace Trinity.Routines.DemonHunter
 
         public virtual int KiteHealthPct => 100;
         public virtual float TrashRange => 80f;
-        public virtual float EliteRange => 80f;
+        public virtual float EliteRange => 120f;
         public virtual float HealthGlobeRange => 60f;
         public virtual float ShrineRange => 80f;
         public virtual Func<bool> ShouldIgnoreNonUnits { get; } = () => false;
@@ -318,7 +318,7 @@ namespace Trinity.Routines.DemonHunter
                 return true;
 
             // Use Boar Taunt on 3 or more trash mobs in an area or on Unique/Elite/Champion
-            if (Runes.DemonHunter.BoarCompanion.IsActive && ((TargetUtil.ClusterExists(20f, 4) && TargetUtil.EliteOrTrashInRange(20f)) || (CurrentTarget.IsElite && CurrentTarget.Distance <= 20f)))
+            if (Runes.DemonHunter.BoarCompanion.IsActive && (TargetUtil.ClusterExists(20f, 4) && TargetUtil.EliteOrTrashInRange(20f) || CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.Distance <= 20f))
                 return true;
 
             // Ferrets used for picking up Health Globes when low on Health

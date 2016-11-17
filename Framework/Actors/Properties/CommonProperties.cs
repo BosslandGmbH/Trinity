@@ -38,7 +38,10 @@ namespace Trinity.Framework.Actors.Properties
                 actor.Radius = rActor.CollisionSphere.Radius;
                 var axialRadius = actorInfo.AxialCylinder.Ax1;
                 actor.AxialRadius = axialRadius;
-                actor.CollisionRadius = Math.Max(1f, axialRadius * 0.60f);
+
+                actor.CollisionRadius = GameData.CustomObjectRadius.ContainsKey(actor.ActorSnoId) 
+                    ? GameData.CustomObjectRadius[actor.ActorSnoId] 
+                    : Math.Max(1f, axialRadius * 0.60f);
             }
 
             var type = GetObjectType(

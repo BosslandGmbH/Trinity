@@ -61,7 +61,7 @@ namespace Trinity.Coroutines.Town
 
                 if (DateTime.UtcNow < DontAttemptTownRunUntil)
                 {
-                    Logger.LogVerbose(LogCategory.GlobalHandler, "Town run cooldown");
+                    //Logger.LogVerbose(LogCategory.GlobalHandler, "Town run cooldown");
                     IsVendoring = false;
                     return false;
                 }

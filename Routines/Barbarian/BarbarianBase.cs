@@ -43,7 +43,7 @@ namespace Trinity.Routines.Barbarian
         public virtual int KiteStutterDelay => 1400;
         public virtual int KiteHealthPct => 100;
         public virtual float TrashRange => 80f;
-        public virtual float EliteRange => 80f;
+        public virtual float EliteRange => 120f;
         public virtual float HealthGlobeRange => 60f;
         public virtual float ShrineRange => 80f;
         public virtual Func<bool> ShouldIgnoreNonUnits { get; } = () => false;
@@ -420,16 +420,7 @@ namespace Trinity.Routines.Barbarian
 
         protected virtual bool ShouldWrathOfTheBerserker()
         {
-            var skill = Skills.Barbarian.WrathOfTheBerserker;
-
-            if (!skill.CanCast())
-                return false;
-
-            // For some reason the normal buff check says the buff is always active after first use.
-            if (Core.Cooldowns.GetBuffCooldownRemaining(skill.SNOPower).TotalMilliseconds > 0)
-                return false;
-
-            return true;
+            return Skills.Barbarian.WrathOfTheBerserker.CanCast();
         }
 
         #endregion

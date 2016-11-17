@@ -45,8 +45,14 @@ namespace Trinity.Coroutines.Town
             if (i.IsUnidentified)
                 return true;
 
+            if (Core.Player.IsInventoryLockedForGreaterRift)
+                return false;
+
             if (Cache.ContainsKey(i.AnnId))
                 return Cache[i.AnnId];
+
+            if (i.IsProtected())
+                return false;
 
             var decision = Combat.Loot.ShouldStash(i);
             Cache.Add(i.AnnId, decision);

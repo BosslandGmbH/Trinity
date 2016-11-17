@@ -21,28 +21,30 @@ using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Barbarian
 {
-    public sealed class BarbarianWastesBulkathos : BarbarianBase, IRoutine
+    public sealed class BarbarianWastesRolling : BarbarianBase, IRoutine
     {
         #region Definition
 
-        public string DisplayName => "Wastes Set + BulKathos Whirlwind";
+        public string DisplayName => "Wastes / BulKathos 'Rolling' Whirlwind";
         public string Description => "Build that spins around a lot.";
-        public string Author => "xzjv";
+        public string Author => "toxin";
         public string Version => "0.1";
-        public string Url => "http://www.icy-veins.com/d3/barbarian-whirlwind-build-with-bul-kathoss-oath-and-wrath-of-the-wastes-patch-2-4-2-season-7";
+        public string Url => "http://www.diablofans.com/builds/84104-the-rolling-barb-gr90";
 
-        public Build BuildRequirements => new Build
-        {
-            Sets = new Dictionary<Set, SetBonus>
-            {
-                { Sets.WrathOfTheWastes, SetBonus.Third },
-                { Sets.BulKathossOath, SetBonus.First },
-            },
-            Skills = new Dictionary<Skill, Rune>
-            {
-                { Skills.Barbarian.Whirlwind, null },
-            },
-        };
+        public Build BuildRequirements => null;
+
+        //public Build BuildRequirements => new Build
+        //{
+        //    Sets = new Dictionary<Set, SetBonus>
+        //    {
+        //        { Sets.WrathOfTheWastes, SetBonus.Third },
+        //        { Sets.BulKathossOath, SetBonus.First },
+        //    },
+        //    Skills = new Dictionary<Skill, Rune>
+        //    {
+        //        { Skills.Barbarian.Whirlwind, null },
+        //    },
+        //};
 
         #endregion
 
@@ -102,9 +104,9 @@ namespace Trinity.Routines.Barbarian
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
-        public BarbarianWastesBulkathosSettings Settings { get; } = new BarbarianWastesBulkathosSettings();
+        public BarbarianWastesRollingSettings Settings { get; } = new BarbarianWastesRollingSettings();
 
-        public sealed class BarbarianWastesBulkathosSettings : NotifyBase, IDynamicSetting
+        public sealed class BarbarianWastesRollingSettings : NotifyBase, IDynamicSetting
         {
             private int _clusterSize;
             private float _emergencyHealthPct;
@@ -135,7 +137,6 @@ namespace Trinity.Routines.Barbarian
 
             #endregion
         }
-
 
         #endregion
     }
