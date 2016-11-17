@@ -102,7 +102,7 @@ namespace Trinity.Components.Combat
 
                 var shouldIgnorePackSize = Combat.Routines.Current.ShouldIgnorePackSize();
 
-                var bossNearby = !Core.Player.IsInBossEncounter || Core.Targets.Any(u => u.IsBoss && u.Distance < 60f);
+                var bossNearby = Core.Player.IsInBossEncounter && Core.Targets.Any(u => u.IsBoss && u.Distance < 60f);
 
                 //var killQuestStepTypes = new HashSet<QuestStepObjectiveType>
                 //{

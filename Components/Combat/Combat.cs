@@ -84,8 +84,8 @@ namespace Trinity.Components.Combat
 
             // Wait after elite death until progression globe appears as a valid target or x time has passed.
             if (RiftProgression.IsInRift && await Behaviors.WaitAfterUnitDeath.While(
-                u => u.IsElite && !TargetUtil.AnyElitesInRange(150f) && !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe && p.Weight > 0 && p.Distance < 50f),
-                "Wait for Progression Globe", 1500))
+                u => u.IsElite && u.Distance < 60f && !TargetUtil.AnyElitesInRange(150f) && !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe && p.Weight > 0 && p.Distance < 50f),
+                "Wait for Progression Globe", 1000))
                 return true;
 
             // Priority movement for progression globes. ** Temporary solution!

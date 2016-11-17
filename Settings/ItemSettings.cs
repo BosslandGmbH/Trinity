@@ -41,7 +41,26 @@ namespace Trinity.Settings
         public ItemSettings()
         {
             base.LoadDefaults();
+
         }
+
+        public override void OnPopulated()
+        {
+            Migration();
+        }
+
+        private void Migration()
+        {
+            if (Version < 1)
+            {
+                SpecialItems |= SpecialItemTypes.TieredLootrunKey; // added .680
+            }
+            Version = SchemaVersion;
+        }
+
+        [DataMember]
+        public int Version { get; set; }
+        public const int SchemaVersion = 1;
 
         [DataMember]
         [Setting, UIControl(UIControlType.FlagsCheckboxes)]
