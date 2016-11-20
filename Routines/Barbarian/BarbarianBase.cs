@@ -236,6 +236,9 @@ namespace Trinity.Routines.Barbarian
             if (!Skills.Barbarian.IgnorePain.CanCast())
                 return false;
 
+            if (Legendary.PrideOfCassius.IsEquipped)
+                return true;
+
             if (Player.CurrentHealthPct < 0.90)
                 return true;
 

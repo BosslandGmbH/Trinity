@@ -15,15 +15,15 @@ namespace Trinity.Components.Adventurer.Util
             FrameLock frameLock = null;
             var frameLockAcquired = false;
 
-            // If UI thread (settings window) or others try to read memory while bot is running 
-            // it can freeze the application, so they need to acquire soft framelock.
+            // Any attempt to acquire framelock during first 5 seconds of bot start will cause freeze
             var isNotMainThread = Thread.CurrentThread != BotMain.BotThread;
-            if (isNotMainThread && ZetaDia.Memory.Executor.IsExecutingContinuously)
+            if (isNotMainThread && BotEvents.IsBotRunning && ProfileManager.CurrentProfileBehavior == null)
             {
-                result.Success = false;   
+                result.Success = false;
                 return result;
             }
 
+            // If UI thread (settings window) or others try to read memory while bot is running 
             if (!BotEvents.IsBotRunning || isNotMainThread)
             {
                 Logger.Verbose("Acquiring Framelock");
