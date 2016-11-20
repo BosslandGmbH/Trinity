@@ -71,7 +71,7 @@ namespace Trinity.Components.Combat
                 return true;
             }
 
-            if (GameData.TransmogTable.Contains(item.GameBalanceId))
+            if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog"))
             {
                 Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
