@@ -61,10 +61,10 @@ namespace Trinity.Components.Adventurer.Settings
                 var level = 0;
                 if (ZetaDia.Me != null)
                 {
-                    using (ZetaDia.Memory.AcquireFrame())
+                    SafeFrameLock.ExecuteWithinFrameLock(() =>
                     {
                         level = PropertyReader<int>.SafeReadValue(() => ZetaDia.Me.HighestUnlockedRiftLevel);
-                    }
+                    });
                 }
                 return level == 0 ? 120 : level;
             }

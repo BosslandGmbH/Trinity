@@ -49,7 +49,10 @@ namespace Trinity.Routines.Monk
         {
             // Maximize time spent attacking while the shenlongs damage buff is active.
 
-            if(!HasShenLongBuff)
+            if (!Settings.BeastMode)
+                return false;
+
+            if (!HasShenLongBuff)
                 return false;
 
             if(Player.CurrentHealthPct < 0.4f)
@@ -126,7 +129,7 @@ namespace Trinity.Routines.Monk
         }
 
         public bool ShouldConserveSpirit 
-            => HasShenLongBuff && Player.CurrentHealthPct > 0.6
+            => Settings.ConserveSpirit && HasShenLongBuff && Player.CurrentHealthPct > 0.6
             && (Player.PrimaryResourcePct < 0.35 || !HasShenLongBuff && Player.PrimaryResourcePct > 0.80);
 
         protected override bool ShouldDashingStrike(out Vector3 position)
@@ -137,9 +140,6 @@ namespace Trinity.Routines.Monk
                 return false;
 
             var charges = Skills.Monk.DashingStrike.Charges;
-
-            if (ShouldConserveSpirit)
-                return false;
 
             if (HasRaimentDashBuff)
             {                
@@ -154,6 +154,9 @@ namespace Trinity.Routines.Monk
                 var buffRefreshTime = Runes.Monk.BlindingSpeed.IsActive || Runes.Monk.Radiance.IsActive ? 3500 : 5500;
                 return Skills.Monk.DashingStrike.TimeSinceUse > buffRefreshTime && TargetUtil.PierceHitsMonster(position);
             }
+
+            if (ShouldConserveSpirit)
+                return false;
 
             // Need to get the damge buff up asap. It only procs if we hit something.
             var target = TargetUtil.GetBestClusterUnit(55f) ?? CurrentTarget;
@@ -253,6 +256,15 @@ namespace Trinity.Routines.Monk
             private int _clusterSize;
             private float _emergencyHealthPct;
             private bool _spamBreathHeaven;
+            private bool _conserveSpirit; 
+            private bool _beastMode;
+
+            [DefaultValue(true)]
+            public bool ConserveSpirit
+            {
+                get { return _conserveSpirit; }
+                set { SetField(ref _conserveSpirit, value); }
+            }
 
             [DefaultValue(6)]
             public int ClusterSize
@@ -273,6 +285,13 @@ namespace Trinity.Routines.Monk
             {
                 get { return _spamBreathHeaven; }
                 set { SetField(ref _spamBreathHeaven, value); }
+            }
+
+            [DefaultValue(true)]
+            public bool BeastMode
+            {
+                get { return _beastMode; }
+                set { SetField(ref _beastMode, value); }
             }
 
             #region IDynamicSetting

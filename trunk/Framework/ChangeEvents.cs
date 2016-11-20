@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Combat;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
@@ -45,6 +46,9 @@ namespace Trinity.Framework
 
         public static TrinityChangeDetector<ILootProvider> LootProvider = new TrinityChangeDetector<ILootProvider>(()
             => Combat.Loot);
+
+        public static TrinityChangeDetector<bool> IsRunning = new TrinityChangeDetector<bool>(()
+            => BotEvents.IsBotRunning);
 
     }
 }
