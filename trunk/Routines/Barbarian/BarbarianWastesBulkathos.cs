@@ -75,6 +75,9 @@ namespace Trinity.Routines.Barbarian
 
         protected override bool ShouldWrathOfTheBerserker()
         {
+            if (!AllowedToUse(Settings.WrathOfTheBerserker, Skills.Barbarian.WrathOfTheBerserker))
+                return false;
+
             return IsInCombat && base.ShouldWrathOfTheBerserker();
         }
 
@@ -108,12 +111,31 @@ namespace Trinity.Routines.Barbarian
         {
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private SkillSettings _wrathOfTheBerserker;
 
             [DefaultValue(6)]
             public int ClusterSize
             {
                 get { return _clusterSize; }
                 set { SetField(ref _clusterSize, value); }
+            }
+
+            public SkillSettings WrathOfTheBerserker
+            {
+                get { return _wrathOfTheBerserker; }
+                set { SetField(ref _wrathOfTheBerserker, value); }
+            }
+
+            private static readonly SkillSettings WrathOfTheBerserkerDefaults = new SkillSettings
+            {
+                UseMode = UseTime.Selective,
+                Reasons = UseReasons.Elites | UseReasons.HealthEmergency
+            };
+
+            public override void LoadDefaults()
+            {
+                base.LoadDefaults();
+                WrathOfTheBerserker = WrathOfTheBerserkerDefaults.Clone();
             }
 
             [DefaultValue(0.4f)]

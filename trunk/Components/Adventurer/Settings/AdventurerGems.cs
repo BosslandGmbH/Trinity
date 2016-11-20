@@ -32,7 +32,7 @@ namespace Trinity.Components.Adventurer.Settings
 
             if (!result.Success)
             {
-                Logger.Debug("[UpdateGems] " + result.Exception.Message);
+                Logger.Debug("[UpdateGems] Failed to Update. " + result?.Exception?.Message);
                 return;
             }
 

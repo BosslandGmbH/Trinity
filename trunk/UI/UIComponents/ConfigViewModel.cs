@@ -35,7 +35,7 @@ namespace Trinity.UI.UIComponents
         {
             storage.CopyTo(_originalStorage);
             _originalStorage.Save();
-                             
+
             TrinityPlugin.SetBotTicksPerSecond();
         }
 
@@ -43,7 +43,7 @@ namespace Trinity.UI.UIComponents
         {
             TrinityStorage.CopyTo(model, _storage, ignorePropertyNames);
             _storage.LoadDynamicSettings();
-            _storage.FireOnLoadedEvents();    
+            _storage.FireOnLoadedEvents();
         }
 
         public System.Windows.Controls.UserControl AdventurerSettings
@@ -51,10 +51,12 @@ namespace Trinity.UI.UIComponents
             get
             {
                 var advSettings = Adventurer.Instance as IDynamicSetting;
+                var control = advSettings.GetControl();
+                var data = advSettings.GetDataContext();
                 return new System.Windows.Controls.UserControl
                 {
-                    Content = advSettings.GetControl(),
-                    DataContext = advSettings.GetDataContext()
+                    Content = control,
+                    DataContext = data
                 };
             }
         }
@@ -162,7 +164,7 @@ namespace Trinity.UI.UIComponents
                         try
                         {
                             UILoader.CloseWindow();
-                            DebugUtil.LogBuildAndItems(TrinityLogLevel.Info);                          
+                            DebugUtil.LogBuildAndItems(TrinityLogLevel.Info);
                         }
                         catch (Exception ex)
                         {
@@ -207,7 +209,7 @@ namespace Trinity.UI.UIComponents
                         {
                             Logger.Log(LogCategory.UserInformation, "Exception in DumpReferenceItems: {0}", ex);
                         }
-                    });                
+                    });
                 DumpMerchantItemsCommand = new RelayCommand(
                     parameter =>
                     {
@@ -330,7 +332,7 @@ namespace Trinity.UI.UIComponents
         private void InitializeResetCommand()
         {
             try
-            {      
+            {
                 ResetAllCommand = new RelayCommand(
                     parameter => _storage.UserRequestedReset());
             }
