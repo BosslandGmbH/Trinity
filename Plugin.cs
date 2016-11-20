@@ -64,7 +64,7 @@ namespace Trinity
         private void OverlayBugFixHack()
         {
             // OverlayManager is throwing a null ref exception on application exit            
-            ZetaDia.Overlay.Deactivate();
+            //ZetaDia.Overlay.Deactivate();
         }
 
         public DateTime LastPulse { get; set; }
