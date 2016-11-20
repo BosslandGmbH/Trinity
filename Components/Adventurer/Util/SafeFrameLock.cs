@@ -18,6 +18,11 @@ namespace Trinity.Components.Adventurer.Util
             // If UI thread (settings window) or others try to read memory while bot is running 
             // it can freeze the application, so they need to acquire soft framelock.
             var isNotMainThread = Thread.CurrentThread != BotMain.BotThread;
+            if (isNotMainThread && ZetaDia.Memory.Executor.IsExecutingContinuously)
+            {
+                result.Success = false;   
+                return result;
+            }
 
             if (!BotEvents.IsBotRunning || isNotMainThread)
             {

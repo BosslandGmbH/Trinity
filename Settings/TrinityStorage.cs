@@ -8,8 +8,10 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
+using System.Web.Profile;
 using System.Windows;
 using System.Xml;
+using System.Xml.Linq;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings.Paragon;
@@ -18,7 +20,7 @@ using Zeta.Game;
 
 namespace Trinity.Settings
 {
-    [DataContract(Namespace = "")]
+    [DataContract(Namespace = "")]   
     public class TrinityStorage : NotifyBase, ITrinitySetting<TrinityStorage>
     {
 
@@ -49,6 +51,8 @@ namespace Trinity.Settings
             _LastLoadedSettings = DateTime.MinValue;
         }
 
+        [DataMember(IsRequired = false)]
+        public int Version { get; set; } = 1;
 
         [DataMember(IsRequired = false)]
         public DynamicSettingGroup Dynamic
@@ -194,9 +198,12 @@ namespace Trinity.Settings
                 {
                     Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation, "Migrating configuration to new Trinity.xml");
                     Save();
-                    File.Delete(OldBattleTagSettingsFile);
-                }
 
+                    if (File.Exists(OldBattleTagSettingsFile))
+                    {
+                        File.Delete(OldBattleTagSettingsFile);
+                    }
+                }                
             }
         }
 
@@ -227,21 +234,29 @@ namespace Trinity.Settings
                     if (DateTime.UtcNow.Subtract(fsChangeStart).TotalMilliseconds > 5000)
                         break;
                 }
-                using (Stream stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+
+                var doc = XDocument.Load(filename);        
+                if (doc.Root != null)
                 {
+                    var reader = doc.Root.CreateReader();
                     DataContractSerializer serializer = new DataContractSerializer(this.GetType());
-                    XmlReader reader = XmlReader.Create(stream);
-                    loadedStorages = (TrinityStorage)serializer.ReadObject(reader);
+                    loadedStorages = (TrinityStorage)serializer.ReadObject(reader, false);
 
                     if (applyToThis)
                     {
                         loadedStorages.CopyTo(this);
                     }
 
-                    stream.Close();
                     LoadDynamicSettings();
                     Logger.Log("Configuration file loaded");
-                    OnLoaded();                   
+                    OnLoaded();
+
+                    if (doc.Root.Name == "TrinitySetting")
+                    {
+                        Logger.LogDebug("Old Settings Format Detected. Migrating and saving copy of old File");
+                        File.Copy(filename, filename + ".backup.xml");
+                        Save();
+                    }
                 }
             }
             else

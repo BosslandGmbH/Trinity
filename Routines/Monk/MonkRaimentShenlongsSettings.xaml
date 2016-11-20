@@ -42,7 +42,21 @@
                     </StackPanel>
                 </GroupBox>
                 <GroupBox>
-                    <GroupBox.Header>Options</GroupBox.Header>
+                    <GroupBox.Header>Spirit Conservation</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap">When enabled, and spirit is below 35% spirit (with the buff) or above 80% (without the buff) the bot will avoid spending resource. This reduces the chance of losing the shenlongs damage buff (running out of resource) and increase the speed to obtain the buff (by letting it hit 100% faster)</TextBlock>
+                        <CheckBox Margin="0,10,0,0" IsChecked="{Binding DataContext.ConserveSpirit}">Enable Spirit Conservation</CheckBox>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Beast Mode</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap">When enabled, and the shenlong damage buff is active, beast mode maximizes the time spent attacking (to maintain spirit generation and therefore keep the damage buff). It does this by disabling all avoidance, kiting and ignoring trash pack (cluster) size and non-units.</TextBlock>
+                        <CheckBox Margin="0,10,0,0" IsChecked="{Binding DataContext.BeastMode}">Enable Beast Mode</CheckBox>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Misc Options</GroupBox.Header>
                     <StackPanel>
                         <CheckBox IsChecked="{Binding DataContext.SpamBreathHeaven}">Spam Breath of Heaven</CheckBox>
                     </StackPanel>

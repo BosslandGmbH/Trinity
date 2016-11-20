@@ -3,12 +3,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
+using Buddy.Overlay;
 using Trinity.Coroutines.Town;
 using Trinity.DbProvider;
 using Trinity.Framework;
@@ -32,7 +35,7 @@ namespace Trinity
     public class TrinityPlugin : IPlugin
     {
         public string Name => "Trinity";
-        public Version Version => new Version(2, 55, 682);
+        public Version Version => new Version(2, 55, 683);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -54,6 +57,14 @@ namespace Trinity
 
             if (!CharacterSettings.Instance.EnabledPlugins.Contains("Trinity"))
                 CharacterSettings.Instance.EnabledPlugins.Add("Trinity");
+
+            OverlayBugFixHack();
+        }
+
+        private void OverlayBugFixHack()
+        {
+            // OverlayManager is throwing a null ref exception on application exit            
+            ZetaDia.Overlay.Deactivate();
         }
 
         public DateTime LastPulse { get; set; }

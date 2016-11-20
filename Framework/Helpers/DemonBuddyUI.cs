@@ -97,7 +97,7 @@ namespace Trinity.Framework.Helpers
             return FindParent<T>(parent);
         }
 
-        private static FieldInfo GetEventField(this Type type, string eventName)
+        public static FieldInfo GetEventField(this Type type, string eventName)
         {
             FieldInfo field = null;
             while (type != null)
