@@ -356,6 +356,9 @@ namespace Trinity.Routines.Barbarian
 
         protected virtual bool ShouldWarCry()
         {
+            if (Player.IsCastingTownPortalOrTeleport())
+                return false;
+
             if (!Skills.Barbarian.WarCry.CanCast())
                 return false;
 

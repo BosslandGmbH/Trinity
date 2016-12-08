@@ -73,8 +73,8 @@ namespace Trinity.Components.Adventurer.Settings
 
         public PluginSettings GetDataContext()
         {
-           UpdateGemList();
-           return this;
+            UpdateGemList();
+            return this;
         }
 
         [DataMember]
@@ -334,13 +334,13 @@ namespace Trinity.Components.Adventurer.Settings
                 {
                     int greaterRiftLevel;
                     if (value.Contains("Max - "))
-                    {                      
+                    {
                         if (int.TryParse(value.Replace("Max - ", string.Empty), out greaterRiftLevel))
                         {
                             GreaterRiftLevel = -greaterRiftLevel;
                             return;
                         }
-                    }   
+                    }
                     if (int.TryParse(value, out greaterRiftLevel))
                     {
                         GreaterRiftLevel = greaterRiftLevel;
@@ -352,15 +352,12 @@ namespace Trinity.Components.Adventurer.Settings
         [IgnoreDataMember]
         public List<AdventurerGem> GemUpgradePriority => Gems.Gems;
 
-        public PluginSettings() { }
-        public PluginSettings(bool initializeDefaults)
+        public PluginSettings()
         {
-            if (!initializeDefaults) return;
-
             LoadDefaults();
         }
 
-        public bool LoadDefaults()
+        public override void LoadDefaults()
         {
             GreaterRiftLevel = 1;
             GreaterRiftRunNephalem = true;
@@ -381,7 +378,7 @@ namespace Trinity.Components.Adventurer.Settings
             BountyPrioritizeBonusAct = true;
             NephalemRiftFullExplore = false;
             KeywardenZergMode = false;
-            return true;
+            return;
         }
 
         [IgnoreDataMember]
@@ -389,7 +386,7 @@ namespace Trinity.Components.Adventurer.Settings
         {
             get
             {
-                
+
                 var unlockedRiftLevel = HighestUnlockedRiftLevel;
 
                 var levels = new List<string>();
@@ -527,8 +524,8 @@ namespace Trinity.Components.Adventurer.Settings
                     }
                     return current;
                 }
-            }            
-            return new PluginSettings(true);
+            }
+            return new PluginSettings();
         }
 
         [OnDeserializing]

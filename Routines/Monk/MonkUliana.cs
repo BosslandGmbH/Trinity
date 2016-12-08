@@ -59,12 +59,13 @@ namespace Trinity.Routines.Monk
 
             if (Player.CurrentHealthPct < 0.35)
                 return SevenSidedStrike(CurrentTarget);
-                    
+
+            var closeEPUnits = WeightedUnits.Where(u => u.Distance < 15f && u.HasDebuff(SNOPower.Monk_ExplodingPalm)).ToList();
             var isEPReady = Legendary.Madstone.IsEquipped || WeightedUnits.Any(u => u.Distance < 15f && u.HasDebuff(SNOPower.Monk_ExplodingPalm));
             var isEnoughTime = TimeToElementStart(Element.Cold) > SevenSidedStrikeCooldownMs;
             var isColdElement = Core.Buffs.ConventionElement == Element.Cold;            
 
-            Logger.Log(LogCategory.Routine, $"TimeToCold={TimeToElementStart(Element.Cold)} SSSCD={SevenSidedStrikeCooldownMs} IsCold={isColdElement}");
+            Logger.Log(LogCategory.Routine, $"TimeToCold={TimeToElementStart(Element.Cold)} SSSCD={SevenSidedStrikeCooldownMs} IsCold={isColdElement} EPReady={isEPReady} closeEPUnits={closeEPUnits.Count}");
 
             if (isEPReady && ShouldSevenSidedStrike(out target) && (!Legendary.ConventionOfElements.IsEquipped || isColdElement || isEnoughTime))
                 return SevenSidedStrike(target);      

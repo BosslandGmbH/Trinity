@@ -2101,11 +2101,10 @@ namespace Trinity.Components.Combat.Resources
             ////todo this is needlessly slow checking all these attributes, trace the spells being used and record only the required slots
             ////or better yet, cache collection of attributes in buff visual effect slots keyed by snopower
 
-            //var sno = (int) debuffSNO;
+            //var sno = (int)debuffSNO;
 
             //try
             //{
-
             //    return _debuffSlots.Any(attr => obj.Attributes.GetAttribute<bool>(attr, sno));
             //}
             //catch (Exception)

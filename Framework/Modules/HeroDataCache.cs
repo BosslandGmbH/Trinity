@@ -69,38 +69,38 @@ namespace Trinity.Framework.Modules
 
         public HeroDataCache()
         {
-            foreach (var native in Core.MemoryModel.GameBalanceHelper.GetRecords<NativeHeroData>(SnoGameBalanceType.Heroes))
-            {
-                var actorClass = GetActorClass(native._2_0x100_int);
-                var heroData = new HeroData
-                {
-                    Name = native._1_0x0_String,
-                    ActorSnoIds = new List<int>
-                    {
-                        native._4_0x108_Actor_Sno,
-                        native._5_0x10C_Actor_Sno
-                    },
-                    SkillKitSno = native._10_0x120_SkillKit_Sno,
-                    PrimaryResourceType = (ResourceType)native._15_0x134_Enum,
-                    SecondaryResourceType = (ResourceType)native._15_0x134_Enum,
-                    PrimaryAttribute = (AttributeType)native._16_0x138_Enum,
-                    PrimaryResourceMax = (int)native._28_0x168_float,
-                    PrimaryResourceRegen = (int)native._30_0x170_float,
-                    DamageReduction = native._26_0x160_float,
-                    Vitality = (int)native._22_0x150_float,
-                    Intelligence = (int)native._21_0x14C_float,
-                    Dexterity = (int)native._20_0x148_float,
-                    Strength = (int)native._19_0x144_float,
-                    BaseCritChance = native._41_0x19C_float,
-                    BaseCritDamage = native._54_0x1D0_float,
-                    MaxCritChance = native._42_0x1A0_float,
-                    DefaultPowerSnoId = native._9_0x11C_Power_Sno,
-                    TreasureClassSnoId = native._6_0x110_TreasureClass_Sno,
-                    GameBalanceId = native._2_0x100_int,
-                    ActorClass = actorClass
-                };
-                _entries.Add(actorClass, heroData);
-            }
+            //foreach (var native in Core.MemoryModel.GameBalanceHelper.GetRecords<NativeHeroData>(SnoGameBalanceType.Heroes))
+            //{
+            //    var actorClass = GetActorClass(native._2_0x100_int);
+            //    var heroData = new HeroData
+            //    {
+            //        Name = native._1_0x0_String,
+            //        ActorSnoIds = new List<int>
+            //        {
+            //            native._4_0x108_Actor_Sno,
+            //            native._5_0x10C_Actor_Sno
+            //        },
+            //        SkillKitSno = native._10_0x120_SkillKit_Sno,
+            //        PrimaryResourceType = (ResourceType)native._15_0x134_Enum,
+            //        SecondaryResourceType = (ResourceType)native._15_0x134_Enum,
+            //        PrimaryAttribute = (AttributeType)native._16_0x138_Enum,
+            //        PrimaryResourceMax = (int)native._28_0x168_float,
+            //        PrimaryResourceRegen = (int)native._30_0x170_float,
+            //        DamageReduction = native._26_0x160_float,
+            //        Vitality = (int)native._22_0x150_float,
+            //        Intelligence = (int)native._21_0x14C_float,
+            //        Dexterity = (int)native._20_0x148_float,
+            //        Strength = (int)native._19_0x144_float,
+            //        BaseCritChance = native._41_0x19C_float,
+            //        BaseCritDamage = native._54_0x1D0_float,
+            //        MaxCritChance = native._42_0x1A0_float,
+            //        DefaultPowerSnoId = native._9_0x11C_Power_Sno,
+            //        TreasureClassSnoId = native._6_0x110_TreasureClass_Sno,
+            //        GameBalanceId = native._2_0x100_int,
+            //        ActorClass = actorClass
+            //    };
+            //    _entries.Add(actorClass, heroData);
+            //}
         }
     }
 

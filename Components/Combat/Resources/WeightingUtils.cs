@@ -11,17 +11,17 @@ namespace Trinity.Components.Combat.Resources
 {
     public static class WeightingUtils
     {
-        public static bool ShouldIgnoreGlobe(TrinityItem cacheObject)
+        public static bool ShouldIgnoreGlobe(TrinityItem actor)
         {
             string reason;
-            return ShouldIgnoreGlobe(cacheObject, out reason);
+            return ShouldIgnoreGlobe(actor, out reason);
         }
 
-        public static bool ShouldIgnoreGlobe(TrinityItem cacheObject, out string reason)
+        public static bool ShouldIgnoreGlobe(TrinityItem actor, out string reason)
         {
             reason = string.Empty;
 
-            if (cacheObject == null)
+            if (actor == null)
                 return false;
 
             switch (Core.Settings.Weighting.GlobeWeighting)
@@ -39,34 +39,91 @@ namespace Trinity.Components.Combat.Resources
                     return false;
             }
 
-            if (!Core.Settings.Weighting.GlobeTypes.HasFlag(cacheObject.GlobeType))
+            if (!Core.Settings.Weighting.GlobeTypes.HasFlag(actor.GlobeType))
             {
-                reason = $"Ignore({cacheObject.GlobeType}=Disabled)";
+                reason = $"Ignore({actor.GlobeType}=Disabled)";
                 return true;
             }
 
             return false;
         }
 
-        public static bool ShouldIgnoreSpecialTarget(TrinityActor cacheObject)
+        public static bool ShouldIgnoreSpecialTarget(TrinityActor actor)
         {
             string reason;
-            return ShouldIgnoreSpecialTarget(cacheObject, out reason);
+            return ShouldIgnoreSpecialTarget(actor, out reason);
         }
 
-        public static bool ShouldIgnoreSpecialTarget(TrinityActor cacheObject, out string reason)
+        public static bool ShouldIgnoreSpecialTarget(TrinityActor actor, out string reason)
         {
             reason = string.Empty;
 
-            if (cacheObject == null)
-                return false;
+            if (actor == null)
+                return true;
 
-            if (!Core.Settings.Weighting.SpecialTypes.HasFlag(cacheObject.SpecialType))
+            if (!Core.Settings.Weighting.SpecialTypes.HasFlag(actor.SpecialType))
             {
-                reason = $"Ignore({cacheObject.SpecialType}=Disabled)";
+                reason = $"Ignore({actor.SpecialType}=Disabled)";
                 return true;
             }
 
+            return false;
+        }
+
+        public static bool ShouldIgnoreTrash(TrinityActor unit)
+        {
+            string reason;
+            return ShouldIgnoreTrash(unit, out reason);
+        }
+
+        public static bool ShouldIgnoreTrash(TrinityActor unit, out string reason)
+        {
+            reason = string.Empty;
+
+            if (unit == null)
+                return true;
+
+            if (!unit.IsTrashMob)
+                return false;
+
+            if (unit.IsTreasureGoblin)
+                return false;
+
+            if (Core.Player.IsCastingPortal)
+            {
+                reason = "Ignore(CastingPortal)";
+                return true;
+            }
+
+            if (unit.IsMinimapActive)
+            {
+                reason = "Keep(IsMinimapActive)";
+                return false;
+            }
+
+            if (Core.Settings.Weighting.TrashWeighting == SettingMode.Enabled)
+            {
+                reason = "Keep(Trash=Enabled)";
+                return false;
+            }
+
+            if (Core.Settings.Weighting.TrashWeighting == SettingMode.Disabled)
+            {
+                reason = "Ignore(Trash=Disabled)";
+                return true;
+            }
+
+            if (Core.Settings.Weighting.TrashWeighting == SettingMode.Auto)
+            {
+                if (Core.BlockedCheck.IsBlocked || Core.StuckHandler.IsStuck)
+                {
+                    reason = "Keep(Blocked/Stuck)";
+                    return false;
+                }
+
+                reason = "Ignore(Trash=OnlyWhenBlocked)";
+                return true;
+            }
             return false;
         }
     }

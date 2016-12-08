@@ -94,7 +94,7 @@ namespace Trinity
         {
             if (!TreeHooks.Instance.Hooks.ContainsKey(hookName))
             {
-                Logger.Log($"Hook '{hookName}' doesnt exist in TreeHooks.");
+                Logger.LogVerbose($"Hook '{hookName}' doesnt exist in TreeHooks.");
                 return;
             }
 

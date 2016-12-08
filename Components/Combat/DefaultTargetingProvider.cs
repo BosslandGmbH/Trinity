@@ -81,7 +81,7 @@ namespace Trinity.Components.Combat
             if (target != null)
             {
                 target.Targeting.IsTargetted = true;
-                Logger.Log(LogCategory.Targetting, $"New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo}");
+                Logger.Log(LogCategory.Targetting, $"New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo} Targeting={target.Targeting}");
             }
 
             CurrentTarget = target;                 

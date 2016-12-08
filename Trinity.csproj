@@ -110,6 +110,7 @@
     <Compile Include="Components\Combat\Resources\WeightingUtils.cs" />
     <Compile Include="Coroutines\EmergencyRepair.cs" />
     <Compile Include="Coroutines\OpenBountyCache.cs" />
+    <Compile Include="DbProvider\Class1.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceDefinitions.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceType.cs" />
     <Compile Include="Framework\Avoidance\Handlers\IAvoidanceHandler.cs" />
@@ -1123,11 +1124,30 @@ xcopy "$(ProjectDir)*" "%25TARGETDIR%25" /Q /E /C /I /R /Y
 rd "%25TARGETDIR%25bin\" /S /Q
 rd "%25TARGETDIR%25obj\" /S /Q
 rd "%25TARGETDIR%25WTV\" /S /Q
+
 del "%25TARGETDIR%25$(ProjectName).csproj"
+
+
 del "%25TARGETDIR%25*.suo"
 del "%25TARGETDIR%25*.user"
+
+
 del "%25TARGETDIR%25*.sln"
+
 del "%25TARGETDIR%25*.DotSettings"
-del "%25TARGETDIR%25packages.config"</PostBuildEvent>
+
+
+del "%25TARGETDIR%25packages.config"
+
+del "%25TARGETDIR%25*.user"
+
+
+
+
+rd "%25TARGETDIR%25.svn\" /S /Q
+
+
+rd "%25TARGETDIR%25.vs\" /S /Q
+</PostBuildEvent>
   </PropertyGroup>
 </Project>

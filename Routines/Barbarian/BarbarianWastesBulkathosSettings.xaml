@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
-    d:FontSize="14"
+
     mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>

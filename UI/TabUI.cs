@@ -411,21 +411,21 @@ namespace Trinity.UI
                     ZetaDia.Actors.Update();
                     Core.Update();
 
-                    Logger.Log($"--- Dumping Power Data ---");
+                    //Logger.Log($"--- Dumping Power Data ---");
 
-                    foreach (var power in Core.Hotbar.ActivePowers)
-                    {
-                        Logger.Log($"--- Dumping Tags for {power} ---");
-                        var data = PowerHelper.Instance.GetPowerData(power);
-                        data.Tags.ForEach(t => Logger.Log($"{t.Key} = {t.Value}"));
-                    }
+                    //foreach (var power in Core.Hotbar.ActivePowers)
+                    //{
+                    //    Logger.Log($"--- Dumping Tags for {power} ---");
+                    //    var data = PowerHelper.Instance.GetPowerData(power);
+                    //    data.Tags.ForEach(t => Logger.Log($"{t.Key} = {t.Value}"));
+                    //}
 
-                    foreach (var power in Core.Hotbar.PassivePowers)
-                    {
-                        Logger.Log($"--- Dumping Tags for {power} ---");
-                        var data = PowerHelper.Instance.GetPowerData(power);
-                        data.Tags.ForEach(t => Logger.Log($"{t.Key} = {t.Value}"));
-                    }
+                    //foreach (var power in Core.Hotbar.PassivePowers)
+                    //{
+                    //    Logger.Log($"--- Dumping Tags for {power} ---");
+                    //    var data = PowerHelper.Instance.GetPowerData(power);
+                    //    data.Tags.ForEach(t => Logger.Log($"{t.Key} = {t.Value}"));
+                    //}
                 }
 
             }

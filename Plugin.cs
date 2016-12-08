@@ -35,7 +35,7 @@ namespace Trinity
     public class TrinityPlugin : IPlugin
     {
         public string Name => "Trinity";
-        public Version Version => new Version(2, 55, 685);
+        public Version Version => new Version(2, 55, 688);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -57,14 +57,6 @@ namespace Trinity
 
             if (!CharacterSettings.Instance.EnabledPlugins.Contains("Trinity"))
                 CharacterSettings.Instance.EnabledPlugins.Add("Trinity");
-
-            OverlayBugFixHack();
-        }
-
-        private void OverlayBugFixHack()
-        {
-            // OverlayManager is throwing a null ref exception on application exit            
-            //ZetaDia.Overlay.Deactivate();
         }
 
         public DateTime LastPulse { get; set; }
@@ -164,6 +156,7 @@ namespace Trinity
                 }
                 else
                 {
+                    
                     Navigator.PlayerMover = Core.PlayerMover;
                     Navigator.StuckHandler = Core.StuckHandler;
                     GameEvents.OnPlayerDied += TrinityEventHandlers.TrinityOnDeath;
@@ -172,6 +165,7 @@ namespace Trinity
                     GameEvents.OnGameChanged += TrinityEventHandlers.GameEvents_OnGameChanged;
                     GameEvents.OnWorldChanged += TrinityEventHandlers.GameEvents_OnWorldChanged;
 
+                    ItemManager.Current = new BlankItemManager();
                     CombatTargeting.Instance.Provider = new TrinityCombatProvider();
                     LootTargeting.Instance.Provider = new BlankLootProvider();
                     ObstacleTargeting.Instance.Provider = new BlankObstacleProvider();

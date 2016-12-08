@@ -56,6 +56,7 @@ namespace Trinity.Components.Adventurer.Game.Events
 
         public static void OnBotStart(IBot bot)
         {
+            Pulsator.OnPulse -= Pulsator_OnPulse;
             Pulsator.OnPulse += Pulsator_OnPulse;
         }
 

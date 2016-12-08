@@ -124,7 +124,12 @@
                     </Grid>
 
                     <ListBox Grid.Column="0" Grid.Row="1" Name="GemPriorityList" BorderThickness="0" Margin="-2 1 -2 0" ItemsSource="{Binding Path=GemUpgradePriority}" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <ListBox.ItemContainerStyle>
+                    <ListBox.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ListBox.Template>
+                    <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsEquiped}" Value="True">

@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel.Configuration;
 using System.Threading.Tasks;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;

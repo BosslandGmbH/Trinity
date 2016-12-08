@@ -209,7 +209,7 @@ namespace Trinity.DbProvider
                 return true;
             }
 
-            if (Core.Player.MovementSpeed > 2)
+            if (Core.Player.MovementSpeed > 3)
             {
                 Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Moving (Speed: {Core.Player.MovementSpeed})");
                 return true;

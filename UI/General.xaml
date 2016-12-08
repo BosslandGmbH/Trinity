@@ -134,6 +134,16 @@
                 </StackPanel>
             </GroupBox>
 
+            <GroupBox Header="Trash Monsters">
+                <StackPanel Margin="0,6,10,0">
+                    <WrapPanel Margin="0,0,0,0">
+                        <RadioButton Foreground="White" Content="Attack Trash" ToolTip="Trash will be attacked according to the routine's 'Cluster Size' setting" IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
+                        <RadioButton Foreground="White" Content="Ignore" ToolTip="Ignore except for a few situations like when stuck/blocked, quest objective monsters or trying to town portal." IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                        <!--<RadioButton Foreground="White" Content="Ignore except when path blocked" ToolTip="Trash will be ignored except when monsters block your path" IsChecked="{Binding Weighting.TrashWeighting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Auto}" />-->
+                    </WrapPanel>
+                </StackPanel>
+            </GroupBox>
+
             <GroupBox Header="Special Targets">
                 <StackPanel Margin="0,5,0,0">
                     <ContentPresenter Margin="0,5,0,0" Content="{Binding Weighting, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=SpecialTypes}" Style="{DynamicResource SimpleItemsControlSelector}" />

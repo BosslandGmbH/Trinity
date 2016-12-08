@@ -334,7 +334,8 @@ namespace Trinity.Settings
         None = 0,
         Enabled,
         Disabled,
-        Selective
+        Selective,
+        Auto
     }
 }
 

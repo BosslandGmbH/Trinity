@@ -35,6 +35,7 @@ namespace Trinity.Settings
         private MonsterAffixes _ignoreAffixes;
         private GoblinPriority _goblinPriority;
         private SpecialTypes _specialTypes;
+        private SettingMode _trashWeighting;
 
         [DataMember]
         [DefaultValue(SettingMode.Enabled)]
@@ -100,13 +101,13 @@ namespace Trinity.Settings
             set { SetField(ref _eliteWeighting, value); }
         }
 
-        //[DataMember]
-        //[DefaultValue(SettingMode.Enabled)]
-        //public SettingMode TrashWeighting
-        //{
-        //    get { return _eliteWeighting; }
-        //    set { SetField(ref _eliteWeighting, value); }
-        //}
+        [DataMember]
+        [DefaultValue(SettingMode.Enabled)]
+        public SettingMode TrashWeighting
+        {
+            get { return _trashWeighting; }
+            set { SetField(ref _trashWeighting, value); }
+        }
 
         [DataMember]
         [Setting, UIControl(UIControlType.FlagsCheckboxes)]
