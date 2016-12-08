@@ -318,8 +318,8 @@ namespace Trinity.Framework.Objects
             return Index.GetHashCode() ^ Name.GetHashCode();
         }
 
-        private PowerData _powerData;
-        public PowerData Data => _powerData ?? (_powerData = Core.MemoryModel.PowerHelper.GetPowerData(SNOPower));
+        //private PowerData _powerData;
+        //public PowerData Data => _powerData ?? (_powerData = Core.MemoryModel.PowerHelper.GetPowerData(SNOPower));
 
         /// <summary>
         /// A unique identifier for IUnique

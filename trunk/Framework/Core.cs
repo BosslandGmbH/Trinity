@@ -88,6 +88,14 @@ namespace Trinity.Framework
 
         public static void Update(bool force = false)
         {
+            //if(Routines.CurrentRoutine == null)
+            //{
+            //    Actors.Update();
+            //    Inventory.Update();
+            //    Hotbar.Update();
+            //    Routines.SelectRoutine();
+            //}
+
             ModuleManager.FireEvent(force ? ModuleEvent.ForcedPulse : ModuleEvent.Pulse);
         }
 
@@ -107,10 +115,10 @@ namespace Trinity.Framework
                 ModuleManager.EnableAll();
 
                 //ZetaDia.Actors.Update();
-                Actors.Update();
-                Inventory.Update();
-                Hotbar.Update();
-                Routines.SelectRoutine();
+                //Actors.Update();
+                //Inventory.Update();
+                //Hotbar.Update();
+                //Routines.SelectRoutine();
 
                 Logger.Log("Trinity Framework Enabled");
                 IsEnabled = true;

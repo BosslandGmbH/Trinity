@@ -58,9 +58,8 @@ namespace Trinity.Framework.Objects.Memory.Attributes
                     Map = Group.Map;
                 }
 
-                if (!Map.IsValid)
+                if (Map == null || !Map.IsValid)
                 {
-                    //Core.Actors.Reset();
                     Logger.LogVerbose($"Attribute Map Invalid for groupId: {groupId}");
                     return;
                 }
@@ -75,11 +74,13 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             }
             catch (Exception ex)
             {
-                Logger.Log($"Exception creating attributes {ex} for groupId {groupId}");
+                Logger.LogDebug($"Exception creating attributes {ex} for groupId {groupId}");
             }
         }
 
         private Dictionary<int, AttributeItem> _previousItems = new Dictionary<int, AttributeItem>();
+
+        private DateTime LastUpdatedTime = DateTime.MinValue;
 
         public bool Update()
         {
@@ -118,10 +119,11 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             //    _lastRowCount = Map.Count;
             //    return isChanged;
          
-            if (isChanged)
+            if (isChanged || DateTime.UtcNow.Subtract(LastUpdatedTime).TotalSeconds > 1)
             {
                 ReadAttributes(FastAttributeGroupId);                
                 _lastRowCount = Map.Count;
+                LastUpdatedTime = DateTime.UtcNow;
                 return true;
             }
             return false;
@@ -143,19 +145,22 @@ namespace Trinity.Framework.Objects.Memory.Attributes
         public ulong LastUpdatedFrame { get; set; }
 
         internal Dictionary<TModifier, TValue> GetAttributes<TModifier, TValue>(AttributeParameterType parameterType) where TModifier : IConvertible
-        {
-            var shouldUpdate = LastUpdatedFrame != ZetaDia.Memory.Executor.FrameCount && (LastUpdatedFrame = ZetaDia.Memory.Executor.FrameCount) != 0;
+        { 
+            // todo: this is not working, sometimes powers stop showing up here. needs investigation
+
+            //var shouldUpdate = LastUpdatedFrame != ZetaDia.Memory.Executor.FrameCount && (LastUpdatedFrame = ZetaDia.Memory.Executor.FrameCount) != 0;
 
             var result = new Dictionary<TModifier, TValue>();     
             foreach (var a in Items)
             {
-                if (shouldUpdate)
+                //if (shouldUpdate)
+                //{
+                    //a.Value.Update();
+                //}
+
+                if ((a.Value.Descripter.ParameterType == AttributeParameterType.PowerSnoId || a.Value.Descripter.ParameterType == AttributeParameterType.PowerSnoId2) && a.Value.GetValue<int>() != 0)
                 {
                     a.Value.Update();
-                }
-
-                if (a.Value.Descripter.ParameterType == AttributeParameterType.PowerSnoId && a.Value.GetValue<int>() != 0)
-                {
                     var key = a.Value.Key.ModifierId.To<TModifier>();
                     if (!result.ContainsKey(key))
                     {

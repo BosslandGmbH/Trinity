@@ -498,7 +498,7 @@ namespace Trinity.Routines.Monk
             => new TrinityPower(SNOPower.Monk_WayOfTheHundredFists, MeleeAttackRange, target.AcdId);
 
         protected virtual TrinityPower SevenSidedStrike(TrinityActor target)
-            => new TrinityPower(SNOPower.Monk_SevenSidedStrike, 16f, target.AcdId);
+            => new TrinityPower(SNOPower.Monk_SevenSidedStrike, 16f, target.AcdId) { CastWhenBlocked = true, };
 
         protected virtual TrinityPower LashingTailKick(TrinityActor target)
             => new TrinityPower(SNOPower.Monk_LashingTailKick, MeleeAttackRange, target.AcdId);

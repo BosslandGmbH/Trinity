@@ -9,7 +9,7 @@
     xmlns:objects="clr-namespace:Trinity.Framework.Objects"
     xmlns:markup="clr-namespace:Trinity.UI.UIComponents.MarkupExtensions"
     xmlns:ui="clr-namespace:Trinity.UI.UIComponents"    
-    d:FontSize="14"
+
     mc:Ignorable="d" Background="#434343" d:DesignHeight="1820" d:DesignWidth="390">
     <UserControl.Resources>
         <ResourceDictionary>

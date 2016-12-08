@@ -50,11 +50,19 @@ namespace Trinity.UI
         public static Window GetDisplayWindow()
         {
             if (!BotMain.IsRunning)
-            { 
-                using (ZetaDia.Memory.AcquireFrame())
+            {
+                using (new PerformanceLogger("Window Data Load", true))
                 {
-                    Core.ChangeMonitor.Update();
-                }                    
+                    using (ZetaDia.Memory.AcquireFrame())
+                    {
+                        ZetaDia.Actors.Update();
+                        Core.Actors.Update();
+                        Core.Inventory.Update();
+                        Core.Hotbar.Update();
+                        Core.Routines.SelectRoutine();
+                        Core.ChangeMonitor.Update();
+                    }
+                }
             }
 
             return GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));

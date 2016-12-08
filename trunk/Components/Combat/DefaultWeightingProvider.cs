@@ -48,6 +48,8 @@ namespace Trinity.Components.Combat
 
                     if (actor.IsElite && !actor.IsBoss)
                         return ShouldIgnoreElite(actor);
+                    else if (actor.IsTrashMob)
+                        return WeightingUtils.ShouldIgnoreTrash(actor);
 
                     break;
             }
@@ -159,6 +161,8 @@ namespace Trinity.Components.Combat
                     if (!ShouldIgnoreElite(unit, out reason))
                         elites.Add(unit);
                 }
+
+
 
                 #endregion
 
@@ -340,6 +344,7 @@ namespace Trinity.Components.Combat
 
                             case TrinityObjectType.Unit:
                             {
+
                                 #region Unit Variables
 
                                 //bool isInHotSpot = GroupHotSpots.CacheObjectIsInHotSpot(cacheObject) || cacheObject.IsNavBlocking();
@@ -415,6 +420,12 @@ namespace Trinity.Components.Combat
 
                                     cacheObject.Weight = MaxWeight;
                                     cacheObject.WeightInfo += "Kill All Mode";
+                                    break;
+                                }
+
+                                if (WeightingUtils.ShouldIgnoreTrash(cacheObject, out reason))
+                                {
+                                    cacheObject.WeightInfo += reason;
                                     break;
                                 }
 
@@ -1529,6 +1540,12 @@ namespace Trinity.Components.Combat
             if (unit.IsBoss)
                 return false;
 
+            if (Core.Player.IsCastingPortal)
+            {
+                reason = "Ignore(CastingPortal)";
+                return true;
+            }
+
             if (unit.IsMinimapActive)
             {
                 reason = "Keep(IsMinimapActive)";
@@ -1566,6 +1583,8 @@ namespace Trinity.Components.Combat
             }
             return false;
         }
+
+
 
         //private bool ShouldIgnoreGlobe(TrinityActor actor, out string reason)
         //{
@@ -1652,14 +1671,12 @@ namespace Trinity.Components.Combat
             // Set Record History
             if (bestTarget?.InternalName != null && bestTarget.ActorSnoId > 0 && bestTarget.Weight > 0)
             {
-                var timesTargetted = RecordTargetHistory(bestTarget);
-
-                if (bestTarget.RActorId != LastTargetRActorGuid || bestTarget != null && bestTarget.IsMarker)
-                {
-                    Logger.Log(LogCategory.Targetting,
-                        $"Target changed to {bestTarget.ActorSnoId} // {bestTarget.InternalName} RActorGuid={bestTarget.RActorId} " +
-                        $"({bestTarget.Type}) {bestTarget.WeightInfo} TargetTimes={timesTargetted}");
-                }
+                //if (bestTarget.RActorId != LastTargetRActorGuid || bestTarget != null && bestTarget.IsMarker)
+                //{
+                //    Logger.Log(LogCategory.Targetting,
+                //        $"Target changed to {bestTarget.ActorSnoId} // {bestTarget.InternalName} RActorGuid={bestTarget.RActorId} " +
+                //        $"({bestTarget.Type}) {bestTarget.WeightInfo} TargetInfo={bestTarget.Targeting}");
+                //}
                 return bestTarget;
             }
             TargetUtil.ClearCurrentTarget("No good target's found in Weighting.");

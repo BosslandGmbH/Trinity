@@ -23,8 +23,10 @@ namespace Trinity.UI.UIComponents.MarkupExtensions
 
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
-            var provideValueTarget = serviceProvider.GetService(typeof (IProvideValueTarget)) as IProvideValueTarget;
+            var provideValueTarget = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
             var target = provideValueTarget.TargetObject as FrameworkElement;
+            if (target == null)
+                return null;
 
             var value = DesignerProperties.GetIsInDesignMode(target) && DesignValue != DependencyProperty.UnsetValue ? DesignValue : Value;
 
@@ -32,7 +34,7 @@ namespace Trinity.UI.UIComponents.MarkupExtensions
                 return value;
 
             if (value is MarkupExtension)
-                return ((MarkupExtension) value).ProvideValue(serviceProvider);
+                return ((MarkupExtension)value).ProvideValue(serviceProvider);
 
             var property = provideValueTarget.TargetProperty as DependencyProperty;
 

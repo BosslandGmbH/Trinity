@@ -99,14 +99,14 @@ namespace Trinity.Framework.Modules
             Left,
             Death
         }
-            
+
 
         protected override void OnPluginEnabled()
         {
             BotMain.OnStart += bot => Start();
-            BotMain.OnStop += bot => Stop();      
-            BotMain.OnShutdownRequested += (sender, args) => Stop();     
-             
+            BotMain.OnStop += bot => Stop();
+            BotMain.OnShutdownRequested += (sender, args) => Stop();
+
             GameEvents.OnGameJoined += (sender, args) => RecordStat(() => Current.Games.Joined++);
             GameEvents.OnGameLeft += (sender, args) => RecordStat(() => Current.Games.Joined++);
             GameEvents.OnPlayerDied += (sender, args) => RecordStat(() => Current.Player.Deaths++);
@@ -128,7 +128,7 @@ namespace Trinity.Framework.Modules
 
         private void Gate(Action v)
         {
-            if(IsRecording && IsSettingEnabled) v();            
+            if (IsRecording && IsSettingEnabled) v();
         }
 
         protected override int UpdateIntervalMs => 500;
@@ -231,7 +231,7 @@ namespace Trinity.Framework.Modules
         }
 
         private void Start()
-        {            
+        {
             SeenActorAnnIds = new HashSet<int>();
             Current = new StatsSession();
             Current.StartTime = DateTime.UtcNow;
@@ -252,8 +252,8 @@ namespace Trinity.Framework.Modules
 
         public void Save()
         {
-            var file = $"Session - {Core.Player.ActorClass} - {Duration:g} - {Current.StartTime.ToLocalTime():ddd dd-MMM-yy hh-mm-ss}.xml";            
-            var path = Path.Combine(FileManager.LoggingPath, file);
+            var file = $"Session - {Core.Player.ActorClass} - {Duration:d} - {Current.StartTime.ToLocalTime():ddd dd-MMM-yy hh-mm-ss}.xml";
+            var path = Path.Combine(FileManager.LoggingPath, file).Replace(":", "-");
             var xml = EasyXmlSerializer.Serialize(Current);
             File.WriteAllText(path, xml);
         }

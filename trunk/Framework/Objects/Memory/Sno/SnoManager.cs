@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.UI.WebControls.Expressions;
 using System.Windows.Media;
@@ -38,17 +39,24 @@ namespace Trinity.Framework.Objects.Memory.Sno
 
             public SnoGroups()
             {
+                var sw = Stopwatch.StartNew();
                 StringList = Core.CreateGroup<SnoStringList>(SnoType.StringList);
+                //Power = Core.CreateGroup<NativePower>(SnoType.Power);
+                //GameBalance = Core.CreateGroup<GameBalanceCollection>(SnoType.GameBalance);
+                sw.Stop();
+                Logger.LogVerbose($"Created SnoGroups in {sw.Elapsed.TotalMilliseconds}ms");
+
                 //Monster = Core.CreateGroup<NativeMonster>(SnoType.Monster);
-                Hero = Core.CreateGroup<NativeHero>(SnoType.Hero);
-                GameBalance = Core.CreateGroup<GameBalanceCollection>(SnoType.GameBalance);
+                //GameBalance = Core.CreateGroup<GameBalanceCollection>(SnoType.GameBalance);
                 //Globals = Core.CreateGroup<NativeGlobals>(SnoType.Globals);
-                Actor = Core.CreateGroup<NativeActor>(SnoType.Actor);
+                //Actor = Core.CreateGroup<NativeActor>(SnoType.Actor);
                 //Account = Core.CreateGroup<NativeAccount>(SnoType.Account);
                 //LevelArea = Core.CreateGroup<NativeLevelArea>(SnoType.LevelArea);
                 //Act = Core.CreateGroup<NativeAct>(SnoType.Act);
                 //TreasureClass = Core.CreateGroup<NativeTreasureClass>(SnoType.TreasureClass);
-                Power = Core.CreateGroup<NativePower>(SnoType.Power);
+
+
+
                 //SkillKit = Core.CreateGroup<NativeSkillKit>(SnoType.SkillKit);
                 //Worlds = Core.CreateGroup<NativeWorlds>(SnoType.Worlds);
                 //Scene = Core.CreateGroup<NativeScene>(SnoType.Scene);

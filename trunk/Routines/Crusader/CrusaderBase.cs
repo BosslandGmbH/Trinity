@@ -2,8 +2,10 @@
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Trinity.Reference;
 using Trinity.Settings;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -582,7 +584,7 @@ namespace Trinity.Routines.Crusader
             if (Skills.Crusader.FistOfTheHeavens.CanCast())
                 return FistOfTheHeavens(CurrentTarget);
 
-            if (Skills.Crusader.Bombardment.CanCast())
+            if ((Navigator.StuckHandler.IsStuck || !RiftProgression.IsInRift) && Skills.Crusader.Bombardment.CanCast())
                 return Bombardment(CurrentTarget);
 
             return DefaultPower;
