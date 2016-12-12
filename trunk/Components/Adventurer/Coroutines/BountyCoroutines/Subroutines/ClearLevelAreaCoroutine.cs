@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Org.BouncyCastle.Utilities.Collections;
 using Trinity.Components.Adventurer.Game.Combat;
+using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
+using Trinity.Components.Combat.Resources;
+using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Common.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
@@ -64,6 +70,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public async Task<bool> GetCoroutine()
         {
+            ClearAreaHelper.CheckClearArea(BountyData);
+
             switch (State)
             {
                 case States.NotStarted:

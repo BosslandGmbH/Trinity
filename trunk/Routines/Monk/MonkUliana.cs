@@ -108,7 +108,15 @@ namespace Trinity.Routines.Monk
             return target != null;       
         }
 
-        public double SevenSidedStrikeCooldownMs => (Runes.Monk.SustainedAttack.IsActive ? 14 : 30 * (1 - Player.CooldownReductionPct)) *1000;
+        public double SevenSidedStrikeCooldownMs
+        {
+            get
+            {
+                var baseCooldown = Runes.Monk.SustainedAttack.IsActive ? 14 : 30;
+                var multiplier = Legendary.TheFlowOfEternity.IsEquipped ? 0.6 : 1;
+                return baseCooldown * multiplier * (1 - Player.CooldownReductionPct) * 1000;
+            }
+        }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();
 

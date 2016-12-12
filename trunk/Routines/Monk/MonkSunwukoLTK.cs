@@ -295,7 +295,7 @@ namespace Trinity.Routines.Monk
         protected override TrinityPower LashingTailKick(TrinityActor target)
         {
             // Teleport with Epiphany
-            if (Skills.Monk.Epiphany.IsBuffActive && (IsStuck || IsBlocked || target.Distance > 30f))
+            if (target.IsDestroyable || Skills.Monk.Epiphany.IsBuffActive && (IsStuck || IsBlocked || target.Distance > 30f))
                 return new TrinityPower(SNOPower.Monk_LashingTailKick, AttackRange, target.AcdId, 0, 0);
 
             // Attack at position (Shift+Click) to send fireball from range.

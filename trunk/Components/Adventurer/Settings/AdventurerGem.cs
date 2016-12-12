@@ -14,13 +14,7 @@ namespace Trinity.Components.Adventurer.Settings
         [DataMember]
         public int Rank { get; set; }
 
-        public string DisplayRank
-        {
-            get
-            {
-                return IsMaxRank ? "MAX" : Rank.ToString();
-            }
-        }
+        public string DisplayRank => IsMaxRank ? "MAX" : Rank.ToString();
 
         [DataMember]
         public string Name { get; set; }
@@ -35,10 +29,7 @@ namespace Trinity.Components.Adventurer.Settings
 
         public bool HasRankCap { get; set; }
 
-        public string DisplayName
-        {
-            get { return string.Format("{0} (Rank: {1}, Upgrade Chance: {2}%)", Name, Rank, UpgradeChance); }
-        }
+        public string DisplayName => $"{Name} (Rank: {Rank}, Upgrade Chance: {UpgradeChance}%)";
 
         public AdventurerGem(ACDItem gem, int griftLevel)
         {
@@ -61,11 +52,12 @@ namespace Trinity.Components.Adventurer.Settings
         public static Dictionary<int, int> GemCaps = new Dictionary<int, int>
         {
             {428355, 50}, // iceblink
-            //{405796, 50}, //ActorId: 405796, Type: Item, Name: Gogok of Swiftness
+            {405796, 150}, //ActorId: 405796, Type: Item, Name: Gogok of Swiftness
             //{405797, 50}, // invigorating gemstone
             {405803, 50}, // Boon of the Hoarder
             //{405783, 25}, //ActorId: 405783, Type: Item, Name: Gem of Ease
-            {428033, 100},//ActorId: 428033, Type: Item, Name: Esoteric Alteration        
+            {428033, 100},//ActorId: 428033, Type: Item, Name: Esoteric Alteration  
+            {428346, 100}, //Mutilation Guard 428346 
         };
 
         /// <summary>

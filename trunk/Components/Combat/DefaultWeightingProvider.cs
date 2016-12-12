@@ -265,7 +265,7 @@ namespace Trinity.Components.Combat
                                 cacheObject.WeightInfo += "Ignoring because we are blocked. ";
                                 continue;
                             }
-                            if (cacheObject.Distance > 12f)
+                            if (cacheObject.RadiusDistance > 12f && cacheObject.Type != TrinityObjectType.Barricade)
                             {
                                 cacheObject.Weight = 0;
                                 cacheObject.WeightInfo += "Ignoring Blocked Far Away ";
@@ -656,6 +656,10 @@ namespace Trinity.Components.Combat
                                     {
                                         cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} because he is a summoner";
                                         //cacheObject.Weight += 100d;
+                                    }
+                                    if (Core.Player.IsInBossEncounter)
+                                    {
+                                        cacheObject.WeightInfo += $"BossEncounter";
                                     }
                                     //else if (cacheObject.HitPointsPct <
                                     //         Core.Settings.Combat.Misc.IgnoreTrashBelowHealthDoT &&
@@ -1502,7 +1506,7 @@ namespace Trinity.Components.Combat
 
 
                         // Anti-Flip flop. A new target needs to be 15% better than current.
-                        if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.AnnId == cacheObject.AnnId)
+                        if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.AnnId == cacheObject.AnnId && bestTarget != null && !bestTarget.IsDestroyable)
                         {
                             cacheObject.Weight *= 1.15;
                             cacheObject.WeightInfo += " Last Target Boost ";

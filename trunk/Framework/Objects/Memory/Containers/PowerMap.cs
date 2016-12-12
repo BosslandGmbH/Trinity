@@ -169,14 +169,14 @@ namespace Trinity.Framework.Objects.Memory.Containers
             public int x08_IntValue => ReadOffset<int>(0x08);
             public float x08_FloatValue => ReadOffset<float>(0x08);
             public TagFormulaValue x08_FomulaValue => ReadPointer<TagFormulaValue>(0x08);
-            public TagReference TagRef => Tags.GetTag(x04_KeyId);
+            //public TagReference TagRef => Tags.GetTag(x04_KeyId);
 
             public IMapValue Value
             {
                 get
                 {
-                    if (TagRef.DataType == MapDataType.Formula)
-                        return ReadPointer<TagFormulaValue>(0x08);
+                    //if (TagRef.DataType == MapDataType.Formula)
+                    //    return ReadPointer<TagFormulaValue>(0x08);
 
                     int intResult;
                     if (int.TryParse(x08_IntValue.ToString(), out intResult))

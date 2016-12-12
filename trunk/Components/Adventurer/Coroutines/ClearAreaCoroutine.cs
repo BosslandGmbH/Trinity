@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
+using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Zeta.Common;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
@@ -116,6 +117,8 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Clearing()
         {
+            ClearAreaHelper.CheckClearArea(_center, _radius);
+
             if (!await NavigationCoroutine.MoveTo(_currentDestination, 10)) return false;
             _currentDestination = _currentDestination = ActorFinder.FindNearestHostileUnitInRadius(_center, _radius);
             if (_currentDestination == Vector3.Zero)

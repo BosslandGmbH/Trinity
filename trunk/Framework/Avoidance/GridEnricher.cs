@@ -293,8 +293,10 @@ namespace Trinity.Framework.Avoidance
             {
                 node.Weight += 2;
 
-                if(actor.IsHostile)
-                { node.HostileMonsterCount ++;}
+                if (actor.IsHostile)
+                {
+                    node.HostileMonsterCount++;
+                }
 
                 node.AddNodeFlags(AvoidanceFlags.Monster);
                 layer.Add(node);

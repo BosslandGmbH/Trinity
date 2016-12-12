@@ -182,6 +182,7 @@ namespace Trinity.Framework.Actors.Properties
             if (affixIds == null || !affixIds.Any())
                 return new FlagEnumParseResult();
 
+            //1747048841
             //[Trinity 2.42.156] Unknown AffixId=-1941835855
             //[Trinity 2.42.156] Unknown AffixId = -76087889
 
@@ -327,7 +328,7 @@ namespace Trinity.Framework.Actors.Properties
                         flags |= MonsterAffixes.Minion;
                         continue;
                     default:
-                        Logger.LogVerbose($"Unknown AffixId={affix}");
+                        //Logger.LogVerbose($"Unknown AffixId={affix}");
                         break;
                 }
             }

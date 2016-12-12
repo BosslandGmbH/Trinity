@@ -23,6 +23,7 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Framework.Helpers.Logger;
+using Trinity.Framework;
 
 namespace Trinity.Settings.ItemList
 {
@@ -534,7 +535,7 @@ namespace Trinity.Settings.ItemList
                 {
                     if (ZetaDia.Me == null || !ZetaDia.IsInGame)
                     {
-                        if (BotMain.IsRunning)
+                        if(!ChangeEvents.IsInGame.Value)
                         {
                             Logger.Log("Must be in a game to use this feature");
                         }

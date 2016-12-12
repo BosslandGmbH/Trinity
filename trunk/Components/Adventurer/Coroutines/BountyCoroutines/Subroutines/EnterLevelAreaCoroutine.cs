@@ -167,7 +167,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (_objectiveLocation != Vector3.Zero)
             {
                 _nearestScene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.Distance(_objectiveLocation.ToVector2())).FirstOrDefault();
-                if (_nearestScene != null && DateTime.UtcNow > _nearestSceneCooldown)
+                if (_nearestScene != null && DateTime.UtcNow > _nearestSceneCooldown && ExplorationData.FortressWorldIds.Contains(AdvDia.CurrentWorldId))
                 {
                     State = States.MovingToNearestScene;
                 }

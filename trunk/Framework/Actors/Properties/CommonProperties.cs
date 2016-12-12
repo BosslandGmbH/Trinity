@@ -56,6 +56,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.ObjectHash = actor.InternalName + actor.AcdId + actor.RActorId;
             actor.Distance = actor.Position.Distance(Core.Player.Position);
             actor.RadiusDistance = Math.Max(actor.Distance - actor.CollisionRadius, 0f);
+            actor.IsDestroyable = actor.Type == TrinityObjectType.Barricade || actor.Type == TrinityObjectType.Destructible;
 
             if (actor.IsAcdBased && actor.IsAcdValid)
             {
@@ -105,16 +106,18 @@ namespace Trinity.Framework.Actors.Properties
             if(actor.ActorType == ActorType.Item && !actor.IsGroundItem)
                 return;
 
-            if (actor.Position != Vector3.Zero && Core.Avoidance.Grid.GridBounds != 0)
+            var grid = Core.Avoidance.Grid;
+
+            if (actor.Position != Vector3.Zero && grid.GridBounds != 0)
             {
-                var inLineOfSight = Core.Avoidance.Grid.CanRayCast(Core.Player.Position, actor.Position);
+                var inLineOfSight = grid.CanRayCast(Core.Player.Position, actor.Position);
                 actor.IsInLineOfSight = inLineOfSight;
                 if (!actor.HasBeenInLoS && inLineOfSight)
                     actor.HasBeenInLoS = true;
 
                 if (actor.IsInLineOfSight)
                 {            
-                    actor.IsWalkable = Core.Avoidance.Grid.CanRayWalk(actor);
+                    actor.IsWalkable = grid.CanRayWalk(actor);
                     if (actor.IsWalkable)
                         actor.HasBeenWalkable = true;
                 }

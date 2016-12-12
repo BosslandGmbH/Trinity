@@ -79,7 +79,7 @@ namespace Trinity.Components.Combat
             {
                 if (distance > 200f)
                 {
-                    Logger.Log(LogCategory.Spells, $"Target is way too far away ({distance}) has changed since power was created");
+                    Logger.Log(LogCategory.Spells, $"Target is way too far away ({distance})");
                     return false;
                 }
 

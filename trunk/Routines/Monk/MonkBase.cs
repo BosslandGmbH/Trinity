@@ -755,6 +755,9 @@ namespace Trinity.Routines.Monk
             if (Skills.Monk.SevenSidedStrike.CanCast())
                 return SevenSidedStrike(CurrentTarget);
 
+            if (Skills.Monk.LashingTailKick.CanCast())
+                return LashingTailKick(CurrentTarget);
+
             return DefaultPower;
         }
 
