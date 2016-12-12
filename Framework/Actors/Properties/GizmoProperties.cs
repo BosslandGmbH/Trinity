@@ -33,7 +33,6 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsCursedChest = actor.Type == TrinityObjectType.CursedChest;
             actor.IsCursedShrine = actor.Type == TrinityObjectType.CursedShrine;
             actor.IsChest = actor.IsCursedChest || actor.IsRareChest || actor.InternalNameLowerCase.Contains("chest") || GameData.ContainerWhiteListIds.Contains(actor.ActorSnoId);
-            actor.IsDestroyable = actor.Type == TrinityObjectType.Barricade || actor.Type == TrinityObjectType.Destructible;
             actor.IsEventObject = actor.IsCursedChest || actor.IsCursedShrine;
             actor.IsInteractableType = GameData.InteractableTypes.Contains(actor.Type);
             actor.IsUntargetable = actor.Attributes.IsUntargetable && !GameData.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);

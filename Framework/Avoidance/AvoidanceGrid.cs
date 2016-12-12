@@ -42,33 +42,23 @@ namespace Trinity.Framework.Avoidance
         {
             if (_currentGrid == null)
             {
-                //Logger.LogDebug($"Grid is null, creating new grid.");
-                _currentGrid = new AvoidanceGrid();
-                return _currentGrid;
-            }
-
-            if (_currentGrid == null || ZetaDia.WorldId != _currentGrid.WorldDynamicId)
-            {
-                //Logger.LogDebug("WorldId changed, returning new grid");
                 _currentGrid = new AvoidanceGrid();
             }
-
-            if (!ScenesStorage.CurrentWorldScenes.Any())
+            else if (_currentGrid == null || ZetaDia.WorldId != _currentGrid.WorldDynamicId)
             {
-                //Logger.LogDebug("Scene data is not ready yet, waiting.");
+                _currentGrid = new AvoidanceGrid();
+            }
+            else if (!ScenesStorage.CurrentWorldScenes.Any())
+            {
                 return _currentGrid;
             }
-
-            if (_currentGrid.NearestNode == null)
+            else if (_currentGrid.NearestNode == null)
             {
-                //Logger.LogDebug($"Nearest node NULL AdvDiaPos={AdvDia.MyPosition} changed, grid is old and nearestNode is Null Age={DateTime.UtcNow.Subtract(_currentGrid.Created).TotalSeconds}");
                 if (DateTime.UtcNow.Subtract(_currentGrid.Created).TotalSeconds > 2)
                 {
-                    //Logger.LogDebug($"WorldId changed and NearestNode == null, recreating grid");
                     _currentGrid = new AvoidanceGrid();
                 }
             }
-
             return _currentGrid;
         }
 

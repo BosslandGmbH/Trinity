@@ -848,7 +848,8 @@
                                                     <Setter Property="Template">
                                                         <Setter.Value>
                                                             <ControlTemplate>
-                                                                <Expander FontWeight="Bold" Foreground="LightSkyBlue" Header="{Binding Name}" IsExpanded="{markup:Value false, DesignValue=true}">
+                                                                <Expander FontWeight="Bold" Foreground="LightSkyBlue" Header="{Binding Name}">
+                                                                    <!--<Expander FontWeight="Bold" Foreground="LightSkyBlue" Header="{Binding Name}" IsExpanded="{markup:Value false, DesignValue=true}">-->
                                                                     <Expander.HeaderTemplate>
                                                                         <DataTemplate>
                                                                             <!--<StackPanel Orientation="Horizontal">-->

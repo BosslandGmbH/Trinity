@@ -72,6 +72,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
+            ClearAreaHelper.CheckClearArea(BountyData);
+
             switch (State)
             {
                 case States.NotStarted:

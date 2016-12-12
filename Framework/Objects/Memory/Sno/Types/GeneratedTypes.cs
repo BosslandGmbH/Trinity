@@ -2668,7 +2668,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
         public NativeSerializeData _10_0x450_SerializeData => ReadObject<NativeSerializeData>(0x450);
         public int _11_0x458_Quest_Sno => ReadOffset<int>(0x458); //      Flags=1  
 
-        public override string ToString() => $"{Header.SnoId}, {(NativePowerSno)Header.SnoId} {_1_0xC_String} {_5_0x330_String}";
+        public override string ToString() => $"{Header.SnoId}, {Header.SnoId} {_1_0xC_String} {_5_0x330_String}";
     }
 
 

@@ -90,8 +90,9 @@ namespace Trinity.Components.Combat
         private void SetCurrentPower(TrinityPower power)
         {
             if (CurrentPower != null)
+            {
                 LastPower = CurrentPower;
-
+            }
             CurrentPower = power;
         }
 
@@ -102,22 +103,20 @@ namespace Trinity.Components.Combat
 
             if (target == null || !target.IsValid)
             {
-                SetCurrentTarget(null);
-                SetCurrentPower(null);
+                Clear();
                 return false;
             }
 
             if (TryBlacklist(target))
             {
-                SetCurrentTarget(null);
-                SetCurrentPower(null);
+                Clear();
                 return false;
             }
 
             SetCurrentTarget(target);
             SetCurrentPower(GetPowerForTarget(target));
 
-            if (HandleInteractionChannelling())
+            if (WaitForInteractionChannelling())
                 return true;
 
             if (await HandleKiting())
@@ -134,13 +133,23 @@ namespace Trinity.Components.Combat
 
             if (CurrentPower.SNOPower != SNOPower.None)
             {
-                await Combat.Spells.CastTrinityPower(CurrentPower);
+                if (!await Combat.Spells.CastTrinityPower(CurrentPower))
+                {
+                    Clear();
+                    return false;
+                }
             }
             
             return true;
         }
 
-        private bool HandleInteractionChannelling()
+        private void Clear()
+        {
+            SetCurrentTarget(null);
+            SetCurrentPower(null);
+        }
+
+        private bool WaitForInteractionChannelling()
         {
             if (Core.Player.IsCasting && !Core.Player.IsTakingDamage && CurrentTarget != null && CurrentTarget.IsGizmo)
             {
@@ -351,6 +360,12 @@ namespace Trinity.Components.Combat
 
             var rangeRequired = Math.Max(1f, power.MinimumRange);
             var distance = position.Distance(Core.Player.Position);
+
+            //if (CurrentTarget?.Position.Distance(position) < 1f)
+            //{
+            //    Logger.LogVerbose(LogCategory.Targetting, $"Using current target '{CurrentTarget.Name}' CollisionRadius of {CurrentTarget.CollisionRadius} for target position range check");
+            //    return IsInRange(CurrentTarget, power);
+            //}
 
             if (Core.Player.IsInBossEncounter && Combat.Targeting.CurrentTarget != null)
             {

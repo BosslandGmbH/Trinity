@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Trinity.Components.Adventurer.Game.Exploration;
-using Trinity.Framework.Objects.PriorityQueue;
 using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Structures
 {
-    public class AvoidanceNode : FastPriorityQueueNode, INode
+    public class AvoidanceNode : INode
     {
         public AvoidanceNode(IDetailNode n)
         {
@@ -25,6 +24,7 @@ namespace Trinity.Framework.Avoidance.Structures
             ExplorationNode = n.ExplorationNode;
             AStarValue = n.AStarValue;
             IsWalkable = n.NodeFlags.HasFlag(NodeFlags.AllowWalk);
+            DefaultFlags = GetDefaultFlags(NodeFlags);
             ResetFlags();
         }
 
@@ -44,6 +44,7 @@ namespace Trinity.Framework.Avoidance.Structures
         public NodeFlags NodeFlags { get; set; }
         public GridPoint GridPoint { get; set; }
         public int Weight { get; set; }
+        public AvoidanceFlags DefaultFlags { get; set; }
 
         public bool AddNodeFlags(AvoidanceFlags flags)
         {
@@ -67,31 +68,38 @@ namespace Trinity.Framework.Avoidance.Structures
 
         private void ResetFlags()
         {
-            AvoidanceFlags = 0;
+            AvoidanceFlags = DefaultFlags;
+        }
 
-            if (NodeFlags.HasFlag(NodeFlags.AllowWalk))
+        public AvoidanceFlags GetDefaultFlags(NodeFlags nodeFlags)
+        {
+            var flags = AvoidanceFlags.None;
+
+            if (nodeFlags.HasFlag(NodeFlags.AllowWalk))
             {
-                AvoidanceFlags |= AvoidanceFlags.AllowWalk;
+                flags |= AvoidanceFlags.AllowWalk;
             }
-            if (NodeFlags.HasFlag(NodeFlags.NearWall))
+            if (nodeFlags.HasFlag(NodeFlags.NearWall))
             {
-                AvoidanceFlags |= AvoidanceFlags.NearWall;
+                flags |= AvoidanceFlags.NearWall;
             }
-            if (NodeFlags.HasFlag(NodeFlags.AllowFlier))
+            if (nodeFlags.HasFlag(NodeFlags.AllowFlier))
             {
-                AvoidanceFlags |= AvoidanceFlags.AllowFlier;
+                flags |= AvoidanceFlags.AllowFlier;
             }
-            if (NodeFlags.HasFlag(NodeFlags.AllowProjectile))
+            if (nodeFlags.HasFlag(NodeFlags.AllowProjectile))
             {
-                AvoidanceFlags |= AvoidanceFlags.AllowProjectile;
+                flags |= AvoidanceFlags.AllowProjectile;
             }
-            if (NodeFlags.HasFlag(NodeFlags.RoundedCorner0) ||
-                NodeFlags.HasFlag(NodeFlags.RoundedCorner1) ||
-                NodeFlags.HasFlag(NodeFlags.RoundedCorner2) ||
-                NodeFlags.HasFlag(NodeFlags.RoundedCorner3))
+            if (nodeFlags.HasFlag(NodeFlags.RoundedCorner0) ||
+                nodeFlags.HasFlag(NodeFlags.RoundedCorner1) ||
+                nodeFlags.HasFlag(NodeFlags.RoundedCorner2) ||
+                nodeFlags.HasFlag(NodeFlags.RoundedCorner3))
             {
-                AvoidanceFlags |= AvoidanceFlags.RoundedCorner;
+                flags |= AvoidanceFlags.RoundedCorner;
             }
+
+            return flags;
         }
 
         public AvoidanceNode Reset()

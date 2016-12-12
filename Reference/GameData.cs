@@ -1693,12 +1693,7 @@ namespace Trinity.Reference
             {348096, 348093}, // x1_Bog_Beacon_B
         };
 
-        /// <summary>
-        /// NOTE: you don't NEED interactable SNO's listed here. But if they are listed here, *THIS* is the range at which your character will try to walk to within the object
-        /// BEFORE trying to actually "click it". Certain objects need you to get very close, so it's worth having them listed with low interact ranges
-        /// </summary>
-        public static Dictionary<int, float> CustomObjectRadius { get { return customObjectRadius; } }
-        private static readonly Dictionary<int, float> customObjectRadius = new Dictionary<int, float>
+        public static Dictionary<int, float> CustomObjectRadius { get; } = new Dictionary<int, float>
         {
             {56686, 4},
             {52685, 4},
@@ -1712,6 +1707,9 @@ namespace Trinity.Reference
             {309432, 37f}, // x1_westm_Bridge
             {54850, 14f}, // a3dun_Keep_SiegeTowerDoor
             {325136, 15f},
+            {210120, 20f},//a4dun_Garden_Corruption_Monster
+            {210268, 20f},//a4dun_Garden_Corruption_HellRift_Monster
+            {360111, 20f},//a4dun_Garden_Corruption_Monster_Despair
         };
 
         /// <summary>

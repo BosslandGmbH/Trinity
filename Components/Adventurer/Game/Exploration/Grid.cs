@@ -84,12 +84,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         protected void UpdateInnerGrid(IEnumerable<INode> nodes)
         {
             Util.Logger.Verbose("[{0}] Updating grid with {1} new nodes", GetType().Name, nodes.Count());
-            
+
             //nodes = nodes.OrderBy(n => n.Center.X).ThenBy(n => n.Center.Y).ToList();
+
+            var worldId = AdvDia.CurrentWorldDynamicId;
 
             foreach (var node in nodes)
             {
-                if (node.DynamicWorldId != AdvDia.CurrentWorldDynamicId)
+                if (node.DynamicWorldId != worldId)
                 {
                     Util.Logger.Debug("[{0}] A node has different worldId than current world, skipping", GetType().Name);
                     return;

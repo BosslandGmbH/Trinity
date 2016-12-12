@@ -98,6 +98,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Adventurer\Game\Combat\ClearAreaHelper.cs" />
     <Compile Include="Components\Combat\DefaultProviders.cs" />
     <Compile Include="Components\Combat\Resources\IPartyMember.cs" />
     <Compile Include="Components\Combat\Resources\ITargetable.cs" />
@@ -110,7 +111,7 @@
     <Compile Include="Components\Combat\Resources\WeightingUtils.cs" />
     <Compile Include="Coroutines\EmergencyRepair.cs" />
     <Compile Include="Coroutines\OpenBountyCache.cs" />
-    <Compile Include="DbProvider\Class1.cs" />
+    <Compile Include="DbProvider\BlankItemManager.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceDefinitions.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceType.cs" />
     <Compile Include="Framework\Avoidance\Handlers\IAvoidanceHandler.cs" />
@@ -159,10 +160,6 @@
     <Compile Include="Framework\Objects\Memory\Sno\Helpers\PowerHelper.cs" />
     <Compile Include="Framework\Objects\Memory\Sno\Helpers\SnoSearchProxy.cs" />
     <Compile Include="Framework\Objects\Memory\Sno\Types\GameBalanceCollection.cs" />
-    <Compile Include="Framework\Objects\Memory\Sno\Types\GeneratedSnoTypes.cs" />
-    <Compile Include="Framework\Objects\Memory\UX\UXItemButton.cs" />
-    <Compile Include="Framework\Objects\Memory\UX\UXButton.cs" />
-    <Compile Include="Framework\Objects\Memory\UX\UXListItem.cs" />
     <Compile Include="HookManager.cs" />
     <Compile Include="Framework\Objects\SkillSettings.cs" />
     <Compile Include="ProfileTags\TakeItemsFromStash.cs" />
@@ -618,10 +615,6 @@
     <Compile Include="Framework\Helpers\EmptyLookup.cs" />
     <Compile Include="Framework\Helpers\EnumExtensions.cs" />
     <Compile Include="Framework\Helpers\ExceptionExtensions.cs" />
-    <Compile Include="Framework\Objects\PriorityQueue\FastPriorityQueue.cs" />
-    <Compile Include="Framework\Objects\PriorityQueue\FastPriorityQueueNode.cs" />
-    <Compile Include="Framework\Objects\PriorityQueue\IPriorityQueue.cs" />
-    <Compile Include="Framework\Objects\PriorityQueue\SimplePriorityQueue.cs" />
     <Compile Include="Framework\Helpers\GameBalanceTable.cs" />
     <Compile Include="Framework\Helpers\OrderedDictionary.cs" />
     <Compile Include="Framework\Helpers\RegexExtensions.cs" />
@@ -687,7 +680,6 @@
     <Compile Include="Settings\Modals\SettingsSection.cs" />
     <Compile Include="Settings\ExplorationSettings.cs" />
     <Compile Include="Settings\WeightingSettings.cs" />
-    <Compile Include="UI\UIComponents\Behaviors\CaptureTextboxInput.cs" />
     <Compile Include="Framework\Helpers\TypeCrawler.cs" />
     <Compile Include="UI\UIComponents\Behaviors\MouseObserver.cs" />
     <Compile Include="UI\UIComponents\Controls\RangeSlider.cs" />
@@ -699,8 +691,6 @@
     <Compile Include="UI\UIComponents\Converters\StaticTypeToValueConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\ValueToStringConverter.cs" />
     <Compile Include="UI\UIComponents\GameInfo.cs" />
-    <Compile Include="UI\UIComponents\Input\InputExtensions.cs" />
-    <Compile Include="UI\UIComponents\Converters\AxisValueToViewportCameraPosition.cs" />
     <Compile Include="UI\UIComponents\Converters\ImagePathConverter.cs" />
     <Compile Include="UI\UIComponents\Converters\OffsetWidthConverter.cs" />
     <Compile Include="Framework\Avoidance\Handlers\PoisonEnchantedAvoidanceHandler.cs" />
@@ -899,12 +889,6 @@
     <Compile Include="UI\UIComponents\DragDrop-Gong\Utilities\ItemsControlExtensions.cs" />
     <Compile Include="UI\UIComponents\DragDrop-Gong\Utilities\TypeUtilities.cs" />
     <Compile Include="UI\UIComponents\DragDrop-Gong\Utilities\VisualTreeExtensions.cs" />
-    <Compile Include="UI\UIComponents\Input\InputEventMonitor.cs" />
-    <Compile Include="UI\UIComponents\Input\AllInputSources.cs" />
-    <Compile Include="UI\UIComponents\Input\KeyboardInput.cs" />
-    <Compile Include="UI\UIComponents\Input\Macro.cs" />
-    <Compile Include="UI\UIComponents\Input\MouseInput.cs" />
-    <Compile Include="UI\UIComponents\Input\WindowsHookHelper.cs" />
     <Compile Include="Settings\ItemList\ItemProperty.cs" />
     <Compile Include="Settings\ItemList\LRule.cs" />
     <Compile Include="UI\UIComponents\Behaviors\CancelMouseBubbling.cs" />
