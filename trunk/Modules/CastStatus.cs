@@ -6,7 +6,7 @@ using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     public enum CastResult
     {

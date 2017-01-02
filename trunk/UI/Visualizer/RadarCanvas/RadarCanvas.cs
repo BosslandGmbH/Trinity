@@ -19,6 +19,7 @@ using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Enums;
 using Trinity.UI.Visualizer.SceneEditor;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
@@ -906,8 +907,9 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             //}      
             foreach (var marker in Core.Markers.CurrentWorldMarkers)
             {
+                var pen = marker.MarkerType == WorldMarkerType.Objective ? RadarResources.EliteLightPen  : RadarResources.MarkerPen;
                 var markerPoint = marker.Position.ToCanvasPoint();
-                dc.DrawLine(RadarResources.MarkerPen, CenterActor.Point, markerPoint);
+                dc.DrawLine(pen, CenterActor.Point, markerPoint);
                 DrawLabel(dc, CanvasData, marker.Name, markerPoint, OrangeBrush, 45, 12, 3);
             }
         }

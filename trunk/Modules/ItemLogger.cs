@@ -1,25 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
-using System.Xml;
-using System.Xml.Serialization;
-using Microsoft.Win32;
-using Trinity.Components.Combat;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Events;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
 using Trinity.Settings;
-using Zeta.Bot;
-using Zeta.Game.Internals.Actors;
 using ItemEvents = Trinity.Framework.Events.ItemEvents;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     public class ItemLogger : Module
     {

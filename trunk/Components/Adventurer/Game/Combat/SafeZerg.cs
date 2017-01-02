@@ -5,6 +5,7 @@ using Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Components.Combat.Resources;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -26,9 +27,9 @@ namespace Trinity.Components.Adventurer.Game.Combat
 
         private bool _zergEnabled;
 
+
         public void EnableZerg()
         {
-
             _zergEnabled = true;
         }
 
@@ -38,6 +39,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
             {
                 //DisablePulse();
                 _zergEnabled = false;
+                SetPreviousCombatMode();
                 TargetingHelper.TurnCombatOn();
             }
         }
@@ -69,13 +71,12 @@ namespace Trinity.Components.Adventurer.Game.Combat
                 combatState = true;
             }
 
-            if (!combatState && 
-                
-                ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Any(u => u.IsFullyValid() && u.IsAlive && ( 
-//                u.CommonData.IsElite || u.CommonData.IsRare || u.CommonData.IsUnique ||
+            if (!combatState &&
+
+                ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Any(u => u.IsFullyValid() && u.IsAlive && (
                 KeywardenDataFactory.GoblinSNOs.Contains(u.ActorSnoId) || (KeywardenDataFactory.A4CorruptionSNOs.Contains(u.ActorSnoId) && u.IsAlive & u.Position.Distance(AdvDia.MyPosition) <= corruptGrowthDetectionRadius))
                 ))
-               
+
             {
                 combatState = true;
             }
@@ -91,7 +92,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
                 }
             }
 
-            var units = ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).ToList();            
+            var units = ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).ToList();
             if (units.Any(u => CorruptGrowthIds.Contains(u.ActorSnoId) && u.Distance < 30f))
             {
                 Logger.Verbose($"Turning off zerg because corrupt growth is nearby");
@@ -108,12 +109,37 @@ namespace Trinity.Components.Adventurer.Game.Combat
 
             if (combatState)
             {
+                SetPreviousCombatMode();
+
                 TargetingHelper.TurnCombatOn();
             }
             else
             {
+                SetSafeZergCombatMode();
+
                 TargetingHelper.TurnCombatOff();
             }
         }
+
+        private void SetPreviousCombatMode()
+        {
+            if (Components.Combat.Combat.CombatMode == CombatMode.SafeZerg)
+            {
+                Logger.DebugSetting($"Reverted to {_previousCombatMode} Combat Mode");
+                Components.Combat.Combat.CombatMode = _previousCombatMode;
+            }
+        }
+
+        private void SetSafeZergCombatMode()
+        {
+            if (Components.Combat.Combat.CombatMode != CombatMode.SafeZerg)
+            {
+                Logger.DebugSetting("Set to Safe Zerg Combat Mode");
+                _previousCombatMode = Components.Combat.Combat.CombatMode;
+                Components.Combat.Combat.CombatMode = CombatMode.SafeZerg;
+            }
+        }
+
+        private CombatMode _previousCombatMode;
     }
 }

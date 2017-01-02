@@ -103,6 +103,7 @@ namespace Trinity.Components.Combat
 
             if (target == null || !target.IsValid)
             {
+                //Logger.LogVerbose(LogCategory.Targetting, $"Null or invalid Target. {target?.Name}");
                 Clear();
                 return false;
             }
@@ -135,8 +136,12 @@ namespace Trinity.Components.Combat
             {
                 if (!await Combat.Spells.CastTrinityPower(CurrentPower))
                 {
-                    Clear();
-                    return false;
+                    if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds > 5)
+                    {
+                        Logger.LogVerbose(LogCategory.Targetting, $"Routine power cast failure timeout. Clearing Target: {target?.Name} and Power: {CurrentPower}");
+                        Clear();
+                        return false;
+                    }
                 }
             }
             

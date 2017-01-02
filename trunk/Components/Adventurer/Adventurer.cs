@@ -61,17 +61,11 @@ namespace Trinity.Components.Adventurer
 
         public static string GetCurrentTag()
         {
-            const string tagsNameSpace = "Trinity.Components.Adventurer.Tags";
             if (ProfileManager.OrderManager == null || ProfileManager.OrderManager.CurrentBehavior == null)
             {
                 return string.Empty;
             }
-            var type = ProfileManager.OrderManager.CurrentBehavior.GetType();
-            if (type.Namespace == tagsNameSpace)
-            {
-                return type.Name;
-            }
-            return string.Empty;
+            return ProfileManager.OrderManager.CurrentBehavior.GetType().Name;
         }
 
         #region Explicit IDynamicSetting Implementation

@@ -40,10 +40,34 @@ namespace Trinity.Routines.Advanced
 
         #endregion
 
+        public override bool SetWeight(TrinityActor cacheObject)
+        {
+            var weightType = WeightSettingsHelper.GetWeightType(cacheObject);
+            var startingWeight = cacheObject.Weight;
+            var weight = 0d;
+
+            foreach (var weightRule in Settings.WeightOverrides.Where(r => r.IsEnabled && r.ActorWeightType == weightType))
+            {
+                weight += weightRule.Eval(cacheObject, cacheObject.Weight);
+            }
+
+            var weightChanged = Math.Abs(startingWeight - weight) > float.Epsilon;
+            if (weightChanged)
+            {
+                cacheObject.Weight = weight;
+                return true;
+            }
+            return false;
+        }
+
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower trinityPower;
             ValidatedSkill vSkill;
+
+            if (Settings.ActiveSkills == null || Settings.Weights == null)
+            {
+                Settings.Update();
+            }
 
             foreach (var skill in Settings.ActiveSkills)
             {
@@ -53,76 +77,14 @@ namespace Trinity.Routines.Advanced
                 }
             }
 
-            //if (TryAutoSelectSkill(out trinityPower))
-            //    return trinityPower;
-
             return null;
         }
-
-        //private bool TryAutoSelectSkill(out TrinityPower trinityPower)
-        //{
-        //    trinityPower = null;
-
-        //    var primarySkills = new List<Skill>();
-        //    var secondarySkills = new List<Skill>();
-        //    var otherSkills = new List<Skill>();
-
-        //    foreach (var skill in SkillUtils.Active)
-        //    {
-        //        if (skill.IsGeneratorOrPrimary)
-        //        {
-        //            primarySkills.Add(skill);
-        //            continue;
-        //        }
-        //        if (skill.IsAttackSpender)
-        //        {
-        //            secondarySkills.Add(skill);
-        //            continue;
-        //        }
-        //        otherSkills.Add(skill);
-        //    }
-
-        //    var other = FindSkill(otherSkills);
-        //    if (other != null)
-        //    {
-        //        var otherPower = ToPower(other);
-        //        Logger.Log(LogCategory.Routine, $"Selecting Other Power {otherPower}");
-        //        {
-        //            trinityPower = otherPower;
-        //            return true;
-        //        }
-        //    }
-
-        //    var secondary = FindSkill(secondarySkills);
-        //    if (secondary != null)
-        //    {
-        //        var secondaryPower = ToPower(secondary);
-        //        Logger.Log(LogCategory.Routine, $"Selecting Other Power {secondaryPower}");
-        //        {
-        //            trinityPower = secondaryPower;
-        //            return true;
-        //        }
-        //    }
-
-        //    var primary = FindSkill(primarySkills);
-        //    if (primary != null)
-        //    {
-        //        var primaryPower = ToPower(primary);
-        //        Logger.Log(LogCategory.Routine, $"Selecting Other Power {primaryPower}");
-        //        {
-        //            trinityPower = primaryPower;
-        //            return true;
-        //        }
-        //    }
-
-        //    return false;
-        //}
 
         private ValidatedSkill FindSkill(IEnumerable<Skill> skills, Predicate<SkillSettings> condition = null)
         {
             return skills.Select(s => ValidateSkill(GetSettingsForSkill(s), condition)).FirstOrDefault();
         }
-        
+
         private bool TryValidateSkill(SkillSettings skillSettings, out ValidatedSkill validatedSkill)
         {
             return (validatedSkill = ValidateSkill(skillSettings)) != null;
@@ -230,56 +192,29 @@ namespace Trinity.Routines.Advanced
 
         #endregion
 
-        #region Conditions
-
-        //public interface IRobotCondition
-        //{
-        //    bool Check();
-        //}
-
-        //[DataContract(Namespace = "", Name = "HealthPct")]
-        //public class HealthPctCondition : NotifyBase, IRobotCondition
-        //{
-        //    private int _healthPct;
-
-        //    [DataMember]
-        //    [DefaultValue(8)]
-        //    public int HealthPct
-        //    {
-        //        get { return _healthPct; }
-        //        set { SetField(ref _healthPct, value); }
-        //    }
-
-        //    public bool Check() => Player.CurrentHealthPct <= HealthPct;
-        //}
-
-        #endregion
-
         public TrinityPower GetDefensivePower() => null;
 
-        public TrinityPower GetBuffPower()
-        {
-            //var buffs = SkillUtils.Active.Where(s => s.Cooldown == TimeSpan.Zero && !s.IsGeneratorOrPrimary);
-            //var buff = FindSkill(buffs);
-            //if (buff != null)
-            //{
-            //    var buffPower = ToPower(buff);
-            //    Logger.Log($"Selecting Buff Power {buffPower}");
-            //    return buffPower;
-            //}
-            return null;
-        }
+        public TrinityPower GetBuffPower() => null;
 
         public TrinityPower GetDestructiblePower()
-        {           
-            //var destructibleSkill = SkillUtils.Active.Where(s => s.CanCast() && s.IsDamaging).OrderByDescending(s => s.IsPrimary).FirstOrDefault();
-            //if (destructibleSkill != null)
-            //{
-            //    Logger.Log(LogCategory.Routine, $"Selected Destructible Power: {destructibleSkill}");
-            //    return new TrinityPower(destructibleSkill, 2f);
-            //}
+        {
+            foreach (var skillEntry in Settings.ActiveSkills)
+            {
+                if (!OffensiveSkillTargetTypes.Contains(skillEntry.Target) || !skillEntry.Skill.CanCast())
+                    continue;
+
+                return new TrinityPower(skillEntry.Skill.SNOPower, skillEntry.CastRange, CurrentTarget.AcdId);
+            }
             return DefaultPower;
         }
+
+        private HashSet<UseTarget> OffensiveSkillTargetTypes { get; } = new HashSet<UseTarget>
+        {
+            UseTarget.BestCluster,
+            UseTarget.CurrentTarget,
+            UseTarget.ClosestMonster,
+            UseTarget.ElitesOnly,
+        };
 
         #region Movement
 
@@ -356,12 +291,12 @@ namespace Trinity.Routines.Advanced
             {
                 public override void Drop(IDropInfo dropInfo)
                 {
-                    base.Drop(dropInfo);                   
+                    base.Drop(dropInfo);
                     var items = dropInfo.TargetCollection.OfType<SkillSettings>().ToList();
                     for (var index = 0; index < items.Count; index++)
                     {
                         var skillSettings = items[index];
-                        skillSettings.Order = index;                  
+                        skillSettings.Order = index;
                     }
                 }
             }
@@ -386,7 +321,10 @@ namespace Trinity.Routines.Advanced
             private int _primaryEnergyReserve;
 
             private List<SkillSettings> _skills;
+            private List<WeightSettings> _weights;
+
             private FullyObservableCollection<SkillSettings> _activeSkills;
+            private FullyObservableCollection<WeightSettings> _weightOverrides;
 
             [IgnoreDataMember]
             public FullyObservableCollection<SkillSettings> ActiveSkills
@@ -395,11 +333,25 @@ namespace Trinity.Routines.Advanced
                 set { SetField(ref _activeSkills, value); }
             }
 
+            [IgnoreDataMember]
+            public FullyObservableCollection<WeightSettings> WeightOverrides
+            {
+                get { return _weightOverrides; }
+                set { SetField(ref _weightOverrides, value); }
+            }
+
             [DataMember]
             public List<SkillSettings> Skills
             {
                 get { return _skills; }
                 set { SetField(ref _skills, value); }
+            }
+
+            [DataMember]
+            public List<WeightSettings> Weights
+            {
+                get { return _weights; }
+                set { SetField(ref _weights, value); }
             }
 
             [DataMember(EmitDefaultValue = false)]
@@ -508,8 +460,9 @@ namespace Trinity.Routines.Advanced
 
             public override void LoadDefaults()
             {
-                base.LoadDefaults();               
-                UpdateSkills(true);              
+                base.LoadDefaults();
+                UpdateSkills(true);
+                UpdateWeights(true);
             }
 
             private void UpdateSkills(bool reset = false)
@@ -519,7 +472,7 @@ namespace Trinity.Routines.Advanced
                 // But we still need to persist settings for all skills used to-date.
                 // Also need to populate with reference skill info for the pretty UI Icons etc.
 
-                if (!Player.IsInGame)
+                if (!Player.IsInGame && !Core.IsEnabled || !ZetaDia.IsInGame)
                     return;
 
                 var activeSettings = SkillUtils.Active.Select(s => new SkillSettings(s)).ToList();
@@ -537,10 +490,27 @@ namespace Trinity.Routines.Advanced
                 ActiveSkills = new FullyObservableCollection<SkillSettings>(availableSkills);
             }
 
+            private void UpdateWeights(bool reset = false)
+            {
+                if (!Player.IsInGame && !Core.IsEnabled || !ZetaDia.IsInGame)
+                    return;
+
+                if (Weights == null || !Weights.Any() || reset)
+                    Weights = WeightSettingsHelper.GetDefaults();
+
+                WeightOverrides = new FullyObservableCollection<WeightSettings>(Weights);
+            }
+
+            public void Update()
+            {
+                UpdateSkills();
+                UpdateWeights();
+            }
+
             public void LoadSettingsFromJson(string json)
             {
                 JsonSerializer.Deserialize(json, this);
-                UpdateSkills();
+                Update();
             }
 
             private static MrRobotSettings OnDataContextRequested(MrRobotSettings settings)
@@ -548,7 +518,18 @@ namespace Trinity.Routines.Advanced
                 // Called when settings window is opened.
                 // Need to refresh the list of active skills.
                 settings.UpdateSkills();
+                settings.UpdateWeights();
                 return settings;
+            }
+
+            public void OnSave()
+            {
+                Logger.LogNormal("Mr Robot Saved.");
+
+                foreach (var weightSetting in WeightOverrides)
+                {
+                    weightSetting.Compile();
+                }
             }
 
             #region IDynamicSetting
@@ -559,7 +540,7 @@ namespace Trinity.Routines.Advanced
             public string GetCode() => JsonSerializer.Serialize(this);
             public void ApplyCode(string code) => LoadSettingsFromJson(code);
             public void Reset() => LoadDefaults();
-            public void Save() { }
+            public void Save() => OnSave();
 
             #endregion
         }

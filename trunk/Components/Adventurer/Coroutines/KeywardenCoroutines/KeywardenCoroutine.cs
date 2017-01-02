@@ -129,7 +129,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             if (!await MoveToMarker())
                 return false;
 
-            if (!await ExplorationCoroutine.Explore(_levelAreaIds))
+            if (!await ExplorationCoroutine.Explore(_levelAreaIds, null, CanMoveToMarker))
                 return false;
             
             Util.Logger.Error("[Keywarden] Oh shit, that guy is nowhere to be found.");
@@ -140,14 +140,10 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 
         private async Task<bool> MoveToMarker()
         {
-            if (_markerCooldownUntil > DateTime.UtcNow)
+            if (!CanMoveToMarker())
                 return true;
 
-            var marker = GetKeywardenMarker();
-            if (marker == null)
-                return true;
-
-            if (marker.Position.Distance(AdvDia.MyPosition) < 20f)
+            if (_minimapMarker.Position.Distance(AdvDia.MyPosition) < 20f)
             {
                 Util.Logger.Info("[Keywarden] Finished Following marker");
                 return true;
@@ -156,7 +152,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
             if (_markerCoroutine == null)
             {
                 Util.Logger.Info("[Keywarden] Following a keywarden marker, lets see where it goes");
-                _markerCoroutine = new MoveToMapMarkerCoroutine(-1, AdvDia.CurrentWorldId, marker.NameHash, 0, false);
+                _markerCoroutine = new MoveToMapMarkerCoroutine(-1, AdvDia.CurrentWorldId, _minimapMarker.NameHash, 0, true);
             }
 
             if (!_markerCoroutine.IsDone)
@@ -167,13 +163,33 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 
             if (_markerCoroutine.State == MoveToMapMarkerCoroutine.States.Failed)
             {
-                _markerCooldownUntil = DateTime.UtcNow.Add(TimeSpan.FromMinutes(1));
-                Util.Logger.Info("[Keywarden] Looks like we can't find a path to the keywarden marker :(");
+                var cooldownDurationSeconds = 15 + _markerMoveFailures * 2;
+                _markerMoveFailures++;
+                _markerCooldownUntil = DateTime.UtcNow.Add(TimeSpan.FromSeconds(cooldownDurationSeconds));
+                _markerCoroutine = null;
+                Util.Logger.Info($"[Keywarden] Looks like we can't find a path to the keywarden marker :( on cooldown for {cooldownDurationSeconds} seconds");
                 return true;
             }
 
             Util.Logger.Info("[Keywarden] Finished Following marker");
+            _markerCoroutine = null;
             return true;
+        }
+
+        private bool CanMoveToMarker()
+        {
+            if (_markerCooldownUntil > DateTime.UtcNow)
+            {
+                Logger.DebugSetting($"Keywarden Marker on Cooldown. {(_markerCooldownUntil.Subtract(DateTime.UtcNow).TotalSeconds)}s remaining");
+                return false;
+            }
+
+            _minimapMarker = GetKeywardenMarker();
+            if (_minimapMarker == null)
+            {
+                Logger.DebugSetting("Failed to find Keywarden Marker");
+            }
+            return _minimapMarker != null;
         }
 
         private MoveToMapMarkerCoroutine _markerCoroutine;
@@ -301,64 +317,74 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
         {
             if (PluginSettings.Current.KeywardenZergMode.HasValue && !PluginSettings.Current.KeywardenZergMode.Value)
             {
-                return;
-            }
-            var corruptGrowthDetectionRadius = ZetaDia.Me.ActorClass == ActorClass.Barbarian ? 30 : 20;
-            var combatState = false;
-
-            if (_keywardenLocation != Vector3.Zero && _keywardenLocation.Distance(AdvDia.MyPosition) <= 50f)
-            {
-                TargetingHelper.TurnCombatOn();
+                SafeZerg.Instance.DisableZerg();
                 return;
             }
 
-            if (!combatState && ZetaDia.Me.HitpointsCurrentPct <= 0.8f)
-            {
-                combatState = true;
-            }
+            SafeZerg.Instance.EnableZerg();
 
-            if (!combatState && _keywardenData.Act == Act.A4)
-            {
-                if (ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Any(
-                            a =>
-                                a.IsFullyValid() && KeywardenDataFactory.A4CorruptionSNOs.Contains(a.ActorSnoId) &&
-                                a.IsAlive & a.Position.Distance(AdvDia.MyPosition) <= corruptGrowthDetectionRadius))
-                {
-                    combatState = true;
-                }
-            }
+            //if (PluginSettings.Current.KeywardenZergMode.HasValue && !PluginSettings.Current.KeywardenZergMode.Value)
+            //{
+            //    return;
+            //}
+            //var corruptGrowthDetectionRadius = ZetaDia.Me.ActorClass == ActorClass.Barbarian ? 30 : 20;
+            //var combatState = false;
+
+            //if (_keywardenLocation != Vector3.Zero && _keywardenLocation.Distance(AdvDia.MyPosition) <= 50f)
+            //{
+            //    TargetingHelper.TurnCombatOn();
+            //    return;
+            //}
+
+            //if (!combatState && ZetaDia.Me.HitpointsCurrentPct <= 0.8f)
+            //{
+            //    combatState = true;
+            //}
+
+            //if (!combatState && _keywardenData.Act == Act.A4)
+            //{
+            //    if (ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Any(
+            //                a =>
+            //                    a.IsFullyValid() && KeywardenDataFactory.A4CorruptionSNOs.Contains(a.ActorSnoId) &&
+            //                    a.IsAlive & a.Position.Distance(AdvDia.MyPosition) <= corruptGrowthDetectionRadius))
+            //    {
+            //        combatState = true;
+            //    }
+            //}
 
 
-            if (!combatState && ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Any(u => u.IsFullyValid() && u.IsAlive && KeywardenDataFactory.GoblinSNOs.Contains(u.ActorSnoId)))
-            {
-                combatState = true;
-            }
+            //if (!combatState && ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Any(u => u.IsFullyValid() && u.IsAlive && KeywardenDataFactory.GoblinSNOs.Contains(u.ActorSnoId)))
+            //{
+            //    combatState = true;
+            //}
 
-            if (!combatState && ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Count(u => u.IsFullyValid() && u.IsHostile && u.IsAlive && u.Position.Distance(AdvDia.MyPosition) <= 15f) >= 4)
-            {
-                combatState = true;
-            }
+            //if (!combatState && ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Count(u => u.IsFullyValid() && u.IsHostile && u.IsAlive && u.Position.Distance(AdvDia.MyPosition) <= 15f) >= 4)
+            //{
+            //    combatState = true;
+            //}
 
-            if (combatState)
-            {
-                TargetingHelper.TurnCombatOn();
-            }
-            else
-            {
-                TargetingHelper.TurnCombatOff();
-            }
+            //if (combatState)
+            //{
+            //    TargetingHelper.TurnCombatOn();
+            //}
+            //else
+            //{
+            //    TargetingHelper.TurnCombatOff();
+            //}
         }
 
         #region OnPulse Implementation
         private readonly WaitTimer _pulseTimer = new WaitTimer(TimeSpan.FromMilliseconds(250));
         private bool _isPulsing;
+        private MinimapMarker _minimapMarker;
+        private int _markerMoveFailures;
 
 
         private void EnablePulse()
         {
             if (!_isPulsing)
             {
-                Util.Logger.Debug("[Rift] Registered to pulsator.");
+                //Util.Logger.Debug("[Rift] Registered to pulsator.");
                 Pulsator.OnPulse += OnPulse;
                 _isPulsing = true;
             }
@@ -368,7 +394,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
         {
             if (_isPulsing)
             {
-                Util.Logger.Debug("[Rift] Unregistered from pulsator.");
+                //Util.Logger.Debug("[Rift] Unregistered from pulsator.");
                 Pulsator.OnPulse -= OnPulse;
                 _isPulsing = false;
             }

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Framework.Objects;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     /// <summary>
     /// Keeps track of any buffs that are active

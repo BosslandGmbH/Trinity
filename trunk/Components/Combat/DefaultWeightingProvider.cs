@@ -980,7 +980,19 @@ namespace Trinity.Components.Combat
                                     if (isHealthEmergency)
                                     {
                                         cacheObject.WeightInfo += $"Health Emergency";
-                                        cacheObject.Weight += (1d - Core.Player.PrimaryResource)*10000d + ObjectDistanceFormula(cacheObject) + EliteMonsterNearFormula(cacheObject, elites); // - PackDensityFormula(cacheObject, objects);
+                                        cacheObject.Weight += (1d - Core.Player.CurrentHealthPct) * 10000d +
+                                                              ObjectDistanceFormula(cacheObject) +
+                                                              EliteMonsterNearFormula(cacheObject, elites);
+                                        break;
+                                    }
+                                
+                                    if (isHealthEmergency)
+                                    {
+                                        cacheObject.WeightInfo += $"Health({Core.Player.CurrentHealthPct})";
+                                        cacheObject.Weight += (1d - Core.Player.PrimaryResource) * 1000d + 
+                                                                ObjectDistanceFormula(cacheObject) + 
+                                                                EliteMonsterNearFormula(cacheObject, elites);
+
                                         break;
                                     }
 
@@ -1390,6 +1402,12 @@ namespace Trinity.Components.Combat
 
                             case TrinityObjectType.Interactable:
                             {
+                                if (Combat.CombatMode == CombatMode.SafeZerg)
+                                {
+                                    cacheObject.WeightInfo += $"Ignore(Zerg)";
+                                    break;
+                                }
+
                                 if (cacheObject.IsUsed)
                                 {
                                     cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Used.";

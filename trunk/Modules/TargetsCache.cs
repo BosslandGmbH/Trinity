@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Coroutines.Town;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Items;
 using Trinity.Reference;
-using Zeta.Bot;
 using Zeta.Bot.Settings;
-using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     /// <summary>
     /// Creates a list of good target candidates (removing all the rubbish actors) to reduce combat processing time for weighting and target selection.

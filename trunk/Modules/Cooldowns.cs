@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     /// <summary>
     /// Keep track of cooldowns for buffs and skills

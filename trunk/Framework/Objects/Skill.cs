@@ -4,7 +4,6 @@ using System.Linq;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Memory.Sno.Helpers;
 using Trinity.Reference;
 using Zeta.Common;

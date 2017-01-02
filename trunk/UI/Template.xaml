@@ -1155,7 +1155,7 @@
                 RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" BorderBrush="#333" Margin="0,2,2,2" TextAlignment="Center" IsReadOnly="False" />
         </Grid>
     </ControlTemplate>
-    <ControlTemplate x:Key="RangeSliderTemplate" TargetType="{x:Type Slider}">
+    <!--<ControlTemplate x:Key="RangeSliderTemplate" TargetType="{x:Type Slider}">
         <Border SnapsToDevicePixels="true" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
             <Grid Background="Transparent">
                 <Grid.RowDefinitions>
@@ -1170,8 +1170,8 @@
                 </Track>
             </Grid>
         </Border>
-    </ControlTemplate>
-    <ControlTemplate x:Key="SliderRange" TargetType="{x:Type controls:RangeSlider}">
+    </ControlTemplate>-->
+    <!--<ControlTemplate x:Key="SliderRange" TargetType="{x:Type controls:RangeSlider}">
         <Grid VerticalAlignment="Top" Background="Transparent">
             <Border BorderThickness="0,1,0,0" BorderBrush="Black" VerticalAlignment="Center" Height="1" Margin="5,0,5,0"/>
             <Border HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="Gold" BorderBrush="#333333" 
@@ -1197,7 +1197,7 @@
                 Margin="10,0,0,0"
                 />
         </Grid>
-        <!--<Grid Background="Transparent">
+        --><!--<Grid Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition MinWidth="35" MaxWidth="{TemplateBinding Tag}" Width="Auto" />
@@ -1217,8 +1217,8 @@
                 Converter={StaticResource intToStringConverter}, 
                 UpdateSourceTrigger=Default, 
                 RelativeSource={RelativeSource TemplatedParent}}" HorizontalAlignment="Stretch" Margin="0,2,2,2" TextAlignment="Center" IsReadOnly="False" />
-        </Grid>-->
-    </ControlTemplate>    
+        </Grid>--><!--
+    </ControlTemplate>-->    
     <ControlTemplate x:Key="SliderLTB" TargetType="{x:Type Slider}">
         <Grid>
             <Grid.ColumnDefinitions>

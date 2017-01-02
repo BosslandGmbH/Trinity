@@ -8,7 +8,6 @@ using Trinity.Components.Combat;
 using Trinity.Coroutines.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Framework.Modules;
 using Trinity.Items;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
@@ -22,6 +21,7 @@ using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
+using Trinity.Modules;
 using Trinity.Reference;
 using Logger = Trinity.Framework.Helpers.Logger;
 

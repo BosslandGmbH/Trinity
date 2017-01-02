@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
@@ -13,10 +11,9 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
 using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     public class PlayerCache : Module
     {

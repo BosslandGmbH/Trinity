@@ -31,7 +31,7 @@ namespace Trinity.Components.Combat
     public class DefaultLootProvider : ILootProvider
     {
         public static int FreeBagSlots { get; set; } = 4;
-        public static int FreeBagSlotsInTown { get; set; } = 10;
+        public static int FreeBagSlotsInTown { get; set; } = 30;
 
         public bool ShouldPickup(TrinityItem item)
         {

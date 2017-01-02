@@ -211,7 +211,7 @@ namespace Trinity.Routines.Crusader
         protected override bool ShouldSteedCharge()
         {
             // Steed disables all skills for a second so make sure it doesn't prevent bombardment.
-            if (TimeToElementStart(Element.Physical) < 3000)
+            if (Legendary.ConventionOfElements.IsEquipped && TimeToElementStart(Element.Physical) < 2000)
                 return false;
 
             return base.ShouldSteedCharge();

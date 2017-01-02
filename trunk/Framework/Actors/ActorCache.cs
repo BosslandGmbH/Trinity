@@ -180,6 +180,7 @@ namespace Trinity.Framework.Actors
             _acdToRActorIndex[actor.AcdId] = actor.RActorId;
             _timer.Stop();
             actor.CreateTime = _timer.Elapsed.TotalMilliseconds;
+            actor.Created = DateTime.UtcNow;
 
             result = true;
             return actor;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Exploration;
@@ -12,11 +13,11 @@ namespace Trinity.Components.Adventurer.Coroutines
         private static ExplorationCoroutine _explorationCoroutine;
         private static HashSet<int> _exploreLevelAreaIds;
 
-        public static async Task<bool> Explore(HashSet<int> levelAreaIds, List<string> ignoreScenes = null)
+        public static async Task<bool> Explore(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null)
         {
             if (_explorationCoroutine == null || (_exploreLevelAreaIds != null && levelAreaIds != null && !_exploreLevelAreaIds.SetEquals(levelAreaIds)))
             {
-                _explorationCoroutine = new ExplorationCoroutine(levelAreaIds);
+                _explorationCoroutine = new ExplorationCoroutine(levelAreaIds, ignoreScenes, breakCondition);
                 _exploreLevelAreaIds = levelAreaIds;
             }
             if (await _explorationCoroutine.GetCoroutine())
@@ -52,15 +53,22 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
         }
 
-        private ExplorationCoroutine(HashSet<int> levelAreaIds, List<string> ignoreScenes = null)
+        private ExplorationCoroutine(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null)
         {
-            _levelAreaIds = levelAreaIds;// ?? new HashSet<int> { AdvDia.CurrentLevelAreaSnoId };
-            //ExplorationHelpers.SyncronizeNodesWithMinimap();
+            _levelAreaIds = levelAreaIds;
+            _ignoreScenes = ignoreScenes;
+            _breakCondition = breakCondition;
         }
 
 
         private async Task<bool> GetCoroutine()
         {
+            if (_breakCondition != null && _breakCondition.Invoke())
+            {
+                Logger.DebugSetting("BreakCondition Triggered");
+                return false;
+            }
+
             switch (State)
             {
                 case States.NotStarted:
@@ -75,6 +83,8 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private ExplorationNode _currentDestination;
         private int _failedNavigationAttempts;
+        private readonly Func<bool> _breakCondition;
+        private List<string> _ignoreScenes;
 
         private bool NotStarted()
         {
@@ -123,7 +133,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                         _currentDestination.FailedNavigationAttempts++;
 
                         var canClientPathTo = await AdvDia.DefaultNavigationProvider.CanFullyClientPathTo(_currentDestination.NavigableCenter);
-                        if (_currentDestination.FailedNavigationAttempts >= 15 && !canClientPathTo)
+                        if (_currentDestination.FailedNavigationAttempts >= 10 && !canClientPathTo)
                         {
                             Logger.DebugSetting($"[Exploration] Unable to client path to {_currentDestination.NavigableCenter} and failed {_currentDestination.FailedNavigationAttempts} times; Ignoring Node.");
                             _currentDestination.IsVisited = true;
@@ -132,7 +142,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                             _currentDestination = null;
                             _failedNavigationAttempts++;
                         }
-                        else if (!CanRayWalkDestination && _currentDestination.Distance < 25f && _currentDestination.FailedNavigationAttempts >= 5 || _currentDestination.FailedNavigationAttempts >= 25)
+                        else if (!CanRayWalkDestination && _currentDestination.Distance < 25f && _currentDestination.FailedNavigationAttempts >= 3 || _currentDestination.FailedNavigationAttempts >= 15)
                         {
                             Logger.DebugSetting($"[Exploration] Failed to Navigate to {_currentDestination.NavigableCenter} {_currentDestination.FailedNavigationAttempts} times; Ignoring Node.");
                             _currentDestination.IsVisited = true;
@@ -153,7 +163,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                     if (_failedNavigationAttempts > 25)
                     {
-                        Logger.Debug($"[Exploration] Expploration Resetting");
+                        Logger.Debug($"[Exploration] Exploration Resetting");
                         ScenesStorage.Reset();
                         Navigator.Clear();
                         _failedNavigationAttempts = 0;

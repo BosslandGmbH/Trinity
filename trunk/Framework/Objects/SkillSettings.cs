@@ -51,11 +51,14 @@ namespace Trinity.Framework.Objects
         private ConventionMode _waitForConvention;
         private SNOPower _SNOPower;
         private int _order;
+        private float _secondaryResourcePctBelow;
+        private float _primaryResourcePctBelow;
 
         /// <summary>
         /// Monster must be this close before a spell is cast.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
+        [DefaultValue(60f)]
         public float CastRange
         {
             get { return _castRange; }
@@ -73,7 +76,7 @@ namespace Trinity.Framework.Objects
         }
 
         /// <summary>
-        /// Player resource must be above this to cast spell.
+        /// Player primary resource must be above this to cast spell.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public float PrimaryResourcePct
@@ -83,7 +86,18 @@ namespace Trinity.Framework.Objects
         }
 
         /// <summary>
-        /// Player resource must be above this to cast spell.
+        /// Player primary resource must be above this to cast spell.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        [DefaultValue(100f)]
+        public float PrimaryResourcePctBelow
+        {
+            get { return _primaryResourcePctBelow; }
+            set { SetField(ref _primaryResourcePctBelow, value); }
+        }
+
+        /// <summary>
+        /// Player secondary resource must be above this to cast spell.
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
         public float SecondaryResourcePct
@@ -93,9 +107,21 @@ namespace Trinity.Framework.Objects
         }
 
         /// <summary>
+        /// Player secondary resource must be below this to cast spell.
+        /// </summary>
+        [DataMember(EmitDefaultValue = false)]
+        [DefaultValue(100f)]
+        public float SecondaryResourcePctBelow
+        {
+            get { return _secondaryResourcePctBelow; }
+            set { SetField(ref _secondaryResourcePctBelow, value); }
+        }
+
+        /// <summary>
         /// Player health must be below this amount to cast spell
         /// </summary>
         [DataMember(EmitDefaultValue = false)]
+        [DefaultValue(1f)]
         public float HealthPct
         {
             get { return _healthPct; }

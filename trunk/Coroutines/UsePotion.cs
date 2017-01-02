@@ -37,6 +37,9 @@ namespace Trinity.Coroutines
 
         public static bool ShouldUsePotion()
         {
+            if (Core.Player == null || Combat.Routines.Current == null)
+                return false;
+
             if (Core.Player.CurrentHealthPct > Combat.Routines.Current.EmergencyHealthPct)
                 return false;
 

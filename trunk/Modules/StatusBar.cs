@@ -1,16 +1,12 @@
-using System;
 using System.Globalization;
 using System.Text;
 using Trinity.Components.Combat;
+using Trinity.Framework;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Enums;
 using Zeta.Bot;
-using Zeta.Common;
-using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     public class StatusBar : Module
     {
