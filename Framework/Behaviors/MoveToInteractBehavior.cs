@@ -7,7 +7,6 @@ using Trinity.Components.Combat;
 using Trinity.Coroutines;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Enums;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;

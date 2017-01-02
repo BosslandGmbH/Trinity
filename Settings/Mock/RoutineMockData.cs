@@ -7,6 +7,7 @@ namespace Trinity.Settings.Mock
     public class RoutineMockData : NotifyBase
     {
         private List<SkillSettings> _activeSkills;
+        private List<WeightSettings> _weightOverrides;
 
         public RoutineMockData()
         {
@@ -16,6 +17,25 @@ namespace Trinity.Settings.Mock
                 new SkillSettings(Reference.Skills.Monk.BlindingFlash),
                 new SkillSettings(Reference.Skills.Monk.Epiphany),
             };
+
+            WeightOverrides = new List<WeightSettings>
+            {
+                new WeightSettings
+                {
+                    Name = "Shrines",
+                    Formula = "1000"
+                },
+                new WeightSettings
+                {
+                    Name = "Trash",
+                    Formula = "3000 * Distance"
+                },
+                new WeightSettings
+                {
+                    Name = "Elites",
+                    Formula = "2000"
+                },
+            };
         }
 
         public List<SkillSettings> ActiveSkills
@@ -23,5 +43,12 @@ namespace Trinity.Settings.Mock
             get { return _activeSkills; }
             set { SetField(ref _activeSkills, value); }
         }
+
+        public List<WeightSettings> WeightOverrides
+        {
+            get { return _weightOverrides; }
+            set { SetField(ref _weightOverrides, value); }
+        }
+
     }
 }

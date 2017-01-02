@@ -1,26 +1,15 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls.Expressions;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Framework.Objects.Memory.UX;
-using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals;
-using Zeta.Game.Internals.Actors;
 using Vector2 = Zeta.Common.Vector2;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     /// <summary>
     /// The icons shown on the minimap

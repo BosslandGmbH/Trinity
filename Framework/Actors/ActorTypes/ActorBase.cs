@@ -1,5 +1,6 @@
 #region
 
+using System;
 using Trinity.Framework.Objects.Memory.Misc;
 using Zeta.Common;
 using Zeta.Game.Internals.SNO;
@@ -34,6 +35,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public int FastAttributeGroupId { get; set; }
         public double CreateTime { get; set; }
         public double UpdateTime { get; set; }
+        public DateTime Created { get; set; }
 
         /// <summary>
         /// Occurs when the actor data is newly existing;

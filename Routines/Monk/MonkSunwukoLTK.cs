@@ -9,7 +9,6 @@ using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Modules;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Trinity.UI;

@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Framework.Objects.Memory.Misc;
-using Zeta.Bot;
-using Zeta.Common;
+﻿using Trinity.Framework.Objects;
 using Zeta.Game;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     public class WorldCache : Module
     {

@@ -23,6 +23,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 {
     public class TrinityActor : ActorBase, ITargetable
     {
+        public DateTime LastFullUpdate { get; set; }
         public TargetingInfo Targeting { get; set; } = new TargetingInfo();
         public virtual ActorAttributes Attributes { get; set; }
         public bool IsAllowedClientEffect { get; set; }
@@ -154,13 +155,35 @@ namespace Trinity.Framework.Actors.ActorTypes
         public override void OnCreated()
         {
             Attributes = new ActorAttributes(FastAttributeGroupId);
-            UpdateProperties();
+            FullUpdate();
         }
 
         public override void OnUpdated()
         {
             Attributes.Update();
-            UpdateProperties();
+
+            if (DateTime.UtcNow.Subtract(LastFullUpdate).TotalSeconds > 10)
+            {
+                FullUpdate();
+                return;
+            }
+
+            FastUpdate();
+        }
+
+        private void FastUpdate()
+        {
+            CommonProperties.Update(this);
+            UnitProperties.Update(this);
+            GizmoProperties.Update(this);
+        }
+
+        private void FullUpdate()
+        {
+            CommonProperties.Populate(this);
+            UnitProperties.Populate(this);
+            GizmoProperties.Populate(this);
+            LastFullUpdate = DateTime.UtcNow;
         }
 
         public bool CanWalkTo(Vector3 destination = default(Vector3))
@@ -210,6 +233,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsCriticalAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.CriticalAvoidance);
 
 
+
         /// <summary>
         /// [Severely costly method] If a path can be made by DB's Navigator to the actor 
         /// </summary>
@@ -250,12 +274,7 @@ namespace Trinity.Framework.Actors.ActorTypes
             CacheInfo += seperator + reason;
         }
 
-        private void UpdateProperties()
-        {
-            CommonProperties.Populate(this);
-            UnitProperties.Populate(this);
-            GizmoProperties.Populate(this);   
-        }
+
 
         public override string ToString() => $"{InternalName} ({ActorSnoId}) Type={Type} Dist={Distance:N2}";
 

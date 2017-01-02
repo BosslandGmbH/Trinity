@@ -1,6 +1,5 @@
 ﻿using System;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Modules;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Framework.Objects.Memory.Misc;

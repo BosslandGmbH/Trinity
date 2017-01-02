@@ -37,8 +37,11 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         private static BountyData GetDynamicBounty(QuestData quest)
         {
+            if (quest == null)
+                return null;
+
             var questId = quest.QuestId;
-                    
+                
             if (DynamicBountyDirectory.ContainsKey(questId))
             {
                 var type = DynamicBountyDirectory[questId];

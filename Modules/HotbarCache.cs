@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     public class HotbarCache : Module
     {

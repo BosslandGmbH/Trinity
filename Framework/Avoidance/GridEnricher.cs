@@ -73,13 +73,15 @@ namespace Trinity.Framework.Avoidance
 
         public void UpdateGrid()
         {
-            Grid.IsUpdatingNodes = true;
+            var grid = Grid;
+
+            grid.IsUpdatingNodes = true;
 
             using (new PerformanceLogger("UpdateGrid"))
             {                
                 HighestNodeWeight = 0;
 
-                if (Grid.NearestNode == null || Grid.NearestNode.DynamicWorldId != ZetaDia.WorldId)
+                if (grid.NearestNode == null || grid.NearestNode.DynamicWorldId != ZetaDia.WorldId)
                 {
                     Logger.LogDebug(LogCategory.Avoidance, $"No Player Nearest Node or WorldId Mismatch");
                     return;
@@ -93,9 +95,9 @@ namespace Trinity.Framework.Avoidance
                 var activeAvoidanceSnoIds = new HashSet<int>();
                 var kiteFromNodes = new AvoidanceLayer();
 
-                var nodePool = Grid.GetNodesInRadius(Core.Player.Position, node => node.IsWalkable, MaxDistance).Select(n => n.Reset()).ToList();
+                var nodePool = grid.GetNodesInRadius(Core.Player.Position, node => node.IsWalkable, MaxDistance).Select(n => n.Reset()).ToList();
                 //var allNodes = Grid.GetNodesInRadius(Core.Player.Position, node => node != null, MaxDistance).ToList();
-                var nearestNodes = Grid.GetNodesInRadius(Core.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), Settings.AvoiderLocalRadius).ToList();
+                var nearestNodes = grid.GetNodesInRadius(Core.Player.Position, node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk), Settings.AvoiderLocalRadius).ToList();
                 var weightSettings = Settings.WeightingOptions;
 
                 try
@@ -147,7 +149,7 @@ namespace Trinity.Framework.Avoidance
 
                             if (avoidance.IsAllowed)
                             {
-                                handler.UpdateNodes(Grid, avoidance);
+                                handler.UpdateNodes(grid, avoidance);
 
                                 avoidance.Actors.ForEach(a =>
                                 {
@@ -243,7 +245,7 @@ namespace Trinity.Framework.Avoidance
                 ActiveAvoidanceSnoIds = activeAvoidanceSnoIds;
             }
 
-            Grid.IsUpdatingNodes = true;
+            grid.IsUpdatingNodes = true;
         }
 
         private void UpdateGizmoFlags(TrinityActor actor)

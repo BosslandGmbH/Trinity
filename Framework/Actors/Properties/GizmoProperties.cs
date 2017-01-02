@@ -14,10 +14,7 @@ namespace Trinity.Framework.Actors.Properties
     {
         public static void Populate(TrinityActor actor)
         {
-            if (actor.ActorType != ActorType.Gizmo)
-                return;
-
-            if (!actor.IsAcdBased || !actor.IsAcdValid)
+            if (!IsValidGizmo(actor))
                 return;
 
             var attributes = actor.Attributes;
@@ -42,6 +39,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.ShrineType = GetShrineType(actor);
             actor.ContainerType = GetContainerType(actor);
 
+            // todo why is this needed for gizmos? 
             var movement = rActor.Movement;
             if (movement != null && movement.IsValid)
             {
@@ -50,6 +48,29 @@ namespace Trinity.Framework.Actors.Properties
                 actor.DirectionVector = movement.DirectionVector;
                 actor.IsMoving = movement.IsMoving;
                 actor.MovementSpeed = movement.SpeedXY;
+            }
+        }
+
+        private static bool IsValidGizmo(TrinityActor actor)
+        {
+            if (actor.ActorType != ActorType.Gizmo)
+                return false;
+
+            if (!actor.IsAcdBased || !actor.IsAcdValid)
+                return false;
+
+            return true;
+        }
+
+        public static void Update(TrinityActor actor)
+        {
+            if (!IsValidGizmo(actor))
+                return;
+
+            if (!actor.IsUsed)
+            {
+                actor.IsUsed = GetIsGizmoUsed(actor);
+                actor.IsUntargetable = actor.Attributes.IsUntargetable && !GameData.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
             }
         }
 

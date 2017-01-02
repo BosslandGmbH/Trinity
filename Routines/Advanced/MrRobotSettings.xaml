@@ -32,7 +32,7 @@
                 <Setter Property="Height" Value="40" />
             </Style>
 
-            <Style x:Key="SkillOrderListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+            <Style x:Key="OrderListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                 <Setter Property="Focusable" Value="False"/>
             </Style>
@@ -47,8 +47,25 @@
                         <TextBlock Text="{Binding}" Margin="0,0,2,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </Border>
-            </DataTemplate>            
-            
+            </DataTemplate>
+
+            <DataTemplate  x:Key="WeightOrderListBoxItemTemplate">
+                <Grid Style="{x:Null}" HorizontalAlignment="Stretch" Margin="0,0,0,0" MinHeight="22" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.5*" />
+                        <!--<ColumnDefinition Width="1*" />-->
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0">
+                        <Path Style="{DynamicResource GrabHandlePath}" Cursor="SizeNS" Margin="0,0,3,0" />
+                        <CheckBox IsChecked="{Binding IsEnabled}" Margin="0" Padding="0" >
+                            <Label Grid.Column="1" Content="{Binding Name, Mode=OneWay}" />
+                        </CheckBox>
+                    </StackPanel>
+                    <TextBox IsEnabled="{Binding IsEnabled}" Grid.Column="1" BorderBrush="#333" Text="{Binding Formula}" HorizontalAlignment="Stretch" Width="Auto" Margin="0,2,2,2" TextAlignment="Left" IsReadOnly="False" />
+                </Grid>
+            </DataTemplate>
+
             <DataTemplate  x:Key="SkillOrderListBoxItemTemplate">
                 <Grid Style="{x:Null}" HorizontalAlignment="Stretch" Margin="0,0,0,0" MinHeight="22" Background="Transparent">
                     <Grid.ColumnDefinitions>
@@ -153,12 +170,21 @@
                                         HorizontalAlignment="Stretch" Margin="2"
                                         />
                                     <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                                        Tag="Resource Above"
+                                        Tag="Primary % Above"
                                         ToolTip="Player resource must be above this to cast spell." 
                                         Interval="5" Maximum="100" Minimum="0" 
                                         SmallChange="5" LargeChange="5" 
                                         TickPlacement="None" TickFrequency="5"
                                         Value="{Binding PrimaryResourcePct}" 
+                                        HorizontalAlignment="Stretch" Margin="2"
+                                        />
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                        Tag="Primary % Below"
+                                        ToolTip="Player resource must be below this to cast spell." 
+                                        Interval="5" Maximum="100" Minimum="0" 
+                                        SmallChange="5" LargeChange="5" 
+                                        TickPlacement="None" TickFrequency="5"
+                                        Value="{Binding PrimaryResourcePctBelow}" 
                                         HorizontalAlignment="Stretch" Margin="2"
                                         />
                                     <Slider Template="{DynamicResource LabelledSliderEditable}" 
@@ -249,7 +275,7 @@
                             <Slider Template="{DynamicResource LabelledSliderEditable}" 
                                 Tag="Kite Stutter Duration"
                                 ToolTip="How long each stutter should last when kiting, during this time the bot attacks"                  
-                                Maximum="30" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
+                                Maximum="3000" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
                                 Value="{Binding DataContext.KiteStutterDuration}" 
                                 HorizontalAlignment="Stretch" Margin="0,0,0,0"
                                 MinWidth="175"/>
@@ -261,7 +287,7 @@
                                 HorizontalAlignment="Stretch" Margin="0,0,0,0"
                                 MinWidth="175"/>
                             <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                                Tag="Kite Stutter Delay"
+                                Tag="Kite Health %"
                                 ToolTip="Kiting will only happen if your health is equal to or below this amount"                  
                                 Maximum="100" Minimum="0" SmallChange="100" TickFrequency="1" TickPlacement="None" 
                                 Value="{Binding DataContext.KiteHealthPct}" 
@@ -334,6 +360,35 @@
                 </GroupBox>
 
                 <GroupBox>
+                    <GroupBox.Header>Weighting Overrides</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">Override weighting formulas. You can enter basic numbers or simple calculations such as "100 * (100 - Actor.Distance)". Properties on 'Actor' and 'Player' objects can be used in formulas.</TextBlock>
+                        <ListBox Padding="5"
+                            d:DataContext="{Binding Source={StaticResource DesignViewModel}}"
+                            ItemsSource="{Binding DataContext.WeightOverrides}"   
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Disabled"       
+                            AlternationCount="100000"
+                            SelectionMode="Single"
+                            ui:DragDrop.IsDragSource="True"
+                            ui:DragDrop.IsDropTarget="True"
+                            ui:DragDrop.DropHandler="{Binding DataContext.DropHandler}"
+                            ui:DragDrop.DragDropContext="SkillOrder"
+                            ui:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                            VerticalAlignment="Top"
+                            ItemTemplate="{DynamicResource WeightOrderListBoxItemTemplate}"
+                            ItemContainerStyle="{DynamicResource OrderListBoxItemStyle}"
+                            >
+                            <ListBox.Template>
+                                <ControlTemplate>
+                                    <ItemsPresenter />
+                                </ControlTemplate>
+                            </ListBox.Template>
+                        </ListBox>
+                    </StackPanel>
+                </GroupBox>
+
+                <GroupBox>
                     <GroupBox.Header>Skill Order</GroupBox.Header>
                     <StackPanel>
                         <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">Drag the items below to prioritize the order they're cast in.</TextBlock>
@@ -351,7 +406,7 @@
                             ui:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
                             VerticalAlignment="Top"
                             ItemTemplate="{DynamicResource SkillOrderListBoxItemTemplate}"
-                            ItemContainerStyle="{DynamicResource SkillOrderListBoxItemStyle}"
+                            ItemContainerStyle="{DynamicResource OrderListBoxItemStyle}"
                             >
                             <ListBox.Template>
                                 <ControlTemplate>

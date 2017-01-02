@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
@@ -9,7 +10,7 @@ using Trinity.Settings;
 using Zeta.Bot;
 using ItemEvents = Trinity.Framework.Events.ItemEvents;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     [Serializable]
     public class StatsSession

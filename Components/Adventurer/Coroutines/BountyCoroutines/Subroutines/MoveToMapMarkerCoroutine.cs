@@ -77,7 +77,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 Util.Logger.Verbose("Enabling SafeZerg for Kill Monster bounty");
                 SafeZerg.Instance.EnableZerg();
             }
-            else
+            else if(!_allowSafeZerg)
             {
                 SafeZerg.Instance.DisableZerg();
             }
@@ -134,7 +134,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            // Markers either exist or not, they dont appear if you explore.
             // End coroutine so we can fall through to exploration with a scan for specific actor.
             State = States.Failed;
             return false;
@@ -150,19 +149,38 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         }
 
         private int _partialMovesCount;
+        private Vector3 _partialMoveLocation;
+        private bool _isPartialMove;
         private async Task<bool> Moving()
         {
-            if (!await NavigationCoroutine.MoveTo(_objectiveLocation, 10)) return false;
+            if (_isPartialMove)
+            {
+                if (!await NavigationCoroutine.MoveTo(_partialMoveLocation, 10))
+                    return false;
+
+                Logger.DebugSetting("Reverting after partial move");
+                _isPartialMove = false;
+            }
+            else
+            {
+                if (!await NavigationCoroutine.MoveTo(_objectiveLocation, 10))
+                    return false;
+            }
+
             if (AdvDia.MyPosition.Distance(_objectiveLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
             {
                 _partialMovesCount++;
-                if (_partialMovesCount < 2)
+                if (_partialMovesCount < 4)
                 {
+                    Logger.DebugSetting("Creating partial move segment");
+                    _partialMoveLocation = MathEx.CalculatePointFrom(AdvDia.MyPosition, _objectiveLocation, 125f);
+                    _isPartialMove = true;
                     return false;
                 }
                 _previouslyFoundLocation = _objectiveLocation;
                 _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
                 _partialMovesCount = 0;
+                _isPartialMove = false;
                 _objectiveLocation = Vector3.Zero;
                 _objectiveScanRange = ActorFinder.LowerSearchRadius(_objectiveScanRange);
                 if (_objectiveScanRange <= 0)
@@ -205,7 +223,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _objectiveLocation = _previouslyFoundLocation;
                 _previouslyFoundLocation = Vector3.Zero;
                 _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
-                Logger.Debug("[MoveToMapMarker] Returning previous objective location.");
+                Logger.Debug("Returning previous objective location.");
 
                 return;
             }
@@ -217,7 +235,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     if (_marker == -1)
                     {
                         _objectiveLocation = BountyHelpers.ScanForMarkerLocation(0, _objectiveScanRange);
-
+                        Logger.DebugSetting($"Scan for Marker position -1 = {_objectiveLocation} (ScanRange={_objectiveScanRange})");
                     }
                     else
                     {

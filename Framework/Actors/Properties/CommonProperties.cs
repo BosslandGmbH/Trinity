@@ -33,15 +33,17 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.IsRActorBased)
             {
-                actor.GizmoType = actorInfo.GizmoType;
+                if (actorInfo != null && actorInfo.IsValid)
+                {
+                    actor.GizmoType = actorInfo.GizmoType;
+                    actor.AxialRadius = actorInfo.AxialCylinder.Ax1;
+                }
+
                 actor.WorldDynamicId = rActor.WorldDynamicId;
                 actor.Radius = rActor.CollisionSphere.Radius;
-                var axialRadius = actorInfo.AxialCylinder.Ax1;
-                actor.AxialRadius = axialRadius;
-
                 actor.CollisionRadius = GameData.CustomObjectRadius.ContainsKey(actor.ActorSnoId) 
                     ? GameData.CustomObjectRadius[actor.ActorSnoId] 
-                    : Math.Max(1f, axialRadius * 0.60f);
+                    : Math.Max(1f, actor.AxialRadius * 0.60f);
             }
 
             var type = GetObjectType(
@@ -52,10 +54,7 @@ namespace Trinity.Framework.Actors.Properties
                 );
 
             actor.Type = type;
-
             actor.ObjectHash = actor.InternalName + actor.AcdId + actor.RActorId;
-            actor.Distance = actor.Position.Distance(Core.Player.Position);
-            actor.RadiusDistance = Math.Max(actor.Distance - actor.CollisionRadius, 0f);
             actor.IsDestroyable = actor.Type == TrinityObjectType.Barricade || actor.Type == TrinityObjectType.Destructible;
 
             if (actor.IsAcdBased && actor.IsAcdValid)
@@ -87,6 +86,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsGroundItem = actor.IsItem && actor.InventorySlot == InventorySlot.None;
             actor.SpecialType = GetSpecialType(actor);
 
+            UpdateDistance(actor);
             actor.RequiredRadiusDistance = GetRequiredRange(actor);
 
             if (actor.Attributes != null)
@@ -98,6 +98,41 @@ namespace Trinity.Framework.Actors.Properties
                 actor.IsQuestMonster = actor.Attributes.IsQuestMonster;
             }
      
+            UpdateLineOfSight(actor);
+        }
+
+        private static void UpdateDistance(TrinityActor actor)
+        {
+            actor.Distance = actor.Position.Distance(Core.Player.Position);
+            actor.RadiusDistance = Math.Max(actor.Distance - actor.CollisionRadius, 0f);
+        }
+
+        public static void Update(TrinityActor actor)
+        {
+            if (actor.IsAcdBased && actor.IsAcdValid)
+            {
+                var commonData = actor.CommonData;
+                actor.Position = commonData.Position;
+                actor.AcdId = commonData.AcdId;
+
+                UpdateDistance(actor);
+
+                if (actor.Distance < 50f)
+                {
+                    var animation = commonData.Animation;
+                    actor.Animation = animation;
+                    actor.AnimationNameLowerCase = GameData.GetAnimationNameLowerCase(animation);
+                    actor.AnimationState = commonData.AnimationState;
+                }
+
+                actor.InventorySlot = actor.CommonData.InventorySlot;
+            }
+            else if (actor.IsRActorBased)
+            {
+                actor.Position = actor.RActor.Position;
+                UpdateDistance(actor);
+            }
+
             UpdateLineOfSight(actor);
         }
 
@@ -352,6 +387,7 @@ namespace Trinity.Framework.Actors.Properties
             }
             return result;
         }
+
 
     }
 

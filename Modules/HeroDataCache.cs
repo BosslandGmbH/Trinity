@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Framework.Objects.Memory.Sno.Types;
 using Zeta.Game;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     public enum HeroDataSnoId
     {

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Zeta.Common;
 using Zeta.Game;
 
-namespace Trinity.Framework.Modules
+namespace Trinity.Modules
 {
     /// <summary>
     /// History of where the player has moved
