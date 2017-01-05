@@ -254,7 +254,14 @@ namespace Trinity.Settings
                     if (doc.Root.Name == "TrinitySetting")
                     {
                         Logger.LogDebug("Old Settings Format Detected. Migrating and saving copy of old File");
-                        File.Copy(filename, filename + ".backup.xml");
+                        try
+                        {
+                            File.Copy(filename, FileManager.GetUniqueFileName(filename + ".backup.xml"));
+                        }
+                        catch (Exception)
+                        {
+                            Logger.LogDebug("Unable to save a backup of old settings file");
+                        }
                         Save();
                     }
                 }

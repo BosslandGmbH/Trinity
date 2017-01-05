@@ -84,7 +84,7 @@ namespace Trinity.Framework.Helpers
         {
             using (new PerformanceLogger("FileManager.Load"))
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.Configuration, "Loading Dictionary file={0} name={1} keys={2} values={3}", filename, name, keyName, valueName);
+                Logger.Log(TrinityLogLevel.Info, LogCategory.Configuration, "Loading Dictionary name={0} keys={1} values={2}", name, keyName, valueName);
                 IDictionary<K, T> ret = new Dictionary<K, T>();
                 try
                 {
@@ -111,20 +111,20 @@ namespace Trinity.Framework.Helpers
                     }
                     else
                     {
-                        throw new FileNotFoundException("Could not load {0}", filename);
+                        throw new FileNotFoundException("Could not load file");
                     }
                     if (ret.Count > 0)
                     {
-                        Logger.Log(TrinityLogLevel.Info, LogCategory.Configuration, "Loaded Dictionary name={0} key={1} value={2} with {3} values", name, keyName, valueName, ret.Count);
+                        Logger.Log(TrinityLogLevel.Info, LogCategory.Configuration, "Loaded Dictionary key={1} value={2} with {3} values", keyName, valueName, ret.Count);
                     }
                     else
                     {
-                        Logger.Log(TrinityLogLevel.Info, LogCategory.Configuration, "Attempted to load Dictionary name={0} key={1} value={2} but 0 values found!", name, keyName, valueName, ret.Count);
+                        Logger.Log(TrinityLogLevel.Info, LogCategory.Configuration, "Attempted to load Dictionary key={1} value={2} but 0 values found!", keyName, valueName, ret.Count);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogNormal("{0}", ex);
+                    Logger.LogNormal("Exception in FileManager Dictionary Load");
                 }
                 return ret;
             }
@@ -476,6 +476,24 @@ namespace Trinity.Framework.Helpers
             foreach (var f in fl)
                 fo.Add(Path.GetFileName(f));
             return fo;
+        }
+
+        public static string GetUniqueFileName(string fileName)
+        {
+            string extension = Path.GetExtension(fileName);
+            if (extension == null)
+            {
+                extension = ".unknown";
+            }
+            int i = 0;
+            while (File.Exists(fileName))
+            {
+                if (i == 0)
+                    fileName = fileName.Replace(extension, "(" + ++i + ")" + extension);
+                else
+                    fileName = fileName.Replace("(" + i + ")" + extension, "(" + ++i + ")" + extension);
+            }
+            return fileName;
         }
 
         public static bool IsFileWriteLocked(FileInfo file)
