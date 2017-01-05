@@ -100,8 +100,8 @@ namespace Trinity.Framework.Helpers
             }
 
             public static IntPtr MapManagerPtr => _offsetsC.ElementAtOrDefault(12) - 0x68;
-            public static IntPtr SNOGroups => _offsetsC.ElementAtOrDefault(12) + 0x38;
-            public static IntPtr AttributeDescripter => _offsetsC.ElementAtOrDefault(15) - 0x04;
+            public static IntPtr SNOGroups => (IntPtr)0x01C13C90; //_offsetsC.ElementAtOrDefault(12) + 0x38;
+            public static IntPtr AttributeDescripter => (IntPtr)0x01C66660; //_offsetsC.ElementAtOrDefault(15) - 0x04;
             public static IntPtr SNOTableGameBalance => _offsetsC.ElementAtOrDefault(16);
             public static IntPtr SNOTableActor => _offsetsC.ElementAtOrDefault(18);
             public static IntPtr SNOTablePower => _offsetsC.ElementAtOrDefault(19);

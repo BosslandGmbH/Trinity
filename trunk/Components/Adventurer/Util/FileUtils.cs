@@ -80,7 +80,7 @@ namespace Trinity.Components.Adventurer.Util
             }
             catch (Exception ex)
             {
-                Logger.Debug("[ReadFromTextFile] " + ex.Message + Environment.NewLine + ex.StackTrace);
+                Logger.Debug("Exception in ReadFromTextFile");
                 return null;
             }
         }

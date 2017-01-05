@@ -58,11 +58,10 @@ namespace Trinity.Framework.Objects.Memory.Attributes
                 var type = TypeUtil<T>.TypeOf;
                 if (Integer is T)
                 {
-                    if (Descripter.IsInteger)
+                    if (Descripter != null && Descripter.IsInteger)
                     {
                         return (T)Convert.ChangeType(Integer, TypeUtil<T>.TypeOf);
                     }
-
                     if (Single > Int32.MinValue && Single < Int32.MaxValue)
                     {
                         return (T)Convert.ChangeType(Single, type);
@@ -70,7 +69,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
                 }
                 if (Single is T)
                 {
-                    if (Descripter.IsInteger)
+                    if (Descripter != null && Descripter.IsInteger)
                     {
                         return (T)Convert.ChangeType(Integer, TypeUtil<T>.TypeOf);
                     }
@@ -95,8 +94,9 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
             ModKey = ZetaDia.Memory.Read<int>(BaseAddress + 4);
             Key = new AttributeKey(ModKey);
-            AttributeDescripter descripter;
-            AttributeManager.AttributeDescriptors.TryGetValue(Key.DescripterId, out descripter);
+
+            AttributeDescripter descripter = null;
+            AttributeManager.AttributeDescriptors?.TryGetValue(Key.DescripterId, out descripter);
 
             if (descripter != null)
             {
@@ -120,7 +120,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         public override string ToString()
         {
-            var modString = Modifer.GetType() != typeof (int) ? $" [ {Descripter.ParameterType}: {Modifer}: {Key.ModifierId} ]" : string.Empty;
+            var modString = Modifer.GetType() != typeof(int) ? $" [ {Descripter?.ParameterType}: {Modifer}: {Key.ModifierId} ]" : string.Empty;
 
             return $"{Key.DescripterId}: {Key.BaseAttribute} ({(int)Key.BaseAttribute}){modString} i:{Integer} f:{Single} Value={((float)GetValue()).ToString("0.##")}";
         }
