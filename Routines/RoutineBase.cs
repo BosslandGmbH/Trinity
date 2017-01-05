@@ -205,7 +205,7 @@ namespace Trinity.Routines
             if (Player.SecondaryResourcePct < settings.SecondaryResourcePct / 100)
                 return true;
 
-            if (Player.CurrentHealthPct <= settings.HealthPct)
+            if (Player.CurrentHealthPct > settings.HealthPct)
                 return true;
 
             if (SpellHistory.TimeSinceUse(skill.SNOPower).TotalMilliseconds < settings.RecastDelayMs)
