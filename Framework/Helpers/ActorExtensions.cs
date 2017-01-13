@@ -17,9 +17,20 @@ namespace Trinity.Framework.Helpers
                 Line 108:  755: BuffIconCount0 (-3341) [ PowerSnoId: ActorLoadingBuff: 212032 ] i:0 f:0 Value=0 	
                 Line 224:  853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Fortress_Portal_Switch: 360496 ] i:1 f:0 Value=1 
                 Line 127:  295: PowerImmobilize (-3801) i:1 f:0 Value=1 
+
+            	Line 404:  618: BuffIconEndTick0 (-3478) [ PowerSnoId: x1_Fortress_Portal_Switch: 360496 ] i:0 f:0 Value=0 
+	Line 430:  586: BuffIconStartTick0 (-3510) [ PowerSnoId: x1_Fortress_Portal_Switch: 360496 ] i:0 f:0 Value=0 
+	Line 478:  755: BuffIconCount0 (-3341) [ PowerSnoId: x1_Fortress_Portal_Switch: 360496 ] i:0 f:0 Value=0 
+	Line 768:  618: BuffIconEndTick0 (-3478) [ PowerSnoId: x1_Fortress_Portal_Switch: 360496 ] i:211820 f:0 Value=211820 
+	Line 794:  586: BuffIconStartTick0 (-3510) [ PowerSnoId: x1_Fortress_Portal_Switch: 360496 ] i:211760 f:0 Value=211760 
+	Line 842:  755: BuffIconCount0 (-3341) [ PowerSnoId: x1_Fortress_Portal_Switch: 360496 ] i:1 f:0 Value=1 
+
+            //755: BuffIconCount0 (-3341) [ PowerSnoId: WarpInMagical: 132910 ] i:0 f:0 Value=0 
             */
 
-            return ZetaDia.Me.CommonData.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.x1_Fortress_Portal_Switch);
+            //return ZetaDia.Me.CommonData.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.x1_Fortress_Portal_Switch);
+
+            return ZetaDia.Me.CommonData.GetAttribute<bool>(ActorAttributeType.BuffIconCount0, (int)SNOPower.x1_Fortress_Portal_Switch);
         }
 
         public static List<ACDItem> ToAcdItems(this IEnumerable<TrinityItem> items)

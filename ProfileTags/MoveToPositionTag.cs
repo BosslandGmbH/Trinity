@@ -33,17 +33,14 @@ namespace Trinity.ProfileTags
 
         #region ScenePosition
 
-        [XmlAttribute("x")]
         [XmlAttribute("sceneX")]
         [DefaultValue(0)]
         public float RelativeSceneX { get; set; }
 
-        [XmlAttribute("y")]
         [XmlAttribute("sceneY")]
         [DefaultValue(0)]
         public float RelativeSceneY { get; set; }
 
-        [XmlAttribute("z")]
         [XmlAttribute("sceneZ")]
         [DefaultValue(0)]
         public float RelativeSceneZ { get; set; }
@@ -72,31 +69,44 @@ namespace Trinity.ProfileTags
         {
             if (_task == null)
             {
-                if (!ZetaDia.WorldInfo.IsGenerated)
+                var targetAbsolutePosition = new Vector3(X, Y, Z);
+                var targetRelativePosition = new Vector3(RelativeSceneX, RelativeSceneY, RelativeSceneZ);
+
+                if (ZetaDia.WorldInfo.IsGenerated && targetAbsolutePosition != Vector3.Zero && targetRelativePosition == Vector3.Zero)
                 {
-                    _task = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, new Vector3(X, Y, Z), 3);
+                    Logger.LogError("[MoveToPosition] The current world is auto-generatd, you need to use sceneX,sceneY,sceneZ + either 'sceneName' or 'sceneSnoId' attributes");
+                    _isDone = true;
+                    return true;
                 }
-                else
+
+                if (!ZetaDia.WorldInfo.IsGenerated && targetAbsolutePosition != Vector3.Zero)
                 {
-                    var relativeScenePosition = new Vector3(RelativeSceneX, RelativeSceneY, RelativeSceneZ);
+                    _task = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, targetAbsolutePosition, 3);
+                }
+                else if (targetRelativePosition != Vector3.Zero)
+                {
                     if (SceneSnoId > 0)
                     {
-                        _task = new MoveToScenePositionCoroutine(SceneSnoId, relativeScenePosition);
+                        _task = new MoveToScenePositionCoroutine(SceneSnoId, targetRelativePosition);
                     }
                     else if (!string.IsNullOrEmpty(SceneName))
                     {
-                        _task = new MoveToScenePositionCoroutine(SceneName, relativeScenePosition);
+                        _task = new MoveToScenePositionCoroutine(SceneName, targetRelativePosition);
                     }
                     else
                     {
                         Logger.LogError("[MoveToPosition] A sceneName or sceneSnoId, and a relative position (sceneX,sceneY,sceneZ) are required for dynamically generated worlds");
-                        _isDone = true;
-                        return false;
                     }
+                }
+                else
+                {
+                    Logger.LogError("[MoveToPosition] No valid coodinates were specified");
                 }
             }
 
-            if (!await _task.GetCoroutine()) return true;
+            if (_task != null && !await _task.GetCoroutine())
+                return true;
+
             _isDone = true;
             return true;
         }

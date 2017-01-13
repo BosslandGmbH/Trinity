@@ -110,7 +110,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         public static Vector3 ScanForActorLocation(int actorId, int searchRadius)
         {
             var actor =
-                ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
+                ZetaDia.Actors.GetActorsOfType<DiaObject>(true).OrderBy(a => a.Distance)
                     .FirstOrDefault(a => a.IsFullyValid() && a.ActorSnoId == actorId && a.Position.Distance(AdvDia.MyPosition) <= searchRadius);
             if (actor != null)
             {

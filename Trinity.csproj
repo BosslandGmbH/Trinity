@@ -98,6 +98,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Adventurer\Coroutines\BountyCoroutines\Subroutines\DebugMessageCoroutine.cs" />
+    <Compile Include="Components\Adventurer\Coroutines\BountyCoroutines\Subroutines\MoveThroughDeathGates.cs" />
     <Compile Include="Components\Adventurer\Game\Combat\ClearAreaHelper.cs" />
     <Compile Include="Components\Combat\DefaultProviders.cs" />
     <Compile Include="Components\Combat\Resources\IPartyMember.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="Modules\ChangeMonitor.cs" />
     <Compile Include="Modules\HeroDataCache.cs" />
     <Compile Include="Modules\ItemLogger.cs" />
+    <Compile Include="Modules\ProfileSettings.cs" />
     <Compile Include="Modules\SessionLogger.cs" />
     <Compile Include="Framework\Objects\Api\ApiBuild.cs" />
     <Compile Include="Framework\Objects\Api\ApiRoutineBuilder.cs" />
@@ -245,6 +248,7 @@
     <Compile Include="Routines\Crusader\CrusaderDefault.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterShadowHybrid.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterMarauder.cs" />
+    <Compile Include="Routines\Monk\MonkOnePunch.cs" />
     <Compile Include="Routines\Monk\MonkSunwukoLTK.cs" />
     <Compile Include="Routines\Monk\MonkUliana.cs" />
     <Compile Include="Routines\Monk\MonkRaimentShenlongs.cs" />
@@ -630,8 +634,16 @@
     <Content Include="Components\Adventurer\Game\Quests\Incompletes.txt" />
     <Content Include="Components\Adventurer\Game\Quests\SNOBounties.txt" />
     <Content Include="Components\Adventurer\Game\Quests\SpecialBounties.txt" />
+    <Content Include="Profiles\BrutalWhiteFarm.xml" />
+    <Content Include="Profiles\Debug\A5-KillValteskBounty.xml" />
+    <Content Include="Profiles\Debug\BelialBounty.xml" />
+    <Content Include="Profiles\Debug\MalthaelBounty.xml" />
+    <Content Include="Profiles\Debug\MoveWithinScene.xml" />
     <Content Include="Profiles\Debug\WaitForCombatTag.xml" />
     <Content Include="Profiles\GreaterRift.xml" />
+    <Content Include="Profiles\Diablo1.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Keywardens.xml" />
     <Content Include="Profiles\NephalemRift.xml" />
     <Content Include="Profiles\AutoFollow\FollowerCombat.xml" />
@@ -668,6 +680,7 @@
     <Compile Include="Routines\Wizard\WizardFlashfire.cs" />
     <Compile Include="Routines\Wizard\WizardFirebirdArchon.cs" />
     <Compile Include="Routines\Wizard\WizardDefault.cs" />
+    <Compile Include="Routines\Wizard\WizardParalysisArchon.cs" />
     <Compile Include="Settings\Mock\RoutineMockData.cs" />
     <Compile Include="Settings\RoutineSettings.cs" />
     <Compile Include="Settings\ItemSettings.cs" />
@@ -947,6 +960,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Routines\Monk\MonkOnePunchSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Routines\Monk\MonkSunwukoLTKSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -992,6 +1009,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Routines\Wizard\WizardDefaultSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Wizard\WizardParalysisArchonSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

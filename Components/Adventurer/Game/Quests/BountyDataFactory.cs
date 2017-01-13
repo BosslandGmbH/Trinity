@@ -798,23 +798,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            //A5 - Bounty: Kill Malthael (359927)
+           // A5 - Bounty: Kill Malthael(359927)
            Bounties.Add(new BountyData
            {
                QuestId = 359927,
                Act = Act.A5,
                WorldId = 328484, // Enter the final worldId here
-                QuestType = BountyQuestType.KillBossBounty,
-                //WaypointNumber = 57,
-                Coroutines = new List<ISubroutine>
+               QuestType = BountyQuestType.KillBossBounty,
+               //WaypointNumber = 60,
+               Coroutines = new List<ISubroutine>
                {
-                    //new MoveToSceneCoroutine(359927, 271235, "x1_fortress_island_NS_01"),
-                    //new MoveToSceneCoroutine(359927, 271235, "x1_fortress_island_SW_01"),
-                    //new MoveToSceneCoroutine(359927, 271235, "x1_fortress_E_BossExit_01"),
+                    new MoveThroughDeathGates(359927, 271235, 4),
                     new EnterLevelAreaCoroutine(359927, 271235, 346410, 1012176886, 176002),
                     new EnterLevelAreaCoroutine(359927, 346410, 328484, -144918420, 374257),
                     new ClearLevelAreaCoroutine(359927)
-               }
+                }
            });
 
             // A4 - Bounty: Kill Diablo (349288)
@@ -1365,6 +1363,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 //WaypointNumber = 56,
                 Coroutines = new List<ISubroutine>
                 {
+                    new MoveThroughDeathGates(363407,271233,1),
                     new MoveToMapMarkerCoroutine(363407, 271233, 2912417),
                     new ClearAreaForNSecondsCoroutine(363407, 60, 0, 0, 100),
                 }
@@ -1519,6 +1518,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 //WaypointNumber = 56,
                 Coroutines = new List<ISubroutine>
                 {
+                    new MoveThroughDeathGates(363405,271233,1),
                     new MoveToMapMarkerCoroutine(363405, 271233, 2912417),
                     new MoveToScenePositionCoroutine(363405, 271233, "x1_fortress_S_03_Judgment", new Vector3(73.57855f, 151.708f, -9.899999f)),
                     new ClearAreaForNSecondsCoroutine(363405, 60, 0, 0, 45),
@@ -3523,6 +3523,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearCurse,
                 Coroutines = new List<ISubroutine>
                     {
+                        new MoveThroughDeathGates(375275,271233,1),
                         new MoveToMapMarkerCoroutine (375275,271233, 2912417, 365097),
                         new InteractWithGizmoCoroutine (375275,271233, 365097, 2912417),
                         new ClearAreaForNSecondsCoroutine (375275, 60, 364559, 2912417)
@@ -6099,6 +6100,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
                     {
+                        new MoveThroughDeathGates(363552,271233,1),
                         new KillUniqueMonsterCoroutine (363552,271233, 363378, -1443986728),
                         new ClearLevelAreaCoroutine (363552)
                     }
@@ -6113,6 +6115,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
                     {
+                        new MoveThroughDeathGates(363555,271233,1),
+                        new MoveThroughDeathGates(363555,271233,1),
                         new KillUniqueMonsterCoroutine (363555,271233, 363367, -413057866),
                         new ClearLevelAreaCoroutine (363555)
                     }
@@ -6127,6 +6131,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
                     {
+                        new MoveThroughDeathGates(363557,271233,1),
                         new KillUniqueMonsterCoroutine (363557,271233, 363232, 327834221),
                         new ClearLevelAreaCoroutine (363557)
                     }

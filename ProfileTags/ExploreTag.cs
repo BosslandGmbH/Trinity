@@ -60,6 +60,9 @@ namespace Trinity.ProfileTags
 
         public async Task<bool> Coroutine()
         {
+            if (_isDone)
+                return true;
+
             if (await ExplorationCoroutine.Explore(new HashSet<int> { LevelAreaId }))
             {
                 _isDone = true;
@@ -71,7 +74,7 @@ namespace Trinity.ProfileTags
         public override void OnDone()
         {
             Pulsator.OnPulse -= OnPulse;
-            Logger.Info($"[ExploreLevelArea] It took {_stopwatch.Elapsed.ToString(@"mm\:ss")} ms to explore {(SNOLevelArea)LevelAreaId}");
+            Logger.Info($"[ExploreLevelArea] It took {_stopwatch.Elapsed.TotalMinutes} minutes to explore {(SNOLevelArea)LevelAreaId}");
             base.OnDone();
         }
 

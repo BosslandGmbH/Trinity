@@ -229,6 +229,7 @@ namespace Trinity.Framework.Actors.Properties
                         return TrinityObjectType.Destructible;
 
                     case GizmoType.PlacedLoot:
+                    case GizmoType.LoreChest: // D1 profile Lectern switch to open door
                     case GizmoType.Switch:
                     case GizmoType.Headstone:
                         return TrinityObjectType.Interactable;

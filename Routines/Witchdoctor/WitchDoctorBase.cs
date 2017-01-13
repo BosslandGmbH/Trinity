@@ -473,10 +473,10 @@ namespace Trinity.Routines.Witchdoctor
             => new TrinityPower(Skills.WitchDoctor.GraspOfTheDead, 65f, target.AcdId);
 
         protected virtual TrinityPower Firebats()
-            => new TrinityPower(Skills.WitchDoctor.Firebats, 25, 25);
+            => new TrinityPower(Skills.WitchDoctor.Firebats, 100, 250);
 
         protected virtual TrinityPower Firebats(TrinityActor target)
-            => new TrinityPower(Skills.WitchDoctor.Firebats, FireBatsRange, target.Position, 25, 25);
+            => new TrinityPower(Skills.WitchDoctor.Firebats, FireBatsRange, target.Position, 100, 250);
 
         protected virtual TrinityPower Haunt(TrinityActor target)
             => new TrinityPower(Skills.WitchDoctor.Haunt, 70f, target.AcdId);

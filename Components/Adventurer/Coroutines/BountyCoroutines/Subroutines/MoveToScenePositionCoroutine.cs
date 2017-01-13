@@ -7,6 +7,7 @@ using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
+using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
@@ -119,6 +120,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> NotStarted()
         {
+            if (AdvDia.CurrentWorldScene == null)
+            {
+                Logger.Debug("waiting patiently for world scene data");
+                return false;
+            }
+
             SafeZerg.Instance.DisableZerg();
             if (_sceneName == null)
             {
@@ -128,13 +135,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 _tempSceneName = null;
             }
-            State = States.Searching;
 
+            Logger.Debug($"Started MoveToScenePositionCoroutine SceneName='{_sceneName}' SceneSnoId={_sceneSnoId}");
+            State = States.Searching;
             return false;
         }
 
         private async Task<bool> Searching()
         {
+
             if (_objectiveLocation == Vector3.Zero)
             {
                 ScanForObjective();
@@ -144,6 +153,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.Moving;
                 return false;
             }
+
+            Logger.Debug("Unable to find scene, exploring...");
 
             var bountyData = BountyData;
 
@@ -183,13 +194,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private async Task<bool> Completed()
         {
             _isDone = true;
-            return false;
+            return true;
         }
 
         private async Task<bool> Failed()
         {
             _isDone = true;
-            return false;
+            return true;
         }
 
         private Vector3 _objectiveLocation = Vector3.Zero;
@@ -229,6 +240,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     {
                         _worldScene = scene;
                         _objectiveLocation = _worldScene.GetWorldPosition(_position);
+                        VisualizerViewModel.DebugPosition = _objectiveLocation;
+                        Logger.DebugSetting($"Scan found target scene {_sceneName}. World={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
                     }
                 }
                 else if (!string.IsNullOrEmpty(_tempSceneName))

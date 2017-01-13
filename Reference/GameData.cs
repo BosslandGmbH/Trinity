@@ -1647,8 +1647,10 @@ namespace Trinity.Reference
         public static HashSet<int> InteractWhiteListIds { get { return interactWhiteListIds; } }
         private static readonly HashSet<int> interactWhiteListIds = new HashSet<int>
         {
-
-
+            //454511, //p43_AD_Valor_BloodStone-21326
+            454473, 455059, // Diablo1 Area Lore Book Lecturn Switches
+            //455675, //p43_AD_Valor_Pedestal-21061 (Sno=455675 
+            453770, //p43_trdun_lecturn_hallsoftheblind- 453770
 
             //328830//x1_Fortress_Portal_Switch (328830)
             309432, // x1_westm_Bridge
@@ -1912,12 +1914,28 @@ namespace Trinity.Reference
             28768, // trDun_Crypt_NSEW_JarSouls_01
         };
 
+        // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
+        public static HashSet<int> DoorsToAlwaysIgnore { get; }= new HashSet<int>
+        {
+            454194, //p43_AD_trDun_Cath_WoodDoor_Lazarus-56453 (454194)
+            454187, //p43_AD_a1dun_Leor_Jail_Door_SuperLocked_A-61290 (454187) 
+            454173, //43_AD_a1dun_Leor_Gate_A-61285 (454173)
+        };
+
+        // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
+        public static Dictionary<int,int> SceneSpecificDoorsIgnore { get; } = new Dictionary<int,int>
+        {
+            { 454485, 454346 } //p43_AD_Catacombs_Door_A-13146 (454346)  // D1 Valor Scene Event
+        };
+
         /// <summary>
         /// Contains ActorSnoId's of world objects that should be blacklisted
         /// </summary>
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            456331, //p43_AD_Valor_Pedestal_Locked-21607
+
             181195, //a2dun_Cald_Belial_Acid_Attack-1533 (181195) Type=Door 
             (int)SNOActor.x1_Malthael_DeathFogMonster, //x1_Malthael_DeathFogMonster-23399 (325136) 
 

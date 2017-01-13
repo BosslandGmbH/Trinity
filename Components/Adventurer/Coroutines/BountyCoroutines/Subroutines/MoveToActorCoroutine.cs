@@ -21,7 +21,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private bool _isDone;
         private States _state;
 
-        private int _objectiveScanRange = 5000;
+        private int _objectiveScanRange;
 
         #region State
 
@@ -57,11 +57,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
 
 
-        public MoveToActorCoroutine(int questId, int worldId, int actorId)
+        public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000)
         {
             _questId = questId;
             _worldId = worldId;
             _actorId = actorId;
+            _objectiveScanRange = maxRange;
         }
 
 
@@ -127,7 +128,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Moving()
         {
-            if (await NavigationCoroutine.MoveTo(_objectiveLocation, 10))
+            // todo make this relative to actor's collision radius or bot might get stuck walking into it.
+            if (await NavigationCoroutine.MoveTo(_objectiveLocation, 15))
             {
                 if (AdvDia.MyPosition.Distance(_objectiveLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
                 {

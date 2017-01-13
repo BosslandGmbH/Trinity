@@ -35,9 +35,10 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsUntargetable = actor.Attributes.IsUntargetable && !GameData.IgnoreUntargettableAttribute.Contains(actor.ActorSnoId);
             actor.IsInvulnerable = actor.Attributes.IsInvulnerable;
             actor.IsUsed = GetIsGizmoUsed(actor);
-            actor.IsLockedDoor = actor.Attributes.IsDoorLocked || actor.Attributes.IsDoorTimed;
+            actor.IsLockedDoor = (actor.Attributes.IsDoorLocked || actor.Attributes.IsDoorTimed) && !actor.Attributes.IsGizmoBeenOperated;
             actor.ShrineType = GetShrineType(actor);
             actor.ContainerType = GetContainerType(actor);
+            actor.IsInteractWhitelisted = GameData.InteractWhiteListIds.Contains(actor.ActorSnoId);
 
             // todo why is this needed for gizmos? 
             var movement = rActor.Movement;
@@ -170,6 +171,9 @@ namespace Trinity.Framework.Actors.Properties
                 if (attributes.IsGizmoBeenOperated)
                     return true;
 
+                if (actor.GizmoType == GizmoType.Switch && actor.AnimationNameLowerCase.Contains("_open"))
+                    return false;
+
                 if (attributes.IsChestOpen)
                     return true;
 
@@ -191,7 +195,7 @@ namespace Trinity.Framework.Actors.Properties
                 if (actor.Type == TrinityObjectType.Destructible || actor.Type == TrinityObjectType.Barricade)
                 {
                     if (actor.IsUntargetable || actor.IsInvulnerable || Math.Abs(actor.HitPointsMax - actor.HitPoints) > 0.0001)
-                         return true;
+                        return true;
 
                     if (attributes.IsDeletedOnServer)
                         return true;

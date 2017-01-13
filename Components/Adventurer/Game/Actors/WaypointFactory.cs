@@ -142,9 +142,9 @@ namespace Trinity.Components.Adventurer.Game.Actors
             { 55, new WaypointData(55, 283553, 283552, "Passage to Corvus") },
             { 56, new WaypointData(56, 283567, 283566, "Ruins of Corvus") },
             { 57, new WaypointData(57, 271234, 271233, "Pandemonium Fortress Level 1") },
-            { 58, new WaypointData(58, 360494, 271235, "Pandemonium Fortress Level 2") },
-            { 59, new WaypointData(59, 338602, 338600, "Battlefields of Eternity") },
-            { 60, new WaypointData(60, 427763, 408254, "Greyhollow Island") },
+            { 60, new WaypointData(60, 459863, 271235, "Pandemonium Fortress Level 2") },
+            { 58, new WaypointData(58, 338602, 338600, "Battlefields of Eternity") },
+            { 59, new WaypointData(59, 427763, 408254, "Greyhollow Island") },
         };
 
         public static readonly Dictionary<int, WaypointData> CampaignWaypoints = new Dictionary<int, WaypointData>

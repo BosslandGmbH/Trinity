@@ -128,7 +128,7 @@ namespace Trinity.DbProvider
                 return;
 
             Logger.Log(LogCategory.Movement, "MoveStop");
-            ZetaDia.Me.UsePower(SNOPower.Walk, ZetaDia.Me.Position, ZetaDia.WorldId);
+            ZetaDia.Me.UsePower(SNOPower.Walk, MathEx.GetPointAt(ZetaDia.Me.Position, 2f, ZetaDia.Me.Movement.Rotation), ZetaDia.WorldId);
         }
 
         private bool ElementIsVisible(UIElement element)

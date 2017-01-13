@@ -27,6 +27,8 @@ namespace Trinity.Framework.Objects
 
         protected virtual void OnPluginDisabled() { }
 
+        protected virtual void OnProfileLoaded() { }
+
         protected virtual void OnShutdown() { }
 
         public Module()

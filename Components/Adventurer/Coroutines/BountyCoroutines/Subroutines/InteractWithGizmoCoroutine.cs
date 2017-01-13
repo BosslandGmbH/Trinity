@@ -185,6 +185,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             //    _interactionCoroutine.DiaObject = portalGizmo;
             //}
 
+            Logger.Debug("[InteractWithGizmo] Starting interaction subroutine.");
+
             if (await _interactionCoroutine.GetCoroutine())
             {
                 ActorFinder.InteractWhitelist.Remove(_actorId);

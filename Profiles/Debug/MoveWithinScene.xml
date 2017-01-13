@@ -1,0 +1,35 @@
+﻿<Profile>
+  <Name>Move to Scene Position</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <Trinity>
+    <Scenes>
+      <Scene id="454485" alwaysRayWalk="true" />
+    </Scenes>
+  </Trinity>
+  <GameParams quest="-1" step="-1" act="A1" resumeFromSave="False" isPrivate="True" numGames="-1" />
+  <Order>
+
+    <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="91" sceneY="139" sceneZ="0" isGenerated="true" />
+
+    <Interact questId="312429" stepId="2" actorId="454511" actorName="p43_AD_Valor_BloodStone" explore="false" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="78" sceneY="139" sceneZ="0" />
+    <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="61" sceneY="80" sceneZ="0" isGenerated="true" />
+
+    <Interact questId="312429" stepId="2" actorId="456331" actorName="p43_AD_Valor_Pedestal_Locked" explore="false" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="62" sceneY="75" sceneZ="0" />
+    <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="91" sceneY="49" sceneZ="0" isGenerated="true" />
+    <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="64" sceneY="82" sceneZ="0" isGenerated="true" />
+
+    <Interact questId="312429" stepId="2" actorId="455675" actorName="p43_AD_Valor_Pedestal" explore="false"  worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="62" sceneY="75" sceneZ="0" />
+    <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="131" sceneY="147" sceneZ="0" isGenerated="true" />
+    <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="146" sceneY="116" sceneZ="0" isGenerated="true" />
+
+    <Interact questId="312429" stepId="2" actorId="454511" actorName="p43_AD_Valor_BloodStone" explore="false"  worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="153" sceneY="105" sceneZ="0" />
+    <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="71" sceneY="80" sceneZ="0" isGenerated="true" />
+
+    <Interact questId="312429" stepId="2" actorId="456331" actorName="p43_AD_Valor_Pedestal_Locked" explore="false"  worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="62" sceneY="75" sceneZ="0" />
+    <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="26" sceneY="84" sceneZ="0" isGenerated="true" />
+
+    <LogMessage message=">> Profile Finished" />
+    <WaitTimer questId="1" stepId="1" waitTime="500" />
+  </Order>
+</Profile>

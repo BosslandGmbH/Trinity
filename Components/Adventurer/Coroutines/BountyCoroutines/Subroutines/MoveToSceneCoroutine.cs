@@ -100,6 +100,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
         }
 
+        public string SceneName => _sceneName;
+
         private async Task<bool> NotStarted()
         {
             SafeZerg.Instance.DisableZerg();
@@ -155,13 +157,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private async Task<bool> Completed()
         {
             _isDone = true;
-            return false;
+            return true;
         }
 
         private async Task<bool> Failed()
         {
             _isDone = true;
-            return false;
+            return true;
         }
 
         private Vector3 _objectiveLocation = Vector3.Zero;

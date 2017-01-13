@@ -74,7 +74,7 @@ namespace Trinity.Routines
             => Core.Actors.AllRActors.Where(u => u.IsUnit && u.IsHostile);
 
         /// <summary>
-        /// A safe list of units who are currently in line of sight without being filtered for valid targets. Use with caution.
+        /// A raw hostile unit list who are currently in line of sight without being filtered for valid targets. Use with caution.
         /// </summary>
         protected static IEnumerable<TrinityActor> AllUnitsInSight
             => HostileMonsters.Where(u => u.IsInLineOfSight);
@@ -106,13 +106,13 @@ namespace Trinity.Routines
             => (int)Math.Ceiling(Core.Routines.CurrentRoutine.ClusterSize * 1.25d);
 
         /// <summary>
-        /// Current target is a safespot and avoider is attempting telling us we should avoid.
+        /// Current target is a safespot and we are moving to it for avoidance reasons
         /// </summary>
         protected static bool IsCurrentlyAvoiding
             => Combat.IsCurrentlyAvoiding;
 
         /// <summary>
-        /// Current target is a safespot and avoider is attempting telling us we should kite.
+        /// Current target is a safespot and we are moving to it for kiting reasons
         /// </summary>
         protected static bool IsCurrentlyKiting
             => Combat.IsCurrentlyKiting;
