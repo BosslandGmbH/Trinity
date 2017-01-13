@@ -164,30 +164,30 @@ namespace Trinity.Components.Adventurer.Coroutines
                 _mover = Mover.Navigator;
             }
 
-            // Intercept destinations that require a gate to be used to reach them, and redirect to gate position.
-            if (DeathGates.IsInDeathGateWorld)
-            {
-                var gatePosition = DeathGates.GetBestGatePosition(_destination);
-                if (DeathGates.IsInOutsideRegion && !IsDeathGateIgnored(gatePosition, _deathGateIgnoreList))
-                {
-                    Logger.DebugSetting($"Moving to use Death Gate (Currently in Outside Region) {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)}");
-                    _deathGatePosition = gatePosition;
-                    State = States.MovingToDeathGate;
-                    _pathGenetionTimer.Reset();
-                    return false;
-                }
+            //// Intercept destinations that require a gate to be used to reach them, and redirect to gate position.
+            //if (DeathGates.IsInDeathGateWorld)
+            //{
+            //    var gatePosition = DeathGates.GetBestGatePosition(_destination);
+            //    if (DeathGates.IsInOutsideRegion && !IsDeathGateIgnored(gatePosition, _deathGateIgnoreList))
+            //    {
+            //        Logger.DebugSetting($"Moving to use Death Gate (Currently in Outside Region) {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)}");
+            //        _deathGatePosition = gatePosition;
+            //        State = States.MovingToDeathGate;
+            //        _pathGenetionTimer.Reset();
+            //        return false;
+            //    }
 
-                var destinationIsGate = _destination.Distance(gatePosition) < 5f;
-                if (destinationIsGate)
-                {
-                    Logger.DebugSetting($"Current Destination is Death Gate. {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)}");
-                    _deathGatePosition = gatePosition;
-                    State = States.MovingToDeathGate;
-                    _pathGenetionTimer.Reset();
-                    return false;
-                }
+            //    var destinationIsGate = _destination.Distance(gatePosition) < 5f;
+            //    if (destinationIsGate)
+            //    {
+            //        Logger.DebugSetting($"Current Destination is Death Gate. {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)}");
+            //        _deathGatePosition = gatePosition;
+            //        State = States.MovingToDeathGate;
+            //        _pathGenetionTimer.Reset();
+            //        return false;
+            //    }
 
-            }
+            //}
 
             Logger.Debug("{0} {1} (Distance: {2})", (_mover == Mover.StraightLine ? "Moving towards" : "Moving to"), _destination, distanceToDestination);
             State = States.Moving;
@@ -262,21 +262,21 @@ namespace Trinity.Components.Adventurer.Coroutines
                         }
                         else
                         {
-                            // DB Navigator will report ReachedDestination when failing to navigate to positions that require a death gate to reach. Redirect to gate position.
-                            var gatePosition = DeathGates.GetBestGatePosition(_destination);
-                            if (gatePosition != Vector3.Zero && (!DeathGates.IsInOutsideRegion || !IsDeathGateIgnored(gatePosition, _deathGateIgnoreList)))
-                            {
-                                Logger.DebugSetting($"Moving to use Death Gate {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)} IgnoreListCount={_deathGateIgnoreList.Count}");
-                                _deathGatePosition = gatePosition;
-                                _deathGateIgnoreList[_deathGatePosition] = DateTime.UtcNow;
-                                State = States.MovingToDeathGate;
-                            }
-                            else
-                            {
+                            //// DB Navigator will report ReachedDestination when failing to navigate to positions that require a death gate to reach. Redirect to gate position.
+                            //var gatePosition = DeathGates.GetBestGatePosition(_destination);
+                            //if (gatePosition != Vector3.Zero && (!DeathGates.IsInOutsideRegion || !IsDeathGateIgnored(gatePosition, _deathGateIgnoreList)))
+                            //{
+                            //    Logger.DebugSetting($"Moving to use Death Gate {gatePosition} Dist: {gatePosition.Distance(AdvDia.MyPosition)} IgnoreListCount={_deathGateIgnoreList.Count}");
+                            //    _deathGatePosition = gatePosition;
+                            //    _deathGateIgnoreList[_deathGatePosition] = DateTime.UtcNow;
+                            //    State = States.MovingToDeathGate;
+                            //}
+                            //else
+                            //{
                                 Logger.DebugSetting($"Navigator reports DestinationReached but we're not at destination, failing. Mover={_mover}");
                                 State = States.Failed;
                                 LastMoveResult = MoveResult.Failed;
-                            }
+                            //}
                         }
                         return false;
                     case MoveResult.Failed:

@@ -724,6 +724,9 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                     //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.RadarDebug))
                     //{
+
+                    DrawDebugPosition(dc, CanvasData);
+
                     DrawClickRays(dc, CanvasData);
 
                     DrawDeathGates(dc, CanvasData);
@@ -911,6 +914,14 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 var markerPoint = marker.Position.ToCanvasPoint();
                 dc.DrawLine(pen, CenterActor.Point, markerPoint);
                 DrawLabel(dc, CanvasData, marker.Name, markerPoint, OrangeBrush, 45, 12, 3);
+            }
+        }
+
+        private void DrawDebugPosition(DrawingContext dc, CanvasData canvasData)
+        {
+            if (VisualizerViewModel.DebugPosition != Vector3.Zero)
+            {
+                dc.DrawLine(RadarResources.SuccessPen, VisualizerViewModel.DebugPosition.ToCanvasPoint(), Player.Point);
             }
         }
 

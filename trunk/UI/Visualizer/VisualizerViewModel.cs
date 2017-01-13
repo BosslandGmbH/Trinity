@@ -1115,6 +1115,7 @@ namespace Trinity.UI.Visualizer
 
         public static Window Window { get; set; }
         public static bool IsWindowOpen { get; set; }
+        public static Vector3 DebugPosition { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

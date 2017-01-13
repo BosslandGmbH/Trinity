@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Trinity.Framework;
+using Trinity.Framework.Objects.Enums;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
@@ -75,6 +77,32 @@ namespace Trinity.ProfileTags
         {
             ActorClass a;
             return Enum.TryParse(actorClass, true, out a) && ZetaDia.Service.Hero.Class == a;
+        }
+
+        public static bool MarkerTypeExists(string worldMarkerType)
+        {
+            WorldMarkerType t;
+            return Enum.TryParse(worldMarkerType, true, out t) && Core.Markers.CurrentWorldMarkers.Any(m => m.MarkerType == t);
+        }
+
+        public static bool MarkerNameExists(string markerName)
+        {
+            return !string.IsNullOrEmpty(markerName) && Core.Markers.CurrentWorldMarkers.Any(m => m.Name == markerName);
+        }
+
+        public static bool MarkerNameHashExists(int markerNameHash)
+        {
+            return Core.Markers.CurrentWorldMarkers.Any(m => m.NameHash == markerNameHash);
+        }
+
+        public static bool BossNearby(int range)
+        {
+            return Core.Targets.ByMonsterQuality[MonsterQuality.Boss].Any();
+        }
+
+        public static bool EliteNearby(int range)
+        {
+            return Core.Targets.Any(m => m.IsUnit && m.IsElite);
         }
 
         public static bool CurrentHeroLevel(int level)

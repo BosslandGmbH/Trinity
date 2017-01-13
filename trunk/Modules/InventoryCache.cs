@@ -43,7 +43,7 @@ namespace Trinity.Modules
             {
                 //Clear();
 
-                if (!ZetaDia.IsInGame)
+                if (!ZetaDia.IsInGame && ZetaDia.PlayerData != null)
                     return;
 
                 var kanaisCubeIds = new HashSet<int>(ZetaDia.PlayerData.KanaisPowersAssignedActorSnoIds);

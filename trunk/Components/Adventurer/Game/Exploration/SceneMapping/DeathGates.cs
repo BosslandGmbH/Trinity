@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using IronPython.Modules;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Rift;
+using Trinity.Framework.Helpers;
+using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
@@ -10,7 +14,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 {
     public static class DeathGates
     {
-        public static List<DeathGateScene> Scenes = new List<DeathGateScene>();
+        public static Dictionary<int, DeathGateScene> SceneDefs = new Dictionary<int, DeathGateScene>();
+        private static Dictionary<string, DeathGateScene> _scenes = new Dictionary<string, DeathGateScene>();
 
         static DeathGates()
         {
@@ -19,7 +24,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             // Y axis increases from top left to bottom right.      
             // Scene size of 240/240      
 
-            Scenes.Add(new DeathGateScene
+            SceneDefs.Add(338627, new DeathGateScene
             {
                 Name = "x1_fortress_island_NW_01",
                 SnoId = 338627,
@@ -32,7 +37,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            Scenes.Add(new DeathGateScene
+            SceneDefs.Add(345345, new DeathGateScene
             {
                 Name = "x1_fortress_NE_05_soul_well",
                 SnoId = 345345,
@@ -45,7 +50,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            Scenes.Add(new DeathGateScene
+            SceneDefs.Add(348859, new DeathGateScene
             {
                 Name = "x1_fortress_soul_grinder_A_W01_N01",
                 SnoId = 348859,
@@ -58,7 +63,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            Scenes.Add(new DeathGateScene
+            SceneDefs.Add(338171, new DeathGateScene
             {
                 Name = "x1_fortress_island_EW_01",
                 SnoId = 338171,
@@ -71,7 +76,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            Scenes.Add(new DeathGateScene
+            SceneDefs.Add(338614, new DeathGateScene
             {
                 Name = "x1_fortress_island_NS_01",
                 SnoId = 338614,
@@ -84,7 +89,41 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            Scenes.Add(new DeathGateScene
+            //World: x1_fortress_level_02, Id: 271235, AnnId: 1999634434, IsGenerated: True
+            //Scene: x1_fortress_island_NE_01, SnoId: 338583,
+            //LevelArea: x1_fortress_level_02_islands, Id: 459863
+
+            SceneDefs.Add(338583, new DeathGateScene
+            {
+                Name = "x1_fortress_island_NE_01",
+                SnoId = 338583,
+                RelativeEnterPosition = new Vector3(163.245f, 109.2724f, 10.1f),
+                RelativeExitPosition = new Vector3(104.1263f, 79.61856f, -9.9f),
+                Type = DeathGateType.ExitSequence,
+                Regions = new RegionGroup
+                {
+                    new RectangularRegion(140, 0, 240, 240, CombineType.Subtract)
+                }
+            });
+
+            //World: x1_fortress_level_02, Id: 271235, AnnId: 1999634434, IsGenerated: True
+            //Scene: x1_fortress_island_NW_01_Waypoint, SnoId: 459857,
+            //LevelArea: x1_fortress_level_02_islands, Id: 459863
+
+            SceneDefs.Add(459857, new DeathGateScene
+            {
+                Name = "x1_fortress_island_NW_01_Waypoint",
+                SnoId = 459857,
+                RelativeEnterPosition = new Vector3(90.64246f, 180.9426f, 10.28859f),
+                RelativeExitPosition = new Vector3(87.58826f, 118.2887f, 20.28859f),
+                Type = DeathGateType.ExitSequence,
+                Regions = new RegionGroup
+                {
+                    new RectangularRegion(0, 160, 240, 240, CombineType.Subtract)
+                }
+            });
+
+            SceneDefs.Add(338652, new DeathGateScene
             {
                 Name = "x1_fortress_island_SW_01",
                 SnoId = 338652,
@@ -97,7 +136,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            Scenes.Add(new DeathGateScene
+            SceneDefs.Add(361790, new DeathGateScene
             {
                 Name = "x1_fortress_island_NS_02",
                 SnoId = 361790,
@@ -106,7 +145,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 Type = DeathGateType.ExitSequence
             });
 
-            Scenes.Add(new DeathGateScene
+            SceneDefs.Add(360993, new DeathGateScene
             {
                 Name = "x1_fortress_island_EW_02",
                 SnoId = 360993,
@@ -121,26 +160,40 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 }
             });
 
-            Scenes.Add(new DeathGateScene
-            {
-                Name = "x1_fortress_island_NE_01",
-                SnoId = 338583,
-                RelativeEnterPosition = new Vector3(163.245f, 109.2724f, 10.1f),
-                RelativeExitPosition = new Vector3(104.1263f, 79.61856f, -9.9f),
-                Type = DeathGateType.ExitSequence,
-                Regions = new RegionGroup
-                {
-                    new RectangularRegion(140, 0, 240, 240, CombineType.Subtract)
-                }
-            });
+            GameEvents.OnWorldChanged += GameEventsOnOnWorldChanged;
+            ScenesStorage.ScenesAdded += ScenesStorageOnScenesAdded;
+            BuildGateScenes(ScenesStorage.CurrentWorldScenes);
         }
 
+        private static void GameEventsOnOnWorldChanged(object sender, EventArgs eventArgs)
+        {
+            _scenes.RemoveAll(s => s.WorldScene.DynamicWorldId != ZetaDia.WorldId);
+            BuildGateScenes(ScenesStorage.CurrentWorldScenes);
+        }
+
+        private static void ScenesStorageOnScenesAdded(List<WorldScene> worldScenes)
+        {
+            BuildGateScenes(worldScenes);
+        }
+
+        private static void BuildGateScenes(IEnumerable<WorldScene> worldScenes)
+        {
+            foreach (var scene in worldScenes)
+            {
+                if (!SceneDefs.ContainsKey(scene.SnoId) || _scenes.ContainsKey(scene.HashName))
+                    continue;
+
+                _scenes.Add(scene.HashName, SceneDefs[scene.SnoId].Build(scene));
+            }
+        }
+
+        public static IEnumerable<DeathGateScene> Scenes => _scenes.Values;
         public static IEnumerable<DeathGateScene> ExitScenes => Scenes.Where(z => z.Type == DeathGateType.ExitSequence && z.IsValid);
         public static IEnumerable<DeathGateScene> EnterScenes => Scenes.Where(z => z.Type == DeathGateType.EnterSequence && z.IsValid);
 
         /// <summary>
         /// Dynamically create a box around the death gate scenes near the level exit
-        /// It can be used to determine if the bot wants to go into a death gated region. 
+        /// It can be used to determine if the bot wants to go into a death gated region.
         /// </summary>
         public static RegionGroup ExitRegion
         {
@@ -209,7 +262,18 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             }
         }
 
-        public static DeathGateScene CurrentGateScene => CreateSequence().CurrentOrDefault;
+        //public static DeathGateScene CurrentGateScene => CreateSequence().CurrentOrDefault;
+
+        public static DeathGateScene CurrentGateScene
+        {
+            get
+            {
+                if (Scenes.FirstOrDefault(s => s.WorldScene.IsInScene(AdvDia.MyPosition)) != null)
+                    return Scenes.FirstOrDefault(s => s.WorldScene.IsInScene(AdvDia.MyPosition));
+
+                return NearestGateSceneToPosition(AdvDia.MyPosition);
+            }
+        }
 
         public static DeathGateScene NextGateScene
         {
@@ -234,7 +298,21 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
         public static bool IsInOutsideRegion => !IsInExitRegion && !IsInEnterRegion;
         public static bool IsInExitRegion => ExitRegion.Contains(AdvDia.MyPosition);
         public static bool IsInEnterRegion => EnterRegion.Contains(AdvDia.MyPosition);
-        public static IEnumerable<DeathGateScene> CurrentRegionScenes => IsInEnterRegion ? EnterScenes : IsInExitRegion ? ExitScenes : new List<DeathGateScene>();
+
+        public static IEnumerable<DeathGateScene> CurrentRegionScenes
+        {
+            get
+            {
+                switch (CurrentGateScene.Type)
+                {
+                    case DeathGateType.EnterSequence:
+                        return EnterScenes;
+                    case DeathGateType.ExitSequence:
+                        return ExitScenes;
+                }
+                return null;
+            }
+        }
 
         public static DeathGateScene NearestGateScene
         {
@@ -262,8 +340,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                 sequence.Next();
             }
 
-            Util.Logger.DebugSetting($"Current Scene {AdvDia.CurrentWorldScene.Name} ({AdvDia.CurrentWorldScene.SnoId})");
-            Util.Logger.DebugSetting($"Closest gate Scene {gateScene.WorldScene.Name} ({gateScene.WorldScene.SnoId}), Sequence={sequence.Index + 1}/{sequence.Count}");
+            Logger.DebugSetting($"Current Scene {AdvDia.CurrentWorldScene.Name} ({AdvDia.CurrentWorldScene.SnoId})");
+            Logger.DebugSetting($"Closest gate Scene {gateScene.WorldScene.Name} ({gateScene.WorldScene.SnoId}), Sequence={sequence.Index + 1}/{sequence.Count}");
             return sequence;
         }
 
@@ -275,6 +353,18 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
         public static Vector3 NearestGateToPosition(Vector3 position)
         {
             return NearestGateSceneToPosition(position).PortalPositions.OrderBy(g => g.Distance(position)).FirstOrDefault();
+        }
+
+        public static SceneDepth CompareDepth(Vector3 position, Vector3 targetPosition)
+        {
+            var myScene = NearestGateSceneToPosition(targetPosition);
+            return CompareDepth(myScene, targetPosition);
+        }
+
+        public static SceneDepth CompareDepth(DeathGateScene thisScene, Vector3 targetPosition)
+        {
+            var targetScene = NearestGateSceneToPosition(targetPosition);
+            return CompareDepth(thisScene, targetScene);
         }
 
         public static SceneDepth CompareDepth(DeathGateScene thisScene, DeathGateScene otherScene)
@@ -292,6 +382,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             }
             return SceneDepth.NotFound;
         }
+
+        public static GateSide MySide
+            => GetSide(NearestGateSceneToPosition(AdvDia.MyPosition), AdvDia.MyPosition);
 
         public static GateSide GetSide(DeathGateScene scene, Vector3 position)
         {
@@ -312,11 +405,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
             var destinationInExitRegion = exitRegion.Contains(destination);
             if (destinationInExitRegion)
-                Util.Logger.DebugSetting("Destination inside exit region");
+                Logger.DebugSetting("Destination inside exit region");
 
             var destinationInEnterRegion = enterRegion.Contains(destination);
             if (destinationInEnterRegion)
-                Util.Logger.DebugSetting("Destination inside enter region");
+                Logger.DebugSetting("Destination inside enter region");
 
             var currentScene = CurrentGateScene;
             var targetScene = NearestGateSceneToPosition(destination);
@@ -336,7 +429,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
                         return myCurrentSide == GateSide.DeepSide ? sceneClickedInside.DeepPortalPosition : sceneClickedInside.ShallowPortalPosition;
                     }
 
-                    Util.Logger.DebugSetting("Selecting closest death gate to player. (In Rift)");
+                    Logger.DebugSetting("Selecting closest death gate to player. (In Rift)");
                     return sceneClickedInside.ClosestGateToPosition(AdvDia.MyPosition);
                 }
 
@@ -381,6 +474,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             return Vector3.Zero;
         }
 
+        public static Vector3 SelectGate(DeathGateScene fromScene, DeathGateScene toScene)
+        {
+            Vector3 bestGatePosition;
+            return TrySelectGate(MySide, CompareDepth(fromScene, toScene), out bestGatePosition)
+                ? bestGatePosition
+                : Vector3.Zero;
+        }
+
         /// <summary>
         /// Pick the correct gate from the current sequence for a given target direction and current position.        
         /// </summary>
@@ -388,9 +489,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
         /// <param name="targetDepth">indicates which direction the destination is in, Deeper is towards 0,0/exit; Shallower is towards the world entrance</param>
         /// <param name="bestGatePosition">the position of the gate that is required to reach the destination</param>
         /// <returns></returns>
-        private static bool TrySelectGate(GateSide mySide, SceneDepth targetDepth, out Vector3 bestGatePosition)
+        public static bool TrySelectGate(GateSide mySide, SceneDepth targetDepth, out Vector3 bestGatePosition)
         {
-            Util.Logger.DebugSetting($"TrySelectGate MyCurrentSide={mySide} TargetDepth={targetDepth}");
+            Logger.DebugSetting($"TrySelectGate MyCurrentSide={mySide} TargetDepth={targetDepth}");
 
             if (mySide == GateSide.DeepSide)
             {
@@ -432,5 +533,22 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             bestGatePosition = Vector3.Zero;
             return false;
         }
+
+        public static bool TryCurrentSidePortalPosition(GateSide mySide, out Vector3 bestGatePosition)
+        {
+            switch (mySide)
+            {
+                case GateSide.DeepSide:
+                    bestGatePosition = CurrentGateScene.DeepPortalPosition;
+                    return true;
+                case GateSide.ShallowSide:
+                    bestGatePosition = CurrentGateScene.ShallowPortalPosition;
+                    return true;
+            }
+
+            bestGatePosition = Vector3.Zero;
+            return false;
+        }
+
     }
 }

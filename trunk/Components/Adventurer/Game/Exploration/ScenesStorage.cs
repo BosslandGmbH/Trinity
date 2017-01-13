@@ -143,6 +143,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     {
                         grid.Update(sceneData);
                     }
+                    ScenesAdded?.Invoke(addedScenes);
                 }
 
             }
@@ -161,7 +162,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         }
 
 
-        public delegate void GridProviderEventHandler(SceneData provider);
+        public delegate void GridProviderEventHandler(List<WorldScene> provider);
 
         public static event GridProviderEventHandler ScenesAdded;
 

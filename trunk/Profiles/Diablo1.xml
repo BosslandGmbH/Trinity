@@ -1,0 +1,460 @@
+<Profile>
+  <Name>Retro Diablo - Old Tristram v0.8 by xzjv</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="-1" />
+  <Trinity>
+    <Scenes>
+      <Scene id="454485" alwaysRayWalk="true" />
+    </Scenes>
+  </Trinity>
+  <Order>
+    <WaitTimer questId="87700" stepId="-1" waitTime="500" />
+
+    <!-- REQUIRES THAT YOU DELETE QUESTTOOLS FROM PLUGINS FOLDER -->
+
+    <!-- Mushroom Quest http://www.pcgamer.com/diablo-3-darkening-of-tristram-secret-guide/ -->
+
+    <If condition="CurrentLevelAreaId != 101351 
+        and CurrentWorldId != 455282 
+        and CurrentWorldId != 452721 
+        and CurrentWorldId != 452922
+        and CurrentWorldId != 452984
+        and CurrentWorldId != 452985
+        and CurrentWorldId != 452991
+        and CurrentWorldId != 452996
+        and CurrentWorldId != 453582
+        and CurrentWorldId != 452997
+        and CurrentWorldId != 452998
+        and CurrentWorldId != 452999
+        and CurrentWorldId != 453004
+        and CurrentWorldId != 453003
+        and CurrentWorldId != 453002
+        and CurrentWorldId != 453008
+        and CurrentWorldId != 453014
+        and CurrentWorldId != 453015
+        and CurrentWorldId != 454208
+        and CurrentWorldId != 453016">
+
+      <LogMessage message="=>> Taking Waypoint to Old Ruins" />
+      <TakeWaypoint waypointNumber="1" />
+    </If>
+
+    <If condition="CurrentLevelAreaId == 101351">
+      <LogMessage message="=>> Travelling to 1995" />
+      <MoveToPosition questId="312429" stepId="2" x="2127" y="2775" z="40" worldSnoId="71150" levelAreaSnoId="91324" sceneSnoId="90202" sceneName="trOut_Old_Tristram_E03_S03" sceneX="267" sceneY="15" sceneZ="40" />
+      <Interact questId="312429" stepId="2" actorId="454075" actorName="P2_Portal_TownPortal_D2" x="2123" y="2771" z="40" worldSnoId="71150" levelAreaSnoId="91324" sceneSnoId="90202" sceneName="trOut_Old_Tristram_E03_S03" sceneX="262" sceneY="25" sceneZ="39" />
+    </If>
+
+    <If condition="CurrentWorldId == 455282">
+      <LogMessage message=">> Find the Cathedral" />
+      <MoveToPosition questId="312429" stepId="2" x="967" y="481" z="40" worldSnoId="455282" levelAreaSnoId="455466" sceneSnoId="455504" sceneName="p43_Retro_Tristram_E03_S03" sceneX="7" sceneY="1" sceneZ="40" />
+      <MoveToPosition questId="312429" stepId="2" x="424" y="447" z="55" worldSnoId="455282" levelAreaSnoId="455466" sceneSnoId="455521" sceneName="p43_Retro_Tristram_E02_N01" sceneX="-536" sceneY="-33" sceneZ="55"  />
+      <Interact questId="312429" stepId="2" actorId="175482" actorName="g_Portal_Rectangle_Orange" x="392" y="442" z="57" worldSnoId="455282" levelAreaSnoId="455466" sceneSnoId="455521" sceneName="p43_Retro_Tristram_E02_N01" sceneX="-576" sceneY="-38" sceneZ="57" />
+    </If>
+
+    <!-- 
+    Worldinfo
+    World: p43_AD_Cathedral_Level_01, Id: 452721, AnnId: 2000093193, IsGenerated: True
+    Scene: trDun_Cath_E_Entrance01, SnoId: 32944,
+    LevelArea: p43_AD_Cathedral_Level_01, Id: 452986    
+    
+    [21821994] [The Darkening of Tristram] QuestSnoId: 455272, QuestMeter: -1, QuestState: InProgress, QuestStep: 2, KillCount: 0, BonusCount: 0
+    [Step] KillDiablo, Id: 2
+    [Objective] p43_d1_Boss_Diablo_Killed, Type: EventReceived
+    QuestSnoId: 455272 QuestStep: 2, Description: Slay The Dark Lord, Header: 455272 2 0, State: InProgress, Index: 0
+    -->
+    <If condition="CurrentWorldId == 452721">
+      <LogMessage message=">> Exploring Labyrinth Level 1 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(176001,45) and not CurrentSceneName('Entrance')" />
+      <Interact questId="312429" stepId="2" actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="452721" levelAreaSnoId="452986" />
+    </If>
+
+    <!--
+    Worldinfo
+    World: p43_AD_Cathedral_Level_02, Id: 452922, AnnId: 2000158730, IsGenerated: True
+    Scene: trDun_Cath_S_Entrance_01, SnoId: 32992,
+    LevelArea: p43_AD_Cathedral_Level_02, Id: 452988
+    -->
+    <If condition="CurrentWorldId == 452922">
+      <LogMessage message=">> Exploring Labyrinth Level 2 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(176001,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="452922" levelAreaSnoId="452988" />
+    </If>
+
+    <!-- todo Dark Passage
+    <MoveToScenePosition questId="312429" stepId="2" actorId="75207" worldSnoId="452922" levelAreaSnoId="452988" sceneSnoId="32986" sceneName="trDun_Cath_SW_Hall_01" sceneX="-79" sceneY="123" sceneZ="-25" />
+    <Interact questId="312429" stepId="2" actorId="364410" actorName="g_Portal_Square_Orange_OnFly" x="641" y="845" z="-25" worldSnoId="452922" levelAreaSnoId="452988" sceneSnoId="32986" sceneName="trDun_Cath_SW_Hall_01" sceneX="-80" sceneY="113" sceneZ="-22" />
+     -->
+
+    <!-- 
+    Worldinfo
+    World: p43_AD_Cathedral_Level_03, Id: 452984, AnnId: 2000224267, IsGenerated: True
+    Scene: trDun_Cath_E_Entrance01, SnoId: 32944,
+    LevelArea: p43_AD_Cathedral_Level_03, Id: 452989
+    -->
+    <If condition="CurrentWorldId == 452984">
+      <LogMessage message=">> Exploring Labyrinth Level 3 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(176001,45) and CurrentSceneName('Exit')" />
+      <Interact actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="452984" levelAreaSnoId="452989" />
+    </If>
+
+    <!--
+    Worldinfo
+    World: p43_AD_Cathedral_Level_04, Id: 452985, AnnId: 2000420878, IsGenerated: True
+    Scene: trDun_Cath_N_Entrance_02, SnoId: 32974,
+    LevelArea: p43_AD_Cathedral_Level_04, Id: 452990
+    -->
+
+    <If condition="CurrentWorldId == 452985">
+      <LogMessage message=">> Exploring Labyrinth Level 4 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(176001,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="452985" levelAreaSnoId="452990" />
+    </If>
+
+    <!--
+    Worldinfo
+    World: p43_AD_Catacombs_Level_05, Id: 452991, AnnId: 2000683026, IsGenerated: True
+    Scene: p43_AD_Catacombs_S_Entrance_01, SnoId: 456192,
+    LevelArea: p43_AD_Catacombs_Level_05, Id: 452992
+    -->
+
+    <If condition="CurrentWorldId == 452991">
+      <LogMessage message=">> Exploring Labyrinth Level 5 (Slay the Dark Lord)" />
+      <Explore stopCondition="(ActorExistsNearMe(341572,45) and CurrentSceneName('Exit')) or CurrentSceneName('_Valor')" />
+
+      <!-- Scene: x1_Catacombs_NSE_01_Valor, SnoId: 454485, Puzzle with Orbs and Doors -->
+      <If condition="CurrentSceneName('Valor')">
+        <LogMessage message=">> Starting Valor Scene Event" />
+
+
+        <!-- 
+
+[Trinity 2.55.695]  Dumping Attribtues for p43_AD_Valor_Pedestal-18782 (Sno=455675 Ann=-1991048606) at <542, 314.5, 0.100061> 
+[Trinity 2.55.695] Attributes (12) Id=1070/-1151466450 
+ 431: Hidden (-3665) i:0 f:0 Value=0 
+ 124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 
+ 122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 
+ 119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 
+ 115: HitpointsCur (-3981) i:0 f:0.001 Value=0 
+ 105: Invulnerable (-3991) i:0 f:0 Value=0 
+ 103: TeamId (-3993) i:1 f:0 Value=1 
+ 844: Disabled (-3252) i:0 f:0 Value=0 
+ 585: BuffVisualEffect (-3511) i:0 f:0 Value=0 
+ 1091: MinimapActive (-3005) i:1 f:0 Value=1 
+ 57: Level (-4039) i:70 f:0 Value=70 
+ 292: Untargetable (-3804) i:0 f:0 Value=0 
+
+
+[Trinity 2.55.695]  Dumping Attribtues for p43_AD_Valor_Pedestal_Locked-19097 (Sno=456331 Ann=-1990786466) at <542, 314.5, 0.100061>
+[Trinity 2.55.695] Attributes (12) Id=1092/-1137638332 
+ 431: Hidden (-3665) i:0 f:0 Value=0 
+ 124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 
+ 122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 
+ 119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 
+ 115: HitpointsCur (-3981) i:0 f:0.001 Value=0 
+ 105: Invulnerable (-3991) i:0 f:0 Value=0 
+ 103: TeamId (-3993) i:1 f:0 Value=1 
+ 844: Disabled (-3252) i:0 f:0 Value=0 
+ 585: BuffVisualEffect (-3511) i:0 f:0 Value=0 
+ 1091: MinimapActive (-3005) i:1 f:0 Value=1 
+ 57: Level (-4039) i:70 f:0 Value=70 
+ 292: Untargetable (-3804) i:0 f:0 Value=0 
+
+
+[Trinity 2.55.695]  Dumping Attribtues for p43_AD_Valor_Pedestal_Locked-19774 (Sno=456331 Ann=-1990786466) at <542, 314.5, 0.100061> 
+[Trinity 2.55.695] Attributes (12) Id=1018/-1130560518 
+ 431: Hidden (-3665) i:0 f:0 Value=0 
+ 124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 
+ 122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 
+ 119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 
+ 115: HitpointsCur (-3981) i:0 f:0.001 Value=0 
+ 105: Invulnerable (-3991) i:0 f:0 Value=0 
+ 103: TeamId (-3993) i:1 f:0 Value=1 
+ 844: Disabled (-3252) i:0 f:0 Value=0 
+ 585: BuffVisualEffect (-3511) i:0 f:0 Value=0 
+ 1091: MinimapActive (-3005) i:1 f:0 Value=1 
+ 57: Level (-4039) i:70 f:0 Value=70 
+ 292: Untargetable (-3804) i:0 f:0 Value=0 
+
+
+[Trinity 2.55.695]  Dumping Attribtues for p43_AD_Valor_Pedestal-19848 (Sno=455675 Ann=-1991048606) at <542, 314.5, 0.100061> 
+[Trinity 2.55.695] Attributes (16) Id=1018/-1125448710 
+ 467: GizmoHasBeenOperated (-3629) i:1 f:0 Value=1 
+ 462: GizmoOperatorACDId (-3634) i:2014707801 f:0 Value=2014708000 
+ 461: GizmoDisabledByScript (-3635) i:1 f:0 Value=1 
+ 456: GizmoState (-3640) i:1 f:0 Value=1 
+ 431: Hidden (-3665) i:0 f:0 Value=0 
+ 124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 
+ 122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 
+ 119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 
+ 115: HitpointsCur (-3981) i:0 f:0.001 Value=0 
+ 105: Invulnerable (-3991) i:0 f:0 Value=0 
+ 103: TeamId (-3993) i:1 f:0 Value=1 
+ 844: Disabled (-3252) i:0 f:0 Value=0 
+ 585: BuffVisualEffect (-3511) i:0 f:0 Value=0 
+ 1091: MinimapActive (-3005) i:1 f:0 Value=1 
+ 57: Level (-4039) i:70 f:0 Value=70 
+ 292: Untargetable (-3804) i:0 f:0 Value=0 
+ 
+ -->
+
+        <LogMessage message=">> Picking up Bloodstone 1" />
+        <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="91" sceneY="139" sceneZ="0" isGenerated="true" />
+        <Interact questId="312429" stepId="2" actorId="454511" actorName="p43_AD_Valor_BloodStone" explore="false" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="78" sceneY="139" sceneZ="0" />
+
+        <LogMessage message=">> Stashing Bloodstone 1 on Pedestal" />
+        <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="61" sceneY="80" sceneZ="0" isGenerated="true" />
+        <Interact questId="312429" stepId="2" actorId="455675" actorName="p43_AD_Valor_Pedestal" explore="false"  worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="62" sceneY="75" sceneZ="0" />
+
+        <LogMessage message=">> Picking up Bloodstone 2" />
+        <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="91" sceneY="49" sceneZ="0" isGenerated="true" />
+        <Interact questId="312429" stepId="2" actorId="454511" actorName="p43_AD_Valor_BloodStone" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="90" sceneY="43" sceneZ="0" />
+
+        <LogMessage message=">> Stashing Bloodstone 2 on Pedestal" />
+        <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="64" sceneY="82" sceneZ="0" isGenerated="true" />
+        <Interact questId="312429" stepId="2" actorId="455675" actorName="p43_AD_Valor_Pedestal" explore="false"  worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="62" sceneY="75" sceneZ="0" />
+
+        <LogMessage message=">> Picking up Bloodstone 3" />
+        <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="131" sceneY="147" sceneZ="0" isGenerated="true" />
+        <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" explore="false" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="146" sceneY="116" sceneZ="0" isGenerated="true" />
+        <Interact questId="312429" stepId="2" actorId="454511" actorName="p43_AD_Valor_BloodStone" explore="false" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="153" sceneY="105" sceneZ="0" />
+
+        <LogMessage message=">> Stashing Bloodstone 3 on Pedestal" />
+        <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="71" sceneY="80" sceneZ="0" isGenerated="true" />
+        <Interact questId="312429" stepId="2" actorId="455675" actorName="p43_AD_Valor_Pedestal" explore="false" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="62" sceneY="75" sceneZ="0" />
+
+        <MoveToPosition questId="312429" stepId="2" worldSnoId="452991" levelAreaSnoId="452992" sceneSnoId="454485" sceneName="x1_Catacombs_NSE_01_Valor" sceneX="26" sceneY="84" sceneZ="0" isGenerated="true" />
+      </If>
+
+      <If condition="not CurrentSceneName('Exit')">
+        <Explore stopCondition="ActorExistsNearMe(341572,45) and CurrentSceneName('Exit')" />
+      </If>
+
+      <Interact questId="312429" stepId="2" actorId="341572" actorName="g_portal_Ladder_VeryShort_Blue" worldSnoId="452991" levelAreaSnoId="452992" />
+    </If>
+
+
+    <!--
+    Worldinfo
+    World: p43_AD_Catacombs_Level_06, Id: 452996, AnnId: 2000748563, IsGenerated: True
+    Scene: p43_AD_Catacombs_S_Entrance_01, SnoId: 456192,
+    LevelArea: p43_AD_Catacombs_Level_06, Id: 452993
+    -->
+
+    <If condition="CurrentWorldId == 452996">
+      <LogMessage message=">> Exploring Labyrinth Level 6 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(341572,60) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="341572" actorName="g_portal_Ladder_VeryShort_Blue" />
+
+      <!-- Chamber of Bone 
+      <Interact questId="312429" stepId="2" actorId="455059" actorName="p43_trDun_Lecturn_ChamberOfBone" x="284" y="653" z="0" worldSnoId="452996" levelAreaSnoId="452993" sceneSnoId="456273" sceneName="p43_AD_Catacombs_SE_02" sceneX="45" sceneY="182" sceneZ="0" />
+      <Interact questId="312429" stepId="2" actorId="454848" actorName="g_Portal_Circle_Orange_ChamberOfBone" worldSnoId="452996" levelAreaSnoId="452993" sceneSnoId="456273" sceneName="p43_AD_Catacombs_SE_02" sceneX="148" sceneY="186" sceneZ="1" />
+
+      [Trinity 2.55.694] Dumping Attribtues for p43_AD_Catacombs_Door_A-16072 (Sno=454346 Ann=-1864433566) at <307.5, 670, 0.0193481> 
+      [Trinity 2.55.694] Attributes (7) Id=1076/-1518533580 
+       456: GizmoState (-3640) i:0 f:0 Value=0 
+       124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 
+       122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 
+       119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 
+       115: HitpointsCur (-3981) i:0 f:0.001 Value=0 
+       103: TeamId (-3993) i:1 f:0 Value=1 
+       57: Level (-4039) i:70 f:0 Value=70 
+ 
+      Worldinfo
+      World: p43_AD_Level06_SideDungeon_ChamberOfBone, Id: 453582, AnnId: 2000814100, IsGenerated: True
+      Scene: x1_abattoir_W_Entrance_01, SnoId: 291409,
+      LevelArea: p43_AD_Level06_SideDungeon_ChamberOfBone, Id: 453583
+
+      <If condition="CurrentWorldId == 453582">
+        <LogMessage message=">> Exploring Chamber of Bone (Slay the Dark Lord)" />
+        <Explore stopCondition="ActorExistsNearMe(454848,40)" />
+      </If>      
+      -->
+
+    </If>
+
+    <!-- 
+    Worldinfo
+    World: p43_AD_Catacombs_Level_07, Id: 452997, AnnId: 2000486415, IsGenerated: True
+    Scene: p43_AD_Catacombs_E_Entrance_01, SnoId: 456189,
+    LevelArea: p43_AD_Catacombs_Level_07, Id: 452994
+    -->
+
+    <If condition="CurrentWorldId == 452997">
+      <LogMessage message=">> Exploring Labyrinth Level 7 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(341572,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="341572" actorName="g_portal_Ladder_VeryShort_Blue" worldSnoId="452997" levelAreaSnoId="452994" />
+    </If>
+
+    <!--
+    Worldinfo
+    World: p43_AD_Catacombs_Level_08, Id: 452998, AnnId: 2000551952, IsGenerated: True
+    Scene: p43_AD_Catacombs_S_Entrance_01, SnoId: 456192,
+    LevelArea: p43_AD_Catacombs_Level_08, Id: 452995
+    -->
+
+    <If condition="CurrentWorldId == 452998">
+      <LogMessage message=">> Exploring Labyrinth Level 8 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(341572,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="341572" actorName="g_portal_Ladder_VeryShort_Blue" worldSnoId="452998" levelAreaSnoId="452995" />
+    </If>
+
+    <!-- 
+    Worldinfo
+    World: p43_AD_Caves_Level_09, Id: 452999, AnnId: 2000617489, IsGenerated: True
+    Scene: trDun_Cave_E_Entrance_01, SnoId: 33015,
+    LevelArea: p43_AD_Caves_Level_09, Id: 453001
+    -->
+
+    <If condition="CurrentWorldId == 452999">
+      <LogMessage message=">> Exploring Labyrinth Level 9 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(176038,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="452999" levelAreaSnoId="453001" />
+    </If>
+
+    <!--
+    Worldinfo
+    World: p43_AD_Caves_Level_10, Id: 453004, AnnId: 2000879637, IsGenerated: True
+    Scene: trDun_Cave_Mine_S_Entrance_01, SnoId: 76837,
+    LevelArea: p43_AD_Caves_Level_10, Id: 453007
+    -->
+
+    <If condition="CurrentWorldId == 453004">
+      <LogMessage message=">> Exploring Labyrinth Level 10 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(176038,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="453004" levelAreaSnoId="453007" />
+    </If>
+
+    <!-- Worldinfo
+    World: p43_AD_Caves_Level_11, Id: 453003, AnnId: 2000945174, IsGenerated: True
+    Scene: trDun_Cave_E_Entrance_01, SnoId: 33015,
+    LevelArea: p43_AD_Caves_Level_11, Id: 453006
+    -->
+
+    <If condition="CurrentWorldId == 453003">
+      <LogMessage message=">> Exploring Labyrinth Level 11 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(176038,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="453003" levelAreaSnoId="453006" />
+    </If>
+
+    <!--
+    Worldinfo
+    World: p43_AD_Caves_Level_12, Id: 453002, AnnId: 2001010711, IsGenerated: True
+    Scene: trDun_Cave_N_Entrance_01, SnoId: 33033,
+    LevelArea: p43_AD_Caves_Level_12, Id: 453005
+    -->
+
+    <If condition="CurrentWorldId == 453002">
+      <LogMessage message=">> Exploring Labyrinth Level 12 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(176038,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="453002" levelAreaSnoId="453005" />
+    </If>
+
+    <!--
+    Worldinfo
+    World: p43_AD_Hell_Level_13, Id: 453008, AnnId: 2001076248, IsGenerated: True
+    Scene: a1dun_Leor_W_Entrance_01, SnoId: 30956,
+    LevelArea: p43_AD_Hell_Level_13, Id: 453009
+    -->
+
+    <If condition="CurrentWorldId == 453008">
+      <LogMessage message=">> Exploring Labyrinth Level 13 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(175482,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="175482" actorName="g_Portal_Rectangle_Orange" worldSnoId="453008" levelAreaSnoId="453009" />
+    </If>
+
+    <!-- Worldinfo
+    World: p43_AD_Hell_Level_14, Id: 453014, AnnId: 2001141785, IsGenerated: True
+    Scene: a1dun_Leor_W_Entrance_01, SnoId: 30956,
+    LevelArea: p43_AD_Hell_Level_14, Id: 453011
+    -->
+
+    <If condition="CurrentWorldId == 453014">
+      <LogMessage message=">> Exploring Labyrinth Level 14 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(175482,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="175482" actorName="g_Portal_Rectangle_Orange" worldSnoId="453014" levelAreaSnoId="453011" />
+    </If>
+
+    <!--
+    Worldinfo
+    World: p43_AD_Hell_Level_15, Id: 453015, AnnId: 2001207322, IsGenerated: True
+    Scene: a1dun_Leor_N_Entrance_01, SnoId: 30945,
+    LevelArea: p43_AD_Hell_Level_15, Id: 453012
+    -->
+
+    <If condition="CurrentWorldId == 453015">
+      <LogMessage message=">> Exploring Labyrinth Level 15 (Slay the Dark Lord)" />
+      <Explore stopCondition="ActorExistsNearMe(175482,45) and CurrentSceneName('Exit')" />
+      <Interact questId="312429" stepId="2" actorId="175482" actorName="g_Portal_Rectangle_Orange" worldSnoId="453015" levelAreaSnoId="453012" />
+    </If>
+
+    <!--
+    World: p43_AD_Level15_SideDungeon_UnholyAltar, Id: 454208, AnnId: 2001272859, IsGenerated: False
+    Scene: trDun_Cath_W_Entrance_01, SnoId: 33000,
+    LevelArea: p43_AD_Level15_SideDungeon_UnholyAltar, Id: 454209
+    -->
+
+    <!--
+[Trinity 2.55.695]  Dumping Attribtues for p43_AD_TabletOfLazarus_Lazarus-39508 (Sno=456335 Ann=-1193082317) at <740.0003, 323.4995, 0.1>
+[Trinity 2.55.695] Attributes (9) Id=956/-116325444 
+ 467: GizmoHasBeenOperated (-3629) i:1 f:0 Value=1 
+ 462: GizmoOperatorACDId (-3634) i:2014707801 f:0 Value=2014708000 
+ 456: GizmoState (-3640) i:1 f:0 Value=1 
+ 124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 
+ 122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 
+ 119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 
+ 115: HitpointsCur (-3981) i:0 f:0.001 Value=0 
+ 103: TeamId (-3993) i:1 f:0 Value=1 
+ 57: Level (-4039) i:70 f:0 Value=70 
+
+
+[Trinity 2.55.695]  Dumping Attribtues for p43_AD_TabletOfLazarus-40098 (Sno=456333 Ann=-1197735437) at <457.499, 323.9998, 0.1>>
+[Trinity 2.55.695] Attributes (6) Id=1048/-81460200 
+ 124: HitpointsMaxTotal (-3972) i:0 f:1 Value=1 
+ 122: HitpointsMax (-3974) i:0 f:0.0009994507 Value=0 
+ 119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 
+ 115: HitpointsCur (-3981) i:0 f:0.001 Value=0 
+ 103: TeamId (-3993) i:1 f:0 Value=1 
+ 57: Level (-4039) i:70 f:0 Value=70 
+    -->
+
+    <If condition="CurrentWorldId == 454208">
+      <LogMessage message=">> Unholy Altar" />
+      <MoveToPosition questId="312429" stepId="2" x="465" y="340" z="0" worldSnoId="454208" levelAreaSnoId="454209" sceneSnoId="454210" sceneName="trDun_Cath_S_Dead_End_01_Lazarus" sceneX="-15" sceneY="100" sceneZ="0" />
+      <Interact questId="312429" stepId="2" explore="false" actorId="456333" actorName="p43_AD_TabletOfLazarus_Lazarus" worldSnoId="454208" levelAreaSnoId="454209" sceneSnoId="454212" sceneName="trDun_Cath_N_Dead_End_01_Lazarus" />
+      <MoveToPosition questId="312429" stepId="2" x="746" y="335" z="0" worldSnoId="454208" levelAreaSnoId="454209" sceneSnoId="454212" sceneName="trDun_Cath_N_Dead_End_01_Lazarus" sceneX="266" sceneY="95" sceneZ="0" />
+      <Interact questId="312429" stepId="2" explore="false" actorId="456335" actorName="p43_AD_TabletOfLazarus_Lazarus" x="746" y="335" z="0" worldSnoId="454208" levelAreaSnoId="454209" sceneSnoId="454212" sceneName="trDun_Cath_N_Dead_End_01_Lazarus" sceneX="260" sceneY="83" sceneZ="0" />
+      <MoveToPosition questId="312429" stepId="2" x="582" y="305" z="23" worldSnoId="454208" levelAreaSnoId="454209" sceneSnoId="454190" sceneName="trDun_Cath_NSE_01_Lazarus" sceneX="342" sceneY="65" sceneZ="23" />
+      <Interact questId="312429" stepId="2" actorId="256728" actorName="g_Portal_TownPortal_Red" x="582" y="305" z="23" worldSnoId="454208" levelAreaSnoId="454209" sceneSnoId="454190" sceneName="trDun_Cath_NSE_01_Lazarus" sceneX="342" sceneY="62" sceneZ="23" />
+      <WaitTimer questId="1" stepId="1" waitTime="3500" />
+    </If>
+
+    <!--
+    World: p43_AD_Hell_Level_16, Id: 453016, AnnId: 2001338396, IsGenerated: True
+    Scene: a1dun_Leor_N_Dead_End_01, SnoId: 30944,
+    LevelArea: p43_AD_Hell_Level_16, Id: 453013
+    -->
+
+    <!--
+    [220CC724] [The Darkening of Tristram] QuestSnoId: 455272, QuestMeter: -1, QuestState: InProgress, QuestStep: 2, KillCount: 0, BonusCount: 0
+    [Step] KillDiablo, Id: 2
+    [Objective] p43_d1_Boss_Diablo_Killed, Type: EventReceived
+    QuestSnoId: 455272 QuestStep: 2, Description: Slay The Dark Lord, Header: 455272 2 0, State: InProgress, Index: 0
+    -->
+
+    <If condition="CurrentWorldId == 453016">
+      <LogMessage message=">> Searching for Diablo" />
+      <Explore stopCondition="not IsActiveQuestAndStep(455272, 2)" />
+      <WaitTimer questId="1" stepId="1" waitTime="4000" />
+    </If>
+    
+
+
+
+    <LogMessage message=">> Finished Profile" />
+    <WaitTimer questId="1" stepId="1" waitTime="500" />
+    <LeaveGame />
+
+  </Order>
+</Profile>

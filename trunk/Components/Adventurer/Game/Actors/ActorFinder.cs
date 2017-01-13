@@ -144,12 +144,14 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 ).OrderBy(u => u.Distance).FirstOrDefault();
         }
 
+        public static bool IsDeathGate(DiaObject o) => o?.ActorSnoId == 328830;
+
         public static DiaGizmo FindNearestDeathGate()
         {
-            //328830
-            if (!ExplorationData.FortressLevelAreaIds.Contains(AdvDia.CurrentLevelAreaId) &&
-                !ExplorationData.FortressWorldIds.Contains(AdvDia.CurrentWorldId))
-                return null;
+            ////328830
+            //if (!ExplorationData.FortressLevelAreaIds.Contains(AdvDia.CurrentLevelAreaId) &&
+            //    !ExplorationData.FortressWorldIds.Contains(AdvDia.CurrentWorldId))
+            //    return null;
 
             var gizmo = ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
                     .Where(u => u.IsValid && u.ActorSnoId == 328830 && u.Distance < 200)
@@ -315,16 +317,18 @@ namespace Trinity.Components.Adventurer.Game.Actors
             if (GuardedGizmos.Contains(gizmo.ActorSnoId) && (gizmo.HasBeenOperated || gizmo.CommonData.ChestOpen > 0))
             {
                 return false;
-            }            
+            }
             if (UsedGizmoAnimations.Contains(gizmo.CommonData.CurrentAnimation))
             {
                 return false;
             }
-            if (GuardedGizmos.Contains(gizmo.ActorSnoId) && !gizmo.HasBeenOperated && gizmo.CommonData.GetAttribute<int>(ActorAttributeType.Untargetable) != 1)
+            if (GuardedGizmos.Contains(gizmo.ActorSnoId) && !gizmo.HasBeenOperated &&
+                gizmo.CommonData.GetAttribute<int>(ActorAttributeType.Untargetable) != 1)
             {
                 return true;
-            }        
-            if (gizmo is GizmoShrine && gizmo.CommonData.GizmoHasBeenOperated != 1 && gizmo.CommonData.GizmoState != 1) // Buggy Cursed Shrine
+            }
+            if (gizmo is GizmoShrine && gizmo.CommonData.GizmoHasBeenOperated != 1 && gizmo.CommonData.GizmoState != 1)
+                // Buggy Cursed Shrine
             {
                 return true;
             }
@@ -334,12 +338,16 @@ namespace Trinity.Components.Adventurer.Game.Actors
                     return gizmo.CommonData.ChestOpen == 0;
                 case GizmoType.Portal:
                 case GizmoType.DungeonPortal:
-                    return !AdvDia.CurrentWorldMarkers.Any(m => m.Position.Distance(gizmo.Position) < 10 && EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
+                    return
+                        !AdvDia.CurrentWorldMarkers.Any(
+                            m =>
+                                m.Position.Distance(gizmo.Position) < 10 &&
+                                EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
                 case GizmoType.PortalDestination:
                 case GizmoType.PoolOfReflection:
                 case GizmoType.Headstone:
                 case GizmoType.HealingWell:
-                case GizmoType.PowerUp:                
+                case GizmoType.PowerUp:
                     return false;
                 case GizmoType.LootRunSwitch:
                 case GizmoType.MultiClick:
@@ -356,20 +364,28 @@ namespace Trinity.Components.Adventurer.Game.Actors
             //{
             //    return true;
             //}
-            if (gizmo.IsGizmoDisabledByScript || gizmo.CommonData.GetAttribute<int>(ActorAttributeType.Untargetable) == 1)
+            if (gizmo.IsGizmoDisabledByScript ||
+                gizmo.CommonData.GetAttribute<int>(ActorAttributeType.Untargetable) == 1)
             {
                 return false;
+            }
+            if (gizmo.ActorSnoId == 455675 && gizmo.CommonData?.MinimapActive == 1)
+            {
+                return true; //p43_AD_Valor_Pedestal-19848 Special Valor Event in Diablo1 Area
             }
 
             if (gizmo.HasBeenOperated)
             {
                 return false;
             }
+
             //if (gizmo is GizmoLootContainer || gizmo is GizmoShrine || gizmo.CommonData.GizmoType == GizmoType.Switch)
             //{
             //    return true;
             //}
-            if ((gizmo.CommonData.MinimapVisibilityFlags & 0x80) != 0)
+            if
+
+            ((gizmo.CommonData.MinimapVisibilityFlags & 0x80) != 0)
             {
                 return true;
             }

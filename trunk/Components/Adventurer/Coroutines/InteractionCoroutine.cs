@@ -4,7 +4,10 @@ using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
+using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
+using Trinity.DbProvider;
 using Trinity.Framework.Helpers;
+using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
@@ -55,13 +58,16 @@ namespace Trinity.Components.Adventurer.Coroutines
         private bool _isPortal;
         private bool _isNephalemStone;
         private bool _isOrek;
+        private int _startingWorldId;
 
-        public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 1)
+        public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3)
         {
             _actorId = actorId;
             _timeOut = timeOut;
             _sleepTime = sleepTime;
             _interactAttempts = interactAttempts;
+            _startingWorldId = ZetaDia.CurrentWorldSnoId;
+
             if (_timeOut != default(TimeSpan))
             {
                 _timeoutCheckEnabled = true;
@@ -110,6 +116,9 @@ namespace Trinity.Components.Adventurer.Coroutines
                 State = States.Failed;
                 return false;
             }
+
+            Logger.Debug($"Interact Actor Found: {actor.Name} ({actor.ActorSnoId}) Distance={actor.Distance}");
+
             if (!actor.IsInteractableQuestObject())
             {
                 Logger.Debug("The object is not valid or not interactable, failing.");
@@ -139,7 +148,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
             if (_isNephalemStone && UIElements.RiftDialog.IsVisible)
             {
-                State=States.Completed;
+                State = States.Completed;
                 return false;
             }
             if (_isOrek && AdvDia.RiftQuest.State == QuestState.Completed)
@@ -177,13 +186,31 @@ namespace Trinity.Components.Adventurer.Coroutines
             // Assume done
             if (!actor.IsInteractableQuestObject())
             {
-                State=States.Completed;
+                State = States.Completed;
                 return false;
             }
             if (_currentInteractAttempt > _interactAttempts)
             {
+                Logger.Debug($"Max interrupt attempts reached ({_interactAttempts})");
                 State = States.Completed;
                 return true;
+            }
+            if (_currentInteractAttempt > 1)
+            {
+                Navigator.PlayerMover.MoveTowards(actor.Position);
+                await Coroutine.Sleep(250);
+                Navigator.PlayerMover.MoveStop();
+            }
+
+            if (_isPortal)
+            {
+                var worldId = ZetaDia.CurrentWorldSnoId;
+                if (worldId != _startingWorldId)
+                {
+                    Logger.Debug($"World changed from {_startingWorldId} to {worldId}, assuming done.");
+                    State = States.Completed;
+                    return true;
+                }
             }
 
             if (_timeoutCheckEnabled)
@@ -202,20 +229,37 @@ namespace Trinity.Components.Adventurer.Coroutines
                     }
                 }
             }
+
+            Logger.Debug($"Attempting to interact with {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance} #{_currentInteractAttempt}");
+
             var interactionResult = await Interact(actor);
 
+            await Coroutine.Sleep(300);
+
+            if (ActorFinder.IsDeathGate(actor))
+            {
+                var nearestGate = ActorFinder.FindNearestDeathGate();
+                if (nearestGate.CommonData.AnnId != actor.CommonData.AnnId && actor.Distance > 10f)
+                {
+                    Logger.Debug("Arrived at Gate Destination (AnnId Check)");
+                    State = States.Completed;
+                    return true;
+                }
+            }
+
+            // Sleep time would have to be set to 0/low for this to be checked during gate travel.  
             if (ZetaDia.Me.IsUsingDeathGate())
             {
                 Logger.Debug("Used Death Gate!");
                 await Coroutine.Wait(5000, () => !ZetaDia.Me.IsUsingDeathGate());
-                Logger.Debug("Arrived at Gate Destination");
+                Logger.Debug("Arrived at Gate Destination (Travelling Check)");
                 State = States.Completed;
                 return true;
             }
 
             if (interactionResult)
             {
-                if (_currentInteractAttempt < _interactAttempts)
+                if (_currentInteractAttempt <= _interactAttempts)
                 {
                     _currentInteractAttempt++;
                     return false;
@@ -234,6 +278,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                 }
                 State = States.Completed;
             }
+
+            Logger.Debug($"Interaction Failed");
             return false;
         }
 
@@ -254,7 +300,6 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interact(DiaObject actor)
         {
-            Logger.Debug("Attempting to interact with {0} at distance {1}", ((SNOActor)actor.ActorSnoId).ToString(), actor.Distance);
             bool retVal = false;
             switch (actor.ActorType)
             {
@@ -287,12 +332,13 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             _interactionStartedAt = default(DateTime);
             _timeoutCheckEnabled = false;
+            _currentInteractAttempt = 0;
             State = States.NotStarted;
         }
 
         public void DisablePulse()
         {
-            
+
         }
     }
 }

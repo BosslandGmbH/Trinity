@@ -169,8 +169,21 @@ namespace Trinity.Components.Combat
             if (target == null)
                 return false;
 
-            if (target.Type == TrinityObjectType.Door && !target.IsUsed)
+            if (target.IsBlacklisted)
                 return false;
+
+            if (target.Type == TrinityObjectType.Door)
+            {
+                if (target.ActorSnoId == 454346 && target.Targeting.TargetedTimes > 3)
+                {
+                    // Special case 'p43_AD_Catacombs_Door_A' no way to tell it's locked, blacklist quickly to explore
+                    GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(15), $"Probably locked door p43_AD_Catacombs_Door_A at {target.Position}");
+                    return true;
+                }
+
+                if (!target.IsUsed)
+                    return false;
+            }
 
             if (target.Type == TrinityObjectType.ProgressionGlobe)
                 return false;
@@ -393,7 +406,8 @@ namespace Trinity.Components.Combat
             if (currentTarget.RadiusDistance <= 2f)
                 return true;
 
-            if (currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(15) && currentTarget.IsInLineOfSight)
+            var requiresRayWalk = Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk;
+            if (!requiresRayWalk && currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(15) && currentTarget.IsInLineOfSight)
                 return true;
 
             return currentTarget.IsWalkable;
@@ -401,6 +415,9 @@ namespace Trinity.Components.Combat
 
         private bool IsInLineOfSight(Vector3 position)
         {
+            if (Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk)
+                return Core.Grids.Avoidance.CanRayWalk(Core.Player.Position, position);
+
             return Core.Grids.Avoidance.CanRayCast(Core.Player.Position, position);
         }
 

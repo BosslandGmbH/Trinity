@@ -60,6 +60,7 @@ namespace Trinity.Framework
         public static StuckHandler StuckHandler { get; } = new StuckHandler();
         public static BlockedCheck BlockedCheck { get; } = new BlockedCheck();
         public static ChangeMonitor ChangeMonitor { get; } = new ChangeMonitor();
+        public static ProfileSettings ProfileSettings { get; } = new ProfileSettings();
 
         public static SettingsModel Settings => TrinitySettings.Settings;
         public static TrinityStorage Storage => TrinitySettings.Storage;

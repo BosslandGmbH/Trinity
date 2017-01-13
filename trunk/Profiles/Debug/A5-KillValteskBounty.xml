@@ -1,0 +1,13 @@
+﻿<Profile>
+  <Name>Adventurer Specific Bounty A5 - Kill Valtesk the Cruel (363555)</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <RunBounty questId="363555"/>
+    <LogMessage message=">> Profile Finished" />
+    <WaitTimer questId="1" stepId="1" waitTime="3000" />
+    <LeaveGame />
+    <LoadProfile profile="SpecificBounty.xml" />
+  </Order>
+</Profile>

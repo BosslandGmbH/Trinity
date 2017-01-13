@@ -19,7 +19,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public Vector2 Center { get; private set; }
         public List<ExplorationNode> Nodes = new List<ExplorationNode>();
         public string Name { get; private set; }
-        public string HashName { get; private set; }
+        public string HashName { get; }
         public Vector2 Min { get; private set; }
         public Vector2 Max { get; private set; }
         //public Rect Rect { get; private set; }
