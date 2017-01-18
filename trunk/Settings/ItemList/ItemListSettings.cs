@@ -42,7 +42,7 @@ namespace Trinity.Settings.ItemList
             LoadCommands();
             Grouping = GroupingType.None;
             GroupsExpandedByDefault = false;
-            CreateView();                        
+            CreateView();
         }
 
         public void CreateView()
@@ -97,13 +97,13 @@ namespace Trinity.Settings.ItemList
                 itemTypeImages[item.TrinityItemType] = item.IconUrl;
             }
 
-            var existingRules = ItemTypes.ToDictionary(k => k.Id, v => v);
+            var existingItemTypes = ItemTypes.ToDictionary(k => k.Id, v => v);
 
             foreach (var itemType in AllowedTrinityItemTypes)
             {
                 LItem item;
 
-                if (!existingRules.TryGetValue((int)itemType, out item))
+                if (!existingItemTypes.TryGetValue((int)itemType, out item))
                 {
                     item = new LItem
                     {
@@ -157,14 +157,19 @@ namespace Trinity.Settings.ItemList
                     return;
                 }
 
-                var existingRules = ItemTypes.ToDictionary(k => k.Id, v => v);
+                var existingItemTypes = ItemTypes.ToDictionary(k => k.Id, v => v);
 
                 foreach (var itemType in value)
                 {
                     LItem item;
-                    if (existingRules.TryGetValue(itemType.Id, out item))
+                    if (existingItemTypes.TryGetValue(itemType.Id, out item))
                     {
                         item.Rules = itemType.Rules;
+                        foreach (var r in item.Rules)
+                        {
+                            r.TrinityItemType = item.TrinityItemType;
+                            r.UpdateStatRange();
+                        }
                         item.Ops = itemType.Ops;
                         item.IsSelected = true;
                         continue;
@@ -495,7 +500,7 @@ namespace Trinity.Settings.ItemList
             get { return _isModalVisible; }
             set { SetField(ref _isModalVisible, value); }
         }
-        
+
         [IgnoreDataMember]
         public ICommand ResetFilterCommand { get; set; }
         [IgnoreDataMember]
@@ -535,7 +540,7 @@ namespace Trinity.Settings.ItemList
                 {
                     if (ZetaDia.Me == null || !ZetaDia.IsInGame)
                     {
-                        if(!ChangeEvents.IsInGame.Value)
+                        if (!ChangeEvents.IsInGame.Value)
                         {
                             Logger.Log("Must be in a game to use this feature");
                         }
@@ -1026,7 +1031,7 @@ namespace Trinity.Settings.ItemList
                         {
                             r.TrinityItemType = item.TrinityItemType;
                             r.ItemReference = item.ItemReference;
-                            r.UpdateStatRange(r.Variant);
+                            r.UpdateStatRange();
                             //r.ItemStatRange = item.GetItemStatRange(r.ItemProperty);
                         });
                         item.IsSelected = true;
