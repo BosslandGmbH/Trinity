@@ -91,20 +91,17 @@ namespace Trinity.Settings.ItemList
                 if (_variant != value)
                 {
                     _variant = value;
-
-
-
-                    ItemStatRange = _defaultStatRange;
-
-                    UpdateStatRange(value);
+                    UpdateStatRange();
                     OnPropertyChanged();
                 }
             }
         }
 
-        public void UpdateStatRange(int value)
+        public void UpdateStatRange()
         {
-            if (_defaultStatRange == null)
+            // This is messed up,
+
+            if (_defaultStatRange == null && (TrinityItemType != TrinityItemType.Unknown || ItemReference != null))
             {
                 _defaultStatRange = ItemReference == null
                     ? ItemDataUtils.GetItemStatRange(TrinityItemType, ItemProperty)
@@ -113,7 +110,7 @@ namespace Trinity.Settings.ItemList
 
             if (ItemReference != null && ItemProperty == ItemProperty.SkillDamage)
             {
-                var customRange = ItemDataUtils.GetStatRangeForItemAndSkill(ItemReference, value);
+                var customRange = ItemDataUtils.GetStatRangeForItemAndSkill(ItemReference, Variant);
                 if (customRange != null)
                 {
                     ItemStatRange = customRange;
@@ -124,9 +121,15 @@ namespace Trinity.Settings.ItemList
                 ItemStatRange = _defaultStatRange;
             }
 
-            OnPropertyChanged(nameof(Min));
-            OnPropertyChanged(nameof(Max));
-            OnPropertyChanged(nameof(Step));
+            if (ItemStatRange == null && _defaultStatRange != null)
+                ItemStatRange = _defaultStatRange;
+
+            if (ItemStatRange == null)
+            {
+                OnPropertyChanged(nameof(Min));
+                OnPropertyChanged(nameof(Max));
+                OnPropertyChanged(nameof(Step));
+            }
         }
 
         [DataMember(EmitDefaultValue = false, Name = "AttKey")]
