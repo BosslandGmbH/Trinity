@@ -311,7 +311,8 @@ namespace Trinity.Settings
         public void SaveDynamicSettings()
         {
             Dynamic.Settings.Clear();
-            foreach (var item in SettingsManager.GetDynamicSettings())
+
+            foreach (var item in SettingsManager.GetDynamicSettings().Where(i => i != null))
             {
                 Dynamic.Settings.Add(new DynamicSettingNode
                 {

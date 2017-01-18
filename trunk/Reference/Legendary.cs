@@ -15,6 +15,34 @@ namespace Trinity.Reference
         {
         }
 
+        #region Manually Added Items
+
+        /// <summary>
+        /// Talisman of Akkhan
+        /// </summary>
+        public static Item TalismanOfAkkhan = new Item
+        {
+            Id = 455735,
+            Name = "Talisman of Akkhan",
+            Quality = ItemQuality.Legendary,
+            Slug = "talisman-of-akkhan",
+            ItemType = ItemType.Helm,
+            TrinityItemType = TrinityItemType.Amulet,
+            IsTwoHanded = false,
+            BaseType = ItemBaseType.Jewelry,
+            InternalName = "",
+            DataUrl = "https://us.battle.net/api/d3/data/item/talisman-of-akkhan",
+            Url = "https://us.battle.net/d3/en/item/talisman-of-akkhan",
+            IconUrl = "http://media.blizzard.com/d3/icons/items/large/p43_akkhanset_amulet_demonhunter_male.png",
+            RelativeUrl = "/d3/en/item/talisman-of-akkhan",
+            IsCrafted = false,
+            LegendaryAffix = "",
+            SetName = "Armor of Akkhan",
+        };
+
+
+        #endregion
+
         #region Special Crafted Items
 
         public static Item ReapersWraps = new Item

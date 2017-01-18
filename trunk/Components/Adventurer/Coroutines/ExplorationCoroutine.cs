@@ -13,11 +13,11 @@ namespace Trinity.Components.Adventurer.Coroutines
         private static ExplorationCoroutine _explorationCoroutine;
         private static HashSet<int> _exploreLevelAreaIds;
 
-        public static async Task<bool> Explore(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null)
+        public static async Task<bool> Explore(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true)
         {
             if (_explorationCoroutine == null || (_exploreLevelAreaIds != null && levelAreaIds != null && !_exploreLevelAreaIds.SetEquals(levelAreaIds)))
             {
-                _explorationCoroutine = new ExplorationCoroutine(levelAreaIds, ignoreScenes, breakCondition);
+                _explorationCoroutine = new ExplorationCoroutine(levelAreaIds, ignoreScenes, breakCondition, allowReExplore);
                 _exploreLevelAreaIds = levelAreaIds;
             }
             if (await _explorationCoroutine.GetCoroutine())
@@ -53,11 +53,12 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
         }
 
-        private ExplorationCoroutine(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null)
+        private ExplorationCoroutine(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true)
         {
             _levelAreaIds = levelAreaIds;
             _ignoreScenes = ignoreScenes;
             _breakCondition = breakCondition;
+            _allowReExplore = allowReExplore;
         }
 
 
@@ -85,6 +86,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private int _failedNavigationAttempts;
         private readonly Func<bool> _breakCondition;
         private List<string> _ignoreScenes;
+        private bool _allowReExplore;
 
         private bool NotStarted()
         {
@@ -107,6 +109,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 var destination = ExplorationHelpers.NearestWeightedUnvisitedNode(_levelAreaIds);
                 if (destination == null)
                 {
+                    Logger.Debug($"[Exploration] No more unvisited nodes to explore, so we're done.");
                     State = States.Completed;
                     return false;
                 }
@@ -163,16 +166,26 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                     if (_failedNavigationAttempts > 25)
                     {
-                        Logger.Debug($"[Exploration] Exploration Resetting");
-                        ScenesStorage.Reset();
-                        Navigator.Clear();
-                        _failedNavigationAttempts = 0;
+                        if (_allowReExplore)
+                        {
+                            Logger.Debug($"[Exploration] Exploration Resetting");
+                            ScenesStorage.Reset();
+                            Navigator.Clear();
+                            _failedNavigationAttempts = 0;
+                        }
+                        else
+                        {
+                            Logger.Debug($"[Exploration] too many failed navigation attempts, aborting.");
+                            State = States.Completed;
+                            return false;
+                        }
                     }
 
                 }
                 return false;
             }
 
+            Logger.Debug($"[Exploration] We found no explore destination, so we're done.");
             ScenesStorage.Reset();
             Navigator.Clear();
 

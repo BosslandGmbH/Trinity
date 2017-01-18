@@ -79,7 +79,16 @@
                         </WrapPanel>
                     </StackPanel>
                 </GroupBox>
-                
+
+                <GroupBox>
+                    <GroupBox.Header>Kiting</GroupBox.Header>
+                    <StackPanel>
+                        <WrapPanel Margin="0,5,0,0">
+                            <CheckBox IsChecked="{Binding DataContext.AllowKiting}" Content="Allow Kiting" />                     
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+
             </StackPanel>
         </Grid>
     </Border>

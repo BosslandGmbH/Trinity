@@ -44,7 +44,7 @@ namespace Trinity.Routines
             => Combat.Party.Leader;
 
         protected static PartyObjective MyPartyObjective
-            => Combat.Party.Members.FirstOrDefault(m => m.IsMe)?.Objective ?? default(PartyObjective);
+            => PartyMe?.Objective ?? default(PartyObjective);
 
         protected static TrinityActor PartyTarget
             => PartyLeader.Target != null ? PartyHelper.FindLocalActor(PartyLeader.Target) : null;

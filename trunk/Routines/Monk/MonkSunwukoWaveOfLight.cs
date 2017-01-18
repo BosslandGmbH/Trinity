@@ -21,7 +21,7 @@ using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Monk
 {
-    public sealed class MonkOnePunch : MonkBase, IRoutine
+    public sealed class MonkSunwukoWaveOfLight : MonkBase, IRoutine
     {
         #region Definition
 
@@ -67,8 +67,17 @@ namespace Trinity.Routines.Monk
 
             if (Core.Buffs.HasCastingShrine)
             {
+                if (Skills.Monk.BlindingFlash.CanCast() && Legendary.TheLawsOfSeph.IsEquipped && Player.PrimaryResource < Player.PrimaryResourceMax - 165)
+                    return BlindingFlash();
+
+                if (Skills.Monk.MysticAlly.CanCast() && Runes.Monk.AirAlly.IsActive && Player.PrimaryResource < Player.PrimaryResourceMax - 200)
+                    return MysticAlly();
+
                 if (Skills.Monk.DashingStrike.CanCast() && !Skills.Monk.DashingStrike.IsLastUsed)
                     return DashingStrike(CurrentTarget.Position);
+
+                if (Skills.Monk.WaveOfLight.CanCast())
+                    return WaveOfLight(CurrentTarget);
             }
 
             if (TrySecondaryPower(out power))
@@ -127,34 +136,40 @@ namespace Trinity.Routines.Monk
             if (!Skills.Monk.BlindingFlash.CanCast())
                 return false;
 
+            //Prioritize using Blinding Flash for Spirit Regeneration
+            if (Legendary.TheLawsOfSeph.IsEquipped)
+                return Player.PrimaryResource < Player.PrimaryResourceMax - 165;
+
             if (!TargetUtil.AnyMobsInRange(20f))
                 return false;
 
             if (Player.CurrentHealthPct < 0.5f)
                 return true;
-                    
-            if (Legendary.TheLawsOfSeph.IsEquipped)
-                return Player.PrimaryResource < Player.PrimaryResourceMax - 165;
 
             return true;
-        }		
-		
-        private int MinSweepingWindStacks => Legendary.VengefulWind.IsEquipped ? 3 : 1;		
-		
+        }
+
         protected override bool ShouldMysticAlly()
         {
             if (!Skills.Monk.MysticAlly.CanCast())
                 return false;
 
-            if (Runes.Monk.AirAlly.IsActive && Player.PrimaryResource > 150)
-                return false;
+            //Prioritize using Mystic Ally for Spirit Regeneration when missing 200 Spirit
+            if (Runes.Monk.AirAlly.IsActive)
+                return Player.PrimaryResource < Player.PrimaryResourceMax - 200;
 
             if (!TargetUtil.AnyMobsInRange(50f))
                 return false;
 
+            //Still check for buff for when not using Air Ally Rune
+            if (Core.Buffs.HasBuff(SNOPower.X1_Monk_MysticAlly_v2))
+                return false;
+
             return true;
-        }			
-		
+        }
+
+        private int MinSweepingWindStacks => Legendary.VengefulWind.IsEquipped ? 3 : 1;
+
         protected override bool ShouldWaveOfLight(out TrinityActor target)
         {
             target = null;
@@ -256,9 +271,9 @@ namespace Trinity.Routines.Monk
 		public override float EliteRange => Settings.WoLEliteRange;		
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
-        public MonkOnePunchSettings Settings { get; } = new MonkOnePunchSettings();
+        public MonkSunwukoWaveOfLightSettings Settings { get; } = new MonkSunwukoWaveOfLightSettings();
 
-        public sealed class MonkOnePunchSettings : NotifyBase, IDynamicSetting
+        public sealed class MonkSunwukoWaveOfLightSettings : NotifyBase, IDynamicSetting
         {
             private SkillSettings _epiphany;
             private SkillSettings _dashingStrike;

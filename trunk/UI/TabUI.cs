@@ -55,6 +55,7 @@ using Trinity.Items.Sorting;
 using Trinity.Settings;
 using Trinity.UI.Visualizer;
 using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
+using System.Threading.Tasks;
 
 namespace Trinity.UI
 {
@@ -119,14 +120,15 @@ namespace Trinity.UI
                 CreateGroup("Debugging", new List<Control>
                         {
                             CreateButton("Find New ActorIds", GetNewActorSNOsEventHandler),
-                            CreateButton("Log Invalid Items", LogInvalidHandler),
+                            //CreateButton("Log Invalid Items", LogInvalidHandler),
                             CreateButton("> Gizmo Attribtues", StartGizmoTestHandler),
                             CreateButton("> Unit Attribtues", StartUnitTestHandler),
                             CreateButton("> Player Attribtues", StartPlayerTestHandler),
-                            CreateButton("> Log Power Data", LogPowerDataHandler),
+                            //CreateButton("> Log Power Data", LogPowerDataHandler),
                             //CreateButton("Dump Item Powers", StartDataTestHandler),
                             //CreateButton("> Buff Test", StartBuffTestHandler),
                             //CreateButton("> Stop Tests", StopTestHandler),
+                            CreateButton("> Unit Monitor", StartUnitMonitor),
 
                 });
 
@@ -398,6 +400,101 @@ namespace Trinity.UI
                 Logger.LogError("Error Starting LazyCache: " + ex);
             }
         }
+
+        private static void StartUnitMonitor(object sender, RoutedEventArgs routedEventArgs)
+        {
+            try
+            {
+                var unitAtts = new Dictionary<int, HashSet<ActorAttributeType>>();
+                var unitLastDamage = new Dictionary<int, float>();
+
+                if (!ZetaDia.IsInGame)
+                    return;
+
+                var endTime = DateTime.UtcNow + TimeSpan.FromSeconds(30);
+                Task.Run(() =>
+                {
+                    while (DateTime.UtcNow < endTime)
+                    {
+                        Thread.Sleep(250);
+
+                        using (ZetaDia.Memory.AcquireFrame())
+                        {
+                            ZetaDia.Actors.Update();
+
+                            Func<DiaObject, bool> isValid =
+                                u =>
+                                    u != null && u.IsValid && u.CommonData != null && u.CommonData.IsValid &&
+                                    !u.CommonData.IsDisposed;
+                            var testunits =
+                                ZetaDia.Actors.GetActorsOfType<DiaUnit>(true)
+                                    .Where(
+                                        u =>
+                                            isValid(u) && u.RActorId != ZetaDia.Me.RActorId && ZetaDia.Me.TeamId != u.TeamId)
+                                    .ToList();
+                            var testunit = testunits.OrderBy(u => u.Distance).FirstOrDefault();
+                            if (testunit == null || testunit.CommonData == null)
+                            {
+                                testunit = ZetaDia.Me;
+                            }
+
+                            var acd = MemoryWrapper.Create<ActorCommonData>(testunit.CommonData.BaseAddress);
+                            var ann = acd.AnnId;
+                            var atts = new Trinity.Framework.Objects.Memory.Attributes.Attributes(acd.FastAttributeGroupId);
+
+
+                            if (_lastAtts == null || ann != _lastAnn)
+                            {
+                                _lastAtts = null;
+                                Logger.Log($"-- Dumping Attribtues for {acd.Name} (Sno={acd.ActorSnoId} Ann={acd.AnnId}) at {acd.Position} ----");
+                                Logger.Log(atts + "\r\n");
+                            }
+
+                            if (_lastAtts != null)
+                            {
+                                foreach (var att in atts.Items)
+                                {
+                                    var curValue = att.Value.GetValue();
+                                    if (_lastAtts.ContainsKey(att.Key))
+                                    {
+                                        var lastValue = _lastAtts[att.Key].GetValue();
+                                        if (Convert.ToInt32(lastValue) != Convert.ToInt32(curValue))
+                                        {
+                                            Logger.Log($"-- Attribute {att} changed from {lastValue}");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Logger.Log($"-- Attribute Added {att}");
+                                    }
+                                }
+
+                                foreach (var att in _lastAtts)
+                                {
+                                    var lastValue = att.Value.GetValue();
+                                    if (!atts.Items.ContainsKey(att.Key))
+                                    {
+                                        Logger.Log(
+                                            $"-- Attribute removed {(ActorAttributeType) att.Key} Value was {lastValue}");
+                                    }
+                                }
+                            }
+
+                            _lastAtts = atts.Items;
+                            _lastAnn = ann;
+                        }
+
+                    }
+                });
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Error Starting LazyCache: " + ex);
+            }
+        }
+
+
 
         private static void LogPowerDataHandler(object sender, RoutedEventArgs routedEventArgs)
         {
@@ -1506,6 +1603,8 @@ namespace Trinity.UI
         }
 
         private static readonly SolidColorBrush BackgroundBrush = new SolidColorBrush(Color.FromRgb(67, 67, 67));
+        private static Dictionary<int, AttributeItem> _lastAtts;
+        private static int _lastAnn;
 
         private static void CreateGroup(string title, List<Control> items)
         {

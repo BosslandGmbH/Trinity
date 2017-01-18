@@ -1025,7 +1025,9 @@ namespace Trinity.Settings.ItemList
                         selectedItem.Rules.ForEach(r =>
                         {
                             r.TrinityItemType = item.TrinityItemType;
-                            r.ItemStatRange = item.GetItemStatRange(r.ItemProperty);
+                            r.ItemReference = item.ItemReference;
+                            r.UpdateStatRange(r.Variant);
+                            //r.ItemStatRange = item.GetItemStatRange(r.ItemProperty);
                         });
                         item.IsSelected = true;
                         item.Rules = selectedItem.Rules;

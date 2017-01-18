@@ -198,7 +198,7 @@ namespace Trinity.ProfileTags
 
             if (_interactTask == null)
             {
-                _interactTask = new InteractionCoroutine(ActorId, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1), InteractAttempts);
+                _interactTask = new InteractionCoroutine(ActorId, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(1), InteractAttempts);
             }
 
             if (!_interactTask.IsDone)

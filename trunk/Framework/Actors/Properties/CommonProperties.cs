@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Trinity.Components.Combat;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
 using Trinity.Settings;
+using Zeta.Bot;
+using Zeta.Bot.Profile;
+using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
@@ -23,6 +27,7 @@ namespace Trinity.Framework.Actors.Properties
             var actorInfo = actor.ActorInfo;
 
             actor.LastSeenTime = DateTime.UtcNow;
+            actor.IsProfileBlacklisted = ProfileManager.CurrentProfile.TargetBlacklists.Any(b => b.ActorId == actor.ActorSnoId);
             actor.IsExcludedId = GameData.ExcludedActorIds.Contains(actor.ActorSnoId) || GameData.BlackListIds.Contains(actor.ActorSnoId);
             actor.IsExcludedType = GameData.ExcludedActorTypes.Contains(actor.ActorType);
             actor.InternalNameLowerCase = actor.InternalName.ToLower();

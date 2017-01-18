@@ -144,7 +144,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 ).OrderBy(u => u.Distance).FirstOrDefault();
         }
 
-        public static bool IsDeathGate(DiaObject o) => o?.ActorSnoId == 328830;
+        public static bool IsDeathGate(DiaObject o) => o != null && o.IsValid && o.ActorSnoId == 328830;
 
         public static DiaGizmo FindNearestDeathGate()
         {

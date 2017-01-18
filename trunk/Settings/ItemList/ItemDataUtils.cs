@@ -35,7 +35,7 @@ namespace Trinity.Settings.ItemList
         public static int GetMinBaseDamage(ACDItem item)
         {
             var min = Math.Min(item.Stats.MinDamageElemental, item.Stats.MaxDamageElemental);
-            return (min != 0) ? (int)min :  (int)item.GetAttribute<float>(ActorAttributeType.DamageWeaponMinPhysical);
+            return (min != 0) ? (int)min : (int)item.GetAttribute<float>(ActorAttributeType.DamageWeaponMinPhysical);
         }
 
 
@@ -241,37 +241,37 @@ namespace Trinity.Settings.ItemList
 
         public static List<Skill> GetSkillsForItemType(TrinityItemType itemType, ActorClass actorClass = ActorClass.Invalid)
         {
-            var result = new List<Skill>();
+            var skills = new List<Skill>();
             if (actorClass != ActorClass.Invalid)
             {
                 var kvp = new KeyValuePair<TrinityItemType, ActorClass>(itemType, actorClass);
-                result.AddRange(SkillDamageByItemTypeAndClass[kvp]);
+                skills.AddRange(SkillDamageByItemTypeAndClass[kvp]);
             }
             else
             {
                 var actorClasses = new List<ActorClass>
                 {
-                        ActorClass.Monk,
-                        ActorClass.DemonHunter,
-                        ActorClass.Witchdoctor,
-                        ActorClass.Wizard,
-                        ActorClass.Crusader,
-                        ActorClass.Barbarian
+                    ActorClass.Monk,
+                    ActorClass.DemonHunter,
+                    ActorClass.Witchdoctor,
+                    ActorClass.Wizard,
+                    ActorClass.Crusader,
+                    ActorClass.Barbarian
                 };
                 foreach (var ac in actorClasses)
                 {
                     var kvp = new KeyValuePair<TrinityItemType, ActorClass>(itemType, ac);
-                    result.AddRange(SkillDamageByItemTypeAndClass[kvp]);
+                    skills.AddRange(SkillDamageByItemTypeAndClass[kvp]);
                 }
             }
-            return result;
+            return skills;
         }
 
         /// <summary>
         /// Returns an object with the Min and Max values for a particular property and item
         /// Eg. Fire Damage 15-20%
         /// </summary>
-        public static ItemStatRange GetItemStatRange(Item item, ItemProperty prop)
+        public static ItemStatRange GetItemStatRange(Item item, ItemProperty prop, int variant = 0)
         {
             ItemStatRange statRange;
 
@@ -283,7 +283,7 @@ namespace Trinity.Settings.ItemList
             if (ItemPropertyLimitsByItemType.TryGetValue(new KeyValuePair<TrinityItemType, ItemProperty>(item.TrinityItemType, prop), out statRange))
                 result = statRange;
 
-            if (SpecialItemsPropertyCases.TryGetValue(new Tuple<Item, ItemProperty>(item, prop), out statRange))
+            if (SpecialItemsPropertyCases.TryGetValue(new Tuple<Item, ItemProperty, int>(item, prop, variant), out statRange))
                 result = statRange;
 
             if (prop == ItemProperty.PassivePower && ItemPassivePowers.ContainsKey(item.Id))
@@ -327,7 +327,7 @@ namespace Trinity.Settings.ItemList
         /// <param name="item"></param>
         /// <param name="prop"></param>
         /// <returns></returns>
-        public static bool IsValidPropertyForItem(Item item, ItemProperty prop)
+        public static bool IsValidPropertyForItem(Item item, ItemProperty prop, int variant = 0)
         {
             ItemStatRange statRange;
 
@@ -340,7 +340,7 @@ namespace Trinity.Settings.ItemList
             if (ItemPropertyLimitsByItemType.TryGetValue(new KeyValuePair<TrinityItemType, ItemProperty>(item.TrinityItemType, prop), out statRange))
                 return true;
 
-            if (SpecialItemsPropertyCases.ContainsKey(new Tuple<Item, ItemProperty>(item, prop)))
+            if (SpecialItemsPropertyCases.ContainsKey(new Tuple<Item, ItemProperty, int>(item, prop, variant)))
                 return true;
 
             if (prop == ItemProperty.PassivePower && ItemPassivePowers.ContainsKey(item.Id))
@@ -355,7 +355,9 @@ namespace Trinity.Settings.ItemList
         public static List<ItemProperty> GetPropertiesForItem(Item item)
         {
             var props = ItemPropertyLimitsByItemType.Where(pair => pair.Key.Key == item.TrinityItemType).Select(pair => pair.Key.Value).ToList();
+
             var specialProps = SpecialItemsPropertyCases.Where(pair => pair.Key.Item1 == item).Select(pair => pair.Key.Item2).ToList();
+
             props = props.Concat(specialProps).Distinct().ToList();
 
             if (ItemPassivePowers.ContainsKey(item.Id))
@@ -384,6 +386,21 @@ namespace Trinity.Settings.ItemList
             return props;
         }
 
+        public static List<object> GetItemPropertyVariants(ItemProperty prop, Item itemReference)
+        {
+            if (prop == ItemProperty.SkillDamage)
+            {
+                var itemSpecificVariants = SpecialItemsPropertyCases
+                    .Where(pair => pair.Key.Item1 == itemReference)
+                    .Select(pair => SkillUtils.GetSkillByPower((SNOPower)pair.Key.Item3)).ToList();
+
+                if (itemSpecificVariants.Any())
+                    return itemSpecificVariants.Cast<object>().ToList();
+            }
+
+            return GetItemPropertyVariants(prop, itemReference.TrinityItemType);
+        }
+
         /// <summary>
         /// Get all the possible options for multi-value item properties. 
         /// For example Skill Damage for Quiver can be for the Sentry, Cluster Arrow, Multishot etc.
@@ -394,7 +411,7 @@ namespace Trinity.Settings.ItemList
             switch (prop)
             {
                 case ItemProperty.SkillDamage:
-                    var classRestriction = (Item.GetClassRestriction(itemType));
+                    var classRestriction = Item.GetClassRestriction(itemType);
                     result = GetSkillsForItemType(itemType, classRestriction).Cast<object>().ToList();
                     break;
 
@@ -429,11 +446,6 @@ namespace Trinity.Settings.ItemList
             return result;
         }
 
-        public static readonly Dictionary<Item, Skill> SpecialItemSkills = new Dictionary<Item, Skill>
-        {
-            { Legendary.Manticore, Skills.DemonHunter.ClusterArrow }
-        };
-
         public static float GetPassivePowerValue(TrinityItem item)
         {
             //todo: bug with attribtues where sometimes the passivepower is not in the attribute list
@@ -448,7 +460,7 @@ namespace Trinity.Settings.ItemList
 
             if (passive != null)
             {
-                return desc.IsPercent ? passive.GetValue<float>() * 100 : passive.GetValue<float>();               
+                return desc.IsPercent ? passive.GetValue<float>() * 100 : passive.GetValue<float>();
             }
 
             var acdItem = ZetaDia.Actors.GetACDByAnnId(item.AnnId);
@@ -585,60 +597,68 @@ namespace Trinity.Settings.ItemList
         /// Items with unusual properties are listed here
         /// Determines if Property will be available in ItemList rules dropdown.
         /// </summary>
-        public static readonly Dictionary<Tuple<Item, ItemProperty>, ItemStatRange> SpecialItemsPropertyCases = new Dictionary<Tuple<Item, ItemProperty>, ItemStatRange>
+        public static readonly Dictionary<Tuple<Item, ItemProperty, int>, ItemStatRange> SpecialItemsPropertyCases = new Dictionary<Tuple<Item, ItemProperty, int>, ItemStatRange>
         {
-            { new Tuple<Item, ItemProperty>(Legendary.HellcatWaistguard, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 6, Min = 3}},
-            { new Tuple<Item, ItemProperty>(Legendary.HellcatWaistguard, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
-            { new Tuple<Item, ItemProperty>(Legendary.TheWitchingHour, ItemProperty.CriticalHitDamage), new ItemStatRange { Max = 50, Min = 26 }},
-            { new Tuple<Item, ItemProperty>(Legendary.TheWitchingHour, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Magefist, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Cindercoat, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            //{ new Tuple<Item, ItemProperty>(Legendary.UnboundBolt, ItemProperty.CriticalHitDamage), new ItemStatRange { Max = 35, Min = 31 }},
-            { new Tuple<Item, ItemProperty>(Legendary.LacuniProwlers, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
-            //{ new Tuple<Item, ItemProperty>(Legendary.SteadyStrikers, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
-            { new Tuple<Item, ItemProperty>(Legendary.MempoOfTwilight, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
-            { new Tuple<Item, ItemProperty>(Legendary.AndarielsVisage, ItemProperty.ElementalDamage), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.AndarielsVisage, ItemProperty.AttackSpeed), new ItemStatRange { Max = 7, Min = 5 }},
-            { new Tuple<Item, ItemProperty>(Legendary.SunKeeper, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 30, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Frostburn, ItemProperty.ColdSkills), new ItemStatRange { Max = 15, Min = 10 }},
-            { new Tuple<Item, ItemProperty>(Legendary.ThundergodsVigor, ItemProperty.LightningSkills), new ItemStatRange { Max = 15, Min = 10 }},
-            { new Tuple<Item, ItemProperty>(Legendary.SashOfKnives, ItemProperty.ResourceCost), new ItemStatRange { Max = 8, Min = 5 }},
-            { new Tuple<Item, ItemProperty>(Legendary.StoneOfJordan, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 30, Min = 25 }},
-            { new Tuple<Item, ItemProperty>(Legendary.StoneOfJordan, ItemProperty.ElementalDamage), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Unity, ItemProperty.DamageAgainstElites), new ItemStatRange { Max = 15, Min = 12 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Etrayu, ItemProperty.ColdSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Uskang, ItemProperty.LightningSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Triumvirate, ItemProperty.LightningSkills), new ItemStatRange { Max = 10, Min = 7 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Triumvirate, ItemProperty.FireSkills), new ItemStatRange { Max = 10, Min = 7 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Triumvirate, ItemProperty.ArcaneSkills), new ItemStatRange { Max = 10, Min = 7 }},
-            { new Tuple<Item, ItemProperty>(Legendary.WinterFlurry, ItemProperty.ColdSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.VigilanteBelt, ItemProperty.Cooldown), new ItemStatRange { Max = 10, Min = 6 }},
-            { new Tuple<Item, ItemProperty>(Legendary.SaffronWrap, ItemProperty.ResourceCost), new ItemStatRange { Max = 6, Min = 4 }},
-            { new Tuple<Item, ItemProperty>(Legendary.LidlessWall, ItemProperty.ElementalDamage), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Skycutter, ItemProperty.HolySkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.TheBurningAxeOfSankis, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.GestureOfOrpheus, ItemProperty.ArcaneSkills), new ItemStatRange { Max = 15, Min = 10 }},
-            { new Tuple<Item, ItemProperty>(Legendary.GestureOfOrpheus, ItemProperty.FireSkills), new ItemStatRange { Max = 15, Min = 10 }},
-            { new Tuple<Item, ItemProperty>(Legendary.GestureOfOrpheus, ItemProperty.LightningSkills), new ItemStatRange { Max = 15, Min = 10 }},
-            { new Tuple<Item, ItemProperty>(Legendary.GestureOfOrpheus, ItemProperty.ColdSkills), new ItemStatRange { Max = 15, Min = 10 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Maximus, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.BalefireCaster, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Wormwood, ItemProperty.PoisonSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.HeartSlaughter, ItemProperty.PhysicalSkills), new ItemStatRange { Max = 30, Min = 25 }},
-            { new Tuple<Item, ItemProperty>(Legendary.SchaefersHammer, ItemProperty.LightningSkills), new ItemStatRange { Max = 25, Min = 20 }},
-            { new Tuple<Item, ItemProperty>(Legendary.WrathOfTheBoneKing, ItemProperty.ColdSkills), new ItemStatRange { Max = 30, Min = 25 }},
-            { new Tuple<Item, ItemProperty>(Legendary.WonKhimLau, ItemProperty.LightningSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Azurewrath, ItemProperty.ColdSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.Doombringer, ItemProperty.PhysicalSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.AkaneshTheHeraldOfRighteousness, ItemProperty.HolySkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.OdynSon, ItemProperty.LightningSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.HolyPointShot, ItemProperty.LightningSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.HolyPointShot, ItemProperty.PhysicalSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.HolyPointShot, ItemProperty.ColdSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.HolyPointShot, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.HolyPointShot, ItemProperty.SkillDamage), new ItemStatRange { Max = 60, Min = 80 }},
-            { new Tuple<Item, ItemProperty>(Legendary.FirebirdsEye, ItemProperty.FireSkills), new ItemStatRange { Max = 20, Min = 15 }},
-            { new Tuple<Item, ItemProperty>(Legendary.TheEyeOfTheStorm, ItemProperty.FireSkills), new ItemStatRange { Max = 30, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.HellcatWaistguard, ItemProperty.DamageAgainstElites, 0), new ItemStatRange { Max = 6, Min = 3}},
+            { new Tuple<Item, ItemProperty, int>(Legendary.HellcatWaistguard, ItemProperty.AttackSpeed, 0), new ItemStatRange { Max = 7, Min = 5 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.TheWitchingHour, ItemProperty.CriticalHitDamage, 0), new ItemStatRange { Max = 50, Min = 26 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.TheWitchingHour, ItemProperty.AttackSpeed, 0), new ItemStatRange { Max = 7, Min = 5 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Magefist, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Cindercoat, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.LacuniProwlers, ItemProperty.AttackSpeed, 0), new ItemStatRange { Max = 7, Min = 5 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.MempoOfTwilight, ItemProperty.AttackSpeed, 0), new ItemStatRange { Max = 7, Min = 5 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.AndarielsVisage, ItemProperty.ElementalDamage, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.AndarielsVisage, ItemProperty.AttackSpeed, 0), new ItemStatRange { Max = 7, Min = 5 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.SunKeeper, ItemProperty.DamageAgainstElites, 0), new ItemStatRange { Max = 30, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Frostburn, ItemProperty.ColdSkills, 0), new ItemStatRange { Max = 15, Min = 10 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.ThundergodsVigor, ItemProperty.LightningSkills, 0), new ItemStatRange { Max = 15, Min = 10 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.SashOfKnives, ItemProperty.ResourceCost, 0), new ItemStatRange { Max = 8, Min = 5 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.StoneOfJordan, ItemProperty.DamageAgainstElites, 0), new ItemStatRange { Max = 30, Min = 25 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.StoneOfJordan, ItemProperty.ElementalDamage, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Unity, ItemProperty.DamageAgainstElites, 0), new ItemStatRange { Max = 15, Min = 12 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Etrayu, ItemProperty.ColdSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Uskang, ItemProperty.LightningSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Triumvirate, ItemProperty.LightningSkills, 0), new ItemStatRange { Max = 10, Min = 7 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Triumvirate, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 10, Min = 7 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Triumvirate, ItemProperty.ArcaneSkills, 0), new ItemStatRange { Max = 10, Min = 7 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.WinterFlurry, ItemProperty.ColdSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.VigilanteBelt, ItemProperty.Cooldown, 0), new ItemStatRange { Max = 10, Min = 6 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.SaffronWrap, ItemProperty.ResourceCost, 0), new ItemStatRange { Max = 6, Min = 4 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.LidlessWall, ItemProperty.ElementalDamage, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Skycutter, ItemProperty.HolySkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.TheBurningAxeOfSankis, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.GestureOfOrpheus, ItemProperty.ArcaneSkills, 0), new ItemStatRange { Max = 15, Min = 10 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.GestureOfOrpheus, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 15, Min = 10 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.GestureOfOrpheus, ItemProperty.LightningSkills, 0), new ItemStatRange { Max = 15, Min = 10 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.GestureOfOrpheus, ItemProperty.ColdSkills, 0), new ItemStatRange { Max = 15, Min = 10 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Maximus, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.BalefireCaster, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Wormwood, ItemProperty.PoisonSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.HeartSlaughter, ItemProperty.PhysicalSkills, 0), new ItemStatRange { Max = 30, Min = 25 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.SchaefersHammer, ItemProperty.LightningSkills, 0), new ItemStatRange { Max = 25, Min = 20 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.WrathOfTheBoneKing, ItemProperty.ColdSkills, 0), new ItemStatRange { Max = 30, Min = 25 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.WonKhimLau, ItemProperty.LightningSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Azurewrath, ItemProperty.ColdSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.Doombringer, ItemProperty.PhysicalSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.AkaneshTheHeraldOfRighteousness, ItemProperty.HolySkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.OdynSon, ItemProperty.LightningSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.HolyPointShot, ItemProperty.LightningSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.HolyPointShot, ItemProperty.PhysicalSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.HolyPointShot, ItemProperty.ColdSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.HolyPointShot, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.HolyPointShot, ItemProperty.SkillDamage, 0), new ItemStatRange { Max = 60, Min = 80 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.FirebirdsEye, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 20, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.TheEyeOfTheStorm, ItemProperty.FireSkills, 0), new ItemStatRange { Max = 30, Min = 15 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.SuwongDiviner, ItemProperty.SkillDamage, Skills.WitchDoctor.AcidCloud.Id), new ItemStatRange { Max = 100, Min = 75 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.BladeOfProphecy, ItemProperty.SkillDamage, Skills.Crusader.Condemn.Id), new ItemStatRange { Max = 100, Min = 75 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.DeadMansLegacy, ItemProperty.SkillDamage, Skills.DemonHunter.Multishot.Id), new ItemStatRange { Max = 100, Min = 75 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.FrydehrsWrath, ItemProperty.SkillDamage, Skills.Crusader.Condemn.Id), new ItemStatRange { Max = 200, Min = 150 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.InnasReach, ItemProperty.SkillDamage, Skills.Monk.MysticAlly.Id), new ItemStatRange { Max = 120, Min = 90 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.ZunimassasStringOfSkulls, ItemProperty.SkillDamage, Skills.WitchDoctor.FetishArmy.Id), new ItemStatRange { Max = 25, Min = 20 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.TheGavelOfJudgment, ItemProperty.SkillDamage, Skills.Barbarian.HammerOfTheAncients.Id), new ItemStatRange { Max = 100, Min = 75 }},
+
+
+
         };
 
         /// <summary>
@@ -998,6 +1018,7 @@ namespace Trinity.Settings.ItemList
 
             // Area Damage
 
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.CrusaderShield, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Ring, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Amulet, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Gloves, ItemProperty.AreaDamage), new ItemStatRange {Min = 10, Max = 20 }},
@@ -1395,6 +1416,14 @@ namespace Trinity.Settings.ItemList
 
         };
 
+        //public static readonly Dictionary<KeyValuePair<Item, Skill>, ItemStatRange> SkillDamageRangeByItem = new Dictionary<KeyValuePair<Item, Skill>, ItemStatRange>
+        //{
+        //    {
+        //        new KeyValuePair<Item, Skill>(Legendary.SuwongDiviner, Skills.WitchDoctor.AcidCloud),
+        //        new ItemStatRange {Max = 100, Min = 75}
+        //    },
+        //};
+
         public static readonly LookupList<KeyValuePair<TrinityItemType, ActorClass>, Skill> SkillDamageByItemTypeAndClass = new LookupList<KeyValuePair<TrinityItemType, ActorClass>, Skill>
         {
             // Head Slot
@@ -1751,6 +1780,14 @@ namespace Trinity.Settings.ItemList
 
 
         };
+
+
+        public static ItemStatRange GetStatRangeForItemAndSkill(Item itemReference, int variant)
+        {
+            var key = new Tuple<Item, ItemProperty, int>(itemReference, ItemProperty.SkillDamage, variant);
+            return SpecialItemsPropertyCases.ContainsKey(key) ? SpecialItemsPropertyCases[key] : null;
+        }
+
 
 
 

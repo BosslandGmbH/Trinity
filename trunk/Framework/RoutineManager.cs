@@ -44,7 +44,7 @@ namespace Trinity.Framework
             foreach (var routine in _routineLoader.Items)
             {
                 var settings = routine.Value.RoutineSettings;
-                settings.Reset();
+                settings?.Reset();
             }
         }
 

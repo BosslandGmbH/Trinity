@@ -158,13 +158,18 @@ namespace Trinity.Framework.Objects.Memory.Attributes
                     //a.Value.Update();
                 //}
 
-                if ((a.Value.Descripter.ParameterType == AttributeParameterType.PowerSnoId || a.Value.Descripter.ParameterType == AttributeParameterType.PowerSnoId2) && a.Value.GetValue<int>() != 0)
+                if (a.Value.Descripter.ParameterType == AttributeParameterType.PowerSnoId || a.Value.Descripter.ParameterType == AttributeParameterType.PowerSnoId2)
                 {
                     a.Value.Update();
-                    var key = a.Value.Key.ModifierId.To<TModifier>();
-                    if (!result.ContainsKey(key))
+
+                    if (a.Value.GetValue<int>() != 0)
                     {
-                        result.Add(key, a.Value.GetValue<TValue>());
+                        var key = a.Value.Key.ModifierId.To<TModifier>();
+
+                        if (!result.ContainsKey(key))
+                        {
+                            result.Add(key, a.Value.GetValue<TValue>());
+                        }
                     }
                 }
             }            

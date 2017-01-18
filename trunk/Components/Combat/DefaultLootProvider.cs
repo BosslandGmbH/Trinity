@@ -47,6 +47,9 @@ namespace Trinity.Components.Combat
             if (item.TrinityItemType == TrinityItemType.ConsumableAddSockets)
                 return true;
 
+            if (item.RawItemType == RawItemType.Lore && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Lore))
+                return true;
+
             if (item.GameBalanceId == GameData.ItemGameBalanceIds.DeathsBreath)
                 return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.DeathsBreath);
 

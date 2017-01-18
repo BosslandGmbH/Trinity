@@ -21,10 +21,12 @@ namespace Trinity.Settings.ItemList
     public class LItem : Item, INotifyPropertyChanged, ICloneable
     {
         private bool _isSelected;
-        private readonly Item _item;
+
         private List<ItemProperty> _itemProperties;
         private ObservableCollection<LRule> _rules = new ObservableCollection<LRule>();
         private int _ops;
+
+        public Item ItemReference { get; set; }
 
         public LItem()
         {
@@ -32,32 +34,31 @@ namespace Trinity.Settings.ItemList
 
         }
 
-        public LItem(Item item)
+        public LItem(Item itemReference)
         {
             LoadCommands();
 
             Type = ILType.Item;
 
-            _item = item;
-
-            Name = item.Name;
-            Id = item.Id;
-            BaseType = item.BaseType;
-            DataUrl = item.DataUrl;
-            InternalName = item.InternalName;
-            IsCrafted = item.IsCrafted;
-            ItemType = item.ItemType;
-            LegendaryAffix = item.LegendaryAffix;
-            Quality = item.Quality;
-            RelativeUrl = item.RelativeUrl;
-            IsCrafted = item.IsCrafted;
-            Slug = item.Slug;
-            Url = item.Url;
-            IconUrl = item.IconUrl;
-            IsTwoHanded = item.IsTwoHanded;
-            TrinityItemType = item.TrinityItemType;
-            IsSetItem = item.IsSetItem;
-            SetName = item.IsSetItem ? item.Set.Name : "None";
+            ItemReference = itemReference;
+            Name = itemReference.Name;
+            Id = itemReference.Id;
+            BaseType = itemReference.BaseType;
+            DataUrl = itemReference.DataUrl;
+            InternalName = itemReference.InternalName;
+            IsCrafted = itemReference.IsCrafted;
+            ItemType = itemReference.ItemType;
+            LegendaryAffix = itemReference.LegendaryAffix;
+            Quality = itemReference.Quality;
+            RelativeUrl = itemReference.RelativeUrl;
+            IsCrafted = itemReference.IsCrafted;
+            Slug = itemReference.Slug;
+            Url = itemReference.Url;
+            IconUrl = itemReference.IconUrl;
+            IsTwoHanded = itemReference.IsTwoHanded;
+            TrinityItemType = itemReference.TrinityItemType;
+            IsSetItem = itemReference.IsSetItem;
+            SetName = itemReference.IsSetItem ? itemReference.Set.Name : "None";
         }
 
         public new bool IsSetItem { get; set; }
@@ -117,7 +118,7 @@ namespace Trinity.Settings.ItemList
                     return _itemProperties = ItemDataUtils.GetPropertiesForItemType(TrinityItemType);
                 }
 
-                return _itemProperties = ItemDataUtils.GetPropertiesForItem(_item);
+                return _itemProperties = ItemDataUtils.GetPropertiesForItem(ItemReference);
             }
             set
             {
@@ -176,7 +177,7 @@ namespace Trinity.Settings.ItemList
 
         public object Clone()
         {
-            return new LItem(_item)
+            return new LItem(ItemReference)
             {
                 IsSelected = IsSelected,
             };
@@ -214,8 +215,7 @@ namespace Trinity.Settings.ItemList
             {
                 return ItemDataUtils.GetItemStatRange(TrinityItemType, property);
             }
-
-            return ItemDataUtils.GetItemStatRange(_item, property);
+            return ItemDataUtils.GetItemStatRange(ItemReference, property);
         }
 
         #region Commands
@@ -320,16 +320,18 @@ namespace Trinity.Settings.ItemList
 
             if (property != ItemProperty.Unknown && allowed)
             {
+                var id = (int) property;
                 var statRange = GetItemStatRange(property);
                 if (statRange != null)
                 {
-                    Logger.LogVerbose($"Stats Min = {statRange.AbsMin.ToString()} Max = {statRange.AbsMax.ToString()} Step = {statRange.AbsStep.ToString()}");
+                    Logger.LogVerbose($"Stats Min = {statRange.AbsMin} Max = {statRange.AbsMax} Step = {statRange.AbsStep}");
                 }
 
                 Rules.Add(new LRule
                 {
-                    Id = (int)property,
+                    Id = id,
                     ItemStatRange = statRange,
+                    ItemReference = ItemReference,
                     TrinityItemType = TrinityItemType,
                     RuleType = ruleType,
                     Value = LRule.GetDefaultValue(property)

@@ -96,7 +96,7 @@ namespace Trinity.Framework.Avoidance
 
                 if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.Distance < 10f && GizmoProximityTypes.Contains(Combat.Targeting.CurrentTarget.Type))
                 {
-                    Logger.Log(LogCategory.Avoidance, "Not Kiting because gizmo nearby");
+                    Logger.Log(LogCategory.Avoidance, "Not Avoiding because gizmo nearby");
                     return false;
                 }
 
