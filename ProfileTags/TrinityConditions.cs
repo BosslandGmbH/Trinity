@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework;
 using Trinity.Framework.Objects.Enums;
 using Zeta.Bot.Settings;
@@ -88,6 +89,19 @@ namespace Trinity.ProfileTags
         public static bool MarkerNameExists(string markerName)
         {
             return !string.IsNullOrEmpty(markerName) && Core.Markers.CurrentWorldMarkers.Any(m => m.Name == markerName);
+        }
+
+        public static bool MarkerTypeWithinRange(string worldMarkerType, float range)
+        {
+            WorldMarkerType t;
+            return Enum.TryParse(worldMarkerType, true, out t) && Core.Markers.CurrentWorldMarkers.Any(m => m.MarkerType == t && m.Distance <= range);
+        }
+
+        public static bool PercentNodesVisited(int percent)
+        {
+            var nodes = ExplorationGrid.Instance.WalkableNodes.Count(n => Core.Player.LevelAreaId == n.LevelAreaId);
+            var univistedNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => !n.IsVisited && Core.Player.LevelAreaId == n.LevelAreaId);
+            return nodes <= 0 || (univistedNodes / nodes) * 100 > percent;
         }
 
         public static bool MarkerNameHashExists(int markerNameHash)

@@ -364,6 +364,10 @@ namespace Trinity.Framework.Actors.Properties
                         hash.Add(MonsterAffixes.Minion);
                         flags |= MonsterAffixes.Minion;
                         continue;
+                    case -464468964: // needs to be added to Zeta enum
+                        //hash.Add(MonsterAffixes.Juggernaut);
+                        //flags |= MonsterAffixes.Juggernaut;
+                        //continue;
                     default:
                         //Logger.LogVerbose($"Unknown AffixId={affix}");
                         break;

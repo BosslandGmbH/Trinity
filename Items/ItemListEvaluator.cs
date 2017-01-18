@@ -76,7 +76,7 @@ namespace Trinity.Items
 
                     var testrule = new LRule(prop)
                     {
-                        Value = (float) range.AncientMax,
+                        Value = (float)range.AncientMax,
                     };
 
                     EvaluateProperty(testrule, cItem, out newValue);
@@ -122,7 +122,7 @@ namespace Trinity.Items
 
             // If any of the required rules are false, trash.
             foreach (var itemRule in itemSetting.RequiredRules)
-            {                
+            {
                 if (!EvaluateProperty(itemRule, cItem, out newValue))
                 {
                     Logger.LogVerbose($"  >>  Not stashing because of required rule failure: {itemRule.Name}");
@@ -155,7 +155,7 @@ namespace Trinity.Items
                     {
                         ruleUpgrades.Add(itemRule, newValue);
                     }
-                }                
+                }
             }
 
             if (trueOptionals >= itemSetting.Ops)
@@ -181,8 +181,8 @@ namespace Trinity.Items
 
         internal static bool EvaluateProperty(LRule itemRule, TrinityItem item, out float newValue)
         {
-            var prop = itemRule.ItemProperty;            
-            var value = (float) itemRule.Value;
+            var prop = itemRule.ItemProperty;
+            var value = (float)itemRule.Value;
             var variant = itemRule.Variant;
 
             var result = false;
@@ -229,10 +229,12 @@ namespace Trinity.Items
                     break;
 
                 case ItemProperty.AttackSpeed:
-                    if(item.ItemBaseType == ItemBaseType.Armor)
-                        itemValue = item.Attributes.AttacksPerSecondPercent;
-                    else
+
+                    itemValue = item.Attributes.AttacksPerSecondPercent;
+                    if (itemValue == 0)
+                    {
                         itemValue = item.Attributes.AttacksPerSecondItemPercent;
+                    }
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
@@ -358,15 +360,13 @@ namespace Trinity.Items
                     break;
 
                 case ItemProperty.SkillDamage:
-
                     var skillId = variant;
                     var skill = ItemDataUtils.GetSkillsForItemType(item.TrinityItemType, Core.Player.ActorClass).FirstOrDefault(s => s.Id == skillId);
                     if (skill != null)
                     {
                         friendlyVariant = skill.Name;
-                        itemValue = item.Attributes.SkillDamagePercent(skill.SNOPower) *100;
+                        itemValue = item.Attributes.SkillDamagePercent(skill.SNOPower) * 100;
                     }
-
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
@@ -381,7 +381,6 @@ namespace Trinity.Items
                         friendlyVariant = ((EnumValue<Element>)element).Name;
                         itemValue = item.Attributes.GetElementalDamage(damageType);
                     }
-
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;
@@ -590,7 +589,7 @@ namespace Trinity.Items
                             if (!int.TryParse(mod, out modifierId))
                                 error += $"Modifier '{itemRule.AttributeModifier}' is not a number. ";
                         }
-                                      
+
                         if (!float.TryParse(val, out value))
                             error += $"Value '{itemRule.AttributeModifier}' is not a number. ";
 
@@ -599,7 +598,7 @@ namespace Trinity.Items
                             Logger.Warn($"Attribute specified in ItemList is invalid. {friendlyVariant} - {error}");
                             break;
                         }
-                        
+
                         itemValue = item.Attributes.GetCachedAttribute<float>(attribute, modifierId);
                         ruleValue = value;
                         result = itemValue >= ruleValue;

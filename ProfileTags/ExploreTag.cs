@@ -63,7 +63,7 @@ namespace Trinity.ProfileTags
             if (_isDone)
                 return true;
 
-            if (await ExplorationCoroutine.Explore(new HashSet<int> { LevelAreaId }))
+            if (await ExplorationCoroutine.Explore(new HashSet<int> { LevelAreaId }, null, null, false))
             {
                 _isDone = true;
                 return true;

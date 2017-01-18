@@ -577,7 +577,7 @@ namespace Trinity.Routines.Witchdoctor
             => Legendary.SacredHarvester.IsEquipped ? 10 : 5;
 
         public static float FireBatsRange
-            => Runes.WitchDoctor.CloudOfBats.IsActive ? 15f : 35f;
+            => Runes.WitchDoctor.CloudOfBats.IsActive ? 12f : 35f;
 
         public static bool IsChannellingFirebats 
             => Player.IsChannelling && Skills.WitchDoctor.Firebats.IsLastUsed;

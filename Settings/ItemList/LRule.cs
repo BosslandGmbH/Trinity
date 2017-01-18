@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Windows.Forms.VisualStyles;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Reference;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Settings.ItemList
 {
@@ -17,10 +20,11 @@ namespace Trinity.Settings.ItemList
 
         }
 
-        public LRule(ItemProperty prop)
+        public LRule(ItemProperty prop, Item itemReference = null)
         {
-            Id = (int) prop;
+            Id = (int)prop;
             Value = GetDefaultValue(prop);
+            ItemReference = ItemReference;
         }
 
         private double _value;
@@ -39,14 +43,14 @@ namespace Trinity.Settings.ItemList
 
         public ItemProperty ItemProperty => (ItemProperty)Id;
 
-        [DataMember]        
+        [DataMember]
         public double Value
         {
             get
             {
                 if (ItemStatRange != null)
                     _value = CoerceValue(_value);
-                                 
+
                 return _value;
             }
             set
@@ -75,7 +79,7 @@ namespace Trinity.Settings.ItemList
                 value = Min;
             else if (value > Max)
                 value = Max;
-            return value;            
+            return value;
         }
 
         [DataMember(EmitDefaultValue = false)]
@@ -87,9 +91,42 @@ namespace Trinity.Settings.ItemList
                 if (_variant != value)
                 {
                     _variant = value;
+
+
+
+                    ItemStatRange = _defaultStatRange;
+
+                    UpdateStatRange(value);
                     OnPropertyChanged();
                 }
             }
+        }
+
+        public void UpdateStatRange(int value)
+        {
+            if (_defaultStatRange == null)
+            {
+                _defaultStatRange = ItemReference == null
+                    ? ItemDataUtils.GetItemStatRange(TrinityItemType, ItemProperty)
+                    : ItemDataUtils.GetItemStatRange(ItemReference, ItemProperty);
+            }
+
+            if (ItemReference != null && ItemProperty == ItemProperty.SkillDamage)
+            {
+                var customRange = ItemDataUtils.GetStatRangeForItemAndSkill(ItemReference, value);
+                if (customRange != null)
+                {
+                    ItemStatRange = customRange;
+                }
+            }
+            else
+            {
+                ItemStatRange = _defaultStatRange;
+            }
+
+            OnPropertyChanged(nameof(Min));
+            OnPropertyChanged(nameof(Max));
+            OnPropertyChanged(nameof(Step));
         }
 
         [DataMember(EmitDefaultValue = false, Name = "AttKey")]
@@ -119,15 +156,21 @@ namespace Trinity.Settings.ItemList
             {
                 if (_variants == null || !_variants.Any())
                 {
-                    _variants = ItemDataUtils.GetItemPropertyVariants(ItemProperty, TrinityItemType);
+                    if (ItemReference != null)
+                    {
+                        _variants = ItemDataUtils.GetItemPropertyVariants(ItemProperty, ItemReference);
+                    }
+                    else
+                    {
+                        _variants = ItemDataUtils.GetItemPropertyVariants(ItemProperty, TrinityItemType);
+                    }
 
                     if (_variant == 0)
                     {
-                        var firstVariant = (_variants.FirstOrDefault() as IUnique);         
-                        if(firstVariant!=null)
-                            _variant = firstVariant.Id;
+                        var firstVariant = (_variants.FirstOrDefault() as IUnique);
+                        if (firstVariant != null)
+                            Variant = firstVariant.Id;
                     }
-                        
                 }
                 return _variants;
             }
@@ -155,9 +198,12 @@ namespace Trinity.Settings.ItemList
 
         public double Step => ItemStatRange.AbsStep;
 
+        private ItemStatRange _defaultStatRange;
         public ItemStatRange ItemStatRange { get; set; }
 
         public TrinityItemType TrinityItemType { get; set; }
+
+        public Item ItemReference { get; set; }
 
         public override int GetHashCode()
         {

@@ -35,6 +35,7 @@ namespace Trinity.Settings.Modals
 
             foreach (var item in SettingsManager.GetDynamicSettings())
             {                
+                if(item == null) continue;
                 result.Add(new SettingsSelectionItem(SettingsSection.Dynamic, item.GetName()));
             }            
 

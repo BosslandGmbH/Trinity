@@ -24,6 +24,7 @@ using Trinity.Reference;
 using Trinity.Routines;
 using Trinity.Settings;
 using Zeta.Bot;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -117,6 +118,9 @@ namespace Trinity.Components.Combat
             SetCurrentTarget(target);
             SetCurrentPower(GetPowerForTarget(target));
 
+            if (await WaitForRiftBossSpawn())
+                return true;
+
             if (WaitForInteractionChannelling())
                 return true;
 
@@ -152,6 +156,25 @@ namespace Trinity.Components.Combat
         {
             SetCurrentTarget(null);
             SetCurrentPower(null);
+        }
+
+        private async Task<bool> WaitForRiftBossSpawn()
+        {
+            if (RiftProgression.IsInRift && CurrentTarget.IsBoss)
+            {
+                if (CurrentTarget.IsSpawningBoss)
+                {
+                    Logger.LogVerbose(LogCategory.Targetting, "Waiting while rift boss spawn");
+
+                    Vector3 safeSpot;
+                    if (Core.Avoidance.Avoider.TryGetSafeSpot(out safeSpot, 30f, 100f, CurrentTarget.Position))
+                    {
+                        PlayerMover.MoveTo(safeSpot);
+                    }
+                    return true;
+                }
+            }
+            return false;
         }
 
         private bool WaitForInteractionChannelling()
@@ -335,7 +358,18 @@ namespace Trinity.Components.Combat
                 {
                     return true;
                 }
-          
+
+                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 5f;
+                if (CurrentTarget != null && isCloseToSafeSpot)
+                {
+                    var canReachTarget = CurrentTarget.Distance < CurrentPower?.MinimumRange;
+                    if (canReachTarget && CurrentTarget.IsAvoidanceOnPath && !Core.Player.Actor.IsInAvoidance)
+                    {
+                        Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and target is within range");
+                        return false;
+                    }
+                }
+
                 Logger.Log(LogCategory.Avoidance, $"Avoiding");
                 await CastDefensiveSpells();
                 PlayerMover.MoveTo(Core.Avoidance.Avoider.SafeSpot);

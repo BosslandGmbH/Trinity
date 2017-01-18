@@ -119,10 +119,13 @@ namespace Trinity.Routines.Wizard
             if (!Skills.Wizard.Archon.CanCast())
                 return false;
 
-            if (Sets.ChantodosResolve.IsFullyEquipped && ChantodosStacks < 20)
+            if (!TargetUtil.AnyMobsInRange(30f))
                 return false;
 
-            if (!TargetUtil.AnyMobsInRange(30f))
+            if (IsFirebirdsMeteorReviveUsed && Player.CurrentHealthPct < EmergencyHealthPct)
+                return true;
+
+            if (Sets.ChantodosResolve.IsFullyEquipped && ChantodosStacks < 20)
                 return false;
 
             return true;

@@ -248,8 +248,10 @@
     <Compile Include="Routines\Crusader\CrusaderDefault.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterShadowHybrid.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterMarauder.cs" />
-    <Compile Include="Routines\Monk\MonkOnePunch.cs" />
+    <Compile Include="Routines\Monk\MonkLegacyOfNightmaresLTK.cs" />
+    <Compile Include="Routines\Monk\MonkLoNLashingTailkick.cs" />
     <Compile Include="Routines\Monk\MonkSunwukoLTK.cs" />
+    <Compile Include="Routines\Monk\MonkSunwukoWaveOfLight.cs" />
     <Compile Include="Routines\Monk\MonkUliana.cs" />
     <Compile Include="Routines\Monk\MonkRaimentShenlongs.cs" />
     <Compile Include="Routines\Monk\MonkDefault.cs" />
@@ -636,7 +638,9 @@
     <Content Include="Components\Adventurer\Game\Quests\SpecialBounties.txt" />
     <Content Include="Profiles\BrutalWhiteFarm.xml" />
     <Content Include="Profiles\Debug\A5-KillValteskBounty.xml" />
-    <Content Include="Profiles\Debug\BelialBounty.xml" />
+    <Content Include="Profiles\Debug\BelialBounty.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Debug\MalthaelBounty.xml" />
     <Content Include="Profiles\Debug\MoveWithinScene.xml" />
     <Content Include="Profiles\Debug\WaitForCombatTag.xml" />
@@ -960,11 +964,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Routines\Monk\MonkOnePunchSettings.xaml">
+    <Page Include="Routines\Monk\MonkLegacyOfNightmaresLTKSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Monk\MonkLoNLashingTailkickSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Routines\Monk\MonkSunwukoLTKSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Monk\MonkSunwukoWaveOfLightSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1124,32 +1136,44 @@
   <PropertyGroup>
     <PostBuildEvent>SET TARGETDIR=C:\DB\DB-Current\Plugins\Trinity\
 
-rd "%25TARGETDIR%25" /S /Q
+rd "%25TARGETDIR%25" /S 
+/Q
 xcopy "$(ProjectDir)*" "%25TARGETDIR%25" /Q /E /C /I /R /Y
+
 rd "%25TARGETDIR%25bin\" /S /Q
 rd "%25TARGETDIR%25obj\" /S /Q
+
 rd "%25TARGETDIR%25WTV\" /S /Q
+
 
 del "%25TARGETDIR%25$(ProjectName).csproj"
 
 
+
 del "%25TARGETDIR%25*.suo"
+
 del "%25TARGETDIR%25*.user"
+
 
 
 del "%25TARGETDIR%25*.sln"
 
+
 del "%25TARGETDIR%25*.DotSettings"
+
 
 
 del "%25TARGETDIR%25packages.config"
 
+
 del "%25TARGETDIR%25*.user"
+
 
 
 
 
 rd "%25TARGETDIR%25.svn\" /S /Q
+
 
 
 rd "%25TARGETDIR%25.vs\" /S /Q

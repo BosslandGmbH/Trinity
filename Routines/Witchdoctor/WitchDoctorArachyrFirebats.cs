@@ -87,6 +87,13 @@ namespace Trinity.Routines.Witchdoctor
 
             if (bestClusterUnit != null)
             {
+                if (Player.HasBuff(SNOPower.Witchdoctor_Hex))
+                {
+                    Logger.Log(LogCategory.Routine, $"Casting Explode Chicken");
+                    Vector3 explodePos = PlayerMover.IsBlocked ? Player.Position : bestClusterUnit.Position;
+                    return ExplodeChicken(explodePos);
+                }
+
                 if (!HasJeramsRevengeBuff && ZetaDia.Me.IsInCombat && Skills.WitchDoctor.WallOfDeath.CanCast())
                 {
                     Logger.Log(LogCategory.Routine, $"Casting Wall of Death on {allUnits.FirstOrDefault()}");

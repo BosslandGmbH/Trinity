@@ -482,10 +482,13 @@ namespace Trinity.Routines.Wizard
             if (!Skills.Wizard.Archon.CanCast())
                 return false;
 
-            if (Sets.ChantodosResolve.IsFullyEquipped && ChantodosStacks < 20)
+            if (!TargetUtil.AnyMobsInRange(30f))
                 return false;
 
-            if (!TargetUtil.AnyMobsInRange(30f))
+            if (IsFirebirdsMeteorReviveUsed && Player.CurrentHealthPct < EmergencyHealthPct)
+                return true;
+
+            if (Sets.ChantodosResolve.IsFullyEquipped && ChantodosStacks < 20)
                 return false;
 
             return true;
@@ -714,6 +717,9 @@ namespace Trinity.Routines.Wizard
 
         public static int ChantodosStacks
             => Core.Buffs.GetBuffStacks(SNOPower.P3_ItemPassive_Unique_Ring_021);
+
+        public static bool IsFirebirdsMeteorReviveUsed
+            => Core.Buffs.HasBuff(SNOPower.ItemPassive_Unique_Ring_732_x1);
 
         public static bool IsChannellingDisintegrate
             => Player.IsChannelling && Skills.Wizard.Disintegrate.IsLastUsed;

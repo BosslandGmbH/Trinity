@@ -463,7 +463,8 @@ namespace Trinity.Reference
                 Legendary.GauntletsOfAkkhan,
                 Legendary.HelmOfAkkhan,
                 Legendary.PauldronsOfAkkhan,
-                Legendary.SabatonsOfAkkhan
+                Legendary.SabatonsOfAkkhan,
+                Legendary.TalismanOfAkkhan
             },
             FirstBonusItemCount = 2,
             SecondBonusItemCount = 4,

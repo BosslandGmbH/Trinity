@@ -55,7 +55,7 @@ namespace Trinity.Framework.Objects
         private string _code;
 
         [IgnoreDataMember]
-        public IDynamicSetting Setting => SettingsManager.GetDynamicSettings().FirstOrDefault(s => s.GetName() == Name);
+        public IDynamicSetting Setting => SettingsManager.GetDynamicSettings().FirstOrDefault(s => s?.GetName() == Name);
 
         [DataMember(Order = 0)]
         public string Name
@@ -90,7 +90,7 @@ namespace Trinity.Framework.Objects
             set { SetField(ref _settings, value); }
         }
 
-        public void Reset() => Extensions.ForEach(_settings, s => s.Setting.Reset());
+        public void Reset() => Extensions.ForEach(_settings, s => s.Setting?.Reset());
 
         public void CopyTo(DynamicSettingGroup setting)
         {

@@ -193,6 +193,12 @@ namespace Trinity.Modules
                 return false;
             }
 
+            if (cacheObject.IsProfileBlacklisted)
+            {
+                cacheObject.AddCacheInfo("BlacklistedByProfile");
+                return false;
+            }
+
             if (cacheObject.IsUnit && cacheObject.Attributes == null)
             {
                 cacheObject.AddCacheInfo("UnitNoAttributes");
@@ -306,6 +312,10 @@ namespace Trinity.Modules
 
         private bool ShouldCacheUnit(TrinityActor cacheObject)
         {
+            //// Uncomment to ignore juggernauts
+            //if (cacheObject.CommonData.AffixIds.Contains(-464468964))
+            //    return false;
+
             if (cacheObject.IsSameTeam && !cacheObject.IsQuestGiver)
             {
                 cacheObject.AddCacheInfo("SameTeam");
