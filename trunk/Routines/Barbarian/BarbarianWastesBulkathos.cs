@@ -93,7 +93,7 @@ namespace Trinity.Routines.Barbarian
         public TrinityPower GetMovementPower(Vector3 destination)
         {
             // All walking is replaced by Whirlwind if possible.
-            if(Skills.Barbarian.Whirlwind.CanCast())
+            if(Skills.Barbarian.Whirlwind.CanCast() && !Player.IsInTown)
                 return Whirlwind(destination);
 
             return Walk(destination);
