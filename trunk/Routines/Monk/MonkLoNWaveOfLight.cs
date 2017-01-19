@@ -1,16 +1,18 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
+using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
+using Trinity.Routines.Crusader;
+using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
@@ -19,16 +21,17 @@ using Logger = Trinity.Framework.Helpers.Logger;
 
 namespace Trinity.Routines.Monk
 {
-    public sealed class MonkLegacyOfNightmaresLTK : MonkBase, IRoutine
+    public sealed class MonkLoNWaveOfLight : MonkBase, IRoutine
     {
         #region Definition
 
-        public string DisplayName => "Legacy of Nightmares Lashing Tail Kick";
-        public string Description => "Lashing Tailkick build that uses Legacy of Nightmare rings and no generator.";
-        public string Author => "TwoCigars";
-        public string Version => "Beta 0.1";      
-
-        public string Url => "http://www.d3planner.com/295554430";
+        public string DisplayName => "LoN Wave Of Light";
+        public string Description => "Fun build that doesnt really compete with Sunwuko for DPS and clear times, but is enjoyable to play with.";
+        public string Author => " TwoCigars";
+        public string Version => "Beta 1.3";
+        public string Url => "http://www.d3planner.com/120704732";
+        
+        // Build lacks Damage and Spirit regen for many builds. Still need to find the best combination of gear/skills to use. 
 
         public Build BuildRequirements => new Build
         {
@@ -36,9 +39,15 @@ namespace Trinity.Routines.Monk
             {
                 { Sets.LegacyOfNightmares, SetBonus.First },
             },
+			Items = new List<Item>
+            {
+                Legendary.PintosPride,
+				Legendary.TzoKrinsGaze,
+				Legendary.KyoshirosBlade,
+            },
             Skills = new Dictionary<Skill, Rune>
             {
-                { Skills.Monk.LashingTailKick, null },
+                { Skills.Monk.WaveOfLight, null },
             },
         };
 
@@ -63,23 +72,8 @@ namespace Trinity.Routines.Monk
                 if (Skills.Monk.DashingStrike.CanCast() && !Skills.Monk.DashingStrike.IsLastUsed)
                     return DashingStrike(CurrentTarget.Position);
 
-                if (Skills.Monk.LashingTailKick.CanCast())
-                    return LashingTailKick(CurrentTarget);
-            }
-
-            // With sweeping armada try to keep distance in the sweet spot between 10-15yd
-            if (Runes.Monk.SweepingArmada.IsActive)
-            {
-                var enoughTimePassed = SpellHistory.TimeSinceUse(SNOPower.Walk).TotalMilliseconds > 500;
-                var isSoloElite = TargetUtil.ElitesInRange(25f) == 1 && !AnyUnitsInRange(25f);
-                if (enoughTimePassed && isSoloElite && CurrentTarget.RadiusDistance <= 10f && !IsStuck)
-                {
-                    if (Avoider.TryGetSafeSpot(out position, 12f + CurrentTarget.CollisionRadius, 30f, CurrentTarget.Position))
-                    {
-                        Logger.Log(LogCategory.Routine, $"Adjusting Distance for Sweeping Armarda RDist={CurrentTarget.RadiusDistance} Dist={ZetaDia.Me.Position.Distance(CurrentTarget.Position)}");
-                        return Walk(position,2f);
-                    }
-                }
+                if (Skills.Monk.WaveOfLight.CanCast())
+                    return WaveOfLight(CurrentTarget);
             }
 
             if (TrySecondaryPower(out power))
@@ -103,35 +97,9 @@ namespace Trinity.Routines.Monk
                 }
             }
 
-            return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 25f));
+            return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 20f));
         }
 
-        public List<SNOAnim> LashingTailkickAnimations = new List<SNOAnim>
-        {
-            SNOAnim.Monk_Male_HTH_LashingTail,
-            SNOAnim.Monk_Female_HTH_LashingTail
-        };
-
-        public bool AnyUnitsInRange(float range)
-            => HostileMonsters.Any(u => u.Position.Distance(Player.Position) < range);
-
-        public bool ShootFromDistance
-            => (CurrentTarget.IsBoss || CurrentTarget.IsElite) && Settings.LTKFromRange;
-
-        public float AttackRange 
-            => ShootFromDistance ? 50f
-            : (Runes.Monk.SweepingArmada.IsActive ? 18f : 12f);
-
-        protected override TrinityPower LashingTailKick(TrinityActor target)
-        {
-            // Teleport with Epiphany
-            if (target.IsDestroyable || Skills.Monk.Epiphany.IsBuffActive && (IsStuck || IsBlocked || target.Distance > 30f))
-                return new TrinityPower(SNOPower.Monk_LashingTailKick, AttackRange, target.AcdId, 0, 0);
-
-            // Attack at position (Shift+Click) to send fireball from range.
-            return new TrinityPower(SNOPower.Monk_LashingTailKick, AttackRange, target.Position, 0, 0);            
-        }
-            
         public TrinityPower GetDefensivePower() => GetBuffPower();
         public TrinityPower GetBuffPower() => DefaultBuffPower();
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
@@ -139,24 +107,22 @@ namespace Trinity.Routines.Monk
         public TrinityPower GetMovementPower(Vector3 destination)
         {
             if (HasInstantCooldowns && Skills.Monk.DashingStrike.CanCast() && Skills.Monk.DashingStrike.TimeSinceUse > 200 && destination.Distance(Player.Position) > 18f)
+				return DashingStrike(destination);
+			
+            if (AllowedToUse(Settings.DashingStrike, Skills.Monk.DashingStrike) && CanDashTo(destination))
             {
-                return DashingStrike(CalculateAttackPosition(destination));
-            }
+                var distance = destination.Distance(Player.Position);
 
-            if (AllowedToUse(Settings.DashingStrike, Skills.Monk.DashingStrike) && CanDashTo(destination) && (destination.Distance(Player.Position) > 35f || IsBlocked))
-            {
-                return DashingStrike(CalculateAttackPosition(destination));
+                // Dont dash towards a unit
+                var isDestinationUnitTarget = IsInCombat && CurrentTarget.IsUnit && destination.Distance(CurrentTarget.Position) < 15f;
+
+                if (distance > 35f && !isDestinationUnitTarget || IsBlocked)
+                {
+                    return DashingStrike(destination);
+                }
             }
 
             return Walk(destination);
-        }
-
-        private Vector3 CalculateAttackPosition(Vector3 destination)
-        {
-            if (Runes.Monk.SweepingArmada.IsActive && CurrentTarget?.Position.Distance(destination) <= 4f && CurrentTarget.IsUnit)
-                return MathEx.CalculatePointFrom(CurrentTarget.Position, destination, AttackRange);
-
-            return destination;
         }
 
         protected override bool ShouldBlindingFlash()
@@ -181,7 +147,7 @@ namespace Trinity.Routines.Monk
         {
             if (!Skills.Monk.MysticAlly.CanCast())
                 return false;
-             
+
             //Prioritize using Mystic Ally for Spirit Regeneration when missing 200 Spirit
             if (Runes.Monk.AirAlly.IsActive)
                 return Player.PrimaryResource < Player.PrimaryResourceMax - 200;
@@ -196,66 +162,39 @@ namespace Trinity.Routines.Monk
             return true;
         }
 
-        protected override bool ShouldMantraOfConviction()
-        {
-            // Only use to dump resource.
-            if (Player.PrimaryResourcePct < 0.65f)
-                return false;
-
-            return base.ShouldMantraOfConviction();
-        }
-
-        protected override bool ShouldMantraOfSalvation()
-        {
-            if (Player.PrimaryResourcePct < 0.3f && Player.CurrentHealthPct > 0.3f)
-                return false;
-
-            return base.ShouldMantraOfSalvation();
-        }
-
-        protected override bool ShouldMantraOfHealing()
-        {
-            if (Player.PrimaryResourcePct < 0.3f && Player.CurrentHealthPct > 0.3f)
-                return false;
-
-            return base.ShouldMantraOfHealing();
-        }
-
-        protected override bool ShouldMantraOfRetribution()
-        {
-            if (Player.PrimaryResourcePct < 0.3f && Player.CurrentHealthPct > 0.3f)
-                return false;
-
-            return base.ShouldMantraOfRetribution();
-        }
-
-        private bool IsLTKAnimating => LashingTailkickAnimations.Contains(ZetaDia.Me.CommonData.CurrentAnimation);
-
-        protected override bool ShouldLashingTailKick(out TrinityActor target)
+        protected override bool ShouldWaveOfLight(out TrinityActor target)
         {
             target = null;
 
-            if (!Skills.Monk.LashingTailKick.CanCast())
+            if (!Skills.Monk.WaveOfLight.CanCast())
             {
                 return false;
-            }
-  
-            if (IsLTKAnimating || Player.IsCastingOrLoading)
-            {
+            }  
+			
+            if (Player.PrimaryResource < PrimaryEnergyReserve)
                 return false;
-            }
 
+            var isBigCluster = TargetUtil.ClusterExists(Settings.WoLRange, Settings.ClusterSize);
+            var isEliteInRange = TargetUtil.AnyElitesInRange(Settings.WoLEliteRange);
+            var isFarTooMuchResource = Player.PrimaryResourcePct > 0.8f;
+
+            if (isBigCluster || isEliteInRange || isFarTooMuchResource)
+            {
+                target = TargetUtil.GetBestClusterUnit();
+                return target != null;
+            }
+			
             if (IsBlocked || IsStuck)
             {
-                target = TargetUtil.GetClosestUnit(50f) ?? CurrentTarget;
+                target = TargetUtil.GetClosestUnit(Settings.WoLRange) ?? CurrentTarget;
             }
             else
             {
-                target = TargetUtil.GetBestClusterUnit(50f) ?? CurrentTarget;
+                target = TargetUtil.GetBestClusterUnit(Settings.WoLRange) ?? CurrentTarget;
             }
             return true;
-        }
-
+        }			
+		
         protected override bool ShouldDashingStrike(out Vector3 position)
         {
             position = Vector3.Zero;
@@ -274,7 +213,7 @@ namespace Trinity.Routines.Monk
                 return false;
 
             var unit = TargetUtil.GetBestClusterUnit(50f);
-            if (unit == null)
+            if (unit == null || unit.Distance < 15f)
                 return false;
 
             return unit.Position != Vector3.Zero;
@@ -295,45 +234,42 @@ namespace Trinity.Routines.Monk
                 return false;
 
             return true;
-        }
-
-        protected override bool ShouldCycloneStrike()
-        {
-            var skill = Skills.Monk.CycloneStrike;
-            if (!skill.CanCast())
-                return false;
-
-            //Overriding the default Primary Energy Reserve [50] to 150. Designed to prevent Cyconle Strike 
-            if (Player.PrimaryResource < 100)
-                return false;
-
-            if (skill.TimeSinceUse < (skill.DistanceFromLastUsePosition < 20f ? 4000 : 2000))
-                return false;
-
-            var targetIsCloseElite = CurrentTarget.IsElite && CurrentTarget.Distance < CycloneStrikeRange;
-            var plentyOfTargetsToPull = TargetUtil.IsPercentUnitsWithinBand(15f, CycloneStrikeRange, 0.25);
-
-            return targetIsCloseElite || plentyOfTargetsToPull;
-        }
-
+        }	
+		
         #region Settings
-
+	
         public override int ClusterSize => Settings.ClusterSize;
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
-
+		public override float TrashRange => Settings.WoLRange;
+		public override float EliteRange => Settings.WoLEliteRange;		
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
-        public MonkLegacyOfNightmaresLTKSettings Settings { get; } = new MonkLegacyOfNightmaresLTKSettings();
+        public MonkLoNWaveOfLightSettings Settings { get; } = new MonkLoNWaveOfLightSettings();
 
-        public sealed class MonkLegacyOfNightmaresLTKSettings : NotifyBase, IDynamicSetting
+        public sealed class MonkLoNWaveOfLightSettings : NotifyBase, IDynamicSetting
         {
             private SkillSettings _epiphany;
             private SkillSettings _dashingStrike;
             private int _clusterSize;
+			private float _woLRange;
+			private float _woLEliteRange;			
             private float _emergencyHealthPct;
-            private bool _LTKFromRange;
 
-            [DefaultValue(8)]
+            [DefaultValue(50)]
+            public float WoLRange
+            {
+                get { return _woLRange; }
+                set { SetField(ref _woLRange, value); }
+            }			
+			
+            [DefaultValue(65)]
+            public float WoLEliteRange
+            {
+                get { return _woLEliteRange; }
+                set { SetField(ref _woLEliteRange, value); }
+            }				
+			
+            [DefaultValue(6)]
             public int ClusterSize
             {
                 get { return _clusterSize; }
@@ -357,12 +293,6 @@ namespace Trinity.Routines.Monk
             {
                 get { return _dashingStrike; }
                 set { SetField(ref _dashingStrike, value); }
-            }
- 
-            public bool LTKFromRange
-            {
-                get { return _LTKFromRange; }
-                set { SetField(ref _LTKFromRange, value); }
             }
 
             #region Skill Defaults

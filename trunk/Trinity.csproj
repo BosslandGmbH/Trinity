@@ -225,6 +225,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Routines\DemonHunter\DemonHunterUnhallowedGrenadeSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Routines\DemonHunter\DemonHunterUnhallowedSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -248,8 +252,9 @@
     <Compile Include="Routines\Crusader\CrusaderDefault.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterShadowHybrid.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterMarauder.cs" />
-    <Compile Include="Routines\Monk\MonkLegacyOfNightmaresLTK.cs" />
+    <Compile Include="Routines\DemonHunter\DemonHunterUnhallowedGrenade.cs" />
     <Compile Include="Routines\Monk\MonkLoNLashingTailkick.cs" />
+    <Compile Include="Routines\Monk\MonkLoNWaveOfLight.cs" />
     <Compile Include="Routines\Monk\MonkSunwukoLTK.cs" />
     <Compile Include="Routines\Monk\MonkSunwukoWaveOfLight.cs" />
     <Compile Include="Routines\Monk\MonkUliana.cs" />
@@ -636,7 +641,9 @@
     <Content Include="Components\Adventurer\Game\Quests\Incompletes.txt" />
     <Content Include="Components\Adventurer\Game\Quests\SNOBounties.txt" />
     <Content Include="Components\Adventurer\Game\Quests\SpecialBounties.txt" />
-    <Content Include="Profiles\BrutalWhiteFarm.xml" />
+    <Content Include="Profiles\BrutalWhiteFarm.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Debug\A5-KillValteskBounty.xml" />
     <Content Include="Profiles\Debug\BelialBounty.xml">
       <SubType>Designer</SubType>
@@ -964,11 +971,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Routines\Monk\MonkLegacyOfNightmaresLTKSettings.xaml">
+    <Page Include="Routines\Monk\MonkLoNLashingTailkickSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Routines\Monk\MonkLoNLashingTailkickSettings.xaml">
+    <Page Include="Routines\Monk\MonkLoNWaveOfLightSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -992,7 +999,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Routines\Witchdoctor\WitchDoctorArachyrSettings.xaml">
+    <Page Include="Routines\Witchdoctor\WitchDoctorArachyrFirebatsSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

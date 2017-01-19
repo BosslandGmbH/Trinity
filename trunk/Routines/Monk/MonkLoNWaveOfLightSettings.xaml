@@ -43,7 +43,27 @@
                                 HorizontalAlignment="Stretch" Margin="0"/>
                     </StackPanel>
                 </GroupBox>
-
+                <GroupBox>
+                    <GroupBox.Header>One Punch Settings</GroupBox.Header>
+                    <StackPanel>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Trash Cluster Range"
+                            ToolTip="Number of Yards to search for mob clusters"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="100" Minimum="10" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.WoLRange}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Elite Range"
+                            ToolTip="Number of Yards to search for Elites"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="100" Minimum="10" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.WoLEliteRange}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                    </StackPanel>					
+                </GroupBox>
                 <GroupBox>
                     <GroupBox.Header>Epiphany</GroupBox.Header>
                     <StackPanel>
@@ -86,12 +106,6 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox>
-                    <GroupBox.Header>Lashing Tail Kick</GroupBox.Header>
-                    <StackPanel>
-                        <CheckBox IsChecked="{Binding DataContext.LTKFromRange}">Allow shooting fireballs from range</CheckBox>
-                    </StackPanel>
-                </GroupBox>                
             </StackPanel>
         </Grid>
     </Border>

@@ -296,6 +296,9 @@ namespace Trinity.Framework.Objects.Memory.Attributes
             return default(T);
         }
 
+        /// <summary>
+        /// Checks both the base attribute and attribute+modifier numbers for a match.
+        /// </summary>
         private static Func<KeyValuePair<int, AttributeItem>, bool> IsAttributeMatch(ActorAttributeType attr)
         {
             return item => (int)attr == item.Key || attr == item.Value.Key.BaseAttribute;
@@ -373,12 +376,19 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         internal T GetAttribute<T>(ActorAttributeType attr)
         {
-            AttributeItem foundAttribute;
-            if (!Items.TryGetValue((int)attr, out foundAttribute))
-                return default(T);
+            var foundAttribute = Items.FirstOrDefault(IsAttributeMatch(attr));
+            if (foundAttribute.Value != null)
+            {
+                foundAttribute.Value.Update();
+                return foundAttribute.Value.GetValue<T>();
+            }
+            return default(T);
+            //AttributeItem foundAttribute;
+            //if (!Items.TryGetValue((int)attr, out foundAttribute))
+            //    return default(T);
 
-            foundAttribute.Update();
-            return foundAttribute.GetValue<T>();
+            //foundAttribute.Update();
+            //return foundAttribute.GetValue<T>();
         }
 
         internal AttributeItem GetAttributeItem(ActorAttributeType attr)

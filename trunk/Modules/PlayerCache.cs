@@ -234,6 +234,7 @@ namespace Trinity.Modules
             ParticipatingInTieredLootRun = _me.IsParticipatingInTieredLootRun;
             TieredLootRunlevel = _me.InTieredLootRunLevel;
             IsCasting = _me.LoopingAnimationEndTime > 0;
+            IsInteractingWithGizmo = _me.CommonData.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.Axe_Operate_Gizmo);
             CurrentAnimation = _me.CommonData.CurrentAnimation;
             IsInventoryLockedForGreaterRift = ZetaDia.CurrentRift.IsStarted && ZetaDia.CurrentRift.Type == RiftType.Greater && !ZetaDia.CurrentRift.IsCompleted;
 
@@ -271,6 +272,7 @@ namespace Trinity.Modules
             IsHidden = _me.IsHidden;
         }
 
+        public bool IsInteractingWithGizmo { get; set; }
 
 
         public bool IsPowerUseDisabled => _me.CommonData.GetAttribute<bool>(ActorAttributeType.PowerImmobilize);

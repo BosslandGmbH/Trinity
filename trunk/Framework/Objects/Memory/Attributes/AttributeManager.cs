@@ -19,7 +19,7 @@ namespace Trinity.Framework.Objects.Memory.Attributes
 
         private static void Create()
         {
-            var descriptors = ReadObjects<AttributeDescripter>(Internals.Addresses.AttributeDescripters, 1435, 0x28).ToList();
+            var descriptors = ReadObjects<AttributeDescripter>(Internals.Addresses.AttributeDescripters, 1441, 0x28).ToList();
             AttributeDescriptors = descriptors.ToDictionary(descripter => descripter.Id);
         }
 
