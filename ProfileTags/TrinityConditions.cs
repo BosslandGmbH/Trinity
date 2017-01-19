@@ -101,7 +101,7 @@ namespace Trinity.ProfileTags
         {
             var nodes = ExplorationGrid.Instance.WalkableNodes.Count(n => Core.Player.LevelAreaId == n.LevelAreaId);
             var univistedNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => !n.IsVisited && Core.Player.LevelAreaId == n.LevelAreaId);
-            return nodes <= 0 || (univistedNodes / nodes) * 100 > percent;
+            return nodes <= 0 || (1 - univistedNodes / (double)nodes) * 100 > percent;
         }
 
         public static bool MarkerNameHashExists(int markerNameHash)

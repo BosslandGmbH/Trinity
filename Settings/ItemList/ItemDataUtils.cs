@@ -656,6 +656,7 @@ namespace Trinity.Settings.ItemList
             { new Tuple<Item, ItemProperty, int>(Legendary.InnasReach, ItemProperty.SkillDamage, Skills.Monk.MysticAlly.Id), new ItemStatRange { Max = 120, Min = 90 }},
             { new Tuple<Item, ItemProperty, int>(Legendary.ZunimassasStringOfSkulls, ItemProperty.SkillDamage, Skills.WitchDoctor.FetishArmy.Id), new ItemStatRange { Max = 25, Min = 20 }},
             { new Tuple<Item, ItemProperty, int>(Legendary.TheGavelOfJudgment, ItemProperty.SkillDamage, Skills.Barbarian.HammerOfTheAncients.Id), new ItemStatRange { Max = 100, Min = 75 }},
+            { new Tuple<Item, ItemProperty, int>(Legendary.CageOfTheHellborn, ItemProperty.MaximumDiscipline, 0), new ItemStatRange { Max = 12, Min = 9 }},
 
 
 
@@ -1300,6 +1301,7 @@ namespace Trinity.Settings.ItemList
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.HandCrossbow, ItemProperty.MaximumDiscipline), new ItemStatRange {  Max = 12, Min = 9 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandCrossbow, ItemProperty.MaximumDiscipline), new ItemStatRange {  Max = 12, Min = 9 }},
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.TwoHandBow, ItemProperty.MaximumDiscipline), new ItemStatRange {  Max = 12, Min = 9 }},
+            {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.Cloak, ItemProperty.MaximumDiscipline), new ItemStatRange {  Max = 12, Min = 9 }},
 
             // Max Fury
             {new KeyValuePair<TrinityItemType, ItemProperty>(TrinityItemType.MightyBelt, ItemProperty.MaximumFury), new ItemStatRange {  Max = 12, Min = 10 }},
