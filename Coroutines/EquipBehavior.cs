@@ -186,57 +186,57 @@ namespace Trinity.Coroutines
 
             var currentLevel = ZetaDia.Me.Level;
 
-            ActiveSkillEntry knownSkillRecord;
-            if (!KnownSkills.TryGetValue((int)skill.Key.SNOPower, out knownSkillRecord))
-            {
-                var test = string.Format($"[Auto Skills] Skill is not known: {skill.Key.Name} CurrentLevel={ZetaDia.Me.Level} RequiredLevel={skill.Key.RequiredLevel}");
-                Logger.LogError(test);
-                return false;
-            }
+            //ActiveSkillEntry knownSkillRecord;
+            //if (!KnownSkills.TryGetValue((int)skill.Key.SNOPower, out knownSkillRecord))
+            //{
+            //    var test = string.Format($"[Auto Skills] Skill is not known: {skill.Key.Name} CurrentLevel={ZetaDia.Me.Level} RequiredLevel={skill.Key.RequiredLevel}");
+            //    Logger.LogError(test);
+            //    return false;
+            //}
 
-            if (currentLevel < knownSkillRecord.RequiredLevel)
-            {                
-                Logger.LogError("[Auto Skills] Skill {0} cannot be equipped until level {1}", skill.Key.Name, knownSkillRecord.RequiredLevel);
-                return false;                
-            }
+            //if (currentLevel < knownSkillRecord.RequiredLevel)
+            //{                
+            //    Logger.LogError("[Auto Skills] Skill {0} cannot be equipped until level {1}", skill.Key.Name, knownSkillRecord.RequiredLevel);
+            //    return false;                
+            //}
 
-            if (skill.Value.RuneIndex == -1 && currentLevel < knownSkillRecord.RuneNoneRequiredLevel)
-            {
-                Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {1}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
-                return false;
-            }
+            //if (skill.Value.RuneIndex == -1 && currentLevel < knownSkillRecord.RuneNoneRequiredLevel)
+            //{
+            //    Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {2}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
+            //    return false;
+            //}
 
-            if (skill.Value.RuneIndex == 1 && currentLevel < knownSkillRecord.Rune1RequiredLevel)
-            {
-                Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {1}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
-                return false;
-            }
+            //if (skill.Value.RuneIndex == 1 && currentLevel < knownSkillRecord.Rune1RequiredLevel)
+            //{
+            //    Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {2}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
+            //    return false;
+            //}
 
-            if (skill.Value.RuneIndex == 2 && currentLevel < knownSkillRecord.Rune2RequiredLevel)
-            {
-                Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {1}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
-                return false;
-            }
+            //if (skill.Value.RuneIndex == 2 && currentLevel < knownSkillRecord.Rune2RequiredLevel)
+            //{
+            //    Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {2}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
+            //    return false;
+            //}
 
-            if (skill.Value.RuneIndex == 3 && currentLevel < knownSkillRecord.Rune3RequiredLevel)
-            {
-                Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {1}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
-                return false;
-            }
+            //if (skill.Value.RuneIndex == 3 && currentLevel < knownSkillRecord.Rune3RequiredLevel)
+            //{
+            //    Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {2}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
+            //    return false;
+            //}
 
-            if (skill.Value.RuneIndex == 4 && currentLevel < knownSkillRecord.Rune4RequiredLevel)
-            {
-                Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {1}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
-                return false;
-            }
+            //if (skill.Value.RuneIndex == 4 && currentLevel < knownSkillRecord.Rune4RequiredLevel)
+            //{
+            //    Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {2}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
+            //    return false;
+            //}
 
-            if (skill.Value.RuneIndex == 5 && currentLevel < knownSkillRecord.Rune5RequiredLevel)
-            {
-                Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {1}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
-                return false;
-            }
+            //if (skill.Value.RuneIndex == 5 && currentLevel < knownSkillRecord.Rune5RequiredLevel)
+            //{
+            //    Logger.LogError("[Auto Skills] Skill {0} with Rune {1} cannot be equipped until level {2}", skill.Key.Name, skill.Value.Name, knownSkillRecord.RuneNoneRequiredLevel);
+            //    return false;
+            //}
 
-            if (currentLevel < skill.Key.RequiredLevel)
+            if (currentLevel < skill.Key.RequiredLevel )
             {
                 Logger.LogError("[Auto Skills] Skill {0} cannot be equipped until level {1}", skill.Key.Name, skill.Key.RequiredLevel);
                 return false;

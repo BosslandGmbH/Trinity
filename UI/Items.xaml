@@ -199,6 +199,8 @@
                 <UniformGrid Columns="2">
                     <CheckBox Content="Don't Pickup Items in Town" IsChecked="{Binding Items.DontPickupInTown}" />
                     <CheckBox ToolTip="Item list needs items to be identified to check their properties." IsChecked="{Binding Items.KeepLegendaryUnid}" HorizontalAlignment="Left" Content="Keep Legendaries Unidentified" />
+                    <CheckBox ToolTip="Keep bounty caches in your stash rather than openining them automatically" IsChecked="{Binding Items.StashTreasureBags}" HorizontalAlignment="Left" Content="Stash Bounty Caches" />
+
                 </UniformGrid>
             </GroupBox>
 

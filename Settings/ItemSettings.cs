@@ -37,6 +37,7 @@ namespace Trinity.Settings
         private bool _autoEquipItems;
         private bool _autoEquipIgnoreWeapons;
         private int _gamblingMinSpendingShards;
+        private bool _stashTreasureBags;
 
         public ItemSettings()
         {
@@ -159,6 +160,14 @@ namespace Trinity.Settings
         {
             get { return _keepLegendaryUnid; }
             set { SetField(ref _keepLegendaryUnid, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(false)]
+        public bool StashTreasureBags
+        {
+            get { return _stashTreasureBags; }
+            set { SetField(ref _stashTreasureBags, value); }
         }
 
         [DataMember]

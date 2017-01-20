@@ -429,7 +429,7 @@ namespace Trinity.Items
                     break;
 
                 case ItemProperty.LifePercent:
-                    itemValue = item.Attributes.LifePercent;
+                    itemValue = item.Attributes.LifePercent *100;
                     ruleValue = value;
                     result = itemValue >= ruleValue;
                     returnValue = itemValue;

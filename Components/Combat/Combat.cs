@@ -133,8 +133,8 @@ namespace Trinity.Components.Combat
 
         private static async Task<bool> CastBuffs()
         {
-            var power = Routines.Current.GetBuffPower();
-            if (power != null && power.TimeSinceUseMs > 500 && !Core.Player.IsInteractingWithGizmo)
+            var power = Routines.Current?.GetBuffPower();
+            if (power != null && power.TimeSinceUseMs > 500 && !Core.Player.IsInteractingWithGizmo && !Core.Player.IsCastingTownPortalOrTeleport())
             {
                 return await Spells.CastTrinityPower(power, "Buff");
             }

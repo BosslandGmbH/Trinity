@@ -24,6 +24,9 @@ namespace Trinity.Coroutines
     {
         public static async Task<bool> Execute()
         {
+            if (Core.Settings.Items.StashTreasureBags)
+                return false;
+
             var bagsOpened = 0;
             if (Core.Player.IsInTown)
             {
