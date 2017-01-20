@@ -251,6 +251,9 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
+            if (item.RawItemType == RawItemType.TreasureBag)
+                return Core.Settings.Items.StashTreasureBags;
+
             if (GameData.VanityItems.Any(i => item.InternalName.StartsWith(i)))
                 return true;
 

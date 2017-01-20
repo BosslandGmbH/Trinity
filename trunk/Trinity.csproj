@@ -253,6 +253,7 @@
     <Compile Include="Routines\DemonHunter\DemonHunterShadowHybrid.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterMarauder.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterUnhallowedGrenade.cs" />
+    <Compile Include="Routines\Guide\MyBasicMonkRoutine.cs" />
     <Compile Include="Routines\Monk\MonkLoNLashingTailkick.cs" />
     <Compile Include="Routines\Monk\MonkLoNWaveOfLight.cs" />
     <Compile Include="Routines\Monk\MonkSunwukoLTK.cs" />

@@ -68,7 +68,7 @@ namespace Trinity.Coroutines
             if (build == null)
                 return false;
 
-            if (_lastBuild != null && build == _lastBuild)
+            if (_lastBuild != null && build == _lastBuild && build.IsEquipped())
                 return false;
 
             if (await EquipBehavior.Instance.Execute(build.Skills, build.Passives))

@@ -502,7 +502,9 @@ namespace Trinity.Modules
         {
             try
             {
-                var commonData = ZetaDia.Me.CommonData;
+                var commonData = ZetaDia.Me?.CommonData;
+                if (commonData == null)
+                    return false;
 
                 if (CheckVisualEffectNoneForPower(commonData, SNOPower.UseStoneOfRecall))
                 {
