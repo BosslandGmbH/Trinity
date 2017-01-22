@@ -111,6 +111,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public Item Reference => Legendary.GetItem(this);
         public SpecialTypes SpecialType { get; set; }
+        public bool IsLowQuality { get; set; }
 
         public ACDItem ToAcdItem() => Core.Actors.GetAcdItemByAnnId(AnnId);
 

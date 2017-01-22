@@ -83,8 +83,9 @@ namespace Trinity.Settings
         Grey = 1 << 0,
         White = 1 << 1,
         Blue = 1 << 2,
-        Yellow = 1 << 3,    
-        All = Grey | White | Blue | Yellow
+        Yellow = 1 << 3,
+        Green = 1 << 4,
+        Orange = 1 << 5,
     } 
 
     [Flags]

@@ -20,7 +20,7 @@ namespace Trinity.Framework.Behaviors
 
         public HashSet<Vector3> VisitedMarkerPositions { get; set; } = new HashSet<Vector3>();
 
-        public async Task<bool> While(Predicate<TrinityMarker> markerSelector, int timeoutMs = 30000)
+        public async Task<bool> While(Predicate<TrinityMarker> markerSelector, int timeoutMs = 20000)
         {
             return await Run(async () => await FindMarker(markerSelector), Move, timeoutMs);
         }

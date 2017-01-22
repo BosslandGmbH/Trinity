@@ -777,6 +777,26 @@ namespace Trinity.Framework.Helpers
             return TrinityItemType.Unknown;
         }
 
+        public static PickupItemQualities GetPickupItemQuality(TrinityItemQuality quality)
+        {
+            switch (quality)
+            {
+                case TrinityItemQuality.Inferior:
+                    return PickupItemQualities.Grey;
+                case TrinityItemQuality.Common:
+                    return PickupItemQualities.White;
+                case TrinityItemQuality.Magic:
+                    return PickupItemQualities.Blue;
+                case TrinityItemQuality.Rare:
+                    return PickupItemQualities.Yellow;
+                case TrinityItemQuality.Legendary:
+                    return PickupItemQualities.Orange;
+                case TrinityItemQuality.Set:
+                    return PickupItemQualities.Green;
+            }
+            return PickupItemQualities.None;
+        }
+
         public static ItemType GetItemType(RawItemType rawItemType)
         {
             switch (rawItemType)

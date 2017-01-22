@@ -215,6 +215,13 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     q => q.Quest == ActBountyFinishingQuests[act] && q.State == QuestState.InProgress);
         }
 
+        public static bool IsAnyActTurninInProgress()
+        {
+            return
+                ZetaDia.ActInfo.AllQuests.Any(
+                    q => ActBountyFinishingQuests.Values.Contains(q.Quest) && q.State == QuestState.InProgress);
+        }
+
         public static bool IsActTurninCompleted(Act act)
         {
             return

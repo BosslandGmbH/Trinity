@@ -450,7 +450,7 @@ namespace Trinity.Modules
                 return false;
             }
 
-            if (cacheObject.IsDestroyable && !cacheObject.HasBeenWalkable && cacheObject.Distance > 5f)
+            if (cacheObject.IsDestroyable && !cacheObject.HasBeenWalkable && cacheObject.Distance > 5f && cacheObject.GizmoType != GizmoType.BreakableChest )
             {
                 cacheObject.AddCacheInfo("CantReachDestructible");
                 return false;
