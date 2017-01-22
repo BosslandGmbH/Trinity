@@ -693,6 +693,7 @@
     <Compile Include="Routines\Wizard\WizardFirebirdArchon.cs" />
     <Compile Include="Routines\Wizard\WizardDefault.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchon.cs" />
+    <Compile Include="Routines\Wizard\WizardParalysisQvazmirArchon.cs" />
     <Compile Include="Settings\Mock\RoutineMockData.cs" />
     <Compile Include="Settings\RoutineSettings.cs" />
     <Compile Include="Settings\ItemSettings.cs" />
@@ -1033,6 +1034,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Routines\Wizard\WizardParalysisArchonSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Wizard\WizardParalysisQvazmirArchonSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

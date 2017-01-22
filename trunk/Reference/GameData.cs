@@ -1779,7 +1779,7 @@ namespace Trinity.Reference
         {
             273323, // x1_westm_Door_Wide_Clicky
             55325, // a3dun_Keep_Door_Destructable
-
+            392606, // p1_Tgoblin_Vase_C
             225252, // Shamanic Ward - Revenge of Gharbad bounty
 
             331397, // x1_westm_Graveyard_Floor_Sarcophagus_Undead_Husband_Event

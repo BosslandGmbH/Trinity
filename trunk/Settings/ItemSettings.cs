@@ -29,6 +29,7 @@ namespace Trinity.Settings
         private TrinityGemType _gemTypes;
         private int _gemLevel;
         private PickupItemQualities _pickupTypes;
+        private bool _dontWalkToLowQuality;
         private bool _keepLegendaryUnid;
         private bool _pickupGold;
         private int _minGoldStack;
@@ -38,6 +39,10 @@ namespace Trinity.Settings
         private bool _autoEquipIgnoreWeapons;
         private int _gamblingMinSpendingShards;
         private bool _stashTreasureBags;
+        //private PickupItemQualities _inCombatLootQualities;
+        //private SettingMode _inCombatLooting;
+        private bool _disableLootingInCombat;
+
 
         public ItemSettings()
         {
@@ -65,11 +70,27 @@ namespace Trinity.Settings
 
         [DataMember]
         [Setting, UIControl(UIControlType.FlagsCheckboxes)]
-        [DefaultValue(PickupItemQualities.All)]
+        [DefaultValue(PickupItemQualities.None)]
         public PickupItemQualities PickupQualities
         {
             get { return _pickupTypes; }
             set { SetField(ref _pickupTypes, value); }
+        }
+
+        //[DataMember]
+        //[Setting, UIControl(UIControlType.FlagsCheckboxes)]
+        //public PickupItemQualities InCombatLootQualities
+        //{
+        //    get { return _inCombatLootQualities; }
+        //    set { SetField(ref _inCombatLootQualities, value); }
+        //}
+
+        [DataMember]
+        [DefaultValue(false)]
+        public bool DontWalkToLowQuality
+        {
+            get { return _dontWalkToLowQuality; }
+            set { SetField(ref _dontWalkToLowQuality, value); }
         }
 
         [DataMember]
@@ -105,6 +126,14 @@ namespace Trinity.Settings
             get { return _gamblingMode; }
             set { SetField(ref _gamblingMode, value); }
         }
+
+        //[DataMember]
+        //[DefaultValue(SettingMode.Enabled)]
+        //public SettingMode InCombatLooting
+        //{
+        //    get { return _inCombatLooting; }
+        //    set { SetField(ref _inCombatLooting, value); }
+        //}
 
         [DataMember]
         [DefaultValue(DropInTownOption.None)]
@@ -218,6 +247,13 @@ namespace Trinity.Settings
             set { SetField(ref _autoEquipIgnoreWeapons, value); }
         }
 
+        [DataMember]
+        [DefaultValue(false)]
+        public bool DisableLootingInCombat
+        {
+            get { return _disableLootingInCombat; }
+            set { SetField(ref _disableLootingInCombat, value); }
+        }
     }
 
 

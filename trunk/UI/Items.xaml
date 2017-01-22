@@ -91,8 +91,27 @@
                         <CheckBox Content="Pickup Blue Items" ToolTip="Blue Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Blue}" />
                         <CheckBox Content="Pickup Yellow Items" ToolTip="Yellow Items" IsChecked="{Binding Items.PickupQualities, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Yellow}" />
                     </UniformGrid>
+                    <Border Margin="0,7,0,0" BorderBrush="#444" BorderThickness="0,1,0,0">
+                        <UniformGrid Margin="0,4,0,0">
+                            <CheckBox Content="Only pickup when standing near / passing by" ToolTip="Bot will avoid walking to pick them up, but will pick them up if already standing ontop of them." IsChecked="{Binding Items.DontWalkToLowQuality}" />
+                        </UniformGrid>
+                    </Border>
                 </StackPanel>
             </GroupBox>
+
+            <!--<GroupBox Header="Combat Looting" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+                <StackPanel Margin="0,0,5,0">
+                    <TextBlock Margin="-3,0,0,8">Control which items are picked up while fighting monsters</TextBlock>
+                    <WrapPanel Margin="0,0,0,0">
+                        <RadioButton Foreground="White" Content="Pickup" IsChecked="{Binding Items.InCombatLooting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Enabled}" />
+                        <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Items.InCombatLooting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Disabled}" />
+                        <RadioButton Foreground="White" Content="Customize" IsChecked="{Binding Items.InCombatLooting, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Selective}" />
+                    </WrapPanel>
+                    <StackPanel Margin="0,5,0,0" Visibility="{Binding Items.InCombatLooting, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Selective}">
+                        <ContentPresenter Margin="0,5,0,0" Content="{Binding Items, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=InCombatLootQualities}" Style="{DynamicResource SimpleItemsControlSelector}" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>-->
 
             <GroupBox Header="Special Items" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <UniformGrid Columns="2">
@@ -200,6 +219,7 @@
                     <CheckBox Content="Don't Pickup Items in Town" IsChecked="{Binding Items.DontPickupInTown}" />
                     <CheckBox ToolTip="Item list needs items to be identified to check their properties." IsChecked="{Binding Items.KeepLegendaryUnid}" HorizontalAlignment="Left" Content="Keep Legendaries Unidentified" />
                     <CheckBox ToolTip="Keep bounty caches in your stash rather than openining them automatically" IsChecked="{Binding Items.StashTreasureBags}" HorizontalAlignment="Left" Content="Stash Bounty Caches" />
+                    <CheckBox ToolTip="Completely ignore all items while in combat (useful for speed farming)" IsChecked="{Binding Items.DisableLootingInCombat}" HorizontalAlignment="Left" Content="Disable Looting In Combat" />
 
                 </UniformGrid>
             </GroupBox>

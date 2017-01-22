@@ -328,6 +328,15 @@ namespace Trinity.Components.Combat
                                 continue;
                             }
                         }
+                        if (cacheObject.GizmoType == GizmoType.BreakableChest)
+                        {
+                            if (!cacheObject.HasBeenInLoS)
+                            {
+                                cacheObject.Weight = 0;
+                                cacheObject.WeightInfo += "Ignoring - Hasn't been in line of sight";
+                                continue;
+                            }
+                        }
                         else if (cacheObject.IsDestroyable)
                         {
                             if (!cacheObject.HasBeenWalkable && cacheObject.GizmoType != GizmoType.BreakableDoor && cacheObject.GizmoType != GizmoType.Door && cacheObject.Type != TrinityObjectType.Barricade)
@@ -896,6 +905,12 @@ namespace Trinity.Components.Combat
                                     if (DropItems.DroppedItemAnnIds.Contains(cacheObject.AnnId))
                                     {
                                         cacheObject.WeightInfo += $"Ignoring previously dropped item";
+                                    }
+
+                                    if (Core.Settings.Items.DisableLootingInCombat && Combat.IsInCombat && item.Distance > 8f)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring(DisableLootingInCombat)";
+                                        break;
                                     }
 
                                     // Don't pickup items if we're doing a TownRun

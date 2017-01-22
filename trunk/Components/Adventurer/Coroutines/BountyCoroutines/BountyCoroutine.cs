@@ -154,6 +154,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             //}
             Stats = BountyStatistic.GetInstance(QuestId);
 
+            LastBountyStats = Stats; 
+
             if (Stats.StartTime == default(DateTime))
                 Stats.StartTime = DateTime.UtcNow;
 
@@ -172,6 +174,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             }
             return false;
         }
+
+        public static BountyStatistic LastBountyStats { get; set; }
 
         private async Task<bool> TakingWaypoint()
         {

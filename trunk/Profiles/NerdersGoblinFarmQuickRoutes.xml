@@ -1,0 +1,158 @@
+<Profile>
+	<Name>Nerder's Rainbow Goblin Farm - Quick Routes</Name>
+	<KillMonsters>True</KillMonsters>
+	<PickupLoot>True</PickupLoot>
+	<GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="-1" />
+	<!--
+		Gem Hoarder - treasureGoblin_C-5999 (5987) 
+		Blood Theif - treasureGoblin_F-1741 (408989)
+		Rainbow Goblin - p1_treasureGoblin_tentacle_A-11597 (405186)
+		Treasure Goblin - treasureGoblin_A-3936 (5984)
+		Gilded Baron - treasureGoblin_J-8458 (429161)
+		Odious Collector - treasureGoblin_B-4075 (5985)
+		Malevolent Tormentor - treasureGoblin_H-11209 (413289)
+		Menagerist Goblin - treasureGoblin_K-12094 (450993)
+		Insufferable Miscreant - treasureGoblin_E-15159 (408655)
+	-->
+	<TargetBlacklists>
+		<TargetBlacklist actorId="114622"/><!-- tyrael  -->
+		<TargetBlacklist actorId="365097"/><!-- CURSED CHEST -->
+		<TargetBlacklist actorId="364601"/><!-- CURSED SHRINE -->
+		<TargetBlacklist actorId="103919"/><!-- a3Battlefield_Props_Demonic_Container_A -->
+		<TargetBlacklist actorId="159575"/><!-- azmodan portal -->
+		<TargetBlacklist actorId="114622"/><!-- Tyrael_Heaven -->
+		<TargetBlacklist actorId="365097"/><!-- x1_Global_Chest_CursedChest_B -->
+		<TargetBlacklist actorId="364601"/><!-- CURSED SHRINE -->
+		<TargetBlacklist actorId="196945"/><!-- a2dun_Spider_EggSack__Chest -->
+		<TargetBlacklist actorId="114622"/><!-- tyrael  -->
+		<TargetBlacklist actorId="365097"/><!-- CURSED CHEST -->
+		<TargetBlacklist actorId="364601"/><!-- CURSED SHRINE -->
+		<TargetBlacklist actorId="103316"/><!-- TrOut_Highlands_Manor_Front_Gate -->
+		<TargetBlacklist actorId="116508"/><!-- trOut_Log_Highlands -->
+		<TargetBlacklist actorId="86385"/><!-- trOut_Highlands_Goatman_Drum_A -->
+		<TargetBlacklist actorId="64271"/><!-- trOut_Stump_Chest -->
+		<TargetBlacklist actorId="112200"/><!-- trOut_Wilderness_RockPile_A -->
+		<TargetBlacklist actorId="80357"/><!-- trOut_Highlands_LogStack_Trap -->
+		<TargetBlacklist actorId="130186"/><!-- TEMP_GoatPortal_Center -->
+		<TargetBlacklist actorId="170325"/><!-- WoodWraith_B_02 -->
+		<TargetBlacklist actorId="170324"/><!-- WoodWraith_B_01 -->
+		<TargetBlacklist actorId="166452"/><!-- trOut_Highlands_Goatmen_SummoningMachine_A -->
+		<TargetBlacklist actorId="85789"/><!-- Leoric_Lecturn_ Leorics Journal -->
+		<TargetBlacklist actorId="105758"/><!-- a1dun_Jail_Ghost_Queen_Lore -->
+		<TargetBlacklist actorId="5747"/><!--Chandelier Trap-->
+	</TargetBlacklists>
+	<Order>
+		<WaitTimer questId="87700" stepId="-1" waitTime="500" />
+		<!-- Take the goblin portal if we find it -->
+		<When condition="ActorExistsNearMe(405590,500)" name="Portal">
+			<LogMessage message=">> Rainbow Goblins Portal is up!" />
+			<While condition="CurrentWorldId != 409093">
+				<MoveToActor questId="1" stepId="1" actorId="405590" isPortal="True" />
+				<WaitTimer questId="1" stepId="1" waitTime="1000" />
+			</While>
+			<LoadProfile file="Whimsydale.xml"/>
+		</When>
+		<If condition="IsInTown">
+			<TakeWaypoint waypointNumber="13" />
+		</If>
+		<!-- Start in Southern Highlands for the Moon Clan Cave -->
+		<If condition="CurrentWorldId == 71150 and (CurrentLevelAreaId == 93632 or CurrentLevelAreaId == 19940)" >
+			<If condition="CurrentLevelAreaId == 93632" >
+				<LogMessage message=">> We're in the Southern Highlands, lets find the cave!" />
+				<MoveToPosition questId="312429" stepId="2" x="2359" y="4832" z="1" worldSnoId="71150" levelAreaSnoId="93632" sceneSnoId="74856" sceneName="trOut_Highlands_Entrance_E07_S03" sceneX="19" sceneY="152" sceneZ="1" isGenerated="false" />
+				<MoveToPosition questId="312429" stepId="2" x="2384" y="4631" z="0" worldSnoId="71150" levelAreaSnoId="19940" sceneSnoId="74866" sceneName="trOut_Highlands_Entrance_E05_S03" sceneX="44" sceneY="-49" sceneZ="0" isGenerated="false" />
+			</If>
+			<If condition="CurrentLevelAreaId == 19940" >
+				<Explore stopCondition="ActorExistsNearMe(176008,100)" />
+				<Interact questId="312429" stepId="2" actorId="176008" actorName="g_Portal_Square_Orange" worldSnoId="71150" levelAreaSnoId="19940" sceneSnoId="33466" sceneName="trOut_Highlands_Sub80_CaveEntrance_A" />
+			</If>
+		</If>
+		<If condition="CurrentWorldId == 82502" >
+			<LogMessage message=">> We're in the Moon Clan Cave lvl 1" />
+			<Explore stopCondition="ActorExistsNearMe(176038,50) and not CurrentSceneName('Entrance')" />
+			<Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="82502" />
+		</If>
+		<If condition="CurrentWorldId == 82511" >
+			<LogMessage message=">> We're in the Moon Clan Cave lvl 2" />
+			<Explore />
+			<While condition="CurrentWorldId != 50579" >
+				<LogMessage message=">> Time to move to Southern Highlands" />
+				<TakeWaypoint waypointNumber="2" />
+			</While>
+		</If>
+		<!-- Cathedral lvl 1 AreaId: 19780-->
+		<If condition="CurrentWorldId == 50579" >
+			<LogMessage message=">> Time to explore the Cathedral lvl 1" />
+			<Explore stopCondition="ActorExistsNearMe(168932,50)" />
+			<Interact questId="312429" stepId="2" actorId="168932" actorName="Boss_Portal_CainIntro" worldSnoId="50579" />
+		</If>
+		<!-- Leoric's Passage -->
+		<If condition="CurrentWorldId == 60713">
+			<LogMessage message=">> Quick pass through of Leoric's Passage" />
+			<MoveToPosition questId="312429" stepId="2" x="239" y="222" z="25" worldSnoId="60713" levelAreaSnoId="60714" sceneSnoId="60885" sceneName="trDun_Cath_Cain_Intro_01" sceneX="239" sceneY="222" sceneZ="25" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="104" y="292" z="0" worldSnoId="60713" levelAreaSnoId="60714" sceneSnoId="60885" sceneName="trDun_Cath_Cain_Intro_01" sceneX="104" sceneY="292" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="101" y="170" z="0" worldSnoId="60713" levelAreaSnoId="60714" sceneSnoId="60885" sceneName="trDun_Cath_Cain_Intro_01" sceneX="101" sceneY="170" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="19" y="228" z="-25" worldSnoId="60713" levelAreaSnoId="60714" sceneSnoId="60885" sceneName="trDun_Cath_Cain_Intro_01" sceneX="19" sceneY="228" sceneZ="-25" isGenerated="false" />
+			<Interact questId="312429" stepId="2" actorId="176001" actorName="g_Portal_ArchTall_Orange" x="19" y="228" z="-25" worldSnoId="60713" levelAreaSnoId="60714" sceneSnoId="60885" sceneName="trDun_Cath_Cain_Intro_01" sceneX="8" sceneY="230" sceneZ="-24" />
+        </If>
+		<!-- Cathedral lvl 2 -->
+		<If condition="CurrentWorldId == 50582" >
+			<LogMessage message=">> Explore the Cathedral lvl 2" />
+			<Explore stopCondition="ActorExistsNearMe(176001,100) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
+			<Interact questId="312429" stepId="2" actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="50582" levelAreaSnoId="19783" sceneSnoId="32947" sceneName="trDun_Cath_E_Exit_02" />
+		</If>
+		<!-- Cathedral lvl 3 -->
+		<If condition="CurrentWorldId == 105406" >
+			<LogMessage message=">> We're now in the Cathedral lvl 3" />
+			<Explore stopCondition="ActorExistsNearMe(176001,60) and not CurrentSceneName('Entrance')" />
+			<Interact questId="312429" stepId="2" actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="105406" levelAreaSnoId="87907" sceneSnoId="32993" sceneName="trDun_Cath_S_Exit_01" sceneX="150" sceneY="119" sceneZ="-46" />
+		</If>
+		<!-- Cathedral lvl 4 -->
+		<If condition="CurrentWorldId == 50584" >
+			<LogMessage message=">> Lets hurry up and get out of Cathedral lvl 4" />
+			<Explore stopCondition="ActorExistsNearMe(175467,50)" />
+			<Interact questId="312429" stepId="2" actorId="175467" actorName="g_Portal_Rectangle_Blue" worldSnoId="50584" />
+		</If>
+		<!-- Royal Crypts -->
+		<If condition="CurrentWorldId == 50585">
+			<LogMessage message=">> Last stop on act 1, Royal Crypts" />
+			<!--<Explore  stopCondition="PercentNodesVisited(95)" />-->
+			<MoveToPosition questId="312429" stepId="2" x="1050" y="570" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33082" sceneName="trDun_Crypt_N_Entrance_02" sceneX="90" sceneY="90" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="967" y="577" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33082" sceneName="trDun_Crypt_N_Entrance_02" sceneX="7" sceneY="97" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="870" y="575" z="1" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33072" sceneName="trDun_Crypt_NSEW_02" sceneX="150" sceneY="95" sceneZ="1" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="817" y="518" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33072" sceneName="trDun_Crypt_NSEW_02" sceneX="97" sceneY="38" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="816" y="466" z="1" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="1889" sceneName="trDun_Crypt_E_Dead_End_01" sceneX="96" sceneY="226" sceneZ="1" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="804" y="538" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33072" sceneName="trDun_Crypt_NSEW_02" sceneX="84" sceneY="58" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="760" y="580" z="1" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33072" sceneName="trDun_Crypt_NSEW_02" sceneX="40" sceneY="100" sceneZ="1" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="819" y="650" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33072" sceneName="trDun_Crypt_NSEW_02" sceneX="99" sceneY="170" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="819" y="738" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33098" sceneName="trDun_Crypt_W_Dead_End_01" sceneX="99" sceneY="18" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="812" y="640" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33072" sceneName="trDun_Crypt_NSEW_02" sceneX="92" sceneY="160" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="725" y="572" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33072" sceneName="trDun_Crypt_NSEW_02" sceneX="5" sceneY="92" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="548" y="576" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33065" sceneName="trDun_Crypt_King_Entrance" sceneX="68" sceneY="96" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="551" y="612" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33065" sceneName="trDun_Crypt_King_Entrance" sceneX="71" sceneY="132" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="550" y="539" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33065" sceneName="trDun_Crypt_King_Entrance" sceneX="70" sceneY="59" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="543" y="491" z="7" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33065" sceneName="trDun_Crypt_King_Entrance" sceneX="63" sceneY="11" sceneZ="7" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="513" y="491" z="7" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33065" sceneName="trDun_Crypt_King_Entrance" sceneX="33" sceneY="11" sceneZ="7" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="507" y="534" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33065" sceneName="trDun_Crypt_King_Entrance" sceneX="27" sceneY="54" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="488" y="573" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33065" sceneName="trDun_Crypt_King_Entrance" sceneX="8" sceneY="93" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="326" y="578" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="74008" sceneName="trDun_Crypt_Skeletal_Entrance_SEW_01" sceneX="86" sceneY="98" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="337" y="505" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="74008" sceneName="trDun_Crypt_Skeletal_Entrance_SEW_01" sceneX="97" sceneY="25" sceneZ="0" isGenerated="false" />
+			<MoveToPosition questId="312429" stepId="2" x="336" y="746" z="0" worldSnoId="50585" levelAreaSnoId="19787" sceneSnoId="33098" sceneName="trDun_Crypt_W_Dead_End_01" sceneX="96" sceneY="26" sceneZ="0" isGenerated="false" />
+        </If>
+		<WaitTimer questId="1" stepId="1" waitTime="3000"/>
+		<If condition="CurrentWorldId == 82502" >
+			<LogMessage message=">> We're in the Moon Clan Cave lvl 1" />
+			<Explore stopCondition="ActorExistsNearMe(176038,50) and not CurrentSceneName('Entrance')" />
+			<Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="82502" />
+		</If>
+		<If condition="CurrentWorldId == 82511" >
+			<LogMessage message=">> We're in the Moon Clan Cave lvl 2" />
+			<Explore />
+			<While condition="CurrentWorldId != 50585" >
+				<LogMessage message=">> Time to move to Royal Crypts" />
+				<TakeWaypoint waypointNumber="5" />
+			</While>
+		</If>
+		<LeaveGame />
+	</Order>
+</Profile>

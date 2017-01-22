@@ -721,6 +721,9 @@ namespace Trinity.Routines.Wizard
         public static bool IsFirebirdsMeteorReviveUsed
             => Core.Buffs.HasBuff(SNOPower.ItemPassive_Unique_Ring_732_x1);
 
+        public static bool HasTalRashaStacks
+            => Core.Buffs.GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_028) >= 3;
+
         public static bool IsChannellingDisintegrate
             => Player.IsChannelling && Skills.Wizard.Disintegrate.IsLastUsed;
 

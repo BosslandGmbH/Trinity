@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Adventurer;
+using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
 using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Game.Quests;
@@ -25,7 +27,7 @@ namespace Trinity.ProfileTags
 
         private List<Act> _acts;
         private List<Act> _completedActs;
-        private Act _currentAct;
+        public Act _currentAct;
         private ActBountiesCoroutine _currentActBountiesCoroutine;
 
         private bool _isDone;
@@ -38,8 +40,12 @@ namespace Trinity.ProfileTags
             }
         }
 
+        public static BountiesTag Current { get; private set; }
+
         public override void OnStart()
         {
+            Current = this;
+
             if (!Core.Adventurer.IsEnabled)
             {
                 Logger.Error("Plugin is not enabled. Please enable Adventurer and try again.");
@@ -56,6 +62,11 @@ namespace Trinity.ProfileTags
             {
                 Logger.Info("[Bounties] Picked {0} as new target. (BonusAct: {1})", _currentActBountiesCoroutine.Act, _currentActBountiesCoroutine.Act == ZetaDia.CurrentBonusAct);
             }
+        }
+
+        public override void OnDone()
+        {
+            Current = null;
         }
 
         private void ResetAll()

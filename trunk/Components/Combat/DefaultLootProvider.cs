@@ -41,6 +41,27 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
+            if (Core.Settings.Items.DisableLootingInCombat && Combat.IsInCombat && item.Distance > 8f)
+            {
+                return false;
+            }
+
+            //if (Core.Settings.Items.InCombatLooting != SettingMode.Enabled && Combat.IsInCombat)
+            //{
+            //    if (Core.Settings.Items.InCombatLooting == SettingMode.Disabled)
+            //        return false;
+
+            //    if (Core.Settings.Items.InCombatLooting == SettingMode.Selective)
+            //    {
+            //        var pickupQuality = TypeConversions.GetPickupItemQuality(item.TrinityItemQuality);
+            //        if (!Core.Settings.Items.InCombatLootQualities.HasFlag(pickupQuality))
+            //            return false;
+            //    }
+            //}
+
+            if (Core.Settings.Items.DontWalkToLowQuality && item.Distance > 8f && item.IsLowQuality)
+                return false;
+
             if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
                 return true;
 
@@ -183,6 +204,9 @@ namespace Trinity.Components.Combat
 
             return true;
         }
+
+
+
 
         public bool ShouldDrop(TrinityItem item, ItemEvaluationType scheduledAction)
         {

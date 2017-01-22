@@ -68,6 +68,12 @@ namespace Trinity.Framework.Actors.Properties
             actor.FollowerType = GetFollowerType(actor.ActorSnoId);
             actor.ItemStackQuantity = attributes.ItemStackQuantity;
             actor.TrinityItemQuality = TypeConversions.GetTrinityItemQuality(actor.ItemQualityLevel);
+
+            actor.IsLowQuality = actor.TrinityItemQuality == TrinityItemQuality.Common ||
+                                 actor.TrinityItemQuality == TrinityItemQuality.Inferior ||
+                                 actor.TrinityItemQuality == TrinityItemQuality.Magic ||
+                                 actor.TrinityItemQuality == TrinityItemQuality.Rare;
+
             actor.GlobeType = GetGlobeType(actor);            
             actor.IsWeapon = TypeConversions.IsWeapon(actor);
             actor.IsArmor = TypeConversions.IsArmor(actor);

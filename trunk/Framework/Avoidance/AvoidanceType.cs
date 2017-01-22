@@ -33,6 +33,7 @@ namespace Trinity.Framework.Avoidance
         MalthaelTeleport,
         PerendiDefaultAttack,
         MalthaelDeathFog,
-        MalthaelHellGates
+        MalthaelHellGates,
+        Urzael
     }
 }

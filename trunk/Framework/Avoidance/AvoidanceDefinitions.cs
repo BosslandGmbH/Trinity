@@ -64,6 +64,111 @@ namespace Trinity.Framework.Avoidance
             }
         };
 
+        /*
+        ActorType => ClientEffect
+RActorId => -309985231
+InternalName => x1_Urzael_ceilingDebris_beam_groundGlow-30579
+ActorSnoId => 360649
+MonsterSnoId => 0
+CommonData => 
+RActor => Trinity.Framework.Objects.Memory.Misc.RActor
+ActorInfo => ActorType:ClientEffect ApperanceSNO:359226 PhysMeshSNO:-1 Cylinder:Position:<1.058791E-22, 4.768372E-07, 0> Ax1:0 Ax2:0 Sphere:Center:<-2.365559E-07, 2.384186E-07, 0> Radius:7.000157 AABB:Min:<-2.365559E-07, 2.384186E-07, 0> Max:<0.03942948, 5.000002, 1.110223E-16> AnimSetSNO:-1 SNOMonster:-1
+         ActorType => ClientEffect
+RActorId => -312672197
+InternalName => x1_westm_Falling_Wood_Urzael-30538
+ActorSnoId => 360652
+MonsterSnoId => 0
+CommonData => 
+RActor => Trinity.Framework.Objects.Memory.Misc.RActor
+ActorInfo => ActorType:ClientEffect ApperanceSNO:350268 PhysMeshSNO:-1 Cylinder:Position:<-0.04530716, 0, 75.23312> Ax1:100 Ax2:100 Sphere:Center:<0, -0.02893925, 68.69508> Radius:100 AABB:Min:<0, -0.02893829, 68.69508> Max:<5.455193, 26.51947, 66.74621> AnimSetSNO:360669 SNOMonster:-1
+        ActorType => ServerProp
+RActorId => -380501958
+InternalName => x1_Urzael_ceilingDebris_Impact_Beam-29506
+ActorSnoId => 359205
+MonsterSnoId => 0
+CommonData => Trinity.Framework.Objects.Memory.Misc.ActorCommonData
+RActor => Trinity.Framework.Objects.Memory.Misc.RActor
+ActorInfo => ActorType:ServerProp ApperanceSNO:14322 PhysMeshSNO:-1 Cylinder:Position:<0.00772902, -0.006169996, -0.00789072> Ax1:0 Ax2:0 Sphere:Center:<0, 0, 0> Radius:2.225377 AABB:Min:<0, 0, 0> Max:<0.1593657, 0.1593657, 3.53863E-17> AnimSetSNO:-1 SNOMonster:-1      
+            ActorType => ServerProp
+RActorId => -482344927
+InternalName => x1_Urzael_death_rune_proxy-27956
+ActorSnoId => 375588
+MonsterSnoId => 0
+CommonData => Trinity.Framework.Objects.Memory.Misc.ActorCommonData
+RActor => Trinity.Framework.Objects.Memory.Misc.RActor
+ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Position:<-2.980232E-08, 0, 0> Ax1:0 Ax2:0 Sphere:Center:<-2.980232E-08, 0, 0> Radius:2.321987 AABB:Min:<-2.980232E-08, 0, 0> Max:<0.2276794, 0.2276794, 0> AnimSetSNO:-1 SNOMonster:-1
+             * * */
+
+
+        public static AvoidanceDefinition Urzael = new AvoidanceDefinition
+        {
+            Id = (int)AvoidanceType.Urzael,
+            Type = AvoidanceType.Urzael,
+            Name = "Urzael",
+            Element = Element.Fire,
+            Handler = new CircularAvoidanceHandler(),
+            Parts = new List<AvoidancePart>
+            {
+                //new AvoidancePart
+                //{
+                //    Name = "Falling wood",
+                //    ActorSnoId = (int) SNOActor.x1_westm_Falling_Wood_Urzael,
+                //    Type = PartType.Telegraph,
+                //    Radius = 14f
+                //},
+                new AvoidancePart
+                {
+                    Name = "Falling wood 2",
+                    ActorSnoId = (int) SNOActor.x1_westm_Falling_Wood_02_Urzael,
+                    Type = PartType.Telegraph,
+                    Radius = 14f
+                },
+                new AvoidancePart
+                {
+                    Name = "Cannonball",
+                    ActorSnoId = (int) SNOActor.x1_Urzael_Cannonball,
+                    Type = PartType.Projectile,
+                    Radius = 14f
+                },
+                new AvoidancePart
+                {
+                    Name = "Cannonball Burning",
+                    ActorSnoId = (int) SNOActor.x1_Urzael_Cannonball_burning,
+                    Type = PartType.Projectile,
+                    Radius = 14f
+                },
+                new AvoidancePart
+                {
+                    Name = "Flame Sweep",
+                    ActorSnoId = (int) SNOActor.x1_Urzael_FlameSweep,
+                    Type = PartType.Projectile,
+                    Radius = 14f
+                },
+                new AvoidancePart
+                {
+                    Name = "Ceiling Debri Impact Emitter",
+                    ActorSnoId = (int) SNOActor.x1_Urzael_ceilingDebris_beam_impact_emitter,
+                    Type = PartType.Telegraph,
+                    Radius = 14f
+                },
+                new AvoidancePart
+                {
+                    Name = "Bad Circle",
+                    ActorSnoId = (int) SNOActor.x1_Urzael_ceilingDebris_beam_groundGlow,
+                    Type = PartType.Telegraph,
+                    Radius = 14f
+                },
+
+                new AvoidancePart
+                {
+                    Name = "Falling Debri Circle",
+                    ActorSnoId = (int) SNOActor.x1_Urzael_ceilingDebris_Impact_Beam,
+                    Type = PartType.Main,
+                    Radius = 14f
+                },
+            }
+        };
+
         //ClientEffect Name: ZK_tornado_model-468962 ActorSnoId: 186055, Distance: 22.96034
 
         public static AvoidanceDefinition ZultunKuleTornado = new AvoidanceDefinition
