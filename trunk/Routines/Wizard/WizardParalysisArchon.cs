@@ -10,6 +10,7 @@ using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Reference;
@@ -51,58 +52,48 @@ namespace Trinity.Routines.Wizard
                 Legendary.ManaldHeal
             },
         };
-		public override KiteMode KiteMode => KiteMode.Always;
-        public override float KiteDistance => 15f;
 
-        public override Func<bool> ShouldIgnoreAvoidance => () => IsArchonActive;
+		public override KiteMode KiteMode => KiteMode.Always;
+        public override float KiteDistance => 25f;
+        public override int KiteStutterDuration => 800;
+        public override int KiteStutterDelay => 1400;
+        public override int KiteHealthPct => 100;
+
+        public override Func<bool> ShouldIgnoreAvoidance => () => IsArchonActive && Player.CurrentHealthPct > 0.7f;
+
         #endregion
         public TrinityPower GetOffensivePower()
         {
             TrinityPower power;
             TrinityActor target;
 
-			var bestCluster = TargetUtil.GetBestClusterPoint();
-            var energyLevelReady = !Legendary.AquilaCuirass.IsEquipped || Player.PrimaryResourcePct > 0.95;
-            
             if (IsArchonActive)
-            {                
-                if (CanTeleport)
-                    Teleport(TargetUtil.GetBestClusterPoint());
+            {
+                if (!IsArchonSlowTimeActive)
+                    return ArchonSlowTime();
 
-                if (Skills.Wizard.ArchonDisintegrationWave.CanCast())
-                {
-                    // Use Wave to pull and ignite monsters that are lined up nicely and are not burning.
-                    var pierceUnits = WeightedUnits.Where(u => u.Distance < 50f && !u.Attributes.HasFirebirdPermanent && !u.Attributes.HasFirebirdTemporary && (u.CountUnitsInFront() + u.CountUnitsBehind(15f)) > 5).ToList();
-                    var bestPierceUnit = pierceUnits.OrderBy(u => u.Distance).FirstOrDefault(u => u.Distance <= 15f);
-                    if (bestPierceUnit != null)
-                        return ArchonDisintegrationWave(bestPierceUnit);
-                }
-
-                if (ShouldArchonStrike(out target))
-                    return ArchonStrike(target);
-
-                return null;
+                if (ShouldArchonDisintegrationWave(out target))
+                    return ArchonDisintegrationWave(target);
             }
-			//frost nova to proc tal rasha
-			
-            if (TrySpecialPower(out power))
-                return power;
+            else
+            {
+                if (TrySpecialPower(out power))
+                    return power;
 
-            if (TrySecondaryPower(out power))
-                return power;
-			
-            if (TryPrimaryPower(out power))
-                return power;
+                if (TrySecondaryPower(out power))
+                    return power;
 
-			if (IsNoPrimary)
-                return Walk(CurrentTarget);
-			
-			return null;
+                if (TryPrimaryPower(out power))
+                    return power;     
+            }
+            return Walk(Avoider.SafeSpot);
         }
-		//cast frost nova frequently to proc Tal's
+
 		protected override bool ShouldFrostNova()
 		{
-			if (!Skills.Wizard.FrostNova.CanCast())
+            //cast frost nova frequently to proc Tal's
+
+            if (!Skills.Wizard.FrostNova.CanCast())
                 return false;
 
             if (!TargetUtil.AnyMobsInRange(15f))
@@ -110,40 +101,104 @@ namespace Trinity.Routines.Wizard
 
             return true;
         }
+
 		protected override bool ShouldTeleport(out Vector3 position)
 		{
-			//Teleport into clusters if calamity is equipped
-			
 			position = Vector3.Zero;
 			
-			if (!Skills.Wizard.Teleport.CanCast())
+			if (!CanTeleport)
 				return false;
-			
-			if (Skills.Wizard.Teleport.TimeSinceUse < 2000)
-				return false;
-			
-			var closeEnoughToBestCluster = TargetUtil.GetBestClusterUnit(15f, 50f)?.Distance < 15f;
-			if (!IsInCombat && closeEnoughToBestCluster)
-				return false;
-			
-			position = TargetUtil.GetBestClusterPoint();
-			return position != Vector3.Zero;
+
+            // Jump into cluster for archon combust
+            if (!IsArchonActive && Skills.Wizard.Archon.CanCast() && TalRashaStacks >= 2 && Runes.Wizard.Combustion.IsActive)
+		    {
+                Logger.Log("Teleport to Archon Combust");
+                position = TargetUtil.GetBestClusterPoint();
+                return position != Vector3.Zero;
+            }
+
+            // Jump away from monsters but within cast range
+            if (Avoider.TryGetSafeSpot(out position, 15f, 50f, Player.Position, 
+                n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Monster) 
+                && Core.Grids.CanRayCast(n.NavigableCenter, CurrentTarget.Position)))
+            {
+                Logger.Log("Teleport to Safespot (ShouldTeleport)");
+                return true;
+            }
+
+            // Try a different approach.
+            var target = TargetUtil.GetBestClusterUnit();
+            position = TargetUtil.GetLoiterPosition(target, 30f);
+            if (position != Vector3.Zero)
+		    {
+                Logger.Log("Teleport to LoiterPosition (ShouldTeleport)");
+                return true;
+            }
+
+		    return false;
 		}
 		
-        public TrinityPower GetDefensivePower() => null;
-
-        public TrinityPower GetBuffPower() 
+        public TrinityPower GetDefensivePower()
         {
-			return DefaultBuffPower();
-			
+            Vector3 position;
+
+            if (ShouldTeleport(out position))
+                    return Teleport(position);
+
+            return null;
         }
+
+        protected override bool ShouldArchon() => false;
+
+        public TrinityPower GetBuffPower()
+        {
+            Vector3 position;
+
+            if (!IsArchonActive && Skills.Wizard.Archon.CanCast() && !Player.IsInTown)
+            {
+                if (!HasTalRashaStacks)
+                {
+                    //Logger.Log($"Building Tal'Rasha Set Stacks ({TalRashaStacks})");
+
+                    var target = TargetUtil.GetBestClusterUnit(50f) ?? Player.Actor;
+
+                    if (Skills.Wizard.FrostNova.CanCast())
+                        return FrostNova();
+
+                    if (Skills.Wizard.Blizzard.CanCast())
+                        return Blizzard(target);
+
+                    if (Skills.Wizard.BlackHole.CanCast())
+                        return BlackHole(target);
+
+                    if (ShouldTeleport(out position))
+                        return Teleport(position);
+
+                    if (Skills.Wizard.ArcaneTorrent.CanCast())
+                        return ArcaneTorrent(target);
+                }
+                else
+                {
+                    return Archon();
+                }
+            }
+
+            return DefaultBuffPower();
+        }
+
+        protected override TrinityPower ArchonDisintegrationWave(TrinityActor target)
+            => new TrinityPower(Skills.Wizard.ArchonDisintegrationWave, 55f, target.AcdId, 25, 25);
 
         public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (AllowedToUse(Settings.Teleport, Skills.Wizard.Teleport) && CanTeleportTo(destination))
-                return Teleport(destination);
+            if (AllowedToUse(Settings.Teleport, Skills.Wizard.Teleport))
+            {
+                TrinityPower trinityPower;
+                if (TryPredictiveTeleport(destination, out trinityPower))
+                    return trinityPower;
+            }
 
             return Walk(destination);
         }

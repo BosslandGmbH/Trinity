@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework.Helpers;
 
 namespace Trinity.Framework.Objects
 {
@@ -14,6 +15,8 @@ namespace Trinity.Framework.Objects
 
         public bool IsEquipped()
         {
+            Logger.LogDebug($"Build IsEquipped Check for {Name}");
+
             if (Passives != null && !Passives.All(passive => passive.IsActive))
                 return false;
 

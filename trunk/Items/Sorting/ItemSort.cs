@@ -20,7 +20,7 @@ namespace Trinity.Items.Sorting
 {
     public static class ItemSort
     {
-        private const int ItemMovementDelay = 100;
+        private const int ItemMovementDelay = 75;
         const string HookName = "VendorRun";
 
         public static bool IsSorting { get; private set; }

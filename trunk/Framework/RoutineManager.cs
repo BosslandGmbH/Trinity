@@ -68,7 +68,7 @@ namespace Trinity.Framework
         {
             if (item.NewValue)
             {
-                Thread.Sleep(500);                
+                Thread.Sleep(500);
                 SelectRoutine();
             }
         }
@@ -121,7 +121,10 @@ namespace Trinity.Framework
                     return;
                 }
             }
-            
+
+            if(!Core.Actors.AllRActors.Any())
+                Core.Actors.Update();
+
             foreach (var routine in CurrentClassRoutines.OrderBy(r => r.BuildRequirements?.RequirementCount))
             {
                 if (routine.BuildRequirements == null)
@@ -136,19 +139,18 @@ namespace Trinity.Framework
                     return;
                 }
             }
-
             Logger.Log($"Auto-Selecting default routine for class");
             CurrentRoutine = genericRoutines.FirstOrDefault();           
         }
 
-        public void ManualSelectRoutine(IRoutine routine)
-        {
-            CurrentRoutine = routine;
-            Settings.SelectedRoutineClassName = routine.GetType().Name;
-            Settings.RoutineMode = RoutineMode.Manual;
-            Logger.Log($"Set Routine Selection: {Settings.SelectedRoutineClassName}");
+        //public void ManualSelectRoutine(IRoutine routine)
+        //{
+        //    CurrentRoutine = routine;
+        //    Settings.SelectedRoutineClassName = routine.GetType().Name;
+        //    Settings.RoutineMode = RoutineMode.Manual;
+        //    Logger.Log($"Set Routine Selection: {Settings.SelectedRoutineClassName}");
 
-        }
+        //}
 
         public void ManualSelectRoutine(string typeName)
         {

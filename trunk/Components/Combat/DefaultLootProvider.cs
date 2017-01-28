@@ -59,7 +59,7 @@ namespace Trinity.Components.Combat
             //    }
             //}
 
-            if (Core.Settings.Items.DontWalkToLowQuality && item.Distance > 8f && item.IsLowQuality)
+            if (Core.Settings.Items.DontWalkToLowQuality && item.Distance > 8f && item.IsLowQuality && !item.IsCraftingReagent)
                 return false;
 
             if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
@@ -69,6 +69,9 @@ namespace Trinity.Components.Combat
                 return true;
 
             if (item.RawItemType == RawItemType.Lore && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Lore))
+                return true;
+
+            if (item.RawItemType == RawItemType.CultistPage && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.CultistPage))
                 return true;
 
             if (item.GameBalanceId == GameData.ItemGameBalanceIds.DeathsBreath)

@@ -114,9 +114,24 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     if (cell != null)
                     {
                         var navNode = new NavigationNode(new Vector3(x, y, cell.Z), navBoxSize, instance, cell);
+
                         instance.Nodes.Add(navNode);
+
+                        var isOnEdge = instance.Scene.Min.X == cell.MinX || instance.Scene.Min.Y == cell.MinY ||
+                                       instance.Scene.Max.X == cell.MaxX || instance.Scene.Max.Y == cell.MaxY;
+
+                        if (isOnEdge)
+                        {
+                            instance.IsEdgeNode = true;
+                        }
+
                         if (cell.NavCellFlags.HasFlag(NavCellFlags.AllowWalk))
                         {
+                            if (isOnEdge)
+                            {
+                                instance.IsConnectionNode = true;
+                            }
+
                             walkableNodes.Add(navNode);
                             if (!navNode.NodeFlags.HasFlag(NodeFlags.NearWall))
                             {
@@ -137,6 +152,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 instance.NavigableCenterNode = walkableExcludingNearWall.OrderBy(ncp => ncp.NavigableCenter.DistanceSqr(instance.Center.ToVector3())).First();
             }
         }
+
+        public bool IsConnectionNode { get; set; }
+
+        public bool IsEdgeNode { get; set; }
 
         public List<IGroupNode> GetNeighbors(int distance, bool includeSelf = false)
         {

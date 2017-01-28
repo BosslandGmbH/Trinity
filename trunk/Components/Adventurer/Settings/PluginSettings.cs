@@ -58,15 +58,16 @@ namespace Trinity.Components.Adventurer.Settings
         {
             get
             {
-                var level = 0;
-                if (ZetaDia.Me != null)
-                {
-                    SafeFrameLock.ExecuteWithinFrameLock(() =>
-                    {
-                        level = PropertyReader<int>.SafeReadValue(() => ZetaDia.Me.HighestUnlockedRiftLevel);
-                    });
-                }
-                return level == 0 ? 120 : level;
+                //var level = 0;
+                //if (ZetaDia.Me != null)
+                //{
+                //    SafeFrameLock.ExecuteWithinFrameLock(() =>
+                //    {
+                //        level = PropertyReader<int>.SafeReadValue(() => ZetaDia.Me.HighestUnlockedRiftLevel);
+                //    });
+                //}
+                //return level == 0 ? 120 : level;
+                return 110;
             }
             set { }
         }
@@ -279,20 +280,8 @@ namespace Trinity.Components.Adventurer.Settings
         [DataMember]
         public AdventurerGems Gems
         {
-            get
-            {
-                if (_gems == null)
-                {
-                    _gems = new AdventurerGems();
-                }
-                var greaterRiftLevel = RiftData.GetGreaterRiftLevel();
-                _gems.UpdateGems(greaterRiftLevel, GreaterRiftPrioritizeEquipedGems);
-                return _gems;
-            }
-            set
-            {
-                SetField(ref _gems, value);
-            }
+            get { return _gems ?? (_gems = new AdventurerGems()); }
+            set { SetField(ref _gems, value); }
         }
 
         /// <summary>

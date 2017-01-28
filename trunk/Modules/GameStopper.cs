@@ -1,3 +1,4 @@
+using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Framework.Objects;
 using Zeta.Bot;
 
@@ -14,6 +15,9 @@ namespace Trinity.Modules
         {
             if (!BotMain.IsRunning)
                 return;
+
+            //if(ActorFinder.FindNearestDeathGate() != null)
+            //    BotMain.Stop();
 
             //if (Core.Settings.Advanced.StopOnGoblins)
             //{

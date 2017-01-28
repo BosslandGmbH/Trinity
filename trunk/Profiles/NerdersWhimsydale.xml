@@ -1,0 +1,36 @@
+<Profile>
+<Name>[Run the dale v1.7.91]</Name>
+<KillMonsters>True</KillMonsters>
+<PickupLoot>True</PickupLoot>
+<GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="-1" />
+
+	<TargetBlacklists>
+		<TargetBlacklist actorId="114622" name="Tyrael" />
+		<TargetBlacklist actorId="4153" />
+		<TargetBlacklist actorId="365097" /> <!-- cursed chest -->
+		<TargetBlacklist actorId="368169" /> <!-- cursed shrine -->
+		<!--TargetBlacklist actorId="392094"/--><!--p1_Tgoblin_Vault_Door-->
+		<!--TargetBlacklist actorId="389569"/--><!--p1_TGoblin_Gate-->
+		<TargetBlacklist actorId="212491" /> <!--Whimsey cloud-->
+		<TargetBlacklist actorId="210422" /> <!--Whimsey gold-->
+	</TargetBlacklists>
+
+	<Order>
+	
+	<TrinityMaxDeaths questId="1" max="2" />
+		<If condition="IsInTown">
+			<WaitTimer questId="1" stepId="1" waitTime="7000"/>
+			<LoadProfile file="NerdersGoblinFarmQuickRoutes.xml" />
+        </If>
+	
+		<If condition="CurrentWorldId == 409093" >
+			<LogMessage message="Clearing the dale" />	
+			<RandomMove radius="100" />
+			<ExploreLevelArea/>
+			<LogMessage message="All done !!" />
+			<WaitTimer questId="1" waitTime="1000"/>
+			<LogMessage message="as you cannot get 2 rainbow portals in 1 game" />
+			<LeaveGame quest="1" step="1" stayInParty="True" />
+		</If>
+	</Order>
+</Profile>

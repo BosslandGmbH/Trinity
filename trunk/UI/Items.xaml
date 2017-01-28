@@ -121,8 +121,8 @@
                     <CheckBox Content="Pickup Staff of Herding Parts" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=StaffOfHeardingParts}" ToolTip="If enabled staff of herding crafting materials will be picked up and stashed"/>
                     <CheckBox Content="Pickup Greater Rift Keys" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=TieredLootrunKey}" ToolTip="If enabled, will pick up greater rift keys"/>
                     <CheckBox Content="Pickup Rotten Mushroom" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=RottenMushroom}" ToolTip="If enabled, will pick up rotten mushrooms"/>
-                    <CheckBox Content="Pickup Lore Items" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Lore}" ToolTip="If enabled, will pick up lore books/pages"/>
-
+                    <CheckBox Content="Pickup Lore Items" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=Lore}" ToolTip="If enabled, will pick up lore books"/>
+                    <CheckBox Content="Pickup Cultist Pages" IsChecked="{Binding Items.SpecialItems, Converter={converters:FlagsToBoolConverter}, ConverterParameter=CultistPage}" ToolTip="If enabled, will pick up cultist pages pages"/>
                 </UniformGrid>
             </GroupBox>
 
@@ -213,6 +213,12 @@
 
                 </Grid>
             </GroupBox>-->
+
+            <GroupBox Header="Stashing Strategy" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+                <UniformGrid Columns="1">
+                    <CheckBox Content="Stash items near others of the same type" IsChecked="{Binding Items.UseTypeStashing}" />
+                </UniformGrid>
+            </GroupBox>
 
             <GroupBox Header="Misc" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <UniformGrid Columns="2">

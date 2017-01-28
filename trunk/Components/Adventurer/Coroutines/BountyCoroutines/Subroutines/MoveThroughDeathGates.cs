@@ -26,8 +26,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private readonly HashSet<Vector3> _usedGatePositions = new HashSet<Vector3>();
         private MoveToSceneCoroutine _moveToSceneCoroutine;
         private InteractionCoroutine _interactionCoroutine;
-        private int _failedMoveToGateAttempts;
-        private int _maxFailedMoveToGateAttempts = 5;
+        private int _moveAttempts;
+        private int _maxFailedMoveToGateAttempts = 8;
         private DateTime _sceneDataBufferStartTime = DateTime.MinValue;
 
         public Vector3 TargetGatePosition { get; set; }
@@ -73,7 +73,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _state = States.NotStarted;
             _usedGatePositions.Clear();
             _gatesUsed = 0;
-            _failedMoveToGateAttempts = 0;
+            _moveAttempts = 0;
             TargetGatePosition = Vector3.Zero;
             TargetGateScene = null;
             CurrentGateScene = null;
@@ -90,6 +90,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> NotStarted()
         {
+            Logger.Debug($"Started MoveThroughDeathGates ({_gatesToUse})");
             SafeZerg.Instance.DisableZerg();
             State = States.Searching;
             return false;
@@ -120,12 +121,27 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            TargetGateScene = GetClosestSceneWithUnvisitedGate();
+            Logger.Debug($"Current Gate Scene is {CurrentGateScene?.Name}.");
+
+            if (!CurrentGateScene.PortalPositions.All(p => _usedGatePositions.Contains(p)))
+            {
+                TargetGateScene = CurrentGateScene;
+            }
+            else
+            {
+                var connectedDeathGateScenes = CurrentGateScene.WorldScene.ConnectedScenes()
+                        .Select(cws => DeathGates.Scenes.FirstOrDefault(s => s.WorldScene == cws.Scene)).ToList();
+
+                TargetGateScene = connectedDeathGateScenes.FirstOrDefault(s => s != null && !s.PortalPositions.Any(p => _usedGatePositions.Contains(p)));
+            }
+
             if (TargetGateScene == null)
             {
                 Logger.Debug("A TargetGateScene wasn't found, using gate in current scene");
-                TargetGateScene = CurrentGateScene;
+                TargetGateScene = GetClosestSceneWithUnvisitedGate();
             }
+
+            Logger.Debug($"Target Gate Scene is {TargetGateScene?.Name}");
 
             TargetGatePosition = DeathGates.SelectGate(CurrentGateScene, TargetGateScene);
             if (TargetGatePosition == Vector3.Zero)
@@ -149,7 +165,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            Logger.Debug("Not in the nearest gate scene, moving...");
+            Logger.Debug($"Not in the nearest gate scene ({CurrentGateScene.Name}), moving...");
             if (_moveToSceneCoroutine == null || _moveToSceneCoroutine.SceneName != CurrentGateScene.Name)
             {
                 _moveToSceneCoroutine = new MoveToSceneCoroutine(_questId, _worldId, CurrentGateScene.Name);
@@ -165,10 +181,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            Logger.Debug($"Inside gate scene {CurrentGateScene.Name}.");
+            Logger.Debug($"Successfully moved to gate scene {CurrentGateScene.Name}.");
             State = States.Searching;
             return false;
         }
+
+        private NavigationCoroutine _navigationCoroutine;
 
         private async Task<bool> MovingToGate()
         {
@@ -178,37 +196,59 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.Failed;
                 return false;
             }
-            if (TargetGatePosition.Distance(AdvDia.MyPosition) > 5f)
-            {
-                Logger.Debug("Moving to TargetGatePosition...");
 
-                if (!await NavigationCoroutine.MoveTo(TargetGatePosition, 4))
+            var distance = TargetGatePosition.Distance(AdvDia.MyPosition);
+            if (distance > 5f)
+            {
+                Logger.Debug($"Moving to TargetGatePosition: {TargetGatePosition} in {TargetGateScene.Name} Distance={distance}");
+
+                if (_navigationCoroutine == null || _navigationCoroutine.Destination != TargetGatePosition)
+                    _navigationCoroutine = new NavigationCoroutine(TargetGatePosition, 4);
+
+                if (!await _navigationCoroutine.GetCoroutine())
                     return false;
 
-                if (TargetGatePosition.Distance(AdvDia.MyPosition) > 5f)
+                distance = TargetGatePosition.Distance(AdvDia.MyPosition);
+                if (distance > 8f)
                 {
-                    if (NavigationCoroutine.LastResult == CoroutineResult.Failure)
-                    {
-                        _failedMoveToGateAttempts++;
-                        if (_failedMoveToGateAttempts <= _maxFailedMoveToGateAttempts)
+                    //if (NavigationCoroutine.LastResult == CoroutineResult.Failure)
+                    //{
+                        _moveAttempts++;
+                        if (_moveAttempts < _maxFailedMoveToGateAttempts)
                         {
-                            Logger.Debug($"Failed attempt #{_failedMoveToGateAttempts} to move to TargetGatePosition...");
+                            Logger.Debug($"Failed attempt #{_moveAttempts} moving to {TargetGatePosition} Distance={distance}.");
+                            _navigationCoroutine = null;
                             return false;
                         }
-                    }
-
-                    Logger.Debug("Failed to move to TargetGatePosition, finished.");
-                    State = States.Failed;
+                        Logger.Debug($"Failed to move to TargetGatePosition, Max Attempts Reached ({_maxFailedMoveToGateAttempts}), finished.");
+                        State = States.Failed;
+                    //}
+                    //Logger.Debug($"Failed to move to TargetGatePosition, too far away from gate ({distance}). finished.");
+                    //State = States.Failed;
                     return false;
                 }
             }
-            Logger.Debug($"Inside gate scene {CurrentGateScene.Name}.");
+
+            Logger.Debug($"Successfully moved to gate {TargetGatePosition} within {TargetGateScene.Name}.");
+
+            CurrentGateScene = DeathGates.CurrentGateScene;
+
+            if (CurrentGateScene == null)
+            {
+                Logger.Debug("Unable to find a gate scene");
+                State = States.Failed;
+                return false;
+            }
+
+            Logger.Debug($"Updated current scene to {CurrentGateScene.Name}");
             State = States.Interacting;
+            _moveAttempts = 0;
             return false;
         }
 
         private async Task<bool> Interacting()
         {
+            var startSide = DeathGates.MySide;
             var startGate = ActorFinder.FindNearestDeathGate();
             if (startGate == null)
             {
@@ -225,6 +265,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             if (_interactionCoroutine == null || _interactionCoroutine.IsDone)
             {
+                Logger.Debug($"Interacting with {startGate.Name} at {startGate.Position} Distance={startGate.Distance} CurrentScene={CurrentGateScene}");
                 _interactionCoroutine = new InteractionCoroutine(startGate.ActorSnoId, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(1), 5);
             }
 
@@ -238,7 +279,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            var endGate = ActorFinder.FindNearestDeathGate();
             if (TargetGatePosition.Distance(AdvDia.MyPosition) <= 10f)
             {
                 Logger.Debug("Interaction with gate failed, we didnt move anywhere.");
@@ -247,11 +287,17 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
 
             _gatesUsed++;
-            var endGateInteractPos = DeathGates.NearestGateToPosition(endGate.Position);
+
+            //var endGateInteractPos = DeathGates.NearestGateToPosition(endGate.Position);
+            var endGateInteractPos = CurrentGateScene.PortalPositions.FirstOrDefault(p => p != TargetGatePosition);
+
+            Logger.Debug($"Ignoring Gate at {endGateInteractPos} within {CurrentGateScene.Name} {DeathGates.MySide}");
             _usedGatePositions.Add(endGateInteractPos);
+
+            Logger.Debug($"Ignoring Gate at {TargetGatePosition} within {CurrentGateScene.Name} {startSide}");
             _usedGatePositions.Add(TargetGatePosition);
 
-            Logger.Debug($"Gate #{_gatesUsed} was used successfully");
+            Logger.Debug($"Gate #{_gatesUsed} at {TargetGatePosition} within {CurrentGateScene.Name} ({startSide}=>{DeathGates.MySide}) was used successfully");
             if (_gatesToUse >= 0 && _gatesUsed >= _gatesToUse)
             {
                 Logger.Debug($"We've used all the gates we're supposed to ({_gatesUsed})");
@@ -264,9 +310,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private DeathGateScene GetClosestSceneWithUnvisitedGate()
         {
-            return
-                DeathGates.Scenes.Where(
-                        s => s != CurrentGateScene && s.PortalPositions.Any(p => !_usedGatePositions.Contains(p)))
+            return DeathGates.Scenes.Where(s => s != CurrentGateScene && s.PortalPositions.Any(p => !_usedGatePositions.Contains(p)))
                     .OrderBy(s => s.Distance)
                     .FirstOrDefault();
         }

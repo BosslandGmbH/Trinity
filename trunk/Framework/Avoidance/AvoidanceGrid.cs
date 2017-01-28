@@ -105,7 +105,91 @@ namespace Trinity.Framework.Avoidance
             if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).Any(node => node != null && flags != null && flags.Any(f => node.AvoidanceFlags.HasFlag(f)));
         }
-        
+
+        public Vector3 GetPathCastPosition(float maxDistance, bool updatePath = false)
+        {
+            return GetFurthestPathPosition(Core.DBNavProvider.CurrentPath, maxDistance, RayType.Cast, updatePath);
+
+        }
+
+        public Vector3 GetPathWalkPosition(float maxDistance, bool updatePath = false)
+        {
+            return GetFurthestPathPosition(Core.DBNavProvider.CurrentPath, maxDistance, RayType.Walk, updatePath);
+        }
+
+        public Vector3 GetPathPosition(float maxDistance, bool updatePath = false)
+        {
+            return GetFurthestPathPosition(Core.DBNavProvider.CurrentPath, maxDistance, RayType.None, updatePath);
+        }
+
+        /// <summary>
+        /// Mark all future points on the current path that are walkable/castable as visited.
+        /// </summary>
+        /// <param name="maxDistance">beyond this range nodes will be left alone</param>
+        /// <param name="type">the type of check to make</param>
+        public void AdvanceNavigatorPath(float maxDistance, RayType type)
+        {
+            var path = Core.DBNavProvider.CurrentPath;
+            if (path == null || path.Count == 0)
+                return;
+
+            var startPosition = ZetaDia.Me.Position;
+            for (int i = path.Index; i < path.Count; i++)
+            {
+                var point = path[i];
+                if (startPosition.Distance(point) > maxDistance || 
+                    type == RayType.Cast && !CanRayCast(startPosition, point) || 
+                    type == RayType.Walk && !CanRayWalk(startPosition, point))
+                {
+                    path.Index = i;
+                    break;
+                }
+            }
+        }
+
+        private Vector3 GetFurthestPathPosition(IndexedList<Vector3> path, float maxDistance, RayType type, bool updatePath)
+        {
+            if (path == null || path.Count == 0)
+                return Vector3.Zero;
+
+            Vector3 startPosition = Core.Player.Position;
+            Vector3 reachablePosition = startPosition;
+            Vector3 unreachablePosition = path.LastOrDefault();
+
+            // Find closest valid path point;
+            for (int i = path.Index; i < path.Count; i++)
+            {
+                var point = path[i];
+                if (startPosition.Distance(point) > maxDistance || type == RayType.Cast && !CanRayCast(startPosition, point) || type == RayType.Walk && !CanRayWalk(startPosition, point))
+                {
+                    if (updatePath)
+                    {
+                        path.Index = i;
+                    }
+                    unreachablePosition = point;
+                    break;
+                }
+                reachablePosition = point;
+            }
+
+            var distance = reachablePosition.Distance(unreachablePosition);
+            const float incrementDistance = 2f;
+            var totalSegments = distance / incrementDistance;
+
+            // Find closest valid portion of path.
+            for (int i = 0; i < totalSegments; i++)
+            {
+                var point = MathEx.CalculatePointFrom(unreachablePosition, reachablePosition, i * incrementDistance);
+                if (startPosition.Distance(point) > maxDistance || type == RayType.Cast && !CanRayCast(startPosition, point) || type == RayType.Walk && !CanRayWalk(startPosition, point))
+                    break;
+
+                reachablePosition = point;
+            }
+
+            return reachablePosition;
+        }
+
+
         public bool RayFromTargetMissingFlagsCount(Vector3 origin, Vector3 target, int requiredFlagCount, params AvoidanceFlags[] flags)
         {            
             var flagTolerenceCounts = flags.ToDictionary(k => k, v => 0);

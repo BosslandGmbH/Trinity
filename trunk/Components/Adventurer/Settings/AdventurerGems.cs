@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Framework;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -19,22 +20,24 @@ namespace Trinity.Components.Adventurer.Settings
                 return;
 
             var gemsInInventory = new List<AdventurerGem>();
-            var result = SafeFrameLock.ExecuteWithinFrameLock(() =>
-            {
-                if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid) return;
-                gemsInInventory = ZetaDia.Actors.GetActorsOfType<ACDItem>()
+            //var result = SafeFrameLock.ExecuteWithinFrameLock(() =>
+            //{
+                //if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid) return;
+
+                gemsInInventory = Core.Actors.Inventory
                     .Where(i => i.IsValid && i.ItemType == ItemType.LegendaryGem)
                     .Select(i => new AdventurerGem(i, greaterRiftLevel))
                     .Distinct(new AdventurerGemComparer())
                     .OrderByDescending(i => i.Rank)
                     .ToList();
-            }, true);
 
-            if (!result.Success)
-            {
-                Logger.Debug("[UpdateGems] Failed to Update. " + result?.Exception?.Message);
-                return;
-            }
+            //}, true);
+
+            //if (!result.Success)
+            //{
+            //    Logger.Debug("[UpdateGems] Failed to Update. " + result?.Exception?.Message);
+            //    return;
+            //}
 
             if (gemsInInventory.Count == 0) return;
             if (Gems == null)

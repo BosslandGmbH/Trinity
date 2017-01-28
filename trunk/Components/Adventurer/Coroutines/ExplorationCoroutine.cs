@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Util;
@@ -87,6 +89,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private readonly Func<bool> _breakCondition;
         private List<string> _ignoreScenes;
         private bool _allowReExplore;
+        private DateTime _explorationDataMaxWaitUntil;
 
         private bool NotStarted()
         {
@@ -102,6 +105,28 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 //_newNodePickTimer.Stop();
                 //_currentDestination = ExplorationHelpers.NearestWeightedUnvisitedNodeLocation(_levelAreaIds);
+
+                if (_explorationDataMaxWaitUntil != DateTime.MinValue && DateTime.UtcNow > _explorationDataMaxWaitUntil)
+                {
+                    Logger.Debug($"[Exploration] Timeout waiting for exploration data");
+                    State = States.Completed;
+                    return false;
+                }
+
+                if (!ExplorationGrid.Instance.WalkableNodes.Any())
+                {
+                    if (_explorationDataMaxWaitUntil == DateTime.MinValue)
+                    {
+                        _explorationDataMaxWaitUntil = DateTime.UtcNow + TimeSpan.FromSeconds(15);
+                    }
+
+                    await Coroutine.Sleep(100);
+                    Logger.Debug($"[Exploration] Patiently waiting for exploration data");
+                    return false;
+                }
+
+                _explorationDataMaxWaitUntil = DateTime.MinValue;
+
                 if (_currentDestination != null)
                 {
                     _currentDestination.IsCurrentDestination = false;

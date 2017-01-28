@@ -185,6 +185,7 @@ namespace Trinity.Settings
                         loadSuccessful = settings != null;
                     }
 
+                    Logger.LogDebug("Settings Load: FireOnLoadedEvents");
                     FireOnLoadedEvents();
                 }
                 catch (Exception ex)
@@ -212,6 +213,7 @@ namespace Trinity.Settings
             var eventSupporters = GetInterfaceMembers<ITrinitySettingEvents>(this);
             foreach (var eventSupporter in eventSupporters)
             {
+                Logger.LogDebug($"FireOnLoadedEvents: {eventSupporter.GetType().Name}");
                 eventSupporter.OnLoaded();
             }
         }
@@ -242,8 +244,10 @@ namespace Trinity.Settings
                     DataContractSerializer serializer = new DataContractSerializer(this.GetType());
                     loadedStorages = (TrinityStorage)serializer.ReadObject(reader, false);
 
+
                     if (applyToThis)
                     {
+                        Logger.LogDebug($"LoadSettingsFromFile: Copying Storage Objects");
                         loadedStorages.CopyTo(this);
                     }
 
@@ -327,19 +331,26 @@ namespace Trinity.Settings
             if (Dynamic == null)
                 return;
 
+            Logger.LogDebug($"LoadDynamicSettings");
+
             foreach (var item in Dynamic.Settings)
             {
+                Logger.LogDebug($"LoadDynamicSettings: {item.Name}");
+
                 var setting = item.Setting;
                 if (setting == null)
                     continue;
 
                 if (string.IsNullOrEmpty(item.Code))
                 {
+                    Logger.LogDebug($"LoadDynamicSettings: {item.Name} > Reset (null code)");
                     setting.Reset();
                 }
                 else
                 {
+                    Logger.LogDebug($"LoadDynamicSettings: {item.Name} > Reset");
                     setting.Reset();
+                    Logger.LogDebug($"LoadDynamicSettings: {item.Name} > Apply Code");
                     setting.ApplyCode(item.Code);
                 }
             }

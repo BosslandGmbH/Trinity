@@ -42,6 +42,7 @@ namespace Trinity.Settings
         //private PickupItemQualities _inCombatLootQualities;
         //private SettingMode _inCombatLooting;
         private bool _disableLootingInCombat;
+        private bool _useTypeStashing;
 
 
         public ItemSettings()
@@ -254,6 +255,15 @@ namespace Trinity.Settings
             get { return _disableLootingInCombat; }
             set { SetField(ref _disableLootingInCombat, value); }
         }
+
+        [DataMember]
+        [DefaultValue(false)]
+        public bool UseTypeStashing
+        {
+            get { return _useTypeStashing; }
+            set { SetField(ref _useTypeStashing, value); }
+        }
+
     }
 
 

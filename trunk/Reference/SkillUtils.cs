@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Components.Adventurer.Game.Events;
+using Trinity.Components.Adventurer.Util;
 using Trinity.Framework;
 using Trinity.Framework.Objects;
 using Zeta.Bot;
@@ -93,16 +95,25 @@ namespace Trinity.Reference
 
         private static HashSet<SNOPower> _activeIds = new HashSet<SNOPower>();
 
-        private static void UpdateActiveSkills()
+        public static void UpdateActiveSkills()
         {
-            if (!BotMain.IsRunning && ZetaDia.Service.IsInGame)
-            {
-                ZetaDia.Actors.Update();
-                using (ZetaDia.Memory.AcquireFrame())
-                {
+            //Logger.LogDebug($"UpdateActiveSkills: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
+
+            //if (!BotEvents.IsBotRunning && ZetaDia.Service.IsInGame)
+            //{
+            //    Logger.LogDebug($"UpdateActiveSkills: Before UpdateActors: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
+
+            //    ZetaDia.Actors.Update();
+
+            //    Logger.LogDebug($"UpdateActiveSkills: Before AcquireFrame: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
+
+            //    using (ZetaDia.Memory.AcquireFrame())
+            //    {
+            //        Logger.LogDebug($"UpdateActiveSkills: Before Hotbar.Update: BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
+
                     Core.Hotbar.Update();
-                }                                    
-            }
+            //    }                                    
+            //}
             _lastUpdatedActiveSkills = DateTime.UtcNow;
             _active = CurrentClass.Where(s => Core.Hotbar.ActivePowers.Contains(s.SNOPower)).ToList();
             _activeIds = Core.Hotbar.ActivePowers;
@@ -140,30 +151,27 @@ namespace Trinity.Reference
 
         public static List<Skill> ByActorClass(ActorClass Class)
         {
-            if (ZetaDia.Me.IsValid)
+            switch (Class)
             {
-                switch (ZetaDia.Me.ActorClass)
-                {
-                    case ActorClass.Barbarian:
-                        return Skills.Barbarian.ToList();
-                    case ActorClass.Crusader:
-                        return Skills.Crusader.ToList();
-                    case ActorClass.DemonHunter:
-                        return Skills.DemonHunter.ToList();
-                    case ActorClass.Monk:
-                        return Skills.Monk.ToList();
-                    case ActorClass.Witchdoctor:
-                        return Skills.WitchDoctor.ToList();
-                    case ActorClass.Wizard:
-                        return Skills.Wizard.ToList();
-                }
+                case ActorClass.Barbarian:
+                    return Skills.Barbarian.ToList();
+                case ActorClass.Crusader:
+                    return Skills.Crusader.ToList();
+                case ActorClass.DemonHunter:
+                    return Skills.DemonHunter.ToList();
+                case ActorClass.Monk:
+                    return Skills.Monk.ToList();
+                case ActorClass.Witchdoctor:
+                    return Skills.WitchDoctor.ToList();
+                case ActorClass.Wizard:
+                    return Skills.Wizard.ToList();
             }
             return new List<Skill>();
         }
 
         public static IEnumerable<Skill> CurrentClass
         {
-            get { return ZetaDia.Me.IsValid ? ByActorClass(ZetaDia.Me.ActorClass) : new List<Skill>(); }
+            get { return ZetaDia.Service?.Hero != null ? ByActorClass(ZetaDia.Service.Hero.Class) : new List<Skill>(); }
         }
 
     }

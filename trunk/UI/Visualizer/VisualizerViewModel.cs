@@ -45,6 +45,7 @@ namespace Trinity.UI.Visualizer
     {
         private ObservableCollection<TrinityActor> _objects;
         private static VisualizerViewModel _instance;
+        private static Window _window;
         private int _windowWidth;
         private int _windowHeight;
         private int _zoom;
@@ -82,6 +83,11 @@ namespace Trinity.UI.Visualizer
                 IsBotRunning = true;
         }
 
+        private void OnCloseWindow(object sender, EventArgs e)
+        {
+            StopThread();
+        }
+
         private void BotMain_OnStart(IBot bot)
         {
             StartThreadAllowed = true;
@@ -93,7 +99,7 @@ namespace Trinity.UI.Visualizer
         {
             StartThreadAllowed = true;
             IsBotRunning = false;
-            StartThread();
+            //StartThread();
             RemoveStatChangerListeners();
         }
 
@@ -1113,7 +1119,19 @@ namespace Trinity.UI.Visualizer
             set { SetField(ref _startThreadAllowed, value); }
         }
 
-        public static Window Window { get; set; }
+        public Window Window
+        {
+            get { return _window; }
+            set
+            {
+                if(_window != null)
+                    _window.Closed -= OnCloseWindow;
+
+                _window = value;
+                _window.Closed += OnCloseWindow;
+            }
+        }
+
         public static bool IsWindowOpen { get; set; }
         public static Vector3 DebugPosition { get; set; }
 

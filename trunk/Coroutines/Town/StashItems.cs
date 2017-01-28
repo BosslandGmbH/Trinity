@@ -25,6 +25,7 @@ using Trinity.Framework.Actors;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Events;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects.Memory.Containers;
 using Trinity.Reference;
 using Extensions = Zeta.Common.Extensions;
 
@@ -102,7 +103,7 @@ namespace Trinity.Coroutines.Town
                 Navigator.PlayerMover.MoveTowards(stash.Position);
                 if (!await MoveToAndInteract.Execute(stash, 5f))
                 {
-                    Logger.LogError($"[SalvageItems] Failed to move to blacksmith ({stash.Name}) to stash items :(");
+                    Logger.LogError($"[SalvageItems] Failed to move to stash ({stash.Name}) to stash items :(");
                     return false;
                 };
                 await Coroutine.Sleep(750);
@@ -409,10 +410,10 @@ namespace Trinity.Coroutines.Town
         /// </summary>
         public static int GetIdealStashPage(TrinityItem item)
         {
-            //if (Core.Settings.Items.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
-            //{
-            //    return ItemLocationMap[item.RawItemType];
-            //}
+            if (Core.Settings.Items.UseTypeStashing && ItemTypeMap.ContainsKey(item.RawItemType))
+            {
+                return ItemTypeMap[item.RawItemType];
+            }
             if (item.ItemBaseType >= ItemBaseType.Misc)
             {
                 return TotalStashPages - 1;
@@ -425,42 +426,74 @@ namespace Trinity.Coroutines.Town
             return !dontStashCraftingMaterials || !i.IsCraftingReagent;
         }
 
-        static Dictionary<RawItemType, int> ItemLocationMap = new Dictionary<RawItemType, int>
+        //static Dictionary<RawItemType, int> ItemLocationMap = new Dictionary<RawItemType, int>
+        //{
+        //    { RawItemType.Gem, -1 },
+        //    { RawItemType.UpgradeableJewel, -1 },
+        //    //{ RawItemType.PortalDevice, -1 },
+        //    //{ RawItemType.Potion, -1 },
+        //};
+
+        private static DateTime _lastTypeMapUpdate = DateTime.MinValue;
+        private static Dictionary<RawItemType, int> _itemTypeMap;
+
+        private static Dictionary<RawItemType, int> ItemTypeMap
         {
-            { RawItemType.Gem, -1 },
-            { RawItemType.UpgradeableJewel, -1 },
-            //{ RawItemType.PortalDevice, -1 },
-            //{ RawItemType.Potion, -1 },
-        };
+            get
+            {
+                if (_itemTypeMap == null || DateTime.UtcNow.Subtract(_lastTypeMapUpdate) > TimeSpan.FromMinutes(1))
+                {
+                    Logger.LogVerbose("Creating Stashing ItemTypeMap");
+                    var typeMap = new Dictionary<RawItemType, int>();
+                    var map = GetInventoryMap();
+                    foreach (var item in map)
+                    {
+                        var type = item.Value.RawItemType;
+                        if (!typeMap.ContainsKey(type))
+                        {
+                            var x = item.Key.Item1;
+                            var y = item.Key.Item2;
+                            var page = y / 10;
+                            typeMap.Add(type, page);
+                            Logger.LogVerbose($"Type: {type} => Page: {page}");
+                        }
+                    }
+                    _itemTypeMap = typeMap;
+                    _lastTypeMapUpdate = DateTime.UtcNow;
+                }
+                return _itemTypeMap;
+            }
+        }
+
 
         public static int GetBestStashLocation(TrinityItem item, out int col, out int row)
         {
             col = 0;
             row = 0;
 
-            //if (Core.Settings.Loot.TownRun.StashGemsOnSecondToLastPage && ItemLocationMap.ContainsKey(item.RawItemType))
-            //{
-            //    var stashPageOffset = ItemLocationMap[item.RawItemType];
+            if (Core.Settings.Items.UseTypeStashing && ItemTypeMap.ContainsKey(item.RawItemType))
+            {
+                var stashPageOffset = ItemTypeMap[item.RawItemType];
 
-            //    int stashpage;
-            //    if (stashPageOffset < 0)
-            //    {
-            //        stashpage = (-1 + TotalStashPages) + stashPageOffset;
-            //    }
-            //    else if (stashPageOffset > TotalStashPages - 1)
-            //    {
-            //        stashpage = TotalStashPages - 1;
-            //    }
-            //    else
-            //    {
-            //        stashpage = stashPageOffset;
-            //    }
+                int stashpage;
+                if (stashPageOffset < 0)
+                {
+                    stashpage = (-1 + TotalStashPages) + stashPageOffset;
+                }
+                else if (stashPageOffset > TotalStashPages - 1)
+                {
+                    stashpage = TotalStashPages - 1;
+                }
+                else
+                {
+                    stashpage = stashPageOffset;
+                }
 
-            //    if (CanPutItemInStashPage(item, stashpage, out col, out row))
-            //    {
-            //        return stashpage;
-            //    }
-            //}
+                if (CanPutItemInStashPage(item, stashpage, out col, out row))
+                {
+                    return stashpage;
+                }
+            }
             if (item.ItemBaseType >= ItemBaseType.Misc)
             {
                 for (int i = TotalStashPages - 1; i >= 0; i--)
@@ -575,8 +608,8 @@ namespace Trinity.Coroutines.Town
 
         private static InventoryMap GetInventoryMap()
         {
+            Core.Actors.Update();
             var items = Inventory.Stash.Items.ToList();
-            //items.ForEach(i => i.Refresh());
             return new InventoryMap(items.ToDictionary(k => new Tuple<int, int>(k.InventoryColumn, k.InventoryRow), v => v));
         }
 

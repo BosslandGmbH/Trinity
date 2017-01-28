@@ -569,7 +569,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         private void UpdateExplorationData()
         {
-            _explorationNodes = ExplorationGrid.Instance.WalkableNodes;            
+            _explorationNodes = ExplorationGrid.Instance.WalkableNodes;
         }
 
         #region ValueCluster
@@ -892,7 +892,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterTopRight.ToCanvasPoint()));
                 groupdc.DrawGeometry(null, pen, new LineGeometry(enterBottomLeft.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));
                 groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopLeft.ToCanvasPoint(), enterBottomLeft.ToCanvasPoint()));
-                groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopRight.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));                
+                groupdc.DrawGeometry(null, pen, new LineGeometry(enterTopRight.ToCanvasPoint(), enterBottomRight.ToCanvasPoint()));
                 //groupdc.DrawGeometry(null, pen, new LineGeometry(enterBottomRight.ToCanvasPoint(), enterTopLeft.ToCanvasPoint()));
             }
             return drawing;
@@ -910,7 +910,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             //}      
             foreach (var marker in Core.Markers.CurrentWorldMarkers)
             {
-                var pen = marker.MarkerType == WorldMarkerType.Objective ? RadarResources.EliteLightPen  : RadarResources.MarkerPen;
+                var pen = marker.MarkerType == WorldMarkerType.Objective ? RadarResources.EliteLightPen : RadarResources.MarkerPen;
                 var markerPoint = marker.Position.ToCanvasPoint();
                 dc.DrawLine(pen, CenterActor.Point, markerPoint);
                 DrawLabel(dc, CanvasData, marker.Name, markerPoint, OrangeBrush, 45, 12, 3);
@@ -977,8 +977,20 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     var to = currentPath[i];
                     var from = currentPath[i - 1];
 
+                    if (currentPath.Index == i)
+                        dc.DrawEllipse(null, RadarResources.CurrentPathPen1, to.ToCanvasPoint(), GridSize + 2, GridSize + 2);
+
                     dc.DrawLine(RadarResources.CurrentPathPen1, from.ToCanvasPoint(), to.ToCanvasPoint());
                 }
+
+                var losPathPosition = Core.Grids.Avoidance.GetPathCastPosition(50f);
+                if (losPathPosition != Vector3.Zero)
+                {
+                    var losPathPoint = losPathPosition.ToCanvasPoint();
+                    dc.DrawLine(RadarResources.BlackPen, Player.Point, losPathPoint);
+                    dc.DrawEllipse(RedBrush, null, losPathPoint, GridSize, GridSize);
+                }
+
             }
             catch (Exception ex)
             {
@@ -1017,7 +1029,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     ex.Message, ex.InnerException, ex);
             }
         }
-        
+
         private void DrawTargetting(DrawingContext dc, CanvasData canvas)
         {
             try
@@ -1042,7 +1054,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 if (power.TargetAcdId == -1 && power.TargetPosition != Vector3.Zero)
                 {
-                    spellPoint = power.TargetPosition.ToCanvasPoint();                    
+                    spellPoint = power.TargetPosition.ToCanvasPoint();
                 }
                 else
                 {
@@ -1154,7 +1166,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 foreach (var node in Core.BlockedCheck.Nodes)
                 {
-                    dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), 2 * Scale, 2 * Scale);                
+                    dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), 2 * Scale, 2 * Scale);
                 }
 
 
@@ -1962,11 +1974,22 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 foreach (var adventurerScene in ScenesStorage.CurrentWorldScenes.Where(s => s.DynamicWorldId == worldId).ToList())
                 {
+                    foreach (var connectedScene in adventurerScene.ConnectedScenes())
+                    {
+                        dc.DrawLine(RadarResources.SceneConnectionPen,
+                            connectedScene.EdgePointA.ToVector3().ToCanvasPoint(),
+                            connectedScene.EdgePointB.ToVector3().ToCanvasPoint());
+
+                        var navConnector = adventurerScene.GetNavigableConnection(connectedScene.Direction);
+                        if (navConnector != Vector3.Zero)
+                            dc.DrawEllipse(null, RadarResources.EliteLightPen, navConnector.ToCanvasPoint(), 10, 10);
+                    }
+
                     // Combine navcells into one drawing and store it; because they don't change relative to each other
                     // And because translating geometry for every navcell on every frame is waaaaay too slow.
                     if (Drawings.Relative.ContainsKey(adventurerScene.HashName))
                         continue;
-                    
+
                     //SceneDrawings.Instance.Record(adventurerScene);
 
                     var drawing = new DrawingGroup();
@@ -2121,7 +2144,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         private void DrawNotInCacheObjects(DrawingContext dc, CanvasData canvas)
         {
             foreach (var actor in VisualizerViewModel.Instance.NotInCacheObjects)
-            {          
+            {
                 var brush = actor.IsElite ? RadarResources.EliteBrush : RadarResources.GreyBrush;
                 brush.Opacity = 0.75;
                 var actorRadius = Math.Min(30, Math.Max(4, actor.CollisionRadius * GridSize));
@@ -2148,7 +2171,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 if (radarObject.Actor.IsInLineOfSight)
                     pen = RadarResources.LineOfSightPen;
-                
+
                 if (SelectedRadarObject == radarObject)
                     pen = RadarResources.SelectionPen;
 

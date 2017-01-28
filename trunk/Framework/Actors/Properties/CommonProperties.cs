@@ -27,7 +27,7 @@ namespace Trinity.Framework.Actors.Properties
             var actorInfo = actor.ActorInfo;
 
             actor.LastSeenTime = DateTime.UtcNow;
-            actor.IsProfileBlacklisted = ProfileManager.CurrentProfile.TargetBlacklists.Any(b => b.ActorId == actor.ActorSnoId);
+            actor.IsProfileBlacklisted = ProfileManager.CurrentProfile?.TargetBlacklists?.Any(b => b.ActorId == actor.ActorSnoId) ?? false;
             actor.IsExcludedId = GameData.ExcludedActorIds.Contains(actor.ActorSnoId) || GameData.BlackListIds.Contains(actor.ActorSnoId);
             actor.IsExcludedType = GameData.ExcludedActorTypes.Contains(actor.ActorType);
             actor.InternalNameLowerCase = actor.InternalName.ToLower();

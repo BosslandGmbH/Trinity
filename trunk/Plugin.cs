@@ -35,7 +35,7 @@ namespace Trinity
     public class TrinityPlugin : IPlugin
     {
         public string Name => "Trinity";
-        public Version Version => new Version(2, 55, 708);
+        public Version Version => new Version(2, 55, 712);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -68,7 +68,7 @@ namespace Trinity
         {
             try
             {
-                using (new PerformanceLogger($"OnPulse ({DateTime.UtcNow.Subtract(LastPulse).ToString("mm':'ss':'fff")})"))
+                using (new PerformanceLogger($"OnPulse ({DateTime.UtcNow.Subtract(LastPulse):mm':'ss':'fff})"))
                 {
                     LastPulse = DateTime.UtcNow;
 
@@ -139,6 +139,7 @@ namespace Trinity
             {
                 Core.Init();
                 TrinitySettings.InitializeSettings();
+                SkillUtils.UpdateActiveSkills();
                 Core.Enable();
                 Core.PlayerMover.MoveTowards(Core.Player.Position);
                 Logger.Log("OnEnable start");
@@ -173,8 +174,11 @@ namespace Trinity
                     if (BotMain.IsRunning)
                     {
                         TrinityEventHandlers.TrinityBotStart(null);
+
                         if (ZetaDia.IsInGame)
+                        {
                             TrinityEventHandlers.TrinityOnJoinGame(null, null);
+                        }
                     }
 
                     SetBotTicksPerSecond();

@@ -186,7 +186,11 @@ namespace Trinity.Components.Adventurer.Game.Rift
             var greaterRiftLevel = PluginSettings.Current.GreaterRiftLevel;
             if (greaterRiftLevel <= 0)
             {
-                var maxLevel = PluginSettings.Current.HighestUnlockedRiftLevel;
+                //var maxLevel = PluginSettings.Current.HighestUnlockedRiftLevel;
+                var maxLevel = ZetaDia.Me != null ? 
+                    PropertyReader<int>.SafeReadValue(() => ZetaDia.Me.HighestUnlockedRiftLevel) 
+                    : 110;
+
                 greaterRiftLevel = maxLevel + greaterRiftLevel;
             }
             return greaterRiftLevel;

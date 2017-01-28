@@ -106,9 +106,11 @@ namespace Trinity.Settings
         TieredLootrunKey = 1 << 10,
         RottenMushroom = 1 << 11,
         Lore = 1 << 12,
+        CultistPage = 1 << 13,
 
         Defaults = CraftingPlans | DeathsBreath | VeiledCrystals | ReusableParts | ArcaneDust | BloodShards | 
-            KeywardenIngredients | StaffOfHeardingParts | Pets | Wings | TieredLootrunKey | RottenMushroom | Lore
+            KeywardenIngredients | StaffOfHeardingParts | Pets | Wings | TieredLootrunKey | RottenMushroom,
+        
     }
 
     [Flags]

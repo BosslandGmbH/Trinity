@@ -282,7 +282,11 @@ namespace Trinity.Framework.Avoidance
                 if ((!actor.IsUsed || actor.IsLockedDoor) && !actor.IsExcludedId)
                 {
                     node.AddNodeFlags(AvoidanceFlags.ClosedDoor);
-                }             
+                }
+                else
+                {
+                    node.RemoveNodeFlags(AvoidanceFlags.ClosedDoor);
+                }          
             }
         }
 

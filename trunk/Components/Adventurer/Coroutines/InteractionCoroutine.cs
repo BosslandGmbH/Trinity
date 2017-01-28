@@ -162,9 +162,16 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interacting()
         {
-            if (ZetaDia.Me.IsFullyValid() && (ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting || ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling))
+            if (ZetaDia.Me.IsFullyValid() && (ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting || ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling) && !AdvDia.IsInArchonForm)
             {
                 Logger.Debug("Waiting for the cast to end");
+                await Coroutine.Sleep(500);
+                return false;
+            }
+
+            if (ZetaDia.IsLoadingWorld)
+            {
+                Logger.Debug("Waiting for world load");
                 await Coroutine.Sleep(500);
                 return false;
             }
@@ -191,15 +198,14 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
             if (_currentInteractAttempt > _interactAttempts)
             {
-                Logger.Debug($"Max interrupt attempts reached ({_interactAttempts})");
+                Logger.Debug($"Max interact attempts reached ({_interactAttempts})");
                 State = States.Completed;
                 return true;
             }
             if (_currentInteractAttempt > 1)
             {
                 Navigator.PlayerMover.MoveTowards(actor.Position);
-                await Coroutine.Sleep(250);
-                Navigator.PlayerMover.MoveStop();
+                await Coroutine.Sleep(250 * _currentInteractAttempt);
             }
 
             if (_isPortal)
@@ -300,31 +306,41 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interact(DiaObject actor)
         {
-            bool retVal = false;
-            switch (actor.ActorType)
-            {
-                case ActorType.Gizmo:
-                    switch (actor.ActorInfo.GizmoType)
-                    {
-                        case GizmoType.BossPortal:
-                        case GizmoType.Portal:
-                        case GizmoType.ReturnPortal:
-                            retVal = ZetaDia.Me.UsePower(SNOPower.GizmoOperatePortalWithAnimation, actor.Position);
-                            break;
-                        default:
-                            retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, actor.Position);
-                            break;
-                    }
-                    break;
-                case ActorType.Monster:
-                    retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_NPC, actor.Position);
-                    break;
-            }
+            //var world = ZetaDia.WorldId;
+            //bool retVal = false;
+            //switch (actor.ActorType)
+            //{
+            //    case ActorType.Gizmo:
+            //        switch (actor.ActorInfo.GizmoType)
+            //        {
+            //            case GizmoType.BossPortal:
+            //            case GizmoType.Portal:
+            //            case GizmoType.ReturnPortal:
+            //                retVal = ZetaDia.Me.UsePower(SNOPower.GizmoOperatePortalWithAnimation, actor.Position);
+            //                break;
+            //            default:
+            //                retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_Gizmo, actor.Position);
+            //                break;
+            //        }
+            //        break;
+            //    case ActorType.Monster:
+            //        retVal = ZetaDia.Me.UsePower(SNOPower.Axe_Operate_NPC, actor.Position);
+            //        break;
+            //}
 
-            // Doubly-make sure we interact
-            actor.Interact();
+            //if (!ZetaDia.IsLoadingWorld && world == ZetaDia.WorldId)
+            //{
+                //Logger.DebugSetting($"Fallback Interaction Used");
+                //actor.Interact();
+            //}
+
+            var ret = actor.Interact();
             await Coroutine.Sleep(_sleepTime);
-            return retVal;
+            if (_isPortal)
+            {
+                await Coroutine.Sleep(1000);
+            }
+            return ret;
         }
 
 

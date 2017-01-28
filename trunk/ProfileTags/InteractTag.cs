@@ -47,7 +47,7 @@ namespace Trinity.ProfileTags
         public float MaxRange { get; set; }
 
         [XmlAttribute("interactAttempts")]
-        [DefaultValue(3)]
+        [DefaultValue(8)]
         public int InteractAttempts { get; set; }
 
         #region ScenePosition
@@ -94,7 +94,7 @@ namespace Trinity.ProfileTags
         {
             if (WorldSnoId != 0 && WorldSnoId != ZetaDia.CurrentWorldSnoId)
             {
-                Logger.Log($"In the wrong world! Current={ZetaDia.CurrentWorldSnoId} Expected={WorldSnoId}");
+                Logger.Log($"World changed! From={WorldSnoId} To={ZetaDia.CurrentWorldSnoId} Assuming Done");
                 _isDone = true;
                 return true;
             }

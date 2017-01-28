@@ -8,11 +8,13 @@ namespace Trinity.Framework.Objects.Memory.Sno
     {
         private readonly SortedList<int, T> _normalHashed = new SortedList<int, T>();
         private readonly SortedList<int, T> _itemHashed = new SortedList<int, T>();
+        private readonly SortedList<string, T> _itemNamed = new SortedList<string, T>();
 
         public void Add(string snoName, T value)
         {            
             _normalHashed[MemoryHelper.GameBalanceNormalHash(snoName)] = value;
             _itemHashed[MemoryHelper.GameBalanceItemHash(snoName)] = value;
+            _itemNamed[snoName] = value;
         }
 
         public T this[int i]
@@ -22,6 +24,17 @@ namespace Trinity.Framework.Objects.Memory.Sno
                 T item;
                 return TryGetValue(i, out item) ? item : default(T);
             }
+        }
+
+        public bool TryGetValue(string internalName, out T item)
+        {
+            if (_itemNamed.ContainsKey(internalName))
+            {
+                item = _itemNamed[internalName];
+                return true;
+            }
+            item = default(T);
+            return false;
         }
 
         public bool TryGetValue(int id, out T item)
@@ -46,6 +59,7 @@ namespace Trinity.Framework.Objects.Memory.Sno
         {
             _normalHashed.Clear();
             _itemHashed.Clear();
+            _itemNamed.Clear();
         }
     }
 }
