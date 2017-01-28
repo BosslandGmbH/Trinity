@@ -120,6 +120,7 @@
     <Compile Include="Framework\Avoidance\Settings\AvoidanceSettingsEntry.cs" />
     <Compile Include="Framework\Avoidance\Settings\AvoidanceSettings.cs" />
     <Compile Include="Framework\Avoidance\GridEnricher.cs" />
+    <Compile Include="Framework\Avoidance\Structures\RayType.cs" />
     <Compile Include="Framework\Behaviors\MoveToInteractBehavior.cs" />
     <Compile Include="Framework\Behaviors\WaitAfterUnitDeathBehavior.cs" />
     <Compile Include="Framework\Behaviors\MoveToMarkerBehavior.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Framework\Helpers\ProjectionEqualityComparer.cs" />
     <Compile Include="Framework\Helpers\EasyXmlSerializer.cs" />
     <Compile Include="Framework\Objects\WeightSettings.cs" />
+    <Compile Include="Modules\QuestCache.cs" />
     <Compile Include="Modules\ChangeMonitor.cs" />
     <Compile Include="Modules\HeroDataCache.cs" />
     <Compile Include="Modules\ItemLogger.cs" />
@@ -645,7 +647,11 @@
     <Content Include="Profiles\BrutalWhiteFarm.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Profiles\Debug\A5-KillValteskBounty.xml" />
+    <Content Include="Profiles\Debug\A5 367926 The Lost Legion.xml" />
+    <Content Include="Profiles\Debug\A2 432334 Blood and Iron.xml" />
+    <Content Include="Profiles\Debug\A2 345954 A Miner%27s Gold.xml" />
+    <Content Include="Profiles\Debug\A5 367872 The Bogan Haul.xml" />
+    <Content Include="Profiles\Debug\A5 363555 Kill Valtesk the Cruel.xml" />
     <Content Include="Profiles\Debug\BelialBounty.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -662,6 +668,9 @@
     <Content Include="Profiles\AutoFollow\FollowerPowerLevel.xml" />
     <Content Include="Profiles\AutoFollow\LeaderManual.xml" />
     <Content Include="Framework\Objects\Memory\readme.txt" />
+    <Content Include="Profiles\NerdersGoblinFarmQuickRoutes.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Questing\Act1.xml" />
     <Content Include="Profiles\Questing\Act1_StartNew.xml" />
     <Content Include="Profiles\Questing\Act2.xml" />
@@ -1106,6 +1115,7 @@
     <Content Include="Profiles\ExploreGoblinRealm.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Profiles\NerdersWhimsydale.xml" />
     <Content Include="Reference\Generator\create_class_passives.htm" />
     <Content Include="Reference\Generator\create_class_runes.htm" />
     <Content Include="Reference\Generator\create_class_skills.htm" />

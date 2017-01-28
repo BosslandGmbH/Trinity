@@ -24,9 +24,9 @@ namespace Trinity.Components.Adventurer.Util
             }
 
             // If UI thread (settings window) or others try to read memory while bot is running 
-            if (!BotEvents.IsBotRunning || isNotMainThread)
+            if (!BotEvents.IsBotRunning)
             {
-                Logger.Verbose("Acquiring Framelock");
+                Util.Logger.Debug($"[AdvDia] AcquireFrame ExecuteWithinFrameLock");
                 frameLock = ZetaDia.Memory.AcquireFrame();
                 if (updateActors) ZetaDia.Actors.Update();
                 frameLockAcquired = true;

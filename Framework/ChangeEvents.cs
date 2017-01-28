@@ -20,34 +20,34 @@ namespace Trinity.Framework
     {
         public static TimeSpan SlowUpdateInterval { get; } = TimeSpan.FromSeconds(3);
 
-        public static TrinityChangeDetector<ActorClass> PlayerClass = new TrinityChangeDetector<ActorClass>(()
+        public static TrinityChangeDetector<ActorClass> PlayerClass { get; } = new TrinityChangeDetector<ActorClass>(()
             => ZetaDia.Service.Hero.Class, SlowUpdateInterval);
 
-        public static TrinityChangeDetector<bool> IsInGame = new TrinityChangeDetector<bool>(()
+        public static TrinityChangeDetector<bool> IsInGame { get; } = new TrinityChangeDetector<bool>(()
             => ZetaDia.IsInGame);
 
-        public static TrinityChangeDetector<HashSet<int>> EquippedItems = new TrinityChangeDetector<HashSet<int>>(()
+        public static TrinityChangeDetector<HashSet<int>> EquippedItems { get; } = new TrinityChangeDetector<HashSet<int>>(()
             => Core.Inventory.EquippedIds, SlowUpdateInterval);
 
-        public static TrinityChangeDetector<List<TrinityItem>> BackpackItems = new TrinityChangeDetector<List<TrinityItem>>(()
+        public static TrinityChangeDetector<List<TrinityItem>> BackpackItems { get; } = new TrinityChangeDetector<List<TrinityItem>>(()
             => Core.Inventory.Backpack, SlowUpdateInterval);
 
-        public static TrinityChangeDetector<HashSet<SNOPower>> Skills = new TrinityChangeDetector<HashSet<SNOPower>>(()
+        public static TrinityChangeDetector<HashSet<SNOPower>> Skills { get; } = new TrinityChangeDetector<HashSet<SNOPower>>(()
             => Core.Hotbar.ActivePowers, SlowUpdateInterval);
 
-        public static TrinityChangeDetector<int> WorldId = new TrinityChangeDetector<int>(()
+        public static TrinityChangeDetector<int> WorldId { get; } = new TrinityChangeDetector<int>(()
             => ZetaDia.CurrentWorldSnoId);
 
-        public static TrinityChangeDetector<int> LevelAreaId = new TrinityChangeDetector<int>(()
+        public static TrinityChangeDetector<int> LevelAreaId { get; } = new TrinityChangeDetector<int>(()
             => ZetaDia.CurrentLevelAreaSnoId);
 
-        public static TrinityChangeDetector<int> HeroId = new TrinityChangeDetector<int>(()
+        public static TrinityChangeDetector<int> HeroId { get; } = new TrinityChangeDetector<int>(()
             => ZetaDia.Service.Hero.HeroId);
 
-        public static TrinityChangeDetector<ILootProvider> LootProvider = new TrinityChangeDetector<ILootProvider>(()
+        public static TrinityChangeDetector<ILootProvider> LootProvider { get; } = new TrinityChangeDetector<ILootProvider>(()
             => Combat.Loot);
 
-        public static TrinityChangeDetector<bool> IsRunning = new TrinityChangeDetector<bool>(()
+        public static TrinityChangeDetector<bool> IsRunning { get; } = new TrinityChangeDetector<bool>(()
             => BotEvents.IsBotRunning);
 
     }

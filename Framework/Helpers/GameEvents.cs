@@ -26,8 +26,10 @@ namespace Trinity.Framework.Helpers
         {
             Logger.Log("Bot Starting");
             BotStartTime = DateTime.UtcNow;
+            Logger.Log("Checking System Information");
             DebugUtil.LogSystemInformation();
             DefaultLootProvider.ResetBackPackCheck();
+            Logger.Log("Replacing Tree Hooks");
             HookManager.ReplaceTreeHooks();
             TreeHooks.Instance.OnHooksCleared += HookManager.InstanceOnOnHooksCleared;
             GoldInactivity.Instance.ResetCheckGold();

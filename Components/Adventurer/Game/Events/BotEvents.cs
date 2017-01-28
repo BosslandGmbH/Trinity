@@ -16,8 +16,6 @@ namespace Trinity.Components.Adventurer.Game.Events
         internal static void UnWire()
         {
             GameEvents.OnGameJoined -= PluginEvents.GameEvents_OnGameJoined;
-            //BotMain.OnStart -= PluginEvents.OnBotStart;
-            //BotMain.OnStop -= PluginEvents.OnBotStop;
             GameEvents.OnWorldChanged -= PluginEvents.GameEvents_OnWorldChanged;
         }
 
@@ -26,6 +24,7 @@ namespace Trinity.Components.Adventurer.Game.Events
             get
             {
                 if (BotMain.BotThread == null) return false;
+                if (BotMain.BotThread.IsAlive) return true;
                 if (BotMain.BotThread.ThreadState.HasFlag(ThreadState.AbortRequested)) return true;
                 if (BotMain.BotThread.ThreadState.HasFlag(ThreadState.WaitSleepJoin)) return true;
                 if (BotMain.BotThread.ThreadState.HasFlag(ThreadState.Aborted)) return false;

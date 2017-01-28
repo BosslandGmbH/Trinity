@@ -155,11 +155,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 currentWorldKnownPositions.Add(nearestNode.Center.ToVector3());
                 nearestNode.IsKnown = true;
                 nearestNode.IsVisited = true;
-                var radius = 45;
+                var radius = 55;
                 switch (PluginEvents.CurrentProfileType)
                 {
                     case ProfileType.Rift:
-                        radius = 45;
+                        radius = 55;
                         var worldScene = AdvDia.CurrentWorldScene;
                         if (worldScene != null && worldScene.Name.Contains("Exit"))
                         {
@@ -167,7 +167,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         }
                         break;
                     case ProfileType.Bounty:
-                        radius = 45;
+                        radius = 55;
                         break;
                     case ProfileType.Keywarden:
                         radius = 70;

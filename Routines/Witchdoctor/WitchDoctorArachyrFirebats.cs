@@ -127,7 +127,7 @@ namespace Trinity.Routines.Witchdoctor
                     if (!interruptForHaunt && !interruptForLocust && !interruptForHarvest)
                     {
                         Logger.Log(LogCategory.Routine, "Continuation of Firebats.");
-                        return new TrinityPower(SNOPower.Witchdoctor_Firebats, 30f, Player.Position, 0, 0);
+                        return new TrinityPower(SNOPower.Witchdoctor_Firebats, 30f, Player.Position, 75, 250);
                     }
 
                     if (interruptForHaunt)

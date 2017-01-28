@@ -39,8 +39,9 @@ namespace Trinity.Settings
 
         private static void HeroIdOnChanged(ChangeDetectorEventArgs<int> args)
         {
+            if (args.OldValue == 0) return;
             Logger.Log("Hero changed, reloading settings.");
-            Core.Storage.Load();            
+            Core.Storage.Load();
         }
 
         public static SettingsModel Settings = new SettingsModel();

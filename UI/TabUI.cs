@@ -129,6 +129,7 @@ namespace Trinity.UI
                             //CreateButton("> Buff Test", StartBuffTestHandler),
                             //CreateButton("> Stop Tests", StopTestHandler),
                             CreateButton("> Unit Monitor", StartUnitMonitor),
+                            CreateButton("> Player Monitor", StartPlayerMonitor),
 
                 });
 
@@ -265,7 +266,7 @@ namespace Trinity.UI
             {
                 var dataContext = VisualizerViewModel.Instance;
 
-                VisualizerViewModel.Window = UILoader.CreateNonModalWindow(
+                var window = UILoader.CreateNonModalWindow(
                     "Visualizer\\Visualizer.xaml",
                     "Radar Visualizer",
                     dataContext,
@@ -273,9 +274,10 @@ namespace Trinity.UI
                     dataContext.WindowHeight
                     );
 
-                VisualizerViewModel.Window.ContentRendered += (o, args) => VisualizerViewModel.IsWindowOpen = true;
-                VisualizerViewModel.Window.Closed += (o, args) => VisualizerViewModel.IsWindowOpen = false;
-                VisualizerViewModel.Window.Show();
+                dataContext.Window = window;
+                window.ContentRendered += (o, args) => VisualizerViewModel.IsWindowOpen = true;
+                window.Closed += (o, args) => VisualizerViewModel.IsWindowOpen = false;
+                window.Show();
             }
             catch (Exception ex)
             {
@@ -393,6 +395,99 @@ namespace Trinity.UI
                     Logger.Log($"-- Dumping Attribtues for {acd.Name} (Sno={acd.ActorSnoId} Ann={acd.AnnId}) at {acd.Position} ----");
                     Logger.Log(atts + "\r\n");
                 }
+
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Error Starting LazyCache: " + ex);
+            }
+        }
+
+        private static void StartPlayerMonitor(object sender, RoutedEventArgs routedEventArgs)
+        {
+            try
+            {
+                var unitAtts = new Dictionary<int, HashSet<ActorAttributeType>>();
+                var unitLastDamage = new Dictionary<int, float>();
+
+                if (!ZetaDia.IsInGame)
+                    return;
+
+                var endTime = DateTime.UtcNow + TimeSpan.FromSeconds(30);
+                Task.Run(() =>
+                {
+                    while (DateTime.UtcNow < endTime)
+                    {
+                        Thread.Sleep(250);
+
+                        using (ZetaDia.Memory.AcquireFrame())
+                        {
+                            ZetaDia.Actors.Update();
+
+                            //Func<DiaObject, bool> isValid =
+                            //    u =>
+                            //        u != null && u.IsValid && u.CommonData != null && u.CommonData.IsValid &&
+                            //        !u.CommonData.IsDisposed;
+                            //var testunits =
+                            //    ZetaDia.Actors.GetActorsOfType<DiaUnit>(true)
+                            //        .Where(
+                            //            u =>
+                            //                isValid(u) && u.RActorId != ZetaDia.Me.RActorId && ZetaDia.Me.TeamId != u.TeamId)
+                            //        .ToList();
+                            //var testunit = testunits.OrderBy(u => u.Distance).FirstOrDefault();
+                            //if (testunit == null || testunit.CommonData == null)
+                            //{
+                                var testunit = ZetaDia.Me;
+                            //}
+
+                            var acd = MemoryWrapper.Create<ActorCommonData>(testunit.CommonData.BaseAddress);
+                            var ann = acd.AnnId;
+                            var atts = new Trinity.Framework.Objects.Memory.Attributes.Attributes(acd.FastAttributeGroupId);
+
+
+                            if (_lastAtts == null || ann != _lastAnn)
+                            {
+                                _lastAtts = null;
+                                Logger.Log($"-- Dumping Attribtues for {acd.Name} (Sno={acd.ActorSnoId} Ann={acd.AnnId}) at {acd.Position} ----");
+                                Logger.Log(atts + "\r\n");
+                            }
+
+                            if (_lastAtts != null)
+                            {
+                                foreach (var att in atts.Items)
+                                {
+                                    var curValue = att.Value.GetValue();
+                                    if (_lastAtts.ContainsKey(att.Key))
+                                    {
+                                        var lastValue = _lastAtts[att.Key].GetValue();
+                                        if (Convert.ToInt32(lastValue) != Convert.ToInt32(curValue))
+                                        {
+                                            Logger.Log($"-- Attribute {att} changed from {lastValue}");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Logger.Log($"-- Attribute Added {att}");
+                                    }
+                                }
+
+                                foreach (var att in _lastAtts)
+                                {
+                                    var lastValue = att.Value.GetValue();
+                                    if (!atts.Items.ContainsKey(att.Key))
+                                    {
+                                        Logger.Log(
+                                            $"-- Attribute removed {(ActorAttributeType)att.Key} Value was {lastValue}");
+                                    }
+                                }
+                            }
+
+                            _lastAtts = atts.Items;
+                            _lastAnn = ann;
+                        }
+
+                    }
+                });
 
             }
             catch (Exception ex)

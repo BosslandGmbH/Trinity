@@ -96,6 +96,11 @@ namespace Trinity.Reference
             (int)SNOActor.monk_serenity_goldRings_spirit,
         };
 
+        public static HashSet<int> RayWalkTargetingOnlyActors { get; }  = new HashSet<int>
+        {
+            (int) SNOActor.X1_Pand_Ext_Ordnance_Tower_Shock_A,
+        };
+
         public static HashSet<int> HerdingMatsSnoIds = new HashSet<int>()
         {
             215500, // "Gibbering Gemstone", Cow_Gem_Flippy-3672 ActorId: 215500

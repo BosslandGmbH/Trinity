@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Rift;
 using Zeta.Bot;
@@ -126,6 +128,10 @@ namespace Trinity.Components.Adventurer.Cache
             get { return PropertyReader<string>.SafeReadValue(() => ZetaDia.Service.Hero.BattleTagName); }
         }
 
+        public static bool IsInArchonForm
+        {
+            get { return ZetaDia.Me.GetAllBuffs().Any(b => b.SNOId == (int) SNOPower.Wizard_Archon); }
+        }
 
 
         //static AdvDia()
@@ -192,18 +198,35 @@ namespace Trinity.Components.Adventurer.Cache
             }
         }
 
-        public static T SafeReadValue(Func<T> valueFactory)
+        public class ReadEntrance : IDisposable
+        {
+            public static int Count { get; private set; }
+            public ReadEntrance()
+            {
+                Count++;
+            }
+            public void Dispose()
+            {
+                Count--;
+            }
+        }
+
+        public static T SafeReadValue(Func<T> valueFactory, [CallerMemberName] string caller = "")
         {
             try
             {
-                if (BotMain.IsRunning)
+                using (new ReadEntrance())
                 {
-                    return valueFactory();
+                    if (BotEvents.IsBotRunning || ReadEntrance.Count > 1)
+                    {
+                        return valueFactory();
+                    }
+                    using (ZetaDia.Memory.AcquireFrame())
+                    {
+                        return valueFactory();
+                    }
                 }
-                using (ZetaDia.Memory.AcquireFrame())
-                {
-                    return valueFactory();
-                }
+
             }
             catch (ACDAttributeLookupFailedException acdEx)
             {

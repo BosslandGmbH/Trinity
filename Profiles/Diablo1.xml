@@ -66,7 +66,8 @@
     -->
     <If condition="CurrentWorldId == 452721">
       <LogMessage message=">> Exploring Labyrinth Level 1 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(176001,45) and not CurrentSceneName('Entrance')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(176001,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="452721" levelAreaSnoId="452986" />
     </If>
 
@@ -78,7 +79,8 @@
     -->
     <If condition="CurrentWorldId == 452922">
       <LogMessage message=">> Exploring Labyrinth Level 2 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(176001,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(176001,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="452922" levelAreaSnoId="452988" />
     </If>
 
@@ -95,7 +97,8 @@
     -->
     <If condition="CurrentWorldId == 452984">
       <LogMessage message=">> Exploring Labyrinth Level 3 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(176001,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(176001,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="452984" levelAreaSnoId="452989" />
     </If>
 
@@ -108,7 +111,8 @@
 
     <If condition="CurrentWorldId == 452985">
       <LogMessage message=">> Exploring Labyrinth Level 4 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(176001,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(176001,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="176001" actorName="g_Portal_ArchTall_Orange" worldSnoId="452985" levelAreaSnoId="452990" />
     </If>
 
@@ -121,7 +125,8 @@
 
     <If condition="CurrentWorldId == 452991">
       <LogMessage message=">> Exploring Labyrinth Level 5 (Slay the Dark Lord)" />
-      <Explore stopCondition="(ActorExistsNearMe(341572,45) and CurrentSceneName('Exit')) or CurrentSceneName('_Valor')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="(ActorExistsNearMe(341572,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')) or CurrentSceneName('_Valor')" />
 
       <!-- Scene: x1_Catacombs_NSE_01_Valor, SnoId: 454485, Puzzle with Orbs and Doors -->
       <If condition="CurrentSceneName('Valor')">
@@ -228,7 +233,7 @@
       </If>
 
       <If condition="not CurrentSceneName('Exit')">
-        <Explore stopCondition="ActorExistsNearMe(341572,45) and CurrentSceneName('Exit')" />
+        <Explore stopCondition="ActorExistsNearMe(341572,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       </If>
 
       <Interact questId="312429" stepId="2" actorId="341572" actorName="g_portal_Ladder_VeryShort_Blue" worldSnoId="452991" levelAreaSnoId="452992" />
@@ -244,7 +249,8 @@
 
     <If condition="CurrentWorldId == 452996">
       <LogMessage message=">> Exploring Labyrinth Level 6 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(341572,60) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(341572,60) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="341572" actorName="g_portal_Ladder_VeryShort_Blue" />
 
       <!-- Chamber of Bone 
@@ -283,7 +289,8 @@
 
     <If condition="CurrentWorldId == 452997">
       <LogMessage message=">> Exploring Labyrinth Level 7 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(341572,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(341572,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="341572" actorName="g_portal_Ladder_VeryShort_Blue" worldSnoId="452997" levelAreaSnoId="452994" />
     </If>
 
@@ -296,7 +303,8 @@
 
     <If condition="CurrentWorldId == 452998">
       <LogMessage message=">> Exploring Labyrinth Level 8 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(341572,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(341572,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="341572" actorName="g_portal_Ladder_VeryShort_Blue" worldSnoId="452998" levelAreaSnoId="452995" />
     </If>
 
@@ -309,7 +317,8 @@
 
     <If condition="CurrentWorldId == 452999">
       <LogMessage message=">> Exploring Labyrinth Level 9 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(176038,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(176038,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="452999" levelAreaSnoId="453001" />
     </If>
 
@@ -322,7 +331,8 @@
 
     <If condition="CurrentWorldId == 453004">
       <LogMessage message=">> Exploring Labyrinth Level 10 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(176038,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(176038,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="453004" levelAreaSnoId="453007" />
     </If>
 
@@ -334,7 +344,8 @@
 
     <If condition="CurrentWorldId == 453003">
       <LogMessage message=">> Exploring Labyrinth Level 11 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(176038,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(176038,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="453003" levelAreaSnoId="453006" />
     </If>
 
@@ -347,7 +358,8 @@
 
     <If condition="CurrentWorldId == 453002">
       <LogMessage message=">> Exploring Labyrinth Level 12 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(176038,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(176038,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="176038" actorName="g_Portal_Oval_Orange" worldSnoId="453002" levelAreaSnoId="453005" />
     </If>
 
@@ -360,7 +372,7 @@
 
     <If condition="CurrentWorldId == 453008">
       <LogMessage message=">> Exploring Labyrinth Level 13 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(175482,45) and CurrentSceneName('Exit')" />
+      <Explore stopCondition="ActorExistsNearMe(175482,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="175482" actorName="g_Portal_Rectangle_Orange" worldSnoId="453008" levelAreaSnoId="453009" />
     </If>
 
@@ -372,7 +384,8 @@
 
     <If condition="CurrentWorldId == 453014">
       <LogMessage message=">> Exploring Labyrinth Level 14 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(175482,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(175482,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="175482" actorName="g_Portal_Rectangle_Orange" worldSnoId="453014" levelAreaSnoId="453011" />
     </If>
 
@@ -385,7 +398,8 @@
 
     <If condition="CurrentWorldId == 453015">
       <LogMessage message=">> Exploring Labyrinth Level 15 (Slay the Dark Lord)" />
-      <Explore stopCondition="ActorExistsNearMe(175482,45) and CurrentSceneName('Exit')" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
+      <Explore stopCondition="ActorExistsNearMe(175482,45) and not MarkerTypeWithinRange('Entrance', 200) and not CurrentSceneName('Entrance')" />
       <Interact questId="312429" stepId="2" actorId="175482" actorName="g_Portal_Rectangle_Orange" worldSnoId="453015" levelAreaSnoId="453012" />
     </If>
 
@@ -445,10 +459,11 @@
 
     <If condition="CurrentWorldId == 453016">
       <LogMessage message=">> Searching for Diablo" />
+      <WaitTimer questId="1" stepId="1" waitTime="3000" />
       <Explore stopCondition="not IsActiveQuestAndStep(455272, 2)" />
       <WaitTimer questId="1" stepId="1" waitTime="4000" />
     </If>
-    
+
 
 
 

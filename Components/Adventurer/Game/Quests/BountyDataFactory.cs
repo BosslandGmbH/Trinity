@@ -1007,7 +1007,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            //A2 - Blood and Iron
+            //A2 - Blood and Iron (432334)
             Bounties.Add(new BountyData
             {
                 QuestId = 432334,
@@ -1719,7 +1719,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 //WaypointNumber = 53,
                 Coroutines = new List<ISubroutine>
                 {
-                    new EnterLevelAreaCoroutine(367872, 267412, 271533, -1947203375, 185067),
+                    new EnterLevelAreaCoroutine(367872, 267412, 271533, -1947203375, 359453),
+                    //new EnterLevelAreaCoroutine(367872, 267412, 271533, -1947203375, 185067),
                     new MoveToPositionCoroutine(271533, new Vector3(149, 152, 0)),
                     new MoveToPositionCoroutine(271533, new Vector3(132, 229, 0)),
                     new MoveToPositionCoroutine(271533, new Vector3(194, 238, 0)),
@@ -6099,11 +6100,11 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WorldId = 271233,
                 QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
-                    {
-                        new MoveThroughDeathGates(363552,271233,1),
-                        new KillUniqueMonsterCoroutine (363552,271233, 363378, -1443986728),
-                        new ClearLevelAreaCoroutine (363552)
-                    }
+                {
+                    new MoveThroughDeathGates(363552,271233,1),
+                    new KillUniqueMonsterCoroutine (363552,271233, 363378, -1443986728),
+                    new ClearLevelAreaCoroutine (363552)
+                }
             });
 
             // A5 - Kill Valtesk the Cruel (363555)
@@ -6115,7 +6116,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
                     {
-                        new MoveThroughDeathGates(363555,271233,1),
                         new MoveThroughDeathGates(363555,271233,1),
                         new KillUniqueMonsterCoroutine (363555,271233, 363367, -413057866),
                         new ClearLevelAreaCoroutine (363555)

@@ -12,6 +12,7 @@ namespace Trinity.Framework.Objects.Enums
     public enum RawItemType
     {
         // Manually Added:
+        CultistPage = 3940472,
         Lore = 3646475,
         ProgressionOrb = 126166628,
         UberReagent = -49494186,

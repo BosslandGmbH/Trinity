@@ -608,5 +608,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         public static Pen MarkerPen { get; set; } = new Pen(Brushes.Orange, 1);
         public static Pen SceneFrameInclude { get; set; }
         public static Pen SceneFrameExclude { get; set; }
+        public static Pen SceneConnectionPen { get; set; } = new Pen(Brushes.Yellow, 4);
     }
 }

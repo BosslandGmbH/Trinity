@@ -268,10 +268,12 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
         {
             get
             {
-                if (Scenes.FirstOrDefault(s => s.WorldScene.IsInScene(AdvDia.MyPosition)) != null)
-                    return Scenes.FirstOrDefault(s => s.WorldScene.IsInScene(AdvDia.MyPosition));
+                var scene = Scenes.FirstOrDefault(s => s.WorldScene.IsInScene(AdvDia.MyPosition));
+                if (scene != null)
+                    return scene;
 
-                return NearestGateSceneToPosition(AdvDia.MyPosition);
+                return NearestGateEntranceScene(AdvDia.MyPosition);
+                //return NearestGateSceneToPosition(AdvDia.MyPosition);
             }
         }
 
@@ -348,6 +350,15 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
         public static DeathGateScene NearestGateSceneToPosition(Vector3 position)
         {
             return Scenes.Where(s => s.IsValid).OrderBy(s => s.WorldScene.Center.Distance(position.ToVector2())).FirstOrDefault();
+        }
+
+        public static DeathGateScene NearestGateEntranceScene(Vector3 position)
+        {
+            // Find the first scene connected to a non-death gate scene.
+            return Scenes.Where(s => s.IsValid)
+                .OrderBy(s => s.WorldScene.Center.Distance(position.ToVector2()))
+                .FirstOrDefault(g => g.WorldScene.ConnectedScenes()
+                    .Any(s => !SceneDefs.ContainsKey(s.Scene.SnoId)));
         }
 
         public static Vector3 NearestGateToPosition(Vector3 position)

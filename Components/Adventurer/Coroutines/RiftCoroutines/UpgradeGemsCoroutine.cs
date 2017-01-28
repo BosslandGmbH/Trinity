@@ -243,7 +243,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private ACDItem GetUpgradeTarget(bool enableLog)
         {
             ZetaDia.Actors.Update();
+
             var gems = PluginSettings.Current.Gems;
+
             gems.UpdateGems(ZetaDia.Me.InTieredLootRunLevel + 1, PluginSettings.Current.GreaterRiftPrioritizeEquipedGems);
 
             var minChance = PluginSettings.Current.GreaterRiftGemUpgradeChance;

@@ -722,7 +722,10 @@ namespace Trinity.Routines.Wizard
             => Core.Buffs.HasBuff(SNOPower.ItemPassive_Unique_Ring_732_x1);
 
         public static bool HasTalRashaStacks
-            => Core.Buffs.GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_028) >= 3;
+            => TalRashaStacks >= 3;
+
+        public static int TalRashaStacks
+            => Core.Buffs.GetBuffStacks(SNOPower.P2_ItemPassive_Unique_Ring_028);
 
         public static bool IsChannellingDisintegrate
             => Player.IsChannelling && Skills.Wizard.Disintegrate.IsLastUsed;
@@ -903,6 +906,38 @@ namespace Trinity.Routines.Wizard
                 return Disintegrate(CurrentTarget);
 
             return DefaultPower;
+        }
+
+        protected bool TryPredictiveTeleport(Vector3 destination, out TrinityPower trinityPower)
+        {
+            trinityPower = null;
+
+            var path = Core.DBNavProvider.CurrentPath;
+            if (path != null && path.Contains(destination) && CanTeleport)
+            {
+                // The destination is often the next point along a jagged navigation path,
+                // which could be very close. Instead of going to the given destination,
+                // the idea here is to look through the path and find a better (further away) position.
+                // It also advances the current path to skip the points we'll miss by teleporting to
+                // prevent the bot from backtracking (DB's navigator doesn't update itself to reflect 
+                // having past a point and clearing the path appears to be delayed and/or not working)
+
+                var projectedPosition = IsBlocked
+                    ? Core.Grids.Avoidance.GetPathCastPosition(50f, true)
+                    : Core.Grids.Avoidance.GetPathWalkPosition(50f, true);
+
+                if (projectedPosition != Vector3.Zero)
+                {
+                    var distance = projectedPosition.Distance(Player.Position);
+                    var inFacingDirection = Core.Grids.Avoidance.IsInPlayerFacingDirection(projectedPosition, 90);
+                    if ((distance > 15f || IsBlocked && distance > 5f) && inFacingDirection)
+                    {
+                        trinityPower = Teleport(projectedPosition);
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         public bool CanTeleportTo(Vector3 destination)

@@ -53,7 +53,9 @@ namespace Trinity.Framework
         public static SessionLogger SessionLogger { get; } = new SessionLogger();
         public static ItemLogger ItemLogger { get; } = new ItemLogger();
         public static HeroDataCache HeroData { get; } = new HeroDataCache();
-  
+        public static QuestCache Quests { get; } = new QuestCache();
+
+
         // Misc
         public static GridHelper Grids { get; } = new GridHelper();
         public static PlayerMover PlayerMover { get; } = new PlayerMover();
@@ -71,7 +73,8 @@ namespace Trinity.Framework
         private static void OnGameJoined(object sender, EventArgs e)
         {
             InGameAndStarted = true;
-            ModuleManager.FireEvent(ModuleEvent.GameJoined);
+
+            //ModuleManager.FireEvent(ModuleEvent.GameJoined);
         }
 
         private static void OnGameLeft(object sender, EventArgs e)
@@ -81,7 +84,10 @@ namespace Trinity.Framework
 
         public static bool InGameAndStarted { get; set; }
 
-        private static void OnWorldChanged(object sender, EventArgs eventArgs) => ModuleManager.FireEvent(ModuleEvent.WorldChanged);
+        private static void OnWorldChanged(object sender, EventArgs eventArgs)
+        {
+            //ModuleManager.FireEvent(ModuleEvent.WorldChanged);
+        }
 
         public static bool GameIsReady => ZetaDia.IsInGame && ZetaDia.Me.IsValid && !ZetaDia.IsLoadingWorld && !ZetaDia.IsPlayingCutscene;
 
@@ -109,11 +115,8 @@ namespace Trinity.Framework
 
         public static void Init()
         {
-            GameEvents.OnGameJoined += (sender, args) => GameJoined = true;
-            GameEvents.OnGameLeft += (sender, args) => GameJoined = false;
-        }
 
-        public static bool GameJoined { get; set; }
+        }
 
         public static void Enable()
         {                  

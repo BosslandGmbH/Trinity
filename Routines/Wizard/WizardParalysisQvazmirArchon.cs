@@ -133,8 +133,8 @@ namespace Trinity.Routines.Wizard
             if (!IsInCombat && closeEnoughToBestCluster)
                 return false;
 
-            if (!IsArchonActive)
-                return false;
+            //if (!IsArchonActive)
+            //    return false;
 
             position = TargetUtil.GetBestClusterPoint();
             return position != Vector3.Zero;

@@ -42,7 +42,7 @@ namespace Trinity.Routines.Barbarian
         public virtual int KiteStutterDuration => 800;
         public virtual int KiteStutterDelay => 1400;
         public virtual int KiteHealthPct => 100;
-        public virtual float TrashRange => 80f;
+        public virtual float TrashRange => 75f;
         public virtual float EliteRange => 120f;
         public virtual float HealthGlobeRange => 60f;
         public virtual float ShrineRange => 80f;

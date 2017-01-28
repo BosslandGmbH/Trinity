@@ -253,6 +253,12 @@ namespace Trinity.Components.Combat
                         if (cacheObject == null || !cacheObject.IsValid || cacheObject.Type == TrinityObjectType.Unknown)
                             continue;
 
+                        if (isGateNearby && !cacheObject.HasBeenWalkable)
+                        {
+                            cacheObject.WeightInfo += "ForedWalkableForDeathGatesNeabry";
+                            continue;
+                        }
+
                         cacheObject.Weight = 0;
                         cacheObject.WeightInfo = string.Empty;
                         var reason = string.Empty;
@@ -384,6 +390,12 @@ namespace Trinity.Components.Combat
                         //    continue;
                         //}
 
+                        if (cacheObject.IsWalkable && GameData.RayWalkTargetingOnlyActors.Contains(cacheObject.ActorSnoId))
+                        {
+                            cacheObject.WeightInfo += "AlwaysRequiresRaywalk";
+                            continue;
+                        }
+
                         cacheObject.Weight = MinWeight;
                         switch (cacheObject.Type)
                         {
@@ -447,7 +459,7 @@ namespace Trinity.Components.Combat
 
                                     #region Basic Checks
 
-                                    if (Combat.CombatMode == CombatMode.KillAll)
+                                    if (Combat.CombatMode == CombatMode.KillAll || Core.Quests.IsKillAllRequired)
                                     {
                                         //Dist:                160     140     120     100      80     60     40      20      0
                                         //Weight (25k Max):    -77400  -53400  -32600  -15000  -600   10600  18600   23400   25000
@@ -1468,6 +1480,13 @@ namespace Trinity.Components.Combat
                                     if (cacheObject.IsUsed)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} - Used.";
+                                        break;
+                                    }
+
+                                    if (cacheObject.GizmoType == GizmoType.LoreChest &&
+                                        !Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Lore))
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring(LoreSetting)";
                                         break;
                                     }
 

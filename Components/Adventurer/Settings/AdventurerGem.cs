@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -31,11 +32,11 @@ namespace Trinity.Components.Adventurer.Settings
 
         public string DisplayName => $"{Name} (Rank: {Rank}, Upgrade Chance: {UpgradeChance}%)";
 
-        public AdventurerGem(ACDItem gem, int griftLevel)
+        public AdventurerGem(TrinityItem gem, int griftLevel)
         {
-            Guid = gem.ACDId;
+            Guid = gem.AcdId;
             SNO = gem.ActorSnoId;
-            Rank = gem.JewelRank;
+            Rank = gem.Attributes.JewelRank;
             Name = gem.Name;
 
             if (GemCaps.ContainsKey(SNO))
@@ -48,6 +49,24 @@ namespace Trinity.Components.Adventurer.Settings
             IsEquiped = !IsMaxRank && gem.InventorySlot == InventorySlot.Socket;
             UpgradeChance = IsMaxRank ? 0 : CalculateUpgradeChance(griftLevel, Rank);
         }
+
+        //public AdventurerGem(ACDItem gem, int griftLevel)
+        //{
+        //    Guid = gem.ACDId;
+        //    SNO = gem.ActorSnoId;
+        //    Rank = gem.JewelRank;
+        //    Name = gem.Name;
+
+        //    if (GemCaps.ContainsKey(SNO))
+        //    {
+        //        MaxRank = GemCaps[SNO];
+        //        IsMaxRank = Rank >= MaxRank;
+        //        HasRankCap = MaxRank > 0;
+        //    }
+
+        //    IsEquiped = !IsMaxRank && gem.InventorySlot == InventorySlot.Socket;
+        //    UpgradeChance = IsMaxRank ? 0 : CalculateUpgradeChance(griftLevel, Rank);
+        //}
 
         public static Dictionary<int, int> GemCaps = new Dictionary<int, int>
         {

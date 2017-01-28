@@ -55,14 +55,20 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         {
             _currentGrid = null;
         }
+        public bool IsValidGridWorldPosition(Vector3 position)
+        {
+            return position.X > 0 && position.Y > 0 && position != Vector3.Zero && position.X < (MaxX * BoxSize) && position.Y < (MaxY * BoxSize);
+        }
 
         public override bool CanRayCast(Vector3 from, Vector3 to)
         {
+            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowProjectile));
         }
 
         public override bool CanRayWalk(Vector3 from, Vector3 to)
         {
+            if (!IsValidGridWorldPosition(@from) || !IsValidGridWorldPosition(to)) return false;
             return GetRayLine(from, to).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk));
         }
 

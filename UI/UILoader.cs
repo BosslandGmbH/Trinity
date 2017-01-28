@@ -10,8 +10,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Markup;
+using Trinity.Components.Adventurer.Game.Events;
+using Trinity.Components.Adventurer.Settings;
+using Trinity.Components.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using Trinity.Routines.Crusader;
 using Trinity.UI.UIComponents;
 using Zeta.Bot;
 using Zeta.Common.Xml;
@@ -49,22 +53,33 @@ namespace Trinity.UI
 
         public static Window GetDisplayWindow()
         {
-            if (!BotMain.IsRunning)
+            if (!BotEvents.IsBotRunning)
             {
+                Logger.LogDebug("GetDisplayWindow: Bot is not running");
                 using (new PerformanceLogger("Window Data Load", true))
                 {
+                    Logger.LogDebug("GetDisplayWindow: AcquireFrame");
                     using (ZetaDia.Memory.AcquireFrame())
                     {
+                        Logger.LogDebug("GetDisplayWindow: ZetaDia.Actors.Update");
                         ZetaDia.Actors.Update();
+                        Logger.LogDebug("GetDisplayWindow: Actors.Update");
                         Core.Actors.Update();
+                        Logger.LogDebug("GetDisplayWindow: Inventory.Update");
                         Core.Inventory.Update();
+                        Logger.LogDebug("GetDisplayWindow: Hotbar.Update");
                         Core.Hotbar.Update();
+                        Logger.LogDebug("GetDisplayWindow: Routines.SelectRoutine");
                         Core.Routines.SelectRoutine();
+                        Logger.LogDebug("GetDisplayWindow: ChangeMonitor.Update");
                         Core.ChangeMonitor.Update();
+                        Logger.LogDebug("GetDisplayWindow: UpdateGems");
+                        PluginSettings.Current.UpdateGemList();
                     }
                 }
             }
 
+            Logger.LogDebug("GetDisplayWindow: Loading Window");
             return GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
         }
 

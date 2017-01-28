@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Zeta.Bot;
 
 namespace Trinity.Modules
 {
@@ -33,11 +35,12 @@ namespace Trinity.Modules
             {
                 try
                 {
+                    //Logger.LogDebug($"Updating Detector: {detector.Name} BotMain.BotThread.ThreadState={BotMain.BotThread?.ThreadState} BotMain.BotThread.IsAlive={BotMain.BotThread?.IsAlive} BotMain.IsRunning={BotMain.IsRunning} BotEvents.IsBotRunning={BotEvents.IsBotRunning}");
                     detector.CheckForChanges();
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError($"BackgroundChangeDetectorException: {detector.Name} {ex}");
+                    Logger.LogError($"ChangeMonitor: {detector.Name} {ex}");
                 }
             }
         }

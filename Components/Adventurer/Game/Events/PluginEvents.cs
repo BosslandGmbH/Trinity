@@ -80,15 +80,9 @@ namespace Trinity.Components.Adventurer.Game.Events
 
             // Trinity uses adventurer scenestorage and grid base 
             ScenesStorage.Update();
-
-            if (!Adventurer.IsAdventurerTagRunning()) return;
             ExplorationGrid.PulseSetVisited();
             BountyStatistics.Pulse();
         }
-
-
-
-
 
     }
 }

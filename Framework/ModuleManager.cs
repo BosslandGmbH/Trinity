@@ -4,12 +4,13 @@ using System.Linq;
 using IronPython.Modules;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
+using Zeta.Bot;
 
 namespace Trinity.Framework
 {
     public class ModuleManager
     {
-        public static List<WeakReference<Module>> Instances = new List<WeakReference<Module>>();            
+        public static List<WeakReference<Module>> Instances = new List<WeakReference<Module>>();
 
         public static void EnableAll()
         {

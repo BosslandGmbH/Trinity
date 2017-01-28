@@ -79,7 +79,7 @@ namespace Trinity.Settings.Paragon
             {
                 case TrinityParagonBonusType.PrimaryStat:
                 case TrinityParagonBonusType.Vitality:
-                    return 2000;
+                    return 5000;
             }
             return 50;
         }
