@@ -601,7 +601,7 @@ namespace Trinity.Components.Combat
                                     }
 
                                     var isQuestGiverOutsideCombat = cacheObject.IsQuestGiver && !ZetaDia.Me.IsInCombat;
-                                    if (!cacheObject.IsHostile && !isQuestGiverOutsideCombat)
+                                    if (!cacheObject.IsHostile && !isQuestGiverOutsideCombat && !cacheObject.IsQuestMonster)
                                     {
                                         cacheObject.WeightInfo += "Unit Not Hostile";
                                         cacheObject.Weight = MinWeight;
@@ -2184,7 +2184,7 @@ namespace Trinity.Components.Combat
 
             var isInRift = RiftProgression.IsInRift || RiftProgression.IsGreaterRift;
 
-            if (cacheObject.IsUnit && !(isInRift && cacheObject.IsElite))
+            if (cacheObject.IsUnit && !(isInRift && cacheObject.IsElite) && !cacheObject.IsQuestMonster)
             {
                 if (!cacheObject.IsWalkable && cacheObject.IsInLineOfSight && cacheObject.Distance > 40f && !cacheObject.IsMinimapActive && !cacheObject.IsBoss && !cacheObject.IsTreasureGoblin)
                     return -MaxWeight;

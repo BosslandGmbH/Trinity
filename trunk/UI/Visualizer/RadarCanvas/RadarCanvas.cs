@@ -1974,15 +1974,14 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 foreach (var adventurerScene in ScenesStorage.CurrentWorldScenes.Where(s => s.DynamicWorldId == worldId).ToList())
                 {
-                    foreach (var connectedScene in adventurerScene.ConnectedScenes())
+                    foreach (var exitPosition in adventurerScene.ExitPositions)
                     {
-                        dc.DrawLine(RadarResources.SceneConnectionPen,
-                            connectedScene.EdgePointA.ToVector3().ToCanvasPoint(),
-                            connectedScene.EdgePointB.ToVector3().ToCanvasPoint());
+                        //dc.DrawLine(RadarResources.SceneConnectionPen,
+                        //    connectedScene.EdgePointA.ToVector3().ToCanvasPoint(),
+                        //    connectedScene.EdgePointB.ToVector3().ToCanvasPoint());
 
-                        var navConnector = adventurerScene.GetNavigableConnection(connectedScene.Direction);
-                        if (navConnector != Vector3.Zero)
-                            dc.DrawEllipse(null, RadarResources.EliteLightPen, navConnector.ToCanvasPoint(), 10, 10);
+                        if (exitPosition != Vector3.Zero)
+                            dc.DrawEllipse(null, RadarResources.EliteLightPen, exitPosition.ToCanvasPoint(), 10, 10);
                     }
 
                     // Combine navcells into one drawing and store it; because they don't change relative to each other
