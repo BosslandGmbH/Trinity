@@ -106,7 +106,7 @@ namespace Trinity.Modules
             //QuestStepObjectiveType.KillMonster,
             QuestStepObjectiveType.KillMonsterFromFamily,
             QuestStepObjectiveType.KillMonsterFromGroup,
-            //QuestStepObjectiveType.KillGroup,
+            QuestStepObjectiveType.KillGroup,
         };
     }
 

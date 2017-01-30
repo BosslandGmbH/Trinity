@@ -5,7 +5,9 @@ using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
+using Trinity.Components.Adventurer.Util;
 using Trinity.DbProvider;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
@@ -82,6 +84,12 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public async Task<bool> GetCoroutine()
         {
+            if (Core.Player.IsCastingOrLoading)
+            {
+                Logger.Log(LogLevel.Info, "Waiting for cast to finish.");
+                return false;
+            }
+
             switch (State)
             {
                 case States.NotStarted:

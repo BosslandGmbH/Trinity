@@ -647,6 +647,12 @@
     <Content Include="Profiles\BrutalWhiteFarm.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Profiles\Debug\A5 359319 The Lord of the Hill.xml" />
+    <Content Include="Profiles\Debug\A5 375268 The Cursed Forum.xml" />
+    <Content Include="Profiles\Debug\MultiTest.xml" />
+    <Content Include="Profiles\Debug\A5 436965 Walk in the Park.xml" />
+    <Content Include="Profiles\Debug\A5 436965 The Cursed Pond.xml" />
+    <Content Include="Profiles\Debug\A5 445044 Binding Evil.xml" />
     <Content Include="Profiles\Debug\A5 367926 The Lost Legion.xml" />
     <Content Include="Profiles\Debug\A2 432334 Blood and Iron.xml" />
     <Content Include="Profiles\Debug\A2 345954 A Miner%27s Gold.xml" />

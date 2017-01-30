@@ -14,6 +14,9 @@ using Trinity.Components.Adventurer.Util;
 using Trinity.DbProvider;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
+using Zeta.Game;
+using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.Actors.Gizmos;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
@@ -90,6 +93,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             get { return _destinationWorldId; }
         }
 
+        public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, IEnumerable<int> portalActorIds, bool prioritizeExitScene = false)
+        {
+            _questId = questId;
+            _sourceWorldId = sourceWorldId;
+            _destinationWorldId = destinationWorldId;
+            _portalMarker = portalMarker;
+            _portalActorIds = portalActorIds;
+            _prioritizeExitScene = prioritizeExitScene;
+        }
 
         public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, int portalActorId, bool prioritizeExitScene = false)
         {
@@ -164,6 +176,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 ScanForObjective();
             }
+
             if (_objectiveLocation != Vector3.Zero)
             {
                 _nearestScene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.Distance(_objectiveLocation.ToVector2())).FirstOrDefault();
@@ -175,6 +188,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.Moving;
                 return false;
             }
+
             //if (_prioritizeExitScene && !_exitSceneUnreachable && ScenesStorage.CurrentWorldSceneIds.Any(s => s.Contains("Exit")))
             //{
             //    var exitScene = ScenesStorage.CurrentWorldScenes.FirstOrDefault(s => s.Name.Contains("Exit"));
@@ -190,8 +204,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             //            return false;
             //        }
             //    }
-
             //}
+
             if (!await ExplorationCoroutine.Explore(BountyData.LevelAreaIds))
                 return false;
 
@@ -205,12 +219,21 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             if (_deathGateLocation != Vector3.Zero)
             {
-                if (!await NavigationCoroutine.MoveTo(_deathGateLocation, 5)) return false;
+                if (!await NavigationCoroutine.MoveTo(_deathGateLocation, 5))
+                    return false;
+
                 _deathGateLocation = Vector3.Zero;
             }
 
 
-            if (!await NavigationCoroutine.MoveTo(_objectiveLocation, 15)) return false;
+            if (!await NavigationCoroutine.MoveTo(_objectiveLocation, 15))
+                return false;
+
+            if (NavigationCoroutine.LastMoveResult == MoveResult.UnstuckAttempt)
+            {
+                Logger.DebugSetting("Navigation ended with unstuck attempts last result.");
+                Navigator.Clear();
+            }
 
             if (AdvDia.MyPosition.Distance(_objectiveLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
             {
@@ -226,13 +249,42 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 State = States.Searching;
                 return false;
-            } 
+            }
 
-            var portal = ActorFinder.FindGizmo(_portalActorId);
+            DiaGizmo portal = null;
+            if (_portalActorIds != null)
+            {
+                foreach (var portalid in _portalActorIds)
+                {
+                    portal = ActorFinder.FindGizmo(portalid);
+                    if (portal != null)
+                    {
+                        _portalActorId = portal.ActorSnoId;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                portal = ActorFinder.FindGizmo(_portalActorId);
+            }
             if (portal == null)
             {
                 portal = BountyHelpers.GetPortalNearMarkerPosition(_objectiveLocation);
-                if (_portalActorId == 0) _discoveredPortalActorId = portal.ActorSnoId;
+                if (portal != null)
+                {
+                    _discoveredPortalActorId = portal.ActorSnoId;
+                }
+                else if (_portalActorId == 0)
+                {
+                    portal = ZetaDia.Actors.GetActorsOfType<GizmoPortal>().OrderBy(d => d.Distance).FirstOrDefault();
+                    if (portal != null)
+                    {
+                        _discoveredPortalActorId = portal.ActorSnoId;
+                        Logger.Info($"[EnterLevelArea] Unable to find the portal we needed, using this one instead {portal.Name} ({portal.ActorSnoId})");
+                    }
+                }
+
                 //if (_portalActorId != portal.ActorSnoId && BountyData.Act == Act.A5)
                 //{
                 //    Logger.Info("[EnterLevelArea] Was expecting to use portal SNO {0}, using {1} instead.", _portalActorId, portal.ActorSnoId);
@@ -274,7 +326,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private MoveToSceneCoroutine _moveToSceneCoroutine;
 
         private async Task<bool> MovingToNearestScene()
-        {            
+        {
             _moveToSceneCoroutine = new MoveToSceneCoroutine(_questId, _sourceWorldId, _nearestScene.Name);
 
             if (!await _moveToSceneCoroutine.GetCoroutine()) return false;
@@ -338,6 +390,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private WorldScene _nearestScene;
         private Vector3 _deathGateLocation;
         private DateTime _nearestSceneCooldown = DateTime.MinValue;
+        private IEnumerable<int> _portalActorIds;
 
         private void ScanForObjective()
         {
@@ -366,7 +419,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                             {
                                 var nearestGate = ActorFinder.FindNearestDeathGate();
                                 if (nearestGate != null)
-                                {                                    
+                                {
                                     Logger.Warn("Found death gate location");
                                     _objectiveLocation = nearestGate.Position;
                                 }
@@ -382,7 +435,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     {
                         _objective = objective;
                         _portalActorId = objective.ActorId;
-                        _destinationWorldId = objective.DestWorldId;                        
+                        _destinationWorldId = objective.DestWorldId;
                     }
                 }
                 // Belial

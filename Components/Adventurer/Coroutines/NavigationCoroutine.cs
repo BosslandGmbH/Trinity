@@ -293,10 +293,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                         State = States.Failed;
                         return false;
                     case MoveResult.UnstuckAttempt:
-
                         await Navigator.StuckHandler.DoUnstick();
-
-                        if (_unstuckAttemps > 1)
+                        if (_unstuckAttemps > 3)
                         {
                             State = States.Failed;
                             return false;

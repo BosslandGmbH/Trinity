@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Trinity.Components.Adventurer.Cache;
-using Trinity.Components.Adventurer.Util;
+using Trinity.Framework.Helpers;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
+using PerformanceLogger = Trinity.Components.Adventurer.Util.PerformanceLogger;
 
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
@@ -91,8 +92,12 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 }
 
                 CreateGrid(mesh);
+
+                ExitPositions = ExitDirections.GetFlags<SceneExitDirections>().Select(GetNavigableConnection);
             }
         }
+
+        public IEnumerable<Vector3> ExitPositions { get; set; }
 
         public Vector2 SouthWest { get; set; }
 

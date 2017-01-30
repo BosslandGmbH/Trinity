@@ -1941,6 +1941,8 @@ namespace Trinity.Reference
         {
             456331, //p43_AD_Valor_Pedestal_Locked-21607
 
+            326271,//x1_PandExt_Ballista_Angelic_A-1035 (326271) 
+
             181195, //a2dun_Cald_Belial_Acid_Attack-1533 (181195) Type=Door 
             (int)SNOActor.x1_Malthael_DeathFogMonster, //x1_Malthael_DeathFogMonster-23399 (325136) 
 

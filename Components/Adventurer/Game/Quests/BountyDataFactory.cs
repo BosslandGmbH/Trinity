@@ -1602,7 +1602,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {                    
                     //new EnterLevelAreaCoroutine(367926, 338600, 357658, -1551729967, 176002),
                     // portal id changed?
-                    new EnterLevelAreaCoroutine(367926, 338600, 0, -1551729967, 176004),
+                    new EnterLevelAreaCoroutine(367926, 338600, 0, -1551729967, new int[]{ 176004, 176002 }),
+                    // g_Portal_ArchTall_Blue (176002) Distance: 4.875014
+
+                    //new InteractWithGizmoCoroutine(367926, 338600, 176002, -1551729967, 5),
 
                     new MoveToPositionCoroutine(357658, new Vector3(187, 118, 3)),
                     new MoveToPositionCoroutine(357658, new Vector3(128, 109, 0)),
@@ -1642,7 +1645,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(359314, 267412, 2912417),
-                    new ClearAreaForNSecondsCoroutine(359314, 60, 0, 0, 100),
+                    new MoveToSceneCoroutine(0, 267412, "X1_Bog_Sub240_LordOfFools"),
+                    new MoveToScenePositionCoroutine(0, 267412, "X1_Bog_Sub240_LordOfFools", new Vector3(113.899f, 80.1803f, 2.100157f)),
+                    new ClearAreaForNSecondsCoroutine(359314, 60, 0, 0, 120),
                 }
             });
 
@@ -1745,6 +1750,11 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new MoveToMapMarkerCoroutine(359319, 267412, 2912417),
                     new MoveToSceneCoroutine(359319,267412,"KingOfTheHill"),
+                    new MoveToSceneCoroutine(359319, 267412, "X1_Bog_Sub240_KingOfTheHill"),
+                    new MoveToMapMarkerCoroutine(359319, 267412, 2912417),
+                    new MoveToScenePositionCoroutine(359319, 267412, "X1_Bog_Sub240_KingOfTheHill", new Vector3(191.7875f, 76.95569f, 10.1f)),
+                    new MoveToScenePositionCoroutine(359319, 267412, "X1_Bog_Sub240_KingOfTheHill", new Vector3(156.2918f, 172.7191f, 20.1f)),
+                    new MoveToScenePositionCoroutine(0, 267412, "X1_Bog_Sub240_KingOfTheHill", new Vector3(119.5713f, 128.0659f, 30.1f)),
                     new ClearAreaForNSecondsCoroutine(359319,15,0,0,60)
                 }
             });
@@ -2075,7 +2085,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(363346, 338600, 2912417),
+                    new MoveToSceneCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01"),
+                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(17.71436f, 173.9963f, 0.1487222f)),
+                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(114.0653f, 114.5838f, -17.4f)),
                     new ClearAreaForNSecondsCoroutine(363346, 60, 0, 0, 150,false),
+                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(195.6577f, 2.806244f, 0.09999999f)),
+                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(130.1381f, 87.56168f, -17.4f)),
+                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(142.9594f, 124.983f, -17.4f)),
+                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(111.6299f, 118.7759f, -17.4f)),
+                    new ClearAreaForNSecondsCoroutine(363346, 60, 0, 0, 150,false),
+
                 }
             });
 
@@ -2088,6 +2107,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.SpecialEvent,
                 Coroutines = new List<ISubroutine>
                 {
+                    // this map is really bad for pathing, better to just explore for now.
+                    //new MoveToMapMarkerCoroutine(359399, 261712, 2912417),
+                    new ClearLevelAreaCoroutine(359399),
                     new MoveToMapMarkerCoroutine(359399, 261712, 2912417),
                     new ClearAreaForNSecondsCoroutine(359399, 60, 4675, 0, 45,false),
                 }
@@ -2228,6 +2250,12 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     // X1_westm_Necro_Jar_of_Souls (316371) Distance: 12.90147
                     new InteractWithGizmoCoroutine(368420, 303361, 316371, 0, 5),
                     new ClearAreaForNSecondsCoroutine(368420, 20, 0, 0, 200),
+
+                    new MoveToScenePositionCoroutine(368420, 303361, "x1_westm_Int_Gen_A_01_Necromancer", new Vector3(130.7036f, 177.8941f, 0.1f)),
+                    new MoveToScenePositionCoroutine(368420, 303361, "x1_westm_Int_Gen_A_01_Necromancer", new Vector3(89.54332f, 182.3007f, 0.1000009f)),
+                    new MoveToScenePositionCoroutine(368420, 303361, "x1_westm_Int_Gen_A_01_Necromancer", new Vector3(141.7386f, 143.7506f, 0.1f)),
+
+
                     // oldNecromancer (4798) Distance: 27.00111
                     new MoveToActorCoroutine(368420, 303361, 4798),
                     // oldNecromancer (4798) Distance: 27.00111
@@ -2626,6 +2654,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(359112, 338944, 2912417),
+
+                    new MoveToSceneCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14"),
+                    new MoveToScenePositionCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14", new Vector3(51.71503f, 80.73083f, 0.1f)),
+
                     // x1_Graveyard_GraveRobert (351621) Distance: 45.1498
                     new InteractWithUnitCoroutine(359112, 338944, 351621, 2912417, 5),
                     new ClearAreaForNSecondsCoroutine(359112, 45, 351621, 2912417, 45),
@@ -2819,7 +2851,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new MoveToMapMarkerCoroutine(345954,70885, 2912417, 2924),
                         new InteractWithUnitCoroutine(345954,70885,2924,2912417,5),
-                        new ClearAreaForNSecondsCoroutine (345954, 60, 2924, 2912417),
+                        new ClearAreaForNSecondsCoroutine (345954, 120, 2924, 2912417, 140),
                         new InteractWithGizmoCoroutine(345954,70885,260238,0,5)
                     }
             });
@@ -3510,8 +3542,19 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (375268,261712, 2912417, 365097),
+                        new MoveToSceneCoroutine(375268, 261712, "x1_westm_NSEW_06"),
                         new InteractWithGizmoCoroutine (375268,261712, 365097, 2912417),
-                        new ClearAreaForNSecondsCoroutine (375268, 60, 364559, 2912417)
+                        new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(86.94189f, 81.26221f, 5.1f)),
+                        new WaitCoroutine(2000),
+                        new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(82.91467f, 149.3269f, 5.1f)),
+                        new WaitCoroutine(2000),
+                        new MoveToSceneCoroutine(375268, 261712, "x1_westm_NSEW_06"),
+                        new WaitCoroutine(2000),
+                        new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(148.5044f, 72.07056f, 5.1f)),
+                        new WaitCoroutine(2000),
+                        new InteractWithGizmoCoroutine (375268,261712, 365097, 2912417),
+                        new ClearAreaForNSecondsCoroutine (375268, 60, 0, 0, 50, false),
+                        new ClearLevelAreaCoroutine(375268),
                     }
             });
 
@@ -6860,7 +6903,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A5,
                 WorldId = 408254, 
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 60,
+                //WaypointNumber = 60,
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(445044, 408254, 2912417),

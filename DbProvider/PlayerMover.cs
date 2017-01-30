@@ -66,6 +66,9 @@ namespace Trinity.DbProvider
             if (Core.Settings.Advanced.DisableAllMovement)
                 return;
 
+            if (ZetaDia.IsLoadingWorld)
+                return;
+
             if (DateTime.UtcNow < SleepUntilTime)
                 return;
 
@@ -140,6 +143,9 @@ namespace Trinity.DbProvider
         public void MoveStop()
         {
             if (DateTime.UtcNow.Subtract(LastUsedMoveStop).TotalMilliseconds < 250)
+                return;
+
+            if (ZetaDia.IsLoadingWorld)
                 return;
 
             Logger.LogVerbose(LogCategory.Movement, "MoveStop");
