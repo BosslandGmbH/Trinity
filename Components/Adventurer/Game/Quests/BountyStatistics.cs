@@ -4,11 +4,13 @@ using System.Linq;
 using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Framework.Helpers;
 using Trinity.ProfileTags;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.Service;
 using Zeta.Game.Internals.SNO;
+using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Game.Quests
 {
@@ -47,6 +49,11 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 var successCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsCompleted);
                 var failureCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsFailed);
                 Logger.Info($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name}");
+            }
+
+            foreach (var item in stats.DistinctBy(o => o.QuestId).Where(s => !(s.IsCompleted || s.IsFailed)))
+            {
+                Logger.Debug($"    <RunBounty questId=\"{item.QuestId}\" name=\"{item.Name}\" />");
             }
 
         }

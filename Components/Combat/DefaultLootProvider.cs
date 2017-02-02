@@ -46,6 +46,9 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
+            if (Core.Settings.Items.DontPickupInTown && Core.Player.IsInTown && !item.IsItemAssigned)
+                return false;
+
             //if (Core.Settings.Items.InCombatLooting != SettingMode.Enabled && Combat.IsInCombat)
             //{
             //    if (Core.Settings.Items.InCombatLooting == SettingMode.Disabled)

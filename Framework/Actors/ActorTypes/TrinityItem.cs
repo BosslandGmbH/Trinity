@@ -16,6 +16,8 @@ namespace Trinity.Framework.Actors.ActorTypes
 {
     public class TrinityItem : TrinityActor
     {
+        public SpecialTypes SpecialType { get; set; }
+        public bool IsLowQuality { get; set; }
         public new ItemAttributes Attributes { get; set; }
         public int InventoryColumn { get; set; }
         public int InventoryRow { get; set; }
@@ -44,12 +46,28 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsMiscItem { get; set; }
         public bool IsTwoSquareItem { get; set; }
         public bool CanPickupItem { get; set; }
+
+        /// <summary>
+        /// If item is assigned - only visible to this player (bounty bag items)
+        /// </summary>
         public bool IsItemAssigned { get; set; }
+
+        /// <summary>
+        /// If the item can be picked up automatically by walking close by (globes)
+        /// </summary>
         public bool IsPickupNoClick { get; set; }
+
+        /// <summary>
+        /// If the item was dropped by this player
+        /// </summary>
         public bool IsMyDroppedItem { get; set; }
         public GlobeTypes GlobeType { get; set; }
         public FollowerType FollowerType { get; set; }
         public int ItemStackQuantity { get; set; }
+
+        /// <summary>
+        /// If item can be picked up by any other players
+        /// </summary>
         public bool IsTradeable { get; set; }
         public bool IsWeapon { get; set; }
         public bool IsArmor { get; set; }
@@ -110,8 +128,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         }
 
         public Item Reference => Legendary.GetItem(this);
-        public SpecialTypes SpecialType { get; set; }
-        public bool IsLowQuality { get; set; }
 
         public ACDItem ToAcdItem() => Core.Actors.GetAcdItemByAnnId(AnnId);
 

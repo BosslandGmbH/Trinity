@@ -81,7 +81,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             _sceneName = sceneName;
             _position = position;
-        }   
+        }
 
         public async Task<bool> GetCoroutine()
         {
@@ -235,7 +235,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 else if (!string.IsNullOrEmpty(_sceneName))
                 {
-                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name.ToLowerInvariant().Contains(_sceneName.ToLowerInvariant()));
+                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(
+                        s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2()))
+                            .FirstOrDefault(
+                                s => s.Name.ToLowerInvariant().Contains(_sceneName.ToLowerInvariant()) ||
+                                s.SubScene != null && s.SubScene.Name.ToLowerInvariant().Contains(_sceneName.ToLowerInvariant())
+                            );
+
                     if (scene != null)
                     {
                         _worldScene = scene;

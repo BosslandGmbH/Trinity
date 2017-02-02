@@ -46,6 +46,7 @@ namespace Trinity.Components.Combat
         TrinityPower CurrentPower { get; }
         TrinityActor LastTarget { get; }
         TrinityPower LastPower { get; }
+        float MaxTargetDistance { get; }
     }
 
     public class DefaultTargetingProvider : ITargetingProvider
@@ -57,6 +58,8 @@ namespace Trinity.Components.Combat
         public TrinityActor LastTarget { get; private set; }
 
         public TrinityPower LastPower { get; private set; }
+
+        public float MaxTargetDistance { get; private set; } = 200f;
 
         private void SetCurrentTarget(TrinityActor target)
         {
@@ -146,6 +149,9 @@ namespace Trinity.Components.Combat
                         Clear();
                         return false;
                     }
+
+                    if (CurrentPower.SNOPower != SNOPower.Walk && CurrentPower.TargetPosition.Distance(Core.Player.Position) > MaxTargetDistance)
+                        return false;
                 }
             }
             
@@ -206,6 +212,13 @@ namespace Trinity.Components.Combat
 
                 if (!target.IsUsed)
                     return false;
+            }
+
+            if (LastPower != null && LastPower.SNOPower == SNOPower.Axe_Operate_Gizmo && target.IsGizmo && target.IsLastTarget && target.Targeting.TargetedTimes > 25 && target.IsItem && (target as TrinityItem).IsLowQuality)
+            {
+                // There's a weird stuck where bot is unable to interact with an item, possibly move/interact range related.
+                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(120), $"Failed too many times to pickup low quality item. {target.Name} Distance={target.Distance}");
+                return true;
             }
 
             if (target.Type == TrinityObjectType.ProgressionGlobe)

@@ -647,9 +647,22 @@
     <Content Include="Profiles\BrutalWhiteFarm.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Profiles\Debug\A3 436282 King of the Ziggurat.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Profiles\Debug\A5 3346146 Forged in Battle.xml" />
+    <Content Include="Profiles\Debug\A4 349288 Kill Diablo.xml" />
+    <Content Include="Profiles\Debug\A3 349216 Kill Direclaw the Demonflyer.xml" />
+    <Content Include="Profiles\Debug\A5 368536 Noble Deaths.xml" />
+    <Content Include="Profiles\Debug\A5 363557 Kill Scythys.xml" />
+    <Content Include="Profiles\Debug\A5 363431 The Hatchery.xml" />
+    <Content Include="Profiles\Debug\A4 369900 The Cursed Dais.xml" />
+    <Content Include="Profiles\Debug\A4 349262 Kill Rakanoth.xml" />
     <Content Include="Profiles\Debug\A5 359319 The Lord of the Hill.xml" />
     <Content Include="Profiles\Debug\A5 375268 The Cursed Forum.xml" />
-    <Content Include="Profiles\Debug\MultiTest.xml" />
+    <Content Include="Profiles\Debug\MultiTest.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Debug\A5 436965 Walk in the Park.xml" />
     <Content Include="Profiles\Debug\A5 436965 The Cursed Pond.xml" />
     <Content Include="Profiles\Debug\A5 445044 Binding Evil.xml" />

@@ -100,7 +100,7 @@ namespace Trinity.Framework.Actors.Properties
                 actor.IsMinimapActive = actor.Attributes.IsMinimapActive || Core.Minimap.MinimapIconAcdIds.Contains(actor.AcdId);
                 actor.MinimapIconOverride = actor.Attributes.MinimapIconOverride;
                 actor.IsNoDamage = actor.Attributes.IsNoDamage;
-                actor.IsQuestMonster = actor.Attributes.IsQuestMonster;
+                actor.IsQuestMonster = actor.Attributes.IsQuestMonster || actor.Attributes.IsShadowClone;
             }
      
             UpdateLineOfSight(actor);

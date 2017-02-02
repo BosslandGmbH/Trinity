@@ -100,13 +100,14 @@ namespace Trinity.Components.Adventurer.Coroutines
                 _forceClearDestinations =
                     new ConcurrentBag<Vector3>(
                         ExplorationHelpers.GetFourPointsInEachDirection(_center, _radius).Where(d => d != Vector3.Zero));
-                Util.Logger.Debug("[ClearArea] No actors found in the area, using the desperate measures.");
+
+                Util.Logger.Debug($"[ClearArea] No actors found in the area, using the desperate measures. Center={_center} Radius={_radius}");
                 State = States.ForceClearing;
                 if (_forceClearDestinations.TryTake(out _currentDestination))
                 {
                     return false;
                 }
-                Util.Logger.Error("[ClearArea] Couldn't get force clear destinations, ending tag.");
+                Util.Logger.Error($"[ClearArea] Couldn't get force clear destinations, ending tag. Center={_center} Radius={_radius}");
                 State = States.Completed;
                 return true;
             }

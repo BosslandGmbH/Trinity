@@ -4,6 +4,9 @@
   <PickupLoot>True</PickupLoot>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
   <Order>
+    
+    
+    <!-- 
     <RunBounty questId="363346"/>
     <RunBounty questId="359319"/>
     <RunBounty questId="375268"/>
@@ -12,9 +15,112 @@
     <RunBounty questId="359314"/>
     <RunBounty questId="359112"/>
     <RunBounty questId="368420"/>
-    <!--<RunBounty questId="369377"/>-->
+    <RunBounty questId="369377"/>
+    <RunBounty questId="363342"/>
+    <RunBounty questId="368536"/>-->
+
+<!--
+    <RunBounty questId="363431"/>
+    <RunBounty questId="363557"/>
+    <RunBounty questId="368536"/>
+    <RunBounty questId="369952"/>
+
+    <RunBounty questId="369900"/>
+    <RunBounty questId="349288"/>
+    <RunBounty questId="349262"/>
+    <RunBounty questId="409893"/>
+    <RunBounty questId="349210"/>
+    <RunBounty questId="357129"/>
+    <RunBounty questId="345973"/>
+    <RunBounty questId="369878"/>
+    <RunBounty questId="346186"/>-->
+    
+    
+    
+    <RunBounty questId="436274"/>
+    <RunBounty questId="375257"/>
     <RunBounty questId="363342"/>
     <RunBounty questId="368536"/>
+    <RunBounty questId="346065"/>
+    <!--<RunBounty questId="432334"/>-->
+    <RunBounty questId="369813"/>
+    <RunBounty questId="368532"/>
+    <!--<RunBounty questId="433392"/>-->
+    <RunBounty questId="347520"/>
+    <RunBounty questId="369800"/>
+    <RunBounty questId="350564"/>
+    <RunBounty questId="346088"/>
+    <RunBounty questId="347520"/>
+    <RunBounty questId="347598"/>
+    <RunBounty questId="359319"/>
+    <RunBounty questId="345954"/>
+    <RunBounty questId="349202"/>
+    <RunBounty questId="345502"/>
+    <RunBounty questId="346186"/>
+    <RunBounty questId="375201"/>
+    <RunBounty questId="359907"/>
+    
+    <RunBounty questId="349216"/> <!-- wrnog waypoint -->
+    <RunBounty questId="433025"/> <!-- ancient devices used gizmo interact -->
+    <RunBounty questId="432293"/> <!-- triune reborn used gizmo interact -->
+
+<!--  Bot try to fight with monsters in closed chamber then quest is failed by time over. -->
+    <RunBounty questId="363431"/>
+    <RunBounty questId="362996"/>
+    <RunBounty questId="363000"/>
+    
+    
+    
+    <!--
+    QuestId: 436274, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Kill Korae and Samae
+QuestId: 375257, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Cursed Spire
+QuestId: 363342, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: A Diversion
+QuestId: 368536, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Noble Deaths
+QuestId: 346065, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Shrine of Rakanishu
+QuestId: 432334, IncompleteCount: 1,  SuccessCount: 1, Act: OpenWorld, Name: Bounty: Blood and Iron
+QuestId: 369813, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Cursed Shallows
+QuestId: 368532, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Rebellious Rabble
+QuestId: 433392, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Catapult Command
+QuestId: 347520, IncompleteCount: 2,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Lair of the Lacuni
+QuestId: 369800, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Cursed Outpost
+QuestId: 350564, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Rygnar Idol
+QuestId: 346088, IncompleteCount: 1,  SuccessCount: 1, Act: OpenWorld, Name: Bounty: Clear the Cave of Burrowing Horror
+QuestId: 347520, IncompleteCount: 2,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Lair of the Lacuni
+
+ 
+    QuestId: 369813, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Cursed Shallows
+    QuestId: 347598, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Clear the Mysterious Cave
+    QuestId: 432334, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Blood and Iron
+    QuestId: 349020, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Matriarch's Bones
+    QuestId: 375264, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Cursed Archive
+    QuestId: 359927, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Kill Malthael
+    QuestId: 369851, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Cursed Glacier
+
+    Looks like the following timed out (inactivity timer set to:300)
+    QuestId: 349262, IncompleteCount: 1,  SuccessCount: 3, Act: OpenWorld, Name: Bounty: Kill Rakanoth
+    QuestId: 347060, IncompleteCount: 1,  SuccessCount: 1, Act: OpenWorld, Name: Bounty: The Precious Ores
+    QuestId: 349204, IncompleteCount: 1,  SuccessCount: 1, Act: OpenWorld, Name: Bounty: Clear the Battlefield Stores Level 2
+    QuestId: 445799, IncompleteCount: 1,  SuccessCount: 1, Act: OpenWorld, Name: Bounty: Clear The Icy Pit
+    QuestId: 346182, IncompleteCount: 1,  SuccessCount: 2, Act: OpenWorld, Name: Bounty: Tide of Battle
+    QuestId: 369377, IncompleteCount: 1,  SuccessCount: 1, Act: OpenWorld, Name: Bounty: Clear the Plague Tunnels
+    QuestId: 369878, IncompleteCount: 1,  SuccessCount: 4, Act: OpenWorld, Name: Bounty: The Cursed Chapel -->
+
+
+    <RunBounty questId="369813"/>
+    <RunBounty questId="347598"/>
+    <RunBounty questId="432334"/>
+    <RunBounty questId="349020"/>
+    <RunBounty questId="375264"/>
+    <!--<RunBounty questId="359927"/>-->
+    <RunBounty questId="369851"/>
+    <!--<RunBounty questId="349262"/>-->
+    <RunBounty questId="347060"/>
+    <RunBounty questId="349204"/>
+    <RunBounty questId="346182"/>
+    <RunBounty questId="369377"/>
+    <RunBounty questId="369878"/>
+
+
     <LogMessage message=">> Profile Finished" />
     <WaitTimer questId="1" stepId="1" waitTime="3000" />
     <LeaveGame />

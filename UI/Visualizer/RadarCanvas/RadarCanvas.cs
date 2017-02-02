@@ -2035,6 +2035,21 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                         }
                         #endregion
 
+                        #region Sub-Scene Borders
+                        if (sceneborders && adventurerScene.SubScene != null)
+                        {
+                            var sceneTopLeft = new Vector3(adventurerScene.SubScene.Min.X, adventurerScene.SubScene.Min.Y, 0);
+                            var sceneTopRight = new Vector3(adventurerScene.SubScene.Max.X, adventurerScene.SubScene.Min.Y, 0);
+                            var sceneBottomLeft = new Vector3(adventurerScene.SubScene.Min.X, adventurerScene.SubScene.Max.Y, 0);
+                            var sceneBottomRight = new Vector3(adventurerScene.SubScene.Max.X, adventurerScene.SubScene.Max.Y, 0);
+
+                            groupdc.DrawGeometry(null, RadarResources.WalkableTerrainBorder, new LineGeometry(sceneTopLeft.ToCanvasPoint(), sceneTopRight.ToCanvasPoint()));
+                            groupdc.DrawGeometry(null, RadarResources.WalkableTerrainBorder, new LineGeometry(sceneBottomLeft.ToCanvasPoint(), sceneBottomRight.ToCanvasPoint()));
+                            groupdc.DrawGeometry(null, RadarResources.WalkableTerrainBorder, new LineGeometry(sceneTopLeft.ToCanvasPoint(), sceneBottomLeft.ToCanvasPoint()));
+                            groupdc.DrawGeometry(null, RadarResources.WalkableTerrainBorder, new LineGeometry(sceneTopRight.ToCanvasPoint(), sceneBottomRight.ToCanvasPoint()));
+                        }
+                        #endregion
+
                         #region Scene Title
 
                         if (sceneborders)
@@ -2044,7 +2059,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                             groupdc.DrawGlyphRun(Brushes.Wheat, glyphRun);
                             textPoint = adventurerScene.Center.ToVector3().ToCanvasPoint();
                             textPoint.Y = textPoint.Y + 20;
-                            glyphRun = DrawingUtilities.CreateGlyphRun((adventurerScene.Max - adventurerScene.Min) + " " + (adventurerScene.HasChild ? "HasSubScene" : string.Empty) + " " + (adventurerScene.SubScene != null ? " (Loaded)" : string.Empty), 8, textPoint);
+                            //(adventurerScene.HasChild ? "HasSubScene" : string.Empty) + " " + 
+                            glyphRun = DrawingUtilities.CreateGlyphRun((adventurerScene.Max - adventurerScene.Min) + " " + (adventurerScene.SubScene != null ? $" ({adventurerScene.SubScene.Name})" : string.Empty), 8, textPoint);
                             groupdc.DrawGlyphRun(Brushes.Wheat, glyphRun);
                         }
                         #endregion

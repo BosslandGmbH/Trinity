@@ -65,7 +65,7 @@
                         <CheckBox IsChecked="{Binding Advanced.ShowBattleTag}" Content="Show BattleTag in Title bar"/>
                         <CheckBox IsChecked="{Binding Advanced.ShowHeroName}" Content="Show Hero Name in Title bar"/>
                         <CheckBox IsChecked="{Binding Advanced.ShowHeroClass}" Content="Show Hero Class in Title bar"/>
-                        <CheckBox IsChecked="{Binding Advanced.LazyRaiderClickToPause}" Content="Lazy Raider Click to Pause"/>
+                        <CheckBox IsChecked="{Binding Advanced.LazyRaider}" Content="Lazy Raider Click to Pause"/>
                         <CheckBox IsChecked="{Binding Advanced.DisableAllMovement}" Content="Disable All Movement"/>
                         <!--<CheckBox IsChecked="{Binding Advanced.AllowDuplicateMessages}" Content="Allow Duplicate Messages"/>-->
                         <!--<CheckBox IsChecked="{Binding Advanced.StopOnGoblins}" Content="Stop When Goblins Found"/>-->

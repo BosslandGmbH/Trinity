@@ -215,9 +215,13 @@
             </GroupBox>-->
 
             <GroupBox Header="Stashing Strategy" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+                <StackPanel><TextBlock TextWrapping="Wrap" Margin="0,0,0,7">Option to stash things on the first page where items are found:</TextBlock>
+                
                 <UniformGrid Columns="1">
-                    <CheckBox Content="Stash items near others of the same type" IsChecked="{Binding Items.UseTypeStashing}" />
-                </UniformGrid>
+                    <CheckBox Content="Equipment (Weapons/Armor/Jewellery)" IsChecked="{Binding Items.UseTypeStashingEquipment}" />
+                    <CheckBox Content="Other Stuff (Gems, Crafting Matrials)" IsChecked="{Binding Items.UseTypeStashingOther}" />
+                    </UniformGrid>
+                </StackPanel>
             </GroupBox>
 
             <GroupBox Header="Misc" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">

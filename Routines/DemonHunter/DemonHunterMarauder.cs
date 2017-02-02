@@ -136,6 +136,9 @@ namespace Trinity.Routines.DemonHunter
 
         #region Settings
 
+        public override int KiteStutterDuration => 800;
+        public override int KiteStutterDelay => 800;
+        public override int KiteHealthPct => 100;
         public override float KiteDistance => Settings.KiteDistance;
         public override int ClusterSize => Settings.ClusterSize;
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;

@@ -410,7 +410,11 @@ namespace Trinity.Coroutines.Town
         /// </summary>
         public static int GetIdealStashPage(TrinityItem item)
         {
-            if (Core.Settings.Items.UseTypeStashing && ItemTypeMap.ContainsKey(item.RawItemType))
+            if (item.IsEquipment && Core.Settings.Items.UseTypeStashingEquipment && ItemTypeMap.ContainsKey(item.RawItemType))
+            {
+                return ItemTypeMap[item.RawItemType];
+            }
+            else if (Core.Settings.Items.UseTypeStashingOther && ItemTypeMap.ContainsKey(item.RawItemType))
             {
                 return ItemTypeMap[item.RawItemType];
             }
@@ -471,10 +475,9 @@ namespace Trinity.Coroutines.Town
             col = 0;
             row = 0;
 
-            if (Core.Settings.Items.UseTypeStashing && ItemTypeMap.ContainsKey(item.RawItemType))
+            var stashPageOffset = GetIdealStashPage(item);
+            if (stashPageOffset != -1)
             {
-                var stashPageOffset = ItemTypeMap[item.RawItemType];
-
                 int stashpage;
                 if (stashPageOffset < 0)
                 {

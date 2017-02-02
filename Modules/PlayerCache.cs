@@ -346,6 +346,10 @@ namespace Trinity.Modules
 
             SceneId = _me.SceneId;
 
+            IsInBossEncounterArea = GameData.BossLevelAreaIDs.Contains(LevelAreaId);
+
+            //IsBossBarVisible = _me.CommonData.UsingBossbar == 1;
+
             // Step 13 is used when the player needs to go "Inspect the cursed shrine"
             // Step 1 is event in progress, kill stuff
             // Step 2 is event completed
@@ -573,6 +577,8 @@ namespace Trinity.Modules
         public PlayerAction CurrentAction { get; set; }
         public bool IsInBossEncounter { get; set; }
 
+        public bool IsInBossEncounterArea { get; set; }
+        public bool IsBossBarVisible { get; internal set; }
 
         private float GetMaxSecondaryResource(DiaActivePlayer player)
         {

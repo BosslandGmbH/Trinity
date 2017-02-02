@@ -28,9 +28,13 @@ namespace Trinity.Framework.Actors.Attributes
 
         public bool IsHidden => GetAttribute<bool>(ActorAttributeType.Hidden);
 
+        public bool IsUsingBossbar => GetAttribute<bool>(ActorAttributeType.UsingBossbar);
+
         public bool NPCIsOperatable => GetAttribute<bool>(ActorAttributeType.NPCIsOperatable);
 
         public bool HasDotDps => GetAttribute<bool>(ActorAttributeType.DOTDPS);
+
+        public bool IsShadowClone => GetCachedAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectB, (int)SNOPower.Diablo_ShadowClones);
 
         public bool IsIllusion => GetCachedAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.MonsterAffix_IllusionistCast);
 

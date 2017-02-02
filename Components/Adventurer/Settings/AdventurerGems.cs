@@ -19,12 +19,14 @@ namespace Trinity.Components.Adventurer.Settings
             if (ZetaDia.Me == null)
                 return;
 
-            var gemsInInventory = new List<AdventurerGem>();
+            //var gemsInInventory = new List<AdventurerGem>();
             //var result = SafeFrameLock.ExecuteWithinFrameLock(() =>
             //{
-                //if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid) return;
+            //if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid) return;
 
-                gemsInInventory = Core.Actors.Inventory
+            Core.Actors.Update();
+
+            Gems = Core.Actors.Inventory
                     .Where(i => i.IsValid && i.ItemType == ItemType.LegendaryGem)
                     .Select(i => new AdventurerGem(i, greaterRiftLevel))
                     .Distinct(new AdventurerGemComparer())
@@ -39,29 +41,30 @@ namespace Trinity.Components.Adventurer.Settings
             //    return;
             //}
 
-            if (gemsInInventory.Count == 0) return;
-            if (Gems == null)
-            {
-                Gems = gemsInInventory;
-            }
-            else
-            {
-                var updatedList = new List<AdventurerGem>();
-                foreach (var gem in Gems)
-                {
-                    var inventoryGem = GetMatchingInventoryGem(gem, gemsInInventory);
-                    if (inventoryGem != null)
-                    {
-                        updatedList.Add(inventoryGem);
-                        gemsInInventory.Remove(inventoryGem);
-                    }
-                }
-                updatedList.AddRange(gemsInInventory);
+            //if (gemsInInventory.Count == 0) return;
+            //if (Gems == null)
+            //{
+            //    Gems = gemsInInventory;
+            //}
+            //else
+            //{
+            //    var updatedList = new List<AdventurerGem>();
+            //    foreach (var gem in Gems)
+            //    {
+            //        var inventoryGem = GetMatchingInventoryGem(gem, gemsInInventory);
+            //        if (inventoryGem != null)
+            //        {
+            //            updatedList.Add(inventoryGem);
+            //            gemsInInventory.Remove(inventoryGem);
+            //        }
+            //    }
+            //    updatedList.AddRange(gemsInInventory);
 
-                Gems = updatedList;
-            }
+            //    Gems = updatedList;
+            //}
 
             Gems = Gems.OrderBy(i => i.IsMaxRank ? 1 : 0).ToList();
+
             if (prioritizeEquipedGems)
             {
                 Gems = Gems.OrderByDescending(i => i.IsEquiped ? 1 : 0).ToList();
