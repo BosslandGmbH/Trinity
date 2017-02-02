@@ -126,7 +126,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             //    if (!await _waitCoroutine.GetCoroutine()) return false;
             //    _waitCoroutine.Reset();
             //}
-            if (!await ClearAreaCoroutine.Clear(_center, _radius, true)) return false;
+            if (!await ClearAreaCoroutine.Clear(_center, _radius, true))
+                return false;
+
             if (BountyData.IsAvailable)
             {
                 _radius = _increaseRadius ? (_radius < 80 ? _radius + 1 : _radius) : _radius;

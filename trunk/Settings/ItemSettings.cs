@@ -42,8 +42,14 @@ namespace Trinity.Settings
         //private PickupItemQualities _inCombatLootQualities;
         //private SettingMode _inCombatLooting;
         private bool _disableLootingInCombat;
-        private bool _useTypeStashing;
+        private bool _useTypeStashingEquipment;
+        private bool _useTypeStashingOther;
 
+
+        public const int SchemaVersion = 1;
+
+        [DataMember]
+        public int Version { get; set; }
 
         public ItemSettings()
         {
@@ -64,10 +70,6 @@ namespace Trinity.Settings
             }
             Version = SchemaVersion;
         }
-
-        [DataMember]
-        public int Version { get; set; }
-        public const int SchemaVersion = 1;
 
         [DataMember]
         [Setting, UIControl(UIControlType.FlagsCheckboxes)]
@@ -258,11 +260,21 @@ namespace Trinity.Settings
 
         [DataMember]
         [DefaultValue(false)]
-        public bool UseTypeStashing
+        public bool UseTypeStashingEquipment
         {
-            get { return _useTypeStashing; }
-            set { SetField(ref _useTypeStashing, value); }
+            get { return _useTypeStashingEquipment; }
+            set { SetField(ref _useTypeStashingEquipment, value); }
         }
+
+        [DataMember]
+        [DefaultValue(false)]
+        public bool UseTypeStashingOther
+        {
+            get { return _useTypeStashingOther; }
+            set { SetField(ref _useTypeStashingOther, value); }
+        }
+
+
 
     }
 

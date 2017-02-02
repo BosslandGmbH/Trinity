@@ -171,7 +171,8 @@ namespace Trinity.Framework.Actors.Properties
                 if (attributes.IsGizmoBeenOperated)
                     return true;
 
-                if (actor.GizmoType == GizmoType.Switch && actor.AnimationNameLowerCase.Contains("_open"))
+                // a3dun_Keep_Bridge_Switch-12283 (56686) Type=Interactable  is used with _open anim and gizmostate = 1
+                if (actor.GizmoType == GizmoType.Switch && actor.AnimationNameLowerCase.Contains("_open") && attributes.GizmoState == 0)
                     return false;
 
                 if (attributes.IsChestOpen)

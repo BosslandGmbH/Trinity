@@ -8,6 +8,7 @@ using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Settings;
+using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Common.Helpers;
@@ -136,6 +137,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (PluginSettings.Current.BountyZerg) SafeZerg.Instance.EnableZerg();
             EnablePulse();
 
+            PulseChecks();
+
             _currentGizmo =
                 _guardedGizmos.Values.Where(g => !g.HasBeenOperated)
                     .OrderBy(g => g.Position.DistanceSqr(AdvDia.MyPosition))
@@ -161,9 +164,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.SearchingForGizmo;
                 return false;
             }
-            if (!await NavigationCoroutine.MoveTo(_currentGizmo.Position, _currentGizmo.InteractDistance)) return false;
+
+            if (!await NavigationCoroutine.MoveTo(_currentGizmo.Position, _currentGizmo.InteractDistance))
+                return false;
+
             if (NavigationCoroutine.LastResult == CoroutineResult.Failure && AdvDia.MyPosition.Distance(_currentGizmo.Position) > _currentGizmo.InteractDistance + 20)
             {
+                Core.PlayerMover.MoveTowards(_currentGizmo.Position);
                 ObjectSearchRadius = 150;
                 _guardedGizmos.Remove(_currentGizmo.Position);
                 Util.Logger.Info("[Bounty] Gizmo is out of reach, lowering the search radius to {0}", ObjectSearchRadius);

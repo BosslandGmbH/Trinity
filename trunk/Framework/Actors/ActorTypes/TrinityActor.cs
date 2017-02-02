@@ -233,6 +233,8 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsCriticalAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.CriticalAvoidance);
         public bool IsInteractWhitelisted { get; set; }
         public bool IsProfileBlacklisted { get; set; }
+        public bool IsUsingBossbar { get; set; }
+        public bool IsShadowClone { get; set; }
 
 
         /// <summary>

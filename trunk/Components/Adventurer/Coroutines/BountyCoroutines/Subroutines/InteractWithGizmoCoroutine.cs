@@ -208,6 +208,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     }                        
                 }
 
+                var actor = ActorFinder.FindGizmo(_actorId);
+                actor?.Interact();
+
                 State = States.Completed;
                 _interactionCoroutine = null;
                 return false;

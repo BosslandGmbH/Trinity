@@ -48,10 +48,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 _currentGrid = new Lazy<ExplorationGrid>(() => new ExplorationGrid());
             }
 
-            if (DateTime.UtcNow.Subtract(_currentGrid.Value.Created).TotalSeconds > 5 && _currentGrid.Value.NearestNode == null)
-            {
-                _currentGrid = new Lazy<ExplorationGrid>(() => new ExplorationGrid());
-            }
+            //if (DateTime.UtcNow.Subtract(_currentGrid.Value.Created).TotalSeconds > 5 && _currentGrid.Value.NearestNode == null)
+            //{
+            //    _currentGrid = new Lazy<ExplorationGrid>(() => new ExplorationGrid());
+            //}
 
             return _currentGrid.Value;
         }

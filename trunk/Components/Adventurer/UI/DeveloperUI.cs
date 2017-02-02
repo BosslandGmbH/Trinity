@@ -985,8 +985,13 @@ namespace Trinity.Components.Adventurer.UI
                         : 0;
                     //AdvDia.Update();
                     Logger.Raw(" ");
-                    Logger.Raw("new MoveToSceneCoroutine({0}, {1}, \"{2}\"),", activeBounty,
-                        AdvDia.CurrentWorldId, AdvDia.CurrentWorldScene.Name);
+
+                    Logger.Raw("new MoveToSceneCoroutine({0}, {1}, \"{2}\"), \\\\ SubScene={3}", 
+                        activeBounty,
+                        AdvDia.CurrentWorldId, 
+                        AdvDia.CurrentWorldScene.Name,
+                        AdvDia.CurrentWorldScene.SubScene.Name);
+
                 }, true);
             }
             catch (Exception ex)

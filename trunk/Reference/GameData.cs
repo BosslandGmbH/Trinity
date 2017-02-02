@@ -36,6 +36,8 @@ namespace Trinity.Reference
 
         };
 
+
+
         public static List<TrinityObjectType> PlayerBlockingTypes = new List<TrinityObjectType>
         {
             TrinityObjectType.Barricade,
@@ -73,6 +75,11 @@ namespace Trinity.Reference
             (int)SNOActor.DuneDervish_B_Unique_Uber
         };
 
+        public static readonly HashSet<int> ExtremePriorityInteractable = new HashSet<int>
+        {
+            (int)SNOActor.a3dun_Keep_Bridge_Switch // switch with bridge area is marked as walkable so raycast passes incorrectly.
+        };
+
         /// <summary>
         /// Client effects that will be let into the object cache
         /// </summary>
@@ -100,6 +107,17 @@ namespace Trinity.Reference
         {
             (int) SNOActor.X1_Pand_Ext_Ordnance_Tower_Shock_A,
         };
+
+        /// <summary>
+        /// This is only intended for use with special bounty caves that spawn units
+        /// as part of a quest that cannot be identified as quest monsters by any 
+        /// other means - use with caution.
+        /// </summary>
+        public static HashSet<int> ForceKillAllSceneSnoIds { get; } = new HashSet<int>
+        {
+            52888, //caOut_Interior_G_x01_y01,
+        };
+
 
         public static HashSet<int> HerdingMatsSnoIds = new HashSet<int>()
         {
@@ -722,11 +740,10 @@ namespace Trinity.Reference
         /// <summary>
         /// Contains the list of Boss Level Area ID's
         /// </summary>
-        public static HashSet<int> BossLevelAreaIDs { get { return bossLevelAreaIDs; } }
-        private static readonly HashSet<int> bossLevelAreaIDs = new HashSet<int>
+        public static HashSet<int> BossLevelAreaIDs { get; } = new HashSet<int>
         {
             109457, 185228, 60194, 130163, 60714, 19789, 62726, 90881, 195268, 58494, 81178, 60757, 111232, 112580,
-            119656, 111516, 143648, 215396, 119882, 109563, 153669, 215235, 55313, 60193, 19789, 330576,
+            119656, 111516, 143648, 215396, 119882, 109563, 153669, 215235, 55313, 60193, 19789, 330576, 109563
         };
 
         /// <summary>
@@ -1939,6 +1956,13 @@ namespace Trinity.Reference
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            // prevent trin from interacting with this NPC as part of mysterious cave bounty due to 
+            // extremely poor navigation in the little nook where he lives. profile to manually move within scene.
+            (int)SNOActor.A2_UniqueVendor_Event_MapVendor, 
+
+            // prevent trin from interacting before clear area, bounty must force interact
+            (int)SNOActor.px_Bounty_Ramparts_Camp_Switch, // a4 catapault command bounty, 
+
             456331, //p43_AD_Valor_Pedestal_Locked-21607
 
             326271,//x1_PandExt_Ballista_Angelic_A-1035 (326271) 

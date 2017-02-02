@@ -405,11 +405,8 @@ namespace Trinity.Components.Adventurer.Settings
 
         public void UpdateGemList()
         {
-            if (_gems != null)
-            {
-                var greaterRiftLevel = RiftData.GetGreaterRiftLevel();
-                _gems.UpdateGems(greaterRiftLevel, GreaterRiftPrioritizeEquipedGems);
-            }
+            var greaterRiftLevel = RiftData.GetGreaterRiftLevel();
+            Gems.UpdateGems(greaterRiftLevel, GreaterRiftPrioritizeEquipedGems);
         }
 
         [IgnoreDataMember]

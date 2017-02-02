@@ -79,7 +79,7 @@ namespace Trinity.Components.Combat
             }
             else if (power.TargetPosition != Vector3.Zero)
             {
-                if (distance > 200f)
+                if (distance > Combat.Targeting.MaxTargetDistance)
                 {
                     Logger.Log(LogCategory.Spells, $"Target is way too far away ({distance})");
                     return false;
@@ -113,6 +113,13 @@ namespace Trinity.Components.Combat
             }
             
             Logger.Warn(LogCategory.Spells, $"Cast {castInfo}");
+
+            if (power.SNOPower == SNOPower.Axe_Operate_Gizmo && Core.StuckHandler.IsStuck)
+            {
+                Logger.LogVerbose(LogCategory.Movement, $"Interaction Stuck Detected. {castInfo}");
+                await Core.StuckHandler.DoUnstick();
+                return false;
+            }
 
             if (power.ShouldWaitAfterUse)
             {
