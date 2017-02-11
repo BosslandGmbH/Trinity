@@ -8,6 +8,7 @@ using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Util;
 using Trinity.Framework.Helpers;
+using Trinity.UI.UIComponents;
 using Zeta.Bot;
 using Zeta.Game;
 using JsonSerializer = Trinity.Components.Adventurer.Util.JsonSerializer;
@@ -40,7 +41,7 @@ namespace Trinity.Components.Adventurer.Settings
         private bool? _bountyMode3;
         private bool _nephalemRiftFullExplore;
         private bool? _keywardenZergMode;
-        private bool? _debugLogging;
+        private bool _debugLogging;
         private bool _useEmpoweredRifts;
         private int _empoweredRiftLevelLimit;
         private int _riftCount;
@@ -51,6 +52,8 @@ namespace Trinity.Components.Adventurer.Settings
         private long _minimumGold;
 
         private static Lazy<PluginSettings> _instance = new Lazy<PluginSettings>(() => new PluginSettings());
+        private bool _gemUpgradeFocusMode;
+
         public static PluginSettings Current => _instance.Value;
 
         [DataMember]
@@ -223,7 +226,7 @@ namespace Trinity.Components.Adventurer.Settings
         }
 
         [DataMember]
-        public bool? DebugLogging
+        public bool DebugLogging
         {
             get { return _debugLogging; }
             set { SetField(ref _debugLogging, value); }
@@ -275,6 +278,14 @@ namespace Trinity.Components.Adventurer.Settings
         {
             get { return _gemAutoLevelReductionLimit; }
             set { SetField(ref _gemAutoLevelReductionLimit, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(false)]
+        public bool GemUpgradeFocusMode
+        {
+            get { return _gemUpgradeFocusMode; }
+            set { SetField(ref _gemUpgradeFocusMode, value); }
         }
 
         [DataMember]
@@ -341,6 +352,7 @@ namespace Trinity.Components.Adventurer.Settings
         [IgnoreDataMember]
         public List<AdventurerGem> GemUpgradePriority => Gems.Gems;
 
+
         public PluginSettings()
         {
             LoadDefaults();
@@ -406,13 +418,13 @@ namespace Trinity.Components.Adventurer.Settings
         public void UpdateGemList()
         {
             var greaterRiftLevel = RiftData.GetGreaterRiftLevel();
-            Gems.UpdateGems(greaterRiftLevel, GreaterRiftPrioritizeEquipedGems);
+            Gems.UpdateGems(greaterRiftLevel);
         }
 
         [IgnoreDataMember]
         public List<int> GemUpgradeChances
         {
-            get { return new List<int> { 100, 90, 80, 70, 60, 30, 15, 8, 4, 2, 1, 0 }; }
+            get { return new List<int> { 100, 90, 80, 70, 60, 30, 15, 8, 4, 2, 1 }; }
         }
 
         [IgnoreDataMember]
@@ -539,6 +551,27 @@ namespace Trinity.Components.Adventurer.Settings
         {
             return JsonSerializer.Serialize(this);
         }
+
+        #region DragDrop Handler
+
+        public class UpdateOrderDropHandler : DefaultDropHandler
+        {
+            public override void Drop(IDropInfo dropInfo)
+            {
+                base.Drop(dropInfo);
+                var items = dropInfo.TargetCollection.OfType<AdventurerGemSetting>().ToList();
+                for (var index = 0; index < items.Count; index++)
+                {
+                    var skillSettings = items[index];
+                    skillSettings.Order = index;
+                }
+            }
+        }
+
+        [IgnoreDataMember]
+        public UpdateOrderDropHandler DropHandler { get; } = new UpdateOrderDropHandler();
+
+        #endregion
     }
 
 }

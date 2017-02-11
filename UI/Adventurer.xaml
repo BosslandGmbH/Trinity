@@ -13,6 +13,6 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
-        <ContentControl Content="{Binding AdventurerSettings}" Margin="0,28,0,128" />
+        <ContentControl Content="{Binding AdventurerSettings}" Margin="0,10,0,0" />
     </ScrollViewer>
 </UserControl>

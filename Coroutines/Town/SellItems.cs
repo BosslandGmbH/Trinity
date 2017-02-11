@@ -17,6 +17,7 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Framework.Helpers.Logger;
+using Trinity.Framework.Helpers;
 
 namespace Trinity.Coroutines.Town
 {
@@ -65,6 +66,7 @@ namespace Trinity.Coroutines.Town
             Logger.LogVerbose("[SellItems] Now to sell {0} items", sellItems.Count);
             sellItems.ForEach(i => Logger.LogDebug($"[SellItems] Selling: {i.Name} ({i.ActorSnoId}) InternalName={i.InternalName} Ancient={i.IsAncient} Ann={i.AnnId}"));
 
+            await Coroutine.Sleep(Randomizer.Fudge(150));
             GameUI.CloseVendorWindow();
 
             var merchant = TownInfo.NearestMerchant;
@@ -82,12 +84,12 @@ namespace Trinity.Coroutines.Town
                     Logger.LogError($"[SellItems] Failed to move to merchant ({merchant.Name}) to sell items :(");
                     return false;
                 }
-                await Coroutine.Sleep(1000);
+                await Coroutine.Sleep(Randomizer.Fudge(1000));
             }
 
             if (UIElements.VendorWindow.IsVisible)
             {
-                await Coroutine.Sleep(1000);
+                await Coroutine.Sleep(Randomizer.Fudge(1500));
                 var freshItems = Inventory.Backpack.Items.Where(ShouldSell);
                 foreach (var item in freshItems)
                 {
@@ -99,6 +101,7 @@ namespace Trinity.Coroutines.Town
                             continue;
                         }
 
+                        await Coroutine.Sleep(Randomizer.Fudge(100));
                         Logger.LogVerbose($"[SellItems] Selling: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} Name={item.InternalName}");
                         ZetaDia.Me.Inventory.SellItem(item.ToAcdItem());
                         ItemEvents.FireItemSold(item);
@@ -106,7 +109,7 @@ namespace Trinity.Coroutines.Town
                     }
                 }
 
-                await Coroutine.Sleep(1000);
+                await Coroutine.Sleep(Randomizer.Fudge(1000));
                 await RepairItems.Execute();
                 return true;
             }

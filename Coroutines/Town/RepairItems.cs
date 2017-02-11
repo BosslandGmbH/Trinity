@@ -47,7 +47,8 @@ namespace Trinity.Coroutines.Town
                 return true;
             }
 
-            var repairActor = TownInfo.NearestMerchant;
+            var repairActor = Randomizer.Boolean ? TownInfo.NearestMerchant : TownInfo.Blacksmith;
+            //var repairActor = TownInfo.NearestMerchant;
             if (repairActor == null)
             {
                 Logger.LogError("[RepairItems] Failed to find somewhere to repair :(");

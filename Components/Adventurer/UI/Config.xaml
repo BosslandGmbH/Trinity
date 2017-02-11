@@ -1,19 +1,195 @@
 ﻿<UserControl
+    xmlns:converters="clr-namespace:Trinity.Components.Adventurer.UI.UIComponents.Converters"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:converters="clr-namespace:Trinity.Components.Adventurer.UI.UIComponents.Converters"
-             mc:Ignorable="d" Background="#555">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters2="clr-namespace:Trinity.UI.UIComponents.Converters"
+    xmlns:mock="clr-namespace:Trinity.Settings.Mock"
+    xmlns:objects="clr-namespace:Trinity.Framework.Objects"
+    xmlns:markup="clr-namespace:Trinity.UI.UIComponents.MarkupExtensions"
+    xmlns:ui="clr-namespace:Trinity.UI.UIComponents"   
+    mc:Ignorable="d" Background="Transparent">
+    
     <UserControl.Resources>
-        <converters:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
-        <converters:IntToStringConverter x:Key="IntToStringConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../../UI/Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <mock:MockData x:Key="DesignViewModel"/>
+        
+            <converters:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
+            <converters:IntToStringConverter x:Key="IntToStringConverter" />
+            <converters2:PercentConverter x:Key="PercentConverter" />
+            <converters2:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters2:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters2:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+            <converters2:UriToCachedImageConverter x:Key="UrlToCachedImageConverter" />
+            <converters2:DebugDataBindingConverter x:Key="DebugDataBindingConverter" />
+            <converters2:EnumToBoolConverter x:Key="EnumToBoolConverter" />
+
+            <DataTemplate x:Key="DragAdorner">
+            <Border Background="Silver"
+                        BorderBrush="Gray"
+                        BorderThickness="1"
+                        CornerRadius="2"
+                        Margin="1">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding}" Margin="0,0,2,0" VerticalAlignment="Center" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+            <Style x:Key="SmallIconStyle" TargetType="{x:Type Image}">
+                <Setter Property="Width" Value="20" />
+                <Setter Property="Height" Value="20" />
+            </Style>
+
+            <!--<Grid Style="{x:Null}" HorizontalAlignment="Stretch" Margin="0,0,0,0" MinHeight="22" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*" />
+                    --><!--<ColumnDefinition Width="1*" />--><!--
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,0,0">
+                    <Path Style="{DynamicResource GrabHandlePath}" Cursor="SizeNS" Margin="0,0,3,0" />
+                    <CheckBox IsChecked="{Binding IsEnabled}" Margin="0" Padding="0" >
+                        <Label Grid.Column="1" Content="{Binding Name, Mode=OneWay}" />
+                    </CheckBox>
+                </StackPanel>
+                <TextBox IsEnabled="{Binding IsEnabled}" Grid.Column="1" BorderBrush="#333" Text="{Binding Formula}" HorizontalAlignment="Stretch" Width="Auto" Margin="0,2,2,2" TextAlignment="Left" IsReadOnly="False" />
+            </Grid>-->
+
+            <DataTemplate  x:Key="GemOrderListBoxItemTemplate">
+                <StackPanel Margin="0,0,0,0">
+                <Grid Style="{x:Null}" HorizontalAlignment="Stretch" MinHeight="22" Background="Transparent">
+                    <Border Background="Transparent" Cursor="SizeNS" Margin="-2" Padding="2" Width="15" Height="18" HorizontalAlignment="Left">
+                        <Path HorizontalAlignment="Left" Style="{DynamicResource GrabHandlePath}" Margin="0,0,3,0"  />
+                    </Border>
+                    <WrapPanel HorizontalAlignment="Left">
+                    <CheckBox IsChecked="{Binding IsEnabled}" HorizontalAlignment="Left" Background="Transparent" Margin="14,0,0,0" Padding="0" ToolTip="Check box to turn on upgrading this type of gem">
+                        <WrapPanel>
+                            <Image DockPanel.Dock="Left" VerticalAlignment="Top" Style="{StaticResource SmallIconStyle}" Margin="2,5,0,0" HorizontalAlignment="Left"                                
+                            Source="{Binding Item.IconUrl, Mode=OneWay, Converter={StaticResource UrlToCachedImageConverter}, IsAsync=true}" />
+                                <Label Margin="0,0,0,0" VerticalAlignment="Center" Background="Transparent" Grid.Column="1" Content="{Binding Item.Name, Mode=OneWay}" IsEnabled="{Binding IsEnabled}">
+                                    <Label.Style>
+                                        <Style TargetType="Label">
+                                            <Setter Property="Foreground" Value="White" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsEquipped}" Value="True">
+                                                    <Setter Property="Foreground" Value="Gold" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Label.Style>
+                                </Label>
+                            </WrapPanel>
+                    </CheckBox>
+
+                        <!--<TextBlock VerticalAlignment="Center" Margin="-5,0,0,0">
+                            <Run Foreground="Green" Text="{Binding HighestRank}" ToolTip="Your highest ranked gem of this type" />
+                        </TextBlock>-->
+
+                            <ItemsControl ItemsSource="{Binding Gems}" Margin="-3,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock VerticalAlignment="Center" Margin="0,0,5,0">
+                                            <TextBlock.ToolTip>
+                                                <TextBlock>
+                                                    <Run Text="{Binding CurrentRiftLevel, Mode=OneWay, StringFormat='Rift: \{0\} '}"/>
+                                                    <Run Text="{Binding UpgradeChance, Mode=OneWay, StringFormat='Upgrade Chance: \{0\}'}"/>
+                                                </TextBlock>
+                                            </TextBlock.ToolTip>
+                                            <Run Foreground="Green" Text="{Binding Rank}" />
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                        </WrapPanel>
+
+                    <!--<ToggleButton Margin="0,0,0,0" BorderThickness="1,0,0,0" BorderBrush="#292929" Width="14" HorizontalAlignment="Right" IsChecked="{Binding IsExpanded}" Template="{DynamicResource ArrowExpanderToggleButton}" />-->
+
+                    <Slider Background="Transparent" Grid.Column="0" Template="{DynamicResource SliderEditable}" 
+                            Visibility="{Binding IsLimited, Converter={StaticResource VisibleWhenTrueConverter}}"
+                            Margin="0,0,35,0" ToolTip="The rank to stop upgrading this gem type at" Width="125"
+                            Interval="500" Maximum="{Binding MaxRank}" Minimum="1" 
+                            SmallChange="1" LargeChange="5"
+                            TickPlacement="None" IsMoveToPointEnabled="True"                                       
+                            Value="{Binding Limit}" 
+                            HorizontalAlignment="Right" />
+
+                        <CheckBox Grid.Column="1" IsChecked="{Binding IsLimited}"  HorizontalAlignment="Right" Margin="0,0,0,0"
+                            Visibility="{Binding IsEnabled, Converter={StaticResource VisibleWhenTrueConverter}}"
+                            ToolTip="Check box to set a rank limit on this gem type"      
+                            VerticalAlignment="Center" VerticalContentAlignment="Center">
+                        </CheckBox>
+                    </Grid>
+                    <!--<Border Visibility="{Binding IsExpanded, Converter={StaticResource VisibleWhenTrueConverter}}">
+                    <Border Visibility="{Binding IsExpanded, Converter={StaticResource VisibleWhenTrueConverter}}" Margin="0,1,0,0" CornerRadius="0,0,3,3" BorderBrush="#292929" BorderThickness="0,1,0,0">
+                        <ItemsControl ItemsSource="{Binding Gems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="6" HorizontalAlignment="Left">
+                                        <TextBlock>
+                                            <Run Text="Rank" />
+                                            <Run Text="{Binding Rank, Mode=OneWay}" />
+                                            <Run Text="-" />
+                                            <Run Text="{Binding UpgradeChance, Mode=OneWay}" />
+                                            <Run Text="%" />
+                                        </TextBlock>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>-->
+                </StackPanel>
+            </DataTemplate>
+
+            <Style x:Key="OrderListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
    
         <StackPanel>
             <StackPanel Grid.Row="0" Grid.Column="0">
-                <GroupBox Header="Greater Rift" Margin="2 2 0 0">
-                    <StackPanel>
+
+            <GroupBox Header="Bounties" Margin="2 10 10 0">
+                <Grid Background="Transparent" Margin="0 0 0 2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition Width="60"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <CheckBox Name="BountyZerg" IsChecked="{Binding BountyZerg}" Content="Safe Zerg Mode" ToolTip="Tries to avoid killing unnecessary monsters to speed up the cache farm." Margin="2 4 2 2"></CheckBox>
+                        <!--<CheckBox Name="BountyPrioritizeBonusAct" IsChecked="{Binding BountyPrioritizeBonusAct}" Content="Prioritize Bonus Act" Margin="2" ToolTip="Runs the act with bonus reward first if the act is enabled to maximize the profit."></CheckBox>-->
+                        <TextBlock  Margin="2 4 2 2" Text="Bonus Act Mode (Mouseover for details)"></TextBlock>
+                        <RadioButton Name="BountyMode0" GroupName="BountyMode" IsChecked="{Binding BountyMode0}" Margin="2" ToolTip="Restarts the game if the bonus act contains any unsupported bounties">Force Bonus Act Mode</RadioButton>
+                        <RadioButton Name="BountyMode1" GroupName="BountyMode" IsChecked="{Binding BountyMode1}" Margin="2" ToolTip="Skips the Bonus Act if it contains any unsupported bounties">Skip Mode</RadioButton>
+                        <RadioButton Name="BountyMode2" GroupName="BountyMode" IsChecked="{Binding BountyMode2}" Margin="2" ToolTip="Attempts to balance mats (Ignores the bonus act if necessary)">Balance Mats Mode</RadioButton>
+                        <RadioButton Name="BountyMode3" GroupName="BountyMode" IsChecked="{Binding BountyMode3}" Margin="2" ToolTip="Runs only selected acts and ignores the bonus act if it's not selected">Act Selection Mode</RadioButton>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <CheckBox Name="BountyAct1" IsChecked="{Binding BountyAct1}" IsEnabled="{Binding BountyMode3}" Content="Act 1" Margin="2 4 2 2"></CheckBox>
+                        <CheckBox Name="BountyAct2" IsChecked="{Binding BountyAct2}" IsEnabled="{Binding BountyMode3}" Content="Act 2" Margin="2"></CheckBox>
+                        <CheckBox Name="BountyAct3" IsChecked="{Binding BountyAct3}" IsEnabled="{Binding BountyMode3}" Content="Act 3" Margin="2"></CheckBox>
+                        <CheckBox Name="BountyAct4" IsChecked="{Binding BountyAct4}" IsEnabled="{Binding BountyMode3}" Content="Act 4" Margin="2"></CheckBox>
+                        <CheckBox Name="BountyAct5" IsChecked="{Binding BountyAct5}" IsEnabled="{Binding BountyMode3}" Content="Act 5" Margin="2"></CheckBox>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+
+            <GroupBox Header="Greater Rift" Margin="2 10 10 0">
+                <StackPanel>
                         <Grid Margin="2" Background="Transparent">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
@@ -25,17 +201,8 @@
                     <Border Height="1" Background="DarkSlateGray" />
                     <CheckBox Name="GreaterRiftRunNephalem" IsChecked="{Binding GreaterRiftRunNephalem}" Content="Run Nephalem Rifts If No Keys Found" Margin="2"></CheckBox>
                     <Border Height="1" Background="DarkSlateGray" />
-                    <Grid Margin="2" Background="Transparent">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition Width="60"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="Minimum Gem Upgrade Chance" Margin="4 4 0 0"></TextBlock>
-                            <ComboBox Grid.Column="1" SelectedValue="{Binding GreaterRiftGemUpgradeChance}" Name="GreaterRiftGemUpgradeChance" ItemsSource="{Binding GemUpgradeChances}"></ComboBox>
-                        </Grid>
-                    <Border Height="1" Background="DarkSlateGray" />
-                    <CheckBox Name="GreaterRiftPrioritizeEquipedGems" IsChecked="{Binding GreaterRiftPrioritizeEquipedGems}" Content="Prioritize Equipped Gems" Margin="2"></CheckBox>
-                    <Border Height="1" Background="DarkSlateGray" />
+
+                    <!--<Border Height="1" Background="DarkSlateGray" />-->
                     <UniformGrid Rows="1">
                             <CheckBox VerticalAlignment="Center" Name="UseEmpoweredRifts" IsChecked="{Binding UseEmpoweredRifts}" Content="Empower Rift" Margin="2" ToolTip="Sinks a lot of money to give you a 4th gem upgrade opportunity"></CheckBox>
                             <WrapPanel HorizontalAlignment="Right" ToolTip="Max rift level for empowering rifts" Visibility="{Binding UseEmpoweredRifts, Converter={StaticResource VisibleWhenTrueConverter}}" >
@@ -62,32 +229,55 @@
                 </StackPanel>
 
                 </GroupBox>
-                <GroupBox Header="Bounties" Margin="2 0 0 0">
-                    <Grid Background="Transparent" Margin="0 0 0 2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition Width="60"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0">
-                            <CheckBox Name="BountyZerg" IsChecked="{Binding BountyZerg}" Content="Safe Zerg Mode" ToolTip="Tries to avoid killing unnecessary monsters to speed up the cache farm." Margin="2 4 2 2"></CheckBox>
-                            <!--<CheckBox Name="BountyPrioritizeBonusAct" IsChecked="{Binding BountyPrioritizeBonusAct}" Content="Prioritize Bonus Act" Margin="2" ToolTip="Runs the act with bonus reward first if the act is enabled to maximize the profit."></CheckBox>-->
-                            <TextBlock  Margin="2 4 2 2" Text="Bonus Act Mode (Mouseover for details)"></TextBlock>
-                            <RadioButton Name="BountyMode0" GroupName="BountyMode" IsChecked="{Binding BountyMode0}" Margin="2" ToolTip="Restarts the game if the bonus act contains any unsupported bounties">Force Bonus Act Mode</RadioButton>
-                            <RadioButton Name="BountyMode1" GroupName="BountyMode" IsChecked="{Binding BountyMode1}" Margin="2" ToolTip="Skips the Bonus Act if it contains any unsupported bounties">Skip Mode</RadioButton>
-                            <RadioButton Name="BountyMode2" GroupName="BountyMode" IsChecked="{Binding BountyMode2}" Margin="2" ToolTip="Attempts to balance mats (Ignores the bonus act if necessary)">Balance Mats Mode</RadioButton>
-                            <RadioButton Name="BountyMode3" GroupName="BountyMode" IsChecked="{Binding BountyMode3}" Margin="2" ToolTip="Runs only selected acts and ignores the bonus act if it's not selected">Act Selection Mode</RadioButton>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1">
-                            <CheckBox Name="BountyAct1" IsChecked="{Binding BountyAct1}" IsEnabled="{Binding BountyMode3}" Content="Act 1" Margin="2 4 2 2"></CheckBox>
-                            <CheckBox Name="BountyAct2" IsChecked="{Binding BountyAct2}" IsEnabled="{Binding BountyMode3}" Content="Act 2" Margin="2"></CheckBox>
-                            <CheckBox Name="BountyAct3" IsChecked="{Binding BountyAct3}" IsEnabled="{Binding BountyMode3}" Content="Act 3" Margin="2"></CheckBox>
-                            <CheckBox Name="BountyAct4" IsChecked="{Binding BountyAct4}" IsEnabled="{Binding BountyMode3}" Content="Act 4" Margin="2"></CheckBox>
-                            <CheckBox Name="BountyAct5" IsChecked="{Binding BountyAct5}" IsEnabled="{Binding BountyMode3}" Content="Act 5" Margin="2"></CheckBox>
-                        </StackPanel>
+
+            <GroupBox Margin="2 10 10 0">
+                <GroupBox.Header>Gem Upgrading</GroupBox.Header>
+                <StackPanel>
+                    
+                    <!--<Border Height="1" Margin="2,5,2,5" Background="DarkSlateGray" />-->
+                    <CheckBox Name="GreaterRiftPrioritizeEquipedGems" IsChecked="{Binding GreaterRiftPrioritizeEquipedGems}" Content="Prioritize Equipped Gems" ToolTip="Always upgrades the equipped gems first until Quality% or Rank limit reached" Margin="2"></CheckBox>
+                    
+                    <CheckBox Name="GemUpgradeEvenly" IsChecked="{Binding GemUpgradeFocusMode}" Content="Focus one gem at a time by order (ranking table below)" ToolTip="Upgrades by row order (ranking in table below) until Quality% or Rank limit reached" Margin="2"></CheckBox>
+
+                    <WrapPanel>
+                        <TextBlock Grid.Column="0" Text="Don't upgrade gem if chance is below: " Margin="4 4 0 0"></TextBlock>
+                        <ComboBox Grid.Column="1" Margin="5,2,2,2" SelectedValue="{Binding GreaterRiftGemUpgradeChance}" Name="GreaterRiftGemUpgradeChance" ItemsSource="{Binding GemUpgradeChances}"></ComboBox>
+                        <TextBlock Grid.Column="0" Text="%" Margin="4 4 0 0"></TextBlock>
+                    </WrapPanel>
+
+                    <Border Height="1" Margin="2,5,2,5" Background="DarkSlateGray" />
+                    <Grid>
+                        <TextBlock Margin="3,8,3,10" TextWrapping="Wrap">Drag the gems below to set upgrade order.</TextBlock>
+                        <TextBlock HorizontalAlignment="Right" Margin="3,8,8,10" TextWrapping="Wrap">Limit:</TextBlock>
                     </Grid>
-                </GroupBox>
-                <GroupBox Header="Misc" Margin="2 0 0 0">
-                    <StackPanel>
+                    <!--  -->
+                    <ListBox Padding="5"
+                            d:DataContext="{Binding Source={StaticResource DesignViewModel}}"
+                            ItemsSource="{Binding Gems.GemSettings}"   
+                            ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                            ScrollViewer.VerticalScrollBarVisibility="Disabled"       
+                            AlternationCount="100000"
+                            SelectionMode="Single"
+                            ui:DragDrop.IsDragSource="True"
+                            ui:DragDrop.IsDropTarget="True"
+                            ui:DragDrop.DropHandler="{Binding DropHandler}"
+                            ui:DragDrop.DragDropContext="GemOrder"
+                            ui:DragDrop.DragAdornerTemplate="{StaticResource DragAdorner}"
+                            VerticalAlignment="Top"
+                            ItemTemplate="{DynamicResource GemOrderListBoxItemTemplate}"
+                            ItemContainerStyle="{DynamicResource OrderListBoxItemStyle}"
+                            >
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <ItemsPresenter />
+                            </ControlTemplate>
+                        </ListBox.Template>
+                    </ListBox>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Misc" Margin="2 10 10 0">
+                <StackPanel>
                         <Grid Margin="2" Background="Transparent">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition></ColumnDefinition>
@@ -102,7 +292,10 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-            <GroupBox Grid.Row="0" Grid.Column="1" Header="Gem Upgrade Priority" Margin="0 2 2 0">
+
+
+
+        <!--<GroupBox Grid.Row="0" Grid.Column="1" Header="Gem Upgrade Priority" Margin="0 2 2 0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="23"></RowDefinition>
@@ -166,7 +359,7 @@
                         <Button Name="GemPriorityDown" Grid.Row="1" FontFamily="Marlett" Content="6" ></Button>
                     </Grid>
                 </Grid>
-            </GroupBox>
+            </GroupBox>-->
             <!--<Grid Name="ButtonsGrid" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>

@@ -50,6 +50,30 @@ namespace Trinity.Components.Adventurer.UI.UIComponents
                     "xmlns:charts=\"clr-namespace:LineChartLib;assembly=" +
                     Assembly.GetExecutingAssembly().GetName().Name + "\"");
 
+                var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+                filecontent = filecontent.Replace("xmlns:radarCanvas=\"clr-namespace:Trinity.UI.Visualizer.RadarCanvas\"", "xmlns:radarCanvas=\"clr-namespace:Trinity.UI.Visualizer.RadarCanvas;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:itemlist=\"clr-namespace:Trinity.Settings.ItemList\"", "xmlns:itemlist=\"clr-namespace:Trinity.Settings.ItemList;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:markupExtensions=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions\"", "xmlns:markupExtensions=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions\"", "xmlns:markup=\"clr-namespace:Trinity.UI.UIComponents.MarkupExtensions;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:input=\"clr-namespace:Trinity.UI.UIComponents.Input\"", "xmlns:input=\"clr-namespace:Trinity.UI.UIComponents.Input;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:behaviors=\"clr-namespace:Trinity.UI.UIComponents.Behaviors\"", "xmlns:behaviors=\"clr-namespace:Trinity.UI.UIComponents.Behaviors;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:controls=\"clr-namespace:Trinity.UI.UIComponents.Controls\"", "xmlns:controls=\"clr-namespace:Trinity.UI.UIComponents.Controls;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:objects=\"clr-namespace:Trinity.Framework.Objects\"", "xmlns:objects=\"clr-namespace:Trinity.Framework.Objects;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:mock=\"clr-namespace:Trinity.Settings.Mock\"", "xmlns:mock=\"clr-namespace:Trinity.Settings.Mock;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:settings=\"clr-namespace:Trinity.Settings\"", "xmlns:settings=\"clr-namespace:Trinity.Settings;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:charts=\"clr-namespace:LineChartLib\"", "xmlns:charts=\"clr-namespace:LineChartLib;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ut=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:converters=\"clr-namespace:Trinity.UI.UIComponents.Converters\"", "xmlns:converters=\"clr-namespace:Trinity.UI.UIComponents.Converters;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:converters2=\"clr-namespace:Trinity.UI.UIComponents.Converters\"", "xmlns:converters2=\"clr-namespace:Trinity.UI.UIComponents.Converters;assembly=" + assemblyName + "\"");
+
+                filecontent = filecontent.Replace("xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas\"", "xmlns:radarCanvas=\"clr-namespace:Trinity.UI.UIComponents.RadarCanvas;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:ui=\"clr-namespace:Trinity.UI.UIComponents\"", "xmlns:ui=\"clr-namespace:Trinity.UI.UIComponents;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop\"", "xmlns:dd=\"clr-namespace:GongSolutions.Wpf.DragDrop;assembly=" + assemblyName + "\"");
+                filecontent = filecontent.Replace("xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums\"", "xmlns:enums=\"clr-namespace:Trinity.Framework.Objects.Enums;assembly=" + assemblyName + "\"");
+                filecontent = Regex.Replace(filecontent, "<ResourceDictionary.MergedDictionaries>.*</ResourceDictionary.MergedDictionaries>", string.Empty, RegexOptions.Singleline | RegexOptions.Compiled);
+
+
 
                 // Remove Template designer reference
                 //filecontent = filecontent.Replace("<ResourceDictionary.MergedDictionaries><ResourceDictionary Source=\"..\\Template.xaml\"/></ResourceDictionary.MergedDictionaries>", string.Empty);

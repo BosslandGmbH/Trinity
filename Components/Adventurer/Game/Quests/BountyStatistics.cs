@@ -27,6 +27,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             if (count == 0) return;
             var totalTime = TimeSpan.FromSeconds(stats.Sum(s => (s.EndTime - s.StartTime).TotalSeconds));
             var averageTime = TimeSpan.FromSeconds(stats.Average(s => (s.EndTime - s.StartTime).TotalSeconds));
+            var timeWasted = TimeSpan.FromSeconds(stats.Where(s => s.IsIncomplete || s.IsFailed).Sum(s => (s.EndTime - s.StartTime).TotalSeconds));
             var bountiesPerHour = count / totalTime.TotalHours;
             var successful = stats.Count(s => s.IsCompleted);
             var failed = stats.Count(s => s.IsFailed);
@@ -35,26 +36,48 @@ namespace Trinity.Components.Adventurer.Game.Quests
             Logger.Info("[BountyStatistics] Total Time: {0:dd\\ hh\\:mm\\:ss}", totalTime);
             Logger.Info("[BountyStatistics] Average Time: {0:hh\\:mm\\:ss}", averageTime);
             Logger.Info("[BountyStatistics] Per hour: {0:0.##}", bountiesPerHour);
+            Logger.Info("[BountyStatistics] Time Wasted: {0:hh\\:mm\\:ss}", timeWasted);
             Logger.Info("[BountyStatistics] Completed Acts: {0}", CompletedBountyActs);
             Logger.Info("[BountyStatistics] Total Bounties: {0}", count);
             Logger.Info("[BountyStatistics] Success Count: {0}", successful);
             Logger.Info("[BountyStatistics] Failed Count: {0}", failed);
             Logger.Info("[BountyStatistics] Incomplete Count: {0}", incomplete);
-            Logger.Info("[BountyStatistics] Success Rate: {0:P}", successful/(double)count);
+            Logger.Info("[BountyStatistics] Success Rate: {0:#.##}%", (successful/(double)count)*100);
 
-            foreach (var item in stats.Where(s => !(s.IsCompleted || s.IsFailed)))
+            var incompleteStats = stats.Where(s => !(s.IsCompleted || s.IsFailed)).DistinctBy(s => s.QuestId).ToList();
+
+            foreach (var item in incompleteStats)
             {
                 var item1 = item;
                 var incompleteCount = stats.Count(s => s.QuestId == item1.QuestId && !(s.IsCompleted || s.IsFailed));
                 var successCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsCompleted);
                 var failureCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsFailed);
-                Logger.Info($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name}");
+                var wasted = stats.Where(s => s.QuestId == item1.QuestId && !(s.IsCompleted || s.IsFailed));
+                var wastedAvg = wasted.Any() ? 0 : wasted.Average(s => (s.EndTime - s.StartTime).TotalSeconds);
+                  
+                Logger.Info($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name} TimeAvg: {wastedAvg}");
             }
 
-            foreach (var item in stats.DistinctBy(o => o.QuestId).Where(s => !(s.IsCompleted || s.IsFailed)))
+            foreach (var item in incompleteStats)
             {
-                Logger.Debug($"    <RunBounty questId=\"{item.QuestId}\" name=\"{item.Name}\" />");
+                Logger.Raw($"    <RunBounty questId=\"{item.QuestId}\" name=\"{item.Name}\" />");
             }
+
+            //Logger.Info("[BountyStatistics] Slowest Bounties:");
+            //foreach(var item in stats.Where(s => s.IsCompleted).OrderByDescending(s => s.Duration).Take(10))
+            //{
+            //    Logger.Info($"[BountyStatistics] {item.Duration:hh:mm:ss}: {item.Name} ({item.QuestId})");
+            //}
+
+            //foreach (var item in stats.Where(s => s.IsCompleted))
+            //{
+            //    var item1 = item;
+            //    var incompleteCount = stats.Count(s => s.QuestId == item1.QuestId && !(s.IsCompleted || s.IsFailed));
+            //    var successCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsCompleted);
+            //    var failureCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsFailed);
+
+            //    Logger.Info($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name} TimeAvg: {wastedAvg}");
+            //}
 
         }
 
@@ -115,6 +138,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public bool IsIncomplete => !(IsCompleted || IsFailed);
         public bool WasLastInProgress => !IsFailed && this == BountyCoroutine.LastBountyStats;
+        public TimeSpan Duration => (EndTime - StartTime);
 
         private BountyStatistic()
         {

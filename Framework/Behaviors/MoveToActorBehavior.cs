@@ -36,7 +36,7 @@ namespace Trinity.Framework.Behaviors
         {
             var actor = Core.Actors.AllRActors
                 .OrderBy(m => m.Distance)
-                .FirstOrDefault(m => m.Position != Vector3.Zero && actorSelector(m) && !VisitedActorPositions.Contains(m.Position) && m.Distance > 5f);
+                .FirstOrDefault(m => m.IsValid && m.Position != Vector3.Zero && actorSelector(m) && !VisitedActorPositions.Contains(m.Position) && m.Distance > 8f);
 
             if (actor != null && (IsRunning || (!PlayerMover.IsBlocked && actor.Distance < 500)) && !Navigator.StuckHandler.IsStuck)
             {

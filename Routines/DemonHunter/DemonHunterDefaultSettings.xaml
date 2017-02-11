@@ -99,7 +99,7 @@
                             Interval="5" Maximum="100" Minimum="0" 
                             SmallChange="5" LargeChange="5" 
                             TickPlacement="BottomRight" TickFrequency="5"
-                            Value="{Binding DataContext.Vault.PrimaryResourcePct}" 
+                            Value="{Binding DataContext.Vault.SecondaryResourcePct}" 
                             HorizontalAlignment="Stretch" Margin="2"
                             />
                         </StackPanel>

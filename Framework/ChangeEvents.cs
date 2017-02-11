@@ -50,6 +50,10 @@ namespace Trinity.Framework
         public static TrinityChangeDetector<bool> IsRunning { get; } = new TrinityChangeDetector<bool>(()
             => BotEvents.IsBotRunning);
 
+        public static TrinityChangeDetector<DateTime> ActorsUpdated { get; } = new TrinityChangeDetector<DateTime>(()
+            => Core.Actors.LastUpdated);
+
+
     }
 }
 

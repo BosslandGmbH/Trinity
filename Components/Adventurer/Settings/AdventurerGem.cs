@@ -1,14 +1,19 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using Trinity.Components.Adventurer.Cache;
 using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Adventurer.Settings
 {
+
     [DataContract]
     public class AdventurerGem
     {
+
         public int Guid { get; set; }
         [DataMember]
         public int SNO { get; set; }
@@ -17,67 +22,51 @@ namespace Trinity.Components.Adventurer.Settings
 
         public string DisplayRank => IsMaxRank ? "MAX" : Rank.ToString();
 
-        [DataMember]
+ 
         public string Name { get; set; }
-        [DataMember]
-        public int UpgradeChance { get; set; }
-        [DataMember]
-        public bool IsEquiped { get; set; }
-        [DataMember]
-        public bool IsMaxRank { get; set; }
-        [DataMember]
-        public int MaxRank { get; set; }
 
+        public int UpgradeChance => IsMaxRank ? 0 : CalculateUpgradeChance(CurrentRiftLevel, Rank);
+
+        public int CurrentRiftSettingsSelection => PluginSettings.Current.GreaterRiftLevel;
+
+        public int CurrentRiftLevel { get; set; }
+
+        public bool IsEquiped { get; set; }
+       
+        public bool IsMaxRank { get; set; }
+     
+        public int MaxRank { get; set; }
+   
         public bool HasRankCap { get; set; }
 
-        public string DisplayName => $"{Name} (Rank: {Rank}, Upgrade Chance: {UpgradeChance}%)";
+        public AdventurerGemSetting Settings { get; set; }
 
-        public AdventurerGem(TrinityItem gem, int griftLevel)
+        public string DisplayName => $"{Name} (Rank: {Rank}, Upgrade Chance: {UpgradeChance}% @ {CurrentRiftLevel})";
+
+        public AdventurerGem() { }
+
+        public AdventurerGem(TrinityItem gem, int riftLevel)
         {
-            Guid = gem.AcdId;
+            Guid = gem.AnnId;
             SNO = gem.ActorSnoId;
             Rank = gem.Attributes.JewelRank;
             Name = gem.Name;
+            CurrentRiftLevel = riftLevel;
 
-            if (GemCaps.ContainsKey(SNO))
+            Settings = PluginSettings.Current.Gems.GemSettings.FirstOrDefault(g => g.Sno == gem.ActorSnoId);
+            if (Settings == null)
             {
-                MaxRank = GemCaps[SNO];
-                IsMaxRank = Rank >= MaxRank;
-                HasRankCap = MaxRank > 0;
+                Logger.LogError($"Gems Settings Entry not found for {gem.Name} ({gem.ActorSnoId}), if its a new gem, it needs to be added to Trinity's Gems.cs reference");
+                return;
             }
 
+            MaxRank = Settings.MaxRank;
+            IsMaxRank = Rank >= Settings.MaxRank;
+            HasRankCap = Settings.MaxRank > 0;
+
             IsEquiped = !IsMaxRank && gem.InventorySlot == InventorySlot.Socket;
-            UpgradeChance = IsMaxRank ? 0 : CalculateUpgradeChance(griftLevel, Rank);
         }
 
-        //public AdventurerGem(ACDItem gem, int griftLevel)
-        //{
-        //    Guid = gem.ACDId;
-        //    SNO = gem.ActorSnoId;
-        //    Rank = gem.JewelRank;
-        //    Name = gem.Name;
-
-        //    if (GemCaps.ContainsKey(SNO))
-        //    {
-        //        MaxRank = GemCaps[SNO];
-        //        IsMaxRank = Rank >= MaxRank;
-        //        HasRankCap = MaxRank > 0;
-        //    }
-
-        //    IsEquiped = !IsMaxRank && gem.InventorySlot == InventorySlot.Socket;
-        //    UpgradeChance = IsMaxRank ? 0 : CalculateUpgradeChance(griftLevel, Rank);
-        //}
-
-        public static Dictionary<int, int> GemCaps = new Dictionary<int, int>
-        {
-            {428355, 50}, // iceblink
-            {405796, 150}, //ActorId: 405796, Type: Item, Name: Gogok of Swiftness
-            //{405797, 50}, // invigorating gemstone
-            {405803, 50}, // Boon of the Hoarder
-            //{405783, 25}, //ActorId: 405783, Type: Item, Name: Gem of Ease
-            {428033, 100},//ActorId: 428033, Type: Item, Name: Esoteric Alteration  
-            {428346, 100}, //Mutilation Guard 428346 
-        };
 
         /// <summary>
         /// Gets the number of upgrades that would be possible for this gem on a given rift level and chance percent
@@ -86,12 +75,11 @@ namespace Trinity.Components.Adventurer.Settings
         /// <param name="maxAttempts">max attempts</param>
         /// <param name="requiredChance">percentage ie. 80. defaults to settings value</param>
         /// <returns>number of possible upgrades</returns>
-        public int GetUpgrades(int riftLevel, int maxAttempts, int requiredChance = -1)
+        public int GetUpgrades(int riftLevel, int maxAttempts, int requiredChance)
         {
-            if (requiredChance < 0)
-            {
-                requiredChance = PluginSettings.Current.GreaterRiftGemUpgradeChance;
-            }
+            if (!Settings.IsEnabled)
+                return 0;
+
             for (var i = 0; i <= maxAttempts; i++)
             {
                 var rank = Rank + i;
@@ -105,18 +93,14 @@ namespace Trinity.Components.Adventurer.Settings
             return maxAttempts;
         }
 
-        public void UpdateUpgradeChance(int griftLevel)
-        {
-            UpgradeChance = GetUpgradeChance(griftLevel);
-        }
-
         public int GetUpgradeChance(int griftLevel)
         {
-            return IsMaxRank ? 0 : CalculateUpgradeChance(griftLevel, Rank);
+            return CalculateUpgradeChance(griftLevel, Rank);
         }
 
         private int CalculateUpgradeChance(int griftLevel, int rank)
         {
+            if (IsMaxRank) return 0;
             var result = griftLevel - rank;
             if (result >= 10) return 100;
             if (result >= 9) return 90;

@@ -49,6 +49,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsMinion = monsterQuality == MonsterQuality.Minion;
             actor.IsElite = actor.IsMinion || actor.IsRare || actor.IsChampion || actor.IsUnique || actor.IsBoss;
             actor.IsTrashMob = actor.IsUnit && !(actor.IsElite || actor.IsBoss || actor.IsTreasureGoblin || actor.IsMinion);
+            actor.IsCorruptGrowth = GameData.CorruptGrowthIds.Contains(actor.ActorSnoId);
 
             if(actor.IsBoss)
             {

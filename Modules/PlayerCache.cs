@@ -88,6 +88,8 @@ namespace Trinity.Modules
         public bool IsCasting { get; set; }
         public bool IsCastingPortal { get; set; }
         public bool IsInParty { get; set; }
+        public float ShieldHitpoints { get; private set; }
+
 
         public bool IsInventoryLockedForGreaterRift { get; set; }
 
@@ -204,6 +206,7 @@ namespace Trinity.Modules
 
         internal void UpdateFastChangingData()
         {
+            var commonData = _me.CommonData;
             IsInParty = ZetaDia.Service.Party.NumPartyMembers > 1;
             AcdId = _me.ACDId;
             RActorGuid = _me.RActorId;
@@ -226,7 +229,7 @@ namespace Trinity.Modules
             MovementSpeed = (float)Core.PlayerHistory.MoveSpeed;
             IsMoving = _me.Movement.IsMoving;
             IsInCombat = _me.IsInCombat;
-            MaxBloodShards = 500 + ZetaDia.Me.CommonData.GetAttribute<int>(ActorAttributeType.HighestSoloRiftLevel) * 10;
+            MaxBloodShards = 500 + commonData.GetAttribute<int>(ActorAttributeType.HighestSoloRiftLevel) * 10;
             IsMaxCriticalChance = _me.CritPercentBonusUncapped > 0 || Math.Abs(_me.CritDamagePercent - 100) < float.Epsilon;
             CriticalChancePct = _me.CritDamagePercent;
             IsJailed = _me.HasDebuff(SNOPower.MonsterAffix_JailerCast);
@@ -234,9 +237,10 @@ namespace Trinity.Modules
             ParticipatingInTieredLootRun = _me.IsParticipatingInTieredLootRun;
             TieredLootRunlevel = _me.InTieredLootRunLevel;
             IsCasting = _me.LoopingAnimationEndTime > 0;
-            IsInteractingWithGizmo = _me.CommonData.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.Axe_Operate_Gizmo);
-            CurrentAnimation = _me.CommonData.CurrentAnimation;
+            IsInteractingWithGizmo = commonData.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.Axe_Operate_Gizmo);
+            CurrentAnimation = commonData.CurrentAnimation;
             IsInventoryLockedForGreaterRift = ZetaDia.CurrentRift.IsStarted && ZetaDia.CurrentRift.Type == RiftType.Greater && !ZetaDia.CurrentRift.IsCompleted;
+            ShieldHitpoints = commonData.GetAttribute<float>(ActorAttributeType.DamageShieldAmount);
 
             Summons = GetPlayerSummonCounts();
 

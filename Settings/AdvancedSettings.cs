@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Configuration;
 using System.Runtime.Serialization;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects.Attributes;
+using Trinity.UI.UIComponents;
 
 namespace Trinity.Settings
 {
@@ -21,6 +24,7 @@ namespace Trinity.Settings
         private bool _disableAllMovement;
         private bool _logStats;
         private bool _logItems;
+        private GameStopReasons _stopReasons;
 
         public AdvancedSettings()
         {
@@ -138,6 +142,14 @@ namespace Trinity.Settings
         {
             get { return _logItems; }
             set { SetField(ref _logItems, value); }
+        }
+
+        [DataMember(IsRequired = false)]
+        [Setting, UIControl(UIControlType.FlagsCheckboxes)]
+        public GameStopReasons StopReasons
+        {            
+            get { return _stopReasons; }
+            set { SetField(ref _stopReasons, value); }
         }
 
     }

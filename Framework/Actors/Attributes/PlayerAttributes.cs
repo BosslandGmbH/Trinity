@@ -20,6 +20,13 @@ namespace Trinity.Framework.Actors.Attributes
         public int GetChargesMax(SNOPower power) => GetAttributeDirectlyFromTable<int>(ActorAttributeType.AllowSkillChanges, (int)power);
 
 
+        public int ShieldHitpoints => GetAttribute<int>(ActorAttributeType.BreakableShieldHP);
+
+        public int HasDamageShield => GetAttribute<int>(ActorAttributeType.DamageShield);
+
+        public int DamageShieldHitpoints => GetAttribute<int>(ActorAttributeType.DamageShieldAmount);
+
+
     }
 }
 

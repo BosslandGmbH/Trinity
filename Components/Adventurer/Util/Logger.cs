@@ -57,7 +57,7 @@ namespace Trinity.Components.Adventurer.Util
 
         public static void DebugSetting(string message, params object[] args)
         {
-            if (PluginSettings.Current.DebugLogging.HasValue && PluginSettings.Current.DebugLogging.Value)
+            if (PluginSettings.Current.DebugLogging)
             {
                 if (!message.StartsWith("["))
                 {

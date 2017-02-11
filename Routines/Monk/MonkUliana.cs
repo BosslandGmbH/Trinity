@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
@@ -57,27 +58,45 @@ namespace Trinity.Routines.Monk
             if (ShouldCycloneStrike())
                 return CycloneStrike();
 
-            if (Player.CurrentHealthPct < 0.35)
-                return SevenSidedStrike(CurrentTarget);
+            if (ShouldSevenSidedStrike(out target))
+                return SevenSidedStrike(target);
 
-            var closeEPUnits = WeightedUnits.Where(u => u.Distance < 15f && u.HasDebuff(SNOPower.Monk_ExplodingPalm)).ToList();
-            var isEPReady = Legendary.Madstone.IsEquipped || WeightedUnits.Any(u => u.Distance < 15f && u.HasDebuff(SNOPower.Monk_ExplodingPalm));
-            var isEnoughTime = TimeToElementStart(Element.Cold) > SevenSidedStrikeCooldownMs;
-            var isColdElement = Core.Buffs.ConventionElement == Element.Cold;            
+            if (!WeightedUnits.Any(u => u.Distance < 20f && HasEP(u)))
+                return GetExplodingPalmPrimary();
 
-            Logger.Log(LogCategory.Routine, $"TimeToCold={TimeToElementStart(Element.Cold)} SSSCD={SevenSidedStrikeCooldownMs} IsCold={isColdElement} EPReady={isEPReady} closeEPUnits={closeEPUnits.Count}");
-
-            if (isEPReady && ShouldSevenSidedStrike(out target) && (!Legendary.ConventionOfElements.IsEquipped || isColdElement || isEnoughTime))
-                return SevenSidedStrike(target);      
-
-            return GetExplodingPalmPrimary();
+            return GetPrimary();
         }
 
         private TrinityPower GetExplodingPalmPrimary()
         {
             TrinityPower power = null;
 
-            var target = TargetUtil.LowestHealthTarget(20f, CurrentTarget.Position, SNOPower.Monk_ExplodingPalm);
+            var target = TargetUtil.LowestHealthTarget(6f, CurrentTarget.Position, SNOPower.Monk_ExplodingPalm);
+            var targetTeleport = TargetUtil.LowestHealthTarget(20f, CurrentTarget.Position, SNOPower.Monk_ExplodingPalm);
+
+            if (IsEpiphanyActive)
+                target = targetTeleport;
+
+            if (Skills.Monk.FistsOfThunder.CanCast())
+                power = FistsOfThunder(targetTeleport);
+
+            else if (Skills.Monk.DeadlyReach.CanCast())
+                power = DeadlyReach(target);
+
+            else if (Skills.Monk.CripplingWave.CanCast())
+                power = CripplingWave(target);
+
+            else if (Skills.Monk.WayOfTheHundredFists.CanCast())
+                power = WayOfTheHundredFists(target);
+
+            return power;
+        }
+
+        private TrinityPower GetPrimary()
+        {
+            TrinityPower power = null;
+
+            var target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
 
             if (Skills.Monk.FistsOfThunder.CanCast())
                 power = FistsOfThunder(target);
@@ -94,18 +113,33 @@ namespace Trinity.Routines.Monk
             return power;
         }
 
+        // There is currently a bug with Attributes sometimes not showing up in Trinity's attributes list.
+        // Needs to be looked into, this is a work-around for now (or use ZetaDia lookup) 
+        public bool HasEP(TrinityActor actor) 
+            => actor.Attributes.Powers.ContainsKey(SNOPower.Monk_ExplodingPalm) || 
+            actor.Attributes.GetAttributeDirectlyFromTable<bool>(ActorAttributeType.PowerBuff0VisualEffectB, (int)SNOPower.Monk_ExplodingPalm);
+
         protected override bool ShouldSevenSidedStrike(out TrinityActor target)
         {
             target = null;
+            var skill = Skills.Monk.SevenSidedStrike;
+            var nearbyUnitsWithEP = WeightedUnits.Any(u => u.Distance < 20f && HasEP(u));
+            //var nearbyUnitsWithGungdoEP = CurrentTarget.HasDebuff((SNOPower)455436);
 
-            if (!Skills.Monk.SevenSidedStrike.CanCast())
+            if (!skill.CanCast())
                 return false;
 
             if (!TargetUtil.AnyMobsInRange(45f) && !CurrentTarget.IsTreasureGoblin)
                 return false;
 
+            if (!nearbyUnitsWithEP && !Legendary.Madstone.IsEquipped)
+                return false;
+
+            //if (!nearbyUnitsWithGungdoEP)
+            //    return false;
+
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
-            return target != null;       
+            return target != null;
         }
 
         public double SevenSidedStrikeCooldownMs

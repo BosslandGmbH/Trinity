@@ -372,7 +372,7 @@ namespace Trinity.Components.Combat
                     return true;
                 }
 
-                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 5f;
+                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 10f;
                 if (CurrentTarget != null && isCloseToSafeSpot)
                 {
                     var canReachTarget = CurrentTarget.Distance < CurrentPower?.MinimumRange;
@@ -381,6 +381,22 @@ namespace Trinity.Components.Combat
                         Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and target is within range");
                         return false;
                     }
+                }
+
+                var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && !Core.Player.Actor.IsInCriticalAvoidance;
+
+                if (newTarget?.Position == LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
+                {
+                    Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
+                    Core.PlayerMover.MoveTowards(Core.Player.Position);
+                    return true;
+                }
+
+                if (!Combat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
+                {
+                    Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
+                    Core.PlayerMover.MoveTowards(Core.Player.Position);
+                    return true;
                 }
 
                 Logger.Log(LogCategory.Avoidance, $"Avoiding");
