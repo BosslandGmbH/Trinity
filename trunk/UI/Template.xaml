@@ -42,6 +42,7 @@
     <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
     <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
 
+
     <Style x:Key="RadioButtonListBoxStyle" TargetType="{x:Type ListBox}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Margin" Value="0"/>
@@ -263,6 +264,10 @@
     <Color x:Key="CustomPressedBorderDisabledLightColor">#FF555555</Color>
     <Color x:Key="CustomPressedBorderDarkColor">#FF444444</Color>
     <Color x:Key="CustomBorderLightColor">#FFCCCCCC</Color>
+    <Color x:Key="CustomDisabledControlDarkColor">#FF444444</Color>
+    <Color x:Key="CustomDisabledBorderLightColor">#FF888888</Color>
+    
+    
 
     <Style TargetType="Grid"></Style>
 
@@ -431,16 +436,15 @@
     </Style>-->
 
 
-    <!--<ControlTemplate x:Key="ExpanderToggleButton"
-                 TargetType="{x:Type ToggleButton}">
+    <ControlTemplate x:Key="ArrowExpanderToggleButton" TargetType="{x:Type ToggleButton}">
         <Border x:Name="Border"
           CornerRadius="2,0,0,0"
           BorderThickness="0,0,1,0">
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1"
                            StartPoint="0.5,0">
-                    <GradientStop Color="{DynamicResource ControlLightColor}" />
-                    <GradientStop Color="{DynamicResource ControlMediumColor}"
+                    <GradientStop Color="{DynamicResource CustomControlLightColor}" />
+                    <GradientStop Color="{DynamicResource CustomControlMediumColor}"
                       Offset="1" />
                 </LinearGradientBrush>
             </Border.Background>
@@ -449,9 +453,9 @@
                            EndPoint="0,1">
                     <LinearGradientBrush.GradientStops>
                         <GradientStopCollection>
-                            <GradientStop Color="{DynamicResource BorderLightColor}"
+                            <GradientStop Color="{DynamicResource CustomBorderLightColor}"
                           Offset="0.0" />
-                            <GradientStop Color="{DynamicResource BorderDarkColor}"
+                            <GradientStop Color="{DynamicResource CustomBorderDarkColor}"
                           Offset="1.0" />
                         </GradientStopCollection>
                     </LinearGradientBrush.GradientStops>
@@ -467,7 +471,7 @@
                                           Storyboard.TargetProperty="(Panel.Background).
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)">
                                 <EasingColorKeyFrame KeyTime="0"
-                                   Value="{StaticResource ControlMouseOverColor}" />
+                                   Value="{StaticResource CustomControlMouseOverColor}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -477,7 +481,7 @@
                                           Storyboard.TargetProperty="(Panel.Background).
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)">
                                 <EasingColorKeyFrame KeyTime="0"
-                                   Value="{StaticResource ControlPressedColor}" />
+                                   Value="{StaticResource CustomControlPressedColor}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -487,13 +491,13 @@
                                           Storyboard.TargetProperty="(Panel.Background).
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)">
                                 <EasingColorKeyFrame KeyTime="0"
-                                   Value="{StaticResource DisabledControlDarkColor}" />
+                                   Value="{StaticResource CustomDisabledControlDarkColor}" />
                             </ColorAnimationUsingKeyFrames>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetName="Border"
                                           Storyboard.TargetProperty="(Border.BorderBrush).
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)">
                                 <EasingColorKeyFrame KeyTime="0"
-                                   Value="{StaticResource DisabledBorderLightColor}" />
+                                   Value="{StaticResource CustomDisabledBorderLightColor}" />
                             </ColorAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualState>
@@ -523,7 +527,7 @@
             VerticalAlignment="Center"
             Data="M 0 0 L 4 4 L 8 0 Z">
                     <Path.Fill>
-                        <SolidColorBrush Color="{DynamicResource GlyphColor}" />
+                        <SolidColorBrush Color="{DynamicResource CustomGlyphColor}" />
                     </Path.Fill>
                 </Path>
                 <Path x:Name="ExpandededArrow"
@@ -532,14 +536,14 @@
             Visibility="Collapsed"
             Data="M 0 4 L 4 0 L 8 4 Z">
                     <Path.Fill>
-                        <SolidColorBrush Color="{DynamicResource GlyphColor}" />
+                        <SolidColorBrush Color="{DynamicResource CustomGlyphColor}" />
                     </Path.Fill>
                 </Path>
             </Grid>
         </Border>
     </ControlTemplate>
 
-    <Style TargetType="{x:Type Expander}">
+    <Style x:Key="ArrowExpander" TargetType="{x:Type Expander}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
@@ -606,7 +610,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <ToggleButton OverridesDefaultStyle="True"
-                                        Template="{StaticResource ExpanderToggleButton}"
+                                        Template="{StaticResource ArrowExpanderToggleButton}"
                                         IsChecked="{Binding IsExpanded, Mode=TwoWay, 
                                         RelativeSource={RelativeSource TemplatedParent}}">
                                     <ToggleButton.Background>
@@ -649,7 +653,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>-->
+    </Style>
 
     <!-- Simple Expander Button's Template-->
     <ControlTemplate x:Key="ExpanderToggleButton" TargetType="{x:Type ToggleButton}">
@@ -1143,7 +1147,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <Slider Grid.Row="1" Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}" Delay="{TemplateBinding Delay}" 
+            <Slider Grid.Row="1" Background="Transparent" Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}" Delay="{TemplateBinding Delay}" 
                     Interval="{TemplateBinding Interval}" IsEnabled="{TemplateBinding IsEnabled}" IsMoveToPointEnabled="True" IsSnapToTickEnabled="{TemplateBinding IsSnapToTickEnabled}" 
                     LargeChange="{TemplateBinding LargeChange}" Orientation="{TemplateBinding Orientation}" SmallChange="{TemplateBinding SmallChange}" TickFrequency="{TemplateBinding TickFrequency}" 
                     TickPlacement="{TemplateBinding TickPlacement}" Ticks="{TemplateBinding Ticks}" ToolTip="{TemplateBinding ToolTip}" 

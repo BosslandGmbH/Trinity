@@ -5,15 +5,21 @@ namespace Trinity.Framework.Helpers
 {
     public static class Randomizer
     {
-        public static readonly Random Random = new Random();
+        private static Random _random { get; } = new Random();
 
-        public static int GetRandomNumber(int max)
+        public static int Fudge(int input, double min = 0.5, double max = 1.5) 
+            => Boolean ? _random.Next((int)(input * min),(int)(input * max)) : input * 4;
+
+        public static bool Boolean => _random.Next(0, 1) == 1;
+
+        public static int Max(int max)
         {
-            return Random.Next(max);
+            return _random.Next(max);
         }
-        public static int GetRandomNumber(int min, int max)
+
+        public static int Random(int min, int max)
         {
-            return Random.Next(min, max);
+            return _random.Next(min, max);
         }
 
         public static IList<T> RandomShuffle<T>(IList<T> list)

@@ -26,9 +26,9 @@ namespace Trinity.DbProvider
         private DateTime _lastStuckCheck = DateTime.MinValue;
         private Vector3 _lastPosition = Vector3.Zero;
         private bool _isStuck;
-        private int _checkIntervalMs = 2500;
+        private int _checkIntervalMs = 2000;
         private bool _isSuspectedStuck;
-        private int _stuckValidationTime = 10000;
+        private int _stuckValidationTime = 6000;
         private DateTime _suspectedStuckStartTime = DateTime.MaxValue;
         private Vector3 _stuckPosition;
         private Vector3 _suspectedStuckPosition;
@@ -340,7 +340,7 @@ namespace Trinity.DbProvider
             var targetPosition = positions.First();
             var segmentStartTime = DateTime.UtcNow;
 
-            while (DateTime.UtcNow.Subtract(startTime).TotalSeconds < 10)
+            while (DateTime.UtcNow.Subtract(startTime).TotalSeconds < 6)
             {
                 if (targetPosition == Vector3.Zero)
                     break;
@@ -351,10 +351,10 @@ namespace Trinity.DbProvider
                 ZetaDia.Me.UsePower(SNOPower.Walk, targetPosition, ZetaDia.WorldId);
                 await Coroutine.Sleep(50);
 
-                if (distance < 4f || position.Distance(ZetaDia.Me.Position) > 15f)
+                if (distance < 4f || position.Distance(ZetaDia.Me.Position) > 50f)
                     break;
 
-                if (!ZetaDia.Me.Movement.IsMoving || DateTime.UtcNow.Subtract(segmentStartTime).TotalMilliseconds > 2500)
+                if (!ZetaDia.Me.Movement.IsMoving || DateTime.UtcNow.Subtract(segmentStartTime).TotalMilliseconds > 4500)
                 {
                     positions.Remove(targetPosition);
                     segmentStartTime = DateTime.UtcNow;

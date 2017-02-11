@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Components.Adventurer.Settings;
 using Trinity.Settings.ItemList;
 
 namespace Trinity.Settings.Mock
@@ -27,5 +28,8 @@ namespace Trinity.Settings.Mock
     {
         public static ItemListMockData ItemList { get; set; } = new ItemListMockData();
         public static RoutineMockData DataContext { get; set; } = new RoutineMockData();
+        public static AdventurerGems Gems { get; set; } = new AdventurerGems();
+
+
     }
 }

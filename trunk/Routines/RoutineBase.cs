@@ -146,7 +146,7 @@ namespace Trinity.Routines
             && SpellHistory.TimeSinceGeneratorCast >= 3750;
 
         protected static bool ShouldRefreshBastiansSpender
-            => Sets.BastionsOfWill.IsFullyEquipped && !Core.Buffs.HasBastiansWillGeneratorBuff
+            => Sets.BastionsOfWill.IsFullyEquipped && !Core.Buffs.HasBastiansWillSpenderBuff
             && SpellHistory.TimeSinceSpenderCast >= 3750;
 
         protected static int EndlessWalkOffensiveStacks

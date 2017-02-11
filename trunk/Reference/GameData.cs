@@ -1956,6 +1956,9 @@ namespace Trinity.Reference
         public static HashSet<int> BlackListIds { get { return blacklistIds; } }
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            // these bounty chests are not clickable they have a protection globe on them during event then sno changes.
+            (int)SNOActor.x1_Global_Chest_Locked,
+
             // prevent trin from interacting with this NPC as part of mysterious cave bounty due to 
             // extremely poor navigation in the little nook where he lives. profile to manually move within scene.
             (int)SNOActor.A2_UniqueVendor_Event_MapVendor, 

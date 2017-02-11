@@ -156,11 +156,11 @@ namespace Trinity.Routines.Wizard
 
             if (!IsArchonActive && Skills.Wizard.Archon.CanCast() && !Player.IsInTown)
             {
-                if (!HasTalRashaStacks)
+                if (Settings.GetStacksBeforeArchon && !HasTalRashaStacks)
                 {
                     //Logger.Log($"Building Tal'Rasha Set Stacks ({TalRashaStacks})");
 
-                    var target = TargetUtil.GetBestClusterUnit(50f) ?? Player.Actor;
+                    var target = TargetUtil.GetBestClusterUnit(70f) ?? Player.Actor;
 
                     if (Skills.Wizard.FrostNova.CanCast())
                         return FrostNova();
@@ -171,10 +171,11 @@ namespace Trinity.Routines.Wizard
                     if (Skills.Wizard.BlackHole.CanCast())
                         return BlackHole(target);
 
-                    if (ShouldTeleport(out position))
-                        return Teleport(position);
-
-                    if (Skills.Wizard.ArcaneTorrent.CanCast())
+                    if (TalRashaStacks == 2 && Skills.Wizard.Teleport.CanCast())
+                        return Teleport(target.Position);
+                    
+                    // AT is never on cooldown so we can use it last.
+                    if (TalRashaStacks == 3 && Skills.Wizard.ArcaneTorrent.CanCast())
                         return ArcaneTorrent(target);
                 }
                 else
@@ -216,12 +217,20 @@ namespace Trinity.Routines.Wizard
             private SkillSettings _teleport;
             private int _clusterSize;
             private float _emergencyHealthPct;
+            private bool _getStacksBeforeArchon;
 
             [DefaultValue(8)]
             public int ClusterSize
             {
                 get { return _clusterSize; }
                 set { SetField(ref _clusterSize, value); }
+            }
+
+            [DefaultValue(true)]
+            public bool GetStacksBeforeArchon
+            {
+                get { return _getStacksBeforeArchon; }
+                set { SetField(ref _getStacksBeforeArchon, value); }
             }
 
             [DefaultValue(0.4f)]

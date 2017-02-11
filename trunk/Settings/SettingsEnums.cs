@@ -27,6 +27,28 @@ namespace Trinity.Settings
     }
 
     [Flags]
+    public enum GameStopReasons
+    {
+        None = 0,
+        GoblinFound = 1 << 0,
+        UrshiFound = 1 << 1,
+        DeathGateFound = 1 << 2,
+        //Quiver = 1 << 3,
+        //Orb = 1 << 4,
+        //Amulet = 1 << 5,
+        //Ring = 1 << 6,
+        //Belt = 1 << 7,
+        //Boots = 1 << 8,
+        //Bracers = 1 << 9,
+        //Chest = 1 << 10,
+        //Gloves = 1 << 11,
+        //Helm = 1 << 12,
+        //Pants = 1 << 13,
+        //Shield = 1 << 14,
+        //Shoulder = 1 << 15,
+    }
+
+    [Flags]
     public enum ShrineTypes
     {
         None = 0,

@@ -177,5 +177,7 @@ namespace Trinity.Framework.Objects
         public string IconUrl { get; set; }
 
         public bool GameBalanceId { get; set; }
+        public int Importance { get; set; }
+        public int MaxRank { get; set; }
     }
 }

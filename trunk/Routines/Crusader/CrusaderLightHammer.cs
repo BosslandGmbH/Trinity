@@ -106,30 +106,30 @@ namespace Trinity.Routines.Crusader
             return Walk(destination);
         }
 
-        protected override bool ShouldFallingSword(out Vector3 position)
-        {
-            position = Vector3.Zero;
+protected override bool ShouldFallingSword(out Vector3 position)
+{
+    position = Vector3.Zero;
 
-            if (!Skills.Crusader.FallingSword.CanCast())
-                return false;
+    if (!Skills.Crusader.FallingSword.CanCast())
+        return false;
 
-            //If your health falls below the Emergency Health Percentage in Trinity > Routine settings, cast falling sword again regardless of delay setting.
-            if (Player.CurrentHealthPct < Settings.EmergencyHealthPct)
-                return true;
+    //If your health falls below the Emergency Health Percentage in Trinity > Routine settings, cast falling sword again regardless of delay setting.
+    if (Player.CurrentHealthPct < Settings.EmergencyHealthPct)
+        return true;
 
-            //Uses the delay [in milliseconds] defined in Trinity > Routines to keep falling sword from being recast too quickly
-            if (Skills.Crusader.FallingSword.TimeSinceUse < Settings.FallingSwordDelay)
-                return false;
+            //Uses the delay [in milliseconds] defined in Trinity > Routines to keep falling sword from being recast too quickly - Added check for mobs being in Range
+            if (Skills.Crusader.FallingSword.TimeSinceUse < Settings.FallingSwordDelay && TargetUtil.AnyMobsInRange(Settings.FallingSwordMobsRange))
+        return false;
 
-            var target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
-            if (target != null)
-            {
-                position = target.Position;
-                return true;
-            }
+    var target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
+    if (target != null)
+    {
+        position = target.Position;
+        return true;
+    }
 
-            return false;
-        }
+    return false;
+}
 
         protected override bool ShouldBlessedHammer(out TrinityActor target)
         {
@@ -232,6 +232,7 @@ namespace Trinity.Routines.Crusader
         {
             private SkillSettings _akarats;
             private int _fallingSwordDelay;
+            private int _fallingSwordMobsRange;
             private int _clusterSize;
             private float _emergencyHealthPct;
 
@@ -255,11 +256,18 @@ namespace Trinity.Routines.Crusader
                 set { SetField(ref _akarats, value); }
             }
 
-            [DefaultValue(2000)]
+            [DefaultValue(8000)]
             public int FallingSwordDelay
             {
                 get { return _fallingSwordDelay; }
                 set { SetField(ref _fallingSwordDelay, value); }
+            }
+            
+            [DefaultValue(15)]
+            public int FallingSwordMobsRange
+            {
+                get { return _fallingSwordMobsRange; }
+                set { SetField(ref _fallingSwordMobsRange, value); }
             }
 
 

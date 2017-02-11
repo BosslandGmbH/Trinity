@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Trinity.Components.Combat;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
@@ -45,7 +47,6 @@ namespace Trinity.UI.UIComponents
         {
             IsInGame = args.NewValue;
         }
-
         private void IsRunningOnChanged(ChangeDetectorEventArgs<bool> args)
         {
             IsRunning = args.NewValue;

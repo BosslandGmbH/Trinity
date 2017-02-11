@@ -637,7 +637,11 @@ namespace Trinity.Routines.DemonHunter
         }
 
         public TrinityPower DefaultDestructiblePower()
-        {       
+        {
+            TrinityPower power;
+            if (CurrentTarget.IsCorruptGrowth && TrySecondaryPower(out power))
+                return power;
+
             if (Skills.DemonHunter.HungeringArrow.CanCast())
                 return HungeringArrow(CurrentTarget);
 

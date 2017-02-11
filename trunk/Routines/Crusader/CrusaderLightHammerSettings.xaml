@@ -53,6 +53,14 @@
                             Value="{Binding Path=DataContext.FallingSwordDelay}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Mob range"
+                            ToolTip="Allowed to cast Falling Sword if no mobs in range"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="50" Minimum="0" SmallChange="1" TickFrequency="5" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.FallingSwordMobsRange}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox>

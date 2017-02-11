@@ -65,6 +65,14 @@
                             </StackPanel>
                         </StackPanel>
                 </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Archon</GroupBox.Header>
+                    <StackPanel>
+                        <StackPanel Margin="0,8,0,0">
+                            <CheckBox IsChecked="{Binding DataContext.GetStacksBeforeArchon}">Always max tal-rasha stacks before using Archon</CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
             </StackPanel>
         </Grid>
     </Border>

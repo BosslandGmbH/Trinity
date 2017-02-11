@@ -2098,6 +2098,9 @@ namespace Trinity.Components.Combat.Resources
             if (obj.Attributes.Powers.ContainsKey(debuffSNO))
                 return true;
 
+            //ActorAttributeType att;
+            //Enum.TryParse("PowerBuff0VisualEffect" + Skills.Monk.ExplodingPalm.CurrentRune.TypeId, out att);
+
             ////todo this is needlessly slow checking all these attributes, trace the spells being used and record only the required slots
             ////or better yet, cache collection of attributes in buff visual effect slots keyed by snopower
 

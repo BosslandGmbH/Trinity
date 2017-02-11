@@ -151,6 +151,11 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsLockedDoor { get; set; }
         public int MinimapIconOverride { get; set; }
         public int EffectOwnerAnnId { get; set; }
+        public bool IsInteractWhitelisted { get; set; }
+        public bool IsProfileBlacklisted { get; set; }
+        public bool IsUsingBossbar { get; set; }
+        public bool IsShadowClone { get; set; }
+        public bool IsCorruptGrowth { get; internal set; }
 
         public override void OnCreated()
         {
@@ -231,10 +236,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsIgnored => TargetCategory == TargetCategory.Ignore;
         public bool IsAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.Avoidance);
         public bool IsCriticalAvoidanceOnPath => Core.Avoidance.Grid.IsIntersectedByFlags(Position, Core.Player.Position, AvoidanceFlags.CriticalAvoidance);
-        public bool IsInteractWhitelisted { get; set; }
-        public bool IsProfileBlacklisted { get; set; }
-        public bool IsUsingBossbar { get; set; }
-        public bool IsShadowClone { get; set; }
+
 
 
         /// <summary>

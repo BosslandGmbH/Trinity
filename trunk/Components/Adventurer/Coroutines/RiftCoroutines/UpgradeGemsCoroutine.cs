@@ -201,7 +201,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
-            var gemToUpgrade = GetUpgradeTarget(_enableGemUpgradeLogs);
+            var gemToUpgrade = PluginSettings.Current.Gems.GetUpgradeTarget();
             if (gemToUpgrade == null)
             {
                 Util.Logger.Info("[UpgradeGems] I couldn't find any gems to upgrade, failing.");
@@ -238,39 +238,6 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
 
             return false;
-        }
-
-        private ACDItem GetUpgradeTarget(bool enableLog)
-        {
-            ZetaDia.Actors.Update();
-
-            var gems = PluginSettings.Current.Gems;
-
-            gems.UpdateGems(ZetaDia.Me.InTieredLootRunLevel + 1, PluginSettings.Current.GreaterRiftPrioritizeEquipedGems);
-
-            var minChance = PluginSettings.Current.GreaterRiftGemUpgradeChance;
-            var upgradeableGems =
-                gems.Gems.Where(g => g.UpgradeChance >= minChance && !g.IsMaxRank).ToList();
-            if (upgradeableGems.Count == 0)
-            {
-                if (enableLog) Util.Logger.Info("[UpgradeGems] Couldn't find any gems which is over the minimum upgrade change, upgrading the gem with highest upgrade chance");
-                upgradeableGems = gems.Gems.Where(g => !g.IsMaxRank).OrderByDescending(g => g.UpgradeChance).ToList();
-            }
-            if (upgradeableGems.Count == 0)
-            {
-                if (enableLog) Util.Logger.Info("[UpgradeGems] Looks like you have no legendary gems, failing.");
-                State = States.Failed;
-                return null;
-            }
-            var gemToUpgrade = upgradeableGems.First();
-            if (enableLog) Util.Logger.Info("[UpgradeGems] Attempting to upgrade {0}", gemToUpgrade.DisplayName);
-            var acdGem =
-                ZetaDia.Actors.GetActorsOfType<ACDItem>()
-                    .FirstOrDefault(
-                        i =>
-                            i.ItemType == ItemType.LegendaryGem && i.ActorSnoId == gemToUpgrade.SNO &&
-                            i.JewelRank == gemToUpgrade.Rank);
-            return acdGem;
         }
 
         private void EnablePulse()

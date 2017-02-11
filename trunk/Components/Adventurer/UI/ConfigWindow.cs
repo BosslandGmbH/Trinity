@@ -124,16 +124,16 @@ namespace Trinity.Components.Adventurer.UI
             //_cancelButton.Click += CancelButton_Click;
 
 
-            _gemPriorityUp = LogicalTreeHelper.FindLogicalNode(_mainControl, "GemPriorityUp") as Button;
-            _gemPriorityUp.Click += GemPriorityUp_Click;
+            //_gemPriorityUp = LogicalTreeHelper.FindLogicalNode(_mainControl, "GemPriorityUp") as Button;
+            //_gemPriorityUp.Click += GemPriorityUp_Click;
 
-            _gemPriorityDown = LogicalTreeHelper.FindLogicalNode(_mainControl, "GemPriorityDown") as Button;
-            _gemPriorityDown.Click += GemPriorityDown_Click;
+            //_gemPriorityDown = LogicalTreeHelper.FindLogicalNode(_mainControl, "GemPriorityDown") as Button;
+            //_gemPriorityDown.Click += GemPriorityDown_Click;
 
-            _gemPriorityList = LogicalTreeHelper.FindLogicalNode(_mainControl, "GemPriorityList") as ListBox;
+            //_gemPriorityList = LogicalTreeHelper.FindLogicalNode(_mainControl, "GemPriorityList") as ListBox;
 
-            _prioritizeEquippedGems = LogicalTreeHelper.FindLogicalNode(_mainControl, "GreaterRiftPrioritizeEquipedGems") as CheckBox;
-            _prioritizeEquippedGems.Click += PrioritizeEquippedGems_Click;
+            //_prioritizeEquippedGems = LogicalTreeHelper.FindLogicalNode(_mainControl, "GreaterRiftPrioritizeEquipedGems") as CheckBox;
+            //_prioritizeEquippedGems.Click += PrioritizeEquippedGems_Click;
 
             _greaterRiftLevel = LogicalTreeHelper.FindLogicalNode(_mainControl, "GreaterRiftLevel") as ComboBox;
             _greaterRiftLevel.SelectionChanged += GreaterRiftLevel_SelectionChanged;
@@ -166,8 +166,8 @@ namespace Trinity.Components.Adventurer.UI
 
         private void Settings_GemListUpdated()
         {
-            _gemPriorityList.ItemsSource = null;
-            _gemPriorityList.ItemsSource = _pluginSettings.GemUpgradePriority;
+            //_gemPriorityList.ItemsSource = null;
+            //_gemPriorityList.ItemsSource = _pluginSettings.GemUpgradePriority;
         }
 
         private void GemPriorityDown_Click(object sender, RoutedEventArgs e)

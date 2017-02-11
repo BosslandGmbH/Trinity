@@ -101,6 +101,7 @@
     <Compile Include="Components\Adventurer\Coroutines\BountyCoroutines\Subroutines\DebugMessageCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\BountyCoroutines\Subroutines\MoveThroughDeathGates.cs" />
     <Compile Include="Components\Adventurer\Game\Combat\ClearAreaHelper.cs" />
+    <Compile Include="Components\Adventurer\Settings\AdventurerGemSetting.cs" />
     <Compile Include="Components\Combat\DefaultProviders.cs" />
     <Compile Include="Components\Combat\Resources\IPartyMember.cs" />
     <Compile Include="Components\Combat\Resources\ITargetable.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Framework\Events\ActorEvents.cs" />
     <Compile Include="Framework\Events\ItemEvents.cs" />
     <Compile Include="Framework\Helpers\CData.cs" />
+    <Compile Include="Framework\Helpers\CoroutineExtensions.cs" />
     <Compile Include="Framework\Helpers\EasyCache.cs" />
     <Compile Include="Framework\Helpers\ExpressionEvaluator.cs" />
     <Compile Include="Framework\Helpers\ObjectComparer.cs" />
