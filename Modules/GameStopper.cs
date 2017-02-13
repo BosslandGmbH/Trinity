@@ -30,9 +30,6 @@ namespace Trinity.Modules
             if (!BotMain.IsRunning)
                 return;
 
-            if (ActorFinder.FindNearestDeathGate() != null)
-                BotMain.Stop();
-
             var reasons = Core.Settings.Advanced.StopReasons;
             if (reasons != GameStopReasons.None)
             {

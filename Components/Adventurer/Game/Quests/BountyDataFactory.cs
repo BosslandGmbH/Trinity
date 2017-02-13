@@ -73,6 +73,18 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         private static BountyData CreateChestAndClearBounty(QuestData quest)
         {
+            if (quest == null)
+            {
+                Logger.Debug("[CreateChestAndClearBounty] quest was null");
+                return null;
+            }
+
+            if(quest.Waypoint == null)
+            {
+                Logger.Debug($"[CreateChestAndClearBounty] quest {quest.Name} ({quest.QuestId}) waypoint was null");
+                return null;
+            }
+
             return new BountyData()
             {
                 QuestId = quest.QuestId,
@@ -7342,7 +7354,12 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     // px_Ruins_frost_camp_cage (435703) Distance: 124.4732
                     new InteractWithGizmoCoroutine(436280, 428493, 435703, 0, 5),
 
-                    new ClearAreaForNSecondsCoroutine(448619, 60, 0, 0, 45),
+                    new ClearAreaForNSecondsCoroutine(448619, 20, 0, 0, 45),
+
+                    // px_Ruins_Frost_Camp_BarbSkular (435720) Distance: 8.818088
+                    new InteractWithUnitCoroutine(436280, 428493, 435720, 0, 5),
+
+
 
                 }
             });
