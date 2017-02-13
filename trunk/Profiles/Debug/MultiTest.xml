@@ -35,17 +35,16 @@
     <RunBounty questId="369878"/>
     <RunBounty questId="346186"/>-->
     
-    
+        <!--<RunBounty questId="433392"/>-->
+        <!--<RunBounty questId="432334"/>-->
     
     <RunBounty questId="436274"/>
     <RunBounty questId="375257"/>
     <RunBounty questId="363342"/>
     <RunBounty questId="368536"/>
     <RunBounty questId="346065"/>
-    <!--<RunBounty questId="432334"/>-->
     <RunBounty questId="369813"/>
     <RunBounty questId="368532"/>
-    <!--<RunBounty questId="433392"/>-->
     <RunBounty questId="347520"/>
     <RunBounty questId="369800"/>
     <RunBounty questId="350564"/>
@@ -53,7 +52,7 @@
     <RunBounty questId="347520"/>
     <RunBounty questId="347598"/>
     <RunBounty questId="359319"/>
-    <RunBounty questId="345954"/>
+    <RunBounty questId="345954"/><!-- a miners gold leaves quest area -->
     <RunBounty questId="349202"/>
     <RunBounty questId="345502"/>
     <RunBounty questId="346186"/>
@@ -69,8 +68,14 @@
     <RunBounty questId="362996"/>
     <RunBounty questId="363000"/>
     
+     <RunBounty questId="346184" name="Bounty: Blaze of Glory" />
+    <RunBounty questId="433025" name="Bounty: The Ancient Devices" />
+    <RunBounty questId="436282" name="Bounty: King of the Ziggurat" />
     
+    <!--A3 - Bounty: Last of the Barbarians (436280)-->
+        <RunBounty questId="436280"/>
     
+     <RunBounty questId="374571" name="Bounty: Out of Time" />
     <!--
     QuestId: 436274, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: Kill Korae and Samae
 QuestId: 375257, IncompleteCount: 1,  SuccessCount: 0, Act: OpenWorld, Name: Bounty: The Cursed Spire
