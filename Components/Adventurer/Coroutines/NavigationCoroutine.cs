@@ -41,13 +41,13 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public static Vector3 LastDestination;
 
-        public static async Task<bool> MoveTo(Vector3 destination, int distance, [CallerMemberName] string caller = "", [CallerFilePath] string callerPath = "")
+        public static async Task<bool> MoveTo(Vector3 destination, int distance, bool straightLinePath = false, [CallerMemberName] string caller = "", [CallerFilePath] string callerPath = "")
         {
             //destination.Z = AdvDia.MainGridProvider.GetHeight(destination.ToVector2());
 
             if (_navigationCoroutine == null || _moveToDestination != destination || _moveToDistance != distance)
             {
-                _navigationCoroutine = new NavigationCoroutine(destination, distance);
+                _navigationCoroutine = new NavigationCoroutine(destination, distance, straightLinePath);
 
                 Logger.DebugSetting($"Created Navigation Task for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
 
@@ -114,10 +114,12 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
         }
 
-        public NavigationCoroutine(Vector3 destination, int distance)
+        public NavigationCoroutine(Vector3 destination, int distance, bool straightLinePath = false)
         {
             Destination = destination;
             _distance = distance;
+            _mover = straightLinePath ? Mover.StraightLine : Mover.Navigator;
+            
             if (_distance < 5)
             {
                 _distance = 5;

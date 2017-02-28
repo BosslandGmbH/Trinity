@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Trinity.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
@@ -9,6 +10,7 @@ using Trinity.Framework.Objects.Memory.Misc;
 using Trinity.Framework.Objects.Memory.Sno;
 using Trinity.Reference;
 using Trinity.Settings;
+using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -17,6 +19,22 @@ namespace Trinity.Framework.Actors.Properties
 {
     public class ItemProperties
     {
+        static ItemProperties()
+        {
+            ChangeEvents.WorldId.Changed += WorldId_Changed;
+        }
+
+        private static void WorldId_Changed(ChangeDetectorEventArgs<int> args)
+        {
+            if(!GameData.TownLevelAreaIds.Contains(args.OldValue) && !ZetaDia.IsInTown)
+            {
+                Logger.LogDebug($"Clearing ItemProperties Seen AnnIds");
+                _seenActorAnnIds.Clear();
+            }
+        }
+
+        private static HashSet<string> _seenActorAnnIds = new HashSet<string>();
+
         public static void Create(TrinityItem actor)
         {
             if (actor.ActorType != ActorType.Item)
@@ -27,9 +45,11 @@ namespace Trinity.Framework.Actors.Properties
 
             var commonData = actor.CommonData;
             var attributes = actor.Attributes;
-            
+
+            actor.InventorySlot = commonData.InventorySlot;
             actor.InventoryColumn = commonData.InventoryColumn;
             actor.InventoryRow = commonData.InventoryRow;
+
             actor.IsUnidentified = attributes.IsUnidentified;
             actor.IsAncient = attributes.IsAncient;
             actor.ItemQualityLevel = attributes.ItemQualityLevel;
@@ -55,7 +75,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.TrinityItemType = TypeConversions.GetTrinityItemType(actor.RawItemType, actor.GemType);
             actor.TrinityItemBaseType = TypeConversions.GetTrinityItemBaseType(actor.TrinityItemType);
             actor.IsGem = actor.RawItemType == RawItemType.Gem || actor.RawItemType == RawItemType.UpgradeableJewel;
-            actor.IsCraftingReagent = actor.RawItemType == RawItemType.CraftingReagent || actor.RawItemType == RawItemType.CraftingReagentBound;
+            actor.IsCraftingReagent = actor.RawItemType == RawItemType.CraftingReagent || actor.RawItemType == RawItemType.CraftingReagent_Bound;
             actor.IsGold = actor.RawItemType == RawItemType.Gold;
             actor.IsEquipment = TypeConversions.GetIsEquipment(actor.TrinityItemBaseType);
             actor.IsClassItem = TypeConversions.GetIsClassItem(actor.ItemType);
@@ -68,6 +88,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.FollowerType = GetFollowerType(actor.ActorSnoId);
             actor.ItemStackQuantity = attributes.ItemStackQuantity;
             actor.TrinityItemQuality = TypeConversions.GetTrinityItemQuality(actor.ItemQualityLevel);
+            actor.IsCosmeticItem= actor.RawItemType == RawItemType.CosmeticPet || actor.RawItemType == RawItemType.CosmeticPennant || actor.RawItemType == RawItemType.CosmeticPortraitFrame || actor.RawItemType == RawItemType.CosmeticWings;
 
             actor.IsLowQuality = actor.TrinityItemQuality == TrinityItemQuality.Common ||
                                  actor.TrinityItemQuality == TrinityItemQuality.Inferior ||
@@ -96,10 +117,21 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.Type == TrinityObjectType.Gold)
                 actor.GoldAmount = attributes.Gold;
+
+            if (!_seenActorAnnIds.Contains(actor.PositionHash))
+            {
+                _seenActorAnnIds.Add(actor.PositionHash);
+
+                if (actor.InventorySlot == InventorySlot.None)
+                {
+                    actor.OnDropped();
+                }
+            }
         }
 
         public static void Update(TrinityItem actor)
         {
+
             if (actor.ActorType != ActorType.Item)
                 return;
 
@@ -109,42 +141,58 @@ namespace Trinity.Framework.Actors.Properties
             var commonData = actor.CommonData;
             actor.AcdId = commonData.AcdId;
 
-            var slot = commonData.InventorySlot;
             var col = commonData.InventoryColumn;
             var row = commonData.InventoryRow;
+            var slot = commonData.InventorySlot;
 
-            var slotChanged = slot != actor.InventorySlot;
             var columnChanged = col != actor.InventoryColumn;
             var rowChanged = row != actor.InventoryRow;
+            var slotChanged = slot != actor.InventorySlot;
+
+            actor.LastInventorySlot = actor.InventorySlot;
+            actor.LastInventoryRow = actor.InventoryRow;
+            actor.LastInventoryColumn = actor.InventoryColumn;
+
+            actor.InventorySlot = slot;
+            actor.InventoryRow = row;
+            actor.InventoryColumn = col;
 
             if (!actor.IsEquipment)
             {
                 actor.ItemStackQuantity = actor.Attributes.ItemStackQuantity;
             }
 
+            if (actor.LastInventorySlot == InventorySlot.None && actor.InventorySlot == InventorySlot.BackpackItems)
+            {
+                UpdateBasicProperties(actor);
+                actor.Attributes = new ItemAttributes(actor.FastAttributeGroupId);
+                Create(actor);
+                actor.OnPickedUp();
+            }
+
             if (columnChanged || rowChanged || slotChanged)
             {
-                if (slotChanged && actor.InventorySlot == InventorySlot.None && slot == InventorySlot.BackpackItems)
-                {
-                    actor.Attributes = new ItemAttributes(actor.FastAttributeGroupId);
-                    Create(actor);
-                    actor.OnPickedUp();
-                }
-
-                actor.InventoryRow = row;
-                actor.InventoryColumn = col;
-                actor.InventorySlot = slot;
-
                 actor.OnMoved();
             }
 
             if (actor.InventorySlot == InventorySlot.BackpackItems && actor.IsUnidentified && !actor.Attributes.IsUnidentified)
             {
+                UpdateBasicProperties(actor);
                 actor.Attributes = new ItemAttributes(actor.FastAttributeGroupId);
                 Create(actor);
                 actor.OnIdentified();               
             }
         }
+
+        public static void UpdateBasicProperties(TrinityActor cacheObject)
+        {
+            cacheObject.ActorSnoId = cacheObject.CommonData.ActorSnoId;
+            cacheObject.GameBalanceId = cacheObject.CommonData.GameBalanceId;
+            cacheObject.FastAttributeGroupId = cacheObject.CommonData.FastAttributeGroupId;
+            cacheObject.AnnId = cacheObject.CommonData.AnnId;
+            cacheObject.AcdId = cacheObject.CommonData.AcdId;
+        }
+
 
         public static GlobeTypes GetGlobeType(TrinityActor cacheObject)
         {

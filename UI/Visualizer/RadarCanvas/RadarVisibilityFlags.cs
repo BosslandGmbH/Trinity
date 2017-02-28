@@ -28,7 +28,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         RadarDebug = 1 << 19,
         KiteFromNodes = 1 << 20,
         ExploreNodes = 1 << 21,
-        All = ~(1 << 22),        
+        Markers = 1 << 22,
+        All = ~(1 << 23),        
     }
 }
 

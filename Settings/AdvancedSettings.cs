@@ -25,6 +25,8 @@ namespace Trinity.Settings
         private bool _logStats;
         private bool _logItems;
         private GameStopReasons _stopReasons;
+        private bool _logAllItems;
+        private bool _logDroppedItems;
 
         public AdvancedSettings()
         {
@@ -37,6 +39,22 @@ namespace Trinity.Settings
         {
             get { return _logCategories; }
             set { SetField(ref _logCategories, value); }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool LogAllItems
+        {
+            get { return _logAllItems; }
+            set { SetField(ref _logAllItems, value); }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(false)]
+        public bool LogDroppedItems
+        {
+            get { return _logDroppedItems; }
+            set { SetField(ref _logDroppedItems, value); }
         }
 
         [DataMember(IsRequired = false)]

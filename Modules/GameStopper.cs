@@ -1,10 +1,13 @@
 using System;
+using System.Media;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Zeta.Bot;
+using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Modules
 {
@@ -36,13 +39,16 @@ namespace Trinity.Modules
                 foreach(var actor in Core.Actors.AllRActors)
                 {
                     if (actor.IsTreasureGoblin && reasons.HasFlag(GameStopReasons.GoblinFound))
-                        Stop("Goblin Found");
+                        Stop($"Goblin '{actor.Name}' Found at distance {actor.Distance}");
 
                     if (actor.ActorSnoId == UrshiSNO && reasons.HasFlag(GameStopReasons.UrshiFound))
-                        Stop("Urshi Found");
+                        Stop($"Urshi '{actor.Name}' Found at distance {actor.Distance}");
 
                     if (actor.ActorSnoId == DeathGateSNO && reasons.HasFlag(GameStopReasons.DeathGateFound))
-                        Stop("Death Gate Found");
+                        Stop($"Death Gate '{actor.Name}' Found at distance {actor.Distance}");
+
+                    if (actor.MonsterQuality == MonsterQuality.Unique && reasons.HasFlag(GameStopReasons.UniqueFound))
+                        Stop($"Unique Monster '{actor.Name}' Found at distance {actor.Distance}");
 
                 }
             }
@@ -51,6 +57,7 @@ namespace Trinity.Modules
         private void Stop(string reason)
         {
             Logger.Warn($"Game Stopped: {reason}");
+            SystemSounds.Exclamation.Play();
             BotMain.Stop();
         }
     }

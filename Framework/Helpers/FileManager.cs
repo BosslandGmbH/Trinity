@@ -363,6 +363,23 @@ namespace Trinity.Framework.Helpers
         }
         private static string _versionPath;
 
+        /// <summary>
+        /// Gets the path to export d3 game data.
+        /// </summary>
+        public static string ReferencePath
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_referencePath))
+                {
+                    _referencePath = Path.Combine(DemonBuddyPath, "Reference");
+                    CreateDirectory(_referencePath);
+                }
+                return _referencePath;
+            }
+        }
+        private static string _referencePath;
+
 
         /// <summary>
         /// Copies a file and if necessary creates destination directory

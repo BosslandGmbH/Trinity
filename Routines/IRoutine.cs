@@ -42,6 +42,7 @@ namespace Trinity.Routines
         int PrimaryEnergyReserve { get; }
         int SecondaryEnergyReserve { get; }
 
+        float PotionHealthPct { get; }
         float EmergencyHealthPct { get; }
 
         // Power Selection

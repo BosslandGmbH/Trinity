@@ -14,26 +14,6 @@ namespace Trinity.Components.Adventurer.Settings
     [DataContract]
     public class AdventurerGems : NotifyBase
     {
-        //public AdventurerGems()
-        //{
-        //    GemSettings.CollectionChanged += GemSettings_CollectionChanged;
-        //}
-
-        //private void GemSettings_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //    using (GemSettings.DeferRefresh)
-        //    {
-        //        var list = sender as IList<AdventurerGemSetting>;
-        //        if (list == null)
-        //            return;
-
-        //        foreach (var item in e.NewItems.Cast<AdventurerGemSetting>())
-        //        {
-        //            item.Order = list.IndexOf(item);
-        //        }
-        //    }
-        //}
-
         public void UpdateOrder(IList<AdventurerGemSetting> list)
         {
             foreach (var item in list)
@@ -51,14 +31,17 @@ namespace Trinity.Components.Adventurer.Settings
         public FullyObservableCollection<AdventurerGemSetting> GemSettings
         {
             get { return _gemSettings ?? (_gemSettings = GetDefaultGemSettings()); }
-            set { LoadGemSettings(value); } // Called with value deserialized from from XML
+            set { LoadGemSettings(value); } // Called with value deserialized from XML
         }
 
+        /// <summary>
+        /// Update gem settings records with partial information from XML Save file.
+        /// </summary>
         private void LoadGemSettings(IEnumerable<AdventurerGemSetting> value)
         {
             using (GemSettings.DeferRefresh)
             {
-                foreach (var gem in GemSettings)
+                foreach (var gem in _gemSettings)
                 {
                     var setting = value.FirstOrDefault(g => g.Sno == gem.Sno);
                     gem.Order = setting.Order;
@@ -66,10 +49,13 @@ namespace Trinity.Components.Adventurer.Settings
                     gem.IsEnabled = setting.IsEnabled;
                     gem.Limit = setting.Limit;
                 }
-                GemSettings.OrderBy(b => b.Order);
+                _gemSettings = new FullyObservableCollection<AdventurerGemSetting>(GemSettings.OrderBy(b => b.Order));
             }
         }
 
+        /// <summary>
+        /// Populate gem settings with every possible gem type using the gem reference.
+        /// </summary>
         private static FullyObservableCollection<AdventurerGemSetting> GetDefaultGemSettings()
         {
             var gems = Reference.Gems.ToList().OrderByDescending(o => o.Importance).Select(g => new AdventurerGemSetting(g));
@@ -89,7 +75,7 @@ namespace Trinity.Components.Adventurer.Settings
         }
 
         /// <summary>
-        /// References gem list to match the actual gems in players backpack/stash.
+        /// Updates gem list to match the actual gems in players backpack/stash.
         /// </summary>
         public void UpdateGems(int greaterRiftLevel)
         {
@@ -107,6 +93,9 @@ namespace Trinity.Components.Adventurer.Settings
             UpdateGemSettings(Gems);
         }
 
+        /// <summary>
+        /// Populate gem settings records with backpack/stash gems
+        /// </summary>
         private void UpdateGemSettings(List<AdventurerGem> freshGemsList)
         {
             if (freshGemsList == null || !freshGemsList.Any())
@@ -116,7 +105,7 @@ namespace Trinity.Components.Adventurer.Settings
             foreach (var gemSetting in GemSettings)
             {
                 var gems = gemsBySno[gemSetting.Sno];
-                if(gems.Any())
+                if (gems.Any())
                 {
                     gemSetting.HighestRank = gems.Max(g => g.Rank);
                 }

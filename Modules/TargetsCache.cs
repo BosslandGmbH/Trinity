@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
+using Trinity.Coroutines;
 using Trinity.Coroutines.Town;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
@@ -175,7 +176,7 @@ namespace Trinity.Modules
 
         private static bool ShouldCacheCommon(TrinityActor cacheObject)
         {
-            if (cacheObject.IsExcludedId)
+            if (cacheObject.IsExcludedId && !(ClearArea.IsClearing && cacheObject.IsHostile))
             {
                 cacheObject.AddCacheInfo("ExcludedId");
                 return false;
@@ -198,6 +199,10 @@ namespace Trinity.Modules
                 cacheObject.AddCacheInfo("BlacklistedByProfile");
                 return false;
             }
+
+            var item = cacheObject as TrinityItem;
+            if (item != null && item.IsCosmeticItem)
+                return true;
 
             if (cacheObject.IsUnit && cacheObject.Attributes == null)
             {
@@ -396,7 +401,7 @@ namespace Trinity.Modules
                 return false;
             }
 
-            if (cacheObject.ItemQualityLevel <= ItemQuality.Rare4 && cacheObject.Distance > 60f)
+            if (!cacheObject.IsCosmeticItem && cacheObject.ItemQualityLevel <= ItemQuality.Rare4 && cacheObject.Distance > 60f)
             {
                 cacheObject.AddCacheInfo($"OutOfRange Limit={CharacterSettings.Instance.LootRadius}");
                 return false;

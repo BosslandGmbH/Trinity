@@ -556,7 +556,9 @@ namespace Trinity.Settings.ItemList
                     }
                     else
                     {
-                        ZetaDia.Actors.Update();
+                        if(!BotMain.IsRunning)
+                            ZetaDia.Actors.Update();
+
                         Logger.Log("Scanning Character for Equipped Items");
                         SelectItems(ZetaDia.Me.Inventory.Equipped);
                     }

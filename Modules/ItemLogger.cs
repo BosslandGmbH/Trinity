@@ -14,10 +14,11 @@ namespace Trinity.Modules
         public enum ItemAction
         {
             None = 0,
-            Identified,
+            PickedUp,
             Salvaged,
             Stashed,
-            Sold
+            Sold,
+            Dropped
         }
 
         public ItemLogger()
@@ -25,15 +26,19 @@ namespace Trinity.Modules
             ItemEvents.OnItemSalvaged += item => LogItem(ItemAction.Salvaged, item);
             ItemEvents.OnItemStashed += item => LogItem(ItemAction.Stashed, item);
             ItemEvents.OnItemSold += item => LogItem(ItemAction.Sold, item);
-            ItemEvents.OnItemIdentified += item => LogItem(ItemAction.Identified, item);
+            ItemEvents.OnItemIdentified += item => LogItem(ItemAction.PickedUp, item);
+            ItemEvents.OnItemDropped += item => LogItem(ItemAction.Dropped, item);
         }
 
         private void LogItem(ItemAction action, TrinityItem item)
         {
             if (!IsEnabled || !Core.Settings.Advanced.LogItems)
-                return;            
+                return;           
+            
+            if (item.TrinityItemQuality < TrinityItemQuality.Legendary && !Core.Settings.Advanced.LogAllItems)
+                return;
 
-            if (item.TrinityItemQuality < TrinityItemQuality.Legendary)
+            if (action == ItemAction.Dropped && !Core.Settings.Advanced.LogDroppedItems)
                 return;
 
             var file = $"{action} - {Core.Player.ActorClass}.log";

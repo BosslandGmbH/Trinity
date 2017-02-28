@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Memory.Reference;
 using Trinity.Items;
 using Trinity.Items.Sorting;
 using Trinity.Reference;
@@ -388,6 +389,14 @@ namespace Trinity.Framework.Helpers
 
             Logger.Log("Dumped Reference Items to: {0}", path);
         }
+
+        internal static void GenerateGameData()
+        {
+            Logger.Log($"Dumping Reference Files to {FileManager.ReferencePath}");
+            ReferenceGenerator.GenerateFiles();
+        }
+
+        
 
         public static string RemoveApostophes(string input)
         {

@@ -33,7 +33,7 @@ namespace Trinity.Settings
         private SettingMode _eliteWeighting;
         private EliteTypes _eliteTypes;
         private MonsterAffixes _ignoreAffixes;
-        private GoblinPriority _goblinPriority;
+        private TargetPriority _goblinPriority;
         private SpecialTypes _specialTypes;
         private SettingMode _trashWeighting;
 
@@ -118,6 +118,7 @@ namespace Trinity.Settings
         }
 
         public const MonsterAffixes IgnoreAffixesExclusions = MonsterAffixes.Elite | MonsterAffixes.Minion | MonsterAffixes.Rare | MonsterAffixes.Unique;
+        private TargetPriority _cosmeticPriority;
 
         [DataMember(IsRequired = false)]
         [Setting, UIControl(UIControlType.FlagsCheckboxes, UIControlOptions.Inline | UIControlOptions.NoLabel)]
@@ -129,11 +130,19 @@ namespace Trinity.Settings
         }
 
         [DataMember]
-        [DefaultValue(GoblinPriority.Kamikaze)]
-        public GoblinPriority GoblinPriority
+        [DefaultValue(TargetPriority.Kamikaze)]
+        public TargetPriority GoblinPriority
         {
             get { return _goblinPriority; }
             set { SetField(ref _goblinPriority, value); }
+        }
+
+        [DataMember]
+        [DefaultValue(TargetPriority.Kamikaze)]
+        public TargetPriority CosmeticPriority
+        {
+            get { return _cosmeticPriority; }
+            set { SetField(ref _cosmeticPriority, value); }
         }
 
 

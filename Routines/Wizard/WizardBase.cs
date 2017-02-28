@@ -733,6 +733,9 @@ namespace Trinity.Routines.Wizard
         public static bool IsChannellingRayOfFrost
             => Player.IsChannelling && Skills.Wizard.RayOfFrost.IsLastUsed;
 
+        public static void CancelArchon() =>
+            Core.Buffs.GetBuff(SNOPower.Wizard_Archon).Cancel();
+
         #endregion
 
         #region Helpers

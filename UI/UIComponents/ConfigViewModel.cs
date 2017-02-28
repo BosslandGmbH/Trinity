@@ -210,6 +210,19 @@ namespace Trinity.UI.UIComponents
                             Logger.Log(LogCategory.UserInformation, "Exception in DumpReferenceItems: {0}", ex);
                         }
                     });
+                GenerateGameData = new RelayCommand(
+                    parameter =>
+                    {
+                        try
+                        {
+                            UILoader.CloseWindow();
+                            DebugUtil.GenerateGameData();
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log(LogCategory.UserInformation, "Exception in DumpReferenceItems: {0}", ex);
+                        }
+                    });
                 DumpMerchantItemsCommand = new RelayCommand(
                     parameter =>
                     {
@@ -310,6 +323,7 @@ namespace Trinity.UI.UIComponents
         public ICommand DumpInvalidItemsCommand { get; private set; }
         public ICommand DumpItemSNOReference { get; private set; }
         public ICommand DumpReferenceItems { get; private set; }
+        public ICommand GenerateGameData { get; private set; }
         public ICommand DumpEquippedLegendaryCommand { get; private set; }
         public ICommand DumpMerchantItemsCommand { get; private set; }
         public ICommand DumpEquippedCommand { get; private set; }

@@ -11,25 +11,29 @@ using Trinity.Framework.Objects.Memory.Sno;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.Service;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Modules
 {
     public class QuestCache : Module
     {
-        protected override int UpdateIntervalMs => 1000;
+        protected override int UpdateIntervalMs => 2000;
 
         protected override void OnPulse()
         {
+            if (!ZetaDia.IsInGame || ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None)
+                return;
+
             CurrentQuest = ZetaDia.CurrentQuest;
             if (CurrentQuest == null)
                 return;
 
-            var act = ZetaDia.ActInfo;
-            if (act == null)
+            Act = ZetaDia.ActInfo;
+            if (Act == null || !Act.IsValid)
                 return;
 
-            CurrentBountyInfo = act.ActiveBounty;
+            CurrentBountyInfo = Act.ActiveBounty;
             if (CurrentBountyInfo == null)
                 return;
 
@@ -42,7 +46,9 @@ namespace Trinity.Modules
             //    SceneNames = SnoManager.StringListHelper.GetStringList(SnoStringListType.LevelAreaNames);
             //}
 
-            foreach (var step in CurrentBountyData.QuestData.Steps)
+            QuestData = CurrentBountyData.QuestData;
+
+            foreach (var step in QuestData.Steps)
             {
                 if (!step.IsActive) continue;
 
@@ -56,27 +62,6 @@ namespace Trinity.Modules
                 }
             }
 
-            //var stringstringlistslsits = Core.MemoryModel.SnoGroups.StringList.Entries.ToList();
-            //foreach (var list in stringstringlistslsits)
-            //{
-            //    foreach (var item in list.StringTableEntries)
-            //    {
-            //        if (item.Value.Contains("Tunnels"))
-            //        {
-            //            Debugger.Break();
-            //        }
-            //    }
-            //}
-
-            //if (CurrentObjective != null)
-            //{
-            //    CurrentLevelAreaInternalName = (SNOLevelArea)ZetaDia.CurrentLevelAreaSnoId;
-
-            //    string localizedName;
-            //    if (SceneNames.TryGetValue(CurrentLevelAreaInternalName.ToString(), out localizedName))
-            //        CurrentSceneName = localizedName;
-            //}
-
         }
 
         public string CurrentSceneName { get; set; }
@@ -89,7 +74,11 @@ namespace Trinity.Modules
 
         public Quest CurrentQuest { get; private set; }
 
+        public ActInfo Act { get; private set; }
+
         public QuestStepData CurrentStepData { get; private set; }
+
+        public QuestData QuestData { get; private set; }
 
         public QuestStepObjectiveData CurrentObjective { get; private set; }
 

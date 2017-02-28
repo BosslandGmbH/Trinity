@@ -247,7 +247,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             //}
         }
 
-        public void Reset()
+        public virtual void Reset()
         {
             State = States.NotStarted;
             _bountyData = null;

@@ -24,6 +24,7 @@ namespace Trinity.Routines
 {
     public class RoutineBase : NotifyBase
     {
+        public virtual float PotionHealthPct => 0.50f;
         public virtual float EmergencyHealthPct => 0.50f;
         public virtual int ClusterSize => 1;
         public virtual float ClusterRadius => 20f;

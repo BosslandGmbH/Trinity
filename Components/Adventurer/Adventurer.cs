@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
+using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Settings;
@@ -66,6 +68,10 @@ namespace Trinity.Components.Adventurer
                 return string.Empty;
             }
             return ProfileManager.OrderManager.CurrentBehavior.GetType().Name;
+        }
+        public static ISubroutine GetCurrentCoroutine()
+        {
+            return GenericBountyCoroutine.LastBountySubroutine;
         }
 
         #region Explicit IDynamicSetting Implementation

@@ -55,8 +55,6 @@ namespace Trinity.Framework.Objects.Memory.Sno
                 //Act = Core.CreateGroup<NativeAct>(SnoType.Act);
                 //TreasureClass = Core.CreateGroup<NativeTreasureClass>(SnoType.TreasureClass);
 
-
-
                 //SkillKit = Core.CreateGroup<NativeSkillKit>(SnoType.SkillKit);
                 //Worlds = Core.CreateGroup<NativeWorlds>(SnoType.Worlds);
                 //Scene = Core.CreateGroup<NativeScene>(SnoType.Scene);

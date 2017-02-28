@@ -52,7 +52,7 @@ namespace Trinity.Components.Adventurer.UI
         private static Button CreateMajorButton(string buttonText, RoutedEventHandler clickHandler)
         {
             var button = new Button
-            {              
+            {
                 Background = Brushes.DarkSlateBlue,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
@@ -153,7 +153,7 @@ namespace Trinity.Components.Adventurer.UI
                     };
 
                     //uniformGrid.Children.Add(mapUiContainer);
-                    
+
                     uniformGrid.Children.Add(dumpers);
                     uniformGrid.Children.Add(coroutineHelpers);
                     uniformGrid.Children.Add(coroutineHelpers2);
@@ -645,7 +645,7 @@ namespace Trinity.Components.Adventurer.UI
                     Logger.Raw("Hooks:");
                     foreach (var hook in TreeHooks.Instance.Hooks)
                     {
-                        Logger.Raw("{0}: {1}", hook.Key,string.Join(", " ,hook.Value));
+                        Logger.Raw("{0}: {1}", hook.Key, string.Join(", ", hook.Value));
                     }
 
                     var party = ZetaDia.Players.ToList();
@@ -887,7 +887,7 @@ namespace Trinity.Components.Adventurer.UI
         {
             var bounties = ZetaDia.ActInfo.Bounties
                 .Where(b => GetDynamicBountyTypeFromName(b.Info.DisplayName) != BountyDataFactory.DynamicBountyType.None &&
-                            !BountyDataFactory.DynamicBountyDirectory.ContainsKey((int) b.Info.Quest));
+                            !BountyDataFactory.DynamicBountyDirectory.ContainsKey((int)b.Info.Quest));
 
             foreach (var bounty in bounties)
             {
@@ -929,34 +929,25 @@ namespace Trinity.Components.Adventurer.UI
 
         static void MoveToPosition_Click(object sender, RoutedEventArgs e)
         {
-            if (BotEvents.IsBotRunning)
+            if (!ZetaDia.IsInGame || ZetaDia.Me == null)
+                return;
+
+            using (ZetaDia.Memory.AcquireFrame())
             {
-                BotMain.Stop();
-                Thread.Sleep(500);
-            }
-            try
-            {
-                if (!ZetaDia.IsInGame)
+                ZetaDia.Actors.Update();
+
+                if (ZetaDia.Me == null)
                     return;
-                using (ZetaDia.Memory.AcquireFrame(true))
-                {
+                if (!ZetaDia.Me.IsValid)
+                    return;
 
-                    if (ZetaDia.Me == null)
-                        return;
-                    if (!ZetaDia.Me.IsValid)
-                        return;
+                ZetaDia.Actors.Update();
 
-                    ZetaDia.Actors.Update();
-                    //AdvDia.Update();
-                    Logger.Raw(" ");
-                    Logger.Raw("new MoveToPositionCoroutine({3}, new Vector3({0}, {1}, {2})),",
-                        (int)AdvDia.MyPosition.X, (int)AdvDia.MyPosition.Y, (int)AdvDia.MyPosition.Z,
-                        AdvDia.CurrentWorldId);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex.ToString());
+                Logger.Raw(" ");
+                Logger.Raw("new MoveToPositionCoroutine({3}, new Vector3({0}, {1}, {2})),",
+                    (int)ZetaDia.Me.Position.X, (int)ZetaDia.Me.Position.Y, (int)ZetaDia.Me.Position.Z,
+                    AdvDia.CurrentWorldId);
+
             }
         }
 
@@ -986,9 +977,9 @@ namespace Trinity.Components.Adventurer.UI
                     //AdvDia.Update();
                     Logger.Raw(" ");
 
-                    Logger.Raw("new MoveToSceneCoroutine({0}, {1}, \"{2}\"), \\\\ SubScene={3}", 
+                    Logger.Raw("new MoveToSceneCoroutine({0}, {1}, \"{2}\"), \\\\ SubScene={3}",
                         activeBounty,
-                        AdvDia.CurrentWorldId, 
+                        AdvDia.CurrentWorldId,
                         AdvDia.CurrentWorldScene.Name,
                         AdvDia.CurrentWorldScene.SubScene.Name);
 
@@ -1002,34 +993,38 @@ namespace Trinity.Components.Adventurer.UI
 
         static void MoveToScenePosition_Click(object sender, RoutedEventArgs e)
         {
-            if (BotEvents.IsBotRunning)
-            {
-                BotMain.Stop();
-                Thread.Sleep(500);
-            }
             try
             {
-                if (!ZetaDia.IsInGame)
+                ZetaDia.Actors.Update();
+
+                if (!ZetaDia.IsInGame || ZetaDia.Me == null)
                     return;
-                ScenesStorage.Update();
-                SafeFrameLock.ExecuteWithinFrameLock(() =>
+
+                using (ZetaDia.Memory.AcquireFrame())
                 {
+
 
                     if (ZetaDia.Me == null)
                         return;
+
                     if (!ZetaDia.Me.IsValid)
                         return;
+
+                    AdvDia.MyPosition = ZetaDia.Me.Position;
+                    ScenesStorage.Update();
 
                     var activeBounty = ZetaDia.ActInfo.ActiveBounty != null
                         ? (int)ZetaDia.ActInfo.ActiveBounty.Quest
                         : 0;
-           
-                    Logger.Raw(" ");
+
                     var currentScenePosition = AdvDia.CurrentWorldScene.GetRelativePosition(ZetaDia.Me.Position);
+
                     Logger.Raw("new MoveToScenePositionCoroutine({0}, {1}, \"{2}\", new Vector3({3}f, {4}f, {5}f)),", activeBounty,
-                        AdvDia.CurrentWorldId, ZetaDia.Me.CurrentScene.Name, currentScenePosition.X,
-                        currentScenePosition.Y, currentScenePosition.Z);
-                }, true);
+                        AdvDia.CurrentWorldId, ZetaDia.Me.CurrentScene.Name,
+                        currentScenePosition.X,
+                        currentScenePosition.Y,
+                        currentScenePosition.Z);
+                }
             }
             catch (Exception ex)
             {
@@ -1294,12 +1289,16 @@ namespace Trinity.Components.Adventurer.UI
         {
             try
             {
+                ZetaDia.Actors.Update();
+
                 if (!ZetaDia.IsInGame || ZetaDia.Me == null)
                     return;
 
                 using (ZetaDia.Memory.AcquireFrame())
                 {
-                    ZetaDia.Actors.Update();
+                    AdvDia.MyPosition = ZetaDia.Me.Position;
+                    ScenesStorage.Update();
+
                     var quest = ZetaDia.CurrentQuest;
                     var questId = quest?.QuestSnoId ?? 1;
                     var questStep = quest?.StepId ?? 1;
@@ -1409,7 +1408,7 @@ namespace Trinity.Components.Adventurer.UI
                     {
                         Logger.Raw($@"-- Listing all potential interact targets --");
                         actors.AddRange(ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).Where(g => g.Distance < 15f).OrderBy(a => a.Distance));
-                        actors.AddRange(ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Where(u => u.Distance < 15f && u.PetType <= 0).OrderBy(a => a.Distance));     
+                        actors.AddRange(ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Where(u => u.Distance < 15f && u.PetType <= 0).OrderBy(a => a.Distance));
                     }
                     else
                     {
@@ -1454,7 +1453,7 @@ namespace Trinity.Components.Adventurer.UI
         //            var actorId = actor?.ActorSnoId ?? 0;
         //            var scenePosition = actor != null ? AdvDia.CurrentWorldScene.GetRelativePosition(actor.Position) : Vector3.Zero;
         //            Logger.Raw($@"     <MoveToScenePosition questId=""{questId}"" stepId=""{questStep}"" actorId=""{actorId}"" worldSnoId=""{ZetaDia.CurrentWorldSnoId}"" levelAreaSnoId=""{ZetaDia.CurrentLevelAreaSnoId}"" sceneSnoId=""{sceneId}"" sceneName=""{sceneName}"" sceneX=""{scenePosition.X:F0}"" sceneY=""{scenePosition.Y:F0}"" sceneZ=""{scenePosition.Z:F0}"" />");
-                   
+
         //        }
         //    }
         //    catch (Exception ex)

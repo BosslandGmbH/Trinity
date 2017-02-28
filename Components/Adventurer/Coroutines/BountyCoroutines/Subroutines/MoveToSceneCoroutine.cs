@@ -7,6 +7,7 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Common;
+using Zeta.Game;
 using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
@@ -67,6 +68,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public async Task<bool> GetCoroutine()
         {
+            if(_scene != null && _scene.IsInScene(AdvDia.MyPosition))
+            {
+                Logger.Debug($"Currently in Target Scene: {_scene.Name}. IsSubScene={_scene.SubScene}");
+                State = States.Completed;
+            }
+
             switch (State)
             {
                 case States.NotStarted:
@@ -173,6 +180,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private long _lastScanTime;
         private BountyData _bountyData;
         private long _lastObjectiveFoundTime;
+        private WorldScene _scene;
 
         private void ScanForObjective()
         {
@@ -188,12 +196,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _lastScanTime = PluginTime.CurrentMillisecond;
                 if (!string.IsNullOrEmpty(_sceneName))
                 {
-                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name.Contains(_sceneName) || s.HasChild && s.SubScene.Name.Contains(_sceneName));
-                    if (scene != null)
+                    _scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name.Contains(_sceneName) || s.HasChild && s.SubScene.Name.Contains(_sceneName));
+                    if (_scene != null)
                     {
                         var centerNode =
-                            scene.Nodes.Where(n => n.HasEnoughNavigableCells)
-                                .OrderBy(n => n.Center.DistanceSqr(scene.Center))
+                            _scene.Nodes.Where(n => n.HasEnoughNavigableCells)
+                                .OrderBy(n => n.Center.DistanceSqr(_scene.Center))
                                 .FirstOrDefault();
                         if (centerNode != null)
                         {

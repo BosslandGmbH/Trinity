@@ -213,6 +213,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         private async Task<bool> UnsupportedBountyFound()
         {
             Logger.Info("[ActBounties] It seems like we have an unsupported bounty in {0}, skipping the act.", Act);
+            BountyStatistics.RestartsFromUnsupported++;
             return true;
 
         }

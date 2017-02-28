@@ -56,6 +56,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
         public NativeSerializeData _12_0x70_SerializeData => ReadObject<NativeSerializeData>(0x70);
         public int _13_0x78_NativeMsgTriggeredEvent => ReadOffset<int>(0x78); //    VarArrSerializeOffsetDiff=-8   Flags=65536  
         public List<NativeMsgTriggeredEvent> _14_0x80_VariableArray => ReadSerializedObjects<NativeMsgTriggeredEvent>(0x80, 0x70); //    VarArrSerializeOffsetDiff=-16   Flags=33  
+        public ConsumableType ConsumeableType => Read<ConsumableType>(ReadOffset<IntPtr>(SizeOf) + 0x30);
         public Vector3 _15_0x88_Vector3 => ReadOffset<Vector3>(0x88); //      Flags=1  
         public List<NativeWeightedLook> _16_0x94_FixedArray => ReadObjects<NativeWeightedLook>(0x94, 8); //      Flags=1  
         public int _17_0x2B4_Physics_Sno => ReadOffset<int>(0x2B4); //      Flags=1  
@@ -71,6 +72,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
         public NativeSerializeData _27_0x350_SerializeData => ReadObject<NativeSerializeData>(0x350);
         public string _28_0x358_SerializedString => ReadSerializedString(0x358, 0x360); //    VarArrSerializeOffsetDiff=8   Flags=33  
         public NativeSerializeData _29_0x360_SerializeData => ReadObject<NativeSerializeData>(0x360);
+
     }
 
 
@@ -157,7 +159,7 @@ namespace Trinity.Framework.Objects.Memory.Sno.Types
         public const int SizeOf = 408; // 0x198
         public int _1_0x0_int => ReadOffset<int>(0x0); //      Flags=1  
         public NativeTriggerConditions _2_0x4_Object => ReadObject<NativeTriggerConditions>(0x4); //      Flags=1  
-        public int _3_0x28_int => ReadOffset<int>(0x28); //      Flags=1  
+        public int _3_0x28_int => ReadOffset<int>(0x28); //      Flags=1  // ConsumableType?
         public NativeSNOName _4_0x2C_Object => ReadObject<NativeSNOName>(0x2C); //      Flags=1  
         public int _5_0x34_int => ReadOffset<int>(0x34); //      Flags=1  
         public int _6_0x38_int => ReadOffset<int>(0x38); //      Flags=524289  

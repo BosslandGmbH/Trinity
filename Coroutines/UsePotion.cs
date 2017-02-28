@@ -23,24 +23,12 @@ namespace Trinity.Coroutines
             return false;
         }
 
-        public static bool ShouldSnapshot()
-        {
-            //if (!Core.Settings.Combat.Misc.TryToSnapshot || !Gems.BaneOfTheStricken.IsEquipped ||
-            //    ZetaDia.Me.AttacksPerSecond < Core.Settings.Combat.Misc.SnapshotAttackSpeed || Core.Player.CurrentHealthPct >= 1)
-            //    return false;
-
-            //if (SnapShot.Last.AttacksPerSecond >= Core.Settings.Combat.Misc.SnapshotAttackSpeed)
-            //    return false;
-
-            return false;
-        }
-
         public static bool ShouldUsePotion()
         {
             if (Core.Player == null || Combat.Routines.Current == null)
                 return false;
 
-            if (Core.Player.CurrentHealthPct > Combat.Routines.Current.EmergencyHealthPct)
+            if (Core.Player.CurrentHealthPct > Combat.Routines.Current.PotionHealthPct)
                 return false;
 
             if (Core.Player.IsIncapacitated || !(Core.Player.CurrentHealthPct > 0) || Core.Player.IsInTown)
@@ -49,17 +37,16 @@ namespace Trinity.Coroutines
             if (SpellHistory.TimeSinceUse(SNOPower.DrinkHealthPotion) <= TimeSpan.FromSeconds(30))
                 return false;
 
-            return Core.Player.CurrentHealthPct <= Combat.Routines.Current.EmergencyHealthPct || ShouldSnapshot();
+            return Core.Player.CurrentHealthPct <= Combat.Routines.Current.PotionHealthPct;
         }
 
         public static bool DrinkPotion()
         {
-            var logEntry = ShouldSnapshot() ? "Using Potion to Snapshot Bane of the Stricken!" : "Using Potion";
 
             var legendaryPotions = Core.Inventory.Backpack.Where(i => i.InternalName.ToLower().Contains("healthpotion_legendary_")).ToList();
             if (legendaryPotions.Any())
             {
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, logEntry, 0);
+                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Using Potion", 0);
                 var dynamicId = legendaryPotions.First().AnnId;
                 ZetaDia.Me.Inventory.UseItem(dynamicId);
                 SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
@@ -70,7 +57,7 @@ namespace Trinity.Coroutines
             var potion = ZetaDia.Me.Inventory.BaseHealthPotion;
             if (potion != null)
             {
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, logEntry, 0);
+                Logger.Log(TrinityLogLevel.Verbose, LogCategory.UserInformation, "Using Potion", 0);
                 ZetaDia.Me.Inventory.UseItem(potion.AnnId);
                 SpellHistory.RecordSpell(new TrinityPower(SNOPower.DrinkHealthPotion));
                 SnapShot.Record();

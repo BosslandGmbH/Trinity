@@ -81,46 +81,44 @@ namespace Trinity.Modules
 
         public bool IsSettingEnabled => Core.Settings.Advanced.LogStats;
 
-        public enum GameStatType
-        {
-            None = 0,
-            Joined,
-            Left,
-            Death
-        }
-
+        public bool IsWired { get; private set; }
 
         protected override void OnPluginEnabled()
         {
+            if (IsWired) return;
+
             BotMain.OnStart += bot => Start();
             BotMain.OnStop += bot => Stop();
             BotMain.OnShutdownRequested += (sender, args) => Stop();
 
             GameEvents.OnGameJoined += (sender, args) => RecordStat(() => Current.Games.Joined++);
-            GameEvents.OnGameLeft += (sender, args) => RecordStat(() => Current.Games.Joined++);
+            GameEvents.OnGameLeft += (sender, args) => RecordStat(() => Current.Games.Left++);
             GameEvents.OnPlayerDied += (sender, args) => RecordStat(() => Current.Player.Deaths++);
+            GameEvents.OnWorldChanged += (sender, args) => SeenActorAnnIds.Clear();
 
             ItemEvents.OnItemDropped += item => RecordItemStats(Current.Dropped, item);
             ItemEvents.OnItemPickedUp += item => RecordItemStats(Current.PickedUp, item);
             ItemEvents.OnItemSalvaged += item => RecordItemStats(Current.Salvaged, item);
             ItemEvents.OnItemStashed += item => RecordItemStats(Current.Stashed, item);
             ItemEvents.OnItemSold += item => RecordItemStats(Current.Sold, item);
+
+            IsWired = true;
         }
 
         private void RecordStat(Action action)
         {
-            if (!IsRecording || !IsSettingEnabled)
-                return;
+            if (!IsRunning) return;
 
             action();
         }
 
         protected override int UpdateIntervalMs => 500;
 
+        public bool IsRunning => IsRecording && IsSettingEnabled && IsWired && TrinityPlugin.IsEnabled;
+
         protected override void OnPulse()
         {
-            if (!IsRecording || !IsSettingEnabled)
-                return;
+            if (!IsRunning) return;
 
             foreach (var actor in Core.Actors.AllRActors)
             {
@@ -130,8 +128,7 @@ namespace Trinity.Modules
 
         private void RecordActorStats(TrinityActor actor)
         {
-            if (!IsRecording || !IsSettingEnabled)
-                return;
+            if (!IsRunning) return;
 
             if (SeenActorAnnIds.Contains(actor.AnnId))
                 return;
@@ -156,8 +153,7 @@ namespace Trinity.Modules
 
         public void RecordItemStats(ItemStats stats, TrinityItem item)
         {
-            if (!IsRecording || !IsSettingEnabled)
-                return;
+            if (!IsRunning) return;
 
             stats.Total++;
 
@@ -229,14 +225,16 @@ namespace Trinity.Modules
 
             IsRecording = false;
             Current.StopTime = DateTime.UtcNow;
-            Save();
+
+            if (IsSettingEnabled)
+                Save();
         }
 
         public TimeSpan Duration => Current.StopTime - Current.StartTime;
 
         public void Save()
         {
-            var file = $"Session - {Core.Player.ActorClass} - {($"{Duration}:g").Replace(":","-")} - {Current.StartTime.ToLocalTime():ddd dd-MMM-yy hh-mm-ss}.xml";
+            var file = $"Session - {Core.Player.ActorClass} - {($"{Duration}:g").Replace(":", "-")} - {Current.StartTime.ToLocalTime():ddd dd-MMM-yy hh-mm-ss}.xml";
             var path = Path.Combine(FileManager.LoggingPath, file);
             var xml = EasyXmlSerializer.Serialize(Current);
             File.WriteAllText(path, xml);

@@ -73,7 +73,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             set { _waypointNumber = value; }
         }
 
-        public void Reset()
+        public virtual void Reset()
         {
             foreach (var coroutine in Coroutines)
             {

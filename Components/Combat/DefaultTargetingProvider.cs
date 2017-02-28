@@ -311,7 +311,7 @@ namespace Trinity.Components.Combat
             // But for goblin kamakazi we need a special exception to force it to always target the goblin.
 
             power = null;
-            if (target.IsTreasureGoblin && Core.Settings.Weighting.GoblinPriority == GoblinPriority.Kamikaze)
+            if (target.IsTreasureGoblin && Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze)
             {
                 Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
 

@@ -2153,6 +2153,25 @@ namespace Trinity.Components.Combat.Resources
             return Players.Any(condition);
         }
 
+        public static TrinityActor BestLOSEliteInRange(float range, bool objectsInAoe = false)
+        {
+            return (from u in SafeList(objectsInAoe)
+                    where u.IsUnit &&
+                          u.IsElite &&
+                          u.IsInLineOfSight &&
+                          u.Distance <= range
+                    orderby
+                        u.NearbyUnitsWithinDistance(15) descending,
+                        u.HitPointsPct descending
+                    select u).FirstOrDefault();
+
+        }
+
+        public static TrinityActor BestRangedAoeUnit(float clusterRadius = 7, float maxSearchRange = 50, int unitCount = 3, bool useWeights = false, bool includeUnitsInAoE = true)
+        {
+            return BestLOSEliteInRange(maxSearchRange, includeUnitsInAoE) ??
+                    GetFarthestClusterUnit(clusterRadius, maxSearchRange, unitCount, useWeights, includeUnitsInAoE);
+        }
 
     }
 

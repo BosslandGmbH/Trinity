@@ -116,8 +116,16 @@ namespace Trinity.Reference
         public static HashSet<int> ForceKillAllSceneSnoIds { get; } = new HashSet<int>
         {
             52888, //caOut_Interior_G_x01_y01,
+            199502, //ragnyr idol bounty fight scene.
+            31604, // a miners gold bounty - caOut_Sub240x240_Mine_Destroyed
+            430021, // king of the ziggaurat?
+            79983, // forged in battle bounty a3dun_Keep_SW_03_Forge
         };
 
+        public static HashSet<int> HidingUnits { get; } = new HashSet<int>()
+        {
+            218947, //Rockworm_Stationary_QueenWorm
+        };
 
         public static HashSet<int> HerdingMatsSnoIds = new HashSet<int>()
         {

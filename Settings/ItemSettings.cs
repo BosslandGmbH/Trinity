@@ -47,6 +47,7 @@ namespace Trinity.Settings
 
 
         public const int SchemaVersion = 1;
+        private bool _buyStashTabs;
 
         [DataMember]
         public int Version { get; set; }
@@ -87,6 +88,14 @@ namespace Trinity.Settings
         //    get { return _inCombatLootQualities; }
         //    set { SetField(ref _inCombatLootQualities, value); }
         //}
+
+        [DataMember]
+        [DefaultValue(true)]
+        public bool BuyStashTabs
+        {
+            get { return _buyStashTabs; }
+            set { SetField(ref _buyStashTabs, value); }
+        }
 
         [DataMember]
         [DefaultValue(false)]

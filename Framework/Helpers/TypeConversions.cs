@@ -574,23 +574,23 @@ namespace Trinity.Framework.Helpers
         {
             switch (type)
             {
-                case RawItemType.Amethyst:
-                    return TrinityItemType.Amethyst;
+                //case RawItemType.Amethyst:
+                //    return TrinityItemType.Amethyst;
                 case RawItemType.Amulet:
                     return TrinityItemType.Amulet;
                 case RawItemType.Axe:
                     return TrinityItemType.Axe;
-                case RawItemType.BeltBarbarian:
+                case RawItemType.Belt_Barbarian:
                     return TrinityItemType.MightyBelt;
-                case RawItemType.BootsBarbarian:
-                case RawItemType.BootsCrusader:
-                case RawItemType.BootsDemonHunter:
-                case RawItemType.BootsMonk:
-                case RawItemType.BootsWitchDoctor:
-                case RawItemType.BootsWizard:
+                case RawItemType.Boots_Barbarian:
+                case RawItemType.Boots_Crusader:
+                case RawItemType.Boots_DemonHunter:
+                case RawItemType.Boots_Monk:
+                case RawItemType.Boots_WitchDoctor:
+                case RawItemType.Boots_Wizard:
                 case RawItemType.Boots:
                     return TrinityItemType.Boots;
-                case RawItemType.StarterBow:
+                //case RawItemType.StarterBow:
                 case RawItemType.GenericBowWeapon:
                 case RawItemType.BowClass:
                 case RawItemType.Bow:
@@ -604,27 +604,27 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.CombatStaff:
                     return TrinityItemType.TwoHandDaibo;
                 case RawItemType.CursedHoradricReagent:
-                case RawItemType.CraftingReagentBound:
+                case RawItemType.CraftingReagent_Bound:
                 case RawItemType.CraftingReagent:
                 case RawItemType.HoradricReagent:
                     return TrinityItemType.CraftingMaterial;
                 case RawItemType.CraftingPlan:
-                case RawItemType.CraftingPlanSmith:
-                case RawItemType.CraftingPlanLegendarySmith:
-                case RawItemType.CraftingPlanJeweler:
-                case RawItemType.CraftingPlanMystic:
-                case RawItemType.CraftingPlanMysticTransmog:
+                case RawItemType.CraftingPlan_Smith:
+                case RawItemType.CraftingPlanLegendary_Smith:
+                case RawItemType.CraftingPlan_Jeweler:
+                case RawItemType.CraftingPlan_Mystic:
+                case RawItemType.CraftingPlan_MysticTransmog:
                     return TrinityItemType.CraftingPlan;
                 case RawItemType.CrusaderShield:
                     return TrinityItemType.CrusaderShield;
                 case RawItemType.Dagger:
                     return TrinityItemType.Dagger;
-                case RawItemType.Diamond:
-                    return TrinityItemType.Diamond;
-                case RawItemType.Dye:
-                    return TrinityItemType.Dye;
-                case RawItemType.Emerald:
-                    return TrinityItemType.Emerald;
+                //case RawItemType.Diamond:
+                //    return TrinityItemType.Diamond;
+                //case RawItemType.Dye:
+                //    return TrinityItemType.Dye;
+                //case RawItemType.Emerald:
+                //    return TrinityItemType.Emerald;
                 case RawItemType.FistWeapon:
                     return TrinityItemType.FistWeapon;
                 case RawItemType.Flail1H:
@@ -637,12 +637,12 @@ namespace Trinity.Framework.Helpers
                     return TrinityItemType.FollowerScoundrel;
                 case RawItemType.TemplarSpecial:
                     return TrinityItemType.FollowerTemplar;
-                case RawItemType.GlovesBarbarian:
-                case RawItemType.GlovesCrusader:
-                case RawItemType.GlovesDemonHunter:
-                case RawItemType.GlovesMonk:
-                case RawItemType.GlovesWitchDoctor:
-                case RawItemType.GlovesWizard:
+                case RawItemType.Gloves_Barbarian:
+                case RawItemType.Gloves_Crusader:
+                case RawItemType.Gloves_DemonHunter:
+                case RawItemType.Gloves_Monk:
+                case RawItemType.Gloves_WitchDoctor:
+                case RawItemType.Gloves_Wizard:
                 case RawItemType.Gloves:
                     return TrinityItemType.Gloves;
                 case RawItemType.HandXbow:
@@ -651,12 +651,12 @@ namespace Trinity.Framework.Helpers
                     return TrinityItemType.HealthPotion;
                 case RawItemType.HealthPotion:
                     return TrinityItemType.HealthPotion;
-                case RawItemType.LegsBarbarian:
-                case RawItemType.LegsCrusader:
-                case RawItemType.LegsDemonHunter:
-                case RawItemType.LegsMonk:
-                case RawItemType.LegsWitchDoctor:
-                case RawItemType.LegsWizard:
+                case RawItemType.Legs_Barbarian:
+                case RawItemType.Legs_Crusader:
+                case RawItemType.Legs_DemonHunter:
+                case RawItemType.Legs_Monk:
+                case RawItemType.Legs_WitchDoctor:
+                case RawItemType.Legs_Wizard:
                 case RawItemType.Legs:
                     return TrinityItemType.Legs;
                 case RawItemType.Polearm:
@@ -665,28 +665,28 @@ namespace Trinity.Framework.Helpers
                     return TrinityItemType.Quiver;
                 case RawItemType.Ring:
                     return TrinityItemType.Ring;
-                case RawItemType.Ruby:
-                    return TrinityItemType.Ruby;
+                //case RawItemType.Ruby:
+                //    return TrinityItemType.Ruby;
                 case RawItemType.Shield:
                     return TrinityItemType.Shield;
-                case RawItemType.ShouldersBarbarian:
-                case RawItemType.ShouldersCrusader:
-                case RawItemType.ShouldersDemonHunter:
-                case RawItemType.ShouldersMonk:
-                case RawItemType.ShouldersWitchDoctor:
-                case RawItemType.ShouldersWizard:
+                case RawItemType.Shoulders_Barbarian:
+                case RawItemType.Shoulders_Crusader:
+                case RawItemType.Shoulders_DemonHunter:
+                case RawItemType.Shoulders_Monk:
+                case RawItemType.Shoulders_WitchDoctor:
+                case RawItemType.Shoulders_Wizard:
                 case RawItemType.Shoulders:
                     return TrinityItemType.Shoulder;
                 case RawItemType.Spear:
                     return TrinityItemType.Spear;
-                case RawItemType.SpiritStoneMonk:
+                case RawItemType.SpiritStone_Monk:
                     return TrinityItemType.SpiritStone;
                 case RawItemType.Staff:
                     return TrinityItemType.TwoHandStaff;
                 case RawItemType.Sword:
                     return TrinityItemType.Sword;
-                case RawItemType.Topaz:
-                    return TrinityItemType.Topaz;
+                //case RawItemType.Topaz:
+                //    return TrinityItemType.Topaz;
                 case RawItemType.Axe2H:
                     return TrinityItemType.TwoHandAxe;
                 case RawItemType.Mace:
@@ -705,37 +705,37 @@ namespace Trinity.Framework.Helpers
                     return TrinityItemType.TwoHandCrossbow;
                 case RawItemType.ShrineGlyph:
                     return TrinityItemType.PowerGlobe;
-                case RawItemType.ProgressionOrb:
+                case RawItemType.Glyph:
                     return TrinityItemType.ProgressionGlobe;
-                case RawItemType.RamaladnisGift:
+                case RawItemType.GeneralUtility:
                     return TrinityItemType.ConsumableAddSockets;
                 case RawItemType.TieredRiftKey:
                     return TrinityItemType.TieredLootrunKey;
                 case RawItemType.Mojo:
                     return TrinityItemType.Mojo;
                 case RawItemType.GenericChestArmor:
-                case RawItemType.ChestArmorBarbarian:
-                case RawItemType.ChestArmorCrusader:
-                case RawItemType.ChestArmorDemonHunter:
-                case RawItemType.ChestArmorMonk:
-                case RawItemType.ChestArmorWitchDoctor:
-                case RawItemType.ChestArmorWizard:
+                case RawItemType.ChestArmor_Barbarian:
+                case RawItemType.ChestArmor_Crusader:
+                case RawItemType.ChestArmor_DemonHunter:
+                case RawItemType.ChestArmor_Monk:
+                case RawItemType.ChestArmor_WitchDoctor:
+                case RawItemType.ChestArmor_Wizard:
                 case RawItemType.ChestArmor:
                 case RawItemType.Armor:
                     return TrinityItemType.Chest;
-                case RawItemType.HelmBarbarian:
-                case RawItemType.HelmCrusader:
-                case RawItemType.HelmDemonHunter:
-                case RawItemType.HelmMonk:
-                case RawItemType.HelmWitchDoctor:
-                case RawItemType.HelmWizard:
+                case RawItemType.Helm_Barbarian:
+                case RawItemType.Helm_Crusader:
+                case RawItemType.Helm_DemonHunter:
+                case RawItemType.Helm_Monk:
+                case RawItemType.Helm_WitchDoctor:
+                case RawItemType.Helm_Wizard:
                 case RawItemType.Helm:
                 case RawItemType.GenericHelm:
                     return TrinityItemType.Helm;
-                case RawItemType.BeltCrusader:
-                case RawItemType.BeltDemonHunter:
-                case RawItemType.BeltMonk:
-                case RawItemType.BeltWitchDoctor:
+                case RawItemType.Belt_Crusader:
+                case RawItemType.Belt_DemonHunter:
+                case RawItemType.Belt_Monk:
+                case RawItemType.Belt_WitchDoctor:
                 case RawItemType.GenericBelt:
                 case RawItemType.Belt:
                     return TrinityItemType.Belt;
@@ -753,7 +753,7 @@ namespace Trinity.Framework.Helpers
                     return TrinityItemType.Gold;
                 case RawItemType.TreasureBag:
                     return TrinityItemType.HoradricCache;
-                case RawItemType.UberReagent:
+                case RawItemType.DemonicOrgan:
                     return TrinityItemType.UberReagent;
                 case RawItemType.PortalDevice:
                     return TrinityItemType.PortalDevice;
@@ -815,7 +815,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Flail1H:
                 case RawItemType.Flail2H:
                     return ItemType.Flail;
-                case RawItemType.StarterBow:
+                //case RawItemType.StarterBow:
                 case RawItemType.GenericBowWeapon:
                 case RawItemType.BowClass:
                 case RawItemType.Bow:
@@ -830,28 +830,28 @@ namespace Trinity.Framework.Helpers
                     return ItemType.Shield;
                 case RawItemType.CrusaderShield:
                     return ItemType.CrusaderShield;
-                case RawItemType.GlovesBarbarian:
-                case RawItemType.GlovesCrusader:
-                case RawItemType.GlovesDemonHunter:
-                case RawItemType.GlovesMonk:
-                case RawItemType.GlovesWitchDoctor:
-                case RawItemType.GlovesWizard:
+                case RawItemType.Gloves_Barbarian:
+                case RawItemType.Gloves_Crusader:
+                case RawItemType.Gloves_DemonHunter:
+                case RawItemType.Gloves_Monk:
+                case RawItemType.Gloves_WitchDoctor:
+                case RawItemType.Gloves_Wizard:
                 case RawItemType.Gloves:
                     return ItemType.Gloves;
-                case RawItemType.BootsBarbarian:
-                case RawItemType.BootsCrusader:
-                case RawItemType.BootsDemonHunter:
-                case RawItemType.BootsMonk:
-                case RawItemType.BootsWitchDoctor:
-                case RawItemType.BootsWizard:
+                case RawItemType.Boots_Barbarian:
+                case RawItemType.Boots_Crusader:
+                case RawItemType.Boots_DemonHunter:
+                case RawItemType.Boots_Monk:
+                case RawItemType.Boots_WitchDoctor:
+                case RawItemType.Boots_Wizard:
                 case RawItemType.Boots:
                     return ItemType.Boots;
-                case RawItemType.ChestArmorBarbarian:
-                case RawItemType.ChestArmorCrusader:
-                case RawItemType.ChestArmorDemonHunter:
-                case RawItemType.ChestArmorMonk:
-                case RawItemType.ChestArmorWitchDoctor:
-                case RawItemType.ChestArmorWizard:
+                case RawItemType.ChestArmor_Barbarian:
+                case RawItemType.ChestArmor_Crusader:
+                case RawItemType.ChestArmor_DemonHunter:
+                case RawItemType.ChestArmor_Monk:
+                case RawItemType.ChestArmor_WitchDoctor:
+                case RawItemType.ChestArmor_Wizard:
                 case RawItemType.ChestArmor:
                 case RawItemType.GenericChestArmor:
                 case RawItemType.Armor:
@@ -862,20 +862,20 @@ namespace Trinity.Framework.Helpers
                     return ItemType.Amulet;
                 case RawItemType.Quiver:
                     return ItemType.Quiver;
-                case RawItemType.ShouldersBarbarian:
-                case RawItemType.ShouldersCrusader:
-                case RawItemType.ShouldersDemonHunter:
-                case RawItemType.ShouldersMonk:
-                case RawItemType.ShouldersWitchDoctor:
-                case RawItemType.ShouldersWizard:
+                case RawItemType.Shoulders_Barbarian:
+                case RawItemType.Shoulders_Crusader:
+                case RawItemType.Shoulders_DemonHunter:
+                case RawItemType.Shoulders_Monk:
+                case RawItemType.Shoulders_WitchDoctor:
+                case RawItemType.Shoulders_Wizard:
                 case RawItemType.Shoulders:
                     return ItemType.Shoulder;
-                case RawItemType.LegsBarbarian:
-                case RawItemType.LegsCrusader:
-                case RawItemType.LegsDemonHunter:
-                case RawItemType.LegsMonk:
-                case RawItemType.LegsWitchDoctor:
-                case RawItemType.LegsWizard:
+                case RawItemType.Legs_Barbarian:
+                case RawItemType.Legs_Crusader:
+                case RawItemType.Legs_DemonHunter:
+                case RawItemType.Legs_Monk:
+                case RawItemType.Legs_WitchDoctor:
+                case RawItemType.Legs_Wizard:
                 case RawItemType.Legs:
                     return ItemType.Legs;
                 case RawItemType.FistWeapon:
@@ -886,19 +886,19 @@ namespace Trinity.Framework.Helpers
                     return ItemType.CeremonialDagger;
                 case RawItemType.WizardHat:
                     return ItemType.WizardHat;
-                case RawItemType.HelmBarbarian:
-                case RawItemType.HelmCrusader:
-                case RawItemType.HelmDemonHunter:
-                case RawItemType.HelmMonk:
-                case RawItemType.HelmWitchDoctor:
-                case RawItemType.HelmWizard:
+                case RawItemType.Helm_Barbarian:
+                case RawItemType.Helm_Crusader:
+                case RawItemType.Helm_DemonHunter:
+                case RawItemType.Helm_Monk:
+                case RawItemType.Helm_WitchDoctor:
+                case RawItemType.Helm_Wizard:
                 case RawItemType.Helm:
                 case RawItemType.GenericHelm:
                     return ItemType.Helm;
-                case RawItemType.BeltCrusader:
-                case RawItemType.BeltDemonHunter:
-                case RawItemType.BeltMonk:
-                case RawItemType.BeltWitchDoctor:
+                case RawItemType.Belt_Crusader:
+                case RawItemType.Belt_DemonHunter:
+                case RawItemType.Belt_Monk:
+                case RawItemType.Belt_WitchDoctor:
                 case RawItemType.GenericBelt:
                     return ItemType.Belt;
                 case RawItemType.Bracers:
@@ -908,7 +908,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.MightyWeapon2H:
                 case RawItemType.MightyWeapon1H:
                     return ItemType.MightyWeapon;
-                case RawItemType.BeltBarbarian:
+                case RawItemType.Belt_Barbarian:
                     return ItemType.MightyBelt;
                 case RawItemType.Polearm:
                     return ItemType.Polearm;
@@ -916,7 +916,7 @@ namespace Trinity.Framework.Helpers
                     return ItemType.Cloak;
                 case RawItemType.Wand:
                     return ItemType.Wand;
-                case RawItemType.SpiritStoneMonk:
+                case RawItemType.SpiritStone_Monk:
                     return ItemType.SpiritStone;
                 case RawItemType.CombatStaff:
                     return ItemType.Daibo;
@@ -927,30 +927,30 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.HealthPotion:
                 case RawItemType.Potion:
                     return ItemType.Potion;
-                case RawItemType.Diamond:
-                case RawItemType.Emerald:
-                case RawItemType.Topaz:
-                case RawItemType.Amethyst:
-                case RawItemType.Ruby:
+                //case RawItemType.Diamond:
+                //case RawItemType.Emerald:
+                //case RawItemType.Topaz:
+                //case RawItemType.Amethyst:
+                //case RawItemType.Ruby:
                 case RawItemType.Gem:
                     return ItemType.Gem;
                 case RawItemType.CursedHoradricReagent:
-                case RawItemType.CraftingReagentBound:
+                case RawItemType.CraftingReagent_Bound:
                 case RawItemType.CraftingReagent:
                 case RawItemType.HoradricReagent:
-                case RawItemType.UberReagent:
+                case RawItemType.DemonicOrgan:
                     return ItemType.CraftingReagent;
-                case RawItemType.PageOfKnowledge:
-                case RawItemType.PageOfRespec:
-                case RawItemType.PageOfTrainingJeweler:
-                case RawItemType.PageOfTrainingSmith:
+                //case RawItemType.PageOfKnowledge:
+                //case RawItemType.PageOfRespec:
+                case RawItemType.PageOfTraining_Jeweler:
+                case RawItemType.PageOfTraining_Smith:
                     return ItemType.CraftingPage;
                 case RawItemType.CraftingPlan:
-                case RawItemType.CraftingPlanSmith:
-                case RawItemType.CraftingPlanLegendarySmith:
-                case RawItemType.CraftingPlanJeweler:
-                case RawItemType.CraftingPlanMystic:
-                case RawItemType.CraftingPlanMysticTransmog:
+                case RawItemType.CraftingPlan_Smith:
+                case RawItemType.CraftingPlanLegendary_Smith:
+                case RawItemType.CraftingPlan_Jeweler:
+                case RawItemType.CraftingPlan_Mystic:
+                case RawItemType.CraftingPlan_MysticTransmog:
                     return ItemType.CraftingPlan;
                 case RawItemType.TemplarSpecial:
                 case RawItemType.ScoundrelSpecial:

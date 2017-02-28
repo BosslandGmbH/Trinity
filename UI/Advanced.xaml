@@ -13,6 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
             <converters:PropertyValueConverter x:Key="propertyValueConverter" />
             <converters:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
+            <converters:BoolToVisibilityConverter x:Key="VisibleWhenTrueConverter" TrueValue="Visible" FalseValue="Collapsed"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
@@ -39,11 +40,16 @@
 
 
                 <GroupBox Header="Reports">
-                    <UniformGrid Columns="2">
-                        <CheckBox IsChecked="{Binding Advanced.LogItems}" Content="Log Item Actions"/>
-                        <CheckBox IsChecked="{Binding Advanced.LogStats}" Content="Log Session Stats"/>
-                    </UniformGrid>
+                    <StackPanel>
+                        <CheckBox IsChecked="{Binding Advanced.LogStats}" Content="Log Session Stats" ToolTip="Writes detailed log files in TrinityLogs\[battletag]\ folder with summary stats for each botting session (time between start and stop)" />
+                        <CheckBox IsChecked="{Binding Advanced.LogItems}" Content="Log Item Decisions" ToolTip="Writes detailed log files in TrinityLogs\[battletag]\ folder for each decision taken with items (Salvaged/Sold etc)" />
+                        <StackPanel Margin="10,5,0,0" Visibility="{Binding Advanced.LogItems, Converter={StaticResource VisibleWhenTrueConverter}}">
+                            <CheckBox IsChecked="{Binding Advanced.LogAllItems}" Content="> Log All Item Qualities" ToolTip="Includes all item types/qualities, not just legendary/set - this will make large file sizes"/>
+                            <CheckBox IsChecked="{Binding Advanced.LogDroppedItems}" Content="> Log All Dropped Items" ToolTip="Includes all items that are dropped (excluding 'Pickup without click' types such as gold) - this will make large file sizes"/>
+                        </StackPanel>
+                    </StackPanel>
                 </GroupBox>
+                    
 
                 <GroupBox Margin="2" Header="Inactivity Timers">
                     <UniformGrid Columns="1" VerticalAlignment="Top">
@@ -197,6 +203,7 @@
                             <Button Content="Dump Invalid Items" Command="{Binding Path=DumpInvalidItemsCommand}"/>
                             <Button Content="Dump ItemSNO Reference" Command="{Binding Path=DumpItemSNOReference}"/>
                             <Button Content="Dump Import Reference" Command="{Binding Path=DumpReferenceItems}"/>
+                            <Button Content="Generate Game Data" Command="{Binding Path=GenerateGameData}"/>
                         </UniformGrid>
                         <TextBlock Margin="0,10,0,0">Stop Bot Events</TextBlock>
                         <ContentPresenter Margin="0,5,0,0" Content="{Binding Advanced, Converter={StaticResourceExtension propertyValueConverter}, ConverterParameter=StopReasons}" Style="{DynamicResource SimpleItemsControlSelector}" />

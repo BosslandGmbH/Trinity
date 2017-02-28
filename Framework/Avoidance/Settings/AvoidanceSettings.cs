@@ -90,6 +90,15 @@ namespace Trinity.Framework.Avoidance.Settings
         });
 
         [IgnoreDataMember]
+        public ICommand MaxHealthCommand => new RelayCommand(param =>
+        {
+            foreach (var item in Entries)
+            {
+                item.HealthPct = 100;
+            }
+        });
+
+        [IgnoreDataMember]
         public ICommand SelectDefaultsCommand => new RelayCommand(param =>
         {
             LoadDefaults();

@@ -17,10 +17,14 @@ namespace Trinity.Framework.Actors.ActorTypes
     public class TrinityItem : TrinityActor
     {
         public SpecialTypes SpecialType { get; set; }
+        public bool IsCosmeticItem { get; set; }
         public bool IsLowQuality { get; set; }
         public new ItemAttributes Attributes { get; set; }
+        public bool IsFirstUpdate { get; set; } = true;
         public int InventoryColumn { get; set; }
         public int InventoryRow { get; set; }
+        public int LastInventoryColumn { get; set; }
+        public int LastInventoryRow { get; set; }
         public InventorySquare InventorySquare { get; set; }
         public int GoldAmount { get; set; }
         public bool IsUnidentified { get; set; }
@@ -82,30 +86,33 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnUpdated()
         {
-            if (IsGroundItem)
-            {
-                CommonProperties.Populate(this);
-            }
             ItemProperties.Update(this);
+            CommonProperties.Update(this);
         }
 
         public void OnMoved()
         {
             ItemEvents.FireItemMoved(this);
-            Logger.Log($"{Name} was moved to [Col={InventoryColumn}, Row={InventoryRow}, Slot={InventorySlot}] (Ann={AnnId} AcdId={AcdId})");
+            Logger.Log($"{Name} was moved from [{LastInventoryColumn},{LastInventoryRow} {LastInventorySlot}] => [{InventoryColumn},{InventoryRow} {InventorySlot}] (Ann={AnnId} AcdId={AcdId})");
         }
 
         public void OnIdentified()
         {
             ItemEvents.FireItemIdentified(this);
-            Logger.Log($"{Name} was identified. (Ann={AnnId} AcdId={AcdId}) Ancient={IsAncient} RawType={RawItemType}");
+            Logger.Log($"{Name} was identified. (Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) Ancient={IsAncient} RawType={RawItemType}");
         }
 
         public void OnPickedUp()
         {
-            Logger.Log($"{Name} was picked up. (Ann={AnnId} AcdId={AcdId}) Ancient={IsAncient} RawType={RawItemType}");
+            Logger.Log($"{Name} was picked up. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} RawType={RawItemType}");
             ItemEvents.FireItemPickedUp(this);
-            Attributes.Update();
+        }
+
+        public void OnDropped()
+        {
+            if (IsPickupNoClick) return;
+            Logger.Log($"{Name} dropped. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} RawType={RawItemType}");
+            ItemEvents.FireItemDropped(this);
         }
 
         public bool Drop()
