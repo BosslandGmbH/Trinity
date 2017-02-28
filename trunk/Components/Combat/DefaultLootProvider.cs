@@ -41,13 +41,39 @@ namespace Trinity.Components.Combat
                 return false;
             }
 
-            if (Core.Settings.Items.DisableLootingInCombat && Combat.IsInCombat && item.Distance > 8f)
+            if (item.RawItemType == RawItemType.CosmeticPet)
             {
-                return false;
+                Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                return true;
             }
+            if (item.RawItemType == RawItemType.CosmeticWings)
+            {
+                Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                return true;
+            }
+            if (item.RawItemType == RawItemType.CosmeticPennant)
+            {
+                Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                return true;
+            }
+            if (item.RawItemType == RawItemType.CosmeticPortraitFrame)
+            {
+                Logger.Log($"Portrait found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                return true;
+            }
+
+            if (item.InternalNameLowerCase.Contains("cosmetic"))
+                return true;
+
+            if (Core.Settings.Items.DisableLootingInCombat && Combat.IsInCombat && item.Distance > 8f)
+                return false;
 
             if (Core.Settings.Items.DontPickupInTown && Core.Player.IsInTown && !item.IsItemAssigned)
                 return false;
+
+            // 451002, //sir williams - 451002 (TentacleBear_C_Unique_Cosmetic_02)
+            // portrait - 410998 (Cosmetic_Portrait_Frame_1)
+
 
             //if (Core.Settings.Items.InCombatLooting != SettingMode.Enabled && Combat.IsInCombat)
             //{
@@ -71,10 +97,10 @@ namespace Trinity.Components.Combat
             if (item.TrinityItemType == TrinityItemType.ConsumableAddSockets)
                 return true;
 
-            if (item.RawItemType == RawItemType.Lore && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Lore))
+            if (item.RawItemType == RawItemType.Book && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Lore))
                 return true;
 
-            if (item.RawItemType == RawItemType.CultistPage && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.CultistPage))
+            if (item.RawItemType == RawItemType.Junk && Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.CultistPage))
                 return true;
 
             if (item.GameBalanceId == GameData.ItemGameBalanceIds.DeathsBreath)
@@ -98,21 +124,9 @@ namespace Trinity.Components.Combat
             if (GameData.HerdingMatsSnoIds.Contains(item.ActorSnoId))
                 return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.StaffOfHeardingParts);
 
-            if (GameData.PetTable.Contains(item.GameBalanceId) || GameData.PetSnoIds.Contains(item.ActorSnoId))
-            {
-                Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
-                return true;
-            }
-
-            if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog"))
+            if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
             {
                 Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
-                return true;
-            }
-
-            if (Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Wings) && GameData.WingsTable.Contains(item.GameBalanceId) || GameData.CosmeticSnoIds.Contains(item.ActorSnoId))
-            {
-                Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
@@ -140,11 +154,11 @@ namespace Trinity.Components.Combat
             switch (item.RawItemType)
             {
                 case RawItemType.CraftingPlan:
-                case RawItemType.CraftingPlanJeweler:
-                case RawItemType.CraftingPlanSmith:
-                case RawItemType.CraftingPlanLegendarySmith:
-                case RawItemType.CraftingPlanMystic:
-                case RawItemType.CraftingPlanMysticTransmog:
+                case RawItemType.CraftingPlan_Jeweler:
+                case RawItemType.CraftingPlan_Smith:
+                case RawItemType.CraftingPlanLegendary_Smith:
+                case RawItemType.CraftingPlan_Mystic:
+                case RawItemType.CraftingPlan_MysticTransmog:
                     return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.CraftingPlans);
             }
 
@@ -211,9 +225,6 @@ namespace Trinity.Components.Combat
             return true;
         }
 
-
-
-
         public bool ShouldDrop(TrinityItem item, ItemEvaluationType scheduledAction)
         {
             if (item.IsProtected() || item.IsAccountBound)
@@ -222,7 +233,7 @@ namespace Trinity.Components.Combat
             if (item.IsGem || item.IsCraftingReagent || item.TrinityItemType == TrinityItemType.CraftingPlan)
                 return false;
 
-            if (!item.IsUnidentified && (item.IsPotion || item.RawItemType == RawItemType.RamaladnisGift || item.IsMiscItem))
+            if (!item.IsUnidentified && (item.IsPotion || item.RawItemType == RawItemType.GeneralUtility || item.IsMiscItem))
                 return false;
 
             if (item.ItemQualityLevel >= ItemQuality.Legendary)
@@ -269,6 +280,11 @@ namespace Trinity.Components.Combat
                 return true;
             }
 
+            // 451002, //sir williams - 451002 (TentacleBear_C_Unique_Cosmetic_02)
+            // portrait - 410998 (Cosmetic_Portrait_Frame_1)
+            if (item.InternalNameLowerCase.Contains("cosmetic"))
+                return true;
+
             if (item.IsProtected())
             {
                 Logger.LogDebug($"Not stashing due to item being in a protected slot (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
@@ -287,21 +303,32 @@ namespace Trinity.Components.Combat
             if (GameData.VanityItems.Any(i => item.InternalName.StartsWith(i)))
                 return true;
 
-            if (Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Pets) && GameData.PetTable.Contains(item.GameBalanceId) || GameData.PetSnoIds.Contains(item.ActorSnoId))
+
+            if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
             {
-                Logger.Log($"Pet found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
-                return true;
+                var setting = Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites);
+                Logger.Log($"Transmog found! - Stash Setting={setting} {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                return setting;
             }
 
-            if (Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites) && GameData.TransmogTable.Contains(item.GameBalanceId))
+            if (item.RawItemType == RawItemType.CosmeticPet)
             {
-                Logger.Log($"Transmog found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Logger.Log($"Pet found! - Stashing it {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
-
-            if (Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.Wings) && GameData.WingsTable.Contains(item.GameBalanceId) || GameData.CosmeticSnoIds.Contains(item.ActorSnoId))
+            if (item.RawItemType == RawItemType.CosmeticWings)
             {
-                Logger.Log($"Wings found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Logger.Log($"Wings found! - Stashing it  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                return true;
+            }
+            if (item.RawItemType == RawItemType.CosmeticPennant)
+            {
+                Logger.Log($"Wings found! - Stashing it  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                return true;
+            }
+            if (item.RawItemType == RawItemType.CosmeticPortraitFrame)
+            {
+                Logger.Log($"Portrait found! - Stashing it {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
@@ -316,6 +343,7 @@ namespace Trinity.Components.Combat
                 Logger.Log($"Staff of Herding Mat found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
             }
+
 
             // Now look for Misc items we might want to keep
             TrinityItemType tItemType = item.TrinityItemType; 
@@ -508,6 +536,12 @@ namespace Trinity.Components.Combat
                     return false;
                 }
 
+                if (item.IsCosmeticItem)
+                {
+                    reason = "Cosmetic";
+                    return false;
+                }
+
                 if (item.IsUnidentified)
                 {
                     reason = "Not Identified";
@@ -607,6 +641,11 @@ namespace Trinity.Components.Combat
                 if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
                 {
                     Logger.LogDebug($"Not Selling due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    return false;
+                }
+
+                if (item.IsCosmeticItem)
+                {
                     return false;
                 }
 

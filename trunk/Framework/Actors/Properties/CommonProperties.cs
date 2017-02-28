@@ -60,7 +60,14 @@ namespace Trinity.Framework.Actors.Properties
 
             actor.Type = type;
             actor.ObjectHash = actor.InternalName + actor.AcdId + actor.RActorId;
+            actor.PositionHash = string.Empty + Core.Player.WorldSnoId + actor.Position.X + actor.Position.Y;
             actor.IsDestroyable = actor.Type == TrinityObjectType.Barricade || actor.Type == TrinityObjectType.Destructible;
+
+            actor.IsUnit = type == TrinityObjectType.Unit || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Player;
+            actor.IsItem = type == TrinityObjectType.Item || actor.ActorType == ActorType.Item;
+            actor.IsPlayer = type == TrinityObjectType.Player || actor.ActorType == ActorType.Player;
+            actor.IsGizmo = actor.ActorType == ActorType.Gizmo;
+            actor.IsMonster = actor.ActorType == ActorType.Monster;
 
             if (actor.IsAcdBased && actor.IsAcdValid)
             {
@@ -75,7 +82,7 @@ namespace Trinity.Framework.Actors.Properties
                 actor.Animation = animation;
                 actor.AnimationNameLowerCase = GameData.GetAnimationNameLowerCase(animation);
                 actor.AnimationState = commonData.AnimationState;
-                actor.InventorySlot = actor.CommonData.InventorySlot;
+                actor.IsGroundItem = actor.IsItem && commonData.InventorySlot == InventorySlot.None && actor.Position != Vector3.Zero;
             }
 
             if (actor.IsRActorBased)
@@ -83,12 +90,8 @@ namespace Trinity.Framework.Actors.Properties
                 actor.Position = actor.RActor.Position;
             }
 
-            actor.IsUnit = type == TrinityObjectType.Unit || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Player;
-            actor.IsItem = type == TrinityObjectType.Item || actor.ActorType == ActorType.Item;
-            actor.IsPlayer = type == TrinityObjectType.Player || actor.ActorType == ActorType.Player;
-            actor.IsGizmo = actor.ActorType == ActorType.Gizmo;
-            actor.IsMonster = actor.ActorType == ActorType.Monster;
-            actor.IsGroundItem = actor.IsItem && actor.InventorySlot == InventorySlot.None;
+
+
             actor.SpecialType = GetSpecialType(actor);
 
             UpdateDistance(actor);
@@ -122,15 +125,13 @@ namespace Trinity.Framework.Actors.Properties
 
                 UpdateDistance(actor);
 
-                if (actor.Distance < 50f)
+                if (!actor.IsItem && actor.Distance < 50f)
                 {
                     var animation = commonData.Animation;
                     actor.Animation = animation;
                     actor.AnimationNameLowerCase = GameData.GetAnimationNameLowerCase(animation);
                     actor.AnimationState = commonData.AnimationState;
                 }
-
-                actor.InventorySlot = actor.CommonData.InventorySlot;
             }
             else if (actor.IsRActorBased)
             {
@@ -143,7 +144,7 @@ namespace Trinity.Framework.Actors.Properties
 
         public static void UpdateLineOfSight(TrinityActor actor)
         {
-            if(actor.ActorType == ActorType.Item && !actor.IsGroundItem)
+            if (actor.ActorType == ActorType.Item && actor.InventorySlot != InventorySlot.None)
                 return;
 
             var grid = Core.Avoidance.Grid;

@@ -16,7 +16,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 {
     public static class BountyStatistics
     {
-        public static List<BountyStatistic> Stats = new List<BountyStatistic>();
+        public static List<BountyStatistic> Stats { get; } = new List<BountyStatistic>();
 
         public static void Report()
         {
@@ -38,6 +38,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             Logger.Info("[BountyStatistics] Per hour: {0:0.##}", bountiesPerHour);
             Logger.Info("[BountyStatistics] Time Wasted: {0:hh\\:mm\\:ss}", timeWasted);
             Logger.Info("[BountyStatistics] Completed Acts: {0}", CompletedBountyActs);
+            Logger.Info("[BountyStatistics] Unsupported Act Restarts: {0}", RestartsFromUnsupported);
             Logger.Info("[BountyStatistics] Total Bounties: {0}", count);
             Logger.Info("[BountyStatistics] Success Count: {0}", successful);
             Logger.Info("[BountyStatistics] Failed Count: {0}", failed);
@@ -106,9 +107,20 @@ namespace Trinity.Components.Adventurer.Game.Quests
             }
         }
 
-        public static int CompletedBountyActs { get; set; }
+        public static IEnumerable<BountyStatistic> CurrentGame => Stats.Where(b => ZetaDia.Service.CurrentGameId == b.GameId);
+
+        public static int CompletedBountyActs { get; internal set; }
+
+        public static int RestartsFromUnsupported { get; internal set; }
 
         private static bool _isTurnInInProgress;
+
+        public static void Reset()
+        {
+            Stats.Clear();
+            CompletedBountyActs = 0;
+            RestartsFromUnsupported = 0;
+        }
 
     }
 
@@ -144,6 +156,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         {
 
         }
+
 
         public static BountyStatistic GetInstance(int questId)
         {

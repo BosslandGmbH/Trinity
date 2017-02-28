@@ -360,11 +360,11 @@ namespace Trinity.Coroutines.Town
                 return false;
             }
 
-            if (ZetaDia.Me.IsInCombat)
-            {
-                Logger.Log("Not portaling because in combat.");
-                return false;
-            }
+            //if (ZetaDia.Me.IsInCombat)
+            //{
+            //    Logger.Log("Not portaling because in combat.");
+            //    return false;
+            //}
 
             Navigator.PlayerMover.MoveStop();
             await Coroutine.Wait(2000, () => !ZetaDia.Me.Movement.IsMoving);

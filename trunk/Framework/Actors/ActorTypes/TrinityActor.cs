@@ -77,6 +77,8 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool HasBeenWalkable { get; set; }
         public bool HasBeenInLoS { get; set; }
         public InventorySlot InventorySlot { get; set; }
+        public InventorySlot LastInventorySlot { get; set; }
+        public string PositionHash { get; set; }
         public bool IsGroundItem { get; set; }
         public int TeamId { get; set; }
         public bool IsQuestGiver { get; set; }

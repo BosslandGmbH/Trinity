@@ -37,6 +37,11 @@ namespace Trinity.ProfileTags
                 );
         }
 
+        public static bool CurrentSceneId(int sceneSnoId)
+        {
+            return ZetaDia.Me.CurrentScene.SceneInfo.SNOId == sceneSnoId;
+        }
+
         public static bool CurrentSceneName(string sceneName)
         {
             return ZetaDia.Me.CurrentScene.Name.ToLowerInvariant().Contains(sceneName.ToLowerInvariant());

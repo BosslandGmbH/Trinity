@@ -33,6 +33,7 @@ namespace Trinity.Settings
         GoblinFound = 1 << 0,
         UrshiFound = 1 << 1,
         DeathGateFound = 1 << 2,
+        UniqueFound = 1 << 3,
         //Quiver = 1 << 3,
         //Orb = 1 << 4,
         //Amulet = 1 << 5,
@@ -254,7 +255,7 @@ namespace Trinity.Settings
         AlwaysDecline,
     }
 
-    public enum GoblinPriority
+    public enum TargetPriority
     {
         Ignore = 0,
         Normal = 1,

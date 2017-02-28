@@ -56,6 +56,7 @@ using Trinity.Settings;
 using Trinity.UI.Visualizer;
 using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 using System.Threading.Tasks;
+using Trinity.Routines.Wizard;
 
 namespace Trinity.UI
 {
@@ -115,6 +116,7 @@ namespace Trinity.UI
                             CreateButton("Convert to Magic", btnClick_ConvertToBlue),
                             CreateButton("Convert to Common", btnClick_ConvertToCommon),
                             CreateButton("Convert to Rare", btnClick_ConvertToRare),
+                            CreateButton("Do Not Click", btnClick_CrazyTest),
                         });
 
                 CreateGroup("Debugging", new List<Control>
@@ -140,6 +142,7 @@ namespace Trinity.UI
                             //CreateButton("Log Run Time", btnClick_LogRunTime),
                             CreateButton("Open Log File", OpenLogFileHandler),
                             CreateButton("Open Settings File", OpenSettingsFileHandler),
+                      
                             //CreateButton("Log Town Actor", LogTownActor),
                             //CreateButton("Test UIElement", TestUIElement),                                                       
                             //CreateButton("Test SNOReader", TestSNOReader),
@@ -290,6 +293,22 @@ namespace Trinity.UI
             try
             {
                 Logger.Log("Bot {0} has been running for {1} hours {2} minutes and {3} seconds", ZetaDia.PlayerData.HeroName, GameStats.Instance.RunTime.Hours, GameStats.Instance.RunTime.Minutes, GameStats.Instance.RunTime.Seconds);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Exception {0}", ex);
+            }
+        }
+
+        private static void btnClick_CrazyTest(object sender, RoutedEventArgs routedEventArgs)
+        {
+            try
+            {
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    WizardBase.CancelArchon();
+                    //ZetaDia.Me.UsePower(SNOPower.Wizard_Archon_Cancel, ZetaDia.Me.Position, ZetaDia.Me.WorldId, ZetaDia.Me.ACDId);
+                }
             }
             catch (Exception ex)
             {

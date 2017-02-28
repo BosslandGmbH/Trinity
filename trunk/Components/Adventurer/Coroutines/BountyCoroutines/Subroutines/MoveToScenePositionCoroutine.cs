@@ -63,12 +63,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
 
 
-        public MoveToScenePositionCoroutine(int questId, int worldId, string sceneName, Vector3 position)
+        public MoveToScenePositionCoroutine(int questId, int worldId, string sceneName, Vector3 position, bool straightLinePath  = false)
         {
             _questId = questId;
             _worldId = worldId;
             _sceneName = sceneName;
             _position = position;
+            _straightLinePath = straightLinePath;
         }
 
         public MoveToScenePositionCoroutine(int sceneSnoId, Vector3 position)
@@ -170,7 +171,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Moving()
         {
-            if (await NavigationCoroutine.MoveTo(_objectiveLocation, 10))
+            if (await NavigationCoroutine.MoveTo(_objectiveLocation, 10, _straightLinePath))
             {
                 if (AdvDia.MyPosition.Distance(_objectiveLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
                 {
@@ -210,16 +211,17 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private long _lastScanTime;
         private BountyData _bountyData;
         private int _sceneSnoId;
+        private bool _straightLinePath;
 
         private void ScanForObjective()
         {
-            if (_previouslyFoundLocation != Vector3.Zero && PluginTime.ReadyToUse(_returnTimeForPreviousLocation, 60000))
-            {
-                _objectiveLocation = _previouslyFoundLocation;
-                _previouslyFoundLocation = Vector3.Zero;
-                Logger.Debug("[MoveToScenePosition] Returning previous objective location.");
-                return;
-            }
+            //if (_previouslyFoundLocation != Vector3.Zero && PluginTime.ReadyToUse(_returnTimeForPreviousLocation, 60000))
+            //{
+            //    _objectiveLocation = _previouslyFoundLocation;
+            //    _previouslyFoundLocation = Vector3.Zero;
+            //    Logger.Debug("[MoveToScenePosition] Returning previous objective location.");
+            //    return;
+            //}
             if (PluginTime.ReadyToUse(_lastScanTime, 1000))
             {
                 _lastScanTime = PluginTime.CurrentMillisecond;
@@ -230,6 +232,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     {
                         _worldScene = scene;
                         _objectiveLocation = _worldScene.GetWorldPosition(_position);
+                        Logger.Debug($"Scan found target scene by SnoId {_worldScene.Name} ({_worldScene.SnoId}). Pos={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
+
                     }
 
                 }
@@ -247,40 +251,40 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                         _worldScene = scene;
                         _objectiveLocation = _worldScene.GetWorldPosition(_position);
                         VisualizerViewModel.DebugPosition = _objectiveLocation;
-                        Logger.DebugSetting($"Scan found target scene {_sceneName}. World={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
+                        Logger.DebugSetting($"Scan found target scene {_worldScene.Name} ({_worldScene.SnoId}). Pos={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
                     }
                 }
-                else if (!string.IsNullOrEmpty(_tempSceneName))
-                {
-                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name == _tempSceneName);
-                    if (scene != null)
-                    {
-                        _worldScene = scene;
-                        _objectiveLocation = _worldScene.GetWorldPosition(_position);
-                    }
-                }
+                //else if (!string.IsNullOrEmpty(_tempSceneName))
+                //{
+                //    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name == _tempSceneName);
+                //    if (scene != null)
+                //    {
+                //        _worldScene = scene;
+                //        _objectiveLocation = _worldScene.GetWorldPosition(_position);
+                //    }
+                //}
                 //if (_objectiveLocation == Vector3.Zero && _actorId != 0)
                 //{
                 //    _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange);
                 //}
-                if (_objectiveLocation != Vector3.Zero)
-                {
-                    using (new PerformanceLogger("[MoveToScenePosition] Path to Objective Check", true))
-                    {
-                        //if ((Navigator.GetNavigationProviderAs<DefaultNavigationProvider>().CanFullyClientPathTo(_objectiveLocation)))
-                        //{
-                        Logger.Info("[MoveToScenePosition] Found the objective at distance {0}",
-                            AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //}
-                        //else
-                        //{
-                        //    Logger.Debug("[MoveToMapMarker] Found the objective at distance {0}, but cannot get a path to it.",
-                        //        AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //    _objectiveLocation = Vector3.Zero;
-                        //}
-                    }
+                //if (_objectiveLocation != Vector3.Zero)
+                //{
+                //    using (new PerformanceLogger("[MoveToScenePosition] Path to Objective Check", true))
+                //    {
+                //        //if ((Navigator.GetNavigationProviderAs<DefaultNavigationProvider>().CanFullyClientPathTo(_objectiveLocation)))
+                //        //{
+                //        Logger.Info("[MoveToScenePosition] Found the objective at distance {0}",
+                //            AdvDia.MyPosition.Distance(_objectiveLocation));
+                //        //}
+                //        //else
+                //        //{
+                //        //    Logger.Debug("[MoveToMapMarker] Found the objective at distance {0}, but cannot get a path to it.",
+                //        //        AdvDia.MyPosition.Distance(_objectiveLocation));
+                //        //    _objectiveLocation = Vector3.Zero;
+                //        //}
+                //    }
 
-                }
+                //}
             }
         }
     }

@@ -80,13 +80,6 @@ namespace Trinity.Coroutines.Town
 
             GameUI.CloseVendorWindow();
 
-            if (StashPagesAvailableToPurchase && ZetaDia.PlayerData.Coinage > 100000000)
-            {
-                // todo: get the actual cost of buying pages
-                Logger.LogError("[StashItems] Buying stash page");
-                ZetaDia.Me.Inventory.BuySharedStashSlots();
-            }
-
             await MoveToStash();
 
             if (!UIElements.StashWindow.IsVisible)
@@ -112,6 +105,12 @@ namespace Trinity.Coroutines.Town
 
             if (UIElements.StashWindow.IsVisible)
             {
+                if (Core.Settings.Items.BuyStashTabs && StashPagesAvailableToPurchase)
+                {
+                    Logger.LogError("[StashItems] Attempting to buy stash pages");
+                    ZetaDia.Me.Inventory.BuySharedStashSlots();
+                }
+
                 await StackRamaladnisGift();
                 await StackCraftingMaterials();
 
@@ -148,7 +147,7 @@ namespace Trinity.Coroutines.Town
                                 await Coroutine.Sleep(500);
                             }
 
-                            Logger.LogVerbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
+                            Logger.LogVerbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
                             ZetaDia.Me.Inventory.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
                             item.OnUpdated();
                             ItemEvents.FireItemStashed(item);
@@ -197,7 +196,7 @@ namespace Trinity.Coroutines.Town
 
         public static async Task<bool> StackRamaladnisGift()
         {
-            var items = Inventory.Stash.Items.Where(i => i.RawItemType == RawItemType.RamaladnisGift && !i.IsTradeable).ToList();
+            var items = Inventory.Stash.Items.Where(i => i.RawItemType == RawItemType.GeneralUtility && !i.IsTradeable).ToList();
             if (!items.Any())
                 return false;
 
@@ -523,11 +522,11 @@ namespace Trinity.Coroutines.Town
         private static HashSet<RawItemType> _specialCaseNonStackableItems = new HashSet<RawItemType>
         {
             RawItemType.CraftingPlan,
-            RawItemType.CraftingPlanJeweler,
-            RawItemType.CraftingPlanLegendarySmith,
-            RawItemType.CraftingPlanMystic,
-            RawItemType.CraftingPlanMysticTransmog,
-            RawItemType.CraftingPlanSmith,
+            RawItemType.CraftingPlan_Jeweler,
+            RawItemType.CraftingPlanLegendary_Smith,
+            RawItemType.CraftingPlan_Mystic,
+            RawItemType.CraftingPlan_MysticTransmog,
+            RawItemType.CraftingPlan_Smith,
         };
 
         public static bool CanPutItemInStashPage(TrinityItem item, int stashPageNumber, out int col, out int row)
@@ -611,7 +610,7 @@ namespace Trinity.Coroutines.Town
 
         private static InventoryMap GetInventoryMap()
         {
-            Core.Actors.Update();
+            Core.Actors.UpdateInventory();
             var items = Inventory.Stash.Items.ToList();
             return new InventoryMap(items.ToDictionary(k => new Tuple<int, int>(k.InventoryColumn, k.InventoryRow), v => v));
         }

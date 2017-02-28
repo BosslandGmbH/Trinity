@@ -208,7 +208,7 @@ namespace Trinity.Framework.Actors
         /// <summary>
         /// Updates the acds that are inventory items, stash/equipped/backpack etc.
         /// </summary>
-        private void UpdateInventory()
+        public void UpdateInventory()
         {
             var untouchedIds = new List<int>(_inventory.Keys);
             foreach (var newItem in _commonData)
@@ -219,7 +219,7 @@ namespace Trinity.Framework.Actors
                     continue;
 
                 var inventorySlot = commonData.InventorySlot;
-                if (inventorySlot == InventorySlot.Merchant || inventorySlot == InventorySlot.None)
+                if (inventorySlot == InventorySlot.Merchant)
                     continue;
 
                 var annId = commonData.AnnId;

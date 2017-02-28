@@ -120,10 +120,10 @@ namespace Trinity.Components.Adventurer.Settings
             set { SetField(ref _gems, value); }
         }
 
-        //public override string ToString()
-        //{
-        //    return $"{GetType().Name}: {Name} ({Sno}) IsEnabled={IsEnabled} Order={Order} IsLimited={IsLimited} Limit={Limit}";
-        //}
+        public override string ToString()
+        {
+            return $"{GetType().Name}: {Name} ({Sno})";
+        }
 
     }
 }

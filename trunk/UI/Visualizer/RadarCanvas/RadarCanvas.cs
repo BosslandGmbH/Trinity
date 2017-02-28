@@ -908,6 +908,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             //{
             //    dc.DrawLine(RadarResources.SuccessPen, zone.EnterPosition.ToCanvasPoint(), zone.ExitPosition.ToCanvasPoint());
             //}      
+
+            if (!VisibilityFlags.HasFlag(RadarVisibilityFlags.Markers))
+                return;
+
             foreach (var marker in Core.Markers.CurrentWorldMarkers)
             {
                 var pen = marker.MarkerType == WorldMarkerType.Objective ? RadarResources.EliteLightPen : RadarResources.MarkerPen;

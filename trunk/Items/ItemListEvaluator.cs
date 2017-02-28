@@ -42,7 +42,7 @@ namespace Trinity.Items
 
             if (!typeEntry.IsSelected)
             {
-                Logger.LogVerbose($"  >>  {cItem.Name} ({cItem.TrinityItemType}) is not a selected {typeEntry.Type}");
+                Logger.LogVerbose($"  >>  {cItem.Name} ({cItem.TrinityItemType}) is not a selected item type - {typeEntry.Type}");
                 return false;
             }
 

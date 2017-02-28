@@ -48,6 +48,7 @@ namespace Trinity.Coroutines
                 }
 
                 count++;       
+                Logger.LogDebug($"Vacuumed: {item.Name} ({item.ActorSnoId}) InternalName={item.InternalName} GbId={item.GameBalanceId}");
                 SpellHistory.RecordSpell(SNOPower.Axe_Operate_Gizmo);
                 VacuumedAcdIds.Add(item.AcdId);            
             }

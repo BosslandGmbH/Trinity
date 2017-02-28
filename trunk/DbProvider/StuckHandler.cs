@@ -16,8 +16,8 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Logger = Trinity.Framework.Helpers.Logger;
-
-
+using Trinity.Components.Adventurer;
+using Trinity.Components.Adventurer.Coroutines;
 
 namespace Trinity.DbProvider
 {
@@ -226,6 +226,20 @@ namespace Trinity.DbProvider
                 Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Profile is Busy");
                 return true;
             }
+
+            if (IsAdventurerBusy())
+            {
+                Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Adventurer is Busy");
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsAdventurerBusy()
+        {
+            if (Adventurer.GetCurrentCoroutine() is WaitCoroutine)
+                return true;
 
             return false;
         }

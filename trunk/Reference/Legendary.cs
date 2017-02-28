@@ -13114,7 +13114,7 @@ namespace Trinity.Reference
         /// </summary>
         public static Item Maximus = new Item
         {
-            Id = 184187,
+            Id = 184187, //184189,
             Name = "Maximus",
             Quality = ItemQuality.Legendary,
             Slug = "maximus",
@@ -14464,7 +14464,7 @@ namespace Trinity.Reference
         /// <summary>
         /// Dictionary of all Legendaries Items
         /// </summary>
-        public static Dictionary<int, Item> Items
+        public static new Dictionary<int, Item> Items
         {
             get { return _items ?? (_items = ToList().Where(i => i.Id != 0).DistinctBy(i => i.Id).ToDictionary(k => k.Id, v => v)); }
         }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 {
@@ -35,6 +36,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
 
         public readonly BountyData Bounty;
+        private ISubroutine _currentStep;
+        private static ISubroutine _lastGenericBountySubroutine;
 
         public GenericBountyCoroutine(int questId)
             : base(questId)
@@ -81,12 +84,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> InProgress()
         {
-            var step = Bounty.Coroutines.FirstOrDefault(b => !b.IsDone);
-            if (step == null)
+            _currentStep = Bounty.Coroutines.FirstOrDefault(b => !b.IsDone);
+            if (_currentStep == null)
             {
                 //TODO if boss bounty and completed run this
                 //new MoveToObjectCoroutine(347558,AdvDia.CurrentWorldSnoId,433670),
                 //new InteractWithGizmoCoroutine(347558,AdvDia.CurrentWorldSnoId,433670,0,5),
+                _lastGenericBountySubroutine = null;
                 State = BountyData.IsAvailable ? States.Failed : States.Completed;
                 return false;
             }
@@ -102,13 +106,25 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             //        return false;
             //    }
             //}
-            await step.GetCoroutine();
+
+            _lastGenericBountySubroutine = _currentStep;
+            await _currentStep.GetCoroutine();
             return false;
         }
 
+        public ISubroutine CurrentBountySubroutine => State == States.InProgress ? _currentStep : null;
+        public static ISubroutine LastBountySubroutine => _lastGenericBountySubroutine;
+
+        public override void Reset()
+        {
+            _lastGenericBountySubroutine = null;
+            _currentStep = null;
+            base.Reset();
+        }
 
         private bool Completed()
         {
+            Reset();
             State = States.NotStarted;
             base.State = BountyCoroutine.States.Completed;
             return true;
@@ -116,6 +132,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private bool Failed()
         {
+            Reset();
             State = States.NotStarted;
             base.State = BountyCoroutine.States.Failed;
             return true;

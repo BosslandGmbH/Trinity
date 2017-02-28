@@ -131,6 +131,8 @@
     <Compile Include="Framework\Helpers\CData.cs" />
     <Compile Include="Framework\Helpers\CoroutineExtensions.cs" />
     <Compile Include="Framework\Helpers\EasyCache.cs" />
+    <Compile Include="Framework\Helpers\NavExtensions.cs" />
+    <Compile Include="Framework\Helpers\ProfileUtils.cs" />
     <Compile Include="Framework\Helpers\ExpressionEvaluator.cs" />
     <Compile Include="Framework\Helpers\ObjectComparer.cs" />
     <Compile Include="Framework\Helpers\ProjectionEqualityComparer.cs" />
@@ -268,6 +270,7 @@
     <Compile Include="Routines\Monk\MonkBase.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterBase.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterUnhallowed.cs" />
+    <Compile Include="Routines\Monk\MonkZDPS.cs" />
     <Compile Include="Routines\RoutineBase.cs" />
     <Compile Include="Routines\IRoutine.cs" />
     <Compile Include="Components\Adventurer\Adventurer.cs" />
@@ -649,12 +652,17 @@
     <Content Include="Profiles\BrutalWhiteFarm.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Profiles\Debug\A3 346186 Crazy Climber.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Debug\A3 436282 King of the Ziggurat.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Profiles\Debug\A2 347598 Clear the Mysterious Cave.xml" />
     <Content Include="Profiles\Debug\A5 3346146 Forged in Battle.xml" />
     <Content Include="Profiles\Debug\A4 349288 Kill Diablo.xml" />
     <Content Include="Profiles\Debug\A3 349216 Kill Direclaw the Demonflyer.xml" />
+    <Content Include="Profiles\Debug\A2 350564 Rygnar Idol.xml" />
     <Content Include="Profiles\Debug\A5 368536 Noble Deaths.xml" />
     <Content Include="Profiles\Debug\A5 363557 Kill Scythys.xml" />
     <Content Include="Profiles\Debug\A5 363431 The Hatchery.xml" />
@@ -662,6 +670,9 @@
     <Content Include="Profiles\Debug\A4 349262 Kill Rakanoth.xml" />
     <Content Include="Profiles\Debug\A5 359319 The Lord of the Hill.xml" />
     <Content Include="Profiles\Debug\A5 375268 The Cursed Forum.xml" />
+    <Content Include="Profiles\Debug\Bosses.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Debug\MultiTest.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -724,6 +735,7 @@
     <Compile Include="Routines\Wizard\WizardDefault.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchon.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisQvazmirArchon.cs" />
+    <Compile Include="Routines\Wizard\WizardVyRashaManaldArchon.cs" />
     <Compile Include="Settings\Mock\RoutineMockData.cs" />
     <Compile Include="Settings\RoutineSettings.cs" />
     <Compile Include="Settings\ItemSettings.cs" />
@@ -1031,6 +1043,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Routines\Monk\MonkZDPSSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Routines\Witchdoctor\WitchDoctorArachyrFirebatsSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1068,6 +1084,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Routines\Wizard\WizardParalysisQvazmirArchonSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Wizard\WizardVyRashaManaldArchonSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

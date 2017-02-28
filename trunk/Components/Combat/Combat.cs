@@ -24,6 +24,7 @@ using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 using Zeta.TreeSharp;
 using Logger = Trinity.Framework.Helpers.Logger;
+using Trinity.Framework.Events;
 
 namespace Trinity.Components.Combat
 {
@@ -78,7 +79,7 @@ namespace Trinity.Components.Combat
             VacuumItems.Execute();           
 
             var target = Weighting.WeightActors(Core.Targets);
-       
+
             if (await CastBuffs())
                 return true;
 

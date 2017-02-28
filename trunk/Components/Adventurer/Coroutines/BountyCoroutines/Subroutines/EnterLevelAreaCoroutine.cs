@@ -103,6 +103,16 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _prioritizeExitScene = prioritizeExitScene;
         }
 
+        public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, int portalActorId, TimeSpan timeout)
+        {
+            _questId = questId;
+            _sourceWorldId = sourceWorldId;
+            _destinationWorldId = destinationWorldId;
+            _portalMarker = portalMarker;
+            _portalActorId = portalActorId;
+            _timeoutDuration = timeout;
+        }
+
         public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, int portalActorId, bool prioritizeExitScene = false)
         {
             _questId = questId;
@@ -122,7 +132,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public async Task<bool> GetCoroutine()
         {
-            if (PluginSettings.Current.BountyZerg) SafeZerg.Instance.EnableZerg();
+            if (State != States.Failed && _timeoutEndTime < DateTime.UtcNow && _timeoutDuration != TimeSpan.Zero)
+            {
+                Logger.Debug($"EnterLevelAreaCoroutine timed out after {_timeoutDuration.TotalSeconds} seconds");
+                State = States.Failed;
+            }
+
+            if (PluginSettings.Current.BountyZerg)
+                SafeZerg.Instance.EnableZerg();
+
             switch (State)
             {
                 case States.NotStarted:
@@ -153,6 +171,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _objectiveLocation = Vector3.Zero;
             _exitSceneLocation = Vector3.Zero;
             _exitSceneUnreachable = false;
+            _timeoutStartTime = DateTime.MinValue;
+            _timeoutEndTime = DateTime.MaxValue;
         }
 
         public void DisablePulse()
@@ -167,6 +187,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private async Task<bool> NotStarted()
         {
             State = States.Searching;
+            _timeoutStartTime = DateTime.UtcNow;
+            _timeoutEndTime = _timeoutStartTime + _timeoutDuration;
             return false;
         }
 
@@ -391,6 +413,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private Vector3 _deathGateLocation;
         private DateTime _nearestSceneCooldown = DateTime.MinValue;
         private IEnumerable<int> _portalActorIds;
+        private TimeSpan _timeoutDuration;
+        private DateTime _timeoutStartTime = DateTime.MinValue;
+        private DateTime _timeoutEndTime = DateTime.MaxValue;
 
         private void ScanForObjective()
         {

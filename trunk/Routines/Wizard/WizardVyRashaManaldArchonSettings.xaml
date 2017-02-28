@@ -1,0 +1,422 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+
+    mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../UI/Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Padding="10">
+        <Grid>
+            <StackPanel>
+                <GroupBox>
+                    <GroupBox.Header>General</GroupBox.Header>
+                    <StackPanel>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cluster Size"
+                            ToolTip="Number of monsters that must be grouped up before fighting starts"
+                                Interval="100" 
+                                Maximum="40" 
+                                Minimum="1" 
+                                SmallChange="1" 
+                                TickPlacement="None" 
+                            Value="{Binding Path=DataContext.ClusterSize}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Health % to Potion"
+                            ToolTip="How low your health must drop before the potion is used"
+                                Interval="500" 
+                                Maximum="99" 
+                                Minimum="0" 
+                                SmallChange="1" 
+                                LargeChange="5"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                    </StackPanel>
+                </GroupBox>
+
+
+
+                <GroupBox>
+                    <GroupBox.Header>Teleport: Where to look for Safe Spot</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock>For DPS and Survival, Teleport is used to keep a distance from enemies.</TextBlock>
+                        <TextBlock>These determine the search ranges to look for a Safe Spot to teleport to.</TextBlock>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Preferred Minimum Distance"
+                            ToolTip="When teleport is used to reposition for better DPS and survival, how far must it go at MINIMUM from current position. Default 30"
+                                Interval="100"
+                                Maximum="50" 
+                                Minimum="1" 
+                                SmallChange="1" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.TeleportKiteMinDistance}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Maximum Distance"
+                            ToolTip="When teleport is used to reposition for better DPS and survival, how far must it go at MAXIMUM from current position. Default 50"
+                                Interval="100"
+                                Maximum="100" 
+                                Minimum="1" 
+                                SmallChange="1" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.TeleportKiteMaxDistance}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                    </StackPanel>
+                </GroupBox>
+
+
+
+                <GroupBox>
+                    <GroupBox.Header>Teleport Activation</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock>Alter when Teleport will be activated to reposition.</TextBlock>
+
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Non-Archon Health Teleport"
+                            ToolTip="How low your health must drop before teleporting for survival when not in Archon form. Default 40"
+                                Interval="500" 
+                                Maximum="99" 
+                                Minimum="0" 
+                                SmallChange="1"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.TeleportHealthEmergency, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Archon Health Teleport"
+                            ToolTip="How low your health must drop before teleporting for survival when in Archon Form. Default 30"
+                                Interval="500" 
+                                Maximum="99" 
+                                Minimum="0" 
+                                SmallChange="1"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ArchonTeleportHealthEmergency, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Kite: Elites in Radius"
+                            ToolTip="When ELITES are within this range, use Teleport to reposition. Default 30"
+                                Interval="100"
+                                Maximum="50" 
+                                Minimum="1" 
+                                SmallChange="1" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight"  
+                            Value="{Binding Path=DataContext.TeleportEliteKiteRange}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Kite: Trash in Radius"
+                            ToolTip="When TRASH MOBS are within this range, use Teleport to reposition. Default 20"
+                                Interval="100"
+                                Maximum="50" 
+                                Minimum="1" 
+                                SmallChange="1"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.TeleportTrashKiteRange}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Kite: Trash Count in Range"
+                            ToolTip="How many TRASH MOBS must be within TRASH IN RANGE radius to use Teleport to reposition. Default 3"
+                                Interval="100"
+                                Maximum="50" 
+                                Minimum="1" 
+                                SmallChange="1"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.TeleportTrashInRangeCount}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                
+                    </StackPanel>
+                </GroupBox>
+
+                
+
+                <GroupBox>
+                    <GroupBox.Header>Archon Teleport Delay Settings</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock>Set a delay before recasting Teleport again.</TextBlock>
+                        <TextBlock>These exist to avoid spamming Teleport instead of attacking.</TextBlock>
+                        <TextBlock>Non-Archon Teleport has no delay and may kite as needed.</TextBlock>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Emergency Health Delay"
+                            ToolTip="Set a delay between teleporting for low health in Archon form. This avoids spamming without attacking. Default 1000"
+                                Interval="100"
+                                Maximum="5000" 
+                                Minimum="100" 
+                                SmallChange="100" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="100" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ArchonTeleportHealthDelay}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="4 Tal's Stacks Delay"
+                            ToolTip="Set a delay between teleporting when 4 Tal's Stacks are present. This allows you to maximize DPS in this scenario. Default 2000"
+                                Interval="100"
+                                Maximum="5000" 
+                                Minimum="100" 
+                                SmallChange="100" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="100" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.Archon4StackDelay}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Under 4 Tal's Stacks Delay"
+                            ToolTip="Set a delay between teleporting when less than 4 Tal's Stacks are present. Without 4 stacks your DPS is limited and repositioning frequently is less of a problem. Default 1000"
+                                Interval="100"
+                                Maximum="5000" 
+                                Minimum="100" 
+                                SmallChange="100" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="100" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.Archon1StackDelay}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Stuck/Blocked Delay"
+                            ToolTip="Set a delay between teleporting for when Stuck or Blocked. This avoids spamming without attacking. Default 1000"
+                                Interval="100"
+                                Maximum="5000" 
+                                Minimum="100" 
+                                SmallChange="100" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="100" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ArchonStuckOrBlockedDelay}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                    </StackPanel>
+                </GroupBox>
+
+                
+
+                <GroupBox>
+                    <GroupBox.Header>Archon</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock>Archon Activation and Skill Settings.</TextBlock>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Health Emergency Transform"
+                            ToolTip="When below this health percent, ignore Tal Rasha's Stack requirement [3] and change to Archon form. Default 40."
+                                Interval="500" 
+                                Maximum="99" 
+                                Minimum="0" 
+                                SmallChange="1" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ShouldArchonHealthPct, Converter={StaticResource PercentConverter}}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="AP Emergency Transform"
+                            ToolTip="When your Arcane Power drops below this number, Archon will be cast to make use of the Tal's Stacks you do have. Default 20"
+                                Interval="100"
+                                Maximum="50" 
+                                Minimum="1" 
+                                SmallChange="1"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ShouldArchonLowResource}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Disintegration Wave Search Range"
+                            ToolTip="Set the Maximum Range that Disintegration Wave will check for enemies. Default 50"
+                                Interval="100"
+                                Maximum="55" 
+                                Minimum="30" 
+                                SmallChange="1"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.DisintegrationWaveRange}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Disintegration Wave Min Range"
+                            ToolTip="Set a preferred distance to require before using Disintegration Wave. Default 30"
+                                Interval="100"
+                                Maximum="55" 
+                                Minimum="30" 
+                                SmallChange="1" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.DisintegrationWaveMinDistance}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                    </StackPanel>
+                </GroupBox>
+
+
+
+                <GroupBox>
+                    <GroupBox.Header>Arcane Torrent</GroupBox.Header>
+                    <StackPanel>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Targetting Range"
+                            ToolTip="How far away can enemies be and still be targeted. Default 55"
+                                Interval="100"
+                                Maximum="65" 
+                                Minimum="20" 
+                                SmallChange="1"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ArcaneTorrentRange}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Arcane Power Reserve"
+                            ToolTip="Do not cast Arcane Torrent if below this amount of Arcane Power. Default 25"
+                                Interval="100"
+                                Maximum="80" 
+                                Minimum="1" 
+                                SmallChange="1"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="1" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ArcaneResourceReserve}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                    </StackPanel>
+                </GroupBox>
+
+
+
+                <GroupBox>
+                    <GroupBox.Header>Tal Rasha Stacks - Elemental Skill Delays</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock>These skills will always be cast after Archon and before Archon. </TextBlock>
+                        <TextBlock>These delays prevent you from wasting Arcane Power when you do not need Tal's Stacks. </TextBlock>
+                        <TextBlock>Mouseover Skills to view their AP cost. </TextBlock>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Blackhole: Arcane Rune"
+                            ToolTip="Arcane. Can be SpellSteal or Event Horizon. Costs 20 AP. How many milliseconds to wait before casting this skill again. Default 6000"
+                                Interval="100"
+                                Maximum="10000" 
+                                Minimum="100" 
+                                SmallChange="100"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="100" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.BlackHoleDelay}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Blizzard: Snowbound"
+                            ToolTip="Cold. Costs 10 AP. How many milliseconds to wait before casting this skill again. Default 2000"
+                                Interval="100"
+                                Maximum="10000" 
+                                Minimum="100" 
+                                SmallChange="100"
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="100" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.BlizzardSnowboundDelay}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Blizzard: Frozen Solid"
+                            ToolTip="Cold. Costs 40 AP. How many milliseconds to wait before casting this skill again. Default 6000"
+                                Interval="100"
+                                Maximum="10000" 
+                                Minimum="100" 
+                                SmallChange="100" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="100" 
+                                TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.BlizzardFrozenSolidDelay}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Energy Twister: Mistral Breeze"
+                            ToolTip="Cold. Costs 25 AP. How many milliseconds to wait before casting this skill again. Default 4000"
+                                Interval="100"
+                                Maximum="10000" 
+                                Minimum="100" 
+                                SmallChange="100" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="100" 
+                                TickPlacement="BottomRight"
+                            Value="{Binding Path=DataContext.EnergyTwisterDelay}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Explosive Blast: Obliterate"
+                            ToolTip="Cold. Costs 20 AP. How many milliseconds to wait before casting this skill again. Default 4000"
+                                Interval="100"
+                                Maximum="10000" 
+                                Minimum="100" 
+                                SmallChange="100" 
+                                IsSnapToTickEnabled="True"
+                                TickFrequency="100" 
+                                TickPlacement="BottomRight"
+                            Value="{Binding Path=DataContext.ExplosiveBlastDelay}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
+
+    

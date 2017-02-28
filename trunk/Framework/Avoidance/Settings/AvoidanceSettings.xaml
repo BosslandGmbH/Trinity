@@ -115,7 +115,9 @@
                             <UniformGrid Rows="1" Margin="0,0,0,10">
                                 <Button Height="23" Command="{Binding SelectAllCommand}" CommandParameter="GroundEffects">Select All</Button>
                                 <Button Height="23" Command="{Binding SelectNoneCommand}" CommandParameter="GroundEffects">Select None</Button>
-                                <Button Height="23" Command="{Binding SelectDefaultsCommand}" CommandParameter="GroundEffects">Select Defaults</Button>
+                                <Button Height="23" Command="{Binding SelectDefaultsCommand}" CommandParameter="GroundEffects">Defaults</Button>
+                                <Button Height="23" Command="{Binding MaxHealthCommand}" CommandParameter="GroundEffects">Max All Health</Button>
+
                             </UniformGrid>
                             <ListView  
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"

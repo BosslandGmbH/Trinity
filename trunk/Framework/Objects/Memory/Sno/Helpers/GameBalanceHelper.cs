@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Objects.Memory.Reference;
 using Trinity.Framework.Objects.Memory.Sno.Types;
 using Zeta.Game.Internals.SNO;
 
@@ -40,7 +41,6 @@ namespace Trinity.Framework.Objects.Memory.Sno.Helpers
                 {
                     Logger.Log($"SnoRecord not found GbId={gbId} GbType={gbType}");
                 }
-
             }
             return default(T);
         }

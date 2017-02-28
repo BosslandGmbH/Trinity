@@ -191,11 +191,32 @@ namespace Trinity.Components.Combat
                 //    DataDictionary.QuestLevelAreaIds.Contains(Core.Player.LevelAreaId), Core.Player.Level,
                 //    CombatBase.IsQuestingMode, isHealthEmergency, hiPriorityHealthGlobes, hiPriorityShrine);
 
-   
-                if (Core.Settings.Weighting.GoblinPriority == GoblinPriority.Kamikaze)
+  
+                TrinityActor target = null;
+                target = objects.OfType<TrinityItem>().Cast<TrinityItem>().FirstOrDefault(u => u.IsCosmeticItem && u.Distance <= 200f);
+
+                if (target == null && Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze)
                 {
-                    var goblin = objects.FirstOrDefault(u => u.IsTreasureGoblin && u.Distance <= 200f);
-                    if (goblin != null && !isStuck && !PlayerMover.IsCompletelyBlocked && !Core.Grids.Avoidance.IsIntersectedByFlags(Core.Player.Position, goblin.Position, AvoidanceFlags.ClosedDoor))
+                    target = objects.FirstOrDefault(u => u.IsTreasureGoblin && u.Distance <= 200f);
+                }
+
+                if (target != null)
+                {
+                    var isBlockedByDoor = Core.Grids.Avoidance.IsIntersectedByFlags(Core.Player.Position, target.Position, AvoidanceFlags.ClosedDoor);
+                    if (isBlockedByDoor)
+                    {
+                        Logger.LogDebug($"Kamakazi Blocked by Closed Door on '{target.InternalName} ({target.ActorSnoId})' Distance={target.Distance}");
+                    }
+                    else if (PlayerMover.IsCompletelyBlocked)
+                    {
+                        Logger.LogDebug($"Kamakazi Blocked by Monsters/Terrain on '{target.InternalName} ({target.ActorSnoId})' Distance={target.Distance}");
+                    }
+                    else if (isStuck)
+                    {
+                        Logger.LogDebug($"Kamakazi Blocked by Stuck on '{target.InternalName} ({target.ActorSnoId})' Distance={target.Distance}");
+                    }
+
+                    if (!isStuck && !PlayerMover.IsCompletelyBlocked && !isBlockedByDoor)
                     {
                         objects.Where(x => !x.IsPlayer).ForEach(o =>
                         {
@@ -203,19 +224,16 @@ namespace Trinity.Components.Combat
                             o.Weight = 0;
                         });
 
-                        IsDoingGoblinKamakazi = true;
-                        KamakaziGoblin = goblin;
-                        Logger.Log("Going Kamakazi on Goblin '{0} ({1})' Distance={2}", goblin.InternalName, goblin.ActorSnoId, goblin.Distance);
-                        goblin.WeightInfo = "Kamakazi Target";
-                        goblin.Weight = MaxWeight;
-                        return goblin;
+                        IsDoingKamakazi = true;
+                        KamakaziTarget = target;
+                        Logger.Log($"Going Kamakazi on '{target.InternalName} ({target.ActorSnoId})' Distance={target.Distance}");
+                        target.WeightInfo = "Kamakazi Target";
+                        target.Weight = MaxWeight;
+                        return target;
                     }
-                    IsDoingGoblinKamakazi = false;
                 }
-                else
-                {
-                    IsDoingGoblinKamakazi = false;
-                }
+                IsDoingKamakazi = false;
+
 
                 //var riftProgressionKillAll = RiftProgression.IsInRift && !RiftProgression.IsGaurdianSpawned && !RiftProgression.RiftComplete &&
                 //                             Core.Settings.Combat.Misc.RiftProgressionAlwaysKillPct < 100 && RiftProgression.CurrentProgressionPct < 100 &&
@@ -235,6 +253,8 @@ namespace Trinity.Components.Combat
                 //        CombatBase.CombatMode = CombatMode.Normal;
                 //    }
                 //}
+
+                var questBasedKillAll = Core.Quests.IsKillAllRequired;
 
                 var routine = Combat.Routines.Current;
 
@@ -278,7 +298,9 @@ namespace Trinity.Components.Combat
                             break;
                         }
 
-                        if (Combat.Routines.Current.ShouldIgnoreNonUnits() && !cacheObject.IsUnit)
+                        var item = cacheObject as TrinityItem;
+
+                        if (Combat.Routines.Current.ShouldIgnoreNonUnits() && !cacheObject.IsUnit && (item == null || !item.IsCosmeticItem))
                         {
                             cacheObject.WeightInfo += "FocussingUnits";
                             continue;
@@ -315,12 +337,12 @@ namespace Trinity.Components.Combat
                             //}
                         }
 
-                        if (IsDoingGoblinKamakazi)
+                        if (IsDoingKamakazi) // does this even get hit?
                         {
-                            if (cacheObject.RActorId == KamakaziGoblin.RActorId && !isStuck)
+                            if (cacheObject.RActorId == KamakaziTarget.RActorId && !isStuck)
                             {
                                 cacheObject.Weight = MaxWeight;
-                                cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Goblin Kamakazi Run ";
+                                cacheObject.WeightInfo += $"Maxxing {cacheObject.InternalName} - Kamakazi Run ";
                                 bestTarget = GetNewBestTarget(cacheObject, bestTarget);
                                 break;
                             }
@@ -336,7 +358,7 @@ namespace Trinity.Components.Combat
 
                         if (cacheObject.IsUnit && cacheObject.Distance < 35f)
                         {
-                            if (!cacheObject.HasBeenInLoS)
+                            if (!cacheObject.HasBeenInLoS && !cacheObject.IsHidden && !GameData.HidingUnits.Contains(cacheObject.ActorSnoId))
                             {
                                 cacheObject.Weight = 0;
                                 cacheObject.WeightInfo += "Ignoring - Hasn't been in line of sight";
@@ -361,7 +383,7 @@ namespace Trinity.Components.Combat
                                 continue;
                             }
                         }
-                        else if (cacheObject.Distance > 15f && !cacheObject.HasBeenWalkable && !cacheObject.IsItem && cacheObject.Type != TrinityObjectType.ProgressionGlobe && cacheObject.Type == TrinityObjectType.Door)
+                        else if (cacheObject.Distance > 15f && !cacheObject.HasBeenWalkable && !cacheObject.IsBoss && !cacheObject.IsItem && cacheObject.Type != TrinityObjectType.ProgressionGlobe && cacheObject.Type != TrinityObjectType.Door && (item == null || !item.IsCosmeticItem))
                         {
                             cacheObject.Weight = 0;
                             cacheObject.WeightInfo += "Ignoring - Hasn't been Walkable";
@@ -384,7 +406,7 @@ namespace Trinity.Components.Combat
                             }
                         }
 
-                        var item = cacheObject as TrinityItem;
+
 
                         if (WeightingUtils.ShouldIgnoreSpecialTarget(cacheObject, out reason))
                         {
@@ -468,7 +490,7 @@ namespace Trinity.Components.Combat
 
                                     #region Basic Checks
 
-                                    if (Combat.CombatMode == CombatMode.KillAll || Core.Quests.IsKillAllRequired || isInSpecialKillAllScene)
+                                    if (Combat.CombatMode == CombatMode.KillAll || questBasedKillAll || isInSpecialKillAllScene)
                                     {
                                         //Dist:                160     140     120     100      80     60     40      20      0
                                         //Weight (25k Max):    -77400  -53400  -32600  -15000  -600   10600  18600   23400   25000
@@ -577,15 +599,15 @@ namespace Trinity.Components.Combat
                                         // Original Trinity stuff for priority handling now
                                         switch (Core.Settings.Weighting.GoblinPriority)
                                         {
-                                            case GoblinPriority.Normal:
+                                            case TargetPriority.Normal:
                                                 cacheObject.WeightInfo += "GoblinNormal ";
                                                 cacheObject.Weight += 500d;
                                                 break;
-                                            case GoblinPriority.Prioritize:
+                                            case TargetPriority.Prioritize:
                                                 cacheObject.WeightInfo += "GoblinPrioritize ";
                                                 cacheObject.Weight += 1000d;
                                                 break;
-                                            case GoblinPriority.Kamikaze:
+                                            case TargetPriority.Kamikaze:
                                                 cacheObject.WeightInfo += "GoblinKamikaze ";
                                                 cacheObject.Weight += MaxWeight;
                                                 break;
@@ -885,6 +907,12 @@ namespace Trinity.Components.Combat
                             case TrinityObjectType.BloodShard:
                             case TrinityObjectType.Item:
                                 {
+                                    if (item.IsCosmeticItem)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring unreachable.";
+                                        break;
+                                    }
+
                                     if (item.TrinityItemType == TrinityItemType.HoradricRelic && Core.Player.BloodShards >= Core.Player.MaxBloodShards)
                                     {
                                         cacheObject.Weight = 0;
@@ -892,11 +920,35 @@ namespace Trinity.Components.Combat
                                         continue;
                                     }
 
+                                    if (Core.Player.ParticipatingInTieredLootRun && bossNearby)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} due to Boss";
+                                        break;
+                                    }
+
+                                    // Don't pickup items if we're doing a TownRun
+                                    if (!Combat.Loot.IsBackpackFull && !item.IsPickupNoClick)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for TownRun";
+                                        break;
+                                    }
+
+                                    if (item.IsCosmeticItem)
+                                    {
+                                        if (cacheObject.Distance < 150f && cacheObject.HasBeenWalkable)
+                                        {
+                                            cacheObject.Weight = MaxWeight;
+                                            cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - Legendary";
+                                            break;
+                                        }
+                                    }
+
                                     if (!cacheObject.IsWalkable && !cacheObject.HasBeenWalkable && cacheObject.Distance > 50f)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring unreachable.";
                                         break;
                                     }
+
 
                                     // Campaign A5 Quest "Lost Treasure of the Nephalem" - have to interact with nephalem switches first... 
                                     // Quest: x1_Adria, Id: 257120, Step: 108 - disable all looting, pickup, and objects
@@ -907,11 +959,7 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
-                                    if (Core.Player.ParticipatingInTieredLootRun && objects.Any(m => m.IsUnit && m.IsBoss))
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} Loot Run Boss";
-                                        break;
-                                    }
+ 
 
                                     if (Core.Player.IsInTown)
                                     {
@@ -942,12 +990,7 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
-                                    // Don't pickup items if we're doing a TownRun
-                                    if (!Combat.Loot.IsBackpackFull && !item.IsPickupNoClick)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for TownRun";
-                                        break;
-                                    }
+                       
 
                                     // Death's Breath Priority
                                     if (cacheObject.ActorSnoId == 361989 || cacheObject.ActorSnoId == 449044)
@@ -978,12 +1021,13 @@ namespace Trinity.Components.Combat
                                             break;
                                     }
 
-                                    if (cacheObject.ItemQualityLevel == ItemQuality.Normal)
-                                    {
-                                        cacheObject.Weight = MaxWeight;
-                                        cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - White Item";
-                                        break;
-                                    }
+                                    // daduq is this? why max weight normal quality?
+                                    //if (cacheObject.ItemQualityLevel == ItemQuality.Normal) 
+                                    //{
+                                    //    cacheObject.Weight = MaxWeight;
+                                    //    cacheObject.WeightInfo += $"Adding {cacheObject.InternalName} - White Item";
+                                    //    break;
+                                    //}
 
                                     cacheObject.Weight += ObjectDistanceFormula(cacheObject) +
                                                           EliteMonsterNearFormula(cacheObject, elites) +
@@ -1398,6 +1442,13 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
+                                    if (cacheObject.Type == TrinityObjectType.Barricade && cacheObject.RadiusDistance <= 1)
+                                    {
+                                        cacheObject.WeightInfo += $"Maxing point blank barricade";
+                                        cacheObject.Weight = MaxWeight;
+                                        break;
+                                    }
+
                                     if (cacheObject.IsLockedDoor)
                                     {
                                         cacheObject.WeightInfo += $"Locked Door";
@@ -1768,9 +1819,9 @@ namespace Trinity.Components.Combat
         //    return false;
         //}
 
-        public TrinityActor KamakaziGoblin { get; set; }
+        public TrinityActor KamakaziTarget { get; set; }
 
-        public bool IsDoingGoblinKamakazi { get; set; }
+        public bool IsDoingKamakazi { get; set; }
 
         private static bool IgnoreWhenNearElites(TrinityActor cacheObject, List<TrinityActor> objects)
         {

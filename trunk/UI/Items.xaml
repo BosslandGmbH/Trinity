@@ -166,6 +166,22 @@
                 </DockPanel>
             </GroupBox>
 
+            <!--<StackPanel Grid.Row="6" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0">
+                <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <GroupBox.Header>
+                        Cosmetic Priority
+                    </GroupBox.Header>
+                    <StackPanel Margin="0,6,0,0">
+                        <WrapPanel>
+                            <RadioButton Foreground="White" Content="Pickup Cosmetics" IsChecked="{Binding Path=Weighting.CosmeticPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Normal}" />
+                            <RadioButton Foreground="White" Content="Ignore" IsChecked="{Binding Path=Weighting.CosmeticPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Ignore}" />
+                            <RadioButton Foreground="White" Content="Prioritize" IsChecked="{Binding Path=Weighting.CosmeticPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Prioritize}" />
+                            <RadioButton Foreground="White" Content="Kamikaze" IsChecked="{Binding Path=Weighting.CosmeticPriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Kamikaze}" />
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>-->
+
             <GroupBox Header="Item Sharing">
                 <WrapPanel HorizontalAlignment="Left" Margin="0,5,0,0">
                     <TextBlock Margin="2,2,20,2" Text="Drop In Town: " VerticalAlignment="Center"/>
@@ -214,12 +230,12 @@
                 </Grid>
             </GroupBox>-->
 
-            <GroupBox Header="Stashing Strategy" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
+            <GroupBox Header="Smart Stashing" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
                 <StackPanel><TextBlock TextWrapping="Wrap" Margin="0,0,0,7">Option to stash things on the first page where items are found:</TextBlock>
                 
                 <UniformGrid Columns="1">
-                    <CheckBox Content="Equipment (Weapons/Armor/Jewellery)" IsChecked="{Binding Items.UseTypeStashingEquipment}" />
-                    <CheckBox Content="Other Stuff (Gems, Crafting Matrials)" IsChecked="{Binding Items.UseTypeStashingOther}" />
+                    <CheckBox Content="For Equipment (Weapons/Armor/Jewellery)" IsChecked="{Binding Items.UseTypeStashingEquipment}" />
+                    <CheckBox Content="For Other Stuff (Gems, Crafting Matrials, etc)" IsChecked="{Binding Items.UseTypeStashingOther}" />
                     </UniformGrid>
                 </StackPanel>
             </GroupBox>
@@ -230,6 +246,7 @@
                     <CheckBox ToolTip="Item list needs items to be identified to check their properties." IsChecked="{Binding Items.KeepLegendaryUnid}" HorizontalAlignment="Left" Content="Keep Legendaries Unidentified" />
                     <CheckBox ToolTip="Keep bounty caches in your stash rather than openining them automatically" IsChecked="{Binding Items.StashTreasureBags}" HorizontalAlignment="Left" Content="Stash Bounty Caches" />
                     <CheckBox ToolTip="Completely ignore all items while in combat (useful for speed farming)" IsChecked="{Binding Items.DisableLootingInCombat}" HorizontalAlignment="Left" Content="Disable Looting In Combat" />
+                    <CheckBox IsChecked="{Binding Items.BuyStashTabs}" HorizontalAlignment="Left" Content="Buy Stash Tabs" />
 
                 </UniformGrid>
             </GroupBox>
