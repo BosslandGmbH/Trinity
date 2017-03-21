@@ -98,7 +98,7 @@ namespace Trinity.Components.QuestTools
         {
             var sb = new StringBuilder();
             var s = StateSnapshot.Create();
-            var actors = Core.Actors.AllRActors.Where(a => !a.IsMe && actorSelector(a));
+            var actors = Core.Actors.AllRActors.Where(actorSelector);
             foreach (var actor in actors)
             {
                 s.UpdateForActor(actor);
@@ -135,17 +135,12 @@ namespace Trinity.Components.QuestTools
                 }
 
                 if (IsNumericType(propertyInfo.PropertyType) && !propertyInfo.Name.Contains("Id"))
-                {
-                    value = Math.Round((decimal)Convert.ChangeType(value, typeof(decimal)), 3, MidpointRounding.AwayFromZero);
-                    result += $@"{attName}=""{value:0.##}"" ";
-                }
-                else
-                {
-                    if (propertyInfo.PropertyType == typeof(bool))
-                        value = value.ToString().ToLowerInvariant();
+                    value = Math.Round((double)Convert.ChangeType(value,typeof(double)),2);
 
-                    result += $@"{attName}=""{value}"" ";
-                }
+                else if (propertyInfo.PropertyType == typeof(bool))
+                    value = value.ToString().ToLowerInvariant();
+
+                result += $@"{attName}=""{value}"" ";
             }
 
             result += $@" worldSnoId=""{s.WorldSnoId}"" levelAreaSnoId=""{s.LevelAreaSnoId}"" />";

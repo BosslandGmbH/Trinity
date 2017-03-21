@@ -135,7 +135,7 @@
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cooldowns}">Log Cooldowns</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=StuckHandler}">Log Stuck Handler</CheckBox>
                         <CheckBox IsChecked="{Binding Advanced.ItemEvents, ConverterParameter=StuckHandler, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Item Events"/>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=CrashDebug}">Log CrashDebug Info</CheckBox>
+
                     </UniformGrid>
                     
                 </GroupBox>

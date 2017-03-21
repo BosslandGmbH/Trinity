@@ -34,6 +34,7 @@ namespace Trinity.Framework.Objects.Memory
     public class SnoCore
     {
         public static Dictionary<SnoType, IndexData> LookupTable = new Dictionary<SnoType, IndexData>();
+        public static IntPtr[] SnoManagerPtrs => MemoryWrapper.ReadArray<IntPtr>(Pointers.Addresses.SnoGroups, 70);
 
         public class IndexData
         {
@@ -49,7 +50,7 @@ namespace Trinity.Framework.Objects.Memory
             {
                 throw new ArgumentOutOfRangeException(nameof(groupId));
             }
-            var ptr = Zeta.Game.ZetaDia.SNO[(Zeta.Game.Internals.SNOGroup)groupNum].BaseAddress;
+            var ptr = SnoManagerPtrs[groupNum];
             var manager = MemoryWrapper.Create<SnoGroup<T>>(ptr);
             if (!LookupTable.ContainsKey(groupId))
             {

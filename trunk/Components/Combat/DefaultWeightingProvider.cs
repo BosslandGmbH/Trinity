@@ -756,10 +756,10 @@ namespace Trinity.Components.Combat
                                         //            cacheObject.InternalName);
                                         //    break;
                                         //}
-                                        //else if (Combat.CombatMode == CombatMode.Questing)
-                                        //{
-                                        //    cacheObject.WeightInfo += $"Questing Mode - Ignoring Trash Pack Size Setting.";
-                                        //}
+                                        else if (Combat.CombatMode == CombatMode.Questing)
+                                        {
+                                            cacheObject.WeightInfo += $"Questing Mode - Ignoring Trash Pack Size Setting.";
+                                        }
                                         else if (leaderTarget != null && !isLeader && leaderTarget.Distance < 60f && Combat.Party.Leader.IsInCombat)
                                         {
                                             cacheObject.WeightInfo += $"Ignoring Trash Pack Size for Leader's Target";
@@ -2159,7 +2159,7 @@ namespace Trinity.Components.Combat
             var range = 80f;
 
             // Overriding these settings required for questing profiles acts1-5 and bounties.
-            var isQuesting = !Core.Rift.IsInRift;
+            var isQuesting = Combat.CombatMode == CombatMode.Questing;
             var questingEliteRange = 120f;
             var questingTrashRange = 100f;
 

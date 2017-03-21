@@ -246,8 +246,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         {
             if (GridCreated) return;
 
-            Core.Logger.Verbose(LogCategory.CrashDebug, "WorldScene.CreateGrid");
-
             Cells = new List<WorldSceneCell>();
 
             foreach (var navCell in mesh.Zone.NavZoneDef.NavCells)

@@ -24,7 +24,7 @@ namespace Trinity.Modules
 
             Stash.Source = () => Core.Inventory.AllItems.Where(i => i.InventorySlot == InventorySlot.SharedStash);
             Backpack.Source = () => Core.Inventory.AllItems.Where(i => i.InventorySlot == InventorySlot.BackpackItems);
-            AllItems.Source = () => Core.Actors.AllInventory.Where(i => !InvalidAnnIds.Contains(i.AnnId));
+            AllItems.Source = () => Core.Actors.Inventory.Where(i => !InvalidAnnIds.Contains(i.AnnId));
         }
 
         public HashSet<int> KanaisCubeIds { get; private set; } = new HashSet<int>();
@@ -52,7 +52,7 @@ namespace Trinity.Modules
             var playerEquippedIds = new HashSet<int>();
             var backpackItemCount = 0;
 
-            foreach (var item in Core.Actors.AllInventory)
+            foreach (var item in Core.Actors.Inventory)
             {
                 if (!item.IsValid)
                     continue;

@@ -19,7 +19,7 @@ namespace Trinity.Components.QuestTools
         }
 
         public Version Version => PluginVersion;
-        public static Version PluginVersion { get; } = new Version(5, 0, 0);
+        public static Version PluginVersion { get; } = new Version(4, 0, 1);
 
         internal static DateTime LastPluginPulse = DateTime.MinValue;
         public static DateTime GameCount { get; set; }
@@ -29,6 +29,7 @@ namespace Trinity.Components.QuestTools
         protected override void OnPulse()
         {
             LastPluginPulse = DateTime.UtcNow;
+            //LoadOnceTag.RecordLoadOnceProfile();
         }
 
         protected override void OnPluginEnabled()
@@ -50,12 +51,16 @@ namespace Trinity.Components.QuestTools
 
         protected override void OnBotStart()
         {
-
+            //UseOnceTag.UseOnceIDs.Clear();
+            //UseOnceTag.UseOnceCounter.Clear();
         }
 
         protected override void OnGameJoined()
         {
             LastJoinedGame = DateTime.UtcNow;
+            //UseOnceTag.UseOnceIDs.Clear();
+            //UseOnceTag.UseOnceCounter.Clear();
+            //LoadOnceTag.UsedProfiles.Clear();
         }
 
     }

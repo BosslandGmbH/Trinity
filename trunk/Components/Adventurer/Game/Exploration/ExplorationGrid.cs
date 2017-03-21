@@ -127,8 +127,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         protected override void OnUpdated(SceneData newNodes)
         {
-            Core.Logger.Verbose(LogCategory.CrashDebug, "ExplorationGrid.OnUpdated");
-
             var nodes = newNodes.ExplorationNodes.Cast<ExplorationNode>().ToList();
 
             UpdateInnerGrid(nodes);

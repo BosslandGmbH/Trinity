@@ -14,18 +14,6 @@ namespace Trinity.Framework.Helpers
 {
     public static class ReflectionHelper
     {
-        public static List<T> FieldToList<T>(FieldInfo fieldInfo, object parent)
-        {
-            var value = fieldInfo.GetValue(parent);
-            var valEnumerable = value as IEnumerable<T>;
-            if (valEnumerable != null)
-            {
-                return valEnumerable.ToList();
-            }
-            var fields = value.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public);
-            return fields.Select(t => t.GetValue(value)).Cast<T>().ToList();
-        }
-
         private static IEnumerable<T> GetInterfaceMembers<T>(object obj)
         {
             var type = obj.GetType();

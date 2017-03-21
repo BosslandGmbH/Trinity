@@ -100,7 +100,7 @@ namespace Trinity.Components.Adventurer.UI
 
                     var coroutineHelpers3 = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(0, 2, 2, 2) };
                     coroutineHelpers3.Children.Add(CreateTitle("Profile Tags"));
-                    coroutineHelpers3.Children.Add(CreateButton("Move To Position", GenerateTag_Click<MoveToPositionTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("Move To Position", GenerateActorTags_Click<MoveToPositionTag>));
                     coroutineHelpers3.Children.Add(CreateButton("Interact", GenerateActorTags_Click<InteractTag>));
                     coroutineHelpers3.Children.Add(CreateButton("Shuffle", GenerateTag_Click<ShuffleTag>));
                     coroutineHelpers3.Children.Add(CreateButton("MoveToActor", GenerateActorTags_Click<MoveToActorTag>));
