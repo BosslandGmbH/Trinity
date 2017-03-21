@@ -1,9 +1,10 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using Trinity.Framework.Helpers;
 
 namespace Trinity.UI.UIComponents.Converters
 {
@@ -23,9 +24,9 @@ namespace Trinity.UI.UIComponents.Converters
             {
                 var fullPath = Path.Combine(FileManager.UiPath, path);
                 if(!File.Exists(fullPath))
-                    Logger.Log("ImagePathConverter: Requested Image file does not exist. Path={0}", fullPath);
+                    Core.Logger.Log("ImagePathConverter: Requested Image file does not exist. Path={0}", fullPath);
 
-                Logger.Log("Loading Image: Path={0}", fullPath);
+                Core.Logger.Log("Loading Image: Path={0}", fullPath);
                 var image = new BitmapImage(new Uri(fullPath));
                 image.Freeze();
                 return image;

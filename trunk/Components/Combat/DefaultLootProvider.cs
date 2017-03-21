@@ -1,30 +1,34 @@
 ﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
 using Trinity.Framework;
-using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
+using System.Linq;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Items;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Trinity.Settings;
+using Trinity.Settings.ItemList;
 using Zeta.Bot;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Components.Combat
 {
     public interface ILootProvider
     {
         bool ShouldDrop(TrinityItem item, ItemEvaluationType scheduledAction);
+
         bool ShouldStash(TrinityItem item);
+
         bool ShouldSalvage(TrinityItem item);
+
         bool ShouldPickup(TrinityItem item);
+
         bool ShouldSell(TrinityItem item);
+
         bool IsBackpackFull { get; }
     }
 
@@ -37,33 +41,33 @@ namespace Trinity.Components.Combat
         {
             if (item == null || !item.IsValid)
             {
-                Logger.LogDebug($"Not a valid item {item?.InternalName} Sno={item?.ActorSnoId} GbId={item?.GameBalanceId}");
+                Core.Logger.Debug($"Not a valid item {item?.InternalName} Sno={item?.ActorSnoId} GbId={item?.GameBalanceId}");
                 return false;
             }
 
             if (item.RawItemType == RawItemType.CosmeticPet)
             {
-                Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Pet found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticWings)
             {
-                Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticPennant)
             {
-                Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Wings found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticPortraitFrame)
             {
-                Logger.Log($"Portrait found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Portrait found! - Picking it up {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
-            if (item.InternalNameLowerCase.Contains("cosmetic"))
-                return true;
+            //if (item.InternalNameLowerCase.Contains("cosmetic"))
+            //    return true;
 
             if (Core.Settings.Items.DisableLootingInCombat && Combat.IsInCombat && item.Distance > 8f)
                 return false;
@@ -73,7 +77,6 @@ namespace Trinity.Components.Combat
 
             // 451002, //sir williams - 451002 (TentacleBear_C_Unique_Cosmetic_02)
             // portrait - 410998 (Cosmetic_Portrait_Frame_1)
-
 
             //if (Core.Settings.Items.InCombatLooting != SettingMode.Enabled && Combat.IsInCombat)
             //{
@@ -126,7 +129,7 @@ namespace Trinity.Components.Combat
 
             if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
             {
-                Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Transmog found! - Picking it up for its visual goodness {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
@@ -142,7 +145,7 @@ namespace Trinity.Components.Combat
             if (item.TrinityItemType == TrinityItemType.UberReagent)
                 return true;
 
-            if (item.TrinityItemType == TrinityItemType.HoradricRelic && ZetaDia.PlayerData.BloodshardCount < Core.Player.MaxBloodShards)
+            if (item.TrinityItemType == TrinityItemType.HoradricRelic && Core.Player.BloodShards < Core.Player.MaxBloodShards)
                 return Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.BloodShards);
 
             if (item.TrinityItemType == TrinityItemType.ProgressionGlobe)
@@ -216,8 +219,10 @@ namespace Trinity.Components.Combat
                 case TrinityItemBaseType.Misc:
                 case TrinityItemBaseType.HealthGlobe:
                     return true;
+
                 case TrinityItemBaseType.ProgressionGlobe:
                     return true;
+
                 default:
                     return false;
             }
@@ -240,7 +245,7 @@ namespace Trinity.Components.Combat
             {
                 if (Core.Settings.Items.DropInTownMode == DropInTownOption.All)
                 {
-                    Logger.LogVerbose($"Should Drop {item.Name} - Setting='{Core.Settings.Items.DropInTownMode}'");
+                    Core.Logger.Verbose($"Should Drop {item.Name} - Setting='{Core.Settings.Items.DropInTownMode}'");
                     return true;
                 }
 
@@ -250,7 +255,7 @@ namespace Trinity.Components.Combat
 
                         if (Core.Settings.Items.DropInTownMode == DropInTownOption.Keep)
                         {
-                            Logger.LogVerbose($"Should Drop {item.Name} - Setting='{Core.Settings.Items.DropInTownMode}' and item is scheduled for {scheduledAction}");
+                            Core.Logger.Verbose($"Should Drop {item.Name} - Setting='{Core.Settings.Items.DropInTownMode}' and item is scheduled for {scheduledAction}");
                             return true;
                         }
 
@@ -261,7 +266,7 @@ namespace Trinity.Components.Combat
 
                         if (Core.Settings.Items.DropInTownMode == DropInTownOption.Vendor)
                         {
-                            Logger.LogVerbose($"Should Drop {item.Name} - Setting='{Core.Settings.Items.DropInTownMode}' and item is scheduled for {scheduledAction}");
+                            Core.Logger.Verbose($"Should Drop {item.Name} - Setting='{Core.Settings.Items.DropInTownMode}' and item is scheduled for {scheduledAction}");
                             return true;
                         }
 
@@ -276,7 +281,7 @@ namespace Trinity.Components.Combat
         {
             if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
             {
-                Logger.LogDebug($"Stashing due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Core.Logger.Debug($"Stashing due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
             }
 
@@ -287,13 +292,13 @@ namespace Trinity.Components.Combat
 
             if (item.IsProtected())
             {
-                Logger.LogDebug($"Not stashing due to item being in a protected slot (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Core.Logger.Debug($"Not stashing due to item being in a protected slot (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return false;
             }
 
             if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
             {
-                Logger.LogDebug($"Not stashing due to inventory locked, keep unidentified setting or participating in loot run. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Core.Logger.Debug($"Not stashing due to inventory locked, keep unidentified setting or participating in loot run. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return false;
             }
 
@@ -303,51 +308,49 @@ namespace Trinity.Components.Combat
             if (GameData.VanityItems.Any(i => item.InternalName.StartsWith(i)))
                 return true;
 
-
             if (GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
             {
                 var setting = Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites);
-                Logger.Log($"Transmog found! - Stash Setting={setting} {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Transmog found! - Stash Setting={setting} {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return setting;
             }
 
             if (item.RawItemType == RawItemType.CosmeticPet)
             {
-                Logger.Log($"Pet found! - Stashing it {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Pet found! - Stashing it {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticWings)
             {
-                Logger.Log($"Wings found! - Stashing it  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Wings found! - Stashing it  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticPennant)
             {
-                Logger.Log($"Wings found! - Stashing it  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Wings found! - Stashing it  {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
             if (item.RawItemType == RawItemType.CosmeticPortraitFrame)
             {
-                Logger.Log($"Portrait found! - Stashing it {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
+                Core.Logger.Log($"Portrait found! - Stashing it {item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId}");
                 return true;
             }
 
             if (Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.RottenMushroom) && item.ActorSnoId == (int)SNOActor.A1_BlackMushroom)
             {
-                Logger.Log($"Rotten Mushroom found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Core.Logger.Log($"Rotten Mushroom found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
             }
 
             if (GameData.HerdingMatsSnoIds.Contains(item.ActorSnoId))
             {
-                Logger.Log($"Staff of Herding Mat found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                Core.Logger.Log($"Staff of Herding Mat found! - Stash Setting. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
             }
 
-
             // Now look for Misc items we might want to keep
-            TrinityItemType tItemType = item.TrinityItemType; 
-            TrinityItemBaseType tBaseType = item.TrinityItemBaseType; 
+            TrinityItemType tItemType = item.TrinityItemType;
+            TrinityItemBaseType tBaseType = item.TrinityItemBaseType;
 
             // Keep any high gems placed in backpack while levelling, so we can socket items with them.
             if (item.IsGem && item.GemQuality >= GemQuality.Marquise && ZetaDia.Me.Level < 70)
@@ -360,13 +363,13 @@ namespace Trinity.Components.Combat
             {
                 if (Core.Settings.Items.LegendaryMode == LegendaryMode.Ignore)
                 {
-                    Logger.Log($"TRASHING: Ignore Legendary. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    Core.Logger.Log($"TRASHING: Ignore Legendary. Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
                 }
 
                 if (Core.Settings.Items.LegendaryMode == LegendaryMode.AlwaysStash)
                 {
-                    Logger.Log($"STASHING: Always Stash Legendary Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    Core.Logger.Log($"STASHING: Always Stash Legendary Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return true;
                 }
 
@@ -374,20 +377,19 @@ namespace Trinity.Components.Combat
                 {
                     if (item.IsAncient)
                     {
-                        Logger.Log($"STASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                        Core.Logger.Log($"STASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                         return true;
                     }
-                    Logger.Log($"TRASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    Core.Logger.Log($"TRASHING: Only Stash Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
                 }
 
                 if (Core.Settings.ItemList.AlwaysTrashNonAncients && !item.IsAncient)
                 {
-                    Logger.Log($"TRASHING: ItemList Option - Always Sell/Salvage Non-Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    Core.Logger.Log($"TRASHING: ItemList Option - Always Sell/Salvage Non-Ancients Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
                 }
             }
-
 
             bool isEquipment = (tBaseType == TrinityItemBaseType.Armor ||
                 tBaseType == TrinityItemBaseType.Jewelry ||
@@ -403,38 +405,38 @@ namespace Trinity.Components.Combat
 
             if (item.TrinityItemType == TrinityItemType.HoradricCache)
                 return false;
-      
+
             if (item.IsUnidentified)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] = (autokeep unidentified items)", item.Name, item.InternalName);
+                Core.Logger.Log("{0} [{1}] = (autokeep unidentified items)", item.Name, item.InternalName);
                 return true;
             }
 
             if (tItemType == TrinityItemType.StaffOfHerding)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep staff of herding)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep staff of herding)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.CraftingMaterial || item.IsCraftingReagent)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep craft materials)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep craft materials)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.Emerald || tItemType == TrinityItemType.Amethyst || tItemType == TrinityItemType.Topaz || tItemType == TrinityItemType.Ruby || tItemType == TrinityItemType.Diamond)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep gems)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep gems)", item.Name, item.InternalName, tItemType);
                 return true;
             }
             if (tItemType == TrinityItemType.CraftTome)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep tomes)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log(LogCategory.ItemValuation, "{0} [{1}] [{2}] = (autokeep tomes)", item.Name, item.InternalName, tItemType);
                 return true;
             }
             if (tItemType == TrinityItemType.InfernalKey)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep infernal key)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep infernal key)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
@@ -443,81 +445,80 @@ namespace Trinity.Components.Combat
                 var equippedPotion = Core.Player.EquippedHealthPotion;
                 if (equippedPotion == null)
                 {
-                    Logger.LogDebug("Potion being stashed because an equipped potion was not found.");
+                    Core.Logger.Debug("Potion being stashed because an equipped potion was not found.");
                     return true;
                 }
                 if (equippedPotion.AnnId == item.AnnId)
                 {
-                    Logger.LogDebug($"{item.Name} [{item.InternalName}] [{tItemType}] = (dont stash equipped potion)");
+                    Core.Logger.Debug($"{item.Name} [{item.InternalName}] [{tItemType}] = (dont stash equipped potion)");
                     return false;
                 }
             }
 
             if (tItemType == TrinityItemType.CraftingPlan && item.ItemQualityLevel >= ItemQuality.Legendary)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep legendary plans)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep legendary plans)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.ConsumableAddSockets)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep Ramaladni's Gift)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep Ramaladni's Gift)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.PortalDevice)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep Machines)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep Machines)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.UberReagent)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep Uber Reagents)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep Uber Reagents)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (tItemType == TrinityItemType.TieredLootrunKey)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (ignoring Tiered Rift Keys)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (ignoring Tiered Rift Keys)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
-
             if (tItemType == TrinityItemType.CraftingPlan)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep plans)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep plans)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
             if (item.ItemQualityLevel <= ItemQuality.Superior && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (trash whites)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (trash whites)", item.Name, item.InternalName, tItemType);
                 return false;
             }
             if (item.ItemQualityLevel >= ItemQuality.Magic1 && item.ItemQualityLevel <= ItemQuality.Magic3 && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (trashing blues)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (trashing blues)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
             if (item.ItemQualityLevel >= ItemQuality.Rare4 && item.ItemQualityLevel <= ItemQuality.Rare6 && (isEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem))
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (force salvage rare)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (force salvage rare)", item.Name, item.InternalName, tItemType);
                 return false;
             }
 
             if (item.ItemQualityLevel >= ItemQuality.Legendary && Core.Settings.Items.LegendaryMode == LegendaryMode.ItemList && (item.IsEquipment || item.TrinityItemBaseType == TrinityItemBaseType.FollowerItem || item.IsPotion))
             {
                 var result = ItemListEvaluator.ShouldStashItem(item);
-                Logger.Log("{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, "ItemListCheck=" + (result ? "KEEP" : "TRASH"));
+                Core.Logger.Log("{0} [{1}] [{2}] = {3}", item.Name, item.InternalName, tItemType, "ItemListCheck=" + (result ? "KEEP" : "TRASH"));
 
                 return result;
             }
 
             if (item.ItemQualityLevel >= ItemQuality.Legendary)
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "{0} [{1}] [{2}] = (autokeep legendaries)", item.Name, item.InternalName, tItemType);
+                Core.Logger.Log("{0} [{1}] [{2}] = (autokeep legendaries)", item.Name, item.InternalName, tItemType);
                 return true;
             }
 
@@ -583,7 +584,7 @@ namespace Trinity.Components.Combat
                     var equippedPotion = Core.Player.EquippedHealthPotion;
                     if (equippedPotion == null)
                     {
-                        Logger.LogDebug("Potion being kept because an equipped potion was not found.");
+                        Core.Logger.Debug("Potion being kept because an equipped potion was not found.");
                         return false;
                     }
                     if (equippedPotion.AnnId == item.AnnId)
@@ -591,6 +592,12 @@ namespace Trinity.Components.Combat
                         reason = "Equipped Potion";
                         return false;
                     }
+                }
+
+                if (!Core.Settings.Items.SpecialItems.HasFlag(SpecialItemTypes.TransmogWhites) && GameData.TransmogTable.Contains(item.GameBalanceId) || item.InternalName.StartsWith("Transmog") || item.ActorSnoId == 110952) //Rakanishu's Blade
+                {
+                    reason = "Transmog Setting";
+                    return true;
                 }
 
                 reason = "Default";
@@ -609,20 +616,20 @@ namespace Trinity.Components.Combat
                     case TrinityItemBaseType.Jewelry:
                     case TrinityItemBaseType.FollowerItem:
                         return true;
+
                     case TrinityItemBaseType.Gem:
                     case TrinityItemBaseType.Misc:
                     case TrinityItemBaseType.Unknown:
                         return false;
                 }
-
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Exception in TrinitySalvage Evaluation for {item.Name} ({item.ActorSnoId}) InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType} {ex}");
+                Core.Logger.Error($"Exception in TrinitySalvage Evaluation for {item.Name} ({item.ActorSnoId}) InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType} {ex}");
             }
             finally
             {
-                Logger.LogDebug($"Salvage Evaluation for: {item.Name} ({item.ActorSnoId}) Reason={reason} InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType}");
+                Core.Logger.Debug($"Salvage Evaluation for: {item.Name} ({item.ActorSnoId}) Reason={reason} InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType}");
             }
             return false;
         }
@@ -640,7 +647,7 @@ namespace Trinity.Components.Combat
 
                 if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
                 {
-                    Logger.LogDebug($"Not Selling due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    Core.Logger.Debug($"Not Selling due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
                 }
 
@@ -673,7 +680,7 @@ namespace Trinity.Components.Combat
                     var equippedPotion = Core.Player.EquippedHealthPotion;
                     if (equippedPotion == null)
                     {
-                        Logger.LogDebug($"Legendary Potion {item.Name} ({item.ActorSnoId}) being kept because an equipped potion was not found.");
+                        Core.Logger.Debug($"Legendary Potion {item.Name} ({item.ActorSnoId}) being kept because an equipped potion was not found.");
                         return false;
                     }
                     if (equippedPotion.AnnId == item.AnnId)
@@ -736,6 +743,7 @@ namespace Trinity.Components.Combat
                     case TrinityItemBaseType.Jewelry:
                     case TrinityItemBaseType.FollowerItem:
                         return true;
+
                     case TrinityItemBaseType.Gem:
                     case TrinityItemBaseType.Misc:
                         if (item.TrinityItemType == TrinityItemType.CraftingPlan)
@@ -743,21 +751,21 @@ namespace Trinity.Components.Combat
                         if (item.TrinityItemType == TrinityItemType.CraftingMaterial)
                             return true;
                         return false;
+
                     case TrinityItemBaseType.Unknown:
                         return false;
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Exception in TrinitySell Evaluation for {item.Name} ({item.ActorSnoId}) InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType} {ex}");
+                Core.Logger.Error($"Exception in TrinitySell Evaluation for {item.Name} ({item.ActorSnoId}) InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType} {ex}");
             }
             finally
             {
-                Logger.LogDebug($"Sell Evaluation for: {item.Name} ({item.ActorSnoId}) Reason={reason} InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType}");
+                Core.Logger.Debug($"Sell Evaluation for: {item.Name} ({item.ActorSnoId}) Reason={reason} InternalName={item.InternalName} Quality={item.ItemQualityLevel} Ancient={item.IsAncient} Identified={!item.IsUnidentified} RawItemType={item.RawItemType}");
             }
             return false;
         }
-
 
         private static int _lastBackPackCount;
         private static int _lastProtectedSlotsCount;
@@ -803,7 +811,7 @@ namespace Trinity.Components.Combat
                 try
                 {
                     if (!forceRefresh && _lastBackPackLocation != new Vector2(-2, -2) && _lastBackPackLocation != new Vector2(-1, -1) &&
-                        _lastBackPackCount == Core.Inventory.Backpack.Count &&
+                        _lastBackPackCount == Core.Inventory.BackpackItemCount &&
                         _lastProtectedSlotsCount == CharacterSettings.Instance.ProtectedBagSlots.Count)
                     {
                         return _lastBackPackLocation;
@@ -816,7 +824,7 @@ namespace Trinity.Components.Combat
                     if (!forceRefresh)
                     {
                         _lastProtectedSlotsCount = CharacterSettings.Instance.ProtectedBagSlots.Count;
-                        _lastBackPackCount = Core.Inventory.Backpack.Count;
+                        _lastBackPackCount = Core.Inventory.BackpackItemCount;
                     }
 
                     // Block off the entire of any "protected bag slots"
@@ -827,11 +835,11 @@ namespace Trinity.Components.Combat
                     }
 
                     // Map out all the items already in the backpack
-                    foreach (ACDItem item in ZetaDia.Me.Inventory.Backpack)
+                    foreach (ACDItem item in InventoryManager.Backpack)
                     {
                         if (!item.IsValid)
                         {
-                            Logger.LogError("Invalid backpack item detetected! marking down two slots!");
+                            Core.Logger.Error("Invalid backpack item detetected! marking down two slots!");
                             freeBagSlots -= 2;
                             continue;
                         }
@@ -840,14 +848,14 @@ namespace Trinity.Components.Combat
 
                         if (row < 0 || row > 5)
                         {
-                            Logger.LogError("Item {0} ({1}) is reporting invalid backpack row of {2}!",
+                            Core.Logger.Error("Item {0} ({1}) is reporting invalid backpack row of {2}!",
                                 item.Name, item.InternalName, item.InventoryRow);
                             continue;
                         }
 
                         if (col < 0 || col > 9)
                         {
-                            Logger.LogError("Item {0} ({1}) is reporting invalid backpack column of {2}!",
+                            Core.Logger.Error("Item {0} ({1}) is reporting invalid backpack column of {2}!",
                                 item.Name, item.InternalName, item.InventoryColumn);
                             continue;
                         }
@@ -872,12 +880,12 @@ namespace Trinity.Components.Combat
                         {
                             if (item.IsValid && !item.IsDisposed)
                             {
-                                Logger.LogDebug("Error checking for next slot on item {0}, row={1} col={2} IsTwoSquare={3} ItemType={4}",
+                                Core.Logger.Debug("Error checking for next slot on item {0}, row={1} col={2} IsTwoSquare={3} ItemType={4}",
                                     item.Name, item.InventoryRow, item.InventoryColumn, item.IsTwoSquareItem, item.ItemType);
                             }
                             else
                             {
-                                Logger.LogDebug("Error checking for next slot on item is no longer valid");
+                                Core.Logger.Debug("Error checking for next slot on item is no longer valid");
                             }
                             continue;
                         }
@@ -894,11 +902,10 @@ namespace Trinity.Components.Combat
                         Math.Min(FreeBagSlotsInTown, unprotectedSlots) :
                         Math.Min(FreeBagSlots, unprotectedSlots);
 
-
                     // free bag slots is less than required
                     if (noFreeSlots || freeBagSlots < minFreeSlots && !forceRefresh)
                     {
-                        Logger.LogDebug("Free Bag Slots is less than required. FreeSlots={0}, FreeBagSlots={1} FreeBagSlotsInTown={2} IsInTown={3} Protected={4} BackpackCount={5}",
+                        Core.Logger.Debug("Free Bag Slots is less than required. FreeSlots={0}, FreeBagSlots={1} FreeBagSlotsInTown={2} IsInTown={3} Protected={4} BackpackCount={5}",
                             freeBagSlots, FreeBagSlots, FreeBagSlotsInTown, Core.Player.IsInTown,
                             _lastProtectedSlotsCount, _lastBackPackCount);
                         _lastBackPackLocation = NoFreeSlot;
@@ -945,7 +952,7 @@ namespace Trinity.Components.Combat
                     }
 
                     // no free slot
-                    Logger.LogDebug("No Free slots!");
+                    Core.Logger.Debug("No Free slots!");
 
                     pos = NoFreeSlot;
                     if (!forceRefresh)
@@ -957,12 +964,11 @@ namespace Trinity.Components.Combat
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(LogCategory.UserInformation, "Error in finding backpack slot");
-                    Logger.Log(LogCategory.UserInformation, "{0}", ex.ToString());
+                    Core.Logger.Log("Error in finding backpack slot");
+                    Core.Logger.Log("{0}", ex.ToString());
                     return NoFreeSlot;
                 }
             }
         }
-
     }
 }

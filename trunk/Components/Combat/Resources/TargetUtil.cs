@@ -1,15 +1,15 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Memory.Symbols.Types;
+using Trinity.Framework.Objects.Memory;
+using Trinity.Framework.Reference;
 using Trinity.Modules;
-using Trinity.Reference;
 using Trinity.Routines;
 using Trinity.Settings;
 using Trinity.UI.Visualizer.RadarCanvas;
@@ -17,7 +17,7 @@ using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Components.Combat.Resources
 {
@@ -31,12 +31,12 @@ namespace Trinity.Components.Combat.Resources
                 {
                     var monk = Core.Targets.FirstOrDefault(x => x.InternalName.ToLower().Contains("monk"));
                     //if (monk == null)
-                    //    Logger.Log("Unable to find Monk.  Where did he go?");
+                    //    Core.Logger.Log("Unable to find Monk.  Where did he go?");
                     return monk;
                 }
                 catch (Exception)
                 {
-                    Logger.Log("Unable to find Monk.  Error?");
+                    Core.Logger.Log("Unable to find Monk.  Error?");
                     //return CombatBase.IsInParty ? TargetUtil.GetClosestUnit(25) : null;
                     return null;
                 }
@@ -58,34 +58,33 @@ namespace Trinity.Components.Combat.Resources
         {
             return
                 (from u in SafeList(includeUnitsInAoe)
-                    where u.IsUnit && u.Position.Distance(pullLocation) <= groupRadius
-                    select u).ToList();
+                 where u.IsUnit && u.Position.Distance(pullLocation) <= groupRadius
+                 select u).ToList();
         }
 
         internal static List<TrinityActor> UnitsAroundPlayer(float groupRadius = 20, bool includeUnitsInAoe = true)
         {
             return
                 (from u in SafeList(includeUnitsInAoe)
-                    where u.IsUnit && u.Position.Distance(Core.Player.Position) <= groupRadius
-                    select u).ToList();
+                 where u.IsUnit && u.Position.Distance(Core.Player.Position) <= groupRadius
+                 select u).ToList();
         }
 
         internal static List<TrinityActor> UnitsToPull(Vector3 pullLocation, float groupRadius = 15,
             int groupCount = 1, float searchRange = 45, bool includeUnitsInAoe = true)
         {
-
             return
                 (from u in SafeList(includeUnitsInAoe)
-                    where u.IsUnit && u.CanCastTo() && u.HasBeenInLoS &&
-                          !UnitsAroundPuller(pullLocation, 20, includeUnitsInAoe)
-                              .Select(x => x.AcdId)
-                              .Contains(u.AcdId) &&
-                          !UnitsAroundPlayer(10, includeUnitsInAoe)
-                              .Select(x => x.AcdId)
-                              .Contains(u.AcdId) &&
-                          u.Position.Distance(pullLocation) <= searchRange
-                    orderby u.Distance
-                    select u).ToList();
+                 where u.IsUnit && u.CanCastTo() && u.HasBeenInLoS &&
+                       !UnitsAroundPuller(pullLocation, 20, includeUnitsInAoe)
+                           .Select(x => x.AcdId)
+                           .Contains(u.AcdId) &&
+                       !UnitsAroundPlayer(10, includeUnitsInAoe)
+                           .Select(x => x.AcdId)
+                           .Contains(u.AcdId) &&
+                       u.Position.Distance(pullLocation) <= searchRange
+                 orderby u.Distance
+                 select u).ToList();
         }
 
         public static TrinityActor BestAoeUnit(float range = 45, bool includeInAoE = false)
@@ -189,7 +188,7 @@ namespace Trinity.Components.Combat.Resources
                 Combat.Targeting.CurrentTarget.Type != TrinityObjectType.Shrine &&
                 Combat.Targeting.CurrentTarget.Type != TrinityObjectType.HealthGlobe)
             {
-                //Logger.Log("Prevent Primary Attack ");
+                //Core.Logger.Log("Prevent Primary Attack ");
                 var targetPosition = TargetUtil.GetLoiterPosition(Combat.Targeting.CurrentTarget, 20f);
                 // return new TrinityPower(SNOPower.Walk, 7f, targetPosition);
                 return targetPosition;
@@ -361,7 +360,6 @@ namespace Trinity.Components.Combat.Resources
                         u.NearbyUnitsWithinDistance(15) descending,
                         u.HitPointsPct descending
                     select u).FirstOrDefault();
-
         }
 
         internal static Vector3 ClosestOcculous(float maxRange, Vector3 fromLocation, bool objectsInAoe = false)
@@ -510,7 +508,7 @@ namespace Trinity.Components.Combat.Resources
                 var clearString = "Clearing CURRENT TARGET: " + reason +
                         $"{Environment.NewLine} Name: {CurrentTarget.InternalName} Type: {CurrentTarget.Type} SNO: {CurrentTarget.ActorSnoId} Distance: {CurrentTarget.Distance} " +
                         $"{Environment.NewLine} Weight: {CurrentTarget.Weight} Info: {CurrentTarget.WeightInfo}";
-                Logger.LogVerbose(LogCategory.Weight, clearString);
+                Core.Logger.Verbose(LogCategory.Weight, clearString);
                 //Combat.Targeting.CurrentTarget = null;
             }
         }
@@ -531,11 +529,12 @@ namespace Trinity.Components.Combat.Resources
                     return false;
             }
         }
+
         private static TrinityActor CurrentTarget => Combat.Targeting.CurrentTarget;
 
         private static HashSet<SNOPower> Hotbar => Core.Hotbar.ActivePowers;
 
-        #endregion
+        #endregion Helper fields
 
         public static int CountUnitsBehind(TrinityActor actor, float range)
         {
@@ -625,17 +624,16 @@ namespace Trinity.Components.Combat.Resources
                      !u.IsElite &&
                      u.Weight > 0 &&
                      u.RadiusDistance <= Combat.Routines.Current.ClusterRadius
-                select u).Count() >= Combat.Routines.Current.TrashRange;
+                     select u).Count() >= Combat.Routines.Current.TrashRange;
             }
             return
                 (from u in ObjectCache
-                    where u.IsUnit && u.IsValid &&
-                          u.Weight > 0 &&
-                          u.IsElite &&
-                          u.RadiusDistance <= range
-                    select u).Any();
+                 where u.IsUnit && u.IsValid &&
+                       u.Weight > 0 &&
+                       u.IsElite &&
+                       u.RadiusDistance <= range
+                 select u).Any();
         }
-
 
         /// <summary>
         /// Checks to make sure there's at least one valid cluster with the minimum monster count
@@ -669,7 +667,7 @@ namespace Trinity.Components.Combat.Resources
                 (from u in ObjectCache
                  where u.IsUnit && u.IsValid &&
                  u.RadiusDistance <= maxRange &&
-                 u.NearbyUnitsWithinDistance(radius)-1 >= minCount
+                 u.NearbyUnitsWithinDistance(radius) - 1 >= minCount
                  select u).Any();
 
             return clusterCheck;
@@ -824,8 +822,8 @@ namespace Trinity.Components.Combat.Resources
                 bestClusterPoint = Core.Player.Position;
 
             return bestClusterPoint;
-
         }
+
         /// <summary>
         /// Finds the optimal cluster position, works regardless if there is a cluster or not (will return single unit position if not). This is not a K-Means cluster, but rather a psuedo cluster based
         /// on the number of other monsters within a radius of any given unit
@@ -859,6 +857,7 @@ namespace Trinity.Components.Combat.Resources
 
             return bestClusterPoint;
         }
+
         /// <summary>
         /// Checks to see if there is a health globe around to grab
         /// </summary>
@@ -892,7 +891,7 @@ namespace Trinity.Components.Combat.Resources
         }
 
         ///// <summary>
-        ///// 
+        /////
         ///// </summary>
         ///// <param name="radius">Cluster Radius</param>
         ///// <param name="maxRange">Unit Max Distance</param>
@@ -952,7 +951,6 @@ namespace Trinity.Components.Combat.Resources
             bool includeHealthGlobes = ObjectCache.Any(g => g.Type == TrinityObjectType.HealthGlobe && g.Weight > 0) &&
                                        (!PlayerMover.IsBlocked);
 
-
             Vector3 bestClusterPoint;
             var clusterUnits =
                 (from u in ObjectCache
@@ -976,6 +974,7 @@ namespace Trinity.Components.Combat.Resources
 
             return bestClusterPoint;
         }
+
         /// <summary>
         /// Fast check to see if there are any attackable units within a certain distance
         /// </summary>
@@ -985,6 +984,7 @@ namespace Trinity.Components.Combat.Resources
         {
             return AnyMobsInRange(range, 1);
         }
+
         /// <summary>
         /// Fast check to see if there are any attackable units within a certain distance
         /// </summary>
@@ -994,6 +994,7 @@ namespace Trinity.Components.Combat.Resources
         {
             return AnyMobsInRange(range, 1, useWeights);
         }
+
         /// <summary>
         /// Fast check to see if there are any attackable units within a certain distance
         /// </summary>
@@ -1006,11 +1007,12 @@ namespace Trinity.Components.Combat.Resources
             if (minCount < 1)
                 minCount = 1;
             return (from o in ObjectCache
-                where o.IsUnit && o.HitPoints > 0 &&
-                     ((useWeights && o.Weight > 0) || !useWeights) &&
-                    o.RadiusDistance <= range
+                    where o.IsUnit && o.HitPoints > 0 &&
+                         ((useWeights && o.Weight > 0) || !useWeights) &&
+                        o.RadiusDistance <= range
                     select o).Count() >= minCount;
         }
+
         /// <summary>
         /// Checks if there are any mobs in range of the specified position
         /// </summary>
@@ -1024,6 +1026,7 @@ namespace Trinity.Components.Combat.Resources
 
             return inRangeCount >= unitsRequired;
         }
+
         /// <summary>
         /// Checks if there are any mobs in range of the specified position
         /// </summary>
@@ -1035,6 +1038,7 @@ namespace Trinity.Components.Combat.Resources
                             u.Position.Distance(position) <= range
                     select u).Count();
         }
+
         /// <summary>
         /// Checks if there are any mobs in range of the specified position
         /// </summary>
@@ -1046,6 +1050,7 @@ namespace Trinity.Components.Combat.Resources
                             u.Position.Distance(Player.Position) <= range
                     select u).Count();
         }
+
         /// <summary>
         /// Checks if there are any bosses in range of the specified position
         /// </summary>
@@ -1058,6 +1063,7 @@ namespace Trinity.Components.Combat.Resources
                             u.Position.Distance(position) <= range
                     select u).Count();
         }
+
         /// <summary>
         /// Returns list of units within the specified range
         /// </summary>
@@ -1082,6 +1088,7 @@ namespace Trinity.Components.Combat.Resources
                     o.RadiusDistance <= range
                     select o).Count() >= minCount;
         }
+
         /// <summary>
         /// Fast check to see if there are any attackable Elite units within a certain distance
         /// </summary>
@@ -1100,6 +1107,7 @@ namespace Trinity.Components.Combat.Resources
                     o.RadiusDistance <= range
                     select o).Any();
         }
+
         /// <summary>
         /// Fast check to see if there are any attackable Elite units within a certain distance
         /// </summary>
@@ -1120,6 +1128,7 @@ namespace Trinity.Components.Combat.Resources
                     o.RadiusDistance <= range
                     select o).Count() >= minCount;
         }
+
         /// <summary>
         /// Checks if there are any mobs in range of the specified position
         /// </summary>
@@ -1134,6 +1143,7 @@ namespace Trinity.Components.Combat.Resources
 
             return inRangeCount >= unitsRequired;
         }
+
         /// <summary>
         /// Count of elites within range of position
         /// </summary>
@@ -1188,8 +1198,6 @@ namespace Trinity.Components.Combat.Resources
             return Combat.Targeting.CurrentTarget?.Position ?? Vector3.Zero;
         }
 
-
-
         // Special Zig-Zag movement for whirlwind/tempest
         /// <summary>
         /// Finds an optimal position for Barbarian Whirlwind, Monk Tempest Rush, or Demon Hunter Strafe
@@ -1237,10 +1245,9 @@ namespace Trinity.Components.Combat.Resources
                 var clusterPoint = GetBestClusterPoint(ringDistance, ringDistance, false, attackInAoe);
                 if (clusterPoint.Distance(Player.Position) >= minDistance)
                 {
-                    Logger.Log(LogCategory.Movement, "Returning ZigZag: BestClusterPoint {0} r-dist={1} t-dist={2}", clusterPoint, ringDistance, clusterPoint.Distance(Player.Position));
+                    Core.Logger.Log(LogCategory.Movement, "Returning ZigZag: BestClusterPoint {0} r-dist={1} t-dist={2}", clusterPoint, ringDistance, clusterPoint.Distance(Player.Position));
                     return clusterPoint;
                 }
-
 
                 List<TrinityActor> zigZagTargetList;
                 if (attackInAoe)
@@ -1263,7 +1270,7 @@ namespace Trinity.Components.Combat.Resources
                     zigZagPoint = zigZagTargetList.OrderByDescending(u => u.Distance).FirstOrDefault().Position;
                     if (Core.Grids.CanRayCast(zigZagPoint) && zigZagPoint.Distance(Player.Position) >= minDistance)
                     {
-                        Logger.Log(LogCategory.Movement, "Returning ZigZag: TargetBased {0} r-dist={1} t-dist={2}", zigZagPoint, ringDistance, zigZagPoint.Distance(Player.Position));
+                        Core.Logger.Log(LogCategory.Movement, "Returning ZigZag: TargetBased {0} r-dist={1} t-dist={2}", zigZagPoint, ringDistance, zigZagPoint.Distance(Player.Position));
                         return zigZagPoint;
                     }
                 }
@@ -1312,7 +1319,7 @@ namespace Trinity.Components.Combat.Resources
                     //    continue;
 
                     // Ignore point if any AoE in this point position
-                    if(Core.Avoidance.Grid.IsLocationInFlags(zigZagPoint, AvoidanceFlags.Avoidance))
+                    if (Core.Avoidance.Grid.IsLocationInFlags(zigZagPoint, AvoidanceFlags.Avoidance))
                         continue;
 
                     // Make sure this point is in LoS/walkable (not around corners or into a wall)
@@ -1330,7 +1337,7 @@ namespace Trinity.Components.Combat.Resources
                     if (monsterCount > 0)
                         pointWeight *= monsterCount;
 
-                    //Logger.Log(LogCategory.Movement, "ZigZag Point: {0} distance={1:0} distaceFromTarget={2:0} intersectsPath={3} weight={4:0} monsterCount={5}",
+                    //Core.Logger.Log(LogCategory.Movement, "ZigZag Point: {0} distance={1:0} distaceFromTarget={2:0} intersectsPath={3} weight={4:0} monsterCount={5}",
                     //    zigZagPoint, distanceToPoint, distanceFromTargetToPoint, intersectsPath, pointWeight, monsterCount);
 
                     // Use this one if it's more weight, or we haven't even found one yet, or if same weight as another with a random chance
@@ -1340,7 +1347,7 @@ namespace Trinity.Components.Combat.Resources
 
                         //if (Core.Settings.Combat.Misc.UseNavMeshTargeting)
                         //{
-                            bestLocation = new Vector3(zigZagPoint.X, zigZagPoint.Y, Core.DBGridProvider.GetHeight(zigZagPoint.ToVector2()));
+                        bestLocation = new Vector3(zigZagPoint.X, zigZagPoint.Y, Core.DBGridProvider.GetHeight(zigZagPoint.ToVector2()));
                         //}
                         //else
                         //{
@@ -1349,7 +1356,7 @@ namespace Trinity.Components.Combat.Resources
                     }
                 }
             }
-            Logger.Log(LogCategory.Movement, "Returning ZigZag: RandomXY {0} r-dist={1} t-dist={2}", bestLocation, ringDistance, bestLocation.Distance(Player.Position));
+            Core.Logger.Log(LogCategory.Movement, "Returning ZigZag: RandomXY {0} r-dist={1} t-dist={2}", bestLocation, ringDistance, bestLocation.Distance(Player.Position));
             return bestLocation;
         }
 
@@ -1386,7 +1393,6 @@ namespace Trinity.Components.Combat.Resources
             //    MathUtil.IntersectsPath(aoe.Position, aoe.Radius, obj.Position, Player.Position));
         }
 
-
         /// <summary>
         /// Checks if spell is tracked on any unit within range of specified position
         /// </summary>
@@ -1415,21 +1421,21 @@ namespace Trinity.Components.Combat.Resources
         internal static bool IsUnitWithoutDebuffWithinRange(float range, SNOPower power, int unitsRequiredWithoutDebuff = 1)
         {
             var unitsInRange = (from u in ObjectCache
+                                where u.IsUnit && u.IsValid &&
+                                       u.Weight > 0 &&
+                                       u.RadiusDistance <= range &&
+                                       u.HasBeenInLoS
+                                select u).ToList();
+
+            var unitsWithoutDebuff = (from u in ObjectCache
                                       where u.IsUnit && u.IsValid &&
                                              u.Weight > 0 &&
                                              u.RadiusDistance <= range &&
-                                             u.HasBeenInLoS
+                                             u.HasBeenInLoS &&
+                                             !u.HasDebuff(power)
                                       select u).ToList();
 
-            var unitsWithoutDebuff = (from u in ObjectCache
-                                   where u.IsUnit && u.IsValid &&
-                                          u.Weight > 0 &&
-                                          u.RadiusDistance <= range &&
-                                          u.HasBeenInLoS &&
-                                          !u.HasDebuff(power)
-                                   select u).ToList();
-
-            //Logger.Log(LogCategory.Behavior, "{0}/{1} units without debuff {2} in {3} range", unitsWithoutDebuff.Count, unitsInRange.Count, power, range);
+            //Core.Logger.Log(LogCategory.Behavior, "{0}/{1} units without debuff {2} in {3} range", unitsWithoutDebuff.Count, unitsInRange.Count, power, range);
 
             return unitsWithoutDebuff.Count >= unitsRequiredWithoutDebuff;
         }
@@ -1442,12 +1448,11 @@ namespace Trinity.Components.Combat.Resources
             return (from u in ObjectCache
                     where u.IsUnit && u.IsValid &&
                             u.Weight > 0 &&
-                            u.RadiusDistance <= range && 
+                            u.RadiusDistance <= range &&
                             (condition == null || condition(u)) &&
                              u.HasBeenInLoS
-                    orderby u.IsElite, u.RadiusDistance 
+                    orderby u.IsElite, u.RadiusDistance
                     select u).FirstOrDefault();
-
         }
 
         /// <summary>
@@ -1478,11 +1483,10 @@ namespace Trinity.Components.Combat.Resources
 
             double percentWithinBand = ((double)totalWithinBand / (double)totalWithinMaxRange) * 100;
 
-            //Logger.LogDebug("{0} of {6} mobs between {1} and {2} yards ({3:f2}%), needed={4}% result={5}", totalWithinBand, bandMinRange, bandMaxRange, percentWithinBand, percentage, percentWithinBand >= percentage, totalWithinMaxRange);
+            //Core.Logger.Debug("{0} of {6} mobs between {1} and {2} yards ({3:f2}%), needed={4}% result={5}", totalWithinBand, bandMinRange, bandMaxRange, percentWithinBand, percentage, percentWithinBand >= percentage, totalWithinMaxRange);
 
             return percentWithinBand >= percentage;
         }
-
 
         internal static TrinityActor GetBestHarvestTarget(float skillRange, float maxRange = 30f)
         {
@@ -1556,9 +1560,9 @@ namespace Trinity.Components.Combat.Resources
                 var isValidUnit = u != null && u.IsUnit && u.Attributes != null && !u.IsPlayer && u.RadiusDistance <= maxRange && u.HasBeenInLoS;
                 if (!isValidUnit)
                     continue;
-            
+
                 total++;
-              
+
                 if (u.Attributes != null && !u.HasDebuff(power))
                 {
                     notDebuffed.Add(u);
@@ -1573,7 +1577,7 @@ namespace Trinity.Components.Combat.Resources
 
             var pct = (float)(debuffed) / total;
 
-            Logger.Log(LogCategory.Behavior, "{0} out of {1} mobs have {3} ({2:0.##}%)", debuffed, total, pct * 100, power);
+            Core.Logger.Log(LogCategory.Behavior, "{0} out of {1} mobs have {3} ({2:0.##}%)", debuffed, total, pct * 100, power);
 
             return pct;
 
@@ -1597,7 +1601,7 @@ namespace Trinity.Components.Combat.Resources
 
             //var pct = (float)debuffed.Count / all.Count;
 
-            //Logger.Log(LogCategory.Behavior, "{0} out of {1} mobs have {3} ({2:0.##}%)", debuffed, all, pct * 100, power);
+            //Core.Logger.Log(LogCategory.Behavior, "{0} out of {1} mobs have {3} ({2:0.##}%)", debuffed, all, pct * 100, power);
 
             //return pct;
         }
@@ -1633,15 +1637,14 @@ namespace Trinity.Components.Combat.Resources
         }
 
         internal static List<TrinityActor> UnitsWithoutDebuff(SNOPower power, float maxRange = 30f, IEnumerable<TrinityActor> units = null)
-            => UnitsWithoutDebuff(new List<SNOPower> {power}, maxRange, units);
-
+            => UnitsWithoutDebuff(new List<SNOPower> { power }, maxRange, units);
 
         internal static IEnumerable<TrinityActor> UnitsWithDebuff(IEnumerable<SNOPower> powers, IEnumerable<TrinityActor> units)
         {
             return (from u in units
-                where u.IsUnit && u.IsValid &&
-                      powers.Any(u.HasDebuff)
-                select u);
+                    where u.IsUnit && u.IsValid &&
+                          powers.Any(u.HasDebuff)
+                    select u);
         }
 
         internal static int DebuffCount(IEnumerable<SNOPower> powers, float maxRange = 30f)
@@ -1663,7 +1666,6 @@ namespace Trinity.Components.Combat.Resources
                     ).Sum();
         }
 
-
         internal static TrinityActor LowestHealthTarget(float range, Vector3 position = new Vector3(), SNOPower withoutDebuff = SNOPower.None)
         {
             if (position == new Vector3())
@@ -1675,7 +1677,7 @@ namespace Trinity.Components.Combat.Resources
                                         u.Weight > 0 &&
                                         u.Position.Distance(position) <= range &&
                                         (withoutDebuff == SNOPower.None || (!SpellTracker.IsUnitTracked(u.AcdId, withoutDebuff) && !u.HasDebuff(withoutDebuff)))
-                                        //!CacheData.MonsterObstacles.Any(m => MathUtil.IntersectsPath(m.Position, m.Radius, u.Position, Player.Position))
+                                 //!CacheData.MonsterObstacles.Any(m => MathUtil.IntersectsPath(m.Position, m.Radius, u.Position, Player.Position))
                                  orderby u.HitPoints ascending
                                  select u).ToList();
 
@@ -1721,12 +1723,12 @@ namespace Trinity.Components.Combat.Resources
         internal static TrinityActor BestExplodingPalmTarget(float range)
         {
             var units = (from u in ObjectCache
-                                 where u.IsUnit && u.IsValid &&
-                                        u.Weight > 0 &&
-                                        u.Position.Distance(Player.Position) <= range &&
-                                        !u.Attributes.Powers.ContainsKey(SNOPower.Monk_ExplodingPalm)
-                                 orderby u.HitPoints
-                                 select u).ToList();
+                         where u.IsUnit && u.IsValid &&
+                                u.Weight > 0 &&
+                                u.Position.Distance(Player.Position) <= range &&
+                                !u.Attributes.Powers.ContainsKey(SNOPower.Monk_ExplodingPalm)
+                         orderby u.HitPoints
+                         select u).ToList();
 
             return units.Any() ? units.FirstOrDefault() : null;
         }
@@ -1747,7 +1749,6 @@ namespace Trinity.Components.Combat.Resources
 
             if (unitsByWeight.Any())
                 target = unitsByWeight.FirstOrDefault();
-
             else if (Combat.Targeting.CurrentTarget != null)
                 target = Combat.Targeting.CurrentTarget;
             else
@@ -1800,7 +1801,6 @@ namespace Trinity.Components.Combat.Resources
             return bestClusterPoint;
         }
 
-
         internal static TrinityActor GetClosestUnit(float maxDistance = 100f)
         {
             var result =
@@ -1825,19 +1825,18 @@ namespace Trinity.Components.Combat.Resources
         public static TrinityActor BestEliteInRange(float range)
         {
             return (from u in ObjectCache
-                 where u.IsUnit &&
-                 u.IsElite &&
-                 u.Distance <= range 
-                 orderby 
-                  u.NearbyUnitsWithinDistance(range) descending,
-                  u.Distance,
-                  u.HitPointsPct descending
-                 select u).FirstOrDefault();
-
+                    where u.IsUnit &&
+                    u.IsElite &&
+                    u.Distance <= range
+                    orderby
+                     u.NearbyUnitsWithinDistance(range) descending,
+                     u.Distance,
+                     u.HitPointsPct descending
+                    select u).FirstOrDefault();
         }
 
         public static List<TrinityActor> GetHighValueRiftTargets(float maxRange, double minValuePercent)
-        {     
+        {
             return (from u in ObjectCache
                     where u.IsUnit && u.Distance <= maxRange && u.RiftValuePct >= minValuePercent
                     orderby
@@ -1899,7 +1898,7 @@ namespace Trinity.Components.Combat.Resources
 
         public static Vector3 GetLoiterPosition(TrinityActor target, float radiusDistance)
         {
-            if(target == null)
+            if (target == null)
                 return Vector3.Zero;
 
             var circlePositions = StuckHandler.GetCirclePoints(16, target.AxialRadius + radiusDistance, target.Position);
@@ -1944,6 +1943,7 @@ namespace Trinity.Components.Combat.Resources
 
         private static Vector3 _lastSafeSpotPosition = Vector3.Zero;
         private static DateTime _lastSafeSpotPositionTime = DateTime.MinValue;
+
         public static Vector3 GetSafeSpotPosition(float distance)
         {
             // Maximum speed of changing safe spots is every 2s
@@ -2085,8 +2085,6 @@ namespace Trinity.Components.Combat.Resources
             ActorAttributeType.PowerBuff3VisualEffectD,
         };
 
-
-
         public static bool HasDebuff(this TrinityActor obj, SNOPower debuffSNO)
         {
             if (obj?.CommonData == null || !obj.IsValid)
@@ -2134,9 +2132,9 @@ namespace Trinity.Components.Combat.Resources
             if (ofLocation == Vector3.Zero)
                 ofLocation = Player.Position;
 
-            return Core.Actors.AllRActors.Where(u 
-                => (!ownedByMe || u.IsSummonedByPlayer) 
-                   && u.PetType == PetType.Pet0 
+            return Core.Actors.AllRActors.Where(u
+                => (!ownedByMe || u.IsSummonedByPlayer)
+                   && u.PetType == PetType.Pet0
                    && u.Position.Distance(ofLocation) <= withinRange);
         }
 
@@ -2164,7 +2162,6 @@ namespace Trinity.Components.Combat.Resources
                         u.NearbyUnitsWithinDistance(15) descending,
                         u.HitPointsPct descending
                     select u).FirstOrDefault();
-
         }
 
         public static TrinityActor BestRangedAoeUnit(float clusterRadius = 7, float maxSearchRange = 50, int unitCount = 3, bool useWeights = false, bool includeUnitsInAoE = true)
@@ -2172,11 +2169,5 @@ namespace Trinity.Components.Combat.Resources
             return BestLOSEliteInRange(maxSearchRange, includeUnitsInAoE) ??
                     GetFarthestClusterUnit(clusterRadius, maxSearchRange, unitCount, useWeights, includeUnitsInAoE);
         }
-
     }
-
 }
-
-
-
-

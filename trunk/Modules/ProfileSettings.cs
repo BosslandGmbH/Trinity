@@ -1,12 +1,9 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Trinity.Framework.Objects;
-using Trinity.ProfileTags.EmbedTags;
 using Zeta.Bot;
-using Zeta.Game;
 using Zeta.XmlEngine;
 
 namespace Trinity.Modules
@@ -33,7 +30,7 @@ namespace Trinity.Modules
 
             public SceneOptions DefaultSceneOptions { get; } = new SceneOptions();
 
-            public SceneOptions CurrentSceneOptions => GetSceneOptions(ZetaDia.Me.CurrentScene.SceneInfo.SNOId);
+            public SceneOptions CurrentSceneOptions => GetSceneOptions(Core.Player.CurrentSceneSnoId);
 
             public SceneOptions GetSceneOptions(int sceneSnoId)
             {

@@ -1,0 +1,18 @@
+﻿<Profile>
+  <Name>Tag Test - Explore</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> Explore Test Started " />
+
+    <If condition="CurrentLevelAreaId != 92945">
+      <TakeWaypoint destinationLevelAreaSnoId="92945" />
+    </If>
+    
+     <!-- g_Portal_ArchTall_Orange-1090 (176001) g_Portal_ArchTall_Orange Distance=8.01292 Type=Portal -->
+     <Explore stopCondition="ActorExistsNearMe(176001,50)" />
+
+     <Explore stopCondition="PercentNodesVisited(95)" startReset="true" />  
+  
+    <LogMessage message=">> Explore Test Finished " />
+  </Order>
+</Profile>

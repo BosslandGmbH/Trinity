@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using Trinity.Framework.Objects.Memory;
 
 namespace Trinity.Framework.Helpers
@@ -21,15 +17,15 @@ namespace Trinity.Framework.Helpers
         {
             TypeOf = typeof(T);
             IsMemoryWrapperType = TypeOf.IsMemoryWrapperType();
-            SizeOf = TypeOf.SizeOf();      
+            SizeOf = TypeOf.SizeOf();
             IsNumericType = TypeOf.IsNumericType();
         }
     }
 
     public static class TypeUtil
-    { 
+    {
         private static readonly ConcurrentDictionary<Type, int> _cachedSizeOf = new ConcurrentDictionary<Type, int>();
-        
+
         private static readonly ConcurrentDictionary<Type, bool> _cachedIsMemoryObject = new ConcurrentDictionary<Type, bool>();
 
         public static bool IsMemoryWrapperType(this Type type)
@@ -44,7 +40,7 @@ namespace Trinity.Framework.Helpers
                 if (t.IsMemoryWrapperType())
                     return t.GetMemoryWrapperSize();
 
-                if(type.IsValueType)
+                if (type.IsValueType)
                     return Marshal.SizeOf(t.IsEnum ? t.GetEnumUnderlyingType() : t);
 
                 return 0;
@@ -63,7 +59,7 @@ namespace Trinity.Framework.Helpers
 
                 if (field == null)
                     return 0;
-                value = field.IsLiteral ? (int) field.GetRawConstantValue() : (int) field.GetValue(null);
+                value = field.IsLiteral ? (int)field.GetRawConstantValue() : (int)field.GetValue(null);
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(type), "Negative value is not allowed");
                 return value;
@@ -87,6 +83,7 @@ namespace Trinity.Framework.Helpers
                 case TypeCode.Double:
                 case TypeCode.Single:
                     return true;
+
                 default:
                     return false;
             }

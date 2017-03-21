@@ -63,7 +63,7 @@ namespace Trinity.Modules
                 ActiveBuffs.Add(cachedBuff);
             }
 
-            HasArchon = HasBuff(SNOPower.Wizard_Archon); // .Any(p => DataDictionary.ArchonSkillIds.Contains((int)p))
+            HasArchon = HasBuff(SNOPower.Wizard_Archon); // .Any(p => GameData.ArchonSkillIds.Contains((int)p))
 
             // Bastians of Will
             HasBastiansWillSpenderBuff = HasBuff(SNOPower.ItemPassive_Unique_Ring_735_x1, 2);

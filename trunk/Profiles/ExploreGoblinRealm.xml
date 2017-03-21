@@ -5,11 +5,11 @@
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="-1" />
   <Order>
 
-    <If condition="ZetaDia.WorldType != Act.OpenWorld">
+    <If condition="ZetaDia.Storage.CurrentWorldType != Act.OpenWorld">
       <LeaveGame questId="1" reason="Profile must be in adventure mode!" stayInParty="False" />
     </If>
 
-    <If condition="ZetaDia.CurrentLevelAreaSnoId != 332339 and ZetaDia.CurrentWorldSnoId != 379962 and ZetaDia.CurrentWorldSnoId != 380753">
+    <If condition="ZetaDia.CurrentLevelAreaSnoId != 332339 and ZetaDia.Globals.WorldSnoId != 379962 and ZetaDia.Globals.WorldSnoId != 380753">
       <TakeWaypoint waypointNumber="0" />
       <WaitWhile condition="IsCastingOrLoading()" />
       <WaitTimer questId="1" stepId="1" waitTime="3000" />
@@ -42,7 +42,7 @@
       <WaitTimer questId="1" stepId="1" waitTime="5000" />
     </If>
 
-    <If condition="ZetaDia.CurrentWorldSnoId == 379962">
+    <If condition="ZetaDia.Globals.WorldSnoId == 379962">
       <LogMessage questId="1" output="Exploring Goblin Realm!" />
       <Explore stopCondition="ActorExistsNearMe(393030, 50) or ActorExistsNearMe(380766, 50)" />
       <Interact questId="312429" stepId="2" actorId="389569" actorName="p1_TGoblin_Gate" x="207" y="179" z="-82" worldSnoId="379962" levelAreaSnoId="380773" sceneSnoId="380605" sceneName="p1_TGoblin_Realm_Prototype3_W01_S01" sceneX="199" sceneY="180" sceneZ="-82" />
@@ -50,7 +50,7 @@
       <WaitTimer questId="1" stepId="1" waitTime="5000" />
     </If>
 
-    <If condition="ZetaDia.CurrentWorldSnoId == 380753">
+    <If condition="ZetaDia.Globals.WorldSnoId == 380753">
       <LogMessage questId="1" output="Time to plunder!" />
       <Interact questId="312429" stepId="2" actorId="378665" actorName="p1_Greed" x="78" y="191" z="-82" worldSnoId="380753" levelAreaSnoId="380774" sceneSnoId="380605" sceneName="p1_TGoblin_Realm_Prototype3_W01_S01" sceneX="75" sceneY="183" sceneZ="-83" />      
       <WaitTimer questId="1" stepId="1" waitTime="10000" />

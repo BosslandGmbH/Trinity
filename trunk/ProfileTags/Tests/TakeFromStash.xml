@@ -1,0 +1,27 @@
+﻿<Profile>
+  <Name>Tag Test - TakeFromStash</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> TakeFromStash Test Started " />
+    
+    <TakeFromStash>
+      <Items>
+        <Item id="197837" name="Puzzle Ring" />
+      </Items>
+    </TakeFromStash>
+
+    <TakeFromStash>
+      <Items>
+        <Item id="437415" name="Amethyst" quantity="25" />
+      </Items>
+    </TakeFromStash>
+    
+    <TakeFromStash>
+      <Items>
+        <Item quality="Rare" />
+      </Items>
+    </TakeFromStash>
+    
+    <LogMessage message=">> TakeFromStash Test Finished " />    
+  </Order>
+</Profile>

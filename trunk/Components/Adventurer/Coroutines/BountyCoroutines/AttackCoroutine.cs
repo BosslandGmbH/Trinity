@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-using Buddy.Coroutines;
-using Trinity.Components.Adventurer.Cache;
+﻿using Buddy.Coroutines;
+using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
-using Trinity.Components.Adventurer.Util;
+using Trinity.Framework;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -39,10 +38,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         public void DisablePulse()
         {
-
         }
 
-        #endregion
+        #endregion ISubroutine
 
         #region State
 
@@ -64,13 +62,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Logger.Debug("[Attack] " + value);
+                    Core.Logger.Debug("[Attack] " + value);
                 }
                 _state = value;
             }
         }
 
-        #endregion
+        #endregion State
 
         public virtual async Task<bool> GetCoroutine()
         {
@@ -111,7 +109,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
             if (_actor == null)
             {
-                Logger.Info("[AttackCoroutine] Actor not found with id: {0}", _actorId);
+                Core.Logger.Log("[AttackCoroutine] Actor not found with id: {0}", _actorId);
                 State = States.Completed;
                 return false;
             }
@@ -126,12 +124,11 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             return false;
         }
 
-
         private async Task<bool> Moving()
         {
             if (!await new MoveToPositionCoroutine(AdvDia.CurrentWorldId, _actor.Position, (int)_attackRange).GetCoroutine())
             {
-                Logger.Info("[AttackCoroutine] Moving to actor failed", _actorId);
+                Core.Logger.Log("[AttackCoroutine] Moving to actor failed", _actorId);
                 State = States.Failed;
                 return false;
             }
@@ -149,12 +146,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             {
                 attempts++;
 
-                Logger.Info("[AttackCoroutine] Attacking {0} Dist={1} with skill: {2}", _actor.Name, _actor.Distance, _attackSkill);
+                Core.Logger.Log("[AttackCoroutine] Attacking {0} Dist={1} with skill: {2}", _actor.Name, _actor.Distance, _attackSkill);
 
                 if (ZetaDia.Me.UsePower(_attackSkill, _actor.Position, AdvDia.CurrentWorldDynamicId, _actor.ACDId) ||
                     ZetaDia.Me.UsePower(_attackSkill, _actor.Position, AdvDia.CurrentWorldDynamicId))
                 {
-                    Logger.Info("[AttackCoroutine] Attack Succeeded! woot!", _actor.Name, _actor.Distance, _attackSkill);
+                    Core.Logger.Log("[AttackCoroutine] Attack Succeeded! woot!", _actor.Name, _actor.Distance, _attackSkill);
                     break;
                 }
 
@@ -173,11 +170,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> Failed()
         {
-            Logger.Info("[AttackCoroutine] Failed", _actor.Name, _actor.Distance, _attackSkill);
+            Core.Logger.Log("[AttackCoroutine] Failed", _actor.Name, _actor.Distance, _attackSkill);
 
             _isDone = true;
             return false;
         }
-
     }
 }

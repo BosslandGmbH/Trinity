@@ -4,7 +4,7 @@ using Trinity.UI.UIComponents.Utilities;
 
 namespace Trinity.UI.UIComponents
 {
-  public class DefaultDragHandler : IDragSource
+    public class DefaultDragHandler : IDragSource
   {
     public virtual void StartDrag(IDragInfo dragInfo)
     {

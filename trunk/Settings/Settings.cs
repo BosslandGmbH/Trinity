@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.Serialization;
-using System.Windows;
-using Trinity.Framework;
+﻿using Trinity.Framework;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Helpers.AutoFollow.Resources;
+using System.Collections.Generic;
+using Trinity.Framework.Events;
 using Trinity.Framework.Objects;
 using Trinity.Settings.ItemList;
 using Trinity.Settings.Paragon;
-using Trinity.UI;
 using Zeta.Bot;
-using Zeta.Game;
 
 namespace Trinity.Settings
 {
@@ -37,10 +30,10 @@ namespace Trinity.Settings
             ChangeEvents.HeroId.Changed += HeroIdOnChanged;
         }
 
-        private static void HeroIdOnChanged(ChangeDetectorEventArgs<int> args)
+        private static void HeroIdOnChanged(ChangeEventArgs<int> args)
         {
             if (args.OldValue == 0) return;
-            Logger.Log("Hero changed, reloading settings.");
+            Core.Logger.Log("Hero changed, reloading settings.");
             Core.Storage.Load();
         }
 

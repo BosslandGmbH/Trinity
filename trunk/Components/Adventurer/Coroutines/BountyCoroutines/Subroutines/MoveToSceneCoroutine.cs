@@ -1,14 +1,20 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Cache;
+using Trinity;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Framework;
+using Trinity.Framework.Actors;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
+using Trinity.Framework.Reference;
 using Zeta.Common;
 using Zeta.Game;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+using Zeta.Game.Internals;
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
@@ -16,61 +22,53 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
     {
         private readonly int _questId;
         private readonly int _worldId;
-        private readonly string _sceneName;
-
+        private BountyData _bountyData;
+        private bool _explore;
 
         private bool _isDone;
-        private States _state;
+        private long _lastObjectiveFoundTime;
+
+        private long _lastScanTime;
+
+        private Vector3 _objectiveLocation = Vector3.Zero;
 
         private int _objectiveScanRange = 5000;
+        private Vector3 _previouslyFoundLocation = Vector3.Zero;
+        private long _returnTimeForPreviousLocation;
+        private WorldScene _scene;
+        private States _state;
+        private bool _zergEnabled;
 
-        #region State
-
-        public enum States
+        public MoveToSceneCoroutine(int questId, int worldId, int sceneSnoId, bool zergSafe = false, bool explore = true)
         {
-            NotStarted,
-            Searching,
-            Moving,
-            Completed,
-            Failed
+            _questId = questId;
+            _worldId = worldId;
+            SceneName = ZetaDia.SNO.LookupSNOName(SNOGroup.Scene, sceneSnoId);
+            _zergEnabled = zergSafe;
+            _explore = explore;
         }
 
-        public States State
+        public MoveToSceneCoroutine(int questId, int worldId, string sceneName, bool zergSafe = false, bool explore = true)
         {
-            get { return _state; }
-            protected set
-            {
-                if (_state == value) return;
-                if (value != States.NotStarted)
-                {
-                    Util.Logger.Info("[MoveToScene] " + value);
-                }
-                _state = value;
-            }
+            _questId = questId;
+            _worldId = worldId;
+            SceneName = sceneName;
+            _zergEnabled = zergSafe;
+            _explore = explore;
         }
 
-        #endregion
+        public string SceneName { get; }
 
         public bool IsDone
         {
             get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
         }
 
-
-
-        public MoveToSceneCoroutine(int questId, int worldId, string sceneName, bool zergSafe = false)
-        {
-            _questId = questId;
-            _worldId = worldId;
-            _sceneName = sceneName;
-        }
-
-
         public async Task<bool> GetCoroutine()
         {
-            if(_scene != null && _scene.IsInScene(AdvDia.MyPosition))
+            if (_scene != null && _scene.IsInScene(AdvDia.MyPosition))
             {
-                Logger.Debug($"Currently in Target Scene: {_scene.Name}. IsSubScene={_scene.SubScene}");
+                Core.Logger.Debug($"Currently in Target Scene: {_scene.Name}. IsSubScene={_scene.SubScene}");
                 State = States.Completed;
             }
 
@@ -78,12 +76,16 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 case States.NotStarted:
                     return await NotStarted();
+
                 case States.Searching:
                     return await Searching();
+
                 case States.Moving:
                     return await Moving();
+
                 case States.Completed:
                     return await Completed();
+
                 case States.Failed:
                     return await Failed();
             }
@@ -107,8 +109,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
         }
 
-        public string SceneName => _sceneName;
-
         private async Task<bool> NotStarted()
         {
             SafeZerg.Instance.DisableZerg();
@@ -118,10 +118,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Searching()
         {
+            SafeZerg.Instance.DisableZerg();
+
             if (_objectiveLocation == Vector3.Zero)
-            {
                 ScanForObjective();
-            }
             if (_objectiveLocation != Vector3.Zero)
             {
                 State = States.Moving;
@@ -134,11 +134,14 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Moving()
         {
-            if (AdvDia.CurrentWorldScene.Name.ToLower().Contains(_sceneName.ToLower()))
+            if (AdvDia.CurrentWorldScene.Name.ToLower().Contains(SceneName.ToLower()))
             {
                 State = States.Completed;
                 return false;
             }
+
+            if (_zergEnabled)
+                SafeZerg.Instance.EnableZerg();
 
             if (await NavigationCoroutine.MoveTo(_objectiveLocation, 10))
             {
@@ -149,9 +152,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     _objectiveLocation = Vector3.Zero;
                     _objectiveScanRange = ActorFinder.LowerSearchRadius(_objectiveScanRange);
                     if (_objectiveScanRange <= 0)
-                    {
                         _objectiveScanRange = 50;
-                    }
                     State = States.Searching;
                     return false;
                 }
@@ -163,24 +164,17 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Completed()
         {
+            SafeZerg.Instance.DisableZerg();
             _isDone = true;
             return true;
         }
 
         private async Task<bool> Failed()
         {
+            SafeZerg.Instance.DisableZerg();
             _isDone = true;
             return true;
         }
-
-        private Vector3 _objectiveLocation = Vector3.Zero;
-        private Vector3 _previouslyFoundLocation = Vector3.Zero;
-        private long _returnTimeForPreviousLocation;
-
-        private long _lastScanTime;
-        private BountyData _bountyData;
-        private long _lastObjectiveFoundTime;
-        private WorldScene _scene;
 
         private void ScanForObjective()
         {
@@ -188,15 +182,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 _objectiveLocation = _previouslyFoundLocation;
                 _previouslyFoundLocation = Vector3.Zero;
-                Logger.Debug("[MoveToScene] Returning previous objective location.");
+                Core.Logger.Debug("[MoveToScene] Returning previous objective location.");
                 return;
             }
             if (PluginTime.ReadyToUse(_lastScanTime, 1000))
             {
                 _lastScanTime = PluginTime.CurrentMillisecond;
-                if (!string.IsNullOrEmpty(_sceneName))
+                if (!string.IsNullOrEmpty(SceneName))
                 {
-                    _scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name.Contains(_sceneName) || s.HasChild && s.SubScene.Name.Contains(_sceneName));
+                    _scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name.Contains(SceneName) || s.HasChild && s.SubScene.Name.Contains(SceneName));
                     if (_scene != null)
                     {
                         var centerNode =
@@ -204,40 +198,49 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                                 .OrderBy(n => n.Center.DistanceSqr(_scene.Center))
                                 .FirstOrDefault();
                         if (centerNode != null)
-                        {
                             _objectiveLocation = centerNode.NavigableCenter;
-                        }
                     }
                 }
-                //if (_objectiveLocation == Vector3.Zero && _actorId != 0)
-                //{
-                //    _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange);
-                //}
                 if (_objectiveLocation != Vector3.Zero && PluginTime.ReadyToUse(_lastObjectiveFoundTime, 20000))
                 {
                     _lastObjectiveFoundTime = PluginTime.CurrentMillisecond;
 
                     using (new PerformanceLogger("[MoveToScene] Path to Objective Check", true))
                     {
-                        //if ((Navigator.GetNavigationProviderAs<DefaultNavigationProvider>().CanFullyClientPathTo(_objectiveLocation)))
-                        //{
-                        Logger.Info("[MoveToScene] Found the objective at distance {0}",
+                        Core.Logger.Log("[MoveToScene] Found the objective at distance {0}",
                             AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //}
-                        //else
-                        //{
-                        //    Logger.Debug("[MoveToMapMarker] Found the objective at distance {0}, but cannot get a path to it.",
-                        //        AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //    _objectiveLocation = Vector3.Zero;
-                        //}
                     }
-
                 }
                 else
                 {
-                    _objectiveLocation = Vector3.Zero;                    
+                    _objectiveLocation = Vector3.Zero;
                 }
             }
         }
+
+        #region State
+
+        public enum States
+        {
+            NotStarted,
+            Searching,
+            Moving,
+            Completed,
+            Failed
+        }
+
+        public States State
+        {
+            get { return _state; }
+            protected set
+            {
+                if (_state == value) return;
+                if (value != States.NotStarted)
+                    Core.Logger.Log("[MoveToScene] " + value);
+                _state = value;
+            }
+        }
+
+        #endregion State
     }
 }

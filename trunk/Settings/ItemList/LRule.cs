@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Windows.Forms.VisualStyles;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
-using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Settings.ItemList
 {

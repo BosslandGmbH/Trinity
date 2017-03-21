@@ -1,7 +1,7 @@
 using System;
+using Trinity.Framework.Helpers;
 using System.ComponentModel;
 using System.Runtime.Serialization;
-using Trinity.Framework.Helpers;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Objects

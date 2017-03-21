@@ -1,0 +1,18 @@
+﻿<Profile>
+  <Name>Tag Test - Rift</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> Rift Test Started " />
+
+    <LogMessage message="RiftTag " />
+    <Rift type="Nephalem" riftCount="1" />
+
+    <LogMessage message="GreaterRiftTag" />
+    <GreaterRift level="12" empower="true" riftCount="1" />
+
+    <LogMessage message="NephalemRiftTag" />
+    <NephalemRift riftCount="1" />
+
+    <LogMessage message=">> Rift Test Finished " />
+  </Order>
+</Profile>

@@ -1,12 +1,11 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.Serialization;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using System.ComponentModel;
-using System.Collections.Generic;
 
 namespace Trinity.Components.Adventurer.Settings
 {
-
     [DataContract]
     public class AdventurerGemSetting : NotifyBase
     {
@@ -124,6 +123,5 @@ namespace Trinity.Components.Adventurer.Settings
         {
             return $"{GetType().Name}: {Name} ({Sno})";
         }
-
     }
 }

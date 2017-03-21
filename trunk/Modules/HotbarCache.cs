@@ -1,9 +1,10 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -36,7 +37,7 @@ namespace Trinity.Modules
                     }
                     catch
                     {
-                        Logger.LogError("Exception getting Charges for Power {0}", Power);
+                        Core.Logger.Error("Exception getting Charges for Power {0}", Power);
                         return 0;
                     }
                 }
@@ -74,7 +75,7 @@ namespace Trinity.Modules
             if (!ZetaDia.IsInGame || ZetaDia.Me == null || !ZetaDia.Me.IsValid)
                 return;
 
-            var cPlayer = ZetaDia.PlayerData;
+            var cPlayer = ZetaDia.Storage.PlayerDataManager.ActivePlayerData;
             if (cPlayer == null || !cPlayer.IsValid)
                 return;
 
@@ -143,7 +144,7 @@ namespace Trinity.Modules
             ActivePowers = activePowers;
             ActiveSkills = activeHotbarSkills;
 
-            Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement,
+            Core.Logger.Debug(LogCategory.CacheManagement,
                 "Refreshed Hotbar: ActiveSkills={0} PassiveSkills={1}",
                 ActiveSkills.Count,
                 PassivePowers.Count);

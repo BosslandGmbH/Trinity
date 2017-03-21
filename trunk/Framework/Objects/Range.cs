@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace Trinity.Framework.Objects
 {
     public class Range

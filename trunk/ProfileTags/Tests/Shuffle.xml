@@ -1,0 +1,33 @@
+﻿<Profile>
+  <Name>Tag Test - Shuffle</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> Shuffle Test Started " />
+
+    <LogMessage message=">> Random Shuffle Test" />
+    <!-- Should print these letters out of order -->    
+    
+    <Shuffle>
+      <LogMessage message="A" />
+      <LogMessage message="B" />
+      <LogMessage message="C" />
+      <LogMessage message="D" />
+      <LogMessage message="E" />
+      <LogMessage message="F" />
+    </Shuffle>
+
+    <LogMessage message=">> Reversed Shuffle Test" />
+    <!-- Should print these letters reversed -->
+    
+    <Shuffle order="Reverse">
+      <LogMessage message="A" />
+      <LogMessage message="B" />
+      <LogMessage message="C" />
+      <LogMessage message="D" />
+      <LogMessage message="E" />
+      <LogMessage message="F" />
+    </Shuffle>
+    
+    <LogMessage message=">> Shuffle Test Finished " />    
+  </Order>
+</Profile>

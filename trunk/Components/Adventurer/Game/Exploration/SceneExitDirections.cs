@@ -1,5 +1,4 @@
 using System;
-
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
     [Flags]

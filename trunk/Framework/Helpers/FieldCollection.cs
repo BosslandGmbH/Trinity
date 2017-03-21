@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,14 @@ using System.Reflection;
 namespace Trinity.Framework.Helpers
 {
     /// <summary>
-    /// Exposes compile-time value of fields as collection.    
+    /// Exposes compile-time value of fields as collection.
     /// </summary>
     /// <typeparam name="TBase">Class to Build enumeration of TValue properties</typeparam>
     /// <typeparam name="TItem">Type of Fields to include</typeparam>
     public class FieldCollection<TBase, TItem> : IEnumerable<TItem>
     {
         private static List<TItem> _list;
+
         public static List<TItem> ToList(bool clone = false)
         {
             return _list ?? (_list = Load(clone).ToList());
@@ -24,8 +26,8 @@ namespace Trinity.Framework.Helpers
         public static IEnumerable<TItem> Load(bool clone = false)
         {
             var source = typeof(TBase).GetFields(BindingFlags.Public | BindingFlags.Static).Select(f => f.GetValue(null)).OfType<TItem>();
-            
-            if (clone && IsCloneableType(typeof (TItem)))
+
+            if (clone && IsCloneableType(typeof(TItem)))
             {
                 return source.Select(o => (TItem)((ICloneable)o).Clone());
             }
@@ -75,5 +77,4 @@ namespace Trinity.Framework.Helpers
             return GetEnumerator();
         }
     }
-    
 }

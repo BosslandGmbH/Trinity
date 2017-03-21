@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Trinity.Framework.Helpers
 {
@@ -38,24 +34,23 @@ namespace Trinity.Framework.Helpers
                 _currentSecond = currentSecond;
                 OnSecondChanged();
                 Reset();
-            }            
+            }
         }
 
         private void OnSecondChanged()
         {
             if (Math.Abs(_totalTimeMs) < double.Epsilon) return;
-
             UpdateCount = _updateCount;
             TotalTimeMilliseconds = _totalTimeMs;
             AverageUpdateTimeMilliseconds = _totalTimeMs / _updateCount;
-            Logger.Log(LogCategory.Performance, ToString());
+            Core.Logger.Log(LogCategory.Performance, ToString());
         }
 
         public override string ToString()
         {
             return $"{Name} PerSecondStat: Updates={UpdateCount} Total={TotalTimeMilliseconds:N4}ms Average={AverageUpdateTimeMilliseconds:N4}ms";
         }
-    
+
         private void Reset()
         {
             _updateCount = 0;
@@ -63,5 +58,3 @@ namespace Trinity.Framework.Helpers
         }
     }
 }
-
-

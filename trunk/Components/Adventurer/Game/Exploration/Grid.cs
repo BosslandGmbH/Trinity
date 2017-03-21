@@ -1,11 +1,10 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Exploration.Algorithms;
 using Zeta.Common;
 using Zeta.Game;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
@@ -39,51 +38,49 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         private void CreateGrid()
         {
-            Created = DateTime.UtcNow;   
+            Created = DateTime.UtcNow;
             LastUpdated = DateTime.MinValue;
-            var worldId = ZetaDia.WorldId;
+            var worldId = ZetaDia.Globals.WorldId;
             //if (InnerGrid == null)
             //{
-                Util.Logger.Debug("[{0}] Creating grid [{1},{1}] ZetaWorldId={2} AdvDiaWorldId={3}", GetType().Name, GridBounds, worldId, AdvDia.CurrentWorldDynamicId);
+            Core.Logger.Debug("[{0}] Creating grid [{1},{1}] ZetaWorldId={2} AdvDiaWorldId={3}", GetType().Name, GridBounds, worldId, AdvDia.CurrentWorldDynamicId);
 
-                InnerGrid = new SplitArray<T>(GridBounds, GridBounds);
-                WorldDynamicId = AdvDia.CurrentWorldDynamicId;
+            InnerGrid = new SplitArray<T>(GridBounds, GridBounds);
+            WorldDynamicId = AdvDia.CurrentWorldDynamicId;
 
-                var currentScenes = ScenesStorage.CurrentWorldScenes;
-                if (currentScenes.Any() && currentScenes.First().DynamicWorldId == worldId)
-                {
-                    Util.Logger.Debug("[{0}] Importing Current World Data from SceneStorage", GetType().Name);
-                    Update(ScenesStorage.CreateSceneData(currentScenes, currentScenes.First().DynamicWorldId));
-                }
+            var currentScenes = ScenesStorage.CurrentWorldScenes;
+            if (currentScenes.Any() && currentScenes.First().DynamicWorldId == worldId)
+            {
+                Core.Logger.Debug("[{0}] Importing Current World Data from SceneStorage", GetType().Name);
+                Update(ScenesStorage.CreateSceneData(currentScenes, currentScenes.First().DynamicWorldId));
+            }
 
             GridStore.Grids.Add(new WeakReference<IGrid>(this));
-            //}                          
+            //}
         }
-
 
         public void Update(ISceneData newNodes)
         {
-            Util.Logger.DebugSetting($"Update called for {this.GetType().Name}");
+            Core.Logger.Debug($"Update called for {this.GetType().Name}");
 
             var sceneData = newNodes as SceneData;
             if (sceneData != null)
             {
                 if (sceneData.WorldDynamicId == AdvDia.CurrentWorldDynamicId)
                 {
-                    LastUpdated = DateTime.UtcNow;                    
+                    LastUpdated = DateTime.UtcNow;
                     OnUpdated(sceneData);
                 }
-            }                
+            }
         }
 
         protected virtual void OnUpdated(SceneData newNodes)
         {
-
         }
 
         protected void UpdateInnerGrid(IEnumerable<INode> nodes)
         {
-            Util.Logger.Verbose("[{0}] Updating grid with {1} new nodes", GetType().Name, nodes.Count());
+            Core.Logger.Verbose("[{0}] Updating grid with {1} new nodes", GetType().Name, nodes.Count());
 
             //nodes = nodes.OrderBy(n => n.Center.X).ThenBy(n => n.Center.Y).ToList();
 
@@ -93,7 +90,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             {
                 if (node.DynamicWorldId != worldId)
                 {
-                    Util.Logger.Debug("[{0}] A node has different worldId than current world, skipping", GetType().Name);
+                    Core.Logger.Debug("[{0}] A node has different worldId than current world, skipping", GetType().Name);
                     return;
                 }
 
@@ -112,10 +109,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             BaseSize = (int)Math.Round(BoxSize / 4, MidpointRounding.AwayFromZero);
         }
 
-        public T NearestNode
-        {
-            get { return GetNearestNode(AdvDia.MyPosition); }
-        }
+        public T NearestNode => GetNearestNode(Core.Actors.ActivePlayerPosition);
 
         //public T GetNearestNode(Vector3 position)
         //{
@@ -205,9 +199,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             if (node == null)
                 return neighbors;
 
-            // Snapping to nearest grid point causes an offset of the circle retreived from the proper original position. 
+            // Snapping to nearest grid point causes an offset of the circle retreived from the proper original position.
             // To get an accurate circle of points we need to draw further and measure distance back to v3 center.
-            // The max distance, needs to be float so it's measurable between the grid nodes 
+            // The max distance, needs to be float so it's measurable between the grid nodes
             // or resulting circle is noticibly big or too small.
 
             var gridDistanceMin = ToGridDistance(minDistance);
@@ -228,7 +222,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var worldDistanceMaxSqr = maxDistance * maxDistance;
             var worldDistanceMinSqr = minDistance * minDistance;
 
-            if(condition != null && condition(node))
+            if (condition != null && condition(node))
                 neighbors.Add(node);
 
             var row = -1;
@@ -275,7 +269,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public List<T> GetNodesInRadius(Vector3 center, float radius)
         {
             var node = GetNearestNode(center);
-            return node != null ? GetNodesInRadius(node, radius) : new List<T>();    
+            return node != null ? GetNodesInRadius(node, radius) : new List<T>();
         }
 
         public List<T> GetNodesInRadius(T node, float radius)
@@ -316,7 +310,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             return Bresenham.GetPointsOnLine(gridFrom, gridTo);
         }
 
-
         public GridPoint ToGridPoint(Vector3 position)
         {
             var x = ToGridDistance(position.X);
@@ -337,10 +330,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public abstract bool CanRayCast(Vector3 @from, Vector3 to);
 
         public abstract bool CanRayWalk(Vector3 @from, Vector3 to);
+
         public abstract void Reset();
 
         public int WorldDynamicId { get; set; }
-
     }
-
 }

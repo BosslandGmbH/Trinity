@@ -1,5 +1,4 @@
 using System.Linq;
-
 namespace Trinity.Framework.Helpers
 {
     public static class EmptyLookup<TKey, TElement>

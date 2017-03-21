@@ -8,16 +8,16 @@ using Trinity.UI.UIComponents.Utilities;
 
 namespace Trinity.UI.UIComponents
 {
-  /// <summary>
-  /// Holds information about a the source of a drag drop operation.
-  /// </summary>
-  /// 
-  /// <remarks>
-  /// The <see cref="DragInfo"/> class holds all of the framework's information about the source
-  /// of a drag. It is used by <see cref="IDragSource.StartDrag"/> to determine whether a drag 
-  /// can start, and what the dragged data should be.
-  /// </remarks>
-  public class DragInfo : IDragInfo
+    /// <summary>
+    /// Holds information about a the source of a drag drop operation.
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// The <see cref="DragInfo"/> class holds all of the framework's information about the source
+    /// of a drag. It is used by <see cref="IDragSource.StartDrag"/> to determine whether a drag 
+    /// can start, and what the dragged data should be.
+    /// </remarks>
+    public class DragInfo : IDragInfo
   {
     /// <summary>
     /// Initializes a new instance of the DragInfo class.

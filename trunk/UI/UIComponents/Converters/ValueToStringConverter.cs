@@ -1,7 +1,7 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Globalization;
 using System.Windows.Data;
-using Trinity.Framework.Helpers;
 
 namespace Trinity.UI.UIComponents.Converters
 {
@@ -23,7 +23,7 @@ namespace Trinity.UI.UIComponents.Converters
             }
             catch (Exception ex)
             {
-                Logger.Log($"Exception in ValueToStringConverter {ex}");
+                Core.Logger.Log($"Exception in ValueToStringConverter {ex}");
             }
             return false;
         }

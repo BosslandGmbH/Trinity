@@ -10,5 +10,3 @@ namespace Trinity.Framework.Objects
         float Distance { get; }
     }
 }
-
-

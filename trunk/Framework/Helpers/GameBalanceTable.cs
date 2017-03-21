@@ -10,14 +10,14 @@ namespace Trinity.Framework.Helpers
         private readonly Dictionary<int, GameBalanceTableEntry> _byNormalHash = new Dictionary<int, GameBalanceTableEntry>();
         private readonly Dictionary<string, GameBalanceTableEntry> _byGameBalanceName = new Dictionary<string, GameBalanceTableEntry>();
 
-        public class GameBalanceTableEntry 
+        public class GameBalanceTableEntry
         {
             public int Index;
             public int ItemHash;
             public int NormalHash;
             public string Name;
         }
-    
+
         public void Add(int index, int itemHash, int normalHash, string name)
         {
             var entry = new GameBalanceTableEntry

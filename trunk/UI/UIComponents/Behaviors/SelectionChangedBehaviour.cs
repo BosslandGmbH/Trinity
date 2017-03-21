@@ -45,7 +45,7 @@ namespace Trinity.UI.UIComponents.Behaviors
                 //    e.Handled = true;
                 //    return;
                 //}
-                //Logger.Log("SelectedIndex={0} SelectedItem={1} SelectedValue={2}",
+                //Core.Logger.Log("SelectedIndex={0} SelectedItem={1} SelectedValue={2}",
                 //    selector.SelectedIndex, selector.SelectedItem, selector.SelectedValue);
 
                 ICommand command = selector.GetValue(CommandProperty) as ICommand;

@@ -7,13 +7,13 @@
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" />
   <Order>
 
-    <If condition="ZetaDia.WorldType != Act.OpenWorld">
+    <If condition="ZetaDia.Storage.CurrentWorldType != Act.OpenWorld">
       <LeaveGame questId="1" reason="Profile must be in adventure mode!" stayInParty="False" />
     </If>
 
     <!-- Quest: x1_OpenWorld_quest (312429) World: p2_TotallyNotACowLevel (434649) LevelArea: p2_TotallyNotACowLevel (434650) -->
     
-    <If condition="ZetaDia.CurrentLevelAreaSnoId != 332339 and ZetaDia.CurrentWorldSnoId != 434649">      
+    <If condition="ZetaDia.CurrentLevelAreaSnoId != 332339 and ZetaDia.Globals.WorldSnoId != 434649">      
       <UseWaypoint waypointNumber="0" questId="1" />
       <WaitWhile condition="IsCastingOrLoading()" />
       <WaitTimer questId="1" stepId="1" waitTime="3000" />
@@ -62,7 +62,7 @@
 
     </If>
 
-    <If condition="ZetaDia.CurrentWorldSnoId == 434649">
+    <If condition="ZetaDia.Globals.WorldSnoId == 434649">
 
       <LogMessage questId="1" output="Exploring Cow Level!" />
 
@@ -91,7 +91,7 @@
 
       <WaitTimer questId="1" stepId="1" waitTime="3000" />
 
-      <While condition="ZetaDia.CurrentWorldSnoId == 434649 and IsActiveQuestAndStep(434753, 1)">        
+      <While condition="ZetaDia.Globals.WorldSnoId == 434649 and IsActiveQuestAndStep(434753, 1)">        
         <ClearArea questId="434753" stepId="1" radius="100" points="15" timeout="60" />
         <WaitTimer questId="1" stepId="1" waitTime="1000" />
         <WaitTimer questId="1" stepId="1" waitTime="1000" />        

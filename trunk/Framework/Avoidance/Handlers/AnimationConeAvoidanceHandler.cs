@@ -1,14 +1,13 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
+using Trinity.Framework.Grid;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
     public class AnimationConeAvoidanceHandler : IAvoidanceHandler
     {
-        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
+        public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             foreach (var actor in avoidance.Actors)
             {
@@ -17,7 +16,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                     var part = avoidance.Definition.GetPart(actor.Animation);
                     if (actor.Animation != part.Animation)
                         continue;
-                    
+
                     var radius = Math.Max(part.Radius, actor.Radius) * avoidance.Settings.DistanceMultiplier;
                     var nonCachedRotation = actor.Rotation;
                     var arcDegrees = Math.Max(15, part.AngleDegrees);
@@ -26,13 +25,9 @@ namespace Trinity.Framework.Avoidance.Handlers
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogDebug($"AnimationConeAvoidanceHandler Exception for Actor: {actor.InternalName}. {ex}");
+                    Core.Logger.Debug($"AnimationConeAvoidanceHandler Exception for Actor: {actor.InternalName}. {ex}");
                 }
             }
         }
     }
 }
-
-
-
-

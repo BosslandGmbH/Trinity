@@ -1,10 +1,10 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Game.Internals.Actors;
 
@@ -12,7 +12,7 @@ namespace Trinity.Components.Combat.Resources
 {
     /// <summary>
     /// Track DoT and duration/expiration spells on monsters
-    /// This is still useful for expensive spells that apply a debuff and we dont want to 
+    /// This is still useful for expensive spells that apply a debuff and we dont want to
     /// cast it again before the projectile actually hits the unit.
     /// </summary>
     public class SpellTracker : IEquatable<SpellTracker>
@@ -51,25 +51,25 @@ namespace Trinity.Components.Combat.Resources
                         duration = spell.Duration;
                 }
 
-                var anyRune = TrackedSpells.FirstOrDefault(s => s.Power == power  && s.RuneIndex == AnyRune);
+                var anyRune = TrackedSpells.FirstOrDefault(s => s.Power == power && s.RuneIndex == AnyRune);
 
                 if (duration == -1 && anyRune != null)
                     duration = anyRune.Duration;
 
                 if (duration > 0)
                 {
-                    Logger.Log(TrinityLogLevel.Verbose, LogCategory.Behavior, "Tracking unit {0} with power {1} for duration {2:0.00}", AcdId, power, duration);
+                    Core.Logger.Verbose(LogCategory.Behavior, "Tracking unit {0} with power {1} for duration {2:0.00}", AcdId, power, duration);
                     TrackSpellOnUnit(new SpellTracker()
-                       {
-                           AcdId = AcdId,
-                           Power = power,
-                           Expiration = DateTime.UtcNow.AddMilliseconds(duration)
-                       });
+                    {
+                        AcdId = AcdId,
+                        Power = power,
+                        Expiration = DateTime.UtcNow.AddMilliseconds(duration)
+                    });
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogNormal("Exception in TrackSpellOnUnit: {0}", ex.ToString());
+                Core.Logger.Log("Exception in TrackSpellOnUnit: {0}", ex.ToString());
             }
         }
 
@@ -99,13 +99,14 @@ namespace Trinity.Components.Combat.Resources
                 return false;
             bool result = TrackedUnits.Any(t => t.AcdId == unit.AcdId && t.Power == power);
             //if (result)
-            //    Technicals.Logger.LogNormal("Unit {0} is tracked with power {1}", unit.AcdId, power);
+            //    Technicals.Core.Logger.Log("Unit {0} is tracked with power {1}", unit.AcdId, power);
             //else
-            //    Technicals.Logger.LogNormal("Unit {0} is NOT tracked with power {1}", unit.AcdId, power);
+            //    Technicals.Core.Logger.Log("Unit {0} is NOT tracked with power {1}", unit.AcdId, power);
             return result;
         }
 
         #region Static Constructor
+
         static SpellTracker()
         {
             TrackedUnits = new HashSet<SpellTracker>();
@@ -118,11 +119,12 @@ namespace Trinity.Components.Combat.Resources
                 Priority = ThreadPriority.Lowest
             };
             MaintenanceThread.Start();
-
         }
-        #endregion
+
+        #endregion Static Constructor
 
         #region Background Maintenance Thread
+
         private static void RunMaintenance()
         {
             while (true)
@@ -138,7 +140,7 @@ namespace Trinity.Components.Combat.Resources
                             var units = TrackedUnits.Where(t => t.Expiration < DateTime.UtcNow);
                             foreach (var unit in units.ToList())
                             {
-                                //Technicals.Logger.LogNormal("Removing unit {0} from TrackedUnits ({1}, {2})", unit.AcdId, unit.Expiration.Ticks, DateTime.UtcNow.Ticks);
+                                //Technicals.Core.Logger.Log("Removing unit {0} from TrackedUnits ({1}, {2})", unit.AcdId, unit.Expiration.Ticks, DateTime.UtcNow.Ticks);
                                 TrackedUnits.Remove(unit);
                             }
                         }
@@ -146,18 +148,21 @@ namespace Trinity.Components.Combat.Resources
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogNormal("Exception in SpellTracker Maintenance: {0}", ex.ToString());
+                    Core.Logger.Log("Exception in SpellTracker Maintenance: {0}", ex.ToString());
                 }
             }
         }
-        #endregion
+
+        #endregion Background Maintenance Thread
 
         #region IEquatable Implimentation
+
         public bool Equals(SpellTracker other)
         {
             return this.AcdId == other.AcdId && this.Power == other.Power;
         }
-        #endregion
+
+        #endregion IEquatable Implimentation
 
         private static HashSet<TrackedSpell> TrackedSpells = new HashSet<TrackedSpell>();
 
@@ -171,7 +176,7 @@ namespace Trinity.Components.Combat.Resources
 
             TrackedSpells.Clear();
 
-            // Barbarian 
+            // Barbarian
             // TBD, maybe Rend is a good candidate?
 
             // Monk
@@ -198,17 +203,18 @@ namespace Trinity.Components.Combat.Resources
             // TBD
         }
 
-
         public class TrackedSpell : IEquatable<TrackedSpell>
         {
             /// <summary>
             /// The SNO Power
             /// </summary>
             public SNOPower Power { get; set; }
+
             /// <summary>
             /// The rune index
             /// </summary>
             public int RuneIndex { get; set; }
+
             /// <summary>
             /// Duration of Tracked Spell in Millseconds
             /// </summary>
@@ -233,5 +239,4 @@ namespace Trinity.Components.Combat.Resources
             }
         }
     }
-
 }

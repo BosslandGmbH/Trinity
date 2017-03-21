@@ -1,34 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Buddy.Coroutines;
-using Trinity.Components.Combat.Resources;
-using Trinity.Coroutines;
-using Trinity.DbProvider;
 using Trinity.Framework;
+using System.Linq;
+using System.Threading.Tasks;
+using Trinity.Components.Combat.Resources;
+using Trinity.Components.Coroutines;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Behaviors;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Reference;
-using Trinity.Routines;
 using Zeta.Bot;
-using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Zeta.TreeSharp;
-using Logger = Trinity.Framework.Helpers.Logger;
-using Trinity.Framework.Events;
 
 namespace Trinity.Components.Combat
 {
-    public static class Combat 
+    public static class Combat
     {
         public static CombatMode CombatMode { get; set; }
 
@@ -67,7 +53,7 @@ namespace Trinity.Components.Combat
         /// </summary>
         public static async Task<bool> MainCombatTask()
         {
-            if (!ZetaDia.IsInGame || ZetaDia.IsLoadingWorld || !ZetaDia.Me.IsValid)
+            if (!ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld || !ZetaDia.Me.IsValid)
                 return false;
 
             if (Core.Player.IsDead)
@@ -75,8 +61,8 @@ namespace Trinity.Components.Combat
 
             await UsePotion.Execute();
             await OpenTreasureBags.Execute();
-    
-            VacuumItems.Execute();           
+
+            VacuumItems.Execute();
 
             var target = Weighting.WeightActors(Core.Targets);
 
@@ -84,29 +70,29 @@ namespace Trinity.Components.Combat
                 return true;
 
             // Wait after elite death until progression globe appears as a valid target or x time has passed.
-            if (RiftProgression.IsInRift && await Behaviors.WaitAfterUnitDeath.While(
+            if (Core.Rift.IsInRift && await Behaviors.WaitAfterUnitDeath.While(
                 u => u.IsElite && u.Distance < 60f && !TargetUtil.AnyElitesInRange(150f) && !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe && p.Weight > 0 && p.Distance < 50f),
                 "Wait for Progression Globe", 1000))
                 return true;
 
             // Priority movement for progression globes. ** Temporary solution!
-            if (ZetaDia.CurrentRift != null && target != null)
+            if (target != null)
             {
                 if (await Behaviors.MoveToActor.While(
                     a => a.Type == TrinityObjectType.ProgressionGlobe && !Weighting.ShouldIgnore(a) && !a.IsAvoidanceOnPath))
-                    return true;            
+                    return true;
             }
 
             // Priority interaction for doors. increases door opening reliability for some edge cases ** Temporary solution!
-            if (ZetaDia.CurrentRift != null && ZetaDia.CurrentRift.IsStarted && await Behaviors.MoveToInteract.While(
+            if (ZetaDia.Storage.RiftStarted && await Behaviors.MoveToInteract.While(
                 a => a.Type == TrinityObjectType.Door && !a.IsUsed && a.Distance < 15f))
                 return true;
-            
+
             // When combat is disabled, we're still allowing trinity to handle non-unit targets.
             if (!IsCombatAllowed && IsUnitOrInvalid(target))
                 return false;
 
-            if (await Targeting.HandleTarget(target))          
+            if (await Targeting.HandleTarget(target))
                 return true;
 
             // We're not in combat at this point.
@@ -120,9 +106,9 @@ namespace Trinity.Components.Combat
                 await AutoEquipSkills.Instance.Execute();
                 await AutoEquipItems.Instance.Execute();
             }
-                                
-            // Allow Profile to Run. 
-            return false;  
+
+            // Allow Profile to Run.
+            return false;
         }
 
         private static bool IsUnitOrInvalid(TrinityActor target)
@@ -146,17 +132,20 @@ namespace Trinity.Components.Combat
         {
             get
             {
-                if (CombatMode == CombatMode.KillAll)
-                    return true;
-
                 if (!CombatTargeting.Instance.AllowedToKillMonsters)
                     return false;
- 
-                if (CombatMode == CombatMode.Normal || CombatMode == CombatMode.Questing)
-                    return true;
 
-                if (CombatMode == CombatMode.Off || CombatMode == CombatMode.SafeZerg && TargetUtil.NumMobsInRangeOfPosition(Core.Player.Position, 10f) > 4)
-                    return true;
+                switch (CombatMode)
+                {
+                    case CombatMode.KillAll:
+                        return true;
+                    case CombatMode.Normal:
+                        return true;
+                    case CombatMode.Off:
+                        return false;
+                    case CombatMode.SafeZerg:
+                        return Core.BlockedCheck.IsBlocked;
+                }
 
                 return true;
             }
@@ -170,6 +159,5 @@ namespace Trinity.Components.Combat
 
         public static bool IsCurrentlyKiting
             => Targeting.CurrentTarget != null && Targeting.CurrentTarget.IsSafeSpot && Core.Avoidance.Avoider.ShouldKite;
-
     }
 }

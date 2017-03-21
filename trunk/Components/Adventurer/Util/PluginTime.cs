@@ -18,7 +18,7 @@ namespace Trinity.Components.Adventurer.Util
 
         public static bool ReadyToUse(long lastCast, long cooldown)
         {
-            //if (lastCast == 0) lastCast = long.MaxValue;
+            if (lastCast == 0) return true;
             return (CurrentMillisecond - lastCast > cooldown);
         }
     }

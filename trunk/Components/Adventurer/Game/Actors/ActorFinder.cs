@@ -1,25 +1,24 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Rift;
-using Trinity.Components.Adventurer.Util;
-using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Actors.Gizmos;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Game.Actors
 {
     public static class ActorFinder
     {
         private static int _radiusChangeCount;
+
         public static int LowerSearchRadius(int currentSearchRadius)
         {
             var radius = currentSearchRadius;
@@ -28,11 +27,11 @@ namespace Trinity.Components.Adventurer.Game.Actors
             {
                 radius = currentSearchRadius / 2;
             }
-            else if(currentSearchRadius >= 500)
+            else if (currentSearchRadius >= 500)
             {
-                radius =  currentSearchRadius - 100;
+                radius = currentSearchRadius - 100;
             }
-            else if(currentSearchRadius >= 100)
+            else if (currentSearchRadius >= 100)
             {
                 radius = currentSearchRadius - 50;
             }
@@ -43,7 +42,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
 
             if (_radiusChangeCount >= 2)
             {
-                Util.Logger.Info("[ActorFinder] It looks like we couldn't path to the destination, lowering the search radius (New Radius = {0})", radius);
+                Core.Logger.Log("[ActorFinder] It looks like we couldn't path to the destination, lowering the search radius (New Radius = {0})", radius);
                 _radiusChangeCount = 0;
             }
             _radiusChangeCount++;
@@ -53,7 +52,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
 
         public static Vector3 FindNearestHostileUnitInRadius(Vector3 center, float radius)
         {
-            using (new PerformanceLogger())
+            using (new PerformanceLogger("FindNearestHostileUnitInRadius"))
             {
                 try
                 {
@@ -81,7 +80,6 @@ namespace Trinity.Components.Adventurer.Game.Actors
                     {
                         return actor.Position;
                     }
-
                 }
                 catch (Exception)
                 {
@@ -90,9 +88,6 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 return Vector3.Zero;
             }
         }
-
-
-
 
         public static DiaUnit FindUnitByGuid(int acdGuid)
         {
@@ -180,9 +175,8 @@ namespace Trinity.Components.Adventurer.Game.Actors
             return null;
         }
 
-
-        //public static Func<DiaObject, bool> CanPathTo = actor 
-        //    => actor.Distance < 10f || ((AdvDia.Navigator as DefaultNavigationProvider)?.CanPathWithinDistance(actor.Position, 10f).Result ?? false);
+        //public static Func<DiaObject, bool> CanPathTo = actor
+        //    => actor.Distance < 10f || ((AdvDia.Navigator as Navigator)?.CanPathWithinDistance(actor.Position, 10f).Result ?? false);
 
         public static bool IsFullyValid<T>(this T actor) where T : DiaObject
         {
@@ -193,7 +187,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
         {
             SNOAnim.caOut_Cage_Open,
             SNOAnim.X1_Westm_Ex_death, // 'wortham survivers' destructible gizmo
-            SNOAnim.a3dun_Keep_Rope_Switch_open, //433385, Type: Gizmo, Name: px_Bounty_Ramparts_Camp_Switch-704, 
+            SNOAnim.a3dun_Keep_Rope_Switch_open, //433385, Type: Gizmo, Name: px_Bounty_Ramparts_Camp_Switch-704,
             SNOAnim.Prisioner_Stake_open, // templar inquisition bounty px_Wilderness_Camp_TemplarPrisoners-23542
             SNOAnim.a1dun_Crypts_Jar_of_Souls_Dead, //x1_westm_necro_jar_of_souls_camp_graveyard
             SNOAnim.a1dun_Crypts_Jar_of_Souls_Death_Backup, //x1_westm_necro_jar_of_souls_camp_graveyard
@@ -305,7 +299,6 @@ namespace Trinity.Components.Adventurer.Game.Actors
                                                                  433246,
 
                                                                  450222 // cursed shrine bounty
-
                                                             };
 
         public static bool IsGizmoInteractable(DiaGizmo gizmo)
@@ -328,7 +321,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 return true;
             }
             if (gizmo is GizmoShrine && gizmo.CommonData.GizmoHasBeenOperated != 1 && gizmo.CommonData.GizmoState != 1)
-                // Buggy Cursed Shrine
+            // Buggy Cursed Shrine
             {
                 return true;
             }
@@ -336,6 +329,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
             {
                 case GizmoType.Chest:
                     return gizmo.CommonData.ChestOpen == 0;
+
                 case GizmoType.Portal:
                 case GizmoType.DungeonPortal:
                     return
@@ -349,9 +343,11 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 case GizmoType.HealingWell:
                 case GizmoType.PowerUp:
                     return false;
+
                 case GizmoType.LootRunSwitch:
                 case GizmoType.MultiClick:
                     return true;
+
                 case GizmoType.Switch:
                     if (gizmo.ActorSnoId == 328830) return true;
                     break;

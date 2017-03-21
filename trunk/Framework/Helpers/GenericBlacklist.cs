@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -12,7 +13,9 @@ namespace Trinity.Framework.Helpers
         public object Value { get; set; }
         public DateTime Expires { get; set; }
 
-        public GenericCacheObject() { }
+        public GenericCacheObject()
+        {
+        }
 
         public GenericCacheObject(string key, object value, TimeSpan expirationDuration)
         {
@@ -47,9 +50,9 @@ namespace Trinity.Framework.Helpers
     {
         public static void Blacklist(TrinityActor objectToBlacklist, TimeSpan duration = default(TimeSpan), string reason = "")
         {
-            Logger.Log($@"Blacklisting {objectToBlacklist.InternalName} ActorSnoId: {objectToBlacklist.ActorSnoId} RActorId: {objectToBlacklist.RActorId}
+            Core.Logger.Log($@"Blacklisting {objectToBlacklist.InternalName} ActorSnoId: {objectToBlacklist.ActorSnoId} RActorId: {objectToBlacklist.RActorId}
             Because: {reason}
-            Duration: {duration:g}   
+            Duration: {duration:g}
             ");
 
             DateTime expires;
@@ -130,7 +133,7 @@ namespace Trinity.Framework.Helpers
                 return true;
             }
         }
-        
+
         public static bool ContainsKey(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -173,7 +176,7 @@ namespace Trinity.Framework.Helpers
                 {
                     if (_manager == null || (_manager != null && !_manager.IsAlive))
                     {
-                        Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Starting up Generic Blacklist Manager thread");
+                        Core.Logger.Log("Starting up Generic Blacklist Manager thread");
                         _manager = new Thread(Manage)
                         {
                             Name = "TrinityPlugin Generic Blacklist",
@@ -185,8 +188,8 @@ namespace Trinity.Framework.Helpers
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Exception in Generic Blacklist Manager");
-                    Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, ex.ToString());
+                    Core.Logger.Log("Exception in Generic Blacklist Manager");
+                    Core.Logger.Log(ex.ToString());
                 }
             }
         }
@@ -213,7 +216,7 @@ namespace Trinity.Framework.Helpers
                 catch (ThreadAbortException) { }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Blacklist manager crashed: {0}", ex.Message);
+                    Core.Logger.Error("Blacklist manager crashed: {0}", ex.Message);
                 }
             }
         }
@@ -235,5 +238,4 @@ namespace Trinity.Framework.Helpers
             }
         }
     }
-
 }

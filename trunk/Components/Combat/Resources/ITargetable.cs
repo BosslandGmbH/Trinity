@@ -12,5 +12,5 @@ namespace Trinity.Components.Combat.Resources
         Vector3 Position { get; }
         int WorldDynamicId { get; }
         float Distance { get; }
-    }    
+    }
 }

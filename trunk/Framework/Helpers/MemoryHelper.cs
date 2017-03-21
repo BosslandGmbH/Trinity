@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 using Zeta.Game;
-using Zeta.Game.Internals;
 
 namespace Trinity.Framework.Helpers
 {
@@ -56,7 +52,6 @@ namespace Trinity.Framework.Helpers
             return result;
         }
 
-
         /// <summary>
         /// Strip zero value byte off byte array
         /// </summary>
@@ -84,7 +79,7 @@ namespace Trinity.Framework.Helpers
                 }
                 catch (Exception)
                 {
-                    //Logger.Log($"Exception at {i}");
+                    //Core.Logger.Log($"Exception at {i}");
                 }
             }
             return -1;
@@ -96,24 +91,25 @@ namespace Trinity.Framework.Helpers
         /// </summary>
         public static class Reader
         {
-            abstract class GenericRead<T>
+            private abstract class GenericRead<T>
             {
                 public abstract T DoStuff(IntPtr ptr);
             }
 
-            class ValueTypeReadHelper<T> : GenericRead<T> where T : struct
+            private class ValueTypeReadHelper<T> : GenericRead<T> where T : struct
             {
                 public override T DoStuff(IntPtr ptr)
                 {
                     return ValueRead<T>(ptr);
                 }
             }
-            static T ValueRead<T>(IntPtr ptr) where T : struct
+
+            private static T ValueRead<T>(IntPtr ptr) where T : struct
             {
                 return ZetaDia.Memory.Read<T>(ptr);
             }
 
-            class RefTypeReadHelper<T> : GenericRead<T> where T : class
+            private class RefTypeReadHelper<T> : GenericRead<T> where T : class
             {
                 public override T DoStuff(IntPtr ptr)
                 {
@@ -121,7 +117,7 @@ namespace Trinity.Framework.Helpers
                 }
             }
 
-            static T RefRead<T>(IntPtr ptr)
+            private static T RefRead<T>(IntPtr ptr)
             {
                 return default(T);
             }
@@ -135,87 +131,84 @@ namespace Trinity.Framework.Helpers
             }
         }
 
-        static readonly Dictionary<Type, Func<int, IntPtr>> GetRecordPtrMethods = new Dictionary<Type, Func<int, IntPtr>>();
+        //private static readonly Dictionary<Type, Func<int, IntPtr>> GetRecordPtrMethods = new Dictionary<Type, Func<int, IntPtr>>();
 
-        /// <summary>
-        /// Call private method GetRecordPtr on SNOTable instance
-        /// GetRecordPtr() finds a record pointer in a table for given value
-        /// e.g. var testPtr = ZetaDia.SNO[ClientSNOTable.ActorInfo].GetRecordPtr(ZetaDia.Me.ActorSnoId);
-        /// </summary>
-        public static IntPtr GetRecordPtr(this SNOTable table, int id)
-        {
-            var type = typeof(SNOTable);
-            Func<int, IntPtr> expr;
+        ///// <summary>
+        ///// Call private method GetRecordPtr on SNOTable instance
+        ///// GetRecordPtr() finds a record pointer in a table for given value
+        ///// e.g. var testPtr = ZetaDia.SNO[ClientSNOTable.ActorInfo].GetRecordPtr(ZetaDia.Me.ActorSnoId);
+        ///// </summary>
+        //public static IntPtr GetRecordPtr(this SNOTable table, int id)
+        //{
+        //    var type = typeof(SNOTable);
+        //    Func<int, IntPtr> expr;
 
-            if (!GetRecordPtrMethods.TryGetValue(type, out expr))
-            {
-                // Get all delcared private methods
-                var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+        //    if (!GetRecordPtrMethods.TryGetValue(type, out expr))
+        //    {
+        //        // Get all delcared private methods
+        //        var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
-                // GetRecordPtr is obfusticated with no name so find a method with the right pattern of args
-                var method = methods.FirstOrDefault(m => m.ReturnType == typeof(IntPtr));
+        //        // GetRecordPtr is obfusticated with no name so find a method with the right pattern of args
+        //        var method = methods.FirstOrDefault(m => m.ReturnType == typeof(IntPtr));
 
-                if (method == null)
-                    throw new NullReferenceException("GetRecordPtr MethodInfo cannot be null");
+        //        if (method == null)
+        //            throw new NullReferenceException("GetRecordPtr MethodInfo cannot be null");
 
-                // Define that expression will take an Int argument
-                var parameterExpr = Expression.Parameter(typeof(int), "input");
+        //        // Define that expression will take an Int argument
+        //        var parameterExpr = Expression.Parameter(typeof(int), "input");
 
-                // Define instance that MethodInfo will be executed against.
-                var instanceExpr = Expression.Constant(table);
+        //        // Define instance that MethodInfo will be executed against.
+        //        var instanceExpr = Expression.Constant(table);
 
-                // Formalize instance, method and arguments.
-                var methodCallExpr = Expression.Call(instanceExpr, method, parameterExpr);
+        //        // Formalize instance, method and arguments.
+        //        var methodCallExpr = Expression.Call(instanceExpr, method, parameterExpr);
 
-                expr = Expression.Lambda<Func<int, IntPtr>>(methodCallExpr, parameterExpr).Compile();
+        //        expr = Expression.Lambda<Func<int, IntPtr>>(methodCallExpr, parameterExpr).Compile();
 
-                GetRecordPtrMethods.Add(type, expr);
-            }
+        //        GetRecordPtrMethods.Add(type, expr);
+        //    }
 
-            return expr != null ? expr(id) : new IntPtr(-1);
-        }
+        //    return expr != null ? expr(id) : new IntPtr(-1);
+        //}
 
-        static readonly Dictionary<Type, Action<IntPtr>> PurgeSNORecordPtrMethods = new Dictionary<Type, Action<IntPtr>>();
+        //private static readonly Dictionary<Type, Action<IntPtr>> PurgeSNORecordPtrMethods = new Dictionary<Type, Action<IntPtr>>();
 
-        /// <summary>
-        /// Call private method GetRecordPtr on SNOTable instance.
-        /// Apparently bad things ensue if you don't purge the record after using it
-        /// </summary>
-        public static void PurgeRecordPtr(this SNOTable table, IntPtr ptr)
-        {
-            var type = typeof(SNOTable);
-            Action<IntPtr> expr;
+        ///// <summary>
+        ///// Call private method GetRecordPtr on SNOTable instance.
+        ///// Apparently bad things ensue if you don't purge the record after using it
+        ///// </summary>
+        //public static void PurgeRecordPtr(this SNOTable table, IntPtr ptr)
+        //{
+        //    var type = typeof(SNOTable);
+        //    Action<IntPtr> expr;
 
-            if (!PurgeSNORecordPtrMethods.TryGetValue(type, out expr))
-            {
-                // Get all delcared private methods
-                var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+        //    if (!PurgeSNORecordPtrMethods.TryGetValue(type, out expr))
+        //    {
+        //        // Get all delcared private methods
+        //        var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
-                // PurgeSNORecord is obfusticated with no name so find a method with the right pattern of args
-                var method = methods.FirstOrDefault(m => m.ReturnType == typeof(void));
+        //        // PurgeSNORecord is obfusticated with no name so find a method with the right pattern of args
+        //        var method = methods.FirstOrDefault(m => m.ReturnType == typeof(void));
 
-                if (method == null)
-                    throw new NullReferenceException("GetRecordPtr MethodInfo cannot be null");
+        //        if (method == null)
+        //            throw new NullReferenceException("GetRecordPtr MethodInfo cannot be null");
 
-                // Define that expression will take an Int argument
-                var parameterExpr = Expression.Parameter(typeof(IntPtr), "input");
+        //        // Define that expression will take an Int argument
+        //        var parameterExpr = Expression.Parameter(typeof(IntPtr), "input");
 
-                // Define instance that MethodInfo will be executed against.
-                var instanceExpr = Expression.Constant(table);
+        //        // Define instance that MethodInfo will be executed against.
+        //        var instanceExpr = Expression.Constant(table);
 
-                // Formalize instance, method and arguments.
-                var methodCallExpr = Expression.Call(instanceExpr, method, parameterExpr);
+        //        // Formalize instance, method and arguments.
+        //        var methodCallExpr = Expression.Call(instanceExpr, method, parameterExpr);
 
-                expr = Expression.Lambda<Action<IntPtr>>(methodCallExpr, parameterExpr).Compile();
+        //        expr = Expression.Lambda<Action<IntPtr>>(methodCallExpr, parameterExpr).Compile();
 
-                PurgeSNORecordPtrMethods.Add(type, expr);
-            }
+        //        PurgeSNORecordPtrMethods.Add(type, expr);
+        //    }
 
-            if (expr != null)
-                expr(ptr);
-        }
-
-
+        //    if (expr != null)
+        //        expr(ptr);
+        //}
     }
 }
-

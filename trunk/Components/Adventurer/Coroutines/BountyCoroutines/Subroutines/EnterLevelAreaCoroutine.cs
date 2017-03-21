@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Buddy.Coroutines;
+using System;
+using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
@@ -11,13 +11,12 @@ using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
-using Trinity.DbProvider;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Actors.Gizmos;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
@@ -30,7 +29,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private HashSet<int> _portalMarkers;
         private int _portalActorId;
         private int _discoveredPortalActorId;
-        private bool _prioritizeExitScene;
         private bool _exitSceneUnreachable;
         private int _prePortalWorldDynamicId;
         private bool _isDone;
@@ -61,13 +59,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Util.Logger.Info("[EnterLevelArea] " + value);
+                    Core.Logger.Log("[EnterLevelArea] " + value);
                 }
                 _state = value;
             }
         }
 
-        #endregion
+        #endregion State
 
         public bool IsDone
         {
@@ -134,7 +132,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             if (State != States.Failed && _timeoutEndTime < DateTime.UtcNow && _timeoutDuration != TimeSpan.Zero)
             {
-                Logger.Debug($"EnterLevelAreaCoroutine timed out after {_timeoutDuration.TotalSeconds} seconds");
+                Core.Logger.Debug($"EnterLevelAreaCoroutine timed out after {_timeoutDuration.TotalSeconds} seconds");
                 State = States.Failed;
             }
 
@@ -145,18 +143,25 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 case States.NotStarted:
                     return await NotStarted();
+
                 case States.Searching:
                     return await Searching();
+
                 case States.Moving:
                     return await Moving();
+
                 case States.MovingToExitScene:
                     return await MovingToExitScene();
+
                 case States.MovingToNearestScene:
                     return await MovingToNearestScene();
+
                 case States.Entering:
                     return await Entering();
+
                 case States.Completed:
                     return await Completed();
+
                 case States.Failed:
                     return await Failed();
             }
@@ -221,7 +226,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             //        if (centerNode != null)
             //        {
             //            _exitSceneLocation = centerNode.NavigableCenter;
-            //            Logger.Debug("[EnterLevelArea] Moving to exit scene");
+            //            Core.Logger.Debug("[EnterLevelArea] Moving to exit scene");
             //            State=States.MovingToExitScene;
             //            return false;
             //        }
@@ -231,7 +236,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (!await ExplorationCoroutine.Explore(BountyData.LevelAreaIds))
                 return false;
 
-            Util.Logger.DebugSetting("[EnterLevelAreaCoroutine] Finished Searching.");
+            Core.Logger.Debug("[EnterLevelAreaCoroutine] Finished Searching.");
 
             ScenesStorage.Reset();
             return false;
@@ -247,19 +252,18 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _deathGateLocation = Vector3.Zero;
             }
 
-
             if (!await NavigationCoroutine.MoveTo(_objectiveLocation, 15))
                 return false;
 
             if (NavigationCoroutine.LastMoveResult == MoveResult.UnstuckAttempt)
             {
-                Logger.DebugSetting("Navigation ended with unstuck attempts last result.");
+                Core.Logger.Debug("Navigation ended with unstuck attempts last result.");
                 Navigator.Clear();
             }
 
             if (AdvDia.MyPosition.Distance(_objectiveLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
             {
-                Util.Logger.DebugSetting("[EnterLevelAreaCoroutine] Navigation ended, extending scan radius to continue searching.");
+                Core.Logger.Debug("[EnterLevelAreaCoroutine] Navigation ended, extending scan radius to continue searching.");
 
                 _previouslyFoundLocation = _objectiveLocation;
                 _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
@@ -303,13 +307,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     if (portal != null)
                     {
                         _discoveredPortalActorId = portal.ActorSnoId;
-                        Logger.Info($"[EnterLevelArea] Unable to find the portal we needed, using this one instead {portal.Name} ({portal.ActorSnoId})");
+                        Core.Logger.Log($"[EnterLevelArea] Unable to find the portal we needed, using this one instead {portal.Name} ({portal.ActorSnoId})");
                     }
                 }
 
                 //if (_portalActorId != portal.ActorSnoId && BountyData.Act == Act.A5)
                 //{
-                //    Logger.Info("[EnterLevelArea] Was expecting to use portal SNO {0}, using {1} instead.", _portalActorId, portal.ActorSnoId);
+                //    Core.Logger.Log("[EnterLevelArea] Was expecting to use portal SNO {0}, using {1} instead.", _portalActorId, portal.ActorSnoId);
                 //    _portalActorId = portal.ActorSnoId;
                 //}
             }
@@ -337,7 +341,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             if (AdvDia.MyPosition.Distance(_exitSceneLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
             {
-                Logger.Debug("[EnterLevelArea] Exit scene is unreachable, going back to the normal routine");
+                Core.Logger.Debug("[EnterLevelArea] Exit scene is unreachable, going back to the normal routine");
                 _exitSceneLocation = Vector3.Zero;
                 _exitSceneUnreachable = true;
             }
@@ -355,7 +359,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             if (AdvDia.MyPosition.Distance(_nearestScene.Center.ToVector3()) > 75 || _moveToSceneCoroutine.State == MoveToSceneCoroutine.States.Failed)
             {
-                Logger.Debug("[EnterLevelArea] Nearest scene is unreachable, going back to the normal routine");
+                Core.Logger.Debug("[EnterLevelArea] Nearest scene is unreachable, going back to the normal routine");
                 _nearestSceneCooldown = DateTime.UtcNow + TimeSpan.FromSeconds(60);
                 _moveToSceneCoroutine = null;
                 _nearestScene = null;
@@ -375,7 +379,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (!await UsePortalCoroutine.UsePortal(_portalActorId != 0 ? _portalActorId : _discoveredPortalActorId, _prePortalWorldDynamicId)) return false;
             if (AdvDia.CurrentWorldId != DestinationWorldId)
             {
-                Logger.Debug("[Bounty] We are not where we are supposed to be.");
+                Core.Logger.Debug("[Bounty] We are not where we are supposed to be.");
                 State = States.Searching;
                 return false;
             }
@@ -399,7 +403,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             return false;
         }
 
-
         private long _lastScanTime;
         private Vector3 _previouslyFoundLocation = Vector3.Zero;
         private long _returnTimeForPreviousLocation;
@@ -416,6 +419,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private TimeSpan _timeoutDuration;
         private DateTime _timeoutStartTime = DateTime.MinValue;
         private DateTime _timeoutEndTime = DateTime.MaxValue;
+        private bool _prioritizeExitScene;
 
         private void ScanForObjective()
         {
@@ -424,7 +428,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _objectiveLocation = _previouslyFoundLocation;
                 _previouslyFoundLocation = Vector3.Zero;
                 _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
-                Logger.Debug("[EnterLevelArea] Returning previous objective location.");
+                Core.Logger.Debug("[EnterLevelArea] Returning previous objective location.");
 
                 return;
             }
@@ -445,7 +449,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                                 var nearestGate = ActorFinder.FindNearestDeathGate();
                                 if (nearestGate != null)
                                 {
-                                    Logger.Warn("Found death gate location");
+                                    Core.Logger.Warn("Found death gate location");
                                     _objectiveLocation = nearestGate.Position;
                                 }
                             }
@@ -474,7 +478,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 //}
                 if (_objectiveLocation != Vector3.Zero)
                 {
-                    Logger.Info("[EnterLevelArea] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_objectiveLocation));
+                    Core.Logger.Log("[EnterLevelArea] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_objectiveLocation));
                 }
             }
         }

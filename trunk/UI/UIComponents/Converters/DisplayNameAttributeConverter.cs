@@ -1,9 +1,9 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using System.Windows.Data;
-using Trinity.Framework.Helpers;
 
 namespace Trinity.UI.UIComponents.Converters
 {

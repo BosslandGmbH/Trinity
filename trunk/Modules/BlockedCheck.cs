@@ -1,13 +1,18 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Objects;
 
 namespace Trinity.Modules
 {
+    /// <summary>
+    /// Checks the space in front of the player for monsters and other blocking objects
+    /// </summary>
     public class BlockedCheck : Module
     {
         protected override int UpdateIntervalMs => 100;
@@ -33,7 +38,7 @@ namespace Trinity.Modules
             }
 
             IsBlocked = isBlocked;
-            //Logger.Warn(ToString());
+            //Core.Logger.Warn(ToString());
         }
 
         public DateTime BlockedStart { get; private set; }

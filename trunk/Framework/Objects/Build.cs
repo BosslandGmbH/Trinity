@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Trinity.Framework.Helpers;
-
 namespace Trinity.Framework.Objects
 {
     public class Build
@@ -15,8 +13,6 @@ namespace Trinity.Framework.Objects
 
         public bool IsEquipped()
         {
-            Logger.LogDebug($"Build IsEquipped Check for {Name}");
-
             if (Passives != null && !Passives.All(passive => passive.IsActive))
                 return false;
 
@@ -28,12 +24,14 @@ namespace Trinity.Framework.Objects
 
             if (Skills != null && !Skills.All(keyValuePair => keyValuePair.Key.IsActive && (keyValuePair.Value == null || keyValuePair.Value.Index == 0 || keyValuePair.Value.IsActive)))
                 return false;
-     
+
             return true;
         }
 
         public int RequirementCount => Skills.Count + Items.Count + Sets.Count + Passives.Count;
+
         public override string ToString() => $"{GetType().Name}: {Name}";
+
         public string SkillSummary => Skills.Any() ? Skills.Aggregate(" > Skills:", (s, pair) => s + $" {pair.Key.Name} {pair.Value?.Name}, ") : string.Empty;
         public string PassivesSummary => Passives.Any() ? Passives.Aggregate(" > Passives: ", (s, passive) => s + $"{passive.Name}, ") : string.Empty;
         public string ItemsSummary => Items.Any() ? Items.Aggregate(" > Items: ", (s, item) => s + $"{item.Name}, ") : string.Empty;

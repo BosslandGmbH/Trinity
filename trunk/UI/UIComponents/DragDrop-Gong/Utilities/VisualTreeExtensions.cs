@@ -8,7 +8,7 @@ using System.Windows.Media.Media3D;
 
 namespace Trinity.UI.UIComponents.Utilities
 {
-  public static class VisualTreeExtensions
+    public static class VisualTreeExtensions
   {
     /// <summary>
     /// Gets the next ancestor element which is a drop target.

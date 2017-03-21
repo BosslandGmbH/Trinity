@@ -1,27 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Trinity.Framework.Helpers;
 using System.ComponentModel;
-using System.Configuration;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.DbProvider;
-using Trinity.Framework;
-using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Attributes;
-using Trinity.Reference;
-using Trinity.Settings;
+using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.DemonHunter
 {

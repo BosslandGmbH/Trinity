@@ -19,7 +19,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             {
                 _nodes.Add(new T[sizeY]);
             }
-        }        
+        }
 
         public int LengthX;
         public int LengthY;
@@ -43,7 +43,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         }
 
         public int GetLength(int dimension)
-        {            
+        {
             return dimension > 1 ? 0 : dimension == 1 ? LengthY : LengthX;
         }
     }

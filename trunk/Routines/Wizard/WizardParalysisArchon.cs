@@ -1,27 +1,18 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using IronPython.Modules;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
-using Trinity.Routines.Crusader;
+using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI;
 using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Wizard
 {
@@ -112,7 +103,7 @@ namespace Trinity.Routines.Wizard
             // Jump into cluster for archon combust
             if (!IsArchonActive && Skills.Wizard.Archon.CanCast() && TalRashaStacks >= 2 && Runes.Wizard.Combustion.IsActive)
 		    {
-                Logger.Log("Teleport to Archon Combust");
+                Core.Logger.Log("Teleport to Archon Combust");
                 position = TargetUtil.GetBestClusterPoint();
                 return position != Vector3.Zero;
             }
@@ -122,7 +113,7 @@ namespace Trinity.Routines.Wizard
                 n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Monster) 
                 && Core.Grids.CanRayCast(n.NavigableCenter, CurrentTarget.Position)))
             {
-                Logger.Log("Teleport to Safespot (ShouldTeleport)");
+                Core.Logger.Log("Teleport to Safespot (ShouldTeleport)");
                 return true;
             }
 
@@ -131,7 +122,7 @@ namespace Trinity.Routines.Wizard
             position = TargetUtil.GetLoiterPosition(target, 30f);
             if (position != Vector3.Zero)
 		    {
-                Logger.Log("Teleport to LoiterPosition (ShouldTeleport)");
+                Core.Logger.Log("Teleport to LoiterPosition (ShouldTeleport)");
                 return true;
             }
 
@@ -158,7 +149,7 @@ namespace Trinity.Routines.Wizard
             {
                 if (Settings.GetStacksBeforeArchon && !HasTalRashaStacks)
                 {
-                    //Logger.Log($"Building Tal'Rasha Set Stacks ({TalRashaStacks})");
+                    //Core.Logger.Log($"Building Tal'Rasha Set Stacks ({TalRashaStacks})");
 
                     var target = TargetUtil.GetBestClusterUnit(70f) ?? Player.Actor;
 

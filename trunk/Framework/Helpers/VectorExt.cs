@@ -85,7 +85,7 @@ namespace Trinity.Framework.Helpers
 
         public static Vector3D ToVector3D(this Vector3 p)
         {
-            return new Vector3D(p.X,p.Y,p.Z);
+            return new Vector3D(p.X, p.Y, p.Z);
         }
 
         public static Vector3 Invert(this Vector3 p)
@@ -106,9 +106,5 @@ namespace Trinity.Framework.Helpers
             var z = p.Z;
             return new Point3D(x, y, z);
         }
-
-
-
-
     }
 }

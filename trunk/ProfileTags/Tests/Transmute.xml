@@ -1,0 +1,23 @@
+﻿<Profile>
+  <Name>Tag Test - Transmute</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> Transmute Test Started " />
+    
+    <!-- requires backpack materials and cube UI open -->
+    
+    <!--<Transmute recipe="OpenPortalToGreed">
+      <Items>
+        <Item id="272056" name="Bovine Bardiche" />
+      </Items>
+    </Transmute>-->
+
+    <Transmute recipe="UpgradeRareItem">
+      <Items>
+        <Item quality="Rare" />
+      </Items>
+    </Transmute>
+    
+    <LogMessage message=">> Transmute Test Finished " />    
+  </Order>
+</Profile>

@@ -55,7 +55,7 @@ namespace Trinity.Framework.Objects
         private string _code;
 
         [IgnoreDataMember]
-        public IDynamicSetting Setting => SettingsManager.GetDynamicSettings().FirstOrDefault(s => s?.GetName() == Name);
+        public IDynamicSetting Setting => SettingsManager.GetDynamicSettings().FirstOrDefault(s => s.GetName() == Name);
 
         [DataMember(Order = 0)]
         public string Name

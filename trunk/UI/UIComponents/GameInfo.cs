@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Trinity.Components.Combat;
-using Trinity.Framework;
+﻿using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using Trinity.Components.Combat;
+using Trinity.Framework.Events;
 
 namespace Trinity.UI.UIComponents
 {
@@ -30,24 +28,24 @@ namespace Trinity.UI.UIComponents
             IsInGame = ChangeEvents.IsInGame.Value;
         }
 
-        private void HeroIdOnChanged(ChangeDetectorEventArgs<int> args)
+        private void HeroIdOnChanged(ChangeEventArgs<int> args)
         {
             HeroId = args.NewValue;
         }
 
-        private void LootProviderOnChanged(ChangeDetectorEventArgs<ILootProvider> args)
+        private void LootProviderOnChanged(ChangeEventArgs<ILootProvider> args)
         {
             var name = args.NewValue.GetType().Name;
-            Logger.Warn($"LootProvider changed to {name}");
+            Core.Logger.Debug($"LootProvider changed to {name}");
             LootProviderName = name;
             IsExternalLootProvider = !(args.NewValue is DefaultLootProvider);
         }
 
-        private void IsInGameOnChanged(ChangeDetectorEventArgs<bool> args)
+        private void IsInGameOnChanged(ChangeEventArgs<bool> args)
         {
             IsInGame = args.NewValue;
         }
-        private void IsRunningOnChanged(ChangeDetectorEventArgs<bool> args)
+        private void IsRunningOnChanged(ChangeEventArgs<bool> args)
         {
             IsRunning = args.NewValue;
         }

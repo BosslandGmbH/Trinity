@@ -66,6 +66,6 @@ namespace Trinity.Framework.Helpers
                 throw new ArgumentException("T must be an enumerated type");
             }
             return new EnumValue<T>(x);
-        }        
+        }
     }
 }

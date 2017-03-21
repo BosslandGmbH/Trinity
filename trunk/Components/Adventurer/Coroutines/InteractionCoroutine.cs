@@ -1,26 +1,20 @@
-﻿using System;
-using System.Threading.Tasks;
-using Buddy.Coroutines;
-using Trinity.Components.Adventurer.Cache;
-using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
-using Trinity.Components.Adventurer.Game.Actors;
-using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
-using Trinity.Components.Adventurer.Util;
-using Trinity.DbProvider;
+﻿using Buddy.Coroutines;
+using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using System.Threading.Tasks;
+using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
+using Trinity.Components.Adventurer.Game.Actors;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
     public sealed class InteractionCoroutine : ISubroutine
     {
-
         #region State
 
         public enum States
@@ -34,6 +28,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         private States _state;
+
         public States State
         {
             get { return _state; }
@@ -42,13 +37,13 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Logger.Debug("[Interaction] " + value);
+                    Core.Logger.Debug("[Interaction] " + value);
                 }
                 _state = value;
             }
         }
 
-        #endregion
+        #endregion State
 
         private readonly int _actorId;
         private readonly TimeSpan _timeOut;
@@ -68,7 +63,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             _timeOut = timeOut;
             _sleepTime = sleepTime;
             _interactAttempts = interactAttempts;
-            _startingWorldId = ZetaDia.CurrentWorldSnoId;
+            _startingWorldId = ZetaDia.Globals.WorldSnoId;
 
             if (_timeOut != default(TimeSpan))
             {
@@ -86,7 +81,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             if (Core.Player.IsCastingOrLoading)
             {
-                Logger.Log(LogLevel.Info, "Waiting for cast to finish.");
+                Core.Logger.Log("Waiting for cast to finish.");
                 return false;
             }
 
@@ -94,20 +89,24 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 case States.NotStarted:
                     return NotStarted();
+
                 case States.Checking:
                     return Checking();
+
                 case States.Interacting:
                     return await Interacting();
+
                 case States.TimedOut:
                     return TimedOut();
+
                 case States.Completed:
                     return Completed();
+
                 case States.Failed:
                     return Failed();
             }
             return false;
         }
-
 
         private bool NotStarted()
         {
@@ -120,16 +119,16 @@ namespace Trinity.Components.Adventurer.Coroutines
             var actor = ActorFinder.FindObject(_actorId);
             if (actor == null)
             {
-                Logger.Debug("Nothing to interact, failing. ");
+                Core.Logger.Debug("Nothing to interact, failing. ");
                 State = States.Failed;
                 return false;
             }
 
-            Logger.Debug($"Interact Actor Found: {actor.Name} ({actor.ActorSnoId}) Distance={actor.Distance}");
+            Core.Logger.Debug($"Interact Actor Found: {actor.Name} ({actor.ActorSnoId}) Distance={actor.Distance}");
 
             if (!actor.IsInteractableQuestObject())
             {
-                Logger.Debug("The object is not valid or not interactable, failing.");
+                Core.Logger.Debug("The object is not valid or not interactable, failing.");
                 State = States.Failed;
                 return false;
             }
@@ -138,7 +137,6 @@ namespace Trinity.Components.Adventurer.Coroutines
                 var gizmoActor = (DiaGizmo)actor;
                 if (gizmoActor.IsDestructibleObject)
                 {
-
                 }
             }
 
@@ -172,14 +170,14 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             if (ZetaDia.Me.IsFullyValid() && (ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting || ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling) && !AdvDia.IsInArchonForm)
             {
-                Logger.Debug("Waiting for the cast to end");
+                Core.Logger.Debug("Waiting for the cast to end");
                 await Coroutine.Sleep(500);
                 return false;
             }
 
-            if (ZetaDia.IsLoadingWorld)
+            if (ZetaDia.Globals.IsLoadingWorld)
             {
-                Logger.Debug("Waiting for world load");
+                Core.Logger.Debug("Waiting for world load");
                 await Coroutine.Sleep(500);
                 return false;
             }
@@ -187,13 +185,13 @@ namespace Trinity.Components.Adventurer.Coroutines
             var actor = ActorFinder.FindObject(_actorId);
             if (actor == null)
             {
-                Logger.Debug("Nothing to interact, failing. ");
+                Core.Logger.Debug("Nothing to interact, failing. ");
                 State = States.Failed;
                 return false;
             }
             //if (actor.Distance > 75f)
             //{
-            //    Logger.Debug($"Actor is way too far away. {actor.Distance}");
+            //    Core.Logger.Debug($"Actor is way too far away. {actor.Distance}");
             //    State = States.Failed;
             //    return false;
             //}
@@ -206,7 +204,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
             if (_currentInteractAttempt > _interactAttempts)
             {
-                Logger.Debug($"Max interact attempts reached ({_interactAttempts})");
+                Core.Logger.Debug($"Max interact attempts reached ({_interactAttempts})");
                 State = States.Completed;
                 return true;
             }
@@ -218,10 +216,10 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             if (_isPortal)
             {
-                var worldId = ZetaDia.CurrentWorldSnoId;
+                var worldId = ZetaDia.Globals.WorldSnoId;
                 if (worldId != _startingWorldId)
                 {
-                    Logger.Debug($"World changed from {_startingWorldId} to {worldId}, assuming done.");
+                    Core.Logger.Debug($"World changed from {_startingWorldId} to {worldId}, assuming done.");
                     State = States.Completed;
                     return true;
                 }
@@ -237,14 +235,14 @@ namespace Trinity.Components.Adventurer.Coroutines
                 {
                     if (DateTime.UtcNow - _interactionStartedAt > _timeOut)
                     {
-                        Logger.Debug("Interaction timed out after {0} seconds", (DateTime.UtcNow - _interactionStartedAt).TotalSeconds);
+                        Core.Logger.Debug("Interaction timed out after {0} seconds", (DateTime.UtcNow - _interactionStartedAt).TotalSeconds);
                         State = States.TimedOut;
                         return false;
                     }
                 }
             }
 
-            Logger.Debug($"Attempting to interact with {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance} #{_currentInteractAttempt}");
+            Core.Logger.Debug($"Attempting to interact with {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance} #{_currentInteractAttempt}");
 
             var interactionResult = await Interact(actor);
 
@@ -255,21 +253,21 @@ namespace Trinity.Components.Adventurer.Coroutines
                 var nearestGate = ActorFinder.FindNearestDeathGate();
                 if (nearestGate.CommonData.AnnId != actor.CommonData.AnnId && actor.Distance > 10f)
                 {
-                    Logger.Debug("Arrived at Gate Destination (AnnId Check)");
+                    Core.Logger.Debug("Arrived at Gate Destination (AnnId Check)");
                     State = States.Completed;
                     return true;
                 }
             }
 
-            // Sleep time would have to be set to 0/low for this to be checked during gate travel.  
-            if (ZetaDia.Me.IsUsingDeathGate())
-            {
-                Logger.Debug("Used Death Gate!");
-                await Coroutine.Wait(5000, () => !ZetaDia.Me.IsUsingDeathGate());
-                Logger.Debug("Arrived at Gate Destination (Travelling Check)");
-                State = States.Completed;
-                return true;
-            }
+            //// Sleep time would have to be set to 0/low for this to be checked during gate travel.
+            //if (ZetaDia.Me.IsUsingDeathGate())
+            //{
+            //    Core.Logger.Debug("Used Death Gate!");
+            //    await Coroutine.Wait(5000, () => !ZetaDia.Me.IsUsingDeathGate());
+            //    Core.Logger.Debug("Arrived at Gate Destination (Travelling Check)");
+            //    State = States.Completed;
+            //    return true;
+            //}
 
             if (interactionResult)
             {
@@ -293,7 +291,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 State = States.Completed;
             }
 
-            Logger.Debug($"Interaction Failed");
+            Core.Logger.Debug($"Interaction Failed");
             return false;
         }
 
@@ -314,7 +312,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interact(DiaObject actor)
         {
-            //var world = ZetaDia.WorldId;
+            //var world = ZetaDia.Globals.WorldId;
             //bool retVal = false;
             //switch (actor.ActorType)
             //{
@@ -336,10 +334,10 @@ namespace Trinity.Components.Adventurer.Coroutines
             //        break;
             //}
 
-            //if (!ZetaDia.IsLoadingWorld && world == ZetaDia.WorldId)
+            //if (!ZetaDia.Globals.IsLoadingWorld && world == ZetaDia.Globals.WorldId)
             //{
-                //Logger.DebugSetting($"Fallback Interaction Used");
-                //actor.Interact();
+            //Core.Logger.Debug($"Fallback Interaction Used");
+            //actor.Interact();
             //}
 
             var ret = actor.Interact();
@@ -351,7 +349,6 @@ namespace Trinity.Components.Adventurer.Coroutines
             return ret;
         }
 
-
         public void Reset()
         {
             _interactionStartedAt = default(DateTime);
@@ -362,7 +359,6 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public void DisablePulse()
         {
-
         }
     }
 }

@@ -1,23 +1,17 @@
-﻿using System;
+﻿using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
-using Trinity.Routines.Crusader;
-using Trinity.Settings;
+using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
-using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Monk
 {
@@ -91,7 +85,7 @@ namespace Trinity.Routines.Monk
                     var needResource = Player.PrimaryResource < PrimaryEnergyReserve;
                     if ((regenOnCooldown || needResource) && HostileMonsters.Any(u => u.Distance <= 12f))
                     {
-                        Logger.Log(LogCategory.Routine, "Moving away - Low Spirit - Regen on Cooldown");
+                        Core.Logger.Log(LogCategory.Routine, "Moving away - Low Spirit - Regen on Cooldown");
                         return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 30f));
                     }
                 }

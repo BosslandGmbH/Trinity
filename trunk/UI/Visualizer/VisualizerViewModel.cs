@@ -1,4 +1,6 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,7 +12,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,11 +20,9 @@ using System.Xml.Serialization;
 using JetBrains.Annotations;
 using Trinity.Components.Combat;
 using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Attributes;
+using Trinity.Framework.Objects;
 using Trinity.Modules;
 using Trinity.Settings;
 using Trinity.UI.UIComponents;
@@ -33,9 +32,8 @@ using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Common.Xml;
 using Zeta.Game;
-using AdvDia = Trinity.Components.Adventurer.Cache.AdvDia;
 using Expression = System.Linq.Expressions.Expression;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
 namespace Trinity.UI.Visualizer
@@ -52,7 +50,7 @@ namespace Trinity.UI.Visualizer
         private RadarVisibilityFlags _visibilityFlags;
         private List<GridColumnFlags> _allGridColumnFlags;
         private bool _showWeighted;
-        private const int RefreshRateMs = 50;
+        private const int RefreshRateMs = 20;
         private DateTime LastRefresh = DateTime.MinValue;
         private string _pauseButtonText = "Pause";
         private bool _isPaused;
@@ -108,7 +106,7 @@ namespace Trinity.UI.Visualizer
             if ((Window != null && Window.IsVisible || force) && !Worker.IsRunning)
             {
                 StartThreadAllowed = false;
-                Logger.LogVerbose("Starting Thread for Visualizer Updates");
+                Core.Logger.Verbose("Starting Thread for Visualizer Updates");
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     Worker.Start(ThreadUpdateTask, RefreshRateMs);
@@ -136,17 +134,9 @@ namespace Trinity.UI.Visualizer
                 if (ZetaDia.Me == null || !ZetaDia.Me.IsValid || !ZetaDia.Service.Hero.IsValid)
                     return false;
 
-                if (DateTime.UtcNow.Subtract(LastUpdatedNav).TotalSeconds > 10)
-                {
-                    // Kickstart DB NavServer into giving us scene data.
-                    Core.StuckHandler.Reset();
-                    Task.Run(() => Navigator.MoveTo(ZetaDia.Me.Position));
-                    LastUpdatedNav = DateTime.UtcNow;
-                }
-
                 ScenesStorage.Update();
-                AdvDia.MyPosition = ZetaDia.Me.Position;
                 Core.Update();
+                Core.Actors.Update();
                 Combat.Weighting.WeightActors(Core.Targets);
                 UpdateVisualizer();
                 return false;
@@ -156,7 +146,7 @@ namespace Trinity.UI.Visualizer
         private void StopThread()
         {
             if (Worker.IsRunning)
-                Logger.LogVerbose("Stopping Thread for Visualizer Updates");
+                Core.Logger.Verbose("Stopping Thread for Visualizer Updates");
 
             Worker.Stop();
             StartThreadAllowed = true;
@@ -179,15 +169,10 @@ namespace Trinity.UI.Visualizer
                 LastRefresh = DateTime.UtcNow;
 
                 var objects = Core.Targets.ToList();
-
-
                 foreach (var obj in objects)
                 {
-                    obj.Position = obj.IsAcdBased ? obj.CommonData.Position : obj.RActor.Position;
+                    obj.Position = obj.Position;
                 }
-
-                //objects = ApplyFilter(objects);
-
                 var queryableObjects = ApplySort(objects.AsQueryable());
 
                 Objects = new ObservableCollection<TrinityActor>(queryableObjects);
@@ -216,7 +201,7 @@ namespace Trinity.UI.Visualizer
                         break;
 
                     case Tab.Markers:
-                        AllMarkers = new ObservableCollection<TrinityMarker>(Core.Markers.CurrentWorldMarkers);
+                        AllMarkers = new ObservableCollection<TrinityMarker>(Core.Markers);
                         break;
 
                     case Tab.Minimap:
@@ -226,21 +211,23 @@ namespace Trinity.UI.Visualizer
                 //}
                 //else
                 //{
-                //    Logger.LogVerbose("Skipping grid update so grid items can be clicked properly");
+                //    Core.Logger.Verbose("Skipping grid update so grid items can be clicked properly");
                 //}
 
                 CurrentTarget = Combat.Targeting.CurrentTarget;
                 Player = Core.Player.Actor;
-                PlayerPositionX = Player.Position.X;
-                PlayerPositionY = Player.Position.Y;
-                PlayerPositionZ = Player.Position.Z;
-                WorldSnoId = Core.Player.WorldSnoId;
-                LevelAreaSnoId = Core.Player.LevelAreaId;
-                PlayerRotation = MathUtil.RadianToDegree(Player.Rotation);
-
-                IsStuck = Navigator.StuckHandler.IsStuck;
-                IsBlocked = PlayerMover.IsBlocked;
-                OnPropertyChanged(nameof(Player));
+                if (Player != null)
+                {
+                    PlayerPositionX = Player.Position.X;
+                    PlayerPositionY = Player.Position.Y;
+                    PlayerPositionZ = Player.Position.Z;
+                    WorldSnoId = Core.Player.WorldSnoId;
+                    LevelAreaSnoId = Core.Player.LevelAreaId;
+                    PlayerRotation = MathUtil.RadianToDegree(Player.Rotation);
+                    IsStuck = Navigator.StuckHandler.IsStuck;
+                    IsBlocked = PlayerMover.IsBlocked;
+                    OnPropertyChanged(nameof(Player));
+                }
 
                 if (!_listeningForStatChanges)
                     AddStatChangerListeners();
@@ -521,7 +508,7 @@ namespace Trinity.UI.Visualizer
         //        var val = value.ToString();
         //        if (val != StoredGridPanelHeight)
         //        {
-        //            Logger.Log("GridPanelHeight Changed from {0} to {1}", StoredGridPanelHeight, val);
+        //            Core.Logger.Log("GridPanelHeight Changed from {0} to {1}", StoredGridPanelHeight, val);
         //            StoredGridPanelHeight = val;
         //            OnPropertyChanged();
         //        }
@@ -851,7 +838,7 @@ namespace Trinity.UI.Visualizer
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in PauseToggleCommand Command", ex);
+                        Core.Logger.Error("Exception in PauseToggleCommand Command", ex);
                     }
                 });
             }
@@ -870,7 +857,7 @@ namespace Trinity.UI.Visualizer
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in PauseToggleCommand Command", ex);
+                        Core.Logger.Error("Exception in PauseToggleCommand Command", ex);
                     }
                 });
             }
@@ -897,7 +884,7 @@ namespace Trinity.UI.Visualizer
                 {
                     try
                     {
-                        //Logger.Log("Blacklist Toggle Command Fired!");
+                        //Core.Logger.Log("Blacklist Toggle Command Fired!");
 
                         //var sno = SelectedObject.ActorSnoId;
                         //var name = SelectedObject.Name;
@@ -919,7 +906,7 @@ namespace Trinity.UI.Visualizer
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in BlacklistToggleCommand Command {0}", ex);
+                        Core.Logger.Error("Exception in BlacklistToggleCommand Command {0}", ex);
                     }
 
                 });
@@ -944,7 +931,7 @@ namespace Trinity.UI.Visualizer
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in SortCommand Command", ex);
+                        Core.Logger.Error("Exception in SortCommand Command", ex);
                     }
                 });
             }
@@ -966,14 +953,14 @@ namespace Trinity.UI.Visualizer
                         //var actor = param as IActor;
                         //if (actor != null)
                         //{
-                        //    Logger.Log("Actor: {0} was clicked on radar", actor.Name);
+                        //    Core.Logger.Log("Actor: {0} was clicked on radar", actor.Name);
                         //    SelectedObject = actor;
                         //}      
                         SelectedObject = param as TrinityActor;
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in RadarClickCommand Command. {0}", ex);
+                        Core.Logger.Error("Exception in RadarClickCommand Command. {0}", ex);
                     }
                 });
             }
@@ -991,7 +978,7 @@ namespace Trinity.UI.Visualizer
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in StartThreadCommand Command. {0}", ex);
+                        Core.Logger.Error("Exception in StartThreadCommand Command. {0}", ex);
                     }
                 });
             }
@@ -1009,7 +996,7 @@ namespace Trinity.UI.Visualizer
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in StartThreadCommand Command. {0}", ex);
+                        Core.Logger.Error("Exception in StartThreadCommand Command. {0}", ex);
                     }
                 });
             }
@@ -1027,7 +1014,7 @@ namespace Trinity.UI.Visualizer
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in StartThreadCommand Command. {0}", ex);
+                        Core.Logger.Error("Exception in StartThreadCommand Command. {0}", ex);
                     }
                 });
             }
@@ -1045,7 +1032,7 @@ namespace Trinity.UI.Visualizer
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in StopThreadCommand Command. {0}", ex);
+                        Core.Logger.Error("Exception in StopThreadCommand Command. {0}", ex);
                     }
                 });
             }
@@ -1072,7 +1059,7 @@ namespace Trinity.UI.Visualizer
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception in CopySelected Command. {0}", ex);
+                        Core.Logger.Error("Exception in CopySelected Command. {0}", ex);
                     }
                 });
             }
@@ -1135,14 +1122,12 @@ namespace Trinity.UI.Visualizer
         public static bool IsWindowOpen { get; set; }
         public static Vector3 DebugPosition { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public new event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public new virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         protected string GetLastMethodFullName(int frame = 1)

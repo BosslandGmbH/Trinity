@@ -5,7 +5,7 @@
         None = 0,
         Main,
         Telegraph,
-        Particle, 
+        Particle,
         Minor,
         Projectile,
         ActorAnimation,
@@ -14,4 +14,3 @@
         Obstacle
     }
 }
-

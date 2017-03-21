@@ -1,4 +1,3 @@
-using System.Runtime.Serialization;
 using Zeta.Common;
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
@@ -12,7 +11,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
         public CombineType CombineType { get; set; } = CombineType.Add;
 
-        public RectangularRegion() { }
+        public RectangularRegion()
+        {
+        }
 
         public RectangularRegion(int minX, int minY, int maxX, int maxY, CombineType combineType)
         {

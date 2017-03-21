@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Adventurer.Cache;
+using Trinity.Framework;
 using Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Events;
-using Trinity.Components.Adventurer.Util;
 using Trinity.Components.Combat.Resources;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -13,8 +12,8 @@ namespace Trinity.Components.Adventurer.Game.Combat
 {
     public class SafeZerg : PulsingObject
     {
-
         private static SafeZerg _instance;
+
         public static SafeZerg Instance
         {
             get { return _instance ?? (_instance = new SafeZerg()); }
@@ -26,7 +25,6 @@ namespace Trinity.Components.Adventurer.Game.Combat
         }
 
         private bool _zergEnabled;
-
 
         public void EnableZerg()
         {
@@ -87,7 +85,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
                 var kwActor = ActorFinder.FindUnit(keywarden.Value.KeywardenSNO);
                 if (kwActor != null && kwActor.Distance < 80f)
                 {
-                    Logger.Verbose("Turning off zerg because {0} is nearby. Distance={1}", kwActor.Name, kwActor.Distance);
+                    Core.Logger.Verbose("Turning off zerg because {0} is nearby. Distance={1}", kwActor.Name, kwActor.Distance);
                     combatState = true;
                 }
             }
@@ -95,7 +93,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
             var units = ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).ToList();
             if (units.Any(u => CorruptGrowthIds.Contains(u.ActorSnoId) && u.Distance < 30f))
             {
-                Logger.Verbose($"Turning off zerg because corrupt growth is nearby");
+                Core.Logger.Verbose($"Turning off zerg because corrupt growth is nearby");
                 combatState = true;
             }
 
@@ -103,7 +101,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
             var closeUnitsCount = units.Count(u => u.IsFullyValid() && u.IsHostile && u.IsAlive && u.Position.Distance(AdvDia.MyPosition) <= 15f);
             if (!combatState && (closeUnitsCount >= 8 || closeUnitsCount >= 3 && health <= 0.6))
             {
-                Logger.Verbose($"Turning off zerg because {closeUnitsCount} units nearby and health is {health}. Distance={1}");
+                Core.Logger.Verbose($"Turning off zerg because {closeUnitsCount} units nearby and health is {health}. Distance={1}");
                 combatState = true;
             }
 
@@ -125,7 +123,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
         {
             if (Components.Combat.Combat.CombatMode == CombatMode.SafeZerg)
             {
-                Logger.DebugSetting($"Reverted to {_previousCombatMode} Combat Mode");
+                Core.Logger.Debug($"Reverted to {_previousCombatMode} Combat Mode");
                 Components.Combat.Combat.CombatMode = _previousCombatMode;
             }
         }
@@ -134,7 +132,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
         {
             if (Components.Combat.Combat.CombatMode != CombatMode.SafeZerg)
             {
-                Logger.DebugSetting("Set to Safe Zerg Combat Mode");
+                Core.Logger.Debug("Set to Safe Zerg Combat Mode");
                 _previousCombatMode = Components.Combat.Combat.CombatMode;
                 Components.Combat.Combat.CombatMode = CombatMode.SafeZerg;
             }

@@ -1,29 +1,24 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Threading;
-using System.Web.Script.Serialization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using JetBrains.Annotations;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
-using Trinity.Settings;
 using Trinity.UI;
 using Trinity.UI.UIComponents;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
-using Trinity.Framework;
+using Trinity.Framework.Events;
+using Trinity.Framework.Reference;
 
 namespace Trinity.Settings.ItemList
 {
@@ -488,7 +483,6 @@ namespace Trinity.Settings.ItemList
             set { SetField(ref _validationMessage, value); }
         }
 
-
         public ModalPage SelectedModalPage
         {
             get { return _selectedModalPage; }
@@ -503,32 +497,46 @@ namespace Trinity.Settings.ItemList
 
         [IgnoreDataMember]
         public ICommand ResetFilterCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand ExportCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand ImportCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand LoadModalCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand CloseModalCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand EnableItemListCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand AdvancedOptionCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand SelectAllCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand SelectNoneCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand ClearRulesCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand AddAllSetsCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand AddAllLegendaryAffixCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand Add24ItemsCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand LoadEquippedItemsCommand { get; set; }
+
         [IgnoreDataMember]
         public ICommand LoadStashedItemsCommand { get; set; }
 
@@ -542,30 +550,30 @@ namespace Trinity.Settings.ItemList
                     {
                         if (!ChangeEvents.IsInGame.Value)
                         {
-                            Logger.Log("Must be in a game to use this feature");
+                            Core.Logger.Log("Must be in a game to use this feature");
                         }
                         else
                         {
                             using (ZetaDia.Memory.AcquireFrame())
                             {
                                 ZetaDia.Actors.Update();
-                                Logger.Log("Scanning Character for Equipped Items");
-                                SelectItems(ZetaDia.Me.Inventory.Equipped);
+                                Core.Logger.Log("Scanning Character for Equipped Items");
+                                SelectItems(InventoryManager.Equipped);
                             }
                         }
                     }
                     else
                     {
-                        if(!BotMain.IsRunning)
+                        if (!BotMain.IsRunning)
                             ZetaDia.Actors.Update();
 
-                        Logger.Log("Scanning Character for Equipped Items");
-                        SelectItems(ZetaDia.Me.Inventory.Equipped);
+                        Core.Logger.Log("Scanning Character for Equipped Items");
+                        SelectItems(InventoryManager.Equipped);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
                 }
             });
 
@@ -577,28 +585,28 @@ namespace Trinity.Settings.ItemList
                     {
                         if (BotMain.IsRunning)
                         {
-                            Logger.Log("Must be in a game to use this feature");
+                            Core.Logger.Log("Must be in a game to use this feature");
                         }
                         else
                         {
                             using (ZetaDia.Memory.AcquireFrame())
                             {
                                 ZetaDia.Actors.Update();
-                                Logger.Log("Scanning Character for Stashed Items");
-                                SelectItems(ZetaDia.Me.Inventory.StashItems);
+                                Core.Logger.Log("Scanning Character for Stashed Items");
+                                SelectItems(InventoryManager.StashItems);
                             }
                         }
                     }
                     else
                     {
                         ZetaDia.Actors.Update();
-                        Logger.Log("Scanning Character for Stashed Items");
-                        SelectItems(ZetaDia.Me.Inventory.StashItems);
+                        Core.Logger.Log("Scanning Character for Stashed Items");
+                        SelectItems(InventoryManager.StashItems);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
                 }
             });
 
@@ -609,7 +617,7 @@ namespace Trinity.Settings.ItemList
                     if (parameter == null)
                         return;
 
-                    Logger.LogVerbose("AdvancedOptionCommand Fired {0}", parameter.ToString());
+                    Core.Logger.Verbose("AdvancedOptionCommand Fired {0}", parameter.ToString());
 
                     var item = parameter as ComboBoxItem;
                     var selectedPropertyName = item != null ? item.Tag.ToString() : parameter.ToString();
@@ -643,7 +651,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in AdvancedOptionCommand: {0} {1}", ex.Message, ex.InnerException);
+                    Core.Logger.Error("Exception in AdvancedOptionCommand: {0} {1}", ex.Message, ex.InnerException);
                 }
             });
 
@@ -653,7 +661,7 @@ namespace Trinity.Settings.ItemList
                 {
                     if (SelectedTab == Tab.Legendary)
                     {
-                        Logger.Log("Selecting all items");
+                        Core.Logger.Log("Selecting all items");
                         using (Collection.DeferRefresh())
                         {
                             SelectedItems = new List<LItem>(DisplayItems);
@@ -664,14 +672,13 @@ namespace Trinity.Settings.ItemList
 
                     if (SelectedTab == Tab.ItemType)
                     {
-                        Logger.Log("Selecting all item types.");
+                        Core.Logger.Log("Selecting all item types.");
                         ItemTypes.ForEach(i => i.IsSelected = true);
                     }
-
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
                 }
             });
 
@@ -679,12 +686,12 @@ namespace Trinity.Settings.ItemList
             {
                 try
                 {
-                    Logger.Log("Add24ItemsCommand Not Implemented");
+                    Core.Logger.Log("Add24ItemsCommand Not Implemented");
                     AddToSelection(item => ItemListPresets.Patch24Items.Contains(item.Id));
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
                 }
             });
 
@@ -692,12 +699,12 @@ namespace Trinity.Settings.ItemList
             {
                 try
                 {
-                    Logger.Log("AddAllSetsCommand Not Implemented");
+                    Core.Logger.Log("AddAllSetsCommand Not Implemented");
                     AddToSelection(item => item.IsSetItem);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in SelectAllCommand {0}", ex);
+                    Core.Logger.Error("Exception in SelectAllCommand {0}", ex);
                 }
             });
 
@@ -705,12 +712,12 @@ namespace Trinity.Settings.ItemList
             {
                 try
                 {
-                    Logger.Log("Selecting all items with a legendary affix");
+                    Core.Logger.Log("Selecting all items with a legendary affix");
                     AddToSelection(item => !string.IsNullOrEmpty(item.LegendaryAffix));
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in SelectAllLegendaryAffixCommand {0}", ex);
+                    Core.Logger.Error("Exception in SelectAllLegendaryAffixCommand {0}", ex);
                 }
             });
 
@@ -720,7 +727,7 @@ namespace Trinity.Settings.ItemList
                 {
                     if (SelectedTab == Tab.Legendary)
                     {
-                        Logger.Log("Deselecting all legendary items");
+                        Core.Logger.Log("Deselecting all legendary items");
                         using (Collection.DeferRefresh())
                         {
                             SelectedItems = new List<LItem>();
@@ -743,7 +750,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in SelectNoneCommand {0}", ex);
+                    Core.Logger.Error("Exception in SelectNoneCommand {0}", ex);
                 }
             });
 
@@ -753,7 +760,7 @@ namespace Trinity.Settings.ItemList
                 {
                     if (SelectedTab == Tab.Legendary)
                     {
-                        Logger.Log("Removing rules from all legendary items.");
+                        Core.Logger.Log("Removing rules from all legendary items.");
                         using (Collection.DeferRefresh())
                         {
                             SelectedItems.ForEach(i => i.Rules = new ObservableCollection<LRule>());
@@ -764,13 +771,13 @@ namespace Trinity.Settings.ItemList
 
                     if (SelectedTab == Tab.ItemType)
                     {
-                        Logger.Log("Removing rules from all item types.");
+                        Core.Logger.Log("Removing rules from all item types.");
                         ItemTypes.ForEach(i => i.Rules = new FullyObservableCollection<LRule>());
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in ClearAllRulesCommand {0}", ex);
+                    Core.Logger.Error("Exception in ClearAllRulesCommand {0}", ex);
                 }
             });
 
@@ -778,7 +785,7 @@ namespace Trinity.Settings.ItemList
 
             EnableItemListCommand = new RelayCommand(parameter =>
             {
-                Logger.Log("Setting ItemFilterMode to ItemList");
+                Core.Logger.Log("Setting ItemFilterMode to ItemList");
                 UILoader.DataContext.Items.LegendaryMode = LegendaryMode.ItemList;
             });
 
@@ -802,27 +809,27 @@ namespace Trinity.Settings.ItemList
                         ExportCommand.Execute(parameter);
                 }
 
-                Logger.Log("Selecting modal content... {0}", parameter.ToString());
+                Core.Logger.Log("Selecting modal content... {0}", parameter.ToString());
             });
 
             CloseModalCommand = new RelayCommand(parameter => { IsModalVisible = false; });
 
             ImportCommand = new RelayCommand(parameter =>
             {
-                Logger.Log("Importing ItemList...");
+                Core.Logger.Log("Importing ItemList...");
 
                 var oldSlected = _selectedItems.Count;
 
                 ImportFromCode(ExportCode);
 
-                Logger.Log("Selected Before = {0} After = {1}", oldSlected, _selectedItems.Count);
+                Core.Logger.Log("Selected Before = {0} After = {1}", oldSlected, _selectedItems.Count);
 
                 IsModalVisible = false;
             });
 
             ExportCommand = new RelayCommand(parameter =>
             {
-                Logger.Log("Exporting ItemList... {0}", parameter);
+                Core.Logger.Log("Exporting ItemList... {0}", parameter);
                 ExportCode = CreateExportCode();
             });
         }
@@ -858,7 +865,7 @@ namespace Trinity.Settings.ItemList
             if (string.IsNullOrEmpty(code) || string.IsNullOrWhiteSpace(code))
             {
                 ValidationMessage = "You must enter an import/export code";
-                Logger.Log("You must enter an import/export code");
+                Core.Logger.Log("You must enter an import/export code");
             }
             try
             {
@@ -889,7 +896,7 @@ namespace Trinity.Settings.ItemList
             catch (Exception ex)
             {
                 ValidationMessage = $"Error importing itemlist. {ex.Message} {ex.InnerException}";
-                Logger.Log("Error importing itemlist. {0} {1}", ex.Message, ex.InnerException);
+                Core.Logger.Log("Error importing itemlist. {0} {1}", ex.Message, ex.InnerException);
             }
             return this;
         }
@@ -930,7 +937,6 @@ namespace Trinity.Settings.ItemList
                 Collection.SortDescriptions.Add(new SortDescription(sortingType.ToString(), ListSortDirection.Ascending));
             }
         }
-
 
         internal void ChangeFilterPending(string property)
         {
@@ -995,13 +1001,13 @@ namespace Trinity.Settings.ItemList
                     {
                         // Remove
                         _selectedItems.Remove(match);
-                        Logger.LogVerbose("Removed {0} ({2}) from Selected Items, NewSelectedCount={1}", item.Name, _selectedItems.Count, item.Id);
+                        Core.Logger.Verbose("Removed {0} ({2}) from Selected Items, NewSelectedCount={1}", item.Name, _selectedItems.Count, item.Id);
                     }
                 }
                 else if (match == null && item.IsSelected)
                 {
                     _selectedItems.Add(item);
-                    Logger.LogVerbose("Added {0} ({2}) to Selected Items, NewSelectedCount={1}", item.Name, _selectedItems.Count, item.Id);
+                    Core.Logger.Verbose("Added {0} ({2}) to Selected Items, NewSelectedCount={1}", item.Name, _selectedItems.Count, item.Id);
                 }
             }
         }
@@ -1010,7 +1016,7 @@ namespace Trinity.Settings.ItemList
         {
             if (_selectedItems == null || _displayItems == null || _collection == null || _collection.View == null || _collection.View.SourceCollection == null)
             {
-                Logger.Log("Skipping UpdateSelectedItems due to Null");
+                Core.Logger.Log("Skipping UpdateSelectedItems due to Null");
                 return;
             }
 
@@ -1048,13 +1054,12 @@ namespace Trinity.Settings.ItemList
                     {
                         if (item.IsSelected)
                         {
-                            Logger.LogVerbose("Update: Deselecting {0}", item.Name);
+                            Core.Logger.Verbose("Update: Deselecting {0}", item.Name);
                             item.IsSelected = false;
                         }
                     }
                 });
             }
         }
-
     }
 }

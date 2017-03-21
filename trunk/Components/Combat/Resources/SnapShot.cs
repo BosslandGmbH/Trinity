@@ -1,7 +1,7 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Framework.Helpers;
 using Zeta.Game;
 
 namespace Trinity.Components.Combat.Resources
@@ -28,7 +28,7 @@ namespace Trinity.Components.Combat.Resources
                 SnapShotTime = DateTime.UtcNow
             };
 
-            Logger.LogVerbose("Recorded Snapshot {0} AttacksPerSecond={1}",
+            Core.Logger.Verbose("Recorded Snapshot {0} AttacksPerSecond={1}",
                 snapshotRecord.SnapShotTime, snapshotRecord.AttacksPerSecond);
 
             SnapShots.Add(snapshotRecord);
@@ -38,7 +38,3 @@ namespace Trinity.Components.Combat.Resources
         }
     }
 }
-
-
-
-

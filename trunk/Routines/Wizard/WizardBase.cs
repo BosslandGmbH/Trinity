@@ -1,23 +1,19 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IronPython.Modules;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Wizard
 {
@@ -36,7 +32,7 @@ namespace Trinity.Routines.Wizard
         // remember what P3_ItemPassive_Unique_Ring_010 means.
 
         // Use the Routine LogCategory for logging.
-        // Logger.Log(LogCategory.Routine, $"My Current Target is {CurrentTarget}");
+        // Core.Logger.Log(LogCategory.Routine, $"My Current Target is {CurrentTarget}");
 
         #region IRoutine Defaults
 
@@ -257,7 +253,7 @@ namespace Trinity.Routines.Wizard
 
             if (Player.Summons.HydraCount < MaxHydras && ZetaDia.Me.IsInCombat)
             {
-                Logger.Log(LogCategory.Routine, $"Casting Hydra, Less than max Hydras! ({Player.Summons.HydraCount}/{MaxHydras})");
+                Core.Logger.Log(LogCategory.Routine, $"Casting Hydra, Less than max Hydras! ({Player.Summons.HydraCount}/{MaxHydras})");
                 position = target.Position;
                 return true;
             }

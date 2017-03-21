@@ -1,9 +1,5 @@
-using System;
-using System.Media;
-using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Framework;
-using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
+using System.Media;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Zeta.Bot;
@@ -56,7 +52,7 @@ namespace Trinity.Modules
 
         private void Stop(string reason)
         {
-            Logger.Warn($"Game Stopped: {reason}");
+            Core.Logger.Warn($"Game Stopped: {reason}");
             SystemSounds.Exclamation.Play();
             BotMain.Stop();
         }

@@ -1,6 +1,6 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
@@ -8,7 +8,7 @@ using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Common;
 using Zeta.Common.Helpers;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
@@ -47,19 +47,18 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Util.Logger.Info("[InteractWithUnit] " + value);
+                    Core.Logger.Log("[InteractWithUnit] " + value);
                 }
                 _state = value;
             }
         }
 
-        #endregion
+        #endregion State
 
         public bool IsDone
         {
             get { return _isDone | AdvDia.CurrentWorldId != _worldId; }
         }
-
 
         public InteractWithUnitCoroutine(int questId, int worldId, int actorId, int marker, int interactAttemps = 1, int secondsToSleepAfterInteraction = 1, int secondsToTimeout = 4)
         {
@@ -72,21 +71,27 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _secondsToTimeout = secondsToTimeout;
         }
 
-        private WaitTimer _timeout=new WaitTimer(TimeSpan.FromSeconds(30));
+        private WaitTimer _timeout = new WaitTimer(TimeSpan.FromSeconds(30));
+
         public async Task<bool> GetCoroutine()
         {
             switch (State)
             {
                 case States.NotStarted:
                     return await NotStarted();
+
                 case States.Searching:
                     return await Searching();
+
                 case States.Moving:
                     return await Moving();
+
                 case States.Interacting:
                     return await Interacting();
+
                 case States.Completed:
                     return await Completed();
+
                 case States.Failed:
                     return await Failed();
             }
@@ -122,7 +127,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             if (_timeout.IsFinished)
             {
-                State=States.Failed;
+                State = States.Failed;
                 return false;
             }
             if (_objectiveLocation == Vector3.Zero)
@@ -180,7 +185,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             //    var portalGizmo = BountyHelpers.GetPortalNearMarkerPosition(_markerPosition);
             //    if (portalGizmo == null)
             //    {
-            //        Logger.Debug("[Bounty] No portal nearby, keep exploring .");
+            //        Core.Logger.Debug("[Bounty] No portal nearby, keep exploring .");
             //        State = States.SearchingForDestinationWorld;
             //        return false;
             //    }
@@ -192,7 +197,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 ActorFinder.InteractWhitelist.Remove(_actorId);
                 if (_interactionCoroutine.State == InteractionCoroutine.States.TimedOut)
                 {
-                    Util.Logger.Debug("[Bounty] Couldn't interact with the unit, failing.");
+                    Core.Logger.Debug("[Bounty] Couldn't interact with the unit, failing.");
                     State = States.Failed;
                     return false;
                 }
@@ -235,7 +240,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 if (_objectiveLocation != Vector3.Zero)
                 {
-                    Logger.Info("[InteractWithUnit] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_objectiveLocation));
+                    Core.Logger.Log("[InteractWithUnit] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_objectiveLocation));
                 }
             }
         }

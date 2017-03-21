@@ -1,14 +1,11 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using JetBrains.Annotations;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Attributes;
-using Trinity.Framework.Objects.Memory.Sno.Types;
 
 namespace Trinity.UI.UIComponents
 {
@@ -202,7 +199,7 @@ namespace Trinity.UI.UIComponents
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError($"Exception in PropertyValueFlagBindingItem: {ex}");
+                    Core.Logger.Error($"Exception in PropertyValueFlagBindingItem: {ex}");
                 }
 
             }

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace Trinity.UI.UIComponents.Behaviors 
+namespace Trinity.UI.UIComponents.Behaviors
 {
     public class ComboAlwaysFireSelection : DependencyObject
     {

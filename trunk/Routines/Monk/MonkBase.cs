@@ -1,22 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using Trinity.Framework;
 using System.Linq;
-using IronPython.Modules;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Trinity.Settings;
-using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Monk
 {
@@ -35,7 +29,7 @@ namespace Trinity.Routines.Monk
         // remember what P3_ItemPassive_Unique_Ring_010 means.
 
         // Use the Routine LogCategory for logging.
-        // Logger.Log(LogCategory.Routine, $"My Current Target is {CurrentTarget}");
+        // Core.Logger.Log(LogCategory.Routine, $"My Current Target is {CurrentTarget}");
 
         #region IRoutine Defaults
 

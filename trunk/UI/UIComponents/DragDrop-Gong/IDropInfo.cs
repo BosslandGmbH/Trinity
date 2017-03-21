@@ -6,7 +6,7 @@ using System.Windows.Data;
 
 namespace Trinity.UI.UIComponents
 {
-  public interface IDropInfo
+    public interface IDropInfo
   {
     /// <summary>
     /// Gets the drag data.

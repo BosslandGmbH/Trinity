@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Trinity.Framework;
+using System.Collections.Generic;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -16,7 +16,6 @@ namespace Trinity.Components.Combat.Resources
     /// </summary>
     public class TrinityPower : IEquatable<TrinityPower>
     {
-
         public SNOPower SNOPower { get; set; }
 
         public float MinimumRange { get; set; }
@@ -71,7 +70,7 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = SNOPower.None;
             MinimumRange = 0f;
             TargetPosition = Vector3.Zero;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = -1;
             IsCastOnSelf = false;
         }
@@ -82,7 +81,7 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = snoPower;
             MinimumRange = 0f;
             TargetPosition = Vector3.Zero;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = -1;
             PowerAssignmentTime = DateTime.UtcNow;
         }
@@ -96,7 +95,7 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = snoPower;
             MinimumRange = 0f;
             TargetPosition = Vector3.Zero;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = -1;
             WaitBeforeUseMs = waitBeforeUseMs;
             WaitAfterUseMs = waitAfterUseMs;
@@ -112,7 +111,7 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = snoPower;
             MinimumRange = minimumRange;
             TargetPosition = Vector3.Zero;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = targetAcdId;
             PowerAssignmentTime = DateTime.UtcNow;
         }
@@ -126,7 +125,7 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = snoPower;
             MinimumRange = minimumRange;
             TargetPosition = Vector3.Zero;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = targetAcdId;
             WaitBeforeUseMs = waitBeforeUseMs;
             WaitAfterUseMs = waitAfterUseMs;
@@ -134,7 +133,7 @@ namespace Trinity.Components.Combat.Resources
         }
 
         public TrinityPower(Skill skill, float minimumRange, int targetAcdId, int waitBeforeUseMs, int waitAfterUseMs)
-            : this (skill.SNOPower, minimumRange, targetAcdId, waitBeforeUseMs, waitAfterUseMs) { }
+            : this(skill.SNOPower, minimumRange, targetAcdId, waitBeforeUseMs, waitAfterUseMs) { }
 
         public TrinityPower(SNOPower snoPower, float minimumRange)
         {
@@ -142,7 +141,7 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = snoPower;
             MinimumRange = minimumRange;
             TargetPosition = Vector3.Zero;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = -1;
             PowerAssignmentTime = DateTime.UtcNow;
         }
@@ -156,13 +155,13 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = snoPower;
             MinimumRange = minimumRange;
             TargetPosition = position;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = -1;
             PowerAssignmentTime = DateTime.UtcNow;
         }
 
         public TrinityPower(Skill skill, float minimumRange, Vector3 position)
-            : this(skill.SNOPower, minimumRange, position)  { }
+            : this(skill.SNOPower, minimumRange, position) { }
 
         public TrinityPower(SNOPower snoPower, float minimumRange, Vector3 position, float waitBeforeUseMs, float waitAfterUseMs)
         {
@@ -170,7 +169,7 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = snoPower;
             MinimumRange = minimumRange;
             TargetPosition = position;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = -1;
             WaitBeforeUseMs = waitBeforeUseMs;
             WaitAfterUseMs = waitAfterUseMs;
@@ -186,7 +185,7 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = snoPower;
             MinimumRange = minimumRange;
             TargetPosition = position;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = targetAcdId;
             WaitBeforeUseMs = waitBeforeUseMs;
             WaitAfterUseMs = waitAfterUseMs;
@@ -202,7 +201,7 @@ namespace Trinity.Components.Combat.Resources
             SNOPower = snoPower;
             MinimumRange = minimumRange;
             TargetPosition = actor.Position;
-            TargetDynamicWorldId = ZetaDia.WorldId;
+            TargetDynamicWorldId = ZetaDia.Globals.WorldId;
             TargetAcdId = actor.AcdId;
             PowerAssignmentTime = DateTime.UtcNow;
         }
@@ -222,6 +221,7 @@ namespace Trinity.Components.Combat.Resources
         }
 
         public string RangedCastInfo => $"Range={MinimumRange:N1} {(TargetPosition == Vector3.Zero ? "" : $"<{TargetPosition.X:N2},{TargetPosition.Y:N2},{TargetPosition.Z:N2}>")} AcdId={(TargetAcdId != -1 ? $"AcdId={TargetAcdId}" : string.Empty)}";
+
         public override string ToString() => $"{SNOPower} {WaitBeforeUseMs}/{WaitAfterUseMs} LastUse={SpellHistory.TimeSinceUse(SNOPower).ToString("mm':'ss':'fff")} {(IsCastOnSelf ? "" : RangedCastInfo)} ";
 
         private readonly HashSet<SNOPower> _waitForAttackToFinishPowers = new HashSet<SNOPower>
@@ -245,18 +245,15 @@ namespace Trinity.Components.Combat.Resources
             //SNOPower.Wizard_Archon_Teleport,
         };
 
-
-
         public bool ShouldWaitForAttackToFinish => _waitForAttackToFinishPowers.Contains(this.SNOPower);
 
         /// <summary>
         /// In the event that the destination cannot be reached because player is blocked from moving there
-        /// this will cause the power to be cast while out of range. Its useful in rare situations like Chicken 
+        /// this will cause the power to be cast while out of range. Its useful in rare situations like Chicken
         /// transform where not exploding would prevent further spell casting.
         /// </summary>
         public bool CastWhenBlocked { get; set; }
 
         public Skill GetSkill() => SkillUtils.GetSkillByPower(SNOPower);
-
     }
 }

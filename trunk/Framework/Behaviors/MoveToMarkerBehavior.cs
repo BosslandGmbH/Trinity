@@ -1,16 +1,15 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Trinity.Components.Combat;
-using Trinity.Coroutines;
-using Trinity.Framework.Objects.Enums;
+using Trinity.Components.Coroutines;
 using Trinity.Modules;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Framework.Behaviors
 {
@@ -27,10 +26,10 @@ namespace Trinity.Framework.Behaviors
 
         private async Task<bool> FindMarker(Predicate<TrinityMarker> markerSelector)
         {
-            if (Marker != null && Core.Markers.CurrentWorldMarkers.Contains(Marker) && Marker.Distance <= 12f)
+            if (Marker != null && Core.Markers.Contains(Marker) && Marker.Distance <= 12f)
                 return false;
 
-            var marker = Core.Markers.CurrentWorldMarkers
+            var marker = Core.Markers
                 .OrderBy(m => m.Distance)
                 .FirstOrDefault(m => m.Position != Vector3.Zero && markerSelector(m) && !VisitedMarkerPositions.Contains(m.Position) && m.Distance > 10f);
 
@@ -48,20 +47,20 @@ namespace Trinity.Framework.Behaviors
 
         private async Task<bool> Move()
         {
-            Logger.LogVerbose($"Moving to Marker: {Marker}");
+            Core.Logger.Verbose($"Moving to Marker: {Marker}");
             await CommonCoroutines.MoveTo(Marker.Position, "ItemMarker");
             return true;
         }
 
         protected override async Task<bool> OnStarted()
         {
-            Logger.Warn($"Started moving to Marker: {Marker}");
+            Core.Logger.Warn($"Started moving to Marker: {Marker}");
             return true;
         }
 
         protected override async Task<bool> OnStopped()
         {
-            Logger.Warn($"Arrived at Marker: {Marker}");
+            Core.Logger.Warn($"Arrived at Marker: {Marker}");
             VacuumItems.Execute();
             VisitedMarkerPositions.Add(Marker.Position);
             Marker = null;

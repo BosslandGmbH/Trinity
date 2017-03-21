@@ -1,20 +1,18 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
-using System.Web.Profile;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Settings.Paragon;
 using Zeta.Bot.Settings;
 using Zeta.Game;
 
@@ -96,7 +94,7 @@ namespace Trinity.Settings
 
         public void UserRequestedReset()
         {
-            Logger.Log("UserRequestedReset called");
+            Core.Logger.Log("UserRequestedReset called");
             Reset(this);
             OnUserRequestedReset();
         }
@@ -155,13 +153,13 @@ namespace Trinity.Settings
                 {
                     if (File.Exists(GlobalSettingsFile))
                     {
-                        Logger.Log("Loading Global Settings, You can use per-battletag settings by removing the Trinity.xml file under your Demonbuddy settings directory");
+                        Core.Logger.Log("Loading Global Settings, You can use per-battletag settings by removing the Trinity.xml file under your Demonbuddy settings directory");
                         var globalSettings = LoadSettingsFromFile(filename);
                         loadSuccessful = globalSettings != null;
                     }
                     else if (File.Exists(HeroSpecificSettingsFile))
                     {
-                        Logger.Log("Loading Hero Specific Settings");
+                        Core.Logger.Log("Loading Hero Specific Settings");
                         filename = HeroSpecificSettingsFile;
 
                         var settings = LoadSettingsFromFile(filename);
@@ -169,7 +167,7 @@ namespace Trinity.Settings
                     }
                     else if (File.Exists(BattleTagSettingsFile))
                     {
-                        Logger.Log("Loading BattleTag Settings");
+                        Core.Logger.Log("Loading BattleTag Settings");
                         filename = BattleTagSettingsFile;
 
                         var settings = LoadSettingsFromFile(filename);
@@ -177,7 +175,7 @@ namespace Trinity.Settings
                     }
                     else if (File.Exists(OldBattleTagSettingsFile))
                     {
-                        Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation, "Old configuration file found, need to migrate!");
+                        Core.Logger.Debug(LogCategory.None, "Old configuration file found, need to migrate!");
                         filename = OldBattleTagSettingsFile;
                         migrateConfig = true;
 
@@ -185,19 +183,19 @@ namespace Trinity.Settings
                         loadSuccessful = settings != null;
                     }
 
-                    Logger.LogDebug("Settings Load: FireOnLoadedEvents");
+                    Core.Logger.Debug("Settings Load: FireOnLoadedEvents");
                     FireOnLoadedEvents();
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "Error while loading Config file: {0}", ex);
+                    Core.Logger.Error(LogCategory.None, "Error while loading Config file: {0}", ex);
                     loadSuccessful = false;
                     migrateConfig = false;
                 }
 
                 if (migrateConfig && loadSuccessful)
                 {
-                    Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation, "Migrating configuration to new Trinity.xml");
+                    Core.Logger.Debug(LogCategory.None, "Migrating configuration to new Trinity.xml");
                     Save();
 
                     if (File.Exists(OldBattleTagSettingsFile))
@@ -213,7 +211,7 @@ namespace Trinity.Settings
             var eventSupporters = GetInterfaceMembers<ITrinitySettingEvents>(this);
             foreach (var eventSupporter in eventSupporters)
             {
-                Logger.LogDebug($"FireOnLoadedEvents: {eventSupporter.GetType().Name}");
+                Core.Logger.Debug($"FireOnLoadedEvents: {eventSupporter.GetType().Name}");
                 eventSupporter.OnLoaded();
             }
         }
@@ -247,24 +245,24 @@ namespace Trinity.Settings
 
                     if (applyToThis)
                     {
-                        Logger.LogDebug($"LoadSettingsFromFile: Copying Storage Objects");
+                        Core.Logger.Debug($"LoadSettingsFromFile: Copying Storage Objects");
                         loadedStorages.CopyTo(this);
                     }
 
                     LoadDynamicSettings();
-                    Logger.Log("Configuration file loaded");
+                    Core.Logger.Log("Configuration file loaded");
                     OnLoaded();
 
                     if (doc.Root.Name == "TrinitySetting")
                     {
-                        Logger.LogDebug("Old Settings Format Detected. Migrating and saving copy of old File");
+                        Core.Logger.Debug("Old Settings Format Detected. Migrating and saving copy of old File");
                         try
                         {
                             File.Copy(filename, FileManager.GetUniqueFileName(filename + ".backup.xml"));
                         }
                         catch (Exception)
                         {
-                            Logger.LogDebug("Unable to save a backup of old settings file");
+                            Core.Logger.Debug("Unable to save a backup of old settings file");
                         }
                         Save();
                     }
@@ -272,7 +270,7 @@ namespace Trinity.Settings
             }
             else
             {
-                Logger.Log(TrinityLogLevel.Debug, LogCategory.UserInformation, "Configuration file not found.");
+                Core.Logger.Debug(LogCategory.None, "Configuration file not found.");
                 Reset();
             }            
             return loadedStorages;
@@ -282,7 +280,7 @@ namespace Trinity.Settings
         {
             lock (this)
             {
-                Logger.Log("Saving Settings");
+                Core.Logger.Log("Saving Settings");
 
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -331,11 +329,11 @@ namespace Trinity.Settings
             if (Dynamic == null)
                 return;
 
-            Logger.LogDebug($"LoadDynamicSettings");
+            //Core.Logger.Debug($"LoadDynamicSettings");
 
             foreach (var item in Dynamic.Settings)
             {
-                Logger.LogDebug($"LoadDynamicSettings: {item.Name}");
+                //Core.Logger.Debug($"LoadDynamicSettings: {item.Name}");
 
                 var setting = item.Setting;
                 if (setting == null)
@@ -343,14 +341,14 @@ namespace Trinity.Settings
 
                 if (string.IsNullOrEmpty(item.Code))
                 {
-                    Logger.LogDebug($"LoadDynamicSettings: {item.Name} > Reset (null code)");
+                    //Core.Logger.Debug($"LoadDynamicSettings: {item.Name} > Reset (null code)");
                     setting.Reset();
                 }
                 else
                 {
-                    Logger.LogDebug($"LoadDynamicSettings: {item.Name} > Reset");
+                    //Core.Logger.Debug($"LoadDynamicSettings: {item.Name} > Reset");
                     setting.Reset();
-                    Logger.LogDebug($"LoadDynamicSettings: {item.Name} > Apply Code");
+                    //Core.Logger.Debug($"LoadDynamicSettings: {item.Name} > Apply Code");
                     setting.ApplyCode(item.Code);
                 }
             }
@@ -383,7 +381,7 @@ namespace Trinity.Settings
 
                 _FSWatcher.EnableRaisingEvents = false;
 
-                Logger.Log(TrinityLogLevel.Info, LogCategory.UserInformation, "Saving Config file");
+                Core.Logger.Log("Saving Config file");
                 using (Stream stream = File.Open(filePath, FileMode.Create, FileAccess.Write, FileShare.Read))
                 {
                     DataContractSerializer serializer = new DataContractSerializer(typeof(TrinityStorage));
@@ -398,7 +396,7 @@ namespace Trinity.Settings
             }
             catch (Exception ex)
             {
-                Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "Error while saving Config file: {0}", ex);
+                Core.Logger.Error(LogCategory.None, "Error while saving Config file: {0}", ex);
             }
             finally
             {
@@ -424,7 +422,7 @@ namespace Trinity.Settings
             try
             {
                 Type type = typeof(T);
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.Configuration, "Starting Reset Object {0}", type.Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "Starting Reset Object {0}", type.Name);
                 foreach (PropertyInfo prop in type.GetProperties(BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
                 {
                     if (Attribute.IsDefined(prop, typeof(IgnoreDataMemberAttribute)))
@@ -458,11 +456,11 @@ namespace Trinity.Settings
 
                 OnReset();
 
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.Configuration, "End Reset Object {0}", type.Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "End Reset Object {0}", type.Name);
             }
             catch (Exception ex)
             {
-                Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "Error while Reset Setting {1} : {0}", ex.Message, typeof(T).Name);
+                Core.Logger.Error(LogCategory.None, "Error while Reset Setting {1} : {0}", ex.Message, typeof(T).Name);
             }
         }
 
@@ -472,7 +470,7 @@ namespace Trinity.Settings
             try
             {
                 Type type = typeof(T);
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.Configuration, "Starting CopyTo Object {0}", type.Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "Starting CopyTo Object {0}", type.Name);
                 foreach (PropertyInfo prop in type.GetProperties(BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance))
                 {
                     try
@@ -502,14 +500,14 @@ namespace Trinity.Settings
                     }
                     catch (Exception ex)
                     {
-                        Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "Error while CopyTo Setting {0} : {1} Property: {2} {3}", typeof(T).Name, ex.Message, prop.Name, ex);
+                        Core.Logger.Error(LogCategory.None, "Error while CopyTo Setting {0} : {1} Property: {2} {3}", typeof(T).Name, ex.Message, prop.Name, ex);
                     }
                 }
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.Configuration, "End CopyTo Object {0}", type.Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "End CopyTo Object {0}", type.Name);
             }
             catch (Exception ex)
             {
-                Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "Error while CopyTo Setting {1} : {0} {2}", ex.Message, typeof(T).Name, ex);
+                Core.Logger.Error(LogCategory.None, "Error while CopyTo Setting {1} : {0} {2}", ex.Message, typeof(T).Name, ex);
             }
         }
 
@@ -517,7 +515,7 @@ namespace Trinity.Settings
         {
             try
             {
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.Configuration, "Starting Clone Object {0}", typeof(T).Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "Starting Clone Object {0}", typeof(T).Name);
                 using (MemoryStream ms = new MemoryStream())
                 {
                     DataContractSerializer serializer = new DataContractSerializer(typeof(T));
@@ -527,12 +525,12 @@ namespace Trinity.Settings
             }
             catch (Exception ex)
             {
-                Logger.Log(TrinityLogLevel.Error, LogCategory.UserInformation, "Error while Clone Setting {1} : {0}", ex.Message, typeof(T).Name);
+                Core.Logger.Error(LogCategory.None, "Error while Clone Setting {1} : {0}", ex.Message, typeof(T).Name);
                 return null;
             }
             finally
             {
-                Logger.Log(TrinityLogLevel.Verbose, LogCategory.Configuration, "End Clone Object {0}", typeof(T).Name);
+                Core.Logger.Verbose(LogCategory.Configuration, "End Clone Object {0}", typeof(T).Name);
             }
         }
 

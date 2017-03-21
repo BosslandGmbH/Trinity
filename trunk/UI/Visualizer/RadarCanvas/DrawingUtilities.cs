@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -11,7 +12,7 @@ using Color = System.Drawing.Color;
 using Pen = System.Drawing.Pen;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
@@ -138,7 +139,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.LogDebug("Exception in CreateGlyphRun {0}", ex);                
+                Core.Logger.Debug("Exception in CreateGlyphRun {0}", ex);                
             }
 
             return glyphRun;

@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,7 +9,6 @@ using System.Runtime.Serialization;
 using System.Windows.Controls;
 using System.Windows.Input;
 using JetBrains.Annotations;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.UI.UIComponents;
 
@@ -170,7 +170,7 @@ namespace Trinity.Settings.ItemList
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            //Logger.Log("Property Changed {0}", propertyName);
+            //Core.Logger.Log("Property Changed {0}", propertyName);
             var handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -236,7 +236,7 @@ namespace Trinity.Settings.ItemList
                         return;
                     }
 
-                    Logger.Log("AddRequiredRuleCommand {0}", parameter.ToString());
+                    Core.Logger.Log("AddRequiredRuleCommand {0}", parameter.ToString());
 
                     var item = parameter as ComboBoxItem;
                     var selectedPropertyName = item != null ? item.Content.ToString() : parameter.ToString();
@@ -245,7 +245,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log("Exception in AddRequiredRuleCommand: {0} {1}", ex.Message, ex.InnerException, ex);
+                    Core.Logger.Log("Exception in AddRequiredRuleCommand: {0} {1}", ex.Message, ex.InnerException, ex);
                 }
 
             });
@@ -259,7 +259,7 @@ namespace Trinity.Settings.ItemList
                         return;
                     }
 
-                    Logger.Log("AddOptionalRuleCommand {0}", parameter.ToString());
+                    Core.Logger.Log("AddOptionalRuleCommand {0}", parameter.ToString());
 
                     var item = parameter as ComboBoxItem;
                     var selectedPropertyName = item != null ? item.Content.ToString() : parameter.ToString();
@@ -268,7 +268,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log("Exception in AddOptionalRuleCommand: {0} {1}", ex.Message, ex.InnerException);
+                    Core.Logger.Log("Exception in AddOptionalRuleCommand: {0} {1}", ex.Message, ex.InnerException);
                 }
 
             });
@@ -281,7 +281,7 @@ namespace Trinity.Settings.ItemList
                     if (lRule == null)
                         return;
 
-                    Logger.Log("RemoveRuleCommand: {0}", lRule.Name);
+                    Core.Logger.Log("RemoveRuleCommand: {0}", lRule.Name);
 
                     Rules.Remove(lRule);
 
@@ -290,7 +290,7 @@ namespace Trinity.Settings.ItemList
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log("Exception in AddRequiredRuleCommand: {0} {1}", ex.Message, ex.InnerException);
+                    Core.Logger.Log("Exception in AddRequiredRuleCommand: {0} {1}", ex.Message, ex.InnerException);
                 }
             });
         }
@@ -311,7 +311,7 @@ namespace Trinity.Settings.ItemList
 
             ItemProperty property;
 
-            Logger.Log("Attempting to Add {0} Type={1}", propertyName, ruleType);
+            Core.Logger.Log("Attempting to Add {0} Type={1}", propertyName, ruleType);
 
             if (!Enum.TryParse(propertyName, out property))
                 return;
@@ -324,7 +324,7 @@ namespace Trinity.Settings.ItemList
                 var statRange = GetItemStatRange(property);
                 if (statRange != null)
                 {
-                    Logger.LogVerbose($"Stats Min = {statRange.AbsMin} Max = {statRange.AbsMax} Step = {statRange.AbsStep}");
+                    Core.Logger.Verbose($"Stats Min = {statRange.AbsMin} Max = {statRange.AbsMax} Step = {statRange.AbsStep}");
                 }
 
                 Rules.Add(new LRule
@@ -344,7 +344,7 @@ namespace Trinity.Settings.ItemList
             {
                 if (!allowed)
                 {
-                    Logger.Log("{0} has already been added and duplicates are not allowed", propertyName);
+                    Core.Logger.Log("{0} has already been added and duplicates are not allowed", propertyName);
                 }
             }
 

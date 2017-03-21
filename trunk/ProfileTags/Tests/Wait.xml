@@ -1,0 +1,15 @@
+﻿<Profile>
+  <Name>Tag Test - Wait</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> Wait Test Started " />
+    
+    <LogMessage message=">> Waiting for 5 seconds" />
+    <Wait seconds="5" />
+
+    <LogMessage message=">> Waiting for 0-10 seconds" />
+    <Wait seconds="5" randomPercent="100" />
+
+    <LogMessage message=">> Wait Test Finished " />
+  </Order>
+</Profile>

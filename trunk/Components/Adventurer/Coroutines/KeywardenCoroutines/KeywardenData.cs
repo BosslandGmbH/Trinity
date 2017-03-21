@@ -15,15 +15,15 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 
         public bool IsAlive
         {
-            get { return !ZetaDia.IsBossEncounterCompleted(BossEncounter); }
+            get { return !ZetaDia.Storage.Quests.IsBossEncounterCompleted(BossEncounter); }
         }
 
         public long MachinesCount
         {
             get
             {
-                var stashCount = ZetaDia.Me.Inventory.StashItems.Where(i => i.IsValid && i.ActorSnoId == KeySNO).Sum(i=>i.ItemStackQuantity);
-                var backpackCount= ZetaDia.Me.Inventory.Backpack.Where(i => i.IsValid && i.ActorSnoId == KeySNO).Sum(i => i.ItemStackQuantity);
+                var stashCount = InventoryManager.StashItems.Where(i => i.IsValid && i.ActorSnoId == KeySNO).Sum(i => i.ItemStackQuantity);
+                var backpackCount = InventoryManager.Backpack.Where(i => i.IsValid && i.ActorSnoId == KeySNO).Sum(i => i.ItemStackQuantity);
                 return stashCount + backpackCount;
             }
         }

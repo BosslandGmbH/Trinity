@@ -7,8 +7,8 @@ namespace Trinity.Framework.Helpers
     {
         private static Random _random { get; } = new Random();
 
-        public static int Fudge(int input, double min = 0.5, double max = 1.5) 
-            => Boolean ? _random.Next((int)(input * min),(int)(input * max)) : input * 4;
+        public static int Fudge(int input, double min = 0.5, double max = 1.5)
+            => Boolean ? _random.Next((int)(input * min), (int)(input * max)) : input * 4;
 
         public static bool Boolean => _random.Next(0, 1) == 1;
 

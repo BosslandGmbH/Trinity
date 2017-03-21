@@ -1,6 +1,6 @@
 ﻿using System;
+using Trinity.Framework;
 using Trinity.Components.Adventurer.Game.Events;
-using Trinity.Components.Adventurer.Util;
 using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Game.Stats
@@ -26,13 +26,13 @@ namespace Trinity.Components.Adventurer.Game.Stats
         {
             if (_startTime == DateTime.MinValue)
                 _startTime = DateTime.UtcNow;
-            _tickStartTime = DateTime.UtcNow;            
+            _tickStartTime = DateTime.UtcNow;
             CurrentExperience = 0;
             _tick++;
             _lastSeen = GetLastSeen();
             EnablePulse();
             IsStarted = true;
-            Logger.Info("[XPTracker] Starting a new experience tracking session.");
+            Core.Logger.Log("[XPTracker] Starting a new experience tracking session.");
             Current = this;
         }
 
@@ -54,7 +54,7 @@ namespace Trinity.Components.Adventurer.Game.Stats
                 ReportExperience(reporterName);
             }
             IsStarted = false;
-        }        
+        }
 
         private void ReportExperience(string reporterName)
         {
@@ -78,20 +78,19 @@ namespace Trinity.Components.Adventurer.Game.Stats
             if (MinExperience == 0 || MinExperience > ThisExpHour)
                 MinExperience = ThisExpHour;
 
-            
-            Logger.Warn("[{0}] Runs count: {1}", reporterName, _tick);
-            Logger.Warn("[{0}] This run time: {1}:{2:D2}:{3:D2}", reporterName, TimeOfLastRun.Hours, TimeOfLastRun.Minutes, TimeOfLastRun.Seconds);
-            Logger.Warn("[{0}] Average run time: {1}:{2:D2}:{3:D2}", reporterName, AverageRunTime.Hours, AverageRunTime.Minutes, AverageRunTime.Seconds);
-            Logger.Warn("[{0}] Best run time: {1}:{2:D2}:{3:D2}", reporterName, _bestTime.Hours, _bestTime.Minutes, _bestTime.Seconds);
-            Logger.Warn("[{0}] Worse run time: {1}:{2:D2}:{3:D2}", reporterName, _worseTime.Hours, _worseTime.Minutes, _worseTime.Seconds);
-            Logger.Warn("[{0}] This run XP Gained: {1:0,0}", reporterName, CurrentExperience);
-            Logger.Warn("[{0}] This run / Hour: {1:0,0}", reporterName, ThisExpHour);
-            Logger.Warn("[{0}] Total XP Gained: {1:0,0}", reporterName, TotalExperience);
-            Logger.Warn("[{0}] Total XP / Hour: {1:0,0}", reporterName, TotalExperience / TimeOfSession.TotalHours);
-            Logger.Warn("[{0}] Best XP / Hour (single run): {1:0,0}", reporterName, MaxExperience);
-            Logger.Warn("[{0}] Worse XP / Hour (single run): {1:0,0}", reporterName, MinExperience);
-            Logger.Warn("[{0}] Best XP / Single run: {1:0,0}", reporterName, MaxExperienceRun);
-            Logger.Warn("[{0}] Worse XP / Single run: {1:0,0}", reporterName, MinExperienceRun);
+            Core.Logger.Warn("[{0}] Runs count: {1}", reporterName, _tick);
+            Core.Logger.Warn("[{0}] This run time: {1}:{2:D2}:{3:D2}", reporterName, TimeOfLastRun.Hours, TimeOfLastRun.Minutes, TimeOfLastRun.Seconds);
+            Core.Logger.Warn("[{0}] Average run time: {1}:{2:D2}:{3:D2}", reporterName, AverageRunTime.Hours, AverageRunTime.Minutes, AverageRunTime.Seconds);
+            Core.Logger.Warn("[{0}] Best run time: {1}:{2:D2}:{3:D2}", reporterName, _bestTime.Hours, _bestTime.Minutes, _bestTime.Seconds);
+            Core.Logger.Warn("[{0}] Worse run time: {1}:{2:D2}:{3:D2}", reporterName, _worseTime.Hours, _worseTime.Minutes, _worseTime.Seconds);
+            Core.Logger.Warn("[{0}] This run XP Gained: {1:0,0}", reporterName, CurrentExperience);
+            Core.Logger.Warn("[{0}] This run / Hour: {1:0,0}", reporterName, ThisExpHour);
+            Core.Logger.Warn("[{0}] Total XP Gained: {1:0,0}", reporterName, TotalExperience);
+            Core.Logger.Warn("[{0}] Total XP / Hour: {1:0,0}", reporterName, TotalExperience / TimeOfSession.TotalHours);
+            Core.Logger.Warn("[{0}] Best XP / Hour (single run): {1:0,0}", reporterName, MaxExperience);
+            Core.Logger.Warn("[{0}] Worse XP / Hour (single run): {1:0,0}", reporterName, MinExperience);
+            Core.Logger.Warn("[{0}] Best XP / Single run: {1:0,0}", reporterName, MaxExperienceRun);
+            Core.Logger.Warn("[{0}] Worse XP / Single run: {1:0,0}", reporterName, MinExperienceRun);
         }
 
         public static ExperienceTrackerResult GetResult()

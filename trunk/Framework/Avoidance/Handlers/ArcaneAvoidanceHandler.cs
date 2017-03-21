@@ -1,19 +1,20 @@
 using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
+using Trinity.Framework.Grid;
 using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
     internal class ArcaneAvoidanceHandler : IAvoidanceHandler
     {
-        private static Dictionary<int,Rotator> _rotators = new Dictionary<int, Rotator>();
+        private static Dictionary<int, Rotator> _rotators = new Dictionary<int, Rotator>();
 
-        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
+        public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             CleanUpRotators();
 
@@ -35,11 +36,11 @@ namespace Trinity.Framework.Avoidance.Handlers
                         _rotators.Add(actor.RActorId, rotator);
                         Task.FromResult(rotator.Rotate());
                     }
-                    
+
                     var centerNodes = grid.GetNodesInRadius(actor.Position, 6f);
                     var radAngle = MathUtil.ToRadians(rotator.Angle);
                     var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 26f, radAngle)).SelectMany(n => n.AdjacentNodes).ToList();
-                       
+
                     var futureRadAngle = MathUtil.ToRadians((float)rotator.GetFutureAngle(TimeSpan.FromMilliseconds(500)));
                     nodes.AddRange(grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 26f, futureRadAngle)).SelectMany(n => n.AdjacentNodes));
                     nodes.AddRange(centerNodes);
@@ -52,7 +53,6 @@ namespace Trinity.Framework.Avoidance.Handlers
                     grid.FlagAvoidanceNodes(telegraphNodes, AvoidanceFlags.Avoidance, avoidance, 10);
                 }
             }
-
         }
 
         private void CleanUpRotators()
@@ -74,7 +74,5 @@ namespace Trinity.Framework.Avoidance.Handlers
                 StartAngleDegrees = actor.RotationDegrees
             };
         }
-
     }
 }
-

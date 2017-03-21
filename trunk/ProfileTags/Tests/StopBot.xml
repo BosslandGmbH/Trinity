@@ -1,0 +1,22 @@
+﻿<Profile>
+  <Name>Tag Test - StopBot</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> StopBot Test Started " />
+
+    <If condition="CurrentLevelAreaId != 92945">
+      <TakeWaypoint destinationLevelAreaSnoId="92945" />
+    </If>
+
+    <Wait seconds="2" />
+    
+    <LogMessage message=">> Stopping Now " />
+    <StopBot condition="CurrentLevelAreaId == 92945" />
+
+    <LogMessage message=">> This message shouldnt be seen" />
+    <MoveToPosition x="389" y="424" z="0" worldSnoId="172909" levelAreaSnoId="92945" sceneSnoId="172876" sceneName="a3dun_vendors_A_E01_S02" sceneX="149" sceneY="184" sceneZ="0" isGenerated="false" />    
+    <Wait seconds="10" />
+
+    <LogMessage message=">> StopBot Test Finished " />    
+  </Order>
+</Profile>

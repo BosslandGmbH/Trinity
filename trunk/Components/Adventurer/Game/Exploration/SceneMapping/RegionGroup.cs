@@ -26,7 +26,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
         }
 
         public IEnumerator<IWorldRegion> GetEnumerator() => Regions.GetEnumerator();
+
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
         public void Add(IWorldRegion x) => Regions.Add(x);
 
         public IWorldRegion Offset(Vector2 min)
@@ -37,7 +39,5 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             }
             return this;
         }
-
-
     }
 }

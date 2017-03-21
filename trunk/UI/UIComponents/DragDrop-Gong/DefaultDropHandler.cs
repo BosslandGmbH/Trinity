@@ -9,10 +9,10 @@ using Trinity.UI.UIComponents.Utilities;
 
 namespace Trinity.UI.UIComponents
 {
-  /// <summary>
-  /// A default insertion drop handler for the most common usages
-  /// </summary>
-  public class DefaultDropHandler : IDropTarget
+    /// <summary>
+    /// A default insertion drop handler for the most common usages
+    /// </summary>
+    public class DefaultDropHandler : IDropTarget
   {
     /// <summary>
     /// Updates the current drag state.

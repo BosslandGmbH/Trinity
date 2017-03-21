@@ -5,9 +5,11 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
     public interface ISubroutine
     {
         bool IsDone { get; }
-        Task<bool> GetCoroutine();
-        void Reset();
-        void DisablePulse();
 
+        Task<bool> GetCoroutine();
+
+        void Reset();
+
+        void DisablePulse();
     }
 }

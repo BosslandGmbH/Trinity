@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Trinity.Components.Combat;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Items;
 using Trinity.Settings;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -65,19 +60,23 @@ namespace Trinity.Framework.Helpers
             {
                 case ItemQuality.Inferior:
                     return TrinityItemQuality.Inferior;
+
                 case ItemQuality.Normal:
                 case ItemQuality.Superior:
                     return TrinityItemQuality.Common;
+
                 case ItemQuality.Magic1:
                 case ItemQuality.Magic2:
                 case ItemQuality.Magic3:
                     return TrinityItemQuality.Magic;
+
                 case ItemQuality.Rare4:
                 case ItemQuality.Rare5:
                 case ItemQuality.Rare6:
                     return TrinityItemQuality.Rare;
+
                 case ItemQuality.Legendary:
-                    return TrinityItemQuality.Legendary;                
+                    return TrinityItemQuality.Legendary;
             }
             return TrinityItemQuality.None;
         }
@@ -209,6 +208,7 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.Sword:
                 case TrinityItemType.Wand:
                     return TrinityItemBaseType.WeaponOneHand;
+
                 case TrinityItemType.TwoHandDaibo:
                 case TrinityItemType.TwoHandMace:
                 case TrinityItemType.TwoHandFlail:
@@ -218,16 +218,19 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.TwoHandSword:
                 case TrinityItemType.TwoHandAxe:
                     return TrinityItemBaseType.WeaponTwoHand;
+
                 case TrinityItemType.TwoHandCrossbow:
                 case TrinityItemType.HandCrossbow:
                 case TrinityItemType.TwoHandBow:
                     return TrinityItemBaseType.WeaponRange;
+
                 case TrinityItemType.Mojo:
                 case TrinityItemType.Orb:
                 case TrinityItemType.CrusaderShield:
                 case TrinityItemType.Quiver:
                 case TrinityItemType.Shield:
                     return TrinityItemBaseType.Offhand;
+
                 case TrinityItemType.Boots:
                 case TrinityItemType.Bracer:
                 case TrinityItemType.Chest:
@@ -242,13 +245,16 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.Belt:
                 case TrinityItemType.MightyBelt:
                     return TrinityItemBaseType.Armor;
+
                 case TrinityItemType.Amulet:
                 case TrinityItemType.Ring:
                     return TrinityItemBaseType.Jewelry;
+
                 case TrinityItemType.FollowerEnchantress:
                 case TrinityItemType.FollowerScoundrel:
                 case TrinityItemType.FollowerTemplar:
                     return TrinityItemBaseType.FollowerItem;
+
                 case TrinityItemType.CraftingMaterial:
                 case TrinityItemType.CraftTome:
                 case TrinityItemType.LootRunKey:
@@ -263,16 +269,20 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.ConsumableAddSockets:
                 case TrinityItemType.TieredLootrunKey:
                     return TrinityItemBaseType.Misc;
+
                 case TrinityItemType.Ruby:
                 case TrinityItemType.Emerald:
                 case TrinityItemType.Topaz:
                 case TrinityItemType.Amethyst:
                 case TrinityItemType.Diamond:
                     return TrinityItemBaseType.Gem;
+
                 case TrinityItemType.HealthGlobe:
                     return TrinityItemBaseType.HealthGlobe;
+
                 case TrinityItemType.PowerGlobe:
                     return TrinityItemBaseType.PowerGlobe;
+
                 case TrinityItemType.ProgressionGlobe:
                     return TrinityItemBaseType.ProgressionGlobe;
             }
@@ -364,7 +374,6 @@ namespace Trinity.Framework.Helpers
             if (name.StartsWith("offhand_")) return TrinityItemType.Mojo;
             if (name.StartsWith("horadricrelic")) return TrinityItemType.HoradricRelic;
 
-
             // Follower item types
             if (name.StartsWith("jewelbox_") || dbItemType == ItemType.FollowerSpecial)
             {
@@ -376,7 +385,7 @@ namespace Trinity.Framework.Helpers
                     return TrinityItemType.FollowerEnchantress;
             }
 
-            // Fall back on some partial DB item type checking 
+            // Fall back on some partial DB item type checking
             if (name.StartsWith("crafting_"))
             {
                 if (dbItemType == ItemType.CraftingPage)
@@ -454,6 +463,7 @@ namespace Trinity.Framework.Helpers
                 case ItemType.Daibo:
                 case ItemType.HandCrossbow:
                     return ItemBaseType.Weapon;
+
                 case ItemType.Shield:
                 case ItemType.CrusaderShield:
                 case ItemType.Gloves:
@@ -473,11 +483,14 @@ namespace Trinity.Framework.Helpers
                 case ItemType.SpiritStone:
                 case ItemType.VoodooMask:
                     return ItemBaseType.Armor;
+
                 case ItemType.Ring:
                 case ItemType.Amulet:
                     return ItemBaseType.Jewelry;
+
                 case ItemType.Gem:
                     return ItemBaseType.Gem;
+
                 default:
                     return ItemBaseType.Misc;
             }
@@ -498,6 +511,7 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.Sword:
                 case TrinityItemType.Wand:
                     return TrinityItemBaseType.WeaponOneHand;
+
                 case TrinityItemType.TwoHandDaibo:
                 case TrinityItemType.TwoHandMace:
                 case TrinityItemType.TwoHandFlail:
@@ -507,16 +521,19 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.TwoHandSword:
                 case TrinityItemType.TwoHandAxe:
                     return TrinityItemBaseType.WeaponTwoHand;
+
                 case TrinityItemType.TwoHandCrossbow:
                 case TrinityItemType.HandCrossbow:
                 case TrinityItemType.TwoHandBow:
                     return TrinityItemBaseType.WeaponRange;
+
                 case TrinityItemType.Mojo:
                 case TrinityItemType.Orb:
                 case TrinityItemType.CrusaderShield:
                 case TrinityItemType.Quiver:
                 case TrinityItemType.Shield:
                     return TrinityItemBaseType.Offhand;
+
                 case TrinityItemType.Boots:
                 case TrinityItemType.Bracer:
                 case TrinityItemType.Chest:
@@ -531,13 +548,16 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.Belt:
                 case TrinityItemType.MightyBelt:
                     return TrinityItemBaseType.Armor;
+
                 case TrinityItemType.Amulet:
                 case TrinityItemType.Ring:
                     return TrinityItemBaseType.Jewelry;
+
                 case TrinityItemType.FollowerEnchantress:
                 case TrinityItemType.FollowerScoundrel:
                 case TrinityItemType.FollowerTemplar:
                     return TrinityItemBaseType.FollowerItem;
+
                 case TrinityItemType.CraftingMaterial:
                 case TrinityItemType.CraftTome:
                 case TrinityItemType.LootRunKey:
@@ -554,16 +574,20 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.PortalDevice:
                 case TrinityItemType.TieredLootrunKey:
                     return TrinityItemBaseType.Misc;
+
                 case TrinityItemType.Ruby:
                 case TrinityItemType.Emerald:
                 case TrinityItemType.Topaz:
                 case TrinityItemType.Amethyst:
                 case TrinityItemType.Diamond:
                     return TrinityItemBaseType.Gem;
+
                 case TrinityItemType.HealthGlobe:
                     return TrinityItemBaseType.HealthGlobe;
+
                 case TrinityItemType.PowerGlobe:
                     return TrinityItemBaseType.PowerGlobe;
+
                 case TrinityItemType.ProgressionGlobe:
                     return TrinityItemBaseType.ProgressionGlobe;
             }
@@ -578,10 +602,13 @@ namespace Trinity.Framework.Helpers
                 //    return TrinityItemType.Amethyst;
                 case RawItemType.Amulet:
                     return TrinityItemType.Amulet;
+
                 case RawItemType.Axe:
                     return TrinityItemType.Axe;
+
                 case RawItemType.Belt_Barbarian:
                     return TrinityItemType.MightyBelt;
+
                 case RawItemType.Boots_Barbarian:
                 case RawItemType.Boots_Crusader:
                 case RawItemType.Boots_DemonHunter:
@@ -595,19 +622,25 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.BowClass:
                 case RawItemType.Bow:
                     return TrinityItemType.TwoHandBow;
+
                 case RawItemType.Bracers:
                     return TrinityItemType.Bracer;
+
                 case RawItemType.CeremonialDagger:
                     return TrinityItemType.CeremonialKnife;
+
                 case RawItemType.Cloak:
                     return TrinityItemType.Cloak;
+
                 case RawItemType.CombatStaff:
                     return TrinityItemType.TwoHandDaibo;
+
                 case RawItemType.CursedHoradricReagent:
                 case RawItemType.CraftingReagent_Bound:
                 case RawItemType.CraftingReagent:
                 case RawItemType.HoradricReagent:
                     return TrinityItemType.CraftingMaterial;
+
                 case RawItemType.CraftingPlan:
                 case RawItemType.CraftingPlan_Smith:
                 case RawItemType.CraftingPlanLegendary_Smith:
@@ -615,8 +648,10 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.CraftingPlan_Mystic:
                 case RawItemType.CraftingPlan_MysticTransmog:
                     return TrinityItemType.CraftingPlan;
+
                 case RawItemType.CrusaderShield:
                     return TrinityItemType.CrusaderShield;
+
                 case RawItemType.Dagger:
                     return TrinityItemType.Dagger;
                 //case RawItemType.Diamond:
@@ -627,16 +662,22 @@ namespace Trinity.Framework.Helpers
                 //    return TrinityItemType.Emerald;
                 case RawItemType.FistWeapon:
                     return TrinityItemType.FistWeapon;
+
                 case RawItemType.Flail1H:
                     return TrinityItemType.Flail;
+
                 case RawItemType.Flail2H:
                     return TrinityItemType.TwoHandFlail;
+
                 case RawItemType.EnchantressSpecial:
                     return TrinityItemType.FollowerEnchantress;
+
                 case RawItemType.ScoundrelSpecial:
                     return TrinityItemType.FollowerScoundrel;
+
                 case RawItemType.TemplarSpecial:
                     return TrinityItemType.FollowerTemplar;
+
                 case RawItemType.Gloves_Barbarian:
                 case RawItemType.Gloves_Crusader:
                 case RawItemType.Gloves_DemonHunter:
@@ -645,12 +686,16 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Gloves_Wizard:
                 case RawItemType.Gloves:
                     return TrinityItemType.Gloves;
+
                 case RawItemType.HandXbow:
                     return TrinityItemType.HandCrossbow;
+
                 case RawItemType.HealthGlyph:
                     return TrinityItemType.HealthPotion;
+
                 case RawItemType.HealthPotion:
                     return TrinityItemType.HealthPotion;
+
                 case RawItemType.Legs_Barbarian:
                 case RawItemType.Legs_Crusader:
                 case RawItemType.Legs_DemonHunter:
@@ -659,16 +704,20 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Legs_Wizard:
                 case RawItemType.Legs:
                     return TrinityItemType.Legs;
+
                 case RawItemType.Polearm:
                     return TrinityItemType.TwoHandPolearm;
+
                 case RawItemType.Quiver:
                     return TrinityItemType.Quiver;
+
                 case RawItemType.Ring:
                     return TrinityItemType.Ring;
                 //case RawItemType.Ruby:
                 //    return TrinityItemType.Ruby;
                 case RawItemType.Shield:
                     return TrinityItemType.Shield;
+
                 case RawItemType.Shoulders_Barbarian:
                 case RawItemType.Shoulders_Crusader:
                 case RawItemType.Shoulders_DemonHunter:
@@ -677,42 +726,59 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Shoulders_Wizard:
                 case RawItemType.Shoulders:
                     return TrinityItemType.Shoulder;
+
                 case RawItemType.Spear:
                     return TrinityItemType.Spear;
+
                 case RawItemType.SpiritStone_Monk:
                     return TrinityItemType.SpiritStone;
+
                 case RawItemType.Staff:
                     return TrinityItemType.TwoHandStaff;
+
                 case RawItemType.Sword:
                     return TrinityItemType.Sword;
                 //case RawItemType.Topaz:
                 //    return TrinityItemType.Topaz;
                 case RawItemType.Axe2H:
                     return TrinityItemType.TwoHandAxe;
+
                 case RawItemType.Mace:
                     return TrinityItemType.Mace;
+
                 case RawItemType.Mace2H:
                     return TrinityItemType.TwoHandMace;
+
                 case RawItemType.Sword2H:
                     return TrinityItemType.TwoHandSword;
+
                 case RawItemType.VoodooMask:
                     return TrinityItemType.VoodooMask;
+
                 case RawItemType.Wand:
                     return TrinityItemType.Wand;
+
                 case RawItemType.WizardHat:
                     return TrinityItemType.WizardHat;
+
                 case RawItemType.Crossbow:
                     return TrinityItemType.TwoHandCrossbow;
+
                 case RawItemType.ShrineGlyph:
                     return TrinityItemType.PowerGlobe;
+
                 case RawItemType.Glyph:
                     return TrinityItemType.ProgressionGlobe;
+
                 case RawItemType.GeneralUtility:
                     return TrinityItemType.ConsumableAddSockets;
+
                 case RawItemType.TieredRiftKey:
                     return TrinityItemType.TieredLootrunKey;
+
                 case RawItemType.Mojo:
                     return TrinityItemType.Mojo;
+
                 case RawItemType.GenericChestArmor:
                 case RawItemType.ChestArmor_Barbarian:
                 case RawItemType.ChestArmor_Crusader:
@@ -723,6 +789,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.ChestArmor:
                 case RawItemType.Armor:
                     return TrinityItemType.Chest;
+
                 case RawItemType.Helm_Barbarian:
                 case RawItemType.Helm_Crusader:
                 case RawItemType.Helm_DemonHunter:
@@ -732,6 +799,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Helm:
                 case RawItemType.GenericHelm:
                     return TrinityItemType.Helm;
+
                 case RawItemType.Belt_Crusader:
                 case RawItemType.Belt_DemonHunter:
                 case RawItemType.Belt_Monk:
@@ -739,35 +807,49 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.GenericBelt:
                 case RawItemType.Belt:
                     return TrinityItemType.Belt;
+
                 case RawItemType.Orb:
                     return TrinityItemType.Orb;
+
                 case RawItemType.MightyWeapon1H:
                     return TrinityItemType.MightyWeapon;
+
                 case RawItemType.MightyWeapon2H:
                     return TrinityItemType.TwoHandMighty;
+
                 case RawItemType.BloodShard:
                     return TrinityItemType.HoradricRelic;
+
                 case RawItemType.DemonicKey:
                     return TrinityItemType.InfernalKey;
+
                 case RawItemType.Gold:
                     return TrinityItemType.Gold;
+
                 case RawItemType.TreasureBag:
                     return TrinityItemType.HoradricCache;
+
                 case RawItemType.DemonicOrgan:
                     return TrinityItemType.UberReagent;
+
                 case RawItemType.PortalDevice:
                     return TrinityItemType.PortalDevice;
+
                 case RawItemType.Gem:
                     switch (gemType)
                     {
                         case GemType.Amethyst:
                             return TrinityItemType.Amethyst;
+
                         case GemType.Ruby:
                             return TrinityItemType.Ruby;
+
                         case GemType.Diamond:
                             return TrinityItemType.Diamond;
+
                         case GemType.Emerald:
                             return TrinityItemType.Emerald;
+
                         case GemType.Topaz:
                             return TrinityItemType.Topaz;
                     }
@@ -783,14 +865,19 @@ namespace Trinity.Framework.Helpers
             {
                 case TrinityItemQuality.Inferior:
                     return PickupItemQualities.Grey;
+
                 case TrinityItemQuality.Common:
                     return PickupItemQualities.White;
+
                 case TrinityItemQuality.Magic:
                     return PickupItemQualities.Blue;
+
                 case TrinityItemQuality.Rare:
                     return PickupItemQualities.Yellow;
+
                 case TrinityItemQuality.Legendary:
                     return PickupItemQualities.Orange;
+
                 case TrinityItemQuality.Set:
                     return PickupItemQualities.Green;
             }
@@ -804,14 +891,18 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Axe:
                 case RawItemType.Axe2H:
                     return ItemType.Axe;
+
                 case RawItemType.Sword:
                 case RawItemType.Sword2H:
                     return ItemType.Sword;
+
                 case RawItemType.Mace:
                 case RawItemType.Mace2H:
                     return ItemType.Mace;
+
                 case RawItemType.Dagger:
                     return ItemType.Dagger;
+
                 case RawItemType.Flail1H:
                 case RawItemType.Flail2H:
                     return ItemType.Flail;
@@ -820,16 +911,22 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.BowClass:
                 case RawItemType.Bow:
                     return ItemType.Bow;
+
                 case RawItemType.Crossbow:
                     return ItemType.Crossbow;
+
                 case RawItemType.Staff:
                     return ItemType.Staff;
+
                 case RawItemType.Spear:
                     return ItemType.Spear;
+
                 case RawItemType.Shield:
                     return ItemType.Shield;
+
                 case RawItemType.CrusaderShield:
                     return ItemType.CrusaderShield;
+
                 case RawItemType.Gloves_Barbarian:
                 case RawItemType.Gloves_Crusader:
                 case RawItemType.Gloves_DemonHunter:
@@ -838,6 +935,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Gloves_Wizard:
                 case RawItemType.Gloves:
                     return ItemType.Gloves;
+
                 case RawItemType.Boots_Barbarian:
                 case RawItemType.Boots_Crusader:
                 case RawItemType.Boots_DemonHunter:
@@ -846,6 +944,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Boots_Wizard:
                 case RawItemType.Boots:
                     return ItemType.Boots;
+
                 case RawItemType.ChestArmor_Barbarian:
                 case RawItemType.ChestArmor_Crusader:
                 case RawItemType.ChestArmor_DemonHunter:
@@ -856,12 +955,16 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.GenericChestArmor:
                 case RawItemType.Armor:
                     return ItemType.Chest;
+
                 case RawItemType.Ring:
                     return ItemType.Ring;
+
                 case RawItemType.Amulet:
                     return ItemType.Amulet;
+
                 case RawItemType.Quiver:
                     return ItemType.Quiver;
+
                 case RawItemType.Shoulders_Barbarian:
                 case RawItemType.Shoulders_Crusader:
                 case RawItemType.Shoulders_DemonHunter:
@@ -870,6 +973,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Shoulders_Wizard:
                 case RawItemType.Shoulders:
                     return ItemType.Shoulder;
+
                 case RawItemType.Legs_Barbarian:
                 case RawItemType.Legs_Crusader:
                 case RawItemType.Legs_DemonHunter:
@@ -878,14 +982,19 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Legs_Wizard:
                 case RawItemType.Legs:
                     return ItemType.Legs;
+
                 case RawItemType.FistWeapon:
                     return ItemType.FistWeapon;
+
                 case RawItemType.Mojo:
                     return ItemType.Mojo;
+
                 case RawItemType.CeremonialDagger:
                     return ItemType.CeremonialDagger;
+
                 case RawItemType.WizardHat:
                     return ItemType.WizardHat;
+
                 case RawItemType.Helm_Barbarian:
                 case RawItemType.Helm_Crusader:
                 case RawItemType.Helm_DemonHunter:
@@ -895,35 +1004,48 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Helm:
                 case RawItemType.GenericHelm:
                     return ItemType.Helm;
+
                 case RawItemType.Belt_Crusader:
                 case RawItemType.Belt_DemonHunter:
                 case RawItemType.Belt_Monk:
                 case RawItemType.Belt_WitchDoctor:
                 case RawItemType.GenericBelt:
                     return ItemType.Belt;
+
                 case RawItemType.Bracers:
                     return ItemType.Bracer;
+
                 case RawItemType.Orb:
                     return ItemType.Orb;
+
                 case RawItemType.MightyWeapon2H:
                 case RawItemType.MightyWeapon1H:
                     return ItemType.MightyWeapon;
+
                 case RawItemType.Belt_Barbarian:
                     return ItemType.MightyBelt;
+
                 case RawItemType.Polearm:
                     return ItemType.Polearm;
+
                 case RawItemType.Cloak:
                     return ItemType.Cloak;
+
                 case RawItemType.Wand:
                     return ItemType.Wand;
+
                 case RawItemType.SpiritStone_Monk:
                     return ItemType.SpiritStone;
+
                 case RawItemType.CombatStaff:
                     return ItemType.Daibo;
+
                 case RawItemType.HandXbow:
                     return ItemType.HandCrossbow;
+
                 case RawItemType.VoodooMask:
                     return ItemType.VoodooMask;
+
                 case RawItemType.HealthPotion:
                 case RawItemType.Potion:
                     return ItemType.Potion;
@@ -934,6 +1056,7 @@ namespace Trinity.Framework.Helpers
                 //case RawItemType.Ruby:
                 case RawItemType.Gem:
                     return ItemType.Gem;
+
                 case RawItemType.CursedHoradricReagent:
                 case RawItemType.CraftingReagent_Bound:
                 case RawItemType.CraftingReagent:
@@ -945,6 +1068,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.PageOfTraining_Jeweler:
                 case RawItemType.PageOfTraining_Smith:
                     return ItemType.CraftingPage;
+
                 case RawItemType.CraftingPlan:
                 case RawItemType.CraftingPlan_Smith:
                 case RawItemType.CraftingPlanLegendary_Smith:
@@ -952,21 +1076,25 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.CraftingPlan_Mystic:
                 case RawItemType.CraftingPlan_MysticTransmog:
                     return ItemType.CraftingPlan;
+
                 case RawItemType.TemplarSpecial:
                 case RawItemType.ScoundrelSpecial:
                 case RawItemType.EnchantressSpecial:
                     return ItemType.FollowerSpecial;
+
                 case RawItemType.TreasureBag:
                     return ItemType.HoradricCache;
+
                 case RawItemType.TieredRiftKey:
                     return ItemType.KeystoneFragment;
+
                 case RawItemType.UpgradeableJewel:
                     return ItemType.LegendaryGem;
+
                 case RawItemType.Dye:
                     return ItemType.Consumable;
 
                     //return ItemType.SeasonCache; ??
-
             }
             return ItemType.Unknown;
         }
@@ -992,6 +1120,7 @@ namespace Trinity.Framework.Helpers
                 case ItemType.HoradricCache:
                 case ItemType.SeasonCache:
                     return true;
+
                 case ItemType.Belt:
                     return false;
             }
@@ -1042,12 +1171,11 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemBaseType.WeaponTwoHand:
                 case TrinityItemBaseType.FollowerItem:
                     return true;
+
                 default:
                     return false;
             }
         }
-
-
 
         public static bool IsUsableByClass(ActorClass actorClass, TrinityItemType trinityItemType)
         {
@@ -1105,7 +1233,6 @@ namespace Trinity.Framework.Helpers
 
         public static bool IsArmor(TrinityItem item) => ArmorTypes.Contains(item.ItemType);
 
-
         internal static HashSet<ItemType> OffHandTypes = new HashSet<ItemType>
         {
             ItemType.Orb,
@@ -1119,6 +1246,19 @@ namespace Trinity.Framework.Helpers
         {
             ItemType.Shield,
             ItemType.CrusaderShield,
+        };
+
+        internal static HashSet<ItemBaseType> EquipmentTypes = new HashSet<ItemBaseType>
+        {
+            ItemBaseType.Armor,
+            ItemBaseType.Jewelry,
+            ItemBaseType.Weapon,
+        };
+
+        internal static HashSet<ItemBaseType> TwoSquareTypes = new HashSet<ItemBaseType>
+        {
+            ItemBaseType.Armor,
+            ItemBaseType.Weapon,
         };
 
         internal static HashSet<ItemType> WeaponTypes = new HashSet<ItemType>
@@ -1176,4 +1316,3 @@ namespace Trinity.Framework.Helpers
         };
     }
 }
-

@@ -24,12 +24,16 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public WorldScene Scene { get { return _scene; } }
         public IGroupNode ExplorationNode { get { return _explorationNode; } }
+
         //public bool IsVisited { get { return _explorationNode.IsVisited; } }
         //public bool IsIgnored { get { return _explorationNode.IsVisited; } }
         public int LevelAreaId { get { return _scene.LevelAreaId; } }
+
         //public float Distance2DSqr { get { return NavigableCenter2D.DistanceSqr(AdvDia.MyPosition.ToVector2()); } }
         public int DynamicWorldId { get { return _scene.DynamicWorldId; } }
+
         public NodeFlags NodeFlags { get; set; }
+
         //public uint CustomFlags { get; set; }
         public GridPoint GridPoint { get; set; }
 
@@ -43,7 +47,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
             if (cell != null)
             {
-                NodeFlags = (NodeFlags) cell.NavCellFlags;
+                NodeFlags = (NodeFlags)cell.NavCellFlags;
             }
 
             var halfSize = (float)boxSize / 2;
@@ -67,6 +71,5 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         }
 
         public byte AStarValue { get; set; }
-
     }
 }

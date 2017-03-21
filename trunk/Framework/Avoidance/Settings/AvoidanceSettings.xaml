@@ -9,13 +9,12 @@
     <UserControl.Resources>
         <ResourceDictionary>
 
- 
             <converters:BoolInverterConverter x:Key="boolInverterConverter" />
             <converters:EnumBooleanConverter x:Key="enumBooleanConverter" />
             <converters:PropertyValueConverter x:Key="propertyValueConverter" />
-            <converters:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter"/>
+            <converters:FlagsEnumValueConverter x:Key="flagsEnumValueBooleanConverter" />
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" TrueValue="Visible" FalseValue="Collapsed" />
-            
+
             <Style TargetType="{x:Type UserControl}">
                 <Style.Triggers>
                     <Trigger Property="ComponentModel:DesignerProperties.IsInDesignMode" Value="true">
@@ -43,32 +42,29 @@
                                 </CheckBox>
                             </WrapPanel>
                         </Border>
-                        <Border Grid.Row="1" Padding="8" Background="#343434" CornerRadius="0" Margin="0,0,0,0" SnapsToDevicePixels="True" Visibility="{Binding IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}" >
+                        <Border Grid.Row="1" Padding="8" Background="#343434" CornerRadius="0" Margin="0,0,0,0" SnapsToDevicePixels="True" Visibility="{Binding IsEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
 
                             <StackPanel>
-                                
-                                <Slider Template="{DynamicResource LabelledSliderEditable}" 
+
+                                <Slider Template="{DynamicResource LabelledSliderEditable}"
                                     Tag="Health Percent"
                                     ToolTip="The amount of health player must be below, for this to be avoided"
-                                    Interval="5" Maximum="100" Minimum="0" 
-                                    SmallChange="5" LargeChange="5" 
+                                    Interval="5" Maximum="100" Minimum="0"
+                                    SmallChange="5" LargeChange="5"
                                     TickPlacement="None"
-                                    Value="{Binding HealthPct}" 
-                                    HorizontalAlignment="Stretch" Margin="2"
-                                    />
+                                    Value="{Binding HealthPct}"
+                                    HorizontalAlignment="Stretch" Margin="2" />
 
-                                <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                                <Slider Template="{DynamicResource LabelledSliderEditable}"
                                     Tag="Distance Multiplier"
                                     ToolTip="Multiplier applied to the distance, increase above 1 to make the bot stay further away"
-                                    Maximum="2" Minimum="0" 
-                                    SmallChange="0.01" LargeChange="0.01"                                       
-                                    TickPlacement="None" 
-                                    Value="{Binding DistanceMultiplier}" 
-                                    HorizontalAlignment="Stretch" Margin="2"
-                                    />
+                                    Maximum="2" Minimum="0"
+                                    SmallChange="0.01" LargeChange="0.01"
+                                    TickPlacement="None"
+                                    Value="{Binding DistanceMultiplier}"
+                                    HorizontalAlignment="Stretch" Margin="2" />
 
                                 <!--<CheckBox IsChecked="{Binding Prioritize}" Foreground="White" ToolTip="When enabled, the avoidance will be treated more seriously">Prioritize</CheckBox>-->
-                                
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -102,10 +98,9 @@
                 <Setter Property="FocusVisualStyle" Value="{x:Null}" />
                 <Setter Property="ContentTemplate" Value="{DynamicResource AvoidanceRowTemplate}" />
             </Style>
-
         </ResourceDictionary>
     </UserControl.Resources>
-   
+
         <!--<Border Padding="10">-->
 
             <!--<TabControl Margin="8" Padding="5,10,5,2" SelectedIndex="{Binding Avoidance.SelectedTabIndex}" Background="#343434">
@@ -117,14 +112,13 @@
                                 <Button Height="23" Command="{Binding SelectNoneCommand}" CommandParameter="GroundEffects">Select None</Button>
                                 <Button Height="23" Command="{Binding SelectDefaultsCommand}" CommandParameter="GroundEffects">Defaults</Button>
                                 <Button Height="23" Command="{Binding MaxHealthCommand}" CommandParameter="GroundEffects">Max All Health</Button>
-
                             </UniformGrid>
-                            <ListView  
+                            <ListView
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                 ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                                ItemContainerStyle="{DynamicResource AvoidanceListViewItemStyle}" 
-                                ItemsSource="{Binding Entries}"                          
-                                SelectionMode="Single" 
+                                ItemContainerStyle="{DynamicResource AvoidanceListViewItemStyle}"
+                                ItemsSource="{Binding Entries}"
+                                SelectionMode="Single"
                                 Height="Auto"
                                 VerticalContentAlignment="Stretch"
                                 Style="{DynamicResource AvoidanceListViewStyle}">
@@ -145,10 +139,10 @@
                                 <Button Command="{Binding SelectAllCommand}" CommandParameter="MonsterAbilities">Select All</Button>
                                 <Button Command="{Binding SelectNoneCommand}" CommandParameter="MonsterAbilities">Select None</Button>
                             </UniformGrid>-->
-                <!--<ListView 
-                                ItemContainerStyle="{DynamicResource AvoidanceListViewItemStyle}" 
-                                ItemsSource="{Binding Avoidance.Avoidances}"                          
-                                SelectionMode="Single" 
+                <!--<ListView
+                                ItemContainerStyle="{DynamicResource AvoidanceListViewItemStyle}"
+                                ItemsSource="{Binding Avoidance.Avoidances}"
+                                SelectionMode="Single"
                                 Height="Auto"
                                 VerticalContentAlignment="Stretch"
                                 Style="{DynamicResource AvoidanceListViewStyle}">
@@ -166,9 +160,9 @@
                                     When to Kite
                                 </GroupBox.Header>
                                 <UniformGrid Margin="0,5,0,0" Columns="2">
-                                    --><!--<CheckBox Content="Enable Kiting" ToolTip="If the bot should actively avoid going near monsters" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Kiting}"/>--><!--                           
+                                    --><!--<CheckBox Content="Enable Kiting" ToolTip="If the bot should actively avoid going near monsters" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Kiting}" />--><!--
                                         <RadioButton GroupName="KiteMode" Content="Never" IsChecked="{Binding Path=Avoidance.KiteMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Never}" />
-                                        <RadioButton GroupName="KiteMode" Content="Always" IsChecked="{Binding Path=Avoidance.KiteMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Always}"  />
+                                        <RadioButton GroupName="KiteMode" Content="Always" IsChecked="{Binding Path=Avoidance.KiteMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Always}" />
                                         <RadioButton GroupName="KiteMode" Content="Bosses Only" IsChecked="{Binding Path=Avoidance.KiteMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Bosses}" />
                                     <RadioButton GroupName="KiteMode" Content="Elites Only" IsChecked="{Binding Path=Avoidance.KiteMode, Converter={StaticResource enumBooleanConverter}, ConverterParameter=Elites}" />
                                 </UniformGrid>
@@ -178,76 +172,75 @@
                                     Kite Options
                                 </GroupBox.Header>
                                 <UniformGrid Columns="1">
-                                    <Slider Template="{DynamicResource LabelledSliderEditable}"   
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}"
                                         ToolTip="The final distance will be this value added to the monster's radius"
                                         Tag="Distance from Monster"
-                                        Maximum="40" 
-                                        Minimum="1" 
-                                        SmallChange="1" 
-                                        LargeChange="5"                                  
+                                        Maximum="40"
+                                        Minimum="1"
+                                        SmallChange="1"
+                                        LargeChange="5"
                                         TickPlacement="None" IsMoveToPointEnabled="True"
-                                        Value="{Binding Avoidance.KiteDistance}" 
-                                        HorizontalAlignment="Stretch" Margin="2"/>
-                                    <Slider Template="{DynamicResource LabelledSliderEditable}"   
+                                        Value="{Binding Avoidance.KiteDistance}"
+                                        HorizontalAlignment="Stretch" Margin="2" />
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}"
                                         ToolTip="Kiting will only happen at or below this health amount"
                                         Tag="Kite Health %"
-                                        Maximum="100" 
-                                        Minimum="10" 
-                                        SmallChange="1" 
-                                        LargeChange="1"                                  
+                                        Maximum="100"
+                                        Minimum="10"
+                                        SmallChange="1"
+                                        LargeChange="1"
                                         TickPlacement="None" IsMoveToPointEnabled="True"
-                                        Value="{Binding Avoidance.KiteHealth}" 
-                                        HorizontalAlignment="Stretch" Margin="2"/>
-                                    <Slider Template="{DynamicResource LabelledSliderEditable}"   
+                                        Value="{Binding Avoidance.KiteHealth}"
+                                        HorizontalAlignment="Stretch" Margin="2" />
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}"
                                         ToolTip="The bot will stop (and probably attack) after this amount of time has passed (in milliseconds)"
                                         Tag="Stutter Delay (ms)"
-                                        Maximum="5000" 
-                                        Minimum="100" 
-                                        SmallChange="100" 
-                                        LargeChange="500"                                  
+                                        Maximum="5000"
+                                        Minimum="100"
+                                        SmallChange="100"
+                                        LargeChange="500"
                                         TickPlacement="None" IsMoveToPointEnabled="True"
-                                        Value="{Binding Avoidance.KiteStutterDelay}" 
-                                        HorizontalAlignment="Stretch" Margin="2"/>
-                                    <Slider Template="{DynamicResource LabelledSliderEditable}"   
+                                        Value="{Binding Avoidance.KiteStutterDelay}"
+                                        HorizontalAlignment="Stretch" Margin="2" />
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}"
                                         ToolTip="How long each stutter will last for in milliseconds"
                                         Tag="Stutter Duration (ms)"
-                                        Maximum="1000" 
-                                        Minimum="100" 
-                                        SmallChange="100" 
-                                        LargeChange="100"                                  
+                                        Maximum="1000"
+                                        Minimum="100"
+                                        SmallChange="100"
+                                        LargeChange="100"
                                         TickPlacement="None" IsMoveToPointEnabled="True"
-                                        Value="{Binding Avoidance.KiteStutterDuration}" 
-                                        HorizontalAlignment="Stretch" Margin="2"/>                                    
-                                    <Slider Template="{DynamicResource LabelledSliderEditable}"  
+                                        Value="{Binding Avoidance.KiteStutterDuration}"
+                                        HorizontalAlignment="Stretch" Margin="2" />
+                                    <Slider Template="{DynamicResource LabelledSliderEditable}"
                                         ToolTip="Amount of badness to give to give monsters you are kiting away from."
                                         Tag="Weight Amount"
-                                        Maximum="10" 
-                                        Minimum="1" 
-                                        SmallChange="1" 
-                                        LargeChange="5"                                  
+                                        Maximum="10"
+                                        Minimum="1"
+                                        SmallChange="1"
+                                        LargeChange="5"
                                         TickPlacement="None" IsMoveToPointEnabled="True"
-                                        Value="{Binding Avoidance.KiteWeight}" 
-                                        HorizontalAlignment="Stretch" Margin="2"/>
+                                        Value="{Binding Avoidance.KiteWeight}"
+                                        HorizontalAlignment="Stretch" Margin="2" />
                                 </UniformGrid>
-                            </GroupBox>                            
-
+                            </GroupBox>
 
                             --><!--<UniformGrid Columns="2">
-                                <TextBlock Text="Kite Trigger Range" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
-                                <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
+                                <TextBlock Text="Kite Trigger Range" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center" />
+                                <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}"
                         Interval="500" Maximum="80" Minimum="0"
-                        SmallChange="1" LargeChange="5" 
+                        SmallChange="1" LargeChange="5"
                         TickPlacement="BottomRight" TickFrequency="1"
-                        Value="{Binding Path=DH.KiteLimit}" 
-                        HorizontalAlignment="Stretch" Margin="2"/>
+                        Value="{Binding Path=DH.KiteLimit}"
+                        HorizontalAlignment="Stretch" Margin="2" />
 
-                                <TextBlock Text="Stop Kiting At Distance" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center"/>
-                                <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}" 
+                                <TextBlock Text="Stop Kiting At Distance" FontWeight="Normal" TextAlignment="Center" VerticalAlignment="Center" />
+                                <Slider Grid.Column="1" Template="{DynamicResource SliderEditable}"
                         Interval="500" Maximum="100" Minimum="20"
                         SmallChange="1" LargeChange="5"
                         TickPlacement="BottomRight" TickFrequency="1"
-                        Value="{Binding Path=DH.KiteMaxDistance}" 
-                        HorizontalAlignment="Stretch" Margin="2"/>
+                        Value="{Binding Path=DH.KiteMaxDistance}"
+                        HorizontalAlignment="Stretch" Margin="2" />
                             </UniformGrid>--><!--
                         </StackPanel>
                     </Border>
@@ -286,19 +279,19 @@
                             </GroupBox.Header>
                             <StackPanel>
                                     <TextBlock TextWrapping="Wrap" Margin="-3,-3,0,10">Try to run to a safespot when health drops below %</TextBlock>
-                                    <Slider ToolTip="Percentage Health to use Shadow Power" Grid.Column="1" Template="{DynamicResource LabelledSliderEditable}" 
+                                    <Slider ToolTip="Percentage Health to use Shadow Power" Grid.Column="1" Template="{DynamicResource LabelledSliderEditable}"
                                         Tag="Avoid at Health %"
-                                        Interval="500" Maximum="100" Minimum="0" 
+                                        Interval="500" Maximum="100" Minimum="0"
                                         SmallChange="1" LargeChange="5"
-                                        TickPlacement="None" 
-                                        Value="{Binding Path=Avoidance.AvoidHealthPct, Converter={StaticResource percentConverter}}" 
-                                        HorizontalAlignment="Stretch" Margin="2"/>
+                                        TickPlacement="None"
+                                        Value="{Binding Path=Avoidance.AvoidHealthPct, Converter={StaticResource percentConverter}}"
+                                        HorizontalAlignment="Stretch" Margin="2" />
                                 </StackPanel>
                         </GroupBox>--><!--
                         </StackPanel>
                     </Border>
                 </TabItem>-->
-                <!--<TabItem Header="Advanced" >
+                <!--<TabItem Header="Advanced">
                     <Border Background="#474747" Padding="10">
                         <StackPanel>
                             --><!--<GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
@@ -309,7 +302,7 @@
                                     <Button Command="{Binding Avoidance.LoadAvoidanceSettingCommand}" CommandParameter="Ranged">Ranged</Button>
                                     <Button Command="{Binding Avoidance.LoadAvoidanceSettingCommand}" CommandParameter="Melee">Melee</Button>
                                     <Button Command="{Binding Avoidance.LoadAvoidanceSettingCommand}" CommandParameter="Tanky">Tanky</Button>
-                                    <Button Command="{Binding Avoidance.LoadAvoidanceSettingCommand}" CommandParameter="MeleeDangerous">Tanky</Button>                                    
+                                    <Button Command="{Binding Avoidance.LoadAvoidanceSettingCommand}" CommandParameter="MeleeDangerous">Tanky</Button>
                                 </UniformGrid>
                             </GroupBox>-->
                             <!--<GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
@@ -317,64 +310,63 @@
                                 Measurement Radius
                             </GroupBox.Header>
                             <UniformGrid Columns="2">
-                                
-                                <Label Content="Measurement Radius: "/>
-                                <Slider Template="{DynamicResource SliderEditable}"                    
-                                    Maximum="30" 
-                                    Minimum="5" 
-                                    SmallChange="1" 
-                                    LargeChange="5"                                  
-                                    TickPlacement="None" IsMoveToPointEnabled="True"
-                                    Value="{Binding Avoidance.AvoiderLocalRadius}" 
-                                    HorizontalAlignment="Stretch" Margin="2"/>
 
-                                <Label Content="Required Average WeightPct: "/>
-                                <Slider Template="{DynamicResource SliderEditable}"                    
-                                    Maximum="10" 
-                                    Minimum="0" 
-                                    SmallChange="0.1" 
-                                    LargeChange="1"                                  
+                                <Label Content="Measurement Radius: " />
+                                <Slider Template="{DynamicResource SliderEditable}"
+                                    Maximum="30"
+                                    Minimum="5"
+                                    SmallChange="1"
+                                    LargeChange="5"
                                     TickPlacement="None" IsMoveToPointEnabled="True"
-                                    Value="{Binding Avoidance.AvoiderNearbyPctAvgTrigger}" 
-                                    HorizontalAlignment="Stretch" Margin="2"/>
+                                    Value="{Binding Avoidance.AvoiderLocalRadius}"
+                                    HorizontalAlignment="Stretch" Margin="2" />
 
-                                <Label Content="Required Total WeightPct: "/>
-                                <Slider Template="{DynamicResource SliderEditable}"                    
-                                    Maximum="100" 
-                                    Minimum="0" 
-                                    SmallChange="1" 
-                                    LargeChange="5"                                  
+                                <Label Content="Required Average WeightPct: " />
+                                <Slider Template="{DynamicResource SliderEditable}"
+                                    Maximum="10"
+                                    Minimum="0"
+                                    SmallChange="0.1"
+                                    LargeChange="1"
                                     TickPlacement="None" IsMoveToPointEnabled="True"
-                                    Value="{Binding Avoidance.MinimumNearbyWeightPctTotalTrigger}" 
-                                    HorizontalAlignment="Stretch" Margin="2"/>
+                                    Value="{Binding Avoidance.AvoiderNearbyPctAvgTrigger}"
+                                    HorizontalAlignment="Stretch" Margin="2" />
 
-                                <Label Content="Required Highest Weight: "/>
-                                <Slider Template="{DynamicResource SliderEditable}"                    
-                                    Maximum="10" 
-                                    Minimum="0" 
-                                    SmallChange="1" 
-                                    LargeChange="2"                                  
+                                <Label Content="Required Total WeightPct: " />
+                                <Slider Template="{DynamicResource SliderEditable}"
+                                    Maximum="100"
+                                    Minimum="0"
+                                    SmallChange="1"
+                                    LargeChange="5"
                                     TickPlacement="None" IsMoveToPointEnabled="True"
-                                    Value="{Binding Avoidance.MinimumHighestNodeWeightTrigger}" 
-                                    HorizontalAlignment="Stretch" Margin="2"/>
+                                    Value="{Binding Avoidance.MinimumNearbyWeightPctTotalTrigger}"
+                                    HorizontalAlignment="Stretch" Margin="2" />
+
+                                <Label Content="Required Highest Weight: " />
+                                <Slider Template="{DynamicResource SliderEditable}"
+                                    Maximum="10"
+                                    Minimum="0"
+                                    SmallChange="1"
+                                    LargeChange="2"
+                                    TickPlacement="None" IsMoveToPointEnabled="True"
+                                    Value="{Binding Avoidance.MinimumHighestNodeWeightTrigger}"
+                                    HorizontalAlignment="Stretch" Margin="2" />
                             </UniformGrid>
                             </GroupBox>--><!--
-
 
                             <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                                 <GroupBox.Header>
                                     Weighting
                                 </GroupBox.Header>
                                 <StackPanel>
-                                    <TextBlock Margin="0,0,0,10"  TextWrapping="Wrap" Text="Nodes are given positive or negative values based on the good or bad things nearby. For example nodes near a health globe receive a positive bonus, resulting in a safer spot to avoid to. For now the amounts are hardcoded but you can enable/disable each weighting type below."/>
+                                    <TextBlock Margin="0,0,0,10"  TextWrapping="Wrap" Text="Nodes are given positive or negative values based on the good or bad things nearby. For example nodes near a health globe receive a positive bonus, resulting in a safer spot to avoid to. For now the amounts are hardcoded but you can enable/disable each weighting type below." />
                                     <UniformGrid Columns="2">
-                                        <CheckBox Content="Monsters" ToolTip="Give a negative weight to nodes around monsters" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Monsters}"/>
-                                        <CheckBox Content="Globes" ToolTip="Give a negative weight to nodes around health globes" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Globes}"/>
-                                        --><!--<CheckBox Content="Obstacles" ToolTip="Give a positive weight to nodes around obstacles" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Obstacles}"/>--><!--
-                                        <CheckBox Content="Backtrack" ToolTip="Give a negative  weight to nodes where the player has recently walked" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Backtrack}"/>
-                                        <CheckBox Content="Adjacent Safe" ToolTip="Give a positive weight to nodes where all nodes next to them are safe" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=AdjacentSafe}"/>
-                                        <CheckBox Content="Avoidance Centroid" ToolTip="Give a negative weight to nodes close to the center of avoidance positions" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=AvoidanceCentroid}"/>
-                                        <CheckBox Content="Monster Centroid" ToolTip="Give a positive weight to nodes far away from the center of monster positions" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=MonsterCentroid}"/>
+                                        <CheckBox Content="Monsters" ToolTip="Give a negative weight to nodes around monsters" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Monsters}" />
+                                        <CheckBox Content="Globes" ToolTip="Give a negative weight to nodes around health globes" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Globes}" />
+                                        --><!--<CheckBox Content="Obstacles" ToolTip="Give a positive weight to nodes around obstacles" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Obstacles}" />--><!--
+                                        <CheckBox Content="Backtrack" ToolTip="Give a negative  weight to nodes where the player has recently walked" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Backtrack}" />
+                                        <CheckBox Content="Adjacent Safe" ToolTip="Give a positive weight to nodes where all nodes next to them are safe" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=AdjacentSafe}" />
+                                        <CheckBox Content="Avoidance Centroid" ToolTip="Give a negative weight to nodes close to the center of avoidance positions" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=AvoidanceCentroid}" />
+                                        <CheckBox Content="Monster Centroid" ToolTip="Give a positive weight to nodes far away from the center of monster positions" IsChecked="{Binding Path=Avoidance.WeightingOptions, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=MonsterCentroid}" />
                                     </UniformGrid>
                                 </StackPanel>
                             </GroupBox>
@@ -384,52 +376,50 @@
                                     Measurement Radius
                                 </GroupBox.Header>
                                 <UniformGrid Columns="1">
-                                    <TextBlock TextWrapping="Wrap" Text="The distance from the player used in avoidance calculations. Determines the amount of nodes evaluated nearby."/>
-                                    <Slider Template="{DynamicResource SliderEditable}" Margin="2,0,2,2"                    
-                                    Maximum="30" 
-                                    Minimum="5" 
-                                    SmallChange="1" 
-                                    LargeChange="5"                                  
+                                    <TextBlock TextWrapping="Wrap" Text="The distance from the player used in avoidance calculations. Determines the amount of nodes evaluated nearby." />
+                                    <Slider Template="{DynamicResource SliderEditable}" Margin="2,0,2,2"
+                                    Maximum="30"
+                                    Minimum="5"
+                                    SmallChange="1"
+                                    LargeChange="5"
                                     TickPlacement="None" IsMoveToPointEnabled="True"
-                                    Value="{Binding Avoidance.AvoiderLocalRadius}" 
+                                    Value="{Binding Avoidance.AvoiderLocalRadius}"
                                     HorizontalAlignment="Stretch" />
                                 </UniformGrid>
                             </GroupBox>
-                            
-                            
 
                             <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                                 <GroupBox.Header>
                                     Highest Single Weight Condition
                                 </GroupBox.Header>
                                 <UniformGrid Columns="1">
-                                    <TextBlock TextWrapping="Wrap" Text="At least one node must have a weight as high or higher than the slider value for the bot to start avoiding."/>
-                                    <Slider Template="{DynamicResource SliderEditable}"                    
-                                    Maximum="10" 
-                                    Minimum="0" 
-                                    SmallChange="1" 
-                                    LargeChange="2"                                  
+                                    <TextBlock TextWrapping="Wrap" Text="At least one node must have a weight as high or higher than the slider value for the bot to start avoiding." />
+                                    <Slider Template="{DynamicResource SliderEditable}"
+                                    Maximum="10"
+                                    Minimum="0"
+                                    SmallChange="1"
+                                    LargeChange="2"
                                     TickPlacement="None" IsMoveToPointEnabled="True"
-                                    Value="{Binding Avoidance.MinimumHighestNodeWeightTrigger}" 
-                                    HorizontalAlignment="Stretch" Margin="0,2,0,0"/>
+                                    Value="{Binding Avoidance.MinimumHighestNodeWeightTrigger}"
+                                    HorizontalAlignment="Stretch" Margin="0,2,0,0" />
                                 </UniformGrid>
-                            </GroupBox>                            
-                            
+                            </GroupBox>
+
                             <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top">
                                 <GroupBox.Header>
                                     Total Weight Percent Condition
                                 </GroupBox.Header>
                                 <StackPanel>
-                                    <TextBlock TextWrapping="Wrap" Text="The total of the weight percentage for all nodes within measurement radius must be higher than the slider value for the bot to start avoiding. "/>
-                                    <TextBlock Margin="0,12,0,0"  TextWrapping="Wrap" Text="The best way to get familar with these numbers is to look at the Avoidance panel in the visualizer, which displays them in real-time"/>
+                                    <TextBlock TextWrapping="Wrap" Text="The total of the weight percentage for all nodes within measurement radius must be higher than the slider value for the bot to start avoiding. " />
+                                    <TextBlock Margin="0,12,0,0"  TextWrapping="Wrap" Text="The best way to get familar with these numbers is to look at the Avoidance panel in the visualizer, which displays them in real-time" />
 
-                                    <Slider Template="{DynamicResource SliderEditable}" Margin="0,8,0,0"              
-                                    Maximum="100" 
-                                    Minimum="0" 
-                                    SmallChange="1" 
-                                    LargeChange="5"                                  
+                                    <Slider Template="{DynamicResource SliderEditable}" Margin="0,8,0,0"
+                                    Maximum="100"
+                                    Minimum="0"
+                                    SmallChange="1"
+                                    LargeChange="5"
                                     TickPlacement="None" IsMoveToPointEnabled="True"
-                                    Value="{Binding Avoidance.MinimumNearbyWeightPctTotalTrigger}" 
+                                    Value="{Binding Avoidance.MinimumNearbyWeightPctTotalTrigger}"
                                     HorizontalAlignment="Stretch" />
                                 </StackPanel>
                             </GroupBox>
@@ -439,29 +429,22 @@
                                     Average Weight Percent Condition
                                 </GroupBox.Header>
                                 <StackPanel>
-                                    <TextBlock TextWrapping="Wrap" Text="Each node has percentage value for their weight compared to all other nodes. These numbers are averaged within the measurement radius to produce the Average Weight Percent (AWP).  "/>
-                                    <TextBlock Margin="0,8,0,0"  TextWrapping="Wrap" Text="If the AWP is less than the slider value the bot wont avoid (with the exception of 'critical avoidance' like molten core/arcane - which are excempt from this system and are always avoided, if enabled). "/>
-                                    <Slider Template="{DynamicResource SliderEditable}"  Margin="0,8,0,0"                    
-                                        Maximum="10" 
-                                        Minimum="0" 
-                                        SmallChange="0.1" 
-                                        LargeChange="1"                                  
+                                    <TextBlock TextWrapping="Wrap" Text="Each node has percentage value for their weight compared to all other nodes. These numbers are averaged within the measurement radius to produce the Average Weight Percent (AWP).  " />
+                                    <TextBlock Margin="0,8,0,0"  TextWrapping="Wrap" Text="If the AWP is less than the slider value the bot wont avoid (with the exception of 'critical avoidance' like molten core/arcane - which are excempt from this system and are always avoided, if enabled). " />
+                                    <Slider Template="{DynamicResource SliderEditable}"  Margin="0,8,0,0"
+                                        Maximum="10"
+                                        Minimum="0"
+                                        SmallChange="0.1"
+                                        LargeChange="1"
                                         TickPlacement="None" IsMoveToPointEnabled="True"
-                                        Value="{Binding Avoidance.AvoiderNearbyPctAvgTrigger}" 
+                                        Value="{Binding Avoidance.AvoiderNearbyPctAvgTrigger}"
                                         HorizontalAlignment="Stretch" />
                                 </StackPanel>
                             </GroupBox>
-
-
-
                         </StackPanel>
                     </Border>
                 </TabItem>-->
 
-
-
             <!--</TabControl>
-
         </Border>-->
-    
 </UserControl>

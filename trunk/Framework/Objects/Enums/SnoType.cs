@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Trinity.Framework.Objects.Enums
+﻿namespace Trinity.Framework.Objects.Enums
 {
     public enum SnoType
     {
@@ -74,4 +68,3 @@ namespace Trinity.Framework.Objects.Enums
         Vibrations = 68,
     }
 }
-

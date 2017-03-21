@@ -1,8 +1,8 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
 namespace Trinity.Framework.Helpers
 {
     namespace AutoFollow.Resources
@@ -22,28 +22,25 @@ namespace Trinity.Framework.Helpers
                         return false;
 
                     return p.GetInterface(configTypeFullName) != null;
-
                 }).ToList();
 
                 foreach (var taskType in configurables)
-                {   
+                {
                     try
                     {
                         var instance = (T)Activator.CreateInstance(taskType);
-                        if (instance == null) continue;       
-                        Logger.LogVerbose("Instantiated {0}", taskType.Name);
+                        if (instance == null) continue;
+                        Core.Logger.Verbose("Instantiated {0}", taskType.Name);
                         Items[taskType.Name] = instance;
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError("Exception creating instance {0}", ex);
+                        Core.Logger.Error("Exception creating instance {0}", ex);
                     }
                 }
                 sw.Stop();
-                Logger.LogVerbose($"Finished Loading {configType.Name} in {sw.Elapsed:g}");
+                Core.Logger.Verbose($"Finished Loading {configType.Name} in {sw.Elapsed:g}");
             }
         }
     }
-
 }
-

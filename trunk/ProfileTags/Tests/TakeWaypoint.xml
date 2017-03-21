@@ -1,0 +1,18 @@
+﻿<Profile>
+  <Name>Tag Test - TakeWaypoint</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> TakeWaypoint Test Started " />
+    
+    <!-- by Number (generated) -->
+    <TakeWaypoint questId="312429" stepId="2" waypointNumber="29" destinationLevelAreaSnoId="93173"  worldSnoId="93099" levelAreaSnoId="93173" />
+    
+    <!-- by Number (minimum) -->
+    <TakeWaypoint waypointNumber="6" />
+    
+    <!-- by levelAreaSnoId -->
+    <TakeWaypoint destinationLevelAreaSnoId="93173" />
+    
+    <LogMessage message=">> TakeWaypoint Test Finished " />    
+  </Order>
+</Profile>

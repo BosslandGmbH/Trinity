@@ -4,25 +4,25 @@ using System.Windows.Controls;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Settings;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Settings;
+using Trinity.Modules;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Framework.Avoidance
 {
     public class AvoidanceManager : Module, IDynamicSetting
     {
         public IAvoider Avoider { get; set; }
-        public GridEnricher GridEnricher { get; }
+        public GridEnricher GridEnricher => Core.GridEnricher;
 
         public AvoidanceManager()
         {
             Avoider = new DefaultAvoider();
-            GridEnricher = new GridEnricher();
         }
 
         public bool InAvoidance(Vector3 position)
@@ -50,16 +50,16 @@ namespace Trinity.Framework.Avoidance
         public List<Structures.Avoidance> CurrentAvoidances = new List<Structures.Avoidance>();
         public AvoidanceAreaStats NearbyStats = new AvoidanceAreaStats();
 
-        public AvoidanceGrid Grid => AvoidanceGrid.Instance;
+        public TrinityGrid Grid => TrinityGrid.Instance;
 
         protected override void OnPulse()
         {
-            if (!TrinityPlugin.IsEnabled || ZetaDia.IsLoadingWorld)
+            if (!TrinityPlugin.IsEnabled || ZetaDia.Globals.IsLoadingWorld)
                 return;
 
             UpdateAvoidances();
             RemoveExpiredAvoidances();
-            GridEnricher.UpdateGrid();
+            
             NearbyStats.Update(GridEnricher.NearbyNodes);
         }
 
@@ -69,7 +69,7 @@ namespace Trinity.Framework.Avoidance
 
             if (!Settings.Entries.Any(s => s.IsEnabled))
                 return;
-  
+
             var source = Core.Actors.AllRActors.ToList();
 
             foreach (var actor in source)
@@ -93,7 +93,7 @@ namespace Trinity.Framework.Avoidance
                     }
                     else
                     {
-                        //Logger.LogVerbose($"Updated Avoidance Actor {actor}");
+                        //Core.Logger.Verbose($"Updated Avoidance Actor {actor}");
                         existingActor.Position = actor.Position;
                         existingActor.Distance = actor.Distance;
                         existingActor.Animation = actor.Animation;
@@ -107,7 +107,7 @@ namespace Trinity.Framework.Avoidance
                 Structures.Avoidance avoidance;
                 if (AvoidanceFactory.TryCreateAvoidance(source, actor, out avoidance))
                 {
-                    Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Definition.Name}, Immune: {avoidance.IsImmune})");
+                    Core.Logger.Log(LogCategory.Avoidance, $"Created new Avoidance from {actor.InternalName} RActorId={actor.RActorId} ({avoidance.Definition.Name}, Immune: {avoidance.IsImmune})");
                     _cachedActors.Add(rActorId, actor);
                     CurrentAvoidances.Add(avoidance);
                 }
@@ -126,16 +126,23 @@ namespace Trinity.Framework.Avoidance
         #region Settings
 
         public AvoidanceSettings Settings { get; set; } = new AvoidanceSettings();
+
         public string GetName() => "AvoidanceSettings";
+
         public UserControl GetControl() => UILoader.LoadXamlByFileName<UserControl>("AvoidanceSettings.xaml");
+
         public object GetDataContext() => Settings;
+
         public string GetCode() => Settings.Save();
+
         public void ApplyCode(string code) => Settings.Load(code);
+
         public void Reset() => Settings.LoadDefaults();
-        public void Save() {}
 
-        #endregion
+        public void Save()
+        {
+        }
 
-
+        #endregion Settings
     }
 }

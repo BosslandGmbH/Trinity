@@ -20,8 +20,8 @@ namespace Trinity.Framework.Actors.Properties
             actor.ActorClass = GetActorClass(actor.ActorSnoId);
             actor.IsMe = actor.RActorId == Core.Actors.ActivePlayerRActorId;
 
-            var cPlayer = ZetaDia.Players.FirstOrDefault(p => p.ACDId == actor.AcdId);
-            if (cPlayer != null)
+            var cPlayer = ZetaDia.Storage.PlayerDataManager.ActivePlayerData;
+            if (cPlayer != null && cPlayer.IsValid)
             {
                 actor.HeroId = cPlayer.HeroId;
                 actor.HeroName = cPlayer.HeroName;
@@ -31,14 +31,14 @@ namespace Trinity.Framework.Actors.Properties
         public static int GetAcdIdByHeroId(int heroId)
         {
             // Only works if player is in the same area.
-            var player = ZetaDia.Players.FirstOrDefault(p => p.HeroId == heroId);
+            var player = ZetaDia.Storage.PlayerDataManager.Players.FirstOrDefault(p => p.HeroId == heroId);
             return player?.ACDId ?? -1;
         }
 
         public static int GetHeroIdByAcdId(int acdId)
         {
             // Only works if player is in the same area.
-            var player = ZetaDia.Players.FirstOrDefault(p => p.ACDId == acdId);
+            var player = ZetaDia.Storage.PlayerDataManager.GetPlayerDataByAcdId(acdId);
             return player?.HeroId ?? -1;
         }
 
@@ -49,30 +49,28 @@ namespace Trinity.Framework.Actors.Properties
                 case (int)SNOActor.Wizard_Female:
                 case (int)SNOActor.Wizard_Male:
                     return ActorClass.Wizard;
+
                 case (int)SNOActor.Barbarian_Female:
                 case (int)SNOActor.Barbarian_Male:
                     return ActorClass.Barbarian;
+
                 case (int)SNOActor.Demonhunter_Female:
                 case (int)SNOActor.Demonhunter_Male:
                     return ActorClass.DemonHunter;
+
                 case (int)SNOActor.X1_Crusader_Female:
                 case (int)SNOActor.X1_Crusader_Male:
                     return ActorClass.Crusader;
+
                 case (int)SNOActor.WitchDoctor_Female:
                 case (int)SNOActor.WitchDoctor_Male:
                     return ActorClass.Witchdoctor;
+
                 case (int)SNOActor.Monk_Female:
                 case (int)SNOActor.Monk_Male:
                     return ActorClass.Monk;
             }
             return ActorClass.Invalid;
         }
-
-
     }
-
-
 }
-
-
-

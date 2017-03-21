@@ -3,7 +3,6 @@ using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 {
-
     //act1 bones
     //act2 gluttony
     //act3 war
@@ -22,7 +21,8 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
     public static class KeywardenDataFactory
     {
         public static HashSet<int> A4CorruptionSNOs = new HashSet<int> { 210268, 210120 };
-        public static HashSet<int> GoblinSNOs= new HashSet<int>
+
+        public static HashSet<int> GoblinSNOs = new HashSet<int>
         {
             //5984, 5985, 5987, 5988, 405186, 380657
 
@@ -122,10 +122,10 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
         434633,
         // treasureGoblin_Anniversary_Event
         434745,
-
          };
 
         public static Dictionary<Act, KeywardenData> Items;
+
         static KeywardenDataFactory()
         {
             Items = new Dictionary<Act, KeywardenData>();

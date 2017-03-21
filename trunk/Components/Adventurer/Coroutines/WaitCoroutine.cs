@@ -1,9 +1,9 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Quests;
-using Trinity.Components.Adventurer.Util;
 using Zeta.Common.Helpers;
 using Zeta.Game;
 
@@ -11,7 +11,6 @@ namespace Trinity.Components.Adventurer.Coroutines
 {
     public class WaitCoroutine : IBountySubroutine
     {
-
         private readonly TimeSpan _waitTime;
         private bool _isDone;
 
@@ -43,12 +42,12 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 _waitTimer = new WaitTimer(_waitTime);
                 _waitTimer.Reset();
-                Logger.Debug("[Wait] Waiting for {0} seconds", _waitTime.TotalSeconds);
+                Core.Logger.Debug("[Wait] Waiting for {0} seconds", _waitTime.TotalSeconds);
             }
 
-            if (ZetaDia.CurrentWorldSnoId != _worldId)
+            if (ZetaDia.Globals.WorldSnoId != _worldId)
             {
-                Logger.Debug("[Wait] Stopped waiting because world id is not correct for {0} seconds");
+                Core.Logger.Debug("[Wait] Stopped waiting because world id is not correct for {0} seconds");
                 _isDone = true;
                 return true;
             }

@@ -1,12 +1,11 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
-using Trinity.Coroutines.Resources;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Objects.Enums;
 
 namespace Trinity.Settings
 {

@@ -6,7 +6,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
     /// Object for saving and reusing relative drawings.
     /// 
     /// Relative drawings that are composed of multiple parts, have the location of each part baked in relative to each other.
-    /// When we save the final drawing the parts can no longer be translated individually. 
+    /// After we save the final drawing the parts can no longer be translated individually. 
     /// For example: a drawing of a scene composed of many navcells.
     /// </summary>
     public class RelativeDrawing : StaticDrawing

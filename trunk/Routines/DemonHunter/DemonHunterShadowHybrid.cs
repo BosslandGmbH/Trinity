@@ -1,27 +1,17 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
-using Trinity.Framework;
-using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Attributes;
-using Trinity.Reference;
-using Trinity.Settings;
+using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.DemonHunter
 {
@@ -72,17 +62,17 @@ namespace Trinity.Routines.DemonHunter
         {
             TrinityPower power;
 
-            Logger.Log(LogCategory.Routine, $"FanBuff={IsFanBuffReady} TrashCluster={IsFanTrashCluster} EliteCluster={IsFanEliteCluster} Element={IsLightningElement} Crit%={Player.CriticalChancePct}");
+            Core.Logger.Log(LogCategory.Routine, $"FanBuff={IsFanBuffReady} TrashCluster={IsFanTrashCluster} EliteCluster={IsFanEliteCluster} Element={IsLightningElement} Crit%={Player.CriticalChancePct}");
 
             if (Player.CurrentHealthPct < 0.2 && Skills.DemonHunter.FanOfKnives.CanCast())
             {
-                Logger.Log(LogCategory.Routine, "About to die...");
+                Core.Logger.Log(LogCategory.Routine, "About to die...");
                 return FanOfKnives();
             }
 
             if (ShouldFan())
             {
-                Logger.Log(LogCategory.Routine, "Its time for the pain");
+                Core.Logger.Log(LogCategory.Routine, "Its time for the pain");
 
                 // +15% dmg
                 var isWolfBuffReady = !Skills.DemonHunter.Companion.IsActive || Skills.DemonHunter.Companion.IsBuffActive;
@@ -109,7 +99,7 @@ namespace Trinity.Routines.DemonHunter
                 // If we cant get there, dont miss the opportunity.
                 if (IsReallyBlocked && TimeFromElementStart(Element.Lightning) > 3000)
                 {
-                    Logger.Log(LogCategory.Routine, "Deloying Blocked Fan");
+                    Core.Logger.Log(LogCategory.Routine, "Deloying Blocked Fan");
                     return FanOfKnives();
                 }
 
@@ -124,25 +114,25 @@ namespace Trinity.Routines.DemonHunter
 
                 if (pullingUnit != null)
                 {
-                    Logger.Log(LogCategory.Routine, "Pulling units");
+                    Core.Logger.Log(LogCategory.Routine, "Pulling units");
                     return Walk(pullingUnit);
                 }
             }
           
             if (IsBossFight && LordGreenStoneDamageStacks < 15)
             {
-                Logger.Log(LogCategory.Routine, "Attacking while waiting for fan");
+                Core.Logger.Log(LogCategory.Routine, "Attacking while waiting for fan");
                 if (TryPrimaryPower(out power))
                     return power;
             }
 
             if (LordGreenStoneDamageStacks < 28 || !IsLightningElement)
             {
-                Logger.Log(LogCategory.Routine, "Hanging out near fan position");
+                Core.Logger.Log(LogCategory.Routine, "Hanging out near fan position");
                 return Walk(TargetUtil.GetLoiterPosition(TargetUtil.BestAoeUnit(100f, true), 30f));
             }
 
-            Logger.Log(LogCategory.Routine, "Moving to fan position");
+            Core.Logger.Log(LogCategory.Routine, "Moving to fan position");
             return Walk(TargetUtil.BestAoeUnit(100f, true));
         }        
 
@@ -193,9 +183,9 @@ namespace Trinity.Routines.DemonHunter
         public override float KiteDistance => 5f;
 
         IDynamicSetting IRoutine.RoutineSettings => Settings;
-        public DemonHunterMarauderSettings Settings { get; } = new DemonHunterMarauderSettings();
+        public DemonHunterShadowHybridSettings Settings { get; } = new DemonHunterShadowHybridSettings();
 
-        public sealed class DemonHunterMarauderSettings : NotifyBase, IDynamicSetting
+        public sealed class DemonHunterShadowHybridSettings : NotifyBase, IDynamicSetting
         {
             private int _clusterSize;
             private float _emergencyHealthPct;

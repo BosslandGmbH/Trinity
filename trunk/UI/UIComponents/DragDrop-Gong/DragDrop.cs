@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections;
 using System.Linq;
 using System.Windows;
@@ -12,7 +13,7 @@ using Trinity.UI.UIComponents.Utilities;
 
 namespace Trinity.UI.UIComponents
 {
-  public static class DragDrop
+    public static class DragDrop
   {
     public static readonly DataFormat DataFormat = DataFormats.GetDataFormat("GongSolutions.Wpf.DragDrop");
 

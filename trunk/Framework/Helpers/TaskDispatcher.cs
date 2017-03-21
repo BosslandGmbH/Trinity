@@ -2,12 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Zeta.Bot;
+using Zeta.Game;
 using Zeta.TreeSharp;
 
 namespace Trinity.Framework.Helpers
 {
     /// <summary>
-    /// Runs a Task<T> as a Buddy Coroutine (via TreeSharp Composite) in a new thread.    
+    /// Runs a Task<T> as a Buddy Coroutine (via TreeSharp Composite) in a new thread.
     /// </summary>
     public class TaskDispatcher
     {
@@ -16,19 +17,19 @@ namespace Trinity.Framework.Helpers
         public static int TickDelayMin = 5;
         public static int TickDelayMax = 15;
 
-        public static void Start<T>(Func<object, Task<T>> task, Func<object,bool> stopCondition = null)
+        public static void Start<T>(Func<object, Task<T>> task, Func<object, bool> stopCondition = null)
         {
             var isStarted = false;
 
             Worker.Start(() =>
-            {                   
-                using (new AquireFrameHelper())
+            {
+                using (ZetaDia.Memory.AcquireFrame())
                 {
                     try
-                    {                        
+                    {
                         if (!isStarted)
                         {
-                            Logger.Log("[TaskDispatcher] Starting Task, thread={0}", Thread.CurrentThread.ManagedThreadId);
+                            Core.Logger.Log("[TaskDispatcher] Starting Task, thread={0}", Thread.CurrentThread.ManagedThreadId);
                             _logic = new ActionRunCoroutine(task);
                             _logic.Start(null);
                             isStarted = true;
@@ -36,8 +37,8 @@ namespace Trinity.Framework.Helpers
                         Tick();
                     }
                     catch (InvalidOperationException ex)
-                    {                            
-                        Logger.LogDebug("[TaskDispatcher] Exception: {0}", ex);
+                    {
+                        Core.Logger.Debug("[TaskDispatcher] Exception: {0}", ex);
                     }
                 }
 
@@ -45,7 +46,7 @@ namespace Trinity.Framework.Helpers
                 {
                     if (stopCondition.Invoke(_logic?.LastStatus))
                     {
-                        Logger.Log("[TaskDispatcher] Finished Task, thread={0} (Condition)", Thread.CurrentThread.ManagedThreadId);
+                        Core.Logger.Log("[TaskDispatcher] Finished Task, thread={0} (Condition)", Thread.CurrentThread.ManagedThreadId);
                         return true;
                     }
                 }
@@ -53,12 +54,12 @@ namespace Trinity.Framework.Helpers
                 {
                     if (_logic?.LastStatus != RunStatus.Running)
                     {
-                        Logger.Log($"[TaskDispatcher] Finished Task, thread={Thread.CurrentThread.ManagedThreadId} (FinalResult={_logic?.LastStatus})");
+                        Core.Logger.Log($"[TaskDispatcher] Finished Task, thread={Thread.CurrentThread.ManagedThreadId} (FinalResult={_logic?.LastStatus})");
                         return true;
                     }
                 }
-             
-                Thread.Sleep(Components.Adventurer.Util.Randomizer.GetRandomNumber(TickDelayMin, TickDelayMax));
+
+                Thread.Sleep(Randomizer.Random(TickDelayMin, TickDelayMax));
                 return false;
             });
         }
@@ -76,7 +77,7 @@ namespace Trinity.Framework.Helpers
             }
             catch (Exception ex)
             {
-                Logger.LogDebug("[TaskDispatcher] Exception in Tick: {0}", ex);
+                Core.Logger.Debug("[TaskDispatcher] Exception in Tick: {0}", ex);
                 _logic.Stop(null);
                 _logic.Start(null);
                 throw;

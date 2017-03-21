@@ -1,0 +1,22 @@
+﻿<Profile>
+  <Name>Tag Test - MoveToPosition</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> MoveToPosition Test Started " />
+
+    <If condition="CurrentLevelAreaId != 92945">
+      <TakeWaypoint destinationLevelAreaSnoId="92945" />
+    </If>
+    
+    <!-- Absolute Position (Generated) -->
+    <MoveToPosition x="389" y="424" z="0" worldSnoId="172909" levelAreaSnoId="92945" sceneSnoId="172876" sceneName="a3dun_vendors_A_E01_S02" sceneX="149" sceneY="184" sceneZ="0" isGenerated="false" />
+
+    <!-- Absolute Position (Minimum) -->
+    <MoveToPosition x="447" y="470" z="0" />
+    
+    <!-- Relative to Scene -->
+    <MoveToPosition sceneName="a3dun_vendors_A_E01_S02" sceneX="183" sceneY="196" sceneZ="0" />
+
+    <LogMessage message=">> MoveToPosition Test Finished " />
+  </Order>
+</Profile>

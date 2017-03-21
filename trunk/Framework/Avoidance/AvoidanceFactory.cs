@@ -1,13 +1,12 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Framework.Avoidance
 {
@@ -60,13 +59,13 @@ namespace Trinity.Framework.Avoidance
         private static void CreateUtils()
         {
             var allParts = new List<AvoidancePart>();
-                                
+
             foreach (var avoidanceDatum in AvoidanceDefinitions.Items)
             {
                 foreach (var part in avoidanceDatum.Parts)
                 {
                     part.Parent = avoidanceDatum;
-                    allParts.Add(part);                    
+                    allParts.Add(part);
                     try
                     {
                         if (part.ActorSnoId > 0)
@@ -74,9 +73,9 @@ namespace Trinity.Framework.Avoidance
                             AvoidanceDataDictionary.Add(part.ActorSnoId, part);
                         }
                     }
-                    catch(Exception ex)                   
+                    catch (Exception ex)
                     {
-                        Logger.LogError("Failed to add AvoidanceData for {0} > {1}. Probably a duplicate ActorSnoId ({2})", avoidanceDatum.Name, part.Name, part.ActorSnoId);
+                        Core.Logger.Error("Failed to add AvoidanceData for {0} > {1}. Probably a duplicate ActorSnoId ({2})", avoidanceDatum.Name, part.Name, part.ActorSnoId);
                     }
                 }
             }
@@ -122,9 +121,9 @@ namespace Trinity.Framework.Avoidance
 
             var part = GetAvoidancePart(actor.ActorSnoId);
             if (part != null && (part.Filter == null || part.Filter(actor)))
-            {            
+            {
                 data = part.Parent;
-                return true;                
+                return true;
             }
             return false;
         }
@@ -141,7 +140,7 @@ namespace Trinity.Framework.Avoidance
             {
                 data = part.Parent;
                 return true;
-            }        
+            }
             return false;
         }
 
@@ -177,5 +176,3 @@ namespace Trinity.Framework.Avoidance
         }
     }
 }
-
-

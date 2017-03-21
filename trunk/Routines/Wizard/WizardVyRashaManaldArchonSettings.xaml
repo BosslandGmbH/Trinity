@@ -25,19 +25,31 @@
                     <GroupBox.Header>General</GroupBox.Header>
                     <StackPanel>
                         <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Cluster Size"
-                            ToolTip="Number of monsters that must be grouped up before fighting starts"
+                            Tag="Archon Cluster Size"
+                            ToolTip="When IN ARCHON FORM; Number of monsters that must be grouped up before fighting starts"
                                 Interval="100" 
                                 Maximum="40" 
                                 Minimum="1" 
                                 SmallChange="1" 
                                 TickPlacement="None" 
-                            Value="{Binding Path=DataContext.ClusterSize}" 
+                            Value="{Binding Path=DataContext.ArchonClusterSize}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Non-Archon Cluster"
+                            ToolTip="When OUT OF ARCHON FORM; Number of monsters that must be grouped up before fighting starts"
+                                Interval="100" 
+                                Maximum="40" 
+                                Minimum="1" 
+                                SmallChange="1" 
+                                TickPlacement="None" 
+                            Value="{Binding Path=DataContext.NonArchonClusterSize}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
 
                         <Slider  Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Health % to Potion"
+                            Tag="Health % to Use Potion"
                             ToolTip="How low your health must drop before the potion is used"
                                 Interval="500" 
                                 Maximum="99" 
@@ -62,7 +74,7 @@
                         <TextBlock>These determine the search ranges to look for a Safe Spot to teleport to.</TextBlock>
                         <Slider Template="{DynamicResource LabelledSliderEditable}" 
                             Tag="Preferred Minimum Distance"
-                            ToolTip="When teleport is used to reposition for better DPS and survival, how far must it go at MINIMUM from current position. Default 30"
+                            ToolTip="When teleport is used to reposition for better DPS and survival, how far must it go at MINIMUM from current position. Default 40"
                                 Interval="100"
                                 Maximum="50" 
                                 Minimum="1" 
@@ -78,7 +90,7 @@
                             Tag="Maximum Distance"
                             ToolTip="When teleport is used to reposition for better DPS and survival, how far must it go at MAXIMUM from current position. Default 50"
                                 Interval="100"
-                                Maximum="100" 
+                                Maximum="50" 
                                 Minimum="1" 
                                 SmallChange="1" 
                                 IsSnapToTickEnabled="True"
@@ -207,7 +219,7 @@
                             MinWidth="175"/>
                         
                         <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Under 4 Tal's Stacks Delay"
+                            Tag="1-3 Tal's Stacks Delay"
                             ToolTip="Set a delay between teleporting when less than 4 Tal's Stacks are present. Without 4 stacks your DPS is limited and repositioning frequently is less of a problem. Default 1000"
                                 Interval="100"
                                 Maximum="5000" 
@@ -217,20 +229,6 @@
                                 TickFrequency="100" 
                                 TickPlacement="BottomRight" 
                             Value="{Binding Path=DataContext.Archon1StackDelay}" 
-                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
-                            MinWidth="175"/>
-
-                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Stuck/Blocked Delay"
-                            ToolTip="Set a delay between teleporting for when Stuck or Blocked. This avoids spamming without attacking. Default 1000"
-                                Interval="100"
-                                Maximum="5000" 
-                                Minimum="100" 
-                                SmallChange="100" 
-                                IsSnapToTickEnabled="True"
-                                TickFrequency="100" 
-                                TickPlacement="BottomRight" 
-                            Value="{Binding Path=DataContext.ArchonStuckOrBlockedDelay}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
                     </StackPanel>
@@ -271,7 +269,7 @@
                             MinWidth="175"/>
 
                         <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Disintegration Wave Search Range"
+                            Tag="Disintegration Wave Range"
                             ToolTip="Set the Maximum Range that Disintegration Wave will check for enemies. Default 50"
                                 Interval="100"
                                 Maximum="55" 
@@ -285,16 +283,16 @@
                             MinWidth="175"/>
 
                         <Slider Template="{DynamicResource LabelledSliderEditable}" 
-                            Tag="Disintegration Wave Min Range"
-                            ToolTip="Set a preferred distance to require before using Disintegration Wave. Default 30"
+                            Tag="DWave Cluster Radius"
+                            ToolTip="How far apart can enemies be and still be considered part of the same cluster. Default 10"
                                 Interval="100"
-                                Maximum="55" 
-                                Minimum="30" 
+                                Maximum="50" 
+                                Minimum="5" 
                                 SmallChange="1" 
                                 IsSnapToTickEnabled="True"
                                 TickFrequency="1" 
                                 TickPlacement="BottomRight" 
-                            Value="{Binding Path=DataContext.DisintegrationWaveMinDistance}" 
+                            Value="{Binding Path=DataContext.DisintegrationWaveMinClusterRadius}" 
                             HorizontalAlignment="Stretch" Margin="0,0,0,0"
                             MinWidth="175"/>
                     </StackPanel>
@@ -309,7 +307,7 @@
                             Tag="Targetting Range"
                             ToolTip="How far away can enemies be and still be targeted. Default 55"
                                 Interval="100"
-                                Maximum="65" 
+                                Maximum="60" 
                                 Minimum="20" 
                                 SmallChange="1"
                                 IsSnapToTickEnabled="True"

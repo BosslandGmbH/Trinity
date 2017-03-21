@@ -1,16 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using System.Collections.Generic;
+using System.Linq;
+using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Components.Combat.Resources
 {
     public static class SpellHistory
     {
+        static SpellHistory()
+        {
+            GameEvents.OnPlayerDied += GameEvents_OnPlayerDied;
+        }
+
+        private static void GameEvents_OnPlayerDied(object sender, EventArgs e)
+        {
+            _history.Clear();
+        }
+
         public class SpellHistoryItem
         {
             public TrinityPower Power { get; set; }
@@ -18,6 +29,7 @@ namespace Trinity.Components.Combat.Resources
             public Vector3 MyPosition { get; set; }
             public Vector3 TargetPosition { get; set; }
             public TimeSpan TimeSinceUse => DateTime.UtcNow.Subtract(UseTime);
+
             public TimeSpan TimeDistanceFrom(SpellHistoryItem other)
             {
                 return other.UseTime < UseTime
@@ -32,12 +44,14 @@ namespace Trinity.Components.Combat.Resources
         private static List<SpellHistoryItem> _history = new List<SpellHistoryItem>(SpellHistorySize);
 
         private static DateTime _lastSpenderCast = DateTime.MinValue;
-        public static double TimeSinceSpenderCast 
+
+        public static double TimeSinceSpenderCast
         {
             get { return DateTime.UtcNow.Subtract(_lastSpenderCast).TotalMilliseconds; }
         }
 
         private static DateTime _lastGeneratorCast = DateTime.MinValue;
+
         public static double TimeSinceGeneratorCast
         {
             get { return DateTime.UtcNow.Subtract(_lastGeneratorCast).TotalMilliseconds; }
@@ -52,8 +66,8 @@ namespace Trinity.Components.Combat.Resources
         public static void RecordSpell(TrinityPower power)
         {
             if (_history.Count >= SpellHistorySize)
-                _history.RemoveAt(0);             
-       
+                _history.RemoveAt(0);
+
             // todo, need a better way than looking up skill again.
             var skill = power.GetSkill();
             if (skill != null)
@@ -74,7 +88,7 @@ namespace Trinity.Components.Combat.Resources
             });
 
             LastSpellUseTime = DateTime.UtcNow;
-            LastPowerUsed = power.SNOPower;                   
+            LastPowerUsed = power.SNOPower;
         }
 
         public static DateTime LastSpellUseTime { get; set; }
@@ -118,7 +132,7 @@ namespace Trinity.Components.Combat.Resources
         public static TimeSpan TimeSinceUse(SNOPower power)
         {
             var lastUsed = PowerLastUsedTime(power);
-            if(lastUsed != DateTime.MinValue)
+            if (lastUsed != DateTime.MinValue)
                 return DateTime.UtcNow.Subtract(lastUsed);
             return TimeSpan.MaxValue;
         }
@@ -136,7 +150,7 @@ namespace Trinity.Components.Combat.Resources
             if (_history.Any(i => i.Power.SNOPower == power))
             {
                 var spellCount = _history.Count(i => i.Power.SNOPower == power && i.TimeSinceUse <= time);
-                Logger.LogVerbose(LogCategory.Targetting, "Found {0}/{1} spells in {2} time for {3} power", spellCount, _history.Count(i => i.Power.SNOPower == power), time, power);
+                Core.Logger.Verbose(LogCategory.Targetting, "Found {0}/{1} spells in {2} time for {3} power", spellCount, _history.Count(i => i.Power.SNOPower == power), time, power);
                 return spellCount;
             }
             return 0;
@@ -179,8 +193,8 @@ namespace Trinity.Components.Combat.Resources
 
         public static IEnumerable<SpellHistoryItem> FindSpells(SNOPower withPower, Vector3 nearPosition, float withinRadius, int withinSeconds)
         {
-            return History.Where(p => p.Power.SNOPower == withPower 
-                && p.TimeSinceUse < TimeSpan.FromSeconds(withinSeconds) 
+            return History.Where(p => p.Power.SNOPower == withPower
+                && p.TimeSinceUse < TimeSpan.FromSeconds(withinSeconds)
                 && p.TargetPosition.Distance2DSqr(nearPosition) < withinRadius);
         }
 
@@ -194,7 +208,5 @@ namespace Trinity.Components.Combat.Resources
         {
             RecordSpell(new TrinityPower(power, 0, position));
         }
-
     }
-
 }

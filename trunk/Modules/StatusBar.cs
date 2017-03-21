@@ -30,8 +30,6 @@ namespace Trinity.Modules
             //if(!CombatBase.IsInCombat)
             //    BotMain.StatusText = "No more targets";
 
-            statusText.Append(Core.Player.CurrentAction);
-
             statusText.Append(" Target=");
             statusText.Append(currentTarget.InternalName);
 

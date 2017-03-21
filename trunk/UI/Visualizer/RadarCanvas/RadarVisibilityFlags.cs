@@ -1,5 +1,4 @@
 using System;
-
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
     [Flags]

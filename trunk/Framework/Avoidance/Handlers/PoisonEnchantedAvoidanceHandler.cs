@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Zeta.Common;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
     internal class PoisonEnchantedAvoidanceHandler : IAvoidanceHandler
     {
-        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
+        public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             foreach (var actor in avoidance.Actors)
             {
@@ -37,11 +38,9 @@ namespace Trinity.Framework.Avoidance.Handlers
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception {0}", ex);
+                    Core.Logger.Error("Exception {0}", ex);
                 }
             }
-
         }
     }
 }
-

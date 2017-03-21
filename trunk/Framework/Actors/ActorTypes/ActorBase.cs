@@ -1,8 +1,8 @@
 #region
 
 using System;
-using Trinity.Framework.Objects.Memory.Misc;
 using Zeta.Common;
+using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 
 #endregion
@@ -24,8 +24,8 @@ namespace Trinity.Framework.Actors.ActorTypes
         public string InternalName { get; set; }
         public int ActorSnoId { get; set; }
         public int MonsterSnoId { get; set; }
-        public ActorCommonData CommonData { get; set; }
-        public RActor RActor { get; set; }
+        public ACD CommonData { get; set; }
+        public DiaObject RActor { get; set; }
         public SNORecordActor ActorInfo { get; set; }
         public SNORecordMonster MonsterInfo { get; set; }
         public bool IsValid => (!IsRActorBased || RActor.IsValid) && (!IsAcdBased || IsAcdValid);

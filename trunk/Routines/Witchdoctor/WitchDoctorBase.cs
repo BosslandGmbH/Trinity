@@ -1,20 +1,18 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Framework.Objects.Memory.Symbols.Types;
-using Trinity.Reference;
+using Trinity.Framework.Objects.Memory;
+using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Witchdoctor
 {
@@ -33,7 +31,7 @@ namespace Trinity.Routines.Witchdoctor
         // remember what P3_ItemPassive_Unique_Ring_010 means.
 
         // Use the Routine LogCategory for logging.
-        // Logger.Log(LogCategory.Routine, $"My Current Target is {CurrentTarget}");
+        // Core.Logger.Log(LogCategory.Routine, $"My Current Target is {CurrentTarget}");
 
         #region IRoutine Defaults
 
@@ -312,7 +310,7 @@ namespace Trinity.Routines.Witchdoctor
                 return false;
 
             var unitsNearDogs = TargetUtil.UnitsWithinRangeOfPet(PetType.Pet0, 12f).ToList();
-            Logger.Log(LogCategory.Routine, $"Units near dogs = {unitsNearDogs.Count}");
+            Core.Logger.Log(LogCategory.Routine, $"Units near dogs = {unitsNearDogs.Count}");
             if (unitsNearDogs.Count < ClusterSize && !unitsNearDogs.Any(u => u.IsElite))
                 return false;
 

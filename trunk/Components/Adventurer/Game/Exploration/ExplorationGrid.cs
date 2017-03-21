@@ -1,13 +1,12 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Events;
-using Trinity.Components.Adventurer.Game.Exploration.Algorithms;
 using Zeta.Common;
 using Zeta.Game;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
@@ -16,22 +15,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         private const int GRID_BOUNDS = 500;
 
         private static readonly ConcurrentDictionary<int, List<Vector3>> KnownPositions = new ConcurrentDictionary<int, List<Vector3>>();
-
-        //private static readonly ConcurrentDictionary<int, Lazy<ExplorationGrid>> WorldGrids = new ConcurrentDictionary<int, Lazy<ExplorationGrid>>();
-
-        //public static ExplorationGrid GetWorldGrid(int worldDynamicId)
-        //{
-        //    return WorldGrids.GetOrAdd(worldDynamicId, new Lazy<ExplorationGrid>(() => new ExplorationGrid())).Value;
-        //}
-
-        //public static ExplorationGrid Instance
-        //{
-        //    get { return GetWorldGrid(AdvDia.CurrentWorldDynamicId); }
-        //}
-
-        //public ExplorationGrid()
-        //{
-        //}
 
         private static Lazy<ExplorationGrid> _currentGrid;
 
@@ -43,15 +26,10 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 return _currentGrid.Value;
             }
 
-            if (_currentGrid == null || _currentGrid.Value == null || ZetaDia.WorldId != _currentGrid.Value.WorldDynamicId)
+            if (_currentGrid == null || _currentGrid.Value == null || ZetaDia.Globals.WorldId != _currentGrid.Value.WorldDynamicId)
             {
                 _currentGrid = new Lazy<ExplorationGrid>(() => new ExplorationGrid());
             }
-
-            //if (DateTime.UtcNow.Subtract(_currentGrid.Value.Created).TotalSeconds > 5 && _currentGrid.Value.NearestNode == null)
-            //{
-            //    _currentGrid = new Lazy<ExplorationGrid>(() => new ExplorationGrid());
-            //}
 
             return _currentGrid.Value;
         }
@@ -63,23 +41,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public List<ExplorationNode> WalkableNodes = new List<ExplorationNode>();
 
-        public override float BoxSize
-        {
-            get
-            {
-                return 20;
-                // return ExplorationData.ExplorationNodeBoxSize; // perf - hit millions of times
-            }
-        }
+        public override float BoxSize { get; } = 20;
 
         public override int GridBounds
         {
             get { return GRID_BOUNDS; }
-        }
-
-        protected bool MarkNodesNearWall
-        {
-            get { return false; }
         }
 
         public override bool CanRayCast(Vector3 from, Vector3 to)
@@ -104,13 +70,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             return lastNode;
         }
 
-        private IEnumerable<GridPoint> GetRayLine(Vector3 from, Vector3 to)
-        {
-            var gridFrom = ToGridPoint(from);
-            var gridTo = ToGridPoint(to);
-            return Bresenham.GetPointsOnLine(gridFrom, gridTo);
-        }
-
         private IEnumerable<ExplorationNode> GetRayLineAsNodes(Vector3 from, Vector3 to)
         {
             var rayLine = GetRayLine(from, to);
@@ -123,22 +82,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var neighbors = centerNode.GetNeighbors(gridDistance, true);
             return neighbors.Where(n => n.Center.DistanceSqr(centerNode.NavigableCenter2D) < radius * radius).ToList();
         }
-
-        //public static void SetNodesVisited()
-        //{
-        //    using (new PerformanceLogger("[NodesStorage] SetNodesVisited", true))
-        //    {
-        //        //var counter = 0;
-        //        Parallel.ForEach(ExplorationGrid.Instance.WalkableNodes.Where(n => n.IsKnown), n =>
-        //        {
-        //            n.IsVisited = true;
-        //            foreach (var node in n.GetNeighbors(1))
-        //            {
-        //                node.IsVisited = true;
-        //            }
-        //        });
-        //    }
-        //}
 
         public static void ResetKnownPositions()
         {
@@ -166,25 +109,26 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                             radius = 30;
                         }
                         break;
+
                     case ProfileType.Bounty:
                         radius = 55;
                         break;
+
                     case ProfileType.Keywarden:
                         radius = 70;
-                        break;                    
+                        break;
                 }
                 foreach (var node in GetExplorationNodesInRadius(nearestNode, radius))
                 {
                     node.IsVisited = true;
                 }
             }
-            //if (!PulseSetVisitedTimer.IsFinished) return;
-            //if (!PluginEvents.IsValidForPulse) return;
-            //PulseSetVisitedTimer.Reset();
         }
 
         protected override void OnUpdated(SceneData newNodes)
         {
+            Core.Logger.Verbose(LogCategory.CrashDebug, "ExplorationGrid.OnUpdated");
+
             var nodes = newNodes.ExplorationNodes.Cast<ExplorationNode>().ToList();
 
             UpdateInnerGrid(nodes);
@@ -194,15 +138,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 if (node == null)
                     continue;
 
-                node.AStarValue = (byte)(node.HasEnoughNavigableCells ? 1 : 2);    
-                
-                if(!node.IsIgnored && node.HasEnoughNavigableCells)
+                node.AStarValue = (byte)(node.HasEnoughNavigableCells ? 1 : 2);
+
+                if (!node.IsIgnored && node.HasEnoughNavigableCells)
                     WalkableNodes.Add(node);
             }
 
-            Util.Logger.Debug("[ExplorationGrid] Updated WalkableNodes={0}", WalkableNodes.Count);
+            Core.Logger.Debug("[ExplorationGrid] Updated WalkableNodes={0}", WalkableNodes.Count);
         }
     }
 }
-
-

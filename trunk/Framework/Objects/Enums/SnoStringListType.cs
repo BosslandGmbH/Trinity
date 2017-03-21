@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Trinity.Framework.Objects.Enums
+﻿namespace Trinity.Framework.Objects.Enums
 {
     /// <summary>
     /// GameBalanceName with value as NormalHash of GameBalanceName (used as id for string list groups)
@@ -332,5 +326,4 @@ namespace Trinity.Framework.Objects.Enums
         Boss_Strings = 77865,
         ItemFlavor = 87075,
     }
-
 }

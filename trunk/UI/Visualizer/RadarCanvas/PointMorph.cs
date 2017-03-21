@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Windows;
+using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using System.Windows;
 using Zeta.Common;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
@@ -138,7 +139,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.PointMorph.Update(). {0} {1}", ex.Message, ex.InnerException);
+                Core.Logger.Log("Exception in RadarUI.PointMorph.Update(). {0} {1}", ex.Message, ex.InnerException);
             }
         }
 

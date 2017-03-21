@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Reference;
 
 namespace Trinity.Settings.Mock
 {
@@ -13,9 +14,9 @@ namespace Trinity.Settings.Mock
         {
             ActiveSkills = new List<SkillSettings>
             {
-                new SkillSettings(Reference.Skills.Monk.DashingStrike),
-                new SkillSettings(Reference.Skills.Monk.BlindingFlash),
-                new SkillSettings(Reference.Skills.Monk.Epiphany),
+                new SkillSettings(Skills.Monk.DashingStrike),
+                new SkillSettings(Skills.Monk.BlindingFlash),
+                new SkillSettings(Skills.Monk.Epiphany),
             };
 
             WeightOverrides = new List<WeightSettings>

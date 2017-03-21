@@ -16,7 +16,7 @@ using Microsoft.Windows.Controls.Primitives;
 
 namespace Trinity.UI.UIComponents.Utilities
 {
-  public static class ItemsControlExtensions
+    public static class ItemsControlExtensions
   {
     public static CollectionViewGroup FindGroup(this ItemsControl itemsControl, Point position)
     {

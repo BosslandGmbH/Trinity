@@ -1,21 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Framework.Objects.Memory.Misc;
+using Trinity.Framework.Objects.Memory;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 
 namespace Trinity.Modules
 {
-    /// <summary>
-    /// Minimap markers
-    /// </summary>
-    public class MarkersCache : Module
+    public interface IMarkerProvider : IEnumerable<TrinityMarker>
     {
+        TrinityMarker FindMarker(int hash);
+        TrinityMarker FindMarker(string name);
+        TrinityMarker FindMarker(WorldMarkerType type);
+    }
+
+    public class TrinityMarker
+    {
+        public int TextureId { get; set; }
+        public float Distance { get; set; }
+        public Vector3 Position { get; set; }
+        public int NameHash { get; set; }
+        public string Name { get; set; }
+        public WorldMarkerType MarkerType { get; set; }
+        public int WorldSnoId { get; set; }
+        public override string ToString() => $"{Name} at {Position} Distance {Distance} Type={MarkerType} TextureId={TextureId}";
+    }
+
+
+    public class MarkersCache : Module, IMarkerProvider
+    {
+        public TrinityMarker FindMarker(int hash)
+            => CurrentWorldMarkers.FirstOrDefault(m => m.NameHash == hash);
+
+        public TrinityMarker FindMarker(string name)
+            => CurrentWorldMarkers.Where(m => m.Name.ToLowerInvariant().Contains(name.ToLowerInvariant())).OrderBy(m => m.Distance).FirstOrDefault();
+
+        public TrinityMarker FindMarker(WorldMarkerType type) 
+            => CurrentWorldMarkers.Where(m => m.MarkerType == type).OrderBy(m => m.Distance).FirstOrDefault();
+
         protected override int UpdateIntervalMs => 1000;
 
         private readonly ConcurrentCache<Vector3, TrinityMarker, MinimapMarker> _cache;
@@ -61,18 +89,10 @@ namespace Trinity.Modules
 
             _cache.Update();
         }
+
+        IEnumerator IEnumerable.GetEnumerator() => CurrentWorldMarkers.GetEnumerator();
+        public IEnumerator<TrinityMarker> GetEnumerator() => CurrentWorldMarkers.GetEnumerator();
     }
 
-    public class TrinityMarker
-    {
-        public int TextureId { get; set; }
-        public float Distance { get; set; }
-        public Vector3 Position { get; set; }
-        public int NameHash { get; set; }
-        public string Name { get; set; }
-        public WorldMarkerType MarkerType { get; set; }
-        public int WorldSnoId { get; set; }
-        public override string ToString() => $"{Name} at {Position} Distance {Distance} Type={MarkerType} TextureId={TextureId}";
-    }
 }
 

@@ -41,7 +41,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public bool IsAvailable
         {
-            get { return ZetaDia.ActInfo.AllQuests.Any(q => q.QuestSNO == QuestId && q.State != QuestState.Completed); }
+            get { return ZetaDia.Storage.Quests.AllQuests.Any(q => q.QuestSNO == QuestId && q.State != QuestState.Completed); }
         }
 
         private int _waypointNumber;
@@ -68,7 +68,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
 
                 return 0;
-
             }
             set { _waypointNumber = value; }
         }
@@ -88,7 +87,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     //<SafeMoveTo questId="312429" stepId="2" x="2401" y="4537" z="-2" pathPrecision="5" pathPointLimit="250" scene="trOut_Highlands_Roads_EW_03" statusText="" />
                     Coroutines.Insert(0, new MoveToPositionCoroutine(71150, new Vector3(2401, 4537, -2)));
                 }
-
             }
             //if (WaypointNumber == 14)
             //{
@@ -100,8 +98,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             //    }
 
             //}
-
-
         }
 
         public override string ToString()

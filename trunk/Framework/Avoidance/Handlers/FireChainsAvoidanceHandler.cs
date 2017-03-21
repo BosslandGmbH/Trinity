@@ -1,13 +1,13 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
     public class FireChainsAvoidanceHandler : IAvoidanceHandler
     {
-        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
-        {  
+        public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
+        {
             var actor = avoidance.Actors.FirstOrDefault();
             if (actor == null)
                 return;
@@ -23,13 +23,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                     var nodes = grid.GetRayLineAsNodes(actor.Position, fireChainFriend.Position).SelectMany(n => n.AdjacentNodes);
                     grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
                 }
-            }           
+            }
         }
     }
 }
-
-
-
-
-
-

@@ -1,8 +1,8 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
-using Trinity.Framework.Helpers;
 
 namespace Trinity.UI.UIComponents.Converters
 {
@@ -19,14 +19,14 @@ namespace Trinity.UI.UIComponents.Converters
                     if (_validForamts.Contains(format))
                         return string.Format(culture, format, value);
 
-                    Logger.Log($"Invalid string Format Param={parameter} Value={value} ValueType={value.GetType()} TargetType={targetType}");
+                    Core.Logger.Log($"Invalid string Format Param={parameter} Value={value} ValueType={value.GetType()} TargetType={targetType}");
                     return value.ToString();
                 }
                 return value.ToString();
             }
             catch (Exception ex)
             {
-                Logger.Log($"Exception in StringFormatConverter Param={parameter} Value={value} ValueType={value.GetType()} TargetType={targetType} {ex}");
+                Core.Logger.Log($"Exception in StringFormatConverter Param={parameter} Value={value} ValueType={value.GetType()} TargetType={targetType} {ex}");
             }
             return value;
         }

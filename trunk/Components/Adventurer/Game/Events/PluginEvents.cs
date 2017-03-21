@@ -1,11 +1,12 @@
 ﻿using System;
-using Trinity.Components.Adventurer.Cache;
+using Trinity.Framework;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Bot;
 using Zeta.Game;
+
 //using Adventurer.Game.Grid;
 
 namespace Trinity.Components.Adventurer.Game.Events
@@ -40,18 +41,20 @@ namespace Trinity.Components.Adventurer.Game.Events
         {
             if (!Adventurer.IsAdventurerTagRunning())
             {
-                Logger.Debug("[BotEvents] Reseting the grids.");
+                Core.Logger.Debug("[BotEvents] Reseting the grids.");
                 ScenesStorage.Reset();
             }
             WorldChangeTime = PluginTime.CurrentMillisecond;
-            Logger.Debug("[BotEvents] World has changed to WorldId: {0} LevelAreaSnoIdId: {1}", AdvDia.CurrentWorldId, AdvDia.CurrentLevelAreaId);
+            Core.Logger.Debug("[BotEvents] World has changed to WorldId: {0} LevelAreaSnoIdId: {1}", AdvDia.CurrentWorldId, AdvDia.CurrentLevelAreaId);
             EntryPortals.AddEntryPortal();
         }
 
         public static void GameEvents_OnGameJoined(object sender, EventArgs e)
         {
-            ScenesStorage.Reset();
-            //AdvDia.Update();
+            if (ScenesStorage.CurrentScene?.LevelAreaId != ZetaDia.CurrentLevelAreaSnoId)
+            {
+                ScenesStorage.Reset();
+            }
         }
 
         public static void OnBotStart(IBot bot)
@@ -66,9 +69,8 @@ namespace Trinity.Components.Adventurer.Game.Events
             BountyStatistics.Report();
         }
 
-
         private static void Pulsator_OnPulse(object sender, EventArgs e)
-        {            
+        {
             PulseUpdates();
         }
 
@@ -78,11 +80,10 @@ namespace Trinity.Components.Adventurer.Game.Events
             if (curFrame == _lastUpdate) return;
             _lastUpdate = curFrame;
 
-            // Trinity uses adventurer scenestorage and grid base 
+            // Trinity uses adventurer scenestorage and grid base
             ScenesStorage.Update();
             ExplorationGrid.PulseSetVisited();
             BountyStatistics.Pulse();
         }
-
     }
 }

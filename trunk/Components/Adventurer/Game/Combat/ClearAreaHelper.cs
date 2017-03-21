@@ -1,17 +1,14 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Combat.Resources;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.Game.Combat
 {
@@ -36,7 +33,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
 
             if (shouldEnable && !IsCombatModeModified)
             {
-                Logger.DebugSetting("Enabling kill-all mode to clear area");
+                Core.Logger.Debug("Enabling kill-all mode to clear area");
                 GameEvents.OnWorldChanged += OnWorldChanged;
                 _previousCombatMode = Components.Combat.Combat.CombatMode;
                 Components.Combat.Combat.CombatMode = CombatMode.KillAll;
@@ -78,7 +75,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
             if (Components.Combat.Combat.CombatMode == CombatMode.KillAll)
             {
                 Components.Combat.Combat.CombatMode = _previousCombatMode;
-                Logger.DebugSetting($"Reverting combat mode to '{_previousCombatMode}' after clearing area");
+                Core.Logger.Debug($"Reverting combat mode to '{_previousCombatMode}' after clearing area");
             }
 
             GameEvents.OnWorldChanged -= OnWorldChanged;

@@ -1,27 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
-
-using Trinity.DbProvider;
-using Trinity.Framework;
-using Trinity.Framework.Avoidance;
-using Zeta.Bot;
-using Zeta.Bot.Navigation;
-using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals.SNO;
-using LineSegment = System.Windows.Media.LineSegment;
-using Logger = Trinity.Framework.Helpers.Logger;
-using Edge = System.Tuple<int, int>;
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
