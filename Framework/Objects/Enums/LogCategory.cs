@@ -32,7 +32,7 @@ namespace Trinity.Framework.Helpers
         StuckHandler = 0x00200000,
         Spells = 0x00400000,
         ItemEvents = 0x00800000,
-        CrashDebug = 0x01000000,
+        Unused25 = 0x01000000,
         Unused26 = 0x02000000,
         Unused27 = 0x04000000,
         Unused28 = 0x08000000,

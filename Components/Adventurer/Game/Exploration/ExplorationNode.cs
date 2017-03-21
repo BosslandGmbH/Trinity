@@ -115,7 +115,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 for (var y = instance.TopLeft.Y + searchBeginning; y <= instance.BottomRight.Y; y = y + navBoxSize)
                 {
                     var cell = instance._scene.Cells.FirstOrDefault(c => c.IsInCell(x, y));
- 
                     //var z = AdvDia.MainGridProvider.GetHeight(new Vector2(x,y));
                     if (cell != null)
                     {

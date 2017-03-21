@@ -66,13 +66,13 @@ namespace Trinity.Framework
 
         private void LogToCategory(LogCategory category, TrinityLogLevel level, string s, object[] args)
         {
+            if (args.Length > 0)
+                s = string.Format(s, args);
+
             if (Core.Settings?.Advanced?.LogCategories.HasFlag(category) ?? true)
             {
-                if (args.Length > 0)
-                    s = string.Format(s, args);
-
-                var cat = category != LogCategory.None ? " ["+category+"] " : string.Empty;
-                var msg = "["+Prefix+"]"+ cat +" " + s;
+                var cat = category != LogCategory.None ? $" [{category}] " : string.Empty;
+                var msg = $"[{Prefix}]{cat} {s}";
 
                 switch (level)
                 {

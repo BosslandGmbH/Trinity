@@ -1,6 +1,4 @@
 ﻿using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Reference;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
@@ -30,26 +28,22 @@ namespace Trinity.Framework.Actors
 
         public static T CreateActor<T>(ACD commonData) where T : TrinityActor
         {
-            var seed = GetActorSeed(commonData);
-            return (T)CreateActor(seed);
+            return (T)CreateActor(GetActorSeed(commonData));
         }
 
         public static TrinityActor CreateActor(ACD commonData)
         {
-            var seed = GetActorSeed(commonData);
-            return CreateActor(seed);
+            return CreateActor(GetActorSeed(commonData));
         }
 
-        public static T CreateActor<T>(DiaObject diaObject, int id = 0) where T : TrinityActor
+        public static T CreateActor<T>(DiaObject diaObject) where T : TrinityActor
         {
-            var seed = GetActorSeed(diaObject, id);
-            return (T)CreateActor(seed);
+            return (T)CreateActor(GetActorSeed(diaObject));
         }
 
-        public static TrinityActor CreateActor(DiaObject diaObject, int id = 0)
+        public static TrinityActor CreateActor(DiaObject diaObject)
         {
-            var seed = GetActorSeed(diaObject, id);
-            return CreateActor(seed);
+            return CreateActor(GetActorSeed(diaObject));
         }
 
         public static ActorSeed GetActorSeed(ACD commonData)
@@ -57,74 +51,50 @@ namespace Trinity.Framework.Actors
             if (commonData == null || !commonData.IsValid)
                 return null;
 
-            var actorSnoId = commonData.ActorSnoId;
-            var acdId = commonData.ACDId;
-            var annId = commonData.AnnId;
-            var actorType = commonData.ActorType;
-            var internalName = commonData.Name;
-            var position = commonData.Position;
-            var fagId = commonData.FastAttribGroupId;
-
             return new ActorSeed
             {
                 IsAcdBased = true,
                 IsRActorBased = false,
-                ActorSnoId = actorSnoId,
+                ActorSnoId = commonData.ActorSnoId,
                 CommonData = commonData,
-                AcdId = acdId,
-                AnnId = annId,
-                ActorType = actorType,
-                InternalName = internalName,
-                Position = position,
-                FastAttributeGroupId = fagId
+                AcdId = commonData.ACDId,
+                AnnId = commonData.AnnId,
+                ActorType = commonData.ActorType,
+                InternalName = commonData.Name,
+                Position = commonData.Position,
+                FastAttributeGroupId = commonData.FastAttribGroupId,
             };
         }
 
-        public static ActorSeed GetActorSeed(DiaObject rActor, int id)
+        public static ActorSeed GetActorSeed(DiaObject rActor)
         {
             if (rActor == null || !rActor.IsValid)
-                return null;
-            
-            var actorSnoId = rActor.ActorSnoId;
-            if (GameData.ExcludedActorIds.Contains(actorSnoId))
-                return null;
-
-            var actorInfo = SnoHelper.GetActorInfo(actorSnoId);
-            if (actorInfo == null)
-                return null;
-
-            var actorType = actorInfo.Type;
-            if (GameData.ExcludedActorTypes.Contains(actorType))
                 return null;
 
             var acdId = rActor.ACDId;
             var commonData = rActor.CommonData;
-            var isAcdBased = acdId != -1 && commonData != null;
-            var rActorId = id > 0 ? id : rActor.RActorId;            
-            var annId = isAcdBased ? commonData.AnnId : -1;
-            var fagId = isAcdBased ? commonData.FastAttribGroupId : -1;
-            var monsterSnoId = actorInfo.MonsterSnoId;
-            var monsterInfo = SnoHelper.GetMonsterInfo(monsterSnoId);
-            var position = rActor.Position;
-            var internalName = rActor.Name;
+            var isAcdBased = commonData != null;
+            var actorInfo = rActor.ActorInfo;
+            if (actorInfo == null)
+                return null;
 
             return new ActorSeed
             {
                 RActor = rActor,
-                RActorId = rActorId,
-                ActorSnoId = actorSnoId,
-                ActorType = actorType,
+                RActorId = rActor.RActorId,
+                ActorSnoId = rActor.ActorSnoId,
+                ActorType = actorInfo.Type,
                 AcdId = acdId,
-                AnnId = annId,
+                AnnId = isAcdBased ? rActor.CommonData.AnnId : -1,
                 ActorInfo = actorInfo,
                 IsAcdBased = isAcdBased,
                 IsRActorBased = true,
-                InternalName = internalName,
-                Position = position,
+                InternalName = rActor.Name,
+                Position = rActor.Position,
                 CommonData = commonData,
-                FastAttributeGroupId = fagId,
-                MonsterInfo = monsterInfo,
-                MonsterSnoId = monsterSnoId
+                FastAttributeGroupId = isAcdBased ? commonData.FastAttribGroupId : -1,
+                MonsterInfo = commonData?.MonsterInfo,
+                MonsterSnoId = actorInfo.MonsterSnoId
             };
         }
 
@@ -140,10 +110,11 @@ namespace Trinity.Framework.Actors
                 case ActorType.Player:
                     return CreateActor<TrinityPlayer>(seed);
             }
+
             return CreateActor<TrinityActor>(seed);
         }
 
-        public static T CreateActor<T>(ActorSeed actorSeed) where T : TrinityActor, new()
+        public static T CreateActor<T>(ActorSeed actorSeed) where T : ActorBase, new()
         {
             var actor = new T
             {

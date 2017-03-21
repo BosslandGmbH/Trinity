@@ -802,7 +802,6 @@ namespace Trinity.Framework.Reference
         public static HashSet<int> ExcludedActorIds = new HashSet<int>
         {
             -1,
-            0,
             4176, // Generic Proxy
             5502, // Start Location
             375658, // Banter Trigger
@@ -831,7 +830,7 @@ namespace Trinity.Framework.Reference
         /// Actor types that we always want to completely ignore
         /// </summary>
         public static HashSet<ActorType> ExcludedActorTypes = new HashSet<ActorType>
-        {    
+        {
             ActorType.Environment,
             ActorType.AxeSymbol,
             //ActorType.CustomBrain, // Some avoidance are custom brain like herald of pestilence creepMobArm

@@ -127,8 +127,6 @@ namespace Trinity.Framework
                 Module util;
                 if (utilReference.TryGetTarget(out util))
                 {
-                    Core.Logger.Verbose(LogCategory.CrashDebug, "ModuleManager.ExecuteOnInstances " + util.Name);
-
                     action?.Invoke(util);
                 }
                 else

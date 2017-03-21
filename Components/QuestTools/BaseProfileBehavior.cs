@@ -23,10 +23,7 @@ namespace Trinity.Components.QuestTools
         protected BaseProfileBehavior()
         {
             QuestId = QuestId <= 0 ? 1 : QuestId;
-            TagClassName = GetType().Name;
         }
-
-        public string TagClassName { get; set; }
 
         [XmlAttribute("timeout")]
         [Description("Time in seconds after which the tag will end")]
@@ -57,8 +54,6 @@ namespace Trinity.Components.QuestTools
 
             if (!IsStarted)
             {
-                Core.Logger.Verbose(LogCategory.CrashDebug, "BaseProfileBehavior.StartTask " + GetType().Name);
-
                 StartTime = DateTime.UtcNow;
                 IsStarted = true;
 
@@ -90,7 +85,7 @@ namespace Trinity.Components.QuestTools
         {
             if (!string.IsNullOrEmpty(StopCondition) && ScriptManager.GetCondition(StopCondition).Invoke())
             {
-                Core.Logger.Log($"[{TagClassName}] Stop condition was met: ({StopCondition})");
+                Core.Logger.Log($"[ExploreLevelArea] Stop condition was met: ({StopCondition})");
                 return true;
             }
             return false;
@@ -99,8 +94,8 @@ namespace Trinity.Components.QuestTools
         private bool _isDone;
 
         protected sealed override Composite CreateBehavior() => new ActionRunCoroutine(ctx => Run());
-        public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
-        public sealed override void OnDone() => Core.Logger.Verbose($"Finished Tag: {TagClassName} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
+        public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {GetType().Name}. {ToString()}");
+        public sealed override void OnDone() => Core.Logger.Verbose($"Finished Tag: {GetType().Name} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
         public sealed override bool IsDone => _isDone;
         public sealed override void ResetCachedDone() => Reset();
         public sealed override void ResetCachedDone(bool force = false) => Reset();

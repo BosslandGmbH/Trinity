@@ -11,8 +11,8 @@ using Zeta.XmlEngine;
 
 
 namespace Trinity.ProfileTags
-{    
-    [XmlElement("TrinityInteract")]
+{
+
     [XmlElement("Interact")]
     public class InteractTag : InteractProfileBehavior { }
 

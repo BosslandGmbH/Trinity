@@ -19,8 +19,6 @@ using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
 {
-    [XmlElement("TrinityMoveTo")]
-    [XmlElement("SafeMoveTo")]
     [XmlElement("MoveToPosition")]
     public class MoveToPositionTag : MoveToPositionProfileBehavior
     {

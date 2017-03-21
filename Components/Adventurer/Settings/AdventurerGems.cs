@@ -81,7 +81,7 @@ namespace Trinity.Components.Adventurer.Settings
 
             Core.Actors.Update();
 
-            Gems = Core.Actors.AllInventory
+            Gems = Core.Actors.Inventory
                     .Where(i => i.IsValid && i.ItemType == ItemType.LegendaryGem)
                     .Select(i => new AdventurerGem(i, greaterRiftLevel))
                     .Distinct(new AdventurerGemComparer())

@@ -689,15 +689,6 @@ namespace Trinity.Routines.Barbarian
             if (Skills.Barbarian.Whirlwind.CanCast())
                 return Whirlwind(CurrentTarget.Position);
 
-            if (Skills.Barbarian.Earthquake.CanCast())
-                return new TrinityPower(Skills.Barbarian.Earthquake, 12f, CurrentTarget.Position) {CastWhenBlocked = true};
-
-            if (Skills.Barbarian.AncientSpear.CanCast())
-                return AncientSpear(CurrentTarget);
-
-            if (Skills.Barbarian.Leap.CanCast())
-                return Leap(CurrentTarget.Position);
-
             return DefaultPower;
         }
 

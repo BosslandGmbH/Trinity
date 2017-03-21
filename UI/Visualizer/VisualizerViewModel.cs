@@ -50,7 +50,7 @@ namespace Trinity.UI.Visualizer
         private RadarVisibilityFlags _visibilityFlags;
         private List<GridColumnFlags> _allGridColumnFlags;
         private bool _showWeighted;
-        private const int RefreshRateMs = 20;
+        private const int RefreshRateMs = 50;
         private DateTime LastRefresh = DateTime.MinValue;
         private string _pauseButtonText = "Pause";
         private bool _isPaused;
@@ -136,7 +136,6 @@ namespace Trinity.UI.Visualizer
 
                 ScenesStorage.Update();
                 Core.Update();
-                Core.Actors.Update();
                 Combat.Weighting.WeightActors(Core.Targets);
                 UpdateVisualizer();
                 return false;

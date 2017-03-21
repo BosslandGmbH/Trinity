@@ -113,7 +113,7 @@ namespace Trinity.Components.Coroutines.Town
                     await Coroutine.Sleep(2000);
                 }
 
-                await Coroutine.Wait(8000, () => Core.Actors.AllInventory.Any());
+                await Coroutine.Wait(8000, () => Core.Actors.Inventory.Any());
                 await Coroutine.Sleep(1000);
 
                 Core.Logger.Debug("Started Town Run Loop");

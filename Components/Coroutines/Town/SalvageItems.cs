@@ -162,12 +162,12 @@ namespace Trinity.Components.Coroutines.Town
                         continue;
                     }
 
-                    //if (!Core.Actors.IsAnnIdValid(item.AnnId))
-                    //{
-                    //    Core.Logger.Log("AnnId test failed, skipping salvage to prevent disconnect");
-                    //    Core.Inventory.InvalidAnnIds.Add(item.AnnId);
-                    //    continue;
-                    //}
+                    if (!Core.Actors.IsAnnIdValid(item.AnnId))
+                    {
+                        Core.Logger.Log("AnnId test failed, skipping salvage to prevent disconnect");
+                        Core.Inventory.InvalidAnnIds.Add(item.AnnId);
+                        continue;
+                    }
 
                     Core.Logger.Log($"Salvaging: {item.Name} ({item.ActorSnoId}) Ancient={item.IsAncient}");
                     InventoryManager.SalvageItem(item.AnnId);

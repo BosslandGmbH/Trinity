@@ -137,6 +137,8 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public Item Reference => Legendary.GetItem(this);
 
+        public ACDItem AcdItemTemp { get; internal set; }
+
         public ACDItem ToAcdItem() => Core.Actors.GetAcdItemByAnnId(AnnId);
 
         private bool IsAcdItemValid(ACDItem acdItem) => acdItem != null && acdItem.IsValid && !acdItem.IsDisposed;
