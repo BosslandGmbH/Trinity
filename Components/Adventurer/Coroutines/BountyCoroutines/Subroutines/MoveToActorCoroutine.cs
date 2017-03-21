@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Zeta.Common;
-using Zeta.Game;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
@@ -17,6 +18,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private readonly int _questId;
         private readonly int _worldId;
         private readonly int _actorId;
+        private readonly bool _isExploreAllowed;
 
         private bool _isDone;
         private States _state;
@@ -42,29 +44,27 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Util.Logger.Info("[MoveToActor] " + value);
+                    Core.Logger.Log("[MoveToActor] " + value);
                 }
                 _state = value;
             }
         }
 
-        #endregion
+        #endregion State
 
         public bool IsDone
         {
             get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
         }
 
-
-
-        public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000)
+        public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000, bool isExploreAllowed = true)
         {
             _questId = questId;
             _worldId = worldId;
             _actorId = actorId;
             _objectiveScanRange = maxRange;
+            _isExploreAllowed = isExploreAllowed;
         }
-
 
         public async Task<bool> GetCoroutine()
         {
@@ -72,12 +72,16 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 case States.NotStarted:
                     return await NotStarted();
+
                 case States.Searching:
                     return await Searching();
+
                 case States.Moving:
                     return await Moving();
+
                 case States.Completed:
                     return await Completed();
+
                 case States.Failed:
                     return await Failed();
             }
@@ -117,6 +121,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (_objectiveLocation != Vector3.Zero)
             {
                 State = States.Moving;
+                return false;
+            }
+
+            if (!_isExploreAllowed)
+            {
+                Core.Logger.Log("Unable to find actor and exploration is disabled");
+                State = States.Failed;
                 return false;
             }
 
@@ -178,17 +189,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 {
                     using (new PerformanceLogger("[MoveToObject] Path to Objective Check", true))
                     {
-                        //if (await AdvDia.DefaultNavigationProvider.CanFullyClientPathTo(_objectiveLocation))
-                        //{
-                        Logger.Info("[MoveToObject] Found the objective at distance {0}",
+                        Core.Logger.Log("[MoveToObject] Found the objective at distance {0}",
                         AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //}
-                        //else
-                        //{
-                        //    Logger.Debug("[MoveToObject] Found the objective at distance {0}, but cannot get a path to it.",
-                        //        AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //    _objectiveLocation = Vector3.Zero;                            
-                        //}
                     }
                 }
             }

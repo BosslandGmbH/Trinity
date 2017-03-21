@@ -1,22 +1,22 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Coroutines;
-using Trinity.Coroutines.Town;
-using Trinity.Framework;
+using Trinity.Components.Coroutines;
+using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Zeta.Bot.Settings;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Modules
 {
@@ -56,7 +56,7 @@ namespace Trinity.Modules
                 var included = new List<TrinityActor>();
                 var ignored = new List<TrinityActor>();
 
-                foreach (var actor in Core.Actors.GetActorsOfType<TrinityActor>())
+                foreach (var actor in Core.Actors.OfType<TrinityActor>())
                 {
                     try
                     {
@@ -75,7 +75,7 @@ namespace Trinity.Modules
                     }
                     catch (Exception ex)
                     {
-                        Logger.LogError($"Exception updating object cache {actor.Name} {actor.ActorSnoId} {ex}");
+                        Core.Logger.Error($"Exception updating object cache {actor.Name} {actor.ActorSnoId} {ex}");
                         Clear();
                         return;
                     }
@@ -85,12 +85,12 @@ namespace Trinity.Modules
                 {
                     foreach (var o in included)
                     {
-                        Logger.LogDebug($"[Cache][{o.CacheTime:N4}] Added {o}");
+                        Core.Logger.Debug($"[Cache][{o.CacheTime:N4}] Added {o}");
                     }
 
                     foreach (var o in ignored)
                     {
-                        Logger.LogDebug($"[Cache][{o.CacheTime:N4}] Ignored {o.InternalName} RActorGuid={o.RActorId} ActorSnoId={o.ActorSnoId} Type={o.ActorType} CacheInfo={o.CacheInfo}");
+                        Core.Logger.Debug($"[Cache][{o.CacheTime:N4}] Ignored {o.InternalName} RActorGuid={o.RActorId} ActorSnoId={o.ActorSnoId} Type={o.ActorType} CacheInfo={o.CacheInfo}");
                     }                   
                 }
 
@@ -108,7 +108,7 @@ namespace Trinity.Modules
         {
             if (cacheObject == null)
             {
-                Logger.LogError("NullObject");
+                Core.Logger.Error("NullObject");
                 return false;
             }
 

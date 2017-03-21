@@ -1,7 +1,5 @@
-using System;
 using System.ComponentModel;
 using System.Runtime.Serialization;
-using Trinity.Framework.Avoidance.Handlers;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
 
@@ -19,7 +17,6 @@ namespace Trinity.Framework.Avoidance.Settings
 
         public AvoidanceSettingsEntry()
         {
-
         }
 
         public AvoidanceSettingsEntry(AvoidanceDefinition definition)
@@ -87,10 +84,10 @@ namespace Trinity.Framework.Avoidance.Settings
             }
         }
 
-
         public override bool Equals(object obj) => (obj as AvoidanceSettingsEntry)?.Id == Id;
+
         public override int GetHashCode() => Id;
+
         public override string ToString() => $"{GetType().Name}: {Definition.Name}";
     }
-
 }

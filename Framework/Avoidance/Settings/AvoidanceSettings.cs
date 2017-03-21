@@ -1,14 +1,11 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Input;
 using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects;
 using Trinity.UI.UIComponents;
-using Zeta.Common;
 
 namespace Trinity.Framework.Avoidance.Settings
 {
@@ -55,7 +52,7 @@ namespace Trinity.Framework.Avoidance.Settings
         public WeightingOptions WeightingOptions { get; set; }
 
         public override void LoadDefaults()
-        { 
+        {
             base.LoadDefaults();
 
             Entries = AvoidanceFactory.AvoidanceData.Select(a => new AvoidanceSettingsEntry(a)).ToList();
@@ -108,7 +105,7 @@ namespace Trinity.Framework.Avoidance.Settings
         {
             var newObj = JsonSerializer.Deserialize<AvoidanceSettings>(code);
             var diff = Entries.Except(newObj.Entries);
-            newObj.Entries.AddRange(diff);            
+            newObj.Entries.AddRange(diff);
             PropertyCopy.Copy(newObj, this, new PropertyCopyOptions { IgnoreNulls = true });
             EntriesByType = Entries.ToDictionary(k => k.Type, v => v);
         }

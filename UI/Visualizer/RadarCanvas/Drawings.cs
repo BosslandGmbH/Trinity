@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using IronPython.Modules;
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {

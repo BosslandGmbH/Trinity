@@ -1,11 +1,11 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using JetBrains.Annotations;
 
 namespace Trinity.Framework.Helpers
 {
@@ -32,12 +32,12 @@ namespace Trinity.Framework.Helpers
         {
             if (EqualityComparer<T>.Default.Equals(field, value)) return false;
             field = value;
-            if(!SupressChangeNotifications)
+            if (!SupressChangeNotifications)
                 OnPropertyChanged(propertyName);
             return true;
         }
 
-        public static IEnumerable<Type> GetDerivedTypes(Type baseType, Assembly assembly) => 
+        public static IEnumerable<Type> GetDerivedTypes(Type baseType, Assembly assembly) =>
             from t in assembly.GetTypes()
             where t.IsSubclassOf(baseType)
             select t;
@@ -54,7 +54,8 @@ namespace Trinity.Framework.Helpers
             }
         }
 
-        public virtual void OnPopulated() { }
-
+        public virtual void OnPopulated()
+        {
+        }
     }
 }

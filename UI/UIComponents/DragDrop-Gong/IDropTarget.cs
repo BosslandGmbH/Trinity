@@ -1,11 +1,9 @@
-﻿using System.Windows;
-
-namespace Trinity.UI.UIComponents
+﻿namespace Trinity.UI.UIComponents
 {
-  /// <summary>
-  /// Interface implemented by Drop Handlers.
-  /// </summary>
-  public interface IDropTarget
+    /// <summary>
+    /// Interface implemented by Drop Handlers.
+    /// </summary>
+    public interface IDropTarget
   {
     /// <summary>
     /// Updates the current drag state.

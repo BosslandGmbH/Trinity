@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Trinity.Framework.Objects.Enums
+﻿namespace Trinity.Framework.Objects.Enums
 {
     public enum TagType // 2.4.2.39192
     {
@@ -1341,6 +1335,6 @@ namespace Trinity.Framework.Objects.Enums
         TAG_VS_FRESNEL_BIAS = 655399, //  Fresnel Bias
         TAG_VS_GLOW = 655398, //  Enable Glow
         TAG_VS_SHADOW_SELF = 655397, //  Shadow Self
-        TAG_VS_MASK = 655396, //  Enable Mask	
+        TAG_VS_MASK = 655396, //  Enable Mask
     }
 }

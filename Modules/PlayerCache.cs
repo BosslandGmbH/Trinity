@@ -1,22 +1,22 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Reference;
+using Trinity.Framework.Objects.Memory;
+using Trinity.Framework.Reference;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Modules
 {
     public class PlayerCache : Module
-    {
+    {       
         public int ActorSnoId { get; set; }
 
         public SummonInfo Summons = new SummonInfo();
@@ -71,7 +71,7 @@ namespace Trinity.Modules
         public bool ParticipatingInTieredLootRun { get; private set; }
         public bool IsInTown { get; private set; }
         public bool IsInCombat { get; private set; }
-        public int BloodShards { get; private set; }
+        public long BloodShards { get; private set; }
         public bool IsRanged { get; private set; }
         public bool IsValid { get; private set; }
         public int TieredLootRunlevel { get; private set; }
@@ -130,7 +130,7 @@ namespace Trinity.Modules
                     return;
                 }
 
-                if (ZetaDia.IsLoadingWorld)
+                if (ZetaDia.Globals.IsLoadingWorld)
                 {
                     IsLoadingWorld = true;
                     IsValid = false;
@@ -158,8 +158,8 @@ namespace Trinity.Modules
                     IsLoadingWorld = false;
 
 
-                    WorldDynamicId = ZetaDia.WorldId;
-                    WorldSnoId = ZetaDia.CurrentWorldSnoId;
+                    WorldDynamicId = ZetaDia.Globals.WorldId;
+                    WorldSnoId = ZetaDia.Globals.WorldSnoId;
 
                     if (DateTime.UtcNow.Subtract(LastVerySlowUpdate).TotalMilliseconds > 5000)
                         UpdateVerySlowChangingData();
@@ -176,7 +176,7 @@ namespace Trinity.Modules
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(TrinityLogLevel.Debug, LogCategory.CacheManagement, "Safely handled exception for grabbing player data.{0}{1}", Environment.NewLine, ex);
+                    Core.Logger.Debug(LogCategory.CacheManagement, "Safely handled exception for grabbing player data.{0}{1}", Environment.NewLine, ex);
                 }
             }
         }
@@ -239,7 +239,7 @@ namespace Trinity.Modules
             IsCasting = _me.LoopingAnimationEndTime > 0;
             IsInteractingWithGizmo = commonData.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectNone, (int)SNOPower.Axe_Operate_Gizmo);
             CurrentAnimation = commonData.CurrentAnimation;
-            IsInventoryLockedForGreaterRift = ZetaDia.CurrentRift.IsStarted && ZetaDia.CurrentRift.Type == RiftType.Greater && !ZetaDia.CurrentRift.IsCompleted;
+            IsInventoryLockedForGreaterRift = ZetaDia.Storage.RiftStarted && ZetaDia.Storage.CurrentRiftType == RiftType.Greater && !ZetaDia.Storage.RiftCompleted;
             ShieldHitpoints = commonData.GetAttribute<float>(ActorAttributeType.DamageShieldAmount);
 
             Summons = GetPlayerSummonCounts();
@@ -248,7 +248,7 @@ namespace Trinity.Modules
             //         var directionRadians = Math.Atan2(direction.X, direction.Y);
             //var directionDegrees = directionRadians * 180/Math.PI;
 
-            //Logger.LogNormal("Player DirectionVector={0}{1} Radians={2} (DB: {3}) Degrees={4} (DB: {5})",
+            //Core.Logger.Log("Player DirectionVector={0}{1} Radians={2} (DB: {3}) Degrees={4} (DB: {5})",
             //             DirectionVector.X, 
             //             DirectionVector.Y,
             //             directionRadians,
@@ -270,7 +270,7 @@ namespace Trinity.Modules
             var averageHealth = HealthHistory.Average();
             IsTakingDamage = averageHealth > CurrentHealth;
             if (IsTakingDamage)
-                Logger.LogVerbose(LogCategory.Avoidance, "Taking Damage 5TickAvg={0} Current={1}", averageHealth, CurrentHealth);
+                Core.Logger.Verbose(LogCategory.Avoidance, "Taking Damage 5TickAvg={0} Current={1}", averageHealth, CurrentHealth);
 
             // For WD Angry Chicken
             IsHidden = _me.IsHidden;
@@ -333,14 +333,16 @@ namespace Trinity.Modules
 
         internal void UpdateSlowChangingData()
         {
-            BloodShards = ZetaDia.PlayerData.BloodshardCount;
+            var player = ZetaDia.Storage.PlayerDataManager.ActivePlayerData;
+            
+            BloodShards = player.BloodshardCount;
             MyDynamicID = _me.CommonData.AnnId;
             CurrentSceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
 
             //Zeta.Game.ZetaDia.Me.CommonData.GetAttribute<int>(Zeta.Game.Internals.Actors.ActorAttributeType.TieredLootRunRewardChoiceState) > 0;
 
-            Coinage = ZetaDia.PlayerData.Coinage;
-            CurrentExperience = (long)ZetaDia.Me.CurrentExperience;
+            Coinage = player.Coinage;
+            CurrentExperience = ZetaDia.Me.CurrentExperience;
 
             IsInPandemoniumFortress = GameData.PandemoniumFortressWorlds.Contains(WorldSnoId) ||
                     GameData.PandemoniumFortressLevelAreaIds.Contains(LevelAreaId);
@@ -358,12 +360,12 @@ namespace Trinity.Modules
             // Step 1 is event in progress, kill stuff
             // Step 2 is event completed
             // Step -1 is not started
-            InActiveEvent = ZetaDia.ActInfo.ActiveQuests.Any(q => GameData.EventQuests.Contains(q.QuestSNO) && q.QuestStep != 13);
-            HasEventInspectionTask = ZetaDia.ActInfo.ActiveQuests.Any(q => GameData.EventQuests.Contains(q.QuestSNO) && q.QuestStep == 13);
+            InActiveEvent = ZetaDia.Storage.Quests.ActiveQuests.Any(q => GameData.EventQuests.Contains(q.QuestSNO) && q.QuestStep != 13);
+            HasEventInspectionTask = ZetaDia.Storage.Quests.ActiveQuests.Any(q => GameData.EventQuests.Contains(q.QuestSNO) && q.QuestStep == 13);
 
-            FreeBackpackSlots = _me.Inventory.NumFreeBackpackSlots;
+            FreeBackpackSlots = InventoryManager.NumFreeBackpackSlots;
 
-            WorldType = ZetaDia.WorldType;
+            WorldType = ZetaDia.Storage.CurrentWorldType;
             if (WorldType != Act.OpenWorld)
             {
                 // Update these only with campaign
@@ -371,8 +373,12 @@ namespace Trinity.Modules
                 CurrentQuestStep = ZetaDia.CurrentQuest.StepId;
             }
 
+            Name = player.HeroName;
+            HeroId = player.HeroId;
             LastSlowUpdate = DateTime.UtcNow;
         }
+
+        public int HeroId { get; set; }
 
         internal void UpdateVerySlowChangingData()
         {
@@ -457,22 +463,20 @@ namespace Trinity.Modules
         {
             get
             {
-                //var potionElement = UIElement.FromHash(9033406906766196825);
-                //var potionGameBalanceId = ZetaDia.Memory.Read<int>(potionElement.BaseAddress - 0x24);
                 try
                 {
-                    var potionElement = UIElement.FromHash(16768550267251786851);
-                    if (potionElement != null && potionElement.IsValid)
+                    var element = UXHelper.GetControl(13566120389425937876);
+                    if (element != null && element.IsValid)
                     {
-                        var potionAnnId = ZetaDia.Memory.Read<int>(potionElement.BaseAddress - 0x18);
-                        return ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(a => a.AnnId == potionAnnId);
+                        var ann = ((UXHotbarButton)element.Parent.Control).x1678;
+                        return ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(a => a.AnnId == ann);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError($"Exception finding EquippedHealthPotion {ex}");
+                    Core.Logger.Error($"Exception finding EquippedHealthPotion {ex}");
                 }
-                return ZetaDia.Me.Inventory.BaseHealthPotion;
+                return InventoryManager.BaseHealthPotion;
             }
         }
 
@@ -516,19 +520,19 @@ namespace Trinity.Modules
 
                 if (CheckVisualEffectNoneForPower(commonData, SNOPower.UseStoneOfRecall))
                 {
-                    Logger.LogVerbose("Player is casting 'UseStoneOfRecall'");
+                    Core.Logger.Verbose("Player is casting 'UseStoneOfRecall'");
                     return true;
                 }
 
                 //if (CheckVisualEffectNoneForPower(commonData, SNOPower.TeleportToPlayer_Cast))
                 //{
-                //    Logger.LogVerbose("Player is casting 'TeleportToPlayer_Cast'");
+                //    Core.Logger.Verbose("Player is casting 'TeleportToPlayer_Cast'");
                 //    return true;
                 //}
 
                 if (CheckVisualEffectNoneForPower(commonData, SNOPower.TeleportToWaypoint_Cast))
                 {
-                    Logger.LogVerbose("Player is casting 'TeleportToWaypoint_Cast'");
+                    Core.Logger.Verbose("Player is casting 'TeleportToWaypoint_Cast'");
                     return true;
                 }
 
@@ -564,7 +568,7 @@ namespace Trinity.Modules
                     ZetaDia.Me.CommonData.IsValid &&
                     !ZetaDia.Me.IsDead &&
                     (
-                        ZetaDia.IsLoadingWorld ||
+                        ZetaDia.Globals.IsLoadingWorld ||
                         ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting ||
                         ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling ||
                         ZetaDia.Me.CommonData.AnimationState == AnimationState.Transform ||
@@ -578,7 +582,6 @@ namespace Trinity.Modules
         public int TeamId { get; set; }
         public float Radius { get; set; }
         public int CurrentSceneSnoId { get; set; }
-        public PlayerAction CurrentAction { get; set; }
         public bool IsInBossEncounter { get; set; }
 
         public bool IsInBossEncounterArea { get; set; }

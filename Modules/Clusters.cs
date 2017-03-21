@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Combat.Resources;
 using Trinity.Framework;
+using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Zeta.Common;

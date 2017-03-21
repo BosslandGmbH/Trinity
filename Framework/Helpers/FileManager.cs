@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -84,7 +85,7 @@ namespace Trinity.Framework.Helpers
         {
             using (new PerformanceLogger("FileManager.Load"))
             {
-                Logger.Log(TrinityLogLevel.Info, LogCategory.Configuration, "Loading Dictionary name={0} keys={1} values={2}", name, keyName, valueName);
+                Core.Logger.Log(LogCategory.Configuration, "Loading Dictionary name={0} keys={1} values={2}", name, keyName, valueName);
                 IDictionary<K, T> ret = new Dictionary<K, T>();
                 try
                 {
@@ -104,7 +105,7 @@ namespace Trinity.Framework.Helpers
 
                             foreach (KeyValuePair<K, T> item in lst)
                             {
-                                Logger.Log(TrinityLogLevel.Debug, LogCategory.Configuration, "Found dictionary item {0} = {1}", item.Key, item.Value);
+                                Core.Logger.Debug(LogCategory.Configuration, "Found dictionary item {0} = {1}", item.Key, item.Value);
                                 ret.Add(item);
                             }
                         }
@@ -115,16 +116,16 @@ namespace Trinity.Framework.Helpers
                     }
                     if (ret.Count > 0)
                     {
-                        Logger.Log(TrinityLogLevel.Info, LogCategory.Configuration, "Loaded Dictionary key={1} value={2} with {3} values", keyName, valueName, ret.Count);
+                        Core.Logger.Log(LogCategory.Configuration, "Loaded Dictionary key={1} value={2} with {3} values", keyName, valueName, ret.Count);
                     }
                     else
                     {
-                        Logger.Log(TrinityLogLevel.Info, LogCategory.Configuration, "Attempted to load Dictionary key={1} value={2} but 0 values found!", keyName, valueName, ret.Count);
+                        Core.Logger.Log(LogCategory.Configuration, "Attempted to load Dictionary key={1} value={2} but 0 values found!", keyName, valueName, ret.Count);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogNormal("Exception in FileManager Dictionary Load");
+                    Core.Logger.Log("Exception in FileManager Dictionary Load");
                 }
                 return ret;
             }
@@ -143,6 +144,7 @@ namespace Trinity.Framework.Helpers
                 return _DemonBuddyPath;
             }
         }
+
         private static string _DemonBuddyPath;
 
         /// <summary>
@@ -158,6 +160,7 @@ namespace Trinity.Framework.Helpers
                 return _PluginPath;
             }
         }
+
         private static string _PluginPath;
 
         /// <summary>
@@ -179,6 +182,14 @@ namespace Trinity.Framework.Helpers
             get
             {
                 return Path.Combine(DemonBuddyPath, "Routines", TrinityRoutineName, CombatRoutineFileName);
+            }
+        }
+
+        public static string RoutinesDirectory
+        {
+            get
+            {
+                return Path.Combine(DemonBuddyPath, "Routines");
             }
         }
 
@@ -271,6 +282,7 @@ namespace Trinity.Framework.Helpers
                 return _trinityImagesPath;
             }
         }
+
         private static string _trinityImagesPath;
 
         /// <summary>
@@ -288,6 +300,7 @@ namespace Trinity.Framework.Helpers
                 return _trinityLogsPath;
             }
         }
+
         private static string _trinityLogsPath;
 
         /// <summary>
@@ -331,6 +344,7 @@ namespace Trinity.Framework.Helpers
         }
 
         private static string _battleTagName;
+
         public static string BattleTagName
         {
             get
@@ -350,6 +364,7 @@ namespace Trinity.Framework.Helpers
                 return _UiPath;
             }
         }
+
         private static string _UiPath;
 
         public static string VersionPath
@@ -361,6 +376,7 @@ namespace Trinity.Framework.Helpers
                 return _versionPath;
             }
         }
+
         private static string _versionPath;
 
         /// <summary>
@@ -378,8 +394,8 @@ namespace Trinity.Framework.Helpers
                 return _referencePath;
             }
         }
-        private static string _referencePath;
 
+        private static string _referencePath;
 
         /// <summary>
         /// Copies a file and if necessary creates destination directory
@@ -403,7 +419,7 @@ namespace Trinity.Framework.Helpers
             {
                 CreateDirectory(destDirectory);
             }
-            Logger.LogDebug("Copying file {0} to {1}", sourcePath, destPath);
+            Core.Logger.Debug("Copying file {0} to {1}", sourcePath, destPath);
             File.Copy(sourcePath, destPath);
         }
 
@@ -416,14 +432,14 @@ namespace Trinity.Framework.Helpers
             {
                 Path.Combine(DemonBuddyPath, "Routines", "GilesPlugin"),
                 Path.Combine(DemonBuddyPath, "Routines", "GilesBlankCombatRoutine"),
-                Path.Combine(DemonBuddyPath, "Routines", "Trinity")                
+                Path.Combine(DemonBuddyPath, "Routines", "Trinity")
             };
 
             foreach (string routinePath in oldRoutines)
             {
                 if (Directory.Exists(routinePath))
                 {
-                    Logger.LogDebug("Deleting old routine: {0}", routinePath);
+                    Core.Logger.Debug("Deleting old routine: {0}", routinePath);
                     Directory.Delete(routinePath, true);
                 }
             }
@@ -432,7 +448,7 @@ namespace Trinity.Framework.Helpers
 
             if (File.Exists(oldTrinityRoutine))
             {
-                Logger.LogDebug("Deleting old routine: {0}", oldTrinityRoutine);
+                Core.Logger.Debug("Deleting old routine: {0}", oldTrinityRoutine);
                 File.Delete(oldTrinityRoutine);
             }
         }
@@ -539,6 +555,7 @@ namespace Trinity.Framework.Helpers
             //file is not locked
             return false;
         }
+
         public static bool IsFileReadLocked(FileInfo file)
         {
             if (!File.Exists(file.FullName))

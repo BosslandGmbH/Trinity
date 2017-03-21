@@ -1,11 +1,9 @@
 using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
+using Trinity.Framework.Helpers;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Actors.Properties;
-using Trinity.Framework.Helpers;
 using Zeta.Game;
 
 namespace Trinity.Framework.Actors.ActorTypes
@@ -20,16 +18,17 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         #region IPartyMember
 
-        // We're severely limited in what we can know about other players in the game.        
+        // We're severely limited in what we can know about other players in the game.
         PartyObjective IPartyMember.Objective => default(PartyObjective);
+
         ITargetable IPartyMember.Target => Combat.Targeting.CurrentTarget;
         float IPartyMember.LeashDistance => 100f;
         bool IPartyMember.IsLeader => Combat.Party.Leader == this;
         bool IPartyMember.IsFollower => Combat.Party.Leader != this;
-        PartyRole IPartyMember.Role => Combat.Party.Leader == this ? PartyRole.Leader : PartyRole.Follower;         
+        PartyRole IPartyMember.Role => Combat.Party.Leader == this ? PartyRole.Leader : PartyRole.Follower;
         bool IPartyMember.IsInCombat => false; // No way to know if another CPlayer is in combat?
 
-        #endregion
+        #endregion IPartyMember
 
         public override void OnCreated()
         {
@@ -40,7 +39,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnUpdated()
         {
-            Attributes.Update();          
+            Attributes.Update();
             UpdateProperties();
         }
 
@@ -53,6 +52,4 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override string ToString() => $"{GetType().Name}: AcdId={AcdId}, {ActorClass} {(IsMe ? "ActivePlayer" : String.Empty)}";
     }
-
 }
-

@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using System.Linq;
+using System.Linq; using Trinity.Framework;
 using System.Reflection;
 
 namespace Trinity.Components.Adventurer.Util
@@ -32,9 +32,9 @@ namespace Trinity.Components.Adventurer.Util
                     }
                     else
                     {
-                        Logger.Raw("{0}{{", GetIndent(level, extraDepth + 1));
+                        Core.Logger.Raw("{0}{{", GetIndent(level, extraDepth + 1));
                         WriteObject(enumValue, level, extraDepth + 1);
-                        Logger.Raw("{0}}},", GetIndent(level, extraDepth + 1));
+                        Core.Logger.Raw("{0}}},", GetIndent(level, extraDepth + 1));
                     }
                 }
                 return;
@@ -64,7 +64,7 @@ namespace Trinity.Components.Adventurer.Util
                 }
                 if (value == null)
                 {
-                    Logger.Raw("{0}{1}: {2}", GetIndent(level, extraDepth), memberInfo.Name, "null");
+                    Core.Logger.Raw("{0}{1}: {2}", GetIndent(level, extraDepth), memberInfo.Name, "null");
                     continue;
                 }
 
@@ -74,7 +74,7 @@ namespace Trinity.Components.Adventurer.Util
                     //if (!(value is string) && value is IEnumerable)
                     //{
                     //    var enumValues = (value as IEnumerable).Cast<object>();
-                    //    Logger.Raw("{0}{1}: {{ {2} }}", GetIndent(level, extraDepth), memberInfo.Name, string.Join(", ", string.Join(", ", enumValues)));
+                    //    Core.Logger.Raw("{0}{1}: {{ {2} }}", GetIndent(level, extraDepth), memberInfo.Name, string.Join(", ", string.Join(", ", enumValues)));
                     //}
                     //else
                     //{
@@ -90,9 +90,9 @@ namespace Trinity.Components.Adventurer.Util
                         beginning = "[";
                         end = "]";
                     }
-                    Logger.Raw("{0}{1}: {2}", GetIndent(level, extraDepth), memberInfo.Name, beginning);
+                    Core.Logger.Raw("{0}{1}: {2}", GetIndent(level, extraDepth), memberInfo.Name, beginning);
                     WriteObject(value, level + 1, extraDepth);
-                    Logger.Raw("{0}{1}", GetIndent(level, extraDepth), end);
+                    Core.Logger.Raw("{0}{1}", GetIndent(level, extraDepth), end);
                 }
             }
         }
@@ -101,11 +101,11 @@ namespace Trinity.Components.Adventurer.Util
         {
             if (value is string)
             {
-                Logger.Raw("{0}\"{1},\"", GetIndent(level, extraDepth), RemoveNewLines(value.ToString()));
+                Core.Logger.Raw("{0}\"{1},\"", GetIndent(level, extraDepth), RemoveNewLines(value.ToString()));
             }
             else
             {
-                Logger.Raw("{0}{1},", GetIndent(level, extraDepth), RemoveNewLines(value.ToString()));
+                Core.Logger.Raw("{0}{1},", GetIndent(level, extraDepth), RemoveNewLines(value.ToString()));
             }
         }
 
@@ -113,13 +113,12 @@ namespace Trinity.Components.Adventurer.Util
         {
             if (value is string)
             {
-                Logger.Raw("{0}{1}: \"{2}\"", GetIndent(level, extraDepth), name, RemoveNewLines(value.ToString()));
+                Core.Logger.Raw("{0}{1}: \"{2}\"", GetIndent(level, extraDepth), name, RemoveNewLines(value.ToString()));
             }
             else
             {
-                Logger.Raw("{0}{1}: {2}", GetIndent(level, extraDepth), name, RemoveNewLines(value.ToString()));
+                Core.Logger.Raw("{0}{1}: {2}", GetIndent(level, extraDepth), name, RemoveNewLines(value.ToString()));
             }
-
         }
 
         private static string RemoveNewLines(string value)

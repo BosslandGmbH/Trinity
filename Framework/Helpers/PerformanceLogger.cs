@@ -27,8 +27,6 @@ namespace Trinity.Framework.Helpers
     [DebuggerStepThrough]
     public class PerformanceLogger : IDisposable
     {
-        
-
         private static readonly log4net.ILog Logging = Zeta.Common.Logger.GetLoggerInstanceForType();
         private readonly string _BlockName;
         private readonly Stopwatch _Stopwatch;
@@ -68,7 +66,7 @@ namespace Trinity.Framework.Helpers
             }
         }
 
-        #endregion
+        #endregion IDisposable Members
 
         ~PerformanceLogger()
         {

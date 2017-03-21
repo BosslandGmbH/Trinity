@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Data;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Trinity.Settings.ItemList;
 
 namespace Trinity.Settings.Mock

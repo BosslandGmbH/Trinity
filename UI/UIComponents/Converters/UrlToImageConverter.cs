@@ -1,8 +1,8 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using Trinity.Framework.Helpers;
 
 namespace Trinity.UI.UIComponents.Converters
 {
@@ -13,7 +13,7 @@ namespace Trinity.UI.UIComponents.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Logger.LogVerbose("Creating Bitmap from url: {0}", value.ToString());
+            Core.Logger.Verbose("Creating Bitmap from url: {0}", value.ToString());
 
             var url = value as string;
             if (url != null)

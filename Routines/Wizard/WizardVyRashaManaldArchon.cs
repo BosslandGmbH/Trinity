@@ -1,27 +1,21 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
-using Trinity.Components.Adventurer.UI.UIComponents.RadarCanvas;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Memory.Symbols.Types;
-using Trinity.Reference;
-using Trinity.Routines.Crusader;
-using Trinity.Settings;
+using Trinity.Framework.Reference;
 using Trinity.UI;
-using Trinity.UI.Visualizer.RadarCanvas;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Wizard
 {
@@ -32,7 +26,7 @@ namespace Trinity.Routines.Wizard
         public string DisplayName => "VyRasha Manald Archon GR Build";
         public string Description => "This RANGED build uses Tal Rasha's damage buff along with Manald Heal and Archon to produce massive DPS. It is designed to stay at range to benefit from ranged gear/gems/passives. \n     Cooldown Reduction:  Required in every slot except amulet. Diamond in Helm. \n     Attack Speed:  Get as many 7% rolls as you can, up to 4. CDR > Attack Speed!  \n     Lightning Damage:  Only get it on Bracers, damage percent does not matter. \n         It changes Archon to lightning, Manald Heal does not benefit!";
         public string Author => "TwoCigars";
-        public string Version => "1.9";
+        public string Version => "2.4";
         public string Url => "Guide http://www.icy-veins.com/d3/wizard-manald-archon-build-patch-2-4-3-season-9 \n\n D3Planner http://www.d3planner.com/599182396 \n\n Manald Info: https://us.battle.net/forums/en/d3/topic/20752649109";
         public Build BuildRequirements => new Build
         {
@@ -49,13 +43,16 @@ namespace Trinity.Routines.Wizard
             Items = new List<Item>
             {
                 Legendary.ManaldHeal,
-                Legendary.Starfire
+                Legendary.Starfire,
+                Legendary.TheSwami,
+                Legendary.FazulasImprobableChain
             },
         };
 
-        public override Func<bool> ShouldIgnoreAvoidance => () => IsArchonActive;
-        public override Func<bool> ShouldIgnoreKiting => () => IsArchonActive;
-        public static int BlizzardAPCost => Runes.Wizard.Snowbound.IsActive ? 10 : 40;
+       
+        public override Func<bool> ShouldIgnoreAvoidance => () => true;
+        public override Func<bool> ShouldIgnoreKiting => () => true;
+        //public static int BlizzardAPCost => Runes.Wizard.Snowbound.IsActive ? 10 : 40;
 
         #endregion
 
@@ -69,17 +66,21 @@ namespace Trinity.Routines.Wizard
             if (ShouldArchon())
                 return Archon();
 
-            if (TryKitingTeleport(out position))
-                return Teleport(position);
+            if (ShouldCancelArchon())
+            {
+                Core.Logger.Log(LogCategory.Routine, $"Canceling Archon: Tal's Stacks {TalRashaStacks} Has Cooldown Pylon: {HasInfiniteCasting}");
+                CancelArchon();
+            }
 
             if (IsArchonActive)
             {
+                if (ShouldArchonTeleport(out position))
+                    return Teleport(position);
+
                 if (ShouldArchonDisintegrationWave(out target))
                     return ArchonDisintegrationWave(target);
 
-                return null;
             }
-
 
             if (!IsArchonActive)
             {
@@ -117,152 +118,197 @@ namespace Trinity.Routines.Wizard
                     return power;
             }
 
-            var avoidanceTest = Core.Avoidance.GridEnricher.AvoidanceCentroid;
-            RadarDebug.Draw(new List<Vector3> { avoidanceTest }, 100, RadarDebug.DrawType.Elipse, RadarDebug.DrawColor.Blue);
-
-            var avoidanceActors = Core.Avoidance.CurrentAvoidances.SelectMany(av => av.Actors);
-            var avoidanceActorPositions = avoidanceActors.Select(a => a.Position);
-            RadarDebug.Draw(new List<Vector3>(avoidanceActorPositions), 100, RadarDebug.DrawType.Elipse, RadarDebug.DrawColor.White);
-
-            var customCentroid = TargetUtil.GetCentroid(avoidanceActorPositions);
-            RadarDebug.Draw(new List<Vector3> { customCentroid }, 100, RadarDebug.DrawType.Elipse, RadarDebug.DrawColor.Yellow);
-
             return null;
         }
 
-        public TrinityPower GetDestructiblePower() => DefaultDestructiblePower();
-
-        private readonly List<TrinityObjectType> _priorityTarget = new List<TrinityObjectType>
+        public TrinityPower GetDestructiblePower()
         {
-            TrinityObjectType.ProgressionGlobe,
-            TrinityObjectType.HealthGlobe,
-            TrinityObjectType.Shrine,
-        };
+            var isTargetAccessible = CurrentTarget.IsInLineOfSight;
 
+            if (isTargetAccessible && CurrentTarget.Distance < 20f)
+            {
+                if (IsArchonActive && Skills.Wizard.ArchonDisintegrationWave.CanCast())
+                    return ArchonDisintegrationWave(CurrentTarget);
+
+                if (!IsArchonActive && Skills.Wizard.ArcaneTorrent.CanCast())
+                    return ArcaneTorrent(CurrentTarget);
+            }
+
+            return null;
+        }
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            var distance = destination.Distance(Player.Position);
-            var isDestinationUnitTarget = IsInCombat && CurrentTarget.IsUnit && destination.Distance(CurrentTarget.Position) < 30f;
-            var isPriorityTarget = CurrentTarget != null && _priorityTarget.Contains(CurrentTarget.Type);
-            var teleportCanBeCast = Skills.Wizard.Teleport.CanCast() || Skills.Wizard.ArchonTeleport.CanCast();
 
-            //if (teleportCanBeCast && IsArchonActive && isPriorityTarget && CurrentTarget.Distance < 50f && !Core.Avoidance.InAvoidance(CurrentTarget.Position))
-            //{
-            //    destination = CurrentTarget.Position;
-            //    return Teleport(destination);
-            //}
-
-            if (CanTeleportTo(destination))
+            if (IsInCombat && CurrentTarget.IsElite && destination.Distance(CurrentTarget.Position) < 50f)
             {
-                if (distance > 35f && !isDestinationUnitTarget || IsBlocked)
+                return null;
+            }
+
+            if (IsArchonActive)
+            {
+                if (ShouldMovementArchonTeleport(destination))
+                    return ArchoArchonTeleport(destination);
+            }
+
+            if (!IsArchonActive && Player.CurrentHealthPct > Settings.TeleportHealthEmergency)
+            {
+                if (IsInCombat && CurrentTarget.IsUnit)
+                {
+                    return null;
+                }
+                else if (ShouldMovementTeleport(destination))
                 {
                     return Teleport(destination);
                 }
             }
 
-            return Walk(destination);
+            if (IsStuck || IsBlocked)
+            {
+                    return Teleport(destination);
+            }
 
+
+            return Walk(destination);
 
         }
 
-        public bool TryKitingTeleport(out Vector3 position)
+
+
+
+        /* Teleport skills below: Required for DPS and Survival
+         */
+
+        private bool ShouldMovementTeleport(Vector3 destination)
+        {
+
+            if (!Skills.Wizard.Teleport.CanCast())
+                return false;
+
+            if (IsStuck || IsBlocked)
+                return true;
+
+            if (!CanTeleportTo(destination))
+                return false;
+
+            return true;
+        }
+
+        private bool ShouldMovementArchonTeleport(Vector3 destination)
+        {
+
+            if (!Skills.Wizard.ArchonTeleport.CanCast())
+                return false;
+
+            if (destination == Vector3.Zero)
+                return false;
+
+            if (IsStuck || IsBlocked)
+                return true;
+
+            var destinationDistance = destination.Distance(Core.Player.Position);
+            if (destinationDistance < 15f && !PlayerMover.IsBlocked)
+                return false;
+
+            // Don't move into molten core/arcane.
+            if (!Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position) && Core.Avoidance.Grid.IsIntersectedByFlags(ZetaDia.Me.Position, destination, AvoidanceFlags.CriticalAvoidance))
+                return false;
+
+            if (Skills.Wizard.Teleport.TimeSinceUse < 200)
+                return false;
+
+            return true;
+        }
+
+        protected override bool ShouldTeleport(out Vector3 position)
         {
             position = Vector3.Zero;
-            var teleportCanBeCast = Skills.Wizard.Teleport.CanCast() || Skills.Wizard.ArchonTeleport.CanCast();
-            var affixOnPlayer = Core.Avoidance.InAvoidance(Player.Position);
-
-            //Teleport Activations
+            var skill = Skills.Wizard.Teleport;
+            var affixOnPlayer = Core.Avoidance.InAvoidance(ZetaDia.Me.Position);
             var healthIsLow = Player.CurrentHealthPct < Settings.TeleportHealthEmergency;
             var archonHealthIsLow = Player.CurrentHealthPct < Settings.ArchonTeleportHealthEmergency;
-            var anyBossInRange = TargetUtil.AnyBossesInRange(Settings.TeleportEliteKiteRange);
+            var anyElitesinRange = TargetUtil.AnyElitesInRange(Settings.TeleportEliteKiteRange);
+            var anyMobsInRange = TargetUtil.AnyMobsInRangeOfPosition(Player.Position, Settings.TeleportTrashKiteRange, Settings.TeleportTrashInRangeCount);
+
+            if (!skill.CanCast())
+                return false;
+
+            if (Player.IsChannelling || !Player.IsChannelling)
+            {
+                if (anyElitesinRange || anyMobsInRange || healthIsLow || affixOnPlayer)
+                    Core.Logger.Log(LogCategory.Routine, $"Close Elites: {anyElitesinRange}, Mobs: {anyMobsInRange}, Health: {healthIsLow}, Affix: {affixOnPlayer}");
+                    return true;
+            }
+
+            Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance, ZetaDia.Me.Position, node => !HostileMonsters.Any(m => m.Position.Distance(node.NavigableCenter) < 15f));
+
+            return position != Vector3.Zero;
+        }
+
+        protected override bool ShouldArchonTeleport(out Vector3 position)
+        {
+            position = Vector3.Zero;
+            var skill = Skills.Wizard.ArchonTeleport;
+            var affixOnPlayer = Core.Avoidance.InAvoidance(ZetaDia.Me.Position);
+            var isShrine = Combat.Targeting.CurrentTarget.Type == TrinityObjectType.Shrine;
+            var isProgressionGlobe = Combat.Targeting.CurrentTarget.Type == TrinityObjectType.ProgressionGlobe;
+            var isHealthGlobe = Combat.Targeting.CurrentTarget.Type == TrinityObjectType.HealthGlobe;
+
+            //Teleport Activations
+            var archonHealthIsLow = IsArchonActive && Player.CurrentHealthPct < Settings.ArchonTeleportHealthEmergency;
             var anyElitesinRange = TargetUtil.AnyElitesInRange(Settings.TeleportEliteKiteRange);
             var anyMobsInRange = TargetUtil.AnyMobsInRangeOfPosition(Player.Position, Settings.TeleportTrashKiteRange, Settings.TeleportTrashInRangeCount);
 
             //Teleport Delays
             var archonHealthIsLowDelay = Skills.Wizard.Teleport.TimeSinceUse > Settings.ArchonTeleportHealthDelay;
-            var archonCannotMoveDelay = Skills.Wizard.Teleport.TimeSinceUse > Settings.ArchonStuckOrBlockedDelay;
             var archonTeleportDelay = (TalRashaStacks == 4 && Skills.Wizard.Teleport.TimeSinceUse > Settings.Archon4StackDelay) || (TalRashaStacks < 4 && Skills.Wizard.Teleport.TimeSinceUse > Settings.Archon1StackDelay);
 
-            if (IsArchonActive && teleportCanBeCast)
+            if (!skill.CanCast())
+                return false;
+
+            if (CurrentTarget.Distance < 50 && isShrine || isProgressionGlobe || (isHealthGlobe && archonHealthIsLow))
             {
-                if (Player.IsChannelling)
-                {
-                    if (archonCannotMoveDelay && IsStuck || IsBlocked)
-                    {
-                        //Logger.Log($"Teleport! Stuck:{IsStuck}, Blocked {IsBlocked}");
-                        Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-                    }
-
-                    if (archonHealthIsLowDelay && archonHealthIsLow)
-                    {
-                        //Logger.Log($"Break Channel for Teleport! Health {Player.CurrentHealthPct} < Setting {archonHealthIsLow}");
-                        Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-                    }
-
-                    if (anyBossInRange && affixOnPlayer)
-                    {
-                        //Logger.Log($"Boss Affix Teleport! Elite:{anyBossInRange}, Affix On Player: {affixOnPlayer}");
-                        Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-                    }
-
-                    if (archonTeleportDelay && anyBossInRange || anyElitesinRange || anyMobsInRange)
-                    {
-                        //Logger.Log($"Proximity Teleport! Elite:{anyElitesinRange}, Close Mobs: {anyMobsInRange}");
-                        Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-                    }
-                }
-
-                if (archonCannotMoveDelay && IsStuck || IsBlocked)
-                {
-                    //Logger.Log($"Teleport! Stuck:{IsStuck}, Blocked {IsBlocked}");
-                    Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-                }
-
-                if (archonHealthIsLowDelay && archonHealthIsLow)
-                {
-                    //Logger.Log($"Break Channel for Teleport! Health {Player.CurrentHealthPct} < Setting {archonHealthIsLow}");
-                    Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-                }
-
-                if (anyBossInRange && affixOnPlayer)
-                {
-                    //Logger.Log($"Boss Affix Teleport! Elite:{anyBossInRange}, Affix On Player: {affixOnPlayer}");
-                    Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-                }
-
-                if (archonTeleportDelay && anyBossInRange || anyElitesinRange || anyMobsInRange)
-                {
-                    //Logger.Log($"Proximity Teleport! Elite:{anyElitesinRange}, Close Mobs: {anyMobsInRange}");
-                    Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-                }
+                //Core.Logger.Log($"Teleporting to Priority Target");
+                position = CurrentTarget.Position;
+                return true;
             }
 
-            if (!IsArchonActive && teleportCanBeCast)
+            if ((Player.IsChannelling || !Player.IsChannelling))
             {
-                if (IsStuck || IsBlocked)
+                if (affixOnPlayer || (archonHealthIsLow && archonHealthIsLowDelay && anyMobsInRange))
                 {
-                    //Logger.Log($"Teleport! Stuck:{IsStuck}, Blocked {IsBlocked}");
-                    Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
+                    //Core.Logger.Log($"Teleport for Survival! Affix: {affixOnPlayer}, Health: {archonHealthIsLow}");
+                    Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance, ZetaDia.Me.Position, node => !HostileMonsters.Any(m => m.Position.Distance(node.NavigableCenter) < 15f));
+                    return true;
                 }
 
-                if (Player.IsChannelling)
+                if(Skills.Wizard.Archon.TimeSinceUse > 19500)
                 {
-                    if (anyBossInRange || anyElitesinRange || anyMobsInRange || healthIsLow)
-                    {
-                        //Logger.Log($"Break Channel for Teleport! Elite:{anyElitesinRange}, Close Mobs: {anyMobsInRange}, Health: {healthIsLow}");
-                        Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-                    }
+                    //Core.Logger.Log($"Teleport! Archon is about to drop!!!");
+                    Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance, ZetaDia.Me.Position, node => !HostileMonsters.Any(m => m.Position.Distance(node.NavigableCenter) < 15f));
+                    return true;
                 }
 
-                if (anyBossInRange || anyElitesinRange || anyMobsInRange || healthIsLow)
+                if (CurrentTarget.IsElite && anyElitesinRange && archonTeleportDelay)
                 {
-                    //Logger.Log($"Proximity Teleport! Elite:{anyElitesinRange}, Close Mobs: {anyMobsInRange}, Health: {healthIsLow}");
-                    Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
+                    //Core.Logger.Log($"Teleport! Elite too close: {CurrentTarget.Distance} Setting: {Settings.TeleportEliteKiteRange}");
+                    Avoider.TryGetSafeSpot(out position, 40, Settings.TeleportKiteMaxDistance, Combat.Targeting.CurrentTarget.Position, node => !HostileMonsters.Any(m => m.Position.Distance(node.NavigableCenter) < 15f));
+                    return true;
                 }
+
+                var target = TargetUtil.BestRangedAoeUnit(10, 50, ClusterSize);
+                if (target != null && target.Distance < 30f)
+                {
+                    //Core.Logger.Log($"Teleport! Trash Target too close: {CurrentTarget.Distance}");
+                    Avoider.TryGetSafeSpot(out position, 40, Settings.TeleportKiteMaxDistance, target.Position, node => !HostileMonsters.Any(m => m.Position.Distance(node.NavigableCenter) < 15f));
+                    return true;
+                }
+
             }
 
             return position != Vector3.Zero;
         }
+
+
 
 
         /* Non-Archon skills below: Used for DPS and Building Tal Rasha Stacks
@@ -280,19 +326,19 @@ namespace Trinity.Routines.Wizard
             if (!Skills.Wizard.ArcaneTorrent.CanCast())
                 return false;
 
-            if (!(TalRashaStacks >= 2))
-                return false;
-
             if (Player.PrimaryResource < Settings.ArcaneResourceReserve)
                 return false;
 
-
-            target = TargetUtil.BestAoeUnit(Settings.ArcaneTorrentRange, true);
-            if (TargetUtil.BestAoeUnit(Settings.ArcaneTorrentRange, true) != null && TalRashaStacks >= 3 && Skills.Wizard.Archon.CooldownRemaining < 6000)
+            target = CurrentTarget;
+            if (target.IsTreasureGoblin && target.Distance < Settings.ArcaneTorrentRange && target.IsInLineOfSight)
                 return true;
 
-            target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
-            if (TargetUtil.BestAoeUnit(Settings.ArcaneTorrentRange, true) == null && TalRashaStacks >= 3 && Skills.Wizard.Archon.CooldownRemaining < 6000)
+            target = TargetUtil.GetClosestUnit(Settings.ArcaneTorrentRange);
+            if (target != null && (Player.CurrentHealthPct < Settings.EmergencyHealthPct) || IsBlocked || IsStuck)
+                return true;
+
+            target = TargetUtil.BestAoeUnit(Settings.ArcaneTorrentRange, true);
+            if (target != null && TalRashaStacks >= 2)
                 return true;
 
             return target != null;
@@ -369,32 +415,6 @@ namespace Trinity.Routines.Wizard
 
         }
 
-        protected override bool ShouldTeleport(out Vector3 position)
-        {
-            position = Vector3.Zero;
-
-            var healthIsLow = Player.CurrentHealthPct < Settings.TeleportHealthEmergency;
-            var archonHealthIsLow = Player.CurrentHealthPct < Settings.ArchonTeleportHealthEmergency;
-            var anyBossInRange = TargetUtil.AnyBossesInRange(Settings.TeleportEliteKiteRange);
-            var anyElitesinRange = TargetUtil.AnyElitesInRange(Settings.TeleportEliteKiteRange);
-            var anyMobsInRange = TargetUtil.AnyMobsInRangeOfPosition(Player.Position, Settings.TeleportTrashKiteRange, Settings.TeleportTrashInRangeCount);
-
-            if (!Skills.Wizard.Teleport.CanCast())
-                return false;
-
-            if (IsStuck || IsBlocked)
-                return true;
-
-            if (Player.IsChannelling && anyBossInRange || anyElitesinRange || anyMobsInRange || healthIsLow)
-                return true;
-
-            if (anyBossInRange || anyElitesinRange || anyMobsInRange || healthIsLow)
-                return true;
-
-            Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-            return position != Vector3.Zero;
-        }
-
         protected override bool ShouldEnergyTwister(out TrinityActor target)
         {
             target = null;
@@ -436,13 +456,13 @@ namespace Trinity.Routines.Wizard
 
             if (Player.CurrentHealthPct < Settings.ShouldArchonHealthPct)
             {
-                Logger.Log($"Emergency Archon: Health at {Player.CurrentHealthPct}%! (Setting: {Settings.ShouldArchonHealthPct}%)");
+                Core.Logger.Log(LogCategory.Routine, $"Emergency Archon: Health at {Player.CurrentHealthPct}%! (Setting: {Settings.ShouldArchonHealthPct}%)");
                 return true;
             }
 
             if (Player.PrimaryResource < Settings.ShouldArchonLowResource)
             {
-                Logger.Log($"Emergency Archon: Arcane power at {Player.PrimaryResource}! (Setting: {Settings.ShouldArchonLowResource})");
+                Core.Logger.Log(LogCategory.Routine, $"Emergency Archon: Arcane power at {Player.PrimaryResource}! (Setting: {Settings.ShouldArchonLowResource})");
                 return true;
             }
 
@@ -462,72 +482,33 @@ namespace Trinity.Routines.Wizard
             if (!Skills.Wizard.ArchonDisintegrationWave.CanCast())
                 return false;
 
-            target = TargetUtil.BestEliteInRange(Settings.DisintegrationWaveRange, true);
-            if (target != null && target.Distance > Settings.DisintegrationWaveMinDistance)
+            target = CurrentTarget;
+            if (target.IsTreasureGoblin && target.Distance < Settings.DisintegrationWaveRange && target.IsInLineOfSight)
                 return true;
 
-            target = TargetUtil.BestPierceOrClusterUnit(15, Settings.DisintegrationWaveRange, true);
-            if (target != null && target.Distance > Settings.DisintegrationWaveMinDistance)
-                return true;
-
-            target = TargetUtil.BestAoeUnit(Settings.DisintegrationWaveRange, true);
-            if (target != null && target.Distance > Settings.DisintegrationWaveMinDistance)
+            target = TargetUtil.BestRangedAoeUnit(Settings.DisintegrationWaveMinClusterRadius, Settings.DisintegrationWaveRange, ClusterSize);
+            if (target != null && target.IsInLineOfSight)
                 return true;
 
             return target != null;
         }
 
-        protected override bool ShouldArchonTeleport(out Vector3 position)
+        public bool ShouldCancelArchon()
         {
-            position = Vector3.Zero;
-            var affixOnPlayer = Core.Avoidance.InAvoidance(Player.Position);
-
-            //Teleport Activations
-            var archonHealthIsLow = Player.CurrentHealthPct < Settings.ArchonTeleportHealthEmergency;
-            var anyBossInRange = TargetUtil.AnyBossesInRange(Settings.TeleportEliteKiteRange);
-            var anyElitesinRange = TargetUtil.AnyElitesInRange(Settings.TeleportEliteKiteRange);
-            var anyMobsInRange = TargetUtil.AnyMobsInRangeOfPosition(Player.Position, Settings.TeleportTrashKiteRange, Settings.TeleportTrashInRangeCount);
-
-            //Teleport Delays
-            var archonHealthIsLowDelay = Skills.Wizard.Teleport.TimeSinceUse > Settings.ArchonTeleportHealthDelay;
-            var archonCannotMoveDelay = Skills.Wizard.Teleport.TimeSinceUse > Settings.ArchonStuckOrBlockedDelay;
-            var archonTeleportDelay = (TalRashaStacks == 4 && Skills.Wizard.Teleport.TimeSinceUse > Settings.Archon4StackDelay) || (TalRashaStacks < 4 && Skills.Wizard.Teleport.TimeSinceUse > Settings.Archon1StackDelay);
-
-            if (!Skills.Wizard.Teleport.CanCast())
+            if (!IsArchonActive)
                 return false;
 
-            if (Player.IsChannelling)
-            {
-                if (archonCannotMoveDelay && IsStuck || IsBlocked)
-                    return true;
+            if (!HasInfiniteCasting)
+                return false;
 
-                if (archonHealthIsLowDelay && archonHealthIsLow)
-                    return true;
+            if (TalRashaStacks == 4)
+                return false;
 
-                if (anyBossInRange && affixOnPlayer)
-                    return true;
+            if (CurrentTarget == null)
+                return false;
 
-                if (archonTeleportDelay && anyBossInRange || anyElitesinRange || anyMobsInRange)
-                    return true;
-            }
-
-            if (archonCannotMoveDelay && IsStuck || IsBlocked)
-                return true;
-
-            if (archonHealthIsLowDelay && archonHealthIsLow)
-                return true;
-
-            if (anyBossInRange && affixOnPlayer)
-                return true;
-
-            if (archonTeleportDelay && anyBossInRange || anyElitesinRange || anyMobsInRange)
-                return true;
-
-
-            Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance);
-            return position != Vector3.Zero;
+            return true;
         }
-
 
 
 
@@ -604,9 +585,11 @@ namespace Trinity.Routines.Wizard
         }
 
 
+
+
         #region Settings
 
-        public override int ClusterSize => Settings.ClusterSize;
+        public override int ClusterSize => IsArchonActive ? Settings.ArchonClusterSize : Settings.NonArchonClusterSize;
         public override float EmergencyHealthPct => Settings.EmergencyHealthPct;
 
 
@@ -616,7 +599,8 @@ namespace Trinity.Routines.Wizard
         public sealed class WizardVyRashaManaldArchonSettings : NotifyBase, IDynamicSetting
         {
             //General
-            private int _clusterSize;
+            private int _archonClusterSize;
+            private int _nonArchonClusterSize;
             private float _emergencyHealthPct;
 
             //Teleport: Where to look for Safe Spot
@@ -634,13 +618,12 @@ namespace Trinity.Routines.Wizard
             private int _archonTeleportHealthDelay;
             private int _archon4StackDelay;
             private int _archon1StackDelay;
-            private int _archonStuckOrBlockedDelay;
 
             //Archon Activation and Skills
             private float _shouldArchonHealthPct;
             private int _shouldArchonLowResource;
-            private float _disintegrationWaveMinDistance;
             private float _disintegrationWaveRange;
+            private float _disintegrationWaveMinClusterRadius;
 
             //Arcane Torrent
             private float _arcaneTorrentRange;
@@ -657,11 +640,18 @@ namespace Trinity.Routines.Wizard
 
 
             //General
-            [DefaultValue(5)]
-            public int ClusterSize
+            [DefaultValue(4)]
+            public int ArchonClusterSize
             {
-                get { return _clusterSize; }
-                set { SetField(ref _clusterSize, value); }
+                get { return _archonClusterSize; }
+                set { SetField(ref _archonClusterSize, value); }
+            }
+
+            [DefaultValue(1)]
+            public int NonArchonClusterSize
+            {
+                get { return _nonArchonClusterSize; }
+                set { SetField(ref _nonArchonClusterSize, value); }
             }
 
             [DefaultValue(0.4f)]
@@ -673,7 +663,7 @@ namespace Trinity.Routines.Wizard
 
 
             //Teleport: Where to look for Safe Spot
-            [DefaultValue(30f)]
+            [DefaultValue(40f)]
             public float TeleportKiteMinDistance
             {
                 get { return _teleportKiteMinDistance; }
@@ -747,13 +737,6 @@ namespace Trinity.Routines.Wizard
                 set { SetField(ref _archon1StackDelay, value); }
             }
 
-            [DefaultValue(1000)]
-            public int ArchonStuckOrBlockedDelay
-            {
-                get { return _archonStuckOrBlockedDelay; }
-                set { SetField(ref _archonStuckOrBlockedDelay, value); }
-            }
-
 
             //Archon Activation and Skills
             [DefaultValue(0.4f)]
@@ -770,18 +753,18 @@ namespace Trinity.Routines.Wizard
                 set { SetField(ref _shouldArchonLowResource, value); }
             }
 
-            [DefaultValue(30)]
-            public float DisintegrationWaveMinDistance
-            {
-                get { return _disintegrationWaveMinDistance; }
-                set { SetField(ref _disintegrationWaveMinDistance, value); }
-            }
-
-            [DefaultValue(50)]
+            [DefaultValue(50f)]
             public float DisintegrationWaveRange
             {
                 get { return _disintegrationWaveRange; }
                 set { SetField(ref _disintegrationWaveRange, value); }
+            }
+
+            [DefaultValue(10f)]
+            public float DisintegrationWaveMinClusterRadius
+            {
+                get { return _disintegrationWaveMinClusterRadius; }
+                set { SetField(ref _disintegrationWaveMinClusterRadius, value); }
             }
 
 

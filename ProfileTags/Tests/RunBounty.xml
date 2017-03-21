@@ -1,0 +1,14 @@
+﻿<Profile>
+  <Name>Tag Test - Run Bounty</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> Run Bounty Test Started " />
+
+    <RunBounty questId="361234" name="Bounty: Kill the Skeleton King" />
+    <RunBounty questId="357129" name="Bounty: Kill the Aspect of Pain" />
+    <RunBounty questId="347558" name="Bounty: Kill Maghda" />
+    <RunBounty questId="349288" name="Bounty: Kill Diablo" />
+  
+    <LogMessage message=">> Run Bounty Test Finished " />
+  </Order>
+</Profile>

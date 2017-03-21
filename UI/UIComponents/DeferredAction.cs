@@ -1,18 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Trinity.UI.UIComponents
 {
     /// <summary>
     /// Represents a timer which performs an action on the UI thread when time elapses.  Rescheduling is supported.
     /// </summary>
+    /// 
     public class DeferredAction : IDisposable
     {
+        //internal void UsageExample()
+        //{
+        //    if (_deferredAction == null)
+        //    {
+        //        _deferredAction = DeferredAction.Create(VeryCostlyMethod);
+        //    }
+        //    _deferredAction.Defer(TimeSpan.FromMilliseconds(250));
+        //}
+
         private Timer timer;
 
         /// <summary>

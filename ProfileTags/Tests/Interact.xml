@@ -1,0 +1,15 @@
+﻿<Profile>
+  <Name>Tag Test - Interact</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> Interact Test Started " />
+
+    <If condition="CurrentLevelAreaId != 92945">
+      <TakeWaypoint destinationLevelAreaSnoId="92945" />
+    </If>
+    
+    <Interact questId="312429" stepId="2" worldSnoId="172909" interactAttempts="1" actorId="56947" levelAreaSnoId="92945" />
+
+    <LogMessage message=">> Interact Test Finished " />    
+  </Order>
+</Profile>

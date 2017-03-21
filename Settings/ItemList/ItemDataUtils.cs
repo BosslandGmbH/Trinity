@@ -1,10 +1,11 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -230,7 +231,7 @@ namespace Trinity.Settings.ItemList
                     var skillDamageIncrease = item.GetSkillDamageIncrease(skill.SNOPower);
                     if (skillDamageIncrease > 0)
                     {
-                        Logger.Log(string.Format("SkillDamage +{0}% {1}", skillDamageIncrease, skill.Name));
+                        Core.Logger.Log(string.Format("SkillDamage +{0}% {1}", skillDamageIncrease, skill.Name));
                         return (int)skillDamageIncrease;
                     }
                 }
@@ -465,7 +466,7 @@ namespace Trinity.Settings.ItemList
 
             var acdItem = ZetaDia.Actors.GetACDByAnnId(item.AnnId);
             var value = acdItem.GetAttribute<float>(desc.Attribute);
-            Logger.LogVerbose(">> PassivePower Attribute found with attribute id on AcdItem");
+            Core.Logger.Verbose(">> PassivePower Attribute found with attribute id on AcdItem");
             return desc.IsPercent ? value * 100 : value;
 
         }

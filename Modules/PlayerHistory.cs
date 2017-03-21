@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using System.Linq;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Zeta.Common;
@@ -54,7 +54,7 @@ namespace Trinity.Modules
             }
         }
         
-        protected override void OnWorldChanged()
+        protected override void OnWorldChanged(ChangeEventArgs<int> args)
         {
             RecentPositions.Clear();
             _centroid.Clear();

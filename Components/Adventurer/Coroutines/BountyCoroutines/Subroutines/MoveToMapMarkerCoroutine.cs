@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Linq; using Trinity.Framework;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects.Enums;
+using Trinity.Modules;
 using Zeta.Common;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
@@ -17,8 +19,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
     {
         private readonly int _questId;
         private readonly int _worldId;
-        private readonly int _marker;
-        private readonly int _actorId;
+        private readonly int _markerHash;
 
         private bool _isDone;
         private States _state;
@@ -44,40 +45,52 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Util.Logger.Info("[MoveToMapMarker] " + value);
+                    Core.Logger.Log("[MoveToMapMarker] " + value);
                 }
                 _state = value;
             }
         }
 
-        #endregion
+        #endregion State
 
         public bool IsDone
         {
             get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
         }
 
-
-
-        public MoveToMapMarkerCoroutine(int questId, int worldId, int marker, int actorId = 0, bool zergAllowSafe = true)
+        public MoveToMapMarkerCoroutine(int questId, int worldId, int markerHash, bool zergAllowSafe = true)
         {
             _questId = questId;
             _worldId = worldId;
-            _marker = marker;
-            _actorId = actorId;
+            _markerHash = markerHash;
             _allowSafeZerg = zergAllowSafe;
         }
 
+        public MoveToMapMarkerCoroutine(int questId, int worldId, WorldMarkerType type, bool zergAllowSafe = true)
+        {
+            _questId = questId;
+            _worldId = worldId;
+            _markerType = type;
+            _allowSafeZerg = zergAllowSafe;
+        }
+
+        public MoveToMapMarkerCoroutine(int questId, int worldId, string name, bool zergAllowSafe = true)
+        {
+            _questId = questId;
+            _worldId = worldId;
+            _markerName = name;
+            _allowSafeZerg = zergAllowSafe;
+        }
 
         public async Task<bool> GetCoroutine()
         {
             if (_allowSafeZerg && PluginSettings.Current.BountyZerg && BountyData != null &&
                 BountyData.QuestType != BountyQuestType.KillMonster)
             {
-                Util.Logger.Verbose("Enabling SafeZerg for Kill Monster bounty");
+                Core.Logger.Verbose("Enabling SafeZerg for Kill Monster bounty");
                 SafeZerg.Instance.EnableZerg();
             }
-            else if(!_allowSafeZerg)
+            else if (!_allowSafeZerg)
             {
                 SafeZerg.Instance.DisableZerg();
             }
@@ -86,12 +99,16 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 case States.NotStarted:
                     return await NotStarted();
+
                 case States.Searching:
                     return await Searching();
+
                 case States.Moving:
                     return await Moving();
+
                 case States.Completed:
                     return await Completed();
+
                 case States.Failed:
                     return await Failed();
             }
@@ -138,19 +155,19 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             State = States.Failed;
             return false;
 
+            //var levelAreas = BountyData != null && BountyData.LevelAreaIds != null && BountyData.LevelAreaIds.Any()
+            //    ? BountyData.LevelAreaIds
+            //    : new HashSet<int> { AdvDia.CurrentLevelAreaId };
 
-            var levelAreas = BountyData != null && BountyData.LevelAreaIds != null && BountyData.LevelAreaIds.Any()
-                ? BountyData.LevelAreaIds
-                : new HashSet<int> { AdvDia.CurrentLevelAreaId };
-
-            if (!await ExplorationCoroutine.Explore(levelAreas)) return false;
-            ScenesStorage.Reset();
-            return false;
+            //if (!await ExplorationCoroutine.Explore(levelAreas)) return false;
+            //ScenesStorage.Reset();
+            //return false;
         }
 
         private int _partialMovesCount;
         private Vector3 _partialMoveLocation;
         private bool _isPartialMove;
+
         private async Task<bool> Moving()
         {
             if (_isPartialMove)
@@ -158,7 +175,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (!await NavigationCoroutine.MoveTo(_partialMoveLocation, 10))
                     return false;
 
-                Logger.DebugSetting("Reverting after partial move");
+                Core.Logger.Debug("Reverting after partial move");
                 _isPartialMove = false;
             }
             else
@@ -172,7 +189,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _partialMovesCount++;
                 if (_partialMovesCount < 4)
                 {
-                    Logger.DebugSetting("Creating partial move segment");
+                    Core.Logger.Debug("Creating partial move segment");
                     _partialMoveLocation = MathEx.CalculatePointFrom(AdvDia.MyPosition, _objectiveLocation, 125f);
                     _isPartialMove = true;
                     return false;
@@ -215,6 +232,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private long _lastScanTime;
         private BountyData _bountyData;
         private bool _allowSafeZerg;
+        private WorldMarkerType _markerType;
+        private string _markerName;
 
         private void ScanForObjective()
         {
@@ -223,48 +242,40 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _objectiveLocation = _previouslyFoundLocation;
                 _previouslyFoundLocation = Vector3.Zero;
                 _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
-                Logger.Debug("Returning previous objective location.");
-
+                Core.Logger.Debug("Returning previous objective location.");
                 return;
             }
             if (PluginTime.ReadyToUse(_lastScanTime, 1000))
             {
                 _lastScanTime = PluginTime.CurrentMillisecond;
-                if (_marker != 0)
+                TrinityMarker marker = null;
+
+                if (_markerHash != 0)
                 {
-                    if (_marker == -1)
+                    if (_markerHash == -1)
                     {
-                        _objectiveLocation = BountyHelpers.ScanForMarkerLocation(0, _objectiveScanRange);
-                        Logger.DebugSetting($"Scan for Marker position -1 = {_objectiveLocation} (ScanRange={_objectiveScanRange})");
+                        marker = BountyHelpers.ScanForMarker(0, _objectiveScanRange);                        
                     }
                     else
                     {
-                        _objectiveLocation = BountyHelpers.ScanForMarkerLocation(_marker, _objectiveScanRange);
-
+                        marker = BountyHelpers.ScanForMarker(_markerHash, _objectiveScanRange);
                     }
                 }
-                //if (_objectiveLocation == Vector3.Zero && _actorId != 0)
-                //{
-                //    _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange);
-                //}
-                if (_objectiveLocation != Vector3.Zero)
+                else if (!string.IsNullOrEmpty(_markerName))
                 {
-                    using (new PerformanceLogger("[MoveToMapMarker] Path to Objective Check", true))
-                    {
-                        //if ((Navigator.GetNavigationProviderAs<DefaultNavigationProvider>().CanFullyClientPathTo(_objectiveLocation)))
-                        //{
-                        Logger.Info("[MoveToMapMarker] Found the objective at distance {0}",
-                            AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //}
-                        //else
-                        //{
-                        //    Logger.Debug("[MoveToMapMarker] Found the objective at distance {0}, but cannot get a path to it.",
-                        //        AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //    _objectiveLocation = Vector3.Zero;
-                        //}
-                    }
-
+                    marker = BountyHelpers.ScanForMarker(_markerName, _objectiveScanRange);
                 }
+                else if (_markerType != default(WorldMarkerType))
+                {
+                    marker = BountyHelpers.ScanForMarker(_markerType, _objectiveScanRange);
+                }
+
+                if (marker != null && marker.Position != Vector3.Zero)
+                {
+                    _objectiveLocation = marker.Position;
+                    Core.Logger.Log($"[MoveToMapMarker] Found the objective {marker}");
+                }
+                _objectiveLocation = marker?.Position ?? Vector3.Zero;
             }
         }
     }

@@ -1,19 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
+using System.Collections.Generic;
+using System.Linq;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Modules
 {
-    /// <summary>
-    /// Keep track of cooldowns for buffs and skills
-    /// todo refactor now that i have the proper game tick @ Core.MemoryModel.Storage.GameTick, which matches the EndTick.    
-    /// </summary>
     public sealed class Cooldowns : Module
     {
         public class CooldownData
@@ -90,7 +86,7 @@ namespace Trinity.Modules
             public override string ToString()
             {
                 return String.Format("Power={0} ({1}) Start={2} End={3} Duration={4} ({5}s) StartAttr={6} Remaining={7}s ({8:00.00}%) Finished={9} Offset={10} EndOffset={11} CurrentTime={12} EndCurrentTime={13} Key={14} EnvironmentTick={15}",
-                    (SNOPower)SnoId, SnoId, StartGameTime, EndGameTime, DurationGameTime, Duration.TotalSeconds, StartAttribute, Remaining.TotalSeconds, Percent*100, IsFinished, Offset, EndOffset, ZetaDia.CurrentTime, EndCurrentTime, StorageKey, Environment.TickCount);
+                    (SNOPower)SnoId, SnoId, StartGameTime, EndGameTime, DurationGameTime, Duration.TotalSeconds, StartAttribute, Remaining.TotalSeconds, Percent*100, IsFinished, Offset, EndOffset, ZetaDia.Globals.GameTick, EndCurrentTime, StorageKey, Environment.TickCount);
             }
         }
 
@@ -118,7 +114,7 @@ namespace Trinity.Modules
 
             using (new PerformanceLogger("Utility.Cooldowns.Pulse"))
             {
-                CurrentTime = ZetaDia.CurrentTime;
+                CurrentTime = ZetaDia.Globals.GameTick;
                 IsLogging = Core.Settings.Advanced.LogCategories.HasFlag(LogCategory.Cooldowns);
 
                 foreach (var buff in ZetaDia.Me.GetAllBuffs()) //Core.Buffs.AllBuffs)
@@ -211,7 +207,7 @@ namespace Trinity.Modules
             var data = UpdateCooldownData(powerId, attrKey, startTime, (ActorAttributeType)startAttr, endTime, (ActorAttributeType)endAttr);
 
             if (IsLogging)
-                Logger.Log("Buff Cooldown: {0} Variant={1}", data, name);
+                Core.Logger.Log("Buff Cooldown: {0} Variant={1}", data, name);
         }
 
         internal void RecordSkillData(SNOPower power)
@@ -229,12 +225,12 @@ namespace Trinity.Modules
             var data = UpdateCooldownData((int)power, storageKey, startTime, startAttr, endTime, endAttr);
 
             if (IsLogging)
-                Logger.Log("Skill Cooldown: {0}", data);
+                Core.Logger.Log("Skill Cooldown: {0}", data);
         }
 
         private static CooldownData UpdateCooldownData(int snoId, int storageKey, int startTime, ActorAttributeType startAttr, int endTime, ActorAttributeType endAttr)
         {
-            // Attribute time returned (game time) is not the same as ZetaDia.CurrentTime and the difference between the two vary over time.
+            // Attribute time returned (game time) is not the same as ZetaDia.Globals.GameTick and the difference between the two vary over time.
             // When the buff starts a comparison to CurrentTime is recorded. This can then be used to work out know how much time has elapsed.
             // Offset will count down until it reaches EndOffset, then it has ended.
 
@@ -247,8 +243,8 @@ namespace Trinity.Modules
                 d.EndAttribute = endAttr;                
                 d.StorageKey = storageKey;
                 d.DurationGameTime = endTime - startTime;
-                d.EndCurrentTime = ZetaDia.CurrentTime + d.DurationGameTime;
-                d.EndOffset = (startTime - ZetaDia.CurrentTime) - d.DurationGameTime;
+                d.EndCurrentTime = ZetaDia.Globals.GameTick + d.DurationGameTime;
+                d.EndOffset = (startTime - ZetaDia.Globals.GameTick) - d.DurationGameTime;
             };
 
             CooldownGroup group;
@@ -279,7 +275,7 @@ namespace Trinity.Modules
                 }
             }
 
-            data.Offset = startTime - ZetaDia.CurrentTime;
+            data.Offset = startTime - ZetaDia.Globals.GameTick;
             //data.IsFinished = data.Offset <= data.EndOffset;
             return data;
         }

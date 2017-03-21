@@ -1,21 +1,18 @@
-﻿
-using System;
+﻿using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Monk
 {
@@ -70,14 +67,14 @@ namespace Trinity.Routines.Monk
         //        var msSinceUse = DateTime.UtcNow.Subtract(lastUseTime).TotalMilliseconds;
         //        if (lastUseTime != _lastUseTime)
         //        {
-        //            Logger.Log($"New LTK cast, waiting for fireball");
+        //            Core.Logger.Log($"New LTK cast, waiting for fireball");
         //            IsFireballPending = msSinceUse < PendingTimeoutMs;
         //            _lastUseTime = lastUseTime;
         //        }
 
         //        if (msSinceUse > PendingTimeoutMs && IsFireballPending)
         //        {
-        //            Logger.Log($"Fireball wait timed out");
+        //            Core.Logger.Log($"Fireball wait timed out");
         //            IsFireballPending = false;
         //        }
 
@@ -85,7 +82,7 @@ namespace Trinity.Routines.Monk
         //        {
         //            if (actor.ActorSnoId == FireballSnoId && !Fireballs.ContainsKey(actor.AnnId))
         //            {
-        //                Logger.Log($"New Fireball Found Delay:{msSinceUse}ms");
+        //                Core.Logger.Log($"New Fireball Found Delay:{msSinceUse}ms");
         //                IsFireballPending = false;
         //                Fireballs.Add(actor.AnnId, actor);                  
         //            }                    
@@ -180,7 +177,7 @@ namespace Trinity.Routines.Monk
             //FireballTracker.Update();
             //if (FireballTracker.IsFireballPending)
             //{
-            //    Logger.Log("Waiting for fireball");
+            //    Core.Logger.Log("Waiting for fireball");
             //    return new TrinityPower(SNOPower.None);
             //}
 
@@ -198,14 +195,14 @@ namespace Trinity.Routines.Monk
 
             if (ShouldRefreshSpiritGuardsBuff)
             {
-                Logger.Log(LogCategory.Routine, "Need Spirit Gaurds Buff");
+                Core.Logger.Log(LogCategory.Routine, "Need Spirit Gaurds Buff");
                 if (TryPrimaryClosestTarget(out power))
                     return power;
             }
 
             if (ShouldRefreshBastiansGenerator)
             {
-                Logger.Log(LogCategory.Routine, "Need Bastians Buff");
+                Core.Logger.Log(LogCategory.Routine, "Need Bastians Buff");
                 if (TryPrimaryClosestTarget(out power))
                     return power;
             }
@@ -219,7 +216,7 @@ namespace Trinity.Routines.Monk
                 {
                     if (Avoider.TryGetSafeSpot(out position, 12f + CurrentTarget.CollisionRadius, 30f, CurrentTarget.Position))
                     {
-                        Logger.Log(LogCategory.Routine, $"Adjusting Distance for Sweeping Armarda RDist={CurrentTarget.RadiusDistance} Dist={ZetaDia.Me.Position.Distance(CurrentTarget.Position)}");
+                        Core.Logger.Log(LogCategory.Routine, $"Adjusting Distance for Sweeping Armarda RDist={CurrentTarget.RadiusDistance} Dist={ZetaDia.Me.Position.Distance(CurrentTarget.Position)}");
                         return Walk(position,2f);
                     }
                 }
@@ -240,14 +237,14 @@ namespace Trinity.Routines.Monk
                     var needResource = Player.PrimaryResource < PrimaryEnergyReserve;
                     if ((needStacks || needResource) && HostileMonsters.Any(u => u.Distance <= 12f))
                     {
-                        Logger.Log(LogCategory.Routine, "Moving away to build stacks");
+                        Core.Logger.Log(LogCategory.Routine, "Moving away to build stacks");
                         return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 30f));
                     }
                 }
             }
 
             // SW Stacks but no mana, or skills cooldown maybe, hang out just outside range of target.
-            Logger.Log(LogCategory.Routine, "Can't cast anything.");
+            Core.Logger.Log(LogCategory.Routine, "Can't cast anything.");
             return Walk(TargetUtil.GetLoiterPosition(CurrentTarget, 25f));
         }
 
@@ -389,7 +386,7 @@ namespace Trinity.Routines.Monk
 
             if (!Skills.Monk.LashingTailKick.CanCast())
             {
-                Logger.Log(LogCategory.Routine, $"Skipping LTK - Cant Cast. Charges={swStacks}");
+                Core.Logger.Log(LogCategory.Routine, $"Skipping LTK - Cant Cast. Charges={swStacks}");
                 return false;
             }
 
@@ -398,7 +395,7 @@ namespace Trinity.Routines.Monk
 
             //if (!TargetUtil.AnyMobsInRange(50f))
             //{
-            //    Logger.Log(LogCategory.Routine, $"Skipping LTK - No Units in 50yd Range. Charges={swStacks}");
+            //    Core.Logger.Log(LogCategory.Routine, $"Skipping LTK - No Units in 50yd Range. Charges={swStacks}");
             //    return false;
             //}
 
@@ -406,8 +403,8 @@ namespace Trinity.Routines.Monk
             //var timeSinceUse = Skills.Monk.LashingTailKick.TimeSinceUse;
             if (IsLTKAnimating || Player.IsCastingOrLoading)
             {
-                //Logger.Log(LogCategory.Routine, $"Skipping LTK - Time Since Use ({timeSinceUse}) Charges={swStacks}");
-                Logger.Log(LogCategory.Routine, $"Skipping LTK - casting/animating");//l;Time Since Use ({timeSinceUse}) Charges={swStacks}");
+                //Core.Logger.Log(LogCategory.Routine, $"Skipping LTK - Time Since Use ({timeSinceUse}) Charges={swStacks}");
+                Core.Logger.Log(LogCategory.Routine, $"Skipping LTK - casting/animating");//l;Time Since Use ({timeSinceUse}) Charges={swStacks}");
                 return false;
             }
 

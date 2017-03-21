@@ -1,12 +1,12 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-
 namespace Trinity.UI.UIComponents.Utilities
 {
-  public static class TypeUtilities
+    public static class TypeUtilities
   {
 #if NET35
     /// <summary>

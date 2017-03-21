@@ -1,21 +1,18 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Adventurer.Cache;
-using Trinity.Components.Adventurer.Util;
-using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.Game.Exploration
 {
     public static class ExplorationHelpers
     {
-
         //public static AdventurerNode NearestWeightedUnvisitedNodeLocation(HashSet<int> levelAreaIds = null)
         //{
-
         //    using (new PerformanceLogger("NearestWeightedUnvisitedNodeLocation", true))
         //    {
         //        return NodesStorage.CurrentWorldNodes.Where(n => !n.Visited && n.NavigableCenter.Distance2DSqr(AdvDia.MyPosition) > 100 && n.NavigableCenter.IsInLevelAreas(levelAreaIds))
@@ -24,7 +21,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         //            .FirstOrDefault();
         //    }
         //}
-
 
         public static ExplorationNode NearestWeightedUnvisitedNode(HashSet<int> levelAreaIds, List<string> ignoreScenes = null)
         {
@@ -37,9 +33,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 for (var i = 3; i <= 4; i++)
                 {
                     var closestUnvisitedNode = ExplorationGrid.Instance.GetNeighbors(nearestNode, i).Cast<ExplorationNode>()
-                        .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells && 
-                        n.DynamicWorldId == dynamicWorldId && levelAreaIds.Contains(n.LevelAreaId) && 
-                        NavigationGrid.Instance.CanRayWalk(myPosition, n.NavigableCenter))
+                        .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells &&
+                        n.DynamicWorldId == dynamicWorldId && levelAreaIds.Contains(n.LevelAreaId) &&
+                        Core.Grids.CanRayWalk(myPosition, n.NavigableCenter))
                         .OrderBy(n => n.Distance)
                         .FirstOrDefault();
                     if (closestUnvisitedNode != null)
@@ -50,7 +46,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
                 if (node == null)
                 {
-                    Logger.DebugSetting("Closest Unvisited Node Selection Failed");
+                    Core.Logger.Debug("Closest Unvisited Node Selection Failed");
 
                     //var nodes = ExplorationGrid.Instance.WalkableNodes.Where(
                     //    n =>
@@ -87,16 +83,16 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         .FirstOrDefault();
                     //if (node != null)
                     //{
-                    //    Logger.Debug("[ExplorationLogic] Picked a node using unvisited weighting method (Node Distance: {0}, Node Weight: {1})", node.NavigableCenter.Distance(AdvDia.MyPosition), node.UnvisitedWeight);
+                    //    Core.Logger.Debug("[ExplorationLogic] Picked a node using unvisited weighting method (Node Distance: {0}, Node Weight: {1})", node.NavigableCenter.Distance(AdvDia.MyPosition), node.UnvisitedWeight);
                     //}
                 }
 
                 if (node == null && ExplorationGrid.Instance.NearestNode != null && !levelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
                 {
-                    Logger.Debug("[ExplorationLogic] Adventurer is trying to find nodes that are not in this LevelArea. DefinedIds='{0}' CurrentId='{0}'. Marking current area's nodes as valid.", string.Join(", ", levelAreaIds), ZetaDia.CurrentLevelAreaSnoId);                     
+                    Core.Logger.Debug("[ExplorationLogic] Adventurer is trying to find nodes that are not in this LevelArea. DefinedIds='{0}' CurrentId='{0}'. Marking current area's nodes as valid.", string.Join(", ", levelAreaIds), ZetaDia.CurrentLevelAreaSnoId);
                     levelAreaIds.Add(ZetaDia.CurrentLevelAreaSnoId);
 
-                    // Ignore level area match   
+                    // Ignore level area match
                     node = ExplorationGrid.Instance.WalkableNodes
                     .Where(n =>
                         !n.IsIgnored &&
@@ -113,9 +109,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     var allNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => levelAreaIds.Contains(n.LevelAreaId));
                     var unvisitedNodes = ExplorationGrid.Instance.WalkableNodes.Count(n => !n.IsVisited && levelAreaIds.Contains(n.LevelAreaId));
 
-                    Logger.Info("[ExplorationLogic] Couldn't find any unvisited nodes. Current AdvDia.LevelAreaSnoIdId: {0}, " +
-                                "ZetaDia.CurrentLevelAreaSnoId: {3}, Total Nodes: {1} Unvisited Nodes: {2} Searching In [{4}] HasNavServerData={5}", 
-                                AdvDia.CurrentLevelAreaId, allNodes, unvisitedNodes, 
+                    Core.Logger.Log("[ExplorationLogic] Couldn't find any unvisited nodes. Current AdvDia.LevelAreaSnoIdId: {0}, " +
+                                "ZetaDia.CurrentLevelAreaSnoId: {3}, Total Nodes: {1} Unvisited Nodes: {2} Searching In [{4}] HasNavServerData={5}",
+                                AdvDia.CurrentLevelAreaId, allNodes, unvisitedNodes,
                                 ZetaDia.CurrentLevelAreaSnoId, string.Join(", ", levelAreaIds),
                                 AdvDia.MainGridProvider.Width != 0);
 
@@ -136,12 +132,12 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             { 53711, new HashSet<Vector3>
                 {
                     // Dulgur oasis scene with decking area in the bottom left of map.
-                    new Vector3(811.1603f,646.8987f,1.828806f), 
+                    new Vector3(811.1603f,646.8987f,1.828806f),
                     new Vector3(814.6924f,668.8029f,1.828797f),
                     new Vector3(833.3029f,652.3396f,1.828796f)
                 }
-            }  
-        };                     
+            }
+        };
 
         public static List<Vector3> GetFourPointsInEachDirection(Vector3 center, int radius)
         {
@@ -176,11 +172,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             }
             catch (Exception)
             {
-
             }
 
             return result;
         }
-
     }
 }

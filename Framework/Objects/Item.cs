@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -13,6 +13,7 @@ namespace Trinity.Framework.Objects
     {
         [DataMember]
         public int Id { get; set; }
+
         public string Name { get; set; }
 
         public ItemType ItemType { get; set; }
@@ -31,7 +32,6 @@ namespace Trinity.Framework.Objects
 
         public Item()
         {
-            
         }
 
         public Item(int actorId, string name = "", ItemType itemType = ItemType.Unknown)
@@ -151,10 +151,10 @@ namespace Trinity.Framework.Objects
                 case TrinityItemType.Quiver:
                 case TrinityItemType.TwoHandBow:
                 case TrinityItemType.TwoHandCrossbow:
-                    return ActorClass.DemonHunter;   
+                    return ActorClass.DemonHunter;
             }
-            
-            return ActorClass.Invalid;            
+
+            return ActorClass.Invalid;
         }
 
         public bool Equals(Item other)
@@ -164,7 +164,7 @@ namespace Trinity.Framework.Objects
 
         /// <summary>
         /// Unique Identifier so that dictionarys can compare this object properly.
-        /// </summary>   
+        /// </summary>
         public override int GetHashCode()
         {
             return Id.GetHashCode() ^ Name.GetHashCode();

@@ -8,7 +8,7 @@ namespace Trinity.Framework.Avoidance.Structures
 {
     public class Avoidance
     {
-        public DateTime CreationTime { get; set; }     
+        public DateTime CreationTime { get; set; }
         public AvoidanceDefinition Definition { get; set; }
         public AvoidanceSettingsEntry Settings { get; set; }
         public List<TrinityActor> Actors { get; set; } = new List<TrinityActor>();
@@ -16,8 +16,8 @@ namespace Trinity.Framework.Avoidance.Structures
         public bool IsImmune { get; set; }
         public bool IsAllowed => Settings.IsEnabled && Core.Player.CurrentHealthPct * 100 <= Settings.HealthPct;
 
-        public override string ToString() 
+        public override string ToString()
             => $"{GetType().Name}: {Definition.Name} Ignored={!IsAllowed} Settings({Settings.HealthPct}/{Settings.DistanceMultiplier}) " +
-               $"Dist={StartPosition.Distance(Core.Player.Position)} Age={CreationTime-DateTime.UtcNow:g} Immune={IsImmune}";
+               $"Dist={StartPosition.Distance(Core.Player.Position)} Age={CreationTime - DateTime.UtcNow:g} Immune={IsImmune}";
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
-using Trinity.Framework.Helpers;
 
 namespace Trinity.UI.UIComponents.Converters
 {
@@ -52,14 +51,14 @@ namespace Trinity.UI.UIComponents.Converters
             return cvs.View;
         }
 
-        private void NotifyOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-        {
-            if (PropertyName == propertyChangedEventArgs.PropertyName)
-            {
-                Logger.LogNormal($"Property Changed {propertyChangedEventArgs.PropertyName}");
-                BindingMember.OnPropertyChanged(nameof(BindingMember.Value));
-            }
-        }
+        //private void NotifyOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        //{
+        //    if (PropertyName == propertyChangedEventArgs.PropertyName)
+        //    {
+        //        Core.Logger.Log($"Property Changed {propertyChangedEventArgs.PropertyName}");
+        //        BindingMember.OnPropertyChanged(nameof(BindingMember.Value));
+        //    }
+        //}
 
         /// <summary>
         /// Gets a "BindingMember" object for every valid property in an object

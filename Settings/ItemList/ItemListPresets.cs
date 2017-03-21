@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 
 namespace Trinity.Settings.ItemList
 {

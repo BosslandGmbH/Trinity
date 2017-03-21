@@ -1,11 +1,11 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Markup;
-using Zeta.Common;
 
 namespace Trinity.UI.UIComponents.Converters
 {

@@ -1,8 +1,8 @@
 using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
-using Trinity.Framework.Helpers;
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
@@ -15,7 +15,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         public void AddEllipse(RadarObject radarObject, Point point, double x, double y)
         {
-            // Geometry used for hit testing
             var elipse = new EllipseGeometry
             {
                 Center = point,

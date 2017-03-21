@@ -1,24 +1,22 @@
 using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Reference;
 using Trinity.Modules;
-using Trinity.Reference;
 using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines
 {
@@ -215,7 +213,7 @@ namespace Trinity.Routines
             if (settings.ClusterSize > 0 && !TargetUtil.ClusterExists(15f, settings.ClusterSize))
                 return true;
 
-            if (settings.WaitForConvention == ConventionMode.GreaterRift && !RiftProgression.IsGreaterRift)
+            if (settings.WaitForConvention == ConventionMode.GreaterRift && !Core.Rift.IsGreaterRift)
                 return true;
 
             if (settings.WaitForConvention != ConventionMode.Never && settings.ConventionCondition != null && !settings.ConventionCondition())
@@ -473,35 +471,35 @@ namespace Trinity.Routines
                     //var lastPower = SpellHistory.LastPower;
                     var distance = buffedLocation.Distance(Player.Position);
 
-                    Logger.LogVerbose(LogCategory.Routine, $"Buffed location found Dist={distance}");
+                    Core.Logger.Verbose(LogCategory.Routine, $"Buffed location found Dist={distance}");
 
                     if (buffedLocation.Distance(Player.Position) < arriveDistance)
                     {
-                        Logger.Log(LogCategory.Routine, $"Standing in Buffed Position {buffedLocation} Dist={distance}");
+                        Core.Logger.Log(LogCategory.Routine, $"Standing in Buffed Position {buffedLocation} Dist={distance}");
                     }
                     else if (!Core.Avoidance.Grid.CanRayWalk(Player.Position, buffedLocation))
                     {
-                        Logger.Log(LogCategory.Routine, $"Unable to straight-line path to Buffed Position {buffedLocation} Dist={distance}");
+                        Core.Logger.Log(LogCategory.Routine, $"Unable to straight-line path to Buffed Position {buffedLocation} Dist={distance}");
                     }
                     else if (!Core.Avoidance.Grid.CanRayWalk(Combat.Targeting.CurrentTarget.Position, buffedLocation))
                     {
-                        Logger.Log(LogCategory.Routine, $"Can't see target from buffed position {buffedLocation} Dist={distance}");
+                        Core.Logger.Log(LogCategory.Routine, $"Can't see target from buffed position {buffedLocation} Dist={distance}");
                     }
                     else if (Core.Avoidance.Avoider.IsKiteOnCooldown)
                     {
-                        Logger.Log(LogCategory.Routine, $"Not moving to buffed location while on kite cooldown");
+                        Core.Logger.Log(LogCategory.Routine, $"Not moving to buffed location while on kite cooldown");
                     }
                     //else if (checkPowerRange && lastPower != null && buffedLocation.Distance(Combat.Targeting.CurrentTarget.Position) > lastPower.MinimumRange + Combat.Targeting.CurrentTarget.CollisionRadius + Player.Radius)
                     //{
-                    //    Logger.LogVerbose(LogCategory.Routine, $"Buffed spot outside attack range for power {lastPower.SNOPower} Range={lastPower.MinimumRange} TimeSinceUse={lastPower.TimeSinceUseMs} Dist={distance}");
+                    //    Core.Logger.Verbose(LogCategory.Routine, $"Buffed spot outside attack range for power {lastPower.SNOPower} Range={lastPower.MinimumRange} TimeSinceUse={lastPower.TimeSinceUseMs} Dist={distance}");
                     //}
                     else if (IsKitingEnabled && TargetUtil.AnyMobsInRangeOfPosition(buffedLocation, Combat.Routines.Current.KiteDistance))
                     {
-                        Logger.LogVerbose(LogCategory.Routine, $"Moving to buffed spot would trigger kiting away from it.");
+                        Core.Logger.Verbose(LogCategory.Routine, $"Moving to buffed spot would trigger kiting away from it.");
                     }
                     else
                     {
-                        Logger.LogVerbose(LogCategory.Routine, $"Moving to Buffed Position {buffedLocation} Dist={distance}");
+                        Core.Logger.Verbose(LogCategory.Routine, $"Moving to Buffed Position {buffedLocation} Dist={distance}");
                         power = new TrinityPower(SNOPower.Walk, maxDistance, buffedLocation);
                         return true;                           
                     } 

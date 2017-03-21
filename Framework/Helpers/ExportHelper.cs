@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Trinity.Framework.Helpers
 {
-    class ExportHelper
+    internal class ExportHelper
     {
         /// <summary>
         /// Compress a string into GZIP Base64
@@ -55,6 +55,5 @@ namespace Trinity.Framework.Helpers
                 return Encoding.UTF8.GetString(buffer);
             }
         }
-
     }
 }

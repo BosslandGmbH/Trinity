@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Trinity.Components.QuestTools;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
 using Zeta.TreeSharp;
@@ -7,18 +8,13 @@ using Zeta.XmlEngine;
 namespace Trinity.ProfileTags
 {
     [XmlElement("StopBot")]
-    public class StopBotTag : ProfileBehavior
+    public class StopBotTag : BaseProfileBehavior
     {
-        private bool _isDone;
-        public override bool IsDone => _isDone;
-        protected override Composite CreateBehavior() => new ActionRunCoroutine(ctx => StopBot());
-        public override void ResetCachedDone(bool force = false) => _isDone = false;
-
-        private async Task<bool> StopBot()
-        {
-            BotMain.Stop();
-            _isDone = true;
+        public override async Task<bool> StartTask()
+        {            
+            BotMain.Stop(false, "StopBotTag stopping from profile");
             return true;
         }
     }
 }
+

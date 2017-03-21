@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -36,7 +35,7 @@ namespace Trinity.Framework.Avoidance.Structures
 
         /// <summary>
         /// The actual distance of danger without padding for settings/movement
-        /// A factor of collision radius would be best but some avoidance 
+        /// A factor of collision radius would be best but some avoidance
         /// report this incorrectly for their effect and so require a custom radius.
         /// </summary>
         public float Radius;
@@ -72,6 +71,5 @@ namespace Trinity.Framework.Avoidance.Structures
         public float AngleDegrees { get; set; }
 
         public Func<TrinityActor, bool> Filter { get; set; }
-
     }
 }

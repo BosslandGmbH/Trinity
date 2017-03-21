@@ -15,7 +15,6 @@ namespace Trinity.Framework.Helpers
     {
         public FullyObservableCollection()
         {
-
         }
 
         public FullyObservableCollection(IEnumerable<T> items, bool clone = false)

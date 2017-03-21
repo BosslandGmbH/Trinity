@@ -1,4 +1,6 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -7,20 +9,16 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Markup;
 using System.Windows.Media;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
-using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
-using Trinity.UI.Visualizer.SceneEditor;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
@@ -29,7 +27,7 @@ using Zeta.Game.Internals.SNO;
 using CombineType = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.CombineType;
 using DeathGates = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.DeathGates;
 using LineSegment = System.Windows.Media.LineSegment;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 using RectangularRegion = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.RectangularRegion;
 using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
@@ -85,7 +83,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         {
             var clickedWorldPosition = PointMorph.GetWorldPosition(DragInitialPosition, CanvasData);
 
-            Logger.Log($"Clicked World Position = {clickedWorldPosition}, Distance={clickedWorldPosition.Distance(ZetaDia.Me.Position)}");
+            Core.Logger.Log($"Clicked World Position = {clickedWorldPosition}, Distance={clickedWorldPosition.Distance(ZetaDia.Me.Position)}");
 
             if (!IsDragging)
             {
@@ -107,18 +105,9 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     for (int i = 0; i < sequence.Count; i++)
                     {
                         var scene = sequence[i];
-                        Logger.Log($"{i}: {(sequence.Index == i ? ">> " : "")}{scene.Name}");
+                        Core.Logger.Log($"{i}: {(sequence.Index == i ? ">> " : "")}{scene.Name}");
                     }
 
-                    //var zone = DeathGates.GetZoneForPosition(clickedWorldPosition);
-                    //if (zone != null)
-                    //{
-                    //    var gatePos = zone.NavigableGatePosition;
-                    //    if (gatePos != Vector3.Zero)
-                    //    {
-                    //        CurrentTestLine = new Tuple<Vector3, Vector3, bool>(gatePos, Player.Actor.Position, result);
-                    //    }
-                    //}
                 }
 
                 var hit = FindElementUnderClick(sender, e);
@@ -194,7 +183,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             Cursor = Cursors.Arrow;
             CanvasData.PanOffset = DragOffset;
 
-            using (new AquireFrameHelper())
+            using (ZetaDia.Memory.AcquireFrame())
             {
                 HandleMapClicked(sender, e);
 
@@ -312,7 +301,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         static void OnZoomChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            Logger.LogVerbose("[RadarUI] Zoom changed from {0} to {1}", args.OldValue, args.NewValue);
+            Core.Logger.Verbose("[RadarUI] Zoom changed from {0} to {1}", args.OldValue, args.NewValue);
             var radarCanvas = obj as RadarCanvas;
             if (radarCanvas != null)
             {
@@ -333,7 +322,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         private static void OnIsDraggingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            Logger.LogVerbose("[RadarUI] Dragging Changed from {0} to {1}", e.OldValue, e.NewValue);
+            Core.Logger.Verbose("[RadarUI] Dragging Changed from {0} to {1}", e.OldValue, e.NewValue);
             var radarCanvas = d as RadarCanvas;
             if (radarCanvas != null)
             {
@@ -365,7 +354,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         static void OnPanChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            Logger.LogVerbose("[RadarUI] Pan changed from {0} to {1}", args.OldValue, args.NewValue);
+            Core.Logger.Verbose("[RadarUI] Pan changed from {0} to {1}", args.OldValue, args.NewValue);
             var radarCanvas = obj as RadarCanvas;
             if (radarCanvas != null)
             {
@@ -391,7 +380,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         static void OnSelectedItemChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            Logger.Log("SelectedItem changed from {0} to {1}", args.OldValue, args.NewValue);
+            Core.Logger.Log("SelectedItem changed from {0} to {1}", args.OldValue, args.NewValue);
 
             //var radarCanvas = obj as RadarCanvas;
             //if (radarCanvas != null)
@@ -418,7 +407,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         static void OnVisibilityFlagsChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            Logger.LogVerbose("[RadarUI] VisibilityFlags changed from {0} to {1}", args.OldValue, args.NewValue);
+            Core.Logger.Verbose("[RadarUI] VisibilityFlags changed from {0} to {1}", args.OldValue, args.NewValue);
             var radarCanvas = obj as RadarCanvas;
             if (radarCanvas != null)
             {
@@ -486,13 +475,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         {
             try
             {
-                //using (new PerformanceLogger("RadarUI UpdateData"))
-                //{
-
-                //if (DateTime.UtcNow.Subtract(LastUpdate).TotalMilliseconds < 5)
-                //    return;
-
-                //LastUpdate = DateTime.UtcNow;
 
                 if (DesiredSize.Height <= 0 || DesiredSize.Width <= 0)
                     return;
@@ -541,21 +523,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 UpdateRelativeDrawings();
 
-                //UpdateAvoidanceGridData();
-
-                //UpdateTestData();
-
-                // Trigger LastKiteNodes collection.
-                //_testkiteNode = TrinDia.Avoidance.BestKiteNode;
-
-                //Logger.Log("Heading={0}",ZetaDia.Me.Movement.RotationDegrees);
-
-                //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Clusters))
-                //{
-                //    UpdateValueCluster();
-                //}
-
-                //}
 
                 // Trigger Canvas to Render
                 InvalidateVisual();
@@ -563,7 +530,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.UpdateData(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("Exception in RadarUI.UpdateData(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -571,25 +538,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         {
             _explorationNodes = ExplorationGrid.Instance.WalkableNodes;
         }
-
-        #region ValueCluster
-
-        private List<Vector3> ValueCluster = new List<Vector3>();
-        private Vector3 ValueClusterCenter;
-        private double ClusterValue;
-
-        private void UpdateValueCluster()
-        {
-            List<Vector3> valueClusterPositions;
-            Vector3 valueClusterCenter;
-            double clusterValue;
-            TargetUtil.GetValueClusterUnits(45f, 0.03, 14f, out valueClusterPositions, out valueClusterCenter, out clusterValue);
-            ValueCluster = valueClusterPositions;
-            ValueClusterCenter = valueClusterCenter;
-            ClusterValue = clusterValue;
-        }
-
-        #endregion
 
 
 
@@ -601,32 +549,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         public RadarObject SelectedRadarObject { get; set; }
 
-        //private List<TrinityUnit> _clusterUnits = new List<TrinityUnit>();
-        //private IEnumerable<IGrouping<int, TrinityUnit>> _clusterGroups = new List<IGrouping<int, TrinityUnit>>();
-        //private void UpdateTestData()
-        //{
-        //    _clusterUnits.Clear();
-        //    _clusterUnits = CacheManager.Monsters.Where(m => m.UnitsNearby >= 2 && m.Distance < 200f).OrderBy(m => m.UnitsNearby).ToList();
-        //    _clusterGroups = CacheManager.Monsters.Where(m => m.UnitsNearby >= 2 && m.Distance < 200f).GroupBy(m => m.UnitsNearby);
-
-        //}
-
-        //private List<TrinityNode> _nodes = new List<TrinityNode>();
-        //private TrinityNode _safeTrinityNode;
-        //private void UpdateAvoidanceGridData()
-        //{
-        //    if (CacheManager.Me.NearestNode == null)
-        //        return;
-
-        //    if (!TrinityGrid.CurrentNodes.Any())
-        //        return;
-
-        //    //_safeNode = TrinityGrid.FindSafeNode(10f, 40f);
-
-        //    // used for debug spiral
-        //    //_walkableNodesNearPlayer = TrinityGrid.FindNodes(CacheManager.Me, node => !node.Flags.HasFlag(WeightFlags.NavigationImpairing) && node.WeightPct <= 0.1, 30f,10f );
-        //    //_nodes = TrinityGrid.FindSafeNodes(10f, 40f);
-        //}
 
         /// <summary>
         /// Update relative drawings. Calculates new position for each scene drawing based on its origin point.
@@ -722,9 +644,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                         }
                     }
 
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.RadarDebug))
-                    //{
-
+     
                     DrawDebugPosition(dc, CanvasData);
 
                     DrawClickRays(dc, CanvasData);
@@ -735,48 +655,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                     DrawMarkers(dc, CanvasData);
 
-                    //DrawMinimap(dc, CanvasData);
-
-                    //}
-
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.Clusters))
-                    //{
-                    //    DrawClusters(dc, CanvasData);
-                    //}
-
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.KiteDirection))
                     {
                         DrawKiteDirection(dc, CanvasData);
                     }
-
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.SafeNodes))
-                    //{
-                    //    DrawSafeNodes(dc, CanvasData);
-                    //}
-
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.KiteNodes))
-                    //{
-                    //    DrawKiteNodes(dc, CanvasData);
-                    //}
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.KiteFromNodes))
-                    //{
-                    //    DrawKiteFromNodes(dc, CanvasData);
-                    //}
-
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.NotInCache))
-                    //{
-
-                    //}
-
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.CombatRadius))
-                    //{
-                    //    DrawCombatRadius(dc, CanvasData);
-                    //}
-
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.UnwalkableNodes))
-                    //{
-                    //    DrawObstacles(dc, CanvasData);
-                    //}
 
                     if (VisibilityFlags.HasFlag(RadarVisibilityFlags.ActivePlayer))
                     {
@@ -796,20 +678,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                         }
                     }
 
-
-
-                    //DrawLineToSafeNode(dc, CanvasData);
-
-                    //if (VisibilityFlags.HasFlag(RadarVisibilityFlags.RadarDebug))
-                    //{
-                    //    DrawDebugVisuals(dc, CanvasData);
-                    //}
-
-
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log("Exception in RadarUI.OnRender(). {0} {1}", ex.Message, ex.InnerException);
+                    Core.Logger.Log("Exception in RadarUI.OnRender(). {0} {1}", ex.Message, ex.InnerException);
                 }
             }
         }
@@ -817,15 +689,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         private void DrawAdventurerNavigation(DrawingContext dc, CanvasData canvasData)
         {
             dc.DrawLine(RadarResources.BorderPen, CanvasData.CenterVector.ToCanvasPoint(), NavigationCoroutine.LastDestination.ToCanvasPoint());
-        }
-
-        private void DrawMinimap(DrawingContext dc, CanvasData canvasData)
-        {
-            foreach (var item in Core.Minimap.MinimapIcons)
-            {
-                var radius = 5 * GridSize;
-                dc.DrawEllipse(PinkBrush, null, item.Position.ToCanvasPoint(), radius, radius);
-            }
         }
 
         private void DrawDeathGates(DrawingContext dc, CanvasData canvasData)
@@ -900,19 +763,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         private void DrawMarkers(DrawingContext dc, CanvasData canvasData)
         {
-
-            //BitmapImage img = new BitmapImage(new Uri("c:\\demo.jpg"));
-            //dc.DrawImage(img, new Rect(0, 0, img.PixelWidth, img.PixelHeight));
-
-            //foreach (var zone in DeathGates.Zones.Where(z => z.PortalScene != null))
-            //{
-            //    dc.DrawLine(RadarResources.SuccessPen, zone.EnterPosition.ToCanvasPoint(), zone.ExitPosition.ToCanvasPoint());
-            //}      
-
             if (!VisibilityFlags.HasFlag(RadarVisibilityFlags.Markers))
                 return;
 
-            foreach (var marker in Core.Markers.CurrentWorldMarkers)
+            foreach (var marker in Core.Markers)
             {
                 var pen = marker.MarkerType == WorldMarkerType.Objective ? RadarResources.EliteLightPen : RadarResources.MarkerPen;
                 var markerPoint = marker.Position.ToCanvasPoint();
@@ -947,22 +801,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
         }
 
-        private void DrawCombatRadius(DrawingContext dc, CanvasData canvasData)
-        {
-            //try
-            //{
-            //    var combatRadius = Core.Settings.Combat.Misc.NonEliteRange;
-            //    var radius = combatRadius * GridSize;
-            //    dc.DrawEllipse(null, RadarResources.GreyPen, Player.Point, radius, radius);
 
-            //    dc.DrawText(new FormattedText($"{combatRadius}", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("Arial"), 12, Brushes.LightYellow),
-            //        new Point(Player.Point.X, Player.Point.Y - (radius + 20)));
-            //}
-            //catch (Exception ex)
-            //{
-            //    Logger.Log("Exception in RadarUI.DrawCurrentpath(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            //}
-        }
 
         private DefaultNavigationProvider NavigationProvider { get; set; }
         public static Brush WhiteBrush { get; set; }
@@ -998,41 +837,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawCurrentpath(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("Exception in RadarUI.DrawCurrentpath(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
-
-
-        private PathGeometry _lastClusterGeom;
-        private DateTime _lastClusterGeomCreationTime = DateTime.MinValue;
-
-        private void DrawClusters(DrawingContext dc, CanvasData canvas)
-        {
-            try
-            {
-                if (ValueCluster != null && ValueCluster.Any())
-                {
-
-                    var points = GrahamScan.GrahamScanCompute(ValueCluster);
-
-                    dc.DrawPolygon(points.Select(p => p.ToCanvasPoint()), RadarResources.TransparentBrush, RadarResources.WhiteDashPen);
-
-                    var center = ValueClusterCenter.ToCanvasPoint();
-
-                    dc.DrawEllipse(BlackBrush, null, center, 5, 5);
-
-                    var text = $"{ClusterValue:0.00}%";
-
-                    DrawLabel(dc, canvas, text, center, YellowBrush);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception in RadarUI.DrawClusters(). {0} {1} {2}",
-                    ex.Message, ex.InnerException, ex);
-            }
-        }
 
         private void DrawTargetting(DrawingContext dc, CanvasData canvas)
         {
@@ -1074,7 +882,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -1094,67 +902,13 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
-        private void DrawKiteNodes(DrawingContext dc, CanvasData canvas)
-        {
-            try
-            {
-                if (!Core.Avoidance.GridEnricher.KiteNodeLayer.Any())
-                    return;
 
-                foreach (var pos in Core.Avoidance.GridEnricher.KiteNodeLayer)
-                {
-                    dc.DrawEllipse(null, new Pen(LineGreenBrush, 1 * Scale), pos.NavigableCenter.ToCanvasPoint(), 4 * Scale, 4 * Scale);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception in RadarUI.DrawKiteNodes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            }
-        }
 
-        private void DrawKiteFromNodes(DrawingContext dc, CanvasData canvas)
-        {
-            try
-            {
-                if (!Core.Avoidance.GridEnricher.KiteFromLayer.Any())
-                    return;
 
-                foreach (var pos in Core.Avoidance.GridEnricher.KiteFromLayer)
-                {
-                    dc.DrawEllipse(null, new Pen(RadarResources.LabelBrush, 1 * Scale), pos.NavigableCenter.ToCanvasPoint(), 4 * Scale, 4 * Scale);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception in RadarUI.DrawKiteFromNodes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            }
-        }
-
-        private void DrawSafeNodes(DrawingContext dc, CanvasData canvas)
-        {
-            try
-            {
-                Vector3 position;
-
-                foreach (var node in Core.Avoidance.GridEnricher.SafeNodeLayer)
-                {
-                    dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), 3 * Scale, 3 * Scale);
-                }
-
-                if (Core.Avoidance.Avoider.TryGetSafeSpot(out position))
-                {
-                    dc.DrawEllipse(BlueBrush, null, position.ToCanvasPoint(), 4 * Scale, 4 * Scale);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            }
-        }
 
         private void DrawTrinityGrid(DrawingContext dc, CanvasData canvas)
         {
@@ -1177,7 +931,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.LogVerbose("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Verbose("Exception in RadarUI.DrawAvoidanceGrid(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -1258,92 +1012,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 dc.DrawEllipse(DarkGrayBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
             }
 
-            //if (!node.AvoidanceFlags.HasFlag(AvoidanceFlags.AllowWalk) && VisibilityFlags.HasFlag(RadarVisibilityFlags.UnwalkableNodes))
-            //{
-            //    dc.DrawEllipse(BlackBrush, null, node.NavigableCenter.ToCanvasPoint(), size, size);
-            //}
         }
 
-        ///// <summary>
-        ///// Draws a line between unit actors and the nearest avoidance node
-        ///// </summary>
-        ///// <param name="dc"></param>
-        ///// <param name="canvas"></param>
-        //private void DrawNearestAvoidanceNodes(DrawingContext dc, CanvasData canvas)
-        //{
-        //    try
-        //    {
-        //        foreach (var unit in CacheManager.Units)
-        //        {
-        //            var nearestnode = unit.NearestNode;
-        //            if (nearestnode != null && nearestnode.Distance < TrinityGrid.MaxRange)
-        //            {
-        //                dc.DrawLine(RadarResources.LineOfSightPen, nearestnode.Position.ToCanvasPoint(), unit.Position.ToCanvasPoint());
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Log("Exception in RadarUI.DrawNearestAvoidanceNodes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-        //    }
-        //}
 
-        private void DrawLineTo(DrawingContext dc, CanvasData canvas, Vector3 position, Pen pen = null)
-        {
-            try
-            {
-                if (position == Vector3.Zero)
-                    return;
-
-                if (pen == null)
-                {
-                    pen = RadarResources.HighlightPen;
-                }
-                dc.DrawLine(pen, canvas.Center, position.ToCanvasPoint());
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception in RadarUI.DrawNearestAvoidanceNodes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            }
-        }
-
-        ///// <summary>
-        ///// Draws shows all the safenodes near the player
-        ///// </summary>
-        ///// <param name="dc"></param>
-        ///// <param name="canvas"></param>
-        //private void DrawSafeNodes(DrawingContext dc, CanvasData canvas)
-        //{
-        //    try
-        //    {
-        //        //Logger.Log("TelegraphBeamAvoidance");
-
-        //        //TrinityGrid.TelegraphBeamAvoidance(CacheManager.Me.Position, CacheManager.Me.Movement.GetHeadingDegreesFromMemory(), 50f);
-
-        //        //Logger.Log("Drawing FindSafeNodes");
-
-        //        //var nodes = TrinityGrid.FindSafeNodes(10f, 40f);
-
-        //        // Spiral Node Finder Test
-        //        for (int i = 0; i < _nodes.Count; i++)
-        //        {
-        //            var from = i == 0 ? CacheManager.Me.NearestNode : _nodes[i - 1];
-        //            var to = _nodes[i];
-
-        //            if (from == null || to == null)
-        //                continue;
-
-        //            dc.DrawLine(RadarResources.LineOfSightLightPen, from.Position.ToCanvasPoint(), to.Position.ToCanvasPoint());
-        //            dc.DrawEllipse(RadarResources.SafeBrush, null, to.Position.ToCanvasPoint(), 4, 4);
-        //        }
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Log("Exception in RadarUI.DrawSpiralTest(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-        //    }
-        //}
-
+  
         private Dictionary<DateTime, StaticTelegraph> _telegraphedNodes = new Dictionary<DateTime, StaticTelegraph>();
         private AvoidanceNode _testkiteNode;
 
@@ -1351,10 +1023,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         {
             public Vector3 Origin;
             public Vector3 Target;
-            //public float Distance;
-            //public double DirectionRadian;
-            //public double DirectionDegree;
-            //public Vector3 MaxCastPosition
         }
 
         private void DrawKiteDirection(DrawingContext dc, CanvasData canvas)
@@ -1371,270 +1039,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawKiteDirection(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("Exception in RadarUI.DrawKiteDirection(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
-        /// <summary>
-        /// Draw stuff for testing
-        /// </summary>
-        /// <param name="dc"></param>
-        /// <param name="canvas"></param>
-        private void DrawTest(DrawingContext dc, CanvasData canvas)
-        {
-            try
-            {
-                //var centroid = PositionCache.GetCentroid;
-                //if (centroid == Vector3.Zero)
-                //    return;
-
-                //var anchorPos = PositionCache.GetCentroid.ToCanvasPoint();
-                //dc.DrawEllipse(Brushes.Black, null, anchorPos, 8, 8);
-                //dc.DrawLine(new Pen(Brushes.Black, 3), CacheManager.Me.Position.ToCanvasPoint(), anchorPos);
-
-                //var poisonEnchantedObjects = CacheManager.Avoidances.Where(a => a.AvoidanceType == AvoidanceType.PoisonEnchanted).GroupBy(a => a.CreationTime);
-
-                //foreach (var enchanted in poisonEnchantedObjects)
-                //{
-                //    if (poisonEnchantedObjects.Where(o => o.NearbyActors(o.ActorSnoId, 20f) > 0)
-                //    {
-                //        o.Position.Round(10);
-                //    })) ;
-                //}
-
-                //foreach (var avoidanceGroup in CacheManager.Avoidances
-                //    .Where(a => a.AvoidanceType == AvoidanceType.PoisonEnchanted)
-                //    .GroupBy(a => a.CreationTime))
-                //{
-                //    Logger.Log("Group Detected {0}", avoidanceGroup.Key);
-                //}
-
-                //foreach (var avoidanceGroup in CacheManager.Avoidances.Where(a => a.ActorSnoId == 226808).GroupBy(a => a.CreationTime))
-                //{
-                //    Vector3 origin;
-                //    Vector3 target;
-
-                //    if (!_telegraphedNodes.ContainsKey(avoidanceGroup.Key))
-                //    {
-                //        // new 
-                //        var caster = CacheManager.EliteRareUniqueBoss.OrderBy(m => m.Position.Distance(CacheManager.Me.Position)).FirstOrDefault(m => m.MonsterAffixes.Contains(TrinityMonsterAffix.Waller));
-                //        if (caster == null)
-                //            continue;
-
-                //        Logger.Log("SummonerId={0}",caster.SummonerId);
-
-                //        origin = caster.Position;
-                //        target = CacheManager.Me.Position;
-
-                //        _telegraphedNodes.Add(avoidanceGroup.Key, new StaticTelegraph
-                //        {
-                //            Origin = origin,
-                //            Target = target
-                //        });
-
-                //    }
-                //    else
-                //    {
-                //        // existing
-                //        var cached = _telegraphedNodes[avoidanceGroup.Key];
-                //        origin = cached.Origin;
-                //        target = cached.Target;
-                //    }
-
-                //    var wallgroup = avoidanceGroup.OrderByDescending(a => a.Position.Distance(origin)).ToList();
-                //    if (!wallgroup.Any())
-                //        continue;
-
-
-                //        var furtherestAwayWall = wallgroup.First();
-                //        TrinityObject endWall = null;
-
-                //        //dc.DrawLine(RadarResources.CurrentPathPen, origin.ToCanvasPoint(), endWall.Position.ToCanvasPoint());
-
-                //        var distance = origin.Distance(target);
-                //        var directionRadian = MathUtil.FindDirectionRadian(origin, target);
-                //        var directionDegree = MathUtil.RadianToDegree(directionRadian);
-                //        var halfPI = Math.PI/2;
-                //        var effectiveRadius = (furtherestAwayWall.Radius / 2.5f) * 2;
-
-                //    if (wallgroup.Count > 4)
-                //    {
-                //        endWall = wallgroup.First();
-                //        var endWallStart = MathEx.GetPointAt(endWall.Position, effectiveRadius, MathUtil.WrapAngle((float) (directionRadian - Math.PI - halfPI)));
-                //        var endWallEnd = MathEx.GetPointAt(endWall.Position, effectiveRadius, (float) (directionRadian - halfPI));
-                //        dc.DrawLine(RadarResources.CurrentPathPen, endWallStart.ToCanvasPoint(), endWallEnd.ToCanvasPoint());                        
-                //    }
-
-                //    //var le = new LineEquation(endWallStart.ToPoint(), endWallEnd.ToPoint());                        
-
-                //        foreach (var sideWall in wallgroup)
-                //        {
-                //            if (endWall != null && sideWall.Equals(endWall))
-                //                continue;
-
-                //            var start = MathEx.GetPointAt(sideWall.Position, effectiveRadius, MathUtil.WrapAngle((float)(directionRadian - Math.PI)));
-                //            var end = MathEx.GetPointAt(sideWall.Position, effectiveRadius, (float)directionRadian);
-
-                //            //var le2 = new LineEquation(start.ToPoint(), end.ToPoint());                            
-                //            //Point intersection;
-                //            //if (le2.IntersectsWithLine(le, out intersection))
-                //            //{
-                //            //    end = intersection.ToVector3();
-                //            //    if (end.Distance(endWallStart) < end.Distance(endWallEnd))
-                //            //        endWallStart = end;
-                //            //    else
-                //            //        endWallEnd = end;
-                //            //}                                
-
-                //            dc.DrawLine(RadarResources.CurrentPathPen, start.ToCanvasPoint(), end.ToCanvasPoint());
-                //        }
-
-                //}
-
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception in RadarUI.DrawHeadingTest(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            }
-        }
-
-
-        ///// <summary>
-        ///// Draws a line between unit actors and the nearest avoidance node
-        ///// </summary>
-        ///// <param name="dc"></param>
-        ///// <param name="canvas"></param>
-        private void DrawLineToSafeNode(DrawingContext dc, CanvasData canvas)
-        {
-            try
-            {
-                //var safestNode = Core.Avoidance.KiteNodes.FirstOrDefault();
-                //if(safestNode != null)
-                //    dc.DrawLine(RadarResources.LineOfSightPen, canvas.Center, safestNode.NavigableCenter.ToCanvasPoint());
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Exception in RadarUI.DrawTest(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-            }
-        }
-
-        //private void DrawActualObjectBounds(DrawingContext dc, CanvasData canvas, TrinityObject trinityObject)
-        //{
-        //    try
-        //    {
-        //        //var worldWidth = trinityObject.Object.ActorInfo.AxialCylinder.Ax1;
-        //        //var worldHeight = trinityObject.Object.ActorInfo.AxialCylinder.Ax2;
-        //        //var canvasWidth = worldWidth * GridSize;
-        //        //var canvasHeight = worldHeight * GridSize;
-        //        var worldPosition = new Vector3(trinityObject.Position.X, trinityObject.Position.Y, 0);
-        //        var point = worldPosition.ToCanvasPoint();
-        //        //var rect = new Rect(point, new Size(canvasWidth, canvasHeight));
-        //        //var angle = 360-(trinityObject.RotationDegrees - canvas.GobalRotation);
-
-        //        //rect.Offset(-canvasWidth / 2, -canvasHeight / 2);
-
-        //        //var rotationTransform = new RotateTransform(angle, point.X, point.Y);
-        //        ////var topLeft = rotationTransform.Transform(rect.TopLeft);
-        //        ////var topRight = rotationTransform.Transform(rect.TopRight);
-        //        ////var bottomLeft = rotationTransform.Transform(rect.BottomLeft);
-        //        ////var bottomRight = rotationTransform.Transform(rect.BottomRight);
-
-
-        //        //var testRect = RectangleF.(left, top, right, bottom);
-        //        //testRect.Offset(-10, -10);
-
-        //        //dc.DrawRectangle(Brushes.Tomato, null, rect.);
-
-        //        var shape = trinityObject.Shape;
-        //        shape.Figures.ForEach(f => f.);
-
-
-        //        //figures.Add(new PathFigure(bottomRight, segments, true));
-        //        var geo = new PathGeometry(shape.Figures, FillRule.Nonzero, null);
-        //        var transform = new ScaleTransform(10,10);
-        //        transform.Transform(geo);
-        //        geo.Bounds.Offset();
-        //        dc.DrawGeometry(Brushes.Yellow, null, geo); 
-        //        //geo.GetOutlinedPathGeometry();
-
-
-        //        //var transforms = new TransformGroup();
-        //        //transforms.Children.Add(new ScaleTransform(10, 10));
-        //        //transforms.Children.Add(canvas.);
-
-        //        //shape.Transform = transforms;
-        //        //DrawRotatedRectangle(dc, canvas, topLeft, bottomLeft, bottomRight, topRight);
-
-        //        dc.DrawGeometry(Brushes.GreenYellow, null, shape);
-
-        //        dc.DrawEllipse(Brushes.Tomato, null, point, 4, 4);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Log("Exception in RadarUI.DrawActualObjectBounds(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-        //    }
-        //}
-
-        //private void DrawActualObjectBounds(DrawingContext dc, CanvasData canvas, TrinityObject trinityObject)
-        //{
-        //    try
-        //    {
-        //        var worldWidth = trinityObject.Object.ActorInfo.AxialCylinder.Ax1;
-        //        var worldHeight = trinityObject.Object.ActorInfo.AxialCylinder.Ax2;
-        //        var canvasWidth = worldWidth * GridSize;
-        //        var canvasHeight = worldHeight * GridSize;
-        //        var worldPosition = new Vector3(trinityObject.Position.X, trinityObject.Position.Y, 0);
-        //        var point = worldPosition.ToCanvasPoint();
-        //        var rect = new Rect(point, new Size(canvasWidth, canvasHeight));
-        //        var angle = 360-(trinityObject.RotationDegrees - canvas.GobalRotation);
-
-        //        rect.Offset(-canvasWidth / 2, -canvasHeight / 2);
-
-        //        var rotationTransform = new RotateTransform(angle, point.X, point.Y);
-        //        var topLeft = rotationTransform.Transform(rect.TopLeft);
-        //        var topRight = rotationTransform.Transform(rect.TopRight);
-        //        var bottomLeft = rotationTransform.Transform(rect.BottomLeft);
-        //        var bottomRight = rotationTransform.Transform(rect.BottomRight);
-
-
-        //        //var testRect = RectangleF.(left, top, right, bottom);
-        //        //testRect.Offset(-10, -10);
-
-        //        //dc.DrawRectangle(Brushes.Tomato, null, rect.);
-
-        //        //MathUtil.GetRotatedPathGeometry();
-        //        DrawRotatedRectangle(dc, canvas, topLeft, bottomLeft, bottomRight, topRight);
-
-        //        dc.DrawEllipse(Brushes.Tomato, null, point, 4, 4);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Log("Exception in RadarUI.DrawActualObjectBounds(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-        //    }
-        //}
-
-        //private void DrawActualObjectBounds(DrawingContext dc, CanvasData canvas, TrinityObject trinityObject)
-        //{
-        //    try
-        //    {
-        //        //var rect = trinityObject.ActorInfo.AABBBounds.ToCanvasRect();
-        //        var rect = trinityObject.ActorInfo.AABBBounds.ToRelativeCanvasRect(trinityObject.Position);
-
-        //        //var bounds = trinityObject.InnerBounds;
-        //        var topLeft = rect.TopLeft.ToCanvasPoint();
-        //        var topRight = rect.TopRight.ToCanvasPoint();
-        //        var bottomLeft = rect.BottomLeft.ToCanvasPoint();
-        //        var bottomRight = rect.BottomRight.ToCanvasPoint();
-
-        //        DrawRectangle(dc, canvas, topLeft, bottomLeft, bottomRight, topRight);
-        //        //DrawPolygon(dc, canvas, bounds.Select(p => p.ToCanvasPoint()));
-        //        //DrawPolygon
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Logger.Log("Exception in RadarUI.DrawActualObjectBounds(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
-        //    }
-        //}
 
         private void DrawNodeArea(DrawingContext dc, CanvasData canvas, AvoidanceNode node, Brush brush, Pen pen = null)
         {
@@ -1648,51 +1056,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 dc.DrawEllipse(brush, null, node.NavigableCenter.ToCanvasPoint(), 4 * Scale, 4 * Scale);
 
-                //var id = "Node_" + node.Center.X + node.Center.Y;
-
-                //if (!Drawings.Relative.ContainsKey(id))
-                //{
-                //    var drawing = new DrawingGroup();
-
-                //    if (brush == null)
-                //        brush = Brushes.Yellow;
-
-                //    using (var groupdc = drawing.Open())
-                //    {
-                //        var figures = new List<PathFigure>();
-
-                //        var segments = new[]
-                //        {
-                //            new LineSegment(node.BottomLeft.ToCanvasPoint(), true),
-                //            new LineSegment(node.TopLeft.ToCanvasPoint(), true),
-                //            new LineSegment(node.TopRight.ToCanvasPoint(), true),
-                //        };
-
-                //        figures.Add(new PathFigure(node.BottomRight.ToCanvasPoint(), segments, true));
-                //        var geo = new PathGeometry(figures, FillRule.Nonzero, null);
-                //        groupdc.DrawGeometry(brush, pen, geo);
-                //    }
-
-                //    var d = new RelativeDrawing
-                //    {
-                //        Drawing = drawing,
-                //        Origin = CenterActor.Morph,
-                //        Center = node.Center,
-                //        WorldId = CacheManager.Me.WorldId,
-                //        Type = DrawingType.NodeArea
-                //    };
-
-                //    Drawings.Relative.TryAdd(id, d);
-                //    dc.DrawDrawing(d.Drawing);
-                //}
-                //else
-                //{       
-                //    dc.DrawDrawing(Drawings.Relative[id].Drawing);
-                //}
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawRotatedRectangle(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("Exception in RadarUI.DrawRotatedRectangle(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -1731,45 +1098,10 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawRotatedRectangle(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("Exception in RadarUI.DrawRotatedRectangle(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
-
-
-        //https://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-        //int pnpoly(int nvert, float[] vertx, float[] verty, float testx, float testy)
-        //{
-        //    int i, j, c = 0;
-        //    for (i = 0, j = nvert - 1; i < nvert; j = i++)
-        //    {
-        //        if (((verty[i] > testy) != (verty[j] > testy)) &&
-        //         (testx < (vertx[j] - vertx[i]) * (testy - verty[i]) / (verty[j] - verty[i]) + vertx[i]))
-        //            c = ~c;
-        //    }
-        //    return c;
-        //}
-
-        //public List<Vector3> GetOutlineEdges(List<Vector3> points)
-        //{
-        //    var output = new List<Point>();
-
-        //    output = GrahamScan.GrahamScanCompute(points);
-
-        //    //float min = 0;
-        //    //float max = 0;
-        //    //Polygon.
-        //    //for (int i = 0; i < points.Count; i++)
-        //    //{
-        //    //    var point = points.ElementAt(i);                
-        //    //    if(point.)
-        //    //}
-        //    //var groupByMultiplicity = points.GroupBy(p => p, new PointComparer());
-
-        //    //var output = groupByMultiplicity.Where(grp => grp.Count() == 1).Select(grp => grp.Key).ToList();
-
-        //    return output;
-        //}
 
         public static class GrahamScan
         {
@@ -1927,36 +1259,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
         }
 
-        //public List<Point> GetOutlineEdges(IEnumerable<Point> points)
-        //{
-        //    var groupByMultiplicity = points.GroupBy(p => p, new PointComparer());
-
-        //    var output = groupByMultiplicity.Where(grp => grp.Count() == 1).Select(grp => grp.Key).ToList();
-
-        //    return output;
-        //}
-
-        //public class PointComparer : IEqualityComparer<Point>
-        //{
-        //    public bool Equals(Point a, Point b)
-        //    {
-        //        var aX = (int)a.X;
-        //        var aY = (int)a.Y;
-        //        var bX = (int)b.Y;
-        //        var bY = (int)b.Y;
-        //        bool r1 = (aX == bX && aY == bY);
-        //        bool r2 = (aX == bY && aX == bY);
-        //        bool r3 = (aX < bX && aY < bY);
-        //        bool r4 = (aX > bX && aY > bY);
-        //        return r1 || r2 || r3 || r4;
-        //    }
-
-        //    public int GetHashCode(Point obj)
-        //    {
-        //        return 0;
-        //    }
-        //}
-
         private bool _isSceneInfoVisible;
         private List<ExplorationNode> _explorationNodes;
 
@@ -2097,7 +1399,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawScenes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("Exception in RadarUI.DrawScenes(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -2115,31 +1417,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
         }
 
-        //public class AnimationCounter
-        //{
-        //    private Stopwatch _sw = new Stopwatch();
-
-        //    private System.Threading.Timer AutoRunTimer;
-
-        //    public int Max { get; }
-
-        //    public int Value { get { return _sw.ElapsedMilliseconds; } }
-
-        //    public AnimationCounter(int max)
-        //    {
-        //        Max = max;
-        //        AutoRunTimer = new System.Threading.Timer(tick, "", 
-        //            TimeSpan.FromMilliseconds(250), 
-        //            TimeSpan.FromMilliseconds(250));
-        //    }
-
-        //    private void tick(object data)
-        //    {
-        //        if(_sw.ElapsedMilliseconds > Max)
-        //    }
-        //}
-
-        //private AnimationCounter SelectedAnimationCounter = new AnimationCounter(360);
 
         private void DrawSelection(DrawingContext dc, CanvasData canvas, RadarObject radarObject)
         {
@@ -2172,11 +1449,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 HitTester.AddEllipse(radarObject, radarObject.Point, actorRadius, actorRadius);
             }
 
-        }
-
-        private void DrawDebugVisuals(DrawingContext dc, CanvasData canvas)
-        {
-            RadarDebug.Render(dc, canvas);
         }
 
 
@@ -2290,7 +1562,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.DrawActor(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
+                Core.Logger.Log("Exception in RadarUI.DrawActor(). {0} {1} {2}", ex.Message, ex.InnerException, ex);
             }
         }
 
@@ -2317,48 +1589,6 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         }
 
 
-        //private void DrawGrid(DrawingContext dc, CanvasData canvas, int gridLineFrequency)
-        //{
-        //    StaticDrawing sd;
-
-        //    if (!Drawings.Static.TryGetValue("Grid", out sd))
-        //    {
-        //        var drawing = new DrawingGroup();
-
-        //        using (var groupdc = drawing.Open())
-        //        {
-        //            // vertical lines
-        //            int pos = 0;
-        //            do
-        //            {
-        //                groupdc.DrawLine(RadarResources.GridPen, new Point(pos, 0), new Point(pos, (int)canvas.CanvasSize.Height));
-        //                pos += (int)canvas.GridSquareSize.Height * gridLineFrequency;
-
-        //            } while (pos < canvas.CanvasSize.Width);
-
-        //            // horizontal lines
-        //            pos = 0;
-        //            do
-        //            {
-        //                groupdc.DrawLine(RadarResources.GridPen, new Point(0, pos), new Point((int)canvas.CanvasSize.Width, pos));
-        //                pos += (int)canvas.GridSquareSize.Width * gridLineFrequency;
-
-        //            } while (pos < canvas.CanvasSize.Height);
-        //        }
-
-        //        drawing.Freeze();
-
-        //        Drawings.Static.TryAdd("Grid", new StaticDrawing
-        //        {
-        //            Drawing = drawing,
-        //            WorldId = CacheManager.WorldId
-        //        });
-        //    }
-        //    else
-        //    {
-        //        dc.DrawDrawing(sd.Drawing);
-        //    }
-        //}
 
     }
 

@@ -1,7 +1,7 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Windows.Forms;
 using System.Windows.Media;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 
 namespace Trinity.UI.Visualizer.RadarCanvas
@@ -510,7 +510,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
             catch (Exception ex)
             {
-                Logger.Log("Exception in RadarUI.GetActorColor(). {0} {1}", ex.Message, ex.InnerException);
+                Core.Logger.Log("Exception in RadarUI.GetActorColor(). {0} {1}", ex.Message, ex.InnerException);
             }
             return res;
         }

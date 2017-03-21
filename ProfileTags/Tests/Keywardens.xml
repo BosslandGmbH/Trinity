@@ -1,0 +1,11 @@
+﻿<Profile>
+  <Name>Tag Test - Keywardens</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> Keywardens Test Started " />
+
+    <Keywardens/>
+
+    <LogMessage message=">> Keywardens Test Finished " />
+  </Order>
+</Profile>

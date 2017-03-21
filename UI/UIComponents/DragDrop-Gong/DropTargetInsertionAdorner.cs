@@ -9,7 +9,7 @@ using GongSolutions.Wpf.DragDrop.Utilities;
 
 namespace Trinity.UI.UIComponents
 {
-  public class DropTargetInsertionAdorner : DropTargetAdorner
+    public class DropTargetInsertionAdorner : DropTargetAdorner
   {
     public DropTargetInsertionAdorner(UIElement adornedElement)
       : base(adornedElement)

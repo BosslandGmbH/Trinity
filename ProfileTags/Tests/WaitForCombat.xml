@@ -1,0 +1,29 @@
+﻿<Profile>
+  <Name>Tag Test - WaitForCombat</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> WaitForCombat Test Started " />
+
+    <!--
+    <WaitForCombat seconds="30"/>
+
+    <If condition="ZetaDia.Me.IsInCombat">
+      <LogMessage message=">> Stopped Waiting, Is in Combat" />
+    </If>
+    <If condition="not ZetaDia.Me.IsInCombat">
+      <LogMessage message=">> Stopped Waiting, NOT in Combat" />
+    </If>
+    -->
+
+    <Wait seconds="30" stopCondition="ZetaDia.Me.IsInCombat"/>
+    
+    <If condition="ZetaDia.Me.IsInCombat">
+      <LogMessage message=">> Stopped Waiting, Is in Combat" />
+    </If>
+    <If condition="not ZetaDia.Me.IsInCombat">
+      <LogMessage message=">> Stopped Waiting, NOT in Combat" />
+    </If>
+    
+    <LogMessage message=">> WaitForCombat Test Finished " />
+  </Order>
+</Profile>

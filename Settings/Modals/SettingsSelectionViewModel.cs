@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Trinity.Framework.Helpers;
 using Trinity.UI.UIComponents;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Settings.Modals
 {
@@ -99,7 +100,7 @@ namespace Trinity.Settings.Modals
         public ICommand SelectAllCommand => new RelayCommand(param =>
         {
 
-            Logger.Info("SelectAllCommand fired");
+            Core.Logger.Log("SelectAllCommand fired");
 
             foreach (var item in Selections)
             {
@@ -110,7 +111,7 @@ namespace Trinity.Settings.Modals
 
         public ICommand SelectNoneCommand => new RelayCommand(param =>
         {
-            Logger.Info("SelectNoneCommand fired");
+            Core.Logger.Log("SelectNoneCommand fired");
 
             foreach (var item in Selections)
             {

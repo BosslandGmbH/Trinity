@@ -4,7 +4,7 @@ using System.Windows.Documents;
 
 namespace Trinity.UI.UIComponents
 {
-  public abstract class DropTargetAdorner : Adorner
+    public abstract class DropTargetAdorner : Adorner
   {
     public DropTargetAdorner(UIElement adornedElement)
       : base(adornedElement)

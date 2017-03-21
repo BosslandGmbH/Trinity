@@ -1,16 +1,13 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
-using Trinity.Components.Adventurer.Util;
-using Trinity.Framework.Helpers;
-using Trinity.ProfileTags;
-using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.Service;
 using Zeta.Game.Internals.SNO;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.Game.Quests
 {
@@ -33,17 +30,17 @@ namespace Trinity.Components.Adventurer.Game.Quests
             var failed = stats.Count(s => s.IsFailed);
             var incomplete = stats.Count(s => s.IsIncomplete);
 
-            Logger.Info("[BountyStatistics] Total Time: {0:dd\\ hh\\:mm\\:ss}", totalTime);
-            Logger.Info("[BountyStatistics] Average Time: {0:hh\\:mm\\:ss}", averageTime);
-            Logger.Info("[BountyStatistics] Per hour: {0:0.##}", bountiesPerHour);
-            Logger.Info("[BountyStatistics] Time Wasted: {0:hh\\:mm\\:ss}", timeWasted);
-            Logger.Info("[BountyStatistics] Completed Acts: {0}", CompletedBountyActs);
-            Logger.Info("[BountyStatistics] Unsupported Act Restarts: {0}", RestartsFromUnsupported);
-            Logger.Info("[BountyStatistics] Total Bounties: {0}", count);
-            Logger.Info("[BountyStatistics] Success Count: {0}", successful);
-            Logger.Info("[BountyStatistics] Failed Count: {0}", failed);
-            Logger.Info("[BountyStatistics] Incomplete Count: {0}", incomplete);
-            Logger.Info("[BountyStatistics] Success Rate: {0:#.##}%", (successful/(double)count)*100);
+            Core.Logger.Log("[BountyStatistics] Total Time: {0:dd\\ hh\\:mm\\:ss}", totalTime);
+            Core.Logger.Log("[BountyStatistics] Average Time: {0:hh\\:mm\\:ss}", averageTime);
+            Core.Logger.Log("[BountyStatistics] Per hour: {0:0.##}", bountiesPerHour);
+            Core.Logger.Log("[BountyStatistics] Time Wasted: {0:hh\\:mm\\:ss}", timeWasted);
+            Core.Logger.Log("[BountyStatistics] Completed Acts: {0}", CompletedBountyActs);
+            Core.Logger.Log("[BountyStatistics] Unsupported Act Restarts: {0}", RestartsFromUnsupported);
+            Core.Logger.Log("[BountyStatistics] Total Bounties: {0}", count);
+            Core.Logger.Log("[BountyStatistics] Success Count: {0}", successful);
+            Core.Logger.Log("[BountyStatistics] Failed Count: {0}", failed);
+            Core.Logger.Log("[BountyStatistics] Incomplete Count: {0}", incomplete);
+            Core.Logger.Log("[BountyStatistics] Success Rate: {0:#.##}%", (successful / (double)count) * 100);
 
             var incompleteStats = stats.Where(s => !(s.IsCompleted || s.IsFailed)).DistinctBy(s => s.QuestId).ToList();
 
@@ -55,19 +52,19 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 var failureCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsFailed);
                 var wasted = stats.Where(s => s.QuestId == item1.QuestId && !(s.IsCompleted || s.IsFailed));
                 var wastedAvg = wasted.Any() ? 0 : wasted.Average(s => (s.EndTime - s.StartTime).TotalSeconds);
-                  
-                Logger.Info($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name} TimeAvg: {wastedAvg}");
+
+                Core.Logger.Log($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name} TimeAvg: {wastedAvg}");
             }
 
             foreach (var item in incompleteStats)
             {
-                Logger.Raw($"    <RunBounty questId=\"{item.QuestId}\" name=\"{item.Name}\" />");
+                Core.Logger.Raw($"    <RunBounty questId=\"{item.QuestId}\" name=\"{item.Name}\" />");
             }
 
-            //Logger.Info("[BountyStatistics] Slowest Bounties:");
+            //Core.Logger.Log("[BountyStatistics] Slowest Bounties:");
             //foreach(var item in stats.Where(s => s.IsCompleted).OrderByDescending(s => s.Duration).Take(10))
             //{
-            //    Logger.Info($"[BountyStatistics] {item.Duration:hh:mm:ss}: {item.Name} ({item.QuestId})");
+            //    Core.Logger.Log($"[BountyStatistics] {item.Duration:hh:mm:ss}: {item.Name} ({item.QuestId})");
             //}
 
             //foreach (var item in stats.Where(s => s.IsCompleted))
@@ -77,34 +74,46 @@ namespace Trinity.Components.Adventurer.Game.Quests
             //    var successCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsCompleted);
             //    var failureCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsFailed);
 
-            //    Logger.Info($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name} TimeAvg: {wastedAvg}");
+            //    Core.Logger.Log($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name} TimeAvg: {wastedAvg}");
             //}
-
         }
 
         private static long _lastPulseTime;
+
         public static void Pulse()
         {
-            if (PluginTime.ReadyToUse(_lastPulseTime, 2000))
-            {
-                _lastPulseTime = PluginTime.CurrentMillisecond;
-                var gameId = ZetaDia.Service.CurrentGameId;
-                foreach (var bountyStatistic in Stats.Where(s => !(s.IsCompleted || s.IsFailed) && s.GameId == gameId))
-                {
-                    bountyStatistic.LastSeen = DateTime.UtcNow;
-                }
+            //if (PluginTime.ReadyToUse(_lastPulseTime, 2000))
+            //{
+            //    GameId gameId = default(GameId);
+            //    _lastPulseTime = PluginTime.CurrentMillisecond;
+            //    try
+            //    {
+            //        gameId = ZetaDia.Service.CurrentGameId;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Core.Logger.Error($"Exception reading ZetaDia.Service.CurrentGameId {ex}");
+            //    }
 
-                var isTurnIn = BountyHelpers.IsAnyActTurninInProgress();
-                if (isTurnIn != _isTurnInInProgress)
-                {
-                    _isTurnInInProgress = isTurnIn;
-                    if (isTurnIn)
-                    {
-                        CompletedBountyActs++;
-                    }
-                }
+            //    if (gameId.FactoryId == 0)
+            //        return;
 
-            }
+            //    foreach (var bountyStatistic in Stats.Where(s => !(s.IsCompleted || s.IsFailed) && s.GameId == gameId))
+            //    {
+            //        bountyStatistic.LastSeen = DateTime.UtcNow;
+            //    }
+
+            //    var isTurnIn = BountyHelpers.IsAnyActTurninInProgress();
+            //    if (isTurnIn != _isTurnInInProgress)
+            //    {
+            //        _isTurnInInProgress = isTurnIn;
+            //        if (isTurnIn)
+            //        {
+            //            CompletedBountyActs++;
+            //        }
+            //    }
+
+            //}
         }
 
         public static IEnumerable<BountyStatistic> CurrentGame => Stats.Where(b => ZetaDia.Service.CurrentGameId == b.GameId);
@@ -121,7 +130,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             CompletedBountyActs = 0;
             RestartsFromUnsupported = 0;
         }
-
     }
 
     public class BountyStatistic
@@ -154,9 +162,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         private BountyStatistic()
         {
-
         }
-
 
         public static BountyStatistic GetInstance(int questId)
         {
@@ -166,12 +172,12 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 return stat;
             }
-            var quest = ZetaDia.ActInfo.AllQuests.FirstOrDefault(q => q.QuestSNO == questId);
+            var quest = ZetaDia.Storage.Quests.AllQuests.FirstOrDefault(q => q.QuestSNO == questId);
 
             var steps = quest?.QuestRecord?.Steps.Aggregate(string.Empty,
-                (str, cur) => str + cur.QuestStepObjectiveSet.QuestStepObjectives.Aggregate(string.Empty, 
+                (str, cur) => str + cur.QuestStepObjectiveSet.QuestStepObjectives.Aggregate(string.Empty,
                         (str2, cur2) => str2 + $"{cur2.StepObjectiveName} ({cur2.ObjectiveType}), "));
-            
+
             stat = new BountyStatistic
             {
                 QuestId = questId,
@@ -184,7 +190,5 @@ namespace Trinity.Components.Adventurer.Game.Quests
             BountyStatistics.Stats.Add(stat);
             return stat;
         }
-
-
     }
 }

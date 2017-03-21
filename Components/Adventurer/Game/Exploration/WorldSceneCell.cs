@@ -23,7 +23,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             MaxY = zoneMin.Y + navCell.Max.Y;
             NavCellFlags = navCell.Flags;
             IsWalkable = NavCellFlags.HasFlag(NavCellFlags.AllowWalk);
-            
+
             Z = Math.Max(navCell.Min.Z, navCell.Max.Z);
         }
 

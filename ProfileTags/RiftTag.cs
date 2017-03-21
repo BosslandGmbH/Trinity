@@ -1,8 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.RiftCoroutines;
 using Trinity.Components.Adventurer.Settings;
-using Trinity.Components.Adventurer.Util;
+using Trinity.Components.QuestTools;
+using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
 using Zeta.Game.Internals;
@@ -11,38 +13,55 @@ using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
 {
-    [XmlElement("Rift")]
-    public class RiftTag : ProfileBehavior
+    [XmlElement("NephalemRift")]
+    public class NephalemRiftTag : RiftProfileBehavior
     {
+        public NephalemRiftTag() { SelectedRiftType = RiftType.Nephalem; }
+    }
+
+    [XmlElement("GreaterRift")]
+    public class GreaterRiftTag : RiftProfileBehavior
+    {
+        public GreaterRiftTag() { SelectedRiftType = RiftType.Greater; }
+    }
+
+    [XmlElement("Rift")]
+    public class RiftTag : RiftProfileBehavior { }
+
+    public class RiftProfileBehavior : BaseProfileBehavior
+    {
+        protected RiftCoroutine _riftCoroutine;
+
+        #region XmlAttributes
+
+        [XmlAttribute("type")]
+        [XmlAttribute("riftType")]
+        [Description("whether greater or nephalem rifts should be opened")]
+        public RiftType SelectedRiftType { get; set; }
+        // Greater, Nephalem,
 
         [XmlAttribute("level")]
+        [Description("level of greater rifts")]
         public virtual int Level { get; set; }
 
         [XmlAttribute("empowered")]
+        [Description("If rift should be empowered when opened")]
         public bool IsEmpowered { get; set; }
 
         [XmlAttribute("getXPShrine")]
+        [Description("If nephalem rifts should be run until bonux XP shrine is found")]
         public bool IsGetXPShrine { get; set; }
-
+        
+        [XmlAttribute("count")]
         [XmlAttribute("riftCount")]
+        [Description("The number of rifts to complete before tag finishes")]
         public int RiftCount { get; set; }
 
-        private readonly Stopwatch _stopwatch = new Stopwatch();
-        private RiftCoroutine _riftCoroutine;
-        private bool _isDone;
+        #endregion
 
-        public override bool IsDone
-        {
-            get
-            {
-                return _isDone;
-            }
-        }
-
-        public override void OnStart()
+        public override async Task<bool> StartTask()
         {
             if (Level == 0) Level = -1;
-            _stopwatch.Start();
 
             var riftOptions = new RiftCoroutine.RiftOptions
             {
@@ -51,33 +70,17 @@ namespace Trinity.ProfileTags
                 NormalRiftForXPShrine = IsGetXPShrine || PluginSettings.Current.NormalRiftForXPShrine,
             };
 
-            _riftCoroutine = new RiftCoroutine(RiftType.Nephalem, riftOptions);
+            _riftCoroutine = new RiftCoroutine(SelectedRiftType, riftOptions);
+            return false;
         }
 
-        protected override Composite CreateBehavior()
+        public override async Task<bool> MainTask()
         {
-            return new ActionRunCoroutine(ctx => Coroutine());
-        }
+            if (!await _riftCoroutine.GetCoroutine())
+                return false;
 
-        public async Task<bool> Coroutine()
-        {
-            if (await _riftCoroutine.GetCoroutine())
-            {
-                _isDone = true;
-            }
             return true;
         }
 
-        public override void OnDone()
-        {
-            Logger.Info("[Rift] It took {0} ms to finish the rift", _stopwatch.ElapsedMilliseconds);
-            base.OnDone();
-        }
-
-        public override void ResetCachedDone(bool force = false)
-        {
-            _isDone = false;
-            _riftCoroutine = null;
-        }
     }
 }

@@ -6,6 +6,7 @@ namespace Trinity.Components.Adventurer.Game.Events
     public abstract class PulsingObject : IDisposable
     {
         #region OnPulse Implementation
+
         protected bool IsPulsing;
 
         protected void EnablePulse()
@@ -31,7 +32,7 @@ namespace Trinity.Components.Adventurer.Game.Events
             OnPulse();
         }
 
-        #endregion
+        #endregion OnPulse Implementation
 
         public void Dispose()
         {

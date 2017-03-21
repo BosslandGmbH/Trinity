@@ -48,14 +48,14 @@ namespace Trinity.Framework.Helpers
         }
 
         public int Delay { get; set; }
-        public DateTime LastUpdate { get; set; }    
+        public DateTime LastUpdate { get; set; }
         public bool IsValueOverride { get; private set; }
 
         public T GetValue(Func<T> retriever)
         {
-            if (IsCacheValid) 
+            if (IsCacheValid)
                 return CachedValue;
-                        
+
             return CachedValue = retriever();
         }
 
@@ -77,6 +77,5 @@ namespace Trinity.Framework.Helpers
         {
             Clear();
         }
-
     }
 }

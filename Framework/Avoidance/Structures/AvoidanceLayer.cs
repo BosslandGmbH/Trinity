@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework.Grid;
 using Trinity.Framework.Helpers;
 using Zeta.Common;
 
@@ -73,11 +74,10 @@ namespace Trinity.Framework.Avoidance.Structures
 
         public void AddRange(IEnumerable<AvoidanceNode> items)
         {
-            foreach(var node in items)
+            foreach (var node in items)
             {
                 Add(node);
             }
         }
-
     }
 }

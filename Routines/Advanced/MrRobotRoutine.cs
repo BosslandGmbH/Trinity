@@ -1,22 +1,16 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Scripting.Utils;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Attributes;
-using Trinity.Reference;
-using Logger = Trinity.Framework.Helpers.Logger;
-using Trinity.Routines.Barbarian;
+using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI;
 using Trinity.UI.UIComponents;
@@ -472,7 +466,7 @@ namespace Trinity.Routines.Advanced
                 // But we still need to persist settings for all skills used to-date.
                 // Also need to populate with reference skill info for the pretty UI Icons etc.
 
-                if (!Player.IsInGame && !Core.IsEnabled || !ZetaDia.IsInGame)
+                if (!Player.IsInGame && !ModuleManager.IsEnabled || !ZetaDia.IsInGame)
                     return;
 
                 var activeSettings = SkillUtils.Active.Select(s => new SkillSettings(s)).ToList();
@@ -492,7 +486,7 @@ namespace Trinity.Routines.Advanced
 
             private void UpdateWeights(bool reset = false)
             {
-                if (!Player.IsInGame && !Core.IsEnabled || !ZetaDia.IsInGame)
+                if (!Player.IsInGame && !ModuleManager.IsEnabled || !ZetaDia.IsInGame)
                     return;
 
                 if (Weights == null || !Weights.Any() || reset)
@@ -524,7 +518,7 @@ namespace Trinity.Routines.Advanced
 
             public void OnSave()
             {
-                Logger.LogNormal("Mr Robot Saved.");
+                Core.Logger.Log("Mr Robot Saved.");
 
                 foreach (var weightSetting in WeightOverrides)
                 {

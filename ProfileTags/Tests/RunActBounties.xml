@@ -1,0 +1,17 @@
+﻿<Profile>
+  <Name>Tag Test - Bounties</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> Explore Test Started " />
+
+    <!--<RunActBounties act="A1" />
+
+    <RunActBounties act="All" />-->
+
+    <!--<RunActBounties act="Balance" />-->
+
+    <RunActBounties />
+  
+    <LogMessage message=">> Explore Test Finished " />
+  </Order>
+</Profile>

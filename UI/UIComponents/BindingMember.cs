@@ -1,18 +1,21 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
-using Trinity.Framework.Helpers;
+using JetBrains.Annotations;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Attributes;
 using Zeta.Bot;
+using Zeta.Game;
 
 namespace Trinity.UI.UIComponents
 {
-    public class BindingMember : BaseObject
+    public class BindingMember : INotifyPropertyChanged
     {
         private string _displayName;
         private readonly PropertyInfo _propertyInfo;
@@ -34,6 +37,25 @@ namespace Trinity.UI.UIComponents
         private List<object> _source = new List<object>();
         public static Dictionary<string, bool> GroupStatus = new Dictionary<string, bool>();
         private Range _range;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SupressChangeNotifications { get; set; }
+
+        protected bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            if (!SupressChangeNotifications)
+                OnPropertyChanged(propertyName);
+            return true;
+        }
 
         public string PropertyName { get; set; }
 
@@ -60,12 +82,12 @@ namespace Trinity.UI.UIComponents
             _isGroupControllerAttribute = GetAttribute<IsGroupController>(propertyInfo);
             _groupAttribute = GetAttribute<GroupAttribute>(propertyInfo);
 
-            //Logger.LogVerbose($"Created Binding Member for {propertyInfo.Name}");
+            //Core.Logger.Verbose($"Created Binding Member for {propertyInfo.Name}");
 
             var notify = baseObject as INotifyPropertyChanged;
             if (notify != null)
             {
-                //Logger.LogVerbose($"Registering Property Changed for {baseObject.GetType().Name} ({propertyInfo.Name})");
+                //Core.Logger.Verbose($"Registering Property Changed for {baseObject.GetType().Name} ({propertyInfo.Name})");
                 notify.PropertyChanged += NotifyOnPropertyChanged;
             }
 
@@ -113,7 +135,7 @@ namespace Trinity.UI.UIComponents
 
                 if (!BotMain.IsRunning)
                 {
-                    using (new AquireFrameHelper())
+                    using (ZetaDia.Memory.AcquireFrame())
                     {
                         Range = new Range
                         {
@@ -350,7 +372,7 @@ namespace Trinity.UI.UIComponents
             return value;
         }
 
-        public class BoundSource : BaseObject
+        public class BoundSource : NotifyBase
         {
             private List<PropertyValueBindingItem> _items;
             private BindingMember _member;
@@ -563,7 +585,7 @@ namespace Trinity.UI.UIComponents
             if (!(value is bool))
                 return;
 
-            Logger.Log(LogCategory.UI, "Setting Group {0} to {1}", groupId, value);  
+            Core.Logger.Log(LogCategory.UI, "Setting Group {0} to {1}", groupId, value);  
 
             AddOrUpdateGroup(groupId, value);
 
@@ -629,7 +651,7 @@ namespace Trinity.UI.UIComponents
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("Exception in PropertyValue_Get {0} {1} {2}", Name, Type, ex);
+                    Core.Logger.Error("Exception in PropertyValue_Get {0} {1} {2}", Name, Type, ex);
                     throw;
                 }
             }
@@ -685,7 +707,7 @@ namespace Trinity.UI.UIComponents
         {
             try
             {
-                Logger.Log("Setting {0} to {1}", Name, value);
+                Core.Logger.Log("Setting {0} to {1}", Name, value);
 
                 if (IsGroupController)
                 {
@@ -700,7 +722,7 @@ namespace Trinity.UI.UIComponents
 
                 //if (PropertyType.IsEnum && value is string)
                 //{
-                //    Logger.Log("Getting value from string: {0} Type={1}", value, value.GetType());                         
+                //    Core.Logger.Log("Getting value from string: {0} Type={1}", value, value.GetType());                         
                 //    val = GetValueFromDescriptionAttribute((string)value, PropertyType);
                 //}
                 //else
@@ -714,7 +736,7 @@ namespace Trinity.UI.UIComponents
             }
             catch (Exception ex)
             {
-                Logger.LogError("Exception in PropertyValue_Set {0} {1} {2}", Name, Type, ex);
+                Core.Logger.Error("Exception in PropertyValue_Set {0} {1} {2}", Name, Type, ex);
                 throw;
             }
         }

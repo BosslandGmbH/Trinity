@@ -1,4 +1,4 @@
-﻿using Trinity.Reference;
+﻿using Trinity.Framework.Reference;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;

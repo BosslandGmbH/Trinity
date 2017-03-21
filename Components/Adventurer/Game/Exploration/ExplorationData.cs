@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Trinity.Components.Adventurer.Cache;
 using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Game.Exploration
@@ -49,8 +48,8 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                                                     271271,
                                                     271234,
                                                     333758,
-
                                                 };
+
         public static HashSet<int> FortressWorldIds = new HashSet<int>
                                                 {
                                                     271233,
@@ -72,6 +71,5 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                                                                      };
 
         public const int GreedPortalSNO = 393030;
-
     }
 }

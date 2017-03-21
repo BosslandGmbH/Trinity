@@ -1,47 +1,46 @@
-﻿using System.Threading.Tasks;
+﻿using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines;
+using Trinity.Components.QuestTools;
+using Trinity.Framework;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
+using Zeta.Game;
+using Zeta.Game.Internals;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
 {
+    [XmlElement("Waypoint")]
+    [XmlElement("UseWaypoint")]
     [XmlElement("TakeWaypoint")]
-    public class TakeWaypointTag : ProfileBehavior
+    public class TakeWaypointTag : BaseProfileBehavior
     {
+        [XmlAttribute("number")]
         [XmlAttribute("waypointNumber")]
+        [Description("Number of waypoint to arrive at")]
+        [DefaultValue(-1)]
         public int WaypointNumber { get; set; }
 
-        private bool _isDone;
-        public override bool IsDone
-        {
-            get
-            {
-                return _isDone;
-            }
-        }
+        [XmlAttribute("levelAreaSnoId")]
+        [XmlAttribute("destinationLevelAreaSnoId")]
+        [Description("Id of level area to arrive at")]
+        public int DestinationLevelAreaSnoId { get; set; }
 
-        protected override Composite CreateBehavior()
+        public override async Task<bool> MainTask()
         {
+            if (WaypointNumber == -1 && DestinationLevelAreaSnoId != 0)
+                WaypointNumber = WaypointCoroutine.GetWaypointNumber(DestinationLevelAreaSnoId);
 
-            return new ActionRunCoroutine(ctx => Coroutine());
-        }
+            if (!await WaypointCoroutine.UseWaypoint(WaypointNumber))
+                return false;
 
-        private async Task<bool> Coroutine()
-        {
-            if (await WaypointCoroutine.UseWaypoint(WaypointNumber))
-            {
-                _isDone = true;
-                return true;
-            }
-            return false;
-        }
-
-        public override void ResetCachedDone(bool force = false)
-        {
-            _isDone = false;
+            Done();
+            return true;
         }
 
     }
 }
+

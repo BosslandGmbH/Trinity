@@ -1,11 +1,9 @@
-﻿using System.Windows;
-
-namespace Trinity.UI.UIComponents
+﻿namespace Trinity.UI.UIComponents
 {
-  /// <summary>
-  /// Interface implemented by Drag Handlers.
-  /// </summary>
-  public interface IDragSource
+    /// <summary>
+    /// Interface implemented by Drag Handlers.
+    /// </summary>
+    public interface IDragSource
   {
     /// <summary>
     /// Queries whether a drag can be started.

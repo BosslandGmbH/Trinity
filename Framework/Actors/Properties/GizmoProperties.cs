@@ -1,11 +1,10 @@
 ﻿using System;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Actors.Properties

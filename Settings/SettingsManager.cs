@@ -1,22 +1,17 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Xml.Serialization;
-using Trinity.Framework;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Settings.Modals;
 using Trinity.UI;
 using Trinity.UI.UIComponents;
-using Zeta.Common;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Settings
 {
@@ -71,7 +66,7 @@ namespace Trinity.Settings
                     if (string.IsNullOrEmpty(filePath))
                         return;
 
-                    Logger.LogNormal($"Saving file to {filePath}");
+                    Core.Logger.Log($"Saving file to {filePath}");
                     var exportSettings = new TrinityStorage();
                     UILoader.DataContext.ViewStorage.CopyTo(exportSettings);
 
@@ -81,7 +76,7 @@ namespace Trinity.Settings
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Exception in LoadSettingsCommand {ex}");
+                Core.Logger.Error($"Exception in LoadSettingsCommand {ex}");
             }
         });
 
@@ -100,7 +95,7 @@ namespace Trinity.Settings
                 if (!File.Exists(filePath))
                     throw new FileNotFoundException($"{filePath} not found");
 
-                Logger.LogNormal($"Loading file: {filePath}");
+                Core.Logger.Log($"Loading file: {filePath}");
 
                 // Load settings into Settings window view model only
                 // User still has to click save for it to actually be applied.    
@@ -117,7 +112,7 @@ namespace Trinity.Settings
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Exception in LoadSettingsCommand {ex}");
+                Core.Logger.Error($"Exception in LoadSettingsCommand {ex}");
             }
         });
 
@@ -257,7 +252,7 @@ namespace Trinity.Settings
                 }
             }
                 
-            Logger.Log($"File contains {result.Count} sections: {string.Join(", ", result)}");
+            Core.Logger.Log($"File contains {result.Count} sections: {string.Join(", ", result)}");
             return result;
         }
 
@@ -282,7 +277,7 @@ namespace Trinity.Settings
                 if (sectionEntry.IsSelected)
                 {
                     if(!string.IsNullOrEmpty(actionDescripter))
-                        Logger.Log($"{actionDescripter} Section: {sectionEntry}");
+                        Core.Logger.Log($"{actionDescripter} Section: {sectionEntry}");
 
                     continue;
                 }

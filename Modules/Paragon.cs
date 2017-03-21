@@ -4,14 +4,11 @@ using Trinity.Framework.Objects;
 using Trinity.Settings.Paragon;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 using UIElement = Zeta.Game.Internals.UIElement;
 
 namespace Trinity.Modules
 {
-    /// <summary>
-    /// Spend paragon points
-    /// </summary>
     public class Paragon : Module
     {
         public DateTime LastAssignedParagon = DateTime.MinValue;
@@ -32,7 +29,7 @@ namespace Trinity.Modules
             if (DateTime.UtcNow.Subtract(LastAssignedParagon).TotalSeconds < 30)
                 return;
 
-            if (!ZetaDia.IsInGame || ZetaDia.IsLoadingWorld || !ZetaDia.Me.IsValid)
+            if (!ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld || !ZetaDia.Me.IsValid)
                 return;
 
             if (IsParagonWindowOpen()) // Dont spend when the user might be clicking buttons, things could get confused.
@@ -46,7 +43,7 @@ namespace Trinity.Modules
                 int pointsAvailable = ZetaDia.Me.GetParagonPointsAvailable((ParagonCategory) i);
                 if (pointsAvailable != 0)
                 {
-                    Logger.Log("You have {0} points in the category: {1} available", pointsAvailable, category);
+                    Core.Logger.Log("You have {0} points in the category: {1} available", pointsAvailable, category);
 
                     switch (category)
                     {
@@ -85,7 +82,7 @@ namespace Trinity.Modules
             {
                 if (pointsSpent >= pointsAvailable)
                 {
-                    Logger.LogVerbose("Spent all available points for the category '{0}'", item.Category);
+                    Core.Logger.Verbose("Spent all available points for the category '{0}'", item.Category);
                     return;
                 }
 
@@ -95,7 +92,7 @@ namespace Trinity.Modules
 
                 if (currentlySpent >= item.MaxLimit)
                 {
-                    Logger.LogVerbose("Skipping {1} ({2}) max limit has been reached (Spent={3} IsLimited={4} Limit={5} LimitMax={6}",
+                    Core.Logger.Verbose("Skipping {1} ({2}) max limit has been reached (Spent={3} IsLimited={4} Limit={5} LimitMax={6}",
                         amount, item.DisplayName, item.DynamicType, currentlySpent, item.IsLimited, item.Limit, item.MaxLimit);
 
                     continue;
@@ -105,7 +102,7 @@ namespace Trinity.Modules
                 {
                     if (currentlySpent >= item.Limit)
                     {
-                        Logger.LogVerbose("Skipping {1} ({2}) limit has been reached (Spent={3} IsLimited={4} Limit={5} LimitMax={6}",
+                        Core.Logger.Verbose("Skipping {1} ({2}) limit has been reached (Spent={3} IsLimited={4} Limit={5} LimitMax={6}",
                             amount, item.DisplayName, item.DynamicType, currentlySpent, item.IsLimited, item.Limit, item.MaxLimit);
 
                         continue;
@@ -123,19 +120,19 @@ namespace Trinity.Modules
                         var pointsNegatedByItems = pctBonus * 2;
                         var effectiveMaxPoints = item.MaxLimit - pointsNegatedByItems; 
                         amount = Math.Min(effectiveMaxPoints, amount);
-                        Logger.LogVerbose("Adjusting MovementSpeed based on {0}% contributed by items.", pctBonus);
+                        Core.Logger.Verbose("Adjusting MovementSpeed based on {0}% contributed by items.", pctBonus);
                     }
                 }
 
                 if (amount <= 0)
                 {
-                    Logger.LogVerbose("Skipping {1} ({2}) spend amount = {0} (Spent={3} IsLimited={4} Limit={5} LimitMax={6}",
+                    Core.Logger.Verbose("Skipping {1} ({2}) spend amount = {0} (Spent={3} IsLimited={4} Limit={5} LimitMax={6}",
                         amount, item.DisplayName, item.DynamicType, currentlySpent, item.IsLimited, item.Limit, item.MaxLimit);
 
                     continue;
                 }
 
-                Logger.LogVerbose("Assigning {0} points to {1} ({2}) (Spent={3} IsLimited={4} Limit={5} LimitMax={6}", 
+                Core.Logger.Verbose("Assigning {0} points to {1} ({2}) (Spent={3} IsLimited={4} Limit={5} LimitMax={6}", 
                     amount, item.DisplayName, item.DynamicType, currentlySpent, item.IsLimited, item.Limit, item.MaxLimit);
 
                 ZetaDia.Me.SpendParagonPoints(item.DynamicType, amount);

@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel;
-using System.Linq;
 using System.Runtime.Serialization;
 using Trinity.Framework.Helpers;
-using Zeta.Common;
 using Zeta.Game;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Settings.Paragon
 {
@@ -82,12 +80,12 @@ namespace Trinity.Settings.Paragon
 
         //public void OnSave()
         //{
-        //    Logger.LogVerbose("Saving Paragon Priority");
+        //    Core.Logger.Verbose("Saving Paragon Priority");
         //}
 
         //public void OnLoaded()
         //{
-        //    Logger.LogVerbose("Loading Paragon Priority");
+        //    Core.Logger.Verbose("Loading Paragon Priority");
 
         //    if (!CoreParagonPriority.Any() || !UtilityParagonPriority.Any() || !DefenseParagonPriority.Any() || !OffenseParagonPriority.Any())
         //    {

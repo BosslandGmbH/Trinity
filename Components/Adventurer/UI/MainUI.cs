@@ -1,15 +1,15 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Windows;
 using System.Windows.Controls;
-using Trinity.Components.Adventurer.Util;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.UI
 {
     internal static class MainUI
     {
         private static Grid _mainTabGrid;
-        static Button _configureAdventurerButton;
+        private static Button _configureAdventurerButton;
 
         internal static void InstallButtons()
         {
@@ -35,14 +35,13 @@ namespace Trinity.Components.Adventurer.UI
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error("[MainUI][InstallButtons] " + ex.Message);
+                        Core.Logger.Error("[MainUI][InstallButtons] " + ex.Message);
                     }
                 });
         }
 
         internal static void RemoveButtons()
         {
-
             Application.Current.Dispatcher.Invoke(
                 () =>
                 {
@@ -55,7 +54,7 @@ namespace Trinity.Components.Adventurer.UI
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error("[MainUI][RemoveButtons] " + ex.Message);
+                        Core.Logger.Error("[MainUI][RemoveButtons] " + ex.Message);
                     }
                 });
         }
@@ -71,7 +70,6 @@ namespace Trinity.Components.Adventurer.UI
                 Margin = new Thickness(428, 10, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
-
             };
             button.Click += Configure_Click; ;
             return button;
@@ -86,17 +84,14 @@ namespace Trinity.Components.Adventurer.UI
                 {
                     try
                     {
-
                         instance.ShowDialog();
                     }
                     catch (Exception ex)
                     {
-                        Logger.Error("[MainUI][Configure] " + ex.Message);
+                        Core.Logger.Error("[MainUI][Configure] " + ex.Message);
                     }
                 });
             }
         }
-
-
     }
 }

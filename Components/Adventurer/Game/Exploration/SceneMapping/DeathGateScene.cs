@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Adventurer.Cache;
-using Trinity.Framework.Helpers;
 using Zeta.Common;
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
@@ -20,15 +18,18 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
         public WorldScene WorldScene { get; set; }
         //{
-            //get { return _worldScene ?? (_worldScene = ScenesStorage.CurrentWorldScenes.FirstOrDefault(s => s.SnoId == SnoId)); }
-            //set { _worldScene = value; }
+        //get { return _worldScene ?? (_worldScene = ScenesStorage.CurrentWorldScenes.FirstOrDefault(s => s.SnoId == SnoId)); }
+        //set { _worldScene = value; }
         //}
 
         public Vector3 DeepPortalPosition => WorldScene?.GetWorldPosition(RelativeExitPosition) ?? Vector3.Zero;
         public Vector3 ShallowPortalPosition => WorldScene?.GetWorldPosition(RelativeEnterPosition) ?? Vector3.Zero;
         public List<Vector3> PortalPositions => new List<Vector3> { DeepPortalPosition, ShallowPortalPosition };
+
         public Vector3 ClosestGateToPosition(Vector3 position) => PortalPositions.OrderBy(p => p.Distance2D(position)).FirstOrDefault();
+
         public Vector3 FarthestGateFromPosition(Vector3 position) => PortalPositions.OrderByDescending(p => p.Distance2D(position)).FirstOrDefault();
+
         public bool IsValid => WorldScene != null;
         public float Distance => ShallowPortalPosition.Distance(AdvDia.MyPosition);
 

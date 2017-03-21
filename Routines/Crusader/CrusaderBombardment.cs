@@ -1,21 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Trinity.Framework;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Coroutines.Town;
-using Trinity.Framework;
+using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
-using Trinity.Settings;
+using Trinity.Framework.Reference;
 using Trinity.UI;
-using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Crusader
 {
@@ -45,7 +43,7 @@ namespace Trinity.Routines.Crusader
 
         public override bool SetWeight(TrinityActor cacheObject)
         {
-            if (Settings.IgnoreTrash && cacheObject.IsTrashMob && RiftProgression.IsInRift && !cacheObject.IsTreasureGoblin && !cacheObject.IsMinimapActive && !cacheObject.IsBountyObjective && !cacheObject.IsQuestMonster && (RiftProgression.IsGreaterRift || !TrinityTownRun.IsTryingToTownPortal()))
+            if (Settings.IgnoreTrash && cacheObject.IsTrashMob && Core.Rift.IsInRift && !cacheObject.IsTreasureGoblin && !cacheObject.IsMinimapActive && !cacheObject.IsBountyObjective && !cacheObject.IsQuestMonster && (Core.Rift.IsGreaterRift || !TrinityTownRun.IsTryingToTownPortal()))
             {
                 cacheObject.WeightInfo += $"Routine(IgnoreTrash)";
                 cacheObject.Weight = 0;
@@ -63,43 +61,43 @@ namespace Trinity.Routines.Crusader
 
             if (AllowedToUse(Settings.Akarats, Skills.Crusader.AkaratsChampion) && ShouldAkaratsChampion())
             {
-                Logger.LogVerbose(LogCategory.Routine, $"Akarats");
+                Core.Logger.Verbose(LogCategory.Routine, $"Akarats");
                 return AkaratsChampion();
             }
 
             if (ShouldCondemn())
             {
-                Logger.LogVerbose(LogCategory.Routine, $"Condemn");
+                Core.Logger.Verbose(LogCategory.Routine, $"Condemn");
                 return Condemn();
             }
 
             if (ShouldProvoke())
             {
-                Logger.LogVerbose(LogCategory.Routine, $"Provoke");
+                Core.Logger.Verbose(LogCategory.Routine, $"Provoke");
                 return Provoke();
             }
 
             if (ShouldJudgement())
             {
-                Logger.LogVerbose(LogCategory.Routine, $"Judgement");
+                Core.Logger.Verbose(LogCategory.Routine, $"Judgement");
                 return Judgement();
             }
 
             if (TryBombard(out power))
             {
-                Logger.LogVerbose(LogCategory.Routine, $"Bombard");
+                Core.Logger.Verbose(LogCategory.Routine, $"Bombard");
                 return power;
             }
 
             if (ShouldSteedCharge())
             {
-                Logger.LogVerbose(LogCategory.Routine, $"Steed");
+                Core.Logger.Verbose(LogCategory.Routine, $"Steed");
                 return SteedCharge();
             }
 
             //if (!IsCurrentlyAvoiding)
             //{
-            //    //Logger.Log("Steed Charge Damage");
+            //    //Core.Logger.Log("Steed Charge Damage");
 
             //    //return TargetUtil.GetZigZagTarget(CurrentTarget.Position, 15f);
 
@@ -110,11 +108,11 @@ namespace Trinity.Routines.Crusader
 
             if (CurrentTarget.Distance < 16f)
             {
-                Logger.Log(LogCategory.Routine,$"ZigZag");
+                Core.Logger.Log(LogCategory.Routine,$"ZigZag");
                 return Walk(TargetUtil.GetZigZagTarget(CurrentTarget.Position), 3f);
             }
 
-            Logger.Log(LogCategory.Routine, $"Walk");
+            Core.Logger.Log(LogCategory.Routine, $"Walk");
             return Walk(CurrentTarget.Position);
         }
 
@@ -176,13 +174,13 @@ namespace Trinity.Routines.Crusader
         {
             get
             {
-                if (Settings.Bombardment.WaitForConvention == ConventionMode.GreaterRift && RiftProgression.IsGreaterRift)
+                if (Settings.Bombardment.WaitForConvention == ConventionMode.GreaterRift && Core.Rift.IsGreaterRift)
                     return false;
 
                 if (Settings.Bombardment.WaitForConvention == ConventionMode.Always)
                     return false;
 
-                if (Settings.Bombardment.WaitForConvention == ConventionMode.RiftBoss && RiftProgression.IsInRift && HostileMonsters.Any(u => u.IsBoss))
+                if (Settings.Bombardment.WaitForConvention == ConventionMode.RiftBoss && Core.Rift.IsInRift && HostileMonsters.Any(u => u.IsBoss))
                     return false;
 
                 return true;
@@ -263,13 +261,13 @@ namespace Trinity.Routines.Crusader
 
             if (TryLaw(out power))
             {
-                //Logger.LogVerbose(LogCategory.Routine, $"Buff Law");
+                //Core.Logger.Verbose(LogCategory.Routine, $"Buff Law");
                 return power;
             }
 
             if (!Player.IsInTown && Settings.BombardmentOOC && HostileMonsters.Any(u => u.Distance < 150f))
             {
-                //Logger.LogVerbose(LogCategory.Routine, $"Buff Bombard Func");
+                //Core.Logger.Verbose(LogCategory.Routine, $"Buff Bombard Func");
 
                 // Break Steed to bombard OOC only if waiting for CoE
                 var goodTimetoCast = !ShouldBombardWheneverPossible || !IsSteedCharging;
@@ -290,7 +288,7 @@ namespace Trinity.Routines.Crusader
 
         public TrinityPower GetDestructiblePower()
         {
-            Logger.LogVerbose(LogCategory.Routine, $"GetDestructiblePower");
+            Core.Logger.Verbose(LogCategory.Routine, $"GetDestructiblePower");
             return DefaultDestructiblePower();
         }
 
@@ -298,7 +296,7 @@ namespace Trinity.Routines.Crusader
         {
             if (ShouldSteedCharge())
             {
-                Logger.LogVerbose(LogCategory.Routine, $"SteedCharge MovementPower");
+                Core.Logger.Verbose(LogCategory.Routine, $"SteedCharge MovementPower");
                 return SteedCharge();
             }
 

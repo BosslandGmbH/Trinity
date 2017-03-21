@@ -16,6 +16,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
             LevelAreaSno = (SNOLevelArea)levelAreaSnoId;
             LevelAreaSnoId = levelAreaSnoId;
         }
+
         public string Name { get; set; }
         public int Number { get; set; }
         public SNOWorld WorldSno { get; set; }
@@ -33,7 +34,6 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 {Act.A3, 28},
                 {Act.A4, 42},
                 {Act.A5, 50}
-
             };
 
         public static int GetWaypointNumber(int levelAreaId)
@@ -58,11 +58,11 @@ namespace Trinity.Components.Adventurer.Game.Actors
             return Waypoints.FirstOrDefault(o => o.Value.WorldSnoId == worldId).Value;
         }
 
-        public static Dictionary<int, WaypointData>  Waypoints
+        public static Dictionary<int, WaypointData> Waypoints
         {
             get
             {
-                if (ZetaDia.WorldType == Act.OpenWorld)
+                if (ZetaDia.Storage.CurrentWorldType == Act.OpenWorld)
                     return OpenWorldWaypoints;
 
                 return CampaignWaypoints;
@@ -149,9 +149,6 @@ namespace Trinity.Components.Adventurer.Game.Actors
 
         public static readonly Dictionary<int, WaypointData> CampaignWaypoints = new Dictionary<int, WaypointData>
         {
-
         };
-
     }
 }
-

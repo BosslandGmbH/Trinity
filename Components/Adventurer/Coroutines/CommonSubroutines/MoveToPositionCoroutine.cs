@@ -1,11 +1,9 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Cache;
-using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 {
@@ -36,13 +34,13 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Util.Logger.Debug("[MoveToPosition] " + value);
+                    Core.Logger.Debug("[MoveToPosition] " + value);
                 }
                 _state = value;
             }
         }
 
-        #endregion
+        #endregion State
 
         public bool IsDone
         {
@@ -51,7 +49,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 
         public MoveToPositionCoroutine(int worldId, Vector3 position, int distance = 1)
         {
-            _startTime = DateTime.UtcNow;            
+            _startTime = DateTime.UtcNow;
             _distance = distance;
             _worldId = worldId;
             _position = position;
@@ -63,10 +61,13 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
             {
                 case States.NotStarted:
                     return NotStarted();
+
                 case States.Moving:
                     return await Moving();
+
                 case States.Completed:
                     return Completed();
+
                 case States.Failed:
                     return Failed();
             }
@@ -91,6 +92,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 
         private bool NotStarted()
         {
+            NavigationCoroutine.Reset();
             State = States.Moving;
             return false;
         }
@@ -101,17 +103,17 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
             {
                 return false;
             }
-            
+
             if (NavigationCoroutine.LastResult == CoroutineResult.Failure)
             {
-                Util.Logger.DebugSetting("[MoveToPosition] CoroutineResult.Failure");
+                Core.Logger.Debug("[MoveToPosition] CoroutineResult.Failure");
 
-                var canFullyPath = await AdvDia.DefaultNavigationProvider.CanFullyClientPathTo(_position);
-                var closeRayCastFail = AdvDia.MyPosition.Distance(_position) < 15f && !NavigationGrid.Instance.CanRayWalk(AdvDia.MyPosition, _position);
+                var canFullyPath = await AdvDia.Navigator.CanFullyClientPathTo(_position);
+                var closeRayCastFail = AdvDia.MyPosition.Distance(_position) < 15f && !Core.Grids.CanRayWalk(AdvDia.MyPosition, _position);//!NavigationGrid.Instance.CanRayWalk(AdvDia.MyPosition, _position);
                 var failedMoveResult = NavigationCoroutine.LastMoveResult == MoveResult.Failed || NavigationCoroutine.LastMoveResult == MoveResult.PathGenerationFailed;
                 if (!canFullyPath || closeRayCastFail || failedMoveResult)
                 {
-                    Util.Logger.DebugSetting("[MoveToPosition] Failed to reach position");
+                    Core.Logger.Debug("[MoveToPosition] Failed to reach position");
                     State = States.Failed;
                     return false;
                 }
@@ -137,6 +139,5 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
             _isDone = true;
             return true;
         }
-
     }
 }

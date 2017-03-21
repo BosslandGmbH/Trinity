@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Runtime.Serialization;
 using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Attributes;
+using Trinity.Framework.Objects;
 using Trinity.UI.UIComponents;
 
 namespace Trinity.Settings
@@ -34,7 +34,7 @@ namespace Trinity.Settings
         }
 
         [DataMember(IsRequired = false)]
-        [DefaultValue(LogCategory.UserInformation | LogCategory.Behavior | LogCategory.Routine | LogCategory.Avoidance | LogCategory.Targetting)]
+        [DefaultValue(LogCategory.None | LogCategory.Behavior | LogCategory.Routine | LogCategory.Avoidance | LogCategory.Targetting)]
         public LogCategory LogCategories
         {
             get { return _logCategories; }

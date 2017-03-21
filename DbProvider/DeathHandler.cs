@@ -1,12 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Threading;
-using System.Threading.Tasks;
-using Buddy.Coroutines;
+﻿using Buddy.Coroutines;
+using System;
 using Trinity.Framework;
 using Trinity.Framework.Helpers;
-using Trinity.Reference;
+using System.Linq;
+using System.Threading.Tasks;
+using Trinity.Framework.Reference;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
@@ -16,9 +14,7 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.SNO;
-using Zeta.TreeSharp;
-using Action = Zeta.TreeSharp.Action;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.DbProvider
 {
@@ -48,12 +44,15 @@ namespace Trinity.DbProvider
 
         public static async Task<bool> Execute()
         {
+            if (ZetaDia.Globals.IsLoadingWorld || !ZetaDia.Me.IsValid || !ZetaDia.Me.CommonData.IsValid)
+                return false;
+
             var isDead = ZetaDia.Me.IsDead;
             if (_isDead != isDead)
             {
                 if (isDead)
-                {                    
-                    _deathCounter = LastDeathTime.Subtract(DateTime.UtcNow).TotalSeconds > 60 ? 0 : _deathCounter +1;
+                {
+                    _deathCounter = LastDeathTime.Subtract(DateTime.UtcNow).TotalSeconds > 60 ? 0 : _deathCounter + 1;
                     _deathNeedRepairCounter = LastDeathTime.Subtract(DateTime.UtcNow).TotalSeconds < 60 && EquipmentNeedsEmergencyRepair(5) ? _deathNeedRepairCounter + 1 : 0;
                     LastDeathTime = DateTime.UtcNow;
                     _resButtonsVisibleStart = DateTime.MinValue;
@@ -62,15 +61,15 @@ namespace Trinity.DbProvider
                     DeathsThisSession++;
                     DeathsThisSession++;
 
-                    Logger.Log("[Death] You died lol! RecentDeaths={0} RecentDeathsNeedingRepair={1}", _deathCounter, _deathNeedRepairCounter);                  
+                    Core.Logger.Log("[Death] You died lol! RecentDeaths={0} RecentDeathsNeedingRepair={1}", _deathCounter, _deathNeedRepairCounter);
                 }
                 else
                 {
-                    Logger.Log("[Death] No Longer Dead");
+                    Core.Logger.Log("[Death] No Longer Dead");
 
                     //if (Core.Settings.Combat.Misc.FleeInGhostMode)
                     //{
-                        await MoveWhileGhosted();
+                    await MoveWhileGhosted();
                     //}
 
                     if (EquipmentNeedsEmergencyRepair(5))
@@ -85,7 +84,7 @@ namespace Trinity.DbProvider
             {
                 return false;
             }
-            
+
             var reviveAtCorpseButton = UIElement.FromHash(0xE3CBD66296A39588);
             var reviveAtCheckPointButton = UIElement.FromHash(0xBFAAF48BA9316742);
             var acceptRessurectionButton = UIElement.FromHash(0x712D458486D6F062);
@@ -94,33 +93,33 @@ namespace Trinity.DbProvider
             var checkpointButtonReady = reviveAtCheckPointButton.IsVisible && reviveAtCheckPointButton.IsEnabled;
             var corpseButtonReady = reviveAtCorpseButton.IsVisible && reviveAtCorpseButton.IsEnabled;
             var townButtonReady = reviveInTownButton.IsVisible && reviveInTownButton.IsEnabled;
-            var isInRift = GameData.RiftWorldIds.Contains(ZetaDia.CurrentWorldSnoId);
-            var isInGreaterRift = isInRift && ZetaDia.CurrentRift != null && ZetaDia.CurrentRift.Type == RiftType.Greater;
+            var isInRift = GameData.RiftWorldIds.Contains(ZetaDia.Globals.WorldSnoId);
+            var isInGreaterRift = isInRift && ZetaDia.Storage.CurrentRiftType == RiftType.Greater;
             var noMoreCorpseRevives = !isInGreaterRift && ZetaDia.Me.CommonData.CorpseResurrectionCharges == 0;
-            var waitingForCorpseResurrect = ZetaDia.CurrentTime < ZetaDia.Me.CommonData.CorpseResurrectionAllowedGameTime;
+            var waitingForCorpseResurrect = ZetaDia.Globals.GameTick < ZetaDia.Me.CommonData.CorpseResurrectionAllowedGameTime;
             var deathCount = ZetaDia.Me.CommonData.DeathCount;
             var corpseResurrectDisabled = ZetaDia.Me.CommonData.CorpseResurrectionDisabled > 0;
 
             if (reviveAtCheckPointButton.IsVisible)
                 _resButtonsVisibleStart = DateTime.UtcNow;
-           
+
             var resurrectButtonsVisible = _resButtonsVisibleStart != DateTime.MinValue;
             if (resurrectButtonsVisible != _resurrectButtonsVisible)
-            {                
+            {
                 if (resurrectButtonsVisible)
                 {
-                    Logger.LogVerbose("[Death] Buttons are now visible");
-                    var maxWaitTime = ZetaDia.Me.IsParticipatingInTieredLootRun ? Math.Min(deathCount * 5, 30) -2 : 4;
+                    Core.Logger.Verbose("[Death] Buttons are now visible");
+                    var maxWaitTime = ZetaDia.Me.IsParticipatingInTieredLootRun ? Math.Min(deathCount * 5, 30) - 2 : 4;
                     _corpseReviveAvailableTime = new DateTime(_resButtonsVisibleStart.Ticks).Add(TimeSpan.FromSeconds(maxWaitTime));
                 }
                 _resurrectButtonsVisible = resurrectButtonsVisible;
-            }                
+            }
 
             var remainingTimeSecs = (_corpseReviveAvailableTime - DateTime.UtcNow).TotalSeconds;
             var resLimit = isInGreaterRift ? 16 : 10;
             if (_deathCounter > resLimit && !ZetaDia.IsInTown && needRepair)
             {
-                Logger.Log("Durability is zero and {0} deaths within 60s of each other - emergency leave game", deathCount);
+                Core.Logger.Log("Durability is zero and {0} deaths within 60s of each other - emergency leave game", deathCount);
                 ZetaDia.Service.Party.LeaveGame(true);
                 await CommonCoroutines.LeaveGame("Durability is zero");
                 _deathCounter = 0;
@@ -133,35 +132,35 @@ namespace Trinity.DbProvider
             }
             else if (IsBeingRevived())
             {
-                Logger.Log("[Death] Waiting while being resurrected");
+                Core.Logger.Log("[Death] Waiting while being resurrected");
             }
-            else if (ZetaDia.Me.IsInBossEncounter && !RiftProgression.IsInRift && IsAlivePlayerNearby)
+            else if (ZetaDia.Me.IsInBossEncounter && !Core.Rift.IsInRift && IsAlivePlayerNearby)
             {
-                Logger.Log("[Death] Waiting because of boss fight");
+                Core.Logger.Log("[Death] Waiting because of boss fight");
             }
             else if (corpseButtonReady && !needRepair && !waitingForCorpseResurrect && !noMoreCorpseRevives && !corpseResurrectDisabled)
             {
-                Logger.Log("[Death] Reviving at corpse");
+                Core.Logger.Log("[Death] Reviving at corpse");
                 reviveAtCorpseButton.Click();
             }
             else if (townButtonReady && needRepair && _deathNeedRepairCounter > 4)
             {
-                Logger.Log("[Death] We've failed few times to resurrect at checkpoint to repair , now resurrecting in town.");
+                Core.Logger.Log("[Death] We've failed few times to resurrect at checkpoint to repair , now resurrecting in town.");
                 reviveInTownButton.Click();
             }
             else if (checkpointButtonReady)
             {
-                Logger.Log("[Death] Reviving at checkpoint (NeedRepair={0})", needRepair);
+                Core.Logger.Log("[Death] Reviving at checkpoint (NeedRepair={0})", needRepair);
                 reviveAtCheckPointButton.Click();
             }
             else if (!corpseButtonReady && !checkpointButtonReady && townButtonReady && DateTime.UtcNow.Subtract(LastDeathTime).TotalSeconds > 45)
             {
-                Logger.Log("[Death] Reviving in town");
+                Core.Logger.Log("[Death] Reviving in town");
                 reviveInTownButton.Click();
             }
             else
-            {                
-                Logger.LogVerbose("[Death] Waiting...");
+            {
+                Core.Logger.Verbose("[Death] Waiting...");
             }
 
             await Coroutine.Sleep(250);
@@ -171,21 +170,21 @@ namespace Trinity.DbProvider
         public async static Task<bool> MoveWhileGhosted()
         {
             var safespot = Core.Avoidance.GridEnricher.SafeNodeLayer.Positions.OrderBy(d =>
-                d.Distance(Core.Avoidance.GridEnricher.MonsterCentroid) + 
+                d.Distance(Core.Avoidance.GridEnricher.MonsterCentroid) +
                 d.Distance(Core.Avoidance.GridEnricher.AvoidanceCentroid)).FirstOrDefault();
 
             if (safespot == Vector3.Zero)
             {
-                Logger.Log("[Death] Unable to find safe spot to escape to :(");
+                Core.Logger.Log("[Death] Unable to find safe spot to escape to :(");
                 return false;
             }
 
-            Logger.Log("[Death] Moving away from revive position");
+            Core.Logger.Log("[Death] Moving away from revive position");
 
             var timeout = DateTime.UtcNow.AddSeconds(5);
             while (DateTime.UtcNow < timeout && ZetaDia.Me.IsGhosted && !ZetaDia.Me.IsDead)
             {
-                Logger.Log($"[Death] Moving away... Distance={_deathLocation.Distance(ZetaDia.Me.Position)}");
+                Core.Logger.Log($"[Death] Moving away... Distance={_deathLocation.Distance(ZetaDia.Me.Position)}");
                 await Navigator.MoveTo(safespot);
                 await Coroutine.Yield();
             }
@@ -194,7 +193,7 @@ namespace Trinity.DbProvider
 
         public static bool EquipmentNeedsEmergencyRepair(int durabilityPct)
         {
-            var equippedItems = ZetaDia.Me.Inventory.Equipped.Where(i => i.DurabilityCurrent < i.DurabilityMax).ToList();
+            var equippedItems = InventoryManager.Equipped.Where(i => i.DurabilityCurrent < i.DurabilityMax).ToList();
             if (!equippedItems.Any())
                 return false;
 
@@ -217,6 +216,5 @@ namespace Trinity.DbProvider
         {
             get { return ZetaDia.Actors.GetActorsOfType<DiaPlayer>(true).FirstOrDefault(p => p?.CommonData != null && p.RActorId != Core.Player.RActorGuid && p.Distance < 100f) != null; }
         }
-
     }
 }

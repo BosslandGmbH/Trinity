@@ -1,21 +1,15 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Controls;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Framework;
-using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
-using Trinity.Reference;
-using Trinity.Routines.DemonHunter;
+using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
-using Zeta.Game;
-using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Monk
 {
@@ -74,7 +68,7 @@ namespace Trinity.Routines.Monk
 
             if (ShouldDashingStrike(out position))
             {
-                Logger.Log(LogCategory.Routine, $"In Combat dash");
+                Core.Logger.Log(LogCategory.Routine, $"In Combat dash");
                 return DashingStrike(position);
             }
 
@@ -236,7 +230,7 @@ namespace Trinity.Routines.Monk
 
             if (CanDashTo(destination) && (isResourceEfficient || followingLeader) && !ShouldConserveSpirit && enoughTimeDelay)
             {
-                Logger.Log(LogCategory.Routine, $"Movement Dash {destination} Dist: {destination.Distance(Core.Player.Position)}");
+                Core.Logger.Log(LogCategory.Routine, $"Movement Dash {destination} Dist: {destination.Distance(Core.Player.Position)}");
                 return DashingStrike(destination);
             }
 

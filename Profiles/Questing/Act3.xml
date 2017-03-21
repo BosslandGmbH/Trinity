@@ -402,7 +402,7 @@
       <WaitTimer questId="93697" stepId="-1" waitTime="5000" />
     </If>
     <!-- Stuck in Stonefort, need to TownPortal -->
-    <If condition="IsActiveQuest(93697) and IsActiveQuestStep(-1) and ZetaDia.CurrentWorldSnoId == 93099">
+    <If condition="IsActiveQuest(93697) and IsActiveQuestStep(-1) and ZetaDia.Globals.WorldSnoId == 93099">
       <WaitTimer questId="93697" stepId="-1" waitTime="5000" />
       <UseTownPortal questId="93697" stepId="-1" />
       <WaitTimer questId="93697" stepId="-1" waitTime="1000" />

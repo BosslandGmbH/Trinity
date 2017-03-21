@@ -8,4 +8,3 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public List<IGroupNode> ExplorationNodes { get; set; }
     }
 }
-

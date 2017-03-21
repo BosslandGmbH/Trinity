@@ -1,11 +1,11 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using Trinity.Framework.Helpers;
 using Zeta.Bot;
 
 namespace Trinity.UI.UIComponents.Converters
@@ -44,7 +44,7 @@ namespace Trinity.UI.UIComponents.Converters
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError("PropertyGridConverter Exception: {0}", ex);
+                    Core.Logger.Error("PropertyGridConverter Exception: {0}", ex);
                 }
 
                 if (bm != null)

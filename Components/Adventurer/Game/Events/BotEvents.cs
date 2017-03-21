@@ -11,8 +11,6 @@ namespace Trinity.Components.Adventurer.Game.Events
             GameEvents.OnWorldChanged += PluginEvents.GameEvents_OnWorldChanged;
         }
 
-
-
         internal static void UnWire()
         {
             GameEvents.OnGameJoined -= PluginEvents.GameEvents_OnGameJoined;

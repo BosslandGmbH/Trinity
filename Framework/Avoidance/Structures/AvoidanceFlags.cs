@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace Trinity.Framework.Avoidance.Structures
 {
     [Flags]
@@ -71,6 +70,4 @@ namespace Trinity.Framework.Avoidance.Structures
         Unused63 = 0x4000000000000000,
         Unused64 = 0x8000000000000000,
     }
-
 }
-

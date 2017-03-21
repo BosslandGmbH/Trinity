@@ -1,8 +1,8 @@
 using System;
+using Trinity.Framework.Helpers;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Text;
-using Trinity.Framework.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 

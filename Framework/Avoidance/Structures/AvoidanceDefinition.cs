@@ -12,7 +12,7 @@ namespace Trinity.Framework.Avoidance.Structures
     /// <summary>
     /// Represents the permanent properties of a type of avoidance.
     /// </summary>
-    public class AvoidanceDefinition 
+    public class AvoidanceDefinition
     {
         public int Id { get; set; }
 
@@ -76,9 +76,5 @@ namespace Trinity.Framework.Avoidance.Structures
         {
             return Parts.FirstOrDefault(p => p.Animation == actorAnimation);
         }
-
     }
-
 }
-
-

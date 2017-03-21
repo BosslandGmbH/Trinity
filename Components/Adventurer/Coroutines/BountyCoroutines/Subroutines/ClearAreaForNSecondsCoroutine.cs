@@ -1,11 +1,11 @@
 ﻿using System;
+using Trinity.Framework;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Common;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
+
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 {
@@ -43,7 +43,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Util.Logger.Info("[ClearAreaForNSeconds] " + value);
+                    Core.Logger.Log("[ClearAreaForNSeconds] " + value);
                 }
                 _state = value;
             }
@@ -78,18 +78,21 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 case States.NotStarted:
                     return await NotStarted();
+
                 case States.Clearing:
                     return await Clearing();
+
                 case States.MovingBack:
                     return await MovingBack();
+
                 case States.Completed:
                     return await Completed();
+
                 case States.Failed:
                     return await Failed();
             }
             return false;
         }
-
 
         private async Task<bool> NotStarted()
         {
@@ -147,7 +150,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             return false;
         }
 
-
         private async Task<bool> Completed()
         {
             _isDone = true;
@@ -176,7 +178,6 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private void ScanForObjective()
         {
-
             if (_marker != 0)
             {
                 _center = BountyHelpers.ScanForMarkerLocation(_marker, OBJECTIVE_SCAN_RANGE);
@@ -191,7 +192,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
             if (_center != Vector3.Zero)
             {
-                Logger.Info("[ClearAreaForNSeconds] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_center));
+                Core.Logger.Log("[ClearAreaForNSeconds] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_center));
             }
         }
     }

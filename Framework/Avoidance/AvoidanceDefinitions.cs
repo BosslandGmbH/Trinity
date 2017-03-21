@@ -1,9 +1,9 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using Trinity.Framework.Avoidance.Handlers;
 using Trinity.Framework.Avoidance.Settings;
 using Trinity.Framework.Avoidance.Structures;
-using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -12,40 +12,38 @@ namespace Trinity.Framework.Avoidance
 {
     public class AvoidanceDefinitions : FieldCollection<AvoidanceDefinitions, AvoidanceDefinition>
     {
-
         /*
 
-
         Raziel Boss
-             1388: IsLootRunBoss (-2708) i:1 f:0 Value=1 
-             800: UsingBossbar (-3296) i:1 f:0 Value=1 
-                Proj 
+             1388: IsLootRunBoss (-2708) i:1 f:0 Value=1
+             800: UsingBossbar (-3296) i:1 f:0 Value=1
+                Proj
                 InternalName => g_ChargedBolt_Projectile-314133
                 ActorSnoId => 4394
-                 1249: ProjectileDetonateTime (-2847) i:794745 f:0 Value=794745 
+                 1249: ProjectileDetonateTime (-2847) i:794745 f:0 Value=794745
 
         Bone warlock boss projectile
             InternalName => SkeletonSummoner_projectile-300033
             ActorSnoId => 5392
-            1249: ProjectileDetonateTime(-2847) i:759285 f:0 Value=759285              
-   
+            1249: ProjectileDetonateTime(-2847) i:759285 f:0 Value=759285
+
         // Blood Pools
         [Trinity 2.50.238] -- Dumping Attribtues for x1_Bog_bloodSpring_large-301223 (Sno=332923 Ann=-1444543456) at <255.3765, 629.3062, -2> ----
-        [Trinity 2.50.238] Attributes (9) Id=1088/2054423616 
-         124: HitpointsMaxTotal (-3972) i:0 f:1.220997E+09 Value=1220997000 
-         122: HitpointsMax (-3974) i:0 f:1.220997E+09 Value=1220997000 
-         119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 
-         115: HitpointsCur (-3981) i:0 f:1.220997E+09 Value=1220997000 
-         359: ProjectileSpeed (-3737) i:0 f:0 Value=0 
-         585: BuffVisualEffect (-3511) i:1 f:0 Value=1 
-         57: Level (-4039) i:70 f:0 Value=70 
-         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Bog_BogWater_large: 335795 ] i:0 f:0 Value=0 
-         859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: x1_Bog_BogWater_large: 335795 ] i:1 f:0 Value=1 
+        [Trinity 2.50.238] Attributes (9) Id=1088/2054423616
+         124: HitpointsMaxTotal (-3972) i:0 f:1.220997E+09 Value=1220997000
+         122: HitpointsMax (-3974) i:0 f:1.220997E+09 Value=1220997000
+         119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0
+         115: HitpointsCur (-3981) i:0 f:1.220997E+09 Value=1220997000
+         359: ProjectileSpeed (-3737) i:0 f:0 Value=0
+         585: BuffVisualEffect (-3511) i:1 f:0 Value=1
+         57: Level (-4039) i:70 f:0 Value=70
+         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Bog_BogWater_large: 335795 ] i:0 f:0 Value=0
+         859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: x1_Bog_BogWater_large: 335795 ] i:1 f:0 Value=1
          */
 
         public static AvoidanceDefinition DiseaseCloud = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.DiseaseCloud,
+            Id = (int)AvoidanceType.DiseaseCloud,
             Type = AvoidanceType.DiseaseCloud,
             Name = "Disease Cloud",
             Element = Element.Poison,
@@ -70,7 +68,7 @@ RActorId => -309985231
 InternalName => x1_Urzael_ceilingDebris_beam_groundGlow-30579
 ActorSnoId => 360649
 MonsterSnoId => 0
-CommonData => 
+CommonData =>
 RActor => Trinity.Framework.Objects.Memory.Misc.RActor
 ActorInfo => ActorType:ClientEffect ApperanceSNO:359226 PhysMeshSNO:-1 Cylinder:Position:<1.058791E-22, 4.768372E-07, 0> Ax1:0 Ax2:0 Sphere:Center:<-2.365559E-07, 2.384186E-07, 0> Radius:7.000157 AABB:Min:<-2.365559E-07, 2.384186E-07, 0> Max:<0.03942948, 5.000002, 1.110223E-16> AnimSetSNO:-1 SNOMonster:-1
          ActorType => ClientEffect
@@ -78,7 +76,7 @@ RActorId => -312672197
 InternalName => x1_westm_Falling_Wood_Urzael-30538
 ActorSnoId => 360652
 MonsterSnoId => 0
-CommonData => 
+CommonData =>
 RActor => Trinity.Framework.Objects.Memory.Misc.RActor
 ActorInfo => ActorType:ClientEffect ApperanceSNO:350268 PhysMeshSNO:-1 Cylinder:Position:<-0.04530716, 0, 75.23312> Ax1:100 Ax2:100 Sphere:Center:<0, -0.02893925, 68.69508> Radius:100 AABB:Min:<0, -0.02893829, 68.69508> Max:<5.455193, 26.51947, 66.74621> AnimSetSNO:360669 SNOMonster:-1
         ActorType => ServerProp
@@ -88,7 +86,7 @@ ActorSnoId => 359205
 MonsterSnoId => 0
 CommonData => Trinity.Framework.Objects.Memory.Misc.ActorCommonData
 RActor => Trinity.Framework.Objects.Memory.Misc.RActor
-ActorInfo => ActorType:ServerProp ApperanceSNO:14322 PhysMeshSNO:-1 Cylinder:Position:<0.00772902, -0.006169996, -0.00789072> Ax1:0 Ax2:0 Sphere:Center:<0, 0, 0> Radius:2.225377 AABB:Min:<0, 0, 0> Max:<0.1593657, 0.1593657, 3.53863E-17> AnimSetSNO:-1 SNOMonster:-1      
+ActorInfo => ActorType:ServerProp ApperanceSNO:14322 PhysMeshSNO:-1 Cylinder:Position:<0.00772902, -0.006169996, -0.00789072> Ax1:0 Ax2:0 Sphere:Center:<0, 0, 0> Radius:2.225377 AABB:Min:<0, 0, 0> Max:<0.1593657, 0.1593657, 3.53863E-17> AnimSetSNO:-1 SNOMonster:-1
             ActorType => ServerProp
 RActorId => -482344927
 InternalName => x1_Urzael_death_rune_proxy-27956
@@ -98,7 +96,6 @@ CommonData => Trinity.Framework.Objects.Memory.Misc.ActorCommonData
 RActor => Trinity.Framework.Objects.Memory.Misc.RActor
 ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Position:<-2.980232E-08, 0, 0> Ax1:0 Ax2:0 Sphere:Center:<-2.980232E-08, 0, 0> Radius:2.321987 AABB:Min:<-2.980232E-08, 0, 0> Max:<0.2276794, 0.2276794, 0> AnimSetSNO:-1 SNOMonster:-1
              * * */
-
 
         public static AvoidanceDefinition Urzael = new AvoidanceDefinition
         {
@@ -173,7 +170,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition ZultunKuleTornado = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.ZultunKuleTornado,
+            Id = (int)AvoidanceType.ZultunKuleTornado,
             Type = AvoidanceType.ZultunKuleTornado,
             Name = "Zultun Kule Tornado",
             Element = Element.Physical,
@@ -192,28 +189,28 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         /*
         [Trinity 2.41.122] -- Dumping Attribtues for X1_LR_Boss_TerrorDemon_A-12271 (Sno=360636 Ann=-2012478880) at <834.7147, 615.7178, 0.2362415> ----
-        [Trinity 2.41.122] Attributes (21): 
-         867: PowerBuff2VisualEffectB (-3229) [ PowerSnoId: DemonHunter_Multishot: 77649 ] i:0 f:0 Value=0 IsValid=True 
-         859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: DemonHunter_Passive_ThrillOfTheHunt: 211225 ] i:0 f:0 Value=0 IsValid=True 
-         859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: ItemPassive_Unique_Gem_002U_x1: 403457 ] i:0 f:0 Value=0 IsValid=True 
-         124: HitpointsMaxTotal (-3972) i:0 f:3.80403E+11 Value=380403000000 IsValid=True 
-         122: HitpointsMax (-3974) i:0 f:3.80403E+11 Value=380403000000 IsValid=True 
-         119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 IsValid=True 
-         115: HitpointsCur (-3981) i:0 f:3.401741E+11 Value=340174100000 IsValid=True 
-         1386: IsLootRunBoss (-2710) i:1 f:0 Value=1 IsValid=True 
-         105: Invulnerable (-3991) i:0 f:0 Value=0 IsValid=True 
-         359: ProjectileSpeed (-3737) i:0 f:0 Value=0 IsValid=True 
-         1368: BountyObjective (-2728) i:1 f:0 Value=1 IsValid=True 
-         585: BuffVisualEffect (-3511) i:1 f:0 Value=1 IsValid=True 
-         1091: MinimapActive (-3005) i:1 f:0 Value=1 IsValid=True 
-         317: Slow (-3779) i:0 f:0 Value=0 IsValid=True 
-         57: Level (-4039) i:70 f:0 Value=70 IsValid=True 
-         305: Chilled (-3791) i:0 f:0 Value=0 IsValid=True 
-         300: Stunned (-3796) i:0 f:0 Value=0 IsValid=True 
-         554: LastDamageACD (-3542) i:-2017590488 f:0 Value=-2017591000 IsValid=True 
-         292: Untargetable (-3804) i:0 f:0 Value=0 IsValid=True 
-         800: UsingBossbar (-3296) i:1 f:0 Value=1 IsValid=True 
-         524: SummonerId (-3572) i:-2012478880 f:0 Value=-2012479000 IsValid=True 
+        [Trinity 2.41.122] Attributes (21):
+         867: PowerBuff2VisualEffectB (-3229) [ PowerSnoId: DemonHunter_Multishot: 77649 ] i:0 f:0 Value=0 IsValid=True
+         859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: DemonHunter_Passive_ThrillOfTheHunt: 211225 ] i:0 f:0 Value=0 IsValid=True
+         859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: ItemPassive_Unique_Gem_002U_x1: 403457 ] i:0 f:0 Value=0 IsValid=True
+         124: HitpointsMaxTotal (-3972) i:0 f:3.80403E+11 Value=380403000000 IsValid=True
+         122: HitpointsMax (-3974) i:0 f:3.80403E+11 Value=380403000000 IsValid=True
+         119: HitpointsTotalFromLevel (-3977) i:0 f:0 Value=0 IsValid=True
+         115: HitpointsCur (-3981) i:0 f:3.401741E+11 Value=340174100000 IsValid=True
+         1386: IsLootRunBoss (-2710) i:1 f:0 Value=1 IsValid=True
+         105: Invulnerable (-3991) i:0 f:0 Value=0 IsValid=True
+         359: ProjectileSpeed (-3737) i:0 f:0 Value=0 IsValid=True
+         1368: BountyObjective (-2728) i:1 f:0 Value=1 IsValid=True
+         585: BuffVisualEffect (-3511) i:1 f:0 Value=1 IsValid=True
+         1091: MinimapActive (-3005) i:1 f:0 Value=1 IsValid=True
+         317: Slow (-3779) i:0 f:0 Value=0 IsValid=True
+         57: Level (-4039) i:70 f:0 Value=70 IsValid=True
+         305: Chilled (-3791) i:0 f:0 Value=0 IsValid=True
+         300: Stunned (-3796) i:0 f:0 Value=0 IsValid=True
+         554: LastDamageACD (-3542) i:-2017590488 f:0 Value=-2017591000 IsValid=True
+         292: Untargetable (-3804) i:0 f:0 Value=0 IsValid=True
+         800: UsingBossbar (-3296) i:1 f:0 Value=1 IsValid=True
+         524: SummonerId (-3572) i:-2012478880 f:0 Value=-2012479000 IsValid=True
 
         [Trinity 2.41.122] SelectedItem changed from  to X1_LR_Boss_TerrorDemon_A_BreathMinion, Type=Unit Dist=26.11438 IsBossOrEliteRareUnique=True IsAttackable=True
         [Trinity 2.41.122][Animation] TerrorDemon_attack_FireBreath State=Transform By: X1_LR_Boss_TerrorDemon_A_BreathMinion (429010)
@@ -223,7 +220,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition OrlashBoss = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.OrlashBoss,
+            Id = (int)AvoidanceType.OrlashBoss,
             Type = AvoidanceType.OrlashBoss,
             Name = "Orlash (Boss)",
             Element = Element.Lightning,
@@ -259,7 +256,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition Thunderstorm = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.Thunderstorm,
+            Id = (int)AvoidanceType.Thunderstorm,
             Type = AvoidanceType.Thunderstorm,
             Name = "Thunderstorm",
             Element = Element.Lightning,
@@ -280,7 +277,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition HeraldOfPestilence = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.HeraldOfPestilence,
+            Id = (int)AvoidanceType.HeraldOfPestilence,
             Type = AvoidanceType.HeraldOfPestilence,
             Name = "Herald of Pestilence",
             Element = Element.Poison,
@@ -302,7 +299,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition Desecrator = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.Desecrator,
+            Id = (int)AvoidanceType.Desecrator,
             Type = AvoidanceType.Desecrator,
             Name = "Desecrator",
             Element = Element.Fire,
@@ -325,7 +322,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition MorluMeteor = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.MorluMeteor,
+            Id = (int)AvoidanceType.MorluMeteor,
             Type = AvoidanceType.MorluMeteor,
             Name = "Morlu Meteor",
             Element = Element.Fire,
@@ -343,11 +340,11 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         };
 
         //[22017F4C] Type: ClientEffect Name: x1_sniperAngel_shardBolt_orb-3273 ActorSnoId: 333688, Distance: 20.05622
-        // 
+        //
 
         public static AvoidanceDefinition ExarchLightningStorm = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.ExarchLightningStorm,
+            Id = (int)AvoidanceType.ExarchLightningStorm,
             Type = AvoidanceType.ExarchLightningStorm,
             Name = "Exarch Lightning Storm",
             Element = Element.Lightning,
@@ -370,7 +367,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         //[2063E270] Type: Monster Name: Generic_Proxy-34955 ActorSnoId: 4176, Distance: 7.551051
         //[2064B684] Type: Monster Name: Generic_Proxy-34967 ActorSnoId: 4176, Distance: 7.551051
         //[20654558] Type: ServerProp Name: g_ChargedBolt_Projectile-34975 ActorSnoId: 4394, Distance: 14.51281
-        // Generic proxy probably used for a lot of things, need to find unique id or check only in the presence of this actor. 
+        // Generic proxy probably used for a lot of things, need to find unique id or check only in the presence of this actor.
 
         //AvoidanceData.Add(new AvoidanceData
         //{
@@ -394,7 +391,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition GhomBoss = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.GhomBoss,
+            Id = (int)AvoidanceType.GhomBoss,
             Type = AvoidanceType.GhomBoss,
             Name = "Ghom",
             Description = "Gas cloud scattered around by this rift boss",
@@ -414,22 +411,22 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         /*
         InternalNameLowerCase => monsteraffix_molten_deathstart_proxy-395571
-        Attributes => Attributes (4) Id=136/1543897224 
-         105: Invulnerable (-3991) i:1 f:0 Value=1 
-         103: TeamId (-3993) i:10 f:0 Value=10 
-         877: PowerBuff4VisualEffectNone (-3219) [ PowerSnoId: MonsterAffix_Molten: 90314 ] i:1 f:0 Value=1 
-         585: BuffVisualEffect (-3511) i:1 f:0 Value=1 
+        Attributes => Attributes (4) Id=136/1543897224
+         105: Invulnerable (-3991) i:1 f:0 Value=1
+         103: TeamId (-3993) i:10 f:0 Value=10
+         877: PowerBuff4VisualEffectNone (-3219) [ PowerSnoId: MonsterAffix_Molten: 90314 ] i:1 f:0 Value=1
+         585: BuffVisualEffect (-3511) i:1 f:0 Value=1
          CollisionRadius => 1
         AxialRadius => 5.587935E-09
         ActorType => ServerProp
-        ActorType:ServerProp ApperanceSNO:14322 PhysMeshSNO:-1 Cylinder:Position:<0.007729018, -0.006169997, -0.007890721> 
-        Ax1:5.587935E-09 Ax2:9 Sphere:Center:<0, 0, 0> Radius:9 AABB:Min:<0, 0, 0> Max:<0.1593657, 0.1593657, 3.53863E-17> 
+        ActorType:ServerProp ApperanceSNO:14322 PhysMeshSNO:-1 Cylinder:Position:<0.007729018, -0.006169997, -0.007890721>
+        Ax1:5.587935E-09 Ax2:9 Sphere:Center:<0, 0, 0> Radius:9 AABB:Min:<0, 0, 0> Max:<0.1593657, 0.1593657, 3.53863E-17>
         AnimSetSNO:-1 SNOMonster:-1
         */
 
         public static AvoidanceDefinition MoltenCore = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.MoltenCore,
+            Id = (int)AvoidanceType.MoltenCore,
             Type = AvoidanceType.MoltenCore,
             Name = "Molten Core",
             Description = "Explosion on the ground after killing a 'molten' elite",
@@ -442,7 +439,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
                 DistanceMultiplier = 1,
                 HealthPct = 100,
                 Prioritize = true,
-                IsEnabled = true,                
+                IsEnabled = true,
             },
             Parts = new List<AvoidancePart>
             {
@@ -480,7 +477,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition FireChains = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.FireChains,
+            Id = (int)AvoidanceType.FireChains,
             Type = AvoidanceType.FireChains,
             Name = "Fire Chains",
             Affix = MonsterAffixes.FireChains,
@@ -499,15 +496,15 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
             }
         };
 
-        //Tethrys ActorId: 359688, Type: Monster, Name: X1_LR_Boss_Succubus_A-17034, 
+        //Tethrys ActorId: 359688, Type: Monster, Name: X1_LR_Boss_Succubus_A-17034,
         //X1_Unique_Monster_Generic_Projectile_Fire - 17346
         //ActorId: 315366, Type: ServerProp, Name: x1_Adria_Geyser - 17939, Distance2d: 6.132203, CollisionRadius: 0, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
-        //ActorId: 4176, Type: Monster, Name: Generic_Proxy - 17932, Distance2d: 4.620997, CollisionRadius: 0, MinimapActive: 0, 
+        //ActorId: 4176, Type: Monster, Name: Generic_Proxy - 17932, Distance2d: 4.620997, CollisionRadius: 0, MinimapActive: 0,
         //ActorId: 315362, Type: ServerProp, Name: x1_Adria_Geyser_Pending - 17931, Distance2d: 48.03704, CollisionRadius: 0, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
 
         public static AvoidanceDefinition TethrysBoss = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.TethrysBoss,
+            Id = (int)AvoidanceType.TethrysBoss,
             Type = AvoidanceType.TethrysBoss,
             Name = "Tethrys Boss",
             Handler = new CircularAvoidanceHandler(),
@@ -519,7 +516,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
                 //{
                 //    Name = "Projectile",
                 //    ActorSnoId = 4176, // dont use generic proxy
-                //    Radius = 5f,                        
+                //    Radius = 5f,
                 //    Severity = Severity.Minor,
                 //    Type = PartType.Projectile,
                 //},
@@ -541,11 +538,11 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
             }
         };
 
-        //ActorId: 223675, Type: ServerProp, Name: monsterAffix_frozen_iceClusters - 4487, 
+        //ActorId: 223675, Type: ServerProp, Name: monsterAffix_frozen_iceClusters - 4487,
 
         public static AvoidanceDefinition Frozen = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.Frozen,
+            Id = (int)AvoidanceType.Frozen,
             Type = AvoidanceType.Frozen,
             Name = "Frozen",
             Affix = MonsterAffixes.Frozen,
@@ -567,11 +564,11 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         // Unit a3_Battlefield_demonic_forge-29378 (174900) has gained BuffVisualEffect (i:1 f:00.00000)
         // Unit a3_Battlefield_demonic_forge-29378 has a3_battlefield_demonic_forge(PowerBuff0VisualEffectNone)
-        // ActorId: 185391, Type: Monster, Name: a3_crater_st_demonic_forge-875, 
+        // ActorId: 185391, Type: Monster, Name: a3_crater_st_demonic_forge-875,
 
         public static AvoidanceDefinition Furnace = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.Furnace,
+            Id = (int)AvoidanceType.Furnace,
             Type = AvoidanceType.Furnace,
             Name = "Furnace",
             Handler = new FurnaceAvoidanceHandler(),
@@ -581,7 +578,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
                 new AvoidancePart
                 {
                     Name = "Forge Fire Breath 1",
-                    ActorSnoId = (int) SNOActor.a3_Battlefield_demonic_forge, //174900,         
+                    ActorSnoId = (int) SNOActor.a3_Battlefield_demonic_forge, //174900,
                     Attribute = ActorAttributeType.PowerBuff0VisualEffectNone,
                     Power = SNOPower.a3_battlefield_demonic_forge,
                     Type = PartType.VisualEffect
@@ -601,10 +598,10 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         //Line 259: [1F4A52DC] Type: ClientEffect Name: X1_Unique_Monster_Generic_AOE_Sphere_Distortion-211338 ActorSnoId: 358917, Distance: 2.384186E-07
         //Line 260: [1F472980] Type: ServerProp Name: X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot-211337 ActorSnoId: 359693, Distance: 2.384186E-07
         //Line 271: [1F490598] Type: ServerProp Name: X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot-211250 ActorSnoId: 359693, Distance: 29.45315
-        
+
         public static AvoidanceDefinition ButcherBoss = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.ButcherBoss,
+            Id = (int)AvoidanceType.ButcherBoss,
             Type = AvoidanceType.ButcherBoss,
             Name = "Butcher Boss",
             Description = "A Rift and Campaign Boss with a big cleaver. Fresh Meat!",
@@ -615,14 +612,14 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
                 new AvoidancePart
                 {
                     Name = "Butcher Pentagram",
-                    ActorSnoId = (int) SNOActor.X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot, //359693,    
+                    ActorSnoId = (int) SNOActor.X1_Unique_Monster_Generic_AOE_DOT_Fire_10foot, //359693,
                     Radius = 12f,
                     Type = PartType.Main
                 },
                 new AvoidancePart
                 {
                     Name = "Butcher Pentagram Telegraph", // ClientEffect
-                    ActorSnoId = (int) SNOActor.X1_Unique_Monster_Generic_AOE_Sphere_Distortion, //359693,    
+                    ActorSnoId = (int) SNOActor.X1_Unique_Monster_Generic_AOE_Sphere_Distortion, //359693,
                     Radius = 12f,
                     Type = PartType.Telegraph
                 }
@@ -644,7 +641,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition Grotesque = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.Grotesque,
+            Id = (int)AvoidanceType.Grotesque,
             Type = AvoidanceType.Grotesque,
             Name = "Grotesque",
             Description = "Fat guys that explode into worms",
@@ -729,7 +726,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition ChargeAttacks = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.ChargeAttacks,
+            Id = (int)AvoidanceType.ChargeAttacks,
             Type = AvoidanceType.ChargeAttacks,
             Name = "Charge Attacks",
             Description = "All types of charge based attacks by monsters",
@@ -944,15 +941,14 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         //x1_LR_Boss_MalletDemon_FallingRocks 368453,
         //todo Parendi / malletdemon avoidance - he hits like a truck.
 
-
         // Beast Creatures with a small guy riding on them, stun the player.
-        //[Trinity 2.41.50][Weight] Found New Target MastaBlasta_Combined_A dist=6 IsElite=False Radius=11.0 Weight=1099 ActorSnoId=137856 AnimSnoId=MastaBlasta_Combined_taunt TargetedCount=26 Type=Unit 
-        //MastaBlasta_Combined_attack_stomp 
+        //[Trinity 2.41.50][Weight] Found New Target MastaBlasta_Combined_A dist=6 IsElite=False Radius=11.0 Weight=1099 ActorSnoId=137856 AnimSnoId=MastaBlasta_Combined_taunt TargetedCount=26 Type=Unit
+        //MastaBlasta_Combined_attack_stomp
 
         //AvoidanceData.Add(new AvoidanceData
         //{
         //    Name = "Stun/Paralyse Attacks",
-        //    Handler = new AnimationConeAvoidanceHandler(),                
+        //    Handler = new AnimationConeAvoidanceHandler(),
         //    Parts = new List<AvoidancePart>
         //    {
         //        new AvoidancePart
@@ -965,13 +961,12 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         //    }
         //});
 
-
         //[19147660] Type: ClientEffect Name: p4_ratKing_ratBall_model-47703 ActorSnoId: 427100, Distance: 19.72662
         //p4_RatKing_RatBallMonster, Type=Unit Dist=24.44967 IsBossOrEliteRareUnique=False IsAttackable=True
 
         public static AvoidanceDefinition RatKing = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.RatKing,
+            Id = (int)AvoidanceType.RatKing,
             Type = AvoidanceType.RatKing,
             Name = "Rat King",
             Description = "Rift Boss who dispatches balls of rats",
@@ -1049,7 +1044,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition Plagued = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.Plagued,
+            Id = (int)AvoidanceType.Plagued,
             Type = AvoidanceType.Plagued,
             Name = "Plagued",
             Description = "Swirly puddles of poisonous goo",
@@ -1082,7 +1077,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition FrozenPulse = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.FrozenPulse,
+            Id = (int)AvoidanceType.FrozenPulse,
             Type = AvoidanceType.FrozenPulse,
             Name = "Frozen Pulse",
             Description = "Spikey ice balls that chase you, then explode",
@@ -1135,7 +1130,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition MoltenTrail = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.MoltenTrail,
+            Id = (int)AvoidanceType.MoltenTrail,
             Type = AvoidanceType.MoltenTrail,
             Name = "Molten Trail",
             Description = "Fire trails behind molten elites",
@@ -1161,7 +1156,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition ArcaneSentry = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.ArcaneSentry,
+            Id = (int)AvoidanceType.ArcaneSentry,
             Type = AvoidanceType.ArcaneSentry,
             Name = "Arcane Sentry",
             Description = "Beams of hurt that spin around",
@@ -1203,7 +1198,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition MaghdaBoss = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.MaghdaBoss,
+            Id = (int)AvoidanceType.MaghdaBoss,
             Type = AvoidanceType.MaghdaBoss,
             Name = "Maghda Boss",
             Description = "Handling for the insect projectile she shoots",
@@ -1231,7 +1226,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition Orbiter = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.Orbiter,
+            Id = (int)AvoidanceType.Orbiter,
             Type = AvoidanceType.Orbiter,
             Name = "Orbiter",
             Description = "Balls of lighting that enlarge when u get close",
@@ -1261,12 +1256,12 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
             }
         };
 
-        //ActorId: 432, Type: ServerProp, Name: skeletonMage_fire_groundPool-1029, Distance2d: 0.240312, 
-        //ActorId: 5374, Type: Projectile, Name: skeletonMage_Fire_projectile-1435, 
+        //ActorId: 432, Type: ServerProp, Name: skeletonMage_fire_groundPool-1029, Distance2d: 0.240312,
+        //ActorId: 5374, Type: Projectile, Name: skeletonMage_Fire_projectile-1435,
 
         public static AvoidanceDefinition MageFire = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.MageFire,
+            Id = (int)AvoidanceType.MageFire,
             Type = AvoidanceType.MageFire,
             Name = "Mage Fire",
             Description = "A single small puddle of fire",
@@ -1313,7 +1308,6 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         //    }
         //});
 
-
         //Line 10390:     x1_MonsterAffix_CorpseBomber_projectile = 316389,
         //Line 10634:     X1_MonsterAffix_corpseBomber_bomb = 325761,
         //Line 11233:     x1_MonsterAffix_CorpseBomber_bomb_start = 340319,
@@ -1330,7 +1324,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition PoisonEnchanted = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.PoisonEnchanted,
+            Id = (int)AvoidanceType.PoisonEnchanted,
             Type = AvoidanceType.PoisonEnchanted,
             Name = "Poison Enchanted",
             Description = "Poison affix that makes long vertical or horizontal trails from an explosion point.",
@@ -1369,7 +1363,7 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
 
         public static AvoidanceDefinition Mortar = new AvoidanceDefinition
         {
-            Id = (int) AvoidanceType.Mortar,
+            Id = (int)AvoidanceType.Mortar,
             Type = AvoidanceType.Mortar,
             Name = "Mortar",
             Affix = MonsterAffixes.Mortar,
@@ -1390,21 +1384,21 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
         /*
         Malthael
 
-        291: Immunity (-3805) [ DamageType: Cold: 3 ] i:1 f:0 Value=1 
-         291: Immunity (-3805) [ DamageType: Lightning: 2 ] i:1 f:0 Value=1 
-         291: Immunity (-3805) [ DamageType: Fire: 1 ] i:1 f:0 Value=1 
-         291: Immunity (-3805) [ DamageType: Physical: 0 ] i:1 f:0 Value=1 
-         291: Immunity (-3805) [ DamageType: Holy: 6 ] i:1 f:0 Value=1 
-         291: Immunity (-3805) [ DamageType: Arcane: 5 ] i:1 f:0 Value=1 
-         291: Immunity (-3805) [ DamageType: Poison: 4 ] i:1 f:0 Value=1 
+        291: Immunity (-3805) [ DamageType: Cold: 3 ] i:1 f:0 Value=1
+         291: Immunity (-3805) [ DamageType: Lightning: 2 ] i:1 f:0 Value=1
+         291: Immunity (-3805) [ DamageType: Fire: 1 ] i:1 f:0 Value=1
+         291: Immunity (-3805) [ DamageType: Physical: 0 ] i:1 f:0 Value=1
+         291: Immunity (-3805) [ DamageType: Holy: 6 ] i:1 f:0 Value=1
+         291: Immunity (-3805) [ DamageType: Arcane: 5 ] i:1 f:0 Value=1
+         291: Immunity (-3805) [ DamageType: Poison: 4 ] i:1 f:0 Value=1
 
-         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_DeathFogMonster_Setup: 325140 ] i:1 f:0 Value=1 
-                853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_DrainSoul: 327766 ] i:1 f:0 Value=1 
-         859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: X1_Malthael_DrainSoul: 327766 ] i:1 f:0 Value=1 
-         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_SummonDeathFogMonster: 325184 ] i:1 f:0 Value=1 
-         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_PhaseOne_AIState: 330358 ] i:1 f:0 Value=1 
-         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_SwordShieldStart: 325648 ] i:0 f:0 Value=0 
-          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_SickleThrowTeleport: 327847 ] i:0 f:0 Value=0 
+         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_DeathFogMonster_Setup: 325140 ] i:1 f:0 Value=1
+                853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_DrainSoul: 327766 ] i:1 f:0 Value=1
+         859: PowerBuff1VisualEffectNone (-3237) [ PowerSnoId: X1_Malthael_DrainSoul: 327766 ] i:1 f:0 Value=1
+         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_SummonDeathFogMonster: 325184 ] i:1 f:0 Value=1
+         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_PhaseOne_AIState: 330358 ] i:1 f:0 Value=1
+         853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: x1_Malthael_SwordShieldStart: 325648 ] i:0 f:0 Value=0
+          853: PowerBuff0VisualEffectNone (-3243) [ PowerSnoId: X1_Malthael_SickleThrowTeleport: 327847 ] i:0 f:0 Value=0
 
             Animation => x1_Malthael_sword_sheild // spinning blades aura
             x1_malthael_drainSoul_ghost
@@ -1462,9 +1456,9 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
             Id = (int)AvoidanceType.MalthaelTeleport,
             Type = AvoidanceType.MalthaelTeleport,
             Group = "Malthael",
-            Name = "Maltheal Teleport Attack",       
+            Name = "Maltheal Teleport Attack",
             Description = "Maltheal teleports to you and owns you with his sickle",
-            Element = Element.Physical,            
+            Element = Element.Physical,
             Handler = new AnimationBeamAvoidanceHandler(),
             Parts = new List<AvoidancePart>
             {
@@ -1491,6 +1485,5 @@ ActorInfo => ActorType:ServerProp ApperanceSNO:375582 PhysMeshSNO:-1 Cylinder:Po
                 },
             }
         };
-
     }
 }

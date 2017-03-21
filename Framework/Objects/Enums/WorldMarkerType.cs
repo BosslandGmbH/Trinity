@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Trinity.Framework.Objects.Enums
+﻿namespace Trinity.Framework.Objects.Enums
 {
     public enum WorldMarkerType
     {
@@ -16,10 +10,8 @@ namespace Trinity.Framework.Objects.Enums
         Objective = 81058,
         Portal = 332286,
         Shrine = 218235,
-        LegendaryItem = 275968,   
+        LegendaryItem = 275968,
         SetItem = 404424,
-        ExitStone = 218394, 
+        ExitStone = 218394,
     }
 }
-
-

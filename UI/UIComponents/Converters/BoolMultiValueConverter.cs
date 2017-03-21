@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;

@@ -1,63 +1,49 @@
 ﻿using System.Linq;
+using Trinity.Framework;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
 using Trinity.Components.Adventurer.Game.Quests;
-using Trinity.Components.Adventurer.Util;
+using Trinity.Components.QuestTools;
 using Zeta.Bot;
 using Zeta.Bot.Profile;
 using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
+using System.Threading.Tasks;
 
 namespace Trinity.ProfileTags
 {
     [XmlElement("RunBounty")]
-    public class RunBountyTag : ProfileBehavior
+    public class RunBountyTag : BaseProfileBehavior
     {
         private BountyCoroutine _bounty;
 
-        private bool _isDone;
-
-        public override bool IsDone
+        public override async Task<bool> StartTask()
         {
-            get
+            var bountyInfo = ZetaDia.Storage.Quests.Bounties.FirstOrDefault(b => (int)b.Quest == QuestId);
+            if (bountyInfo == null)
             {
-                return _isDone || (_bounty != null && _bounty.IsDone);
+                Core.Logger.Error($"[RunBountyTag] Bounty is not available in this game.");
+                return true;
             }
-        }
-
-        public override void OnStart()
-        {
-            var bountyInfo = ZetaDia.ActInfo.Bounties.FirstOrDefault(b => (int)b.Quest == QuestId);
 
             _bounty = BountyCoroutineFactory.GetBounty(bountyInfo);
             if (_bounty == null)
             {
-                Logger.Error("[RunBountyTag] Unsupported QuestId ({0}), ending tag.", QuestId);
-                _isDone = true;
+                Core.Logger.Error($"[RunBountyTag] Bounty is not supported ({QuestId}), ending tag.");
+                return true;
             }
+
+            _bounty.Reset();
+            return false;
         }
 
-        protected override Composite CreateBehavior()
+        public override async Task<bool> MainTask()
         {
-            if (_bounty == null)
-            {
-                return null;
-            }
-            return new ActionRunCoroutine(ctx => _bounty.GetCoroutine());
+            if (!_bounty.IsDone && !await _bounty.GetCoroutine())
+                return false;
+
+            return true;
         }
 
-        //public override void OnDone()
-        //{
-        //    if (_bounty != null)
-        //    {
-        //        _bounty.ResetState();
-        //    }
-        //}
-
-        public override void ResetCachedDone(bool force = false)
-        {
-            _bounty = null;
-            _isDone = false;
-        }
     }
 }

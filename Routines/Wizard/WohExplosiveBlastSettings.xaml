@@ -1,0 +1,115 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+
+    mc:Ignorable="d" Background="#434343" d:DesignHeight="5000" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../UI/Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Padding="10">
+        <Grid>
+            <StackPanel>
+                <GroupBox>
+                    <GroupBox.Header>How To Use:</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">Read all content of this page</TextBlock>
+                        <GroupBox>
+                            <GroupBox.Header>Trinity Avoidance Page Set:</GroupBox.Header>
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Disable all Avoidance</TextBlock>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox>
+                            <GroupBox.Header>Trinity General Page Set:</GroupBox.Header>
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Set Trash Monster to Ignore</TextBlock>
+                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Set Elite Monster to Attack</TextBlock>
+                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Set Container to Ignore</TextBlock>
+                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Set Globe to Ignore</TextBlock>
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox>
+                            <GroupBox.Header>Backup Protect Set:</GroupBox.Header>
+                            <StackPanel>
+                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Put every material and gem number of 1 in backpack</TextBlock>
+                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Reusable Parts/Arcane Dust/Veiled Crystal/Forgotten Soul</TextBlock>
+                                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Death's Breath/Marquise Gems/Imperial Gems.</TextBlock>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Need Attributes:</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Cooldown Reduce 40%+</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Critical Hit Chance 52%+</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Critical Hit Damage 470%+</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Area Damage 150%+</TextBlock>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Suits:</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Tal Rasha's Elements (Equip 5) (Effect 3)</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Bastions of Will (Equip 2) (Effect 1)</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Sage's Journey (Equip 2) (Effect 2)</TextBlock>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Active Skils:</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Frost Nova - Frozen Mist</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Magic Weapon - Force Weapon</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Spectral Blade - Thrown Blade</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Explosive Blast - Chain Reaction</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Diamond Skin - Prism</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Teleport - Calamity</TextBlock>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Passive Skils:</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Illusionist</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Evocation</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Glass Cannon</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Audacity</TextBlock>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Legendary Effects:</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Goldwrap</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Homing Pads</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Ring Of Royal Grandeur</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Nemesis Bracers</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Gloves of Worship</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Wand of Woh</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Ingeom</TextBlock>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Legendary Gems:</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Wreath of Lightning</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Bane of the Trapped</TextBlock>
+                        <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Top" TextWrapping="Wrap">* Boon of the Hoarder</TextBlock>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
+
+    

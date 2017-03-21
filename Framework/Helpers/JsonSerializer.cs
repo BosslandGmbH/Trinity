@@ -31,7 +31,7 @@ namespace Trinity.Framework.Helpers
             }
             catch (Exception ex)
             {
-                Logger.LogDebug($"JsonSerializer.Serialize Excpetion. Type={typeof(T)} {ex}");
+                Core.Logger.Debug($"JsonSerializer.Serialize Excpetion. Type={typeof(T)} {ex}");
                 return null;
             }
         }
@@ -48,7 +48,7 @@ namespace Trinity.Framework.Helpers
             }
             catch (Exception ex)
             {
-                Logger.LogDebug($"JsonSerializer.Serialize Excpetion. Type={typeof(T)} {ex}");
+                Core.Logger.Debug($"JsonSerializer.Serialize Excpetion. Type={typeof(T)} {ex}");
                 return null;
             }
         }
@@ -69,7 +69,7 @@ namespace Trinity.Framework.Helpers
             }
             catch (Exception ex)
             {
-                Logger.LogDebug($"JsonSerializer.Serialize Excpetion. Type={typeof(T)} {ex}");
+                Core.Logger.Debug($"JsonSerializer.Serialize Excpetion. Type={typeof(T)} {ex}");
             }
         }
 

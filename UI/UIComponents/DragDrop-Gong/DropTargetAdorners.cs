@@ -1,8 +1,7 @@
 ﻿using System;
-
 namespace Trinity.UI.UIComponents
 {
-  public class DropTargetAdorners
+    public class DropTargetAdorners
   {
     public static Type Highlight
     {

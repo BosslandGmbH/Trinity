@@ -1,5 +1,4 @@
 using System;
-
 namespace Trinity.Framework.Helpers
 {
     public class StaticRouter<T>
@@ -21,8 +20,5 @@ namespace Trinity.Framework.Helpers
         {
             _expr = ReflectionHelper.GetPrivateStaticFieldAccessor<T>(parentType, index);
         }
-
-        
     }
 }
-

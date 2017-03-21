@@ -1,0 +1,31 @@
+﻿<Profile>
+  <Name>Tag Test - When</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> TakeWaypoint Test Started " />
+
+    <If condition="CurrentLevelAreaId != 92945">
+      <TakeWaypoint destinationLevelAreaSnoId="92945" />
+    </If>
+
+    <MoveToPosition x="329" y="437" z="0" />
+
+    <When condition="ActorExistsNearMe(361241,20)" name="Waypoint">
+      <LogMessage message="When Condition Triggered - Take waypoint when near kadala" />
+      <TakeWaypoint number="1" />
+      <Wait seconds="3" />
+    </When>
+
+    <When condition="ActorExistsNearMe(6442,20)" name="KadalaMove">
+      <LogMessage message="When Condition Triggered - Move to kadala when near waypoint " />
+      <MoveToActor actorId="361241" />
+      <Wait seconds="3" />
+    </When>
+
+    <!-- Waypoint-6749 (6442) Waypoint Distance=6.827172 Type=Waypoint -->
+    <MoveToActor questId="312429" stepId="2" actorId="6442" explore="false" maxRange="300" x="402.54" y="414.34" z=".7" />    
+    <Wait seconds="5" />
+    
+    <LogMessage message=">> TakeWaypoint Test Finished " />       
+  </Order>
+</Profile>

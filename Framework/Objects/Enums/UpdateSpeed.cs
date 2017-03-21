@@ -26,7 +26,7 @@
         /// Every 500ms
         /// </summary>
         Normal = 500,
-        
+
         /// <summary>
         /// Every 1000ms
         /// </summary>
@@ -41,7 +41,5 @@
         /// Every 5000ms
         /// </summary>
         ExtremelySlow = 5000
-
-
     }
 }

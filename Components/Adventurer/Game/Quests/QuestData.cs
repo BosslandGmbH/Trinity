@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using Trinity.Components.Adventurer.Game.Actors;
-using Trinity.Components.Adventurer.Util;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.SNO;
@@ -37,11 +37,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
             questData.InternalName = bountyInfo.Quest.ToString();
             questData.Act = bountyInfo.Act;
             questData.ActName = bountyInfo.Act.ToString();
-            
-            questData.LevelAreaIds = new HashSet<int>(bountyInfo.LevelAreas.Select(la => (int)la));
-            
-            questData.Waypoint = WaypointFactory.GetWaypointByLevelAreaId((int)bountyInfo.StartingLevelArea);
 
+            questData.LevelAreaIds = new HashSet<int>(bountyInfo.LevelAreas.Select(la => (int)la));
+
+            questData.Waypoint = WaypointFactory.GetWaypointByLevelAreaId((int)bountyInfo.StartingLevelArea);
 
             foreach (var step in bountyInfo.Info.QuestRecord.Steps)
             {
@@ -61,10 +60,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
             //    questData.BountyScript.Reset();
             //}
 
-            //Logger.Debug("[QuestData] Saving Quest {0} ({1})", questData.Name, questData.QuestId);
+            //Core.Logger.Debug("[QuestData] Saving Quest {0} ({1})", questData.Name, questData.QuestId);
             //questData.Save();
             return questData;
-        }    
+        }
 
         public bool IsObjectiveActive(QuestStepObjectiveType objectiveType)
         {
@@ -73,7 +72,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         private static BountyInfo GetBountyInfo(int questId)
         {
-            return ZetaDia.ActInfo.Bounties.FirstOrDefault(b => (int)b.Quest == questId);
+            return ZetaDia.Storage.Quests.Bounties.FirstOrDefault(b => (int)b.Quest == questId);
         }
     }
 
@@ -83,7 +82,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
         public string Name { get; set; }
         public List<QuestStepObjectiveData> Objectives { get; set; }
 
-        public QuestStepData() { }
+        public QuestStepData()
+        {
+        }
 
         public QuestStepData(QuestData questData, QuestStep questStep)
         {
@@ -97,17 +98,17 @@ namespace Trinity.Components.Adventurer.Game.Quests
         }
 
         private bool _isActive = true;
+
         //[JsonIgnore]
         public bool IsActive
         {
             get
             {
                 if (!_isActive) return false;
-                _isActive = ZetaDia.ActInfo.AllQuests.Any(q => q.QuestStep == StepId);
+                _isActive = ZetaDia.Storage.Quests.AllQuests.Any(q => q.QuestStep == StepId);
                 return _isActive;
             }
         }
-
     }
 
     public class QuestStepObjectiveData
@@ -119,7 +120,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
         public string ObjectiveTypeName { get; set; }
         public string Name { get; set; }
 
-        public QuestStepObjectiveData() { }
+        public QuestStepObjectiveData()
+        {
+        }
 
         public QuestStepObjectiveData(QuestData questData, QuestStepData questStepData, QuestStepObjective objective)
         {
@@ -131,6 +134,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         }
 
         private bool _isActive = true;
+
         //[JsonIgnore]
         public bool IsActive
         {
@@ -147,13 +151,13 @@ namespace Trinity.Components.Adventurer.Game.Quests
             var currentQuest = QuestInfo.FromId(questId);
             if (currentQuest == null)
             {
-                Logger.Debug("[Bounty] Failed to determine the step id. Reason: Quest not found.");
+                Core.Logger.Debug("[Bounty] Failed to determine the step id. Reason: Quest not found.");
                 return false;
             }
             var step = currentQuest.QuestRecord.Steps.FirstOrDefault();
             if (step == null)
             {
-                Logger.Debug("[Bounty] Failed to determine the step id. Reason: Step not found.");
+                Core.Logger.Debug("[Bounty] Failed to determine the step id. Reason: Step not found.");
                 return false;
             }
             var objectives = currentQuest.QuestRecord.Steps.First(qs => qs.StepId == questStepId).QuestStepObjectiveSet.QuestStepObjectives;
@@ -169,5 +173,4 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return QuestObjectiveInfo.IsActiveObjective(questId, questStepId, objectiveIndex);
         }
     }
-
 }

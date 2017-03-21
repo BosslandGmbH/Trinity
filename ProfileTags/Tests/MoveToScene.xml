@@ -1,0 +1,23 @@
+﻿<Profile>
+  <Name>Tag Test - MoveToActor</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> MoveToActor Test Started " />
+
+    <If condition="CurrentLevelAreaId != 92945">
+      <TakeWaypoint destinationLevelAreaSnoId="92945" />
+    </If>
+    
+    <!-- Scene: a3dun_vendors_A_E01_S01, SnoId: 172888 -->    
+    <!-- test by name -->
+    <MoveToScene questId="312429" stepId="2" sceneName="E01_S01" worldSnoId="172909" levelAreaSnoId="92945" />
+
+    <MoveToPosition questId="312429" stepId="2" x="106.629997253418" y="484.75" z="25.0799999237061" />
+
+    <!-- Scene: a3dun_vendors_A_E01_S02, SnoId: 172876, -->
+    <!-- test by id -->
+    <MoveToScene questId="312429" stepId="2" sceneSnoId="172876" worldSnoId="172909" levelAreaSnoId="92945" />
+
+    <LogMessage message=">> MoveToActor Test Finished " />
+  </Order>
+</Profile>

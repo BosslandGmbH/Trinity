@@ -7,7 +7,6 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using Trinity.Framework.Objects.Memory.Misc;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 
@@ -15,6 +14,18 @@ namespace Trinity.Framework.Helpers
 {
     public static class ReflectionHelper
     {
+        public static List<T> FieldToList<T>(FieldInfo fieldInfo, object parent)
+        {
+            var value = fieldInfo.GetValue(parent);
+            var valEnumerable = value as IEnumerable<T>;
+            if (valEnumerable != null)
+            {
+                return valEnumerable.ToList();
+            }
+            var fields = value.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public);
+            return fields.Select(t => t.GetValue(value)).Cast<T>().ToList();
+        }
+
         private static IEnumerable<T> GetInterfaceMembers<T>(object obj)
         {
             var type = obj.GetType();
@@ -90,11 +101,6 @@ namespace Trinity.Framework.Helpers
             return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new List<object> { instance }.Concat(parameters).ToArray(), null);
         }
 
-        public static T To<T>(this ActorCommonData instance) where T : ACD
-        {
-            return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { instance.BaseAddress }, null);
-        }
-
         public static T UnsafeCreate<T>(this ACD instance) where T : ACD
         {
             return (T)Activator.CreateInstance(typeof(T), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { instance.BaseAddress }, null);
@@ -102,9 +108,9 @@ namespace Trinity.Framework.Helpers
 
         public static string DumpOffsets<T>() where T : struct
         {
-            var type = typeof (T);
+            var type = typeof(T);
             var db = new StringBuilder();
-            foreach(var field in type.GetFields())
+            foreach (var field in type.GetFields())
             {
                 db.AppendLine($" {field.Name} = ReadOffset<{field.FieldType.Name}>(0x{Marshal.OffsetOf(type, field.Name).ToString("x")});");
             }
@@ -125,7 +131,11 @@ namespace Trinity.Framework.Helpers
                 catch (Exception)
                 {
                     continue;
-                }                
+                }
+                if (val == null)
+                {
+                    continue;
+                }
                 dynamic value = Convert.ChangeType(val, property.PropertyType);
                 if (property.PropertyType.IsValueType)
                 {
@@ -156,8 +166,6 @@ namespace Trinity.Framework.Helpers
             }
             return null;
         }
-
-
 
         public static MemberExpression StaticPropertyOrField(Type type, string propertyOrFieldName)
         {
@@ -264,8 +272,6 @@ namespace Trinity.Framework.Helpers
                 return false;
 
             return true;
-
         }
     }
 }
-

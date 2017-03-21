@@ -1,7 +1,7 @@
 ﻿using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
-using Trinity.Components.Adventurer.Cache;
 using Zeta.Common;
 using Zeta.Game.Internals.SNO;
 
@@ -17,7 +17,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         int UnvisitedWeight { get; }
         bool IsIgnored { get; set; }
         byte AStarValue { get; set; }
+
         List<IGroupNode> GetNeighbors(int distance, bool includeSelf = false);
+
         IDetailNode NavigableCenterNode { get; set; }
     }
 
@@ -37,13 +39,16 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public Vector2 TopRight { get; private set; }
         public Vector2 BottomRight { get; set; }
         public int NavigableCellCount { get; private set; }
+
         //public float FillPercentage { get; private set; }
         public bool HasEnoughNavigableCells { get; private set; }
+
         public List<IDetailNode> Nodes { get; private set; }
         public WorldScene Scene { get { return _scene; } }
         public bool IsKnown { get; set; }
         public bool IsVisited { get; set; }
         public NodeFlags NodeFlags { get; set; }
+
         //public uint CustomFlags { get; set; }
         public GridPoint GridPoint { get; set; }
 
@@ -83,13 +88,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             var halfSize = (float)boxSize / 2;
             //_maxCellsCount = _boxSize / 2.5 / 2;
 
-            Center = center;            
+            Center = center;
             TopLeft = Center + new Vector2(-(halfSize), -(halfSize));
             BottomLeft = Center + new Vector2(-(halfSize), halfSize);
             TopRight = Center + new Vector2(halfSize, -(halfSize));
             BottomRight = Center + new Vector2(halfSize, halfSize);
             NavigableCenterNode = null;
-            IsBlacklisted = Scene.BlacklistedPositions.Any(IsInNode);          
+            IsBlacklisted = Scene.BlacklistedPositions.Any(IsInNode);
             Calculate(this);
         }
 
@@ -110,6 +115,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 for (var y = instance.TopLeft.Y + searchBeginning; y <= instance.BottomRight.Y; y = y + navBoxSize)
                 {
                     var cell = instance._scene.Cells.FirstOrDefault(c => c.IsInCell(x, y));
+ 
                     //var z = AdvDia.MainGridProvider.GetHeight(new Vector2(x,y));
                     if (cell != null)
                     {
@@ -141,7 +147,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     }
                 }
             }
-
 
             instance.NavigableCellCount = walkableExcludingNearWall.Count;
             //instance.FillPercentage = instance.NavigableCellCount / (float)maxCellsCount;
@@ -175,7 +180,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 return GetNeighbors(1, true).Count(n => n.HasEnoughNavigableCells && !n.IsVisited);
             }
         }
-
 
         public bool IsIgnored
         {

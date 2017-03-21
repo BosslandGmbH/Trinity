@@ -1,24 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using Buddy.Coroutines;
+using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Game.Actors;
-using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors.Gizmos;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
     public sealed class WaypointCoroutine
     {
-
         private static WaypointCoroutine _waypointCoroutine;
         private static int _useWaypointWaypointNumber;
+
+        public static int GetWaypointNumber(int snoLevelAreaId)
+        {
+            Waypoint wp = ZetaDia.Storage.ActManager.GetWaypointByLevelAreaSnoId(snoLevelAreaId);
+            return wp?.Number ?? 0;
+        }
+
+        public static int GetWaypointNumber(SNOLevelArea levelArea)
+        {
+            Waypoint wp = ZetaDia.Storage.ActManager.GetWaypointByLevelArea(SNOLevelArea.A1_Tristram_Adventure_Mode_Hub);
+            return wp?.Number ?? 0;
+        }
 
         public static async Task<bool> UseWaypoint(int waypointNumber)
         {
@@ -36,10 +45,8 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
-
         private readonly int _waypointNumber;
         private Vector3 _startingPosition;
-
 
         private enum States
         {
@@ -55,6 +62,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         private States _state;
+
         private States State
         {
             get { return _state; }
@@ -63,13 +71,11 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                 {
-                    Util.Logger.Debug("[Waypoint] " + value);
+                    Core.Logger.Debug("[Waypoint] " + value);
                 }
                 _state = value;
             }
         }
-
-
 
         private WaypointCoroutine(int waypointNumber)
         {
@@ -82,20 +88,28 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 case States.NotStarted:
                     return NotStarted();
+
                 case States.ClearingArea:
                     return await ClearingArea();
+
                 case States.TogglingWaypointMap:
                     return await TogglingWaypointMap();
+
                 case States.WaypointMapVisible:
                     return await WaypointMapVisible();
+
                 case States.WorldTransferStartFired:
                     return WorldTransferStartFired();
+
                 case States.UsingWaypoint:
                     return await UsingWaypoint();
+
                 case States.UsedWaypoint:
                     return await UsedWaypoint();
+
                 case States.Completed:
                     return Completed();
+
                 case States.Failed:
                     return Failed();
             }
@@ -111,7 +125,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> ClearingArea()
         {
-            if (await ClearAreaCoroutine.Clear(_startingPosition,45))
+            if (await ClearAreaCoroutine.Clear(_startingPosition, 45))
             {
                 State = States.TogglingWaypointMap;
             }
@@ -141,7 +155,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 return false;
             }
             State = States.WorldTransferStartFired;
-            GameEvents.FireWorldTransferStart();
+            //GameEvents.FireWorldTransferStart();
             await Coroutine.Sleep(100);
             return false;
         }
@@ -158,11 +172,12 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         private bool _usedWaypoint;
+
         private async Task<bool> UsingWaypoint()
         {
             if (!_usedWaypoint)
             {
-                Util.Logger.Debug("[Waypoint] Using waypoint {0}", _waypointNumber);
+                Core.Logger.Debug("[Waypoint] Using waypoint {0}", _waypointNumber);
                 // Checking for near by waypoint gizmos.
                 var gizmoWaypoint =
                     ZetaDia.Actors.GetActorsOfType<GizmoWaypoint>().OrderBy(g => g.Distance).FirstOrDefault();
@@ -171,7 +186,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                     // Already there
                     if (gizmoWaypoint.WaypointNumber == _waypointNumber && gizmoWaypoint.Distance <= 150)
                     {
-                        Util.Logger.Info("[Waypoint] Already near the destination waypoint");
+                        Core.Logger.Log("[Waypoint] Already near the destination waypoint");
                         State = States.Completed;
                         return false;
                     }
@@ -181,7 +196,6 @@ namespace Trinity.Components.Adventurer.Coroutines
                     {
                         _usedWaypoint = true;
                         gizmoWaypoint.UseWaypoint(_waypointNumber);
-
                     }
                     else
                     {
@@ -202,13 +216,13 @@ namespace Trinity.Components.Adventurer.Coroutines
             await Coroutine.Sleep(1000);
             State = States.UsedWaypoint;
             return false;
-
         }
 
         private static readonly List<int> TransportStates = new List<int> { 3, 13 };
+
         private async Task<bool> UsedWaypoint()
         {
-            if (!ZetaDia.IsInGame || ZetaDia.IsLoadingWorld || ZetaDia.IsPlayingCutscene)
+            if (!ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld || ZetaDia.Globals.IsPlayingCutscene)
                 return false;
 
             if (ZetaDia.Me == null || ZetaDia.Me.CommonData == null || !ZetaDia.Me.IsValid || !ZetaDia.Me.CommonData.IsValid)
@@ -227,14 +241,13 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             Navigator.Clear();
             return false;
-
-
         }
 
         private bool Completed()
         {
             return true;
         }
+
         private bool Failed()
         {
             return true;
@@ -247,7 +260,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 var gizmoWaypoint = ZetaDia.Actors.GetActorsOfType<GizmoWaypoint>().OrderBy(g => g.Distance).FirstOrDefault();
                 if (gizmoWaypoint != null)
                 {
-                    if(gizmoWaypoint.WaypointNumber == _waypointNumber)
+                    if (gizmoWaypoint.WaypointNumber == _waypointNumber)
                         return true;
                     if (_waypointNumber == 42 && gizmoWaypoint.WaypointNumber == 28) // A4/A3 Bastians Keep
                         return true;

@@ -1,86 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using Trinity.Framework;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Cache;
 using Trinity.Components.Adventurer.Coroutines;
-using Zeta.Bot;
+using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
+using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Components.QuestTools;
 using Zeta.Common;
 using Zeta.Game;
-using Zeta.TreeSharp;
 using Zeta.XmlEngine;
-using Logger = Trinity.Components.Adventurer.Util.Logger;
 
 namespace Trinity.ProfileTags
 {
+    [XmlElement("TrinityExploreDungeon")]
+    [XmlElement("ExploreDungeon")]
     [XmlElement("Explore")]
-    [XmlElement("ExploreLevelArea")]
-    public class ExploreTag : TrinityProfileBehavior
+    public class ExploreTag : ExploreTagProfileBehavior { }
+
+    public class ExploreTagProfileBehavior : BaseProfileBehavior
     {
-        private Stopwatch _stopwatch = new Stopwatch();
+        private ISubroutine _exploreTask;
 
-        [XmlAttribute("levelAreaId")]
-        [DefaultValue(0)]
-        public int LevelAreaId { get; set; }
+        #region XmlAttributes
 
-        [XmlAttribute("stopCondition")]
-        public string StopCondition { get; set; }
+        [XmlAttribute("startReset")]
+        [DefaultValue(false)]
+        [Description("If explored nodes should be cleared when starting tag")]
+        public bool StartReset { get; set; }
 
-        private bool _isDone;
-        public override bool IsDone => _isDone;
+        #endregion
 
-        public override void OnStart()
+        public override async Task<bool> StartTask()
         {
-            _stopwatch.Start();
-            if (LevelAreaId == 0)
+            if (StartReset)
             {
-                Pulsator.OnPulse += OnPulse;
-                LevelAreaId = AdvDia.CurrentLevelAreaId;
+                ScenesStorage.Reset();
             }
-            base.OnStart();
-        }
-
-        private void OnPulse(object sender, EventArgs eventArgs)
-        {
-            if (string.IsNullOrEmpty(StopCondition))
-                return;
-
-            if (ScriptManager.GetCondition(StopCondition).Invoke())
-            {
-                Logger.Info($"[ExploreLevelArea] Stop condition was met: ({StopCondition})");
-                _isDone = true;
-            }
-        }
-
-        protected override Composite CreateBehavior()
-        {
-            return new ActionRunCoroutine(ctx => Coroutine());
-        }
-
-        public async Task<bool> Coroutine()
-        {
-            if (_isDone)
-                return true;
-
-            if (await ExplorationCoroutine.Explore(new HashSet<int> { LevelAreaId }, null, null, false))
-            {
-                _isDone = true;
-                return true;
-            }
+            _exploreTask = new ExplorationCoroutine(new HashSet<int> {ZetaDia.CurrentLevelAreaSnoId}, null, null, false);
             return false;
-        }        
-
-        public override void OnDone()
-        {
-            Pulsator.OnPulse -= OnPulse;
-            Logger.Info($"[ExploreLevelArea] It took {_stopwatch.Elapsed.TotalMinutes} minutes to explore {(SNOLevelArea)LevelAreaId}");
-            base.OnDone();
         }
 
-        public override void ResetCachedDone(bool force = false)
+        public override async Task<bool> MainTask()
         {
-            _isDone = false;
+            if (!_exploreTask.IsDone && !await _exploreTask.GetCoroutine())
+                return false;
+
+            return true;
         }
+
     }
 }

@@ -1,14 +1,12 @@
-﻿
-using System;
-using System.Linq;
+﻿using System;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
     public class AnimationCircularAvoidanceHandler : IAvoidanceHandler
     {
-
-        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
+        public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             foreach (var actor in avoidance.Actors)
             {
@@ -20,7 +18,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                     continue;
 
                 var radius = Math.Max(part.Radius, actor.Radius);
-                var finalRadius = radius* avoidance.Settings.DistanceMultiplier;
+                var finalRadius = radius * avoidance.Settings.DistanceMultiplier;
                 var nodes = grid.GetNodesInRadius(actor.Position, finalRadius);
 
                 if (actor.Animation != part.Animation)
@@ -35,15 +33,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 {
                     grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
                 }
-            
             }
         }
-
-
-
     }
 }
-
-
-
-

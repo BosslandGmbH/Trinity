@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Zeta.Game;
 
 namespace Trinity.Framework.Objects

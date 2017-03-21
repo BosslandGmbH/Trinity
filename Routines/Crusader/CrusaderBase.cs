@@ -1,15 +1,14 @@
 ﻿using System;
-using Trinity.Components.Combat;
+using Trinity.Framework;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Routines.Crusader
 {
@@ -28,7 +27,7 @@ namespace Trinity.Routines.Crusader
         // remember what P3_ItemPassive_Unique_Ring_010 means.
 
         // Use the Routine LogCategory for logging.
-        // Logger.Log(LogCategory.Routine, $"My Current Target is {CurrentTarget}");
+        // Core.Logger.Log(LogCategory.Routine, $"My Current Target is {CurrentTarget}");
 
         #region IRoutine Defaults
 
@@ -584,7 +583,7 @@ namespace Trinity.Routines.Crusader
             if (Skills.Crusader.FistOfTheHeavens.CanCast())
                 return FistOfTheHeavens(CurrentTarget);
 
-            if ((Navigator.StuckHandler.IsStuck || !RiftProgression.IsInRift) && Skills.Crusader.Bombardment.CanCast())
+            if ((Navigator.StuckHandler.IsStuck || !Core.Rift.IsInRift) && Skills.Crusader.Bombardment.CanCast())
                 return Bombardment(CurrentTarget);
 
             return DefaultPower;

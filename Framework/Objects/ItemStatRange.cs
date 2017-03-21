@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace Trinity.Framework.Objects
 {
     public class ItemStatRange
@@ -13,7 +12,7 @@ namespace Trinity.Framework.Objects
         {
             get
             {
-                if (AncientMax == 0) 
+                if (AncientMax == 0)
                     return Max;
 
                 return Math.Max(AncientMax, Max);
@@ -24,7 +23,7 @@ namespace Trinity.Framework.Objects
         {
             get
             {
-                if (AncientMin == 0) 
+                if (AncientMin == 0)
                     return Min;
 
                 return Math.Min(AncientMin, Min);

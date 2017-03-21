@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;

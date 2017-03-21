@@ -1,21 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Buddy.Coroutines;
+using System;
+using Trinity.Framework.Helpers;
 using System.Threading.Tasks;
-using Buddy.Coroutines;
-using Org.BouncyCastle.Asn1.X509;
-using Trinity.Components.Combat;
-using Trinity.Coroutines;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Events;
-using Trinity.Framework.Helpers;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Framework.Objects.Memory.Misc;
-using Zeta.Bot.Coroutines;
-using Zeta.Bot.Navigation;
-using Zeta.Common;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Framework.Behaviors
 {
@@ -53,14 +42,14 @@ namespace Trinity.Framework.Behaviors
                 WaitTimeMs = TimeSpan.FromMilliseconds(waitMs);
                 WaitCondition = waitCondition;
                 WaitReason = reason;
-            }   
+            }
             return await Run(async () => LastDiedUnit != null && await WaitCheck(), WaitAction, waitMs * 2);
         }
 
         public void Clear()
         {
             LastDiedUnit = null;
-            WaitStartTime = DateTime.MinValue;                                    
+            WaitStartTime = DateTime.MinValue;
         }
 
         private async Task<bool> WaitCheck()
@@ -70,7 +59,7 @@ namespace Trinity.Framework.Behaviors
 
         private async Task<bool> WaitAction()
         {
-            Logger.LogVerbose(LogCategory.Behavior, $"Waiting after unit death: {LastDiedUnit?.Name}, because {WaitReason}, TimeSinceDeath={TimeSinceDeath:g} RemainingWaitTime={RemainingWaitTime:g}");
+            Core.Logger.Verbose(LogCategory.Behavior, $"Waiting after unit death: {LastDiedUnit?.Name}, because {WaitReason}, TimeSinceDeath={TimeSinceDeath:g} RemainingWaitTime={RemainingWaitTime:g}");
             await Coroutine.Sleep(250);
             return true;
         }
@@ -78,18 +67,15 @@ namespace Trinity.Framework.Behaviors
         protected override async Task<bool> OnStarted()
         {
             LastStartedTime = DateTime.UtcNow;
-            Logger.Warn($"Started waiting after unit death: {LastDiedUnit?.Name}, {LastDiedUnit?.AcdId}");
+            Core.Logger.Warn($"Started waiting after unit death: {LastDiedUnit?.Name}, {LastDiedUnit?.AcdId}");
             return true;
         }
 
         protected override async Task<bool> OnStopped()
         {
             LastStoppedTime = DateTime.UtcNow;
-            Logger.Warn($"Finished waiting after unit death: {LastDiedUnit?.Name}, TimeWaited={LastRunTime:g}");
+            Core.Logger.Warn($"Finished waiting after unit death: {LastDiedUnit?.Name}, TimeWaited={LastRunTime:g}");
             return true;
         }
-
-
     }
 }
-

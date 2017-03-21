@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Settings;
-using Trinity.Settings.ItemList;
+﻿using Trinity.Components.Adventurer.Settings;
 
 namespace Trinity.Settings.Mock
 {

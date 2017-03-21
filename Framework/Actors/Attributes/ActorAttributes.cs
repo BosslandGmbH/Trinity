@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
-using Trinity.Framework.Objects.Memory.Attributes;
-using Trinity.Framework.Objects.Memory.Misc;
-using Trinity.Framework.Objects.Memory.Symbols.Types;
+using Trinity.Framework.Objects.Memory;
 using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Actors.Attributes
 {
-    public class ActorAttributes : Objects.Memory.Attributes.Attributes
+    public class ActorAttributes : Objects.Memory.Attributes
     {
-        public ActorAttributes() { }
+        public ActorAttributes()
+        {
+        }
 
-        public ActorAttributes(int groupId) : base(groupId) { }
+        public ActorAttributes(int groupId) : base(groupId)
+        {
+        }
 
         public Dictionary<SNOPower, float> Powers => GetAttributes<SNOPower, float>(AttributeParameterType.PowerSnoId);
 
@@ -71,9 +73,9 @@ namespace Trinity.Framework.Actors.Attributes
         //public int TeamId => GetAttribute<int>(ActorAttributeType.TeamId);
         public int TeamId => GetAttributeDirectlyFromTable<int>(ActorAttributeType.TeamId);
 
-        public MarkerType MarkerType => GetAttribute<MarkerType>(ActorAttributeType.ConversationIcon,0); // 483: ConversationIcon(-3613)
+        public MarkerType MarkerType => GetAttribute<MarkerType>(ActorAttributeType.ConversationIcon, 0); // 483: ConversationIcon(-3613)
 
-        public bool NpcHasInteractOptions => GetAttribute<bool>(ActorAttributeType.NPCHasInteractOptions,0);
+        public bool NpcHasInteractOptions => GetAttribute<bool>(ActorAttributeType.NPCHasInteractOptions, 0);
 
         public int SummonerId => GetAttribute<int>(ActorAttributeType.SummonerId);
 
@@ -99,10 +101,5 @@ namespace Trinity.Framework.Actors.Attributes
         public bool IsDoorTimed => GetAttribute<int>(ActorAttributeType.DoorTimer) > 0;
 
         public int EffectOwnerAnnId => GetAttribute<int>(ActorAttributeType.EffectOwnerANN);
-        
     }
 }
-
-
-
-

@@ -1,13 +1,14 @@
 using System.Linq;
 using Trinity.Framework.Avoidance.Structures;
+using Trinity.Framework.Grid;
 using Zeta.Common;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.Framework.Avoidance.Handlers
 {
     internal class FurnaceAvoidanceHandler : IAvoidanceHandler
     {
-        public void UpdateNodes(AvoidanceGrid grid, Structures.Avoidance avoidance)
+        public void UpdateNodes(TrinityGrid grid, Structures.Avoidance avoidance)
         {
             foreach (var actor in avoidance.Actors)
             {
@@ -18,7 +19,7 @@ namespace Trinity.Framework.Avoidance.Handlers
 
                 if (actor.IsDead || actor.CommonData == null || !actor.CommonData.IsValid || actor.CommonData.IsDisposed)
                 {
-                    Logger.LogVerbose("Actor {0} CommonData Invalid ({1})", actor.InternalName, part.Name);
+                    Core.Logger.Verbose("Actor {0} CommonData Invalid ({1})", actor.InternalName, part.Name);
                     continue;
                 }
 
@@ -26,7 +27,7 @@ namespace Trinity.Framework.Avoidance.Handlers
                 {
                     if (actor.Attributes.GetAttribute<bool>(part.Attribute, part.Power))
                     {
-                        Logger.Log("Power {0} on {1} ({1}) in Attribute {2}", part.Power, actor.InternalName, part.Name, part.Attribute);
+                        Core.Logger.Log("Power {0} on {1} ({1}) in Attribute {2}", part.Power, actor.InternalName, part.Name, part.Attribute);
                         var nodes = grid.GetRayLineAsNodes(actor.Position, MathEx.GetPointAt(actor.Position, 30f, actor.Rotation)).SelectMany(n => n.AdjacentNodes).Distinct();
                         grid.FlagAvoidanceNodes(nodes, AvoidanceFlags.Avoidance, avoidance, 10);
                     }
@@ -37,8 +38,6 @@ namespace Trinity.Framework.Avoidance.Handlers
                     grid.FlagAvoidanceNodes(obstacleNodes, AvoidanceFlags.NavigationBlocking, avoidance, 5);
                 }
             }
-
         }
     }
 }
-

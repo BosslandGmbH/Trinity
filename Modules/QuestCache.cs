@@ -1,17 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using Trinity.Components.Adventurer.Game.Quests;
-using Trinity.Components.Combat;
-using Trinity.Components.Combat.Resources;
-using Trinity.Framework;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Framework.Objects.Memory.Sno;
+using Trinity.Framework.Objects.Memory;
 using Zeta.Game;
 using Zeta.Game.Internals;
-using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.Service;
 using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Modules
@@ -22,45 +14,49 @@ namespace Trinity.Modules
 
         protected override void OnPulse()
         {
-            if (!ZetaDia.IsInGame || ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None)
-                return;
+            //if (!ZetaDia.IsInGame || ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None)
+            //    return;
 
-            CurrentQuest = ZetaDia.CurrentQuest;
-            if (CurrentQuest == null)
-                return;
+            //CurrentQuest = ZetaDia.CurrentQuest;
+            //if (CurrentQuest == null)
+            //    return;
 
-            Act = ZetaDia.ActInfo;
-            if (Act == null || !Act.IsValid)
-                return;
+            ////ZetaDia.ActRecord.
+            ////Act = ZetaDia.ActInfo;
+            ////if (Act == null || !Act.IsValid)
+            ////    return;
 
-            CurrentBountyInfo = Act.ActiveBounty;
-            if (CurrentBountyInfo == null)
-                return;
+            ////ZetaDia.
 
-            CurrentBountyData = BountyDataFactory.GetBountyData((int)CurrentBountyInfo.Quest);
-            if (CurrentBountyData == null)
-                return;
+            ////CurrentBountyInfo = Act.ActiveBounty;
+            ////if (CurrentBountyInfo == null)
+            ////    return;
 
-            //if (SceneNames == null)
+
+            //CurrentBountyData = BountyDataFactory.GetBountyData((int)CurrentBountyInfo.Quest);
+            //if (CurrentBountyData == null)
+            //    return;
+
+            ////if (SceneNames == null)
+            ////{
+            ////    SceneNames = SnoManager.StringListHelper.GetStringList(SnoStringListType.LevelAreaNames);
+            ////}
+
+            //QuestData = CurrentBountyData.QuestData;
+
+            //foreach (var step in QuestData.Steps)
             //{
-            //    SceneNames = SnoManager.StringListHelper.GetStringList(SnoStringListType.LevelAreaNames);
+            //    if (!step.IsActive) continue;
+
+            //    CurrentStepData = step;
+
+            //    foreach (var objective in step.Objectives)
+            //    {
+            //        if (!objective.IsActive) continue;
+
+            //        CurrentObjective = objective;
+            //    }
             //}
-
-            QuestData = CurrentBountyData.QuestData;
-
-            foreach (var step in QuestData.Steps)
-            {
-                if (!step.IsActive) continue;
-
-                CurrentStepData = step;
-
-                foreach (var objective in step.Objectives)
-                {
-                    if (!objective.IsActive) continue;
-
-                    CurrentObjective = objective;
-                }
-            }
 
         }
 
@@ -74,7 +70,7 @@ namespace Trinity.Modules
 
         public Quest CurrentQuest { get; private set; }
 
-        public ActInfo Act { get; private set; }
+        //public ActInfo Act { get; private set; }
 
         public QuestStepData CurrentStepData { get; private set; }
 

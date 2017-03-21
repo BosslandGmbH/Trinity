@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Trinity.Framework.Helpers;
+using System.Collections.Generic;
+using Trinity.Framework.Grid;
 
 namespace Trinity.Framework.Avoidance.Structures
 {
@@ -23,14 +24,14 @@ namespace Trinity.Framework.Avoidance.Structures
 
             foreach (var node in nodes)
             {
-                if(node.Weight > highestWeight)
+                if (node.Weight > highestWeight)
                     highestWeight = node.Weight;
 
                 weightPctSum += node.WeightPct;
             }
 
             WeightPctTotal = weightPctSum;
-            HighestWeight = highestWeight;            
+            HighestWeight = highestWeight;
 
             WeightPctAvg = NodesTotal > 0 ? WeightPctTotal / (double)NodesTotal : 0;
         }
@@ -60,4 +61,3 @@ namespace Trinity.Framework.Avoidance.Structures
         }
     }
 }
-

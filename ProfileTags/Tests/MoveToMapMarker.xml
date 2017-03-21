@@ -1,0 +1,22 @@
+﻿<Profile>
+  <Name>Tag Test - MoveToMapMarker</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> MoveToMarker Test Started " />
+
+    <If condition="CurrentLevelAreaId != 270011">
+      <TakeWaypoint destinationLevelAreaSnoId="270011" />
+    </If>
+    
+    <LogMessage message="Moving to marker by Hash" />
+    <MoveToMapMarker questId="1" markerHash="-748823538" />
+
+    <LogMessage message="Moving to marker by Name" />
+    <MoveToMapMarker questId="1" markerName="Dungeons" />
+
+    <LogMessage message="Moving to marker by Type" />
+    <MoveToMapMarker questId="1" markerType="Waypoint" />
+
+    <LogMessage message=">> MoveToMapMarker Test Finished " />
+  </Order>
+</Profile>

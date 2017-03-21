@@ -1,37 +1,20 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
-using Buddy.Coroutines;
-using Trinity.Components.Combat.Resources;
-using Trinity.Coroutines;
-using Trinity.Coroutines.Town;
-using Trinity.DbProvider;
 using Trinity.Framework;
-using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Avoidance;
-using Trinity.Framework.Avoidance.Structures;
 using Trinity.Framework.Helpers;
+using System.Threading.Tasks;
+using Trinity.Components.Combat.Resources;
+using Trinity.DbProvider;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
-using Trinity.Framework.Objects.Enums;
-using Trinity.Items;
-using Trinity.Reference;
+using Trinity.Framework.Reference;
 using Trinity.Routines;
 using Trinity.Settings;
-using Zeta.Bot;
-using Zeta.Bot.Coroutines;
-using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
-using Zeta.TreeSharp;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 #endregion
 
@@ -40,8 +23,11 @@ namespace Trinity.Components.Combat
     public interface ITargetingProvider
     {
         Task<bool> HandleTarget(TrinityActor target);
+
         bool IsInRange(TrinityActor target, TrinityPower power);
+
         bool IsInRange(Vector3 position, TrinityPower power);
+
         TrinityActor CurrentTarget { get; }
         TrinityPower CurrentPower { get; }
         TrinityActor LastTarget { get; }
@@ -65,7 +51,7 @@ namespace Trinity.Components.Combat
         {
             if (CurrentTarget != null && CurrentTarget.Targeting.TotalTargetedTime > TimeSpan.FromSeconds(30))
             {
-                Logger.Log(LogCategory.Targetting, $"Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
+                Core.Logger.Log(LogCategory.Targetting, $"Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
             }
 
             if (CurrentTarget == target)
@@ -73,9 +59,9 @@ namespace Trinity.Components.Combat
 
             if (target == null && CurrentTarget != null)
             {
-                Logger.Log(LogCategory.Targetting, $"Clearing Target. Was: {CurrentTarget}");
+                Core.Logger.Log(LogCategory.Targetting, $"Clearing Target. Was: {CurrentTarget}");
             }
-         
+
             if (CurrentTarget != null)
             {
                 CurrentTarget.Targeting.IsTargetted = false;
@@ -85,10 +71,10 @@ namespace Trinity.Components.Combat
             if (target != null)
             {
                 target.Targeting.IsTargetted = true;
-                Logger.Log(LogCategory.Targetting, $"New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo} Targeting={target.Targeting}");
+                Core.Logger.Log(LogCategory.Targetting, $"New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo} Targeting={target.Targeting}");
             }
 
-            CurrentTarget = target;                 
+            CurrentTarget = target;
         }
 
         private void SetCurrentPower(TrinityPower power)
@@ -107,7 +93,7 @@ namespace Trinity.Components.Combat
 
             if (target == null || !target.IsValid)
             {
-                //Logger.LogVerbose(LogCategory.Targetting, $"Null or invalid Target. {target?.Name}");
+                //Core.Logger.Verbose(LogCategory.Targetting, $"Null or invalid Target. {target?.Name}");
                 Clear();
                 return false;
             }
@@ -134,7 +120,7 @@ namespace Trinity.Components.Combat
             {
                 if (!Core.Player.IsPowerUseDisabled)
                 {
-                    Logger.Log(LogCategory.Targetting, $"No valid power was selected for target: {CurrentTarget}");                    
+                    Core.Logger.Log(LogCategory.Targetting, $"No valid power was selected for target: {CurrentTarget}");
                 }
                 return false;
             }
@@ -145,7 +131,7 @@ namespace Trinity.Components.Combat
                 {
                     if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds > 5)
                     {
-                        Logger.LogVerbose(LogCategory.Targetting, $"Routine power cast failure timeout. Clearing Target: {target?.Name} and Power: {CurrentPower}");
+                        Core.Logger.Verbose(LogCategory.Targetting, $"Routine power cast failure timeout. Clearing Target: {target?.Name} and Power: {CurrentPower}");
                         Clear();
                         return false;
                     }
@@ -154,7 +140,7 @@ namespace Trinity.Components.Combat
                         return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -166,11 +152,11 @@ namespace Trinity.Components.Combat
 
         private async Task<bool> WaitForRiftBossSpawn()
         {
-            if (RiftProgression.IsInRift && CurrentTarget.IsBoss)
+            if (Core.Rift.IsInRift && CurrentTarget.IsBoss)
             {
                 if (CurrentTarget.IsSpawningBoss)
                 {
-                    Logger.LogVerbose(LogCategory.Targetting, "Waiting while rift boss spawn");
+                    Core.Logger.Verbose(LogCategory.Targetting, "Waiting while rift boss spawn");
 
                     Vector3 safeSpot;
                     if (Core.Avoidance.Avoider.TryGetSafeSpot(out safeSpot, 30f, 100f, CurrentTarget.Position))
@@ -187,7 +173,7 @@ namespace Trinity.Components.Combat
         {
             if (Core.Player.IsCasting && !Core.Player.IsTakingDamage && CurrentTarget != null && CurrentTarget.IsGizmo)
             {
-                Logger.LogVerbose(LogCategory.Targetting, "Waiting while channelling spell");
+                Core.Logger.Verbose(LogCategory.Targetting, "Waiting while channelling spell");
                 return true;
             }
             return false;
@@ -241,7 +227,7 @@ namespace Trinity.Components.Combat
 
             if (duration > TimeSpan.FromMinutes(2))
             {
-               GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted for too long ({duration})");
+                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted for too long ({duration})");
                 return true;
             }
 
@@ -261,7 +247,7 @@ namespace Trinity.Components.Combat
                 return null;
 
             switch (target.Type)
-            {              
+            {
                 case TrinityObjectType.BloodShard:
                 case TrinityObjectType.Gold:
                 case TrinityObjectType.HealthGlobe:
@@ -279,12 +265,12 @@ namespace Trinity.Components.Combat
                 case TrinityObjectType.CursedChest:
                 case TrinityObjectType.Container:
                     return InteractPower(target, 100, 1200);
-                
+
                 case TrinityObjectType.Item:
                     return InteractPower(target, 15, 15, 6f);
 
                 case TrinityObjectType.Destructible:
-                case TrinityObjectType.Barricade:    
+                case TrinityObjectType.Barricade:
                     return routine.GetDestructiblePower();
             }
 
@@ -313,7 +299,7 @@ namespace Trinity.Components.Combat
             power = null;
             if (target.IsTreasureGoblin && Core.Settings.Weighting.GoblinPriority == TargetPriority.Kamikaze)
             {
-                Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
+                Core.Logger.Log(LogCategory.Targetting, $"Forcing Kamakazi Target on {target}, routineProvided={routinePower}");
 
                 var kamaKaziPower = RoutineBase.DefaultPower;
                 if (routinePower != null)
@@ -321,16 +307,15 @@ namespace Trinity.Components.Combat
                     routinePower.SetTarget(target);
                     kamaKaziPower = routinePower;
                 }
-               
+
                 power = kamaKaziPower;
-                return true;              
+                return true;
             }
             return false;
         }
 
         public TrinityPower InteractPower(TrinityActor actor, int waitBefore, int waitAfter, float addedRange = 0)
             => new TrinityPower(actor.IsUnit ? SNOPower.Axe_Operate_NPC : SNOPower.Axe_Operate_Gizmo, actor.AxialRadius + addedRange, actor.Position, actor.AcdId, waitBefore, waitAfter);
-
 
         public async Task<bool> CastDefensiveSpells()
         {
@@ -354,7 +339,7 @@ namespace Trinity.Components.Combat
                 Vector3 safespot;
                 if (Core.Avoidance.Avoider.TryGetSafeSpot(out safespot) && safespot.Distance(ZetaDia.Me.Position) > 3f)
                 {
-                    Logger.Log(LogCategory.Avoidance, $"Kiting");
+                    Core.Logger.Log(LogCategory.Avoidance, $"Kiting");
                     await CastDefensiveSpells();
                     PlayerMover.MoveTo(safespot);
                     return true;
@@ -378,7 +363,7 @@ namespace Trinity.Components.Combat
                     var canReachTarget = CurrentTarget.Distance < CurrentPower?.MinimumRange;
                     if (canReachTarget && CurrentTarget.IsAvoidanceOnPath && !Core.Player.Actor.IsInAvoidance)
                     {
-                        Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and target is within range");
+                        Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and target is within range");
                         return false;
                     }
                 }
@@ -387,22 +372,22 @@ namespace Trinity.Components.Combat
 
                 if (newTarget?.Position == LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
                 {
-                    Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
+                    Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
                     Core.PlayerMover.MoveTowards(Core.Player.Position);
                     return true;
                 }
 
                 if (!Combat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
                 {
-                    Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
+                    Core.Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
                     Core.PlayerMover.MoveTowards(Core.Player.Position);
                     return true;
                 }
 
-                Logger.Log(LogCategory.Avoidance, $"Avoiding");
+                Core.Logger.Log(LogCategory.Avoidance, $"Avoiding");
                 await CastDefensiveSpells();
                 PlayerMover.MoveTo(Core.Avoidance.Avoider.SafeSpot);
-                return true;                           
+                return true;
             }
             return false;
         }
@@ -421,7 +406,7 @@ namespace Trinity.Components.Combat
             var targetRangeRequired = target.IsHostile || target.IsDestroyable ? Math.Max(spellRange, objectRange) : objectRange;
             var targetRadiusDistance = target.RadiusDistance;
 
-            Logger.LogVerbose(LogCategory.Targetting, $">> CurrentPower={Combat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{targetRadiusDistance}");
+            Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={Combat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{targetRadiusDistance}");
             return targetRadiusDistance <= targetRangeRequired && IsInLineOfSight(target);
         }
 
@@ -444,7 +429,7 @@ namespace Trinity.Components.Combat
 
             //if (CurrentTarget?.Position.Distance(position) < 1f)
             //{
-            //    Logger.LogVerbose(LogCategory.Targetting, $"Using current target '{CurrentTarget.Name}' CollisionRadius of {CurrentTarget.CollisionRadius} for target position range check");
+            //    Core.Logger.Verbose(LogCategory.Targetting, $"Using current target '{CurrentTarget.Name}' CollisionRadius of {CurrentTarget.CollisionRadius} for target position range check");
             //    return IsInRange(CurrentTarget, power);
             //}
 
@@ -457,12 +442,12 @@ namespace Trinity.Components.Combat
                 }
             }
 
-            Logger.LogVerbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
+            Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={power} CurrentTarget={position} RangeReq:{rangeRequired} Dist:{distance}");
             return distance <= rangeRequired && IsInLineOfSight(position);
         }
 
         private bool IsInLineOfSight(TrinityActor currentTarget)
-        {            
+        {
             if (GameData.LineOfSightWhitelist.Contains(currentTarget.ActorSnoId))
                 return true;
 
@@ -483,7 +468,5 @@ namespace Trinity.Components.Combat
 
             return Core.Grids.Avoidance.CanRayCast(Core.Player.Position, position);
         }
-
-
     }
 }

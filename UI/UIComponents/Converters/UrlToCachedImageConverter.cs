@@ -1,11 +1,12 @@
 ﻿using System;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Trinity.Framework.Helpers;
 
 namespace Trinity.UI.UIComponents.Converters
 {
@@ -33,19 +34,19 @@ namespace Trinity.UI.UIComponents.Converters
                 ImageSource cachedImage;
                 if (ImageCache.TryGetValue(localFilePath, out cachedImage))
                 {
-                    Logger.LogVerbose("Found memory cached image: {0}", filename);
+                    Core.Logger.Verbose("Found memory cached image: {0}", filename);
                     return cachedImage;
                 }
 
                 if (File.Exists(localFilePath))
                 {
-                    Logger.LogVerbose("Found image on disk: {0}", filename);
+                    Core.Logger.Verbose("Found image on disk: {0}", filename);
                     var diskImage = BitmapFrame.Create(new Uri(localFilePath, UriKind.Absolute), BitmapCreateOptions.DelayCreation, BitmapCacheOption.OnLoad);
                     ImageCache.Add(localFilePath, diskImage);
                     return diskImage;
                 }
 
-                Logger.LogVerbose("Creating image from url: {0}", value.ToString());
+                Core.Logger.Verbose("Creating image from url: {0}", value.ToString());
 
                 var image = new BitmapImage();
                 image.BeginInit();
@@ -60,7 +61,7 @@ namespace Trinity.UI.UIComponents.Converters
             }
             catch (Exception ex)
             {
-                Logger.LogDebug("Exception Loading ListItem Image: {0} {1}", ex.Message, ex.InnerException);
+                Core.Logger.Debug("Exception Loading ListItem Image: {0} {1}", ex.Message, ex.InnerException);
             }
 
             return null;

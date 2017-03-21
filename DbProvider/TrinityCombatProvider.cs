@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
-using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Routines;
-using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 using ITargetingProvider = Zeta.Bot.ITargetingProvider;

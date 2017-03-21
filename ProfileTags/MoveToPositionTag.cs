@@ -1,122 +1,129 @@
-﻿using System.ComponentModel;
+﻿
+using System;
+using Trinity.Framework;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
-using Trinity.Components.Adventurer.Cache;
+using Trinity.Components.Adventurer;
+using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
+using Trinity.Components.Adventurer.Game.Actors;
+using Trinity.Components.QuestTools;
 using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.TreeSharp;
 using Zeta.XmlEngine;
-using Logger = Trinity.Framework.Helpers.Logger;
+
 
 namespace Trinity.ProfileTags
 {
+    [XmlElement("TrinityMoveTo")]
+    [XmlElement("SafeMoveTo")]
     [XmlElement("MoveToPosition")]
-    public class MoveToPositionTag : TrinityProfileBehavior
+    public class MoveToPositionTag : MoveToPositionProfileBehavior
     {
-        #region Position
+    }
+
+    public class MoveToPositionProfileBehavior : BaseProfileBehavior
+    {
+        protected ISubroutine _movementTask;
+
+        #region XmlAttributes
 
         [XmlAttribute("x")]
         [DefaultValue(0)]
+        [Description("X position to be moved to")]
         public float X { get; set; }
 
         [XmlAttribute("y")]
         [DefaultValue(0)]
+        [Description("Y position to be moved to")]
         public float Y { get; set; }
 
         [XmlAttribute("z")]
+        [Description("Z position to be moved to")]
         [DefaultValue(0)]
         public float Z { get; set; }
-
-        #endregion
-
-        #region ScenePosition
-
+        
         [XmlAttribute("sceneX")]
+        [Description("X position relative to scene")]
         [DefaultValue(0)]
         public float RelativeSceneX { get; set; }
 
         [XmlAttribute("sceneY")]
+        [Description("Y position relative to scene")]
         [DefaultValue(0)]
         public float RelativeSceneY { get; set; }
 
         [XmlAttribute("sceneZ")]
+        [Description("Z position relative to scene")]
         [DefaultValue(0)]
         public float RelativeSceneZ { get; set; }
 
         [XmlAttribute("sceneSnoId")]
+        [Description("Scene id for relative movement")]
         [DefaultValue(0)]
         public int SceneSnoId { get; set; }
 
         [XmlAttribute("sceneName")]
+        [Description("Scene name for relative movement")]
         [DefaultValue("")]
         public string SceneName { get; set; }
 
         #endregion
 
-        private bool _isDone;
-        public override bool IsDone => _isDone;
+        public Vector3 AbsolutePosition => new Vector3(X, Y, Z);
+        public Vector3 RelativePosition => new Vector3(RelativeSceneX, RelativeSceneY, RelativeSceneZ);
 
-        protected override Composite CreateBehavior()
+        public override async Task<bool> StartTask()
         {
-            return new ActionRunCoroutine(ctx => Routine());
-        }
-
-        private ISubroutine _task;
-
-        public async Task<bool> Routine()
-        {
-            if (_task == null)
+            if (!TrySetAbsoluteDestination(AbsolutePosition))
             {
-                var targetAbsolutePosition = new Vector3(X, Y, Z);
-                var targetRelativePosition = new Vector3(RelativeSceneX, RelativeSceneY, RelativeSceneZ);
-
-                if (ZetaDia.WorldInfo.IsGenerated && targetAbsolutePosition != Vector3.Zero && targetRelativePosition == Vector3.Zero)
+                if (!TrySetRelativeDestination(RelativePosition, SceneSnoId, SceneName))
                 {
-                    Logger.LogError("[MoveToPosition] The current world is auto-generatd, you need to use sceneX,sceneY,sceneZ + either 'sceneName' or 'sceneSnoId' attributes");
-                    _isDone = true;
                     return true;
                 }
+            }
+            return false;
+        }
 
-                if (!ZetaDia.WorldInfo.IsGenerated && targetAbsolutePosition != Vector3.Zero)
-                {
-                    _task = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, targetAbsolutePosition, 3);
-                }
-                else if (targetRelativePosition != Vector3.Zero)
-                {
-                    if (SceneSnoId > 0)
-                    {
-                        _task = new MoveToScenePositionCoroutine(SceneSnoId, targetRelativePosition);
-                    }
-                    else if (!string.IsNullOrEmpty(SceneName))
-                    {
-                        _task = new MoveToScenePositionCoroutine(SceneName, targetRelativePosition);
-                    }
-                    else
-                    {
-                        Logger.LogError("[MoveToPosition] A sceneName or sceneSnoId, and a relative position (sceneX,sceneY,sceneZ) are required for dynamically generated worlds");
-                    }
-                }
-                else
-                {
-                    Logger.LogError("[MoveToPosition] No valid coodinates were specified");
-                }
+        public bool TrySetAbsoluteDestination(Vector3 absPos)
+        {
+            if (absPos != Vector3.Zero && !ZetaDia.WorldInfo.IsGenerated)
+            {
+                _movementTask = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, absPos, 3);
+                return true;
+            }
+            return false;
+        }
+
+        public bool TrySetRelativeDestination(Vector3 relPos, int sceneId, string sceneName)
+        {
+            if (relPos == Vector3.Zero)
+                return false;
+
+            if (sceneId > 0)
+            {
+                _movementTask = new MoveToScenePositionCoroutine(sceneId, relPos);
+                return true;
             }
 
-            if (_task != null && !await _task.GetCoroutine())
-                return true;
+            if (string.IsNullOrEmpty(sceneName))
+                return false;
 
-            _isDone = true;
+            _movementTask = new MoveToScenePositionCoroutine(sceneName, relPos);
             return true;
         }
 
-        public override void ResetCachedDone(bool force = false)
+        public override async Task<bool> MainTask()
         {
-            _task?.Reset();
-            _isDone = false;
+            if (!_movementTask.IsDone && !await _movementTask.GetCoroutine())
+                return false;
+
+            return true;
         }
 
     }
 }
-

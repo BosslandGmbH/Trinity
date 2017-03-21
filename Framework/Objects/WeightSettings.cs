@@ -1,13 +1,11 @@
 using System;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using Microsoft.Scripting.Utils;
 using Trinity.Framework.Actors.ActorTypes;
-using Trinity.Framework.Helpers;
 using Trinity.Modules;
-using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Framework.Objects
 {
