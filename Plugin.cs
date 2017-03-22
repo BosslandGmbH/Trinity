@@ -22,7 +22,7 @@ namespace Trinity
     {
         private static TrinityPlugin _instance;
         public string Name => "Trinity PTR";
-        public Version Version => new Version(2, 250, 740);
+        public Version Version => new Version(2, 250, 741);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -35,13 +35,19 @@ namespace Trinity
         public TrinityPlugin()
         {
             _instance = this;
-
             UILoader.Preload();
+            PluginManager.OnPluginsReloaded += PluginManager_OnPluginsReloaded;
+        }
 
-            if (CharacterSettings.Instance.EnabledPlugins == null)
-                CharacterSettings.Instance.EnabledPlugins = new List<string>();
-            if (!CharacterSettings.Instance.EnabledPlugins.Contains("Trinity"))
-                CharacterSettings.Instance.EnabledPlugins.Add("Trinity");
+        private void PluginManager_OnPluginsReloaded(object sender, EventArgs e)
+        {
+            foreach (var plugin in PluginManager.Plugins)
+            {
+                if (plugin.Plugin == this && !plugin.Enabled)
+                {
+                    plugin.Enabled = true;
+                }
+            }
         }
 
         public void OnInitialize()
