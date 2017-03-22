@@ -14,6 +14,7 @@ using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Bot.Settings;
 using Zeta.Common.Plugins;
+using Zeta.Game;
 using Application = System.Windows.Application;
 
 namespace Trinity
@@ -21,8 +22,8 @@ namespace Trinity
     public class TrinityPlugin : IPlugin
     {
         private static TrinityPlugin _instance;
-        public string Name => "Trinity PTR";
-        public Version Version => new Version(2, 250, 741);
+        public string Name => "Trinity";
+        public Version Version => new Version(2, 250, 742);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -35,7 +36,7 @@ namespace Trinity
         public TrinityPlugin()
         {
             _instance = this;
-            UILoader.Preload();
+            UILoader.Preload();            
             PluginManager.OnPluginsReloaded += PluginManager_OnPluginsReloaded;
         }
 

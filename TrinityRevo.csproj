@@ -33,17 +33,17 @@
     <RootNamespace>Trinity</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Demonbuddy, Version=1.1.3134.180, Culture=neutral, PublicKeyToken=eff32ccf253d66d4, processorArchitecture=x86">
+    <Reference Include="Demonbuddy, Version=1.1.3136.182, Culture=neutral, PublicKeyToken=eff32ccf253d66d4, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DB-PTR\Demonbuddy.exe</HintPath>
+      <HintPath>..\..\DB-Current\Demonbuddy.exe</HintPath>
     </Reference>
-    <Reference Include="GreyMagic, Version=1.1.3111.159, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=x86">
+    <Reference Include="GreyMagic, Version=1.1.3136.182, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DB-PTR\GreyMagic.dll</HintPath>
+      <HintPath>..\..\DB-Current\GreyMagic.dll</HintPath>
     </Reference>
     <Reference Include="IronPython, Version=2.7.0.40, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DB-PTR\IronPython.dll</HintPath>
+      <HintPath>..\..\DB-Current\IronPython.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
