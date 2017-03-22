@@ -71,6 +71,9 @@ namespace Trinity.Modules
             if (!Core.Settings.Advanced.GoldInactivityEnabled)
                 return false;
 
+            if (ZetaDia.Me == null)
+                return false;
+
             try
             {
                 if (!ZetaDia.IsInGame)
@@ -126,6 +129,9 @@ namespace Trinity.Modules
             if (Core.Settings.Advanced.DisableAllMovement)
                 return false;
 
+            if (ZetaDia.Me == null)
+                return false;
+
             try
             {
                 if (!ZetaDia.IsInGame)
@@ -175,7 +181,8 @@ namespace Trinity.Modules
 
         private void LeaveGame()
         {
-            //GameEvents.FireWorldTransferStart();
+            ResetGold();
+            ResetXp();
             ZetaDia.Service.Party.LeaveGame();
             BotMain.PauseWhile(() => ZetaDia.IsInGame);
         }

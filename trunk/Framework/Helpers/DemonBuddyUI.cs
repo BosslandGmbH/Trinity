@@ -1,8 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using Demonbuddy;
+using Zeta.Bot;
 
 namespace Trinity.Framework.Helpers
 {
@@ -18,6 +20,20 @@ namespace Trinity.Framework.Helpers
         private static TabControl FindMainMenu()
         {
             return GetElement<TabControl>(MainWindow.FindName("tabControlMain"));
+        }
+
+        private static Version _productVersion;
+        public static Version ProductVersion
+        {
+            get { return _productVersion ?? (_productVersion = new Version(System.Windows.Forms.Application.ProductVersion)); }
+            set { _productVersion = value; }
+        }
+
+        private static Version _fileVersion;
+        public static Version FileVersion
+        {
+            get { return _fileVersion ?? (_fileVersion = new Version(System.Windows.Forms.Application.ProductVersion)); }
+            set { _fileVersion = value; }
         }
 
         private static MainWindow _mainWindow;
