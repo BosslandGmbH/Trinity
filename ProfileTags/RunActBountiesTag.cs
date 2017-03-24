@@ -58,7 +58,6 @@ namespace Trinity.ProfileTags
 
         public override async Task<bool> StartTask()
         {
-            Combat.CombatMode = CombatMode.Questing;
             PluginEvents.CurrentProfileType = ProfileType.Bounty;
 
             _currentAct = Act.Invalid;

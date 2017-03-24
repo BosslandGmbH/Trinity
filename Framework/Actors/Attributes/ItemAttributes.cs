@@ -79,7 +79,8 @@ namespace Trinity.Framework.Actors.Attributes
         public float ResourceCostReductionPercentAll => GetCachedAttribute<float>(ActorAttributeType.ResourceCostReductionPercentAll); // ResourceCostReductionPercentAll (-3364) = i:1028440064 f:0.04998779 v:0.04998779 ModifierType=None Modifier=-1
         public float AttacksPerSecondItemPercent => GetCachedAttribute<float>(ActorAttributeType.AttacksPerSecondItemPercent) * 100; // AttacksPerSecondPercent (-3895) = i:1032805417 f:0.07 v:0.07 ModifierType=None Modifier=-1
         public float AttacksPerSecondPercent => GetCachedAttribute<float>(ActorAttributeType.AttacksPerSecondPercent) * 100; // AttacksPerSecondPercent (-3895) = i:1032805417 f:0.07 v:0.07 ModifierType=None Modifier=-1
-        public bool IsAncient => GetAttribute<bool>(ActorAttributeType.AncientRank); // AncientRank (-3691) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1
+        public bool IsPrimalAncient => GetAttribute<int>(ActorAttributeType.AncientRank) == 2;
+        public bool IsAncient => GetAttribute<int>(ActorAttributeType.AncientRank) > 0; // AncientRank (-3691) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1
         public bool IsUnidentified => GetAttribute<bool>(ActorAttributeType.Unidentified); // AncientRank (-3691) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1
         public int Post212Drop2 => GetCachedAttribute<int>(ActorAttributeType.Post212Drop2); // Post212Drop2 (-3692) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1
         public int Loot20Drop => GetCachedAttribute<int>(ActorAttributeType.Loot20Drop); // Loot20Drop (-3694) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1

@@ -4,6 +4,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Trinity.Modules;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -78,11 +79,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 if (HasChild)
                 {
                     SubScene = new WorldScene(mesh.SubScene, boxSize, boxTolerance);
-                    //if (SubScene.HasChild)
-                    //{
-                    //    Core.Logger.Error("[ScenesStorage] Found sub sub scene!!!");
-                    //    SubScene.SubScene = new WorldScene(SubScene.Scene.Mesh.SubScene, boxSize, boxTolerance);
-                    //}
                 }
                 Core.Logger.Verbose("[WorldScene] Created a new world scene. Name: {0} LevelArea: {1} ({2})", Name, (SNOLevelArea)LevelAreaId, LevelAreaId);
                 if (LevelAreaId != AdvDia.CurrentLevelAreaId && !ExplorationData.OpenWorldIds.Contains(AdvDia.CurrentWorldId))
@@ -175,7 +171,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             {
                 yield return new ConnectedSceneResult
                 {
-                    Scene = ScenesStorage.CurrentWorldScenes.FirstOrDefault(
+                    Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
                         s => s.ExitDirections.HasFlag(SceneExitDirections.South) &&
                              s.SouthWest == NorthWest && s.SouthEast == NorthEast),
                     Direction = SceneExitDirections.North,
@@ -187,7 +183,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             {
                 yield return new ConnectedSceneResult
                 {
-                    Scene = ScenesStorage.CurrentWorldScenes.FirstOrDefault(
+                    Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
                         s => s.ExitDirections.HasFlag(SceneExitDirections.West) &&
                              s.NorthWest == NorthEast && s.SouthWest == SouthEast),
                     Direction = SceneExitDirections.East,
@@ -199,7 +195,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             {
                 yield return new ConnectedSceneResult
                 {
-                    Scene = ScenesStorage.CurrentWorldScenes.FirstOrDefault(
+                    Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
                         s => s.ExitDirections.HasFlag(SceneExitDirections.North) &&
                              s.NorthEast == SouthEast && s.NorthWest == SouthWest),
                     Direction = SceneExitDirections.South,
@@ -211,7 +207,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             {
                 yield return new ConnectedSceneResult
                 {
-                    Scene = ScenesStorage.CurrentWorldScenes.FirstOrDefault(
+                    Scene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(
                         s => s.ExitDirections.HasFlag(SceneExitDirections.East) &&
                              s.SouthEast == SouthWest && s.NorthEast == NorthWest),
                     Direction = SceneExitDirections.West,

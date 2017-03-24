@@ -109,7 +109,7 @@ namespace Trinity.Modules
 
         protected override void OnPulse()
         {
-            if (ZetaDia.Me == null)
+            if (ZetaDia.Me == null || !Core.IsOutOfGame)
                 return;
 
             using (new PerformanceLogger("Utility.Cooldowns.Pulse"))

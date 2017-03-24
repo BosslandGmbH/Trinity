@@ -1,6 +1,7 @@
 using System;
 using Trinity.Framework;
 using System.Windows;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 
 namespace Trinity.Modules
@@ -23,8 +24,8 @@ namespace Trinity.Modules
                 title += $"{Core.Player.ActorClass} ";
 
             if (!string.IsNullOrEmpty(title))
-                Application.Current.Dispatcher.BeginInvoke((Action)(() 
-                    => Application.Current.MainWindow.Title = title));
+                Application.Current.Dispatcher.Invoke((Action)(()
+                    => Application.Current.MainWindow.Title = $"DemonBuddy ({DemonbuddyUI.Version}) - {title}"));
         }
     }
 }

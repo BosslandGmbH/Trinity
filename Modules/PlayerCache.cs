@@ -20,7 +20,7 @@ namespace Trinity.Modules
         public int ActorSnoId { get; set; }
 
         public SummonInfo Summons = new SummonInfo();
-        public TrinityPlayer Actor { get; set; } = new TrinityPlayer();
+        public TrinityPlayer Actor => Core.Actors.Me;
         public int AcdId { get; private set; }
         public float CriticalChancePct { get; set; }
         public int RActorGuid { get; private set; }
@@ -169,10 +169,6 @@ namespace Trinity.Modules
 
                     UpdateFastChangingData();
 
-
-                    UpdateActor();
-
-
                 }
                 catch (Exception ex)
                 {
@@ -183,26 +179,6 @@ namespace Trinity.Modules
 
         public DateTime LastChangedLevelAreaId { get; set; }
 
-        private void UpdateActor()
-        {
-            Actor = Core.Actors.Me;
-            //Actor = new TrinityActor
-            //{
-            //    Object = _me,
-            //    CommonData = _me.CommonData,
-            //    AcdId = this.AcdId,
-            //    ActorType = ActorType.Player,
-            //    IsHostile = false,
-            //    HitPoints = this.CurrentHealth,
-            //    HitPointsPct = this.CurrentHealthPct,
-            //    Rotation = this.Rotation,
-            //    AnnId = this.MyDynamicID,
-            //    AnimationState = _me.CommonData.AnimationState,
-            //    Animation = _me.CommonData.CurrentAnimation,
-            //    InternalName = _me.Name,
-            //    Position = Position,
-            //};
-        }
 
         internal void UpdateFastChangingData()
         {

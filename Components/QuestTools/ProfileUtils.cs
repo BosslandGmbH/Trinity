@@ -88,7 +88,7 @@ namespace Trinity.Components.QuestTools
         {
             // All unrecognized tags are set as null and moved to root.
             // Avoid these tags throwing exception by removing them.
-            ProfileManager.CurrentProfile.Order.RemoveAll(t => t == null);
+            ProfileManager.CurrentProfile?.Order?.RemoveAll(t => t == null);
         }        
 
         internal static void ReplaceTags(IList<ProfileBehavior> tags)

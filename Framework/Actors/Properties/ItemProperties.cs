@@ -51,6 +51,7 @@ namespace Trinity.Framework.Actors.Properties
 
             actor.IsUnidentified = attributes.IsUnidentified;
             actor.IsAncient = attributes.IsAncient;
+            actor.IsPrimalAncient = attributes.IsPrimalAncient;
             actor.ItemQualityLevel = attributes.ItemQualityLevel;
             //ItemStackQuantity = Attributes.ItemStackQuantity;
             actor.RequiredLevel = Math.Max(actor.Attributes.RequiredLevel, actor.Attributes.ItemLegendaryItemLevelOverride);

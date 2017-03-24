@@ -3,9 +3,11 @@ using Trinity.Components.QuestTools;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Avoidance;
+using Trinity.Framework.Events;
 using Trinity.Framework.Grid;
 using Trinity.Modules;
 using Trinity.Settings;
+using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 
@@ -14,22 +16,20 @@ namespace Trinity.Framework
 {
     public static class Core
     {
-        public static void Init()
-        {
-            Logger.Log("Framework Core Initialized");
-        }
+        public static void Init() { }
 
         public static IFrameworkLogger Logger { get; } = new DefaultLogger();
         public static PlayerCache Player { get; } = new PlayerCache();
-
         public static RoutineManager Routines => RoutineManager.Instance;
         public static Adventurer Adventurer { get; } = Adventurer.Instance;
         public static QuestTools QuestTools { get; } = new QuestTools();
         public static InventoryCache Inventory { get; } = new InventoryCache();
         public static ActorCache Actors { get; } = new ActorCache();
+        public static SceneStorage Scenes { get; } = new SceneStorage();
         public static HotbarCache Hotbar { get; } = new HotbarCache();
         public static BuffsCache Buffs { get; } = new BuffsCache();
         public static BuildLogger BuildLogger { get; } = new BuildLogger();
+        public static RoutineSelector RoutineSelector { get; } = new RoutineSelector();
         public static TargetsCache Targets { get; } = new TargetsCache();
         public static AvoidanceManager Avoidance { get; } = new AvoidanceManager();
         public static CastStatus CastStatus { get; } = new CastStatus();
@@ -57,16 +57,12 @@ namespace Trinity.Framework
         public static ChangeMonitor ChangeMonitor { get; } = new ChangeMonitor();
         public static InactivityMonitor InactivityMonitor { get; } = new InactivityMonitor();
         public static ProfileSettings ProfileSettings { get; } = new ProfileSettings();
-
         public static SettingsModel Settings => TrinitySettings.Settings;
         public static TrinityStorage Storage => TrinitySettings.Storage;
-
-
         public static MainGridProvider DBGridProvider => (MainGridProvider)Navigator.SearchGridProvider;
         public static DefaultNavigationProvider DBNavProvider => (DefaultNavigationProvider)Navigator.NavigationProvider;
-
-
         public static bool GameIsReady => ZetaDia.IsInGame && ZetaDia.Me.IsValid && !ZetaDia.Globals.IsLoadingWorld && !ZetaDia.Globals.IsPlayingCutscene;
+        public static bool IsOutOfGame => ZetaDia.ActivePlayerData.WorldSnoId == 1998454784 || ZetaDia.ActivePlayerData.IsNotInGame > 0 || !ZetaDia.ActivePlayerData.IsInGame;
 
         internal static void Update()
         {

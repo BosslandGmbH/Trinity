@@ -8,6 +8,7 @@ using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Reference;
+using Trinity.ProfileTags;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
@@ -26,6 +27,12 @@ namespace Trinity.Components.QuestTools
             ScriptManager.RegisterShortcutsDefinitions((typeof(ProfileConditions)));
         }
 
+        public static string ProfileSetting(string key)
+        {
+            string value;
+            return ProfileSettingTag.ProfileSettings.TryGetValue(key, out value) ? value : string.Empty;
+        }
+
         public static bool IsCastingOrLoading()
         {
             return
@@ -42,6 +49,11 @@ namespace Trinity.Components.QuestTools
                     ZetaDia.Me.CommonData.AnimationState == AnimationState.Transform ||
                     ZetaDia.Me.CommonData.AnimationState.ToString() == "13"
                 );
+        }
+
+        public static bool HaveBounty(int questId)
+        {
+            return ZetaDia.Storage.Quests.Bounties.FirstOrDefault(bounty => bounty.Info.QuestSNO == questId && bounty.Info.State != QuestState.Completed) != null;
         }
 
         public static bool CurrentSceneId(int sceneSnoId)

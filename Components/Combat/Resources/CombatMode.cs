@@ -4,7 +4,6 @@
     {
         Normal,
         Off,
-        Questing,
         KillAll,
         SafeZerg,
     }

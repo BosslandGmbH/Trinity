@@ -29,7 +29,7 @@ namespace Trinity.Components.Adventurer.Game.Stats
             _tickStartTime = DateTime.UtcNow;
             CurrentExperience = 0;
             _tick++;
-            _lastSeen = GetLastSeen();
+            _lastSeen = GetExperience();
             EnablePulse();
             IsStarted = true;
             Core.Logger.Log("[XPTracker] Starting a new experience tracking session.");
@@ -104,7 +104,7 @@ namespace Trinity.Components.Adventurer.Game.Stats
 
         private void UpdateExperience()
         {
-            var currentLastSeen = GetLastSeen();
+            var currentLastSeen = GetExperience();
             if (_lastSeen < currentLastSeen)
             {
                 CurrentExperience += (currentLastSeen - _lastSeen);
@@ -113,8 +113,11 @@ namespace Trinity.Components.Adventurer.Game.Stats
             _lastSeen = currentLastSeen;
         }
 
-        private static long GetLastSeen()
+        private static long GetExperience()
         {
+            if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
+                return 0;
+
             return ZetaDia.Me.Level == 70
                 ? ZetaDia.Me.ParagonCurrentExperience
                 : ZetaDia.Me.CurrentExperience;

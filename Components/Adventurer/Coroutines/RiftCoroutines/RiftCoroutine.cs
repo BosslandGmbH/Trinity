@@ -14,6 +14,7 @@ using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Game.Stats;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
@@ -275,6 +276,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         {
             get
             {
+                ZetaDia.Actors.Update();
+                Core.Update();
                 var keys = AdvDia.StashAndBackpackItems.Where(i => i.RawItemType == RawItemType.TieredRiftKey).Sum(k => k.ItemStackQuantity);
                 Core.Logger.Log("I have {0} rift keys.", keys);
                 return keys;
@@ -322,7 +325,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             State = AdvDia.CurrentWorldId == ExplorationData.ActHubWorldIds[Act.A1] ? States.InTown : States.GoingToAct1Hub;
             if (AdvDia.RiftQuest.State == QuestState.NotStarted)
             {
-                ScenesStorage.Reset();
+                Core.Scenes.Reset();
                 RiftData.EntryPortals.Clear();
                 _currentWorldDynamicId = 0;
                 _previusWorldDynamicId = 0;
@@ -609,7 +612,17 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     int minLevel = Math.Min(maxLevel, Math.Max(13, maxLevel - settings.GemAutoLevelReductionLimit));
 
                     var gems = PluginSettings.Current.Gems;
-                    if (gems.Gems.Count < 21)
+                    if (gems.Gems == null)
+                    {
+                        gems.UpdateGems(PluginSettings.Current.GreaterRiftLevel);
+                    }
+                    if (gems.Gems == null)
+                    {
+                        Core.Logger.Error("Gems collection in Adventurer settings was not populated properly.");
+                        State = States.Failed;
+                        return false;
+                    }
+                    if (gems.Gems != null && gems.Gems.Count < 21)
                     {
                         Core.Logger.Log("We're getting a new gem on that run, running it at minimum level (GR " + minLevel + ")!");
                         _level = minLevel;
@@ -833,7 +846,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             //}
 
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 
@@ -885,7 +898,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             //}
 
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 
@@ -1005,7 +1018,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
             Core.Logger.Log("[Rift] The Boss must be scared, but we will find him!");
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 
@@ -1066,7 +1079,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
             Core.Logger.Log("[Rift] Where are you, my dear Urshi!");
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 
@@ -1194,7 +1207,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             if (!await ExplorationCoroutine.Explore(new HashSet<int> { AdvDia.CurrentLevelAreaId })) return false;
             Core.Logger.Log("[Rift] I am no butcher, where is this cow?");
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 

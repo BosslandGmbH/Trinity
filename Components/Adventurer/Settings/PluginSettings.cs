@@ -72,7 +72,7 @@ namespace Trinity.Components.Adventurer.Settings
 
         public PluginSettings GetDataContext()
         {
-            UpdateGemList();
+            //UpdateGemList(); // >>> causing freeze on ActorCache accessing ActivePlayerData
             return this;
         }
 

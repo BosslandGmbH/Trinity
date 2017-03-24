@@ -206,7 +206,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             if (_objectiveLocation != Vector3.Zero)
             {
-                _nearestScene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.Distance(_objectiveLocation.ToVector2())).FirstOrDefault();
+                _nearestScene = Core.Scenes.CurrentWorldScenes.OrderBy(s => s.Center.Distance(_objectiveLocation.ToVector2())).FirstOrDefault();
                 if (_nearestScene != null && DateTime.UtcNow > _nearestSceneCooldown && ExplorationData.FortressWorldIds.Contains(AdvDia.CurrentWorldId))
                 {
                     State = States.MovingToNearestScene;
@@ -216,9 +216,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            //if (_prioritizeExitScene && !_exitSceneUnreachable && ScenesStorage.CurrentWorldSceneIds.Any(s => s.Contains("Exit")))
+            //if (_prioritizeExitScene && !_exitSceneUnreachable && Core.Scenes.CurrentWorldSceneIds.Any(s => s.Contains("Exit")))
             //{
-            //    var exitScene = ScenesStorage.CurrentWorldScenes.FirstOrDefault(s => s.Name.Contains("Exit"));
+            //    var exitScene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(s => s.Name.Contains("Exit"));
             //    if (exitScene != null)
             //    {
             //        var centerNode =
@@ -238,7 +238,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             Core.Logger.Debug("[EnterLevelAreaCoroutine] Finished Searching.");
 
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 

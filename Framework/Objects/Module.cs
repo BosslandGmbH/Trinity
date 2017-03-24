@@ -36,6 +36,8 @@ namespace Trinity.Framework.Objects
         protected virtual void OnPulse() { }
         public void WorldChanged(ChangeEventArgs<int> args) => OnWorldChanged(args);
         protected virtual void OnWorldChanged(ChangeEventArgs<int> args) { }
+        public void GameChanged() => OnGameChanged();
+        protected virtual void OnGameChanged() { }
         public void GameJoined() => OnGameJoined();
         protected virtual void OnGameJoined() { }
         public void GameLeft() => OnGameLeft();

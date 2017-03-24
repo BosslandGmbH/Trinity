@@ -555,7 +555,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private static void ResetNavigator()
         {
             Navigator.Clear();
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
         }
 
         private enum Mover

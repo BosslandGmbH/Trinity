@@ -196,7 +196,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                         if (_allowReExplore)
                         {
                             Core.Logger.Debug($"[Exploration] Exploration Resetting");
-                            ScenesStorage.Reset();
+                            Core.Scenes.Reset();
                             Navigator.Clear();
                             _failedNavigationAttempts = 0;
                         }
@@ -212,7 +212,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
 
             Core.Logger.Debug($"[Exploration] We found no explore destination, so we're done.");
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             Navigator.Clear();
 
             State = States.Completed;

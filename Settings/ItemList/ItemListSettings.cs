@@ -246,6 +246,8 @@ namespace Trinity.Settings.ItemList
             //TrinityItemType.UberReagent
         };
 
+        private bool _alwaysStashPrimalAncients;
+
         public LItem GetitemTypeRule(TrinityItemType itemType)
         {
             return ItemTypes.FirstOrDefault(sr => sr.TrinityItemType == itemType);
@@ -330,6 +332,21 @@ namespace Trinity.Settings.ItemList
                 if (_alwaysStashAncients != value)
                 {
                     _alwaysStashAncients = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [DataMember(IsRequired = false)]
+        [DefaultValue(true)]
+        public bool AlwaysStashPrimalAncients
+        {
+            get { return _alwaysStashPrimalAncients; }
+            set
+            {
+                if (_alwaysStashPrimalAncients != value)
+                {
+                    _alwaysStashPrimalAncients = value;
                     OnPropertyChanged();
                 }
             }

@@ -147,7 +147,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
 
             Core.Logger.Log("[UpgradeGems] Where are you, my dear Urshi!");
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 

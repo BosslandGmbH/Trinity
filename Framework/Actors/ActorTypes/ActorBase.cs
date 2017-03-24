@@ -13,7 +13,7 @@ namespace Trinity.Framework.Actors.ActorTypes
     /// Minimum set of properties shared by all actors.
     /// </summary>
     public class ActorBase
-    {        
+    {
         public bool IsAcdBased { get; set; }
         public bool IsRActorBased { get; set; }
         public Vector3 Position { get; set; }
@@ -28,7 +28,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public DiaObject RActor { get; set; }
         public SNORecordActor ActorInfo { get; set; }
         public SNORecordMonster MonsterInfo { get; set; }
-        public bool IsValid => (!IsRActorBased || RActor.IsValid) && (!IsAcdBased || IsAcdValid);
+        public bool IsValid => (!IsRActorBased || RActor.IsValid) && (!IsAcdBased || IsAcdValid) && (ActorInfo?.IsValid ?? true);
         public bool IsRActorValid => RActor != null && RActor.IsValid && RActor.RActorId != -1 && !IsRActorDisposed;
         public bool IsAcdValid => CommonData != null && CommonData.IsValid && !CommonData.IsDisposed;
         public bool IsRActorDisposed => AnnId != -1 && IsAcdBased && (!IsAcdValid || AnnId != CommonData.AnnId);
@@ -56,6 +56,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         /// </summary>
         public virtual void OnDestroyed() { }
 
-        public override string ToString() => $"{GetType().Name}: RActorId={RActorId}, {ActorType}, {InternalName}";        
+        public override string ToString() => $"{GetType().Name}: RActorId={RActorId}, {ActorType}, {InternalName}";
     }
 }

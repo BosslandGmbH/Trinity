@@ -34,7 +34,6 @@ using Zeta.Common.Xml;
 using Zeta.Game;
 using Expression = System.Linq.Expressions.Expression;
 
-using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
 namespace Trinity.UI.Visualizer
 {
@@ -134,7 +133,7 @@ namespace Trinity.UI.Visualizer
                 if (ZetaDia.Me == null || !ZetaDia.Me.IsValid || !ZetaDia.Service.Hero.IsValid)
                     return false;
 
-                ScenesStorage.Update();
+                Core.Scenes.Update();
                 Core.Update();
                 Combat.Weighting.WeightActors(Core.Targets);
                 UpdateVisualizer();

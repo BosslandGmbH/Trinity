@@ -115,7 +115,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                                 ZetaDia.CurrentLevelAreaSnoId, string.Join(", ", levelAreaIds),
                                 AdvDia.MainGridProvider.Width != 0);
 
-                    //ScenesStorage.Reset();
+                    //Core.Scenes.Reset();
                     //BotMain.PauseFor(TimeSpan.FromSeconds(1));
                 }
                 return node;

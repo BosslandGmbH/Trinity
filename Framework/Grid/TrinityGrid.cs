@@ -15,7 +15,6 @@ using Direction = Trinity.Components.Adventurer.Game.Exploration.Direction;
 
 using NodeFlags = Trinity.Components.Adventurer.Game.Exploration.NodeFlags;
 using SceneData = Trinity.Components.Adventurer.Game.Exploration.SceneData;
-using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
 
 namespace Trinity.Framework.Grid
 {
@@ -48,7 +47,7 @@ namespace Trinity.Framework.Grid
             {
                 _currentGrid = new TrinityGrid();
             }
-            else if (!ScenesStorage.CurrentWorldScenes.Any())
+            else if (!Core.Scenes.CurrentWorldScenes.Any())
             {
                 return _currentGrid;
             }

@@ -11,7 +11,6 @@ namespace Trinity.Framework.Objects.Memory
     {
         public AttributeItem this[short index] => Items[index];
         public Dictionary<int, AttributeItem> Items = new Dictionary<int, AttributeItem>();
-        public Func<ACD, int> GetFastAttributeGroupId = acd => ZetaDia.Memory.Read<int>(acd.BaseAddress + 0x120);
         public int FastAttributeGroupId;
         public BasicMap<AttributeItem> PtrMap;
         public AttributeGroup Group;
@@ -23,6 +22,13 @@ namespace Trinity.Framework.Objects.Memory
         }
 
         public bool IsValid => Group != null && Group.IsValid && Group.Id != 0 && Map != null && Map.IsValid && Map.Count != 0;
+
+        public void Destroy()
+        {
+            Items.Clear();
+            Group = null;
+            Map = null;
+        }
 
         public Attributes()
         {
@@ -41,6 +47,12 @@ namespace Trinity.Framework.Objects.Memory
             {
                 if (groupId == -1)
                     return;
+
+                if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
+                {
+                    Destroy();
+                    return;
+                }
 
                 FastAttributeGroupId = groupId;
                 Group = AttributeManager.FindGroup(groupId);
@@ -86,7 +98,7 @@ namespace Trinity.Framework.Objects.Memory
 
         public bool Update()
         {
-            if (!IsValid)
+            if (!IsValid || ZetaDia.Me == null || !ZetaDia.Me.IsValid)
                 return false;
 
             var isChanged = Map.Count != _lastRowCount;

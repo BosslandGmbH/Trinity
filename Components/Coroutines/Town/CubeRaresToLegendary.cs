@@ -135,7 +135,7 @@ namespace Trinity.Components.Coroutines.Town
                 if (!ZetaDia.IsInTown)
                     break;
 
-                Core.Logger.Log("[CubeRaresToLegendary] CubeRaresToLegendary Started! Wooo!");
+                //Core.Logger.Log("[CubeRaresToLegendary] CubeRaresToLegendary Started! Wooo!");
 
                 var backpackGuids = new HashSet<int>(InventoryManager.Backpack.Select(i => i.ACDId));
 
@@ -151,7 +151,7 @@ namespace Trinity.Components.Coroutines.Town
                         continue;
                     }
 
-                    Core.Logger.Log("[CubeRaresToLegendary] Ready to go, Lets transmute!");
+                    //Core.Logger.Log("[CubeRaresToLegendary] Ready to go, Lets transmute!");
 
                     var item = GetBackPackRares(types).First();
                     var itemName = item.Name;
@@ -167,8 +167,12 @@ namespace Trinity.Components.Coroutines.Town
                         var newTrinityItem = Core.Actors.GetItemByAnnId(newItem.AnnId);
                         ItemEvents.FireItemCubed(newTrinityItem);
 
-                        Core.Logger.Log("[CubeRaresToLegendary] Upgraded Rare '{0}' ---> '{1}' ({2})",
-                            itemName, newLegendaryItem.Name, newItem.ActorSnoId);
+                        if(newTrinityItem.IsPrimalAncient)
+                            Core.Logger.Warn($"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId}) PRIMAL!~");
+                        else
+                            Core.Logger.Log($"[CubeRaresToLegendary] Upgraded Rare '{itemName}' ---> '{newLegendaryItem.Name}' ({newItem.ActorSnoId})");
+
+                      
                     }
                     else
                     {

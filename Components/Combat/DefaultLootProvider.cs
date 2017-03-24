@@ -97,6 +97,9 @@ namespace Trinity.Components.Combat
             if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
                 return true;
 
+            if (item.IsPrimalAncient && Core.Settings.ItemList.AlwaysStashPrimalAncients)
+                return true;
+
             if (item.TrinityItemType == TrinityItemType.ConsumableAddSockets)
                 return true;
 
@@ -282,6 +285,12 @@ namespace Trinity.Components.Combat
             if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
             {
                 Core.Logger.Debug($"Stashing due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                return true;
+            }
+
+            if (item.IsPrimalAncient && Core.Settings.ItemList.AlwaysStashPrimalAncients)
+            {
+                Core.Logger.Debug($"Stashing due to ItemList setting - Always stash primal ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                 return true;
             }
 
@@ -555,6 +564,12 @@ namespace Trinity.Components.Combat
                     return false;
                 }
 
+                if (item.IsPrimalAncient && Core.Settings.ItemList.AlwaysStashPrimalAncients)
+                {
+                    reason = "ItemList Stash Primal Ancients";
+                    return false;
+                }
+
                 if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     reason = "Rift Locked Inventory";
@@ -648,6 +663,12 @@ namespace Trinity.Components.Combat
                 if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
                 {
                     Core.Logger.Debug($"Not Selling due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                    return false;
+                }
+
+                if (item.IsPrimalAncient && Core.Settings.ItemList.AlwaysStashPrimalAncients)
+                {
+                    Core.Logger.Debug($"Not Selling due to ItemList setting - Always stash primal ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
                     return false;
                 }
 

@@ -18,7 +18,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
         public WorldScene WorldScene { get; set; }
         //{
-        //get { return _worldScene ?? (_worldScene = ScenesStorage.CurrentWorldScenes.FirstOrDefault(s => s.SnoId == SnoId)); }
+        //get { return _worldScene ?? (_worldScene = Core.Scenes.CurrentWorldScenes.FirstOrDefault(s => s.SnoId == SnoId)); }
         //set { _worldScene = value; }
         //}
 

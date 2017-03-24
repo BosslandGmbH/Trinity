@@ -25,6 +25,11 @@ namespace Trinity.ProfileTags
         [Description("id of actor to be found")]
         public int ActorId { get; set; }
 
+        //[XmlAttribute("internalName")]
+        //[DefaultValue(0)]
+        //[Description("The full or partial SNO name / internal name of actor to be found")]
+        //public int ActorInternalName { get; set; }
+
         [XmlAttribute("explore")]
         [Description("If actor should be searched for when not found")]
         [DefaultValue(false)]
@@ -41,7 +46,14 @@ namespace Trinity.ProfileTags
         {
             if (await base.StartTask())
             {
-                _movementTask = new MoveToActorCoroutine(QuestId, AdvDia.CurrentWorldId, ActorId, (int)MaxRange, Explore);
+                if (ActorId != 0)
+                {
+                    _movementTask = new MoveToActorCoroutine(QuestId, AdvDia.CurrentWorldId, ActorId, (int)MaxRange, Explore);
+                }
+                //else if (!string.IsNullOrEmpty(ActorInternalName))
+                //{
+                //    //todo
+                //}
             }
             return false;
         }

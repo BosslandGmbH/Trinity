@@ -140,7 +140,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
             if (!await ExplorationCoroutine.Explore(BountyData.LevelAreaIds)) return false;
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 

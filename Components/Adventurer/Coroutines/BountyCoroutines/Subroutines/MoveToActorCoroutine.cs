@@ -133,7 +133,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             var areaIds = BountyData != null ? BountyData.LevelAreaIds : new HashSet<int> { AdvDia.CurrentLevelAreaId };
             if (!await ExplorationCoroutine.Explore(areaIds)) return false;
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 

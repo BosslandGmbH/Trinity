@@ -317,6 +317,12 @@ namespace Trinity.Modules
 
         public void UpdateKiteFromFlags(TrinityActor actor, AvoidanceLayer layer)
         {
+            if (Combat.Routines.Current == null)
+            {
+                Core.Logger.Debug("UpdateKiteFromFlags failed to update becasue no routine is selected");
+                return;
+            }
+
             var kiteMode = Combat.Routines.Current.KiteMode;
             var kiteDistance = Combat.Routines.Current.KiteDistance;
 

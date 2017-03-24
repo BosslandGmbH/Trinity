@@ -33,11 +33,11 @@
     <RootNamespace>Trinity</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Demonbuddy, Version=1.1.3136.182, Culture=neutral, PublicKeyToken=eff32ccf253d66d4, processorArchitecture=x86">
+    <Reference Include="Demonbuddy, Version=1.1.3154.652, Culture=neutral, PublicKeyToken=eff32ccf253d66d4, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DB-Current\Demonbuddy.exe</HintPath>
     </Reference>
-    <Reference Include="GreyMagic, Version=1.1.3136.182, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=x86">
+    <Reference Include="GreyMagic, Version=1.1.3154.652, Culture=neutral, PublicKeyToken=260525fa2b0e778a, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\DB-Current\GreyMagic.dll</HintPath>
     </Reference>
@@ -172,7 +172,16 @@
     <Compile Include="Components\Adventurer\UI\DeveloperUI.cs" />
     <Compile Include="Components\Adventurer\UI\MainUI.cs" />
     <Compile Include="Components\QuestTools\BaseContainerProfileBehavior.cs" />
+    <Compile Include="Components\QuestTools\BaseProfileBehavior.cs" />
+    <Compile Include="Components\QuestTools\BotBehaviorQueue.cs" />
+    <Compile Include="Components\QuestTools\EnhancedDefaultTags.cs" />
+    <Compile Include="Components\QuestTools\IEnhancedProfileBehavior.cs" />
+    <Compile Include="Components\QuestTools\ProfileConditions.cs" />
+    <Compile Include="Components\QuestTools\ProfileExtensions.cs" />
+    <Compile Include="Components\QuestTools\ProfileHistory.cs" />
     <Compile Include="Components\QuestTools\ProfileTagLogger.cs" />
+    <Compile Include="Components\QuestTools\ProfileUtils.cs" />
+    <Compile Include="Components\QuestTools\QuestTools.cs" />
     <Compile Include="Framework\Helpers\Extensions\CollectionExtensions.cs" />
     <Compile Include="Framework\Helpers\Extensions\AttributeExtensions.cs" />
     <Compile Include="Framework\Helpers\CoroutineQueue.cs" />
@@ -200,58 +209,9 @@
     <Compile Include="Components\Combat\Resources\TargetUtil.cs" />
     <Compile Include="Components\Combat\Resources\TrinityPower.cs" />
     <Compile Include="Components\Combat\Resources\WeightingUtils.cs" />
-    <Compile Include="Components\QuestTools\BotBehaviorQueue.cs" />
     <Compile Include="Framework\Helpers\Extensions\ConvertExtensions.cs" />
     <Compile Include="Framework\Helpers\DemonbuddyUI.cs" />
-    <Compile Include="Components\QuestTools\ProfileExtensions.cs" />
-    <Compile Include="Components\QuestTools\ProfileHistory.cs" />
-    <Compile Include="Components\QuestTools\ProfileUtils.cs" />
     <Compile Include="Framework\Helpers\Extensions\StringExtensions.cs" />
-    <Compile Include="ProfileTags\Deprecated\StartTimerTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\StopAllTimersTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\StopTimerTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\TimeTracker.cs" />
-    <Compile Include="ProfileTags\Deprecated\Timing.cs" />
-    <Compile Include="ProfileTags\Deprecated\CombatSettingTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\CompleteGreaterRiftTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\ActBountiesCompleteTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\HasGreaterRiftKeysTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\HasNoRiftKeysTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\HasNormalRiftKeysTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\HasQuestAndStepTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\HasTrialRiftKeysTag.cs" />
-    <Compile Include="Components\QuestTools\IEnhancedProfileBehavior.cs" />
-    <Compile Include="ProfileTags\Deprecated\IfRandomTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\LoadOnceTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\UseOnceTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\UseResetTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\UseStopTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\ConfirmOKTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\TrinityCombatIgnoreTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\TrinityIfSNOInRangeTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\TrinityIfTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\TrinityInteractTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\TrinityLoadProfileTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\TrinityLogTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\TrinityMoveToSNOTag.cs" />
-    <Compile Include="Components\QuestTools\EnhancedDefaultTags.cs" />
-    <Compile Include="ProfileTags\Deprecated\ExploreDungeonTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\GetItemFromStashTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\IncrementCounterTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\MaxDeathsTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\MoveToMapMarkerTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\MoveToObjectiveTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\MoveToSceneTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\OffsetMoveTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\SafeMoveToTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\QTOpenRiftWrapperTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\QuestToolsVariableTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\RandomRollTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\ResetCounterTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\RestartActTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\ResumeUseTownPortalTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\SetQuestingTag.cs" />
-    <Compile Include="Components\QuestTools\QuestTools.cs" />
     <Compile Include="Components\Coroutines\AutoEquipItems.cs" />
     <Compile Include="Components\Coroutines\AutoEquipSkills.cs" />
     <Compile Include="Components\Coroutines\ClearArea.cs" />
@@ -317,6 +277,8 @@
     <Compile Include="Framework\Avoidance\AvoidanceManager.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceType.cs" />
     <Compile Include="Framework\Avoidance\DefaultAvoider.cs" />
+    <Compile Include="Modules\RoutineSelector.cs" />
+    <Compile Include="Modules\SceneStorage.cs" />
     <Compile Include="Modules\GridEnricher.cs" />
     <Compile Include="Framework\Avoidance\Handlers\AnimationBeamAvoidanceHandler.cs" />
     <Compile Include="Framework\Avoidance\Handlers\AnimationCircularAvoidanceHandler.cs" />
@@ -452,37 +414,30 @@
     <Compile Include="Framework\Objects\SkillSettings.cs" />
     <Compile Include="Framework\Objects\WeightSettings.cs" />
     <Compile Include="Framework\RoutineManager.cs" />
-    <Compile Include="ProfileTags\MoveToMapMarkerTag.cs" />
-    <Compile Include="ProfileTags\RunActBountiesTag.cs" />
-    <Compile Include="ProfileTags\Todo\ClearAreaTag.cs" />
-    <Compile Include="ProfileTags\Deprecated\CommandTag.cs" />
+    <Compile Include="ProfileTags\ChildTags\ItemTag.cs" />
+    <Compile Include="ProfileTags\DeprecatedTags.cs" />
     <Compile Include="ProfileTags\ExploreTag.cs" />
-    <Compile Include="ProfileTags\Todo\GreaterRiftTag.cs" />
-    <Compile Include="ProfileTags\Todo\HaveBountyTag.cs" />
+    <Compile Include="ProfileTags\HaveBountyTag.cs" />
     <Compile Include="ProfileTags\InteractTag.cs" />
     <Compile Include="ProfileTags\KeywardensTag.cs" />
-    <Compile Include="ProfileTags\Todo\LoadLastProfileTag.cs" />
+    <Compile Include="ProfileTags\LoadLastProfileTag.cs" />
     <Compile Include="ProfileTags\MoveToActorTag.cs" />
-    <Compile Include="ProfileTags\Todo\NephalemRiftTag.cs" />
+    <Compile Include="ProfileTags\MoveToMapMarkerTag.cs" />
+    <Compile Include="ProfileTags\MoveToPositionTag.cs" />
+    <Compile Include="ProfileTags\MoveToSceneTag.cs" />
     <Compile Include="ProfileTags\ProfileSettingTag.cs" />
-    <Compile Include="ProfileTags\Todo\RandomMoveTag.cs" />
-    <Compile Include="ProfileTags\Todo\RandomWaitTag.cs" />
-    <Compile Include="ProfileTags\Todo\ReloadProfileTag.cs" />
     <Compile Include="ProfileTags\RiftTag.cs" />
-    <Compile Include="ProfileTags\Todo\RunActBountiesTag.cs" />
+    <Compile Include="ProfileTags\RunActBountiesTag.cs" />
     <Compile Include="ProfileTags\RunBountyTag.cs" />
-    <Compile Include="ProfileTags\Todo\SetCombatMode.cs" />
     <Compile Include="ProfileTags\ShuffleTag.cs" />
     <Compile Include="ProfileTags\StopBotTag.cs" />
     <Compile Include="ProfileTags\TakeFromStash.cs" />
     <Compile Include="ProfileTags\TakeWaypointTag.cs" />
-    <Compile Include="ProfileTags\Todo\TownPortalTag.cs" />
-    <Compile Include="ProfileTags\Todo\TownRunTag.cs" />
     <Compile Include="ProfileTags\TransmuteTag.cs" />
-    <Compile Include="ProfileTags\Todo\WaitForCombat.cs" />
-    <Compile Include="ProfileTags\RandomWaitTag.cs" />
-    <Compile Include="ProfileTags\Todo\WhenTag.cs" />
+    <Compile Include="ProfileTags\WaitForCombatTag.cs" />
+    <Compile Include="ProfileTags\WaitTag.cs" />
     <Compile Include="ProfileTags\WhenTag.cs" />
+    <Compile Include="ProfileTags\ZergTag.cs" />
     <Compile Include="Settings\ItemList\ItemListEvaluator.cs" />
     <Compile Include="Components\Coroutines\ItemSort.cs" />
     <Compile Include="Modules\BlockedCheck.cs" />
@@ -514,10 +469,6 @@
     <Compile Include="Modules\TargetsCache.cs" />
     <Compile Include="Modules\WorldCache.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="ProfileTags\ChildTags\ItemTag.cs" />
-    <Compile Include="ProfileTags\MoveToPositionTag.cs" />
-    <Compile Include="Components\QuestTools\ProfileConditions.cs" />
-    <Compile Include="Components\QuestTools\BaseProfileBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Framework\Reference\GameData.cs" />
     <Compile Include="Framework\Reference\GameUI.cs" />
@@ -712,36 +663,6 @@
     <Content Include="Profiles\Bounties.xml" />
     <Content Include="Profiles\BrutalWhiteFarm.xml" />
     <Content Include="Profiles\Debug\BelialBounty.xml" />
-    <Content Include="ProfileTags\Tests\Rift.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="ProfileTags\Tests\Keywardens.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="ProfileTags\Tests\RunBounty.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="ProfileTags\Tests\RunActBounties.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="ProfileTags\Tests\Interact.xml" />
-    <Content Include="ProfileTags\Tests\Explore.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="ProfileTags\Tests\MoveToMapMarker.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="ProfileTags\Tests\MoveToActor.xml" />
-    <Content Include="ProfileTags\Tests\RandomWait.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="ProfileTags\Tests\StopBot.xml" />
-    <Content Include="ProfileTags\Tests\Shuffle.xml" />
-    <Content Include="ProfileTags\Tests\TakeFromStash.xml" />
-    <Content Include="ProfileTags\Tests\When.xml" />
-    <Content Include="ProfileTags\Tests\Transmute.xml" />
-    <Content Include="ProfileTags\Tests\TakeWaypoint.xml" />
-    <Content Include="ProfileTags\Tests\MoveToPosition.xml" />
     <Content Include="Profiles\Debug\Bosses.xml" />
     <Content Include="Profiles\Debug\MalthaelBounty.xml" />
     <Content Include="Profiles\Debug\MoveWithinScene.xml" />
@@ -775,6 +696,28 @@
     <Content Include="Profiles\Questing\AllActs_Relogger.xml" />
     <Content Include="Profiles\Questing\AllActs_RestartCurrentAct.xml" />
     <Content Include="Profiles\Questing\AllActs_RestartCurrentAct_Relogger.xml" />
+    <Content Include="ProfileTags\Tests\Explore.xml" />
+    <Content Include="ProfileTags\Tests\Interact.xml" />
+    <Content Include="ProfileTags\Tests\Keywardens.xml" />
+    <Content Include="ProfileTags\Tests\LoadLastProfile.xml" />
+    <Content Include="ProfileTags\Tests\LoadLastProfileSub.xml" />
+    <Content Include="ProfileTags\Tests\MoveToActor.xml" />
+    <Content Include="ProfileTags\Tests\MoveToMapMarker.xml" />
+    <Content Include="ProfileTags\Tests\MoveToPosition.xml" />
+    <Content Include="ProfileTags\Tests\MoveToScene.xml" />
+    <Content Include="ProfileTags\Tests\ProfileSetting.xml" />
+    <Content Include="ProfileTags\Tests\Rift.xml" />
+    <Content Include="ProfileTags\Tests\RunActBounties.xml" />
+    <Content Include="ProfileTags\Tests\RunBounty.xml" />
+    <Content Include="ProfileTags\Tests\Shuffle.xml" />
+    <Content Include="ProfileTags\Tests\StopBot.xml" />
+    <Content Include="ProfileTags\Tests\TakeFromStash.xml" />
+    <Content Include="ProfileTags\Tests\TakeWaypoint.xml" />
+    <Content Include="ProfileTags\Tests\Transmute.xml" />
+    <Content Include="ProfileTags\Tests\Wait.xml" />
+    <Content Include="ProfileTags\Tests\WaitForCombat.xml" />
+    <Content Include="ProfileTags\Tests\When.xml" />
+    <Content Include="ProfileTags\Tests\Zerg.xml" />
     <Content Include="UI\UIComponents\DragDrop-Gong\Icons\EffectCopy.png" />
     <Content Include="UI\UIComponents\DragDrop-Gong\Icons\EffectLink.png" />
     <Content Include="UI\UIComponents\DragDrop-Gong\Icons\EffectMove.png" />

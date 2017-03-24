@@ -29,7 +29,7 @@ using DeathGates = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.D
 using LineSegment = System.Windows.Media.LineSegment;
 
 using RectangularRegion = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.RectangularRegion;
-using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
+
 
 namespace Trinity.UI.Visualizer.RadarCanvas
 {
@@ -1278,7 +1278,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 var worldId = Core.Player.WorldDynamicId;
 
-                foreach (var adventurerScene in ScenesStorage.CurrentWorldScenes.Where(s => s.DynamicWorldId == worldId).ToList())
+                foreach (var adventurerScene in Core.Scenes.CurrentWorldScenes.Where(s => s.DynamicWorldId == worldId).ToList())
                 {
                     foreach (var exitPosition in adventurerScene.ExitPositions)
                     {

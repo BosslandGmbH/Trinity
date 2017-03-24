@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -22,19 +24,13 @@ namespace Trinity.Framework.Helpers
             return GetElement<TabControl>(MainWindow.FindName("tabControlMain"));
         }
 
-        private static Version _productVersion;
-        public static Version ProductVersion
+        private static string _version;
+        public static string Version
         {
-            get { return _productVersion ?? (_productVersion = new Version(System.Windows.Forms.Application.ProductVersion)); }
-            set { _productVersion = value; }
+            get { return _version ?? (_version = System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\DemonBuddy.exe").FileVersion); }
+            set { _version = value; }
         }
 
-        private static Version _fileVersion;
-        public static Version FileVersion
-        {
-            get { return _fileVersion ?? (_fileVersion = new Version(System.Windows.Forms.Application.ProductVersion)); }
-            set { _fileVersion = value; }
-        }
 
         private static MainWindow _mainWindow;
         public static MainWindow MainWindow
@@ -57,7 +53,7 @@ namespace Trinity.Framework.Helpers
 
         private static StatusBar FindStatusBar()
         {
-            return FindParent<StatusBar>(StatusBarText);            
+            return FindParent<StatusBar>(StatusBarText);
         }
 
         private static StatusBarItem _statusBarText;
@@ -82,7 +78,7 @@ namespace Trinity.Framework.Helpers
         private static SplitButton FindSettingsButton()
         {
             return GetElement<SplitButton>(MainWindow.FindName("btnSettings"));
-        }      
+        }
 
         public static T GetElement<T>(object element) where T : class, new()
         {
@@ -99,5 +95,5 @@ namespace Trinity.Framework.Helpers
             return FindParent<T>(parent);
         }
 
-    }    
+    }
 }

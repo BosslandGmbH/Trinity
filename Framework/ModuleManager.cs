@@ -2,10 +2,14 @@
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Trinity.Framework.Events;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Reference;
 using Zeta.Bot;
+using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals.Service;
 
 namespace Trinity.Framework
 {
@@ -20,12 +24,12 @@ namespace Trinity.Framework
 
         public static void EnableModules()
         {
-            ExecuteOnInstances(util => util.IsEnabled = true);
+            GetModules().ForEach(m => m.IsEnabled = true);
         }
 
         public static void DisableModules()
         {
-            ExecuteOnInstances(util => util.IsEnabled = false);
+            GetModules().ForEach(m => m.IsEnabled = false);
         }
 
         public static bool IsEnabled { get; set; }
@@ -38,9 +42,9 @@ namespace Trinity.Framework
                 GameEvents.OnPlayerDied += GameEventsOnPlayerDied;
                 GameEvents.OnGameJoined += GameEventsOnGameJoined;
                 GameEvents.OnGameLeft += GameEventsOnGameLeft;
+                GameEvents.OnGameChanged -= GameEventsOnGameChanged;
                 ProfileManager.OnProfileLoaded += OnProfileLoaded;
                 ChangeEvents.WorldId.Changed += WorldIdOnChanged;
-                ChangeEvents.IsInGame.Changed += IsInGameOnChanged;
                 ChangeEvents.HeroId.Changed += HeroIdOnChanged;
                 BotMain.OnShutdownRequested += BotMainOnShutdownRequested;
                 BotMain.OnStop += BotMainOnStop;
@@ -49,6 +53,12 @@ namespace Trinity.Framework
                 EnableModules();
                 IsEnabled = true;
             }
+        }
+
+        private static void GameEventsOnGameChanged(object sender, EventArgs e)
+        {
+            IsGameJoined = ZetaDia.IsInGame;
+            ExecuteOnInstances(m => m.GameChanged());
         }
 
         private static void GameEventsOnGameJoined(object sender, EventArgs e)
@@ -103,6 +113,7 @@ namespace Trinity.Framework
             Pulsator.OnPulse -= PulsatorOnPulse;
             GameEvents.OnPlayerDied -= GameEventsOnPlayerDied;
             GameEvents.OnGameJoined -= GameEventsOnGameJoined;
+            GameEvents.OnGameChanged -= GameEventsOnGameChanged;
             ProfileManager.OnProfileLoaded -= OnProfileLoaded;
             ChangeEvents.WorldId.Changed -= WorldIdOnChanged;
             ChangeEvents.IsInGame.Changed -= IsInGameOnChanged;
@@ -120,18 +131,24 @@ namespace Trinity.Framework
             ExecuteOnInstances(m => m.Pulse());
         }
 
-        private static void ExecuteOnInstances(Action<Module> action)
+        private static void ExecuteOnInstances(Action<Module> action, [CallerMemberName] string caller = "")
         {
-            foreach (var utilReference in Instances.ToList())
+            foreach (var module in GetModules())
             {
-                Module util;
-                if (utilReference.TryGetTarget(out util))
+                var notInGame = GameData.MenuWorldSnoIds.Contains(ZetaDia.Globals.WorldSnoId);
+                var partyLocked = ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None;
+                if (notInGame || partyLocked)
                 {
-                    action?.Invoke(util);
+                    Core.Logger.Log("Aborting Updates, not in game or party locked.");
+                    return;
                 }
-                else
+                try
                 {
-                    Instances.Remove(utilReference);
+                    action?.Invoke(module);
+                }
+                catch (Exception ex)
+                {
+                    Core.Logger.Debug($"Action '{caller}' threw exception for module '{module.Name}'.");
                 }
             }
         }
@@ -154,6 +171,12 @@ namespace Trinity.Framework
 
         public static IEnumerable<IDynamicSetting> DynamicSettings => GetModules().OfType<IDynamicSetting>();
 
-        public static bool IsGameJoined { get; private set; }
+        public static bool IsGameJoined { get; set; }
+
+        public static void OutOfGamePulse()
+        {
+            if(IsGameJoined)
+                IsGameJoined = false;
+        }
     }
 }
