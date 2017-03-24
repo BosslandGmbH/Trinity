@@ -142,7 +142,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 return false;
 
             Core.Logger.Error("[Keywarden] Oh shit, that guy is nowhere to be found.");
-            ScenesStorage.ResetVisited();
+            Core.Scenes.ResetVisited();
             State = States.Searching;
             return false;
         }

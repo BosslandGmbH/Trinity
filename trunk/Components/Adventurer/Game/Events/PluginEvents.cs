@@ -39,10 +39,13 @@ namespace Trinity.Components.Adventurer.Game.Events
 
         public static void GameEvents_OnWorldChanged(object sender, EventArgs e)
         {
+            if (Core.IsOutOfGame)
+                return;
+
             if (!Adventurer.IsAdventurerTagRunning())
             {
                 Core.Logger.Debug("[BotEvents] Reseting the grids.");
-                ScenesStorage.Reset();
+                Core.Scenes.Reset();
             }
             WorldChangeTime = PluginTime.CurrentMillisecond;
             Core.Logger.Debug("[BotEvents] World has changed to WorldId: {0} LevelAreaSnoIdId: {1}", AdvDia.CurrentWorldId, AdvDia.CurrentLevelAreaId);
@@ -51,9 +54,9 @@ namespace Trinity.Components.Adventurer.Game.Events
 
         public static void GameEvents_OnGameJoined(object sender, EventArgs e)
         {
-            if (ScenesStorage.CurrentScene?.LevelAreaId != ZetaDia.CurrentLevelAreaSnoId)
+            if (Core.Scenes.CurrentScene?.LevelAreaId != ZetaDia.CurrentLevelAreaSnoId)
             {
-                ScenesStorage.Reset();
+                Core.Scenes.Reset();
             }
         }
 
@@ -81,7 +84,7 @@ namespace Trinity.Components.Adventurer.Game.Events
             _lastUpdate = curFrame;
 
             // Trinity uses adventurer scenestorage and grid base
-            ScenesStorage.Update();
+            Core.Scenes.Update();
             ExplorationGrid.PulseSetVisited();
             BountyStatistics.Pulse();
         }

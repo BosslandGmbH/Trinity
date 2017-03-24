@@ -23,7 +23,7 @@ namespace Trinity
     {
         private static TrinityPlugin _instance;
         public string Name => "Trinity";
-        public Version Version => new Version(2, 250, 742);
+        public Version Version => new Version(2, 250, 750);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -38,10 +38,21 @@ namespace Trinity
             _instance = this;
             UILoader.Preload();            
             PluginManager.OnPluginsReloaded += PluginManager_OnPluginsReloaded;
+            InstallRoutine();
+        }
+
+        private static void InstallRoutine()
+        {
+            var routineDirectory = Path.GetDirectoryName(FileManager.CombatRoutineDestinationPath);
+            if (routineDirectory != null && !Directory.Exists(routineDirectory))
+                Directory.CreateDirectory(routineDirectory);
+
+            if (File.Exists(FileManager.CombatRoutineSourcePath))
+                File.Copy(FileManager.CombatRoutineSourcePath, FileManager.CombatRoutineDestinationPath, true);
         }
 
         private void PluginManager_OnPluginsReloaded(object sender, EventArgs e)
-        {
+        {            
             foreach (var plugin in PluginManager.Plugins)
             {
                 if (plugin.Plugin == this && !plugin.Enabled)
@@ -60,10 +71,6 @@ namespace Trinity
             // are initialized by BotMain thread instead of UI thread, causing problems.
             if (!Application.Current.CheckAccess())
                 return;
-
-            // DB requires a \Routines\ folder to exist or it shows an error dialog.
-            if (!Directory.Exists(FileManager.RoutinesDirectory))
-                Directory.CreateDirectory(FileManager.RoutinesDirectory);
 
             IsInitialized = true;
         }
@@ -88,8 +95,7 @@ namespace Trinity
             UILoader.PreLoadWindowContent();
             ModuleManager.Enable();
             Core.Logger.Log($"is now ENABLED: {Description} - now in action!");                        
-            IsEnabled = true;
-            
+            IsEnabled = true;            
         }
 
         private static void SetupDemonBuddy()
@@ -100,7 +106,6 @@ namespace Trinity
             CombatTargeting.Instance.Provider = new TrinityCombatProvider();
             LootTargeting.Instance.Provider = new BlankLootProvider();
             ObstacleTargeting.Instance.Provider = new BlankObstacleProvider();
-            Zeta.Bot.RoutineManager.Current = new TrinityRoutine();
             GlobalSettings.Instance.LogoutInactivityTime = 0;
         }
 

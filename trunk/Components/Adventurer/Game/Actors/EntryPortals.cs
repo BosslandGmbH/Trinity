@@ -18,7 +18,7 @@ namespace Trinity.Components.Adventurer.Game.Actors
                 return;
             }
 
-            if (ZetaDia.Globals.IsLoadingWorld)
+            if (ZetaDia.Globals.IsLoadingWorld || Core.IsOutOfGame)
                 return;
 
             var entryPortal = ZetaDia.Minimap.Markers.CurrentWorldMarkers.FirstOrDefault(m => (m.IsPortalEntrance || m.IsPortalExit) && m.Position.Distance(ZetaDia.Me.Position) < 12);

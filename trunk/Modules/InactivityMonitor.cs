@@ -71,8 +71,11 @@ namespace Trinity.Modules
             if (!Core.Settings.Advanced.GoldInactivityEnabled)
                 return false;
 
-            if (ZetaDia.Me == null)
+            if (ZetaDia.Me == null || !BotMain.IsRunning || BotMain.IsPausedForStateExecution)
+            {
+                ResetGold();
                 return false;
+            }
 
             try
             {
@@ -129,8 +132,11 @@ namespace Trinity.Modules
             if (Core.Settings.Advanced.DisableAllMovement)
                 return false;
 
-            if (ZetaDia.Me == null)
+            if (ZetaDia.Me == null || !BotMain.IsRunning || BotMain.IsPausedForStateExecution)
+            {
+                ResetXp();
                 return false;
+            }
 
             try
             {

@@ -26,6 +26,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         public InventorySquare InventorySquare { get; set; }
         public int GoldAmount { get; set; }
         public bool IsUnidentified { get; set; }
+        public bool IsPrimalAncient { get; set; }
         public bool IsAncient { get; set; }
         public int RequiredLevel { get; set; }
         public bool IsCrafted { get; set; }
@@ -112,7 +113,12 @@ namespace Trinity.Framework.Actors.ActorTypes
         public void OnDropped()
         {
             if (IsPickupNoClick) return;
-            Core.Logger.Log($"{Name} dropped. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} RawType={RawItemType}");
+
+            if (IsPrimalAncient)
+                Core.Logger.Warn($"Primal {Name} dropped. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} Primal={IsPrimalAncient} RawType={RawItemType}");
+            else 
+                Core.Logger.Log($"{Name} dropped. (SnoId={ActorSnoId} Ann={AnnId} AcdId={AcdId} GbId={GameBalanceId}) InternalName={InternalName} Quality={ItemQualityLevel} Ancient={IsAncient} Primal={IsPrimalAncient} RawType={RawItemType}");
+
             ItemEvents.FireItemDropped(this);
         }
 
@@ -136,8 +142,6 @@ namespace Trinity.Framework.Actors.ActorTypes
         }
 
         public Item Reference => Legendary.GetItem(this);
-
-        public ACDItem AcdItemTemp { get; internal set; }
 
         public ACDItem ToAcdItem() => Core.Actors.GetAcdItemByAnnId(AnnId);
 

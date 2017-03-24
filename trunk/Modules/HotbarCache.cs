@@ -20,7 +20,7 @@ namespace Trinity.Modules
             public HotbarSlot Slot { get; set; }
             public SNOPower Power { get; set; }
             public int RuneIndex { get; set; }
-            public bool HasRuneEquipped { get; set; }            
+            public bool HasRuneEquipped { get; set; }
 
             public Rune Rune
             {
@@ -33,7 +33,7 @@ namespace Trinity.Modules
                 {
                     try
                     {
-                        return ZetaDia.Me.CommonData.GetAttribute<int>(((int) Power << 12) + ((int) ActorAttributeType.SkillCharges & 0xFFF));
+                        return ZetaDia.Me.CommonData.GetAttribute<int>(((int)Power << 12) + ((int)ActorAttributeType.SkillCharges & 0xFFF));
                     }
                     catch
                     {
@@ -60,7 +60,7 @@ namespace Trinity.Modules
 
         public bool IsArchonActive
         {
-            get { return ActivePowers.Any(p => GameData.ArchonSkillIds.Contains((int) p)); }
+            get { return ActivePowers.Any(p => GameData.ArchonSkillIds.Contains((int)p)); }
         }
 
         protected override void OnPulse()
@@ -123,7 +123,7 @@ namespace Trinity.Modules
                 var hotbarskill = new HotbarSkill
                 {
                     Power = diaActiveSkill.Power,
-                    Slot = (HotbarSlot) i,
+                    Slot = (HotbarSlot)i,
                     RuneIndex = runeIndex,
                     HasRuneEquipped = diaActiveSkill.HasRuneEquipped,
                     Skill = SkillUtils.GetSkillByPower(power),
@@ -133,8 +133,8 @@ namespace Trinity.Modules
                 {
                     activePowers.Add(power);
                     activeHotbarSkills.Add(hotbarskill);
-                    _hotbarSkillBySnoPower.Add(power, hotbarskill);
-                    _skillBySlot.Add((HotbarSlot)i, hotbarskill);
+                    _hotbarSkillBySnoPower[power] = hotbarskill;
+                    _skillBySlot[(HotbarSlot)i] = hotbarskill;
                 }
 
                 if (!GameData.LastUseAbilityTimeDefaults.ContainsKey(power))
@@ -164,12 +164,12 @@ namespace Trinity.Modules
 
         public int GetSkillStacks(int id)
         {
-            return GetHotbarSkill((SNOPower) id).Charges;
+            return GetHotbarSkill((SNOPower)id).Charges;
         }
 
         public int GetSkillCharges(SNOPower id)
         {
-            return GetSkillStacks((int) id);
+            return GetSkillStacks((int)id);
         }
 
         public void Clear()

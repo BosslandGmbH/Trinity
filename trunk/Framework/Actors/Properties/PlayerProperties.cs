@@ -19,13 +19,8 @@ namespace Trinity.Framework.Actors.Properties
             var attributes = actor.Attributes as PlayerAttributes;
             actor.ActorClass = GetActorClass(actor.ActorSnoId);
             actor.IsMe = actor.RActorId == Core.Actors.ActivePlayerRActorId;
-
-            var cPlayer = ZetaDia.Storage.PlayerDataManager.ActivePlayerData;
-            if (cPlayer != null && cPlayer.IsValid)
-            {
-                actor.HeroId = cPlayer.HeroId;
-                actor.HeroName = cPlayer.HeroName;
-            }
+            actor.HeroId = ZetaDia.Service.Hero.HeroId;
+            actor.HeroName = ZetaDia.Service.Hero.Name;          
         }
 
         public static int GetAcdIdByHeroId(int heroId)

@@ -49,7 +49,7 @@ namespace Trinity.Components.Coroutines.Town
             return decision;
         }
 
-        public async static Task<bool> Execute(bool dontStashCraftingMaterials = false)
+        public static async Task<bool> Execute(bool dontStashCraftingMaterials = false)
         {
             if (!ZetaDia.IsInTown)
             {
@@ -138,9 +138,11 @@ namespace Trinity.Components.Coroutines.Town
 
                             Core.Logger.Verbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
                             InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
-                            item.OnUpdated();
+
+                            UpdateAfterItemMove(item);
+
                             ItemEvents.FireItemStashed(item);
-                            await Coroutine.Sleep(250);
+                            await Coroutine.Sleep(500);
                         }
                         catch (Exception ex)
                         {
@@ -160,6 +162,15 @@ namespace Trinity.Components.Coroutines.Town
 
             Core.Logger.Error($"[StashItems] Failed to stash items");
             return false;
+        }
+
+        private static void UpdateAfterItemMove(TrinityItem item)
+        {
+            if (item.IsValid && item.CommonData.IsValid && !item.CommonData.IsDisposed)
+            {
+                item.OnCreated();
+            }
+            Core.Actors.Update();
         }
 
         public static async Task<bool> MoveToStash()
@@ -253,6 +264,9 @@ namespace Trinity.Components.Coroutines.Town
                         InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
                         await Coroutine.Sleep(100);
                     }
+
+                    UpdateAfterItemMove(item);
+                    items = GetInventoryMap();
                 }
             }
             return true;
@@ -597,7 +611,7 @@ namespace Trinity.Components.Coroutines.Town
 
         private static InventoryMap GetInventoryMap()
         {
-            Core.Actors.UpdateInventory();
+            Core.Actors.Update();
             var items = Core.Inventory.Stash.ToList();
             return new InventoryMap(items.ToDictionary(k => new Tuple<int, int>(k.InventoryColumn, k.InventoryRow), v => v));
         }

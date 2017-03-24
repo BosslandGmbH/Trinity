@@ -23,7 +23,7 @@ namespace Trinity.Components.Adventurer
         public static int CurrentLevelAreaId => Core.Player.LevelAreaId;
         public static Vector3 MyPosition => Core.Player.Position;
         public static float MyZDiff(Vector3 toPosition) => Math.Abs(toPosition.Z - MyPosition.Z);   
-        public static WorldScene CurrentWorldScene => ScenesStorage.CurrentScene;
+        public static WorldScene CurrentWorldScene => Core.Scenes.CurrentScene;
         public static bool IsInTown => Core.Player.IsInTown;
         public static int BattleNetHeroId => Core.Player.HeroId;
         public static List<MinimapMarker> CurrentWorldMarkers  => ZetaDia.Minimap.Markers.CurrentWorldMarkers.Where(m => m.IsValid && m.NameHash != -1).ToList();

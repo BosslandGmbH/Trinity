@@ -132,17 +132,20 @@ namespace Trinity.Components.Combat
         {
             get
             {
-                if (CombatMode == CombatMode.KillAll)
-                    return true;
-
                 if (!CombatTargeting.Instance.AllowedToKillMonsters)
                     return false;
 
-                if (CombatMode == CombatMode.Normal || CombatMode == CombatMode.Questing)
-                    return true;
-
-                if (CombatMode == CombatMode.Off || CombatMode == CombatMode.SafeZerg && TargetUtil.NumMobsInRangeOfPosition(Core.Player.Position, 10f) > 4)
-                    return true;
+                switch (CombatMode)
+                {
+                    case CombatMode.KillAll:
+                        return true;
+                    case CombatMode.Normal:
+                        return true;
+                    case CombatMode.Off:
+                        return false;
+                    case CombatMode.SafeZerg:
+                        return Core.BlockedCheck.IsBlocked;
+                }
 
                 return true;
             }

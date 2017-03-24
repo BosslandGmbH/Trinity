@@ -1,74 +1,76 @@
-﻿//using System.Collections.Generic;
-//using Trinity.Framework;
-//using Zeta.Bot;
-//using Zeta.Bot.Profile;
-//using Zeta.TreeSharp;
-//using Zeta.XmlEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
+using Trinity;
+using Trinity.Components.QuestTools;
+using Trinity.Framework;
+using Trinity.Framework.Actors;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
+using Trinity.Framework.Reference;
+using Zeta.Bot;
+using Zeta.Common;
+using Zeta.Game;
+using Zeta.Game.Internals;
+using Zeta.XmlEngine;
 
-//namespace Trinity.Components.QuestTools.ProfileTags
-//{
-//    [XmlElement("ProfileSetting")]
-//    public class ProfileSettingTag : ProfileBehavior, IEnhancedProfileBehavior
-//    { 
-//        private bool _isDone; 
-//        public override bool IsDone 
-//        { 
-//            get { return _isDone; } 
-//        } 
+namespace Trinity.ProfileTags
+{
+    [XmlElement("ProfileSetting")]
+    public class ProfileSettingTag : BaseProfileBehavior
+    {
+        #region XmlAttributes
 
-//        [XmlAttribute("name")]	
-//        public string Name { get; set; }
+        [XmlAttribute("name")]
+        [Description("A key used to access the value later")]
+        public string Name { get; set; }
 
-//        [XmlAttribute("value")]
-//        public string Value { get; set; }
+        [XmlAttribute("value")]
+        [Description("A value to be saved")]
+        public string Value { get; set; }
 
-//        public static Dictionary<string,string> ProfileSettings = new Dictionary<string, string>();
-//        public static bool Initialized;
-//        public static void Initialize()
-//        {
-//            BotMain.OnStart += bot => ProfileSettings.Clear();
-//            Initialized = true;
-//        }
+        [Description("Clears all current profile settings")]
+        public bool ShouldReset { get; set; }
 
-//        protected override Composite CreateBehavior() 
-//        { 
-//            return new Action(ret =>
-//            {
-//                if (!Initialized)
-//                    Initialize();
+        #endregion
 
-//                if (ProfileSettings.ContainsKey(Name))
-//                    ProfileSettings[Name] = Value;
-//                else
-//                    ProfileSettings.Add(Name,Value);
+        public static Dictionary<string, string> ProfileSettings = new Dictionary<string, string>();
 
-//                Core.Logger.Log("Setting Condition={0} to {1}", Name, Value);
+        public static bool Initialized;
+        public static void Initialize()
+        {
+            BotMain.OnStart += bot => ProfileSettings.Clear();
+            Initialized = true;
+        }
 
-//				_isDone = true;
-//                return RunStatus.Failure;
-//            }); 
-//        }
+        public override async Task<bool> StartTask()
+        {
+            if (!Initialized)
+                Initialize();
 
-//        #region IEnhancedProfileBehavior
+            if (ShouldReset)
+            {
+                Core.Logger.Log($"Removed all profile settings");
+                ProfileSettings.Clear();
+            }
 
-//        public void Update()
-//        {
-//            UpdateBehavior();
-//        }
+            if (!string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Value))
+            {
+                if (ProfileSettings.ContainsKey(Name))
+                    ProfileSettings[Name] = Value;
+                else
+                    ProfileSettings.Add(Name, Value);
 
-//        public void Start()
-//        {
-//            OnStart();
-//        }
+                Core.Logger.Log("Setting Condition={0} to {1}", Name, Value);
+            }
 
-//        public void Done()
-//        {
-//            _isDone = true;
-//        }
+            return true;
+        }
 
-//        #endregion
-//    } 
-//}
+    }
+}
 
 
 

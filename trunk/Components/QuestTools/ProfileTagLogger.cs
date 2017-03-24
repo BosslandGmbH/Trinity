@@ -43,7 +43,7 @@ namespace Trinity.Components.QuestTools
                 var s = new StateSnapshot();
                 using (ZetaDia.Memory.AcquireFrame())
                 {
-                    ScenesStorage.Update();
+                    Core.Scenes.Update();
                     Core.Update();
 
                     var position = ZetaDia.Me.Position;
@@ -98,7 +98,7 @@ namespace Trinity.Components.QuestTools
         {
             var sb = new StringBuilder();
             var s = StateSnapshot.Create();
-            var actors = Core.Actors.AllRActors.Where(actorSelector);
+            var actors = Core.Actors.AllRActors.Where(a => !a.IsMe && actorSelector(a));
             foreach (var actor in actors)
             {
                 s.UpdateForActor(actor);
@@ -135,12 +135,17 @@ namespace Trinity.Components.QuestTools
                 }
 
                 if (IsNumericType(propertyInfo.PropertyType) && !propertyInfo.Name.Contains("Id"))
-                    value = Math.Round((double)Convert.ChangeType(value,typeof(double)),2);
+                {
+                    value = Math.Round((decimal)Convert.ChangeType(value, typeof(decimal)), 3, MidpointRounding.AwayFromZero);
+                    result += $@"{attName}=""{value:0.##}"" ";
+                }
+                else
+                {
+                    if (propertyInfo.PropertyType == typeof(bool))
+                        value = value.ToString().ToLowerInvariant();
 
-                else if (propertyInfo.PropertyType == typeof(bool))
-                    value = value.ToString().ToLowerInvariant();
-
-                result += $@"{attName}=""{value}"" ";
+                    result += $@"{attName}=""{value}"" ";
+                }
             }
 
             result += $@" worldSnoId=""{s.WorldSnoId}"" levelAreaSnoId=""{s.LevelAreaSnoId}"" />";

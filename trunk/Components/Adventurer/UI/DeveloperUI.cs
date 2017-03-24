@@ -306,8 +306,8 @@ namespace Trinity.Components.Adventurer.UI
                     Core.Logger.Raw("\nCurrent Level Area {0} ({1})", AdvDia.CurrentLevelAreaId,
                         (SNOLevelArea)AdvDia.CurrentLevelAreaId);
 
-                    ScenesStorage.Update();
-                    var scenes = ScenesStorage.CurrentWorldScenes.Where(s => s.LevelAreaId == AdvDia.CurrentLevelAreaId);
+                    Core.Scenes.Update();
+                    var scenes = Core.Scenes.CurrentWorldScenes.Where(s => s.LevelAreaId == AdvDia.CurrentLevelAreaId);
                     foreach (var adventurerScene in scenes)
                     {
                         Core.Logger.Raw("{0}", adventurerScene.Name);
@@ -931,7 +931,7 @@ namespace Trinity.Components.Adventurer.UI
                     return;
 
                 Core.Update();
-                ScenesStorage.Update();
+                Core.Scenes.Update();
 
                 using(ZetaDia.Memory.AcquireFrame())
                 {
@@ -977,7 +977,7 @@ namespace Trinity.Components.Adventurer.UI
                         return;
 
                     Core.Update();
-                    ScenesStorage.Update();
+                    Core.Scenes.Update();
 
                     var activeBounty = ZetaDia.Storage.Quests.ActiveBounty != null
                         ? (int)ZetaDia.Storage.Quests.ActiveBounty.Quest
@@ -1261,7 +1261,7 @@ namespace Trinity.Components.Adventurer.UI
 
                 using (ZetaDia.Memory.AcquireFrame())
                 {
-                    ScenesStorage.Update();
+                    Core.Scenes.Update();
                     Core.Update();
 
                     var quest = ZetaDia.CurrentQuest;

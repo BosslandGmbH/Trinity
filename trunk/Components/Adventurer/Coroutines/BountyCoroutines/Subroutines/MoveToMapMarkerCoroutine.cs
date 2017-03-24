@@ -58,6 +58,14 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
         }
 
+        public MoveToMapMarkerCoroutine(int questId, int worldId, int markerHash, int doesNothing, bool zergAllowSafe = true)
+        {
+            _questId = questId;
+            _worldId = worldId;
+            _markerHash = markerHash;
+            _allowSafeZerg = zergAllowSafe;
+        }
+
         public MoveToMapMarkerCoroutine(int questId, int worldId, int markerHash, bool zergAllowSafe = true)
         {
             _questId = questId;
@@ -160,7 +168,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             //    : new HashSet<int> { AdvDia.CurrentLevelAreaId };
 
             //if (!await ExplorationCoroutine.Explore(levelAreas)) return false;
-            //ScenesStorage.Reset();
+            //Core.Scenes.Reset();
             //return false;
         }
 

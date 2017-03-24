@@ -21,7 +21,17 @@ namespace Trinity.Framework.Reference
 
         public const int WALLER_SNO = 226808;
 
-
+        public static HashSet<int> MenuWorldSnoIds = new HashSet<int>
+        {
+            50623, //AxeBadData
+            50627, //AxeFlatWorld
+            238775, //BattleNet_Act1Screen
+            191376, //BattleNet_Act2Screen
+            191389, //BattleNet_Act3Screen, BattleNet_Act4Screen
+            288104, //BattleNet_Act5Screen
+            148534, //BattleNet_MainScreen
+            194282, //BattleNet_PVPScreen
+        };
 
         /// <summary>
         /// Client effects that will be let into the object cache

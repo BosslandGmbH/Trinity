@@ -36,7 +36,7 @@ namespace Trinity.ProfileTags
         {
             if (StartReset)
             {
-                ScenesStorage.Reset();
+                Core.Scenes.Reset();
             }
             _exploreTask = new ExplorationCoroutine(new HashSet<int> {ZetaDia.CurrentLevelAreaSnoId}, null, null, false);
             return false;

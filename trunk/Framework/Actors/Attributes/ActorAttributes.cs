@@ -101,5 +101,7 @@ namespace Trinity.Framework.Actors.Attributes
         public bool IsDoorTimed => GetAttribute<int>(ActorAttributeType.DoorTimer) > 0;
 
         public int EffectOwnerAnnId => GetAttribute<int>(ActorAttributeType.EffectOwnerANN);
+
+
     }
 }

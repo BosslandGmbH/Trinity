@@ -172,7 +172,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             }
             if (!await _currentBountyCoroutine.GetCoroutine()) return false;
             BountyStatistics.Report();
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             if (_currentBountyCoroutine.State == BountyCoroutine.States.Failed)
             {
                 //Core.Logger.Log("[ActBounties] Looks like the bounty has failed, skipping the rest of the act.");

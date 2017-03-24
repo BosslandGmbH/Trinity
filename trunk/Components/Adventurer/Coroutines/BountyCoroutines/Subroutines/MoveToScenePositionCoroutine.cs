@@ -164,7 +164,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (!await ExplorationCoroutine.Explore(levelAreaIds))
                 return false;
 
-            ScenesStorage.Reset();
+            Core.Scenes.Reset();
             return false;
         }
 
@@ -226,7 +226,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _lastScanTime = PluginTime.CurrentMillisecond;
                 if (_sceneSnoId > 0)
                 {
-                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.SnoId == _sceneSnoId);
+                    var scene = Core.Scenes.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.SnoId == _sceneSnoId);
                     if (scene != null)
                     {
                         _worldScene = scene;
@@ -236,7 +236,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 else if (!string.IsNullOrEmpty(_sceneName))
                 {
-                    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(
+                    var scene = Core.Scenes.CurrentWorldScenes.OrderBy(
                         s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2()))
                             .FirstOrDefault(
                                 s => s.Name.ToLowerInvariant().Contains(_sceneName.ToLowerInvariant()) ||
@@ -253,7 +253,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
                 //else if (!string.IsNullOrEmpty(_tempSceneName))
                 //{
-                //    var scene = ScenesStorage.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name == _tempSceneName);
+                //    var scene = Core.Scenes.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name == _tempSceneName);
                 //    if (scene != null)
                 //    {
                 //        _worldScene = scene;

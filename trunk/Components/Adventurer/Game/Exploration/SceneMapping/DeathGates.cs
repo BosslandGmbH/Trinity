@@ -160,18 +160,20 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             });
 
             GameEvents.OnWorldChanged += GameEventsOnOnWorldChanged;
-            ScenesStorage.ScenesAdded += ScenesStorageOnScenesAdded;
-            BuildGateScenes(ScenesStorage.CurrentWorldScenes);
+            Core.Scenes.ScenesAdded += ScenesStorageOnScenesAdded;
+            BuildGateScenes(Core.Scenes.CurrentWorldScenes);
         }
 
         private static void GameEventsOnOnWorldChanged(object sender, EventArgs eventArgs)
         {
+            Core.Logger.Verbose("World changed: Scanning for death gates");
             _scenes.RemoveAll(s => s.WorldScene.DynamicWorldId != ZetaDia.Globals.WorldId);
-            BuildGateScenes(ScenesStorage.CurrentWorldScenes);
+            BuildGateScenes(Core.Scenes.CurrentWorldScenes);
         }
 
         private static void ScenesStorageOnScenesAdded(List<WorldScene> worldScenes)
         {
+            Core.Logger.Verbose("Scenes Updated: Scanning for death gates");
             BuildGateScenes(worldScenes);
         }
 

@@ -1,0 +1,17 @@
+﻿<Profile>
+  <Name>Tag Test - ProfileSetting</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> ProfileSetting Test Started " />
+    
+    <ProfileSetting name="Lily" value="True" />
+
+    <If condition="ProfileSetting('Lily') == 'True'">
+      <LogMessage message=">> ProfileSetting was read" />
+    </If>
+
+    <ProfileSetting reset="True" />
+    
+    <LogMessage message=">> ProfileSetting Test Finished " />
+  </Order>
+</Profile>

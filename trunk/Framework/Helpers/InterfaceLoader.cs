@@ -9,29 +9,24 @@ namespace Trinity.Framework.Helpers
     {
         public class InterfaceLoader<T> where T : class
         {
-            public Dictionary<string, T> Items { get; private set; } = new Dictionary<string, T>();
+            public Dictionary<string, T> Items { get; } = new Dictionary<string, T>();
 
             public void Load()
             {
                 var sw = Stopwatch.StartNew();
                 var configType = typeof(T);
                 var configTypeFullName = configType.FullName;
-                var configurables = configType.Assembly.GetTypes().Where(p =>
-                {
-                    if (p.IsInterface || p.IsAbstract)
-                        return false;
+                var implementers = configType.Assembly.GetTypes()
+                    .Where(p => !p.IsInterface && !p.IsAbstract && p.GetInterface(configTypeFullName) != null).ToList();
 
-                    return p.GetInterface(configTypeFullName) != null;
-                }).ToList();
-
-                foreach (var taskType in configurables)
+                foreach (var item in implementers)
                 {
                     try
                     {
-                        var instance = (T)Activator.CreateInstance(taskType);
+                        var instance = (T)Activator.CreateInstance(item);
                         if (instance == null) continue;
-                        Core.Logger.Verbose("Instantiated {0}", taskType.Name);
-                        Items[taskType.Name] = instance;
+                        Core.Logger.Verbose("Instantiated {0}", item.Name);
+                        Items[item.Name] = instance;
                     }
                     catch (Exception ex)
                     {

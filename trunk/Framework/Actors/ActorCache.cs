@@ -8,9 +8,11 @@ using System.Linq;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
+using Trinity.Framework.Reference;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
+using Zeta.Game.Internals.Service;
 using Zeta.Game.Internals.SNO;
 
 
@@ -38,47 +40,48 @@ namespace Trinity.Framework.Actors
         public int ActivePlayerRActorId { get; private set; }
         public TrinityPlayer Me { get; private set; }
         public Vector3 ActivePlayerPosition { get; set; }
+        public int LastWorldSnoId { get; private set; }
+
         protected override void OnPulse() => Update();
 
-        public void Update()
+        protected override void OnGameChanged()
         {
-            if (!ZetaDia.IsInGame)
-            {
-                if (_rActors.Any())
-                {
-                    Clear();
-                }
-                return;
-            }
-
-            UpdateObjectsFromMemory();
+            Clear();
         }
 
-        private void UpdateObjectsFromMemory()
+        public void Update()
         {
             var currentFrame = ZetaDia.Memory.Executor.FrameCount;
             if (LastUpdatedFrame == currentFrame)
                 return;
 
+            if (!ZetaDia.IsInGame)
+                return;
+
+            if (ZetaDia.Actors.Me == null)
+                ZetaDia.Actors.Update();
+
             ActivePlayerRActorId = ZetaDia.ActivePlayerRActorId;
             var player = ZetaDia.RActors[(short)ActivePlayerRActorId];
             ActivePlayerPosition = player.Position;
 
-            // Currently need actors populated to lookup ACDs from RActor.CommonData property
-            if (!_rActors.Any())
-                ZetaDia.Actors.Update();
+            if (GameData.MenuWorldSnoIds.Contains(LastWorldSnoId))
+            {
+                // A partial update after manual game quit may allow through some bad data
+                // which would then crash d3 during RActor update cycle.               
+                Core.Logger.Log($"Clearing {_rActors.Count} Actors for New Game");
+                Clear();
+            }
 
             UpdateAcds();
             UpdateRActors();
             UpdateInventory();
 
-            ByDistance = _rActors.Values.OrderBy(a => a.Distance);
             CurrentAcdIds = new HashSet<int>(_commonData.Keys);
             CurrentRActorIds = new HashSet<int>(_rActors.Keys);
             LastUpdatedFrame = currentFrame;
+            LastWorldSnoId = ZetaDia.Globals.WorldSnoId;
         }
-
-        public IOrderedEnumerable<TrinityActor> ByDistance { get; private set; }
 
         #region Update Methods
 
@@ -152,11 +155,13 @@ namespace Trinity.Framework.Actors
             foreach (var key in untouchedIds)
             {
                 TrinityActor item;
-                if (_rActors.TryRemove(key, out item) && item != null && item.IsValid)
+                if (_rActors.TryRemove(key, out item) && item != null)
                 {
-                    item.OnDestroyed();
-                    item.RActor.UpdatePointer(IntPtr.Zero);
+                    item.RActor?.UpdatePointer(IntPtr.Zero);
                     item.CommonData?.UpdatePointer(IntPtr.Zero);
+                    item.ActorInfo?.UpdatePointer(IntPtr.Zero);
+                    item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
+                    item.OnDestroyed();
                 }
             }
         }
@@ -197,7 +202,7 @@ namespace Trinity.Framework.Actors
         /// <summary>
         /// Updates the acds that are inventory items, stash/equipped/backpack etc.
         /// </summary>
-        public void UpdateInventory()
+        private void UpdateInventory()
         {
             var untouchedIds = new List<int>(_inventory.Keys);
             foreach (var newItem in _commonData)
@@ -225,11 +230,13 @@ namespace Trinity.Framework.Actors
             foreach (var key in untouchedIds)
             {
                 TrinityItem item;
-                if (_inventory.TryRemove(key, out item) && item != null && item.IsValid)
+                if (_inventory.TryRemove(key, out item) && item != null)
                 {
-                    item.OnDestroyed();
                     item.RActor?.UpdatePointer(IntPtr.Zero);
                     item.CommonData?.UpdatePointer(IntPtr.Zero);
+                    item.ActorInfo?.UpdatePointer(IntPtr.Zero);
+                    item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
+                    item.OnDestroyed();
                 }
             }
         }
@@ -255,7 +262,7 @@ namespace Trinity.Framework.Actors
 
         public IEnumerable<TrinityActor> AllRActors => _rActors.Values;
 
-        public IEnumerable<T> OfType<T>() where T : TrinityActor 
+        public IEnumerable<T> OfType<T>() where T : TrinityActor
             => _rActors.Values.OfType<T>();
 
         public IEnumerable<TrinityItem> Inventory => _inventory.Values.ToList();
@@ -266,7 +273,7 @@ namespace Trinity.Framework.Actors
         }
 
         public ACD GetCommonDataByAnnId(int annId)
-        { 
+        {
             var acdIndex = _annToAcdIndex[annId];
             var acd = ZetaDia.Storage.ActorCommonData[acdIndex];
             if (acd != null && acd.IsValid)
@@ -357,10 +364,14 @@ namespace Trinity.Framework.Actors
             Core.Logger.Debug("Resetting ActorCache");
             _annToAcdIndex.Clear();
             _commonData.ForEach(o => o.Value.UpdatePointer(IntPtr.Zero));
-            _rActors.ForEach(o => o.Value.RActor.UpdatePointer(IntPtr.Zero));
+            foreach (var pair in _rActors)
+            {
+                pair.Value.RActor.UpdatePointer(IntPtr.Zero);
+                pair.Value.Attributes?.Destroy();
+            }
+            _rActors.Clear();
             _inventory.Clear();
             _commonData.Clear();
-            _rActors.Clear();
             CurrentAcdIds.Clear();
             CurrentRActorIds.Clear();
             Me = null;

@@ -41,22 +41,20 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             Created = DateTime.UtcNow;
             LastUpdated = DateTime.MinValue;
             var worldId = ZetaDia.Globals.WorldId;
-            //if (InnerGrid == null)
-            //{
+      
             Core.Logger.Debug("[{0}] Creating grid [{1},{1}] ZetaWorldId={2} AdvDiaWorldId={3}", GetType().Name, GridBounds, worldId, AdvDia.CurrentWorldDynamicId);
 
             InnerGrid = new SplitArray<T>(GridBounds, GridBounds);
             WorldDynamicId = AdvDia.CurrentWorldDynamicId;
 
-            var currentScenes = ScenesStorage.CurrentWorldScenes;
+            var currentScenes = Core.Scenes.CurrentWorldScenes;
             if (currentScenes.Any() && currentScenes.First().DynamicWorldId == worldId)
             {
                 Core.Logger.Debug("[{0}] Importing Current World Data from SceneStorage", GetType().Name);
-                Update(ScenesStorage.CreateSceneData(currentScenes, currentScenes.First().DynamicWorldId));
+                Update(Core.Scenes.CreateSceneData(currentScenes, currentScenes.First().DynamicWorldId));
             }
 
-            GridStore.Grids.Add(new WeakReference<IGrid>(this));
-            //}
+            GridStore.Grids.Add(new WeakReference<IGrid>(this));           
         }
 
         public void Update(ISceneData newNodes)

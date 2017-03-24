@@ -1,4 +1,78 @@
-﻿//using System; using Trinity.Framework; using Trinity.Framework.Helpers;
+﻿using System;
+using Trinity.Framework;
+using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
+using Trinity.Components.Adventurer.Coroutines;
+using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
+using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
+using Trinity.Components.QuestTools;
+using Trinity.Framework.Objects.Enums;
+using Zeta.Common;
+using Zeta.Game;
+using Zeta.XmlEngine;
+
+
+namespace Trinity.ProfileTags
+{
+
+    [XmlElement("TrinityMoveToScene")]
+    [XmlElement("MoveToScene")]
+    public class MoveToSceneTag : MoveToSceneProfileBehavior { }
+
+    public class MoveToSceneProfileBehavior : BaseProfileBehavior
+    {
+        private ISubroutine _task;
+
+        #region XmlAttributes
+
+        [XmlAttribute("sceneId")]
+        [XmlAttribute("sceneSnoId")]
+        [Description("Scene id for relative movement")]
+        [DefaultValue(0)]
+        public int SceneSnoId { get; set; }
+
+        [XmlAttribute("sceneName")]
+        [Description("Scene name for relative movement")]
+        [DefaultValue("")]
+        public string SceneName { get; set; }
+
+        [XmlAttribute("zerg")]
+        [DefaultValue(false)]
+        [Description("If combat should be ignored where possible enroute")]
+        public bool Zerg { get; set; }
+
+        #endregion
+
+        public override async Task<bool> StartTask()
+        {
+            if (SceneSnoId != 0)
+            {
+                _task = new MoveToSceneCoroutine(QuestId, ZetaDia.Globals.WorldSnoId, SceneSnoId, Zerg);
+                return false;
+            }
+            if (!string.IsNullOrEmpty(SceneName))
+            {
+                _task = new MoveToSceneCoroutine(QuestId, ZetaDia.Globals.WorldSnoId, SceneName, Zerg);
+                return false;
+            }
+            return true;
+        }
+
+        public override async Task<bool> MainTask()
+        {
+            if (!_task.IsDone && !await _task.GetCoroutine())
+                return false;
+
+            return true;
+        }
+
+    }
+}
+
+
+
+//using System; using Trinity.Framework; using Trinity.Framework.Helpers;
 //using System.Collections.Generic;
 //using System.Linq; using Trinity.Framework;
 //using Trinity.Components.QuestTools.Helpers;

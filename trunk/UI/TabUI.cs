@@ -30,7 +30,7 @@ using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI.Visualizer;
-using ScenesStorage = Trinity.Components.Adventurer.Game.Exploration.ScenesStorage;
+
 
 namespace Trinity.UI
 {
@@ -276,7 +276,7 @@ namespace Trinity.UI
                 {
                     ZetaDia.Actors.Update();
                     Core.Player.Update();
-                    ScenesStorage.Update();
+                    Core.Scenes.Update();
                     Core.Update();
                     DebugUtil.ItemListTest();
                 }

@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework;
 using System.Runtime.Serialization;
+using System.Threading;
 using Trinity.Framework.Helpers;
+using Zeta.Bot;
+using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -62,7 +65,7 @@ namespace Trinity.Components.Adventurer.Settings
         /// <summary>
         /// A list of actual gem instances in the players current game
         /// </summary>
-        public List<AdventurerGem> Gems { get; set; }
+        public List<AdventurerGem> Gems { get; set; } = new IndexedList<AdventurerGem>();
 
         private static void Swap<T>(IList<T> list, int indexA, int indexB)
         {
@@ -79,7 +82,8 @@ namespace Trinity.Components.Adventurer.Settings
             if (ZetaDia.Me == null)
                 return;
 
-            Core.Actors.Update();
+            if(Thread.CurrentThread.ManagedThreadId == BotMain.BotThread?.ManagedThreadId || !BotMain.IsRunning)
+                Core.Actors.Update();
 
             Gems = Core.Actors.Inventory
                     .Where(i => i.IsValid && i.ItemType == ItemType.LegendaryGem)

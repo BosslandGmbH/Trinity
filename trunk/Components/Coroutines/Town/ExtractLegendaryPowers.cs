@@ -49,8 +49,8 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInGame || !ZetaDia.IsInTown || ZetaDia.Storage.CurrentWorldType != Act.OpenWorld)
                 return false;
 
-            //if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
-            //    return false;
+            if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.None)
+                return false;
 
             if (DateTime.UtcNow < _disabledUntil)
                 return false;

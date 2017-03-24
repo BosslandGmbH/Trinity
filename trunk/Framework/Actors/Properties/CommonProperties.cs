@@ -23,7 +23,6 @@ namespace Trinity.Framework.Actors.Properties
         {
             var rActor = actor.RActor;
             var commonData = actor.CommonData;
-            var actorInfo = actor.ActorInfo;
 
             actor.LastSeenTime = DateTime.UtcNow;
             actor.IsProfileBlacklisted = ProfileManager.CurrentProfile?.TargetBlacklists?.Any(b => b.ActorId == actor.ActorSnoId) ?? false;
@@ -37,6 +36,7 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.IsRActorBased)
             {
+                var actorInfo = commonData?.ActorInfo;
                 if (actorInfo != null && actorInfo.IsValid)
                 {
                     actor.GizmoType = actorInfo.GizmoType;
@@ -60,7 +60,7 @@ namespace Trinity.Framework.Actors.Properties
 
             actor.Type = type;
             actor.ObjectHash = actor.InternalName + actor.AcdId + actor.RActorId;
-            
+
             actor.IsDestroyable = actor.Type == TrinityObjectType.Barricade || actor.Type == TrinityObjectType.Destructible;
 
             actor.IsUnit = type == TrinityObjectType.Unit || actor.ActorType == ActorType.Monster || actor.ActorType == ActorType.Player;
@@ -330,14 +330,14 @@ namespace Trinity.Framework.Actors.Properties
                     {
                         if (actor.IsHidden || actor.IsQuestMonster)
                         {
-                            result = actor.CollisionRadius;
+                            result = actor.CollisionRadius +1;
                         }
                         else
                         {
                             if (Combat.Targeting.CurrentPower != null)
-                                result = Math.Max(Combat.Targeting.CurrentPower.MinimumRange, actor.CollisionRadius);
+                                result = Math.Max(Combat.Targeting.CurrentPower.MinimumRange, actor.CollisionRadius + 1);
                             else
-                                result = actor.CollisionRadius;
+                                result = actor.CollisionRadius +1;
                         }
                         break;
                     }

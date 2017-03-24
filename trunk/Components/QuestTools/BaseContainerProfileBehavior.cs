@@ -22,7 +22,10 @@ namespace Trinity.Components.QuestTools
         protected BaseContainerProfileBehavior()
         {
             QuestId = QuestId <= 0 ? 1 : QuestId;
+            TagClassName = GetType().Name;
         }
+
+        public string TagClassName { get; set; }
 
         [XmlAttribute("timeout")]
         [Description("Time in seconds after which the tag will end")]
@@ -48,12 +51,13 @@ namespace Trinity.Components.QuestTools
 
 
         private bool _isDone;
+
         public override bool IsDone
         {
             get
             {
                 if (_isDone)
-                    return true;
+                    return true;           
 
                 if (!IsStarted)
                 {
@@ -91,15 +95,15 @@ namespace Trinity.Components.QuestTools
         {
             if (!string.IsNullOrEmpty(StopCondition) && ScriptManager.GetCondition(StopCondition).Invoke())
             {
-                Core.Logger.Log($"[ExploreLevelArea] Stop condition was met: ({StopCondition})");
+                Core.Logger.Log($"[{TagClassName}] Stop condition was met: ({StopCondition})");
                 return true;
             }
             return false;
         }
 
         protected sealed override Composite CreateBehavior() => null;
-        public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {GetType().Name}. {ToString()}");
-        public sealed override void OnDone() => Core.Logger.Verbose($"Finished Tag: {GetType().Name} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
+        public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
+        public override void OnDone() => Core.Logger.Verbose($"Finished Tag: {TagClassName} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
         public sealed override void ResetCachedDone() => Reset();
         public sealed override void ResetCachedDone(bool force = false) => Reset();
 

@@ -12,6 +12,11 @@ namespace Trinity.Framework
 {
     public class HookManager
     {
+        static HookManager()
+        {
+            TreeHooks.Instance.OnHooksCleared += InstanceOnOnHooksCleared;
+        }
+
         private static readonly Dictionary<string, Composite> OriginalHooks = new Dictionary<string, Composite>();
 
         public static void CheckHooks()
@@ -29,6 +34,7 @@ namespace Trinity.Framework
                 ReplaceCombatHook();
                 ReplaceVendorRunHook();
                 ReplaceDeathHook();
+                InsertOutOfGameHook();
                 HooksAttached = true;
             }
             else
@@ -38,6 +44,15 @@ namespace Trinity.Framework
                 ReplaceHookWithOriginal("Death");
                 HooksAttached = false;
             }
+        }
+
+        public static void InsertOutOfGameHook()
+        {
+            TreeHooks.Instance.InsertHook("OutOfGame", 0, new Zeta.TreeSharp.Action(ret =>
+            {
+                ModuleManager.OutOfGamePulse();
+                return RunStatus.Failure;                
+            }));
         }
 
         public static bool HooksAttached { get; set; }
@@ -65,9 +80,6 @@ namespace Trinity.Framework
 
         private static void StoreAndReplaceHook(string hookName, Composite behavior)
         {
-            if (!TreeHooks.Instance.Hooks.ContainsKey(hookName))
-                return;
-
             if (!OriginalHooks.ContainsKey(hookName))
                 OriginalHooks.Add(hookName, TreeHooks.Instance.Hooks[hookName][0]);
 

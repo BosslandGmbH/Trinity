@@ -943,6 +943,7 @@
                                             Overrides
                                         </GroupBox.Header>
                                         <StackPanel>
+
                                             <CheckBox
                                                 ToolTip="Avoids you having to add an ancient rule to every selected item"
                                                 Content="Always Trash Non-Ancients"
@@ -950,7 +951,10 @@
                                             <CheckBox
                                                 ToolTip="Allows you to keep itemlist selections AND ancients"
                                                 Content="Always Keep Ancients"
-                                                IsChecked="{Binding ItemList.AlwaysStashAncients}" />                                            
+                                                IsChecked="{Binding ItemList.AlwaysStashAncients}" />
+                                          <CheckBox
+                                              Content="Always Keep Primal Ancients"
+                                              IsChecked="{Binding ItemList.AlwaysStashPrimalAncients}" />
                                         </StackPanel>
                                     </GroupBox>
                                     <GroupBox HorizontalAlignment="Stretch" VerticalAlignment="Top"
