@@ -5,18 +5,6 @@ namespace Trinity.Components.Adventurer.Game.Events
 {
     public class BotEvents
     {
-        internal static void WireUp()
-        {
-            GameEvents.OnGameJoined += PluginEvents.GameEvents_OnGameJoined;
-            GameEvents.OnWorldChanged += PluginEvents.GameEvents_OnWorldChanged;
-        }
-
-        internal static void UnWire()
-        {
-            GameEvents.OnGameJoined -= PluginEvents.GameEvents_OnGameJoined;
-            GameEvents.OnWorldChanged -= PluginEvents.GameEvents_OnWorldChanged;
-        }
-
         public static bool IsBotRunning
         {
             get

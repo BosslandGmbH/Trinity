@@ -249,6 +249,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnDestroyed()
         {
+            //Core.Logger.Log($"Destroyed {Name} {AnnId}");
             if (!IsDead && IsUnit && Distance < 150f && !IsBoss)
             {
                 OnUnitDeath();

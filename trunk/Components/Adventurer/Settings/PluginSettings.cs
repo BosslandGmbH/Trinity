@@ -12,6 +12,14 @@ using Trinity.UI.UIComponents;
 
 namespace Trinity.Components.Adventurer.Settings
 {
+    public enum GemPriority
+    {
+        None = 0,
+        Order,
+        Chance,
+        Rank,
+    }
+
     [DataContract]
     public class PluginSettings : NotifyBase
     {
@@ -48,6 +56,7 @@ namespace Trinity.Components.Adventurer.Settings
 
         private static Lazy<PluginSettings> _instance = new Lazy<PluginSettings>(() => new PluginSettings());
         private bool _gemUpgradeFocusMode;
+        private GemPriority _gemUpgradePriority;
 
         public static PluginSettings Current => _instance.Value;
 
@@ -275,13 +284,15 @@ namespace Trinity.Components.Adventurer.Settings
             set { SetField(ref _gemAutoLevelReductionLimit, value); }
         }
 
+
         [DataMember]
-        [DefaultValue(false)]
-        public bool GemUpgradeFocusMode
+        [DefaultValue(GemPriority.Rank)]
+        public GemPriority GemUpgradePriority
         {
-            get { return _gemUpgradeFocusMode; }
-            set { SetField(ref _gemUpgradeFocusMode, value); }
+            get { return _gemUpgradePriority; }
+            set { SetField(ref _gemUpgradePriority, value); }
         }
+
 
         [DataMember]
         public AdventurerGems Gems
@@ -346,9 +357,6 @@ namespace Trinity.Components.Adventurer.Settings
             }
         }
 
-        [IgnoreDataMember]
-        public List<AdventurerGem> GemUpgradePriority => Gems.Gems;
-
         public PluginSettings()
         {
             LoadDefaults();
@@ -356,6 +364,7 @@ namespace Trinity.Components.Adventurer.Settings
 
         public override void LoadDefaults()
         {
+            GemUpgradePriority = GemPriority.Rank;
             GreaterRiftLevel = 1;
             GreaterRiftRunNephalem = true;
             GreaterRiftGemUpgradeChance = 60;
@@ -485,6 +494,9 @@ namespace Trinity.Components.Adventurer.Settings
                 settings.BountyMode1 = false;
                 settings.BountyMode2 = true;
             }
+
+            if (GemUpgradePriority == GemPriority.None)
+                GemUpgradePriority = GemPriority.Rank;
         }
 
         public static PluginSettings LoadSettingsFromJsonString(string json)

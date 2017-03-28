@@ -389,7 +389,6 @@
     <Compile Include="Framework\Objects\Memory\Container.cs" />
     <Compile Include="Framework\Objects\Memory\ExpandoContainer.cs" />
     <Compile Include="Framework\Objects\Memory\GameBalanceHelper.cs" />
-    <Compile Include="Framework\Objects\Memory\Pointers.cs" />
     <Compile Include="Framework\Objects\Memory\Table.cs" />
     <Compile Include="Framework\Objects\Memory\MemoryWrapper.cs" />
     <Compile Include="Framework\Objects\Memory\ItemRecord.cs" />
@@ -426,6 +425,7 @@
     <Compile Include="ProfileTags\MoveToPositionTag.cs" />
     <Compile Include="ProfileTags\MoveToSceneTag.cs" />
     <Compile Include="ProfileTags\ProfileSettingTag.cs" />
+    <Compile Include="ProfileTags\RandomMove.cs" />
     <Compile Include="ProfileTags\RiftTag.cs" />
     <Compile Include="ProfileTags\RunActBountiesTag.cs" />
     <Compile Include="ProfileTags\RunBountyTag.cs" />
@@ -703,6 +703,9 @@
     <Content Include="ProfileTags\Tests\LoadLastProfileSub.xml" />
     <Content Include="ProfileTags\Tests\MoveToActor.xml" />
     <Content Include="ProfileTags\Tests\MoveToMapMarker.xml" />
+    <Content Include="ProfileTags\Tests\RandomMove.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="ProfileTags\Tests\MoveToPosition.xml" />
     <Content Include="ProfileTags\Tests\MoveToScene.xml" />
     <Content Include="ProfileTags\Tests\ProfileSetting.xml" />

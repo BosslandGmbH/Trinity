@@ -49,6 +49,11 @@ namespace Trinity.Components.QuestTools
         /// </summary>
         public virtual bool StartMethod() => false;
 
+        /// <summary>
+        /// Method run once tag and children are finished.
+        /// </summary>
+        public virtual void DoneMethod() { }
+
 
         private bool _isDone;
 
@@ -57,7 +62,7 @@ namespace Trinity.Components.QuestTools
             get
             {
                 if (_isDone)
-                    return true;           
+                    return true;
 
                 if (!IsStarted)
                 {
@@ -103,7 +108,7 @@ namespace Trinity.Components.QuestTools
 
         protected sealed override Composite CreateBehavior() => null;
         public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
-        public override void OnDone() => Core.Logger.Verbose($"Finished Tag: {TagClassName} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
+        public sealed override void OnDone() => Core.Logger.Verbose($"Finished Tag: {TagClassName} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
         public sealed override void ResetCachedDone() => Reset();
         public sealed override void ResetCachedDone(bool force = false) => Reset();
 
@@ -134,7 +139,9 @@ namespace Trinity.Components.QuestTools
             _isDone = true;
             IsStarted = false;
             EndTime = DateTime.UtcNow;
+            DoneMethod();
             this.SetChildrenDone();
+            OnDone();
         }
 
         #endregion IEnhancedProfileBehavior

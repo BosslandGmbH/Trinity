@@ -21,6 +21,13 @@ namespace Trinity.Framework.Reference
 
         public const int WALLER_SNO = 226808;
 
+           
+        public static HashSet<int> IsCursedChestOrShrine = new HashSet<int>
+        {
+            364559,364601,365097,365718,365746,368169,369539,370696,374353,374355,374356,374391,376511
+        };
+
+
         public static HashSet<int> MenuWorldSnoIds = new HashSet<int>
         {
             50623, //AxeBadData

@@ -4,9 +4,12 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
+using Trinity.DbProvider;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
 using Trinity.Settings;
 using Trinity.UI;
@@ -79,6 +82,43 @@ namespace Trinity.Routines.Wizard
 
         public override Func<bool> ShouldIgnoreAvoidance => () => true;
         #endregion
+
+        public override async Task<bool> HandleAvoiding(TrinityActor newTarget)
+        {
+            if (Core.Avoidance.Avoider.ShouldAvoid)
+            {
+                var isCloseToSafeSpot = Core.Player.Position.Distance(Core.Avoidance.Avoider.SafeSpot) < 10f;
+                if (CurrentTarget != null && isCloseToSafeSpot)
+                {
+                    var canReachTarget = CurrentTarget.Distance < CurrentPower?.MinimumRange;
+                    if (canReachTarget && CurrentTarget.IsAvoidanceOnPath && !Core.Player.Actor.IsInAvoidance)
+                    {
+                        Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and target is within range");
+                        return false;
+                    }
+                }
+
+                var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && !Core.Player.Actor.IsInCriticalAvoidance;
+                if (newTarget?.Position == Combat.Targeting.LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
+                {
+                    Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
+                    Core.PlayerMover.MoveTowards(Core.Player.Position);
+                    return true;
+                }
+
+                if (!Combat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
+                {
+                    Core.Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
+                    Core.PlayerMover.MoveTowards(Core.Player.Position);
+                    return true;
+                }
+
+                Core.Logger.Log(LogCategory.Avoidance, $"Avoiding");
+                PlayerMover.MoveTo(Core.Avoidance.Avoider.SafeSpot);
+                return true;
+            }
+            return false;
+        }
 
         public TrinityPower GetOffensivePower()
         {

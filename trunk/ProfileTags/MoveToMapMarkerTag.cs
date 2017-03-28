@@ -38,7 +38,6 @@ namespace Trinity.ProfileTags
         public int MarkerHash { get; set; }
 
         [XmlAttribute("markerName")]
-        [DefaultValue("")]
         [Description("Full or partial name of the marker")]
         public string MarkerName { get; set; }
 

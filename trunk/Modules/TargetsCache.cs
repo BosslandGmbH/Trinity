@@ -197,7 +197,9 @@ namespace Trinity.Modules
             if (cacheObject.IsProfileBlacklisted)
             {
                 cacheObject.AddCacheInfo("BlacklistedByProfile");
-                return false;
+
+                if (!GameData.IsCursedChestOrShrine.Contains(cacheObject.ActorSnoId))
+                    return false;               
             }
 
             var item = cacheObject as TrinityItem;

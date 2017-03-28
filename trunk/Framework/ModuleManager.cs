@@ -49,7 +49,7 @@ namespace Trinity.Framework
                 BotMain.OnShutdownRequested += BotMainOnShutdownRequested;
                 BotMain.OnStop += BotMainOnStop;
                 BotMain.OnStart += BotMainOnStart;
-                ExecuteOnInstances(m => m.PluginEnabled());
+                SafeExecuteOnInstances(m => m.PluginEnabled());
                 EnableModules();
                 IsEnabled = true;
             }
@@ -57,56 +57,72 @@ namespace Trinity.Framework
 
         private static void GameEventsOnGameChanged(object sender, EventArgs e)
         {
+            Core.Logger.Debug("GameEventsOnGameChanged Fired");
             IsGameJoined = ZetaDia.IsInGame;
-            ExecuteOnInstances(m => m.GameChanged());
+            GetModules().ForEach(m => m.GameChanged());
         }
 
         private static void GameEventsOnGameJoined(object sender, EventArgs e)
         {
+            Core.Logger.Debug("GameEventsOnGameJoined Fired");
             IsGameJoined = true;
-            ExecuteOnInstances(m => m.GameJoined());
+            GetModules().ForEach(m => m.GameJoined());
         }
 
         private static void GameEventsOnGameLeft(object sender, EventArgs e)
         {
+            Core.Logger.Debug("GameEventsOnGameLeft Fired");
             IsGameJoined = false;
-            ExecuteOnInstances(m => m.GameLeft());
+            GetModules().ForEach(m => m.GameLeft());
         }
 
         private static void GameEventsOnPlayerDied(object sender, EventArgs e)
-            => ExecuteOnInstances(m => m.PlayerDied());
+            => SafeExecuteOnInstances(m => m.PlayerDied());
 
         private static void PulsatorOnPulse(object sender, EventArgs e)
         {
             if ((IsGameJoined || !BotMain.IsRunning) && !ZetaDia.Globals.IsLoadingWorld)
             {
-                ExecuteOnInstances(m => m.Pulse());
+                SafeExecuteOnInstances(m => m.Pulse());
+            }
+            else
+            {
+                Core.Logger.Debug($"Discarding Pulse IsGameJoined={IsGameJoined} BotMain.IsRunning={BotMain.IsRunning} LoadingWorld={ZetaDia.Globals.IsLoadingWorld}");
             }
         }
 
         private static void OnProfileLoaded(object sender, EventArgs eventArgs) 
-            => ExecuteOnInstances(m => m.ProfileLoaded());
+            => GetModules().ForEach(m => m.ProfileLoaded());
  
         private static void BotMainOnStart(IBot bot) 
-            => ExecuteOnInstances(m => m.BotStart());
+            => GetModules().ForEach(m => m.BotStart());
 
         private static void BotMainOnStop(IBot bot) 
-            => ExecuteOnInstances(m => m.BotStop());
+            => GetModules().ForEach(m => m.BotStop());
 
         private static void BotMainOnShutdownRequested(object sender, ShutdownRequestedEventArgs args)
-            => ExecuteOnInstances(m => m.ShutDown());
+            => GetModules().ForEach(m => m.ShutDown());
  
         private static void HeroIdOnChanged(ChangeEventArgs<int> args)
-            => ExecuteOnInstances(m => m.HeroIdChanged(args));
+        {
+            Core.Logger.Debug("HeroIdOnChanged Fired");
+            SafeExecuteOnInstances(m => m.HeroIdChanged(args));
+        }
 
         private static void IsInGameOnChanged(ChangeEventArgs<bool> args)
-            => ExecuteOnInstances(m => m.IsInGameChanged(args));
+        {
+            Core.Logger.Debug("IsInGameOnChanged Fired");
+            SafeExecuteOnInstances(m => m.IsInGameChanged(args));
+        }
 
         private static void WorldIdOnChanged(ChangeEventArgs<int> args)
-            => ExecuteOnInstances(m => m.WorldChanged(args));
+        {
+            Core.Logger.Debug("WorldIdOnChanged Fired");
+            SafeExecuteOnInstances(m => m.WorldChanged(args));
+        }
 
         private static void InBossEncounterChanged(ChangeEventArgs<bool> args)
-            => ExecuteOnInstances(m => m.BossEncounterChanged(args));
+            => SafeExecuteOnInstances(m => m.BossEncounterChanged(args));
 
         public static void Disable()
         {
@@ -122,16 +138,16 @@ namespace Trinity.Framework
             BotMain.OnStop -= BotMainOnStop;
             BotMain.OnStart -= BotMainOnStart;
             DisableModules();
-            ExecuteOnInstances(m => m.PluginDisabled());
+            SafeExecuteOnInstances(m => m.PluginDisabled());
             IsEnabled = false;
         }
 
         internal static void Pulse()
         {
-            ExecuteOnInstances(m => m.Pulse());
+            SafeExecuteOnInstances(m => m.Pulse());
         }
 
-        private static void ExecuteOnInstances(Action<Module> action, [CallerMemberName] string caller = "")
+        private static void SafeExecuteOnInstances(Action<Module> action, [CallerMemberName] string caller = "")
         {
             foreach (var module in GetModules())
             {
@@ -175,8 +191,11 @@ namespace Trinity.Framework
 
         public static void OutOfGamePulse()
         {
-            if(IsGameJoined)
+            if (IsGameJoined)
+            {
                 IsGameJoined = false;
+                GameEventsOnGameLeft(null,null);
+            }
         }
     }
 }

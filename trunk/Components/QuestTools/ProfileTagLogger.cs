@@ -11,6 +11,8 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects.Enums;
+using Trinity.Modules;
 using Zeta.Bot.Profile;
 using Zeta.Common;
 using Zeta.Game;
@@ -32,6 +34,16 @@ namespace Trinity.Components.QuestTools
                 ActorId = actor.ActorSnoId;
                 ActorSno = (SNOActor)ActorId;
                 SetPosition(actor.Position);
+            }
+
+            public void UpdateForMarker(TrinityMarker marker)
+            {
+                if (marker == null) return;
+                MarkerHash = marker.NameHash;
+                MarkerName = marker.Name;
+                MarkerType = marker.MarkerType;
+
+                UpdateForActor(Core.Actors.FirstOrDefault(a => a.Position.Distance(a.Position) <= 3f));
             }
 
             public static StateSnapshot Create()
@@ -77,6 +89,9 @@ namespace Trinity.Components.QuestTools
                 SceneZ = relativePosition.Z;
             }
 
+            public WorldMarkerType MarkerType { get; set; }
+            public int MarkerHash { get; set; }
+            public string MarkerName { get; set; }
             public SNOActor ActorSno { get; set; }
             public int ActorId { get; set; }
             public int WaypointNumber { get; set; }
@@ -94,12 +109,11 @@ namespace Trinity.Components.QuestTools
             public int QuestId { get; set; }
         }
 
-        public static string GenerateTags<T>(Func<TrinityActor, bool> actorSelector) where T  : ProfileBehavior
+        public static string GenerateActorTags<T>(Func<TrinityActor, bool> actorSelector) where T  : ProfileBehavior
         {
             var sb = new StringBuilder();
             var s = StateSnapshot.Create();
-            var actors = Core.Actors.AllRActors.Where(a => !a.IsMe && actorSelector(a));
-            foreach (var actor in actors)
+            foreach (var actor in Core.Actors.AllRActors.Where(a => !a.IsMe && actorSelector(a)))
             {
                 s.UpdateForActor(actor);
                 sb.AppendLine($"     <!-- {actor.Name} ({actor.ActorSnoId}) {(SNOActor) actor.ActorSnoId} Distance={actor.Distance} Type={actor.Type} -->");
@@ -108,6 +122,21 @@ namespace Trinity.Components.QuestTools
             }
             return sb.ToString();
         }
+
+        public static string GenerateMarkerTags<T>(Func<TrinityMarker, bool> markerSelector) where T : ProfileBehavior
+        {
+            var sb = new StringBuilder();
+            var s = StateSnapshot.Create();
+            foreach (var marker in Core.Markers.Where(markerSelector))
+            {
+                s.UpdateForMarker(marker);
+                sb.AppendLine($"     <!-- {marker.Name} {marker.NameHash} {marker.MarkerType} Distance={marker.Distance} TextureId={marker.TextureId} WorldSnoId={marker.WorldSnoId} -->");
+                sb.AppendLine(GenerateTag<T>(s));
+                sb.AppendLine(Environment.NewLine);
+            }
+            return sb.ToString();
+        }
+
 
         public static string GenerateTag<T>(StateSnapshot snapshot = null) where T : ProfileBehavior
         {

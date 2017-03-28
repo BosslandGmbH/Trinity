@@ -44,7 +44,7 @@ namespace Trinity.Framework.Actors
 
         protected override void OnPulse() => Update();
 
-        protected override void OnGameChanged()
+        protected override void OnWorldChanged(ChangeEventArgs<int> args)
         {
             Clear();
         }
@@ -52,8 +52,8 @@ namespace Trinity.Framework.Actors
         public void Update()
         {
             var currentFrame = ZetaDia.Memory.Executor.FrameCount;
-            if (LastUpdatedFrame == currentFrame)
-                return;
+            //if (LastUpdatedFrame == currentFrame)
+            //    return;
 
             if (!ZetaDia.IsInGame)
                 return;
@@ -64,14 +64,6 @@ namespace Trinity.Framework.Actors
             ActivePlayerRActorId = ZetaDia.ActivePlayerRActorId;
             var player = ZetaDia.RActors[(short)ActivePlayerRActorId];
             ActivePlayerPosition = player.Position;
-
-            if (GameData.MenuWorldSnoIds.Contains(LastWorldSnoId))
-            {
-                // A partial update after manual game quit may allow through some bad data
-                // which would then crash d3 during RActor update cycle.               
-                Core.Logger.Log($"Clearing {_rActors.Count} Actors for New Game");
-                Clear();
-            }
 
             UpdateAcds();
             UpdateRActors();
@@ -220,9 +212,25 @@ namespace Trinity.Framework.Actors
                 if (annId == -1)
                     continue;
 
-                _inventory.AddOrUpdate(annId,
-                    id => AddInventoryItem(id, commonData),
-                    (id, existingItem) => UpdateInventoryItem(id, existingItem, commonData));
+                if (!commonData.IsValid || commonData.IsDisposed)
+                    continue;
+
+                if (!_inventory.ContainsKey(annId))
+                {
+                    var newObj = ActorFactory.CreateActor<TrinityItem>(commonData);
+                    _inventory.TryAdd(annId, newObj);
+                }
+                else
+                {
+                    var oldObj = _inventory[annId];
+                    if (!UpdateInventoryItem(oldObj, commonData))
+                        continue;
+
+                }
+
+                //_inventory.AddOrUpdate(annId,
+                //    id => AddInventoryItem(id, commonData),
+                //    (id, existingItem) => UpdateInventoryItem(id, existingItem, commonData));
 
                 untouchedIds.Remove(annId);
             }
@@ -241,19 +249,17 @@ namespace Trinity.Framework.Actors
             }
         }
 
-        private TrinityItem AddInventoryItem(int id, ACD newItem)
-        {
-            return ActorFactory.CreateActor<TrinityItem>(newItem);
-        }
 
-        private TrinityItem UpdateInventoryItem(int id, TrinityItem item, ACD commonData)
+        private bool UpdateInventoryItem(TrinityItem item, ACD commonData)
         {
             _timer.Start();
             item.CommonData = commonData;
             item.OnUpdated();
+            if (!item.IsValid)
+                return false;
             _timer.Stop();
             item.UpdateTime = _timer.Elapsed.TotalMilliseconds;
-            return item;
+            return true;
         }
 
         #endregion Update Methods
@@ -361,7 +367,7 @@ namespace Trinity.Framework.Actors
 
         public void Clear()
         {
-            Core.Logger.Debug("Resetting ActorCache");
+            Core.Logger.Warn("Resetting ActorCache");
             _annToAcdIndex.Clear();
             _commonData.ForEach(o => o.Value.UpdatePointer(IntPtr.Zero));
             foreach (var pair in _rActors)

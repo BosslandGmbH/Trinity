@@ -2,12 +2,19 @@
 using System.Windows.Controls;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
+using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Events;
+using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.UI;
+using Trinity.Components.Adventurer.Util;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Bot;
+using Zeta.Game;
 
 namespace Trinity.Components.Adventurer
 {
@@ -22,34 +29,59 @@ namespace Trinity.Components.Adventurer
 
         protected override int UpdateIntervalMs => 50;
 
+        protected override void OnGameJoined()
+        {
+            if (Core.Scenes.CurrentScene?.LevelAreaId != ZetaDia.CurrentLevelAreaSnoId)
+            {
+                Core.Scenes.Reset();
+            }
+        }
+
+        protected override void OnWorldChanged(ChangeEventArgs<int> args)
+        {
+            PluginEvents.WorldChangeTime = PluginTime.CurrentMillisecond;
+            Core.Logger.Debug("[BotEvents] World has changed to WorldId: {0} LevelAreaSnoIdId: {1}", ZetaDia.Globals.WorldSnoId, ZetaDia.CurrentLevelAreaSnoId);
+            EntryPortals.AddEntryPortal();
+        }
+
+        public static long TimeSinceWorldChange
+        {
+            get
+            {
+                if (PluginEvents.WorldChangeTime == 0)
+                {
+                    return Int32.MaxValue;
+                }
+                return PluginTime.CurrentMillisecond - PluginEvents.WorldChangeTime;
+            }
+        }
+
+        protected override void OnBotStop()
+        {
+            BountyStatistics.Report();
+        }
+
         protected override void OnPulse()
         {
-            PluginEvents.PulseUpdates();
+            ExplorationGrid.PulseSetVisited();
+            BountyStatistics.Pulse();
         }
 
         protected override void OnPluginEnabled()
         {
             BotMain.OnStart += PluginEvents.OnBotStart;
             BotMain.OnStop += PluginEvents.OnBotStop;
-            DeveloperUI.InstallTab();
-            BotEvents.WireUp();
+            DeveloperUI.InstallTab();      
             SafeZerg.Instance.DisableZerg();
         }
 
         protected override void OnPluginDisabled()
         {
             DeveloperUI.RemoveTab();
-            BotEvents.UnWire();
         }
 
         public static bool IsAdventurerTagRunning()
         {
-            //const string tagsNameSpace = "Trinity.Components.Adventurer.Tags";
-            //if (ProfileManager.OrderManager == null || ProfileManager.OrderManager.CurrentBehavior == null)
-            //{
-            //    return false;
-            //}
-            //return ProfileManager.OrderManager.CurrentBehavior.GetType().Namespace == tagsNameSpace;
             return true;
         }
 
@@ -57,7 +89,7 @@ namespace Trinity.Components.Adventurer
         {
             if (ProfileManager.OrderManager == null || ProfileManager.OrderManager.CurrentBehavior == null)
             {
-                return string.Empty;
+                return String.Empty;
             }
             return ProfileManager.OrderManager.CurrentBehavior.GetType().Name;
         }

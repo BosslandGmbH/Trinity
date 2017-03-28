@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
@@ -109,7 +110,7 @@ namespace Trinity.ProfileTags
 
         public override async Task<bool> MainTask()
         {
-            if (PluginEvents.TimeSinceWorldChange < 1000)
+            if (Adventurer.TimeSinceWorldChange < 1000)
             {
                 Core.Logger.Debug("[Bounties] Sleeping 1 second due to world change");
                 await Coroutine.Sleep(1000);

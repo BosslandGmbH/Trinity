@@ -44,7 +44,10 @@ namespace Trinity.DbProvider
 
         public static async Task<bool> Execute()
         {
-            if (ZetaDia.Globals.IsLoadingWorld || !ZetaDia.Me.IsValid || !ZetaDia.Me.CommonData.IsValid)
+            if (!ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld || !ZetaDia.Me.IsValid)
+                return false;
+
+            if (Core.IsOutOfGame || Core.Player.IsDead)
                 return false;
 
             var isDead = ZetaDia.Me.IsDead;

@@ -121,8 +121,8 @@ namespace Trinity.Components.Adventurer.Coroutines
                     {
                         _explorationDataMaxWaitUntil = DateTime.UtcNow + TimeSpan.FromSeconds(15);
                     }
-
-                    await Coroutine.Sleep(100);
+                    Core.Scenes.Update();
+                    await Coroutine.Sleep(1000);
                     Core.Logger.Debug($"[Exploration] Patiently waiting for exploration data");
                     return false;
                 }

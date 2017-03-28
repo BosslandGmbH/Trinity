@@ -134,7 +134,7 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.ActorType != ActorType.Item)
                 return;
 
-            if (!actor.IsAcdBased) // || !actor.IsAcdValid)
+            if (!actor.IsAcdBased || !actor.IsAcdValid)
                 return;
 
             var commonData = actor.CommonData;
@@ -156,10 +156,10 @@ namespace Trinity.Framework.Actors.Properties
             actor.InventoryRow = row;
             actor.InventoryColumn = col;
 
-            if (!actor.IsEquipment && Core.Player.IsInTown)
-            {
+            //if (!actor.IsEquipment && Core.Player.IsInTown)
+            //{
                 actor.ItemStackQuantity = actor.Attributes.ItemStackQuantity;
-            }
+            //}
 
             if (actor.LastInventorySlot == InventorySlot.None && actor.InventorySlot == InventorySlot.BackpackItems)
             {

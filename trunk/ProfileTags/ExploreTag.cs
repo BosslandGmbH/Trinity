@@ -14,7 +14,9 @@ using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
 {
+    [XmlElement("ExploreLevelArea")]
     [XmlElement("TrinityExploreDungeon")]
+    [XmlElement("Explore")]
     [XmlElement("ExploreDungeon")]
     [XmlElement("Explore")]
     public class ExploreTag : ExploreTagProfileBehavior { }

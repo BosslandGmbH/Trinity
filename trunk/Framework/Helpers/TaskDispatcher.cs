@@ -27,9 +27,15 @@ namespace Trinity.Framework.Helpers
                 {
                     try
                     {
+                        if (!BotMain.IsRunning)
+                        {
+                            ZetaDia.Actors.Update();
+                            Core.Update();
+                        }
+
                         if (!isStarted)
                         {
-                            Core.Logger.Log("[TaskDispatcher] Starting Task, thread={0}", Thread.CurrentThread.ManagedThreadId);
+                            Core.Logger.Log("[TaskDispatcher] Starting Task, thread={0}", Thread.CurrentThread.ManagedThreadId);                            
                             _logic = new ActionRunCoroutine(task);
                             _logic.Start(null);
                             isStarted = true;

@@ -3400,10 +3400,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     // todo needs work, failing.
                     new MoveToMapMarkerCoroutine(436267, 428493, 2912417),
-                    // x1_Event_CursedShrine (364601) Distance: 22.65772
-                    new InteractWithGizmoCoroutine(436267, 428493, 364601, 0, 5),
-                    //ActorId: 364601, Type: Gizmo, Name: x1_Event_CursedShrine-36946, Distance2d: 4.163542, CollisionRadius: 10.04086, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
-                    new ClearAreaForNSecondsCoroutine(436267,90,364601,0,30),
+                    // x1_Event_CursedShrine (365097) Distance: 22.65772
+                    new InteractWithGizmoCoroutine(436267, 428493, 365097, 0, 5),
+                    //ActorId: 365097, Type: Gizmo, Name: x1_Event_CursedShrine-36946, Distance2d: 4.163542, CollisionRadius: 10.04086, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
+                    new ClearAreaForNSecondsCoroutine(436267,90,365097,0,30),
                 }
             });
 
@@ -3435,9 +3435,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new EnterLevelAreaCoroutine(375264, 70885, 123183, -1758560943, 185067),
-                        new MoveToMapMarkerCoroutine (375264,123183, 2912417 , 364601),
-                        new InteractWithGizmoCoroutine (375264,123183, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (375264, 90, 364601, 2912417)
+                        new MoveToMapMarkerCoroutine (375264,123183, 2912417 , 365097),
+                        new InteractWithGizmoCoroutine (375264,123183, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (375264, 90, 365097, 2912417)
                     }
             });
 
@@ -3466,8 +3466,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (365401, 71150, 2912417),
-                        new InteractWithGizmoCoroutine (365401,71150, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (365401, 60, 364601, 2912417, 30)
+                        new InteractWithGizmoCoroutine (365401,71150, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (365401, 60, 365097, 2912417, 30)
                     }
             });
 
@@ -3481,8 +3481,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369763, 71150, 2912417),
-                        new InteractWithGizmoCoroutine (369763,71150, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (369763, 60, 364601, 2912417)
+                        new InteractWithGizmoCoroutine (369763,71150, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (369763, 60, 365097, 2912417)
                     }
             });
 
@@ -3512,8 +3512,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369797,70885, 2912417),
-                        new InteractWithGizmoCoroutine (369797,70885, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (369797, 60, 364601, 2912417)
+                        new InteractWithGizmoCoroutine (369797,70885, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (369797, 60, 365097, 2912417)
                     }
             });
 
@@ -3543,9 +3543,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
 //                        new MoveToMapMarkerCoroutine (369813, 70885, 1352061373),
                         new EnterLevelAreaCoroutine(369813, 70885, 0, 1352061373, 176003),
-                        new MoveToMapMarkerCoroutine (369813,62569, 2912417, 364601),
-                        new InteractWithGizmoCoroutine (369813,62569, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (369813, 60, 364601, 2912417)
+                        new MoveToMapMarkerCoroutine (369813,62569, 2912417, 365097),
+                        new InteractWithGizmoCoroutine (369813,62569, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (369813, 60, 365097, 2912417)
                     }
             });
 
@@ -3575,9 +3575,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
 //						new MoveToMapMarkerCoroutine(369851, 95804, 942020622),
 						new EnterLevelAreaCoroutine(369851, 95804, 0, 942020622, 176003),
-                        new MoveToMapMarkerCoroutine (369851, 189910, 2912417, 364601),
-                        new InteractWithGizmoCoroutine (369851,189910, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (369851, 60, 364601, 2912417)
+                        new MoveToMapMarkerCoroutine (369851, 189910, 2912417, 365097),
+                        new InteractWithGizmoCoroutine (369851,189910, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (369851, 60, 365097, 2912417)
                     }
             });
 
@@ -3590,9 +3590,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearCurse,
                 Coroutines = new List<ISubroutine>
                     {
-                        new MoveToMapMarkerCoroutine (369853,75434, 2912417, 364601),
-                        new InteractWithGizmoCoroutine (369853,75434, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (369853, 60, 364601, 2912417)
+                        new MoveToMapMarkerCoroutine (369853,75434, 2912417, 365097),
+                        new InteractWithGizmoCoroutine (369853,75434, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (369853, 60, 365097, 2912417)
                     }
             });
 
@@ -3605,9 +3605,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearCurse,
                 Coroutines = new List<ISubroutine>
                     {
-                        new MoveToMapMarkerCoroutine (369868,81934, 2912417, 364601),
-                        new InteractWithGizmoCoroutine (369868,81934, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (369868, 60, 364601, 2912417)
+                        new MoveToMapMarkerCoroutine (369868,81934, 2912417, 365097),
+                        new InteractWithGizmoCoroutine (369868,81934, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (369868, 60, 365097, 2912417)
                     }
             });
 
@@ -3650,9 +3650,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearCurse,
                 Coroutines = new List<ISubroutine>
                     {
-                        new MoveToMapMarkerCoroutine (369908,338600, 2912417, 364601),
-                        new InteractWithGizmoCoroutine (369908,338600, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (369908, 60, 364601, 2912417)
+                        new MoveToMapMarkerCoroutine (369908,338600, 2912417, 365097),
+                        new InteractWithGizmoCoroutine (369908,338600, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (369908, 60, 365097, 2912417)
                     }
             });
 
@@ -3682,9 +3682,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new EnterLevelAreaCoroutine (369952, 267412, 341040, 1344182686, 0),
-                        new MoveToMapMarkerCoroutine (369952,341040, 2912417, 364601),
-                        new InteractWithGizmoCoroutine (369952,341040, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (369952, 60, 364601, 2912417)
+                        new MoveToMapMarkerCoroutine (369952,341040, 2912417, 365097),
+                        new InteractWithGizmoCoroutine (369952,341040, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (369952, 60, 365097, 2912417)
                     }
             });
 
@@ -3712,9 +3712,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearCurse,
                 Coroutines = new List<ISubroutine>
                     {
-                        new MoveToMapMarkerCoroutine (375198,50579, 2912417, 364601),
-                        new InteractWithGizmoCoroutine (375198,50579, 364601, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (375198, 60, 364601, 2912417,30)
+                        new MoveToMapMarkerCoroutine (375198,50579, 2912417, 365097),
+                        new InteractWithGizmoCoroutine (375198,50579, 365097, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (375198, 60, 365097, 2912417,30)
                     }
             });
 
@@ -8113,9 +8113,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new EnterLevelAreaCoroutine(447419, 428493, 444305, -1665315172, 175467),
                     new MoveToMapMarkerCoroutine(447419, 444305, 2912417),
-                    // x1_Event_CursedShrine (364601) Distance: 11.55153
-                    new InteractWithGizmoCoroutine(447419, 444305, 364601, 0, 5),
-					new ClearAreaForNSecondsCoroutine(447419, 90, 364601, 2912417, 30),
+                    // x1_Event_CursedShrine (365097) Distance: 11.55153
+                    new InteractWithGizmoCoroutine(447419, 444305, 365097, 0, 5),
+					new ClearAreaForNSecondsCoroutine(447419, 90, 365097, 2912417, 30),
                 }
             });
 
@@ -8284,8 +8284,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(436965, 408254, 2912417),
-                    // x1_Event_CursedShrine (364601) Distance: 15.57718
-                    new InteractWithGizmoCoroutine(436965, 408254, 364601, 0, 5),
+                    // x1_Event_CursedShrine (365097) Distance: 15.57718
+                    new InteractWithGizmoCoroutine(436965, 408254, 365097, 0, 5),
                     new ClearAreaForNSecondsCoroutine(436965, 60, 0, 0, 45),
                 }
             });

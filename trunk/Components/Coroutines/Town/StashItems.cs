@@ -136,13 +136,12 @@ namespace Trinity.Components.Coroutines.Town
                                 await Coroutine.Sleep(500);
                             }
 
-                            Core.Logger.Verbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
-                            InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
-
-                            UpdateAfterItemMove(item);
-
+                            Core.Logger.Debug($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
+                            InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);                     
+                            await Coroutine.Sleep(100);
+                            Core.Actors.Update();
+                            await Coroutine.Wait(5000, () => !item.IsValid || item.InventoryRow == row && item.InventoryColumn == col);
                             ItemEvents.FireItemStashed(item);
-                            await Coroutine.Sleep(500);
                         }
                         catch (Exception ex)
                         {
@@ -242,32 +241,48 @@ namespace Trinity.Components.Coroutines.Town
 
         public static async Task<bool> StackCraftingMaterials()
         {
-            var items = GetInventoryMap();
-
             foreach (var itemGroup in Core.Inventory.Stash.Where(i => i.MaxStackCount > 0 && i.ItemStackQuantity < i.MaxStackCount && !i.IsTradeable).GroupBy(i => i.Name))
             {
                 if (itemGroup.Count() <= 1)
                     continue;
 
-                Core.Logger.Verbose($">> Stacking: {itemGroup.Key}");
-
-                foreach (var item in itemGroup.OrderBy(i => i.InventoryRow))
+                Core.Logger.Debug($">> Started Stacking: {itemGroup.Key}");
+                var usedIds = new HashSet<int>();
+                var stacks = itemGroup.OrderBy(i => i.ItemStackQuantity).ToList();
+                foreach (var item in stacks)
                 {
+                    if (usedIds.Contains(item.AnnId))
+                        continue;
+
+                    var map = GetInventoryMap();
                     int col = 0, row = 0;
                     var page = GetIdealStashPage(item);
                     if (page == -1)
                         page = GetStashPage(item);
 
-                    if (CanStackOnPage(item, page, ref col, ref row, items))
-                    {
-                        Core.Logger.Verbose($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
-                        InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
-                        await Coroutine.Sleep(100);
-                    }
+                    if (!item.IsValid)
+                        continue;
 
-                    UpdateAfterItemMove(item);
-                    items = GetInventoryMap();
+                    if (CanStackOnPage(item, page, ref col, ref row, map))
+                    {
+                        var targetItem = map[col, row];
+                        if (!targetItem.IsValid)
+                            continue;
+
+                        Core.Logger.Log($"[StashItems] Stacking: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow}] ({item.ItemStackQuantity}) onto [{col},{row}] ({targetItem.ItemStackQuantity})");
+                        InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
+                        usedIds.Add(item.AnnId);
+
+                        await Coroutine.Sleep(100);
+                        Core.Actors.Update();
+                        await Coroutine.Wait(5000, () => !item.IsValid || targetItem.ItemStackQuantity == targetItem.MaxStackCount);
+                        
+
+                        Core.Logger.Verbose($"Source [{item.InventoryColumn},{item.InventoryRow}] IsValid={item.IsValid} Stack={item.ItemStackQuantity}");
+                        Core.Logger.Verbose($"Target [{targetItem.InventoryColumn},{targetItem.InventoryRow}] IsValid={targetItem.IsValid} Stack={targetItem.ItemStackQuantity}");
+                    }
                 }
+                Core.Logger.Debug($">> Finished Stacking: {itemGroup.Key}");
             }
             return true;
         }
@@ -276,136 +291,6 @@ namespace Trinity.Components.Coroutines.Town
         {
             return Core.Inventory.Stash.Where(i => i.InventoryRow >= page * 10 && i.InventoryRow < page * 10 + 10);
         }
-
-        //public static async Task<bool> SortStashPages()
-        //{
-        //    if (!Core.Settings.Loot.TownRun.SortStashPages)
-        //        return false;
-
-        //    if (Core.Settings.Loot.TownRun.StashGemsOnSecondToLastPage)
-        //    {
-        //        var secondLastPageIndex = TotalStashPages - 2;
-        //        InventoryManager.SwitchStashPage(secondLastPageIndex);
-        //        await SortStashPage(secondLastPageIndex);
-        //    }
-
-        //    var lastPageIndex = TotalStashPages - 1;
-        //    InventoryManager.SwitchStashPage(lastPageIndex);
-        //    await SortStashPage(lastPageIndex);
-        //    return true;
-        //}
-
-        //public static async Task<bool> SortStashPage(int page)
-        //{
-        //    if (!await MoveToStash())
-        //        return false;
-
-        //    var targetCol = 0;
-        //    var rowOnPage = 0;
-        //    var map = GetInventoryMap();
-
-        //    var itemsMovedAway = new List<TrinityItem>();
-        //    var items = GetItemsOnStashPage(page).ToList();
-        //    var equipment = items.Where(i => i.IsEquipment).OrderBy(i => i.RawItemType).ThenBy(i => i.ActorSnoId);
-        //    var other = items.Where(i => !i.IsEquipment).OrderBy(i => i.RawItemType).ThenBy(i => i.ActorSnoId);
-        //    var orderedItems = new Queue<TrinityItem>(other).AddRange(equipment);
-
-        //    // Step through each square on the stash page.
-        //    while (orderedItems.Any())
-        //    {
-        //        var itemToMove = orderedItems.Dequeue();
-        //        var targetRow = page * 10 + rowOnPage;
-
-        //        TrinityItem itemInTargetLocation, itemInLocationBelow, itemInLocationAbove;
-
-        //        if (targetCol > 6 || rowOnPage > 9)
-        //            break;
-
-        //        // ignore target spots if the current item is already there.
-        //        if (!map.TryGetValue(new Tuple<int, int>(targetCol, targetRow), out itemInTargetLocation) || itemInTargetLocation.AnnId != itemToMove.AnnId)
-        //        {
-        //            if (CanSwapOrPlaceAtLocation(targetCol, targetRow, itemToMove.IsTwoSquareItem, map))
-        //            {
-        //                Core.Logger.Verbose($"[StashItems] Sorting: {itemToMove.Name} ({itemToMove.ActorSnoId}) StashPage={page} from [{itemToMove.InventoryColumn},{itemToMove.InventoryRow}] to [{targetCol},{targetRow}]");
-        //                InventoryManager.MoveItem(itemToMove.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, targetCol, targetRow);
-        //                await Coroutine.Sleep(25);
-        //                await ActorManager.WaitForUpdate();
-        //                itemInTargetLocation?.Refresh();
-        //                itemToMove.Refresh();
-        //                map = GetInventoryMap();
-        //            }
-        //            else if (itemInTargetLocation != null)
-        //            {
-        //                // Move an item away from the target square.
-        //                var moveToLocation = GetNextEmptySquare(targetCol, targetRow, itemInTargetLocation.IsTwoSquareItem);
-        //                Core.Logger.Verbose($"[StashItems] >> Moving Item out of the way: {itemInTargetLocation.Name} ({itemInTargetLocation.ActorSnoId}) StashPage={Math.Floor(moveToLocation.Row / 10d)} from [{itemInTargetLocation.InventoryColumn},{itemInTargetLocation.InventoryRow}] to [{moveToLocation.Column},{moveToLocation.Row}]");
-        //                InventoryManager.MoveItem(itemInTargetLocation.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, moveToLocation.Column, moveToLocation.Row);
-        //                Core.Logger.Verbose($"[StashItems] Sorting: {itemToMove.Name} ({itemToMove.ActorSnoId}) StashPage={page} from [{itemToMove.InventoryColumn},{itemToMove.InventoryRow}] to [{targetCol},{targetRow}]");
-        //                InventoryManager.MoveItem(itemToMove.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, targetCol, targetRow);
-        //                await Coroutine.Sleep(25);
-        //                await ActorManager.WaitForUpdate();
-        //                itemsMovedAway.Add(itemInTargetLocation);
-        //                itemInTargetLocation.Refresh();
-        //                itemToMove.Refresh();
-        //                map = GetInventoryMap();
-        //            }
-        //            else if (itemToMove.IsTwoSquareItem && map.TryGetValue(new Tuple<int, int>(targetCol, targetRow + 1), out itemInLocationBelow))
-        //            {
-        //                // Move item in lower half of the needed 2-square space.
-        //                var moveToLocation = GetNextEmptySquare(targetCol, targetRow, itemInLocationBelow.IsTwoSquareItem);
-        //                Core.Logger.Verbose($"[StashItems] >> Moving Item out of the way (below): {itemInLocationBelow.Name} ({itemInLocationBelow.ActorSnoId}) StashPage={Math.Floor(moveToLocation.Row / 10d)} from [{itemInLocationBelow.InventoryColumn},{itemInLocationBelow.InventoryRow}] to [{moveToLocation.Column},{moveToLocation.Row}]");
-        //                InventoryManager.MoveItem(itemInLocationBelow.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, moveToLocation.Column, moveToLocation.Row);
-        //                Core.Logger.Verbose($"[StashItems] Sorting: {itemToMove.Name} ({itemToMove.ActorSnoId}) StashPage={page} from [{itemToMove.InventoryColumn},{itemToMove.InventoryRow}] to [{targetCol},{targetRow}]");
-        //                InventoryManager.MoveItem(itemToMove.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, targetCol, targetRow);
-        //                await Coroutine.Sleep(25);
-        //                await ActorManager.WaitForUpdate();
-        //                itemsMovedAway.Add(itemInLocationBelow);
-        //                itemInLocationBelow.Refresh();
-        //                itemToMove.Refresh();
-        //                map = GetInventoryMap();
-        //            }
-        //            else
-        //            {
-        //                if (rowOnPage > 0 && map.TryGetValue(new Tuple<int, int>(targetCol, targetRow - 1), out itemInLocationAbove) && itemInLocationAbove.IsTwoSquareItem)
-        //                {
-        //                    // Target location was blocked by a two-square item above.
-        //                    orderedItems.InsertItem(itemToMove);
-        //                    Core.Logger.Verbose($"[StashItems] {itemToMove.Name}'s Target [{targetCol},{targetRow}] is blocked by {itemInLocationAbove.Name} ({itemInLocationAbove.ActorSnoId})");
-        //                }
-        //                else
-        //                {
-        //                    Core.Logger.Log($"[StashItems] Unknown: {itemToMove.Name} ({itemToMove.ActorSnoId}) StashPage={page} this=[{itemToMove.InventoryColumn},{itemToMove.InventoryRow}] Target=[{targetCol},{targetRow}]");
-        //                }
-        //            }
-        //        }
-        //        if (targetCol >= 6)
-        //        {
-        //            targetCol = 0;
-        //            rowOnPage++;
-        //        }
-        //        else targetCol = targetCol + 1;
-        //    }
-
-        //    foreach (var item in itemsMovedAway)
-        //    {
-        //        if (GetStashPage(item) == page)
-        //        {
-        //            await ActorManager.WaitForUpdate();
-        //            continue;
-        //        }
-
-        //        int col, row;
-        //        if (!CanPutItemInStashPage(item, page, out col, out row))
-        //        {
-        //            GetBestStashLocation(item, out col, out row);
-        //        }
-
-        //        Core.Logger.Verbose($"[StashItems] << Restoring: {item.Name} ({item.ActorSnoId}) StashPage={page} from [{item.InventoryColumn},{item.InventoryRow}] to [{col},{row}]");
-        //        InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);
-        //    }
-
-        //    return true;
-        //}
 
         /// <summary>
         /// Get the stash page where items should ideally be placed, ignoring if it can actually be placed there.
@@ -431,14 +316,6 @@ namespace Trinity.Components.Coroutines.Town
         {
             return !dontStashCraftingMaterials || !i.IsCraftingReagent;
         }
-
-        //static Dictionary<RawItemType, int> ItemLocationMap = new Dictionary<RawItemType, int>
-        //{
-        //    { RawItemType.Gem, -1 },
-        //    { RawItemType.UpgradeableJewel, -1 },
-        //    //{ RawItemType.PortalDevice, -1 },
-        //    //{ RawItemType.Potion, -1 },
-        //};
 
         private static DateTime _lastTypeMapUpdate = DateTime.MinValue;
         private static Dictionary<RawItemType, int> _itemTypeMap;
@@ -616,31 +493,6 @@ namespace Trinity.Components.Coroutines.Town
             return new InventoryMap(items.ToDictionary(k => new Tuple<int, int>(k.InventoryColumn, k.InventoryRow), v => v));
         }
 
-        //public static InventorySquare GetNextEmptySquare(int col, int row, bool twoSquare)
-        //{
-        //    for (int r = row; r < TotalStashPages - 1 * 10; r++)
-        //    {
-        //        for (int c = col; c < 7; c++)
-        //        {
-        //            if (CanPlaceAtLocation(c, r, twoSquare))
-        //            {
-        //                return new InventorySquare((byte)c, (byte)r);
-        //            }
-        //        }
-        //    }
-        //    for (int r = 0; r <= row; r++)
-        //    {
-        //        for (int c = 0; c < 7; c++)
-        //        {
-        //            if (CanPlaceAtLocation(c, r, twoSquare))
-        //            {
-        //                return new InventorySquare((byte)c, (byte)r);
-        //            }
-        //        }
-        //    }
-        //    return new InventorySquare(0, 0);
-        //}
-
         private static bool TryGetStackLocation(TrinityItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
         {
             var loc = new Tuple<int, int>(col, row);
@@ -665,7 +517,7 @@ namespace Trinity.Components.Coroutines.Town
 
             if (item.ActorSnoId == existingItem.ActorSnoId && newStackSize <= item.MaxStackCount && item.AnnId != existingItem.AnnId)
             {
-                Core.Logger.Verbose($"Can stash item {item.Name} on page {stashPageNumber} at [col={col},row={row}] (stack on existing {existingStackQuantity} + {itemStackQuantity} ({newStackSize}) / {item.MaxStackCount})");
+                Core.Logger.Debug($"Can stash item {item.Name} on page {stashPageNumber} at [col={col},row={row}] (stack on existing {existingStackQuantity} + {itemStackQuantity} ({newStackSize}) / {item.MaxStackCount})");
                 placeAtCol = col;
                 placeAtRow = row;
                 return true;
@@ -710,47 +562,9 @@ namespace Trinity.Components.Coroutines.Town
             public InventoryMap(Dictionary<Tuple<int, int>, TrinityItem> dictionary) : base(dictionary)
             {
             }
+
+            public TrinityItem this[int indexX, int indexY] => this[new Tuple<int, int>(indexX, indexY)];
         }
-
-        //private static bool CanPlaceAtLocation(int col, int row, bool isTwoSquare, InventoryMap map = null)
-        //{
-        //    if (map == null)
-        //        map = GetInventoryMap();
-
-        //    var loc = new Tuple<int, int>(col, row);
-        //    var isSquareEmpty = !map.ContainsKey(loc);
-
-        //    var isLastRow = (9 + 1) % 10 == 0;
-        //    if (isLastRow && isTwoSquare)
-        //    {
-        //        Core.Logger.Log("LastRow CanPlaceAtLocation");
-        //        return false;
-        //    }
-
-        //    if (isTwoSquare)
-        //    {
-        //        var locBelow = new Tuple<int, int>(col, row + 1);
-        //        if (map.ContainsKey(locBelow))
-        //            return false;
-        //    }
-
-        //    var locAbove = new Tuple<int, int>(col, row - 1);
-        //    var isItemAbove = map.ContainsKey(locAbove);
-        //    if (isItemAbove && map[locAbove].IsTwoSquareItem)
-        //        return false;
-
-        //    return isSquareEmpty;
-        //}
-
-        //private static bool CanSwapOrPlaceAtLocation(int col, int row, bool isTwoSquare, InventoryMap map = null)
-        //{
-        //    if (map == null)
-        //        map = GetInventoryMap();
-
-        //    var key = new Tuple<int, int>(col, row);
-
-        //    return CanPlaceAtLocation(col, row, isTwoSquare, map) || (map.ContainsKey(key) && isTwoSquare == map[key].IsTwoSquareItem);
-        //}
 
         private static void HandleFullStash()
         {
@@ -766,8 +580,10 @@ namespace Trinity.Components.Coroutines.Town
             }
         }
 
-        public static bool StashPagesAvailableToPurchase => 5 - ZetaDia.Me.CommonData.GetAttribute<int>(ActorAttributeType.StashTabsPurchasedWithGold) > 0;
+        public static bool StashPagesAvailableToPurchase 
+            => 5 - ZetaDia.Me.CommonData.GetAttribute<int>(ActorAttributeType.StashTabsPurchasedWithGold) > 0;
 
-        public static int TotalStashPages => ZetaDia.Me.NumSharedStashSlots / 70;
+        public static int TotalStashPages 
+            => ZetaDia.Me.NumSharedStashSlots / 70;
     }
 }

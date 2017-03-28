@@ -3,12 +3,20 @@ using Trinity.Framework;
 using System.Windows;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Zeta.Bot;
 
 namespace Trinity.Modules
 {
     public class WindowTitle : Module
     {
         protected override int UpdateIntervalMs => 1000;
+
+        protected override void OnProfileLoaded()
+        {
+            ProfileName = ProfileManager.CurrentProfile?.Name ?? "";
+        }
+
+        public string ProfileName = "";
 
         protected override void OnPulse()
         {
@@ -22,6 +30,8 @@ namespace Trinity.Modules
 
             if (Core.Settings.Advanced.ShowHeroClass)
                 title += $"{Core.Player.ActorClass} ";
+
+            title += $@" - ""{ProfileName}""";
 
             if (!string.IsNullOrEmpty(title))
                 Application.Current.Dispatcher.Invoke((Action)(()

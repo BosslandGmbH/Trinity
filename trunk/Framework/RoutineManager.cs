@@ -91,10 +91,14 @@ namespace Trinity.Framework
             if (Settings.RoutineMode == RoutineMode.Manual && !string.IsNullOrEmpty(manualSelectionName))
             {                
                 var routine = AllRoutines.FirstOrDefault(r => r.GetType().Name == manualSelectionName);
-                if (routine != null && routine != CurrentRoutine)
+                if (routine != null)
                 {
-                    Core.Logger.Log($"Loading Force-Selected Routine: {manualSelectionName}");
-                    CurrentRoutine = routine;
+                    if (routine != CurrentRoutine)
+                    {
+                        Core.Logger.Log($"Loading Force-Selected Routine: {manualSelectionName}");
+                        CurrentRoutine = routine;
+                    }
+                    
                     return;
                 }
             }
