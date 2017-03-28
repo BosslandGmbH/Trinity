@@ -14,59 +14,43 @@ namespace Trinity.Modules
 
         protected override void OnPulse()
         {
-            //if (!ZetaDia.IsInGame || ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None)
-            //    return;
+            CurrentQuest = ZetaDia.CurrentQuest;
+            if (CurrentQuest == null)
+                return;
 
-            //CurrentQuest = ZetaDia.CurrentQuest;
-            //if (CurrentQuest == null)
-            //    return;
+            CurrentBounty = ZetaDia.Storage.Quests.ActiveBounty;
+            if (CurrentBounty == null)
+                return;
 
-            ////ZetaDia.ActRecord.
-            ////Act = ZetaDia.ActInfo;
-            ////if (Act == null || !Act.IsValid)
-            ////    return;
+            CurrentBountyData = BountyDataFactory.GetBountyData((int)CurrentBounty.Quest);
+            if (CurrentBountyData == null)
+                return;
 
-            ////ZetaDia.
+            QuestData = CurrentBountyData.QuestData;
 
-            ////CurrentBountyInfo = Act.ActiveBounty;
-            ////if (CurrentBountyInfo == null)
-            ////    return;
+            foreach (var step in QuestData.Steps)
+            {
+                if (!step.IsActive) continue;
 
+                CurrentStepData = step;
 
-            //CurrentBountyData = BountyDataFactory.GetBountyData((int)CurrentBountyInfo.Quest);
-            //if (CurrentBountyData == null)
-            //    return;
+                foreach (var objective in step.Objectives)
+                {
+                    if (!objective.IsActive) continue;
 
-            ////if (SceneNames == null)
-            ////{
-            ////    SceneNames = SnoManager.StringListHelper.GetStringList(SnoStringListType.LevelAreaNames);
-            ////}
-
-            //QuestData = CurrentBountyData.QuestData;
-
-            //foreach (var step in QuestData.Steps)
-            //{
-            //    if (!step.IsActive) continue;
-
-            //    CurrentStepData = step;
-
-            //    foreach (var objective in step.Objectives)
-            //    {
-            //        if (!objective.IsActive) continue;
-
-            //        CurrentObjective = objective;
-            //    }
-            //}
+                    CurrentObjective = objective;
+                }
+            }
 
         }
+
+        public BountyInfo CurrentBounty { get; set; }
 
         public string CurrentSceneName { get; set; }
 
         public SNOLevelArea CurrentLevelAreaInternalName { get; set; }
 
         public SnoDictionary<string> SceneNames { get; private set; }
-
-        public BountyInfo CurrentBountyInfo { get; private set; }
 
         public Quest CurrentQuest { get; private set; }
 
@@ -80,8 +64,22 @@ namespace Trinity.Modules
 
         public BountyData CurrentBountyData { get; private set; }
 
-        public bool IsKillAllRequired => CurrentQuest != null && CurrentQuest.IsValid && CurrentStepData != null && CurrentObjective != null &&
-            CurrentStepData.IsActive && CurrentObjective.IsActive && KillAllTypes.Contains(CurrentObjective.ObjectiveType);
+        public bool IsKillAllRequired
+        {
+            get
+            {
+                if (CurrentQuest == null || !CurrentQuest.IsValid)
+                    return false;
+
+                if (CurrentStepData == null || CurrentObjective == null)
+                    return false;
+
+                if (!CurrentStepData.IsActive || !CurrentObjective.IsActive)
+                    return false;
+
+                return KillAllTypes.Contains(CurrentObjective.ObjectiveType);
+            }
+        }
 
         public HashSet<QuestStepObjectiveType> KillAllTypes { get; } = new HashSet<QuestStepObjectiveType>
         {

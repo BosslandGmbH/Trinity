@@ -4,6 +4,7 @@
   <PickupLoot>True</PickupLoot>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="-1" />
   <TargetBlacklists>
+  
     <!--All Cursed Chests and Shrines-->
     <TargetBlacklist actorId="364559"/>
     <TargetBlacklist actorId="364601"/>

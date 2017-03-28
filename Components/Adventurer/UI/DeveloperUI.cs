@@ -98,16 +98,27 @@ namespace Trinity.Components.Adventurer.UI
                     coroutineHelpers.Children.Add(CreateButton("Clear Level Area", ClearLevelArea_Click));
                     coroutineHelpers.Children.Add(CreateButton("Clear Area For N Seconds", ClearAreaForNSeconds_Click));
 
-                    var coroutineHelpers3 = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(0, 2, 2, 2) };
+                    var scrollViewer3 = new ScrollViewer();
+                    var coroutineHelpers3 = new StackPanel
+                    {
+                        Background = Brushes.DimGray, Margin = new Thickness(0, 2, 2, 2)
+                    };
+                    
                     coroutineHelpers3.Children.Add(CreateTitle("Profile Tags"));
-                    coroutineHelpers3.Children.Add(CreateButton("Move To Position", GenerateActorTags_Click<MoveToPositionTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("Move To Position", GenerateTag_Click<MoveToPositionTag>));
                     coroutineHelpers3.Children.Add(CreateButton("Interact", GenerateActorTags_Click<InteractTag>));
                     coroutineHelpers3.Children.Add(CreateButton("Shuffle", GenerateTag_Click<ShuffleTag>));
                     coroutineHelpers3.Children.Add(CreateButton("MoveToActor", GenerateActorTags_Click<MoveToActorTag>));
-                    coroutineHelpers3.Children.Add(CreateButton("MoveToMarker", GenerateActorTags_Click<MoveToMapMarkerTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("MoveToMarker", GenerateMarkerTags_Click<MoveToMapMarkerTag>));
                     coroutineHelpers3.Children.Add(CreateButton("TakeWaypoint", GenerateTag_Click<TakeWaypointTag>));
-                    //coroutineHelpers3.Children.Add(CreateButton("If Scene", IfScene_Click));
-                    //coroutineHelpers3.Children.Add(CreateButton("If World", IfWorld_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("If Scene", IfScene_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("If World", IfWorld_Click));
+
+                    scrollViewer3.Content = coroutineHelpers3;
+
+                    //var coroutineHelpers4 = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(-2, 2, 2, 2) };
+                    //coroutineHelpers4.Children.Add(CreateTitle(" "));
+
                     //coroutineHelpers3.Children.Add(CreateButton("Move To Actor", MoveToActorTag_Click));
                     //coroutineHelpers3.Children.Add(CreateButton("Enter Level Area", EnterLevelAreaTag_Click));
                     //coroutineHelpers3.Children.Add(CreateButton("Clear Level Area", ClearLevelAreaTag_Click));
@@ -159,7 +170,8 @@ namespace Trinity.Components.Adventurer.UI
                     uniformGrid.Children.Add(dumpers);
                     uniformGrid.Children.Add(coroutineHelpers);
                     uniformGrid.Children.Add(coroutineHelpers2);
-                    uniformGrid.Children.Add(coroutineHelpers3);
+                    uniformGrid.Children.Add(scrollViewer3);
+                    //uniformGrid.Children.Add(coroutineHelpers4);
 
                     _tabItem = new TabItem
                     {
@@ -1224,13 +1236,23 @@ namespace Trinity.Components.Adventurer.UI
             }
         }
 
-
+        private static void GenerateMarkerTags_Click<T>(object sender, RoutedEventArgs e) where T : ProfileBehavior
+        {
+            try
+            {
+                Core.Logger.Raw(ProfileTagLogger.GenerateActorTags<T>(a => (a.IsUnit && a.PetType == PetType.None || a.IsGizmo && !a.IsUsed) && a.Distance < 40f));
+            }
+            catch (Exception ex)
+            {
+                Core.Logger.Error(ex.ToString());
+            }
+        }
 
         private static void GenerateActorTags_Click<T>(object sender, RoutedEventArgs e) where T : ProfileBehavior
         {
             try
             {
-                Core.Logger.Raw(ProfileTagLogger.GenerateTags<T>(a => (a.IsUnit && a.PetType == PetType.None || a.IsGizmo && !a.IsUsed) && a.Distance < 40f ));
+                Core.Logger.Raw(ProfileTagLogger.GenerateActorTags<T>(a => (a.IsUnit && a.PetType == PetType.None || a.IsGizmo && !a.IsUsed) && a.Distance < 40f ));
             }
             catch (Exception ex)
             {

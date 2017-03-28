@@ -53,6 +53,7 @@ namespace Trinity.Modules
         protected override void OnWorldChanged(ChangeEventArgs<int> args)
         {
             PurgeOldScenes();
+            Update();
         }
 
         private void PurgeOldScenes()

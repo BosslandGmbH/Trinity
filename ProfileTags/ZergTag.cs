@@ -11,29 +11,28 @@ namespace Trinity.ProfileTags
     [XmlElement("Zerg")]
     public class ZergTag : BaseContainerProfileBehavior
     {
-        //[XmlAttribute("force")]
-        //[Description("Make sure zerg mode is on every tick")]
-        //[DefaultValue(false)]
-        //public bool Force { get; set; }
+        #region XmlAttributes
+
+        [XmlAttribute("mode")]
+        [Description("Turn zerg on or off when tag starts")]
+        public bool? Enabled { get; set; }
+
+        #endregion
 
         public override bool StartMethod()
         {
+            if (Enabled.HasValue)
+            {
+                Combat.CombatMode = Enabled.Value ? CombatMode.SafeZerg : CombatMode.SafeZerg;
+                return true;
+            }
             Combat.CombatMode = CombatMode.SafeZerg;
             return false;
         }
 
-        //public override bool MainMethod()
-        //{
-        //    if (Force && Combat.CombatMode != CombatMode.SafeZerg)
-        //        Combat.CombatMode = CombatMode.SafeZerg;
-
-        //    return false;
-        //}
-
-        public override void OnDone()
+        public override void DoneMethod()
         {
             Combat.CombatMode = CombatMode.Normal;
-            base.OnDone();
         }
     }
 

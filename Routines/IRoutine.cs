@@ -53,7 +53,7 @@ namespace Trinity.Routines
 
         // Hardcore Overrides        
         Task<bool> HandleKiting();
-        Task<bool> HandleAvoiding();
+        Task<bool> HandleAvoiding(TrinityActor newTarget);
         Task<bool> HandleTargetInRange();
         Task<bool> MoveToTarget();
         bool SetWeight(TrinityActor cacheObject);

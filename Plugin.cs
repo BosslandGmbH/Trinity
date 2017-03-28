@@ -23,7 +23,7 @@ namespace Trinity
     {
         private static TrinityPlugin _instance;
         public string Name => "Trinity";
-        public Version Version => new Version(2, 250, 750);
+        public Version Version => new Version(2, 250, 755);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -41,6 +41,10 @@ namespace Trinity
             InstallRoutine();
         }
 
+        /// <summary>
+        /// Copy db provider routine to Db\Routines\. This is required for hooks and YAR Relogger.
+        /// The routine does not actually doing anything except route a settings button click.
+        /// </summary>
         private static void InstallRoutine()
         {
             var routineDirectory = Path.GetDirectoryName(FileManager.CombatRoutineDestinationPath);
@@ -51,6 +55,9 @@ namespace Trinity
                 File.Copy(FileManager.CombatRoutineSourcePath, FileManager.CombatRoutineDestinationPath, true);
         }
 
+        /// <summary>
+        /// Makes sure trinity plugin is enabled.
+        /// </summary>
         private void PluginManager_OnPluginsReloaded(object sender, EventArgs e)
         {            
             foreach (var plugin in PluginManager.Plugins)
@@ -64,19 +71,12 @@ namespace Trinity
 
         public void OnInitialize()
         {
-            if (IsInitialized)
-                return;
-
-            // When DB is started via CMD line argument and includes a login then plugins 
-            // are initialized by BotMain thread instead of UI thread, causing problems.
-            if (!Application.Current.CheckAccess())
-                return;
-
+            if (IsInitialized) return;
             IsInitialized = true;
         }
 
         public void OnPulse()
-        {
+        {            
             HookManager.CheckHooks();
             GameUI.SafeClickUIButtons();
             VisualizerViewModel.Instance.UpdateVisualizer();               
@@ -89,7 +89,7 @@ namespace Trinity
 
             Core.Init();
             TrinitySettings.InitializeSettings();
-            SkillUtils.UpdateActiveSkills();
+            SkillUtils.UpdateActiveSkills();            
             TabUi.InstallTab();
             SetupDemonBuddy();
             UILoader.PreLoadWindowContent();
@@ -98,8 +98,12 @@ namespace Trinity
             IsEnabled = true;            
         }
 
+        /// <summary>
+        /// Install empty providers to DemonBuddy otherwise it will try to use its 
+        /// in-built default ones and interfere with Trinity operations.
+        /// </summary>
         private static void SetupDemonBuddy()
-        {
+        {            
             Navigator.PlayerMover = Core.PlayerMover;
             Navigator.StuckHandler = Core.StuckHandler;
             ItemManager.Current = new BlankItemManager();

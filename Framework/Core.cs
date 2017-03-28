@@ -5,11 +5,13 @@ using Trinity.Framework.Actors;
 using Trinity.Framework.Avoidance;
 using Trinity.Framework.Events;
 using Trinity.Framework.Grid;
+using Trinity.Framework.Reference;
 using Trinity.Modules;
 using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
+using Zeta.Game.Internals.Service;
 
 
 namespace Trinity.Framework
@@ -19,6 +21,7 @@ namespace Trinity.Framework
         public static void Init() { }
 
         public static IFrameworkLogger Logger { get; } = new DefaultLogger();
+        public static ChangeMonitor ChangeMonitor { get; } = new ChangeMonitor();
         public static PlayerCache Player { get; } = new PlayerCache();
         public static RoutineManager Routines => RoutineManager.Instance;
         public static Adventurer Adventurer { get; } = Adventurer.Instance;
@@ -54,7 +57,6 @@ namespace Trinity.Framework
         public static StuckHandler StuckHandler { get; } = new StuckHandler();
         public static BlockedCheck BlockedCheck { get; } = new BlockedCheck();
         public static WindowTitle WindowTitle { get; } = new WindowTitle();
-        public static ChangeMonitor ChangeMonitor { get; } = new ChangeMonitor();
         public static InactivityMonitor InactivityMonitor { get; } = new InactivityMonitor();
         public static ProfileSettings ProfileSettings { get; } = new ProfileSettings();
         public static SettingsModel Settings => TrinitySettings.Settings;
@@ -62,7 +64,7 @@ namespace Trinity.Framework
         public static MainGridProvider DBGridProvider => (MainGridProvider)Navigator.SearchGridProvider;
         public static DefaultNavigationProvider DBNavProvider => (DefaultNavigationProvider)Navigator.NavigationProvider;
         public static bool GameIsReady => ZetaDia.IsInGame && ZetaDia.Me.IsValid && !ZetaDia.Globals.IsLoadingWorld && !ZetaDia.Globals.IsPlayingCutscene;
-        public static bool IsOutOfGame => ZetaDia.ActivePlayerData.WorldSnoId == 1998454784 || ZetaDia.ActivePlayerData.IsNotInGame > 0 || !ZetaDia.ActivePlayerData.IsInGame;
+        public static bool IsOutOfGame => GameData.MenuWorldSnoIds.Contains(ZetaDia.Globals.WorldSnoId) || ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None;
 
         internal static void Update()
         {

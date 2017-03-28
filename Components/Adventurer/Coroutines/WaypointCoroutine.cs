@@ -183,13 +183,13 @@ namespace Trinity.Components.Adventurer.Coroutines
                     ZetaDia.Actors.GetActorsOfType<GizmoWaypoint>().OrderBy(g => g.Distance).FirstOrDefault();
                 if (gizmoWaypoint != null && gizmoWaypoint.IsFullyValid())
                 {
-                    // Already there
-                    if (gizmoWaypoint.WaypointNumber == _waypointNumber && gizmoWaypoint.Distance <= 150)
-                    {
-                        Core.Logger.Log("[Waypoint] Already near the destination waypoint");
-                        State = States.Completed;
-                        return false;
-                    }
+                    //// Already there
+                    //if (gizmoWaypoint.SNODestinationLevelArea == ZetaDia.CurrentLevelAreaSnoId && gizmoWaypoint.Distance <= 150)
+                    //{
+                    //    Core.Logger.Log("[Waypoint] Already near the destination waypoint");
+                    //    State = States.Completed;
+                    //    return false;
+                    //}
 
                     // To far away to interact
                     if (gizmoWaypoint.Distance < 10)

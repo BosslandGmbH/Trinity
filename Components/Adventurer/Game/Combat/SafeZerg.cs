@@ -56,12 +56,12 @@ namespace Trinity.Components.Adventurer.Game.Combat
 
         private void ZergCheck()
         {
-            if (!_zergEnabled)
+            if (!_zergEnabled || ZetaDia.Me == null || !ZetaDia.Me.IsValid)
             {
                 return;
             }
 
-            var corruptGrowthDetectionRadius = ZetaDia.Me.ActorClass == ActorClass.Barbarian ? 30 : 20;
+            var corruptGrowthDetectionRadius = ZetaDia.Service.Hero.Class == ActorClass.Barbarian ? 30 : 20;
             var combatState = false;
 
             if (!combatState && ZetaDia.Me.HitpointsCurrentPct <= 0.8f)

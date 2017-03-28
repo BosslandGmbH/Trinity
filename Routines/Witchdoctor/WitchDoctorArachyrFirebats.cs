@@ -26,7 +26,7 @@ namespace Trinity.Routines.Witchdoctor
         public string Description => "Specialized combat for channelling firebats with Arachyr set.";
         public string Author => "xzjv";
         public string Version => "0.1";
-        public string Url => "http://www.diablofans.com/builds/82419-2-4-2-helltooth-firebats-dps-105";
+        public string Url => "http://www.icy-veins.com/d3/witch-doctor-firebats-angry-chicken-with-arachyr-or-helltooth-sets-patch-2-4-3-season-9";
 
 
 

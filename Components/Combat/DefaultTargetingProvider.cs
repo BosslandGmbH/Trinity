@@ -352,7 +352,7 @@ namespace Trinity.Components.Combat
         {
             if (Core.Avoidance.Avoider.ShouldAvoid)
             {
-                if (await Combat.Routines.Current.HandleAvoiding())
+                if (await Combat.Routines.Current.HandleAvoiding(newTarget))
                 {
                     return true;
                 }

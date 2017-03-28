@@ -16,6 +16,12 @@ namespace Trinity.Components.Combat
 {
     public static class Combat
     {
+        static Combat()
+        {
+            BotMain.OnStart += (b) => CombatMode = CombatMode.Normal;
+            GameEvents.OnGameChanged += (s,a) => CombatMode = CombatMode.Normal;
+        }
+
         public static CombatMode CombatMode { get; set; }
 
         /// <summary>
@@ -56,7 +62,7 @@ namespace Trinity.Components.Combat
             if (!ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld || !ZetaDia.Me.IsValid)
                 return false;
 
-            if (Core.Player.IsDead)
+            if (Core.IsOutOfGame || Core.Player.IsDead)
                 return false;
 
             await UsePotion.Execute();

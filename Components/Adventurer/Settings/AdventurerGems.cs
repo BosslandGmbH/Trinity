@@ -122,7 +122,7 @@ namespace Trinity.Components.Adventurer.Settings
 
             var minChance = PluginSettings.Current.GreaterRiftGemUpgradeChance;
             var level = ZetaDia.Me.InTieredLootRunLevel + 1;
-            var focus = PluginSettings.Current.GemUpgradeFocusMode;
+            var priority = PluginSettings.Current.GemUpgradePriority;
             var equipPriority = PluginSettings.Current.GreaterRiftPrioritizeEquipedGems;
             var chanceReq = PluginSettings.Current.GreaterRiftGemUpgradeChance;
 
@@ -134,7 +134,7 @@ namespace Trinity.Components.Adventurer.Settings
             Core.Logger.Log($"[UpgradeGems] Highest Ranked Gem: {Gems.Max(g => g.Rank)}");
             Core.Logger.Log($"[UpgradeGems] Lowest Ranked Gem: {Gems.Min(g => g.Rank)}");
             Core.Logger.Log($"[UpgradeGems] Upgrade Chance Setting: {minChance}%");
-            Core.Logger.Log($"[UpgradeGems] Focus Mode: {focus}");
+            Core.Logger.Log($"[UpgradeGems] Ordering Priority: {priority}");
             Core.Logger.Log($"[UpgradeGems] Prioritize Equipped: {equipPriority}");
 
             var gems = Gems.ToList();
@@ -183,16 +183,33 @@ namespace Trinity.Components.Adventurer.Settings
                 }
             }
 
-            if (focus)
+            switch (priority)
             {
-                Core.Logger.Log($"[UpgradeGems] ---- Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Order, Rank - Focus Mode ----");
-                gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenBy(g => g.Settings.Order).ToList();
+                case GemPriority.None:
+                case GemPriority.Rank:
+                    Core.Logger.Log($"[UpgradeGems] ---- 'Rank' Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Rank ----");
+                    gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenByDescending(g => g.Rank).ThenBy(g => g.Settings.Order).ToList();
+                    break;
+                case GemPriority.Order:
+                    Core.Logger.Log($"[UpgradeGems] ---- 'Order' Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Order ----");
+                    gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenBy(g => g.Settings.Order).ToList();
+                    break;
+                case GemPriority.Chance:
+                    Core.Logger.Log($"[UpgradeGems] ---- 'Chance' Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Chance, then Rank ----");
+                    gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenByDescending(g => g.UpgradeChance).ThenByDescending(g => g.Rank).ToList();
+                    break;
             }
-            else
-            {
-                Core.Logger.Log($"[UpgradeGems] ---- Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Chance, Order, Rank ----");
-                gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenByDescending(g => g.UpgradeChance).ThenBy(g => g.Settings.Order).ThenBy(g => g.Rank).ToList();
-            }
+
+            //if (focus)
+            //{
+            //    Core.Logger.Log($"[UpgradeGems] ---- Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Order, Rank - Focus Mode ----");
+            //    gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenBy(g => g.Settings.Order).ToList();
+            //}
+            //else
+            //{
+            //    Core.Logger.Log($"[UpgradeGems] ---- Ordered Candidates ({gems.Count}), by {(equipPriority ? "Equipped, " : "")}Chance, Order, Rank ----");
+            //    gems = gems.OrderBy(g => equipPriority && g.IsEquiped ? 0 : 1).ThenByDescending(g => g.UpgradeChance).ThenBy(g => g.Settings.Order).ThenBy(g => g.Rank).ToList();
+            //}
 
             for (int i = 0; i < gems.Count; i++)
             {

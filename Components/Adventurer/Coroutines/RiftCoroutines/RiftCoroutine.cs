@@ -325,7 +325,11 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             State = AdvDia.CurrentWorldId == ExplorationData.ActHubWorldIds[Act.A1] ? States.InTown : States.GoingToAct1Hub;
             if (AdvDia.RiftQuest.State == QuestState.NotStarted)
             {
-                Core.Scenes.Reset();
+                if (Core.Scenes.CurrentScene.LevelAreaId != ZetaDia.CurrentLevelAreaSnoId)
+                {
+                    Core.Scenes.Reset();
+                }
+
                 RiftData.EntryPortals.Clear();
                 _currentWorldDynamicId = 0;
                 _previusWorldDynamicId = 0;

@@ -2,7 +2,7 @@
   <Name>Tag Test - When</Name>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
   <Order>    
-    <LogMessage message=">> TakeWaypoint Test Started " />
+    <LogMessage message=">> When Test Started " />
 
     <If condition="CurrentLevelAreaId != 92945">
       <TakeWaypoint destinationLevelAreaSnoId="92945" />
@@ -26,6 +26,6 @@
     <MoveToActor questId="312429" stepId="2" actorId="6442" explore="false" maxRange="300" x="402.54" y="414.34" z=".7" />    
     <Wait seconds="5" />
     
-    <LogMessage message=">> TakeWaypoint Test Finished " />       
+    <LogMessage message=">> When Test Finished " />       
   </Order>
 </Profile>

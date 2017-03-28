@@ -316,7 +316,7 @@ namespace Trinity.Routines
 
         // returning true == you've handled it, and default handling is skipped.
         public virtual async Task<bool> HandleKiting() => false;
-        public virtual async Task<bool> HandleAvoiding() => false;
+        public virtual async Task<bool> HandleAvoiding(TrinityActor newTarget) => false;
         public virtual async Task<bool> HandleTargetInRange() => false;
         public virtual async Task<bool> MoveToTarget() => false;
         public virtual bool SetWeight(TrinityActor cacheObject) => false;

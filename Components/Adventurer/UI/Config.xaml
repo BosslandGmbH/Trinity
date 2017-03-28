@@ -236,8 +236,17 @@
                     <!--<Border Height="1" Margin="2,5,2,5" Background="DarkSlateGray" />-->
                     <CheckBox Name="GreaterRiftPrioritizeEquipedGems" IsChecked="{Binding GreaterRiftPrioritizeEquipedGems}" Content="Prioritize Equipped Gems" ToolTip="Always upgrades the equipped gems first until Quality% or Rank limit reached" Margin="2"></CheckBox>
 
-                    <CheckBox Name="GemUpgradeEvenly" IsChecked="{Binding GemUpgradeFocusMode}" Content="Focus one gem at a time by order (ranking table below)" ToolTip="Upgrades by row order (ranking in table below) until Quality% or Rank limit reached" Margin="2"></CheckBox>
+                    <!--<CheckBox Name="GemUpgradeEvenly" IsChecked="{Binding GemUpgradeFocusMode}" Content="Focus one gem at a time by order (ranking table below)" ToolTip="Upgrades by row order (ranking in table below) until Quality% or Rank limit reached" Margin="2"></CheckBox>-->
 
+                  <StackPanel Margin="0,6,10,0">
+                    <TextBlock Text="Primary Order:" />
+                    <WrapPanel Margin="0,0,0,0">
+                      <RadioButton Foreground="White" Content="Rank" IsChecked="{Binding GemUpgradePriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Rank}" />
+                      <RadioButton Foreground="White" Content="Manual Order" IsChecked="{Binding GemUpgradePriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Order}" />
+                      <RadioButton Foreground="White" Content="Chance %" IsChecked="{Binding GemUpgradePriority, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Chance}" />
+                    </WrapPanel>
+                  </StackPanel>                  
+                  
                     <WrapPanel>
                         <TextBlock Grid.Column="0" Text="Don't upgrade gem if chance is below: " Margin="4 4 0 0"></TextBlock>
                         <ComboBox Grid.Column="1" Margin="5,2,2,2" SelectedValue="{Binding GreaterRiftGemUpgradeChance}" Name="GreaterRiftGemUpgradeChance" ItemsSource="{Binding GemUpgradeChances}"></ComboBox>

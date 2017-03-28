@@ -153,7 +153,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item Enforcer = new Item
         {
-            Id = 405798,
+            Id = 405798, //Enforcer ActorSnoId=405798 GameBalanceId=-1045305945 
             Name = "Enforcer",
             Quality = ItemQuality.Legendary,
             Slug = "enforcer",

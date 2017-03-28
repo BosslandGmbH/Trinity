@@ -5,7 +5,7 @@
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
   <Order>
     
-    <RunBounty questId="369868" name="Bounty: The Cursed Caldera" />
+    <!--<RunBounty questId="369868" name="Bounty: The Cursed Caldera" />
     <RunBounty questId="359927" name="Bounty: Kill Malthael" />
     <RunBounty questId="365381" name="Bounty: The Cursed Grove" />
     <RunBounty questId="345546" name="Bounty: A Stranger in Need" />
@@ -50,7 +50,10 @@
     <RunBounty questId="409897" name="Bounty: The Cursed Pulpit" />
     <RunBounty questId="367559" name="Bounty: Kill Krailen the Wicked" />
     <RunBounty questId="369878" name="Bounty: The Cursed Chapel" />
-    <RunBounty questId="347600" name="Bounty: Kill Bashiok" />
+    <RunBounty questId="347600" name="Bounty: Kill Bashiok" />-->
+    
+    <RunBounty questId="369853" name="The Cursed Depths" />
+    <RunBounty questId="368601" name="The True Son of the Wolf" />
 
     <LogMessage message=">> Profile Finished" />
     <WaitTimer questId="1" stepId="1" waitTime="3000" />

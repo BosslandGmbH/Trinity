@@ -76,16 +76,18 @@ namespace Trinity.UI
                 };
 
                 CreateStretchyGroup(string.Empty, new List<Control>
-                        {
-                            CreateMajorButton("Configure", ShowMainTrinityUIEventHandler),
-                            CreateMajorButton("Open Visualizer", OpenRadarButtonHandler)
-                        });
+                {
+                    CreateMajorButton("Configure", ShowMainTrinityUIEventHandler),
+                    CreateMajorButton("Open Visualizer", OpenRadarButtonHandler)
+                });
 
                 CreateGroup("Items", new List<Control>
-                        {
-                            CreateButton("Sort Backpack", SortBackEventHandler),
-                            CreateButton("Sort Stash", SortStashEventHandler),
-                        });
+                {
+                    CreateButton("Sort Backpack", SortBackEventHandler),
+                    CreateButton("Sort Stash", SortStashEventHandler),
+                    CreateButton("Stack Materials", StackCraftingMaterialsInStash),
+                    CreateButton("Stash Backpack", DepositBackpackToStash),                    
+                });
 
                 CreateGroup("Cube Backpack", new List<Control>
                 {
@@ -1401,6 +1403,34 @@ namespace Trinity.UI
             {
                 Core.Logger.Log("This must be started with stash open.");
                 Core.Logger.Warn("Please wait - this may take up to 30 seconds before starting.");
+
+                ItemSort.SortStash();
+            }
+            catch (Exception ex)
+            {
+                Core.Logger.Error("Error dropping legendaries:" + ex);
+            }
+        }
+
+        private static void StackCraftingMaterialsInStash(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TaskDispatcher.Start(ret => Components.Coroutines.Town.StashItems.StackCraftingMaterials());
+
+                ItemSort.SortStash();
+            }
+            catch (Exception ex)
+            {
+                Core.Logger.Error("Error dropping legendaries:" + ex);
+            }
+        }
+
+        private static void DepositBackpackToStash(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TaskDispatcher.Start(ret => Components.Coroutines.Town.StashItems.Execute());
 
                 ItemSort.SortStash();
             }
