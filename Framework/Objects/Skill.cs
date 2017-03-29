@@ -277,7 +277,7 @@ namespace Trinity.Framework.Objects
         /// </summary>
         public bool CanCast()
         {
-            return Combat.Spells.CanCast(this);
+            return TrinityCombat.Spells.CanCast(this);
         }
 
         /// <summary>

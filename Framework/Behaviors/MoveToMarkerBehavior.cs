@@ -33,7 +33,7 @@ namespace Trinity.Framework.Behaviors
                 .OrderBy(m => m.Distance)
                 .FirstOrDefault(m => m.Position != Vector3.Zero && markerSelector(m) && !VisitedMarkerPositions.Contains(m.Position) && m.Distance > 10f);
 
-            if (marker != null && (IsRunning || (!Combat.IsInCombat && marker.Distance < 500)) && !Navigator.StuckHandler.IsStuck)
+            if (marker != null && (IsRunning || (!TrinityCombat.IsInCombat && marker.Distance < 500)) && !Navigator.StuckHandler.IsStuck)
             {
                 if (VisitedMarkerPositions.Count > 500)
                     VisitedMarkerPositions.Clear();

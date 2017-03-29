@@ -70,7 +70,7 @@ namespace Trinity.Framework.Avoidance
             if (!Settings.Entries.Any(s => s.IsEnabled))
                 return;
 
-            var source = Core.Actors.AllRActors.ToList();
+            var source = Core.Actors.Actors.ToList();
 
             foreach (var actor in source)
             {

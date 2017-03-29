@@ -57,7 +57,7 @@ namespace Trinity.Components.Combat
         /// </summary>
         public TrinityActor WeightActors(IEnumerable<TrinityActor> actors)
         {
-            if (Combat.Routines.Current == null)
+            if (TrinityCombat.Routines.Current == null)
                 return null;
 
             var objects = actors.ToList();
@@ -96,12 +96,12 @@ namespace Trinity.Components.Combat
 
                 //var hiPriorityHealthGlobes = Core.Settings.Combat.Misc.HiPriorityHG;
 
-                var isHealthEmergency = (Core.Player?.CurrentHealthPct <= Combat.Routines.Current?.EmergencyHealthPct);
+                var isHealthEmergency = (Core.Player?.CurrentHealthPct <= TrinityCombat.Routines.Current?.EmergencyHealthPct);
                 var isInSpecialKillAllScene = GameData.ForceKillAllSceneSnoIds.Contains(Core.Player.CurrentSceneSnoId);
                 var isGateNearby = false;
                 var isPriorityInteractableNearby = false;
 
-                foreach (var r in Core.Actors.AllRActors)
+                foreach (var r in Core.Actors.Actors)
                 {
                     if (r.Distance <= 40f && r.ActorSnoId == (int)SNOActor.x1_Fortress_Portal_Switch)
                         isGateNearby = true;
@@ -113,7 +113,7 @@ namespace Trinity.Components.Combat
                         isPriorityInteractableNearby = true;
                 }
 
-                var shouldIgnorePackSize = Combat.Routines.Current.ShouldIgnorePackSize();
+                var shouldIgnorePackSize = TrinityCombat.Routines.Current.ShouldIgnorePackSize();
 
                 var bossNearby = Core.Player.IsInBossEncounter && Core.Targets.Any(u => u.IsBoss && u.Distance < 60f);
 
@@ -251,7 +251,7 @@ namespace Trinity.Components.Combat
 
                 var questBasedKillAll = Core.Quests.IsKillAllRequired;
 
-                var routine = Combat.Routines.Current;
+                var routine = TrinityCombat.Routines.Current;
 
                 TrinityActor bestTarget = null;
 
@@ -260,8 +260,8 @@ namespace Trinity.Components.Combat
                     #region Foreach Loop
 
                     var playerInCriticalAvoidance = Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position);
-                    var leaderTarget = Combat.Party.Leader != null ? PartyHelper.FindLocalActor(Combat.Party.Leader.Target) : null;
-                    var isLeader = Combat.Party.Leader?.IsMe ?? false;
+                    var leaderTarget = TrinityCombat.Party.Leader != null ? PartyHelper.FindLocalActor(TrinityCombat.Party.Leader.Target) : null;
+                    var isLeader = TrinityCombat.Party.Leader?.IsMe ?? false;
 
 
                     foreach (var cacheObject in objects.Where(x => !x.IsPlayer))
@@ -295,7 +295,7 @@ namespace Trinity.Components.Combat
 
                         var item = cacheObject as TrinityItem;
 
-                        if (Combat.Routines.Current.ShouldIgnoreNonUnits() && !cacheObject.IsUnit && (item == null || !item.IsCosmeticItem))
+                        if (TrinityCombat.Routines.Current.ShouldIgnoreNonUnits() && !cacheObject.IsUnit && (item == null || !item.IsCosmeticItem))
                         {
                             cacheObject.WeightInfo += "FocussingUnits";
                             continue;
@@ -485,7 +485,7 @@ namespace Trinity.Components.Combat
 
                                     #region Basic Checks
 
-                                    if (Combat.CombatMode == CombatMode.KillAll || questBasedKillAll || isInSpecialKillAllScene)
+                                    if (TrinityCombat.CombatMode == CombatMode.KillAll || questBasedKillAll || isInSpecialKillAllScene)
                                     {
                                         //Dist:                160     140     120     100      80     60     40      20      0
                                         //Weight (25k Max):    -77400  -53400  -32600  -15000  -600   10600  18600   23400   25000
@@ -493,12 +493,12 @@ namespace Trinity.Components.Combat
                                         //Formula:   MaxWeight-(Distance * Distance * RangeFactor)
                                         //           RangeFactor effects how quickly weights go into negatives on far distances.                                                                    
 
-                                        var ignoreTrashTooFarAway = cacheObject.IsTrashMob && cacheObject.Distance > Combat.Routines.Current.TrashRange;
-                                        var ignoreElitesTooFarAway = cacheObject.IsElite && cacheObject.Distance > Combat.Routines.Current.EliteRange;
+                                        var ignoreTrashTooFarAway = cacheObject.IsTrashMob && cacheObject.Distance > TrinityCombat.Routines.Current.TrashRange;
+                                        var ignoreElitesTooFarAway = cacheObject.IsElite && cacheObject.Distance > TrinityCombat.Routines.Current.EliteRange;
 
                                         if (ignoreTrashTooFarAway || ignoreElitesTooFarAway)
                                         {
-                                            cacheObject.WeightInfo += $"Ignore Far Away Stuff TrashRange={Combat.Routines.Current.TrashRange} EliteRange={Combat.Routines.Current.EliteRange}";
+                                            cacheObject.WeightInfo += $"Ignore Far Away Stuff TrashRange={TrinityCombat.Routines.Current.TrashRange} EliteRange={TrinityCombat.Routines.Current.EliteRange}";
                                             cacheObject.Weight = 0;
                                             break;
                                         }
@@ -760,7 +760,7 @@ namespace Trinity.Components.Combat
                                         //{
                                         //    cacheObject.WeightInfo += $"Questing Mode - Ignoring Trash Pack Size Setting.";
                                         //}
-                                        else if (leaderTarget != null && !isLeader && leaderTarget.Distance < 60f && Combat.Party.Leader.IsInCombat)
+                                        else if (leaderTarget != null && !isLeader && leaderTarget.Distance < 60f && TrinityCombat.Party.Leader.IsInCombat)
                                         {
                                             cacheObject.WeightInfo += $"Ignoring Trash Pack Size for Leader's Target";
                                         }
@@ -768,10 +768,10 @@ namespace Trinity.Components.Combat
                                         {
                                             cacheObject.WeightInfo += $"Routine Ignoring Trash Pack Size.";
                                         }
-                                        else if (nearbyTrashCount < Combat.Routines.Current.ClusterSize && !Core.Minimap.MinimapIconAcdIds.Contains(cacheObject.AcdId) &&
+                                        else if (nearbyTrashCount < TrinityCombat.Routines.Current.ClusterSize && !Core.Minimap.MinimapIconAcdIds.Contains(cacheObject.AcdId) &&
                                                  !GameData.CorruptGrowthIds.Contains(cacheObject.ActorSnoId) && !isQuestGiverOutsideCombat && !bossNearby && !cacheObject.IsShadowClone)
                                         {
-                                            cacheObject.WeightInfo += $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {Combat.Routines.Current.ClusterSize})";
+                                            cacheObject.WeightInfo += $"Ignoring Below TrashPackSize ({nearbyTrashCount} < {TrinityCombat.Routines.Current.ClusterSize})";
                                             break;
                                         }
                                         else
@@ -922,7 +922,7 @@ namespace Trinity.Components.Combat
                                     }
 
                                     // Don't pickup items if we're doing a TownRun
-                                    if (!Combat.Loot.IsBackpackFull && !item.IsPickupNoClick)
+                                    if (!TrinityCombat.Loot.IsBackpackFull && !item.IsPickupNoClick)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for TownRun";
                                         break;
@@ -958,7 +958,7 @@ namespace Trinity.Components.Combat
 
                                     if (Core.Player.IsInTown)
                                     {
-                                        var trinityItem = Core.Actors.GetItemByAnnId(cacheObject.AnnId);
+                                        var trinityItem = Core.Actors.ItemByAnnId(cacheObject.AnnId);
                                         if (trinityItem != null)
                                         {
                                             if (Core.Settings.Items.DontPickupInTown && !trinityItem.IsItemAssigned)
@@ -979,7 +979,7 @@ namespace Trinity.Components.Combat
                                         cacheObject.WeightInfo += $"Ignoring previously dropped item";
                                     }
 
-                                    if (Core.Settings.Items.DisableLootingInCombat && Combat.IsInCombat && item.Distance > 8f)
+                                    if (Core.Settings.Items.DisableLootingInCombat && TrinityCombat.IsInCombat && item.Distance > 8f)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring(DisableLootingInCombat)";
                                         break;
@@ -1534,7 +1534,7 @@ namespace Trinity.Components.Combat
 
                             case TrinityObjectType.Interactable:
                                 {
-                                    if (Combat.CombatMode == CombatMode.SafeZerg)
+                                    if (TrinityCombat.CombatMode == CombatMode.SafeZerg)
                                     {
                                         cacheObject.WeightInfo += $"Ignore(Zerg)";
                                         break;
@@ -1694,7 +1694,7 @@ namespace Trinity.Components.Combat
 
 
                         // Anti-Flip flop. A new target needs to be 15% better than current.
-                        if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.AnnId == cacheObject.AnnId && bestTarget != null && !bestTarget.IsDestroyable)
+                        if (TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.AnnId == cacheObject.AnnId && bestTarget != null && !bestTarget.IsDestroyable)
                         {
                             cacheObject.Weight *= 1.15;
                             cacheObject.WeightInfo += " Last Target Boost ";
@@ -1982,9 +1982,9 @@ namespace Trinity.Components.Combat
             //return 1;
         }
 
-        private int LastTargetRActorGuid => Combat.Targeting.LastTarget?.RActorId ?? -1;
+        private int LastTargetRActorGuid => TrinityCombat.Targeting.LastTarget?.RActorId ?? -1;
 
-        private bool LastTargetIsSafeSpot => Combat.Targeting.LastTarget?.IsSafeSpot ?? false;
+        private bool LastTargetIsSafeSpot => TrinityCombat.Targeting.LastTarget?.IsSafeSpot ?? false;
 
         private static int GetBlacklistTargetTimes(TrinityActor currentTarget)
         {
@@ -2020,8 +2020,8 @@ namespace Trinity.Components.Combat
                    cacheObject.MonsterQuality == MonsterQuality.Rare ||
                    cacheObject.MonsterQuality == MonsterQuality.Champion ||
                    cacheObject.MonsterQuality == MonsterQuality.Minion
-                ? Combat.Routines.Current.EliteRange
-                : Combat.Routines.Current.TrashRange;
+                ? TrinityCombat.Routines.Current.EliteRange
+                : TrinityCombat.Routines.Current.TrashRange;
         }
 
         public double GoldFormula(TrinityItem cacheObject)
@@ -2165,8 +2165,8 @@ namespace Trinity.Components.Combat
 
             if (cacheObject.Type == TrinityObjectType.Unit)
             {
-                var eliteRange = Combat.Routines.Current.EliteRange;
-                var nonEliteRange = Combat.Routines.Current.TrashRange;
+                var eliteRange = TrinityCombat.Routines.Current.EliteRange;
+                var nonEliteRange = TrinityCombat.Routines.Current.TrashRange;
                 //var eliteRange = isQuesting ? questingEliteRange : Combat.Routines.Current.EliteRange;
                 //var nonEliteRange = isQuesting ? questingTrashRange : Combat.Routines.Current.TrashRange;
                 //; //RoutineAdapter.Routine.TrashRange; //Core.Settings.Combat.Misc.NonEliteRange;
@@ -2184,14 +2184,14 @@ namespace Trinity.Components.Combat
 
         public double PackDensityFormula(TrinityActor cacheObject, List<TrinityActor> objects)
         {
-            if (Combat.CombatMode == CombatMode.KillAll)
+            if (TrinityCombat.CombatMode == CombatMode.KillAll)
                 return 0;
 
             var pack = objects.Where(
-                x => x.IsUnit && x.IsHostile && x.Position.Distance(cacheObject.Position) < Combat.Routines.Current.TrashRange && (!ShouldIgnoreElite(cacheObject) || !x.IsElite))
+                x => x.IsUnit && x.IsHostile && x.Position.Distance(cacheObject.Position) < TrinityCombat.Routines.Current.TrashRange && (!ShouldIgnoreElite(cacheObject) || !x.IsElite))
                 .ToList();
 
-            var packDistanceValue = pack.Sum(mob => 100d * ((Combat.Routines.Current.TrashRange - cacheObject.RadiusDistance) / Combat.Routines.Current.TrashRange));
+            var packDistanceValue = pack.Sum(mob => 100d * ((TrinityCombat.Routines.Current.TrashRange - cacheObject.RadiusDistance) / TrinityCombat.Routines.Current.TrashRange));
 
             return packDistanceValue < 0 ? 0 : packDistanceValue;
         }

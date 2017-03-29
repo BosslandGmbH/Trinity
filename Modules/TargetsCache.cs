@@ -301,7 +301,7 @@ namespace Trinity.Modules
                     break;
 
                 case TrinityObjectType.Unit:
-                    if (Combat.CombatMode == CombatMode.KillAll && cacheObject.IsWalkable)
+                    if (TrinityCombat.CombatMode == CombatMode.KillAll && cacheObject.IsWalkable)
                         return true;
                     if (cacheObject.IsElite && cacheObject.Distance < 40f || cacheObject.IsWalkable)
                         return true;
@@ -385,7 +385,7 @@ namespace Trinity.Modules
 
         private bool ShouldCacheItem(TrinityItem cacheObject)
         {
-            if (!cacheObject.IsPickupNoClick && !Combat.Loot.IsBackpackFull)
+            if (!cacheObject.IsPickupNoClick && !TrinityCombat.Loot.IsBackpackFull)
             {
                 cacheObject.AddCacheInfo("BackpackFull");
                 return false;
@@ -409,7 +409,7 @@ namespace Trinity.Modules
                 return false;
             }
 
-            if (!Combat.Loot.ShouldPickup(cacheObject))
+            if (!TrinityCombat.Loot.ShouldPickup(cacheObject))
             {
                 cacheObject.AddCacheInfo("LootProvider.ShouldPickup");
                 return false;

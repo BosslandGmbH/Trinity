@@ -15,14 +15,14 @@ namespace Trinity.DbProvider
 
         public float CurrentCastRange => CurrentPower?.MinimumRange ?? RoutineBase.DefaultWeaponDistance;
 
-        public TrinityPower CurrentPower => Combat.Targeting.CurrentPower;
+        public TrinityPower CurrentPower => TrinityCombat.Targeting.CurrentPower;
 
-        public TrinityActor CurrentTarget => Combat.Targeting.CurrentTarget;
+        public TrinityActor CurrentTarget => TrinityCombat.Targeting.CurrentTarget;
 
         public int CurrentTargetRActorId => CurrentTarget?.RActorId ?? -1;
 
-        public bool IsAvoiding => Combat.IsCurrentlyAvoiding;
+        public bool IsAvoiding => TrinityCombat.IsCurrentlyAvoiding;
 
-        public bool IsKiting => Combat.IsCurrentlyKiting;
+        public bool IsKiting => TrinityCombat.IsCurrentlyKiting;
     }
 }

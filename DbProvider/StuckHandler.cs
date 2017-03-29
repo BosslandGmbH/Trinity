@@ -169,19 +169,19 @@ namespace Trinity.DbProvider
                 return true;
             }
 
-            if (Combat.IsCurrentlyAvoiding)
+            if (TrinityCombat.IsCurrentlyAvoiding)
             {
                 Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Currently Avoiding");
                 return false;
             }
 
-            if (Combat.IsCurrentlyKiting)
+            if (TrinityCombat.IsCurrentlyKiting)
             {
                 Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Currently Kiting");
                 return false;
             }
 
-            var isWaiting = Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentPower?.SNOPower == SNOPower.Walk && Core.Player.MovementSpeed < 4 && Core.Grids.CanRayWalk(ZetaDia.Me.Position, Combat.Targeting.CurrentTarget.Position);
+            var isWaiting = TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentPower?.SNOPower == SNOPower.Walk && Core.Player.MovementSpeed < 4 && Core.Grids.CanRayWalk(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
             if (isWaiting)
             {
                 Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Waiting (Routine Walk)");
@@ -189,7 +189,7 @@ namespace Trinity.DbProvider
             }
 
             var secondsSincePowerUse = DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds;
-            if (secondsSincePowerUse < 4 && !_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && Combat.IsInCombat)
+            if (secondsSincePowerUse < 4 && !_invalidBusyPowers.Contains(SpellHistory.LastPowerUsed) && TrinityCombat.IsInCombat)
             {
                 Core.Logger.Log(LogCategory.StuckHandler, $"Not Stuck: Recently cast power in combat ({SpellHistory.LastPowerUsed}, {secondsSincePowerUse}s ago)");
                 return true;

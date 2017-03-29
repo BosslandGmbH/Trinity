@@ -164,7 +164,7 @@ namespace Trinity.Components.Coroutines.Town
                     if (newItem != null)
                     {
                         var newLegendaryItem = Legendary.GetItemByACD(newItem);
-                        var newTrinityItem = Core.Actors.GetItemByAnnId(newItem.AnnId);
+                        var newTrinityItem = Core.Actors.ItemByAnnId(newItem.AnnId);
                         ItemEvents.FireItemCubed(newTrinityItem);
 
                         if(newTrinityItem.IsPrimalAncient)

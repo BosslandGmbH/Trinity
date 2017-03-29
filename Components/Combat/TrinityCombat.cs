@@ -14,9 +14,9 @@ using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Components.Combat
 {
-    public static class Combat
+    public static class TrinityCombat
     {
-        static Combat()
+        static TrinityCombat()
         {
             BotMain.OnStart += (b) => CombatMode = CombatMode.Normal;
             GameEvents.OnGameChanged += (s,a) => CombatMode = CombatMode.Normal;
@@ -64,6 +64,12 @@ namespace Trinity.Components.Combat
 
             if (Core.IsOutOfGame || Core.Player.IsDead)
                 return false;
+
+            if (!Core.Scenes.CurrentWorldScenes.Any())
+            {
+                Core.Logger.Debug("MainCombatTask Waiting for scene data to load");
+                return false;
+            }
 
             await UsePotion.Execute();
             await OpenTreasureBags.Execute();

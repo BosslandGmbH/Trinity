@@ -160,6 +160,9 @@ namespace Trinity.Framework.Actors.ActorTypes
         public override void OnCreated()
         {
             Attributes = new ActorAttributes(FastAttributeGroupId);
+
+            //var test = new ActorAttributes2(CommonData);
+
             FullUpdate();
         }
 
@@ -229,7 +232,7 @@ namespace Trinity.Framework.Actors.ActorTypes
         /// </summary>
         public float ZDiff => Math.Abs(Position.Z - Core.Player.Position.Z);
 
-        public bool IsLastTarget => RActorId == (Combat.Targeting.LastTarget?.RActorId ?? -1);
+        public bool IsLastTarget => RActorId == (TrinityCombat.Targeting.LastTarget?.RActorId ?? -1);
         public string DebugAvoidanceFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.AvoidanceFlags.ToString();
         public string DebugNavCellFlags => Core.Avoidance.Grid.GetNearestNode(Position)?.NodeFlags.ToString();
         public bool IsInAvoidance => Core.Avoidance.Grid.IsLocationInFlags(Position, AvoidanceFlags.Avoidance);

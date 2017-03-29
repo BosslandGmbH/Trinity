@@ -846,7 +846,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         {
             try
             {
-                var target = Combat.Targeting.CurrentTarget;
+                var target = TrinityCombat.Targeting.CurrentTarget;
                 if (target == null)
                     return;
 
@@ -858,7 +858,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 dc.DrawEllipse(PinkBrush, null, targetPoint, GridSize, GridSize);
                 dc.DrawLine(PinkPen, Player.Point, targetPoint);
 
-                var power = Combat.Targeting.CurrentPower;
+                var power = TrinityCombat.Targeting.CurrentPower;
                 if (power == null)
                     return;
 
@@ -870,7 +870,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                 }
                 else
                 {
-                    var spellTarget = Core.Actors.GetActorByAcdId<TrinityActor>(power.TargetAcdId);
+                    var spellTarget = Core.Actors.RActorByAcdId<TrinityActor>(power.TargetAcdId);
                     if (spellTarget == null)
                         return;
 

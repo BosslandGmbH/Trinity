@@ -128,7 +128,7 @@ namespace Trinity.Framework.Objects.Memory
         {
             var modString = Modifer.GetType() != typeof(int) ? $" [ {Descripter?.ParameterType}: {Modifer}: {Key.ModifierId} ]" : string.Empty;
 
-            return $"{Key.DescripterId}: {Key.BaseAttribute} ({(int)Key.BaseAttribute}){modString} i:{Integer} f:{Single} Value={((float)GetValue()).ToString("0.##")}";
+            return $"{Key.DescripterId}: {Key.BaseAttribute} ({(int)Key.BaseAttribute}){modString} i:{Integer} f:{Single} Value={((float)GetValue()):0.##}";
         }
     }
 }

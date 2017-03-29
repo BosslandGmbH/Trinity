@@ -54,8 +54,6 @@ namespace Trinity.Modules
 
         public Quest CurrentQuest { get; private set; }
 
-        //public ActInfo Act { get; private set; }
-
         public QuestStepData CurrentStepData { get; private set; }
 
         public QuestData QuestData { get; private set; }

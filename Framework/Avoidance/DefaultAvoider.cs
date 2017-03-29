@@ -57,7 +57,7 @@ namespace Trinity.Framework.Avoidance
 
         public TimeSpan TimeSinceLastAvoid => DateTime.UtcNow.Subtract(LastAvoidTime);
         public TimeSpan TimeSinceLastKite => DateTime.UtcNow.Subtract(LastKiteTime);
-        public bool IsKiteOnCooldown => Combat.Routines.Current.KiteDistance > 0 && Core.Avoidance.Avoider.TimeSinceLastKite.TotalMilliseconds < Combat.Routines.Current.KiteStutterDuration;
+        public bool IsKiteOnCooldown => TrinityCombat.Routines.Current.KiteDistance > 0 && Core.Avoidance.Avoider.TimeSinceLastKite.TotalMilliseconds < TrinityCombat.Routines.Current.KiteStutterDuration;
 
         private readonly PerFrameCachedValue<bool> _shouldKite = new PerFrameCachedValue<bool>(GetShouldKite);
         private readonly PerFrameCachedValue<bool> _shouldAvoid = new PerFrameCachedValue<bool>(GetShouldAvoid);
@@ -93,7 +93,7 @@ namespace Trinity.Framework.Avoidance
                     return false;
                 }
 
-                if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.Distance < 10f && GizmoProximityTypes.Contains(Combat.Targeting.CurrentTarget.Type))
+                if (TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.Distance < 10f && GizmoProximityTypes.Contains(TrinityCombat.Targeting.CurrentTarget.Type))
                 {
                     Core.Logger.Debug(LogCategory.Avoidance, "Not Avoiding because gizmo nearby");
                     return false;
@@ -137,7 +137,7 @@ namespace Trinity.Framework.Avoidance
                         return true;
                     }
 
-                    if (Combat.Targeting.CurrentTarget != null && Core.Grids.Avoidance.IsIntersectedByFlags(ZetaDia.Me.Position, Combat.Targeting.CurrentTarget.Position, AvoidanceFlags.CriticalAvoidance))
+                    if (TrinityCombat.Targeting.CurrentTarget != null && Core.Grids.Avoidance.IsIntersectedByFlags(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position, AvoidanceFlags.CriticalAvoidance))
                     {
                         TargetUtil.ClearCurrentTarget("Current Target Intersects Critical Avoidance.");
                     }
@@ -156,7 +156,7 @@ namespace Trinity.Framework.Avoidance
 
         private static float TargetZDif
         {
-            get { return Combat.Targeting.CurrentTarget == null ? 0 : Math.Abs(Combat.Targeting.CurrentTarget.Position.Z - ZetaDia.Me.Position.Z); }
+            get { return TrinityCombat.Targeting.CurrentTarget == null ? 0 : Math.Abs(TrinityCombat.Targeting.CurrentTarget.Position.Z - ZetaDia.Me.Position.Z); }
         }
 
         public Vector3 SafeSpot
@@ -203,7 +203,7 @@ namespace Trinity.Framework.Avoidance
             if (Core.Buffs.HasInvulnerableShrine)
                 return false;
 
-            if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.IsTreasureGoblin)
+            if (TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.IsTreasureGoblin)
                 return false;
 
             if (Core.Player.IsInTown)
@@ -215,7 +215,7 @@ namespace Trinity.Framework.Avoidance
             if (ShouldAvoidCritical)
                 return true;
 
-            if (Combat.Routines.Current?.ShouldIgnoreAvoidance() ?? false)
+            if (TrinityCombat.Routines.Current?.ShouldIgnoreAvoidance() ?? false)
             {
                 Core.Logger.Debug(LogCategory.Avoidance, "Not Avoiding because routine has said no");
                 return false;
@@ -235,19 +235,19 @@ namespace Trinity.Framework.Avoidance
             if (Core.Player.IsInTown)
                 return false;
 
-            if (!Combat.IsInCombat)
+            if (!TrinityCombat.IsInCombat)
                 return false;
 
-            if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.IsTreasureGoblin)
+            if (TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.IsTreasureGoblin)
                 return false;
 
-            if (Combat.Routines.Current.ShouldIgnoreKiting())
+            if (TrinityCombat.Routines.Current.ShouldIgnoreKiting())
             {
                 Core.Logger.Debug(LogCategory.Avoidance, "Not Kiting because routine has said no");
                 return false;
             }
 
-            if (Combat.Targeting.CurrentTarget?.Distance < 10f && GizmoProximityTypes.Contains(Combat.Targeting.CurrentTarget.Type))
+            if (TrinityCombat.Targeting.CurrentTarget?.Distance < 10f && GizmoProximityTypes.Contains(TrinityCombat.Targeting.CurrentTarget.Type))
             {
                 Core.Logger.Debug(LogCategory.Avoidance, "Not Kiting because gizmo nearby");
                 return false;
@@ -259,7 +259,7 @@ namespace Trinity.Framework.Avoidance
                 return false;
             }
 
-            var currentTarget = Combat.Targeting.CurrentTarget;
+            var currentTarget = TrinityCombat.Targeting.CurrentTarget;
             var isCloseLargeMonster = currentTarget?.Distance < 12f && (currentTarget.MonsterSize != MonsterSize.Big || currentTarget.MonsterSize != MonsterSize.Boss);
 
             if (PlayerMover.IsBlocked && !isCloseLargeMonster && Core.BlockedCheck.BlockedTime.TotalMilliseconds > 8000 && !Core.Avoidance.InCriticalAvoidance(ZetaDia.Me.Position))
@@ -269,38 +269,38 @@ namespace Trinity.Framework.Avoidance
             }
 
             var playerHealthPct = Core.Player.CurrentHealthPct * 100;
-            if (playerHealthPct > 50 && Combat.Targeting.CurrentTarget != null)
+            if (playerHealthPct > 50 && TrinityCombat.Targeting.CurrentTarget != null)
             {
                 // Restrict kiting when the current target is on the edge of line of sight
                 // This should help with flip-flopping around corners and doorways.
 
                 var from = Core.Player.Position;
-                var to = Combat.Targeting.CurrentTarget.Position;
+                var to = TrinityCombat.Targeting.CurrentTarget.Position;
 
                 var losAngleA = MathEx.WrapAngle((float)(MathUtil.FindDirectionRadian(from, to) - Math.Round(Math.PI, 5) / 2));
-                var losPositionA = MathEx.GetPointAt(from, Combat.Targeting.CurrentTarget.Distance, losAngleA);
+                var losPositionA = MathEx.GetPointAt(from, TrinityCombat.Targeting.CurrentTarget.Distance, losAngleA);
                 if (!Core.Avoidance.Grid.CanRayCast(from, losPositionA))
                     return false;
 
                 var losAngleB = MathEx.WrapAngle((float)(MathUtil.FindDirectionRadian(from, to) + Math.Round(Math.PI, 5) / 2));
-                var losPositionB = MathEx.GetPointAt(from, Combat.Targeting.CurrentTarget.Distance, losAngleB);
+                var losPositionB = MathEx.GetPointAt(from, TrinityCombat.Targeting.CurrentTarget.Distance, losAngleB);
                 if (!Core.Avoidance.Grid.CanRayCast(from, losPositionB))
                     return false;
             }
 
-            var isAtKiteHealth = playerHealthPct <= Combat.Routines.Current.KiteHealthPct;
-            if (isAtKiteHealth && TargetZDif < 4 && Combat.Routines.Current.KiteMode != KiteMode.Never)
+            var isAtKiteHealth = playerHealthPct <= TrinityCombat.Routines.Current.KiteHealthPct;
+            if (isAtKiteHealth && TargetZDif < 4 && TrinityCombat.Routines.Current.KiteMode != KiteMode.Never)
             {
-                var canSeeTarget = Combat.Targeting.CurrentTarget == null || Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, Combat.Targeting.CurrentTarget.Position);
+                var canSeeTarget = TrinityCombat.Targeting.CurrentTarget == null || Core.Avoidance.Grid.CanRayCast(ZetaDia.Me.Position, TrinityCombat.Targeting.CurrentTarget.Position);
                 if (canSeeTarget)
                 {
                     if (Core.Grids.Avoidance.IsStandingInFlags(AvoidanceFlags.KiteFrom))
                     {
-                        if (DateTime.UtcNow.Subtract(LastKiteTime).TotalMilliseconds > Combat.Routines.Current.KiteStutterDelay)
+                        if (DateTime.UtcNow.Subtract(LastKiteTime).TotalMilliseconds > TrinityCombat.Routines.Current.KiteStutterDelay)
                         {
                             Core.Logger.Debug(LogCategory.Avoidance, "Kite Shutter Triggered");
                             LastKiteTime = DateTime.UtcNow;
-                            KiteStutterCooldownEndTime = DateTime.UtcNow.AddMilliseconds(Combat.Routines.Current.KiteStutterDuration);
+                            KiteStutterCooldownEndTime = DateTime.UtcNow.AddMilliseconds(TrinityCombat.Routines.Current.KiteStutterDuration);
                             return true;
                         }
 

@@ -32,7 +32,7 @@ namespace Trinity.Modules
             var reasons = Core.Settings.Advanced.StopReasons;
             if (reasons != GameStopReasons.None)
             {
-                foreach(var actor in Core.Actors.AllRActors)
+                foreach(var actor in Core.Actors.Actors)
                 {
                     if (actor.IsTreasureGoblin && reasons.HasFlag(GameStopReasons.GoblinFound))
                         Stop($"Goblin '{actor.Name}' Found at distance {actor.Distance}");

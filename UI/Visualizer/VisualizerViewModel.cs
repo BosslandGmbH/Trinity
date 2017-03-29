@@ -135,7 +135,7 @@ namespace Trinity.UI.Visualizer
 
                 Core.Scenes.Update();
                 Core.Update();
-                Combat.Weighting.WeightActors(Core.Targets);
+                TrinityCombat.Weighting.WeightActors(Core.Targets);
                 UpdateVisualizer();
                 return false;
             }
@@ -212,7 +212,7 @@ namespace Trinity.UI.Visualizer
                 //    Core.Logger.Verbose("Skipping grid update so grid items can be clicked properly");
                 //}
 
-                CurrentTarget = Combat.Targeting.CurrentTarget;
+                CurrentTarget = TrinityCombat.Targeting.CurrentTarget;
                 Player = Core.Player.Actor;
                 if (Player != null)
                 {

@@ -51,7 +51,7 @@ namespace Trinity.Routines.Witchdoctor
 
         private bool IgnoreAvoidanceCondition()
         {
-            var isFirebatsSelected = Combat.Targeting.CurrentPower?.SNOPower == SNOPower.Witchdoctor_Firebats;
+            var isFirebatsSelected = TrinityCombat.Targeting.CurrentPower?.SNOPower == SNOPower.Witchdoctor_Firebats;
             var isInAvoidance = Core.Avoidance.InCriticalAvoidance(Player.Position);
             if (isFirebatsSelected && TargetUtil.AnyMobsInRange(FireBatsRange) && Player.CurrentHealthPct > 0.5f && !isInAvoidance)
                 return true;

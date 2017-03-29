@@ -89,7 +89,7 @@ namespace Trinity.Modules
                     return false;
 
                 // sometimes bosses take a LONG time
-                if (Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.IsBoss)
+                if (TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.IsBoss)
                 {
                     Core.Logger.Log("Current target is boss, gold inactivity reset");
                     ResetGold();

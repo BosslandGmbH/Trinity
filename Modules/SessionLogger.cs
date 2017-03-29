@@ -120,7 +120,7 @@ namespace Trinity.Modules
         {
             if (!IsRunning) return;
 
-            foreach (var actor in Core.Actors.AllRActors)
+            foreach (var actor in Core.Actors.Actors)
             {
                 RecordActorStats(actor);
             }

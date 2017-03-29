@@ -44,7 +44,7 @@ namespace Trinity.Components.Coroutines.Town
             if (i.IsProtected())
                 return false;
 
-            var decision = Combat.Combat.Loot.ShouldStash(i);
+            var decision = Combat.TrinityCombat.Loot.ShouldStash(i);
             Cache.Add(i.AnnId, decision);
             return decision;
         }

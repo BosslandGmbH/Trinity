@@ -124,7 +124,7 @@ namespace Trinity.Modules
                         UpdateProjectileBlockers(obj);
                     }
 
-                    foreach (var door in Core.Actors.AllRActors.Where(a => a.Type == TrinityObjectType.Door))
+                    foreach (var door in Core.Actors.Actors.Where(a => a.Type == TrinityObjectType.Door))
                     {
                         UpdateDoorFlags(door);
                     }
@@ -317,14 +317,14 @@ namespace Trinity.Modules
 
         public void UpdateKiteFromFlags(TrinityActor actor, AvoidanceLayer layer)
         {
-            if (Combat.Routines.Current == null)
+            if (TrinityCombat.Routines.Current == null)
             {
                 Core.Logger.Debug("UpdateKiteFromFlags failed to update becasue no routine is selected");
                 return;
             }
 
-            var kiteMode = Combat.Routines.Current.KiteMode;
-            var kiteDistance = Combat.Routines.Current.KiteDistance;
+            var kiteMode = TrinityCombat.Routines.Current.KiteMode;
+            var kiteDistance = TrinityCombat.Routines.Current.KiteDistance;
 
             if (kiteMode == KiteMode.Never)
                 return;

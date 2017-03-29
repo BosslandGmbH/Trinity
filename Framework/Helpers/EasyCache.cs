@@ -8,7 +8,7 @@ namespace Trinity.Framework.Helpers
     {
         public interface ICacheValue
         {
-            T Value<T>();
+            T Cast<T>();
         }
 
         public class CacheValue<T> : ICacheValue
@@ -16,19 +16,24 @@ namespace Trinity.Framework.Helpers
             public DateTime LastRefreshed;
             public T CachedValue;
 
-            public TV Value<TV>() => (TV)Convert.ChangeType(CachedValue, typeof(T));
+            public TResult Cast<TResult>() => (TResult)Convert.ChangeType(CachedValue, typeof(T));
         }
 
         public TimeSpan Duration;
 
         public Dictionary<string, ICacheValue> CachedValues = new Dictionary<string, ICacheValue>();
 
-        public T Value<T>(Func<T> valueProducer, [CallerMemberName] string caller = "")
+        public EasyCache(TimeSpan duration)
         {
-            return Value(caller, valueProducer);
+            Duration = duration;
         }
 
-        public T Value<T>(string propertyName, Func<T> valueProducer)
+        public T GetValue<T>(Func<T> valueProducer, [CallerMemberName] string caller = "")
+        {
+            return GetValue(caller, valueProducer);
+        }
+
+        public T GetValue<T>(string propertyName, Func<T> valueProducer)
         {
             if (!CachedValues.ContainsKey(propertyName))
                 return CreateValue(propertyName, valueProducer);

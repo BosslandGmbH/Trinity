@@ -35,7 +35,7 @@ namespace Trinity.Components.Coroutines.Town
             if (i.IsUnidentified)
                 return false;
 
-            return Combat.Combat.Loot.ShouldSell(i) && !Combat.Combat.Loot.ShouldSalvage(i) && !Combat.Combat.Loot.ShouldStash(i);
+            return Combat.TrinityCombat.Loot.ShouldSell(i) && !Combat.TrinityCombat.Loot.ShouldSalvage(i) && !Combat.TrinityCombat.Loot.ShouldStash(i);
         }
 
         public async static Task<bool> Execute()

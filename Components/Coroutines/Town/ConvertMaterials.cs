@@ -1,243 +1,288 @@
-﻿//using Buddy.Coroutines;
-//using System.Collections.Generic;
-//using System.Linq; using Trinity.Framework;
-//using System.Threading.Tasks;
-//using Trinity.Coroutines.Resources;
-//using Trinity.Framework;
-//using Trinity.Framework.Actors.ActorTypes;
-//using Trinity.Framework.Helpers;
-//using Zeta.Game;
-//using Zeta.Game.Internals.Actors;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Buddy.Coroutines;
+using Trinity;
+using Trinity.Framework;
+using Trinity.Framework.Actors;
+using Trinity.Framework.Actors.ActorTypes;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
+using Trinity.Framework.Reference;
+using Trinity.Settings;
+using Zeta.Common;
+using Zeta.Game;
+using Zeta.Game.Internals;
+using Zeta.Game.Internals.Actors;
 
-//namespace Trinity.Coroutines.Town
-//{
-//    /// <summary>
-//    /// Converts crafting materials into other types of crafting materials
-//    /// </summary>
-//    public class ConvertMaterials
-//    {
-//        public static List<TrinityItem> GetBackpackItemsOfQuality(List<ItemQuality> qualities)
-//        {
-//            // DB is reporting items as being still there after transmution, add a bunch of checks :(
-//            return Core.Inventory.Backpack.Items.Where(i =>
-//            {
-//                if (!i.IsValid)
-//                {
-//                    //Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] Invalid item '{0}' IsValid/Disposed", i.InternalName);
-//                    return false;
-//                }
+namespace Trinity.Components.Coroutines.Town
+{
+    /// <summary>
+    /// Converts crafting materials into other types of crafting materials
+    /// </summary>
+    public class ConvertMaterials
+    {
+        public static bool CanRun(CurrencyType from, CurrencyType to, bool excludeLegendaryUpgradeRares = false)
+        {
+            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
+                return false;
 
-//                if (!i.IsCraftingReagent && i.RequiredLevel < 70)
-//                    return false;
+            if (!GetSacraficialItems(to, excludeLegendaryUpgradeRares).Any())
+            {
+                Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] You don't have enough valid weapon/armor/jewellery in backpack", from, to);
+                return false;
+            }
 
-//                if (i.ItemBaseType != ItemBaseType.Armor && i.ItemBaseType != ItemBaseType.Weapon && i.ItemBaseType != ItemBaseType.Jewelry)
-//                {
-//                    //Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] Invalid item '{0}' BaseType={1}", i.InternalName, i.DBItemBaseType);
-//                    return false;
-//                }
+            if (HasCurrency(from))
+            {
+                Core.Logger.Verbose(LogCategory.Behavior, $"[ConvertMaterials] We have enough Materials to convert from {from} ({GetCurrency(from)}) to {to}, Deaths={Core.Inventory.Currency.DeathsBreath}");
+                return true;
+            }
 
-//                var stackQuantity = i.ItemStackQuantity;
-//                var isVendor = i.IsVendorBought;
-//                if (!isVendor && stackQuantity != 0 || isVendor && stackQuantity > 1)
-//                {
-//                    //Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] Invalid item '{0}' stackQuantity={1}", i.InternalName, stackQuantity);
-//                    return false;
-//                }
+            Core.Logger.Verbose(LogCategory.Behavior, $"[ConvertMaterials] Not Enough Backpack materials to convert from {from} ({GetCurrency(from)}) to {to}, Deaths={Core.Inventory.Currency.DeathsBreath}");
+            return false;
+        }
 
-//                if (!qualities.Contains(i.ItemQualityLevel))
-//                {
-//                    //Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] Invalid item '{0}' Quality LinkColor={1} DBQuality={2}", i.InternalName, i.GetItemQuality(), i.ItemQualityLevel);
-//                    return false;
-//                }
+        /// <summary>
+        /// Converts crafting materials into other types of crafting materials
+        /// </summary>
+        /// <param name="to">the type of material you will get more of</param>
+        public static async Task<bool> Execute(CurrencyType to)
+        {
+            if (!UIElements.TransmuteItemsDialog.IsVisible)
+            {
+                Core.Logger.Log("Transmute dialog must be open");
+                return false;
+            }
 
-//                return true;
-//            }).ToList();
-//        }
+            foreach (var currency in GetOtherCurrency(to).OrderByDescending(c => Core.Inventory.Currency.GetCurrency(c)))
+            {
+                if (CanRun(currency, to))
+                {
+                    await Execute(currency, to);
+                }
+            }
+            return true;
+        }
 
-//        public static bool CanRun(InventoryItemType from, InventoryItemType to, bool excludeLegendaryUpgradeRares = false, bool checkStash = false)
-//        {
-//            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
-//                return false;
+        /// <summary>
+        /// Converts crafting materials into other types of crafting materials
+        /// </summary>
+        /// <param name="from">the type of material you will consume</param>
+        /// <param name="to">the type of material you will get more of</param>
+        public static async Task<bool> Execute(CurrencyType from, CurrencyType to)
+        {
+            Core.Logger.Log("[ConvertMaterials] Wooo! Lets convert some {0} to {1}", from, to);
 
-//            if (!Inventory.MaterialConversionTypes.Contains(to) || !Inventory.MaterialConversionTypes.Contains(from))
-//            {
-//                Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] Unable to convert from {0} to {1}", from, to);
-//                return false;
-//            }
+            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
+                return false;
 
-//            if (!GetSacraficialItems(to, excludeLegendaryUpgradeRares).Any())
-//            {
-//                Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] You don't have enough valid weapon/armor/jewellery in backpack", from, to);
-//                return false;
-//            }
+            if (!CurrencyConversionTypes.Contains(to) || !CurrencyConversionTypes.Contains(from))
+            {
+                Core.Logger.Log("[Cube] Unable to convert from {0} to {1}", from, to);
+                return false;
+            }
 
-//            Inventory.Materials.Update();
-//            Inventory.Materials.LogCounts();
+            var fromAmount = GetCurrency(from);
+            var toAmount = GetCurrency(to);
+            var sacraficialItems = GetSacraficialItems(to);
 
-//            if (checkStash)
-//            {
-//                if (Inventory.Materials[InventoryItemType.DeathsBreath].TotalStackQuantity >= 1 && Inventory.Materials[from].TotalStackQuantity > 100)
-//                {
-//                    Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] Enough materials to convert from {0} ({1}) to {2}",
-//                        from, Inventory.Materials[from].TotalStackQuantity, to);
+            Core.Logger.Verbose($"[ConvertMaterials] Starting Material Counts DeathsBreath={Core.Inventory.Currency.DeathsBreath} {from}={fromAmount} {to}={toAmount} SacraficialItems={sacraficialItems.Count}");
 
-//                    return true;
-//                }
-//            }
+            while (CanRun(from, to))
+            {                
+                var item = GetSacraficialItems(to).First();
+                var recipe = GetRecipeFromCurrency(from);
 
-//            if (Inventory.Materials[from].BackpackStackQuantity > 100)
-//            {
-//                Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] We have enough Backpack materials to convert from {0} ({1}) to {2}",
-//                    from, Inventory.Materials[from].BackpackStackQuantity, to);
+                await Transmute.Execute(item, recipe);
+                await Coroutine.Sleep(1250);
+                await Coroutine.Yield();
+                Core.Update();
 
-//                return true;
-//            }
+                var newToAmount = GetCurrency(to);
+                if (newToAmount > toAmount)
+                {
+                    Core.Logger.Log("[ConvertMaterials] Converted materials '{0}' ---> '{1}'", from, to);
+                    toAmount = newToAmount;
+                    fromAmount = GetCurrency(from);
+                    ConsecutiveFailures = 0;
+                    Core.Inventory.InvalidAnnIds.Add(item.AnnId);
+                }
+                else
+                {
+                    ConsecutiveFailures++;
+                    if (ConsecutiveFailures > 3)
+                    {
+                        Core.Inventory.InvalidAnnIds.Add(item.AnnId);
+                    }
+                    Core.Logger.Error("[ConvertMaterials] Failed to convert materials");
+                    return false;
+                }
 
-//            Core.Logger.Verbose(LogCategory.Behavior, "[ConvertMaterials] Not Enough Backpack materials to convert from {0} ({1}) to {2}, Deaths={3}",
-//                from, Inventory.Materials[from].BackpackStackQuantity, to, Inventory.Materials[InventoryItemType.DeathsBreath].BackpackStackQuantity);
+                await Coroutine.Sleep(100);
+                await Coroutine.Yield();
+            }
 
-//            return false;
-//        }
+            Core.Logger.Verbose($"[ConvertMaterials] Finishing Material Counts DeathsBreath={Core.Inventory.Currency.DeathsBreath} {from}={fromAmount} {to}={toAmount} SacraficialItems={sacraficialItems.Count}");
 
-//        /// <summary>
-//        /// Converts crafting materials into other types of crafting materials
-//        /// </summary>
-//        /// <param name="from">the type of material you will consume</param>
-//		/// <param name="to">the type of material you will get more of</param>
-//        public static async Task<bool> Execute(InventoryItemType from, InventoryItemType to)
-//        {
-//            Core.Logger.Log("[ConvertMaterials] Wooo! Lets convert some {0} to {1}", from, to);
+            return true;
+        }
 
-//            if (!ZetaDia.IsInGame || !ZetaDia.IsInTown)
-//                return false;
+        public static int ConsecutiveFailures { get; set; }
 
-//            if (!Inventory.MaterialConversionTypes.Contains(to) || !Inventory.MaterialConversionTypes.Contains(from))
-//            {
-//                Core.Logger.Log("[Cube] Unable to convert from {0} to {1}", from, to);
-//                return false;
-//            }
+        public static bool HasCurrency(CurrencyType from)
+        {
+            var recipe = GetRecipeFromCurrency(from);
+            return (int)recipe != -1 && Core.Inventory.Currency.HasCurrency(recipe);
+        }
 
-//            var backpackDeathsBreathAmount = Core.Inventory.Currency.DeathsBreath.Select(i => i.ItemStackQuantity).Sum();
-//            var backpackFromMaterialAmount = Inventory.Backpack.OfType(from).Select(i => i.ItemStackQuantity).Sum();
-//            var backpackToMaterialAmount = Inventory.Backpack.OfType(to).Select(i => i.ItemStackQuantity).Sum();
+        public static TransmuteRecipe GetRecipeFromCurrency(CurrencyType from)
+        {
+            switch (from)
+            {
+                case CurrencyType.ArcaneDust:
+                    return TransmuteRecipe.ConvertCraftingMaterialsFromMagic;
+                case CurrencyType.VeiledCrystal:
+                    return TransmuteRecipe.ConvertCraftingMaterialsFromRare;
+                case CurrencyType.ReusableParts:
+                    return TransmuteRecipe.ConvertCraftingMaterialsFromNormal;
+            }
+            return (TransmuteRecipe)(-1);
+        }
 
-//            Inventory.Materials.Update();
-//            var sacraficialItems = GetSacraficialItems(to);
+        public static TransmuteRecipe GetRecipeToCurrency(CurrencyType to, TrinityItem item)
+        {
+            var quality = item.TrinityItemQuality;
+            switch (to)
+            {
+                case CurrencyType.ArcaneDust:
+                    return quality == TrinityItemQuality.Rare 
+                        ? TransmuteRecipe.ConvertCraftingMaterialsFromRare 
+                        : TransmuteRecipe.ConvertCraftingMaterialsFromNormal;
 
-//            Core.Logger.Verbose("[ConvertMaterials] Starting Material Counts DeathsBreath={0} {1}={2} {3}={4} SacraficialItems={5}",
-//                backpackDeathsBreathAmount, from, backpackFromMaterialAmount, to, backpackToMaterialAmount, sacraficialItems.Count);
+                case CurrencyType.VeiledCrystal:
+                    return quality == TrinityItemQuality.Magic
+                        ? TransmuteRecipe.ConvertCraftingMaterialsFromMagic
+                        : TransmuteRecipe.ConvertCraftingMaterialsFromNormal;
 
-//            while (CanRun(from, to))
-//            {
-//                Inventory.Materials.Update();
-//                sacraficialItems = GetSacraficialItems(to);
+                case CurrencyType.ReusableParts:
+                    return quality == TrinityItemQuality.Rare
+                        ? TransmuteRecipe.ConvertCraftingMaterialsFromRare
+                        : TransmuteRecipe.ConvertCraftingMaterialsFromMagic;
+            }
+            return (TransmuteRecipe)(-1);
+        }
 
-//                backpackDeathsBreathAmount = Core.Inventory.Currency.DeathsBreath;
-//                if (backpackDeathsBreathAmount <= 0)
-//                {
-//                    Core.Logger.Log("[Cube] Not enough deaths breaths! BackpackCount={0}", backpackDeathsBreathAmount);
-//                    return false;
-//                }
+        public static IEnumerable<CurrencyType> GetOtherCurrency(CurrencyType to)
+        {
+            switch (to)
+            {
+                case CurrencyType.ArcaneDust:
+                    yield return CurrencyType.ReusableParts;
+                    yield return CurrencyType.VeiledCrystal;
+                    break;
+                case CurrencyType.ReusableParts:
+                    yield return CurrencyType.VeiledCrystal;
+                    yield return CurrencyType.ArcaneDust;
+                    break;
+                case CurrencyType.VeiledCrystal:
+                    yield return CurrencyType.ReusableParts;
+                    yield return CurrencyType.ArcaneDust;
+                    break;
+            }
+        }
 
-//                var item = sacraficialItems.First();
-//                var transmuteGroup = new List<TrinityItem>
-//                {
-//                    //Inventory.Backpack.DeathsBreath.First(),
-//                    item
-//                };
-//                sacraficialItems.Remove(item);
+        public static long GetCurrency(CurrencyType from)
+        {
+            switch (from)
+            {
+                case CurrencyType.ArcaneDust:
+                    return Core.Inventory.Currency.ArcaneDust;
+                case CurrencyType.VeiledCrystal:
+                    return Core.Inventory.Currency.VeiledCrystals;
+                case CurrencyType.ReusableParts:
+                    return Core.Inventory.Currency.ReusableParts;
+            }
+            return 0;
+        }
 
-//                // Make sure we include enough materials by adding multiple stacks if nessesary.
-//                //var materialStacks = Inventory.GetStacksUpToQuantity(Inventory.Backpack.OfType(from), 50).ToList();
-//                //if (materialStacks.Any(m => !m.IsValid) || !item.IsValid)
-//                //{
-//                //    Core.Logger.Error("[ConvertMaterials] something is terribly wrong our items are not valid");
-//                //    return false;
-//                //}
+        public static HashSet<CurrencyType> CurrencyConversionTypes = new HashSet<CurrencyType>
+        {
+            CurrencyType.ArcaneDust,
+            CurrencyType.VeiledCrystal,
+            CurrencyType.ReusableParts
+        };
 
-//                //transmuteGroup.AddRange(materialStacks);
+        public static List<TrinityItem> GetSacraficialItems(CurrencyType to, bool excludeLegendaryUpgradeRares = false)
+        {
+            List<TrinityItem> sacraficialItems = new List<TrinityItem>();
 
-//                InventoryManager.KanaisCubeFillCurrenciesForRecipe(TransmuteRecipe.ConvertCraftingMaterialsFromMagic);
+            switch (to)
+            {
+                case CurrencyType.ReusableParts:
+                    sacraficialItems = GetBackpackItemsOfQuality(new List<ItemQuality>
+                    {
+                        ItemQuality.Inferior,
+                        ItemQuality.Normal,
+                        ItemQuality.Superior
+                    });
+                    break;
 
-//                await Transmute.Execute(transmuteGroup);
-//                await Coroutine.Sleep(1500);
-//                await Coroutine.Yield();
+                case CurrencyType.ArcaneDust:
+                    sacraficialItems = GetBackpackItemsOfQuality(new List<ItemQuality>
+                    {
+                        ItemQuality.Magic1,
+                        ItemQuality.Magic2,
+                        ItemQuality.Magic3
+                    });
+                    break;
 
-//                var newToAmount = Inventory.Backpack.OfType(to).Select(i => i.Attributes.ItemStackQuantity).Sum();
-//                if (newToAmount > backpackToMaterialAmount || Core.Actors.IsAnnIdValid(item.AnnId))
-//                {
-//                    Core.Logger.Log("[ConvertMaterials] Converted materials '{0}' ---> '{1}'", from, to);
-//                    backpackToMaterialAmount = newToAmount;
-//                    backpackFromMaterialAmount = Inventory.Backpack.OfType(from).Select(i => i.ItemStackQuantity).Sum();
-//                    backpackDeathsBreathAmount = Inventory.Backpack.DeathsBreath.Select(i => i.ItemStackQuantity).Sum();
-//                    ConsecutiveFailures = 0;
-//                }
-//                else
-//                {
-//                    ConsecutiveFailures++;
-//                    if (ConsecutiveFailures > 3)
-//                    {
-//                        Inventory.InvalidItemDynamicIds.Add(item.AcdId);
-//                    }
+                case CurrencyType.VeiledCrystal:
+                    sacraficialItems = GetBackpackItemsOfQuality(new List<ItemQuality>
+                    {
+                        ItemQuality.Rare4,
+                        ItemQuality.Rare5,
+                        ItemQuality.Rare6
+                    });
+                    break;
+            }
 
-//                    Core.Logger.Error("[ConvertMaterials] Failed to convert materials");
-//                    return false;
-//                }
+            if (excludeLegendaryUpgradeRares)
+            {
+                var upgradeRares = CubeRaresToLegendary.GetBackPackRares();
+                sacraficialItems.RemoveAll(i => upgradeRares.Contains(i));
+            }
 
-//                await Coroutine.Sleep(100);
-//                await Coroutine.Yield();
-//            }
+            sacraficialItems.RemoveAll(i => Core.Inventory.InvalidAnnIds.Contains(i.AnnId));
+            return sacraficialItems;
+        }
 
-//            Core.Logger.Verbose("[ConvertMaterials] Finishing Material Counts DeathsBreath={0} {1}={2} {3}={4} SacraficialItems={5}",
-//                backpackDeathsBreathAmount, from, backpackFromMaterialAmount, to, backpackToMaterialAmount, sacraficialItems.Count);
+        public static List<TrinityItem> GetBackpackItemsOfQuality(List<ItemQuality> qualities)
+        {
+            return Core.Inventory.Backpack.Where(i =>
+            {
+                if (!i.IsValid)
+                    return false;
 
-//            return true;
-//        }
+                if (!i.IsCraftingReagent && i.RequiredLevel < 70)
+                    return false;
 
-//        public static int ConsecutiveFailures { get; set; }
+                if (i.ItemBaseType != ItemBaseType.Armor && i.ItemBaseType != ItemBaseType.Weapon && i.ItemBaseType != ItemBaseType.Jewelry)
+                    return false;
 
-//        public static List<TrinityItem> GetSacraficialItems(InventoryItemType to, bool excludeLegendaryUpgradeRares = false)
-//        {
-//            List<TrinityItem> sacraficialItems = new List<TrinityItem>();
+                var stackQuantity = i.ItemStackQuantity;
+                var isVendor = i.IsVendorBought;
+                if (!isVendor && stackQuantity != 0 || isVendor && stackQuantity > 1)
+                    return false;
 
-//            switch (to)
-//            {
-//                case InventoryItemType.ReusableParts:
-//                    sacraficialItems = GetBackpackItemsOfQuality(new List<ItemQuality>
-//                    {
-//                        ItemQuality.Inferior,
-//                        ItemQuality.Normal,
-//                        ItemQuality.Superior
-//                    });
-//                    break;
+                if (!qualities.Contains(i.ItemQualityLevel))
+                    return false;
 
-//                case InventoryItemType.ArcaneDust:
-//                    sacraficialItems = GetBackpackItemsOfQuality(new List<ItemQuality>
-//                    {
-//                        ItemQuality.Magic1,
-//                        ItemQuality.Magic2,
-//                        ItemQuality.Magic3
-//                    });
-//                    break;
+                return true;
 
-//                case InventoryItemType.VeiledCrystal:
-//                    sacraficialItems = GetBackpackItemsOfQuality(new List<ItemQuality>
-//                    {
-//                        ItemQuality.Rare4,
-//                        ItemQuality.Rare5,
-//                        ItemQuality.Rare6
-//                    });
-//                    break;
-//            }
+            }).ToList();
+        }
 
-//            if (excludeLegendaryUpgradeRares)
-//            {
-//                var upgradeRares = CubeRaresToLegendary.GetBackPackRares();
-//                sacraficialItems.RemoveAll(i => upgradeRares.Contains(i));
-//            }
-
-//            sacraficialItems.RemoveAll(i => Inventory.InvalidItemDynamicIds.Contains(i.AcdId));
-//            return sacraficialItems;
-//        }
-//    }
-//}
+    }
+}

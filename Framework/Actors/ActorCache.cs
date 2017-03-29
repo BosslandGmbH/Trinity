@@ -18,12 +18,30 @@ using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Framework.Actors
 {
+    public interface IActorCache : IEnumerable<TrinityActor>
+    {
+        HashSet<int> CurrentAcdIds { get; }
+        HashSet<int> CurrentRActorIds { get; }
+        int ActivePlayerRActorId { get; }
+        Vector3 ActivePlayerPosition { get; }
+        IEnumerable<TrinityActor> Actors { get; }
+        IEnumerable<TrinityItem> Inventory { get; }
+        TrinityPlayer Me { get; }
+        DateTime LastUpdated { get; }
+        IEnumerable<T> OfType<T>() where T : TrinityActor;
+        T RActorByAcdId<T>(int acdId) where T : TrinityActor;
+        TrinityItem ItemByAnnId(int annId);
+        ACDItem GetAcdItemByAnnId(int annId);
+        bool IsAnnIdValid(int itemAnnId);
+        void Update();
+    }
+
     /// <summary>
     /// Maintains the current valid list of actors.
     /// Collections are complete, except for bad data / disposed actors.
     /// Filtered lists for attacking/interacting can be found in Core.Targets
     /// </summary>
-    public class ActorCache : Module, IEnumerable<TrinityActor>
+    public class ActorCache : Module, IActorCache
     {
         private Stopwatch _timer = new Stopwatch();
 
@@ -266,7 +284,7 @@ namespace Trinity.Framework.Actors
 
         #region Lookup Methods
 
-        public IEnumerable<TrinityActor> AllRActors => _rActors.Values;
+        public IEnumerable<TrinityActor> Actors => _rActors.Values;
 
         public IEnumerable<T> OfType<T>() where T : TrinityActor
             => _rActors.Values.OfType<T>();
@@ -312,7 +330,7 @@ namespace Trinity.Framework.Actors
             return null;
         }
 
-        public TrinityItem GetItemByAnnId(int annId)
+        public TrinityItem ItemByAnnId(int annId)
         {
             TrinityItem item;
             if (_inventory.TryGetValue(annId, out item))
@@ -383,7 +401,7 @@ namespace Trinity.Framework.Actors
             Me = null;
         }
 
-        public T GetActorByAcdId<T>(int acdId) where T : TrinityActor
+        public T RActorByAcdId<T>(int acdId) where T : TrinityActor
         {
             if (acdId == 0 || acdId == -1)
                 return default(T);
@@ -398,7 +416,7 @@ namespace Trinity.Framework.Actors
             return _rActors[rActorId] as T;
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => AllRActors.GetEnumerator();
-        public IEnumerator<TrinityActor> GetEnumerator() => AllRActors.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Actors.GetEnumerator();
+        public IEnumerator<TrinityActor> GetEnumerator() => Actors.GetEnumerator();
     }
 }

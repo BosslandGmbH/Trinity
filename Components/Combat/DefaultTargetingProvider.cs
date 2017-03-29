@@ -127,7 +127,7 @@ namespace Trinity.Components.Combat
 
             if (CurrentPower.SNOPower != SNOPower.None)
             {
-                if (!await Combat.Spells.CastTrinityPower(CurrentPower))
+                if (!await TrinityCombat.Spells.CastTrinityPower(CurrentPower))
                 {
                     if (DateTime.UtcNow.Subtract(SpellHistory.LastSpellUseTime).TotalSeconds > 5)
                     {
@@ -242,7 +242,7 @@ namespace Trinity.Components.Combat
 
         private TrinityPower GetPowerForTarget(TrinityActor target)
         {
-            var routine = Combat.Routines.Current;
+            var routine = TrinityCombat.Routines.Current;
             if (target == null)
                 return null;
 
@@ -277,7 +277,7 @@ namespace Trinity.Components.Combat
             if (target.IsQuestGiver)
                 return InteractPower(target, 100, 250);
 
-            if (Combat.IsInCombat)
+            if (TrinityCombat.IsInCombat)
             {
                 var routinePower = routine.GetOffensivePower();
 
@@ -319,10 +319,10 @@ namespace Trinity.Components.Combat
 
         public async Task<bool> CastDefensiveSpells()
         {
-            var power = Combat.Routines.Current.GetDefensivePower();
+            var power = TrinityCombat.Routines.Current.GetDefensivePower();
             if (power != null && power.SNOPower != SpellHistory.LastPowerUsed)
             {
-                return await Combat.Spells.CastTrinityPower(power, "Defensive");
+                return await TrinityCombat.Spells.CastTrinityPower(power, "Defensive");
             }
             return false;
         }
@@ -331,7 +331,7 @@ namespace Trinity.Components.Combat
         {
             if (Core.Avoidance.Avoider.ShouldKite)
             {
-                if (await Combat.Routines.Current.HandleKiting())
+                if (await TrinityCombat.Routines.Current.HandleKiting())
                 {
                     return true;
                 }
@@ -352,7 +352,7 @@ namespace Trinity.Components.Combat
         {
             if (Core.Avoidance.Avoider.ShouldAvoid)
             {
-                if (await Combat.Routines.Current.HandleAvoiding(newTarget))
+                if (await TrinityCombat.Routines.Current.HandleAvoiding(newTarget))
                 {
                     return true;
                 }
@@ -377,7 +377,7 @@ namespace Trinity.Components.Combat
                     return true;
                 }
 
-                if (!Combat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
+                if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
                 {
                     Core.Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
                     Core.PlayerMover.MoveTowards(Core.Player.Position);
@@ -406,7 +406,7 @@ namespace Trinity.Components.Combat
             var targetRangeRequired = target.IsHostile || target.IsDestroyable ? Math.Max(spellRange, objectRange) : objectRange;
             var targetRadiusDistance = target.RadiusDistance;
 
-            Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={Combat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{targetRadiusDistance}");
+            Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={TrinityCombat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{targetRadiusDistance}");
             return targetRadiusDistance <= targetRangeRequired && IsInLineOfSight(target);
         }
 
@@ -433,12 +433,12 @@ namespace Trinity.Components.Combat
             //    return IsInRange(CurrentTarget, power);
             //}
 
-            if (Core.Player.IsInBossEncounter && Combat.Targeting.CurrentTarget != null)
+            if (Core.Player.IsInBossEncounter && TrinityCombat.Targeting.CurrentTarget != null)
             {
-                var positionIsBoss = Combat.Targeting.CurrentTarget.IsBoss && Combat.Targeting.CurrentTarget.Position.Distance(position) < 10f;
+                var positionIsBoss = TrinityCombat.Targeting.CurrentTarget.IsBoss && TrinityCombat.Targeting.CurrentTarget.Position.Distance(position) < 10f;
                 if (positionIsBoss)
                 {
-                    rangeRequired += Combat.Targeting.CurrentTarget.CollisionRadius;
+                    rangeRequired += TrinityCombat.Targeting.CurrentTarget.CollisionRadius;
                 }
             }
 

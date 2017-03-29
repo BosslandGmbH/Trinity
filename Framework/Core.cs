@@ -19,15 +19,14 @@ namespace Trinity.Framework
     public static class Core
     {
         public static void Init() { }
-
         public static IFrameworkLogger Logger { get; } = new DefaultLogger();
         public static ChangeMonitor ChangeMonitor { get; } = new ChangeMonitor();
+        public static IActorCache Actors { get; } = new ActorCache();
         public static PlayerCache Player { get; } = new PlayerCache();
         public static RoutineManager Routines => RoutineManager.Instance;
         public static Adventurer Adventurer { get; } = Adventurer.Instance;
         public static QuestTools QuestTools { get; } = new QuestTools();
         public static InventoryCache Inventory { get; } = new InventoryCache();
-        public static ActorCache Actors { get; } = new ActorCache();
         public static SceneStorage Scenes { get; } = new SceneStorage();
         public static HotbarCache Hotbar { get; } = new HotbarCache();
         public static BuffsCache Buffs { get; } = new BuffsCache();

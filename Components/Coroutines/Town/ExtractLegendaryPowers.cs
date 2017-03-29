@@ -123,7 +123,7 @@ namespace Trinity.Components.Coroutines.Town
                 if (_blacklistedActorSnoIds.Contains(item.ActorSnoId))
                     continue;
 
-                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed && Combat.Combat.Loot.ShouldStash(item))
+                if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyTrashed && Combat.TrinityCombat.Loot.ShouldStash(item))
                     continue;
 
                 if (Core.Settings.KanaisCube.ExtractLegendaryPowers == CubeExtractOption.OnlyNonAncient && !item.IsAncient)

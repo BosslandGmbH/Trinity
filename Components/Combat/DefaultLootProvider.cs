@@ -69,7 +69,7 @@ namespace Trinity.Components.Combat
             //if (item.InternalNameLowerCase.Contains("cosmetic"))
             //    return true;
 
-            if (Core.Settings.Items.DisableLootingInCombat && Combat.IsInCombat && item.Distance > 8f)
+            if (Core.Settings.Items.DisableLootingInCombat && TrinityCombat.IsInCombat && item.Distance > 8f)
                 return false;
 
             if (Core.Settings.Items.DontPickupInTown && Core.Player.IsInTown && !item.IsItemAssigned)
@@ -823,7 +823,7 @@ namespace Trinity.Components.Combat
             return validLocation.X >= 0 && validLocation.Y >= 0;
         }
 
-        public bool IsBackpackFull => IsValidTwoSlotBackpackLocation();
+        public bool IsBackpackFull => !IsValidTwoSlotBackpackLocation();
 
         internal static Vector2 FindBackpackLocation(bool isOriginalTwoSlot, bool forceRefresh = false)
         {

@@ -47,7 +47,7 @@ namespace Trinity.DbProvider
             if (!ZetaDia.IsInGame || ZetaDia.Globals.IsLoadingWorld || !ZetaDia.Me.IsValid)
                 return false;
 
-            if (Core.IsOutOfGame || Core.Player.IsDead)
+            if (Core.IsOutOfGame)
                 return false;
 
             var isDead = ZetaDia.Me.IsDead;

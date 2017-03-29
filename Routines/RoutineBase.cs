@@ -31,16 +31,16 @@ namespace Trinity.Routines
             => Core.Player;
 
         protected static TrinityActor CurrentTarget
-            => Combat.Targeting.CurrentTarget;
+            => TrinityCombat.Targeting.CurrentTarget;
 
         protected static IPartyProvider Party
-            => Combat.Party;
+            => TrinityCombat.Party;
 
         protected static IPartyMember PartyMe
-            => Combat.Party.Members.FirstOrDefault(m => m.IsMe);
+            => TrinityCombat.Party.Members.FirstOrDefault(m => m.IsMe);
 
         protected static IPartyMember PartyLeader
-            => Combat.Party.Leader;
+            => TrinityCombat.Party.Leader;
 
         protected static PartyObjective MyPartyObjective
             => PartyMe?.Objective ?? default(PartyObjective);
@@ -49,7 +49,7 @@ namespace Trinity.Routines
             => PartyLeader.Target != null ? PartyHelper.FindLocalActor(PartyLeader.Target) : null;
 
         protected static TrinityPower CurrentPower
-            => Combat.Targeting.CurrentPower;
+            => TrinityCombat.Targeting.CurrentPower;
 
         protected static IAvoider Avoider
             => Core.Avoidance.Avoider;
@@ -70,7 +70,7 @@ namespace Trinity.Routines
         /// A raw hostile unit list without being filtered for valid targets. Use with caution.
         /// </summary>
         protected static IEnumerable<TrinityActor> HostileMonsters
-            => Core.Actors.AllRActors.Where(u => u.IsUnit && u.IsHostile);
+            => Core.Actors.Actors.Where(u => u.IsUnit && u.IsHostile);
 
         /// <summary>
         /// A raw hostile unit list who are currently in line of sight without being filtered for valid targets. Use with caution.
@@ -108,19 +108,19 @@ namespace Trinity.Routines
         /// Current target is a safespot and we are moving to it for avoidance reasons
         /// </summary>
         protected static bool IsCurrentlyAvoiding
-            => Combat.IsCurrentlyAvoiding;
+            => TrinityCombat.IsCurrentlyAvoiding;
 
         /// <summary>
         /// Current target is a safespot and we are moving to it for kiting reasons
         /// </summary>
         protected static bool IsCurrentlyKiting
-            => Combat.IsCurrentlyKiting;
+            => TrinityCombat.IsCurrentlyKiting;
 
         /// <summary>
         /// If our current target is a hostile unit
         /// </summary>
         protected static bool IsInCombat
-            => Combat.IsInCombat;
+            => TrinityCombat.IsInCombat;
 
         /// <summary>
         /// Player's current build has multiple free/generator/primary skills equipped
@@ -247,7 +247,7 @@ namespace Trinity.Routines
             if (settings.Reasons.HasFlag(UseReasons.Goblins) && WeightedUnits.Any(u => u.IsTreasureGoblin))
                 return true;
 
-            if (settings.Reasons.HasFlag(UseReasons.HealthEmergency) && Player.CurrentHealthPct < Combat.Routines.Current.EmergencyHealthPct)
+            if (settings.Reasons.HasFlag(UseReasons.HealthEmergency) && Player.CurrentHealthPct < TrinityCombat.Routines.Current.EmergencyHealthPct)
                 return true;
 
             if (settings.Reasons.HasFlag(UseReasons.Buff) && settings.BuffCondition != null && settings.BuffCondition())
@@ -481,7 +481,7 @@ namespace Trinity.Routines
                     {
                         Core.Logger.Log(LogCategory.Routine, $"Unable to straight-line path to Buffed Position {buffedLocation} Dist={distance}");
                     }
-                    else if (!Core.Avoidance.Grid.CanRayWalk(Combat.Targeting.CurrentTarget.Position, buffedLocation))
+                    else if (!Core.Avoidance.Grid.CanRayWalk(TrinityCombat.Targeting.CurrentTarget.Position, buffedLocation))
                     {
                         Core.Logger.Log(LogCategory.Routine, $"Can't see target from buffed position {buffedLocation} Dist={distance}");
                     }
@@ -493,7 +493,7 @@ namespace Trinity.Routines
                     //{
                     //    Core.Logger.Verbose(LogCategory.Routine, $"Buffed spot outside attack range for power {lastPower.SNOPower} Range={lastPower.MinimumRange} TimeSinceUse={lastPower.TimeSinceUseMs} Dist={distance}");
                     //}
-                    else if (IsKitingEnabled && TargetUtil.AnyMobsInRangeOfPosition(buffedLocation, Combat.Routines.Current.KiteDistance))
+                    else if (IsKitingEnabled && TargetUtil.AnyMobsInRangeOfPosition(buffedLocation, TrinityCombat.Routines.Current.KiteDistance))
                     {
                         Core.Logger.Verbose(LogCategory.Routine, $"Moving to buffed spot would trigger kiting away from it.");
                     }
@@ -512,7 +512,7 @@ namespace Trinity.Routines
         {
             get
             {
-                switch (Combat.Routines.Current.KiteMode)
+                switch (TrinityCombat.Routines.Current.KiteMode)
                 {
                     case KiteMode.Always:
                         return true;

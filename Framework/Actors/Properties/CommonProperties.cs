@@ -335,8 +335,8 @@ namespace Trinity.Framework.Actors.Properties
                         }
                         else
                         {
-                            if (Combat.Targeting.CurrentPower != null)
-                                result = Math.Max(Combat.Targeting.CurrentPower.MinimumRange, actor.CollisionRadius + 1);
+                            if (TrinityCombat.Targeting.CurrentPower != null)
+                                result = Math.Max(TrinityCombat.Targeting.CurrentPower.MinimumRange, actor.CollisionRadius + 1);
                             else
                                 result = actor.CollisionRadius +1;
                         }

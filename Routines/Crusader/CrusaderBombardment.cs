@@ -145,7 +145,7 @@ namespace Trinity.Routines.Crusader
                 }
             }
 
-            var eliteExists = HostileMonsters.Any(u => u.IsElite && !Combat.Weighting.ShouldIgnore(u));
+            var eliteExists = HostileMonsters.Any(u => u.IsElite && !TrinityCombat.Weighting.ShouldIgnore(u));
 
             // Provoke with Votoyias spiker.
             var inProvokeRange = !eliteExists || CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.Distance < 15f;

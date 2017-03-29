@@ -30,6 +30,8 @@ using Trinity.Framework.Objects.Memory;
 using Trinity.Framework.Reference;
 using Trinity.Settings;
 using Trinity.UI.Visualizer;
+using Zeta.Game.Internals;
+using CurrencyType = Zeta.Game.CurrencyType;
 
 
 namespace Trinity.UI
@@ -1186,15 +1188,64 @@ namespace Trinity.UI
             }
         }
 
+        //private static void RunConvertMaterials(CurrencyType to)
+        //{
+
+        //    //var conversions = 0;
+        //    //var working = false;
+        //    //var startTime = DateTime.UtcNow;
+
+        //    //foreach (var fromMaterial in fromMaterials)
+        //    //{
+        //    //    var canRun = false;
+        //    //    using (ZetaDia.Memory.AcquireFrame())
+        //    //    {
+        //    //        ZetaDia.Actors.Update();
+        //    //        Core.Update();
+        //    //        canRun = Trinity.Components.Coroutines.Town.ConvertMaterials.CanRun(fromMaterial, to);
+        //    //    }
+
+        //    //    if (UIElements.TransmuteItemsDialog.IsVisible && canRun)
+        //    //    {
+        //    //        LastStartedConvert = DateTime.UtcNow;
+        //    //        CoroutineHelper.RunCoroutine(() => Components.Coroutines.Town.ConvertMaterials.Execute(fromMaterial, to), result =>
+        //    //        {
+        //    //            var r = !Components.Coroutines.Town.ConvertMaterials.CanRun(fromMaterial, to) || CheckConvertTimeout() || !result;
+        //    //            working = !r;
+        //    //            return r;
+        //    //        }, 50, () => working = false);
+        //    //        conversions++;
+        //    //    }
+        //    //    while (working)
+        //    //    {
+        //    //        if (DateTime.UtcNow.Subtract(startTime).TotalSeconds > 30)
+        //    //        {
+        //    //            Core.Logger.Error("ConvertMaterials timed out");
+        //    //            break;
+        //    //        }
+        //    //        Thread.Sleep(500);
+        //    //    }
+        //    //}
+        //    //return conversions > 0;
+        //}
+
+        //public static bool CheckConvertTimeout()
+        //{
+        //    if (DateTime.UtcNow.Subtract(LastStartedConvert).TotalSeconds > 20)
+        //    {
+        //        Core.Logger.Error("Timeout");
+        //        return true;
+        //    }
+        //    return false;
+        //}
+
+
         private static void btnClick_ConvertToBlue(object sender, RoutedEventArgs routedEventArgs)
         {
             try
             {
-                Core.Logger.Log("Starting Conversion of Backpack VeiledCrystals to Magic Dust.");
-
-                var result = ConvertMaterials(new[] { InventoryItemType.VeiledCrystal, InventoryItemType.ReusableParts }, InventoryItemType.ArcaneDust);
-
-                Core.Logger.Log("Finished Result={0}", result);
+                Core.Logger.Log("Starting Conversion of Backpack to Magic Dust.");
+                TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.ArcaneDust));
             }
             catch (Exception ex)
             {
@@ -1202,66 +1253,12 @@ namespace Trinity.UI
             }
         }
 
-        private static bool ConvertMaterials(InventoryItemType[] fromMaterials, InventoryItemType to)
-        {
-            var conversions = 0;
-            //var working = false;
-            //var startTime = DateTime.UtcNow;
-
-            //foreach (var fromMaterial in fromMaterials)
-            //{
-            //    var canRun = false;
-            //    using (ZetaDia.Memory.AcquireFrame())
-            //    {
-            //        ZetaDia.Actors.Update();
-            //        Core.Update();
-            //        canRun = Coroutines.Town.ConvertMaterials.CanRun(fromMaterial, to);
-            //    }
-
-            //    if (UIElements.TransmuteItemsDialog.IsVisible && canRun)
-            //    {
-            //        LastStartedConvert = DateTime.UtcNow;
-            //        CoroutineHelper.RunCoroutine(() => Coroutines.Town.ConvertMaterials.Execute(fromMaterial, to), result =>
-            //        {
-            //            var r = !Coroutines.Town.ConvertMaterials.CanRun(fromMaterial, to) || CheckConvertTimeout() || !result;
-            //            working = !r;
-            //            return r;
-            //        }, 50, () => working = false);
-            //        conversions++;
-            //    }
-            //    while (working)
-            //    {
-            //        if (DateTime.UtcNow.Subtract(startTime).TotalSeconds > 30)
-            //        {
-            //            Core.Logger.Error("ConvertMaterials timed out");
-            //            break;
-            //        }
-            //        Thread.Sleep(500);
-            //    }
-            //}
-
-            return conversions > 0;
-        }
-
-        public static bool CheckConvertTimeout()
-        {
-            if (DateTime.UtcNow.Subtract(LastStartedConvert).TotalSeconds > 20)
-            {
-                Core.Logger.Error("Timeout");
-                return true;
-            }
-            return false;
-        }
-
         private static void btnClick_ConvertToCommon(object sender, RoutedEventArgs routedEventArgs)
         {
             try
             {
-                Core.Logger.Log("Starting Conversion of Backpack VeiledCrystals to ReusableParts");
-
-                var result = ConvertMaterials(new[] { InventoryItemType.ArcaneDust, InventoryItemType.VeiledCrystal }, InventoryItemType.ReusableParts);
-
-                Core.Logger.Log("Finished Result={0}", result);
+                Core.Logger.Log("Starting Conversion of Backpack to Reusable Parts.");
+                TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.ReusableParts));
             }
             catch (Exception ex)
             {
@@ -1273,11 +1270,8 @@ namespace Trinity.UI
         {
             try
             {
-                Core.Logger.Log("Starting Conversion of Backpack ReusableParts/ArcaneDust to VeiledCrystals");
-
-                var result = ConvertMaterials(new[] { InventoryItemType.ArcaneDust, InventoryItemType.ReusableParts }, InventoryItemType.VeiledCrystal);
-
-                Core.Logger.Log("Finished Result={0}", result);
+                Core.Logger.Log("Starting Conversion of Backpack to Veiled Crystals.");
+                TaskDispatcher.Start(ret => ConvertMaterials.Execute(CurrencyType.VeiledCrystal));
             }
             catch (Exception ex)
             {
