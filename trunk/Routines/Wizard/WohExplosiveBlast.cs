@@ -99,14 +99,14 @@ namespace Trinity.Routines.Wizard
                 }
 
                 var safe = (!Core.Player.IsTakingDamage || Core.Player.CurrentHealthPct > 0.5f) && !Core.Player.Actor.IsInCriticalAvoidance;
-                if (newTarget?.Position == Combat.Targeting.LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
+                if (newTarget?.Position == TrinityCombat.Targeting.LastTarget?.Position && newTarget.IsAvoidanceOnPath && safe)
                 {
                     Core.Logger.Log(LogCategory.Avoidance, $"Not avoiding due to being safe and waiting for avoidance before handling target {newTarget.Name}");
                     Core.PlayerMover.MoveTowards(Core.Player.Position);
                     return true;
                 }
 
-                if (!Combat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
+                if (!TrinityCombat.IsInCombat && Core.Player.Actor.IsAvoidanceOnPath && safe)
                 {
                     Core.Logger.Log(LogCategory.Avoidance, $"Waiting for avoidance to clear (out of combat)");
                     Core.PlayerMover.MoveTowards(Core.Player.Position);
@@ -132,10 +132,10 @@ namespace Trinity.Routines.Wizard
             }
 
             // 锁定奥拉什
-            var target = Core.Actors.AllRActors.Where(u => u.ActorSnoId == 360636).ToList().FirstOrDefault();
+            var target = Core.Actors.Actors.Where(u => u.ActorSnoId == 360636).ToList().FirstOrDefault();
 
             if (target == null)
-                target = TargetUtil.BestEliteInRange(50) ?? Combat.Targeting.CurrentTarget;
+                target = TargetUtil.BestEliteInRange(50) ?? TrinityCombat.Targeting.CurrentTarget;
 
             if (target.Distance > 15 && Skills.Wizard.Teleport.CanCast())
                 return Teleport(target.Position);

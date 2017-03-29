@@ -38,7 +38,7 @@ namespace Trinity.Components.Coroutines
                 Core.Logger.Log("Started Clearing Area");
                 IsClearing = true;
                 TrinityTownRun.IsVendoring = false;
-                Combat.Combat.CombatMode = CombatMode.KillAll;
+                Combat.TrinityCombat.CombatMode = CombatMode.KillAll;
                 StartWorld = ZetaDia.Globals.WorldSnoId;
                 StartPosition = ZetaDia.Me.Position;
             }
@@ -50,7 +50,7 @@ namespace Trinity.Components.Coroutines
             {
                 Core.Logger.Log("Stopped Clearing Area");
                 IsClearing = false;
-                Combat.Combat.CombatMode = CombatMode.Normal;
+                Combat.TrinityCombat.CombatMode = CombatMode.Normal;
             }
         }
 

@@ -21,11 +21,11 @@ namespace Trinity.Framework.Actors.ActorTypes
         // We're severely limited in what we can know about other players in the game.
         PartyObjective IPartyMember.Objective => default(PartyObjective);
 
-        ITargetable IPartyMember.Target => Combat.Targeting.CurrentTarget;
+        ITargetable IPartyMember.Target => TrinityCombat.Targeting.CurrentTarget;
         float IPartyMember.LeashDistance => 100f;
-        bool IPartyMember.IsLeader => Combat.Party.Leader == this;
-        bool IPartyMember.IsFollower => Combat.Party.Leader != this;
-        PartyRole IPartyMember.Role => Combat.Party.Leader == this ? PartyRole.Leader : PartyRole.Follower;
+        bool IPartyMember.IsLeader => TrinityCombat.Party.Leader == this;
+        bool IPartyMember.IsFollower => TrinityCombat.Party.Leader != this;
+        PartyRole IPartyMember.Role => TrinityCombat.Party.Leader == this ? PartyRole.Leader : PartyRole.Follower;
         bool IPartyMember.IsInCombat => false; // No way to know if another CPlayer is in combat?
 
         #endregion IPartyMember

@@ -76,7 +76,7 @@ namespace Trinity.DbProvider
             if (UiSafetyCheck())
                 return;
 
-            var power = Combat.Routines.Current.GetMovementPower(destination);
+            var power = TrinityCombat.Routines.Current.GetMovementPower(destination);
             if (power == null || power.SNOPower == SNOPower.None)
                 power = new TrinityPower(SNOPower.Walk, 3f, destination);
 

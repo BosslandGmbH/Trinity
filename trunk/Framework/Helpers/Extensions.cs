@@ -117,78 +117,78 @@ namespace Trinity.Framework.Helpers
             return newValue;
         }
 
-        /// <summary>
-        /// Allows a nullable backed property and use _field.GetValueOrDefaultAttribute() for [DefaultValue(1)] attribute
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj">The object.</param>
-        /// <param name="name">The name.</param>
-        /// <param name="type">The type.</param>
-        /// <returns>T.</returns>
-        public static T GetValueOrDefaultAttribute<T>(this T? obj, [CallerMemberName] string name = "", Type type = null) where T : struct, IComparable
-        {
-            if (obj.HasValue)
-                return obj.Value;
+        ///// <summary>
+        ///// Allows a nullable backed property and use _field.GetValueOrDefaultAttribute() for [DefaultValue(1)] attribute
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="obj">The object.</param>
+        ///// <param name="name">The name.</param>
+        ///// <param name="type">The type.</param>
+        ///// <returns>T.</returns>
+        //public static T GetValueOrDefaultAttribute<T>(this T? obj, [CallerMemberName] string name = "", Type type = null) where T : struct, IComparable
+        //{
+        //    if (obj.HasValue)
+        //        return obj.Value;
 
-            if (type == null)
-            {
-                var frame = new StackFrame(1);
-                var method = frame.GetMethod();
-                if (method.DeclaringType != null)
-                {
-                    type = method.DeclaringType;
-                }
-                else
-                {
-                    return default(T);
-                }
-            }
+        //    if (type == null)
+        //    {
+        //        var frame = new StackFrame(1);
+        //        var method = frame.GetMethod();
+        //        if (method.DeclaringType != null)
+        //        {
+        //            type = method.DeclaringType;
+        //        }
+        //        else
+        //        {
+        //            return default(T);
+        //        }
+        //    }
 
-            var properties = TypeDescriptor.GetProperties(type)[name];
-            if (properties != null)
-            {
-                var myAttribute = properties.Attributes.OfType<DefaultValueAttribute>().FirstOrDefault();
-                if (myAttribute != null)
-                {
-                    return (T)Convert.ChangeType(myAttribute.Value, typeof(T));
-                }
-            }
-            return default(T);
-        }
+        //    var properties = TypeDescriptor.GetProperties(type)[name];
+        //    if (properties != null)
+        //    {
+        //        var myAttribute = properties.Attributes.OfType<DefaultValueAttribute>().FirstOrDefault();
+        //        if (myAttribute != null)
+        //        {
+        //            return (T)Convert.ChangeType(myAttribute.Value, typeof(T));
+        //        }
+        //    }
+        //    return default(T);
+        //}
 
-        /// <summary>
-        /// Gets a dictionary value or the default
-        /// </summary>
-        /// <typeparam name="TKey">The type of the t key.</typeparam>
-        /// <typeparam name="TValue">The type of the t value.</typeparam>
-        /// <param name="dictionary">The dictionary.</param>
-        /// <param name="key">The key.</param>
-        /// <returns>TValue.</returns>
-        public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
-        {
-            TValue value;
-            return dictionary.TryGetValue(key, out value) ? value : default(TValue);
-        }
+        ///// <summary>
+        ///// Gets a dictionary value or the default
+        ///// </summary>
+        ///// <typeparam name="TKey">The type of the t key.</typeparam>
+        ///// <typeparam name="TValue">The type of the t value.</typeparam>
+        ///// <param name="dictionary">The dictionary.</param>
+        ///// <param name="key">The key.</param>
+        ///// <returns>TValue.</returns>
+        //public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key)
+        //{
+        //    TValue value;
+        //    return dictionary.TryGetValue(key, out value) ? value : default(TValue);
+        //}
 
-        /// <summary>
-        /// Get an attribute, exceptions get swallowed and default returned
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="actor">The actor.</param>
-        /// <param name="type">The type.</param>
-        /// <returns>T.</returns>
-        public static T GetAttributeOrDefault<T>(this TrinityActor actor, ActorAttributeType type) where T : struct
-        {
-            try
-            {
-                actor.Attributes.GetAttribute<T>(type);
-            }
-            catch (Exception ex)
-            {
-                Core.Logger.Debug(LogCategory.CacheManagement, "Exception on {0} accessing {1} attribute: {2}", actor.InternalName, type, ex);
-            }
-            return default(T);
-        }
+        ///// <summary>
+        ///// Get an attribute, exceptions get swallowed and default returned
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="actor">The actor.</param>
+        ///// <param name="type">The type.</param>
+        ///// <returns>T.</returns>
+        //public static T GetAttributeOrDefault<T>(this TrinityActor actor, ActorAttributeType type) where T : struct
+        //{
+        //    try
+        //    {
+        //        actor.Attributes.GetAttribute<T>(type);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Core.Logger.Debug(LogCategory.CacheManagement, "Exception on {0} accessing {1} attribute: {2}", actor.InternalName, type, ex);
+        //    }
+        //    return default(T);
+        //}
 
         /// <summary>
         /// Get an attribute, exceptions get swallowed and default returned

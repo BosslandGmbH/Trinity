@@ -15,13 +15,13 @@ namespace Trinity.Modules
 
         private void Update()
         {
-            if (Combat.Targeting.CurrentTarget == null)
+            if (TrinityCombat.Targeting.CurrentTarget == null)
                 return;
 
             // todo: moved from handle target due to 5% of cpu usage, refactor
 
             var statusText = new StringBuilder();
-            var currentTarget = Combat.Targeting.CurrentTarget;
+            var currentTarget = TrinityCombat.Targeting.CurrentTarget;
             if (currentTarget == null)
                 return;
 
@@ -33,10 +33,10 @@ namespace Trinity.Modules
             statusText.Append(" Target=");
             statusText.Append(currentTarget.InternalName);
 
-            if (currentTarget.IsUnit && Combat.Targeting.CurrentPower != null && Combat.Targeting.CurrentPower.SNOPower != SNOPower.None)
+            if (currentTarget.IsUnit && TrinityCombat.Targeting.CurrentPower != null && TrinityCombat.Targeting.CurrentPower.SNOPower != SNOPower.None)
             {
                 statusText.Append(" Power=");
-                statusText.Append(Combat.Targeting.CurrentPower.SNOPower);
+                statusText.Append(TrinityCombat.Targeting.CurrentPower.SNOPower);
             }
 
             //statusText.Append(" Speed=");

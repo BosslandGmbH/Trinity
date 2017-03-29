@@ -18,7 +18,7 @@ namespace Trinity.Framework.Objects.Memory
 
         private static uint AttributeHasher(int key)
         {
-            return unchecked((uint)(key ^ (key >> 12)));
+            return unchecked((uint)(key ^ (key >> 12)));            
         }
 
         public bool IsValid => Group != null && Group.IsValid && Group.Id != 0 && Map != null && Map.IsValid && Map.Count != 0;
@@ -90,7 +90,7 @@ namespace Trinity.Framework.Objects.Memory
             {
                 Core.Logger.Debug($"Exception creating attributes {ex} for groupId {groupId}");
             }
-        }
+        }        
 
         private Dictionary<int, AttributeItem> _previousItems = new Dictionary<int, AttributeItem>();
 

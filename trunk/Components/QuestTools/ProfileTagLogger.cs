@@ -113,7 +113,7 @@ namespace Trinity.Components.QuestTools
         {
             var sb = new StringBuilder();
             var s = StateSnapshot.Create();
-            foreach (var actor in Core.Actors.AllRActors.Where(a => !a.IsMe && actorSelector(a)))
+            foreach (var actor in Core.Actors.Actors.Where(a => !a.IsMe && actorSelector(a)))
             {
                 s.UpdateForActor(actor);
                 sb.AppendLine($"     <!-- {actor.Name} ({actor.ActorSnoId}) {(SNOActor) actor.ActorSnoId} Distance={actor.Distance} Type={actor.Type} -->");

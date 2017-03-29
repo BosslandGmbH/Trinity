@@ -18,7 +18,7 @@ namespace Trinity.Components.Combat
 
     public class DefaultPartyProvider : IPartyProvider
     {
-        private IEnumerable<TrinityPlayer> Players => Core.Actors.AllRActors.OfType<TrinityPlayer>();
+        private IEnumerable<TrinityPlayer> Players => Core.Actors.Actors.OfType<TrinityPlayer>();
         public IEnumerable<IPartyMember> Members => Players;
         public IEnumerable<IPartyMember> Followers => Enumerable.Empty<IPartyMember>();
         public IPartyMember Leader => Players.OrderByDescending(p => p.HitPointsMax).FirstOrDefault();

@@ -35,8 +35,8 @@ namespace Trinity.Components.Adventurer.Game.Combat
             {
                 Core.Logger.Debug("Enabling kill-all mode to clear area");
                 GameEvents.OnWorldChanged += OnWorldChanged;
-                _previousCombatMode = Components.Combat.Combat.CombatMode;
-                Components.Combat.Combat.CombatMode = CombatMode.KillAll;
+                _previousCombatMode = Components.Combat.TrinityCombat.CombatMode;
+                Components.Combat.TrinityCombat.CombatMode = CombatMode.KillAll;
                 IsCombatModeModified = true;
             }
         }
@@ -72,9 +72,9 @@ namespace Trinity.Components.Adventurer.Game.Combat
             if (!IsCombatModeModified)
                 return;
 
-            if (Components.Combat.Combat.CombatMode == CombatMode.KillAll)
+            if (Components.Combat.TrinityCombat.CombatMode == CombatMode.KillAll)
             {
-                Components.Combat.Combat.CombatMode = _previousCombatMode;
+                Components.Combat.TrinityCombat.CombatMode = _previousCombatMode;
                 Core.Logger.Debug($"Reverting combat mode to '{_previousCombatMode}' after clearing area");
             }
 

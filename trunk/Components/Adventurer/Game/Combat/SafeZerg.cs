@@ -121,20 +121,20 @@ namespace Trinity.Components.Adventurer.Game.Combat
 
         private void SetPreviousCombatMode()
         {
-            if (Components.Combat.Combat.CombatMode == CombatMode.SafeZerg)
+            if (Components.Combat.TrinityCombat.CombatMode == CombatMode.SafeZerg)
             {
                 Core.Logger.Debug($"Reverted to {_previousCombatMode} Combat Mode");
-                Components.Combat.Combat.CombatMode = _previousCombatMode;
+                Components.Combat.TrinityCombat.CombatMode = _previousCombatMode;
             }
         }
 
         private void SetSafeZergCombatMode()
         {
-            if (Components.Combat.Combat.CombatMode != CombatMode.SafeZerg)
+            if (Components.Combat.TrinityCombat.CombatMode != CombatMode.SafeZerg)
             {
                 Core.Logger.Debug("Set to Safe Zerg Combat Mode");
-                _previousCombatMode = Components.Combat.Combat.CombatMode;
-                Components.Combat.Combat.CombatMode = CombatMode.SafeZerg;
+                _previousCombatMode = Components.Combat.TrinityCombat.CombatMode;
+                Components.Combat.TrinityCombat.CombatMode = CombatMode.SafeZerg;
             }
         }
 

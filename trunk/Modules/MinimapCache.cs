@@ -82,7 +82,7 @@ namespace Trinity.Modules
         public float Distance { get; set; }
         public int AcdId { get; set; }
         public Vector2 ScreenOffset { get; set; }
-        public TrinityActor Actor => Core.Actors.GetActorByAcdId<TrinityActor>(AcdId);
+        public TrinityActor Actor => Core.Actors.RActorByAcdId<TrinityActor>(AcdId);
         public override string ToString() => $"{Name}, ScreenPosition={ScreenPosition} AcdId={AcdId}";
     }
 

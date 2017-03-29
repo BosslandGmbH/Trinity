@@ -41,7 +41,7 @@ namespace Trinity.Framework.Events
             => ZetaDia.Service.Hero.HeroId);
 
         public static TrinityChangeDetector<ILootProvider> LootProvider { get; } = new TrinityChangeDetector<ILootProvider>(()
-            => Combat.Loot);
+            => TrinityCombat.Loot);
 
         public static TrinityChangeDetector<bool> IsRunning { get; } = new TrinityChangeDetector<bool>(()
             => BotEvents.IsBotRunning);

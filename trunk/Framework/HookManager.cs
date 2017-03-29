@@ -59,7 +59,7 @@ namespace Trinity.Framework
 
         private static void ReplaceCombatHook()
         {
-            StoreAndReplaceHook("Combat", new ActionRunCoroutine(ret => Combat.MainCombatTask()));
+            StoreAndReplaceHook("Combat", new ActionRunCoroutine(ret => TrinityCombat.MainCombatTask()));
         }
 
         private static void ReplaceVendorRunHook()

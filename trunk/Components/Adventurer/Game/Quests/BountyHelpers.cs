@@ -125,7 +125,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public static Vector3 ScanForActorLocation(int actorId, int searchRadius)
         {
-            var actor = Core.Actors.AllRActors.FirstOrDefault(a => a.ActorSnoId == actorId && a.Distance <= searchRadius);
+            var actor = Core.Actors.Actors.FirstOrDefault(a => a.ActorSnoId == actorId && a.Distance <= searchRadius);
             return actor?.Position ?? Vector3.Zero;
         }
 

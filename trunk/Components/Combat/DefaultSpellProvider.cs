@@ -56,7 +56,7 @@ namespace Trinity.Components.Combat
             var distance = power.TargetPosition.Distance(Core.Player.Position);
             var castInfo = $"{type} {power}".Trim();
 
-            var target = Core.Actors.GetActorByAcdId<TrinityActor>(power.TargetAcdId);
+            var target = Core.Actors.RActorByAcdId<TrinityActor>(power.TargetAcdId);
             if (target != null)
             {
                 castInfo += $" on {target}";
@@ -64,7 +64,7 @@ namespace Trinity.Components.Combat
                 // Store found unit's position for SpellHistory queries.
                 power.TargetPosition = target.Position;
 
-                if (!Combat.Targeting.IsInRange(target, power))
+                if (!TrinityCombat.Targeting.IsInRange(target, power))
                 {
                     Core.Logger.Log(LogCategory.Movement, $"Moving to {castInfo}");
                     PlayerMover.MoveTo(target.Position);
@@ -73,14 +73,14 @@ namespace Trinity.Components.Combat
             }
             else if (power.TargetPosition != Vector3.Zero)
             {
-                if (distance > Combat.Targeting.MaxTargetDistance)
+                if (distance > TrinityCombat.Targeting.MaxTargetDistance)
                 {
                     Core.Logger.Log(LogCategory.Spells, $"Target is way too far away ({distance})");
                     return false;
                 }
 
                 castInfo += $" Dist:{Core.Player.Position.Distance(power.TargetPosition)}";
-                if (!Combat.Targeting.IsInRange(power.TargetPosition, power))
+                if (!TrinityCombat.Targeting.IsInRange(power.TargetPosition, power))
                 {
                     Core.Logger.Log(LogCategory.Movement, $"Moving to position for {castInfo}");
                     PlayerMover.MoveTo(power.TargetPosition);

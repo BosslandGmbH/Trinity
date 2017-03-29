@@ -263,7 +263,7 @@ namespace Trinity.Modules
 
             // todo, create a units only collection in ActorsCache so we dont have to iterate all RActors.
 
-            foreach (var actor in Core.Actors.AllRActors)
+            foreach (var actor in Core.Actors.Actors)
             {
                 if (!actor.IsSummonedByPlayer)
                     continue;

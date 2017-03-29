@@ -182,13 +182,14 @@
     <Compile Include="Components\QuestTools\ProfileTagLogger.cs" />
     <Compile Include="Components\QuestTools\ProfileUtils.cs" />
     <Compile Include="Components\QuestTools\QuestTools.cs" />
+    <Compile Include="Framework\Actors\Attributes\Attributes.cs" />
     <Compile Include="Framework\Helpers\Extensions\CollectionExtensions.cs" />
     <Compile Include="Framework\Helpers\Extensions\AttributeExtensions.cs" />
     <Compile Include="Framework\Helpers\CoroutineQueue.cs" />
     <Compile Include="Components\Adventurer\Util\FileUtils.cs" />
     <Compile Include="Components\Adventurer\Util\ObjectDumper.cs" />
     <Compile Include="Components\Adventurer\Util\PluginTime.cs" />
-    <Compile Include="Components\Combat\Combat.cs" />
+    <Compile Include="Components\Combat\TrinityCombat.cs" />
     <Compile Include="Components\Combat\DefaultLootProvider.cs" />
     <Compile Include="Components\Combat\DefaultPartyProvider.cs" />
     <Compile Include="Components\Combat\DefaultProviders.cs" />

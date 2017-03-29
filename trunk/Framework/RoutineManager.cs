@@ -103,7 +103,7 @@ namespace Trinity.Framework
                 }
             }
 
-            if (!Core.Actors.AllRActors.Any())
+            if (!Core.Actors.Actors.Any())
                 Core.Actors.Update();
 
             foreach (var routine in CurrentClassRoutines.OrderBy(r => r.BuildRequirements?.RequirementCount))

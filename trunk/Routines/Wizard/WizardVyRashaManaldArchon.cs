@@ -249,9 +249,9 @@ namespace Trinity.Routines.Wizard
             position = Vector3.Zero;
             var skill = Skills.Wizard.ArchonTeleport;
             var affixOnPlayer = Core.Avoidance.InAvoidance(ZetaDia.Me.Position);
-            var isShrine = Combat.Targeting.CurrentTarget.Type == TrinityObjectType.Shrine;
-            var isProgressionGlobe = Combat.Targeting.CurrentTarget.Type == TrinityObjectType.ProgressionGlobe;
-            var isHealthGlobe = Combat.Targeting.CurrentTarget.Type == TrinityObjectType.HealthGlobe;
+            var isShrine = TrinityCombat.Targeting.CurrentTarget.Type == TrinityObjectType.Shrine;
+            var isProgressionGlobe = TrinityCombat.Targeting.CurrentTarget.Type == TrinityObjectType.ProgressionGlobe;
+            var isHealthGlobe = TrinityCombat.Targeting.CurrentTarget.Type == TrinityObjectType.HealthGlobe;
 
             //Teleport Activations
             var archonHealthIsLow = IsArchonActive && Player.CurrentHealthPct < Settings.ArchonTeleportHealthEmergency;
@@ -291,7 +291,7 @@ namespace Trinity.Routines.Wizard
                 if (CurrentTarget.IsElite && anyElitesinRange && archonTeleportDelay)
                 {
                     //Core.Logger.Log($"Teleport! Elite too close: {CurrentTarget.Distance} Setting: {Settings.TeleportEliteKiteRange}");
-                    Avoider.TryGetSafeSpot(out position, 40, Settings.TeleportKiteMaxDistance, Combat.Targeting.CurrentTarget.Position, node => !HostileMonsters.Any(m => m.Position.Distance(node.NavigableCenter) < 15f));
+                    Avoider.TryGetSafeSpot(out position, 40, Settings.TeleportKiteMaxDistance, TrinityCombat.Targeting.CurrentTarget.Position, node => !HostileMonsters.Any(m => m.Position.Distance(node.NavigableCenter) < 15f));
                     return true;
                 }
 

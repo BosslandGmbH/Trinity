@@ -25,19 +25,10 @@ namespace Trinity.Components.Coroutines.Town
     public class TrinityTownRun
     {
         public static bool StartedOutOfTown { get; set; }
-
         public static bool IsWantingTownRun { get; set; }
-
         public static bool IsInTownVendoring { get; set; }
 
         public static DateTime DontAttemptTownRunUntil = DateTime.MinValue;
-
-        private static int _catastrophicErrorCount;
-
-        static TrinityTownRun()
-        {
-            GameEvents.OnGameJoined += (sender, args) => _catastrophicErrorCount = 0;
-        }
 
         public static async Task<bool> Execute()
         {
@@ -77,6 +68,7 @@ namespace Trinity.Components.Coroutines.Town
                 }
 
                 IsWantingTownRun = true;
+
                 Core.Logger.Debug("Town run started");
 
                 if (ZetaDia.Globals.IsLoadingWorld)
@@ -119,6 +111,7 @@ namespace Trinity.Components.Coroutines.Town
                 Core.Logger.Debug("Started Town Run Loop");
 
                 var checkCycles = 2;
+
                 while (!Core.Player.IsInventoryLockedForGreaterRift)
                 {
                     Core.Inventory.Backpack.ForEach(i => Core.Logger.Debug($"Backpack Item: {i.Name} ({i.ActorSnoId} / {i.InternalName}) RawItemType={i.RawItemType} TrinityItemType={i.TrinityItemType}"));
@@ -138,8 +131,8 @@ namespace Trinity.Components.Coroutines.Town
 
                     if (!await ExtractLegendaryPowers.Execute())
                         continue;
-
-                    if (DefaultLootProvider.IsAnyTwoSlotBackpackLocation)
+           
+                    if (!TrinityCombat.Loot.IsBackpackFull)
                     {
                         if (!await Gamble.Execute())
                             continue;
@@ -148,8 +141,8 @@ namespace Trinity.Components.Coroutines.Town
                     if (!await CubeRaresToLegendary.Execute())
                         continue;
 
-                    //if (!await CubeItemsToMaterials.Execute())
-                    //    continue;
+                    if (!await CubeItemsToMaterials.Execute())
+                        continue;
 
                     if (await Any(
                         DropItems.Execute,
@@ -166,8 +159,6 @@ namespace Trinity.Components.Coroutines.Town
                 }
 
                 await StashItems.Execute();
-                //await StashItems.SortStashPages();
-                //await UseCraftingRecipes.Execute();
                 await RepairItems.Execute();
 
                 Core.Logger.Log("Finished Town Run woo!");
@@ -202,15 +193,10 @@ namespace Trinity.Components.Coroutines.Town
         private static bool ShouldStartTownRun()
         {
             if (ZetaDia.IsInTown && BrainBehavior.IsVendoring)
-            {
                 return !IsInTownVendoring;
-            }
 
             if (!CanTownRun())
-            {
-                //Core.Logger.Verbose("Can't town run.");
                 return false;
-            }
 
             if (IsWantingTownRun)
             {

@@ -29,7 +29,7 @@ namespace Trinity.Framework.Behaviors
 
         private async Task<bool> FindActor(Predicate<TrinityActor> actorSelector)
         {
-            var actor = Core.Actors.AllRActors
+            var actor = Core.Actors.Actors
                 .OrderBy(m => m.Distance)
                 .FirstOrDefault(m => m.IsValid && m.Position != Vector3.Zero && actorSelector(m) && !VisitedActorPositions.Contains(m.Position) && m.Distance > 8f);
 

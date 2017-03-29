@@ -46,7 +46,7 @@ namespace Trinity.Components.Coroutines.Town
             if (!i.IsSalvageable)
                 return false;
 
-            var decision = Combat.Combat.Loot.ShouldSalvage(i) && !StashItems.ShouldStash(i);
+            var decision = Combat.TrinityCombat.Loot.ShouldSalvage(i) && !StashItems.ShouldStash(i);
             Cache.Add(i.AnnId, decision);
             return decision;
         }
@@ -104,7 +104,7 @@ namespace Trinity.Components.Coroutines.Town
             {
                 if (ZetaDia.Me.Level >= 70 && UIElements.SalvageAllWrapper.IsVisible)
                 {
-                    var items = Core.Inventory.Backpack.Where(i => Combat.Combat.Loot.ShouldSalvage(i)).ToList();
+                    var items = Core.Inventory.Backpack.Where(i => Combat.TrinityCombat.Loot.ShouldSalvage(i)).ToList();
 
                     var normals = items.Where(i => NormalQualityLevels.Contains(i.ItemQualityLevel)).ToList();
                     if (normals.Count > 0)

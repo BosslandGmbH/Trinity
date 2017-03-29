@@ -39,7 +39,7 @@ namespace Trinity.Components.Coroutines.Town
             else if (SalvageItems.ShouldSalvage(i))
                 action = ItemEvaluationType.Salvage;
 
-            var decision = Combat.Combat.Loot.ShouldDrop(i, action) && !i.IsAccountBound;
+            var decision = Combat.TrinityCombat.Loot.ShouldDrop(i, action) && !i.IsAccountBound;
             Cache.Add(i.AnnId, decision);
             return decision;
         }

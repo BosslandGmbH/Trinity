@@ -184,16 +184,16 @@ namespace Trinity.Components.Combat.Resources
             if (Legendary.NemesisBracers.IsEquipped && shrine != null)
                 return shrine.Position;
             // Prevent Default Attack
-            if (Combat.Targeting.CurrentTarget.Type != TrinityObjectType.Destructible &&
-                Combat.Targeting.CurrentTarget.Type != TrinityObjectType.Shrine &&
-                Combat.Targeting.CurrentTarget.Type != TrinityObjectType.HealthGlobe)
+            if (TrinityCombat.Targeting.CurrentTarget.Type != TrinityObjectType.Destructible &&
+                TrinityCombat.Targeting.CurrentTarget.Type != TrinityObjectType.Shrine &&
+                TrinityCombat.Targeting.CurrentTarget.Type != TrinityObjectType.HealthGlobe)
             {
                 //Core.Logger.Log("Prevent Primary Attack ");
-                var targetPosition = TargetUtil.GetLoiterPosition(Combat.Targeting.CurrentTarget, 20f);
+                var targetPosition = TargetUtil.GetLoiterPosition(TrinityCombat.Targeting.CurrentTarget, 20f);
                 // return new TrinityPower(SNOPower.Walk, 7f, targetPosition);
                 return targetPosition;
             }
-            return Combat.Targeting.CurrentTarget.Position;
+            return TrinityCombat.Targeting.CurrentTarget.Position;
         }
 
         internal static List<TrinityActor> MobsBetweenRange(float startRange = 15f, float endRange = 25)
@@ -503,7 +503,7 @@ namespace Trinity.Components.Combat.Resources
 
         public static void ClearCurrentTarget(string reason)
         {
-            if (Combat.Targeting.CurrentTarget != null)
+            if (TrinityCombat.Targeting.CurrentTarget != null)
             {
                 var clearString = "Clearing CURRENT TARGET: " + reason +
                         $"{Environment.NewLine} Name: {CurrentTarget.InternalName} Type: {CurrentTarget.Type} SNO: {CurrentTarget.ActorSnoId} Distance: {CurrentTarget.Distance} " +
@@ -530,7 +530,7 @@ namespace Trinity.Components.Combat.Resources
             }
         }
 
-        private static TrinityActor CurrentTarget => Combat.Targeting.CurrentTarget;
+        private static TrinityActor CurrentTarget => TrinityCombat.Targeting.CurrentTarget;
 
         private static HashSet<SNOPower> Hotbar => Core.Hotbar.ActivePowers;
 
@@ -623,8 +623,8 @@ namespace Trinity.Components.Combat.Resources
                      where u.IsUnit &&
                      !u.IsElite &&
                      u.Weight > 0 &&
-                     u.RadiusDistance <= Combat.Routines.Current.ClusterRadius
-                     select u).Count() >= Combat.Routines.Current.TrashRange;
+                     u.RadiusDistance <= TrinityCombat.Routines.Current.ClusterRadius
+                     select u).Count() >= TrinityCombat.Routines.Current.TrashRange;
             }
             return
                 (from u in ObjectCache
@@ -967,8 +967,8 @@ namespace Trinity.Components.Combat.Resources
 
             if (clusterUnits.Any())
                 bestClusterPoint = clusterUnits.FirstOrDefault();
-            else if (Combat.Targeting.CurrentTarget != null)
-                bestClusterPoint = Combat.Targeting.CurrentTarget.Position;
+            else if (TrinityCombat.Targeting.CurrentTarget != null)
+                bestClusterPoint = TrinityCombat.Targeting.CurrentTarget.Position;
             else
                 bestClusterPoint = Core.Player.Position;
 
@@ -1169,7 +1169,7 @@ namespace Trinity.Components.Combat.Resources
         {
             if (range < 5f)
                 range = 5f;
-            return Combat.Targeting.CurrentTarget != null && Combat.Targeting.CurrentTarget.IsElite && Combat.Targeting.CurrentTarget.RadiusDistance <= range;
+            return TrinityCombat.Targeting.CurrentTarget != null && TrinityCombat.Targeting.CurrentTarget.IsElite && TrinityCombat.Targeting.CurrentTarget.RadiusDistance <= range;
         }
 
         /// <summary>
@@ -1195,7 +1195,7 @@ namespace Trinity.Components.Combat.Resources
             //}
 
             //return target;
-            return Combat.Targeting.CurrentTarget?.Position ?? Vector3.Zero;
+            return TrinityCombat.Targeting.CurrentTarget?.Position ?? Vector3.Zero;
         }
 
         // Special Zig-Zag movement for whirlwind/tempest
@@ -1520,9 +1520,9 @@ namespace Trinity.Components.Combat.Resources
             {
                 return clusterPosition;
             }
-            if (IsValidPosition(Combat.Targeting.CurrentTarget.Position))
+            if (IsValidPosition(TrinityCombat.Targeting.CurrentTarget.Position))
             {
-                return Combat.Targeting.CurrentTarget.Position;
+                return TrinityCombat.Targeting.CurrentTarget.Position;
             }
             if (IsValidPosition(Player.Position))
             {
@@ -1683,8 +1683,8 @@ namespace Trinity.Components.Combat.Resources
 
             if (unitsByHealth.Any())
                 lowestHealthTarget = unitsByHealth.FirstOrDefault();
-            else if (Combat.Targeting.CurrentTarget != null)
-                lowestHealthTarget = Combat.Targeting.CurrentTarget;
+            else if (TrinityCombat.Targeting.CurrentTarget != null)
+                lowestHealthTarget = TrinityCombat.Targeting.CurrentTarget;
             else
                 lowestHealthTarget = default(TrinityActor);
 
@@ -1709,8 +1709,8 @@ namespace Trinity.Components.Combat.Resources
 
             if (unitsByHealth.Any())
                 lowestHealthTarget = unitsByHealth.FirstOrDefault();
-            else if (Combat.Targeting.CurrentTarget != null)
-                lowestHealthTarget = Combat.Targeting.CurrentTarget;
+            else if (TrinityCombat.Targeting.CurrentTarget != null)
+                lowestHealthTarget = TrinityCombat.Targeting.CurrentTarget;
             else
                 lowestHealthTarget = default(TrinityActor);
 
@@ -1749,8 +1749,8 @@ namespace Trinity.Components.Combat.Resources
 
             if (unitsByWeight.Any())
                 target = unitsByWeight.FirstOrDefault();
-            else if (Combat.Targeting.CurrentTarget != null)
-                target = Combat.Targeting.CurrentTarget;
+            else if (TrinityCombat.Targeting.CurrentTarget != null)
+                target = TrinityCombat.Targeting.CurrentTarget;
             else
                 target = default(TrinityActor);
 
@@ -2132,7 +2132,7 @@ namespace Trinity.Components.Combat.Resources
             if (ofLocation == Vector3.Zero)
                 ofLocation = Player.Position;
 
-            return Core.Actors.AllRActors.Where(u
+            return Core.Actors.Actors.Where(u
                 => (!ownedByMe || u.IsSummonedByPlayer)
                    && u.PetType == PetType.Pet0
                    && u.Position.Distance(ofLocation) <= withinRange);
@@ -2144,7 +2144,7 @@ namespace Trinity.Components.Combat.Resources
             return Core.Targets.Where(u => u.IsUnit && petLocations.Any(p => p.Distance(u.Position) <= rangeFromPet));
         }
 
-        private static IEnumerable<TrinityPlayer> Players => Core.Actors.AllRActors.OfType<TrinityPlayer>();
+        private static IEnumerable<TrinityPlayer> Players => Core.Actors.Actors.OfType<TrinityPlayer>();
 
         public static bool AnyPlayer(Func<TrinityPlayer, bool> condition)
         {

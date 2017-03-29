@@ -242,6 +242,7 @@ namespace Trinity.Modules
                 {CurrencyType.DeathsBreath, 1}
             };
 
+            public long GetCurrency(CurrencyType type) => PlayerData.GetCurrencyAmount(type);
             public long OrganDiablo => PlayerData.GetCurrencyAmount(CurrencyType.DemonOrganDiablo);
             public long OrganLeoric => PlayerData.GetCurrencyAmount(CurrencyType.DemonOrganSkeletonKing);
             public long OrganGhom => PlayerData.GetCurrencyAmount(CurrencyType.DemonOrganGhom);

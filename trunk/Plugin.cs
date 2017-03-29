@@ -23,7 +23,7 @@ namespace Trinity
     {
         private static TrinityPlugin _instance;
         public string Name => "Trinity";
-        public Version Version => new Version(2, 250, 755);
+        public Version Version => new Version(2, 250, 758);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -31,7 +31,6 @@ namespace Trinity
         public static TrinityPlugin Instance => _instance ?? (_instance = new TrinityPlugin());
         public static bool IsEnabled { get; private set; }
         public bool IsInitialized { get; private set; }
-
 
         public TrinityPlugin()
         {

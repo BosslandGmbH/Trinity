@@ -23,10 +23,10 @@ namespace Trinity.Components.Coroutines
 
         public static bool ShouldUsePotion()
         {
-            if (Core.Player == null || Combat.Combat.Routines.Current == null)
+            if (Core.Player == null || Combat.TrinityCombat.Routines.Current == null)
                 return false;
 
-            if (Core.Player.CurrentHealthPct > Combat.Combat.Routines.Current.PotionHealthPct)
+            if (Core.Player.CurrentHealthPct > Combat.TrinityCombat.Routines.Current.PotionHealthPct)
                 return false;
 
             if (Core.Player.IsIncapacitated || !(Core.Player.CurrentHealthPct > 0) || Core.Player.IsInTown)
@@ -35,7 +35,7 @@ namespace Trinity.Components.Coroutines
             if (SpellHistory.TimeSinceUse(SNOPower.DrinkHealthPotion) <= TimeSpan.FromSeconds(30))
                 return false;
 
-            return Core.Player.CurrentHealthPct <= Combat.Combat.Routines.Current.PotionHealthPct;
+            return Core.Player.CurrentHealthPct <= Combat.TrinityCombat.Routines.Current.PotionHealthPct;
         }
 
         public static bool DrinkPotion()

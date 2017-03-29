@@ -14,8 +14,8 @@ namespace Trinity.Framework.Helpers
     {
         private static Composite _logic;
 
-        public static int TickDelayMin = 5;
-        public static int TickDelayMax = 15;
+        public static int TickDelayMin = 25;
+        public static int TickDelayMax = 75;
 
         public static void Start<T>(Func<object, Task<T>> task, Func<object, bool> stopCondition = null)
         {

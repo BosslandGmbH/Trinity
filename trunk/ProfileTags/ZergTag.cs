@@ -23,16 +23,16 @@ namespace Trinity.ProfileTags
         {
             if (Enabled.HasValue)
             {
-                Combat.CombatMode = Enabled.Value ? CombatMode.SafeZerg : CombatMode.SafeZerg;
+                TrinityCombat.CombatMode = Enabled.Value ? CombatMode.SafeZerg : CombatMode.SafeZerg;
                 return true;
             }
-            Combat.CombatMode = CombatMode.SafeZerg;
+            TrinityCombat.CombatMode = CombatMode.SafeZerg;
             return false;
         }
 
         public override void DoneMethod()
         {
-            Combat.CombatMode = CombatMode.Normal;
+            TrinityCombat.CombatMode = CombatMode.Normal;
         }
     }
 
