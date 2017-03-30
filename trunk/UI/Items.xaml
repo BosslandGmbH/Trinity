@@ -231,7 +231,7 @@
             </GroupBox>-->
 
             <GroupBox Header="Smart Stashing" Visibility="{Binding GameInfo.IsExternalLootProvider, Converter={StaticResource HiddenWhenTrueConverter}}">
-                <StackPanel><TextBlock TextWrapping="Wrap" Margin="0,0,0,7">Option to stash things on the first page where items are found:</TextBlock>
+                <StackPanel><TextBlock TextWrapping="Wrap" Margin="0,0,0,7">Option to stash things on the first page where items of the same type are found:</TextBlock>
                 
                 <UniformGrid Columns="1">
                     <CheckBox Content="For Equipment (Weapons/Armor/Jewellery)" IsChecked="{Binding Items.UseTypeStashingEquipment}" />

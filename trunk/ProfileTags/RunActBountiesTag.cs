@@ -116,6 +116,28 @@ namespace Trinity.ProfileTags
                 await Coroutine.Sleep(1000);
             }
 
+            if (_currentActBountiesCoroutine == null)
+            {
+                if (_currentAct != Act.Invalid)
+                {
+                    if (!BountyHelpers.AreAllActBountiesCompleted(_currentAct))
+                    {
+                        _currentActBountiesCoroutine = new ActBountiesCoroutine(_currentAct);
+                    }
+                    else
+                    {
+                        if (!TrySelectActCoroutine())
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
             if (!await _currentActBountiesCoroutine.GetCoroutine())
                 return false;
 
@@ -213,7 +235,7 @@ namespace Trinity.ProfileTags
 
             var orderedActs = eligibleActs.OrderByDescending(p => p.Value).Select(v => v.Key).ToList();
 
-            Core.Logger.Log($"Balance Material Acts: {eligibleActs.Aggregate("",(s, item) => s + $"{item.Key}({item.Value}), ")}");
+            Core.Logger.Log($"Balance Material Acts: {eligibleActs.Aggregate("", (s, item) => s + $"{item.Key}({item.Value}), ")}");
             return orderedActs;
         }
 

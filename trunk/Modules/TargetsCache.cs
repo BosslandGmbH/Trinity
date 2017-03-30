@@ -385,7 +385,7 @@ namespace Trinity.Modules
 
         private bool ShouldCacheItem(TrinityItem cacheObject)
         {
-            if (!cacheObject.IsPickupNoClick && !TrinityCombat.Loot.IsBackpackFull)
+            if (!cacheObject.IsPickupNoClick && TrinityCombat.Loot.IsBackpackFull)
             {
                 cacheObject.AddCacheInfo("BackpackFull");
                 return false;

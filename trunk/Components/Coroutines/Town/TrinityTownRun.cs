@@ -131,13 +131,10 @@ namespace Trinity.Components.Coroutines.Town
 
                     if (!await ExtractLegendaryPowers.Execute())
                         continue;
-           
-                    if (!TrinityCombat.Loot.IsBackpackFull)
-                    {
-                        if (!await Gamble.Execute())
-                            continue;
-                    }
-
+                      
+                    if (!await Gamble.Execute())
+                        continue;
+                  
                     if (!await CubeRaresToLegendary.Execute())
                         continue;
 

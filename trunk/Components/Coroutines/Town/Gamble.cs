@@ -103,7 +103,7 @@ namespace Trinity.Components.Coroutines.Town
                         GameUI.CloseVendorWindow();
                     }
 
-                    if (!DefaultLootProvider.IsAnyTwoSlotBackpackLocation)
+                    if (TrinityCombat.Loot.IsBackpackFull)
                     {
                         BrainBehavior.ForceTownrun();
                     }
@@ -193,6 +193,12 @@ namespace Trinity.Components.Coroutines.Town
                     return false;
                 }
 
+                if (TrinityCombat.Loot.IsBackpackFull || InventoryManager.NumFreeBackpackSlots < 5)
+                {
+                    LogVerbose("No Backpack space, can't gamble!");
+                    return false;
+                }
+
                 if (Core.Player.IsInventoryLockedForGreaterRift || !Core.Settings.Items.KeepLegendaryUnid && Core.Player.ParticipatingInTieredLootRun)
                 {
                     LogVerbose("No gambling during greater rift due to backpack items being disabled ");
@@ -230,12 +236,7 @@ namespace Trinity.Components.Coroutines.Town
                     LogVerbose("Can't afford desired items!");
                     return false;
                 }
-
-                if (!DefaultLootProvider.IsAnyTwoSlotBackpackLocation || InventoryManager.NumFreeBackpackSlots < 5)
-                {
-                    LogVerbose("No Backpack space!");
-                    return false;
-                }
+             
             }
             catch (Exception ex)
             {
