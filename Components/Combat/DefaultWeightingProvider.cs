@@ -922,7 +922,7 @@ namespace Trinity.Components.Combat
                                     }
 
                                     // Don't pickup items if we're doing a TownRun
-                                    if (!TrinityCombat.Loot.IsBackpackFull && !item.IsPickupNoClick)
+                                    if (TrinityCombat.Loot.IsBackpackFull && !item.IsPickupNoClick)
                                     {
                                         cacheObject.WeightInfo += $"Ignoring {cacheObject.InternalName} for TownRun";
                                         break;
