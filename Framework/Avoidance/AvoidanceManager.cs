@@ -144,5 +144,13 @@ namespace Trinity.Framework.Avoidance
         }
 
         #endregion Settings
+
+        public void Clear()
+        {
+            _cachedActors.Clear();
+            _currentRActorIds.Clear();
+            CurrentAvoidances.Clear();
+        }
+
     }
 }

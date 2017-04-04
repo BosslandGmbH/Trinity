@@ -52,7 +52,6 @@ namespace Trinity.Modules
         };
 
         public List<AvoidanceNode> CurrentNodes = new List<AvoidanceNode>();
-        public List<AvoidanceNode> AllNodes = new List<AvoidanceNode>();
         public List<AvoidanceNode> NearbyNodes = new List<AvoidanceNode>();
         public IOrderedEnumerable<AvoidanceNode> SafeNodesByWeight = new List<AvoidanceNode>().OrderBy(a => 1);
         public IOrderedEnumerable<AvoidanceNode> SafeNodesByDistance = new List<AvoidanceNode>().OrderBy(a => 1);

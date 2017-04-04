@@ -136,8 +136,14 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.Failed;
             }
 
-            if (PluginSettings.Current.BountyZerg)
+            if (PluginSettings.Current.BountyZerg && BountyData != null)
+            {
                 SafeZerg.Instance.EnableZerg();
+            }
+            else
+            {
+                SafeZerg.Instance.DisableZerg();
+            }
 
             switch (State)
             {

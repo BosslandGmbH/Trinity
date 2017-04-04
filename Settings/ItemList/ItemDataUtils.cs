@@ -449,21 +449,16 @@ namespace Trinity.Settings.ItemList
 
         public static float GetPassivePowerValue(TrinityItem item)
         {
-            //todo: bug with attribtues where sometimes the passivepower is not in the attribute list
-
-            var passive = item.Attributes.GetAttributeItem(ActorAttributeType.ItemPowerPassive);
-
             ItemPowerDescripter desc;
             if (!ItemPassivePowers.TryGetValue(item.ActorSnoId, out desc))
             {
                 return -1;
             }
-
-            if (passive != null)
-            {
-                return desc.IsPercent ? passive.GetValue<float>() * 100 : passive.GetValue<float>();
+            var val = item.Attributes.GetAttribute<float>(ActorAttributeType.ItemPowerPassive);
+            if (val != 0)
+            {                
+                return desc.IsPercent ? val * 100 : val;
             }
-
             var acdItem = ZetaDia.Actors.GetACDByAnnId(item.AnnId);
             var value = acdItem.GetAttribute<float>(desc.Attribute);
             Core.Logger.Verbose(">> PassivePower Attribute found with attribute id on AcdItem");

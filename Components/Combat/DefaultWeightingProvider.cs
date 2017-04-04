@@ -186,7 +186,7 @@ namespace Trinity.Components.Combat
                 //    GameData.QuestLevelAreaIds.Contains(Core.Player.LevelAreaId), Core.Player.Level,
                 //    CombatBase.IsQuestingMode, isHealthEmergency, hiPriorityHealthGlobes, hiPriorityShrine);
 
-  
+
                 TrinityActor target = null;
                 target = objects.OfType<TrinityItem>().Cast<TrinityItem>().FirstOrDefault(u => u.IsCosmeticItem && u.Distance <= 200f);
 
@@ -954,7 +954,7 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
- 
+
 
                                     if (Core.Player.IsInTown)
                                     {
@@ -985,7 +985,7 @@ namespace Trinity.Components.Combat
                                         break;
                                     }
 
-                       
+
 
                                     // Death's Breath Priority
                                     if (cacheObject.ActorSnoId == 361989 || cacheObject.ActorSnoId == 449044)
@@ -1156,7 +1156,7 @@ namespace Trinity.Components.Combat
                                 if (isHealthEmergency)
                                 {
                                     cacheObject.WeightInfo += $"Health Emergency";
-                                    cacheObject.Weight += (1d - Core.Player.PrimaryResource) * 5000d + EliteMonsterNearFormula(cacheObject, elites) - PackDensityFormula(cacheObject, objects);
+                                    cacheObject.Weight += (1d - Core.Player.PrimaryResourcePct) * 50000d + EliteMonsterNearFormula(cacheObject, elites) - PackDensityFormula(cacheObject, objects);
                                     break;
                                 }
 
@@ -1534,11 +1534,7 @@ namespace Trinity.Components.Combat
 
                             case TrinityObjectType.Interactable:
                                 {
-                                    if (TrinityCombat.CombatMode == CombatMode.SafeZerg)
-                                    {
-                                        cacheObject.WeightInfo += $"Ignore(Zerg)";
-                                        break;
-                                    }
+
 
                                     if (cacheObject.IsUsed)
                                     {
@@ -1564,6 +1560,12 @@ namespace Trinity.Components.Combat
                                     {
                                         cacheObject.WeightInfo += $"WhiteListed Interactable";
                                         cacheObject.Weight = MaxWeight;
+                                        break;
+                                    }
+
+                                    if (TrinityCombat.CombatMode == CombatMode.SafeZerg)
+                                    {
+                                        cacheObject.WeightInfo += $"Ignore(Zerg)";
                                         break;
                                     }
 

@@ -23,10 +23,11 @@ using Zeta.Common;
 using Zeta.Game.Internals;
 using Trinity.Framework.Reference;
 using Zeta.Game.Internals;
+using System.Collections;
 
 namespace Trinity.Modules
 {
-    public class SceneStorage : Module
+    public class SceneStorage : Module,  IEnumerable<WorldScene>
     {
         public delegate void GridProviderEventHandler(List<WorldScene> provider);
 
@@ -199,6 +200,16 @@ namespace Trinity.Modules
             {
                 node.IsVisited = false;
             }
+        }
+
+        public IEnumerator<WorldScene> GetEnumerator()
+        {
+            return ((IEnumerable<WorldScene>)CurrentWorldScenes).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable<WorldScene>)CurrentWorldScenes).GetEnumerator();
         }
     }
 

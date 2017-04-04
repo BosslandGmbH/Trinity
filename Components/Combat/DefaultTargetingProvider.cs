@@ -11,6 +11,7 @@ using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
 using Trinity.Routines;
 using Trinity.Settings;
+using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
@@ -33,6 +34,8 @@ namespace Trinity.Components.Combat
         TrinityActor LastTarget { get; }
         TrinityPower LastPower { get; }
         float MaxTargetDistance { get; }
+
+        void Clear();
     }
 
     public class DefaultTargetingProvider : ITargetingProvider
@@ -219,19 +222,19 @@ namespace Trinity.Components.Combat
             var times = target.Targeting.TargetedTimes;
             var duration = target.Targeting.TotalTargetedTime;
 
-            if (duration > TimeSpan.FromSeconds(10) && times > 10)
+            if (duration > TimeSpan.FromSeconds(10) && times > 5)
             {
                 GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(5), $"Micro-Blacklist for reposition / anti-flipflop (Times={times} Duration={duration})");
                 return true;
             }
 
-            if (duration > TimeSpan.FromMinutes(2))
+            if (duration > TimeSpan.FromSeconds(30) && !target.IsElite)
             {
                 GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted for too long ({duration})");
                 return true;
             }
 
-            if (duration > TimeSpan.FromSeconds(30) && target.Targeting.TargetedTimes > 50)
+            if (duration > TimeSpan.FromSeconds(30) && target.Targeting.TargetedTimes > 50 && !target.IsBoss)
             {
                 GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(60), $"Targetted too many times ({times})");
                 return true;
@@ -427,12 +430,6 @@ namespace Trinity.Components.Combat
             var rangeRequired = Math.Max(1f, power.MinimumRange);
             var distance = position.Distance(Core.Player.Position);
 
-            //if (CurrentTarget?.Position.Distance(position) < 1f)
-            //{
-            //    Core.Logger.Verbose(LogCategory.Targetting, $"Using current target '{CurrentTarget.Name}' CollisionRadius of {CurrentTarget.CollisionRadius} for target position range check");
-            //    return IsInRange(CurrentTarget, power);
-            //}
-
             if (Core.Player.IsInBossEncounter && TrinityCombat.Targeting.CurrentTarget != null)
             {
                 var positionIsBoss = TrinityCombat.Targeting.CurrentTarget.IsBoss && TrinityCombat.Targeting.CurrentTarget.Position.Distance(position) < 10f;
@@ -455,7 +452,7 @@ namespace Trinity.Components.Combat
                 return true;
 
             var requiresRayWalk = Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk;
-            if (!requiresRayWalk && currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(15) && currentTarget.IsInLineOfSight)
+            if (!requiresRayWalk && currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(5) && currentTarget.IsInLineOfSight)
                 return true;
 
             return currentTarget.IsWalkable;
@@ -463,10 +460,22 @@ namespace Trinity.Components.Combat
 
         private bool IsInLineOfSight(Vector3 position)
         {
-            if (Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk)
+            var longTargetTime = CurrentTarget?.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(10);
+
+            if (longTargetTime || Core.BlockedCheck.IsBlocked || Core.StuckHandler.IsStuck || Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk)
+            {
                 return Core.Grids.Avoidance.CanRayWalk(Core.Player.Position, position);
+            }
 
             return Core.Grids.Avoidance.CanRayCast(Core.Player.Position, position);
+        }
+
+        void ITargetingProvider.Clear()
+        {
+            CurrentTarget = null;
+            LastTarget = null;
+            CurrentPower = null;
+            LastPower = null;
         }
     }
 }

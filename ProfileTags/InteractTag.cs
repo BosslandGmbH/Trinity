@@ -27,11 +27,16 @@ namespace Trinity.ProfileTags
         [Description("Number of times to interact")]
         public int InteractAttempts { get; set; }
 
+        [XmlAttribute("ignoreSanityChecks")]
+        [DefaultValue(true)]
+        [Description("Attempt to interact even when the actor doesn't look interactable")]
+        public bool IgnoreSanityChecks { get; set; }
+
         #endregion
 
         public override async Task<bool> StartTask()
         {
-            _interactTask = new InteractionCoroutine(ActorId, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(1), InteractAttempts);
+            _interactTask = new InteractionCoroutine(ActorId, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(1), InteractAttempts, IgnoreSanityChecks);
 
             return await base.StartTask();
         }

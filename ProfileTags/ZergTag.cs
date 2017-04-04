@@ -14,6 +14,7 @@ namespace Trinity.ProfileTags
         #region XmlAttributes
 
         [XmlAttribute("mode")]
+        [XmlAttribute("enabled")]
         [Description("Turn zerg on or off when tag starts")]
         public bool? Enabled { get; set; }
 
@@ -23,9 +24,13 @@ namespace Trinity.ProfileTags
         {
             if (Enabled.HasValue)
             {
-                TrinityCombat.CombatMode = Enabled.Value ? CombatMode.SafeZerg : CombatMode.SafeZerg;
+                // No child variation.
+                // <Zerg enabled="true" />
+                // <Zerg enabled="false" />
+                TrinityCombat.CombatMode = Enabled.Value ? CombatMode.SafeZerg : CombatMode.Normal;
                 return true;
             }
+
             TrinityCombat.CombatMode = CombatMode.SafeZerg;
             return false;
         }

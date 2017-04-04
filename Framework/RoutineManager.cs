@@ -119,7 +119,7 @@ namespace Trinity.Framework
                     return;
                 }
             }
-            Core.Logger.Log($"Auto-Selecting default routine for class");
+
             CurrentRoutine = genericRoutines.FirstOrDefault();
         }
 

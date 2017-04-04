@@ -16,8 +16,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
     {
         private readonly float _boxSize;
         private readonly float _boxTolerance;
-
-        //public Scene Scene { get; private set; }
         public Vector2 Center { get; private set; }
 
         public List<ExplorationNode> Nodes = new List<ExplorationNode>();

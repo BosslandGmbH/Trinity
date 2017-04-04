@@ -371,36 +371,36 @@ namespace Trinity.Framework.Helpers
 
         internal static void LogNewItems()
         {
-            var knownIds = Legendary.ItemIds;
+            //var knownIds = Legendary.ItemIds;
 
-            using (ZetaDia.Memory.AcquireFrame())
-            {
-                if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
-                {
-                    Core.Logger.Log("Not in game");
-                    return;
-                }
+            //using (ZetaDia.Memory.AcquireFrame())
+            //{
+            //    if (ZetaDia.Me == null || !ZetaDia.Me.IsValid)
+            //    {
+            //        Core.Logger.Log("Not in game");
+            //        return;
+            //    }
 
-                var allItems = new List<ACDItem>();
-                allItems.AddRange(InventoryManager.StashItems);
-                allItems.AddRange(InventoryManager.Equipped);
-                allItems.AddRange(InventoryManager.Backpack);
+            //    var allItems = new List<ACDItem>();
+            //    allItems.AddRange(InventoryManager.StashItems);
+            //    allItems.AddRange(InventoryManager.Equipped);
+            //    allItems.AddRange(InventoryManager.Backpack);
 
-                if (!allItems.Any())
-                    return;
+            //    if (!allItems.Any())
+            //        return;
 
-                var newItems = allItems.Where(i => i != null && i.IsValid && i.ItemQualityLevel == ItemQuality.Legendary && (i.ItemBaseType == ItemBaseType.Jewelry || i.ItemBaseType == ItemBaseType.Armor || i.ItemBaseType == ItemBaseType.Weapon) && !knownIds.Contains(i.ActorSnoId)).DistinctBy(p => p.ActorSnoId).OrderBy(i => i.ItemType).ToList();
+            //    var newItems = allItems.Where(i => i != null && i.IsValid && i.ItemQualityLevel == ItemQuality.Legendary && (i.ItemBaseType == ItemBaseType.Jewelry || i.ItemBaseType == ItemBaseType.Armor || i.ItemBaseType == ItemBaseType.Weapon) && !knownIds.Contains(i.ActorSnoId)).DistinctBy(p => p.ActorSnoId).OrderBy(i => i.ItemType).ToList();
 
-                if (!newItems.Any())
-                    return;
+            //    if (!newItems.Any())
+            //        return;
 
-                Core.Logger.Log("------ New/Unknown Items {0} ------", newItems.Count);
+            //    Core.Logger.Log("------ New/Unknown Items {0} ------", newItems.Count);
 
-                newItems.ForEach(i =>
-                {
-                    Core.Logger.Log($"Item: {i.ItemType}: {i.Name} ({i.ActorSnoId})");
-                });
-            }
+            //    newItems.ForEach(i =>
+            //    {
+            //        Core.Logger.Log($"Item: {i.ItemType}: {i.Name} ({i.ActorSnoId})");
+            //    });
+            //}
         }
 
         internal static void DumpItemSNOReference()

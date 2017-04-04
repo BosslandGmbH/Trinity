@@ -1,0 +1,21 @@
+﻿<Profile>
+  <Name>Tag Test - UseDeathGate</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> UseDeathGate Test Started " />
+
+    <If condition="CurrentLevelAreaId != 271234">
+      <TakeWaypoint destinationLevelAreaSnoId="271234" />
+    </If>
+    
+    <UseDeathGate count="1" />
+
+    <If condition="CurrentLevelAreaId != 459863">
+      <TakeWaypoint destinationLevelAreaSnoId="459863" />
+    </If>
+
+    <UseDeathGate count="4" />
+
+    <LogMessage message=">> UseDeathGate Test Finished " />    
+  </Order>
+</Profile>

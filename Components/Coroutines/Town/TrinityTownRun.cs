@@ -211,7 +211,7 @@ namespace Trinity.Components.Coroutines.Town
                 }
             }
 
-            var validLocation = DefaultLootProvider.FindBackpackLocation(true);
+            var validLocation = DefaultLootProvider.FindBackpackLocation(true, false);
             if (validLocation.X < 0 || validLocation.Y < 0)
             {
                 Core.Logger.Log("No more space to pickup a 2-slot item, now running town-run routine. (TownRun)");

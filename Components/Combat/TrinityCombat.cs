@@ -6,6 +6,7 @@ using Trinity.Components.Combat.Resources;
 using Trinity.Components.Coroutines;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Behaviors;
+using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
 using Zeta.Bot;
@@ -154,9 +155,12 @@ namespace Trinity.Components.Combat
                     case CombatMode.Normal:
                         return true;
                     case CombatMode.Off:
+                        Core.Logger.Verbose(LogCategory.Targetting, "CombatMode is set to Off");
                         return false;
                     case CombatMode.SafeZerg:
-                        return Core.BlockedCheck.IsBlocked;
+                        var result = Core.BlockedCheck.IsBlocked;
+                        Core.Logger.Verbose(LogCategory.Targetting, result ? "Safe Zerg suspended due to being blocked" : "Safe Zerg is active");
+                        return result;
                 }
 
                 return true;

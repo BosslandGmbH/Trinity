@@ -71,15 +71,6 @@ namespace Trinity.Components.Adventurer.UI
                 () =>
                 {
                     var mainWindow = Application.Current.MainWindow;
-                    //var settings = new UniformGrid
-                    //{
-                    //    Columns = 1,
-                    //    Background = BackgroundBrush,
-                    //    Height = 160,
-                    //    Margin = new Thickness(10, 10, 10, 10),
-                    //};
-
-                    //settings.Children.Add(CreateMajorButton("Configure Adventurer", ShowMainAdventurerWindow));
 
                     var dumpers = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(2, 2, 0, 2) };
                     dumpers.Children.Add(CreateTitle("Dumpers"));
@@ -116,14 +107,6 @@ namespace Trinity.Components.Adventurer.UI
 
                     scrollViewer3.Content = coroutineHelpers3;
 
-                    //var coroutineHelpers4 = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(-2, 2, 2, 2) };
-                    //coroutineHelpers4.Children.Add(CreateTitle(" "));
-
-                    //coroutineHelpers3.Children.Add(CreateButton("Move To Actor", MoveToActorTag_Click));
-                    //coroutineHelpers3.Children.Add(CreateButton("Enter Level Area", EnterLevelAreaTag_Click));
-                    //coroutineHelpers3.Children.Add(CreateButton("Clear Level Area", ClearLevelAreaTag_Click));
-                    //coroutineHelpers3.Children.Add(CreateButton("Clear Area For N Seconds", ClearAreaForNSecondsTag_Click));
-
                     var coroutineHelpers2 = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(0, 2, 2, 2) };
                     coroutineHelpers2.Children.Add(CreateTitle(" "));
                     coroutineHelpers2.Children.Add(CreateButton("Wait For N Seconds", WaitForNSeconds_Click, new Thickness(0, 2.5, 5, 2.5)));
@@ -131,31 +114,6 @@ namespace Trinity.Components.Adventurer.UI
                     coroutineHelpers2.Children.Add(CreateButton("Interact With Unit", InteractWithUnit_Click, new Thickness(0, 2.5, 5, 2.5)));
                     coroutineHelpers2.Children.Add(CreateButton("MoveToScene", MoveToScene_Click, new Thickness(0, 2.5, 5, 2.5)));
                     coroutineHelpers2.Children.Add(CreateButton("Move To Scene Pos", MoveToScenePosition_Click, new Thickness(0, 2.5, 5, 2.5)));
-
-                    //var tests = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(0, 2, 2, 2) };
-                    //tests.Children.Add(CreateTitle("Tests"));
-                    //tests.Children.Add(CreateButton("Dump Experience", DumpExperience_Click));
-                    //tests.Children.Add(CreateButton("Dump Me", DumpMe_Click));
-                    //tests.Children.Add(CreateButton("Dump Bounty Quests", DumpBountyQuests_Click));
-                    //tests.Children.Add(CreateButton("Dump Backpack", DumpBackpack_Click));
-                    //tests.Children.Add(CreateButton("Dump Party Members", DumpParty_Click));
-                    //tests.Children.Add(CreateButton("Dump Test1", DumpDynamicBounty_Click));
-                    //tests.Children.Add(CreateButton("Dump Waypoint", DumpWaypoint_Click));
-
-                    //var mapUiContainer = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(0, 2, 0, 2)};
-
-                    //var mapUiButton = new Button();
-                    //mapUiButton.Click += ToggleRadarUI_Click;
-                    //mapUiButton.Content = "Toggle\r\nMap UI";
-                    //mapUiButton.Margin = new Thickness(5);
-                    //mapUiButton.Background = new SolidColorBrush(Colors.NavajoWhite) {Opacity = 0.2};
-                    //mapUiButton.Height = 166;
-                    //mapUiButton.FontWeight = FontWeights.Bold;
-                    //mapUiButton.FontSize = 26;
-                    //mapUiButton.Width = 140;
-                    //mapUiButton.HorizontalAlignment = HorizontalAlignment.Left;
-                    //mapUiButton.VerticalAlignment = VerticalAlignment.Top;
-                    //mapUiContainer.Children.Add(mapUiButton);
 
                     var uniformGrid = new UniformGrid
                     {
@@ -165,13 +123,10 @@ namespace Trinity.Components.Adventurer.UI
                         Columns = 4
                     };
 
-                    //uniformGrid.Children.Add(mapUiContainer);
-
                     uniformGrid.Children.Add(dumpers);
                     uniformGrid.Children.Add(coroutineHelpers);
                     uniformGrid.Children.Add(coroutineHelpers2);
                     uniformGrid.Children.Add(scrollViewer3);
-                    //uniformGrid.Children.Add(coroutineHelpers4);
 
                     _tabItem = new TabItem
                     {

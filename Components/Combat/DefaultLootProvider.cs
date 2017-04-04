@@ -30,6 +30,8 @@ namespace Trinity.Components.Combat
         bool ShouldSell(TrinityItem item);
 
         bool IsBackpackFull { get; }
+
+        Vector2 FindBackpackSlot(bool twoSlot);
     }
 
     public class DefaultLootProvider : ILootProvider
@@ -819,11 +821,16 @@ namespace Trinity.Components.Combat
 
         public static bool IsValidTwoSlotBackpackLocation()
         {
-            var validLocation = FindBackpackLocation(true);
+            var validLocation = FindBackpackLocation(true, false);
             return validLocation.X >= 0 && validLocation.Y >= 0;
         }
 
         public bool IsBackpackFull => !IsValidTwoSlotBackpackLocation();
+
+        public Vector2 FindBackpackSlot(bool twoSlot)
+        {
+            return FindBackpackLocation(twoSlot, true);
+        }
 
         internal static Vector2 FindBackpackLocation(bool isOriginalTwoSlot, bool forceRefresh = false)
         {

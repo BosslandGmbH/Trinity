@@ -132,7 +132,7 @@ namespace Trinity.Components.Coroutines
 
         private void UnequipItem(CachedACDItem item)
         {
-            var location = DefaultLootProvider.FindBackpackLocation(true);
+            var location = DefaultLootProvider.FindBackpackLocation(true, false);
             if (location == DefaultLootProvider.NoFreeSlot)
                 return;
 

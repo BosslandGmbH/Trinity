@@ -112,7 +112,7 @@ namespace Trinity.Routines.Monk
         // Needs to be looked into, this is a work-around for now (or use ZetaDia lookup) 
         public bool HasEP(TrinityActor actor) 
             => actor.Attributes.Powers.ContainsKey(SNOPower.Monk_ExplodingPalm) || 
-            actor.Attributes.GetAttributeDirectlyFromTable<bool>(ActorAttributeType.PowerBuff0VisualEffectB, (int)SNOPower.Monk_ExplodingPalm);
+            actor.Attributes.GetAttribute<bool>(ActorAttributeType.PowerBuff0VisualEffectB, (int)SNOPower.Monk_ExplodingPalm);
 
         protected override bool ShouldSevenSidedStrike(out TrinityActor target)
         {

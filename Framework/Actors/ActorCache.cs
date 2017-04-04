@@ -34,6 +34,7 @@ namespace Trinity.Framework.Actors
         ACDItem GetAcdItemByAnnId(int annId);
         bool IsAnnIdValid(int itemAnnId);
         void Update();
+        void Clear();
     }
 
     /// <summary>
@@ -167,10 +168,10 @@ namespace Trinity.Framework.Actors
                 TrinityActor item;
                 if (_rActors.TryRemove(key, out item) && item != null)
                 {
-                    item.RActor?.UpdatePointer(IntPtr.Zero);
-                    item.CommonData?.UpdatePointer(IntPtr.Zero);
-                    item.ActorInfo?.UpdatePointer(IntPtr.Zero);
-                    item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
+                    //item.RActor?.UpdatePointer(IntPtr.Zero);
+                    //item.CommonData?.UpdatePointer(IntPtr.Zero);
+                    //item.ActorInfo?.UpdatePointer(IntPtr.Zero);
+                    //item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
                     item.OnDestroyed();
                 }
             }
@@ -258,10 +259,10 @@ namespace Trinity.Framework.Actors
                 TrinityItem item;
                 if (_inventory.TryRemove(key, out item) && item != null)
                 {
-                    item.RActor?.UpdatePointer(IntPtr.Zero);
-                    item.CommonData?.UpdatePointer(IntPtr.Zero);
-                    item.ActorInfo?.UpdatePointer(IntPtr.Zero);
-                    item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
+                    //item.RActor?.UpdatePointer(IntPtr.Zero);
+                    //item.CommonData?.UpdatePointer(IntPtr.Zero);
+                    //item.ActorInfo?.UpdatePointer(IntPtr.Zero);
+                    //item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
                     item.OnDestroyed();
                 }
             }
@@ -387,11 +388,17 @@ namespace Trinity.Framework.Actors
         {
             Core.Logger.Warn("Resetting ActorCache");
             _annToAcdIndex.Clear();
-            _commonData.ForEach(o => o.Value.UpdatePointer(IntPtr.Zero));
+            //_commonData.ForEach(o => o.Value.UpdatePointer(IntPtr.Zero));
             foreach (var pair in _rActors)
             {
-                pair.Value.RActor.UpdatePointer(IntPtr.Zero);
+                //pair.Value.RActor.UpdatePointer(IntPtr.Zero);
+                //pair.Value.ActorInfo?.UpdatePointer(IntPtr.Zero);
+                //pair.Value.MonsterInfo?.UpdatePointer(IntPtr.Zero);
+                //pair.Value.CommonData?.UpdatePointer(IntPtr.Zero);
                 pair.Value.Attributes?.Destroy();
+                pair.Value.RActor = null;
+                pair.Value.CommonData = null;
+                pair.Value.Attributes = null;
             }
             _rActors.Clear();
             _inventory.Clear();

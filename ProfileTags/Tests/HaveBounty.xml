@@ -1,0 +1,29 @@
+﻿<Profile>
+  <Name>Tag Test - HaveBounty</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> HaveBounty Test Started " />
+
+    <HaveBounty questId="361234">
+      <LogMessage message=">> Skeleton King Child Executed" />
+      <Wait seconds="1" />
+    </HaveBounty>
+
+    <HaveBounty questId="357129">
+      <LogMessage message=">> Aspect of Pain Child Executed" />
+      <Wait seconds="1" />
+    </HaveBounty>
+
+    <HaveBounty questId="347558">
+      <LogMessage message=">> Kill Maghda Child Executed" />
+      <Wait seconds="1" />
+    </HaveBounty>
+
+    <HaveBounty questId="349288">
+      <LogMessage message=">> Kill Diablo Child Executed" />
+      <Wait seconds="1" />
+    </HaveBounty>
+
+    <LogMessage message=">> HaveBounty Test Finished " />
+  </Order>
+</Profile>

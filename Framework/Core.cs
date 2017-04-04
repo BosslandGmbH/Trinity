@@ -1,4 +1,5 @@
-﻿using Trinity.Components.Adventurer;
+﻿using System.Linq;
+using Trinity.Components.Adventurer;
 using Trinity.Components.QuestTools;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors;
@@ -58,11 +59,16 @@ namespace Trinity.Framework
         public static WindowTitle WindowTitle { get; } = new WindowTitle();
         public static InactivityMonitor InactivityMonitor { get; } = new InactivityMonitor();
         public static ProfileSettings ProfileSettings { get; } = new ProfileSettings();
+        public static GameCleaner GameCleaner { get; } = new GameCleaner();
         public static SettingsModel Settings => TrinitySettings.Settings;
         public static TrinityStorage Storage => TrinitySettings.Storage;
         public static MainGridProvider DBGridProvider => (MainGridProvider)Navigator.SearchGridProvider;
         public static DefaultNavigationProvider DBNavProvider => (DefaultNavigationProvider)Navigator.NavigationProvider;
+
         public static bool GameIsReady => ZetaDia.IsInGame && ZetaDia.Me.IsValid && !ZetaDia.Globals.IsLoadingWorld && !ZetaDia.Globals.IsPlayingCutscene;
+
+        public static bool TrinityIsReady => GameIsReady && Actors.Any() && Scenes.Any();
+
         public static bool IsOutOfGame => GameData.MenuWorldSnoIds.Contains(ZetaDia.Globals.WorldSnoId) || ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None;
 
         internal static void Update()

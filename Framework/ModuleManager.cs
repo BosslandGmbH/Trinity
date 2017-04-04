@@ -49,7 +49,7 @@ namespace Trinity.Framework
                 BotMain.OnShutdownRequested += BotMainOnShutdownRequested;
                 BotMain.OnStop += BotMainOnStop;
                 BotMain.OnStart += BotMainOnStart;
-                SafeExecuteOnInstances(m => m.PluginEnabled());
+                GetModules().ForEach(m => m.PluginEnabled());
                 EnableModules();
                 IsEnabled = true;
             }
@@ -138,7 +138,7 @@ namespace Trinity.Framework
             BotMain.OnStop -= BotMainOnStop;
             BotMain.OnStart -= BotMainOnStart;
             DisableModules();
-            SafeExecuteOnInstances(m => m.PluginDisabled());
+            GetModules().ForEach(m => m.PluginDisabled());
             IsEnabled = false;
         }
 

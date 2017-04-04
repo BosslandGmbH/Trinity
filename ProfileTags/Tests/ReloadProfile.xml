@@ -1,0 +1,21 @@
+﻿<Profile>
+  <Name>Tag Test - Reload Profile</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> Reload Profile Test Started " />
+
+    <If condition="CurrentLevelAreaId != 92945">
+      <TakeWaypoint destinationLevelAreaSnoId="92945" />
+    </If>
+    
+    <MoveToPosition x="389" y="424" z="0" worldSnoId="172909" levelAreaSnoId="92945" sceneSnoId="172876" sceneName="a3dun_vendors_A_E01_S02" sceneX="149" sceneY="184" sceneZ="0" isGenerated="false" />
+
+    <!--<ReloadProfile max="3" />-->
+
+    <ReloadProfile max="3" restart="true" />
+    
+    <!--<ReloadProfile max="3" stop="true" />-->
+
+    <LogMessage message=">> Reload Profile Test Finished " />
+  </Order>
+</Profile>

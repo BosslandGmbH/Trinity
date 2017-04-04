@@ -35,7 +35,6 @@ namespace Trinity.Components.Adventurer.Game.Combat
         {
             if (_zergEnabled || TargetingHelper.CombatState == CombatState.Disabled)
             {
-                //DisablePulse();
                 _zergEnabled = false;
                 SetPreviousCombatMode();
                 TargetingHelper.TurnCombatOn();
@@ -76,6 +75,7 @@ namespace Trinity.Components.Adventurer.Game.Combat
                 ))
 
             {
+                Core.Logger.Verbose("Turning off zerg because either corrupt growth or keywarden nearby");
                 combatState = true;
             }
 
@@ -108,14 +108,10 @@ namespace Trinity.Components.Adventurer.Game.Combat
             if (combatState)
             {
                 SetPreviousCombatMode();
-
-                TargetingHelper.TurnCombatOn();
             }
             else
             {
                 SetSafeZergCombatMode();
-
-                TargetingHelper.TurnCombatOff();
             }
         }
 

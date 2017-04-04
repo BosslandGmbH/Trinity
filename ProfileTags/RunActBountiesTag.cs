@@ -97,7 +97,7 @@ namespace Trinity.ProfileTags
                     break;
             }
 
-            foreach (var act in _acts)
+            foreach (var act in _acts.ToList())
             {
                 if (BountyHelpers.AreAllActBountiesCompleted(act))
                     _acts.Remove(act);

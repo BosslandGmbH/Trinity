@@ -14,6 +14,8 @@ namespace Trinity.Framework.Actors.ActorTypes
     /// </summary>
     public class ActorBase
     {
+        private SNORecordActor _actorInfo;
+        private SNORecordMonster _monsterInfo;
         public bool IsAcdBased { get; set; }
         public bool IsRActorBased { get; set; }
         public Vector3 Position { get; set; }
@@ -26,8 +28,21 @@ namespace Trinity.Framework.Actors.ActorTypes
         public int MonsterSnoId { get; set; }
         public ACD CommonData { get; set; }
         public DiaObject RActor { get; set; }
-        public SNORecordActor ActorInfo { get; set; }
-        public SNORecordMonster MonsterInfo { get; set; }
+
+        public SNORecordActor ActorInfo
+        {
+            // Map on these records is causing d3 to crash.
+            get { return CommonData != null && CommonData.IsValid && _actorInfo != null && _actorInfo.IsValid ? _actorInfo : default(SNORecordActor); }
+            set { _actorInfo = value; }
+        }
+
+        public SNORecordMonster MonsterInfo
+        {
+            // Map on these records is causing d3 to crash.
+            get { return CommonData != null && CommonData.IsValid && _monsterInfo != null && _monsterInfo.IsValid ? _monsterInfo : default(SNORecordMonster); }
+            set { _monsterInfo = value; }
+        }
+
         public bool IsValid => (!IsRActorBased || RActor.IsValid) && (!IsAcdBased || IsAcdValid) && (ActorInfo?.IsValid ?? true);
         public bool IsRActorValid => RActor != null && RActor.IsValid && RActor.RActorId != -1 && !IsRActorDisposed;
         public bool IsAcdValid => CommonData != null && CommonData.IsValid && !CommonData.IsDisposed;

@@ -60,6 +60,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public async Task<bool> GetCoroutine()
         {
+            SafeZerg.Instance.DisableZerg();
             ClearAreaHelper.CheckClearArea(BountyData);
 
             switch (State)

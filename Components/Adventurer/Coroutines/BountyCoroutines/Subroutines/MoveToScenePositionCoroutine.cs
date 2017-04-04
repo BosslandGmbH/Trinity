@@ -5,6 +5,7 @@ using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
+using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
 using Trinity.UI.Visualizer;
 using Zeta.Common;
@@ -82,6 +83,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public async Task<bool> GetCoroutine()
         {
+            if (PluginSettings.Current.BountyZerg && BountyData != null)
+            {
+                SafeZerg.Instance.EnableZerg();
+            }
+            else
+            {
+                SafeZerg.Instance.DisableZerg();
+            }
+
             switch (State)
             {
                 case States.NotStarted:
