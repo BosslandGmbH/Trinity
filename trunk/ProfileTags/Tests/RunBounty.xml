@@ -1,5 +1,5 @@
 ﻿<Profile>
-  <Name>Tag Test - Run Bounty</Name>
+  <Name>Tag Test - RunBounty</Name>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
   <Order>
     <LogMessage message=">> Run Bounty Test Started " />
@@ -9,6 +9,6 @@
     <RunBounty questId="347558" name="Bounty: Kill Maghda" />
     <RunBounty questId="349288" name="Bounty: Kill Diablo" />
   
-    <LogMessage message=">> Run Bounty Test Finished " />
+    <LogMessage message=">> RunBounty Test Finished " />
   </Order>
 </Profile>

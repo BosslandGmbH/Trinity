@@ -8,6 +8,7 @@ namespace Trinity.ProfileTags.EmbedTags
     [XmlElement("Item")]
     public class ItemTag
     {
+        [XmlAttribute("actorId")]
         [XmlAttribute("id")]
         [DefaultValue(0)]
         public int Id { get; set; }

@@ -52,7 +52,7 @@ namespace Trinity.Modules
                $"{DateTime.UtcNow.ToLocalTime():f} {Environment.NewLine}" +
                $"{item.Name} ({item.ActorSnoId}), {item.RawItemType} {Environment.NewLine}" +
                $"{item.ItemBaseType}: {item.TrinityItemType}, {item.TrinityItemQuality}" +
-               $"{(item.IsAncient ? ", Ancient" : string.Empty)}, {item.Attributes.Summary()}" + 
+               $"{(item.IsAncient ? ", Ancient" : string.Empty)}, {item.Attributes}" + 
                $"{Environment.NewLine}";
     }
 

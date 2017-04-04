@@ -61,6 +61,12 @@ namespace Trinity.Components.QuestTools
         {
             get
             {
+                if (!Core.TrinityIsReady)
+                {
+                    Core.Logger.Verbose("Waiting for Trinity to become ready");
+                    return false;
+                }
+
                 if (_isDone)
                     return true;
 
@@ -68,11 +74,12 @@ namespace Trinity.Components.QuestTools
                 {
                     StartTime = DateTime.UtcNow;
                     IsStarted = true;
+                    OnStart();
                     if (StartMethod())
                         Done();
                 }
 
-                if (!IsActiveQuestStep)
+                if (!IsActiveQuest || StepId != 0 && !IsActiveQuestStep)
                     Done();
 
                 else if (CheckTimeout())
@@ -108,7 +115,8 @@ namespace Trinity.Components.QuestTools
 
         protected sealed override Composite CreateBehavior() => null;
         public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
-        public sealed override void OnDone() => Core.Logger.Verbose($"Finished Tag: {TagClassName} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
+        public sealed override void OnDone() { }
+
         public sealed override void ResetCachedDone() => Reset();
         public sealed override void ResetCachedDone(bool force = false) => Reset();
 
@@ -137,11 +145,17 @@ namespace Trinity.Components.QuestTools
         public void Done()
         {
             _isDone = true;
-            IsStarted = false;
+
             EndTime = DateTime.UtcNow;
             DoneMethod();
             this.SetChildrenDone();
-            OnDone();
+
+            if (IsStarted)
+            {
+                Core.Logger.Verbose($"Finished Tag: {TagClassName} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
+            }
+
+            IsStarted = false;
         }
 
         #endregion IEnhancedProfileBehavior

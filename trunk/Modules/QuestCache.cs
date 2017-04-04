@@ -14,33 +14,33 @@ namespace Trinity.Modules
 
         protected override void OnPulse()
         {
-            CurrentQuest = ZetaDia.CurrentQuest;
-            if (CurrentQuest == null)
-                return;
+            //CurrentQuest = ZetaDia.CurrentQuest;
+            //if (CurrentQuest == null)
+            //    return;
 
-            CurrentBounty = ZetaDia.Storage.Quests.ActiveBounty;
-            if (CurrentBounty == null)
-                return;
+            //CurrentBounty = ZetaDia.Storage.Quests.ActiveBounty;
+            //if (CurrentBounty == null)
+            //    return;
 
-            CurrentBountyData = BountyDataFactory.GetBountyData((int)CurrentBounty.Quest);
-            if (CurrentBountyData == null)
-                return;
+            //CurrentBountyData = BountyDataFactory.GetBountyData((int)CurrentBounty.Quest);
+            //if (CurrentBountyData == null)
+            //    return;
 
-            QuestData = CurrentBountyData.QuestData;
+            //QuestData = CurrentBountyData.QuestData;
 
-            foreach (var step in QuestData.Steps)
-            {
-                if (!step.IsActive) continue;
+            //foreach (var step in QuestData.Steps)
+            //{
+            //    if (!step.IsActive) continue;
 
-                CurrentStepData = step;
+            //    CurrentStepData = step;
 
-                foreach (var objective in step.Objectives)
-                {
-                    if (!objective.IsActive) continue;
+            //    foreach (var objective in step.Objectives)
+            //    {
+            //        if (!objective.IsActive) continue;
 
-                    CurrentObjective = objective;
-                }
-            }
+            //        CurrentObjective = objective;
+            //    }
+            //}
 
         }
 
@@ -66,16 +66,20 @@ namespace Trinity.Modules
         {
             get
             {
-                if (CurrentQuest == null || !CurrentQuest.IsValid)
-                    return false;
+                return false;
 
-                if (CurrentStepData == null || CurrentObjective == null)
-                    return false;
+                // Needs work - better detection of when inside the area/level that needs to have things killed.
 
-                if (!CurrentStepData.IsActive || !CurrentObjective.IsActive)
-                    return false;
+                //if (CurrentQuest == null || !CurrentQuest.IsValid)
+                //    return false;
 
-                return KillAllTypes.Contains(CurrentObjective.ObjectiveType);
+                //if (CurrentStepData == null || CurrentObjective == null)
+                //    return false;
+
+                //if (!CurrentStepData.IsActive || !CurrentObjective.IsActive)
+                //    return false;
+
+                //return KillAllTypes.Contains(CurrentObjective.ObjectiveType);
             }
         }
 
@@ -89,6 +93,11 @@ namespace Trinity.Modules
             QuestStepObjectiveType.KillMonsterFromGroup,
             QuestStepObjectiveType.KillGroup,
         };
+
+        public static void Clear()
+        {
+
+        }
     }
 
 }

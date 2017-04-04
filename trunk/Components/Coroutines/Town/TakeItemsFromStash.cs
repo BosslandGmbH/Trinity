@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Buddy.Coroutines;
+using Trinity.Components.Combat;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -38,7 +39,10 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
             }
 
-            await MoveToAndInteract.Execute(TownInfo.Stash);
+            if (!UIElements.StashWindow.IsVisible && TownInfo.Stash.Distance <= 10f)
+            {
+                await MoveToAndInteract.Execute(TownInfo.Stash);
+            }
 
             if (!UIElements.StashWindow.IsVisible && TownInfo.Stash.Distance <= 10f)
             {
@@ -100,7 +104,13 @@ namespace Trinity.Components.Coroutines.Town
                             if (item.IsValid && !item.IsDisposed)
                             {
                                 Core.Logger.Log($"[TakeItemsFromStash] Removing {item.Name} ({item.ActorSnoId}) from stash. StackSize={stackSize} WithdrawnAlready={numTakenAlready} InternalName={item.InternalName} Id={item.ActorSnoId} AnnId={item.AnnId} Quality={item.ItemQualityLevel} AncientRank={item.AncientRank}");
-                                InventoryManager.QuickWithdraw(item);
+
+                                // Quick withdraw broken?
+                                //InventoryManager.QuickWithdraw(item);
+
+                                var newPosition = TrinityCombat.Loot.FindBackpackSlot(item.IsTwoSquareItem);
+                                InventoryManager.MoveItem(item.AnnId, ZetaDia.Me.CommonData.AnnId, InventorySlot.BackpackItems, (int)newPosition.X, (int)newPosition.Y);
+                                
                                 amountWithdrawn[item.ActorSnoId] += stackSize;
                                 lastStackTaken[item.ActorSnoId] = item;
                             }

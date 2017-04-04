@@ -21,6 +21,15 @@
         <Item quality="Rare" />
       </Items>
     </TakeFromStash>
+
+    <TakeFromStash>
+      <Items>
+        <Item id="366946" quantity="250" />
+        <Item id="366947" quantity="250" />
+        <Item id="366948" quantity="250" />
+        <Item id="366949" quantity="250" />
+      </Items>
+    </TakeFromStash>
     
     <LogMessage message=">> TakeFromStash Test Finished " />    
   </Order>

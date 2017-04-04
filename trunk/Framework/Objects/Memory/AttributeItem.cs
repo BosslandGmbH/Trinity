@@ -1,4 +1,5 @@
 ﻿using System;
+using Trinity.Framework.Actors.Attributes;
 using Trinity.Framework.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -17,7 +18,7 @@ namespace Trinity.Framework.Objects.Memory
 
         public int Size = 12;
 
-        public AttributeKey Key;
+        public ActorAttributes.AttributeKey Key;
 
         public object GetValue()
         {
@@ -100,7 +101,7 @@ namespace Trinity.Framework.Objects.Memory
             if (!IsValid) return;
 
             ModKey = ZetaDia.Memory.Read<int>(BaseAddress + 4);
-            Key = new AttributeKey(ModKey);
+            Key = new ActorAttributes.AttributeKey(ModKey);
 
             Zeta.Game.Internals.AttributeDescriptor descripter;
 

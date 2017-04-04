@@ -2,6 +2,7 @@
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using Trinity.Framework.Actors.Attributes;
 using Zeta.Game;
 using Zeta.Game.Internals.Actors;
 
@@ -202,11 +203,11 @@ namespace Trinity.Framework.Objects.Memory
 
         internal T GetCachedAttribute<T>(ActorAttributeType attr, int modifier)
         {
-            var key = new AttributeKey((int)attr, modifier);
+            var key = new ActorAttributes.AttributeKey((int)attr, modifier);
             return GetCachedAttribute<T>(key);
         }
 
-        internal T GetCachedAttribute<T>(AttributeKey key)
+        internal T GetCachedAttribute<T>(ActorAttributes.AttributeKey key)
         {
             AttributeItem foundAttribute;
             if (!Items.TryGetValue(key.Value, out foundAttribute))
@@ -217,7 +218,7 @@ namespace Trinity.Framework.Objects.Memory
 
         internal T GetAttributeDirectlyFromTable<T>(ActorAttributeType attr, int modifier = -1)
         {
-            var key = new AttributeKey((int)attr, modifier);
+            var key = new ActorAttributes.AttributeKey((int)attr, modifier);
 
             AttributeItem foundAttribute;
             if (Map == null || !Map.TryGetItemByKey(key.Value, out foundAttribute, AttributeHasher))
@@ -237,17 +238,17 @@ namespace Trinity.Framework.Objects.Memory
 
         internal T GetAttribute<T>(ActorAttributeType attr, SNOPower modifier)
         {
-            var key = new AttributeKey((int)attr, (int)modifier);
+            var key = new ActorAttributes.AttributeKey((int)attr, (int)modifier);
             return GetAttribute<T>(key);
         }
 
         internal T GetAttribute<T>(ActorAttributeType attr, int modifier)
         {
-            var key = new AttributeKey((int)attr, modifier);
+            var key = new ActorAttributes.AttributeKey((int)attr, modifier);
             return GetAttribute<T>(key);
         }
 
-        internal T GetAttribute<T>(AttributeKey key)
+        internal T GetAttribute<T>(ActorAttributes.AttributeKey key)
         {
             AttributeItem foundAttribute;
             if (!Items.TryGetValue(key.Value, out foundAttribute))

@@ -32,14 +32,7 @@ namespace Trinity.Modules
         {
             foreach (var detector in Store.GetDetectors().Where(d => d.IsEnabled && d.HasSubscribers))
             {
-                try
-                {
-                    detector.CheckForChanges();
-                }
-                catch (Exception ex)
-                {
-                    Core.Logger.Error($"ChangeMonitor: {detector.Name} {ex}");
-                }
+                detector.CheckForChanges();
             }
         }
     }

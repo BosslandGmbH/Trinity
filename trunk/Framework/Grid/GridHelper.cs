@@ -24,7 +24,7 @@ namespace Trinity.Framework.Grid
 
         public bool CanRayWalk(Vector3 @from, Vector3 to)
         {
-            return Avoidance.CanRayCast(@from, to);
+            return Avoidance.CanRayWalk(@from, to);
         }
     }
 }

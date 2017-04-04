@@ -85,7 +85,7 @@ namespace Trinity.Framework.Actors.Attributes
         public int Post212Drop2 => GetCachedAttribute<int>(ActorAttributeType.Post212Drop2); // Post212Drop2 (-3692) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1
         public int Loot20Drop => GetCachedAttribute<int>(ActorAttributeType.Loot20Drop); // Loot20Drop (-3694) = i:1 f:1.401298E-45 v:1 ModifierType=None Modifier=-1
         public int Seed => GetCachedAttribute<int>(ActorAttributeType.Seed); // Seed (-3698) = i:-180189030 f:-2.466006E+32 v:-1.80189E+08 ModifierType=None Modifier=-1
-        public int RequiredLevel => GetCachedAttribute<int>(new AttributeKey((int)ActorAttributeType.Requirement, (int)RequirementType.EquipItem)); // ItemLegendaryItemLevelOverride (-3706) = i:70 f:9.809089E-44 v:70 ModifierType=None Modifier=-1
+        public int RequiredLevel => GetCachedAttribute<int>(new ActorAttributes.AttributeKey((int)ActorAttributeType.Requirement, (int)RequirementType.EquipItem)); // ItemLegendaryItemLevelOverride (-3706) = i:70 f:9.809089E-44 v:70 ModifierType=None Modifier=-1
 
         public int ItemLegendaryItemLevelOverride => GetCachedAttribute<int>(ActorAttributeType.ItemLegendaryItemLevelOverride);
         public int ItemBindingLevelOverride => GetCachedAttribute<int>(ActorAttributeType.ItemBindingLevelOverride); // ItemBindingLevelOverride (-3707) = i:2 f:2.802597E-45 v:2 ModifierType=None Modifier=-1
@@ -244,13 +244,13 @@ namespace Trinity.Framework.Actors.Attributes
 
         public int GetElementalDamage(DamageType damageType)
         {
-            var key = new AttributeKey((int)ActorAttributeType.DamageDealtPercentBonus, (int)damageType);
+            var key = new ActorAttributes.AttributeKey((int)ActorAttributeType.DamageDealtPercentBonus, (int)damageType);
             return (int)Math.Round(GetCachedAttribute<float>(key) * 100, MidpointRounding.AwayFromZero);
         }
 
         public float SkillDamagePercent(SNOPower power)
         {
-            var key = new AttributeKey((int)ActorAttributeType.PowerDamagePercentBonus, (int)power);
+            var key = new ActorAttributes.AttributeKey((int)ActorAttributeType.PowerDamagePercentBonus, (int)power);
             return GetCachedAttribute<float>(key);
         }
 

@@ -47,10 +47,6 @@ namespace Trinity.Framework.Grid
             {
                 _currentGrid = new TrinityGrid();
             }
-            else if (!Core.Scenes.CurrentWorldScenes.Any())
-            {
-                return _currentGrid;
-            }
             return _currentGrid;
         }
 

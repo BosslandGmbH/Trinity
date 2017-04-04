@@ -1,33 +1,33 @@
-﻿//using System.Linq;
-//using Zeta.Game;
-//using Zeta.Game.Internals;
-//using Zeta.TreeSharp;
-//using Zeta.XmlEngine;
+﻿using System;
+using System.Linq;
+using Trinity;
+using Trinity.Components.QuestTools;
+using Trinity.Framework;
+using Trinity.Framework.Actors;
+using Trinity.Framework.Helpers;
+using Trinity.Framework.Objects;
+using Trinity.Framework.Reference;
+using Zeta.Common;
+using Zeta.Game;
+using Zeta.Game.Internals;
+using Zeta.XmlEngine;
 
-//namespace Trinity.Components.QuestTools.ProfileTags
-//{
-//    [XmlElement("HaveBounty")]
-//    public class HaveBountyTag : BaseComplexProfileBehavior
-//    {
-//        public HaveBountyTag() { }
-//        protected override Composite CreateBehavior()
-//        {
-//            return
-//            new Decorator(ret => !IsDone,
-//                new PrioritySelector(
-//                    GetNodes().Select(b => b.Behavior).ToArray()
-//                )
-//            );
-//        }
+namespace Trinity.ProfileTags
+{
+    [XmlElement("HaveBounty")]
+    public class HaveBountyTag : BaseContainerProfileBehavior
+    {
+        public override bool StartMethod()
+        {
+            var bounty = ZetaDia.Storage.Quests.Bounties.FirstOrDefault(b => b.Info.QuestSNO == QuestId && b.Info.State != QuestState.Completed);
+            if (bounty != null)
+            {
+                Core.Logger.Log($"Bounty with QuestId {QuestId} was found. {bounty.Info.DisplayName}.");
+                return false;
+            }
 
-//        public override bool GetConditionExec()
-//        {
-//            return ZetaDia.Storage.Quests.Bounties.Where(bounty => bounty.Info.QuestSNO == QuestId && bounty.Info.State != QuestState.Completed).FirstOrDefault() != null;
-//        }
-
-//        private bool CheckNotAlreadyDone(object obj)
-//        {
-//            return !IsDone;
-//        }
-//    }
-//}
+            Core.Logger.Log($"Bounty with QuestId {QuestId} was not found");
+            return true;
+        }
+    }
+}

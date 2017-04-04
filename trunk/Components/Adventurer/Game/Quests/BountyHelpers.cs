@@ -131,7 +131,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public static bool AreAllActBountiesCompleted(Act act)
         {
-            return !ZetaDia.Storage.Quests.Bounties.Any(b => b.Act == act && b.Info.State != QuestState.Completed);
+            return !ZetaDia.Storage.Quests.Bounties.ToList().Any(b => b.Act == act && b.Info.State != QuestState.Completed);
         }
 
         public static DiaGizmo GetPortalNearMarkerPosition(Vector3 position)

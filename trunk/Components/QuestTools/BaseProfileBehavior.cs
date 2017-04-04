@@ -52,6 +52,12 @@ namespace Trinity.Components.QuestTools
 
         private async Task<bool> Run()
         {
+            if (!Core.TrinityIsReady)
+            {
+                Core.Logger.Verbose("Waiting for Trinity to become ready");
+                return false;
+            }
+
             if (_isDone)
                 return true;
 

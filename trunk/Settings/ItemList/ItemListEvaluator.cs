@@ -597,7 +597,7 @@ namespace Trinity.Settings.ItemList
                             break;
                         }
 
-                        itemValue = item.Attributes.GetCachedAttribute<float>(attribute, modifierId);
+                        itemValue = item.Attributes.GetAttribute<float>(attribute, modifierId);
                         ruleValue = value;
                         result = itemValue >= ruleValue;
                         returnValue = itemValue;

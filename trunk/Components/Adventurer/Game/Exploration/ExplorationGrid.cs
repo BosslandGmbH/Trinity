@@ -17,20 +17,22 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         private static readonly ConcurrentDictionary<int, List<Vector3>> KnownPositions = new ConcurrentDictionary<int, List<Vector3>>();
 
         private static Lazy<ExplorationGrid> _currentGrid;
+        private static Lazy<ExplorationGrid> _lastGrid;
 
         public static ExplorationGrid GetWorldGrid(int worldDynamicId)
         {
-            if (_currentGrid == null)
+            var worldId = ZetaDia.Globals.WorldId;
+            if (_lastGrid?.Value?.WorldDynamicId == worldId)
             {
-                _currentGrid = new Lazy<ExplorationGrid>(() => new ExplorationGrid());
-                return _currentGrid.Value;
+                var cur = _currentGrid;
+                _currentGrid = _lastGrid;
+                _lastGrid = cur;
             }
-
-            if (_currentGrid == null || _currentGrid.Value == null || ZetaDia.Globals.WorldId != _currentGrid.Value.WorldDynamicId)
+            if (_currentGrid?.Value == null || worldId != _currentGrid.Value.WorldDynamicId)
             {
+                _lastGrid = _currentGrid;
                 _currentGrid = new Lazy<ExplorationGrid>(() => new ExplorationGrid());
             }
-
             return _currentGrid.Value;
         }
 

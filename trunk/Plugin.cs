@@ -23,7 +23,7 @@ namespace Trinity
     {
         private static TrinityPlugin _instance;
         public string Name => "Trinity";
-        public Version Version => new Version(2, 250, 759);
+        public Version Version => new Version(2, 250, 767);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));

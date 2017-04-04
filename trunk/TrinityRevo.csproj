@@ -278,6 +278,7 @@
     <Compile Include="Framework\Avoidance\AvoidanceManager.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceType.cs" />
     <Compile Include="Framework\Avoidance\DefaultAvoider.cs" />
+    <Compile Include="Modules\GameCleaner.cs" />
     <Compile Include="Modules\RoutineSelector.cs" />
     <Compile Include="Modules\SceneStorage.cs" />
     <Compile Include="Modules\GridEnricher.cs" />
@@ -429,6 +430,8 @@
     <Compile Include="ProfileTags\RandomMove.cs" />
     <Compile Include="ProfileTags\RiftTag.cs" />
     <Compile Include="ProfileTags\RunActBountiesTag.cs" />
+    <Compile Include="ProfileTags\ReloadProfileTag.cs" />
+    <Compile Include="ProfileTags\UseDeathGateTag.cs" />
     <Compile Include="ProfileTags\RunBountyTag.cs" />
     <Compile Include="ProfileTags\ShuffleTag.cs" />
     <Compile Include="ProfileTags\StopBotTag.cs" />
@@ -439,6 +442,7 @@
     <Compile Include="ProfileTags\WaitTag.cs" />
     <Compile Include="ProfileTags\WhenTag.cs" />
     <Compile Include="ProfileTags\ZergTag.cs" />
+    <Compile Include="Routines\Wizard\WizardParalysisArchonHydra.cs" />
     <Compile Include="Settings\ItemList\ItemListEvaluator.cs" />
     <Compile Include="Components\Coroutines\ItemSort.cs" />
     <Compile Include="Modules\BlockedCheck.cs" />
@@ -449,7 +453,6 @@
     <Compile Include="Modules\InactivityMonitor.cs" />
     <Compile Include="Modules\LazyRaider.cs" />
     <Compile Include="Modules\Performance.cs" />
-    <Compile Include="Modules\ResetGameState.cs" />
     <Compile Include="Modules\Clusters.cs" />
     <Compile Include="Modules\Cooldowns.cs" />
     <Compile Include="Modules\GameStopper.cs" />
@@ -704,6 +707,7 @@
     <Content Include="ProfileTags\Tests\LoadLastProfileSub.xml" />
     <Content Include="ProfileTags\Tests\MoveToActor.xml" />
     <Content Include="ProfileTags\Tests\MoveToMapMarker.xml" />
+    <Content Include="ProfileTags\Tests\ReloadProfile.xml" />
     <Content Include="ProfileTags\Tests\RandomMove.xml">
       <SubType>Designer</SubType>
     </Content>
@@ -712,11 +716,13 @@
     <Content Include="ProfileTags\Tests\ProfileSetting.xml" />
     <Content Include="ProfileTags\Tests\Rift.xml" />
     <Content Include="ProfileTags\Tests\RunActBounties.xml" />
+    <Content Include="ProfileTags\Tests\HaveBounty.xml" />
     <Content Include="ProfileTags\Tests\RunBounty.xml" />
     <Content Include="ProfileTags\Tests\Shuffle.xml" />
     <Content Include="ProfileTags\Tests\StopBot.xml" />
     <Content Include="ProfileTags\Tests\TakeFromStash.xml" />
     <Content Include="ProfileTags\Tests\TakeWaypoint.xml" />
+    <Content Include="ProfileTags\Tests\UseDeathGate.xml" />
     <Content Include="ProfileTags\Tests\Transmute.xml" />
     <Content Include="ProfileTags\Tests\Wait.xml" />
     <Content Include="ProfileTags\Tests\WaitForCombat.xml" />
@@ -863,6 +869,9 @@
     <Page Include="Routines\Wizard\WizardFlashFireSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Wizard\WizardParalysisArchonHydraSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Routines\Wizard\WizardParalysisArchonSettings.xaml">
       <Generator>MSBuild:Compile</Generator>

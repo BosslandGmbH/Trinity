@@ -59,6 +59,7 @@ namespace Trinity.Framework.Objects.Memory
             }
             return string.Empty;
         }
+
     }
 
     public class NativeStringList : SnoTableEntry

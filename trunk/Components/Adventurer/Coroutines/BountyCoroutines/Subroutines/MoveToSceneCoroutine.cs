@@ -6,6 +6,7 @@ using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
+using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
 using Trinity.Framework;
 using Trinity.Framework.Actors;
@@ -70,6 +71,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 Core.Logger.Debug($"Currently in Target Scene: {_scene.Name}. IsSubScene={_scene.SubScene}");
                 State = States.Completed;
+            }
+
+            if (PluginSettings.Current.BountyZerg && BountyData != null)
+            {
+                SafeZerg.Instance.EnableZerg();
+            }
+            else
+            {
+                SafeZerg.Instance.DisableZerg();
             }
 
             switch (State)
