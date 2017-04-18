@@ -13,5 +13,7 @@
         LegendaryItem = 275968,
         SetItem = 404424,
         ExitStone = 218394,
+        QuestPortalForward = 81058,
+        QuestPortalBack = 102321,
     }
 }

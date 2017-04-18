@@ -29,6 +29,12 @@ namespace Trinity.Modules
             }
         }
 
+        protected override void OnBotStart()
+        {
+            ResetGold();
+            ResetXp();
+        }
+
         protected override void OnGameJoined()
         {
             ResetGold();

@@ -1,0 +1,27 @@
+﻿<Profile>
+  <Name>Tag Test - TakeTownPortal and TakeReturnPortal Loop</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> TakeTownPortal and TakeReturnPortal Loop Test Started " />
+
+    <If condition="CurrentLevelAreaId != 19953">
+      <TakeWaypoint destinationLevelAreaSnoId="19953" />
+    </If>
+
+    <MoveToPosition questId="312429" stepId="2" x="615.09" y="843.69" z="20.1" sceneName="trOut_FesteringWoods_120_Edge_SE_02"  worldSnoId="71150" levelAreaSnoId="19953" />
+
+    <TownPortal questId="1" />
+
+    <!-- [199506B4] Type: Gizmo Name: Waypoint_Town-7659 ActorSnoId: 223757 WaypointNumber: 0--> 
+    <MoveToActor actorId="223757" />
+
+    <!-- PT_Blacksmith_RepairShortcut-4303 (195170) PT_Blacksmith_RepairShortcut Distance=13.0678 Type=Unit -->
+    <MoveToActor actorId="195170" />
+
+    <TakeReturnPortal questId="1" />
+
+    <Wait seconds="5" />
+
+    <LogMessage message=">> TakeTownPortal and TakeReturnPortal Loop Test Finished " />    
+  </Order>
+</Profile>

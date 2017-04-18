@@ -77,7 +77,10 @@ namespace Trinity.Components.Coroutines.Town
                 switch (levelAreaId)
                 {
                     case 19947: // Campaign A1 Hub
-
+                        vectors.Add(new Vector3(2984.255f, 2819.564f, 24.04533f));
+                        vectors.Add(new Vector3(2961.75f, 2814.551f, 24.04533f));
+                        vectors.Add(new Vector3(2999.527f, 2840.646f, 24.04532f));
+                        vectors.Add(new Vector3(2962.378f, 2852.275f, 24.04533f));
                         break;
 
                     case 332339: // OpenWorld A1 Hub

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using Trinity.Framework;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
+using Trinity.Components.Combat;
+using Trinity.Components.QuestTools;
 using Zeta.Common;
 using Zeta.Common.Helpers;
 using Zeta.Game;
@@ -53,15 +56,16 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             get { return _bountyData ?? (_bountyData = BountyDataFactory.GetBountyData(_questId)); }
         }
 
-        public ClearLevelAreaCoroutine(int questId)
+        public ClearLevelAreaCoroutine(int questId, bool stopWhenExplored = false)
         {
             _questId = questId;
+            _stopWhenExplored = stopWhenExplored;
         }
 
         public async Task<bool> GetCoroutine()
         {
             SafeZerg.Instance.DisableZerg();
-            ClearAreaHelper.CheckClearArea(BountyData);
+            TrinityCombat.SetKillMode(1000);
 
             switch (State)
             {
@@ -102,7 +106,17 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 }
             }
 
-            if (!await ExplorationCoroutine.Explore(BountyData.LevelAreaIds)) return false;
+            var ids = BountyData?.LevelAreaIds ?? new HashSet<int> {ZetaDia.CurrentLevelAreaSnoId};
+
+            if (!await ExplorationCoroutine.Explore(ids))
+                return false;
+
+            if (_stopWhenExplored && ProfileConditions.PercentNodesVisited(90))
+            {
+                State = States.Completed;
+                return false;
+            }
+
             ExplorationGrid.Instance.WalkableNodes.ForEach(n => { n.IsVisited = false; });
             return false;
         }
@@ -123,12 +137,16 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Completed()
         {
-            throw new NotImplementedException();
+            TrinityCombat.ResetCombatMode();
+            Core.Logger.Log("[ClearLevelArea] Completed");
+            return true;
         }
 
         private async Task<bool> Failed()
         {
-            throw new NotImplementedException();
+            TrinityCombat.ResetCombatMode();
+            Core.Logger.Log("[ClearLevelArea] Failed");
+            return true;
         }
 
         public void Reset()
@@ -142,6 +160,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         }
 
         private static readonly WaitTimer HostileSearchTimer = new WaitTimer(TimeSpan.FromMilliseconds(500));
+        private bool _stopWhenExplored;
 
         public Vector3 FindNearestHostileUnitLocation()
         {

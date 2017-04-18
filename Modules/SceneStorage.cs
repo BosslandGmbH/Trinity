@@ -51,6 +51,11 @@ namespace Trinity.Modules
             }
         }
 
+        protected override void OnBotStart()
+        {
+            Reset();
+        }
+
         protected override void OnWorldChanged(ChangeEventArgs<int> args)
         {
             PurgeOldScenes();

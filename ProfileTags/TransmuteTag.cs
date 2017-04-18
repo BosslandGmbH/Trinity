@@ -24,6 +24,24 @@ namespace Trinity.ProfileTags
         [Description("Items to be transmuted")]
         public List<ItemTag> Items { get; set; }
 
+        /*
+        public enum TransmuteRecipe
+        {
+            ConvertCraftingMaterialsFromRare = -1849120465,
+            AugmentAncientItem = -1846982033,
+            ConvertGems = -1112415923,
+            RemoveLevelRequirement = -1020554217,
+            ConvertCraftingMaterialsFromMagic = -897374554,
+            ExtractLegendaryPower = -114611389,
+            OpenPortalToCow = -1,
+            OpenPortalToGreed = -1,
+            ConvertCraftingMaterialsFromNormal = 507548782,
+            ConvertSetItem = 955478940,
+            ReforgeLegendary = 1697574309,
+            UpgradeRareItem = 1946622401,
+        }     
+        */
+
         [XmlAttribute("recipe")]
         [Description("Cube recipe to use")]
         public TransmuteRecipe Recipe { get; set; }
@@ -80,20 +98,3 @@ namespace Trinity.ProfileTags
     }
 }
 
-/*
-public enum TransmuteRecipe
-{
-  ConvertCraftingMaterialsFromRare = -1849120465,
-  AugmentAncientItem = -1846982033,
-  ConvertGems = -1112415923,
-  RemoveLevelRequirement = -1020554217,
-  ConvertCraftingMaterialsFromMagic = -897374554,
-  ExtractLegendaryPower = -114611389,
-  OpenPortalToCow = -1,
-  OpenPortalToGreed = -1,
-  ConvertCraftingMaterialsFromNormal = 507548782,
-  ConvertSetItem = 955478940,
-  ReforgeLegendary = 1697574309,
-  UpgradeRareItem = 1946622401,
-}     
-*/

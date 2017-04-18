@@ -155,7 +155,8 @@ namespace Trinity.Framework.Actors.ActorTypes
         public bool IsProfileBlacklisted { get; set; }
         public bool IsUsingBossbar { get; set; }
         public bool IsShadowClone { get; set; }
-        public bool IsCorruptGrowth { get; internal set; }
+        public bool IsCorruptGrowth { get; set; }
+        public bool IsPortal { get; set; }
 
         public override void OnCreated()
         {

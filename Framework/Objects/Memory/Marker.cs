@@ -9,6 +9,7 @@ namespace Trinity.Framework.Objects.Memory
     {
         public string Name => SnoManager.StringListHelper.GetStringListValue((SnoStringListType)StringListSnoId, NameHash);
         public float Distance => ZetaDia.Me.Position.Distance(Position);
+        public int Id => ReadOffset<int>(0x4);
         public Vector3 Position => ReadOffset<Vector3>(0x8);
         public int WorldId => ReadOffset<int>(0x14);
         public int MinimapTextureId => ReadOffset<int>(0x18);

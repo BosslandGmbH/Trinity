@@ -29,6 +29,8 @@ namespace Trinity.Modules
         public string Name { get; set; }
         public WorldMarkerType MarkerType { get; set; }
         public int WorldSnoId { get; set; }
+        public int Id { get; set; }
+
         public override string ToString() => $"{Name} at {Position} Distance {Distance} Type={MarkerType} TextureId={TextureId}";
     }
 
@@ -46,36 +48,37 @@ namespace Trinity.Modules
 
         protected override int UpdateIntervalMs => 1000;
 
-        private readonly ConcurrentCache<Vector3, TrinityMarker, MinimapMarker> _cache;
+        private readonly ConcurrentCache<int, TrinityMarker, MinimapMarker> _cache;
 
         public IEnumerable<TrinityMarker> CurrentWorldMarkers => _cache.Items.Values.ToList();
 
         public MarkersCache()
         {
-            _cache = new ConcurrentCache<Vector3, TrinityMarker, MinimapMarker>(GetSourceItems, GetKey, Update, Create);
+            _cache = new ConcurrentCache<int, TrinityMarker, MinimapMarker>(GetSourceItems, GetKey, Update, Create);
         }
 
         private IList<MinimapMarker> GetSourceItems() => ZetaDia.Minimap.Markers.CurrentWorldMarkers.ToList();
 
-        private Vector3 GetKey(MinimapMarker item) => item.Position;
+        private int GetKey(MinimapMarker item) => item.Id;
 
-        private TrinityMarker Create(Vector3 key, MinimapMarker newItem, out bool success)
+        private TrinityMarker Create(int key, MinimapMarker newItem, out bool success)
         {
             var nativeMarker = (Marker)newItem;
             success = true;
             return new TrinityMarker
             {
                 Name = nativeMarker.Name,
+                Id = nativeMarker.Id,
                 NameHash = nativeMarker.NameHash,
                 WorldSnoId = nativeMarker.WorldId,
-                Position = key,
+                Position = nativeMarker.Position,
                 Distance = nativeMarker.Distance,
                 TextureId = nativeMarker.MinimapTextureId,
                 MarkerType = nativeMarker.MarkerType,
             };
         }
 
-        private TrinityMarker Update(Vector3 key, TrinityMarker existingItem, MinimapMarker newItem, out bool success)
+        private TrinityMarker Update(int key, TrinityMarker existingItem, MinimapMarker newItem, out bool success)
         {
             success = existingItem.WorldSnoId == Core.Player.WorldDynamicId;
             existingItem.Distance = Core.Player.Position.Distance(existingItem.Position);         

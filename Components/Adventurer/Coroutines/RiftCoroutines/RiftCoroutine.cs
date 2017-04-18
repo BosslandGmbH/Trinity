@@ -811,6 +811,16 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
+
+            if (_nextLevelPortalLocation != Vector3.Zero)
+            {
+                if (_nextLevelPortalLocation.Distance(Core.Player.Position) < 150)
+                {
+                    State = States.MovingToExitPortal;
+                    return false;
+                }
+            }
+
             //if (Core.Player.IsInParty && RiftData.GetGreaterRiftLevel() > 55 && TrinityPluginSettings.Settings.Advanced.BetaPlayground)
             //{
             //    var deadPlayer =

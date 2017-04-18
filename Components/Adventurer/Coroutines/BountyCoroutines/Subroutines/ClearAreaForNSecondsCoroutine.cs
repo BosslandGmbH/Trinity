@@ -72,7 +72,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            ClearAreaHelper.CheckClearArea(BountyData);
+            if (_startPosition != Vector3.Zero)
+            {
+                ClearAreaHelper.CheckClearArea(_startPosition, _radius);
+            }
 
             switch (State)
             {
@@ -108,10 +111,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             State = States.Clearing;
             _startTime = PluginTime.CurrentMillisecond;
+            _startPosition = Core.Player.Position;
             return false;
         }
 
         private WaitCoroutine _waitCoroutine = new WaitCoroutine(1000);
+        private Vector3 _startPosition;
 
         private async Task<bool> Clearing()
         {
@@ -124,15 +129,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (_worldId == -1)
                 _worldId = AdvDia.CurrentWorldId;
 
-            //if (ActorFinder.FindNearestHostileUnitInRadius(_center, _radius) == Vector3.Zero)
-            //{
-            //    if (!await _waitCoroutine.GetCoroutine()) return false;
-            //    _waitCoroutine.Reset();
-            //}
-            if (!await ClearAreaCoroutine.Clear(_center, _radius, true))
-                return false;
-
-            if (BountyData.IsAvailable)
+            if (BountyData != null && BountyData.IsAvailable)
             {
                 _radius = _increaseRadius ? (_radius < 80 ? _radius + 1 : _radius) : _radius;
                 State = States.MovingBack;
@@ -165,6 +162,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             _isDone = false;
             _state = States.NotStarted;
+            _startPosition = Vector3.Zero;
         }
 
         public void DisablePulse()

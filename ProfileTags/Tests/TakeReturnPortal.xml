@@ -1,0 +1,13 @@
+﻿<Profile>
+  <Name>Tag Test - TakeReturnPortal</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> TakeReturnPortal Test Started " />
+    
+    <TakeReturnPortal />
+
+    <Wait seconds="5" />
+
+    <LogMessage message=">> TakeReturnPortal Test Finished " />    
+  </Order>
+</Profile>

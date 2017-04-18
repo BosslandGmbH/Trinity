@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Components.Combat;
 using Zeta.Common;
 
 namespace Trinity.Components.Adventurer.Coroutines
@@ -156,6 +157,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private bool Completed()
         {
+            TrinityCombat.ResetCombatMode();
             return true;
         }
 

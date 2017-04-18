@@ -9,6 +9,7 @@ using Trinity.Framework.Behaviors;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
@@ -19,11 +20,10 @@ namespace Trinity.Components.Combat
     {
         static TrinityCombat()
         {
-            BotMain.OnStart += (b) => CombatMode = CombatMode.Normal;
-            GameEvents.OnGameChanged += (s,a) => CombatMode = CombatMode.Normal;
+            BotMain.OnStart += (b) => ResetCombatMode();
+            GameEvents.OnGameChanged += (s, e) => ResetCombatMode();
+            GameEvents.OnWorldChanged += (s, e) => ResetCombatMode();
         }
-
-        public static CombatMode CombatMode { get; set; }
 
         /// <summary>
         /// Handles selecting targets and if we should engage in combat.
@@ -84,7 +84,9 @@ namespace Trinity.Components.Combat
 
             // Wait after elite death until progression globe appears as a valid target or x time has passed.
             if (Core.Rift.IsInRift && await Behaviors.WaitAfterUnitDeath.While(
-                u => u.IsElite && u.Distance < 60f && !TargetUtil.AnyElitesInRange(150f) && !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe && p.Weight > 0 && p.Distance < 50f),
+                u => u.IsElite && u.Distance < 150 
+                && Core.Targets.Entries.Any(a => a.IsElite && a.EliteType != EliteTypes.Minion && a.RadiusDistance < 60) 
+                && !Core.Targets.Any(p => p.Type == TrinityObjectType.ProgressionGlobe && p.Distance < 150), 
                 "Wait for Progression Globe", 1000))
                 return true;
 
@@ -166,6 +168,21 @@ namespace Trinity.Components.Combat
                 return true;
             }
         }
+
+        public static void ResetCombatMode()
+        {
+            CombatMode = CombatMode.Normal;
+            KillAllRadius = 150f;
+        }
+
+        public static void SetKillMode(float radius = 80f)
+        {
+            CombatMode = CombatMode.KillAll;
+            KillAllRadius = radius;
+        }
+
+        public static CombatMode CombatMode { get; set; }
+        public static float KillAllRadius { get; set; }
 
         public static bool IsInCombat
             => IsCombatAllowed && Targeting.CurrentTarget != null && Targeting.CurrentTarget.ActorType == ActorType.Monster;

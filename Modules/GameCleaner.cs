@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Framework;
 using Trinity.Framework.Objects;
@@ -25,6 +26,8 @@ namespace Trinity.Modules
             Core.Targets.Clear();
             Core.Avoidance.Clear();
             QuestCache.Clear();
+            Core.Scenes.Reset();
+            ExplorationGrid.Clear();
         }
     }
 }

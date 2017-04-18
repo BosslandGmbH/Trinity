@@ -69,8 +69,6 @@ namespace Trinity.Components.Adventurer
 
         protected override void OnPluginEnabled()
         {
-            BotMain.OnStart += PluginEvents.OnBotStart;
-            BotMain.OnStop += PluginEvents.OnBotStop;
             DeveloperUI.InstallTab();      
             SafeZerg.Instance.DisableZerg();
         }

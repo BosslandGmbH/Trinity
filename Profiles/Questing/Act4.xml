@@ -60,16 +60,16 @@
       <SafeMoveTo questId="112498" stepId="2" name="Tyrael" pathPrecision="10" x="345" y="688" z="-14" />
       <WaitTimer questId="112498" stepId="2" waitTime="20000" />
       <!-- TalkTo Tyrael -->
-      <MoveToActor questId="112498" stepId="2" actorId="6353" x="350" y="694" z="-14" />
+      <Interact questId="112498" stepId="2" actorId="6353" x="350" y="694" z="-14" />
     </If>
     <If condition="IsActiveQuest(112498) and IsActiveQuestStep(17) and CurrentWorldId == 182944">
       <!-- Enter Vestibule of Light -->
-      <MoveToActor questId="112498" stepId="17" actorId="182963" isPortal="True" destinationWorldId="109143" x="357" y="657" z="-12" />
+      <Interact questId="112498" stepId="17" actorId="182963" isPortal="True" destinationWorldId="109143" x="357" y="657" z="-12" />
       <WaitTimer questId="112498" stepId="17" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(112498) and IsActiveQuestStep(15) and CurrentWorldId == 182944">
       <!-- Istaku Fight Death Handling -->
-      <MoveToActor questId="112498" stepId="15" actorId="182963" isPortal="True" destinationWorldId="109143" x="357" y="657" z="-12" />
+      <Interact questId="112498" stepId="15" actorId="182963" isPortal="True" destinationWorldId="109143" x="357" y="657" z="-12" />
       <WaitTimer questId="112498" stepId="15" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(112498) and IsActiveQuestStep(15) and CurrentWorldId == 109143">
@@ -89,14 +89,14 @@
       <WaitTimer questId="113910" stepId="66" waitTime="1000" />
 
       <!-- TalkTo Itherael -->
-      <MoveToActor questId="113910" stepId="58" actorId="112768" x="355" y="322" z="0" />
+      <Interact questId="113910" stepId="58" actorId="112768" x="355" y="322" z="0" />
       <WaitTimer questId="113910" stepId="58" waitTime="1000" />
 
     </If>
     <!-- The Vestibule of Light -->
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(40) and CurrentWorldId == 109143">
       <!-- Gardens of Hope 1st Tier -->
-      <MoveToActor questId="113910" stepId="40" actorId="176002" isPortal="True" destinationWorldId="109513" x="356" y="275" z="3" />
+      <Interact questId="113910" stepId="40" actorId="176002" isPortal="True" destinationWorldId="109513" x="356" y="275" z="3" />
       <WaitTimer questId="113910" stepId="40" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(40)  and CurrentWorldId == 109513">
@@ -115,12 +115,12 @@
     </If>
     <!-- Gardens of Hope 1st Tier -->
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(17) and CurrentWorldId == 109513">
-      <MoveToActor questId="113910" stepId="17" actorId="161276" isPortal="True" destinationWorldId="166640" x="990" y="268" z="18" />
+      <Interact questId="113910" stepId="17" actorId="161276" isPortal="True" destinationWorldId="166640" x="990" y="268" z="18" />
       <WaitTimer questId="113910" stepId="17" waitTime="1000" />
     </If>
     <!-- Rakanoth Death Handling -->
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(11) and CurrentWorldId == 109513">
-      <MoveToActor questId="113910" stepId="11" actorId="161276" isPortal="True" destinationWorldId="166640" x="990" y="268" z="18" />
+      <Interact questId="113910" stepId="11" actorId="161276" isPortal="True" destinationWorldId="166640" x="990" y="268" z="18" />
       <WaitTimer questId="113910" stepId="11" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(11)  and CurrentWorldId == 166640">
@@ -137,24 +137,24 @@
 
     <!-- Rakanoth Death Handling: Destroy Auriel's Prison in the Library of Fate -->
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(13) and CurrentWorldId == 109513">
-      <MoveToActor questId="113910" stepId="13" actorId="161276" isPortal="True" destinationWorldId="166640" x="990" y="268" z="18" />
+      <Interact questId="113910" stepId="13" actorId="161276" isPortal="True" destinationWorldId="166640" x="990" y="268" z="18" />
       <WaitTimer questId="113910" stepId="13" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(13)  and CurrentWorldId == 166640">
       <!-- Auriel's Prison -->
-      <MoveToActor questId="113910" stepId="13" actorId="182826" x="369" y="283" z="0" />
+      <Interact questId="113910" stepId="13" actorId="182826" x="369" y="283" z="0" />
       <WaitTimer questId="113910" stepId="13" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(33)  and CurrentWorldId == 166640">
       <!-- TalkTo Auriel -->
-      <MoveToActor questId="113910" stepId="33" actorId="114074" x="365" y="285" z="0" />
+      <Interact questId="113910" stepId="33" actorId="114074" x="365" y="285" z="0" />
 
       <WaitTimer questId="113910" stepId="33" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(38)  and CurrentWorldId == 166640">
       <!-- Use Portal to Gardens of Hope 1st Tier -->
       <WaitTimer questId="113910" stepId="38" waitTime="1000" />
-      <MoveToActor questId="113910" stepId="38" actorId="204901" isPortal="True" destinationWorldId="109513" />
+      <Interact questId="113910" stepId="38" actorId="204901" isPortal="True" destinationWorldId="109513" />
       <WaitTimer questId="113910" stepId="38" waitTime="1000" />
 
     </If>
@@ -216,7 +216,7 @@
     </If>
 
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(44) and CurrentWorldId == 109513">
-      <MoveToActor questId="113910" stepId="44" actorId="224890" isPortal="True" destinationWorldId="109525" />
+      <Interact questId="113910" stepId="44" actorId="224890" isPortal="True" destinationWorldId="109525" />
       <WaitTimer questId="113910" stepId="44" waitTime="1000" />
     </If>
 
@@ -227,7 +227,7 @@
         </PrioritizeScenes>
       </TrinityExploreDungeon>
       <!-- Destroy Rift Oculus -->
-      <MoveToActor questId="113910" stepId="44"  actorId="208561" />
+      <Interact questId="113910" stepId="44"  actorId="208561" />
       <WaitTimer questId="113910" stepId="44" waitTime="25000" />
     </While>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(44) and CurrentWorldId == 109525">
@@ -246,20 +246,20 @@
 
       <!-- Auriel's portal to Gardens of Hope 1st Tier -->
       <MoveToMapMarker questId="113910" stepId="62" exitNameHash="-1524911734" actorId="204901" isPortal="True" destinationWorldId="109513" />
-      <MoveToActor questId="113910" stepId="62" actorId="204901" isPortal="True" destinationWorldId="109513" />
+      <Interact questId="113910" stepId="62" actorId="204901" isPortal="True" destinationWorldId="109513" />
       <WaitTimer questId="113910" stepId="62" waitTime="1000" />
     </While>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(50) and CurrentWorldId == 109513">
 
       <!-- Portal to Gardens of Hope 2nd Tier -->
       <SafeMoveTo  questId="113910" stepId="50" x="355" y="1019" z="3" />
-      <MoveToActor questId="113910" stepId="50" actorId="204901" isPortal="True" destinationWorldId="219659" x="355" y="1019" z="3" />
+      <Interact questId="113910" stepId="50" actorId="204901" isPortal="True" destinationWorldId="219659" x="355" y="1019" z="3" />
       <WaitTimer questId="113910" stepId="50" waitTime="1000" />
 
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(50) and CurrentWorldId == 109513">
       <!-- Portal to Gardens of Hope 2nd Tier -->
-      <MoveToActor questId="113910" stepId="50" actorId="204901" isPortal="True" destinationWorldId="219659" x="355" y="1019" z="3" />
+      <Interact questId="113910" stepId="50" actorId="204901" isPortal="True" destinationWorldId="219659" x="355" y="1019" z="3" />
       <WaitTimer questId="113910" stepId="50" waitTime="1000" />
 
     </If>
@@ -281,7 +281,7 @@
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(48) and CurrentWorldId == 219659">
       <!-- Gardens of Hope 2nd Tier -->
       <!-- Hell Rift -->
-      <MoveToActor questId="113910" stepId="48" actorId="224890" isPortal="True" destinationWorldId="109530" />
+      <Interact questId="113910" stepId="48" actorId="224890" isPortal="True" destinationWorldId="109530" />
       <WaitTimer questId="113910" stepId="48" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(48) and CurrentWorldId == 219659">
@@ -292,7 +292,7 @@
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(48) and CurrentWorldId == 109530">
       <!-- Destroy the Rift Oculous -->
       <TrinityExploreDungeon questId="113910" stepId="48" boxTolerance="0.18" boxSize="18" until="ObjectFound" actorId="225834" />
-      <MoveToActor questId="113910" stepId="48" actorId="225834" />
+      <Interact questId="113910" stepId="48" actorId="225834" />
       <WaitTimer questId="113910" stepId="48" waitTime="45000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(60) and CurrentWorldId == 109530">
@@ -301,7 +301,7 @@
       <!-- Quest: Heaven_RestorationOfHope (113910) World: a4dun_Hell_Portal_02 (109530) LevelArea: A4_dun_Hell_Portal_02 (109531) -->
       <MoveToMapMarker questId="113910" stepId="60" markerNameHash="-1524911733" actorId="204901" interactRange="8.316568"
                              pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
-      <!--<MoveToActor questId="113910" stepId="60" actorId="204901" isPortal="True" destinationWorldId="219659" />-->
+      <!--<Interact questId="113910" stepId="60" actorId="204901" isPortal="True" destinationWorldId="219659" />-->
       <WaitTimer questId="113910" stepId="60" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(56) and CurrentWorldId == 219659">
@@ -333,16 +333,16 @@
     </If>
 
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(56) and CurrentWorldId == 219659">
-      <MoveToActor questId="113910" stepId="56" actorId="122552" />
+      <Interact questId="113910" stepId="56" actorId="122552" />
       <WaitTimer questId="113910" stepId="56" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(54) and CurrentWorldId == 219659">
-      <MoveToActor questId="113910" stepId="54" actorId="122552" />
+      <Interact questId="113910" stepId="54" actorId="122552" />
       <WaitTimer questId="113910" stepId="54" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(23) and CurrentWorldId == 219659">
       <!-- Crystal Colonnade Portal -->
-      <MoveToActor questId="113910" stepId="23" actorId="220551" isPortal="True" destinationWorldId="103910" />
+      <Interact questId="113910" stepId="23" actorId="220551" isPortal="True" destinationWorldId="103910" />
       <WaitTimer questId="113910" stepId="23" waitTime="1000" />
     </If>
 
@@ -367,7 +367,7 @@
       <!-- We're in the Crystal Colonnade -->
       <!-- Silver Spire -->
       <MoveToMapMarker questId="114901" stepId="16" portalMarkerHash="1067638620" destinationWorldId="198281" actorId="176001" isPortal="True"  x="365" y="367" z="0" />
-      <MoveToActor questId="114795" stepId="16" actorId="176001" isPortal="True" destinationWorldId="198281" x="371" y="374" z="0" />
+      <Interact questId="114795" stepId="16" actorId="176001" isPortal="True" destinationWorldId="198281" x="371" y="374" z="0" />
       <WaitTimer questId="114795" stepId="16" waitTime="1000" />
     </If>
 
@@ -385,7 +385,7 @@
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(24) and CurrentWorldId == 198281">
       <!-- Gateway to the Silver Spire -->
       <WaitTimer questId="114901" stepId="24" waitTime="1000" />
-      <MoveToActor questId="114901" stepId="24" actorId="210758" isPortal="True" destinationWorldId="121579" x="401" y="398" z="-1" interactRange="20" />
+      <Interact questId="114901" stepId="24" actorId="210758" isPortal="True" destinationWorldId="121579" x="401" y="398" z="-1" interactRange="20" />
       <WaitTimer questId="114901" stepId="24" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(24) and CurrentWorldId == 121579">
@@ -418,7 +418,7 @@
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(26) and CurrentWorldId == 198281">
       <!-- Gateway to the Silver Spire -->
       <WaitTimer questId="114901" stepId="26" waitTime="1000" />
-      <MoveToActor questId="114901" stepId="26" actorId="210758" isPortal="True" destinationWorldId="121579" x="401" y="398" z="-1" interactRange="20" />
+      <Interact questId="114901" stepId="26" actorId="210758" isPortal="True" destinationWorldId="121579" x="401" y="398" z="-1" interactRange="20" />
       <WaitTimer questId="114901" stepId="26" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(26) and CurrentWorldId == 121579">
@@ -435,7 +435,7 @@
         </IgnoreScenes>
       </TrinityExploreDungeon>
       <!-- The Great Span -->
-      <MoveToActor questId="114901" stepId="26" actorId="225195" isPortal="True" destinationWorldId="214956" interactRange="20" />
+      <Interact questId="114901" stepId="26" actorId="225195" isPortal="True" destinationWorldId="214956" interactRange="20" />
       <WaitTimer questId="114901" stepId="26" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(26) and CurrentWorldId == 214956">
@@ -454,7 +454,7 @@
     <!-- Prime Evil -->
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(7) and CurrentWorldId == 214956">
       <!-- GoTo The Silver Spire Level 2 -->
-      <MoveToActor questId="114901" stepId="7" actorId="210758" isPortal="True" destinationWorldId="129305" interactRange="20" x="74" y="583" z="0" />
+      <Interact questId="114901" stepId="7" actorId="210758" isPortal="True" destinationWorldId="129305" interactRange="20" x="74" y="583" z="0" />
       <WaitTimer questId="114901" stepId="7" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(7) and CurrentWorldId == 129305">
@@ -470,7 +470,7 @@
           <IgnoreScene sceneName="_W_0" />
         </IgnoreScenes>
       </TrinityExploreDungeon>
-      <MoveToActor questId="114901" stepId="7" actorId="210763" isPortal="True" destinationWorldId="205399" interactRange="20" />
+      <Interact questId="114901" stepId="7" actorId="210763" isPortal="True" destinationWorldId="205399" interactRange="20" />
       <WaitTimer questId="114901" stepId="7" waitTime="1000" />
 
       <WaitTimer questId="114901" stepId="7" waitTime="1000" />
@@ -481,7 +481,7 @@
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(20) and CurrentWorldId == 205399">
       <!-- TalkTo Tyrael -->
-      <MoveToActor questId="114901" stepId="20" actorId="122552" x="304" y="311" z="0" />
+      <Interact questId="114901" stepId="20" actorId="122552" x="304" y="311" z="0" />
       <WaitTimer questId="114901" stepId="20" waitTime="1000" />
     </If>
 
@@ -490,7 +490,7 @@
     </If>
 
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(22) and CurrentWorldId == 205399">
-      <MoveToActor questId="114901" stepId="22" actorId="161279" isPortal="True" destinationWorldId="109561" x="279" y="276" z="2" interactRange="35" />
+      <Interact questId="114901" stepId="22" actorId="161279" isPortal="True" destinationWorldId="109561" x="279" y="276" z="2" interactRange="35" />
       <WaitTimer questId="114901" stepId="22" waitTime="5000" />
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(22) and CurrentWorldId == 109561">
@@ -539,16 +539,16 @@
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(3) and CurrentWorldId == 196292">
       <!-- Destroy Diablo in The Crystal Arch 196292 -->
-      <MoveToActor  questId="114901" stepId="3"  actorId="114917" interactAttempts="-1" interactRange="20" />
+      <Interact  questId="114901" stepId="3"  actorId="114917" interactAttempts="-1" interactRange="20" />
       <WaitTimer questId="114901" stepId="3" waitTime="430000" />
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(17) and CurrentWorldId == 196292">
       <SafeMoveTo questId="114901" stepId="17" x="335" y="328" z="40" />
       <WaitTimer questId="114901" stepId="17" waitTime="15000" />
       <!-- TalkTo Auriel -->
-      <MoveToActor questId="114901" stepId="17" actorId="114074" x="311" y="326" z="40" />
+      <Interact questId="114901" stepId="17" actorId="114074" x="311" y="326" z="40" />
       <WaitTimer questId="114901" stepId="17" waitTime="10000" />
-      <ConfirmOK  questId="114901" stepId="17" />
+      <!--<ConfirmOK  questId="114901" stepId="17" />-->
       <WaitTimer questId="114901" stepId="17" waitTime="10000" />
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(5) and CurrentWorldId == 196292">

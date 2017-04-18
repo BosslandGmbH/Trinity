@@ -1,0 +1,13 @@
+﻿<Profile>
+  <Name>Tag Test - TownPortal</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>    
+    <LogMessage message=">> TownPortal Test Started " />
+
+    <TownPortal />
+
+    <Wait seconds="5" />
+
+    <LogMessage message=">> TownPortal Test Finished " />    
+  </Order>
+</Profile>

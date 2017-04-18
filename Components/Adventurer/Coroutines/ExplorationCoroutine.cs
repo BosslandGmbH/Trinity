@@ -96,6 +96,10 @@ namespace Trinity.Components.Adventurer.Coroutines
         private bool NotStarted()
         {
             State = States.Exploring;
+
+            if(_ignoreScenes != null && _ignoreScenes.Any())
+                ExplorationHelpers.MarkNodesAsVisited(_ignoreScenes);
+
             return false;
         }
 

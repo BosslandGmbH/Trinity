@@ -66,7 +66,7 @@
 
     <If condition="IsActiveQuest(93595) and IsActiveQuestStep(-1) and CurrentWorldId == 204707">
       <!-- The Siege of Bastion's Keep -->
-      <MoveToActor questId="93595" stepId="-1" actorId="170038" x="103" y="85" z="25" />
+      <Interact questId="93595" stepId="-1" actorId="170038" x="103" y="85" z="25" />
       <!-- TalkTo Tyrael -->
       <WaitTimer questId="93595" stepId="-1" waitTime="1000" />
       <!-- Watchtower -->
@@ -82,7 +82,7 @@
       <MoveTo questId="93595" stepId="8" pathPrecision="5" x="175" y="186" z="0" />
       <MoveTo questId="93595" stepId="8" pathPrecision="5" x="118" y="182" z="0" />
       <!--
-			<MoveToActor questId="93595" stepId="8" actorId="176001" isPortal="True" destinationWorldId="182875" x="119" y="171" z="0" />
+			<Interact questId="93595" stepId="8" actorId="176001" isPortal="True" destinationWorldId="182875" x="119" y="171" z="0" />
 			-->
       <UsePortal questId="93595" stepId="8" portalMarkerHash="-1968039200" destinationWorldId="182875" />
       <WaitTimer questId="93595" stepId="8" waitTime="1000" />
@@ -90,7 +90,7 @@
     <If condition="IsActiveQuest(93595) and IsActiveQuestStep(8) and CurrentWorldId == 182875">
       <!-- The Armory -->
       <MoveTo questId="93595" stepId="8" x="355" y="336" z="0" />
-      <!--<MoveToActor questId="93595" stepId="8" actorId="176001" isPortal="True" destinationWorldId="172909" x="351" y="282" z="10" /> -->
+      <!--<Interact questId="93595" stepId="8" actorId="176001" isPortal="True" destinationWorldId="172909" x="351" y="282" z="10" /> -->
       <UsePortal questId="93595" stepId="8" portalMarkerHash="732643260" destinationWorldId="172909" />
       <WaitTimer questId="93595" stepId="8" waitTime="1000" />
     </If>
@@ -119,9 +119,9 @@
     <If condition="IsActiveQuest(93595) and IsActiveQuestStep(8) and CurrentWorldId == 81019
 				and ActorExistsAt(ZetaDia.Me.ActorSnoId,3555,3405,50,200) ">
 
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="3555" y="3405" z="50" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="3555" y="3405" z="50" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
       <WaitTimer questId="93595" stepId="8" waitTime="250" />
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="3555" y="3405" z="50" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="3555" y="3405" z="50" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
       <WaitTimer questId="93595" stepId="8" waitTime="1500" />
     </If>
 
@@ -140,9 +140,9 @@
     <If condition="IsActiveQuest(93595) and IsActiveQuestStep(8) and CurrentWorldId == 81019
 				and ActorExistsAt(ZetaDia.Me.ActorSnoId,3202,3398,25,200) ">
 
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="3219" y="3383" z="25" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="3219" y="3383" z="25" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
       <WaitTimer questId="93595" stepId="8" waitTime="250" />
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="3219" y="3383" z="25" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="3219" y="3383" z="25" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
       <WaitTimer questId="93595" stepId="8" waitTime="1500" />
     </If>
 
@@ -165,9 +165,9 @@
     <!-- Use third Signal Beacon -->
     <If condition="IsActiveQuest(93595) and IsActiveQuestStep(8) and CurrentWorldId == 81019
 				and ActorExistsAt(ZetaDia.Me.ActorSnoId,2915,3567,0,200) ">
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="2906" y="3557" z="0" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="2906" y="3557" z="0" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
       <WaitTimer questId="93595" stepId="8" waitTime="250" />
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="2906" y="3557" z="0" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="2906" y="3557" z="0" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
       <WaitTimer questId="93595" stepId="8" waitTime="1500" />
     </If>
 
@@ -190,9 +190,9 @@
     <If condition="IsActiveQuest(93595) and IsActiveQuestStep(8) and CurrentWorldId == 81019
 				and ActorExistsAt(ZetaDia.Me.ActorSnoId,2708,3265,25,200) ">
 
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="2708" y="3265" z="25" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="2708" y="3265" z="25" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
       <WaitTimer questId="93595" stepId="8" waitTime="250" />
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="2708" y="3265" z="25"  endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="2708" y="3265" z="25"  endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead" />
       <WaitTimer questId="93595" stepId="8" waitTime="1500" />
 
       <SafeMoveTo questId="93595" stepId="8" x="2712" y="3189" z="25"/>
@@ -211,9 +211,9 @@
     <If condition="IsActiveQuest(93595) and IsActiveQuestStep(8) and CurrentWorldId == 81019
 				and ActorExistsAt(ZetaDia.Me.ActorSnoId,2836,2694,50,200) ">
 
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="2836" y="2694" z="50" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="2836" y="2694" z="50" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
       <WaitTimer questId="93595" stepId="8" waitTime="250" />
-      <MoveToActor questId="93595" stepId="8" actorId="196211" interactRange="16" x="2836" y="2694" z="50" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
+      <Interact questId="93595" stepId="8" actorId="196211" interactRange="16" x="2836" y="2694" z="50" endAnimation="a3dunRmpt_Interactives_signal_fire_A_Dead"  />
       <WaitTimer questId="93595" stepId="8" waitTime="4500" />
     </If>
 
@@ -245,13 +245,13 @@
     </If>
     <If condition="IsActiveQuest(93684) and IsActiveQuestStep(-1) and CurrentWorldId == 81019">
       <!-- Turning the Tide -->
-      <MoveToActor questId="93684" stepId="-1" actorId="196150" x="2708" y="2673" z="25" />
+      <Interact questId="93684" stepId="-1" actorId="196150" x="2708" y="2673" z="25" />
       <!-- TalkTo Sgt. Dalen -->
       <WaitTimer questId="93684" stepId="-1" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(93684) and IsActiveQuestStep(18) and CurrentWorldId == 81019 ">
       <!-- Skycrown Battlements -->
-      <MoveToActor questId="93684" stepId="18" actorId="176002" isPortal="True" destinationWorldId="93099" />
+      <Interact questId="93684" stepId="18" actorId="176002" isPortal="True" destinationWorldId="93099" />
       <!-- To Stonefort -->
       <WaitTimer questId="93684" stepId="18" waitTime="1000" />
     </If>
@@ -259,7 +259,7 @@
     <If condition="IsActiveQuest(93684) and IsActiveQuestStep(-1) and CurrentWorldId == 172909">
       <!-- If we started in Bastions Keep -->
       <!-- TalkTo Tyrael -->
-      <MoveToActor questId="93684" stepId="-1" actorId="170038" x="388" y="423" z="0" />
+      <Interact questId="93684" stepId="-1" actorId="170038" x="388" y="423" z="0" />
       <WaitTimer  questId="93684" stepId="-1" waitTime="10000" />
     </If>
 
@@ -274,7 +274,7 @@
     <If condition="IsActiveQuest(93684) and IsActiveQuestStep(18) and CurrentWorldId == 93099
 			and ActorExistsAt(ZetaDia.Me.ActorSnoId, 4272,4252,-25,200) ">
       <SafeMoveTo questId="93684" stepId="18"  x="4187" y="4003" z="1" />
-      <MoveToActor questId="93684" stepId="18" actorId="106146" x="4187" y="4003" z="1" />
+      <Interact questId="93684" stepId="18" actorId="106146" x="4187" y="4003" z="1" />
       <WaitTimer questId="93684" stepId="18" waitTime="10000" />
       <SafeMoveTo questId="93684" stepId="18" x="4217" y="4033" z="0" />
       <WaitTimer questId="93684" stepId="18" waitTime="10000" />
@@ -304,7 +304,7 @@
     <!-- Start event -->
     <If condition="IsActiveQuest(93684) and IsActiveQuestStep(18) and CurrentWorldId == 93099
 				and ActorExistsAt(ZetaDia.Me.ActorSnoId,3502,3424,0,200) and ActorExistsAt(154137,3502,3424,0,200) ">
-      <MoveToActor questId="93684" stepId="18" actorId="154137" x="3502" y="3549" z="0" />
+      <Interact questId="93684" stepId="18" actorId="154137" x="3502" y="3549" z="0" />
     </If>
     <!-- Wait for First Catapult -->
     <If condition="IsActiveQuest(93684) and IsActiveQuestStep(18) and CurrentWorldId == 93099
@@ -340,9 +340,9 @@
     <!-- Wait for Second Catapult -->
     <If condition="IsActiveQuest(93684) and IsActiveQuestStep(18) and CurrentWorldId == 93099
 				and ActorExistsAt(ZetaDia.Me.ActorSnoId,3185,3297,25,200) ">
-      <MoveToActor questId="93684" stepId="18" actorId="162406"  x="3185" y="3297" z="25" />
+      <Interact questId="93684" stepId="18" actorId="162406"  x="3185" y="3297" z="25" />
       <WaitTimer questId="93684" stepId="18" waitTime="5000" />
-      <MoveToActor questId="93684" stepId="18" actorId="162406"  x="3185" y="3297" z="25" />
+      <Interact questId="93684" stepId="18" actorId="162406"  x="3185" y="3297" z="25" />
       <WaitTimer questId="93684" stepId="18" waitTime="5000" />
 
       <SafeMoveTo questId="93684" stepId="18" x="3185" y="3297" z="25"/>
@@ -364,7 +364,7 @@
 				and ActorExistsAt(ZetaDia.Me.ActorSnoId,3251,2825,0,200) ">
       <SafeMoveTo questId="93684" stepId="18" x="3258" y="2836" z="0" pathPrecision="10" />
       <SafeMoveTo questId="93684" stepId="18" x="3247" y="2818" z="0" pathPrecision="10" straightLinePathing="True" />
-      <MoveToActor questId="93684" stepId="18" actorId="149810" x="3247" y="2818" z="0" straightLinePathing="True" />
+      <Interact questId="93684" stepId="18" actorId="149810" x="3247" y="2818" z="0" straightLinePathing="True" />
       <WaitTimer questId="93684" stepId="18"  waitTime="2000" />
 
     </If>
@@ -411,20 +411,20 @@
     <!-- Talk to Tyrael -->
     <If condition="IsActiveQuest(93697) and IsActiveQuestStep(-1) and CurrentWorldId == 172909 and ActorExistsAt(170038, 385,424,0, 40)">
       <WaitTimer questId="93697" stepId="-1" waitTime="1000" />
-      <MoveToActor questId="93697" stepId="-1" actorId="170038" x="385" y="424" z="0" />
+      <Interact questId="93697" stepId="-1" actorId="170038" x="385" y="424" z="0" />
       <WaitTimer questId="93697" stepId="-1"  waitTime="15000" />
     </If>
 
     <!-- Bastion's Keep -->
     <If condition="IsActiveQuest(93697) and IsActiveQuestStep(18) and CurrentWorldId == 172909">
       <WaitTimer questId="93697" stepId="18" waitTime="1000" />
-      <MoveToActor questId="93697" stepId="18" actorId="176001" isPortal="True" destinationWorldId="93104" x="354" y="281" z="4" />
+      <Interact questId="93697" stepId="18" actorId="176001" isPortal="True" destinationWorldId="93104" x="354" y="281" z="4" />
       <!-- to Keep Depths Level 1 -->
       <WaitTimer questId="93697" stepId="18" waitTime="1000" />
     </If>
 
     <If condition="IsActiveQuest(93697) and IsActiveQuestStep(20) and CurrentWorldId == 172909">
-      <MoveToActor questId="93697" stepId="20" actorId="176001" isPortal="True" destinationWorldId="93104" x="354" y="281" z="4" />
+      <Interact questId="93697" stepId="20" actorId="176001" isPortal="True" destinationWorldId="93104" x="354" y="281" z="4" />
       <!-- to Keep Depths Level 1 -->
       <WaitTimer questId="93697" stepId="20" waitTime="1000" />
     </If>
@@ -535,7 +535,7 @@
       <WaitTimer questId="93697" stepId="22" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(93697) and IsActiveQuestStep(22) and CurrentWorldId == 75434">
-      <MoveToActor questId="93697" stepId="22" actorId="176001" isPortal="True" destinationWorldId="136415"  />
+      <Interact questId="93697" stepId="22" actorId="176001" isPortal="True" destinationWorldId="136415"  />
       <WaitTimer questId="93697" stepId="22" waitTime="1000" />
     </If>
 
@@ -651,7 +651,7 @@
 
     <If condition="IsActiveQuest(203595) and IsActiveQuestStep(-1) and CurrentWorldId == 172909">
       <!-- Tremors in the Stone -->
-      <MoveToActor questId="203595" stepId="-1" actorId="162406" x="384" y="426" z="0" />
+      <Interact questId="203595" stepId="-1" actorId="162406" x="384" y="426" z="0" />
       <!-- TalkTo LT Lavail -->
       <WaitTimer questId="203595" stepId="-1" waitTime="1000" />
     </If>
@@ -660,7 +660,7 @@
       <MoveTo questId="203595" stepId="1" x="352" y="476" z="0" straightLinePathing="True" />
       <MoveTo questId="203595" stepId="1" x="309" y="471" z="-5" straightLinePathing="True" />
       <MoveToMapMarker questId="203595" stepId="1" portalMarkerHash="-1968039200" destinationWorldId="182875" interactRange="20" />
-      <MoveToActor questId="203595" stepId="1" actorId="178293" isPortal="True" destinationWorldId="182875" x="307" y="456" z="-13" />
+      <Interact questId="203595" stepId="1" actorId="178293" isPortal="True" destinationWorldId="182875" x="307" y="456" z="-13" />
       <!-- The Armory -->
       <WaitTimer questId="203595" stepId="1" waitTime="1000" />
     </If>
@@ -674,32 +674,32 @@
     </While>
     <If condition="IsActiveQuest(203595) and IsActiveQuestStep(6) and CurrentWorldId == 182875">
       <!-- TalkTo Leah -->
-      <MoveToActor questId="203595" stepId="6" actorId="4580" x="367" y="343" z="0" />
+      <Interact questId="203595" stepId="6" actorId="4580" x="367" y="343" z="0" />
       <WaitTimer questId="203595" stepId="6" waitTime="1000" />
     </If>
     <!-- Machines of War -->
     <!-- We're in The Amory -->
     <If condition="IsActiveQuest(101756) and IsActiveQuestStep(4) and CurrentWorldId == 182875">
       <!-- To Bastions Keep Stronghold -->
-      <MoveToActor questId="101756" stepId="4" actorId="176001" isPortal="True" destinationWorldId="172909" x="351" y="283" z="10" />
+      <Interact questId="101756" stepId="4" actorId="176001" isPortal="True" destinationWorldId="172909" x="351" y="283" z="10" />
       <WaitTimer questId="101756" stepId="4" waitTime="1000" />
     </If>
     <While condition="IsActiveQuest(101756) and IsActiveQuestStep(4) and CurrentWorldId == 172909">
       <!-- Go through the Arreat Gate -->
       <SafeMoveTo questId="1" x="126" y="355" z="0" pathPrecision="10" pathPointLimit="250" statusText="" />
-      <MoveToActor questId="101756" stepId="4" actorId="176001" isPortal="True" destinationWorldId="95804" interactRange="21" maxSearchDistance="20" x="126" y="355" z="0" />
+      <Interact questId="101756" stepId="4" actorId="176001" isPortal="True" destinationWorldId="95804" interactRange="21" maxSearchDistance="20" x="126" y="355" z="0" />
       <WaitTimer questId="101756" stepId="4" waitTime="1000" />
     </While>
     <If condition="IsActiveQuest(101756) and IsActiveQuestStep(6) and CurrentWorldId == 95804">
       <SafeMoveTo questId="101756" stepId="6" x="4152" y="396" z="-2" />
-      <MoveToActor questId="101756" stepId="6" actorId="170482" x="4152" y="396" z="-2" />
+      <Interact questId="101756" stepId="6" actorId="170482" x="4152" y="396" z="-2" />
       <!-- TalkTo SGT Pale -->
       <WaitTimer questId="101756" stepId="6" waitTime="1000" />
     </If>
 
     <!-- Go to the Barracks Level 1 Portal -->
     <If condition="IsActiveQuest(101756) and IsActiveQuestStep(9) and CurrentWorldId == 95804">
-      <MoveToActor questId="101759" stepId="9" name="The Barracks Level 1 Entrance" actorId="176001" interactRange="10" x="4144" y="316" z="1" isPortal="True" destinationWorldId="174555" />
+      <Interact questId="101759" stepId="9" name="The Barracks Level 1 Entrance" actorId="176001" interactRange="10" x="4144" y="316" z="1" isPortal="True" destinationWorldId="174555" />
       <WaitTimer questId="101756" stepId="9" waitTime="1000" />
     </If>
 
@@ -729,7 +729,7 @@
       <!-- Trebucket might be useobject, not 100% sure -->
       <SafeMoveTo questId="101756" stepId="1" name="Trebuchet" pathPrecision="10" x="3028" y="604" z="8" />
       <WaitTimer  questId="101756" stepId="1" waitTime="5000" />
-      <MoveToActor questId="101756" stepId="1" name="Trebuchet" pathPrecision="10" x="3028" y="604" z="8" actorId="177041" />
+      <Interact questId="101756" stepId="1" name="Trebuchet" pathPrecision="10" x="3028" y="604" z="8" actorId="177041" />
       <WaitTimer questId="101756" stepId="1" waitTime="1000" />
       <!-- Trebuchet Destroyed -->
       <!-- Task 2 -->
@@ -754,20 +754,20 @@
       <WaitTimer questId="101756" stepId="18" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(101756) and IsActiveQuestStep(21)">
-      <MoveToActor questId="101756" stepId="21" actorId="170038" x="2797" y="606" z="0" />
+      <Interact questId="101756" stepId="21" actorId="170038" x="2797" y="606" z="0" />
       <!-- TalkTo Tyrael -->
       <WaitTimer questId="101756" stepId="21" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(101750)  and IsActiveQuestStep(-1) and CurrentWorldId == 95804">
       <!-- Siegebreaker -->
-      <MoveToActor questId="101750" stepId="-1" actorId="170038" x="2797" y="606" z="0" />
+      <Interact questId="101750" stepId="-1" actorId="170038" x="2797" y="606" z="0" />
       <!-- TalkTo Tyrael -->
       <WaitTimer questId="101750" stepId="-1" waitTime="1000" />
 
     </If>
     <!-- Quest: TraverseBridge (101750) World: a3dun_hub_keep (172909) LevelArea: A3_Dun_Keep_Hub (92945) -->
     <If condition="IsActiveQuest(101750) and IsActiveQuestStep(1) and CurrentWorldId==172909 and CurrentLevelAreaId==92945">
-      <MoveToActor questId="101750" stepId="1" actorId="191492" interactRange="9" name="hearthPortal-524"  isPortal="True" destinationWorldId="-1" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="101750" stepId="1" actorId="191492" interactRange="9" name="hearthPortal-524"  isPortal="True" destinationWorldId="-1" pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
     <If condition="IsActiveQuest(101750)  and IsActiveQuestStep(1) and CurrentWorldId == 95804 and MarkerExistsAt(-443762283, Me.Position.X, Me.Position.Y, Me.Position.Z, 300)">
       <UsePortal questId="101750" stepId="1" destinationWorldId="226713" portalMarkerHash="-443762283" />
@@ -780,7 +780,7 @@
       <SafeMoveTo questId="101750" stepId="1" name="Rakkis Crossing Waypoint" pathPrecision="10" x="909" y="584" z="0" allowLongDistance="True" />
       <!-- Demon Gate to Edge of the Abyss -->
       <!--<SafeMoveTo questId="101750" pathPointLimit="200" stepId="1" x="566" y="602" z="0" />-->
-      <MoveToActor questId="101750" stepId="1" actorId="226784" isPortal="True" destinationWorldId="226713" x="566" y="602" z="0" timeout="300" />
+      <Interact questId="101750" stepId="1" actorId="226784" isPortal="True" destinationWorldId="226713" x="566" y="602" z="0" timeout="300" />
       <UsePortal questId="101750" stepId="1" destinationWorldId="226713" portalMarkerHash="-443762283" />
       <WaitTimer questId="101750" stepId="1" waitTime="5000" />
     </If>
@@ -789,7 +789,7 @@
     <!-- In case we die -->
     <If condition="IsActiveQuest(101750) and IsActiveQuestStep(10) and CurrentWorldId == 95804">
 
-      <MoveToActor questId="101750" stepId="10" actorId="226784" isPortal="True" destinationWorldId="226713" x="566" y="602" z="0" />
+      <Interact questId="101750" stepId="10" actorId="226784" isPortal="True" destinationWorldId="226713" x="566" y="602" z="0" />
       <!-- Demon Gate to Edge of the Abyss -->
       <WaitTimer questId="101750" stepId="10" waitTime="1000" />
 
@@ -807,7 +807,7 @@
     <If condition="IsActiveQuest(101750) and IsActiveQuestStep(17) and CurrentWorldId == 226713">
       <WaitTimer questId="101750" stepId="17" waitTime="4500" />
       <!-- TalkTo Adria -->
-      <MoveToActor questId="101750" stepId="17" actorId="3095" x="427" y="332" z="0" />
+      <Interact questId="101750" stepId="17" actorId="3095" x="427" y="332" z="0" />
       <WaitTimer questId="101750" stepId="17" waitTime="4500" />
     </If>
 
@@ -817,7 +817,7 @@
       <UseWaypoint questId="101758" stepId="10" waypointNumber="6" />
     </If>
     <If condition="IsActiveQuest(101758) and IsActiveQuestStep(10)  and CurrentWorldId == 226713">
-      <MoveToActor questId="101758" stepId="10" actorId="175482" isPortal="True" destinationWorldId="81049" x="281" y="358" z="0" />
+      <Interact questId="101758" stepId="10" actorId="175482" isPortal="True" destinationWorldId="81049" x="281" y="358" z="0" />
       <WaitTimer questId="101758" stepId="10" waitTime="1000" />
     </If>
 
@@ -842,7 +842,7 @@
 
     <!-- Quest: KillAzmodan (101758) World: [sno unknown] (172909) LevelArea: A3_Dun_Keep_Hub (92945) -->
     <If condition="IsActiveQuest(101758) and IsActiveQuestStep(41) and CurrentWorldId==172909 and CurrentLevelAreaId==92945">
-      <MoveToActor questId="101758" stepId="41" x="374" y="417" z="1"  actorId="191492" interactRange="9" name="hearthPortal-491"  isPortal="True" destinationWorldId="-1" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="101758" stepId="41" x="374" y="417" z="1"  actorId="191492" interactRange="9" name="hearthPortal-491"  isPortal="True" destinationWorldId="-1" pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Tower Level 1 -->
@@ -860,7 +860,7 @@
       <SafeMoveTo questId="101758" stepId="41" pathPrecision="10" x="1118" y="1076" z="-64"  />
       <SafeMoveTo questId="101758" stepId="41" pathPrecision="10" x="1099" y="1036" z="-81"  />
 
-      <MoveToActor questId="101758" stepId="41" actorId="176001" isPortal="True" interactRange="20"  destinationWorldId="80763" />
+      <Interact questId="101758" stepId="41" actorId="176001" isPortal="True" interactRange="20"  destinationWorldId="80763" />
       <UseObject questId="101758" stepId="41" actorId="176001" isPortal="True" interactRange="20" destinationWorldId="80763" />
       <!-- GoTo Tower of the Damned Level 2 -->
       <WaitTimer questId="101758" stepId="41" waitTime="1000" />
@@ -888,7 +888,7 @@
       <SafeMoveTo questId="101758" stepId="41" pathPrecision="20" x="1271" y="1016" z="-69.9" pathPointLimit="10000" allowLongDistance="True"/>
       <SafeMoveTo questId="101758" stepId="41" x="1100" y="880" z="-104.2828"  pathPointLimit="10000" allowLongDistance="True"/>
 
-      <MoveToActor questId="101758" stepId="41" actorId="176001" isPortal="True" interactRange="20" destinationWorldId="85201" x="1080" y="883" z="-112" pathPointLimit="10000" allowLongDistance="True"/>
+      <Interact questId="101758" stepId="41" actorId="176001" isPortal="True" interactRange="20" destinationWorldId="85201" x="1080" y="883" z="-112" pathPointLimit="10000" allowLongDistance="True"/>
       <UsePortal questId="101758" stepId="41" actorId="176001" portalMarkerHash="2083727833"  isPortal="True" interactRange="20"  destinationWorldId="85201" x="1080" y="883" z="-112"/>
       <WaitTimer questId="101758" stepId="41" waitTime="1000" />
     </If>
@@ -904,7 +904,7 @@
 
       <!-- <SafeMoveTo questId="101758" stepId="41" pathPrecision="10" x="1104" y="1048" z="-68" /> -->
       <MoveTo questId="101758" stepId="41" x="1104" y="1048" z="-68" />
-      <MoveToActor questId="101758" stepId="41" actorId="176001" isPortal="True" destinationWorldId="85201" interactRange="40" />
+      <Interact questId="101758" stepId="41" actorId="176001" isPortal="True" destinationWorldId="85201" interactRange="40" />
       <UsePortal questId="101758" stepId="41" actorId="176001" isPortal="True" destinationWorldId="85201" interactRange="40" />
       <WaitTimer questId="101758" stepId="41" waitTime="1000" />
 
@@ -1026,7 +1026,7 @@
       <MoveTo questId="101758" stepId="14" pathPrecision="10" x="795" y="1078" z="-87" />
 
       <UseObject questId="101758" stepId="14" actorId="204747" interactRange="20" isPortal="True" destinationWorldId="81934" x="758" y="1082" z="-90" />
-      <MoveToActor questId="101758" stepId="14" actorId="204747" interactRange="20" isPortal="True" destinationWorldId="81934" />
+      <Interact questId="101758" stepId="14" actorId="204747" interactRange="20" isPortal="True" destinationWorldId="81934" />
       <!-- Arreat Crater Level 2 -->
       <WaitTimer questId="101758" stepId="14" waitTime="2000" />
     </If>
@@ -1047,7 +1047,7 @@
       <!-- Sometimes it shows up as exitNameHash="0" :( -->
       <MoveToMapMarker questId="101758" stepId="14" markerNameHash="0" />
 
-      <MoveToActor questId="101758" stepId="14" actorId="176001" isPortal="True" destinationWorldId="119641" />
+      <Interact questId="101758" stepId="14" actorId="176001" isPortal="True" destinationWorldId="119641" />
       <WaitTimer questId="101758" stepId="14" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(101758) and IsActiveQuestStep(14) and CurrentWorldId == 81934">
@@ -1081,7 +1081,7 @@
       <SafeMoveTo questId="101758" stepId="29" pathPrecision="10" x="1122" y="1102" z="-93"  />
       <SafeMoveTo questId="101758" stepId="29" pathPrecision="10" x="1098" y="1033" z="-119"  />
 
-      <!--<MoveToActor questId="101758" stepId="29" actorId="176001" isPortal="True" destinationWorldId="139272"  />-->
+      <!--<Interact questId="101758" stepId="29" actorId="176001" isPortal="True" destinationWorldId="139272"  />-->
       <UseObject questId="101758" stepId="29" actorId="176001" isPortal="True" destinationWorldId="139272" />
       <!-- Tower of the Cursed Level 2 -->
       <WaitTimer questId="101758" stepId="29" waitTime="1000" />
@@ -1106,7 +1106,7 @@
       <SafeMoveTo questId="101758" stepId="29" pathprecision="10" x="1125" y="1087" z="-51" />
 
       <UsePortal questId="101758" stepId="29" actorId="161278" destinationWorldId="119650" interactRange="40" portalMarkerHash="43541885" x="1083" y="1043" z="-70.48186" />
-      <MoveToActor questId="101758" stepId="29" actorId="161278" isPortal="True" destinationWorldId="119650" interactRange="20" />
+      <Interact questId="101758" stepId="29" actorId="161278" isPortal="True" destinationWorldId="119650" interactRange="20" />
       <WaitTimer questId="101758" stepId="29" waitTime="2000" />
     </If>
     <!-- Tower of the Cursed Level 2 Version 2 
@@ -1131,16 +1131,16 @@
       <SafeMoveTo questId="101758" stepId="29" pathPrecision="20" x="1104" y="879" z="-82"  />
 
       <!--<MoveTo questId="101758" stepId="29" pathPrecision="20" x="1104" y="879" z="-82" />-->
-      <MoveToActor questId="101758" stepId="29" actorId="161278" isPortal="True" destinationWorldId="119650" interactRange="20" />
+      <Interact questId="101758" stepId="29" actorId="161278" isPortal="True" destinationWorldId="119650" interactRange="20" />
       <!--
 			<UsePortal questId="101758" stepId="29" actorId="161278" destinationWorldId="119650" interactRange="20" portalMarkerHash="43541885" />
-			<MoveToActor questId="101758" stepId="29" actorId="161278" isPortal="True" destinationWorldId="119650" interactRange="20" />
+			<Interact questId="101758" stepId="29" actorId="161278" isPortal="True" destinationWorldId="119650" interactRange="20" />
 			-->
       <WaitTimer questId="101758" stepId="29" waitTime="2000" />
     </If>
     <If condition="IsActiveQuest(101758) and IsActiveQuestStep(29) and CurrentWorldId == 139272
 			and ActorExistsAt(ZetaDia.Me.ActorSnoId, 1112,884,-78, 60)">
-      <MoveToActor questId="101758" stepId="29" actorId="161278" isPortal="True" destinationWorldId="119650" interactRange="20" />
+      <Interact questId="101758" stepId="29" actorId="161278" isPortal="True" destinationWorldId="119650" interactRange="20" />
     </If>
 
     <If condition="IsActiveQuest(101758) and IsActiveQuestStep(29) and CurrentWorldId == 139272 and IsSceneLoaded(141807)">
@@ -1172,22 +1172,22 @@
     </If>
     <!-- Kill Cydea -->
     <While condition="IsActiveQuest(101758) and IsActiveQuestStep(29) and CurrentWorldId == 119650">
-      <MoveToActor questId="101758" stepId="29" actorId="95250" />
+      <Interact questId="101758" stepId="29" actorId="95250" />
       <WaitTimer questId="101758" stepId="29" waitTime="3000" />
     </While>
 
     <!-- Kill Cydea -->
     <While condition="IsActiveQuest(101758) and IsActiveQuestStep(23) and CurrentWorldId == 119650">
-      <MoveToActor questId="101758" stepId="23" actorId="95250" />
+      <Interact questId="101758" stepId="23" actorId="95250" />
       <WaitTimer questId="101758" stepId="23" waitTime="3000" />
     </While>
 
     <!-- Destroy Heart -->
     <While condition="IsActiveQuest(101758) and IsActiveQuestStep(27) and CurrentWorldId == 119650">
       <!-- Kill Sin Heart -->
-      <MoveToActor questId="101758" stepId="27" actorId="193077" interactAttempts="-1" interactRange="40" />
+      <Interact questId="101758" stepId="27" actorId="193077" interactAttempts="-1" interactRange="40" />
       <WaitTimer questId="101758" stepId="27" waitTime="500" />
-      <MoveToActor questId="101758" stepId="27" actorId="193077" interactAttempts="-1" interactRange="40" />
+      <Interact questId="101758" stepId="27" actorId="193077" interactAttempts="-1" interactRange="40" />
       <WaitTimer questId="101758" stepId="27" waitTime="500" />
     </While>
 
@@ -1201,7 +1201,7 @@
       <SafeMoveTo questId="101758" stepId="1" pathPrecision="10" x="1082" y="988" z="0" />
       <SafeMoveTo questId="101758" stepId="1" pathPrecision="10" x="1084" y="889" z="-51" />
       <SafeMoveTo questId="101758" stepId="1" pathPrecision="10" x="1082" y="784" z="-107" />
-      <MoveToActor questId="101758" stepId="1" actorId="204747" interactRange="15" isPortal="True" destinationWorldId="119290" />
+      <Interact questId="101758" stepId="1" actorId="204747" interactRange="15" isPortal="True" destinationWorldId="119290" />
       <WaitTimer questId="101758" stepId="1" waitTime="1000" />
     </If>
 
@@ -1209,7 +1209,7 @@
     <If condition="IsActiveQuest(101758) and IsActiveQuestStep(1) and CurrentWorldId == 119290">
       <!-- Heart of the Cursed -->
       <SafeMoveTo questId="101758" stepId="1" x="169" y="718" z="-50" />
-      <MoveToActor questId="101758" stepId="1" actorId="159575" isPortal="True" destinationWorldId="121214" x="169" y="718" z="-50" />
+      <Interact questId="101758" stepId="1" actorId="159575" isPortal="True" destinationWorldId="121214" x="169" y="718" z="-50" />
       <WaitTimer questId="101758" stepId="1" waitTime="1000" />
     </If>
 
@@ -1224,7 +1224,7 @@
     <If condition="IsActiveQuest(101758) and IsActiveQuestStep(32) and CurrentWorldId == 119290">
       <!-- Heart of the Cursed -->
       <SafeMoveTo questId="101758" stepId="32" x="169" y="718" z="-50" />
-      <MoveToActor questId="101758" stepId="32" actorId="159575" isPortal="True" destinationWorldId="121214" x="169" y="718" z="-50" />
+      <Interact questId="101758" stepId="32" actorId="159575" isPortal="True" destinationWorldId="121214" x="169" y="718" z="-50" />
       <UsePortal questId="101758" stepId="32" destinationWorldId="121214" portalMarkerHash="1743679055" />
       <WaitTimer questId="101758" stepId="32" waitTime="2000" />
     </If>
@@ -1244,7 +1244,7 @@
     <While condition="IsActiveQuest(101758) and IsActiveQuestStep(32) and CurrentWorldId == 121214">
       <WaitTimer questId="101758" stepId="32" waitTime="10000" />
       <TrinityExploreDungeon questId="101758" stepId="32" until="ObjectFound" actorId="201827" objectDistance="20" boxSize="18" boxTolerance=".18" />
-      <MoveToActor questId="101758" stepId="32" actorId="201827" />
+      <Interact questId="101758" stepId="32" actorId="201827" />
       <!-- Soul of Azmodan -->
       <WaitTimer questId="101758" stepId="32" waitTime="1000" />
 
@@ -1262,7 +1262,7 @@
 
     <!-- TalkTo LT Lavail -->
     <If condition="IsActiveQuest(101758) and IsActiveQuestStep(39) and IsInTown">
-      <MoveToActor questId="101758" stepId="39" actorId="162406" x="379" y="421" z="0" />
+      <Interact questId="101758" stepId="39" actorId="162406" x="379" y="421" z="0" />
       <WaitTimer questId="101758" stepId="39" waitTime="1000" />
     </If>
 
@@ -1271,14 +1271,14 @@
       <MoveTo questId="101758" stepId="46"  x="352" y="474" z="0" pathPrecision="10" straightLinePathing="True" />
       <MoveTo questId="101758" stepId="46" x="312" y="478" z="-5.678424" pathPrecision="10" straightLinePathing="True" />
       <MoveToMapMarker questId="101758" stepId="46" portalMarkerHash="-1968039200" destinationWorldId="182875" interactRange="20" />
-      <MoveToActor questId="101758" stepId="46" actorId="178293" isPortal="True" destinationWorldId="182875" x="303" y="456" z="-12" />
+      <Interact questId="101758" stepId="46" actorId="178293" isPortal="True" destinationWorldId="182875" x="303" y="456" z="-12" />
       <WaitTimer questId="101758" stepId="46" waitTime="4000" />
     </If>
 
     <!-- GoTo Tower -->
     <If condition="IsActiveQuest(101758) and IsActiveQuestStep(34) and CurrentWorldId == 182875">
       <MoveTo questId="101758" stepId="34" x="302" y="344" z="0" />
-      <MoveToActor questId="101758" stepId="34" actorId="159576" isPortal="True" destinationWorldId="186552" x="308" y="342" z="0" />
+      <Interact questId="101758" stepId="34" actorId="159576" isPortal="True" destinationWorldId="186552" x="308" y="342" z="0" />
       <WaitTimer questId="101758" stepId="34" waitTime="1000" />
 
       <WaitTimer questId="101758" stepId="34" waitTime="15000" />
@@ -1295,9 +1295,9 @@
     <!-- Travel to Act 4 -->
 
     <While condition="IsActiveQuest(101758) and IsActiveQuestStep(36) and CurrentWorldId == 186552">
-      <MoveToActor questId="101758" stepId="36" actorId="188441" interactRange="35" x="113" y="93" z="22" />
+      <Interact questId="101758" stepId="36" actorId="188441" interactRange="35" x="113" y="93" z="22" />
       <WaitTimer questId="101758" stepId="36" waitTime="1000" />
-      <ConfirmOK questId="101758" stepId="36" />
+      <!--<ConfirmOK questId="101758" stepId="36" />-->
       <WaitTimer questId="101758" stepId="36" waitTime="35000" />
     </While>
 

@@ -52,37 +52,47 @@ namespace Trinity.Components.QuestTools
 
         private async Task<bool> Run()
         {
-            if (!Core.TrinityIsReady)
+            try
             {
-                Core.Logger.Verbose("Waiting for Trinity to become ready");
-                return false;
-            }
-
-            if (_isDone)
-                return true;
-
-            if (!IsStarted)
-            {
-                StartTime = DateTime.UtcNow;
-                IsStarted = true;
-
-                if (await StartTask())
+                if (!Core.TrinityIsReady)
                 {
-                    Done();
+                    Core.Logger.Verbose("Waiting for Trinity to become ready");
+                    return false;
+                }
+
+                if (_isDone)
                     return true;
-                }      
+
+                if (!IsStarted)
+                {
+                    StartTime = DateTime.UtcNow;
+                    IsStarted = true;
+
+                    if (await StartTask())
+                    {
+                        Done();
+                        return true;
+                    }
+                }
+
+                if (CheckTimeout())
+                    Done();
+
+                else if (CheckStopCondition())
+                    Done();
+
+                else if (await MainTask())
+                    Done();
+
+                return true;
             }
-
-            if (CheckTimeout())
-                Done();
-
-            else if (CheckStopCondition())
-                Done();
-
-            else if (await MainTask())
-                Done();
-
+            catch (Exception ex)
+            {
+                Core.Logger.Debug($"Exception in {TagClassName}: {ex}");
+            }
+            Done();
             return true;
+
         }
 
         private bool CheckTimeout()
@@ -106,6 +116,7 @@ namespace Trinity.Components.QuestTools
         public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
         public sealed override void OnDone() => Core.Logger.Verbose($"Finished Tag: {TagClassName} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
         public sealed override bool IsDone => _isDone;
+        public override bool IsDoneCache => _isDone;
         public sealed override void ResetCachedDone() => Reset();
         public sealed override void ResetCachedDone(bool force = false) => Reset();
 

@@ -424,7 +424,7 @@ namespace Trinity.Framework.Helpers
         /// <returns><c>true</c> if [is fully valid] [the specified dia object]; otherwise, <c>false</c>.</returns>
         public static bool IsFullyValid(this DiaObject diaObject)
         {
-            return diaObject != null && diaObject.IsValid && diaObject.CommonData != null && diaObject.CommonData.IsValid;
+            return diaObject != null && diaObject.IsValid && diaObject.CommonData != null && diaObject.CommonData.IsValid && !diaObject.CommonData.IsDisposed;
         }
 
         /// <summary>

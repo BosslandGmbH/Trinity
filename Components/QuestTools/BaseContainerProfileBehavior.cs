@@ -61,40 +61,51 @@ namespace Trinity.Components.QuestTools
         {
             get
             {
-                if (!Core.TrinityIsReady)
+                try
                 {
-                    Core.Logger.Verbose("Waiting for Trinity to become ready");
-                    return false;
-                }
 
-                if (_isDone)
-                    return true;
 
-                if (!IsStarted)
-                {
-                    StartTime = DateTime.UtcNow;
-                    IsStarted = true;
-                    OnStart();
-                    if (StartMethod())
+                    if (!Core.TrinityIsReady)
+                    {
+                        Core.Logger.Verbose("Waiting for Trinity to become ready");
+                        return false;
+                    }
+
+                    if (_isDone)
+                        return true;
+
+                    if (!IsStarted)
+                    {
+                        StartTime = DateTime.UtcNow;
+                        IsStarted = true;
+                        OnStart();
+                        if (StartMethod())
+                            Done();
+                    }
+
+                    if (!IsActiveQuest || StepId != 0 && !IsActiveQuestStep)
                         Done();
+
+                    else if (CheckTimeout())
+                        Done();
+
+                    else if (CheckStopCondition())
+                        Done();
+
+                    else if (MainMethod())
+                        Done();
+
+                    else if (Body.All(p => p.IsDone))
+                        Done();
+
+                    return _isDone;
                 }
-
-                if (!IsActiveQuest || StepId != 0 && !IsActiveQuestStep)
-                    Done();
-
-                else if (CheckTimeout())
-                    Done();
-
-                else if (CheckStopCondition())
-                    Done();
-
-                else if (MainMethod())
-                    Done();
-
-                else if (Body.All(p => p.IsDone))
-                    Done();
-
-                return _isDone;
+                catch (Exception ex)
+                {
+                    Core.Logger.Debug($"Exception in {TagClassName}: {ex}");
+                }
+                Done();
+                return true;
             }
         }
 
@@ -113,7 +124,7 @@ namespace Trinity.Components.QuestTools
             return false;
         }
 
-        protected sealed override Composite CreateBehavior() => null;
+        protected sealed override Composite CreateBehavior() => new Zeta.TreeSharp.Action();
         public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
         public sealed override void OnDone() { }
 
@@ -122,11 +133,19 @@ namespace Trinity.Components.QuestTools
 
         public void Reset()
         {
-            _isDone = false;
-            IsStarted = false;
-            this.ResetChildren();
-            StartTime = DateTime.MinValue;
-            EndTime = DateTime.MinValue;
+            try
+            {
+                _isDone = false;
+                IsStarted = false;
+                this.ResetChildren();
+                StartTime = DateTime.MinValue;
+                EndTime = DateTime.MinValue;
+            }
+            catch (Exception ex)
+            {
+                Core.Logger.Log($"[{TagClassName}] Exception resetting profile tag {ex}");
+            }
+
         }
 
         #region IEnhancedProfileBehavior

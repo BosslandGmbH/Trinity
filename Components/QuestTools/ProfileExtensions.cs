@@ -52,7 +52,7 @@ namespace Trinity.Components.QuestTools
 
         public static void SetChildrenDone(this ProfileBehavior behavior)
         {
-            behavior.GetChildren().ForEach(b =>
+            behavior?.GetChildren()?.ForEach(b =>
             {
                 (b as IEnhancedProfileBehavior)?.Done();
             });
@@ -60,12 +60,12 @@ namespace Trinity.Components.QuestTools
 
         public static void ResetChildren(this ProfileBehavior behavior)
         {
-            behavior.GetChildren().ForEach(b => b.ResetCachedDone());
+            behavior?.GetChildren()?.ForEach(b => b?.ResetCachedDone());
         }
 
         public static bool AreChildrenDone(this ProfileBehavior behavior)
         {
-            return behavior.GetChildren().All(b => b.IsDone);
+            return behavior?.GetChildren()?.All(b => b.IsDone) ?? false;
         }
 
         /// <summary>
