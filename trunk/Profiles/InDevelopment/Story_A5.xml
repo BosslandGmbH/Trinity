@@ -1,5 +1,5 @@
 ﻿<Profile>
-  <Name>Story Mode - Act 1</Name>
+  <Name>Story Mode - Act 5</Name>
   <KillMonsters>True</KillMonsters>
   <PickupLoot>True</PickupLoot>
   <GameParams quest="-1" step="-1" act="A1" resumeFromSave="False" isPrivate="True" numGames="-1" />
@@ -9,11 +9,11 @@
     <If condition="not (IsInTown)">
       <TakeWaypoint waypointNumber="0" />
     </If>
-
+    
     <!-- Select profile for current act -->
     <If condition="ZetaDia.CurrentActSnoId == 70015">
       <LogMessage message="We're in the wrong act, loading Act 1" />
-      <LoadProfile profile="Act1.xml" />
+      <LoadProfile profile="Story_A1.xml" />
     </If>
     <If condition="ZetaDia.CurrentActSnoId == 70016">
       <LogMessage message="We're in the wrong act, loading Act 2" />

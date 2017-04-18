@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Profile>
-  <Name>Cow Level Explorer 1.1 by xzjv [REQUIRES QUESTTOOLS 3.5.13+]</Name>
+  <Name>Cow Level Explorer 1.1 by xzjv</Name>
   <KillMonsters>True</KillMonsters>
   <PickupLoot>True</PickupLoot>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" />
@@ -25,7 +25,11 @@
 
       <LogMessage Output="Getting Bovine Bardiche from Stash" />
 
-      <GetItemFromStash questId="1" actorId="272056" maxItems="5" />
+      <TakeFromStash>
+        <Items>
+          <Item id="272056" quantity="5" />
+        </Items>
+      </TakeFromStash>
 
       <LogMessage questId="1" output="Moving to Cube" />
 
@@ -40,7 +44,7 @@
 
       <LogMessage questId="1" output="Opening Cow Portal" />
 
-      <Transmute>
+      <Transmute recipe="OpenPortalToCow">
         <Items>
           <Item id="272056" name="Bovine Bardiche" />
         </Items>
@@ -67,16 +71,7 @@
       <LogMessage questId="1" output="Exploring Cow Level!" />
 
       <!-- // TentacleLord (209133) -->
-      <ExploreDungeon
-        routeMode="WeightedNearestMinimapUnvisited"
-        questId="1"
-        until="ObjectFound"
-        actorId="209133"
-        objectDistance="60"
-        pathPrecision="30"
-        boxSize="11"
-        boxTolerance="0.01"
-        markerDistance="45" />
+      <Explore endCondition="ActorExistsNearMe(209133, 60)" />
 
       <!--
       QuestSNO: 434753 QuestStep: 1, Description: Slay the Infernal Bovine herd!, Header: 434753 1 0, State: InProgress, Index: 0
@@ -96,16 +91,6 @@
         <WaitTimer questId="1" stepId="1" waitTime="1000" />
         <WaitTimer questId="1" stepId="1" waitTime="1000" />        
       </While>
-
-      <!-- UNCOMMENT THIS TAG BELOW TO RE-EXPLORE THE WHOLE LEVEL -->
-      <!--<ExploreDungeon
-        routeMode="WeightedNearestMinimapUnvisited"
-        questId="1"
-        until="FullyExplored"
-        pathPrecision="30"
-        boxSize="11"
-        boxTolerance="0.01"
-        markerDistance="45" />-->
       
     </If>   
 

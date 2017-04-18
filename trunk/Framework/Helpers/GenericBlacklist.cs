@@ -7,7 +7,8 @@ using Trinity.Framework.Actors.ActorTypes;
 
 namespace Trinity.Framework.Helpers
 {
-    internal class GenericCacheObject
+    // 黑白灰 修改访问级别
+    public class GenericCacheObject
     {
         public string Key { get; set; }
         public object Value { get; set; }
@@ -46,11 +47,43 @@ namespace Trinity.Framework.Helpers
         }
     }
 
-    internal class GenericBlacklist
+    // 黑白灰 修改黑名单支持同时到期时间多个对象
+    public class GenericBlacklist
     {
+
+        private static void addToExpireCache(DateTime k, string v)
+        {
+
+            HashSet<string> ls = null;
+            if (ExpireCache.ContainsKey(k))
+            {
+                ls = ExpireCache[k];
+            }
+            else
+            {
+                ls = new HashSet<string>();
+                ExpireCache.Add(k, ls);
+            }
+            ls.Add(v);
+        }
+
+        private static bool removeFromExpireCache(DateTime k, string v)
+        {
+            if (!ExpireCache.ContainsKey(k))
+            {
+                return false;
+            }
+            var ls = ExpireCache[k];
+            if (ls == null)
+            {
+                return false;
+            }
+            return ls.Remove(v);
+        }
+
         public static void Blacklist(TrinityActor objectToBlacklist, TimeSpan duration = default(TimeSpan), string reason = "")
         {
-            Core.Logger.Log($@"Blacklisting {objectToBlacklist.InternalName} ActorSnoId: {objectToBlacklist.ActorSnoId} RActorId: {objectToBlacklist.RActorId}
+            Core.Logger.Debug($@"Blacklisting {objectToBlacklist.InternalName} ActorSnoId: {objectToBlacklist.ActorSnoId} RActorId: {objectToBlacklist.RActorId}
             Because: {reason}
             Duration: {duration:g}
             ");
@@ -76,7 +109,7 @@ namespace Trinity.Framework.Helpers
         }
 
         private static readonly Dictionary<string, GenericCacheObject> DataCache = new Dictionary<string, GenericCacheObject>();
-        private static readonly Dictionary<DateTime, string> ExpireCache = new Dictionary<DateTime, string>();
+        private static readonly Dictionary<DateTime, HashSet<string>> ExpireCache = new Dictionary<DateTime, HashSet<string>>();
 
         private static readonly object Synchronizer = new object();
 
@@ -97,7 +130,7 @@ namespace Trinity.Framework.Helpers
                 if (ContainsKey(obj.Key))
                     return false;
                 DataCache.Add(obj.Key, obj);
-                ExpireCache.Add(obj.Expires, obj.Key);
+                addToExpireCache(obj.Expires, obj.Key);
                 return true;
             }
         }
@@ -112,7 +145,7 @@ namespace Trinity.Framework.Helpers
                 RemoveObject(obj.Key);
 
                 DataCache.Add(obj.Key, obj);
-                ExpireCache.Add(obj.Expires, obj.Key);
+                addToExpireCache(obj.Expires, obj.Key);
 
                 return true;
             }
@@ -129,7 +162,7 @@ namespace Trinity.Framework.Helpers
                     return false;
                 GenericCacheObject oldObj = DataCache[key];
                 DataCache.Remove(key);
-                ExpireCache.Remove(oldObj.Expires);
+                removeFromExpireCache(oldObj.Expires, oldObj.Key);
                 return true;
             }
         }
@@ -204,10 +237,13 @@ namespace Trinity.Framework.Helpers
 
                     lock (Synchronizer)
                     {
-                        foreach (KeyValuePair<DateTime, string> kv in ExpireCache.Where(kv => kv.Key.Ticks < nowTicks).ToList())
+                        foreach (KeyValuePair<DateTime, HashSet<string>> kv in ExpireCache.Where(kv => kv.Key.Ticks < nowTicks).ToList())
                         {
                             ExpireCache.Remove(kv.Key);
-                            DataCache.Remove(kv.Value);
+                            foreach (var v in kv.Value)
+                            {
+                                DataCache.Remove(v);
+                            }
                         }
                     }
 

@@ -36,6 +36,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.IsUsed = GetIsGizmoUsed(actor);
             actor.IsLockedDoor = (actor.Attributes.IsDoorLocked || actor.Attributes.IsDoorTimed) && !actor.Attributes.IsGizmoBeenOperated;
             actor.ShrineType = GetShrineType(actor);
+            actor.IsPortal = GameData.PortalTypes.Contains(actor.GizmoType);
             actor.ContainerType = GetContainerType(actor);
             actor.IsInteractWhitelisted = GameData.InteractWhiteListIds.Contains(actor.ActorSnoId);
 

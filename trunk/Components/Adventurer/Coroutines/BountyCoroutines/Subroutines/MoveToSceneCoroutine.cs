@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity;
@@ -137,7 +138,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.Moving;
                 return false;
             }
-            if (!await ExplorationCoroutine.Explore(BountyData.LevelAreaIds)) return false;
+            var levelArea = BountyData != null ? BountyData.LevelAreaIds : new HashSet<int> {ZetaDia.CurrentLevelAreaSnoId};
+            if (!await ExplorationCoroutine.Explore(levelArea)) return false;
             Core.Scenes.Reset();
             return false;
         }

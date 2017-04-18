@@ -72,28 +72,35 @@ namespace Trinity.ProfileTags
         [DefaultValue("")]
         public string SceneName { get; set; }
 
+        [XmlAttribute("interactRange")]
+        [XmlAttribute("distance")]
+        [Description("How close to get to the position")]
+        [DefaultValue(5)]
+        public float StopDistance { get; set; }
+
         #endregion
 
         public Vector3 AbsolutePosition => new Vector3(X, Y, Z);
         public Vector3 RelativePosition => new Vector3(RelativeSceneX, RelativeSceneY, RelativeSceneZ);
-
+    
         public override async Task<bool> StartTask()
         {
-            if (!TrySetAbsoluteDestination(AbsolutePosition))
+            if (TrySetAbsoluteDestination(AbsolutePosition))
             {
-                if (!TrySetRelativeDestination(RelativePosition, SceneSnoId, SceneName))
-                {
-                    return true;
-                }
+                return false;
             }
-            return false;
+            if (TrySetRelativeDestination(RelativePosition, SceneSnoId, SceneName))
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool TrySetAbsoluteDestination(Vector3 absPos)
         {
             if (absPos != Vector3.Zero && !ZetaDia.WorldInfo.IsGenerated)
             {
-                _movementTask = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, absPos, 3);
+                _movementTask = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, absPos, (int)StopDistance);
                 return true;
             }
             return false;
@@ -119,6 +126,12 @@ namespace Trinity.ProfileTags
 
         public override async Task<bool> MainTask()
         {
+            if (_movementTask == null)
+            {
+                Core.Logger.Debug($"_movementTask was null in {TagClassName}");
+                return true;
+            }
+
             if (!_movementTask.IsDone && !await _movementTask.GetCoroutine())
                 return false;
 

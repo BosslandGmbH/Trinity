@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals;
 
 
 namespace Trinity.Components.Adventurer.Game.Exploration
@@ -138,6 +139,29 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 }
             }
         };
+
+        public static void MarkNodesAsVisited(IEnumerable<string> sceneNames)
+        {
+            sceneNames = sceneNames.Select(s => s.ToLowerInvariant()).ToList();
+            foreach (var scene in Core.Scenes)
+            {
+                var fullname = scene.Name.ToLowerInvariant();
+                if (sceneNames.Any(s => fullname.Contains(s)))
+                {
+                    foreach (var node in scene.Nodes)
+                    {
+                        node.IsVisited = true;
+                    }
+                    Core.Logger.Debug($"Marked {scene.Nodes.Count} exploration nodes for scene {fullname} ({scene.SnoId}) as visited");
+                }
+            }
+        }
+
+        public static void MarkNodesAsVisited(IEnumerable<WorldScene> scenes)
+        {
+            var sceneLookup = new HashSet<int>(scenes.Select(s => s.SnoId));
+            ExplorationGrid.Instance.WalkableNodes.Where(s => sceneLookup.Contains(s.Scene.SnoId)).ForEach(s => s.IsVisited  = true);
+        }
 
         public static List<Vector3> GetFourPointsInEachDirection(Vector3 center, int radius)
         {

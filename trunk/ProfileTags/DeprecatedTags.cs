@@ -15,7 +15,7 @@ namespace Trinity.ProfileTags.Deprecated
         public DeprecatedTag(string message)
         {
             var attrNames = GetType().GetCustomAttributes<XmlElementAttribute>();
-            var xmlNames = attrNames.Aggregate("", (s, item) => s + $"{item}, ");
+            var xmlNames = attrNames.Aggregate("", (s, item) => s + $"{item.Name}, ");
             Core.Logger.Warn($"Invalid Profile Tag Detected: {GetType().Name} ({xmlNames}). {message}");
         }
 
@@ -25,10 +25,10 @@ namespace Trinity.ProfileTags.Deprecated
     [XmlElement("TrinityLoadOnce")]
     [XmlElement("LoadOnce")]
     [XmlElement("ConfirmOK")]
-    [XmlElement("WaitForCombat")]
     [XmlElement("Command")]
     [XmlElement("IncrementCounter")]
     [XmlElement("TrinityMoveToSNO")]
+    [XmlElement("TrinityOffsetMove")]
     public class DeprecatedNotSupportedTag : DeprecatedTag
     {
         public DeprecatedNotSupportedTag() : base("This tag is no longer supported") { }

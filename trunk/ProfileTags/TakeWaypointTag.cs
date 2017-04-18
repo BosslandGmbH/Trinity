@@ -24,6 +24,7 @@ namespace Trinity.ProfileTags
         [DefaultValue(-1)]
         public int WaypointNumber { get; set; }
 
+        [XmlAttribute("levelAreaId")]
         [XmlAttribute("levelAreaSnoId")]
         [XmlAttribute("destinationLevelAreaSnoId")]
         [Description("Id of level area to arrive at")]

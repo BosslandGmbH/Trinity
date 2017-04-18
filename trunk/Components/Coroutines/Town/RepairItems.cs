@@ -44,8 +44,10 @@ namespace Trinity.Components.Coroutines.Town
                 return true;
             }
 
-            var repairActor = Randomizer.Boolean ? TownInfo.NearestMerchant : TownInfo.Blacksmith;
-            //var repairActor = TownInfo.NearestMerchant;
+            var smith = TownInfo.Blacksmith;
+            var merchant = TownInfo.NearestMerchant;
+            var repairActor = (Randomizer.Boolean ? merchant : smith) ?? (smith ?? merchant);
+
             if (repairActor == null)
             {
                 Core.Logger.Error("[RepairItems] Failed to find somewhere to repair :(");
@@ -105,6 +107,10 @@ namespace Trinity.Components.Coroutines.Town
         {
             var equippedItems = InventoryManager.Equipped.Where(i => i.DurabilityCurrent < i.DurabilityMax).ToList();
             if (!equippedItems.Any())
+                return false;
+
+            // Fix for Campaign quest start of ACT1
+            if (ZetaDia.CurrentQuest.QuestSnoId == 87700)
                 return false;
 
             var currentHighestDurItem = equippedItems.Max(i => i.DurabilityPercent);

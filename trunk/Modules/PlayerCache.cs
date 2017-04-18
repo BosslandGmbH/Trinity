@@ -547,7 +547,7 @@ namespace Trinity.Modules
                         ZetaDia.Globals.IsLoadingWorld ||
                         ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting ||
                         ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling ||
-                        ZetaDia.Me.CommonData.AnimationState == AnimationState.Transform ||
+                        //ZetaDia.Me.CommonData.AnimationState == AnimationState.Transform || //archon is transform
                         ZetaDia.Me.CommonData.AnimationState.ToString() == "13"
                     );
             }

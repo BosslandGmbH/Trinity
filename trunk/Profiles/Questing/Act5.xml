@@ -76,7 +76,7 @@
     <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_Warehouse -->
     <!-- Inside Old Westmarch Storehouse -->
     <If condition="IsActiveQuest(251355) and IsActiveQuestStep(2) and CurrentWorldId==306549">
-      <MoveToActor questId="251355" stepId="2" x="903" y="720" z="5" actorId="308377" interactRange="8"
+      <Interact questId="251355" stepId="2" x="903" y="720" z="5" actorId="308377" interactRange="8"
                    name="x1_NPC_Westmarch_IntroGuy-4560"  pathPrecision="5" pathPointLimit="250" statusText="Talk to Victor" />
     </If>
 
@@ -84,7 +84,7 @@
     <If condition="IsActiveQuest(251355) and IsActiveQuestStep(59) and CurrentWorldId==306549">
       <!--
       <SafeMoveTo questId="251355" stepId="59" x="876" y="718" z="5" pathPrecision="5" pathPointLimit="250" statusText="Move to door" />
-      <MoveToActor questId="251355" stepId="59" x="872" y="718" z="6" actorId="309222"
+      <Interact questId="251355" stepId="59" x="872" y="718" z="6" actorId="309222"
                    interactRange="14" name="X1_Westm_Door_Giant_Inset-839"  pathPrecision="5" pathPointLimit="250" statusText="Opening Door" />
       -->
       <SafeMoveTo questId="251355" stepId="59" x="802" y="715" z="0" pathPrecision="5" pathPointLimit="250" statusText="Outside to birds" />
@@ -109,7 +109,7 @@
     </While>
     <While condition="IsActiveQuest(251355) and IsActiveQuestStep(7) and CurrentWorldId==306549 and CurrentLevelAreaId==311624">
       <SafeMoveTo questId="251355" stepId="7" x="402" y="524" z="7" pathPrecision="5" pathPointLimit="250" statusText="Moving to Quest Trigger Point" />
-      <MoveToActor questId="251355" stepId="7" x="396" y="530" z="7" actorId="289293"
+      <Interact questId="251355" stepId="7" x="396" y="530" z="7" actorId="289293"
                    interactRange="8" name="x1_Tyrael_Hurt-2472"  pathPrecision="5" pathPointLimit="250" statusText="Talking to Tyrael" />
       <WaitTimer questId="251355" stepId="7" waitTime="500" />
     </While>
@@ -124,7 +124,7 @@
     </If>
     <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_CathedralCourtyard -->
     <If condition="IsActiveQuest(251355) and IsActiveQuestStep(57) and CurrentWorldId==306549 and CurrentLevelAreaId==311624">
-      <MoveToActor questId="251355" stepId="57" x="312" y="523" z="20"  actorId="316548" interactRange="17" name="x1_westm_Church_Ext_Door_A-21"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="251355" stepId="57" x="312" y="523" z="20"  actorId="316548" interactRange="17" name="x1_westm_Church_Ext_Door_A-21"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Quest: x1_WestM_IntroQuest World: x1_westm_intro LevelArea: X1_Westm_CathedralCourtyard -->
@@ -162,7 +162,7 @@
     <While condition="IsActiveQuest(251355) and IsActiveQuestStep(11) and CurrentWorldId==308549 and CurrentLevelAreaId==309413">
       <SafeMoveTo questId="251355" stepId="11" x="389" y="352" z="1" pathPrecision="5" pathPointLimit="250" statusText="Clearing the Cathedral" />
       <WaitTimer questId="251355" stepId="57" waitTime="500" statusText="Clearing the Cathedral" />
-      <MoveToActor questId="251355" stepId="11" x="408" y="365" z="1" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-3785"
+      <Interact questId="251355" stepId="11" x="408" y="365" z="1" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-3785"
                    pathPrecision="5" pathPointLimit="250" statusText="Talk to Tyrael" />
     </While>
     <!-- Quest: x1_WestM_IntroQuest World: X1_Westmarch_Cath_Int LevelArea: X1_WestM_Intro_Cath_Int_Door -->
@@ -173,7 +173,7 @@
     </If>
     <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
     <If condition="IsActiveQuest(284683) and IsActiveQuestStep(-1) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
-      <MoveToActor questId="284683" stepId="-1" x="370" y="522" z="8" actorId="303828" interactRange="8" name="x1_WestmHub_General-4003"
+      <Interact questId="284683" stepId="-1" x="370" y="522" z="8" actorId="303828" interactRange="8" name="x1_WestmHub_General-4003"
                    pathPrecision="5" pathPointLimit="250" statusText="Talk to General Torion" />
     </If>
     <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
@@ -278,12 +278,12 @@
     [QuestTools] Change(s) occured at Position x="368" y="363" z="-20"
     -->
     <While condition="IsActiveQuest(284683) and IsActiveQuestStep(68) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
-      <MoveToActor questId="284683" stepId="68" x="387" y="282" z="-18" actorId="360303" interactRange="12" name="x1_Westm_MysticCorpsePile-38652"
+      <Interact questId="284683" stepId="68" x="387" y="282" z="-18" actorId="360303" interactRange="12" name="x1_Westm_MysticCorpsePile-38652"
                    pathPrecision="5" pathPointLimit="250" statusText="Writhing Corpse Pile" />
     </While>
     <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_GideonsCourt LevelArea: X1_WestM_DeathOrb_GideonsCourt -->
     <If condition="IsActiveQuest(284683) and IsActiveQuestStep(30) and CurrentWorldId==338891 and CurrentLevelAreaId==338956">
-      <MoveToActor questId="284683" stepId="30" x="386" y="289" z="-19" actorId="175310" interactRange="9" name="PT_Mystic_NoVendor_NonGlobalFollower-39462"
+      <Interact questId="284683" stepId="30" x="386" y="289" z="-19" actorId="175310" interactRange="9" name="PT_Mystic_NoVendor_NonGlobalFollower-39462"
                    pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
     <!-- Quest: X1_WestmHub_Survivor_Rescue World: X1_WestM_DeathOrb_GideonsCourt LevelArea: X1_WestM_DeathOrb_GideonsCourt -->
@@ -391,7 +391,7 @@
     </While>
     <While condition="IsActiveQuest(284683) and IsActiveQuestStep(40) and CurrentWorldId==339151 and CurrentLevelAreaId==339158">
       <WaitTimer questId="284683" stepId="40" waitTime="500" />
-      <MoveToActor questId="284683" stepId="40" x="452" y="430" z="10" actorId="175310" interactRange="9" name="PT_Mystic_NoVendor_NonGlobalFollower-53186"
+      <Interact questId="284683" stepId="40" x="452" y="430" z="10" actorId="175310" interactRange="9" name="PT_Mystic_NoVendor_NonGlobalFollower-53186"
                    pathPrecision="5" pathPointLimit="250" statusText="" />
     </While>
     <!--
@@ -413,7 +413,7 @@
     <!-- Quest: X1_Westm_KillUrzael World: [sno unknown] LevelArea: x1_Westm_Hub -->
     <If condition="IsActiveQuest(285098) and IsActiveQuestStep(-1) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
       <TrinityTownRun questId="1" />
-      <MoveToActor questId="285098" stepId="-1" x="381" y="510" z="7" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-425"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="285098" stepId="-1" x="381" y="510" z="7" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-425"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
     <!--[QuestTools] questStepId changed from -1 to 1-->
     <!-- Quest: X1_Westm_KillUrzael World: [sno unknown] LevelArea: x1_Westm_Hub -->
@@ -479,7 +479,7 @@
     <!-- Quest: X1_Westm_KillUrzael World: x1_Urzael_Arena LevelArea: x1_Urzael_Arena -->
     <While condition="IsActiveQuest(285098) and IsActiveQuestStep(14) and CurrentWorldId==308446 and CurrentLevelAreaId==308487">
       <SafeMoveTo questId="285098" stepId="14" x="329" y="343" z="0" pathPrecision="5" pathPointLimit="250" statusText="" />
-      <MoveToActor questId="285098" stepId="14" x="332" y="348" z="0" actorId="274457" interactRange="46" name="x1_Malthael_NPC-46446"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="285098" stepId="14" x="332" y="348" z="0" actorId="274457" interactRange="46" name="x1_Malthael_NPC-46446"  pathPrecision="5" pathPointLimit="250" statusText="" />
       <WaitTimer questId="285098" stepId="14" waitTime="1000" />
     </While>
     <!-- Quest: X1_Westm_KillUrzael World: x1_Urzael_Arena LevelArea: x1_Urzael_Arena -->
@@ -490,14 +490,14 @@
 
     <!-- Quest: X1_Westm_KillUrzael World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
     <If condition="IsActiveQuest(285098) and IsActiveQuestStep(18) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
-      <MoveToActor questId="285098" stepId="18" x="381" y="510" z="7" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-19511"
+      <Interact questId="285098" stepId="18" x="381" y="510" z="7" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-19511"
                    pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Quest: x1_Adria World: [sno unknown] LevelArea: x1_Westm_Hub -->
     <If condition="IsActiveQuest(257120) and IsActiveQuestStep(-1) and CurrentWorldId==304235">
       <TrinityTownRun questId="1" />
-      <MoveToActor questId="257120" stepId="-1" x="531" y="567" z="3" actorId="56948"
+      <Interact questId="257120" stepId="-1" x="531" y="567" z="3" actorId="56948"
                    interactRange="9" name="PT_Mystic-53"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
@@ -562,7 +562,7 @@
     <!--[QuestTools] questStepId changed from 67 to 65-->
     <!-- Quest: x1_Adria World: x1_Bog_AdriaRitual LevelArea: x1_Bog_AdriaRitual -->
     <If condition="IsActiveQuest(257120) and IsActiveQuestStep(92) and CurrentWorldId==282460">
-      <MoveToActor questId="257120" stepId="92" x="538" y="563" z="0" actorId="340914" interactRange="19" name="x1_Catacombs_Door_B-1713"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="257120" stepId="92" x="538" y="563" z="0" actorId="340914" interactRange="19" name="x1_Catacombs_Door_B-1713"  pathPrecision="5" pathPointLimit="250" statusText="" />
       <WaitTimer questId="257120" stepId="92" waitTime="500" />
       <MoveToMapMarker questId="257120" stepId="92" x="494" y="579" z="-19" markerNameHash="97677856" actorId="365394" interactRange="20"
                       pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="267412" statusText="" />
@@ -586,7 +586,7 @@
     <!--[QuestTools] questStepId changed from 92 to 106-->
     <!-- Quest: x1_Adria World: x1_Bog_01 LevelArea: x1_Bog_01 -->
     <If condition="IsActiveQuest(257120) and IsActiveQuestStep(106) and CurrentWorldId==267412">
-      <MoveToActor questId="257120" stepId="106" actorId="348096" interactRange="9" name="x1_Bog_Beacon_B-5498"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="257120" stepId="106" actorId="348096" interactRange="9" name="x1_Bog_Beacon_B-5498"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Quest: x1_Adria World: x1_Bog_01 LevelArea: x1_Bog_01 -->
@@ -821,7 +821,7 @@
     <!--[QuestTools] questStepId changed from 110 to 14-->
     <!-- Quest: x1_Adria World: x1_Adria_Boss_Arena_02 LevelArea: x1_Adria_Boss_Arena -->
     <If condition="IsActiveQuest(257120) and IsActiveQuestStep(78) and CurrentWorldId==297771 and CurrentLevelAreaId==287220">
-      <MoveToActor questId="257120" stepId="78" x="404" y="358" z="1" actorId="284530" interactRange="7" name="x1_NPC_LorathNahr-36690"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="257120" stepId="78" x="404" y="358" z="1" actorId="284530" interactRange="7" name="x1_NPC_LorathNahr-36690"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Quest: x1_Adria World: x1_Adria_Boss_Arena_02 LevelArea: x1_Adria_Boss_Arena -->
@@ -831,7 +831,7 @@
     <!-- Quest: x1_Adria World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
     <If condition="IsActiveQuest(257120) and IsActiveQuestStep(115) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
       <TrinityTownRun questId="1" />
-      <MoveToActor questId="257120" stepId="115" x="381" y="510" z="7" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-37078"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="257120" stepId="115" x="381" y="510" z="7" actorId="289293" interactRange="8" name="x1_Tyrael_Hurt-37078"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Pandemonium Gate -->
@@ -844,7 +844,7 @@
     </If>
     <!-- Quest: x1_ToHeaven World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
     <If condition="IsActiveQuest(263851) and IsActiveQuestStep(15) and CurrentWorldId==304235 and CurrentLevelAreaId==270011">
-      <MoveToActor questId="263851" stepId="15" x="374" y="755" z="7"  actorId="277401" interactRange="10" name="x1_Heaven_PandemoniumPortal-553"  isPortal="True" destinationWorldId="-1" pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="263851" stepId="15" x="374" y="755" z="7"  actorId="277401" interactRange="10" name="x1_Heaven_PandemoniumPortal-553"  isPortal="True" destinationWorldId="-1" pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
     <!-- Quest: x1_ToHeaven World: x1_Heaven_Pandemonium_Portal LevelArea: x1_Heaven_Pandemonium_Portal -->
     <If condition="IsActiveQuest(263851) and IsActiveQuestStep(15) and CurrentWorldId==339160 and CurrentLevelAreaId==339468">
@@ -859,7 +859,7 @@
     </If>
     <!-- Quest: x1_ToHeaven World: x1_Heaven_Pandemonium_Portal LevelArea: x1_Heaven_Pandemonium_Portal -->
     <If condition="IsActiveQuest(263851) and IsActiveQuestStep(19) and CurrentWorldId==339160 and CurrentLevelAreaId==339468">
-      <MoveToActor questId="263851" stepId="19" x="444" y="444" z="0" actorId="368315" interactRange="23" name="x1_Imperius_HeavenToPandGate-37969"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="263851" stepId="19" x="444" y="444" z="0" actorId="368315" interactRange="23" name="x1_Imperius_HeavenToPandGate-37969"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Quest: x1_ToHeaven World: x1_Heaven_Pandemonium_Portal LevelArea: x1_Heaven_Pandemonium_Portal -->
@@ -902,9 +902,9 @@
     </If>
     <If condition="IsActiveQuest(273790) and (IsActiveQuestStep(11) or IsActiveQuestStep(35)) and CurrentWorldId==291941 and (CurrentLevelAreaId==274985 or CurrentLevelAreaId==279169)">
       <SafeMoveTo questId="273790" stepId="11" x="358" y="105" z="-66" pathPrecision="5" pathPointLimit="250" statusText="" />
-      <MoveToActor questId="273790" stepId="11" x="352" y="101" z="-66" actorId="275409" interactRange="23" name="x1_Imperius-69077"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="273790" stepId="11" x="352" y="101" z="-66" actorId="275409" interactRange="23" name="x1_Imperius-69077"  pathPrecision="5" pathPointLimit="250" statusText="" />
       <SafeMoveTo questId="273790" stepId="35" x="358" y="105" z="-66" pathPrecision="5" pathPointLimit="250" statusText="" />
-      <MoveToActor questId="273790" stepId="35" x="352" y="101" z="-66" actorId="275409" interactRange="23" name="x1_Imperius-69077"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="273790" stepId="35" x="352" y="101" z="-66" actorId="275409" interactRange="23" name="x1_Imperius-69077"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Quest: X1_PandExt_ExteriorFull World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
@@ -965,7 +965,7 @@
     </If>
     <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_BatteringRam_Entrance_A LevelArea: X1_Pand_Ext_BatteringRam_Entrance_A -->
     <If condition="IsActiveQuest(273790) and IsActiveQuestStep(30) and CurrentWorldId==339254 and CurrentLevelAreaId==339397">
-      <MoveToActor questId="273790" stepId="30" x="393" y="148" z="-51" actorId="290323" interactRange="8" name="X1_Tyrael_PandExt-62537"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="273790" stepId="30" x="393" y="148" z="-51" actorId="290323" interactRange="8" name="X1_Tyrael_PandExt-62537"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
 
@@ -975,7 +975,7 @@
     </If>
     <!-- Quest: X1_PandExt_ExteriorFull World: X1_Pand_Ext_BatteringRam_Entrance_A LevelArea: X1_Pand_Ext_BatteringRam_Entrance_A -->
     <If condition="IsActiveQuest(273790) and IsActiveQuestStep(33) and CurrentWorldId==339254 and CurrentLevelAreaId==339397">
-      <MoveToActor questId="273790" stepId="33" x="393" y="148" z="-51" actorId="290323" interactRange="8" name="X1_Tyrael_PandExt-62537"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="273790" stepId="33" x="393" y="148" z="-51" actorId="290323" interactRange="8" name="X1_Tyrael_PandExt-62537"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Quest: x1_BatteringRamFight World: X1_Westmarch_Hub LevelArea: x1_Westm_Hub -->
@@ -1014,7 +1014,7 @@
           <IgnoreScene sceneName="Entrance" />
         </IgnoreScenes>
       </TrinityExploreDungeon>
-      <MoveToActor questId="273408" stepId="30" x="981" y="1210" z="98" actorId="6353" interactRange="8" name="Tyrael-63493"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="273408" stepId="30" x="981" y="1210" z="98" actorId="6353" interactRange="8" name="Tyrael-63493"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <!-- Quest: x1_Fortress_KillMalthael World: x1_fortress_level_01 LevelArea: x1_fortress_level_01 -->
@@ -1166,7 +1166,7 @@
           <IgnoreScene sceneName="_W_" />
         </IgnoreScenes>
       </TrinityExploreDungeon>
-      <MoveToActor questId="273408" stepId="61" actorId="347276" interactRange="181" name="x1_Fortress_Soul_Grinder_A-11701"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="273408" stepId="61" actorId="347276" interactRange="181" name="x1_Fortress_Soul_Grinder_A-11701"  pathPrecision="5" pathPointLimit="250" statusText="" />
 
     </If>
 
@@ -1192,7 +1192,7 @@
 
     <!-- Quest: x1_Fortress_KillMalthael World: X1_Malthael_Boss_Arena LevelArea: X1_Malthael_Boss_Arena -->
     <If condition="IsActiveQuest(273408) and IsActiveQuestStep(21) and CurrentWorldId==328484 and CurrentLevelAreaId==330576">
-      <MoveToActor questId="273408" stepId="21" x="110" y="110" z="0" actorId="6353" interactRange="8" name="Tyrael-152829"  pathPrecision="5" pathPointLimit="250" statusText="" />
+      <Interact questId="273408" stepId="21" x="110" y="110" z="0" actorId="6353" interactRange="8" name="Tyrael-152829"  pathPrecision="5" pathPointLimit="250" statusText="" />
     </If>
 
     <If condition="IsActiveQuest(-1) and IsActiveQuestStep(999) and CurrentWorldId == 196292">

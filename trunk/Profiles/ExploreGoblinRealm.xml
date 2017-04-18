@@ -3,6 +3,14 @@
   <KillMonsters>True</KillMonsters>
   <PickupLoot>True</PickupLoot>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="-1" />
+  <Trinity>
+    <Scenes>
+      <Scene id="454485" alwaysRayWalk="true" />
+    </Scenes>
+    <KeepInBackpack>
+      <Item id="197837" name="Puzzle Ring" />
+    </KeepInBackpack>
+  </Trinity>
   <Order>
 
     <If condition="ZetaDia.Storage.CurrentWorldType != Act.OpenWorld">
@@ -28,7 +36,7 @@
       <LogMessage questId="1" output="Moving to Cube" />
       <Interact actorId="439975" actorName="KanaiCube_Stand" x="419" y="584" z="24" worldSnoId="332336" levelAreaSnoId="332339" sceneSnoId="414798" sceneName="px_trOut_Tristram_E10_S15" sceneX="179" sceneY="107" sceneZ="24" />
       <LogMessage questId="1" output="Opening Greed Portal" />
-      <Transmute>
+      <Transmute recipe="OpenPortalToGreed">
         <Items>
           <Item id="197837" name="Puzzle Ring" />
         </Items>

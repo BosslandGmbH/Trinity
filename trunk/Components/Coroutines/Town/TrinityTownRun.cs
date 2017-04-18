@@ -13,6 +13,7 @@ using Zeta.Bot;
 using Zeta.Bot.Coroutines;
 using Zeta.Bot.Logic;
 using Zeta.Bot.Navigation;
+using Zeta.Bot.Profile;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -50,11 +51,11 @@ namespace Trinity.Components.Coroutines.Town
                     IsVendoring = false;
                     return false;
                 }
-                
+
                 // Fix for Campaign quest start of ACT1
-                if (Core.Player.CurrentQuestSNO == 87700)
+                if (ZetaDia.CurrentQuest.QuestSnoId == 87700)
                     return false;
- 
+
                 if (Core.CastStatus.StoneOfRecall.LastResult == CastResult.Casting)
                 {
                     Core.Logger.Verbose(LogCategory.GlobalHandler, "Casting");
@@ -264,7 +265,7 @@ namespace Trinity.Components.Coroutines.Town
                 return false;
             }
 
-            if (Core.Player.LevelAreaId == 19947 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && new Vector3(2959.893f, 2806.495f, 24.04533f).Distance(ZetaDia.Me.Position) > 180f)
+            if (Core.Player.WorldSnoId == 71150 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && ZetaDia.CurrentQuest.StepId == -1)
             {
                 Core.Logger.Log("Can't townrun with the current quest (A1 New Game) !");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(30);
@@ -369,7 +370,7 @@ namespace Trinity.Components.Coroutines.Town
             return false;
         }
 
-        private static async Task<bool> TakeReturnPortal()
+        public static async Task<bool> TakeReturnPortal()
         {
             if (!ZetaDia.IsInTown)
                 return false;

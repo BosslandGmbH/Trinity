@@ -3,6 +3,7 @@ using Trinity.Framework;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Zeta.Common;
@@ -23,7 +24,7 @@ namespace Trinity.ProfileTags
         #region XmlAttributes
     
         [XmlAttribute("interactAttempts")]
-        [DefaultValue(8)]
+        [DefaultValue(2)]
         [Description("Number of times to interact")]
         public int InteractAttempts { get; set; }
 
@@ -32,13 +33,22 @@ namespace Trinity.ProfileTags
         [Description("Attempt to interact even when the actor doesn't look interactable")]
         public bool IgnoreSanityChecks { get; set; }
 
+        [XmlAttribute("delay")]
+        [DefaultValue(2)]
+        [Description("Number of seconds to wait after interact attempt")]
+        public int Delay { get; set; }
+
         #endregion
 
         public override async Task<bool> StartTask()
         {
-            _interactTask = new InteractionCoroutine(ActorId, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(1), InteractAttempts, IgnoreSanityChecks);
+            Delay = Delay > 0 ? Delay : 2;
 
-            return await base.StartTask();
+            if (await base.StartTask())
+                return true;
+
+            _interactTask = new InteractionCoroutine(ActorId, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(Delay), InteractAttempts, IgnoreSanityChecks, StartAnimation, EndAnimation);
+            return false;
         }
 
         public override async Task<bool> MainTask()

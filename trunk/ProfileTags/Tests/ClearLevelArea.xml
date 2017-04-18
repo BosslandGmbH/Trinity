@@ -1,0 +1,15 @@
+﻿<Profile>
+  <Name>Tag Test - ClearLevelArea</Name>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <LogMessage message=">> ClearLevelArea Test Started " />
+
+    <If condition="CurrentLevelAreaId != 119870">
+      <TakeWaypoint destinationLevelAreaSnoId="119870" />
+    </If>
+
+    <ClearLevelArea />
+
+    <LogMessage message=">> ClearLevelArea Test Finished " />
+  </Order>
+</Profile>

@@ -5,6 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Adventurer.Game.Events;
+using Zeta.Bot;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -18,6 +19,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         private static Lazy<ExplorationGrid> _currentGrid;
         private static Lazy<ExplorationGrid> _lastGrid;
+
+        public ExplorationGrid()
+        {
+            BotMain.OnStart += (ibot) => Clear();
+        }
 
         public static ExplorationGrid GetWorldGrid(int worldDynamicId)
         {
@@ -34,6 +40,13 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 _currentGrid = new Lazy<ExplorationGrid>(() => new ExplorationGrid());
             }
             return _currentGrid.Value;
+        }
+
+        public static void Clear()
+        {
+            KnownPositions.Clear();
+            _currentGrid = null;
+            _lastGrid = null;
         }
 
         public static ExplorationGrid Instance

@@ -230,25 +230,6 @@ namespace Trinity.Components.Combat
                 IsDoingKamakazi = false;
 
 
-                //var riftProgressionKillAll = Core.Rift.IsInRift && !Core.Rift.IsGaurdianSpawned && !Core.Rift.RiftComplete &&
-                //                             Core.Settings.Combat.Misc.RiftProgressionAlwaysKillPct < 100 && Core.Rift.CurrentProgressionPct < 100 &&
-                //                             Core.Rift.CurrentProgressionPct >= Core.Settings.Combat.Misc.RiftProgressionAlwaysKillPct;
-
-                //if (riftProgressionKillAll != _riftProgressionKillAll)
-                //{
-                //    _riftProgressionKillAll = riftProgressionKillAll;
-                //    if (riftProgressionKillAll)
-                //    {
-                //        Core.Logger.Log($"Rift Progression is now at {Core.Rift.CurrentProgressionPct} - Killing everything!");
-                //        CombatBase.CombatMode = CombatMode.KillAll;
-                //    }
-                //    else
-                //    {
-                //        Core.Logger.Verbose($"Reverting rift progression kill all mode back to normal combat");
-                //        CombatBase.CombatMode = CombatMode.Normal;
-                //    }
-                //}
-
                 var questBasedKillAll = Core.Quests.IsKillAllRequired;
 
                 var routine = TrinityCombat.Routines.Current;
@@ -485,27 +466,32 @@ namespace Trinity.Components.Combat
 
                                     #region Basic Checks
 
-                                    if (TrinityCombat.CombatMode == CombatMode.KillAll || questBasedKillAll || isInSpecialKillAllScene)
+                                    var defaultKillRange = cacheObject.IsUnit && cacheObject.IsTrashMob
+                                        ? TrinityCombat.Routines.Current.TrashRange
+                                        : TrinityCombat.Routines.Current.EliteRange;
+
+                                    if (TrinityCombat.CombatMode == CombatMode.KillAll && cacheObject.Distance <= Math.Max(20, TrinityCombat.KillAllRadius) || questBasedKillAll || isInSpecialKillAllScene)
                                     {
                                         //Dist:                160     140     120     100      80     60     40      20      0
                                         //Weight (25k Max):    -77400  -53400  -32600  -15000  -600   10600  18600   23400   25000
                                         //
                                         //Formula:   MaxWeight-(Distance * Distance * RangeFactor)
-                                        //           RangeFactor effects how quickly weights go into negatives on far distances.                                                                    
-
-                                        var ignoreTrashTooFarAway = cacheObject.IsTrashMob && cacheObject.Distance > TrinityCombat.Routines.Current.TrashRange;
-                                        var ignoreElitesTooFarAway = cacheObject.IsElite && cacheObject.Distance > TrinityCombat.Routines.Current.EliteRange;
-
-                                        if (ignoreTrashTooFarAway || ignoreElitesTooFarAway)
+                                        //           RangeFactor effects how quickly weights go into negatives on far distances.    
+                                        
+                                        var effectiveRadiusIgnore = Math.Max(defaultKillRange, TrinityCombat.KillAllRadius);
+                                        if (cacheObject.Distance > effectiveRadiusIgnore)
                                         {
-                                            cacheObject.WeightInfo += $"Ignore Far Away Stuff TrashRange={TrinityCombat.Routines.Current.TrashRange} EliteRange={TrinityCombat.Routines.Current.EliteRange}";
+                                            cacheObject.WeightInfo += $"Kill All Mode Ignore Far Away - EffectiveRadius={effectiveRadiusIgnore} TrashRange={TrinityCombat.Routines.Current.TrashRange} EliteRange={TrinityCombat.Routines.Current.EliteRange}";
                                             cacheObject.Weight = 0;
                                             break;
                                         }
 
-                                        cacheObject.Weight = MaxWeight / 2;
-                                        cacheObject.WeightInfo += "Kill All Mode";
-                                        break;
+                                        if (cacheObject.Distance <= Math.Max(20, TrinityCombat.KillAllRadius))
+                                        {
+                                            cacheObject.Weight = MaxWeight / 2;
+                                            cacheObject.WeightInfo += $"Kill All Mode (Radius={TrinityCombat.KillAllRadius})";
+                                            break;
+                                        }
                                     }
 
                                     if (WeightingUtils.ShouldIgnoreTrash(cacheObject, out reason))

@@ -1,8 +1,10 @@
 ﻿using System;
 using Trinity.Framework;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Trinity.Framework.Objects;
+using Trinity.ProfileTags.EmbedTags;
 using Zeta.Bot;
 using Zeta.XmlEngine;
 
@@ -25,12 +27,20 @@ namespace Trinity.Modules
         [XmlElement("Trinity")]
         public class TrinityOptions
         {
+            [XmlElement("Items")]
+            public List<ItemTag> KeepInBackpack { get; set; }
+
             [XmlElement("Scenes")]
             public List<SceneOptions> Scenes { get; set; }
 
             public SceneOptions DefaultSceneOptions { get; } = new SceneOptions();
 
             public SceneOptions CurrentSceneOptions => GetSceneOptions(Core.Player.CurrentSceneSnoId);
+
+            public bool ShouldKeepInBackpack(int itemSnoId)
+            {
+                return KeepInBackpack != null && KeepInBackpack.Any(i => i.Id == itemSnoId);
+            }
 
             public SceneOptions GetSceneOptions(int sceneSnoId)
             {
@@ -41,6 +51,8 @@ namespace Trinity.Modules
             {
                 return Scenes?.FirstOrDefault(s => string.Equals(s.Name, sceneName, StringComparison.InvariantCultureIgnoreCase)) ?? DefaultSceneOptions;
             }
+
+
         }
 
         [XmlElement("Scene")]

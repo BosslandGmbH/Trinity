@@ -284,6 +284,12 @@ namespace Trinity.Components.Combat
 
         public bool ShouldStash(TrinityItem item)
         {
+            if (Core.ProfileSettings.Options.ShouldKeepInBackpack(item.ActorSnoId))
+            {
+                Core.Logger.Debug($"Profile Setting Keep in Backpack - Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
+                return false;
+            }
+
             if (item.IsAncient && Core.Settings.ItemList.AlwaysStashAncients)
             {
                 Core.Logger.Debug($"Stashing due to ItemList setting - Always stash ancients. (col={item.InventoryColumn}, row={item.InventoryRow}). Item={item.Name} InternalName={item.InternalName} Sno={item.ActorSnoId} GbId={item.GameBalanceId} RawItemType={item.RawItemType}");
@@ -578,6 +584,12 @@ namespace Trinity.Components.Combat
                     return false;
                 }
 
+                if (Core.ProfileSettings.Options.ShouldKeepInBackpack(item.ActorSnoId))
+                {
+                    reason = "Profile Setting Keep in Backpack";
+                    return false;
+                }
+
                 if (!item.IsSalvageable)
                 {
                     reason = "Not Salvagable";
@@ -659,6 +671,12 @@ namespace Trinity.Components.Combat
                 if (item.IsProtected())
                 {
                     reason = $"Protected Slot [col:{item.InventoryColumn}, row:{item.InventoryRow}]";
+                    return false;
+                }
+
+                if (Core.ProfileSettings.Options.ShouldKeepInBackpack(item.ActorSnoId))
+                {
+                    reason = "Profile Setting Keep in Backpack";
                     return false;
                 }
 

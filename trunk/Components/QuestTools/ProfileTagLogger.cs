@@ -12,6 +12,7 @@ using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Objects.Memory;
 using Trinity.Modules;
 using Zeta.Bot.Profile;
 using Zeta.Common;
@@ -28,24 +29,6 @@ namespace Trinity.Components.QuestTools
     {
         public class StateSnapshot
         {
-            public void UpdateForActor(TrinityActor actor)
-            {
-                if (actor == null) return;
-                ActorId = actor.ActorSnoId;
-                ActorSno = (SNOActor)ActorId;
-                SetPosition(actor.Position);
-            }
-
-            public void UpdateForMarker(TrinityMarker marker)
-            {
-                if (marker == null) return;
-                MarkerHash = marker.NameHash;
-                MarkerName = marker.Name;
-                MarkerType = marker.MarkerType;
-
-                UpdateForActor(Core.Actors.FirstOrDefault(a => a.Position.Distance(a.Position) <= 3f));
-            }
-
             public static StateSnapshot Create()
             {
                 ZetaDia.Actors.Update();
@@ -64,13 +47,13 @@ namespace Trinity.Components.QuestTools
 
                     s.QuestId = currentQuest?.QuestSnoId ?? 1;
                     s.QuestStep = currentQuest?.StepId ?? 1;
-                    s.SceneId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
+                    s.SceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
                     s.SceneName = ZetaDia.Me.CurrentScene.Name;
                     s.WorldSnoId = ZetaDia.Globals.WorldSnoId;
                     s.LevelAreaSnoId = ZetaDia.CurrentLevelAreaSnoId;
 
                     var waypoint = ZetaDia.Storage.ActManager.GetWaypointByLevelAreaSnoId(s.LevelAreaSnoId);
-                    s.WaypointNumber = waypoint.Number;
+                    s.WaypointNumber = waypoint?.Number ?? 0;
 
                     s.UpdateForActor(Core.Actors.Me);
 
@@ -78,9 +61,34 @@ namespace Trinity.Components.QuestTools
                 return s;
             }
 
+            public void UpdateForActor(TrinityActor actor)
+            {
+                if (actor == null) return;
+                ActorId = actor.ActorSnoId;
+                ActorSno = (SNOActor)ActorId;
+                StartAnimation = actor.Animation.ToString();
+                SetPosition(actor.Position);
+            }
+
+            public void UpdateForMarker(TrinityMarker marker)
+            {
+                if (marker == null) return;
+                MarkerHash = marker.NameHash;
+                MarkerName = marker.Name;
+                MarkerType = marker.MarkerType;
+
+                var actor = Core.Actors.FirstOrDefault(a => !a.IsMe && !a.IsExcludedId && a.Position.Distance(a.Position) <= 3f);
+                UpdateForActor(actor);
+            }
+
             public void SetPosition(Vector3 position)
             {
-                var relativePosition = AdvDia.CurrentWorldScene.GetRelativePosition(position);
+                if (AdvDia.CurrentWorldScene == null)
+                {
+                    Core.Scenes.Update();
+                }
+
+                var relativePosition = AdvDia.CurrentWorldScene?.GetRelativePosition(position) ?? Vector3.Zero;
                 X = position.X;
                 Y = position.Y;
                 Z = position.Z;
@@ -89,6 +97,7 @@ namespace Trinity.Components.QuestTools
                 SceneZ = relativePosition.Z;
             }
 
+            public string StartAnimation { get; set; }
             public WorldMarkerType MarkerType { get; set; }
             public int MarkerHash { get; set; }
             public string MarkerName { get; set; }
@@ -105,29 +114,29 @@ namespace Trinity.Components.QuestTools
             public int LevelAreaSnoId { get; set; }
             public int WorldSnoId { get; set; }
             public string SceneName { get; set; }
-            public int SceneId { get; set; }
+            public int SceneSnoId { get; set; }
             public int QuestId { get; set; }
         }
 
-        public static string GenerateActorTags<T>(Func<TrinityActor, bool> actorSelector) where T  : ProfileBehavior
+        public static string GenerateActorTags<T>(Func<TrinityActor, bool> actorSelector) where T : ProfileBehavior
         {
             var sb = new StringBuilder();
             var s = StateSnapshot.Create();
-            foreach (var actor in Core.Actors.Actors.Where(a => !a.IsMe && actorSelector(a)))
+            foreach (var actor in Core.Actors.Actors.Where(a => !a.IsMe && actorSelector(a)).OrderBy(a => a.Distance))
             {
                 s.UpdateForActor(actor);
-                sb.AppendLine($"     <!-- {actor.Name} ({actor.ActorSnoId}) {(SNOActor) actor.ActorSnoId} Distance={actor.Distance} Type={actor.Type} -->");
+                sb.AppendLine($"     <!-- {actor.Name} ({actor.ActorSnoId}) {(SNOActor)actor.ActorSnoId} Distance={actor.Distance} Type={actor.Type} Anim={actor.Animation} -->");
                 sb.AppendLine(GenerateTag<T>(s));
                 sb.AppendLine(Environment.NewLine);
             }
             return sb.ToString();
         }
 
-        public static string GenerateMarkerTags<T>(Func<TrinityMarker, bool> markerSelector) where T : ProfileBehavior
+        public static string GenerateMarkerTags<T>(Func<TrinityMarker, bool> markerSelector = null) where T : ProfileBehavior
         {
             var sb = new StringBuilder();
             var s = StateSnapshot.Create();
-            foreach (var marker in Core.Markers.Where(markerSelector))
+            foreach (var marker in Core.Markers.Where(a => markerSelector?.Invoke(a) ?? true))
             {
                 s.UpdateForMarker(marker);
                 sb.AppendLine($"     <!-- {marker.Name} {marker.NameHash} {marker.MarkerType} Distance={marker.Distance} TextureId={marker.TextureId} WorldSnoId={marker.WorldSnoId} -->");
@@ -156,7 +165,10 @@ namespace Trinity.Components.QuestTools
                 if (string.IsNullOrEmpty(attName) || IgnoreXmlAttributeNames.Contains(attName))
                     continue;
 
-                var valueMatch = stateDict.FirstOrDefault(i => string.Equals(propertyInfo.Name.ToLowerInvariant(), i.Key.ToLowerInvariant(), StringComparison.InvariantCultureIgnoreCase));       
+                var valueMatch = stateDict.FirstOrDefault(i
+                    => string.Equals(propertyInfo.Name.ToLowerInvariant(), i.Key.ToLowerInvariant(), StringComparison.InvariantCultureIgnoreCase) ||
+                    string.Equals(attName, i.Key.ToLowerInvariant(), StringComparison.InvariantCultureIgnoreCase));
+
                 var value = valueMatch.Value ?? GetDefaultValue(propertyInfo);
                 if (value == null)
                 {
@@ -184,6 +196,26 @@ namespace Trinity.Components.QuestTools
         private static object GetDefaultValue(PropertyInfo propertyInfo)
         {
             return propertyInfo.GetCustomAttribute<DefaultValueAttribute>()?.Value;
+        }
+
+        public static string GenerateQuestInfoComment()
+        {
+            var currentQuest = ZetaDia.Storage.Quests.ActiveQuests.FirstOrDefault();
+            if (currentQuest == null) return null;
+            var currentStep = currentQuest.QuestRecord.Steps.FirstOrDefault(q => q.StepId == currentQuest.QuestStep);
+            var obj = currentStep?.QuestStepObjectiveSet?.QuestStepObjectives?.FirstOrDefault();
+
+            return $"<!-- Quest: {currentQuest.Quest}: {currentQuest.DisplayName} ({currentQuest.QuestSNO}) Type:{currentQuest.QuestType} Step: {currentStep?.Name} ({currentQuest.QuestStep}) -->";
+        }
+
+        public static string GenerateWorldInfoComment()
+        {
+            var sceneSnoId = ZetaDia.CurrentLevelAreaSnoId;
+            var sceneName = Core.World.CurrentLevelAreaName;
+            var sceneSnoName = ZetaDia.SNO.LookupSNOName(SNOGroup.LevelArea, sceneSnoId);
+            var worldSnoId = ZetaDia.Globals.WorldSnoId;
+            var world = ZetaDia.SNO[SNOGroup.Worlds].GetRecord<SNORecordWorld>(worldSnoId);
+            return $"<!-- World: {world.Name} ({worldSnoId}) Scene: {sceneSnoName} {sceneName} ({sceneSnoId}) Generated={world.IsGenerated} -->";
         }
 
         private static HashSet<string> IgnoreXmlAttributeNames { get; } = new HashSet<string>

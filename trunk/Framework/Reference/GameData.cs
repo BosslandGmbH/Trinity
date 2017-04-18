@@ -21,7 +21,18 @@ namespace Trinity.Framework.Reference
 
         public const int WALLER_SNO = 226808;
 
-           
+
+        public static HashSet<GizmoType> PortalTypes = new HashSet<GizmoType>
+        {
+            GizmoType.Portal,
+            GizmoType.BossPortal,
+            GizmoType.DungeonPortal,
+            GizmoType.HearthPortal,
+            GizmoType.ReturnPointPortal,
+            GizmoType.SecretPortal,
+            GizmoType.TownPortal,
+        };
+
         public static HashSet<int> IsCursedChestOrShrine = new HashSet<int>
         {
             364559,364601,365097,365718,365746,368169,369539,370696,374353,374355,374356,374391,376511

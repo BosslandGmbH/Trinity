@@ -365,7 +365,7 @@ namespace Trinity.DbProvider
                 ZetaDia.Me.UsePower(SNOPower.Walk, targetPosition, ZetaDia.Globals.WorldId);
                 await Coroutine.Sleep(50);
 
-                if (distance < 4f || position.Distance(ZetaDia.Me.Position) > 50f)
+                if (distance < 4f || position.Distance(ZetaDia.Me.Position) > 25f)
                     break;
 
                 if (!ZetaDia.Me.Movement.IsMoving || DateTime.UtcNow.Subtract(segmentStartTime).TotalMilliseconds > 4500)

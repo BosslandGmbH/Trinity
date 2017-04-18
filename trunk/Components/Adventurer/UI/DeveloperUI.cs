@@ -23,6 +23,7 @@ using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
 using Zeta.Game.Internals.Actors.Gizmos;
+using Zeta.Game.Internals.SNO;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
@@ -92,18 +93,25 @@ namespace Trinity.Components.Adventurer.UI
                     var scrollViewer3 = new ScrollViewer();
                     var coroutineHelpers3 = new StackPanel
                     {
-                        Background = Brushes.DimGray, Margin = new Thickness(0, 2, 2, 2)
+                        Background = Brushes.DimGray,
+                        Margin = new Thickness(0, 2, 2, 2)
                     };
-                    
+
                     coroutineHelpers3.Children.Add(CreateTitle("Profile Tags"));
                     coroutineHelpers3.Children.Add(CreateButton("Move To Position", GenerateTag_Click<MoveToPositionTag>));
                     coroutineHelpers3.Children.Add(CreateButton("Interact", GenerateActorTags_Click<InteractTag>));
                     coroutineHelpers3.Children.Add(CreateButton("Shuffle", GenerateTag_Click<ShuffleTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("ClearLevelArea", GenerateTag_Click<ClearLevelAreaTag>));
                     coroutineHelpers3.Children.Add(CreateButton("MoveToActor", GenerateActorTags_Click<MoveToActorTag>));
                     coroutineHelpers3.Children.Add(CreateButton("MoveToMarker", GenerateMarkerTags_Click<MoveToMapMarkerTag>));
                     coroutineHelpers3.Children.Add(CreateButton("TakeWaypoint", GenerateTag_Click<TakeWaypointTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("MoveToScene", GenerateTag_Click<MoveToSceneTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("WaitTag", GenerateTag_Click<WaitTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("UseDeathGate", GenerateTag_Click<UseDeathGateTag>));
+                    coroutineHelpers3.Children.Add(CreateButton("Explore", GenerateTag_Click<ExploreTag>));
                     coroutineHelpers3.Children.Add(CreateButton("If Scene", IfScene_Click));
                     coroutineHelpers3.Children.Add(CreateButton("If World", IfWorld_Click));
+                    coroutineHelpers3.Children.Add(CreateButton("If Quest World", IfQuestWorld_Click));
 
                     scrollViewer3.Content = coroutineHelpers3;
 
@@ -900,7 +908,7 @@ namespace Trinity.Components.Adventurer.UI
                 Core.Update();
                 Core.Scenes.Update();
 
-                using(ZetaDia.Memory.AcquireFrame())
+                using (ZetaDia.Memory.AcquireFrame())
                 {
                     if (ZetaDia.Me == null)
                         return;
@@ -910,7 +918,7 @@ namespace Trinity.Components.Adventurer.UI
                     var activeBounty = ZetaDia.Storage.Quests.ActiveBounty != null
                         ? (int)ZetaDia.Storage.Quests.ActiveBounty.Quest
                         : 0;
-                   
+
                     Core.Logger.Raw(" ");
 
                     Core.Logger.Raw("new MoveToSceneCoroutine({0}, {1}, \"{2}\"), \\\\ SubScene={3}",
@@ -1195,7 +1203,7 @@ namespace Trinity.Components.Adventurer.UI
         {
             try
             {
-                Core.Logger.Raw(ProfileTagLogger.GenerateActorTags<T>(a => (a.IsUnit && a.PetType == PetType.None || a.IsGizmo && !a.IsUsed) && a.Distance < 40f));
+                Core.Logger.Raw(ProfileTagLogger.GenerateMarkerTags<T>());
             }
             catch (Exception ex)
             {
@@ -1207,7 +1215,7 @@ namespace Trinity.Components.Adventurer.UI
         {
             try
             {
-                Core.Logger.Raw(ProfileTagLogger.GenerateActorTags<T>(a => (a.IsUnit && a.PetType == PetType.None || a.IsGizmo && !a.IsUsed) && a.Distance < 40f ));
+                Core.Logger.Raw(ProfileTagLogger.GenerateActorTags<T>(a => (a.IsUnit && a.PetType == PetType.None || a.IsNpc || a.IsQuestGiver || a.ActorType == ActorType.Gizmo) && a.Distance < 40f));
             }
             catch (Exception ex)
             {
@@ -1231,13 +1239,12 @@ namespace Trinity.Components.Adventurer.UI
         {
             try
             {
-                ZetaDia.Actors.Update();
-
                 if (!ZetaDia.IsInGame || ZetaDia.Me == null)
                     return;
 
                 using (ZetaDia.Memory.AcquireFrame())
                 {
+                    ZetaDia.Actors.Update();
                     Core.Scenes.Update();
                     Core.Update();
 
@@ -1272,12 +1279,16 @@ namespace Trinity.Components.Adventurer.UI
         private static void IfWorld_Click(object sender, RoutedEventArgs e)
         {
             try
-            {
+            {                
                 if (!ZetaDia.IsInGame || ZetaDia.Me == null)
                     return;
 
                 using (ZetaDia.Memory.AcquireFrame())
                 {
+                    ZetaDia.Actors.Update();
+                    Core.Scenes.Update();
+                    Core.Update();
+
                     Core.Logger.Raw($@"
 
         <If condition=""CurrentWorldId == {ZetaDia.Globals.WorldSnoId}"">
@@ -1302,6 +1313,8 @@ namespace Trinity.Components.Adventurer.UI
                 using (ZetaDia.Memory.AcquireFrame())
                 {
                     ZetaDia.Actors.Update();
+                    Core.Scenes.Update();
+                    Core.Update();
 
                     var quest = ZetaDia.CurrentQuest;
                     var questId = quest?.QuestSnoId ?? 1;
@@ -1312,6 +1325,37 @@ namespace Trinity.Components.Adventurer.UI
                     Core.Logger.Raw($@"
 
         <If condition=""CurrentSceneName == {ZetaDia.Me.CurrentScene.Name}"">
+
+        </If>
+                    ");
+                }
+            }
+            catch (Exception ex)
+            {
+                Core.Logger.Error(ex.ToString());
+            }
+        }
+
+
+        private static void IfQuestWorld_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ZetaDia.Actors.Update();
+
+                if (!ZetaDia.IsInGame || ZetaDia.Me == null)
+                    return;
+
+                using (ZetaDia.Memory.AcquireFrame())
+                {
+                    Core.Scenes.Update();
+                    Core.Update();
+
+                    Core.Logger.Raw($@"
+
+        {ProfileTagLogger.GenerateQuestInfoComment()}
+        {ProfileTagLogger.GenerateWorldInfoComment()}
+        <If condition=""IsActiveQuest({ZetaDia.CurrentQuest.QuestSnoId}) and IsActiveQuestStep({ZetaDia.CurrentQuest.StepId}) and CurrentWorldId == {ZetaDia.Globals.WorldSnoId}"">
 
         </If>
                     ");

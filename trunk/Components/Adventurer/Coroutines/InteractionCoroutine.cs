@@ -6,6 +6,7 @@ using Trinity.Framework.Helpers;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
+using Trinity.Framework.Reference;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -59,15 +60,19 @@ namespace Trinity.Components.Adventurer.Coroutines
         private bool _isOrek;
         private int _startingWorldId;
         private bool _ignoreSanityChecks;
+        private string _endAnimation;
+        private string _startAnimation;
 
-        public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3, bool ignoreSanityChecks = false)
+        public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3, 
+            bool ignoreSanityChecks = false, string startAnimation ="", string endAnimation="")
         {
             _actorId = actorId;
             _timeOut = timeOut;
             _sleepTime = sleepTime;
             _interactAttempts = interactAttempts;
-            _startingWorldId = ZetaDia.Globals.WorldSnoId;
             _ignoreSanityChecks = ignoreSanityChecks;
+            _endAnimation = endAnimation;
+            _startAnimation = startAnimation;
 
             if (_timeOut != default(TimeSpan))
             {
@@ -95,7 +100,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                     return NotStarted();
 
                 case States.Checking:
-                    return Checking();
+                    return await Checking();
 
                 case States.Interacting:
                     return await Interacting();
@@ -118,10 +123,12 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
-        private bool Checking()
+        private async Task<bool> Checking()
         {
+            _startingWorldId = ZetaDia.Globals.WorldSnoId;
+
             var actor = ActorFinder.FindObject(_actorId);
-            if (actor == null)
+            if (actor == null || !actor.IsFullyValid())
             {
                 Core.Logger.Debug("Nothing to interact, failing. ");
                 State = States.Failed;
@@ -130,18 +137,18 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             Core.Logger.Debug($"Interact Actor Found: {actor.Name} ({actor.ActorSnoId}) Distance={actor.Distance}");
 
-            if (!_ignoreSanityChecks &&  !actor.IsInteractableQuestObject())
+            if (!_ignoreSanityChecks && !actor.IsInteractableQuestObject())
             {
                 Core.Logger.Debug("The object is not valid or not interactable, failing.");
                 State = States.Failed;
                 return false;
             }
-            if (actor is DiaGizmo)
+
+            Core.PlayerMover.MoveTowards(actor.Position);
+            if (!Core.Player.IsTakingDamage)
             {
-                var gizmoActor = (DiaGizmo)actor;
-                if (gizmoActor.IsDestructibleObject)
-                {
-                }
+                await Coroutine.Sleep(1000);
+                Core.PlayerMover.MoveStop();
             }
 
             if (actor is DiaGizmo && (actor as DiaGizmo).IsPortal)
@@ -170,16 +177,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
-        public HashSet<GizmoType> _portalTypes = new HashSet<GizmoType>
-        {
-            GizmoType.Portal,
-            GizmoType.BossPortal,
-            GizmoType.DungeonPortal,
-            GizmoType.HearthPortal,
-            GizmoType.ReturnPointPortal,
-            GizmoType.SecretPortal,
-            GizmoType.TownPortal,
-        };
+
 
         private async Task<bool> Interacting()
         {
@@ -197,12 +195,42 @@ namespace Trinity.Components.Adventurer.Coroutines
                 return false;
             }
 
+            if (ZetaDia.Globals.WorldSnoId != _startingWorldId)
+            {
+                Core.Logger.Debug("World changed, assuming done!");
+                await Coroutine.Sleep(2500);
+                State = States.Completed;
+                return false;
+            }
+
             var actor = ActorFinder.FindObject(_actorId);
             if (actor == null)
             {
                 Core.Logger.Debug("Nothing to interact, failing. ");
                 State = States.Failed;
                 return false;
+            }
+
+            if (!string.IsNullOrEmpty(_endAnimation))
+            {
+                var anim = actor.CommonData?.CurrentAnimation.ToString().ToLowerInvariant();
+                if (!string.IsNullOrEmpty(anim) && anim.Contains(_endAnimation.ToLowerInvariant()))
+                {
+                    Core.Logger.Debug($"Specified end animation was detected {_endAnimation}, done!");
+                    State = States.Completed;
+                    return false;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(_startAnimation))
+            {
+                var anim = actor.CommonData?.CurrentAnimation.ToString().ToLowerInvariant();
+                if (!string.IsNullOrEmpty(anim) && !anim.Contains(_startAnimation.ToLowerInvariant()))
+                {
+                    Core.Logger.Debug($"Specified start animation was no longer detected {_startAnimation}, done!");
+                    State = States.Completed;
+                    return false;
+                }
             }
 
             //if (actor.Distance > 75f)
@@ -232,7 +260,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 await Coroutine.Sleep(250 * _currentInteractAttempt);
             }
 
-            if (_isPortal || _portalTypes.Contains(actor.CommonData.GizmoType))
+            if (_isPortal || GameData.PortalTypes.Contains(actor.CommonData.GizmoType))
             {
                 var worldId = ZetaDia.Globals.WorldSnoId;
                 if (worldId != _startingWorldId)
@@ -258,6 +286,13 @@ namespace Trinity.Components.Adventurer.Coroutines
                         return false;
                     }
                 }
+            }
+
+            if (!actor.IsFullyValid())
+            {
+                Core.Logger.Debug($"Actor is no longer valid, assuming done.");
+                State = States.Completed;
+                return true;
             }
 
             Core.Logger.Debug($"Attempting to interact with {((SNOActor)actor.ActorSnoId)} at distance {actor.Distance} #{_currentInteractAttempt}");
@@ -358,11 +393,21 @@ namespace Trinity.Components.Adventurer.Coroutines
             //actor.Interact();
             //}
 
+            var world = ZetaDia.Globals.WorldId;
+            await Coroutine.Sleep(100);
             var ret = actor.Interact();
             await Coroutine.Sleep(_sleepTime);
             if (_isPortal)
             {
                 await Coroutine.Sleep(1000);
+            }
+            if (!ZetaDia.Globals.IsLoadingWorld && world == ZetaDia.Globals.WorldId)
+            {
+                await Coroutine.Sleep(400);
+                if (actor.IsFullyValid())
+                {
+                    ret = actor.Interact();
+                }
             }
             return ret;
         }

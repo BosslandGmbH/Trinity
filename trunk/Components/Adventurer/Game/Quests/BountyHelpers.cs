@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq; using Trinity.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using Trinity.Framework;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Settings;
@@ -100,7 +103,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public static TrinityMarker ScanForMarker(WorldMarkerType type, int searchRadius)
         {
-            return Core.Markers.FirstOrDefault(m => m.MarkerType == type && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));            
+            return Core.Markers.FirstOrDefault(m => m.MarkerType == type && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
         }
 
         public static TrinityMarker ScanForMarker(string name, int searchRadius)
@@ -123,10 +126,39 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return Vector3.Zero;
         }
 
-        public static Vector3 ScanForActorLocation(int actorId, int searchRadius)
+        public static Vector3 ScanForActorLocation(int actorId, int searchRadius, Vector3 origin = default(Vector3), Func<TrinityActor,bool> func = null )
         {
-            var actor = Core.Actors.Actors.FirstOrDefault(a => a.ActorSnoId == actorId && a.Distance <= searchRadius);
+            origin = origin != Vector3.Zero ? origin : Core.Player.Position;
+            var actor = Core.Actors.Where(a => a.ActorSnoId == actorId && a.Position.Distance(origin) <= searchRadius && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
             return actor?.Position ?? Vector3.Zero;
+        }
+
+        public static TrinityActor GetActorNearMarker(int markerHash, float radius = 5, Func<TrinityActor, bool> func = null)
+        {
+            var marker = ScanForMarker(markerHash, 120);
+            if (marker == null) return null;
+            switch (marker.MarkerType)
+            {
+                case WorldMarkerType.Entrance:
+                case WorldMarkerType.Exit:
+                    return Core.Actors.Where(a => a.Position.Distance(marker.Position) < radius && a.IsPortal && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
+            }
+            return Core.Actors.Where(a => a.Position.Distance(marker.Position) < radius && !a.IsMe && !a.IsExcludedId && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
+        }
+
+        public static Vector3 ScanForActorLocation(string internalName, int searchRadius)
+        {
+            return ScanForActor(internalName, searchRadius)?.Position ?? Vector3.Zero;
+        }
+
+        public static TrinityActor ScanForActor(int actorSnoId, int searchRadius = 500, Func<TrinityActor, bool> func = null)
+        {
+            return Core.Actors.Where(a => a.ActorSnoId == actorSnoId && a.Distance <= searchRadius && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
+        }
+        
+        public static TrinityActor ScanForActor(string internalName, int searchRadius = 500, Func<TrinityActor, bool> func = null)
+        {
+            return Core.Actors.Where(a => a.Distance <= searchRadius && a.InternalNameLowerCase.Contains(internalName.ToLowerInvariant()) && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
         }
 
         public static bool AreAllActBountiesCompleted(Act act)

@@ -143,8 +143,12 @@ namespace Trinity.DbProvider
             }
             else if (corpseButtonReady && !needRepair && !waitingForCorpseResurrect && !noMoreCorpseRevives && !corpseResurrectDisabled)
             {
-                Core.Logger.Log("[Death] Reviving at corpse");
-                reviveAtCorpseButton.Click();
+                while (reviveAtCorpseButton.IsVisible && ZetaDia.Me.IsDead)
+                {
+                    Core.Logger.Log("[Death] Reviving at corpse");     
+                    reviveAtCorpseButton.Click();                           
+                    await Coroutine.Sleep(1000);
+                }
             }
             else if (townButtonReady && needRepair && _deathNeedRepairCounter > 4)
             {

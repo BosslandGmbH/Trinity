@@ -115,8 +115,21 @@ namespace Trinity.Components.QuestTools
             return !string.IsNullOrEmpty(markerName) && Core.Markers.Any(m => m.Name == markerName);
         }
 
+
+        public static bool MarkerExistsNearMe(int hashId, float range)
+        {
+            return Core.Markers.Any(m => m.NameHash == hashId && m.Distance <= range);
+        }
+
+        public static bool MarkerNameHashExists(int markerNameHash)
+        {
+            return Core.Markers.Any(m => m.NameHash == markerNameHash);
+        }
+
         public static bool MarkerTypeWithinRange(string worldMarkerType, float range)
         {
+            if (string.IsNullOrEmpty(worldMarkerType) || worldMarkerType == "None") return false;
+
             WorldMarkerType t;
             return Enum.TryParse(worldMarkerType, true, out t) && Core.Markers.Any(m => m.MarkerType == t && m.Distance <= range);
         }
@@ -128,10 +141,7 @@ namespace Trinity.Components.QuestTools
             return nodes <= 0 || (1 - univistedNodes / (double)nodes) * 100 > percent;
         }
 
-        public static bool MarkerNameHashExists(int markerNameHash)
-        {
-            return Core.Markers.Any(m => m.NameHash == markerNameHash);
-        }
+
 
         public static bool BossNearby(int range)
         {
@@ -210,14 +220,14 @@ namespace Trinity.Components.QuestTools
             return actor != null && actor.HasBeenOperated;
         }
 
-        public static bool CurrentAnimation(int actorId, string animationName)
+        public static bool ActorAnimationExistsNearMe(int actorId, string animationName, float radius)
         {
-            var actor = ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true).FirstOrDefault(a => a.ActorSnoId == actorId);
+            var actor = ZetaDia.Actors.GetActorsOfType<DiaObject>(true).FirstOrDefault(a => a.ActorSnoId == actorId && a.Distance <= radius);
 
-            if (actor == null || actor.CommonData == null)
+            if (actor?.CommonData == null || !actor.IsFullyValid())
                 return false;
 
-            var result = actor.CommonData.CurrentAnimation.ToString() == animationName;
+            var result = actor.CommonData.CurrentAnimation.ToString().ToLowerInvariant().Contains(animationName.ToLowerInvariant());
 
             //Core.Logger.Debug("Animation for {0} ({1}) is {2} State={3} ({4})",
             //    actor.Name,
@@ -227,6 +237,11 @@ namespace Trinity.Components.QuestTools
             //    result);
 
             return result;
+        }
+
+        public static bool CurrentAnimation(int actorId, string animationName)
+        {
+            return ActorAnimationExistsNearMe(actorId, animationName, 200f);
         }
 
         public static bool IsBountyLevelArea(int questId)

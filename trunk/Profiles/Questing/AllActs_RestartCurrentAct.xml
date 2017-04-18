@@ -5,6 +5,24 @@
   <GameParams quest="87700" step="-1" act="A1" resumeFromSave="True" isPrivate="True" numGames="-1" />
   <Order>
     <LogMessage message="Loaded Questing Restart Current Act Profile" />
-    <RestartAct questId="1" />
-  </Order>
+    <If condition="ZetaDia.CurrentActSnoId == 70015">
+      <LogMessage message="Loading Act 1" />
+      <LoadProfile profile="Act1_StartNew.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70016">
+      <LogMessage message="Loading Act 2" />
+      <LoadProfile profile="Act2_StartNew.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70017">
+      <LogMessage message="Loading Act 3" />
+      <LoadProfile profile="Act3_StartNew.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 70018">
+      <LogMessage message="Loading Act 4" />
+      <LoadProfile profile="Act4_StartNew.xml" />
+    </If>
+    <If condition="ZetaDia.CurrentActSnoId == 236915">
+      <LogMessage message="Loading Act 5" />
+      <LoadProfile profile="Act5_StartNew.xml" />
+    </If>  </Order>
 </Profile>

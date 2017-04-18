@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
@@ -7,6 +8,7 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Trinity.Framework;
+using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
 using Zeta.Common;
 
@@ -57,13 +59,14 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
         }
 
-        public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000, bool isExploreAllowed = true)
+        public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000, bool isExploreAllowed = true, Func<TrinityActor,bool> actorSelector = null)
         {
             _questId = questId;
             _worldId = worldId;
             _actorId = actorId;
             _objectiveScanRange = maxRange;
             _isExploreAllowed = isExploreAllowed;
+            _actorSelector = actorSelector;
         }
 
         public async Task<bool> GetCoroutine()
@@ -132,7 +135,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
 
             var areaIds = BountyData != null ? BountyData.LevelAreaIds : new HashSet<int> { AdvDia.CurrentLevelAreaId };
+
             if (!await ExplorationCoroutine.Explore(areaIds)) return false;
+
             Core.Scenes.Reset();
             return false;
         }
@@ -175,6 +180,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private long _lastScanTime;
         private BountyData _bountyData;
+        private Func<TrinityActor, bool> _actorSelector;
 
         private async Task<bool> ScanForObjective()
         {
@@ -183,7 +189,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _lastScanTime = PluginTime.CurrentMillisecond;
                 if (_actorId != 0)
                 {
-                    _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange);
+                    _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange, AdvDia.MyPosition, _actorSelector);
                 }
                 if (_objectiveLocation != Vector3.Zero)
                 {

@@ -24,30 +24,5 @@ namespace Trinity.Components.Adventurer.Game.Events
         public static ProfileType CurrentProfileType { get; internal set; }
         public static long WorldChangeTime { get; set; }
 
-        private static uint _lastUpdate;
-
-
-        public static void GameEvents_OnWorldChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        public static void GameEvents_OnGameJoined(object sender, EventArgs e)
-        {
-
-        }
-
-        public static void OnBotStart(IBot bot)
-        {
-
-        }
-
-        public static void OnBotStop(IBot bot)
-        {
-            BountyStatistics.Report();
-        }
-
-
-
     }
 }
