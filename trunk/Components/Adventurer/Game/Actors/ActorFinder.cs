@@ -25,15 +25,15 @@ namespace Trinity.Components.Adventurer.Game.Actors
 
             if (currentSearchRadius >= 1500)
             {
-                radius = currentSearchRadius / 2;
+                radius = (int)(currentSearchRadius / 1.5d);
             }
             else if (currentSearchRadius >= 500)
             {
-                radius = currentSearchRadius - 100;
+                radius = currentSearchRadius - 75;
             }
             else if (currentSearchRadius >= 100)
             {
-                radius = currentSearchRadius - 50;
+                radius = currentSearchRadius - 35;
             }
             else if (currentSearchRadius > 20)
             {

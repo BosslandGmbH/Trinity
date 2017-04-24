@@ -1,0 +1,20 @@
+﻿<Profile>
+  <Name>Debug Profile </Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams quest="87700" step="-1" act="A1" resumeFromSave="True" isPrivate="True" numGames="-1" />
+  <Order>
+    <LogMessage message="Debug Profile " />
+
+    <!--QuestSnoId: 80322 QuestStep: 91, Description: Disrupt the Hidden Conclave ritual, Header: 80322 91 0, State: Completed, Index: 0
+    QuestSnoId: 80322 QuestStep: 91, Description: Disrupt the Secret Altar ritual, Header: 80322 91 1, State: InProgress, Index: 1-->
+
+    <If condition="IsActiveObjective(80322,91,0)">
+      <LogMessage output="Obj 0 is active"/>
+    </If>
+    <If condition="IsActiveObjective(80322,91,1)">
+      <LogMessage output="Obj 1 is active"/>
+    </If>
+
+  </Order>
+</Profile>

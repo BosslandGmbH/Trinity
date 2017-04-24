@@ -14,6 +14,7 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.TreeSharp;
+using Zeta.XmlEngine;
 using Action = Zeta.TreeSharp.Action;
 
 
@@ -334,6 +335,7 @@ namespace Trinity.Components.QuestTools
         #endregion
     }
 
+    [XmlElement("EnhancedIf")]
     public class EnhancedIfTag : IfTag, IEnhancedProfileBehavior
     {
         private bool _isDone;
@@ -360,7 +362,7 @@ namespace Trinity.Components.QuestTools
         public override void ResetCachedDone()
         {
             _isDone = false;
-            base.ResetCachedDone();
+            base.ResetCachedDone(true);
         }
 
         #region IEnhancedProfileBehavior : INodeContainer

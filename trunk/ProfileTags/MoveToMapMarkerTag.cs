@@ -58,6 +58,12 @@ namespace Trinity.ProfileTags
         {
             if (MarkerHash != 0)
             {
+                if (MarkerType != default(WorldMarkerType))
+                {
+                    _task = new MoveToMapMarkerCoroutine(QuestId, ZetaDia.Globals.WorldSnoId, MarkerHash, MarkerType, Zerg);
+                    return false;
+                }
+
                 _task = new MoveToMapMarkerCoroutine(QuestId, ZetaDia.Globals.WorldSnoId, MarkerHash, Zerg);
                 return false;
             }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Buddy.Coroutines;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.QuestTools;
 using Trinity.Framework;
@@ -39,6 +40,7 @@ namespace Trinity.ProfileTags
                 return false;
 
             Done();
+            await Coroutine.Sleep(1000);
             return true;
         }
 

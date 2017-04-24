@@ -22,7 +22,7 @@ namespace Trinity.Routines.Wizard
 
         public string DisplayName => "Vyr/Rasha Paralysis Archon";
         public string Description => "Wizard routine intended for high-level grifts";
-        public string Author => "Unexpected with help from TwoCigars";
+        public string Author => "Unexpected/TwoCigars";
         public string Version => "0.4";
         public string Url => "http://www.diablofans.com/builds/85544-s9-2-4-3-paralysis-vyrrasha-t13-speed-rifts";
 
@@ -103,7 +103,7 @@ namespace Trinity.Routines.Wizard
             // Jump into cluster for archon combust
             if (!IsArchonActive && Skills.Wizard.Archon.CanCast() && TalRashaStacks >= 2 && Runes.Wizard.Combustion.IsActive)
 		    {
-                Core.Logger.Log("Teleport to Archon Combust");
+                Core.Logger.Log(LogCategory.Routine, "Teleport to Archon Combust");
                 position = TargetUtil.GetBestClusterPoint();
                 return position != Vector3.Zero;
             }
@@ -113,16 +113,16 @@ namespace Trinity.Routines.Wizard
                 n => n.AvoidanceFlags.HasFlag(AvoidanceFlags.Monster) 
                 && Core.Grids.CanRayCast(n.NavigableCenter, CurrentTarget.Position)))
             {
-                Core.Logger.Log("Teleport to Safespot (ShouldTeleport)");
+                Core.Logger.Log(LogCategory.Routine,"Teleport to Safespot (ShouldTeleport)");
                 return true;
             }
 
             // Try a different approach.
             var target = TargetUtil.GetBestClusterUnit();
             position = TargetUtil.GetLoiterPosition(target, 30f);
-            if (position != Vector3.Zero)
+            if (position != Vector3.Zero && target != null && TargetUtil.AnyMobsInRange(20f, 3) || TargetUtil.AnyElitesInRange(20f))
 		    {
-                Core.Logger.Log("Teleport to LoiterPosition (ShouldTeleport)");
+                Core.Logger.Log(LogCategory.Routine, "Teleport to LoiterPosition (ShouldTeleport)");
                 return true;
             }
 
@@ -152,6 +152,8 @@ namespace Trinity.Routines.Wizard
                     //Core.Logger.Log($"Building Tal'Rasha Set Stacks ({TalRashaStacks})");
 
                     var target = TargetUtil.GetBestClusterUnit(70f) ?? Player.Actor;
+                    if (!target.IsValid)
+                        return DefaultBuffPower();
 
                     if (Skills.Wizard.FrostNova.CanCast())
                         return FrostNova();

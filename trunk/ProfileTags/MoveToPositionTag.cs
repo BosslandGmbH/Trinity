@@ -78,10 +78,16 @@ namespace Trinity.ProfileTags
         [DefaultValue(5)]
         public float StopDistance { get; set; }
 
+        [XmlAttribute("useNavigation")]
+        [Description("Move without any navigation - Use with caution only on areas known to have bugged navigation")]
+        [DefaultValue(true)]
+        public bool UseNavigation { get; set; }
+
         #endregion
 
         public Vector3 AbsolutePosition => new Vector3(X, Y, Z);
         public Vector3 RelativePosition => new Vector3(RelativeSceneX, RelativeSceneY, RelativeSceneZ);
+        public Vector3 Destination { get; set; }
     
         public override async Task<bool> StartTask()
         {
@@ -100,7 +106,7 @@ namespace Trinity.ProfileTags
         {
             if (absPos != Vector3.Zero && !ZetaDia.WorldInfo.IsGenerated)
             {
-                _movementTask = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, absPos, (int)StopDistance);
+                _movementTask = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, absPos, (int)StopDistance, !UseNavigation);
                 return true;
             }
             return false;
@@ -113,14 +119,14 @@ namespace Trinity.ProfileTags
 
             if (sceneId > 0)
             {
-                _movementTask = new MoveToScenePositionCoroutine(sceneId, relPos);
+                _movementTask = new MoveToScenePositionCoroutine(sceneId, relPos, !UseNavigation);
                 return true;
             }
 
             if (string.IsNullOrEmpty(sceneName))
                 return false;
 
-            _movementTask = new MoveToScenePositionCoroutine(sceneName, relPos);
+            _movementTask = new MoveToScenePositionCoroutine(sceneName, relPos, !UseNavigation);
             return true;
         }
 

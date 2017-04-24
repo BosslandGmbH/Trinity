@@ -33,6 +33,14 @@ namespace Trinity.Framework.Reference
             GizmoType.TownPortal,
         };
 
+        public static HashSet<GizmoType> DestructibleTypes = new HashSet<GizmoType>
+        {
+            GizmoType.BreakableChest,
+            GizmoType.BreakableDoor,
+            GizmoType.DestroyableObject,
+            GizmoType.ReformingDestroyableObject,
+        };
+
         public static HashSet<int> IsCursedChestOrShrine = new HashSet<int>
         {
             364559,364601,365097,365718,365746,368169,369539,370696,374353,374355,374356,374391,376511

@@ -62,6 +62,8 @@ namespace Trinity.Components.Adventurer.Coroutines
         private bool _ignoreSanityChecks;
         private string _endAnimation;
         private string _startAnimation;
+        private bool _isQuestGiver;
+        private DateTime _castWaitStartTime = DateTime.MinValue;
 
         public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3, 
             bool ignoreSanityChecks = false, string startAnimation ="", string endAnimation="")
@@ -143,17 +145,26 @@ namespace Trinity.Components.Adventurer.Coroutines
                 State = States.Failed;
                 return false;
             }
-
+            
             Core.PlayerMover.MoveTowards(actor.Position);
             if (!Core.Player.IsTakingDamage)
             {
-                await Coroutine.Sleep(1000);
+                await Coroutine.Sleep(500);
                 Core.PlayerMover.MoveStop();
             }
 
-            if (actor is DiaGizmo && (actor as DiaGizmo).IsPortal)
+            // why not eh?
+            actor.Interact();
+
+            var gizmo = actor as DiaGizmo;
+            if (gizmo != null && gizmo.IsFullyValid() && gizmo.IsPortal)
             {
                 _isPortal = true;
+            }
+            var unit = actor as DiaUnit;
+            if (unit != null && unit.IsFullyValid())
+            {
+                _isQuestGiver = unit.IsQuestGiver;
             }
             if (actor.ActorSnoId == 364715)
             {
@@ -181,8 +192,12 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interacting()
         {
-            if (ZetaDia.Me.IsFullyValid() && (ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting || ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling) && !AdvDia.IsInArchonForm)
+            if (ZetaDia.Me.IsFullyValid() 
+                && (_castWaitStartTime.Subtract(DateTime.UtcNow).TotalSeconds < 10 || _castWaitStartTime == DateTime.MinValue) 
+                && (ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting || ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling) 
+                && !AdvDia.IsInArchonForm)
             {
+                _castWaitStartTime = DateTime.UtcNow;
                 Core.Logger.Debug("Waiting for the cast to end");
                 await Coroutine.Sleep(500);
                 return false;
@@ -233,6 +248,14 @@ namespace Trinity.Components.Adventurer.Coroutines
                 }
             }
 
+            var unit = actor as DiaUnit;
+            if (_isQuestGiver && unit != null && !unit.IsQuestGiver)
+            {
+                Core.Logger.Debug($"Unit {actor.Name} is no longer a quest giver, assuming done!");
+                State = States.Completed;
+                return false;
+            }
+
             //if (actor.Distance > 75f)
             //{
             //    Core.Logger.Debug($"Actor is way too far away. {actor.Distance}");
@@ -260,7 +283,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 await Coroutine.Sleep(250 * _currentInteractAttempt);
             }
 
-            if (_isPortal || GameData.PortalTypes.Contains(actor.CommonData.GizmoType))
+            if (_isPortal || actor.IsFullyValid() && GameData.PortalTypes.Contains(actor.CommonData.GizmoType))
             {
                 var worldId = ZetaDia.Globals.WorldSnoId;
                 if (worldId != _startingWorldId)
@@ -393,8 +416,13 @@ namespace Trinity.Components.Adventurer.Coroutines
             //actor.Interact();
             //}
 
+
             var world = ZetaDia.Globals.WorldId;
             await Coroutine.Sleep(100);
+
+            if (actor == null || !actor.IsFullyValid())
+                return false;
+
             var ret = actor.Interact();
             await Coroutine.Sleep(_sleepTime);
             if (_isPortal)

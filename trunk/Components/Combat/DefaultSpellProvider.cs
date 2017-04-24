@@ -57,7 +57,7 @@ namespace Trinity.Components.Combat
             var castInfo = $"{type} {power}".Trim();
 
             var target = Core.Actors.RActorByAcdId<TrinityActor>(power.TargetAcdId);
-            if (target != null)
+            if (target != null && target.IsValid)
             {
                 castInfo += $" on {target}";
 

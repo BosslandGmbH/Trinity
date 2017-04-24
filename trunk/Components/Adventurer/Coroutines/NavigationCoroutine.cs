@@ -11,6 +11,7 @@ using Trinity.Components.Adventurer.Game.Events;
 using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Components.Adventurer.Util;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Common.Helpers;
@@ -47,6 +48,8 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             if (_navigationCoroutine == null || _moveToDestination != destination || _moveToDistance != distance)
             {
+                AdvDia.Navigator.Clear();
+
                 _navigationCoroutine = new NavigationCoroutine(destination, distance, straightLinePath);
 
                 Core.Logger.Debug($"Created Navigation Task for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
@@ -63,7 +66,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                 if (_navigationCoroutine.State == States.Failed)
                 {
-                    Core.Logger.Debug($"_navigationCoroutine.State=Failed for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
+                    Core.Logger.Debug($"NavigationCoroutine failed for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
                     return true;
                 }
 
@@ -77,10 +80,12 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             NotStarted,
             Moving,
+            LastResortMovement,
             MovingToDeathGate,
             InteractingWithDeathGate,
             Completed,
-            Failed
+            Failed,
+
         }
 
         private States _state;
@@ -121,6 +126,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             Destination = destination;
             _distance = distance;
             _mover = straightLinePath ? Mover.StraightLine : Mover.Navigator;
+            _useStraightLine = straightLinePath;
 
             if (_distance < 5)
             {
@@ -150,6 +156,95 @@ namespace Trinity.Components.Adventurer.Coroutines
                 case States.Failed:
                     Core.Logger.Debug($"CanFullyClientPath={await AdvDia.Navigator.CanFullyClientPathTo(Destination)}");
                     return Failed();
+
+                case States.LastResortMovement:
+                    return await LastResortMovement();
+            }
+            return false;
+        }
+
+        private DateTime _lastResortTimeoutBase = DateTime.MaxValue;
+        private bool _startedLastResort;
+        private async Task<bool> LastResortMovement()
+        {
+            if (!_startedLastResort)
+            {
+                Core.Logger.Debug($"Starting Last Resort Movement to Destination {_moveToDestination}");
+                Core.DBNavProvider.Clear();
+                _lastResortTotalTimeout = DateTime.UtcNow + TimeSpan.FromSeconds(30);
+                _startedLastResort = true;
+            }
+
+            if (DateTime.UtcNow > _lastResortTotalTimeout)
+            {
+                Core.Logger.Log($"Movement Failed (Timeout)");
+                LastMoveResult = MoveResult.Failed;
+                _startedLastResort = false;
+                _lastResortTimeoutBase = DateTime.MaxValue;
+                State = States.Failed;
+                return false;
+            }
+
+            if (_mover == Mover.StraightLine)
+            {
+                Core.PlayerMover.MoveTowards(_moveToDestination);
+                LastMoveResult = MoveResult.Moved;
+            }
+            else
+            {
+                LastMoveResult = await CommonCoroutines.MoveAndStop(_moveToDestination, 10f, "LastResort");
+            }
+
+            var distanceToDestination = _moveToDestination.Distance(ZetaDia.Me.Position);
+            var withinAcceptableRange = _distance > 0 && distanceToDestination <= _distance || distanceToDestination <= 10f;
+
+            var position = ZetaDia.Me.Position;
+            if (position.Distance(_lastPosition) <= 2f)
+            {
+                IsLastResortTimeout(5);
+                if (LastMoveResult == MoveResult.Moved)
+                {
+                    return false;
+                }
+            }
+            _lastPosition = position;
+
+            if (withinAcceptableRange)
+            {
+                LastMoveResult = MoveResult.ReachedDestination;
+                _startedLastResort = false;
+                _lastResortTimeoutBase = DateTime.MaxValue;
+                State = States.Completed;
+                return false;
+            }
+
+            switch (LastMoveResult)
+            {
+                case MoveResult.ReachedDestination:
+                case MoveResult.PathGenerationFailed:
+                case MoveResult.Failed:
+                    IsLastResortTimeout(10);
+                    return false;
+            }
+
+            _lastResortTimeoutBase = DateTime.MaxValue;
+            return false;
+        }
+
+        private bool IsLastResortTimeout(int duration)
+        {
+            if (_lastResortTimeoutBase == DateTime.MaxValue)
+            {
+                _lastResortTimeoutBase = DateTime.UtcNow;
+            }
+            if (DateTime.UtcNow > _lastResortTimeoutBase + TimeSpan.FromSeconds(duration))
+            {
+                Core.Logger.Log($"Movement Failed (Timeout)");
+                LastMoveResult = MoveResult.Failed;
+                _startedLastResort = false;
+                _lastResortTimeoutBase = DateTime.MaxValue;
+                State = States.Failed;
+                return false;
             }
             return false;
         }
@@ -163,18 +258,18 @@ namespace Trinity.Components.Adventurer.Coroutines
             var zDiff = Math.Abs((float)(Destination.Z - AdvDia.MyPosition.Z));
             var distanceToDestination = AdvDia.MyPosition.Distance(Destination);
 
-            if (PluginEvents.CurrentProfileType == ProfileType.Rift &&
-                distanceToDestination < 50f && zDiff < 3 &&
-                Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination))
-            {
-                _mover = Mover.StraightLine;
-                _lastRaywalkCheck = PluginTime.CurrentMillisecond;
-                Navigator.PlayerMover.MoveTowards(Destination);
-            }
-            else
-            {
-                _mover = Mover.Navigator;
-            }
+            //if (PluginEvents.CurrentProfileType == ProfileType.Rift &&
+            //    distanceToDestination < 50f && zDiff < 3 &&
+            //    Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination))
+            //{
+            //    _mover = Mover.StraightLine;
+            //    _lastRaywalkCheck = PluginTime.CurrentMillisecond;
+            //    Navigator.PlayerMover.MoveTowards(Destination);
+            //}
+            //else
+            //{
+            //    _mover = Mover.Navigator;
+            //}
 
             //// Intercept destinations that require a gate to be used to reach them, and redirect to gate position.
             //if (DeathGates.IsInDeathGateWorld)
@@ -216,11 +311,11 @@ namespace Trinity.Components.Adventurer.Coroutines
             if (_timeout == DateTime.MaxValue)
                 _timeout = DateTime.UtcNow + TimeSpan.FromSeconds(240);
 
-            if (_mover == Mover.StraightLine && (!Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination) || !await AdvDia.Navigator.CanFullyClientPathTo(Destination)))
-            {
-                Core.Logger.Debug("Unable to straight line path, switching to navigator pathing");
-                _mover = Mover.Navigator;
-            }
+            //if (_mover == Mover.StraightLine && (!Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination) || !await AdvDia.Navigator.CanFullyClientPathTo(Destination)))
+            //{
+            //    Core.Logger.Debug("Unable to straight line path, switching to navigator pathing");
+            //    _mover = Mover.Navigator;
+            //}
 
             if (Destination != Vector3.Zero)
             {
@@ -231,14 +326,14 @@ namespace Trinity.Components.Adventurer.Coroutines
                 }
                 else
                 {
-                    if (_mover == Mover.StraightLine && PluginTime.ReadyToUse(_lastRaywalkCheck, 200))
-                    {
-                        if (!Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination))
-                        {
-                            _mover = Mover.Navigator;
-                        }
-                        _lastRaywalkCheck = PluginTime.CurrentMillisecond;
-                    }
+                    //if (_mover == Mover.StraightLine && PluginTime.ReadyToUse(_lastRaywalkCheck, 200))
+                    //{
+                    //    if (!Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination))
+                    //    {
+                    //        _mover = Mover.Navigator;
+                    //    }
+                    //    _lastRaywalkCheck = PluginTime.CurrentMillisecond;
+                    //}
                     switch (_mover)
                     {
                         case Mover.StraightLine:
@@ -248,7 +343,6 @@ namespace Trinity.Components.Adventurer.Coroutines
                             return false;
 
                         case Mover.Navigator:
-
                             if (AdvDia.Navigator != null)
                             {
                                 LastMoveResult = await AdvDia.Navigator.MoveTo(Destination);
@@ -258,7 +352,6 @@ namespace Trinity.Components.Adventurer.Coroutines
                                 LastMoveResult = await Navigator.MoveTo(Destination);
                             }
                             Core.Logger.Debug($"Navigator MoveResult = {LastMoveResult}, Destination={Destination} Dist3D={AdvDia.MyPosition.Distance(Destination)} Dist2D={AdvDia.MyPosition.Distance2D(Destination)}");
-
                             break;
                     }
                 }
@@ -282,13 +375,16 @@ namespace Trinity.Components.Adventurer.Coroutines
                             else
                             {
                                 Core.Logger.Debug($"Navigator reports DestinationReached but we're not at destination, failing. Mover={_mover}");
-                                State = States.Failed;
+                                State = States.LastResortMovement;
                                 LastMoveResult = MoveResult.Failed;
                             }
                         }
                         return false;
 
                     case MoveResult.Failed:
+                        Core.Logger.Debug($"Navigator reports Failed movement attempt. Mover={_mover}");
+                        State = States.LastResortMovement;
+                        return false;
                         break;
 
                     case MoveResult.PathGenerationFailed:
@@ -344,6 +440,9 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         private MoveThroughDeathGates _deathGateCoroutine;
+        private Vector3 _lastPosition;
+        private DateTime _lastResortTotalTimeout;
+        private bool _useStraightLine;
 
         private async Task<bool> MovingToDeathGate()
         {

@@ -92,15 +92,19 @@
 [Objective] Type: HadConversation
 -->
 
-    <If condition="IsActiveQuest(87700) and IsActiveQuestStep(-1) and CurrentWorldId == 71150">
+    <If condition="IsActiveQuestAndStep(87700,-1) and CurrentWorldId == 71150">
       <LogMessage message=">> Tristram Gate Event" />
       <Kill>
-        <MoveToPosition questId="87700" stepId="-1" sceneX="29.23" sceneY="184.15" sceneZ="24.06" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5"  worldSnoId="71150" levelAreaSnoId="19947" />
+        <MoveToPosition questId="87700" stepId="-1" x="3094.89" y="2906.13" z="59.18" sceneX="34.9" sceneY="146.13" sceneZ="59.18" sceneSnoId="33349" sceneName="trOut_Tristram_E10_S16" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
+        <MoveToPosition questId="87700" stepId="-1" x="3009.2" y="2969.43" z="51.8" sceneX="189.2" sceneY="209.43" sceneZ="51.8" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
+        <MoveToPosition questId="87700" stepId="-1" x="2838.41" y="2940.48" z="24.05" sceneX="18.41" sceneY="180.48" sceneZ="24.05" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
+        <!--<MoveToPosition questId="87700" stepId="-1" x="2821.29" y="2954.39" z="24.05" sceneX="1.29" sceneY="194.39" sceneZ="24.05" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />-->
         <Interact questId="87700" stepId="-1" actorId="3739" actorName="CaptainRumfoord" x="2841" y="2937" z="24" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
         <WaitForCombat />
-        <Wait seconds="5" />
+        <Wait seconds="8" />
         <Interact questId="87700" stepId="-1" actorId="3739" actorName="CaptainRumfoord" x="2841" y="2937" z="24" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
       </Kill>
+      <Wait seconds="2" />
     </If>
 
     <If condition="IsActiveQuest(87700) and IsActiveQuestStep(42) and CurrentWorldId == 71150">
@@ -136,7 +140,7 @@
     </If>
 
 
-<!--
+    <!--
 [2088AEA4] [The Legacy of Cain] QuestSnoId: 72095, QuestMeter: -1, QuestState: InProgress, QuestStep: 11, KillCount: 0, BonusCount: 0
 [Step] GoCathedral, Id: 7
 [Objective] LeahTriggeredRuins, Type: EventReceived
@@ -171,7 +175,7 @@
 [Step] TalkLeah, Id: 32
 [Objective] Type: HadConversation
 -->
-    
+
     <!-- The Legacy of Cain -->
     <If condition="IsActiveQuestAndStep(72095, -1) and CurrentLevelAreaId == 19947">
       <!-- The Legacy of Cain -->
@@ -262,6 +266,13 @@
       <Interact questId="72095" stepId="47" actorId="221031" isPortal="True" destinationWorldId="71150" x="155" y="43" z="0" />
       <WaitTimer questId="72095" stepId="47" waitTime="1000" />
     </If>
+
+
+    <!-- Diablo 1.0.7 resume game handling -->
+    <If condition="IsInTown and not (IsActiveQuestAndStep(72095,32) or IsActiveQuestAndStep(72738,14))">
+      <ResumeUseTownPortal forceUsePortal="True" timeLimit="30" />
+    </If>
+
     <If condition="IsActiveQuest(72095) and IsActiveQuestStep(47) and CurrentWorldId == 71150">
       <!-- Cathedral door -->
       <SafeMoveTo questId="72095" stepId="47" actorId="167289" x="1525" y="2720" z="56" />
@@ -270,6 +281,8 @@
       <SafeMoveTo questId="72095" stepId="47" name="Hidden Cellar Exit" x="1476" y="2722" z="56" />
       <WaitTimer questId="72095" stepId="47" waitTime="1000" />
     </If>
+
+
     <If condition="IsActiveQuest(72095) and IsActiveQuestStep(23) and CurrentWorldId == 71150">
       <!-- Enter Cathedral -->
       <Interact questId="72095" stepId="23" actorId="182738" isPortal="True" destinationWorldId="50579" interactRange="30" x="1451" y="2720" z="53" />
@@ -303,19 +316,21 @@
       <!-- Leoric's Passage -->
       <WaitTimer questId="72095" stepId="11" waitTime="1000" />
     </If>
-    <While condition="IsActiveQuest(72095) and IsActiveQuestStep(11) and CurrentWorldId == 60713">
+    <If condition="IsActiveQuest(72095) and IsActiveQuestStep(11) and CurrentWorldId == 60713">
       <!-- Inside Leoric's Passage -->
       <WaitTimer questId="72095" stepId="11" waitTime="1000" />
-      <LogMessage questId="72095" stepId="11" output="Waiting for skeletons" />
-    </While>
-    <While condition="IsActiveQuest(72095) and IsActiveQuestStep(15) and CurrentWorldId == 60713">
+      <LogMessage questId="72095" stepId="11" output="Inside Leoric's Passage" />
+    </If>
+    <If condition="IsActiveQuest(72095) and IsActiveQuestStep(15) and CurrentWorldId == 60713">
+      <LogMessage output="Kill Skele's Attacking Cain" />
       <Kill>
         <WaitTimer questId="72095" stepId="15" waitTime="1000" />
         <!-- Kill Skele's Attacking Cain -->
         <SafeMoveTo questId="72095" stepId="15" name="Kill Skeletons" x="119" y="188" z="0" />
-        <WaitTimer questId="72095" stepId="11" waitTime="4000" />
+        <Wait seconds="12" />
       </Kill>
-    </While>
+    </If>
+
 
     <!-- Death Handling for Skeleton Boss -->
     <If condition="IsActiveQuest(72095) and IsActiveQuestStep(15) and CurrentWorldId == 50579">
@@ -358,12 +373,8 @@
       <WaitTimer questId="72095" stepId="32" waitTime="1000" />
     </While>
 
-    <!-- Diablo 1.0.7 resume game handling -->
-    <If condition="IsInTown and not (IsActiveQuestAndStep(72095,32) or IsActiveQuestAndStep(72738,14))">
-      <ResumeUseTownPortal forceUsePortal="True" timeLimit="30" />
-    </If>
 
-    
+
 
     <!--
 [2088B014] [A Shattered Crown] QuestSnoId: 72221, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
@@ -392,7 +403,7 @@
 [Objective] Type: PossessItem
 [Objective] StoneOfRecallUsed, Type: EventReceived
 -->
-    
+
     <!-- 72221 -->
     <!-- A Shattered Crown -->
     <!-- Talk to Cain -->
@@ -593,10 +604,10 @@
       <Interact questId="72221" stepId="54" actorId="56947" x="2943" y="2844" z="24" />
       <WaitTimer questId="72221" stepId="54" waitTime="25000" />
     </If>
-    
-      
-      
-<!--
+
+
+
+    <!--
 [2088B184] [Reign of the Black King] QuestSnoId: 72061, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
 [Step] GoWilderness, Id: 30
 [Objective] Type: EnterLevelArea
@@ -635,8 +646,10 @@
 [Step] TalkCainStranger, Id: 54
 [Objective] Type: HadConversation
 -->
-        
-      
+
+
+
+
     <If condition="IsActiveQuest(72061) and IsActiveQuestStep(-1) and CurrentWorldId == 71150">
       <!-- Reign of the Black King -->
       <!-- Talk to Deckard Cain -->
@@ -711,6 +724,16 @@
       <LogMessage output="Stuck: Stuck in Cathedral Level 2" />
       <WaitTimer questId="72061" stepId="6" waitTime="1000" />
     </If>
+
+    <!-- Resume Game from Town -->
+    <!-- Quest: SkeletonKing: Reign of the Black King (72061) MainQuest Step: BraveDepthsContinued (44) -->
+    <!-- Objective: 0: Search for the Royal Crypts (InProgress) -->
+    <!-- World: trOUT_Town (71150) Scene: A1_trOUT_NewTristram New Tristram (19947) Generated=False -->
+    <If condition="IsActiveQuest(72061) and IsActiveQuestStep(44) and CurrentWorldId == 71150">
+      <LogMessage output="Quest: SkeletonKing: Reign of the Black King (72061) MainQuest Step: BraveDepthsContinued (44) Search for the Royal Crypts" />
+      <TakeWaypoint levelAreaId="87907"/>
+    </If>
+
     <!-- Cathedral Level 3 -->
     <If condition="IsActiveQuest(72061) and IsActiveQuestStep(6) and CurrentWorldId == 105406">
       <Kill>
@@ -811,12 +834,13 @@
 
 
 
-
     <!-- Quest: SkeletonKing: Reign of the Black King (72061) Type:MainQuest Step: BraveDepthsContinued (44) -->
     <!-- World: a1trDun_Level06 (50584) Scene: A1_trDun_Level06 Cathedral Level 4 (19785) Generated=True -->
     <If condition="IsActiveQuest(72061) and IsActiveQuestStep(44) and CurrentWorldId == 50584">
 
       <MoveToScene questId="72061" stepId="44" sceneName="_Exit_" zerg="false"  worldSnoId="50584" levelAreaSnoId="19785" />
+
+      <Explore stopCondition="ActorExistsNearMe(176001, 100) or ActorExistsNearMe(175467,100)" />
 
       <!-- g_Portal_ArchTall_Orange-34575 (176001) g_Portal_ArchTall_Orange Distance=26.03303 Type=Portal -->
       <Interact questId="72061" stepId="44" interactAttempts="2" ignoreSanityChecks="true" actorId="176001"  worldSnoId="50584" levelAreaSnoId="19785" />
@@ -839,7 +863,7 @@
 
       <!-- trDun_Cath_Gate_A-6920 (5763) trDun_Cath_Gate_A Distance=24.10337 Type=Door -->
       <Interact questId="72061" stepId="16" interactAttempts="2" ignoreSanityChecks="true" actorId="5763" markerHash="0" explore="false" maxRange="300" x="322.95" y="520" z="0" sceneX="82.95" sceneY="40" sceneZ="0" sceneSnoId="74008" sceneName="trDun_Crypt_Skeletal_Entrance_SEW_01" distance="5"  worldSnoId="50585" levelAreaSnoId="19787" />
-</If>
+    </If>
     <While condition="IsActiveQuest(72061) and IsActiveQuestStep(16) and CurrentWorldId == 50585">
       <!-- Open Onate Door to Skeleton King Tomb -->
       <!-- [1A2ED188] GizmoType: Door Name: trDun_SkeletonKing_Sealed_Door-9957 ActorSnoId: 5944 Distance: 10.52197 Position: <343.9002, 485.3749, -0.1628075> Barracade: False Radius: 18.99448 -->
@@ -883,49 +907,77 @@
     <If condition="IsActiveQuest(72061) and IsActiveQuestStep(21) and CurrentWorldId == 73261">
       <!-- Death Handling: Place Leoric's crown on the Skeleton King -->
       <Interact questId="72061" stepId="21" actorId="5354" x="340" y="262" z="18" />
-      <WaitTimer questId="72061" stepId="21" waitTime="1000" />
+      <Wait seconds="4" />
     </If>
 
-    <While condition="IsActiveQuest(72061) and IsActiveQuestStep(21) and CurrentWorldId == 73261">
+    <If condition="IsActiveQuestAndStep(72061,21) and CurrentWorldId == 73261">
       <!-- Kill the Skeleton King -->
       <SafeMoveTo questId="72061" stepId="21" name="Kill the Skeleton King" pathPrecision="10" x="339" y="271" z="15" />
-      <WaitTimer questId="72061" stepId="21" waitTime="1000" />
-    </While>
-
-    <While condition="IsActiveQuest(72061) and IsActiveQuestStep(48) and CurrentWorldId == 73261">
+      <WaitTimer questId="1" waitTime="15000" />
+    </If>
+    <!-- Quest: SkeletonKing: Reign of the Black King (72061) MainQuest Step: MeteorRoom (48) -->
+    <!-- Objective: 0: Enter the Desolate Chamber (InProgress) -->
+    <!-- World: a1trDun_King_Level08 (73261) Scene: A1_trDun_Level07D Crypt of the Skeleton King (19789) Generated=False -->
+    <If condition="IsActiveQuestAndStep(72061,48) and CurrentWorldId == 73261">
+      <LogMessage output="Quest: SkeletonKing: Reign of the Black King (72061) MainQuest Step: MeteorRoom (48) Enter the Desolate Chamber" />
+      <Wait seconds="2" />
+    </If>
+    <If condition="IsActiveQuestAndStep(72061,48) and CurrentWorldId == 73261">
       <!-- Go in Desolate Chamber -->
       <Interact questId="72061" stepId="48" actorId="175467" isPortal="True" destinationWorldId="117405" x="339" y="251" z="21" />
-      <WaitTimer questId="72061" stepId="48" waitTime="1500" />
-    </While>
-    <While condition="IsActiveQuest(72061) and IsActiveQuestStep(50) and CurrentWorldId == 73261">
-      <!-- Resume Handling: Talk to Stranger -->
-      <Interact questId="72061" stepId="50" actorId="175467" isPortal="True" destinationWorldId="117405" x="339" y="251" z="21" />
-      <WaitTimer questId="72061" stepId="50" waitTime="1500" />
-    </While>
-    <While condition="IsActiveQuest(72061) and IsActiveQuestStep(50) and CurrentWorldId == 117405">
-      <!-- TalkTo Stranger in Desolate Chamber -->
+      <Wait seconds="8" />
+    </If>
 
-      <MoveToPosition questId="72061" stepId="50" x="346.16" y="319.59" z="32.1" sceneX="106.16" sceneY="79.59" sceneZ="32.1" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+    <If condition="IsActiveQuest(72061) and IsActiveQuestStep(50) and CurrentWorldId == 117405">
+      <!-- TalkTo Stranger in Desolate Chamber  Navigation shits itself in this area -->
+
+      <!--<MoveToPosition questId="72061" stepId="50" x="346.16" y="319.59" z="32.1" sceneX="106.16" sceneY="79.59" sceneZ="32.1" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
       <MoveToPosition questId="72061" stepId="50" x="396.59" y="316.85" z="15.22" sceneX="156.59" sceneY="76.85" sceneZ="15.22" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
       <MoveToPosition questId="72061" stepId="50" x="416.09" y="330.96" z="6.48" sceneX="176.09" sceneY="90.96" sceneZ="6.48" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
-      <MoveToPosition questId="72061" stepId="50" x="392.21" y="357.92" z="1.06" sceneX="152.21" sceneY="117.92" sceneZ="1.06" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="392.21" y="357.92" z="1.06" sceneX="152.21" sceneY="117.92" sceneZ="1.06" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />-->
+      <WaitTimer questId="1" waitTime="8000" />
+
+      <MoveToPosition questId="72061" stepId="50" x="364.47" y="317.3" z="32.1" sceneX="124.47" sceneY="77.29" sceneZ="32.1" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="true"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="375.88" y="317.87" z="28.97" sceneX="135.88" sceneY="77.87" sceneZ="28.97" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="false"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="385.18" y="318.99" z="22.02" sceneX="145.18" sceneY="78.99" sceneZ="22.02" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="false"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="393.31" y="321.4" z="15.05" sceneX="153.31" sceneY="81.4" sceneZ="15.05" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="false"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="398.26" y="324.08" z="10.6" sceneX="158.26" sceneY="84.08" sceneZ="10.6" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="false"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="407.96" y="329.56" z="6.28" sceneX="167.96" sceneY="89.56" sceneZ="6.28" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="false"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="416.44" y="337.11" z="7.05" sceneX="176.44" sceneY="97.11" sceneZ="7.05" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="false"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="409.66" y="351.19" z="6.74" sceneX="169.66" sceneY="111.19" sceneZ="6.74" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="false"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="399.31" y="357.35" z="4.1" sceneX="159.31" sceneY="117.35" sceneZ="4.1" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="false"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" x="390.2" y="359.54" z="1.29" sceneX="150.2" sceneY="119.54" sceneZ="1.29" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5" useNavigation="false"  worldSnoId="117405" levelAreaSnoId="117411" />
+
+      <!--<MoveToPosition questId="72061" stepId="50" x="360.44" y="319.91" z="32.1" sceneX="120.44" sceneY="79.91" sceneZ="32.1" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="374.66" y="317.49" z="30.12" sceneX="134.66" sceneY="77.49" sceneZ="30.12" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="380.89" y="317.88" z="25.64" sceneX="140.89" sceneY="77.88" sceneZ="25.64" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="386.41" y="318.72" z="20.96" sceneX="146.41" sceneY="78.72" sceneZ="20.96" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="392.37" y="320.6" z="16.15" sceneX="152.37" sceneY="80.6" sceneZ="16.15" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="395.89" y="322.45" z="12.6" sceneX="155.89" sceneY="82.45" sceneZ="12.6" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="401.5" y="326.1" z="8.36" sceneX="161.5" sceneY="86.1" sceneZ="8.36" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="407.88" y="332.31" z="6.56" sceneX="167.88" sceneY="92.31" sceneZ="6.56" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="403.95" y="338.27" z="6.63" sceneX="163.95" sceneY="98.27" sceneZ="6.63" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="397.78" y="345.33" z="6.29" sceneX="157.78" sceneY="105.33" sceneZ="6.29" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />
+      <MoveToPosition questId="72061" stepId="50" useNavigation="false" x="387.95" y="354.2" z="0.72" sceneX="147.95" sceneY="114.2" sceneZ="0.72" sceneSnoId="117035" sceneName="trDun_Crypt_W_Exit_Stranger_01" distance="5"  worldSnoId="117405" levelAreaSnoId="117411" />-->
 
       <Interact questId="72061" stepId="50" actorId="180900" x="379" y="360" z="0" />
-      <WaitTimer questId="72061" stepId="50" waitTime="1500" />
-    </While>
+      <WaitTimer questId="72061" stepId="50" waitTime="3500" />
+    </If>
     <!-- Return to New Tristram Via Desolate Chamber Waypoint #5 -->
-    <While condition="IsActiveQuest(72061) and IsActiveQuestStep(52) and CurrentWorldId == 117405">
-      <SafeMoveTo questId="72061" stepId="52" x="413" y="332" z="6"  pathPrecision="2" statusText="Desolate Chamber 4" straightLinePathing="True" />
-      <SafeMoveTo questId="72061" stepId="52" x="421" y="261" z="7" pathPrecision="2" pathPointLimit="250" statusText="Waypoint location" straightLinePathing="True" />
-
+    <If condition="IsActiveQuest(72061) and IsActiveQuestStep(52) and CurrentWorldId == 117405">
+      <!--<SafeMoveTo questId="72061" stepId="52" x="413" y="332" z="6"  pathPrecision="2" statusText="Desolate Chamber 4" straightLinePathing="True" />
+      <SafeMoveTo questId="72061" stepId="52" x="421" y="261" z="7" pathPrecision="2" pathPointLimit="250" statusText="Waypoint location" straightLinePathing="True" />-->
+      <WaitTimer questId="72061" stepId="52" waitTime="1500" />
       <TakeWaypoint questId="72061" stepId="52" actorId="6442" waypointNumber="0" x="421" y="259" z="7" />
-      <WaitTimer questId="72061" stepId="52" waitTime="2500" />
-    </While>
+      <WaitTimer questId="1" waitTime="4000" />
+    </If>
     <If condition="IsActiveQuest(72061) and IsActiveQuestStep(54) and CurrentWorldId == 117405">
+      <WaitTimer questId="1" waitTime="4000" />
       <TakeWaypoint questId="72061" stepId="54" actorId="6442" waypointNumber="0" x="421" y="259" z="7" />
       <WaitTimer questId="72061" stepId="54" waitTime="2500" />
     </If>
     <If condition="IsActiveQuest(72061) and IsActiveQuestStep(54) and CurrentWorldId == 71150">
+      <WaitTimer questId="72061" stepId="54" waitTime="1000" />
       <!-- Talk to Cain -->
       <Interact questId="72061" stepId="54" actorId="3533" x="2951" y="2797" z="24" />
       <WaitTimer questId="72061" stepId="54" waitTime="9000" />
@@ -946,7 +998,7 @@
 [Step] ReturnSword, Id: 5
 [Objective] Type: HadConversation
 -->
-    
+
     <!-- Sword of the Stranger -->
     <!-- Talk to Cain -->
     <If condition="IsActiveQuest(117779) and IsActiveQuestStep(-1) and CurrentWorldId == 71150">
@@ -1085,7 +1137,7 @@
     </If>
 
 
-<!--
+    <!--
 [2088B464] [The Broken Blade] QuestSnoId: 72738, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
 [Step] Head through Fields, Id: 86
 [Objective] Type: HadConversation
@@ -1125,7 +1177,7 @@
 [Step] DefeatCult, Id: 56
 [Objective] Leah_Returned_To_Tristram, Type: EventReceived
 -->
-    
+
 
     <!-- The Broken Blade -->
     <!-- Talk to Leah -->
@@ -1195,6 +1247,9 @@
       <MoveToPosition questId="72738" stepId="26" x="1262.07" y="792.73" z="61.28" sceneX="62.07" sceneY="72.73" sceneZ="61.28" sceneSnoId="60702" sceneName="trOut_TristramFields_ExitA_E02_S02" distance="5"  worldSnoId="71150" levelAreaSnoId="19952" />
       <MoveToPosition questId="72738" stepId="26" x="1254.2" y="752.19" z="44.87" sceneX="54.2" sceneY="32.19" sceneZ="44.87" sceneSnoId="60702" sceneName="trOut_TristramFields_ExitA_E02_S02" distance="5"  worldSnoId="71150" levelAreaSnoId="19952" />
 
+      <MoveToPosition questId="72738" stepId="26" x="1311.79" y="743.79" z="44.94" sceneX="111.79" sceneY="23.79" sceneZ="44.94" sceneSnoId="60702" sceneName="trOut_TristramFields_ExitA_E02_S02" distance="5" useNavigation="false"  worldSnoId="71150" levelAreaSnoId="19952" />
+      <MoveToPosition questId="72738" stepId="26" x="1309.63" y="699.81" z="40.61" sceneX="109.63" sceneY="219.81" sceneZ="40.61" sceneSnoId="60695" sceneName="trOut_TristramFields_ExitA_E01_S02" distance="5" useNavigation="false"  worldSnoId="71150" levelAreaSnoId="61573" />
+      <MoveToPosition questId="72738" stepId="26" x="1259.79" y="699.09" z="10.03" sceneX="59.79" sceneY="219.09" sceneZ="10.03" sceneSnoId="60695" sceneName="trOut_TristramFields_ExitA_E01_S02" distance="5" useNavigation="false"  worldSnoId="71150" levelAreaSnoId="61573" />
     </If>
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(26) and CurrentWorldId == 71150">
       <Interact questId="72738" stepId="26" actorId="108882" x="1255" y="689" z="10" />
@@ -1222,9 +1277,42 @@
     </If>
 
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
-      <MoveToScene questId="72738" stepId="12" sceneSnoId="80370" sceneName="trOut_FesteringWoods_Sub120_NephalemEntranceB" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
-      <!-- g_Portal_Square_Orange-46013 (176008) g_Portal_Square_Orange Distance=1.414105 Type=Portal -->
-      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" actorId="176008" markerHash="0" explore="false" maxRange="300" />
+      <!-- Crypt of the Ancients 976523526 Exit Distance=255.9992 TextureId=102320 WorldSnoId=1999503360 -->
+      <MoveToMapMarker questId="72738" stepId="12" markerHash="976523526" markerName="Crypt of the Ancients" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
+        <MoveToScene questId="72738" stepId="12" sceneSnoId="80370" sceneName="trOut_FesteringWoods_Sub120_NephalemEntranceB" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
+        <Wait seconds="4" />
+        <!-- g_Portal_Square_Orange-16516 (176008) g_Portal_Square_Orange Distance=33.78579 Type=Portal Anim=0 Marker=Crypt of the Ancients (976523526, Exit) -->
+        <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+      </If>
+      <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
+        <Explore stopCondition="ActorExistsNearMe(176008, 150)">
+          <IgnoreScenes>
+            <Scene name="edge"></Scene>
+            <Scene name="exit"></Scene>
+          </IgnoreScenes>
+        </Explore>
+        <!-- g_Portal_Square_Orange-16516 (176008) g_Portal_Square_Orange Distance=33.78579 Type=Portal Anim=0 Marker=Crypt of the Ancients (976523526, Exit) -->
+        <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526"  actorId="176008" />
+      </If>
+      <!-- Crypt of the Ancients 976523526 Exit Distance=255.9992 TextureId=102320 WorldSnoId=1999503360 -->
+      <MoveToMapMarker questId="72738" stepId="12" markerHash="976523526" markerName="Crypt of the Ancients" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
+        <MoveToScene questId="72738" stepId="12" sceneSnoId="80370" sceneName="trOut_FesteringWoods_Sub120_NephalemEntranceB" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
+        <Wait seconds="4" />
+        <!-- g_Portal_Square_Orange-16516 (176008) g_Portal_Square_Orange Distance=33.78579 Type=Portal Anim=0 Marker=Crypt of the Ancients (976523526, Exit) -->
+        <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+      </If>
+      <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
+        <Explore stopCondition="ActorExistsNearMe(176008, 150)">
+          <IgnoreScenes>
+            <Scene name="edge"></Scene>
+            <Scene name="exit"></Scene>
+          </IgnoreScenes>
+        </Explore>
+        <!-- g_Portal_Square_Orange-16516 (176008) g_Portal_Square_Orange Distance=33.78579 Type=Portal Anim=0 Marker=Crypt of the Ancients (976523526, Exit) -->
+        <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526"  actorId="176008" />
+      </If>
     </If>
 
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 60394">
@@ -1236,26 +1324,40 @@
         <Interact questId="72738" stepId="12" actorId="215512" x="147" y="339" z="-14" endAnimation="Altar_A_Chest_03_open" />
       </Kill>
     </If>
+
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 60394">
       <WaitTimer questId="72738" stepId="12" waitTime="1000" />
       <SafeMoveTo questId="72738" stepId="12" x="269" y="176" z="-1" />
       <Interact questId="72738" stepId="12" actorId="176008" isPortal="True" destinationWorldId="71150" x="269" y="176" z="-1" />
       <WaitTimer questId="72738" stepId="12" waitTime="1000" />
     </If>
+
     <!-- Shortcut!! Use Town Portal -->
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(14) and CurrentWorldId == 60394">
       <TrinityTownPortal questId="72738" stepId="14" />
       <WaitTimer questId="72738" stepId="14" waitTime="2500" />
     </If>
 
-
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
-
-      <MoveToScene questId="72738" stepId="12" sceneSnoId="80042" sceneName="trOut_FesteringWoods_Sub120_NephalemEntranceA" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
-      <Interact questId="72738" stepId="12" interactAttempts="5" ignoreSanityChecks="true" actorId="176008" markerHash="0" explore="false" maxRange="300"  />
-
+      <!-- Warrior's Rest 976523525 Exit Distance=8.905836 TextureId=102320 WorldSnoId=1999503360 Actor=g_Portal_Square_Orange-16397 (176008) -->
+      <MoveToMapMarker questId="72738" stepId="12" markerHash="976523525" markerName="Warrior's Rest" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
+        <MoveToScene questId="72738" stepId="12" sceneSnoId="80042" sceneName="trOut_FesteringWoods_Sub120_NephalemEntranceA" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
+        <Wait seconds="4" />
+        <!-- g_Portal_Square_Orange-16397 (176008) g_Portal_Square_Orange Distance=8.905836 Type=Portal Anim=0 Marker=Warrior's Rest (976523525, Exit) -->
+        <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523525"  actorId="176008" />
+      </If>
+      <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
+        <Explore stopCondition="ActorExistsNearMe(176008, 150)">
+          <IgnoreScenes>
+            <Scene name="edge"></Scene>
+            <Scene name="exit"></Scene>
+          </IgnoreScenes>
+        </Explore>
+        <!-- g_Portal_Square_Orange-16397 (176008) g_Portal_Square_Orange Distance=8.905836 Type=Portal Anim=0 Marker=Warrior's Rest (976523525, Exit) -->
+        <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523525" actorId="176008" />
+      </If>
     </If>
-
 
     <!-- We're in Warrior's Rest -->
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 60393">
@@ -1267,11 +1369,8 @@
       </Kill>
     </If>
 
-
-
     <!-- Shortcut!! Use Town Portal -->
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(14) and CurrentWorldId == 60393">
-      <!--<TrinityTownPortal questId="72738" stepId="14" />-->
       <TakeWaypoint questId="72738" stepId="14" waypointNumber="8" />
       <WaitTimer questId="72738" stepId="14" waitTime="2500" />
     </If>
@@ -1281,10 +1380,6 @@
     </If>
 
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(14) and CurrentWorldId == 71150">
-
-
-      <!--<MoveToPosition questId="72738" stepId="14" x="1258.88" y="697.71" z="10.03" sceneX="58.88" sceneY="217.71" sceneZ="10.03" sceneSnoId="60695" sceneName="trOut_TristramFields_ExitA_E01_S02" distance="5"  worldSnoId="71150" levelAreaSnoId="61573" />
-     <MoveToPosition questId="72738" stepId="14" x="1206.38" y="698.52" z="40.62" sceneX="6.38" sceneY="218.52" sceneZ="40.62" sceneSnoId="60695" sceneName="trOut_TristramFields_ExitA_E01_S02" distance="5"  worldSnoId="71150" levelAreaSnoId="61573" />-->
 
       <MoveToPosition questId="72738" stepId="14" x="1255.65" y="698.82" z="10.03"/>
       <MoveToPosition questId="72738" stepId="14" x="1311.58" y="699.29" z="40.61" />
@@ -1323,6 +1418,7 @@
       <!-- Talk to Alaric -->
       <Interact questId="72738" stepId="99" actorId="108882" x="284" y="277" z="-76" />
       <WaitTimer questId="72738" stepId="99" waitTime="1000" />
+
     </If>
     <While condition="IsActiveQuest(72738) and IsActiveQuestStep(103) and CurrentWorldId == 60395">
       <SafeMoveTo questId="72738" stepId="103" x="164" y="256" z="-70" />
@@ -1347,7 +1443,7 @@
     </If>
 
 
-<!--
+    <!--
 [2088B5D4] [The Doom in Wortham] QuestSnoId: 73236, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
 [Step] Talk To Ferryman, Id: 34
 [Objective] Type: EnterWorld
@@ -1369,7 +1465,7 @@
 [Step] TalkCain, Id: 69
 [Objective] Type: HadConversation
 -->
-    
+
 
     <If condition="CurrentWorldId == 60395">
 
@@ -1398,13 +1494,13 @@
       <MoveToPosition questId="73236" stepId="34" x="2949.15" y="2607.35" z="0.6" sceneX="129.15" sceneY="87.35" sceneZ="0.6" sceneSnoId="33342" sceneName="trOut_Tristram_E09_S15" distance="5"  worldSnoId="71150" levelAreaSnoId="19947" />
 
       <!-- Ferryman-53243 (153019) Ferryman Distance=12.34945 Type=Unit -->
-      <Interact questId="73236" stepId="34" interactAttempts="2" ignoreSanityChecks="true" actorId="153019" markerHash="0" explore="false" maxRange="300" x="3131.34" y="2597.32" z="0.93" sceneX="71.34" sceneY="77.32" sceneZ="0.93" sceneSnoId="33343" sceneName="trOut_Tristram_E09_S16" distance="5"  worldSnoId="71150" levelAreaSnoId="19947" />
+      <Interact questId="73236" stepId="34" interactAttempts="2" ignoreSanityChecks="true" delay="3" actorId="153019" markerHash="0" explore="false" maxRange="300" x="3131.34" y="2597.32" z="0.93" sceneX="71.34" sceneY="77.32" sceneZ="0.93" sceneSnoId="33343" sceneName="trOut_Tristram_E09_S16" distance="5"  worldSnoId="71150" levelAreaSnoId="19947" />
+      <Wait seconds="6" />
     </If>
 
-    <If condition="IsActiveQuest(73236) and IsActiveQuestStep(34)">
-      <WaitTimer questId="73236" stepId="-1" waitTime="5000" />
+    <If condition="IsActiveQuest(73236) and IsActiveQuestStep(20) and CurrentWorldId == 72882">
+      <Wait seconds="3" />
     </If>
-
 
     <!-- Quest: TownAttack: The Doom in Wortham (73236) Type:MainQuest Step: Travel to Chapel (20) -->
     <!-- World: trOUT_TownAttack (72882) Scene: A1_trOUT_FishingVillage Wortham (19935) Generated=False -->
@@ -1421,8 +1517,11 @@
       <MoveToPosition questId="73236" stepId="20" x="585.57" y="581.4" z="70.1" sceneX="105.57" sceneY="101.4" sceneZ="70.1" sceneSnoId="76000" sceneName="trOut_TownAttack_E09_S15" distance="5"  worldSnoId="72882" levelAreaSnoId="19935" />
 
       <!--<SafeMoveTo questId="73236" stepId="20" name="Center of Wortham" pathPrecision="10" x="582" y="579" z="70" />-->
+
+      <Wait seconds="10"/>
+
       <!-- Go to center of Wortham -->
-      <WaitTimer questId="73236" stepId="59" waitTime="65000" />
+      <WaitTimer questId="731236" stepId="59" waitTime="65000" />
 
     </If>
 
@@ -1487,11 +1586,11 @@
     <If condition="IsActiveQuest(73236) and (IsActiveQuestStep(67) or IsActiveQuestStep(69)) and CurrentWorldId == 167721">
       <Kill>
         <MoveToPosition questId="73236" stepId="69" x="65.91" y="142.26" z="0.1" sceneX="65.91" sceneY="142.26" sceneZ="0.1" sceneSnoId="167719" sceneName="trOut_oldTristram_Cellar_G" distance="5"  worldSnoId="167721" levelAreaSnoId="119870" />
-
         <WaitTimer questId="73236" stepId="69" waitTime="4000" />
-        <!-- Use Waypoint to go back to Cain's House -->
-        <TakeWaypoint questId="73236" stepId="69" waypointNumber="0"  />
       </Kill>
+
+      <!-- Use Waypoint to go back to Cain's House -->
+      <TakeWaypoint questId="73236" stepId="69" waypointNumber="0"  />
 
     </If>
 
@@ -1511,9 +1610,9 @@
     <If condition="IsActiveQuest(73236) and IsActiveQuestStep(69) and CurrentWorldId == 174449">
       <WaitTimer questId="73236" stepId="69" waitTime="15000" />
     </If>
-    
-    
-<!--
+
+
+    <!--
 [2088B744] [Trailing the Coven] QuestSnoId: 72546, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
 [Step] TalkLeah, Id: 1
 [Objective] Type: HadConversation
@@ -1821,7 +1920,7 @@
       <SafeMoveTo questId="72546" stepId="43" name="Kill the cultists" pathPrecision="10" x="327.3711" y="385.4651" z="13.02209" />
     </While>
 
-<!--
+    <!--
 [2088B8B4] [The Imprisoned Angel] QuestSnoId: 72801, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
 [Step] GoLeoric, Id: 1
 [Objective] Type: EnterWorld
@@ -2107,9 +2206,12 @@
       <WaitTimer questId="72801" stepId="41" waitTime="1000" />
     </If>
     <While condition="IsActiveQuest(72801) and IsActiveQuestStep(39) and CurrentWorldId == 135713">
-      <SafeMoveTo questId="72801" stepId="39" name="Kill the Cultists" pathPrecision="10" x="339" y="81" z="-24" />
-      <!-- Kill the Cultists -->
-      <WaitTimer questId="72801" stepId="39" waitTime="65000" />
+      <Kill>
+        <SafeMoveTo questId="72801" stepId="39" name="Kill the Cultists" pathPrecision="10" x="339" y="81" z="-24" />
+        <!-- Kill the Cultists -->
+        <WaitTimer questId="72801" stepId="39" waitTime="65000" />
+      </Kill>
+      <Wait seconds="1" />
     </While>
     <!-- Talk to the Stranger, Resume Handling -->
     <If condition="IsActiveQuest(72801) and IsActiveQuestStep(11) and CurrentWorldId == 78839">

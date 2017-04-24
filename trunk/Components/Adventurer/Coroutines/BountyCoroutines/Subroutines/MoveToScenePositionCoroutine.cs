@@ -69,16 +69,19 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _straightLinePath = straightLinePath;
         }
 
-        public MoveToScenePositionCoroutine(int sceneSnoId, Vector3 position)
+        public MoveToScenePositionCoroutine(int sceneSnoId, Vector3 position, bool straightLinePath = false)
         {
             _sceneSnoId = sceneSnoId;
             _position = position;
+            _straightLinePath = straightLinePath;
+
         }
 
-        public MoveToScenePositionCoroutine(string sceneName, Vector3 position)
+        public MoveToScenePositionCoroutine(string sceneName, Vector3 position, bool straightLinePath = false)
         {
             _sceneName = sceneName;
             _position = position;
+            _straightLinePath = straightLinePath;
         }
 
         public async Task<bool> GetCoroutine()
@@ -209,6 +212,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Failed()
         {
+            Core.PlayerMover.MoveTowards(_objectiveLocation);
             _isDone = true;
             return true;
         }
@@ -236,7 +240,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _lastScanTime = PluginTime.CurrentMillisecond;
                 if (_sceneSnoId > 0)
                 {
-                    var scene = Core.Scenes.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.SnoId == _sceneSnoId);
+                    var scene = Core.Scenes.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.SnoId == _sceneSnoId || s.HasChild && s.SubScene.SnoId == _sceneSnoId);
                     if (scene != null)
                     {
                         _worldScene = scene;

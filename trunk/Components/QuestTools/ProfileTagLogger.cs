@@ -4,10 +4,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
+using log4net;
+using log4net.Appender;
+using log4net.Core;
+using log4net.Filter;
+using log4net.Repository.Hierarchy;
 using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Framework;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
@@ -15,6 +22,7 @@ using Trinity.Framework.Objects.Enums;
 using Trinity.Framework.Objects.Memory;
 using Trinity.Modules;
 using Zeta.Bot.Profile;
+using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -63,11 +71,35 @@ namespace Trinity.Components.QuestTools
 
             public void UpdateForActor(TrinityActor actor)
             {
-                if (actor == null) return;
+                if (actor == null)
+                {
+                    ActorId = 0;
+                    ActorSno = 0;
+                    ActorName = string.Empty;
+                    StartAnimation = string.Empty;
+                    SetPosition(Vector3.Zero);
+                    return;
+                }
+
                 ActorId = actor.ActorSnoId;
                 ActorSno = (SNOActor)ActorId;
-                StartAnimation = actor.Animation.ToString();
+                ActorName = actor.Name;
+                StartAnimation = actor.Animation != 0 ? actor.Animation.ToString() : string.Empty;
                 SetPosition(actor.Position);
+
+                var marker = BountyHelpers.GetMarkerNearActor(actor);
+                if (marker != null)
+                {
+                    MarkerHash = marker.NameHash;
+                    MarkerName = marker.Name;
+                    MarkerType = marker.MarkerType;
+                }
+                else
+                {
+                    MarkerHash = 0;
+                    MarkerName = string.Empty;
+                    MarkerType = WorldMarkerType.None;
+                }
             }
 
             public void UpdateForMarker(TrinityMarker marker)
@@ -77,7 +109,7 @@ namespace Trinity.Components.QuestTools
                 MarkerName = marker.Name;
                 MarkerType = marker.MarkerType;
 
-                var actor = Core.Actors.FirstOrDefault(a => !a.IsMe && !a.IsExcludedId && a.Position.Distance(a.Position) <= 3f);
+                var actor = Core.Actors.Where(a => !a.IsMe && !a.IsExcludedId && a.Position.Distance(marker.Position) <= 3f).OrderBy(a => a.IsGizmo).ThenBy(a => a.Distance).FirstOrDefault();
                 UpdateForActor(actor);
             }
 
@@ -103,6 +135,7 @@ namespace Trinity.Components.QuestTools
             public string MarkerName { get; set; }
             public SNOActor ActorSno { get; set; }
             public int ActorId { get; set; }
+            public string ActorName { get; set; }
             public int WaypointNumber { get; set; }
             public float SceneZ { get; set; }
             public float SceneY { get; set; }
@@ -125,7 +158,10 @@ namespace Trinity.Components.QuestTools
             foreach (var actor in Core.Actors.Actors.Where(a => !a.IsMe && actorSelector(a)).OrderBy(a => a.Distance))
             {
                 s.UpdateForActor(actor);
-                sb.AppendLine($"     <!-- {actor.Name} ({actor.ActorSnoId}) {(SNOActor)actor.ActorSnoId} Distance={actor.Distance} Type={actor.Type} Anim={actor.Animation} -->");
+                var minimapEntry = Core.Minimap.MinimapIcons.FirstOrDefault(m => m.Position.Distance(actor.Position) < 5f);
+                var minimapMsg = minimapEntry != null ? $"MinimapName={minimapEntry.Name} " : string.Empty;
+                var markerMsg = !string.IsNullOrEmpty(s.MarkerName) ? $"Marker={s.MarkerName} ({s.MarkerHash}, {s.MarkerType}) " : string.Empty;
+                sb.AppendLine($"     <!-- {actor.Name} ({actor.ActorSnoId}) {(SNOActor)actor.ActorSnoId} Distance={actor.Distance} Type={actor.Type} Anim={actor.Animation} {minimapMsg}{markerMsg}-->");
                 sb.AppendLine(GenerateTag<T>(s));
                 sb.AppendLine(Environment.NewLine);
             }
@@ -139,7 +175,8 @@ namespace Trinity.Components.QuestTools
             foreach (var marker in Core.Markers.Where(a => markerSelector?.Invoke(a) ?? true))
             {
                 s.UpdateForMarker(marker);
-                sb.AppendLine($"     <!-- {marker.Name} {marker.NameHash} {marker.MarkerType} Distance={marker.Distance} TextureId={marker.TextureId} WorldSnoId={marker.WorldSnoId} -->");
+                var actorMsg = s.ActorId != 0 ? $"Actor={s.ActorName} ({s.ActorId}) " : string.Empty;
+                sb.AppendLine($"     <!-- {marker.Name} {marker.NameHash} {marker.MarkerType} Distance={marker.Distance} TextureId={marker.TextureId} WorldSnoId={marker.WorldSnoId} {actorMsg}-->");
                 sb.AppendLine(GenerateTag<T>(s));
                 sb.AppendLine(Environment.NewLine);
             }
@@ -198,15 +235,72 @@ namespace Trinity.Components.QuestTools
             return propertyInfo.GetCustomAttribute<DefaultValueAttribute>()?.Value;
         }
 
-        public static string GenerateQuestInfoComment()
+        public static string GenerateQuestInfo()
         {
             var currentQuest = ZetaDia.Storage.Quests.ActiveQuests.FirstOrDefault();
             if (currentQuest == null) return null;
             var currentStep = currentQuest.QuestRecord.Steps.FirstOrDefault(q => q.StepId == currentQuest.QuestStep);
             var obj = currentStep?.QuestStepObjectiveSet?.QuestStepObjectives?.FirstOrDefault();
-
-            return $"<!-- Quest: {currentQuest.Quest}: {currentQuest.DisplayName} ({currentQuest.QuestSNO}) Type:{currentQuest.QuestType} Step: {currentStep?.Name} ({currentQuest.QuestStep}) -->";
+            var output = $"Quest: {currentQuest.Quest}: {currentQuest.DisplayName} ({currentQuest.QuestSNO}) {currentQuest.QuestType} Step: {currentStep?.Name} ({currentQuest.QuestStep})";
+            return output;
         }
+
+        public static string GenerateTagComment()
+        {
+            var sb = new StringBuilder();
+            var indent = "        ";
+            sb.AppendLine("");
+            sb.AppendLine(indent + GenerateQuestInfoComment());
+            TrinityObjectiveInfo activeObj = null;
+            foreach (var o in GetObjectiveInfo())
+            {
+                sb.AppendLine(indent + $"<!-- Objective: {o.Index}: {o.Description} ({o.State}) -->");
+            }
+            sb.AppendLine(indent + GenerateWorldInfoComment());
+            return sb.ToString();
+        }
+
+        public static IEnumerable<TrinityObjectiveInfo> GetActiveObjectives() => GetObjectiveInfo().Where(o => o.State == QuestStepObjectiveElementState.InProgress);
+
+        public static List<TrinityObjectiveInfo> GetObjectiveInfo()
+        {
+            // Why you make things so difficult for me nesox?
+            var objectives = new List<TrinityObjectiveInfo>();
+            var logger = (log4net.Repository.Hierarchy.Logger)log4net.LogManager.GetLogger(typeof(QuestObjectiveInfo))?.Logger;
+            if (logger == null) return objectives;
+            var dbLogger = (log4net.Repository.Hierarchy.Logger)log4net.LogManager.GetLogger(typeof(Demonbuddy.MainWindow))?.Logger;
+            if (dbLogger == null) return objectives;
+            var asyncAppender = dbLogger.Parent.Appenders.ToArray().OfType<Zeta.Common.Logger.AsyncAppender>().FirstOrDefault();
+            var repository = (Hierarchy)LogManager.GetRepository();
+            repository.Root.RemoveAppender(asyncAppender);
+            var appender = new MemoryAppender();
+            logger.AddAppender(appender);
+            QuestObjectiveInfo.DumpObjectives();
+            objectives.AddRange(appender.GetEvents().Select(e => new TrinityObjectiveInfo(e.RenderedMessage)));
+            logger.RemoveAppender(appender);
+            repository.Root.AddAppender(asyncAppender);
+            return objectives;
+        }
+
+        public class TrinityObjectiveInfo
+        {
+            public TrinityObjectiveInfo(string input)
+            {
+                Description = new Regex("(?<=Description:\\W)[\\w\\s]+").Match(input).Value;
+                Enum.TryParse(new Regex("(?<=State:\\W)[\\w\\s]+").Match(input).Value, out State);
+                int.TryParse(new Regex("(?<=Index:\\W)[\\w\\s]+").Match(input).Value, out Index);
+            }
+
+            public QuestStepObjectiveElementState State;
+            public string Description;
+            public int Index;
+        }
+
+        public static string GenerateQuestInfoComment()
+        {
+            return $"<!-- {GenerateQuestInfo()} -->";
+        }
+
 
         public static string GenerateWorldInfoComment()
         {

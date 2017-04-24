@@ -15,5 +15,7 @@
         ExitStone = 218394,
         QuestPortalForward = 81058,
         QuestPortalBack = 102321,
+        QuestSceneEntrance = 102320,
     }
 }
+

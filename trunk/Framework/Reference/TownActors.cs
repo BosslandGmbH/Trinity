@@ -1213,21 +1213,24 @@ namespace Trinity.Framework.Reference
             LevelAreaId = 168314
         };
 
-        public static TownActor A2Blacksmith = new TownActor
-        {
-            Name = "PT_Blacksmith",
-            InternalName = "PT_Blacksmith",
-            Act = Act.A2,
-            ActorId = 56947,
-            InteractPosition = new Vector3(274.3154f, 217.5824f, 0.1f),
-            Position = new Vector3(269f, 218f, 0.0341768f),
-            IsAdventurerMode = true,
-            ServiceType = ServiceType.Repair,
-            IsGizmo = false,
-            IsUnit = true,
-            WorldSnoId = 161472,
-            LevelAreaId = 168314
-        };
+        /// <summary>
+        /// Smith does not allow repair in campaign mode has dialog options
+        /// </summary>
+        //public static TownActor A2Blacksmith = new TownActor
+        //{
+        //    Name = "PT_Blacksmith",
+        //    InternalName = "PT_Blacksmith",
+        //    Act = Act.A2,
+        //    ActorId = 56947,
+        //    InteractPosition = new Vector3(274.3154f, 217.5824f, 0.1f),
+        //    Position = new Vector3(269f, 218f, 0.0341768f),
+        //    IsAdventurerMode = true,
+        //    ServiceType = ServiceType.Repair,
+        //    IsGizmo = false,
+        //    IsUnit = true,
+        //    WorldSnoId = 161472,
+        //    LevelAreaId = 168314
+        //};
 
         public static TownActor A2BlacksmithForgeArmor = new TownActor
         {

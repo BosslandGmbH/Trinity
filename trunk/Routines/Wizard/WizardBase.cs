@@ -600,7 +600,7 @@ namespace Trinity.Routines.Wizard
             => new TrinityPower(Skills.Wizard.ArcaneTorrent, 70f, target.Position, 25, 50);
 
         protected virtual TrinityPower Disintegrate(TrinityActor target)
-            => new TrinityPower(Skills.Wizard.Disintegrate, 70f, target.AcdId, 75, 75);
+            => new TrinityPower(Skills.Wizard.Disintegrate, 50f, target.AcdId, 75, 75);
 
         // Force
 
@@ -668,7 +668,7 @@ namespace Trinity.Routines.Wizard
         // Archon
 
         protected virtual TrinityPower ArchonDisintegrationWave(TrinityActor target)
-            => new TrinityPower(Skills.Wizard.ArchonDisintegrationWave, 50f, target.AcdId, 25, 25);
+            => new TrinityPower(Skills.Wizard.ArchonDisintegrationWave, 47f, target.AcdId, 25, 25);
 
         protected virtual TrinityPower ArchonBlast()
             => new TrinityPower(Skills.Wizard.ArchonBlast);
@@ -703,7 +703,7 @@ namespace Trinity.Routines.Wizard
             => Runes.Wizard.SleetStorm.IsActive ? 20f : 60f;
 
         public static float DisintegrateRange
-            => Runes.Wizard.Entropy.IsActive ? 15f : 70f;
+            => Runes.Wizard.Entropy.IsActive ? 15f : 50f;
 
         public static bool CanTeleport
             => Skills.Wizard.Teleport.CanCast() || Skills.Wizard.ArchonTeleport.CanCast();

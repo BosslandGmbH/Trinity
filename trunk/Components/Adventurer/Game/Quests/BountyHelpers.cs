@@ -96,9 +96,19 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return marker?.Position ?? Vector3.Zero;
         }
 
+        public static TrinityMarker ScanForMarker(Vector3 markerPosition, int searchRadius = 5)
+        {
+            return Core.Markers.Where(m => m.Position.Distance2D(markerPosition) <= searchRadius).OrderBy(m => m.MarkerType == WorldMarkerType.Objective).FirstOrDefault();
+        }
+
         public static TrinityMarker ScanForMarker(int markerNameHash, int searchRadius)
         {
             return Core.Markers.FirstOrDefault(m => m.NameHash == markerNameHash && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
+        }
+
+        public static TrinityMarker ScanForMarker(int markerNameHash, WorldMarkerType type, int searchRadius)
+        {
+            return Core.Markers.Where(m => m.NameHash == markerNameHash && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash)).OrderByDescending(a => a.MarkerType == type).FirstOrDefault();
         }
 
         public static TrinityMarker ScanForMarker(WorldMarkerType type, int searchRadius)
@@ -126,7 +136,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return Vector3.Zero;
         }
 
-        public static Vector3 ScanForActorLocation(int actorId, int searchRadius, Vector3 origin = default(Vector3), Func<TrinityActor,bool> func = null )
+        public static Vector3 ScanForActorLocation(int actorId, int searchRadius, Vector3 origin = default(Vector3), Func<TrinityActor, bool> func = null)
         {
             origin = origin != Vector3.Zero ? origin : Core.Player.Position;
             var actor = Core.Actors.Where(a => a.ActorSnoId == actorId && a.Position.Distance(origin) <= searchRadius && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
@@ -146,6 +156,11 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return Core.Actors.Where(a => a.Position.Distance(marker.Position) < radius && !a.IsMe && !a.IsExcludedId && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
         }
 
+        public static TrinityMarker GetMarkerNearActor(TrinityActor actor)
+        {
+            return ScanForMarker(actor.Position);
+        }
+
         public static Vector3 ScanForActorLocation(string internalName, int searchRadius)
         {
             return ScanForActor(internalName, searchRadius)?.Position ?? Vector3.Zero;
@@ -155,7 +170,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
         {
             return Core.Actors.Where(a => a.ActorSnoId == actorSnoId && a.Distance <= searchRadius && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();
         }
-        
+
         public static TrinityActor ScanForActor(string internalName, int searchRadius = 500, Func<TrinityActor, bool> func = null)
         {
             return Core.Actors.Where(a => a.Distance <= searchRadius && a.InternalNameLowerCase.Contains(internalName.ToLowerInvariant()) && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();

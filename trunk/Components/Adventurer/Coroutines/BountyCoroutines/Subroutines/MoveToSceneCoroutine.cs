@@ -40,6 +40,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private WorldScene _scene;
         private States _state;
         private bool _zergEnabled;
+        private int _failureCount;
 
         public MoveToSceneCoroutine(int questId, int worldId, int sceneSnoId, bool zergSafe = false, bool explore = true)
         {
@@ -109,6 +110,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _state = States.NotStarted;
             _objectiveScanRange = 5000;
             _objectiveLocation = Vector3.Zero;
+            _failureCount = 0;
         }
 
         public void DisablePulse()
@@ -157,14 +159,14 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             if (await NavigationCoroutine.MoveTo(_objectiveLocation, 10))
             {
-                if (AdvDia.MyPosition.Distance(_objectiveLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
+                if (AdvDia.MyPosition.Distance(_objectiveLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure && _failureCount < 10)
                 {
+                    _failureCount++;
                     _previouslyFoundLocation = _objectiveLocation;
                     _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
                     _objectiveLocation = Vector3.Zero;
-                    _objectiveScanRange = ActorFinder.LowerSearchRadius(_objectiveScanRange);
-                    if (_objectiveScanRange <= 0)
-                        _objectiveScanRange = 50;
+                    _objectiveScanRange = Math.Max(ActorFinder.LowerSearchRadius(_objectiveScanRange),250);
+                    Core.Logger.Log("Search Radius changed to  {_objectiveScanRange}");
                     State = States.Searching;
                     return false;
                 }
@@ -202,16 +204,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _lastScanTime = PluginTime.CurrentMillisecond;
                 if (!string.IsNullOrEmpty(SceneName))
                 {
-                    _scene = Core.Scenes.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name.Contains(SceneName) || s.HasChild && s.SubScene.Name.Contains(SceneName));
-                    if (_scene != null)
-                    {
-                        var centerNode =
-                            _scene.Nodes.Where(n => n.HasEnoughNavigableCells)
-                                .OrderBy(n => n.Center.DistanceSqr(_scene.Center))
-                                .FirstOrDefault();
-                        if (centerNode != null)
-                            _objectiveLocation = centerNode.NavigableCenter;
-                    }
+                    _scene = Core.Scenes.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name.ToLowerInvariant().Contains(SceneName.ToLowerInvariant()) || s.HasChild && s.SubScene.Name.ToLowerInvariant().Contains(SceneName.ToLowerInvariant()));
+                    var centerNode =
+                        _scene?.Nodes.Where(n => n.HasEnoughNavigableCells)
+                            .OrderBy(n => n.Center.DistanceSqr(_scene.Center))
+                            .FirstOrDefault();
+                    if (centerNode != null)
+                        _objectiveLocation = centerNode.NavigableCenter;
                 }
                 if (_objectiveLocation != Vector3.Zero && PluginTime.ReadyToUse(_lastObjectiveFoundTime, 20000))
                 {

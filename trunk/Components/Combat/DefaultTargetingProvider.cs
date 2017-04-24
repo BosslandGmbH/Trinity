@@ -274,6 +274,7 @@ namespace Trinity.Components.Combat
 
                 case TrinityObjectType.Destructible:
                 case TrinityObjectType.Barricade:
+                    Core.PlayerMover.MoveTowards(target.Position);
                     return routine.GetDestructiblePower();
             }
 
@@ -404,13 +405,14 @@ namespace Trinity.Components.Combat
                 return true;
 
             var objectRange = Math.Max(2f, target.RequiredRadiusDistance);
+
             var spellRange = CurrentPower != null ? Math.Max(2f, CurrentPower.MinimumRange) : objectRange;
 
-            var targetRangeRequired = target.IsHostile || target.IsDestroyable ? Math.Max(spellRange, objectRange) : objectRange;
-            var targetRadiusDistance = target.RadiusDistance;
+            var targetRangeRequired = target.IsHostile || target.IsDestroyable ? spellRange : objectRange;
 
-            Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={TrinityCombat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{targetRadiusDistance}");
-            return targetRadiusDistance <= targetRangeRequired && IsInLineOfSight(target);
+            Core.Logger.Verbose(LogCategory.Targetting, $">> CurrentPower={TrinityCombat.Targeting.CurrentPower} CurrentTarget={target} RangeReq:{targetRangeRequired} RadDist:{target.RadiusDistance}");
+
+            return target.RadiusDistance <= targetRangeRequired && IsInLineOfSight(target);
         }
 
         public bool IsInRange(Vector3 position, TrinityPower power)
@@ -448,14 +450,14 @@ namespace Trinity.Components.Combat
             if (GameData.LineOfSightWhitelist.Contains(currentTarget.ActorSnoId))
                 return true;
 
-            if (currentTarget.RadiusDistance <= 2f)
+            if (currentTarget.RadiusDistance <= 1f)
                 return true;
 
             var requiresRayWalk = Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk;
             if (!requiresRayWalk && currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(5) && currentTarget.IsInLineOfSight)
                 return true;
 
-            return currentTarget.IsWalkable;
+            return Core.Grids.Avoidance.CanRayWalk(currentTarget, 15f);
         }
 
         private bool IsInLineOfSight(Vector3 position)
@@ -464,7 +466,7 @@ namespace Trinity.Components.Combat
 
             if (longTargetTime || Core.BlockedCheck.IsBlocked || Core.StuckHandler.IsStuck || Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk)
             {
-                return Core.Grids.Avoidance.CanRayWalk(Core.Player.Position, position);
+                return Core.Grids.Avoidance.CanRayWalk(Core.Player.Position, position, 15f);
             }
 
             return Core.Grids.Avoidance.CanRayCast(Core.Player.Position, position);

@@ -204,6 +204,9 @@ namespace Trinity.Components.Coroutines
 
         private static async Task<bool> Interact(DiaObject actor)
         {
+            if (!actor.IsFullyValid())
+                return false;
+
             bool retVal = false;
             switch (actor.ActorType)
             {

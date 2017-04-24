@@ -59,7 +59,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
         }
 
-        public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000, bool isExploreAllowed = true, Func<TrinityActor,bool> actorSelector = null)
+        public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000, 
+            bool isExploreAllowed = true, Func<TrinityActor,bool> actorSelector = null, float stopDistance = -1)
         {
             _questId = questId;
             _worldId = worldId;
@@ -67,6 +68,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _objectiveScanRange = maxRange;
             _isExploreAllowed = isExploreAllowed;
             _actorSelector = actorSelector;
+            _stopDistance = stopDistance;
         }
 
         public async Task<bool> GetCoroutine()
@@ -121,6 +123,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 await ScanForObjective();
             }
+
             if (_objectiveLocation != Vector3.Zero)
             {
                 State = States.Moving;
@@ -144,8 +147,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Moving()
         {
-            // todo make this relative to actor's collision radius or bot might get stuck walking into it.
-            if (await NavigationCoroutine.MoveTo(_objectiveLocation, 15))
+            if (await NavigationCoroutine.MoveTo(_objectiveLocation, Math.Max(5,(int)_stopDistance)))
             {
                 if (AdvDia.MyPosition.Distance(_objectiveLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
                 {
@@ -181,6 +183,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private long _lastScanTime;
         private BountyData _bountyData;
         private Func<TrinityActor, bool> _actorSelector;
+        private float _stopDistance;
 
         private async Task<bool> ScanForObjective()
         {
@@ -189,15 +192,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _lastScanTime = PluginTime.CurrentMillisecond;
                 if (_actorId != 0)
                 {
-                    _objectiveLocation = BountyHelpers.ScanForActorLocation(_actorId, _objectiveScanRange, AdvDia.MyPosition, _actorSelector);
+                    var objectiveActor = BountyHelpers.ScanForActor(_actorId, _objectiveScanRange, _actorSelector);
+                    _objectiveLocation = objectiveActor.Position;
+
+                    if (_stopDistance == -1)
+                        _stopDistance = objectiveActor.Radius;
                 }
                 if (_objectiveLocation != Vector3.Zero)
                 {
-                    using (new PerformanceLogger("[MoveToObject] Path to Objective Check", true))
-                    {
-                        Core.Logger.Log("[MoveToObject] Found the objective at distance {0}",
-                        AdvDia.MyPosition.Distance(_objectiveLocation));
-                    }
+                    Core.Logger.Log($"[MoveToObject] Found the objective at distance {AdvDia.MyPosition.Distance(_objectiveLocation)}");
                 }
             }
             return true;

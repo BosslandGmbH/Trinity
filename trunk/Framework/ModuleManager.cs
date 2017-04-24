@@ -155,7 +155,7 @@ namespace Trinity.Framework
                 var partyLocked = ZetaDia.Service.Party.CurrentPartyLockReasonFlags != PartyLockReasonFlag.None;
                 if (notInGame || partyLocked)
                 {
-                    Core.Logger.Log("Aborting Updates, not in game or party locked.");
+                    Core.Logger.Debug("Aborting Updates, not in game or party locked.");
                     return;
                 }
                 try
@@ -165,6 +165,7 @@ namespace Trinity.Framework
                 catch (Exception ex)
                 {
                     Core.Logger.Debug($"Action '{caller}' threw exception for module '{module.Name}'.");
+                    Core.Logger.Verbose($"{ex}");
                 }
             }
         }
