@@ -8,6 +8,7 @@ using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
+using Zeta.Bot;
 using Zeta.Bot.Profile.Composites;
 using Zeta.Common;
 using Zeta.Game;
@@ -63,7 +64,12 @@ namespace Trinity.Components.QuestTools
             {
                 try
                 {
+                    if (_isDone)
+                        return true;
 
+                    // Containers are never really started or run, 
+                    // but IsDone is called when execution is outside the container 
+                    // and every tick while a child tag is being executed. 
 
                     if (!Core.TrinityIsReady)
                     {
@@ -71,16 +77,20 @@ namespace Trinity.Components.QuestTools
                         return false;
                     }
 
-                    if (_isDone)
-                        return true;
-
                     if (!IsStarted)
                     {
+                        if (Body.All(t => t != ProfileManager.CurrentProfileBehavior))
+                            return false;
+
                         StartTime = DateTime.UtcNow;
                         IsStarted = true;
+
                         OnStart();
+
                         if (StartMethod())
                             Done();
+
+                        return false;
                     }
 
                     if (!IsActiveQuest || StepId != 0 && !IsActiveQuestStep)
@@ -125,8 +135,21 @@ namespace Trinity.Components.QuestTools
         }
 
         protected sealed override Composite CreateBehavior() => new Zeta.TreeSharp.Action();
-        public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
-        public sealed override void OnDone() { }
+        public sealed override void OnStart()
+        {
+            OnStartFired = true;
+            Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
+        }
+
+        public bool OnStartFired { get; set; }
+
+        public sealed override void OnDone()
+        {
+            if (IsStarted)
+            {
+                DoneMethod();
+            }
+        }
 
         public sealed override void ResetCachedDone() => Reset();
         public sealed override void ResetCachedDone(bool force = false) => Reset();
@@ -137,6 +160,7 @@ namespace Trinity.Components.QuestTools
             {
                 _isDone = false;
                 IsStarted = false;
+                OnStartFired = false;
                 this.ResetChildren();
                 StartTime = DateTime.MinValue;
                 EndTime = DateTime.MinValue;

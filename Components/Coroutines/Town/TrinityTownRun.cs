@@ -267,14 +267,14 @@ namespace Trinity.Components.Coroutines.Town
 
             if (Core.Player.WorldSnoId == 71150 && ZetaDia.CurrentQuest.QuestSnoId == 87700 && ZetaDia.CurrentQuest.StepId == -1)
             {
-                Core.Logger.Log("Can't townrun with the current quest (A1 New Game) !");
+                Core.Logger.Debug("Can't townrun with the current quest (A1 New Game) !");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(30);
                 return false;
             }
 
             if (GameData.BossLevelAreaIDs.Contains(Core.Player.LevelAreaId))
             {
-                Core.Logger.Log("Unable to Town Portal - Boss Area!");
+                Core.Logger.Debug("Unable to Town Portal - Boss Area!");
                 DontAttemptTownRunUntil = DateTime.UtcNow + TimeSpan.FromSeconds(10);
                 return false;
             }
@@ -375,30 +375,29 @@ namespace Trinity.Components.Coroutines.Town
             if (!ZetaDia.IsInTown)
                 return false;
 
-            var portal = TownInfo.ReturnPortal;
-            if (portal == null)
+            var portalRef = TownInfo.ReturnPortal;
+            var actor = portalRef?.GetActor();
+            if (actor == null || !actor.IsFullyValid())
             {
-                Core.Logger.Log("Couldn't find a return portal");
+                Core.Logger.Debug("Couldn't find a return portal");
                 return false;
             }
 
             Core.Logger.Log("Found a hearth portal, lets use it.");
 
-            if (!await MoveToAndInteract.Execute(portal, 2f, 10))
+            if (!await MoveToAndInteract.Execute(actor, 2f, 10))
             {
                 Core.Logger.Log("Failed to move to return portal :(");
                 return false;
             }
+     
+            Core.PlayerMover.MoveStop();
 
-            var actor = portal.GetActor();
-            if (actor != null)
+            if (actor.IsFullyValid() && !actor.Interact())
             {
-                if (!actor.Interact())
-                {
-                    Core.Logger.Log("Failed to interact with return portal.");
-                }
+                Core.Logger.Debug("Failed to interact with return portal.");
             }
-
+            
             await Coroutine.Sleep(1000);
 
             if (ZetaDia.IsInTown && !ZetaDia.Globals.IsLoadingWorld)

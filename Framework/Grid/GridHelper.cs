@@ -16,15 +16,14 @@ namespace Trinity.Framework.Grid
 
         public bool CanRayCast(Vector3 to)
         {
-            if (!Avoidance.IsPopulated)
-                return false;
-
+            if (!Avoidance.IsPopulated) return false;
             return Avoidance.CanRayCast(Core.Player.Position, to);
         }
 
-        public bool CanRayWalk(Vector3 @from, Vector3 to)
+        public bool CanRayWalk(Vector3 from, Vector3 to)
         {
-            return Avoidance.CanRayWalk(@from, to);
+            return Avoidance.CanRayWalk(from, to);
         }
+
     }
 }

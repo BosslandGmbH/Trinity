@@ -2,18 +2,16 @@
   <Name>Tag Test - Zerg</Name>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
   <Order>    
-    <LogMessage message=">> Zerg Test Started " />
+    <LogMessage message=">> Kill Test Started " />
 
-    <If condition="CurrentLevelAreaId != 19787">
+    <!--<If condition="CurrentLevelAreaId != 19787">
       <TakeWaypoint destinationLevelAreaSnoId="19787" />
-    </If>
+    </If>-->
 
-    <Zerg>
+    <Kill>
       <MoveToPosition x="739.68" y="576.44" z="0.53" sceneX="0" sceneY="0" sceneZ="0" sceneSnoId="0" sceneName="trDun_Crypt_NSEW_02"  worldSnoId="50585" levelAreaSnoId="19787" />
-    </Zerg>
+    </Kill>
 
-    <MoveToPosition x="1017" y="578" z="0"  />
-    
-    <LogMessage message=">> Zerg Test Finished " />       
+    <LogMessage message=">> Kill Test Finished " />       
   </Order>
 </Profile>

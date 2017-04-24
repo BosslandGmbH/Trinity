@@ -1,6 +1,7 @@
 using System;
 using Trinity.Framework;
 using System.Windows;
+using Trinity.Components.Combat;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Zeta.Bot;
@@ -31,7 +32,7 @@ namespace Trinity.Modules
             if (Core.Settings.Advanced.ShowHeroClass)
                 title += $"{Core.Player.ActorClass} ";
 
-            title += $@" - ""{ProfileName}""";
+            title += $@" - ""{ProfileName}"" - {TrinityCombat.CombatMode}";
 
             if (!string.IsNullOrEmpty(title))
                 Application.Current.Dispatcher.Invoke((Action)(()

@@ -54,14 +54,14 @@ namespace Trinity.Components.QuestTools
         {
             try
             {
+                if (_isDone)
+                    return true;
+
                 if (!Core.TrinityIsReady)
                 {
                     Core.Logger.Verbose("Waiting for Trinity to become ready");
                     return false;
                 }
-
-                if (_isDone)
-                    return true;
 
                 if (!IsStarted)
                 {
@@ -116,7 +116,7 @@ namespace Trinity.Components.QuestTools
         public sealed override void OnStart() => Core.Logger.Verbose($"Started Tag: {TagClassName}. {ToString()}");
         public sealed override void OnDone() => Core.Logger.Verbose($"Finished Tag: {TagClassName} in {EndTime.Subtract(StartTime).TotalSeconds:N2} seconds");
         public sealed override bool IsDone => _isDone;
-        public override bool IsDoneCache => _isDone;
+        public sealed override bool IsDoneCache => _isDone;
         public sealed override void ResetCachedDone() => Reset();
         public sealed override void ResetCachedDone(bool force = false) => Reset();
 

@@ -27,7 +27,7 @@ namespace Trinity.Framework.Helpers
         private static string _version;
         public static string Version
         {
-            get { return _version ?? (_version = System.Diagnostics.FileVersionInfo.GetVersionInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\DemonBuddy.exe").FileVersion); }
+            get { return _version ?? (_version = Assembly.GetEntryAssembly().GetName().Version.ToString()); }
             set { _version = value; }
         }
 

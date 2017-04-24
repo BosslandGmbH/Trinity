@@ -9,6 +9,7 @@ using Trinity.Framework.Reference;
 using Trinity.UI;
 using Zeta.Common;
 using Zeta.Game;
+using Zeta.Game.Internals.Actors;
 
 
 namespace Trinity.Routines.Barbarian
@@ -46,7 +47,7 @@ namespace Trinity.Routines.Barbarian
             if (TrySpecialPower(out power))
                 return power;
 
-            if (TrySecondaryPower(out power))
+            if (TrySecondaryPower(out power) && (power.SNOPower != SNOPower.Barbarian_GroundStomp || Skills.Barbarian.IgnorePain.CanCast()))
                 return power;
 
             // Zoom around
@@ -60,6 +61,11 @@ namespace Trinity.Routines.Barbarian
             }
 
             return null;
+        }
+
+        protected override bool ShouldGroundStomp(out Vector3 position)
+        {
+            return base.ShouldGroundStomp(out position) && Skills.Barbarian.IgnorePain.CanCast();
         }
 
         public TrinityPower GetDefensivePower() => GetBuffPower();

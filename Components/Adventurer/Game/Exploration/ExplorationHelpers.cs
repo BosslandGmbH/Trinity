@@ -142,6 +142,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public static void MarkNodesAsVisited(IEnumerable<string> sceneNames)
         {
+            if (sceneNames == null)
+                return;
+
             sceneNames = sceneNames.Select(s => s.ToLowerInvariant()).ToList();
             foreach (var scene in Core.Scenes)
             {

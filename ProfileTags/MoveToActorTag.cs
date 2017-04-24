@@ -75,7 +75,7 @@ namespace Trinity.ProfileTags
                 if (!actorFound)
                     return true;
                 
-                _movementTask = new MoveToActorCoroutine(QuestId, AdvDia.CurrentWorldId, ActorId, (int)MaxRange, Explore, CheckActorAnimation);
+                _movementTask = new MoveToActorCoroutine(QuestId, AdvDia.CurrentWorldId, ActorId, (int)MaxRange, Explore, CheckActorAnimation, StopDistance);
             }
 
             _endAnimLower = EndAnimation?.ToLowerInvariant() ?? string.Empty;
@@ -97,7 +97,7 @@ namespace Trinity.ProfileTags
             }
             else if (ActorId == 0 && MarkerHash != 0)
             {
-                actor = BountyHelpers.GetActorNearMarker(MarkerHash, 5f, CheckActorAnimation);
+                actor = BountyHelpers.GetActorNearMarker(MarkerHash, 10f, CheckActorAnimation);
             }
 
             if (actor == null)

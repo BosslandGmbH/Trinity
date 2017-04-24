@@ -46,6 +46,7 @@ namespace Trinity.Framework
         public static WorldCache World { get; } = new WorldCache();
         public static Clusters Clusters { get; } = new Clusters();
         public static RiftProgression Rift { get; } = new RiftProgression();
+        public static NavigatorUpdater NavUpdater { get; } = new NavigatorUpdater();
         public static GridEnricher GridEnricher { get; } = new GridEnricher();
         public static LazyRaider LazyRaider { get; } = new LazyRaider();
         public static Performance Performance { get; } = new Performance();

@@ -15,6 +15,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
         private bool _isDone;
         private States _state;
         private DateTime _startTime;
+        private bool _straightLinePathing;
 
         #region State
 
@@ -47,12 +48,13 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
             get { return _isDone || AdvDia.CurrentWorldId != _worldId; }
         }
 
-        public MoveToPositionCoroutine(int worldId, Vector3 position, int distance = 1)
+        public MoveToPositionCoroutine(int worldId, Vector3 position, int distance = 1, bool forceStraightLinePathing = false)
         {
             _startTime = DateTime.UtcNow;
             _distance = distance;
             _worldId = worldId;
             _position = position;
+            _straightLinePathing = forceStraightLinePathing;
         }
 
         public async Task<bool> GetCoroutine()
@@ -99,7 +101,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 
         private async Task<bool> Moving()
         {
-            if (!await NavigationCoroutine.MoveTo(_position, _distance))
+            if (!await NavigationCoroutine.MoveTo(_position, _distance, _straightLinePathing))
             {
                 return false;
             }
@@ -136,6 +138,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
 
         private bool Failed()
         {
+            Core.PlayerMover.MoveTowards(_position);
             _isDone = true;
             return true;
         }

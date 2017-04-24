@@ -278,6 +278,7 @@
     <Compile Include="Framework\Avoidance\AvoidanceManager.cs" />
     <Compile Include="Framework\Avoidance\AvoidanceType.cs" />
     <Compile Include="Framework\Avoidance\DefaultAvoider.cs" />
+    <Compile Include="Modules\NavigatorUpdater.cs" />
     <Compile Include="Modules\GameCleaner.cs" />
     <Compile Include="Modules\RoutineSelector.cs" />
     <Compile Include="Modules\SceneStorage.cs" />
@@ -684,13 +685,6 @@
     <Content Include="Profiles\ExploreCowLevel.xml" />
     <Content Include="Profiles\ExploreGoblinRealm.xml" />
     <Content Include="Profiles\GreaterRift.xml" />
-    <Content Include="Profiles\InDevelopment\Story_A1.xml">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Profiles\InDevelopment\Story_A2.xml" />
-    <Content Include="Profiles\InDevelopment\Story_A3.xml" />
-    <Content Include="Profiles\InDevelopment\Story_A4.xml" />
-    <Content Include="Profiles\InDevelopment\Story_A5.xml" />
     <Content Include="Profiles\Keywardens.xml" />
     <Content Include="Profiles\NephalemRift.xml" />
     <Content Include="Profiles\NerdersGoblinFarmQuickRoutes.xml">
@@ -701,7 +695,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Profiles\Questing\Act1_StartNew.xml" />
-    <Content Include="Profiles\Questing\Act2.xml" />
+    <Content Include="Profiles\Questing\Act2.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Questing\Act2_StartNew.xml" />
     <Content Include="Profiles\Questing\Act3.xml" />
     <Content Include="Profiles\Questing\Act3_StartNew.xml" />
@@ -715,6 +711,7 @@
     <Content Include="ProfileTags\Tests\Explore.xml" />
     <Content Include="ProfileTags\Tests\Interact.xml" />
     <Content Include="ProfileTags\Tests\Keywardens.xml" />
+    <Content Include="ProfileTags\Tests\Kill.xml" />
     <Content Include="ProfileTags\Tests\LoadLastProfile.xml" />
     <Content Include="ProfileTags\Tests\LoadLastProfileSub.xml" />
     <Content Include="ProfileTags\Tests\ClearLevelArea.xml" />
@@ -969,7 +966,9 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Profiles\InDevelopment\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
     <VisualStudio AllowExistingFolder="true" />

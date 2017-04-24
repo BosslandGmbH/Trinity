@@ -16,6 +16,7 @@ namespace Trinity.Components.QuestTools
     /// <summary>
     /// Interface to expose Internal/Protected members in ProfileBehavior
     /// Enables running independently of treesharp start/stop/update
+    /// Specifically for BotBehaviorQueue/WhenTag
     /// </summary>
     public interface IEnhancedProfileBehavior
     {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Components.Combat;
 using Trinity.DbProvider;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Avoidance;
@@ -90,6 +91,29 @@ namespace Trinity.Framework.Grid
             if (!IsValidGridWorldPosition(playerPosition) || !IsValidGridWorldPosition(targetPosition)) return false;
             return GetRayLine(playerPosition, targetPosition).Select(point => InnerGrid[point.X, point.Y]).All(node => node != null && node.NodeFlags.HasFlag(NodeFlags.AllowWalk));
         }
+
+        public bool CanRayWalk(TrinityActor targetActor, float radiusDegrees)
+        {
+            return CanRayWalk(Core.Player.Position, targetActor.Position, radiusDegrees);
+        }
+
+        public bool CanRayWalk(Vector3 from, Vector3 to,  float radiusDegrees)
+        {
+            var radiusRadians = MathEx.ToRadians(radiusDegrees);
+            var angleTo = (float)MathUtil.FindDirectionRadian(from, to);
+            var losAngleA = MathEx.WrapAngle(angleTo - radiusRadians);
+            var losPositionA = MathEx.GetPointAt(from, TrinityCombat.Targeting.CurrentTarget.Distance, losAngleA);
+            if (!CanRayWalk(from, losPositionA))
+                return false;
+
+            var losAngleB = MathEx.WrapAngle(angleTo + radiusRadians);
+            var losPositionB = MathEx.GetPointAt(from, TrinityCombat.Targeting.CurrentTarget.Distance, losAngleB);
+            if (!CanRayWalk(from, losPositionB))
+                return false;
+
+            return CanRayWalk(from, losPositionB);
+        }
+
 
         public bool UnsafeCanRayWalk(TrinityActor targetActor)
         {

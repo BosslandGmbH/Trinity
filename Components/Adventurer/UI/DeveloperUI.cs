@@ -1350,15 +1350,12 @@ namespace Trinity.Components.Adventurer.UI
                 {
                     Core.Scenes.Update();
                     Core.Update();
+                    Core.Logger.Log(ProfileTagLogger.GenerateTagComment() + 
+     $@"<If condition=""IsActiveQuest({ZetaDia.CurrentQuest.QuestSnoId}) and IsActiveQuestStep({ZetaDia.CurrentQuest.StepId}) and CurrentWorldId == {ZetaDia.Globals.WorldSnoId}"">
+            <LogMessage output=""{ProfileTagLogger.GenerateQuestInfo() + " " + ProfileTagLogger.GetActiveObjectives()?.FirstOrDefault()?.Description}"" />
 
-                    Core.Logger.Raw($@"
-
-        {ProfileTagLogger.GenerateQuestInfoComment()}
-        {ProfileTagLogger.GenerateWorldInfoComment()}
-        <If condition=""IsActiveQuest({ZetaDia.CurrentQuest.QuestSnoId}) and IsActiveQuestStep({ZetaDia.CurrentQuest.StepId}) and CurrentWorldId == {ZetaDia.Globals.WorldSnoId}"">
-
-        </If>
-                    ");
+        </If>");
+                 
                 }
             }
             catch (Exception ex)
