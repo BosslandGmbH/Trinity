@@ -590,7 +590,7 @@
           <WaitTimer questId="80322" stepId="91" waitTime="1000" />
 
           <!-- g_Portal_Rectangle_Orange-8393 (175482) g_Portal_Rectangle_Orange Distance=4.000553 Type=Portal Anim=0 -->
-          <Interact questId="80322" stepId="58" interactAttempts="2" ignoreSanityChecks="true" delay="2"
+          <Interact questId="80322" stepId="91" interactAttempts="2" ignoreSanityChecks="true" delay="2"
                     actorId="175482" markerHash="0" explore="false" maxRange="300" startAnimation="" x="145.46"
                     y="235.47" z="3.23" sceneX="145.46" sceneY="235.47" sceneZ="3.23" sceneSnoId="2846"
                     sceneName="caOut_Interior_F_x01_y01" distance="5" worldSnoId="51270" levelAreaSnoId="102936" />
