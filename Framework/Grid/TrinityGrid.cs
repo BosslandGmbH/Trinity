@@ -101,13 +101,15 @@ namespace Trinity.Framework.Grid
         {
             var radiusRadians = MathEx.ToRadians(radiusDegrees);
             var angleTo = (float)MathUtil.FindDirectionRadian(from, to);
+            var dist = from.Distance(to);
+
             var losAngleA = MathEx.WrapAngle(angleTo - radiusRadians);
-            var losPositionA = MathEx.GetPointAt(from, TrinityCombat.Targeting.CurrentTarget.Distance, losAngleA);
+            var losPositionA = MathEx.GetPointAt(from, dist, losAngleA);
             if (!CanRayWalk(from, losPositionA))
                 return false;
 
             var losAngleB = MathEx.WrapAngle(angleTo + radiusRadians);
-            var losPositionB = MathEx.GetPointAt(from, TrinityCombat.Targeting.CurrentTarget.Distance, losAngleB);
+            var losPositionB = MathEx.GetPointAt(from, dist, losAngleB);
             if (!CanRayWalk(from, losPositionB))
                 return false;
 

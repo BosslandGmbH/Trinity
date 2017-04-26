@@ -139,6 +139,7 @@
     <Compile Include="Components\Adventurer\Game\Exploration\SceneData.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\SceneExitDirections.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\SceneMapping\CombineType.cs" />
+    <Compile Include="Components\Adventurer\Game\Exploration\SceneMapping\SceneData.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\SceneMapping\DeathGates.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\SceneMapping\DeathGateScene.cs" />
     <Compile Include="Components\Adventurer\Game\Exploration\SceneMapping\DeathGateType.cs" />
@@ -450,6 +451,8 @@
     <Compile Include="ProfileTags\WhenTag.cs" />
     <Compile Include="ProfileTags\KillTag.cs" />
     <Compile Include="ProfileTags\ZergTag.cs" />
+    <Compile Include="Routines\DemonHunter\DemonHunterShadowImpale.cs" />
+    <Compile Include="Routines\Wizard\WizardParalysisArchonBlizzard.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonHydra.cs" />
     <Compile Include="Settings\ItemList\ItemListEvaluator.cs" />
     <Compile Include="Components\Coroutines\ItemSort.cs" />
@@ -675,6 +678,7 @@
     <Content Include="Profiles\Bounties.xml" />
     <Content Include="Profiles\BrutalWhiteFarm.xml" />
     <Content Include="Profiles\Debug\BelialBounty.xml" />
+    <Content Include="Profiles\Debug\Explore.xml" />
     <Content Include="Profiles\Debug\TagIssue.xml" />
     <Content Include="Profiles\Debug\Bosses.xml" />
     <Content Include="Profiles\Debug\MalthaelBounty.xml" />
@@ -814,6 +818,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Routines\DemonHunter\DemonHunterShadowImpaleSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Routines\DemonHunter\DemonHunterUnhallowedGrenadeSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -885,6 +892,9 @@
     <Page Include="Routines\Wizard\WizardFlashFireSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Wizard\WizardParalysisArchonBlizzardSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Routines\Wizard\WizardParalysisArchonHydraSettings.xaml">
       <Generator>MSBuild:Compile</Generator>

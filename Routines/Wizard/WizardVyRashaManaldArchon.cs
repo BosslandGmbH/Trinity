@@ -26,7 +26,7 @@ namespace Trinity.Routines.Wizard
         public string DisplayName => "VyRasha Manald Archon GR Build";
         public string Description => "This RANGED build uses Tal Rasha's damage buff along with Manald Heal and Archon to produce massive DPS. It is designed to stay at range to benefit from ranged gear/gems/passives. \n     Cooldown Reduction:  Required in every slot except amulet. Diamond in Helm. \n     Attack Speed:  Get as many 7% rolls as you can, up to 4. CDR > Attack Speed!  \n     Lightning Damage:  Only get it on Bracers, damage percent does not matter. \n         It changes Archon to lightning, Manald Heal does not benefit!";
         public string Author => "TwoCigars";
-        public string Version => "2.4";
+        public string Version => "2.4.2a";
         public string Url => "Guide http://www.icy-veins.com/d3/wizard-manald-archon-build-patch-2-4-3-season-9 \n\n D3Planner http://www.d3planner.com/599182396 \n\n Manald Info: https://us.battle.net/forums/en/d3/topic/20752649109";
         public Build BuildRequirements => new Build
         {
@@ -49,7 +49,7 @@ namespace Trinity.Routines.Wizard
             },
         };
 
-       
+
         public override Func<bool> ShouldIgnoreAvoidance => () => true;
         public override Func<bool> ShouldIgnoreKiting => () => true;
         //public static int BlizzardAPCost => Runes.Wizard.Snowbound.IsActive ? 10 : 40;
@@ -59,12 +59,19 @@ namespace Trinity.Routines.Wizard
 
         public TrinityPower GetOffensivePower()
         {
-            TrinityPower power;
             TrinityActor target;
             Vector3 position = Vector3.Zero;
 
-            if (ShouldArchon())
+            /*if (ShouldArchon())
+                return Archon();*/
+
+            #region Archon_Seq
+            if (Skills.Wizard.Archon.CanCast() && (TalRashaStacks >= 3 || TalRashaStacks >= 2))
+            {
+                Core.Logger.Log(LogCategory.Spells, $"Archon conditions met (TalRasha {TalRashaStacks} stacks!)");
                 return Archon();
+            }
+            #endregion
 
             if (ShouldCancelArchon())
             {
@@ -136,7 +143,7 @@ namespace Trinity.Routines.Wizard
 
             return null;
         }
-        public TrinityPower GetMovementPower(Vector3 destination)
+        /*public TrinityPower GetMovementPower(Vector3 destination)
         {
 
             if (IsInCombat && CurrentTarget.IsElite && destination.Distance(CurrentTarget.Position) < 50f)
@@ -170,7 +177,21 @@ namespace Trinity.Routines.Wizard
 
             return Walk(destination);
 
+        }*/
+
+        #region MovementPower_Seq
+        public TrinityPower GetMovementPower(Vector3 destination)
+        {
+            if (CanTeleportTo(destination) && destination.Distance(Core.Player.Position) > 15)
+            {
+                Core.Logger.Log(LogCategory.Movement, $"Moving method <Coord:{destination}>, Reason: Movement");
+                return Teleport(destination);
+            }
+
+            return Walk(destination);
         }
+        #endregion
+
 
 
 
@@ -236,7 +257,7 @@ namespace Trinity.Routines.Wizard
             {
                 if (anyElitesinRange || anyMobsInRange || healthIsLow || affixOnPlayer)
                     Core.Logger.Log(LogCategory.Routine, $"Close Elites: {anyElitesinRange}, Mobs: {anyMobsInRange}, Health: {healthIsLow}, Affix: {affixOnPlayer}");
-                    return true;
+                return true;
             }
 
             Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance, ZetaDia.Me.Position, node => !HostileMonsters.Any(m => m.Position.Distance(node.NavigableCenter) < 15f));
@@ -281,7 +302,7 @@ namespace Trinity.Routines.Wizard
                     return true;
                 }
 
-                if(Skills.Wizard.Archon.TimeSinceUse > 19500)
+                if (Skills.Wizard.Archon.TimeSinceUse > 19500)
                 {
                     //Core.Logger.Log($"Teleport! Archon is about to drop!!!");
                     Avoider.TryGetSafeSpot(out position, Settings.TeleportKiteMinDistance, Settings.TeleportKiteMaxDistance, ZetaDia.Me.Position, node => !HostileMonsters.Any(m => m.Position.Distance(node.NavigableCenter) < 15f));

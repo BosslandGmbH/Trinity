@@ -1295,24 +1295,35 @@
         <!-- g_Portal_Square_Orange-16516 (176008) g_Portal_Square_Orange Distance=33.78579 Type=Portal Anim=0 Marker=Crypt of the Ancients (976523526, Exit) -->
         <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526"  actorId="176008" />
       </If>
-      <!-- Crypt of the Ancients 976523526 Exit Distance=255.9992 TextureId=102320 WorldSnoId=1999503360 -->
-      <MoveToMapMarker questId="72738" stepId="12" markerHash="976523526" markerName="Crypt of the Ancients" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
-      <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
-        <MoveToScene questId="72738" stepId="12" sceneSnoId="80370" sceneName="trOut_FesteringWoods_Sub120_NephalemEntranceB" zerg="false"  worldSnoId="71150" levelAreaSnoId="19953" />
-        <Wait seconds="4" />
-        <!-- g_Portal_Square_Orange-16516 (176008) g_Portal_Square_Orange Distance=33.78579 Type=Portal Anim=0 Marker=Crypt of the Ancients (976523526, Exit) -->
-        <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
-      </If>
-      <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
-        <Explore stopCondition="ActorExistsNearMe(176008, 150)">
-          <IgnoreScenes>
-            <Scene name="edge"></Scene>
-            <Scene name="exit"></Scene>
-          </IgnoreScenes>
-        </Explore>
-        <!-- g_Portal_Square_Orange-16516 (176008) g_Portal_Square_Orange Distance=33.78579 Type=Portal Anim=0 Marker=Crypt of the Ancients (976523526, Exit) -->
-        <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526"  actorId="176008" />
-      </If>
+
+      <MoveToPosition questId="72738" stepId="12" x="656.92" y="772.56" z="20.1" sceneX="56.92" sceneY="52.56" sceneZ="20.1" sceneSnoId="81159" sceneName="trOut_FesteringWoods_Sub120_Generic_02" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+
+      <MoveToPosition questId="72738" stepId="12" x="538.11" y="907.56" z="20.1" sceneX="58.11" sceneY="67.56" sceneZ="20.1" sceneSnoId="82684" sceneName="trOut_FesteringWoods_Sub120_Generic_04" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+
+      <MoveToPosition questId="72738" stepId="12" x="418.09" y="901.99" z="20.1" sceneX="58.09" sceneY="61.99" sceneZ="20.1" sceneSnoId="82684" sceneName="trOut_FesteringWoods_Sub120_Generic_04" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+
+      <MoveToPosition questId="72738" stepId="12" x="331.39" y="883.9" z="20.26" sceneX="91.39" sceneY="43.9" sceneZ="20.26" sceneSnoId="80370" sceneName="trOut_FesteringWoods_Sub120_NephalemEntranceB" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+      
+      <MoveToPosition questId="72738" stepId="12" x="418.88" y="783.74" z="21.38" sceneX="58.88" sceneY="63.74" sceneZ="21.38" sceneSnoId="162684" sceneName="trOut_FesteringWoods_Sub120_Waypoint" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+
+      <MoveToPosition questId="72738" stepId="12" x="556.12" y="677.91" z="20.1" sceneX="76.12" sceneY="77.91" sceneZ="20.1" sceneSnoId="81152" sceneName="trOut_FesteringWoods_Sub120_Generic_01" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+
+      <MoveToPosition questId="72738" stepId="12" x="399.31" y="672.7" z="15.85" sceneX="39.31" sceneY="72.7" sceneZ="15.85" sceneSnoId="80042" sceneName="trOut_FesteringWoods_Sub120_NephalemEntranceA" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+
+      <MoveToPosition questId="72738" stepId="12" x="291.59" y="663.73" z="20.1" sceneX="51.59" sceneY="63.73" sceneZ="20.1" sceneSnoId="82684" sceneName="trOut_FesteringWoods_Sub120_Generic_04" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+
+      <MoveToPosition questId="72738" stepId="12" x="309.76" y="809.46" z="20.1" sceneX="69.76" sceneY="89.46" sceneZ="20.1" sceneSnoId="81152" sceneName="trOut_FesteringWoods_Sub120_Generic_01" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19953" />
+      <Interact questId="72738" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" markerHash="976523526" actorId="176008" />
+
+
     </If>
 
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 60394">

@@ -271,6 +271,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 Core.Logger.Debug("[EnterLevelAreaCoroutine] Navigation ended, extending scan radius to continue searching.");
 
+                NavigationCoroutine.Reset();
                 _previouslyFoundLocation = _objectiveLocation;
                 _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
                 _objectiveLocation = Vector3.Zero;

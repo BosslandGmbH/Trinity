@@ -22,8 +22,21 @@ namespace Trinity.Components.QuestTools
     {
         protected BaseContainerProfileBehavior()
         {
+            LoadDefaults();
             QuestId = QuestId <= 0 ? 1 : QuestId;
             TagClassName = GetType().Name;
+        }
+
+        public void LoadDefaults()
+        {
+            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(this))
+            {
+                var myAttribute = (DefaultValueAttribute)property.Attributes[typeof(DefaultValueAttribute)];
+                if (myAttribute != null)
+                {
+                    property.SetValue(this, myAttribute.Value);
+                }
+            }
         }
 
         public string TagClassName { get; set; }
@@ -79,7 +92,8 @@ namespace Trinity.Components.QuestTools
 
                     if (!IsStarted)
                     {
-                        if (Body.All(t => t != ProfileManager.CurrentProfileBehavior))
+                        var currentTag = ProfileManager.CurrentProfileBehavior;
+                        if (currentTag != this && Body.All(t => currentTag != t))
                             return false;
 
                         StartTime = DateTime.UtcNow;

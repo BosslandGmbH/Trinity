@@ -47,7 +47,7 @@ namespace Trinity.ProfileTags
             if (await base.StartTask())
                 return true;
 
-            _interactTask = new InteractionCoroutine(ActorId, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(Delay), InteractAttempts, IgnoreSanityChecks, StartAnimation, EndAnimation);
+            _interactTask = new InteractionCoroutine(ActorId, TimeSpan.FromSeconds(30), TimeSpan.FromSeconds(Delay), InteractAttempts, IgnoreSanityChecks, StartAnimation, EndAnimation, MarkerHash);
             return false;
         }
 

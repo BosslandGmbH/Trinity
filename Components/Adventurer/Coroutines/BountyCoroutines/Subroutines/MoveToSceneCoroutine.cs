@@ -166,7 +166,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
                     _objectiveLocation = Vector3.Zero;
                     _objectiveScanRange = Math.Max(ActorFinder.LowerSearchRadius(_objectiveScanRange),250);
-                    Core.Logger.Log("Search Radius changed to  {_objectiveScanRange}");
+                    Core.Logger.Log($"Search Radius changed to  {_objectiveScanRange}");
                     State = States.Searching;
                     return false;
                 }

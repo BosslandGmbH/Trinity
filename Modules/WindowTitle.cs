@@ -21,6 +21,9 @@ namespace Trinity.Modules
 
         protected override void OnPulse()
         {
+            if (!BotMain.IsRunning)
+                return;
+
             var title = string.Empty;
 
             if (Core.Settings.Advanced.ShowBattleTag)
@@ -32,7 +35,7 @@ namespace Trinity.Modules
             if (Core.Settings.Advanced.ShowHeroClass)
                 title += $"{Core.Player.ActorClass} ";
 
-            title += $@" - ""{ProfileName}"" - {TrinityCombat.CombatMode}";
+            title += $@" - ""{ProfileName}"" - {TrinityCombat.CombatMode} Mode";
 
             if (!string.IsNullOrEmpty(title))
                 Application.Current.Dispatcher.Invoke((Action)(()

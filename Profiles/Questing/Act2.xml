@@ -358,7 +358,7 @@
       <!-- wait for Lacuni to spawn -->
       <WaitTimer questId="80322" stepId="52" waitTime="35000" />
     </If>
-    <If condition="IsActiveQuest(80322) and IsActiveQuestStep(102) and CurrentWorldId == 70885">
+    <If condition="IsActiveQuestAndStep(80322,102) and CurrentWorldId == 70885">
       <!-- Kill Lacuni -->
       <Kill>
         <SafeMoveTo questId="80322" stepId="102" name="Lacuni" pathPrecision="10" x="2728" y="1598" z="185" />
@@ -485,7 +485,7 @@
       </If>
 
       <!-- Inside Hidden Conclave -->
-      <If condition="IsActiveQuest(80322) and IsActiveQuestStep(91) and CurrentWorldId == 50657">
+      <If condition="IsActiveQuestAndStep(80322,91) and CurrentWorldId == 50657">
         <Kill>
           <SafeMoveTo questId="80322" stepId="91" name="Disrupt Ritual" pathPrecision="10" x="140" y="173" z="0" />
           <WaitTimer questId="80322" stepId="91" waitTime="1000" />
@@ -509,7 +509,7 @@
       </If>
 
       <!-- Inside Hidden Conclave -->
-      <If condition="IsActiveQuest(80322) and IsActiveQuestStep(58) and CurrentWorldId == 50657">
+      <If condition="IsActiveQuestAndStep(80322,58) and CurrentWorldId == 50657">
         <Kill>
           <Interact questId="80322" stepId="58" actorId="175482" isPortal="True" destinationWorldId="70885" x="228"
                     y="148" z="0" />
@@ -583,14 +583,14 @@
 
 
       <!-- Inside Secret Altar -->
-      <If condition="IsActiveQuest(80322) and IsActiveQuestStep(91) and CurrentWorldId == 51270">
+      <If condition="IsActiveQuestAndStep(80322,91) and CurrentWorldId == 51270">
         <Kill>
           <!--<SafeMoveTo questId="80322" stepId="91" name="Disrupt Ritual" pathPrecision="2" x="203" y="110" z="0"  />-->
           <ClearLevelArea />
           <WaitTimer questId="80322" stepId="91" waitTime="1000" />
 
           <!-- g_Portal_Rectangle_Orange-8393 (175482) g_Portal_Rectangle_Orange Distance=4.000553 Type=Portal Anim=0 -->
-          <Interact questId="80322" stepId="91" interactAttempts="2" ignoreSanityChecks="true" delay="2"
+          <Interact questId="80322" stepId="58" interactAttempts="2" ignoreSanityChecks="true" delay="2"
                     actorId="175482" markerHash="0" explore="false" maxRange="300" startAnimation="" x="145.46"
                     y="235.47" z="3.23" sceneX="145.46" sceneY="235.47" sceneZ="3.23" sceneSnoId="2846"
                     sceneName="caOut_Interior_F_x01_y01" distance="5" worldSnoId="51270" levelAreaSnoId="102936" />
@@ -608,12 +608,14 @@
       <!-- GoTo Black Canyon Bridge -->
       <SafeMoveTo questId="80322" stepId="58" name="Black Canyon Bridge" pathPrecision="10" x="2157" y="1052" z="170" />
       <WaitTimer questId="80322" stepId="58" waitTime="10000" />
+      <Interact questId="80322" stepId="58" actorId="85843" x="2157" y="1052" z="170" />
     </If>
 
     <If condition="IsActiveQuest(80322) and IsActiveQuestStep(117) and CurrentWorldId == 70885">
 
-      <WaitTimer questId="80322" stepId="58" waitTime="2000" />
+      <WaitTimer questId="80322" stepId="117" waitTime="2000" />
       <Interact questId="80322" stepId="117" actorId="85843" x="2157" y="1052" z="170" />
+      
       <!-- TalkTo Enchantress -->
       <WaitTimer questId="1" waitTime="5000" />
       <!-- click yes if you want enchantress, no if you don't -->
@@ -640,7 +642,7 @@
 [Objective] KhamsinGate_Completed, Type: EventReceived
 -->
 
-    <If condition="IsActiveQuest(93396) and IsActiveQuestStep(76) and CurrentWorldId == 70885">
+    <If condition="IsActiveQuestAndStep(93396,76) and CurrentWorldId == 70885">
       <LogMessage output="Quest: KhamsinGate: The Road to Alcarnus (93396) Type:MainQuest Step: CrossBridge (76)" />
       <!-- Road to Alcarnus -->
       <!-- We get a waypoint here -->
@@ -649,7 +651,7 @@
                   z="172" />
       <WaitTimer questId="93396" stepId="76" waitTime="1000" />
     </If>
-    <If condition="IsActiveQuest(93396) and IsActiveQuestStep(58) and CurrentWorldId == 70885">
+    <If condition="IsActiveQuestAndStep(93396,58) and CurrentWorldId == 70885">
       <SafeMoveTo questId="93396" stepId="58" name="Khasim Outpost" pathPrecision="10" x="1422" y="323" z="177" />
       <!-- Find Khasim Outpost Waypoint -->
       <SafeMoveTo questId="93396" stepId="58" name="Khasim Outpost" pathPrecision="10" x="1317" y="283" z="162" />
@@ -724,7 +726,7 @@
 			<WaitTimer questId="93396" stepId="30" waitTime="3000" statusText="Waiting for Davyd 2" /> 
 			-->
       <Interact questId="93396" stepId="30" actorId="185284" x="164" y="177" z="0" endAnimation="caOut_Cage_Open" />
-      <WaitTimer questId="93396" stepId="30" waitTime="7000" />
+      <WaitTimer questId="93396" stepId="30" waitTime="7000" />1
       <Interact questId="93396" stepId="30" actorId="185284" x="164" y="177" z="0" endAnimation="caOut_Cage_Open" />
       <WaitTimer questId="93396" stepId="30" waitTime="1000" />
       <Interact questId="93396" stepId="30" actorId="175482" isPortal="True" destinationWorldId="70885" x="161" y="83"
@@ -1209,7 +1211,7 @@
       <SafeMoveTo questId="78264" stepId="2" name="Snakemen" pathPrecision="10" x="215" y="244" z="-9" />
       <!-- Kill Snakemen -->
       <Kill>
-        <WaitTimer questId="78264" stepId="2" waitTime="125000" />
+        <WaitTimer questId="78264" stepId="2" waitTime="10000" />
       </Kill>
     </If>
     <If condition="IsActiveQuest(78264) and IsActiveQuestStep(15) and CurrentWorldId == 58493">
@@ -1529,12 +1531,12 @@
         <PrioritizeScenes>
           <PriorityScene sceneName="Exit" />
         </PrioritizeScenes>
-        <IgnoreScenes>
-          <IgnoreScene sceneName="Aqd_N_" />
-          <IgnoreScene sceneName="Aqd_S_" />
-          <IgnoreScene sceneName="Aqd_E_" />
-          <IgnoreScene sceneName="Aqd_W_" />
-        </IgnoreScenes>
+        <!--<IgnoreScenes>
+          <IgnoreScene sceneName="Aqd_N_0" />
+          <IgnoreScene sceneName="Aqd_S_0" />
+          <IgnoreScene sceneName="Aqd_E_0" />
+          <IgnoreScene sceneName="Aqd_W_0" />
+        </IgnoreScenes>-->
       </TrinityExploreDungeon>
 
       <MoveToMapMarker questId="57335" stepId="40" markerNameHash="1140186062" actorId="176007"

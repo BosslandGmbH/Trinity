@@ -108,7 +108,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             var ids = BountyData?.LevelAreaIds ?? new HashSet<int> {ZetaDia.CurrentLevelAreaSnoId};
 
-            if (!await ExplorationCoroutine.Explore(ids))
+            if (!await ExplorationCoroutine.Explore(ids, useIgnoreRegions:false))
                 return false;
 
             if (_stopWhenExplored && ProfileConditions.PercentNodesVisited(90))

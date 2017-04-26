@@ -1,0 +1,12 @@
+﻿<Profile>
+  <Name>Debug Profile </Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams quest="87700" step="-1" act="A1" resumeFromSave="True" isPrivate="True" numGames="-1" />
+  <Order>
+    <LogMessage message="Explore Profile" />
+
+    <Explore  />
+
+  </Order>
+</Profile>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
+using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Common;
@@ -75,7 +76,7 @@ namespace Trinity.ProfileTags
                 if (!actorFound)
                     return true;
                 
-                _movementTask = new MoveToActorCoroutine(QuestId, AdvDia.CurrentWorldId, ActorId, (int)MaxRange, Explore, CheckActorAnimation, StopDistance);
+                _movementTask = new MoveToActorCoroutine(QuestId, AdvDia.CurrentWorldId, ActorId, (int)MaxRange, Explore, CheckActorAnimation, StopDistance, MarkerHash);
             }
 
             _endAnimLower = EndAnimation?.ToLowerInvariant() ?? string.Empty;
@@ -86,20 +87,7 @@ namespace Trinity.ProfileTags
 
         public bool FindActor()
         {
-            TrinityActor actor = null;
-            if (ActorId != 0)
-            {
-                actor = BountyHelpers.ScanForActor(ActorId, (int)MaxRange, CheckActorAnimation);
-            }
-            else if (!string.IsNullOrEmpty(ActorInternalName))
-            {
-                actor = BountyHelpers.ScanForActor(ActorInternalName, (int)MaxRange, CheckActorAnimation);
-            }
-            else if (ActorId == 0 && MarkerHash != 0)
-            {
-                actor = BountyHelpers.GetActorNearMarker(MarkerHash, 10f, CheckActorAnimation);
-            }
-
+            var actor = ActorFinder.FindActor(ActorId, MarkerHash, MaxRange, ActorInternalName, CheckActorAnimation);
             if (actor == null)
                 return false;
 
