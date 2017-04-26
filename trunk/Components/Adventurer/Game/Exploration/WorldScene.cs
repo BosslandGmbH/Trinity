@@ -4,6 +4,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Modules;
 using Zeta.Common;
 using Zeta.Game;
@@ -90,6 +91,32 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 CreateGrid(mesh);
 
                 ExitPositions = ExitDirections.GetFlags<SceneExitDirections>().Select(GetNavigableConnection);
+            }
+        }
+
+        private SceneInfo _sceneInfo;
+        public SceneInfo SceneInfo
+        {
+            get
+            {
+                if (_sceneInfo == null)
+                {
+                    SceneMapping.SceneData.SceneDefs.TryGetValue(SnoId, out _sceneInfo);
+                }
+                return _sceneInfo ?? (_sceneInfo = new SceneInfo());
+            }
+        }
+
+        private RegionGroup _ignoreRegions;
+        public RegionGroup IgnoreRegions
+        {
+            get
+            {
+                if (_ignoreRegions == null)
+                {
+                    _ignoreRegions = SceneInfo.IgnoreRegions.GetOffset(Min) as RegionGroup;
+                }
+                return _ignoreRegions ?? (_ignoreRegions = new RegionGroup());
             }
         }
 

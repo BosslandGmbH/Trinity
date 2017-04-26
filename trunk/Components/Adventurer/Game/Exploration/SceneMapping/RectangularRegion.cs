@@ -1,3 +1,4 @@
+using System.Windows;
 using Zeta.Common;
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
@@ -9,10 +10,17 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
         public Vector2 Min { get; set; }
         public Vector2 Max { get; set; }
 
+
         public CombineType CombineType { get; set; } = CombineType.Add;
 
         public RectangularRegion()
         {
+        }
+
+        public RectangularRegion(float minX, float minY, float maxX, float maxY, CombineType combineType) :
+            this((int)minX, (int)minY, (int)maxX, (int)maxY, combineType)
+        {
+
         }
 
         public RectangularRegion(int minX, int minY, int maxX, int maxY, CombineType combineType)
@@ -24,7 +32,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
         public bool Contains(Vector3 position) => position.X >= Min.X && position.X <= Max.X && position.Y >= Min.Y && position.Y <= Max.Y;
 
-        public IWorldRegion Offset(Vector2 min)
+        public IWorldRegion GetOffset(Vector2 min)
         {
             return this + min;
         }

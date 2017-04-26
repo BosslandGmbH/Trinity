@@ -57,7 +57,7 @@ namespace Trinity.Components.Combat
                 Core.Logger.Log(LogCategory.Targetting, $"Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
             }
 
-            if (CurrentTarget == target)
+            if (CurrentTarget == target || target != null && target.IsMe)
                 return;
 
             if (target == null && CurrentTarget != null)

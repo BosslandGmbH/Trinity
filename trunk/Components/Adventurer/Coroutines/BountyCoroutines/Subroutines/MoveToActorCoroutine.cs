@@ -60,7 +60,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         }
 
         public MoveToActorCoroutine(int questId, int worldId, int actorId, int maxRange = 5000, 
-            bool isExploreAllowed = true, Func<TrinityActor,bool> actorSelector = null, float stopDistance = -1)
+            bool isExploreAllowed = true, Func<TrinityActor,bool> actorSelector = null, float stopDistance = -1, int markerId = 0)
         {
             _questId = questId;
             _worldId = worldId;
@@ -69,6 +69,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _isExploreAllowed = isExploreAllowed;
             _actorSelector = actorSelector;
             _stopDistance = stopDistance;
+            _markerId = markerId;
         }
 
         public async Task<bool> GetCoroutine()
@@ -139,7 +140,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             var areaIds = BountyData != null ? BountyData.LevelAreaIds : new HashSet<int> { AdvDia.CurrentLevelAreaId };
 
-            if (!await ExplorationCoroutine.Explore(areaIds)) return false;
+            if (!await ExplorationCoroutine.Explore(areaIds, useIgnoreRegions:false)) return false;
 
             Core.Scenes.Reset();
             return false;
@@ -184,6 +185,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private BountyData _bountyData;
         private Func<TrinityActor, bool> _actorSelector;
         private float _stopDistance;
+        private int _markerId;
 
         private async Task<bool> ScanForObjective()
         {
@@ -192,7 +194,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _lastScanTime = PluginTime.CurrentMillisecond;
                 if (_actorId != 0)
                 {
-                    var objectiveActor = BountyHelpers.ScanForActor(_actorId, _objectiveScanRange, _actorSelector);
+                    //var objectiveActor = BountyHelpers.ScanForActor(_actorId, _objectiveScanRange, _actorSelector);
+                    var objectiveActor = ActorFinder.FindActor(_actorId, _markerId, 500, "", _actorSelector);
+
                     _objectiveLocation = objectiveActor.Position;
 
                     if (_stopDistance == -1)

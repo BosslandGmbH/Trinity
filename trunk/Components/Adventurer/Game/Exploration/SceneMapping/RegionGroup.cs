@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Zeta.Common;
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
@@ -14,11 +15,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             var added = false;
             foreach (var r in Regions)
             {
+                // any 'add' regions that contain provided result in add, except if also in subtract region.
                 if (!added && r.CombineType == CombineType.Add && r.Contains(position))
                 {
                     added = true;
                     continue;
                 }
+
+                // Any hit within a subtracted region means position is not contained within group.
                 if (r.CombineType == CombineType.Subtract && r.Contains(position))
                     return false;
             }
@@ -31,13 +35,14 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
         public void Add(IWorldRegion x) => Regions.Add(x);
 
-        public IWorldRegion Offset(Vector2 min)
+        public IWorldRegion GetOffset(Vector2 min)
         {
-            foreach (var region in Regions)
+            return new RegionGroup
             {
-                region.Offset(min);
-            }
-            return this;
+                Regions = Regions.Select(r => r.GetOffset(min)).ToList(),
+                CombineType = CombineType,
+            };
         }
+
     }
 }

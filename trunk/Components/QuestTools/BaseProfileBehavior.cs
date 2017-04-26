@@ -22,8 +22,21 @@ namespace Trinity.Components.QuestTools
     {
         protected BaseProfileBehavior()
         {
+            LoadDefaults();
             QuestId = QuestId <= 0 ? 1 : QuestId;
             TagClassName = GetType().Name;
+        }
+
+        public void LoadDefaults()
+        {
+            foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(this))
+            {
+                var myAttribute = (DefaultValueAttribute)property.Attributes[typeof(DefaultValueAttribute)];
+                if (myAttribute != null)
+                {
+                    property.SetValue(this, myAttribute.Value);
+                }
+            }
         }
 
         public string TagClassName { get; set; }

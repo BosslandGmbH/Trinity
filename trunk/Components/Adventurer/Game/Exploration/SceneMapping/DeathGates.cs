@@ -222,7 +222,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
                 foreach (var region in entranceScene.Regions)
                 {
-                    group.Add(region.Offset(portalScene.Min));
+                    group.Add(region.GetOffset(portalScene.Min));
                 }
 
                 return group;
@@ -256,7 +256,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
 
                 foreach (var region in entranceScene.Regions)
                 {
-                    group.Add(region.Offset(worldScene.Min));
+                    group.Add(region.GetOffset(worldScene.Min));
                 }
 
                 return group;

@@ -157,7 +157,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 return false;
             }
 
-            Core.Logger.Debug($"TargetGatePosition found at distance {TargetGatePosition.Distance(AdvDia.MyPosition)} in scene {TargetGateScene.Name}");
+            Core.Logger.Debug($"TargetGatePosition found at distance {TargetGatePosition.Distance(AdvDia.MyPosition)} in scene {TargetGateScene?.Name}");
             State = States.MovingToGate;
             return false;
         }

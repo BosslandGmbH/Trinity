@@ -47,6 +47,11 @@ namespace Trinity.ProfileTags
         [Description("Legacy support for stopping exploration when exit found with specific markerHash. You should use 'stopCondition'.")]
         public int ExitNameHash { get; set; }
 
+        [XmlAttribute("useSceneRegions")]
+        [Description("If the per scene regions defined in SceneData.cs should be used to automatically mark nodes as visited. (Dead ends within scenes etc)")]
+        [DefaultValue(true)]
+        public bool UseSceneRegions { get; set; }
+
         [XmlAttribute("until")]
         [Description("Legacy support for stopping exploration when exit found. You should use 'stopCondition'.")]
         public string ExploreUntil { get; set; }
@@ -59,10 +64,11 @@ namespace Trinity.ProfileTags
             {
                 Core.Scenes.Reset();
             }
+
             var ignoreSceneNames = IgnoreScenes?.Select(s => s.Name).ToList();
             var levelAreaIds = new HashSet<int> {ZetaDia.CurrentLevelAreaSnoId};
 
-            _exploreTask = new ExplorationCoroutine(levelAreaIds, ignoreSceneNames, null, false);
+            _exploreTask = new ExplorationCoroutine(levelAreaIds, ignoreSceneNames, null, false, UseSceneRegions);
             return false;
         }
 

@@ -55,6 +55,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         }
 
         public List<ExplorationNode> WalkableNodes = new List<ExplorationNode>();
+        private static WorldScene _currentScene;
 
         public override float BoxSize { get; } = 20;
 
@@ -138,7 +139,18 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                     node.IsVisited = true;
                 }
             }
+
+            if (!BotMain.IsRunning)
+            {
+                // Update ignore regions for debug on visualizer.
+                // Normally this should only be executed if ExploreCoroutine chooses,
+                // because it introduces potential stucks and skipping target actors
+                ExplorationHelpers.UpdateIgnoreRegions();
+            }
+
         }
+
+
 
         protected override void OnUpdated(SceneData newNodes)
         {

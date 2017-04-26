@@ -1,3 +1,4 @@
+using System.Windows;
 using Zeta.Common;
 
 namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
@@ -6,8 +7,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
     {
         bool Contains(Vector3 position);
 
-        IWorldRegion Offset(Vector2 min);
+        IWorldRegion GetOffset(Vector2 min);
 
         CombineType CombineType { get; }
+
     }
 }

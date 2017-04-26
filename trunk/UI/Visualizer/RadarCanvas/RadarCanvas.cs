@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Components.Adventurer.UI;
 using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
@@ -64,6 +65,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             IsMouseDown = true;
             IsRightClick = e.RightButton == MouseButtonState.Pressed;
             IsLeftClick = e.LeftButton == MouseButtonState.Pressed;
+            HasDragged = false;
             Cursor = Cursors.Hand;
             DragInitialPosition = Mouse.GetPosition(this);
             DragInitialPanOffset = CanvasData.PanOffset;
@@ -71,6 +73,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             //HandleMapClicked(sender, e);
         }
 
+        public bool HasDragged { get; set; }
         public bool IsLeftClick { get; set; }
         public bool IsRightClick { get; set; }
 
@@ -81,53 +84,57 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         private void HandleMapClicked(object sender, MouseButtonEventArgs e)
         {
-            var clickedWorldPosition = PointMorph.GetWorldPosition(DragInitialPosition, CanvasData);
-
-            Core.Logger.Log($"Clicked World Position = {clickedWorldPosition}, Distance={clickedWorldPosition.Distance(ZetaDia.Me.Position)}");
+            var startWorldPosition = PointMorph.GetWorldPosition(DragInitialPosition, CanvasData);
+            var clickedPosition = Mouse.GetPosition(this);
+            var endWorldPosition = PointMorph.GetWorldPosition(clickedPosition, CanvasData); 
 
             if (!IsDragging)
             {
                 if (IsRightClick)
                 {
-                    var result = Core.Grids.Avoidance.CanRayWalk(clickedWorldPosition, Player.Actor.Position);
-                    CurrentRayWalk = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
+                    var size = endWorldPosition - startWorldPosition;
+                    var scene = Core.Scenes.FirstOrDefault(s => s.IsInScene(startWorldPosition));
+
+                    Core.Logger.Log($"Right Mouse Drag from {startWorldPosition} to {endWorldPosition} in {scene?.Name} Size={Math.Abs(size.X)}*{Math.Abs(size.Y)}");
+                    DeveloperUI.LogSceneInfoPosition(scene, startWorldPosition, endWorldPosition);
+
                 }
                 else if (IsLeftClick)
                 {
-                    var result = Core.Grids.Avoidance.CanRayCast(clickedWorldPosition, Player.Actor.Position);
+                    Core.Logger.Log($"Clicked World Position = {startWorldPosition}, Distance={startWorldPosition.Distance(ZetaDia.Me.Position)}");
 
-                    CurrentRayCast = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
+                    var result = Core.Grids.Avoidance.CanRayWalk(startWorldPosition, Player.Actor.Position);
+                    CurrentRayWalk = new Tuple<Vector3, Vector3, bool>(startWorldPosition, Player.Actor.Position, result);
 
-                    var gatePosition = DeathGates.GetBestGatePosition(clickedWorldPosition);
-                    CurrentTestLine = new Tuple<Vector3, Vector3, bool>(gatePosition, Player.Actor.Position, result);
+                    //var result = Core.Grids.Avoidance.CanRayCast(clickedWorldPosition, Player.Actor.Position);
+                    //CurrentRayCast = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
 
-                    var sequence = DeathGates.CreateSequence();
-                    for (int i = 0; i < sequence.Count; i++)
+                    //var gatePosition = DeathGates.GetBestGatePosition(clickedWorldPosition);
+                    //CurrentTestLine = new Tuple<Vector3, Vector3, bool>(gatePosition, Player.Actor.Position, result);
+
+                    //var sequence = DeathGates.CreateSequence();
+                    //for (int i = 0; i < sequence.Count; i++)
+                    //{
+                    //    var scene = sequence[i];
+                    //    Core.Logger.Log($"{i}: {(sequence.Index == i ? ">> " : "")}{scene.Name}");
+                    //}
+
+                    var hit = FindElementUnderClick(sender, e);
+                    if (hit != null)
                     {
-                        var scene = sequence[i];
-                        Core.Logger.Log($"{i}: {(sequence.Index == i ? ">> " : "")}{scene.Name}");
+                        var actor = hit.RadarObject.Actor;
+                        ClickCommand.Execute(actor);
+                        InvalidateVisual();
+                        return;
                     }
-
                 }
 
-                var hit = FindElementUnderClick(sender, e);
-                if (hit != null)
-                {
-                    var actor = hit.RadarObject.Actor;
-                    ClickCommand.Execute(actor);
-
-                    // Trigger Canvas to Render
-                    InvalidateVisual();
-
-                    return;
-                }
-
-                var node = Core.Avoidance.Grid.GetNearestNode(clickedWorldPosition);
+                var node = Core.Avoidance.Grid.GetNearestNode(startWorldPosition);
                 SelectedItem = new TrinityActor
                 {
-                    InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int)clickedWorldPosition.X},{(int)clickedWorldPosition.Y}]",
-                    Distance = clickedWorldPosition.Distance(ZetaDia.Me.Position),
-                    Position = clickedWorldPosition,
+                    InternalName = $"Node[{node.GridPoint.X},{node.GridPoint.Y}] World[{(int) startWorldPosition.X},{(int) startWorldPosition.Y}]",
+                    Distance = startWorldPosition.Distance(ZetaDia.Me.Position),
+                    Position = startWorldPosition,
                 };
             }
 
@@ -149,30 +156,36 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             if (IsMouseDown)
             {
                 IsDragging = true;
+                HasDragged = true;
                 const double dragSpeed = 0.5;
                 var position = e.GetPosition(this);
                 var xOffset = position.X - DragInitialPosition.X;
                 var yOffset = position.Y - DragInitialPosition.Y;
+
                 DragOffset = new Point((int)(xOffset * dragSpeed) + DragInitialPanOffset.X, (int)(yOffset * dragSpeed) + DragInitialPanOffset.Y);
-                CanvasData.PanOffset = DragOffset;
+
+                if (IsLeftClick)
+                {
+                    CanvasData.PanOffset = DragOffset;
+                }
             }
             else
             {
                 IsDragging = false;
             }
 
-            if (DateTime.UtcNow.Subtract(LastMoveCursorCheck).TotalMilliseconds > 25)
-            {
-                LastMoveCursorCheck = DateTime.UtcNow;
-                if (FindElementUnderClick(sender, e) != null)
-                {
-                    Mouse.OverrideCursor = Cursors.Hand;
-                }
-                else
-                {
-                    Mouse.OverrideCursor = null;
-                }
-            }
+            //if (DateTime.UtcNow.Subtract(LastMoveCursorCheck).TotalMilliseconds > 25)
+            //{
+            //    LastMoveCursorCheck = DateTime.UtcNow;
+            //    if (FindElementUnderClick(sender, e) != null)
+            //    {
+            //        Mouse.OverrideCursor = Cursors.Hand;
+            //    }
+            //    else
+            //    {
+            //        Mouse.OverrideCursor = null;
+            //    }
+            //}
         }
 
         //public bool IsDragging { get; set; }
@@ -180,13 +193,16 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         private void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
             IsMouseDown = false;
+
+            if (IsLeftClick)
+            {
+                CanvasData.PanOffset = DragOffset;
+            }
             Cursor = Cursors.Arrow;
-            CanvasData.PanOffset = DragOffset;
 
             using (ZetaDia.Memory.AcquireFrame())
             {
                 HandleMapClicked(sender, e);
-
             }
         }
 
@@ -537,6 +553,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         private void UpdateExplorationData()
         {
             _explorationNodes = ExplorationGrid.Instance.WalkableNodes;
+
+
         }
 
 
@@ -651,6 +669,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                     DrawDeathGates(dc, CanvasData);
 
+                    DrawSceneDataRegions(dc, CanvasData);
+
                     DrawAdventurerNavigation(dc, CanvasData);
 
                     DrawMarkers(dc, CanvasData);
@@ -723,9 +743,21 @@ namespace Trinity.UI.Visualizer.RadarCanvas
             }
         }
 
+        private void DrawSceneDataRegions(DrawingContext dc, CanvasData canvasData)
+        {
+            foreach (var scene in Core.Scenes)
+            {
+                foreach (var rect in scene.IgnoreRegions)
+                {
+                    dc.DrawDrawing(GetRectangle(rect as RectangularRegion));
+                }
+            }
+        }
+
         private static DrawingGroup GetRectangle(RectangularRegion enterRegion)
         {
             var drawing = new DrawingGroup();
+            if (enterRegion == null) return drawing;
             using (var groupdc = drawing.Open())
             {
                 var pen = enterRegion.CombineType == CombineType.Add ? RadarResources.SceneFrameInclude : RadarResources.SceneFrameExclude;

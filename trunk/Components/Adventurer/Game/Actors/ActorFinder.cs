@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Adventurer.Coroutines;
 using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Game.Rift;
+using Trinity.Framework.Actors.ActorTypes;
 using Zeta.Bot.Settings;
 using Zeta.Common;
 using Zeta.Game;
@@ -25,15 +27,15 @@ namespace Trinity.Components.Adventurer.Game.Actors
 
             if (currentSearchRadius >= 1500)
             {
-                radius = (int)(currentSearchRadius / 1.5d);
+                radius = currentSearchRadius / 2;
             }
             else if (currentSearchRadius >= 500)
             {
-                radius = currentSearchRadius - 75;
+                radius = currentSearchRadius - 100;
             }
             else if (currentSearchRadius >= 100)
             {
-                radius = currentSearchRadius - 35;
+                radius = currentSearchRadius - 50;
             }
             else if (currentSearchRadius > 20)
             {
@@ -92,6 +94,31 @@ namespace Trinity.Components.Adventurer.Game.Actors
         public static DiaUnit FindUnitByGuid(int acdGuid)
         {
             return ZetaDia.Actors.GetActorByACDId(acdGuid) as DiaUnit;
+        }
+
+        public static TrinityActor FindActor(int actorId, int marker = 0, float maxRange = 500, string internalName = "", Func<TrinityActor,bool> condition = null)
+        {
+            TrinityActor actor = null;
+            if (actorId != 0)
+            {
+                if (marker != 0)
+                {
+                    actor = BountyHelpers.ScanForActor(actorId, marker, (int)maxRange, condition);
+                }
+                else
+                {
+                    actor = BountyHelpers.ScanForActor(actorId, (int)maxRange, condition);
+                }
+            }
+            else if (!string.IsNullOrEmpty(internalName))
+            {
+                actor = BountyHelpers.ScanForActor(internalName, (int)maxRange, condition);
+            }
+            else if (actorId == 0 && marker != 0)
+            {
+                actor = BountyHelpers.GetActorNearMarker(marker, 10f, condition);
+            }
+            return actor;
         }
 
         public static DiaObject FindObject(int actorId)
@@ -193,6 +220,12 @@ namespace Trinity.Components.Adventurer.Game.Actors
             SNOAnim.a1dun_Crypts_Jar_of_Souls_Death_Backup, //x1_westm_necro_jar_of_souls_camp_graveyard
             SNOAnim.trOut_Wilderness_Cultist_SummoningMachine_A_death, //px_Highlands_Camp_ResurgentCult_Totem
         };
+
+        public static bool IsInteractableQuestObject(this TrinityActor actor)
+        {
+            var a = ZetaDia.Actors.GetActorByACDId(actor.AcdId);
+            return a?.IsInteractableQuestObject() ?? false;
+        }
 
         public static bool IsInteractableQuestObject<T>(this T actor) where T : DiaObject
         {

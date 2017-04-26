@@ -140,7 +140,19 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             }
         };
 
+        private static WorldScene _currentScene;
+
         public static void MarkNodesAsVisited(IEnumerable<string> sceneNames)
+        {
+            MarkSceneNodes(sceneNames, true);
+        }
+
+        public static void MarkNodesAsUnvisited(IEnumerable<string> sceneNames)
+        {
+            MarkSceneNodes(sceneNames, false);
+        }
+
+        public static void MarkSceneNodes(IEnumerable<string> sceneNames, bool asVisited)
         {
             if (sceneNames == null)
                 return;
@@ -153,17 +165,48 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 {
                     foreach (var node in scene.Nodes)
                     {
-                        node.IsVisited = true;
+                        node.IsVisited = asVisited;
                     }
                     Core.Logger.Debug($"Marked {scene.Nodes.Count} exploration nodes for scene {fullname} ({scene.SnoId}) as visited");
                 }
             }
         }
 
+        public static void UpdateIgnoreRegions()
+        {
+            var currentScene = Core.Scenes.CurrentScene;
+            if (currentScene != null && currentScene != _currentScene)
+            {
+                MarkIgnoreRegionsAsVisited(currentScene);
+                foreach (var connectedScene in currentScene.ConnectedScenes())
+                {
+                    MarkIgnoreRegionsAsVisited(connectedScene.Scene);
+                }
+                _currentScene = currentScene;
+            }
+        }
+
+        public static bool MarkIgnoreRegionsAsVisited(WorldScene scene)
+        {
+            if (scene?.Nodes == null) return false;
+            int modifiedNodes = 0;
+            foreach (var node in scene.Nodes)
+            {
+                if (node == null) continue;
+                if (scene.IgnoreRegions.Contains(node.NavigableCenter))
+                {
+                    modifiedNodes++;
+                    node.IsVisited = true;
+                }
+            }
+            Core.Logger.Debug($"Marked {modifiedNodes} exploration nodes for ignore regions in {scene.Name} ({scene.SnoId}) as visited");
+            return modifiedNodes > 0;
+        }
+
         public static void MarkNodesAsVisited(IEnumerable<WorldScene> scenes)
         {
             var sceneLookup = new HashSet<int>(scenes.Select(s => s.SnoId));
-            ExplorationGrid.Instance.WalkableNodes.Where(s => sceneLookup.Contains(s.Scene.SnoId)).ForEach(s => s.IsVisited  = true);
+            ExplorationGrid.Instance.WalkableNodes.Where(s => sceneLookup.Contains(s.Scene.SnoId)).ForEach(s => s.IsVisited = true);
         }
 
         public static List<Vector3> GetFourPointsInEachDirection(Vector3 center, int radius)

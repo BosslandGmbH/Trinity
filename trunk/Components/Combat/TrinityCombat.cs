@@ -74,8 +74,7 @@ namespace Trinity.Components.Combat
 
             await UsePotion.Execute();
             await OpenTreasureBags.Execute();
-
-            VacuumItems.Execute();
+            await VacuumItems.Execute();
 
             var target = Weighting.WeightActors(Core.Targets);
 
@@ -112,9 +111,14 @@ namespace Trinity.Components.Combat
 
             // We're not in combat at this point.
 
-            if (!Core.Player.IsCasting)
+            /* We make sure player's 20f radius is clear & not taking damage.
+            Only because mobs around break combat for a moment does not guarantee safe teleportation.
+            Bot in such cases chain dies. -Seq*/
+
+            if (!Core.Player.IsCasting && (!TargetUtil.AnyMobsInRange(20f) || !Core.Player.IsTakingDamage))
             {
                 if (await Behaviors.MoveToMarker.While(m => m.MarkerType == WorldMarkerType.LegendaryItem || m.MarkerType == WorldMarkerType.SetItem))
+                    //Core.Logger.Debug("No mobs around 20 yards & I'm not taking damage");
                     return true;
 
                 await EmergencyRepair.Execute();

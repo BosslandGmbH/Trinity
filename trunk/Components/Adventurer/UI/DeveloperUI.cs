@@ -80,6 +80,8 @@ namespace Trinity.Components.Adventurer.UI
                     //dumpers.Children.Add(CreateButton("Specific Actor", DumpActor_Click));
                     dumpers.Children.Add(CreateButton("Unsupported Bounties", DumpUnsupportedBounties_Click));
                     dumpers.Children.Add(CreateButton("Scenes", DumpLevelAreaScenes_Click));
+                    dumpers.Children.Add(CreateButton("SceneData Entry", DumpSceneInfo));
+                    
 
                     var coroutineHelpers = new StackPanel { Background = Brushes.DimGray, Height = 176, Margin = new Thickness(2, 2, 0, 2) };
                     coroutineHelpers.Children.Add(CreateTitle("Coroutines"));
@@ -851,6 +853,50 @@ namespace Trinity.Components.Adventurer.UI
             ;
         }
 
+        private static void DumpSceneInfo(object sender, RoutedEventArgs e)
+        {
+            ZetaDia.Actors.Update();
+            if (!ZetaDia.IsInGame || ZetaDia.Me == null)
+                return;
+
+            using (ZetaDia.Memory.AcquireFrame())
+            {
+                Core.Scenes.Update();
+                Core.Update();
+
+                var position = ZetaDia.Me.Position;
+                var currentQuest = ZetaDia.CurrentQuest;
+                var sceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
+                var sceneName = ZetaDia.Me.CurrentScene.Name;
+                var worldScene = AdvDia.CurrentWorldScene;
+
+                // note: relative position of subscene is being recorded/tested against parent scene bounds
+
+                LogSceneInfoPosition(worldScene, Vector3.Zero, ZetaDia.Me.Position);
+            }
+        }
+
+        public static void LogSceneInfoPosition(WorldScene worldScene, Vector3 startPosAbsolute, Vector3 endPosAbsolute)
+        {
+            var sceneSnoId = ZetaDia.Me.CurrentScene.SceneInfo.SNOId;
+            var sceneName = ZetaDia.Me.CurrentScene.Name;
+            var endPos = worldScene.GetRelativePosition(endPosAbsolute);
+            var startPos = worldScene.GetRelativePosition(startPosAbsolute);
+
+            Core.Logger.Raw($"SceneDefs.Add({sceneSnoId}, new SceneInfo");
+            Core.Logger.Raw($"{{");
+            Core.Logger.Raw($@"    Name = ""{sceneName}"",");
+            Core.Logger.Raw($"    SnoId = {sceneSnoId},");
+            Core.Logger.Raw($"    Size = new Vector2({worldScene.Size.X},{worldScene.Size.Y}),");
+            Core.Logger.Raw($"    Type = SceneType.Normal,");
+            Core.Logger.Raw($"    IgnoreRegions = new RegionGroup");
+            Core.Logger.Raw($"    {{");
+            Core.Logger.Raw($"        new RectangularRegion({Math.Round(startPos.X,0)}, {Math.Round(startPos.Y,0)}, {Math.Round(endPos.X,0)}, {Math.Round(endPos.Y,0)}, CombineType.Add)");
+            Core.Logger.Raw($"    }}");
+            Core.Logger.Raw($"}});");
+            Core.Logger.Raw($"");
+        }
+
         private static void DumpBountyInfo(BountyInfo bountyInfo, int waypointNumber)
         {
             Core.Logger.Raw("// {0} - {1} ({2})", bountyInfo.Act, bountyInfo.Info.DisplayName, (int)bountyInfo.Quest);
@@ -1279,7 +1325,7 @@ namespace Trinity.Components.Adventurer.UI
         private static void IfWorld_Click(object sender, RoutedEventArgs e)
         {
             try
-            {                
+            {
                 if (!ZetaDia.IsInGame || ZetaDia.Me == null)
                     return;
 
@@ -1350,12 +1396,12 @@ namespace Trinity.Components.Adventurer.UI
                 {
                     Core.Scenes.Update();
                     Core.Update();
-                    Core.Logger.Log(ProfileTagLogger.GenerateTagComment() + 
+                    Core.Logger.Log(ProfileTagLogger.GenerateTagComment() +
      $@"<If condition=""IsActiveQuest({ZetaDia.CurrentQuest.QuestSnoId}) and IsActiveQuestStep({ZetaDia.CurrentQuest.StepId}) and CurrentWorldId == {ZetaDia.Globals.WorldSnoId}"">
             <LogMessage output=""{ProfileTagLogger.GenerateQuestInfo() + " " + ProfileTagLogger.GetActiveObjectives()?.FirstOrDefault()?.Description}"" />
 
         </If>");
-                 
+
                 }
             }
             catch (Exception ex)

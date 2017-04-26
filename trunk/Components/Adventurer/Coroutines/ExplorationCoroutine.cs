@@ -16,11 +16,11 @@ namespace Trinity.Components.Adventurer.Coroutines
         private static ExplorationCoroutine _explorationCoroutine;
         private static HashSet<int> _exploreLevelAreaIds;
 
-        public static async Task<bool> Explore(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true)
+        public static async Task<bool> Explore(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true, bool useIgnoreRegions = true)
         {
             if (_explorationCoroutine == null || (_exploreLevelAreaIds != null && levelAreaIds != null && !_exploreLevelAreaIds.SetEquals(levelAreaIds)))
             {
-                _explorationCoroutine = new ExplorationCoroutine(levelAreaIds, ignoreScenes, breakCondition, allowReExplore);
+                _explorationCoroutine = new ExplorationCoroutine(levelAreaIds, ignoreScenes, breakCondition, allowReExplore, useIgnoreRegions);
                 _exploreLevelAreaIds = levelAreaIds;
             }
             if (await _explorationCoroutine.GetCoroutine())
@@ -56,12 +56,13 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
         }
 
-        public ExplorationCoroutine(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true)
+        public ExplorationCoroutine(HashSet<int> levelAreaIds, List<string> ignoreScenes = null, Func<bool> breakCondition = null, bool allowReExplore = true, bool useIgnoreRegions = true)
         {
             _levelAreaIds = levelAreaIds;
             _ignoreScenes = ignoreScenes;
             _breakCondition = breakCondition;
             _allowReExplore = allowReExplore;
+            _useIgnoreRegions = useIgnoreRegions;
         }
 
         private async Task<bool> GetCoroutine()
@@ -92,6 +93,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private List<string> _ignoreScenes;
         private bool _allowReExplore;
         private DateTime _explorationDataMaxWaitUntil;
+        private bool _useIgnoreRegions;
 
         private bool NotStarted()
         {
@@ -107,6 +109,11 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Exploring()
         {
+            if (_useIgnoreRegions)
+            {
+                ExplorationHelpers.UpdateIgnoreRegions();
+            }
+
             if (_currentDestination == null || _currentDestination.IsVisited)// || _newNodePickTimer.IsFinished)
             {
                 //_newNodePickTimer.Stop();

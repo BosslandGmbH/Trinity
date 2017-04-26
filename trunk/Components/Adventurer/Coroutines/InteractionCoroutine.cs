@@ -6,6 +6,7 @@ using Trinity.Framework.Helpers;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
+using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Framework.Reference;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
@@ -64,9 +65,10 @@ namespace Trinity.Components.Adventurer.Coroutines
         private string _startAnimation;
         private bool _isQuestGiver;
         private DateTime _castWaitStartTime = DateTime.MinValue;
+        private int _markerHash;
 
         public InteractionCoroutine(int actorId, TimeSpan timeOut, TimeSpan sleepTime, int interactAttempts = 3, 
-            bool ignoreSanityChecks = false, string startAnimation ="", string endAnimation="")
+            bool ignoreSanityChecks = false, string startAnimation ="", string endAnimation="", int markerHash = 0)
         {
             _actorId = actorId;
             _timeOut = timeOut;
@@ -75,6 +77,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             _ignoreSanityChecks = ignoreSanityChecks;
             _endAnimation = endAnimation;
             _startAnimation = startAnimation;
+            _markerHash = markerHash;
 
             if (_timeOut != default(TimeSpan))
             {
@@ -129,7 +132,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             _startingWorldId = ZetaDia.Globals.WorldSnoId;
 
-            var actor = ActorFinder.FindObject(_actorId);
+            var actor = GetActor();
             if (actor == null || !actor.IsFullyValid())
             {
                 Core.Logger.Debug("Nothing to interact, failing. ");
@@ -154,7 +157,10 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
 
             // why not eh?
-            actor.Interact();
+            if (actor.IsFullyValid() && !ActorFinder.IsDeathGate(actor))
+            {
+                actor.Interact();
+            }
 
             var gizmo = actor as DiaGizmo;
             if (gizmo != null && gizmo.IsFullyValid() && gizmo.IsPortal)
@@ -188,6 +194,14 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
+        private DiaObject GetActor()
+        {
+            var trinActor = ActorFinder.FindActor(_actorId, _markerHash);
+            var actor = trinActor != null
+                ? ZetaDia.Actors.GetActorByACDId(trinActor.AcdId)
+                : ActorFinder.FindObject(_actorId);
+            return actor;
+        }
 
 
         private async Task<bool> Interacting()
@@ -218,7 +232,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 return false;
             }
 
-            var actor = ActorFinder.FindObject(_actorId);
+            var actor = GetActor();
             if (actor == null)
             {
                 Core.Logger.Debug("Nothing to interact, failing. ");
@@ -277,7 +291,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 return true;
             }
 
-            if (_currentInteractAttempt > 1)
+            if (_currentInteractAttempt > 1 && actor.Position.Distance(ZetaDia.Me.Position) > 5f)
             {
                 Navigator.PlayerMover.MoveTowards(actor.Position);
                 await Coroutine.Sleep(250 * _currentInteractAttempt);

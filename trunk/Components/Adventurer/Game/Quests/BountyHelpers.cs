@@ -166,6 +166,11 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return ScanForActor(internalName, searchRadius)?.Position ?? Vector3.Zero;
         }
 
+        public static TrinityActor ScanForActor(int actorSnoId, int markerHash, int searchRadius = 500, Func<TrinityActor, bool> func = null)
+        {
+            return Core.Actors.Where(a => a.ActorSnoId == actorSnoId && a.Distance <= searchRadius && (func == null || func(a))).Where(a => GetMarkerNearActor(a)?.NameHash == markerHash).OrderBy(a => a.Distance).FirstOrDefault();
+        }
+
         public static TrinityActor ScanForActor(int actorSnoId, int searchRadius = 500, Func<TrinityActor, bool> func = null)
         {
             return Core.Actors.Where(a => a.ActorSnoId == actorSnoId && a.Distance <= searchRadius && (func == null || func(a))).OrderBy(a => a.Distance).FirstOrDefault();

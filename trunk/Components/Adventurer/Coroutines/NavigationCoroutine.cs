@@ -164,71 +164,79 @@ namespace Trinity.Components.Adventurer.Coroutines
         }
 
         private DateTime _lastResortTimeoutBase = DateTime.MaxValue;
-        private bool _startedLastResort;
+        private DateTime _startedLastResortTime;
         private async Task<bool> LastResortMovement()
         {
-            if (!_startedLastResort)
-            {
-                Core.Logger.Debug($"Starting Last Resort Movement to Destination {_moveToDestination}");
-                Core.DBNavProvider.Clear();
-                _lastResortTotalTimeout = DateTime.UtcNow + TimeSpan.FromSeconds(30);
-                _startedLastResort = true;
-            }
-
-            if (DateTime.UtcNow > _lastResortTotalTimeout)
-            {
-                Core.Logger.Log($"Movement Failed (Timeout)");
-                LastMoveResult = MoveResult.Failed;
-                _startedLastResort = false;
-                _lastResortTimeoutBase = DateTime.MaxValue;
-                State = States.Failed;
-                return false;
-            }
-
-            if (_mover == Mover.StraightLine)
-            {
-                Core.PlayerMover.MoveTowards(_moveToDestination);
-                LastMoveResult = MoveResult.Moved;
-            }
-            else
-            {
-                LastMoveResult = await CommonCoroutines.MoveAndStop(_moveToDestination, 10f, "LastResort");
-            }
-
-            var distanceToDestination = _moveToDestination.Distance(ZetaDia.Me.Position);
-            var withinAcceptableRange = _distance > 0 && distanceToDestination <= _distance || distanceToDestination <= 10f;
-
-            var position = ZetaDia.Me.Position;
-            if (position.Distance(_lastPosition) <= 2f)
-            {
-                IsLastResortTimeout(5);
-                if (LastMoveResult == MoveResult.Moved)
-                {
-                    return false;
-                }
-            }
-            _lastPosition = position;
-
-            if (withinAcceptableRange)
-            {
-                LastMoveResult = MoveResult.ReachedDestination;
-                _startedLastResort = false;
-                _lastResortTimeoutBase = DateTime.MaxValue;
-                State = States.Completed;
-                return false;
-            }
-
-            switch (LastMoveResult)
-            {
-                case MoveResult.ReachedDestination:
-                case MoveResult.PathGenerationFailed:
-                case MoveResult.Failed:
-                    IsLastResortTimeout(10);
-                    return false;
-            }
-
-            _lastResortTimeoutBase = DateTime.MaxValue;
+            State = States.Failed;
             return false;
+
+            // Needs to be reconsidered; if DB navigator is failing to find a path to a scene/marker then it wil continue to fail
+            // the only good solutions seem to be a) continue exploring (ideally in direction of marker) until closer and a path can 
+            // be successfully generated and b) create a closer path segment 1/2 or 1/3 the distance to try and get a a path, 
+            // but this is dangerous as with some map geometry it might be the completely wrong direction.
+
+            //    if (_startedLastResortTime == default(DateTime))
+            //    {
+            //        Core.Logger.Debug($"Starting Last Resort Movement to Destination {_moveToDestination}");
+            //        Core.DBNavProvider.Clear();
+            //        _lastResortTotalTimeout = DateTime.UtcNow + TimeSpan.FromSeconds(30);
+            //        _startedLastResortTime = DateTime.UtcNow;
+            //    }
+
+            //    if (DateTime.UtcNow > _lastResortTotalTimeout)
+            //    {
+            //        Core.Logger.Log($"Movement Failed (Timeout)");
+            //        LastMoveResult = MoveResult.Failed;
+            //        _startedLastResortTime = default(DateTime);
+            //        _lastResortTimeoutBase = DateTime.MaxValue;
+            //        State = States.Failed;
+            //        return false;
+            //    }
+
+            //    if (_mover == Mover.StraightLine)
+            //    {
+            //        Core.PlayerMover.MoveTowards(_moveToDestination);
+            //        LastMoveResult = MoveResult.Moved;
+            //    }
+            //    else
+            //    {
+            //        LastMoveResult = await CommonCoroutines.MoveAndStop(_moveToDestination, 10f, "LastResort");
+            //    }
+
+            //    var distanceToDestination = _moveToDestination.Distance(ZetaDia.Me.Position);
+            //    var withinAcceptableRange = _distance > 0 && distanceToDestination <= _distance || distanceToDestination <= 10f;
+
+            //    if (Core.Player.MovementSpeed < 1 && DateTime.UtcNow.Subtract(_startedLastResortTime).TotalSeconds > 2)
+            //    {
+            //        Core.Logger.Log($"Movement Failed (Not Moving)");
+            //        LastMoveResult = MoveResult.Failed;
+            //        _startedLastResortTime = default(DateTime);
+            //        _lastResortTimeoutBase = DateTime.MaxValue;
+            //        State = States.Failed;
+            //        return false;
+            //    }
+
+            //    if (withinAcceptableRange)
+            //    {
+            //        LastMoveResult = MoveResult.ReachedDestination;
+            //        _startedLastResortTime = default(DateTime);
+            //        _lastResortTimeoutBase = DateTime.MaxValue;
+            //        State = States.Completed;
+            //        return false;
+            //    }
+
+            //    switch (LastMoveResult)
+            //    {
+            //        case MoveResult.ReachedDestination:
+            //        case MoveResult.PathGenerationFailed:
+            //        case MoveResult.Failed:
+            //            IsLastResortTimeout(10);
+            //            return false;
+            //    }
+
+            //    Core.Logger.Log($"Moving to {Destination} Dist:{ZetaDia.Me.Position.Distance(Destination)}");
+            //    _lastResortTimeoutBase = DateTime.MaxValue;
+            //    return false;
         }
 
         private bool IsLastResortTimeout(int duration)
@@ -241,7 +249,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 Core.Logger.Log($"Movement Failed (Timeout)");
                 LastMoveResult = MoveResult.Failed;
-                _startedLastResort = false;
+                _startedLastResortTime = default(DateTime);
                 _lastResortTimeoutBase = DateTime.MaxValue;
                 State = States.Failed;
                 return false;
