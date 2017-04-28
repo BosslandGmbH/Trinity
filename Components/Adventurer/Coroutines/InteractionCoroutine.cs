@@ -8,6 +8,7 @@ using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Framework.Reference;
+using Zeta.Bot;
 using Zeta.Bot.Navigation;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -159,14 +160,16 @@ namespace Trinity.Components.Adventurer.Coroutines
             // why not eh?
             if (actor.IsFullyValid() && !ActorFinder.IsDeathGate(actor))
             {
+                var gizmo = actor as DiaGizmo;
+                if (gizmo != null && gizmo.IsFullyValid() && gizmo.IsPortal)
+                {
+                    _isPortal = true;
+                    GameEvents.FireWorldTransferStart();
+                }
+
                 actor.Interact();
             }
 
-            var gizmo = actor as DiaGizmo;
-            if (gizmo != null && gizmo.IsFullyValid() && gizmo.IsPortal)
-            {
-                _isPortal = true;
-            }
             var unit = actor as DiaUnit;
             if (unit != null && unit.IsFullyValid())
             {
