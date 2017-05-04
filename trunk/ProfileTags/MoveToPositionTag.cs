@@ -104,7 +104,8 @@ namespace Trinity.ProfileTags
 
         public bool TrySetAbsoluteDestination(Vector3 absPos)
         {
-            if (absPos != Vector3.Zero && !ZetaDia.WorldInfo.IsGenerated)
+            const int skycrownBattlements = 81019;
+            if (absPos != Vector3.Zero && !ZetaDia.WorldInfo.IsGenerated || (absPos != Vector3.Zero && ZetaDia.Globals.WorldSnoId == skycrownBattlements))
             {
                 _movementTask = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, absPos, (int)StopDistance, !UseNavigation);
                 return true;
