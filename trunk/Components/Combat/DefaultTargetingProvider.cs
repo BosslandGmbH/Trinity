@@ -279,7 +279,10 @@ namespace Trinity.Components.Combat
             }
 
             if (target.IsQuestGiver)
+            {
+                Core.PlayerMover.MoveTowards(target.Position);
                 return InteractPower(target, 100, 250);
+            }
 
             if (TrinityCombat.IsInCombat)
             {
@@ -450,14 +453,14 @@ namespace Trinity.Components.Combat
             if (GameData.LineOfSightWhitelist.Contains(currentTarget.ActorSnoId))
                 return true;
 
-            if (currentTarget.RadiusDistance <= 1f)
+            if (currentTarget.RadiusDistance <= 2f)
                 return true;
 
             var requiresRayWalk = Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk;
             if (!requiresRayWalk && currentTarget.Targeting.TotalTargetedTime < TimeSpan.FromSeconds(5) && currentTarget.IsInLineOfSight)
                 return true;
 
-            return Core.Grids.Avoidance.CanRayWalk(currentTarget, 15f);
+            return Core.Grids.Avoidance.CanRayWalk(currentTarget, 5f);
         }
 
         private bool IsInLineOfSight(Vector3 position)
@@ -466,7 +469,7 @@ namespace Trinity.Components.Combat
 
             if (longTargetTime || Core.BlockedCheck.IsBlocked || Core.StuckHandler.IsStuck || Core.ProfileSettings.Options.CurrentSceneOptions.AlwaysRayWalk)
             {
-                return Core.Grids.Avoidance.CanRayWalk(Core.Player.Position, position, 15f);
+                return Core.Grids.Avoidance.CanRayWalk(Core.Player.Position, position, 5f);
             }
 
             return Core.Grids.Avoidance.CanRayCast(Core.Player.Position, position);

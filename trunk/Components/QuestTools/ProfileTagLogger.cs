@@ -251,7 +251,6 @@ namespace Trinity.Components.QuestTools
             var indent = "        ";
             sb.AppendLine("");
             sb.AppendLine(indent + GenerateQuestInfoComment());
-            TrinityObjectiveInfo activeObj = null;
             foreach (var o in GetObjectiveInfo())
             {
                 sb.AppendLine(indent + $"<!-- Objective: {o.Index}: {o.Description} ({o.State}) -->");
@@ -286,7 +285,7 @@ namespace Trinity.Components.QuestTools
         {
             public TrinityObjectiveInfo(string input)
             {
-                Description = new Regex("(?<=Description:\\W)[\\w\\s]+").Match(input).Value;
+                Description = new Regex("(?<=Description:\\W)[\\w\\s\\'\\`]+").Match(input).Value;
                 Enum.TryParse(new Regex("(?<=State:\\W)[\\w\\s]+").Match(input).Value, out State);
                 int.TryParse(new Regex("(?<=Index:\\W)[\\w\\s]+").Match(input).Value, out Index);
             }

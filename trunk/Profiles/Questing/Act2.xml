@@ -477,11 +477,13 @@
       </If>
 
       <If condition="IsActiveQuest(80322) and IsActiveQuestStep(91) and CurrentWorldId == 70885">
-        <!-- Disrupt the Hidden Conclave Ritual -->
+        <Kill>
+          <!-- Disrupt the Hidden Conclave Ritual -->
         <SafeMoveTo questId="80322" stepId="91" x="2296" y="971" z="207" pathPrecision="5" />
         <Interact questId="80322" stepId="91" actorId="176008" isPortal="True" destinationWorldId="50657" x="2287"
                   y="969" z="208" />
         <WaitTimer questId="80322" stepId="91" waitTime="1000" />
+        </Kill>
       </If>
 
       <!-- Inside Hidden Conclave -->
@@ -987,16 +989,17 @@
                 destinationWorldId="195200" x="885" y="1201" z="196" />
       <WaitTimer questId="74128" stepId="26" waitTime="3000" />
     </If>
-    <While condition="IsActiveQuest(74128) and IsActiveQuestStep(26) and CurrentWorldId == 195200">
+    <If condition="IsActiveQuest(74128) and IsActiveQuestStep(26) and CurrentWorldId == 195200">
       <Kill>
         <!-- Kill Maghda -->
         <SafeMoveTo questId="74128" stepId="26" name="Maghda" pathPrecision="30" x="155" y="200" z="0" />
         <SafeMoveTo questId="74128" stepId="26" name="Maghda" pathPrecision="30" x="195" y="158" z="0" />
         <SafeMoveTo questId="74128" stepId="26" name="Maghda" pathPrecision="30" x="244" y="201" z="0" />
         <SafeMoveTo questId="74128" stepId="26" name="Maghda" pathPrecision="30" x="187" y="251" z="0" />
+        <MoveToPosition questId="74128" stepId="9" x="155.88" y="200.05" z="0.1" sceneX="155.88" sceneY="200.05" sceneZ="0.1" sceneSnoId="195199" sceneName="caOut_Arena_Alcarnus" distance="5" useNavigation="true"  worldSnoId="195200" levelAreaSnoId="195268" />
         <!-- Kill Maghda -->
       </Kill>
-    </While>
+    </If>
 
     <If condition="IsActiveQuest(74128) and IsActiveQuestStep(9) and CurrentWorldId == 195200">
       <WaitTimer questId="74128" stepId="9" waitTime="15000"

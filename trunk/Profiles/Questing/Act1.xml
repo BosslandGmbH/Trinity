@@ -94,13 +94,17 @@
 
     <If condition="IsActiveQuestAndStep(87700,-1) and CurrentWorldId == 71150">
       <LogMessage message=">> Tristram Gate Event" />
+      <Wait seconds="5" />
       <Kill>
-        <MoveToPosition questId="87700" stepId="-1" x="3094.89" y="2906.13" z="59.18" sceneX="34.9" sceneY="146.13" sceneZ="59.18" sceneSnoId="33349" sceneName="trOut_Tristram_E10_S16" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
+        <MoveToPosition questId="87700" stepId="-1" x="3000.61" y="2972.98" z="50.17" sceneX="180.61" sceneY="212.98" sceneZ="50.17" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
+       <MoveToPosition questId="87700" stepId="-1" x="2962.8" y="2980.77" z="40.21" sceneX="142.8" sceneY="220.77" sceneZ="40.21" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
+       <MoveToPosition questId="87700" stepId="-1" x="2927.25" y="2980.3" z="34.32" sceneX="107.25" sceneY="220.3" sceneZ="34.32" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
+        <!--<MoveToPosition questId="87700" stepId="-1" x="3094.89" y="2906.13" z="59.18" sceneX="34.9" sceneY="146.13" sceneZ="59.18" sceneSnoId="33349" sceneName="trOut_Tristram_E10_S16" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
         <MoveToPosition questId="87700" stepId="-1" x="3009.2" y="2969.43" z="51.8" sceneX="189.2" sceneY="209.43" sceneZ="51.8" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
-        <MoveToPosition questId="87700" stepId="-1" x="2838.41" y="2940.48" z="24.05" sceneX="18.41" sceneY="180.48" sceneZ="24.05" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />
+        <MoveToPosition questId="87700" stepId="-1" x="2838.41" y="2940.48" z="24.05" sceneX="18.41" sceneY="180.48" sceneZ="24.05" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />-->
         <!--<MoveToPosition questId="87700" stepId="-1" x="2821.29" y="2954.39" z="24.05" sceneX="1.29" sceneY="194.39" sceneZ="24.05" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" distance="5" useNavigation="true"  worldSnoId="71150" levelAreaSnoId="19947" />-->
         <Interact questId="87700" stepId="-1" actorId="3739" actorName="CaptainRumfoord" x="2841" y="2937" z="24" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
-        <WaitForCombat />
+        <WaitForCombat timeout="15" />
         <Wait seconds="8" />
         <Interact questId="87700" stepId="-1" actorId="3739" actorName="CaptainRumfoord" x="2841" y="2937" z="24" worldSnoId="71150" levelAreaSnoId="19947" sceneSnoId="33348" sceneName="trOut_Tristram_E10_S15" />
       </Kill>
@@ -116,7 +120,7 @@
       <LogMessage message=">> The Falle Star - Inside Slaughtered Calf Inn" />
       <Interact questId="87700" stepId="42" actorId="4580" actorName="Leah" x="111" y="59" z="0" worldSnoId="109362" levelAreaSnoId="109457" sceneSnoId="109359" sceneName="trOut_Tristram_Inn" />
       <Kill>
-        <WaitForCombat />
+        <WaitForCombat timeout="15" />
         <Interact questId="87700" stepId="46" actorId="4580" actorName="Leah" x="115" y="58" z="0" worldSnoId="109362" levelAreaSnoId="109457" sceneSnoId="109359" sceneName="trOut_Tristram_Inn" />
       </Kill>
       <Interact questId="87700" stepId="50" actorId="178293" actorName="g_Portal_Rectangle_Orange_IconDoor" x="83" y="124" z="0" worldSnoId="109362" levelAreaSnoId="109457" sceneSnoId="109359" sceneName="trOut_Tristram_Inn" />
@@ -1271,6 +1275,10 @@
       <TakeWaypoint questId="72738" stepId="12" actorId="223757" waypointNumber="8" x="2981" y="2836" z="24" />
     </If>
 
+    <If condition="(IsActiveObjective(72738,12,1) and not IsActiveObjective(72738,12,0)) and CurrentWorldId == 60393">
+      <TakeWaypoint questId="72738" stepId="12" actorId="223757" waypointNumber="8" x="2981" y="2836" z="24" />
+    </If>
+
     <If condition="IsActiveQuest(72738) and IsActiveQuestStep(12) and CurrentWorldId == 71150">
       <LogMessage output="Moving into the festering woods" />
       <MoveToPosition questId="72738" stepId="12" x="863.24" y="785.2" z="20.43" sceneX="143.24" sceneY="65.2" sceneZ="20.43" sceneSnoId="79216" sceneName="trOut_TristramFields_ExitA_E02_N01" distance="5"  worldSnoId="71150" levelAreaSnoId="19953" />
@@ -1479,10 +1487,17 @@
 
 
     <If condition="CurrentWorldId == 60395">
-
       <!-- g_Portal_Ladder_OffCenter_Blue-29394 (229013) g_Portal_Ladder_OffCenter_Blue Distance=14.57456 Type=Portal -->
       <Interact questId="73236" stepId="34" interactAttempts="2" ignoreSanityChecks="true" actorId="229013" markerHash="0" explore="false" maxRange="300" x="420.48" y="327.79" z="-47.63" sceneX="420.48" sceneY="327.79" sceneZ="-47.63" sceneSnoId="33021" sceneName="trDun_Cave_Middle_RiverA" distance="5"  worldSnoId="60395" levelAreaSnoId="60398" />
-
+      <TakeWaypoint number="0" />
+    </If>
+    
+    <!-- Resume Fix -->
+    <!-- Quest: TownAttack: The Doom in Wortham (73236) MainQuest Step: Possess Sword Piece (67) -->
+    <!-- Objective: 0: Search for the Sword Hilt (InProgress) -->
+    <!-- World: Fields_Cave_SwordOfJustice_Level01 (119888) Scene: A1_Fields_Cave_SwordOfJustice_Level01 Khazra Den (119893) Generated=True -->
+    <If condition="IsActiveQuest(73236) and IsActiveQuestStep(67) and CurrentWorldId == 119888">
+      <LogMessage output="Quest: TownAttack: The Doom in Wortham (73236) MainQuest Step: Possess Sword Piece (67) Search for the Sword Hilt" />
       <TakeWaypoint number="0" />
     </If>
 
@@ -2101,7 +2116,11 @@
     <!-- Quest: RescueTyrael: The Imprisoned Angel (72801) Type:MainQuest Step: SearchJail (17) -->
     <!-- World: trDun_Jail_Level01 (94676) Scene: A1_trDun_Jail_Level01 The Cursed Hold (94672) Generated=False -->
     <While condition="IsActiveQuest(72801) and IsActiveQuestStep(17) and CurrentWorldId == 94676">
-      <Explore stopCondition="ActorAnimationExistsNearMe(102927,'Ghost_Jail_Prisoner_Container_dead_01',100)" />
+      <Explore stopCondition="ActorAnimationExistsNearMe(102927,'Ghost_Jail_Prisoner_Container_dead_01',100)" startReset="true">
+        <IgnoreScenes>
+          <Scene sceneName="Exit"  />
+        </IgnoreScenes>
+      </Explore>
       <!-- Ghost_Jail_Prisoner-20552 (102927) Ghost_Jail_Prisoner Distance=10.78925 Type=Container -->
       <Interact questId="72801" stepId="17" interactAttempts="2" explore="true" maxRange="100" ignoreSanityChecks="true" startAnimation="Ghost_Jail_Prisoner_Container_dead_01" delay="2" actorId="102927" worldSnoId="94676" levelAreaSnoId="94672" />
     </While>

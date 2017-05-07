@@ -860,6 +860,7 @@ namespace Trinity.Framework.Reference
             4434, //HealthBall_liquid ActorSnoId=4434
             375094, //invisBoxCollision_flippy ActorSnoId=375094
             89880, //g_LightGlow_Orange ActorSnoId=89880
+            177040, //chain in heart of damnned a3dun_battlefield_Demon_ChainPylon_locked
         };
 
         /// <summary>

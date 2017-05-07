@@ -162,6 +162,8 @@ namespace Trinity.Framework.Actors.ActorTypes
         {
             Attributes = new ActorAttributes(FastAttributeGroupId);
 
+            //Test to replace attributes with DB's attribute system. 
+            //Player Map Ptr is currently wrong.
             //var test = new ActorAttributes2(CommonData);
 
             FullUpdate();
@@ -169,8 +171,15 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnUpdated()
         {
-            Attributes.Update();
+            // Strange case where shrine has no attributes, try to refresh
+            if (FastAttributeGroupId == 0 && IsValid && IsGizmo)
+            {
+                Attributes = new ActorAttributes(FastAttributeGroupId);
+                FullUpdate();
+                return;
+            }
 
+            Attributes.Update();
             if (DateTime.UtcNow.Subtract(LastFullUpdate).TotalSeconds > 10)
             {
                 FullUpdate();

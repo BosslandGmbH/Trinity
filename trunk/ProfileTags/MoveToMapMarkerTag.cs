@@ -33,7 +33,7 @@ namespace Trinity.ProfileTags
         [XmlAttribute("markerNameHash")]
         [XmlAttribute("portalNameHash")]
         [XmlAttribute("markerHash")]
-        [DefaultValue(0)]
+        [DefaultValue(0)] // -1 is used for objective in MoveToMapMarkerCoroutine
         [Description("Name hash id of the marker")]
         public int MarkerHash { get; set; }
 

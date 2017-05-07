@@ -17,6 +17,7 @@ using Zeta.XmlEngine;
 
 namespace Trinity.ProfileTags
 {
+    [XmlElement("TrinityTownRun")]
     [XmlElement("TownRun")]
     public class TownRunTag : BaseProfileBehavior
     {

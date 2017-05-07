@@ -183,21 +183,21 @@ namespace Trinity.Framework.Reference
             LevelAreaId = 270011
         };
 
-        public static TownActor A5Blacksmith = new TownActor
-        {
-            Name = "A5 Blacksmith",
-            InternalName = "PT_Blacksmith",
-            Act = Act.A5,
-            ActorId = 56947,
-            InteractPosition = new Vector3(545.5338f, 717.6472f, 2.634673f),
-            Position = new Vector3(541.959f, 716.487f, 2.52075f),
-            IsAdventurerMode = true,
-            ServiceType = ServiceType.Repair,
-            IsGizmo = false,
-            IsUnit = true,
-            WorldSnoId = 304235,
-            LevelAreaId = 270011
-        };
+        //public static TownActor A5Blacksmith = new TownActor
+        //{
+        //    Name = "A5 Blacksmith",
+        //    InternalName = "PT_Blacksmith",
+        //    Act = Act.A5,
+        //    ActorId = 56947,
+        //    InteractPosition = new Vector3(545.5338f, 717.6472f, 2.634673f),
+        //    Position = new Vector3(541.959f, 716.487f, 2.52075f),
+        //    IsAdventurerMode = true,
+        //    ServiceType = ServiceType.Repair,
+        //    IsGizmo = false,
+        //    IsUnit = true,
+        //    WorldSnoId = 304235,
+        //    LevelAreaId = 270011
+        //};
 
         public static TownActor A5Tyrael = new TownActor
         {
@@ -569,21 +569,22 @@ namespace Trinity.Framework.Reference
             LevelAreaId = 92945
         };
 
-        public static TownActor A4Blacksmith = new TownActor
-        {
-            Name = "A4 Blacksmith",
-            InternalName = "PT_Blacksmith",
-            Act = Act.A4,
-            ActorId = 56947,
-            InteractPosition = new Vector3(329.887f, 415.2654f, 0.4806792f),
-            Position = new Vector3(326.6459f, 414.904f, -0.0621901f),
-            IsAdventurerMode = true,
-            ServiceType = ServiceType.Repair,
-            IsGizmo = false,
-            IsUnit = true,
-            WorldSnoId = 172909,
-            LevelAreaId = 92945
-        };
+        // Cannot repair at blacksmith in campaign mode he just has talk options.
+        //public static TownActor A4Blacksmith = new TownActor
+        //{
+        //    Name = "A4 Blacksmith",
+        //    InternalName = "PT_Blacksmith",
+        //    Act = Act.A4,
+        //    ActorId = 56947,
+        //    InteractPosition = new Vector3(329.887f, 415.2654f, 0.4806792f),
+        //    Position = new Vector3(326.6459f, 414.904f, -0.0621901f),
+        //    IsAdventurerMode = true,
+        //    ServiceType = ServiceType.Repair,
+        //    IsGizmo = false,
+        //    IsUnit = true,
+        //    WorldSnoId = 172909,
+        //    LevelAreaId = 92945
+        //};
 
         public static TownActor A4BlacksmithSalvage = new TownActor
         {
@@ -601,21 +602,26 @@ namespace Trinity.Framework.Reference
             LevelAreaId = 92945
         };
 
-        public static TownActor A4QuaterMaster = new TownActor
-        {
-            Name = "A4 QuarterMaster",
-            InternalName = "A4_UniqueVendor_InnKeeper_08",
-            Act = Act.A4,
-            ActorId = 230865,
-            InteractPosition = new Vector3(311.422f, 496.7398f, -5.678425f),
-            Position = new Vector3(308.39f, 499.479f, -5.77843f),
-            IsAdventurerMode = true,
-            ServiceType = ServiceType.QuarterMaster,
-            IsGizmo = false,
-            IsUnit = true,
-            WorldSnoId = 172909,
-            LevelAreaId = 92945
-        };
+       //      <!-- A3_UniqueVendor_InnKeeper-529 (181473) A3_UniqueVendor_InnKeeper Distance = 6.338559 Type=Unit Anim = OmniNPC_Male_HTH_town_idle_01-- >
+       //< MoveToActor questId="93595" stepId="8" actorId="181473" markerHash="0" explore="false" maxRange="300" startAnimation="OmniNPC_Male_HTH_town_idle_01" x="308.35" y="499.54" z="-5.78" sceneX="68.35" sceneY="19.54" sceneZ="-5.78" sceneSnoId="172872" sceneName="a3dun_vendors_A_E02_S02" distance="5" useNavigation="true"  worldSnoId="172909" levelAreaSnoId="92945" />
+       // Different in campaign mode...
+       //
+
+        //public static TownActor A4QuaterMaster = new TownActor
+        //{
+        //    Name = "A4 QuarterMaster",
+        //    InternalName = "A4_UniqueVendor_InnKeeper_08",
+        //    Act = Act.A4,
+        //    ActorId = 230865,
+        //    InteractPosition = new Vector3(311.422f, 496.7398f, -5.678425f),
+        //    Position = new Vector3(308.39f, 499.479f, -5.77843f),
+        //    IsAdventurerMode = true,
+        //    ServiceType = ServiceType.QuarterMaster,
+        //    IsGizmo = false,
+        //    IsUnit = true,
+        //    WorldSnoId = 172909,
+        //    LevelAreaId = 92945
+        //};
 
         public static TownActor A4Healer = new TownActor
         {
@@ -876,21 +882,21 @@ namespace Trinity.Framework.Reference
             LevelAreaId = 92945
         };
 
-        public static TownActor A3Blacksmith = new TownActor
-        {
-            Name = "A3 Blacksmith",
-            InternalName = "PT_Blacksmith",
-            Act = Act.A3,
-            ActorId = 56947,
-            InteractPosition = new Vector3(329.887f, 415.2654f, 0.4806792f),
-            Position = new Vector3(326.6459f, 414.904f, -0.0621901f),
-            IsAdventurerMode = true,
-            ServiceType = ServiceType.Repair,
-            IsGizmo = false,
-            IsUnit = true,
-            WorldSnoId = 172909,
-            LevelAreaId = 92945
-        };
+        //public static TownActor A3Blacksmith = new TownActor
+        //{
+        //    Name = "A3 Blacksmith",
+        //    InternalName = "PT_Blacksmith",
+        //    Act = Act.A3,
+        //    ActorId = 56947,
+        //    InteractPosition = new Vector3(329.887f, 415.2654f, 0.4806792f),
+        //    Position = new Vector3(326.6459f, 414.904f, -0.0621901f),
+        //    IsAdventurerMode = true,
+        //    ServiceType = ServiceType.Repair,
+        //    IsGizmo = false,
+        //    IsUnit = true,
+        //    WorldSnoId = 172909,
+        //    LevelAreaId = 92945
+        //};
 
         public static TownActor A3BlacksmithSalvage = new TownActor
         {
@@ -908,21 +914,22 @@ namespace Trinity.Framework.Reference
             LevelAreaId = 92945
         };
 
-        public static TownActor A3QuaterMaster = new TownActor
-        {
-            Name = "A3 QuarterMaster",
-            InternalName = "A4_UniqueVendor_InnKeeper_08",
-            Act = Act.A3,
-            ActorId = 230865,
-            InteractPosition = new Vector3(311.422f, 496.7398f, -5.678425f),
-            Position = new Vector3(308.39f, 499.479f, -5.77843f),
-            IsAdventurerMode = true,
-            ServiceType = ServiceType.QuarterMaster,
-            IsGizmo = false,
-            IsUnit = true,
-            WorldSnoId = 172909,
-            LevelAreaId = 92945
-        };
+        // diff actor in campaign mode
+        //public static TownActor A3QuaterMaster = new TownActor
+        //{
+        //    Name = "A3 QuarterMaster",
+        //    InternalName = "A4_UniqueVendor_InnKeeper_08",
+        //    Act = Act.A3,
+        //    ActorId = 230865,
+        //    InteractPosition = new Vector3(311.422f, 496.7398f, -5.678425f),
+        //    Position = new Vector3(308.39f, 499.479f, -5.77843f),
+        //    IsAdventurerMode = true,
+        //    ServiceType = ServiceType.QuarterMaster,
+        //    IsGizmo = false,
+        //    IsUnit = true,
+        //    WorldSnoId = 172909,
+        //    LevelAreaId = 92945
+        //};
 
         public static TownActor A3Healer = new TownActor
         {

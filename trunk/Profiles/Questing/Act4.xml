@@ -26,9 +26,7 @@
   <Order>
     <LogMessage message="Loaded Act 4 by rrrix" />
     <ToggleTargeting questId="1" combat="True" killRadius="90" looting="True" lootRadius="300" />
-    <QuestToolsSetVariable questId="1" key="DebugLogging" value="True" />
-    <SetQuesting questId="1" mode="true" />
-    <SetCombatMode mode="Questing" />
+
 
     <If condition="ZetaDia.CurrentActSnoId == 70015">
       <LogMessage message="We're in the wrong act, loading Act 1" />
@@ -220,6 +218,28 @@
       <WaitTimer questId="113910" stepId="44" waitTime="1000" />
     </If>
 
+
+    <!-- Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: CloseHellPortal1 (44) -->
+    <!-- Objective: 0: Destroy the Rift Oculus in the Hell Rift (InProgress) -->
+    <!-- World: a4dun_Hell_Portal_01 (109525) Scene: A4_dun_Hell_Portal_01 Hell Rift (109526) Generated=True -->
+    <If condition="IsActiveQuest(113910) and IsActiveQuestStep(44) and CurrentWorldId == 109525">
+      <LogMessage output="Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: CloseHellPortal1 (44) Destroy the Rift Oculus in the Hell Rift" />
+      <Explore condition="ActorExistsNearMe(208561,80)" />
+      <Interact questId="113910" stepId="44"  actorId="208561" />
+      <WaitTimer questId="113910" stepId="44" waitTime="25000" />
+    </If>
+
+    <!-- Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: EscapeHellPortal1 (62) -->
+    <!-- Objective: 0: Use Auriel's portal to leave the Hell Rift (InProgress) -->
+    <!-- World: a4dun_Hell_Portal_01 (109525) Scene: A4_dun_Hell_Portal_01 Hell Rift (109526) Generated=True -->
+    <If condition="IsActiveQuest(113910) and IsActiveQuestStep(62) and CurrentWorldId == 109525">
+      <LogMessage output="Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: EscapeHellPortal1 (62) Use Auriel's portal to leave the Hell Rift" />
+      <!-- Gardens of Hope 1st Tier -1524911734 QuestSceneEntrance Distance=539.316 TextureId=102320 WorldSnoId=2001207314 Actor=a4dun_Garden_Hellportal_Pillar-24821 (208561) -->
+      <MoveToMapMarker questId="113910" stepId="62" markerHash="-1524911734" markerName="Gardens of Hope 1st Tier" markerType="102320" zerg="false"  worldSnoId="109525" levelAreaSnoId="109526" />
+      <Interact questId="113910" stepId="62" actorId="204901" isPortal="True" destinationWorldId="109513" />
+      <WaitTimer questId="113910" stepId="62" waitTime="1000" />
+    </If>
+
     <While condition="IsActiveQuest(113910) and IsActiveQuestStep(44) and CurrentWorldId == 109525">
       <TrinityExploreDungeon questId="113910" stepId="44" until="ObjectFound" actorId="208561" exitNameHash="-1524911734" boxTolerance="0.18" boxSize="18">
         <PrioritizeScenes>
@@ -265,7 +285,7 @@
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(52) and CurrentWorldId == 219659">
       <!-- 2nd Tier Hell Rift -->
-      <TrinityExploreDungeon questId="113910" stepId="52" actorId="224890" boxTolerance="0.70" boxSize="10" pathPrecision="40" until="ExitFound" exitNameHash="984446737">
+      <TrinityExploreDungeon questId="113910" stepId="52" actorId="224890" exitNameHash="984446737">
         <PrioritizeScenes>
           <PriorityScene sceneName="Exit" />
         </PrioritizeScenes>
@@ -301,6 +321,8 @@
       <!-- Quest: Heaven_RestorationOfHope (113910) World: a4dun_Hell_Portal_02 (109530) LevelArea: A4_dun_Hell_Portal_02 (109531) -->
       <MoveToMapMarker questId="113910" stepId="60" markerNameHash="-1524911733" actorId="204901" interactRange="8.316568"
                              pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+      <!-- g_Portal_HeavenTeal-29108 (204901) g_Portal_HeavenTeal Distance=7.503984 Type=Portal Anim=townPortal_neverLeaveUs_idle_01 Marker=Gardens of Hope 2nd Tier (-1524911733, QuestSceneEntrance) -->
+      <Interact questId="113910" stepId="60" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="204901" markerHash="-1524911733" explore="false" maxRange="300" startAnimation="townPortal_neverLeaveUs_idle_01" x="689.9" y="734.25" z="20" sceneX="209.9" sceneY="14.25" sceneZ="20" sceneSnoId="151076" sceneName="a3dun_Crater_S_Dead_End_02_E01_N01" distance="5" useNavigation="true"  worldSnoId="109530" levelAreaSnoId="109531" />
       <!--<Interact questId="113910" stepId="60" actorId="204901" isPortal="True" destinationWorldId="219659" />-->
       <WaitTimer questId="113910" stepId="60" waitTime="1000" />
     </If>
@@ -330,6 +352,9 @@
 
       <MoveToMapMarker questId="113910" stepId="56" markerNameHash="-1524911733" actorId="204901" interactRange="20"
             pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="219659" statusText="" />
+      <Interact questId="113910" stepId="56" markerNameHash="-1524911733" actorId="204901" interactRange="20"
+      pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="219659" statusText="" />
+
     </If>
 
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(56) and CurrentWorldId == 219659">
@@ -380,6 +405,8 @@
       <!-- Move to Silver Spire, New Game -->
       <SafeMoveTo questId="114901" stepId="24" x="371" y="374" z="0" />
       <MoveToMapMarker questId="114901" stepId="24" portalMarkerHash="1067638620" destinationWorldId="198281" actorId="176001" isPortal="True"  x="365" y="367" z="0" />
+      <Interact questId="114901" stepId="24" portalMarkerHash="1067638620" destinationWorldId="198281" actorId="176001" isPortal="True"  x="365" y="367" z="0" />
+
     </If>
 
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(24) and CurrentWorldId == 198281">
@@ -405,6 +432,9 @@
       <!-- Quest: Heaven_CorruptedArch (114901) World: a4dun_Spire_Level_01 (121579) LevelArea: A4_dun_Spire_01 (109538) -->
       <MoveToMapMarker questId="114901" stepId="24" markerNameHash="1038619951" actorId="225195" interactRange="14.75969"
                              pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+      <Interact questId="114901" stepId="24" markerNameHash="1038619951" actorId="225195" interactRange="14.75969"
+                       pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+
       <WaitTimer questId="114901" stepId="24" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(114901) and IsActiveQuestStep(24) and CurrentWorldId == 214956">
