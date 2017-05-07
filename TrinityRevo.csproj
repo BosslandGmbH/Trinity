@@ -174,6 +174,7 @@
     <Compile Include="Components\Adventurer\UI\MainUI.cs" />
     <Compile Include="Components\QuestTools\BaseContainerProfileBehavior.cs" />
     <Compile Include="Components\QuestTools\BaseProfileBehavior.cs" />
+    <Compile Include="Components\QuestTools\BehaviorTreeExecutor.cs" />
     <Compile Include="Components\QuestTools\BotBehaviorQueue.cs" />
     <Compile Include="Components\QuestTools\EnhancedDefaultTags.cs" />
     <Compile Include="Components\QuestTools\IEnhancedProfileBehavior.cs" />
@@ -703,7 +704,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Profiles\Questing\Act2_StartNew.xml" />
-    <Content Include="Profiles\Questing\Act3.xml" />
+    <Content Include="Profiles\Questing\Act3.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Questing\Act3_StartNew.xml" />
     <Content Include="Profiles\Questing\Act4.xml" />
     <Content Include="Profiles\Questing\Act4_StartNew.xml" />

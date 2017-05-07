@@ -91,7 +91,8 @@ namespace Trinity.ProfileTags
             if (ActorId > 0 && ProfileConditions.ActorExistsNearMe(ActorId, 80f))
                 return true;
 
-            if (ExploreUntil == "ExitFound" && ProfileConditions.MarkerTypeWithinRange("Exit", 80f))
+            if (ExploreUntil == "ExitFound" && ProfileConditions.MarkerTypeWithinRange("Exit", 80f) 
+                && (ExitNameHash == 0 || ProfileConditions.MarkerExistsNearMe(ExitNameHash,80f)))
                 return true;
 
             return false;

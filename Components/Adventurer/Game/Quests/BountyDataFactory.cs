@@ -10,7 +10,7 @@ using Zeta.Common;
 using Zeta.Game;
 
 
- // This bounties is improved by Noin (1.05) 
+ // This bounties is improved by Noin (1.09) 
 			
 namespace Trinity.Components.Adventurer.Game.Quests
 {
@@ -306,19 +306,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             // pattern to where theyre placed. Navigation is also busted
             // for this area, visited nodes are not being flagged properly
             // when in radius
-
-            // A2 - Blood and Iron (432334)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 432334,
-                Act = Act.A2,
-                WorldId = 70885,
-                QuestType = BountyQuestType.GuardedGizmo,
-                Coroutines = new List<ISubroutine>
-                {
-                    new GuardedGizmoCoroutine(432334, 432331)
-                }
-            });
 			
             // A2 - Bounty: Prisoners of Kamyr (347595)
             Bounties.Add(new BountyData
@@ -332,6 +319,18 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new MoveToMapMarkerCoroutine(347595, 70885, 2912417),
 
+                    new MoveToScenePositionCoroutine(347595, 70885, "caOut_Oasis_Sub240_POI", new Vector3(95.05688f, 100.9766f, 90.32501f)),
+
+                    // caldeumTortured_Poor_Male_A_ZakarwaPrisoner (183609) Distance: 11.12986
+                    new InteractWithUnitCoroutine(347595, 70885, 183609, 2912417, 5),
+                    new WaitCoroutine(3000),
+
+                    new MoveToScenePositionCoroutine(347595, 70885, "caOut_Oasis_Sub240_POI", new Vector3(114.7661f, 82.81201f, 90.32503f)),
+
+                    // caldeumTortured_Poor_Male_A_ZakarwaPrisoner (183609) Distance: 5.553013
+                    new InteractWithUnitCoroutine(347595, 70885, 183609, 2912417, 5),
+                    new WaitCoroutine(3000),
+					
                     new MoveToScenePositionCoroutine(347595, 70885, "caOut_Oasis_Sub240_POI", new Vector3(95.05688f, 100.9766f, 90.32501f)),
 
                     // caldeumTortured_Poor_Male_A_ZakarwaPrisoner (183609) Distance: 11.12986
@@ -362,19 +361,104 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new ClearAreaForNSecondsCoroutine(347595, 30, 0, 0, 45),
                 }
             });
-
-            // A5 - Bounty: Lost Host (363402)
+			
+            // A5 - Bounty: The True Son of the Wolf (368601)
             Bounties.Add(new BountyData
             {
-                QuestId = 363402,
+                QuestId = 368601,
                 Act = Act.A5,
-                WorldId = 271235,
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 60,
+                WorldId = 336902, // Enter the final worldId here
+                QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
                 {
-                    new MoveToMapMarkerCoroutine(363402, 271235, 2912417),
-                    new ClearAreaForNSecondsCoroutine(363402, 60, 2912417, 0, 30, false),
+                    new EnterLevelAreaCoroutine(368601, 263494, 336902, -752748507, 333736),
+                    new MoveToPositionCoroutine(336902, new Vector3(311, 393, 10)),
+                    // x1_NPC_Westmarch_Aldritch (336711) Distance: 9.175469
+                    new InteractWithUnitCoroutine(368601, 336902, 336711, 0, 5),
+//                  new ClearAreaForNSecondsCoroutine(368601, 60, 336711, 0, 40),
+                    new ClearAreaForNSecondsCoroutine(368601, 60, 0, 0, 45),
+                    new ClearLevelAreaCoroutine(336902),
+                }
+            });
+			
+            // A1 - Bounty: The Precious Ores (347060)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 347060,
+                Act = Act.A1,
+                WorldId = 82371, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                Coroutines = new List<ISubroutine>
+                {
+                    new EnterLevelAreaCoroutine(347060, 71150, 82370, -431250552, 176038),
+                    new EnterLevelAreaCoroutine(347060, 82370, 82371, -431250551, 176038, true),
+                    new InteractWithUnitCoroutine(347060, 82371, 107076, -431250552, 5),
+
+					
+                    new MoveToActorCoroutine(347060, 82371, 204032),
+                    // a1dun_caves_Rocks_GoldOre (204032) Distance: 19.51709
+                    new InteractWithGizmoCoroutine(347060, 82371, 204032, 0, 5),
+                    // a1duncave_props_crystal_cluster_A (202277) Distance: 20.88908
+
+                    // a1duncave_props_crystal_cluster_A (202277) Distance: 20.88908
+					new MoveToScenePositionCoroutine(347060, 82371, "trDun_Cave_Mine_NSEW_01", new Vector3(147.2289f, 107.4656f, 0.1f)),
+                    new MoveToActorCoroutine(347060, 82371, 202277),
+					new InteractWithGizmoCoroutine(347060, 82371, 202277, 0, 5),
+					new ClearAreaForNSecondsCoroutine(347060, 60, 0, 0, 30),
+					
+                    new InteractWithUnitCoroutine(347060, 82371, 107076, 0, 5),
+                }
+            });
+			
+            // A1 - Scavenged Scabbard (344488)
+             // Fixed pathing to entrance but it doesnt attack the boss at the end. Trinity issue.
+            Bounties.Add(new BountyData
+            {
+                QuestId = 344488,
+                Act = Act.A1,
+                WorldId = 82313,
+                QuestType = BountyQuestType.SpecialEvent,
+                Coroutines = new List<ISubroutine>
+                    {
+//						new MoveToMapMarkerCoroutine(344488, 71150, 497382903),
+						
+						new MoveToPositionCoroutine(71150, new Vector3(2401, 4530, -1)), 
+						new MoveToPositionCoroutine(71150, new Vector3(2384, 4357, 0)), 
+						new MoveToPositionCoroutine(71150, new Vector3(2333, 4145, 0)), 
+						new MoveToPositionCoroutine(71150, new Vector3(2197, 3978, 0)), 
+						new MoveToPositionCoroutine(71150, new Vector3(2133, 3886, 4)), 
+						new MoveToPositionCoroutine(71150, new Vector3(2087, 3868, 10)),			 
+
+                        new EnterLevelAreaCoroutine (344488, 71150, 82076, 497382903, 175482),
+ 
+                        //Navigation appears to be busted on this level
+                        //new EnterLevelAreaCoroutine (344488, 71150, 82076, 497382903, 175482),
+
+                        new EnterLevelAreaCoroutine (344488, 82076, 82313, 497382904, 176001, true),
+						new WaitCoroutine(3000),
+                        new MoveToPositionCoroutine(82313, new Vector3(328, 519, 0)),
+                        new InteractWithUnitCoroutine(344488,82313,81609,0,3),
+                        new WaitCoroutine(344488, 82313, 3000),
+						
+						new MoveToActorCoroutine(344488, 82313, 222404),
+						
+                        new InteractWithGizmoCoroutine(344488, 82313, 222404, 0, 5),						
+						new InteractWithUnitCoroutine(344488, 82313, 81609, 0, 5),
+                        new ClearLevelAreaCoroutine(344488)
+
+                    }
+            });
+
+            // A2 - Blood and Iron (432334)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 432334,
+                Act = Act.A2,
+                WorldId = 70885,
+                QuestType = BountyQuestType.GuardedGizmo,
+                Coroutines = new List<ISubroutine>
+                {
+                    new GuardedGizmoCoroutine(432334, 432331)
                 }
             });
 		
@@ -389,6 +473,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(346065, 70885, 2912417),
+					
                     new MoveToSceneCoroutine(346065, 70885, "caOut_Oasis_Sub240_POI"),
                     new MoveToScenePositionCoroutine(346065, 70885, "caOut_Oasis_Sub240_POI", new Vector3(106.3967f, 125.3721f, 120.1f)),
 
@@ -413,26 +498,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A5 - Bounty: The Great Weapon (363344)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 363344,
-                Act = Act.A5,
-                WorldId = 338600, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                //WaypointNumber = 58,
-                Coroutines = new List<ISubroutine>
-                {
-                    new MoveToMapMarkerCoroutine(363344, 338600, 2912417),
-                    // X1_Angel_Common_Event_GreatWeapon (354407) Distance: 31.32524
-					new MoveToActorCoroutine(363344, 338600, 354407),
-                    // X1_Angel_Common_Event_GreatWeapon (354407) Distance: 31.32524
-                    new InteractWithUnitCoroutine(363344, 338600, 354407, 0, 5),
-                    new MoveToScenePositionCoroutine(363344, 338600, "GreatWeapon", new Vector3(114.6218f, 161.0695f, -17.9f)),
-                    new ClearAreaForNSecondsCoroutine(363344, 200, 354407, 0, 45),
-
-                }
-            });
 
             // A5 - Bounty: The Crystal Prison (363390)
             Bounties.Add(new BountyData
@@ -464,7 +529,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.SpecialEvent,
                 Coroutines = new List<ISubroutine>
                     {
-//                        new EnterLevelAreaCoroutine(375350,261712,338930,-660641889 ,376027),
+                        new MoveToMapMarkerCoroutine(375350, 261712, -660641889),
                         new EnterLevelAreaCoroutine(375350,261712,338930,-660641889 ,0),
 
                         new EnterLevelAreaCoroutine(375350,338930,338968,2115491808,0),
@@ -481,88 +546,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     }
             });
 
-            // A2 - Bounty: Restless Sands (350562) 8	0
-            Bounties.Add(new BountyData
-            {
-                QuestId = 350562,
-                Act = Act.A2,
-                WorldId = 70885, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                //WaypointNumber = 21,
-                Coroutines = new List<ISubroutine>
-                {
-//					new MoveToMapMarkerCoroutine(350562, 70885, 2912417),
-                    new MoveToMapMarkerCoroutine(350562, 70885, 2912417),
-//                    new MoveToMapMarkerCoroutine(350562, 70885, 242772911),
-                    // oldNecromancer (4798) Distance: 14.02715
-                    new MoveToActorCoroutine(350562, 70885, 4798),
-                    // oldNecromancer (4798) Distance: 14.02715
-                    new InteractWithUnitCoroutine(350562, 70885, 4798, 0, 5),
-                    new WaitCoroutine(5000),
-                    // caOut_Totem_A (3707) Distance: 10.77662
-                    new MoveToActorCoroutine(350562, 70885, 3707),
-                    // caOut_Totem_A (3707) Distance: 10.77662
-                    new InteractWithGizmoCoroutine(350562, 70885, 3707, 0, 5),
-                    new WaitCoroutine(5000),
-                    // caOut_Totem_A (3707) Distance: 10.77662
-                    new MoveToActorCoroutine(350562, 70885, 3707),
-                    // caOut_Totem_A (3707) Distance: 10.77662
-                    new InteractWithGizmoCoroutine(350562, 70885, 3707, 0, 5),
-                    new WaitCoroutine(5000),
-                    // oldNecromancer (4798) Distance: 1.06224
-                    new MoveToActorCoroutine(350562, 70885, 4798),
-                    // oldNecromancer (4798) Distance: 1.06224
-                    new InteractWithUnitCoroutine(350562, 70885, 4798, 0, 5),
-                    new ClearAreaForNSecondsCoroutine(350562, 10, 0, 0, 45),
-                    // oldNecromancer (4798) Distance: 1.06224
-                    new MoveToActorCoroutine(350562, 70885, 4798),
-                    // oldNecromancer (4798) Distance: 1.06224
-                    new InteractWithUnitCoroutine(350562, 70885, 4798, 0, 5),
-                    new ClearLevelAreaCoroutine(350562)
-                }
-            });
-			
-            // A2 - Bounty: The Guardian Spirits (350560)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 350560,
-                Act = Act.A2,
-                WorldId = 70885, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                //WaypointNumber = 21,
-                Coroutines = new List<ISubroutine>
-                {
-                    //World: caOUT_Town, Id: 70885, AnnId: 1999568897, IsGenerated: False
-                    //Scene: caOut_Sub240x240_Tower_Ruin, SnoId: 31623,
-                    //LevelArea: A2_caOUT_StingingWinds, Id: 19839
-
-                    new MoveToMapMarkerCoroutine(350560, 70885, 2912417),
-
-                    new MoveToSceneCoroutine(350560, 70885, "caOut_StingingWinds_E05_S07"),
-
-                    //// A2C2DyingGhostGuy (51293) Distance: 4.714807
-                    new InteractWithUnitCoroutine(350560, 70885, 51293, 2912417, 5),
-                    new WaitCoroutine(5000),
-                    new MoveToScenePositionCoroutine(350560, 70885, null, new Vector3(98.66846f, 108.3327f, 175.6606f)),
-                    //// GhostTotem (59436) Distance: 4.005692
-                    new InteractWithGizmoCoroutine(350560, 70885, 59436, 0, 5),
-                    new MoveToScenePositionCoroutine(350560, 70885, null, new Vector3(156.0665f, 112.9069f, 175.5679f)),
-                    //// GhostTotem (59436) Distance: 6.767324
-                    new InteractWithGizmoCoroutine(350560, 70885, 59436, 0, 5),
-                    new MoveToScenePositionCoroutine(350560, 70885, null, new Vector3(134.1381f, 139.6368f, 175.9637f)),
-                    new WaitCoroutine(3000),
-                    new ClearAreaForNSecondsCoroutine(350560, 20, 0, 0, 25),
-                    // A2C2DyingGhostGuy (51293) Distance: 8.124561
-//                    new InteractWithUnitCoroutine(350560, 70885, 51293, 2912417, 5),
-                    // GhostTotem (59436) Distance: 6.767324
-//                    new InteractWithGizmoCoroutine(350560, 70885, 59436, 0, 5),
-//                    new WaitCoroutine(3000),
-                    // GhostTotem (59436) Distance: 4.005692
-//                    new InteractWithGizmoCoroutine(350560, 70885, 59436, 0, 5),
-//                    new WaitCoroutine(3000),
-//                    new ClearAreaForNSecondsCoroutine(350560, 20, 0, 0, 25),
-                }
-            });
 			
             // A5 - Bounty: Demon Souls (363409)
              // Death orbs are Monster/Unit that are not hostile, possibly need interact. trinity doesnt know what to do with them.
@@ -575,31 +558,27 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 //WaypointNumber = 56,
                 Coroutines = new List<ISubroutine>
                 {
-					new MoveToActorCoroutine(363409, 271233, 328830),
-					new InteractWithGizmoCoroutine(363409, 271233, 328830, -1751517829, 5),
+                   new MoveThroughDeathGates(363409, 271233, 1),
+
                     new MoveToMapMarkerCoroutine(363409, 271233, 2912417),
                     // x1_Fortress_Event_Worldstone_Jamella (334487) Distance: 27.00935
-                    new InteractWithUnitCoroutine(363409, 271233, 334487, 2912417, 5),
-                    new MoveToScenePositionCoroutine(363409, 271233, "Worldstone", new Vector3(54.08716f, 149.2113f, 0.471462f)),
-                    
-                    ////ActorId: 334466, Type: Monster, Name: x1_Death_Orb_Little_Event_Worldstone-4542, Distance2d: 13.59136, 
-                    //new InteractWithUnitCoroutine(363409, 271233, 334466, 2912417, 5),
-
-                    new ClearAreaForNSecondsCoroutine(363409,20,334466,0),
-                    new MoveToScenePositionCoroutine(363409, 271233, "Worldstone", new Vector3(161.1299f, 46.66309f, 0.471462f)),
-					new InteractWithGizmoCoroutine(363409, 271233, 328830, 0, 5),
-                    new ClearAreaForNSecondsCoroutine(363409,20,334466,0),
-                    new MoveToScenePositionCoroutine(363409, 271233, "Worldstone", new Vector3(76.70563f, 60.66968f, 0.4456833f)),
-                    new ClearAreaForNSecondsCoroutine(363409,20,334466,0),
-                    new MoveToScenePositionCoroutine(363409, 271233, "x1_fortress_SE_05_Worldstone", new Vector3(185.5141f, 196.046f, 0.1f)),
-                    
-                   // //ActorId: 334466, Type: Monster, Name: x1_Death_Orb_Little_Event_Worldstone-4542, Distance2d: 13.59136, 
-                   // new InteractWithUnitCoroutine(363409, 271233, 334466, 2912417, 5),
-
-                   ////ActorId: 334466, Type: Monster, Name: x1_Death_Orb_Little_Event_Worldstone-4542, Distance2d: 13.59136, 
-                   // new InteractWithUnitCoroutine(363409, 271233, 334466, 2912417, 5),
-
-                    // x1_Fortress_Event_Worldstone_Jamella (334487) Distance: 3.279212
+					new InteractWithUnitCoroutine(363409, 271233, 334487, 2912417, 5),
+					
+                    new MoveToScenePositionCoroutine(363409, 271233, "x1_fortress_SE_05_Worldstone", new Vector3(165.6456f, 61.12549f, 0.361735f)),
+                    new ClearAreaForNSecondsCoroutine(363409, 20, 334466, 0, 45),
+					
+                    new MoveToScenePositionCoroutine(363409, 271233, "x1_fortress_SE_05_Worldstone", new Vector3(176.6174f, 147.6885f, 0.471462f)),
+					new MoveThroughDeathGates(363409, 271233, 1),
+					
+					new MoveToScenePositionCoroutine(363409, 271233, "x1_fortress_SE_05_Worldstone", new Vector3(68.77673f, 154.9171f, 0.4347426f)),
+                    new ClearAreaForNSecondsCoroutine(363409, 20, 334466, 0, 45),
+					new MoveThroughDeathGates(363409, 271233, 1),
+					
+                    new MoveToScenePositionCoroutine(363409, 271233, "x1_fortress_SE_05_Worldstone", new Vector3(70.68292f, 67.76535f, 0.4456832f)),
+                    new ClearAreaForNSecondsCoroutine(363409, 20, 334466, 0, 45),
+					new MoveThroughDeathGates(363409, 271233, 1),
+					
+                    new MoveToScenePositionCoroutine(363409, 271233, "x1_fortress_SE_05_Worldstone", new Vector3(185.505f, 200.7375f, 0.1f)),
                     new InteractWithUnitCoroutine(363409, 271233, 334487, 0, 5),
                 }
             });
@@ -685,22 +664,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
                     new EnterLevelAreaCoroutine(347591, 70885, 157882, 922565181, 175467),
 					
-					new MoveToScenePositionCoroutine(347591, 157882, "a2dun_Aqd_E_01", new Vector3(169.041f, -142.0453f, 7.948498f)),
 					
+					new MoveToScenePositionCoroutine(347591, 157882, "a2dun_Aqd_NSE_Vault_01", new Vector3(47.53217f, 11.98969f, -1.867057f)),
 					new MoveToActorCoroutine(347591, 157882, 219879),
-
                     // a2dun_Aqd_Act_Lever_FacePuzzle_01 (219879) Distance: 20.38647
                     new InteractWithGizmoCoroutine(347591, 157882, 219879, 0, 5),
 					
 					new WaitCoroutine(2000),
 
                     //153836 a2dun_Aqd_GodHead_Door (Door) 
-                    new MoveToActorCoroutine(347591, 70885, 153836),
-
-                    // a2dun_Aqd_Chest_Rare_FacePuzzleSmall (190708) Distance: 30.81505
-                    new InteractWithGizmoCoroutine(347591, 157882, 190708, 0, 5),
-
-                    new ClearAreaForNSecondsCoroutine(347591, 30, 0, 0, 45),
+					new MoveToScenePositionCoroutine(347591, 157882, "a2dun_Aqd_NSE_Vault_01", new Vector3(47.53217f, 11.98969f, -1.867057f)),
+					new MoveToScenePositionCoroutine(347591, 157882, "a2dun_Aqd_NSE_Vault_02", new Vector3(53.40659f, 48.12427f, -9.900001f)),
+					// a2dun_Aqd_Chest_Rare_FacePuzzleSmall (190708) Distance: 11.21381
+					new InteractWithGizmoCoroutine(347591, 157882, 190708, 0, 5),
+					
+                    new ClearAreaForNSecondsCoroutine(347591, 30, 0, 0, 30),
                 }
             });
 			
@@ -736,52 +714,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 			
-
-			
-            // A5 - Bounty: The Hatchery (363431)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 363431,
-                Act = Act.A5,
-                WorldId = 283552, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                //WaypointNumber = 54,
-                Coroutines = new List<ISubroutine>
-                {
-                    new MoveToMapMarkerCoroutine(363431, 283552, 2912417),
-                    new ClearAreaForNSecondsCoroutine(363431, 45, 0, 0, 45),
-                }
-            });
-			
-			// A5 - 현상금 사냥: 숲의 기도 방해 (444397)
-			Bounties.Add(new BountyData
-			{
-				QuestId = 444397,
-				Act = Act.A5,
-				WorldId = 408254,
-				QuestType = BountyQuestType.SpecialEvent,
-                WaypointNumber = 59,
-				Coroutines = new List<ISubroutine>
-				{
-					new MoveToMapMarkerCoroutine(444397, 408254, 2912417),
-					new ClearAreaForNSecondsCoroutine(444397, 120, 0, 0, 25),
-				}
-			});
-
-			// A1 - 현상금 사냥: 죽음을 부르는 자 카둘 처치 (344490)
-			Bounties.Add(new BountyData
-			{
-				QuestId = 344490,
-				Act = Act.A1,
-				WorldId = 71150, // Enter the final worldId here
-				QuestType = BountyQuestType.SpecialEvent,
-				WaypointNumber = 13,
-				Coroutines = new List<ISubroutine>
-				{
-					new MoveToMapMarkerCoroutine(344490, 71150, 1928482775),
-					new ClearAreaForNSecondsCoroutine(344490, 60, 0, 0, 45),
-				}
-			});
 			
 			// A5 - 현상금 사냥: 보물고 (359911)
 			Bounties.Add(new BountyData
@@ -799,8 +731,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
 					new InteractWithGizmoCoroutine(359911, 283552, 368515, 0, 5),
 					new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(64.40137f, 659.7856f, 0.1000001f)),
 					new InteractWithGizmoCoroutine(359911, 283552, 368515, 0, 5),
-					new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(170.482f, 643.7385f, 0.5160835f)),
+					new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(168.645f, 154.1129f, 0.6154602f)),
 					new InteractWithGizmoCoroutine(359911, 283552, 368515, 0, 5),
+					
+					
 					new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(111.5297f, 577.4111f, 0.5355556f)),
 					// x1_Catacombs_chest_rare_treasureRoom (356908) Distance: 5.573406
 					new InteractWithGizmoCoroutine(359911, 283552, 356908, 0, 5),
@@ -818,32 +752,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new GuardedGizmoCoroutine(433025, 432885)
-                }
-            });
-			
-            //A1 - The Triune Reborn - Interact with operated gizmo repeatly
-            Bounties.Add(new BountyData
-            {
-                QuestId = 432293,
-                Act = Act.A1,
-                WorldId = 71150,
-                QuestType = BountyQuestType.GuardedGizmo,
-                Coroutines = new List<ISubroutine>
-                {
-                    new GuardedGizmoCoroutine(432293,432259)
-                }
-            });
-			
-            //A1 - Wortham Survivors - Interact with operated gizmo repeatly
-            Bounties.Add(new BountyData
-            {
-                QuestId = 434378,
-                Act = Act.A1,
-                WorldId = 58982,
-                QuestType = BountyQuestType.GuardedGizmo,
-                Coroutines = new List<ISubroutine>
-                {
-                    new GuardedGizmoCoroutine(434378,434366)
                 }
             });
 			
@@ -868,7 +776,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 //WaypointNumber = 45,
                 Coroutines = new List<ISubroutine>
                 {
-                    new EnterLevelAreaCoroutine(361421, 121579, 214956, 1038619951, 225195),
+                    new EnterLevelAreaCoroutine(361421, 121579, 0, 1038619951, 225195),
                     new ClearLevelAreaCoroutine(361421),
                 }
             });
@@ -1276,6 +1184,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.GuardedGizmo,
                 Coroutines = new List<ISubroutine>
                 {
+					new MoveToPositionCoroutine(409511, new Vector3(2537, 1955, 15)), 
+					
                     new GuardedGizmoCoroutine(433099,433124)
                 }
             });
@@ -1328,6 +1238,272 @@ namespace Trinity.Components.Adventurer.Game.Quests
         private static void AddCustomBounties()
         {
             RemoveCustomBounties(347598, 346086, 346188, 369271);
+			
+            // A5 - Bounty: The Great Weapon (363344)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 363344,
+                Act = Act.A5,
+                WorldId = 338600, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                //WaypointNumber = 58,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine(363344, 338600, 2912417),
+                    // X1_Angel_Common_Event_GreatWeapon (354407) Distance: 31.32524
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(164.6685f, 231.1599f, 0.1f)),
+					new MoveToActorCoroutine(363344, 338600, 354407),
+					new InteractWithUnitCoroutine(363344, 338600, 354407, 0, 5),
+					
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(62.6709f, 231.9426f, 0.1f)),
+					new MoveToActorCoroutine(363344, 338600, 354407),
+					new InteractWithUnitCoroutine(363344, 338600, 354407, 0, 5),
+					
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(123.2855f, 157.1476f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  10000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(122.0012f, 164.2465f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(76.9765f, 155.9859f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(165.17f, 144.5193f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(122.0012f, 164.2465f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(76.9765f, 155.9859f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(165.17f, 144.5193f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(122.0012f, 164.2465f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(76.9765f, 155.9859f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(165.17f, 144.5193f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(122.0012f, 164.2465f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(76.9765f, 155.9859f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(165.17f, 144.5193f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(122.0012f, 164.2465f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(76.9765f, 155.9859f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(165.17f, 144.5193f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(122.0012f, 164.2465f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(76.9765f, 155.9859f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+					new MoveToScenePositionCoroutine(363344, 338600, "x1_Pand_Ext_240_NSEW_Event_GreatWeapon_01", new Vector3(165.17f, 144.5193f, -17.9f)),
+					new WaitCoroutine(363344, 338600,  5000),
+
+                    new ClearAreaForNSecondsCoroutine(363344, 200, 354407, 0, 45),
+
+                }
+            });
+			
+            // A2 - Bounty: The Guardian Spirits (350560)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 350560,
+                Act = Act.A2,
+                WorldId = 70885, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                //WaypointNumber = 21,
+                Coroutines = new List<ISubroutine>
+                {
+                    //World: caOUT_Town, Id: 70885, AnnId: 1999568897, IsGenerated: False
+                    //Scene: caOut_Sub240x240_Tower_Ruin, SnoId: 31623,
+                    //LevelArea: A2_caOUT_StingingWinds, Id: 19839
+
+                    new MoveToMapMarkerCoroutine(350560, 70885, 2912417),
+					
+					new MoveToSceneCoroutine(350560, 70885, "caOut_StingingWinds_E05_S07"), 
+					new MoveToScenePositionCoroutine(350560, 70885, "caOut_Sub240x240_Tower_Ruin", new Vector3(128.8564f, 142.8369f, 191.6977f)),
+
+					
+					new InteractWithUnitCoroutine(350560, 70885, 51293, 2912417, 5),
+                    new WaitCoroutine(350560, 70885, 5000),
+					
+                    new MoveToScenePositionCoroutine(350560, 70885, "caOut_Sub240x240_Tower_Ruin", new Vector3(161.0929f, 112.1465f, 175.5483f)),
+                    //// GhostTotem (59436) Distance: 4.005692
+                    new InteractWithGizmoCoroutine(350560, 70885, 59436, 0, 5),
+					
+                    new MoveToScenePositionCoroutine(350560, 70885, "caOut_Sub240x240_Tower_Ruin", new Vector3(101.0205f, 109.6327f, 175.4678f)),
+                    //// GhostTotem (59436) Distance: 6.767324
+                    new InteractWithGizmoCoroutine(350560, 70885, 59436, 0, 5),
+					
+                    new MoveToScenePositionCoroutine(350560, 70885, "caOut_Sub240x240_Tower_Ruin", new Vector3(136.7617f, 136.5654f, 175.9637f)),
+                    new WaitCoroutine(350560, 70885, 5000),
+                    new ClearAreaForNSecondsCoroutine(350560, 20, 0, 0, 25),
+                }
+            });
+			
+            // A2 - Bounty: Restless Sands (350562) 8	0
+            Bounties.Add(new BountyData
+            {
+                QuestId = 350562,
+                Act = Act.A2,
+                WorldId = 70885, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                //WaypointNumber = 21,
+                Coroutines = new List<ISubroutine>
+                {
+
+                    new MoveToMapMarkerCoroutine(350562, 70885, 2912417),
+
+					new InteractWithUnitCoroutine(350562, 70885, 4798, 0, 5),
+                    new WaitCoroutine(350562, 70885, 5000),
+
+                    // caOut_Totem_A (3707) Distance: 10.77662
+					
+					new MoveToScenePositionCoroutine(350562, 70885, "caOut_Sub240x240_Battlements_Ruin", new Vector3(132.3932f, 97.01617f, 158.806f)),
+                    new InteractWithGizmoCoroutine(350562, 70885, 3707, 0, 5),
+                    new WaitCoroutine(350562, 70885, 5000),
+                    // caOut_Totem_A (3707) Distance: 10.77662
+                    // caOut_Totem_A (3707) Distance: 10.77662
+					new MoveToScenePositionCoroutine(350562, 70885, "caOut_Sub240x240_Battlements_Ruin", new Vector3(57.79712f, 117.5626f, 172.8638f)),
+                    new InteractWithGizmoCoroutine(350562, 70885, 3707, 0, 5),
+                    new WaitCoroutine(350562, 70885, 5000),
+                    // oldNecromancer (4798) Distance: 1.06224
+                    // oldNecromancer (4798) Distance: 1.06224
+					new MoveToScenePositionCoroutine(350562, 70885, "caOut_Sub240x240_Battlements_Ruin", new Vector3(136.5515f, 121.9786f, 158.806f)),
+                    new InteractWithUnitCoroutine(350562, 70885, 4798, 0, 5),
+                    // oldNecromancer (4798) Distance: 1.06224
+                    new MoveToActorCoroutine(350562, 70885, 4798),
+                    // oldNecromancer (4798) Distance: 1.06224
+                    new InteractWithUnitCoroutine(350562, 70885, 4798, 0, 5),
+//                 new ClearLevelAreaCoroutine(350562)
+                }
+            });
+			
+            // A5 - Bounty: Lost Host (363402)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 363402,
+                Act = Act.A5,
+                WorldId = 271235,
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointNumber = 60,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine(363402, 271235, 2912417),
+					
+					new MoveToScenePositionCoroutine(363402, 271235, "x1_fortress_SW_01_B", new Vector3(91.39471f, 131.2191f, -9.900017f)),
+					new MoveToScenePositionCoroutine(363402, 271235, "x1_fortress_SW_01_B", new Vector3(102.9944f, 130.5471f, -9.900017f)),
+					new MoveToScenePositionCoroutine(363402, 271235, "x1_fortress_SW_01_B", new Vector3(90.04523f, 133.9944f, -9.900017f)),
+					new MoveToScenePositionCoroutine(363402, 271235, "x1_fortress_SW_01_B", new Vector3(92.48651f, 131.3251f, -9.900016f)),
+					new MoveToScenePositionCoroutine(363402, 271235, "x1_fortress_SW_01_B", new Vector3(95.55377f, 115.0262f, -9.900017f)),
+					new MoveToScenePositionCoroutine(363402, 271235, "x1_fortress_SW_01_B", new Vector3(105.3384f, 146.7679f, -9.900017f)),
+					
+//                    new ClearAreaForNSecondsCoroutine(363402, 60, 2912417, 0, 30, false),
+                }
+            });
+			
+            // A2 - Kill Taros the Wild (345971)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 345971,
+                Act = Act.A2,
+                WorldId = 70885,
+                QuestType = BountyQuestType.KillMonster,
+                Coroutines = new List<ISubroutine>
+                    {
+						new MoveToPositionCoroutine(70885, new Vector3(2700, 1586, 184)), 
+						new MoveToPositionCoroutine(70885, new Vector3(2535, 1497, 184)), 
+						new MoveToPositionCoroutine(70885, new Vector3(2483, 1576, 186)), 
+						new MoveToPositionCoroutine(70885, new Vector3(2344, 1518, 207)),
+
+                        new KillUniqueMonsterCoroutine (345971, 70885, 221372, -1258389667),
+                        new ClearLevelAreaCoroutine (345971)
+                    }
+            });
+			
+            // A5 - Bounty: The Hatchery (363431)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 363431,
+                Act = Act.A5,
+                WorldId = 283552, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                //WaypointNumber = 54,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine(363431, 283552, 2912417),
+                    new ClearAreaForNSecondsCoroutine(363431, 45, 0, 0, 45),
+                }
+            });
+			
+			// A1 - 현상금 사냥: 죽음을 부르는 자 카둘 처치 (344490)
+			Bounties.Add(new BountyData
+			{
+				QuestId = 344490,
+				Act = Act.A1,
+				WorldId = 71150, // Enter the final worldId here
+				QuestType = BountyQuestType.SpecialEvent,
+				WaypointNumber = 13,
+				Coroutines = new List<ISubroutine>
+				{
+//					new MoveToMapMarkerCoroutine(344490, 71150, 1928482775),
+					
+					new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(133.3196f, 129.1948f, 9.915271f)),
+					new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(130.6052f, 98.22607f, 9.915272f)),
+					new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(155.8533f, 125.9028f, 9.915272f)),
+					new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(133.0754f, 148.5098f, 9.915272f)),
+					new MoveToScenePositionCoroutine(344490, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(119.749f, 125.9014f, 9.915271f)),
+					
+					new ClearAreaForNSecondsCoroutine(344490, 60, 0, 0, 45),
+					new ClearLevelAreaCoroutine (344490)
+				}
+			});
+			
+			// A5 - 현상금 사냥: 숲의 기도 방해 (444397)
+			Bounties.Add(new BountyData
+			{
+				QuestId = 444397,
+				Act = Act.A5,
+				WorldId = 408254,
+				QuestType = BountyQuestType.SpecialEvent,
+                WaypointNumber = 59,
+				Coroutines = new List<ISubroutine>
+				{
+					new MoveToMapMarkerCoroutine(444397, 408254, 2912417),
+					
+					new MoveToScenePositionCoroutine(0, 408254, "p4_Forest_Coast_NSEW_Sub120_EffigyMeadow", new Vector3(73.39761f, 65.86435f, 0.1f)),
+					new MoveToScenePositionCoroutine(0, 408254, "p4_Forest_Coast_NSEW_Sub120_EffigyMeadow", new Vector3(83.71802f, 65.09787f, 0.1f)),
+					new MoveToScenePositionCoroutine(0, 408254, "p4_Forest_Coast_NSEW_Sub120_EffigyMeadow", new Vector3(69.86966f, 65.79407f, 0.1f)),
+					new MoveToScenePositionCoroutine(0, 408254, "p4_Forest_Coast_NSEW_Sub120_EffigyMeadow", new Vector3(78.4863f, 63.40695f, 0.1f)),
+					
+					new ClearAreaForNSecondsCoroutine(444397, 60, 0, 0, 25),
+				}
+			});
+			
+            //A1 - Wortham Survivors - Interact with operated gizmo repeatly
+            Bounties.Add(new BountyData
+            {
+                QuestId = 434378,
+                Act = Act.A1,
+                WorldId = 58982,
+                QuestType = BountyQuestType.GuardedGizmo,
+                Coroutines = new List<ISubroutine>
+                {
+                    new GuardedGizmoCoroutine(434378,434366)
+                }
+            });
+			
+            //A1 - The Triune Reborn - Interact with operated gizmo repeatly
+            Bounties.Add(new BountyData
+            {
+                QuestId = 432293,
+                Act = Act.A1,
+                WorldId = 71150,
+                QuestType = BountyQuestType.GuardedGizmo,
+                Coroutines = new List<ISubroutine>
+                {
+                    new GuardedGizmoCoroutine(432293,432259)
+                }
+            });
 
 
 
@@ -1391,10 +1567,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
 					new EnterLevelAreaCoroutine(369377, 261712, 338930, -660641889, 376027),
 //					new int[]{ 376027, 176002 }
-					
-//					new EnterLevelAreaCoroutine(369377, 261712, 0, -660641889, 0),
 //					new EnterLevelAreaCoroutine(369377, 338930, 0, 2115491808, 175482),
-                    new EnterLevelAreaCoroutine(369377, 338930, 0, 2115491808, new int[]{ 175482, 176001 }),
+                    new EnterLevelAreaCoroutine(369377, 338930, 338968, 2115491808, new int[]{ 175482, 176001 }),
 //					new EnterLevelAreaCoroutine(369377, 338930, 0, 2115491808, 176001),
                     new ClearLevelAreaCoroutine(369377),
                 }
@@ -1423,7 +1597,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 					new WaitCoroutine(5000),
 					new MoveToScenePositionCoroutine(436284, 428493, "p4_ruins_frost_SE_02_Guardians", new Vector3(99.5239f, 90.3031f, -12.4f)),
                     // 437152 (437152) Distance: 5.283126
-                    new ClearAreaForNSecondsCoroutine(436284,90,437152,0,60),
+                    new ClearAreaForNSecondsCoroutine(436284, 90, 437152, 2912417, 20),
                 }
             });
 
@@ -1546,6 +1720,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 //WaypointNumber = 19,
                 Coroutines = new List<ISubroutine>
                 {
+					new MoveToPositionCoroutine(70885, new Vector3(2032, 1067, 170)),
                     new MoveToMapMarkerCoroutine(345976, 70885, 689915896),
 					new KillUniqueMonsterCoroutine (345976, 70885, 0, 689915896),
                     new ClearLevelAreaCoroutine(345976),
@@ -1567,6 +1742,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
 					
 //                    new MoveToScenePositionCoroutine(359907, 283566, "x1_Catacombs_SEW_06_garden", new Vector3(59.00961f, 90.45087f, 0.4674271f)),
 //                 new InteractWithGizmoCoroutine(359907, 283566, 356805, 0, 5),
+
+					new MoveToScenePositionCoroutine(359907, 283566, "x1_Catacombs_SEW_06_garden", new Vector3(96.20807f, 92.42499f, 0.2714336f)),
 					
 					new MoveToScenePositionCoroutine(359907, 283566, "x1_Catacombs_SEW_06_garden", new Vector3(132.951f, 68.6438f, 0.5334398f)),
 					new WaitCoroutine(359907, 283566, 10000),
@@ -1575,7 +1752,12 @@ namespace Trinity.Components.Adventurer.Game.Quests
 					new MoveToScenePositionCoroutine(359907, 283566, "x1_Catacombs_SEW_06_garden", new Vector3(136.5582f, 127.6992f, 0.5334393f)),
 					new WaitCoroutine(359907, 283566, 10000),
 					new MoveToScenePositionCoroutine(359907, 283566, "x1_Catacombs_SEW_06_garden", new Vector3(100.6373f, 92.96954f, 0.2542905f)),
-                    new ClearAreaForNSecondsCoroutine(359907, 45, 0, 0, 45),
+					new WaitCoroutine(359907, 283566, 10000),
+					new MoveToScenePositionCoroutine(359907, 283566, "x1_Catacombs_SEW_06_garden", new Vector3(136.5582f, 127.6992f, 0.5334393f)),
+					new WaitCoroutine(359907, 283566, 10000),
+					new MoveToScenePositionCoroutine(359907, 283566, "x1_Catacombs_SEW_06_garden", new Vector3(100.6373f, 92.96954f, 0.2542905f)),
+					new WaitCoroutine(359907, 283566, 10000),
+//                    new ClearAreaForNSecondsCoroutine(359907, 150, 0, 0, 80),
 
                     // x1_Catacombs_chest_rare_GardenEvent (356805) Distance: 5.320904
                     new InteractWithGizmoCoroutine(359907, 283566, 356805, 0, 5),
@@ -1654,7 +1836,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveThroughDeathGates(363405,271233,1),
                     new MoveToMapMarkerCoroutine(363405, 271233, 2912417),
                     new MoveToScenePositionCoroutine(363405, 271233, "x1_fortress_S_03_Judgment", new Vector3(73.57855f, 151.708f, -9.899999f)),
-                    new ClearAreaForNSecondsCoroutine(363405, 60, 0, 0, 30),
+					
+					new MoveToScenePositionCoroutine(363405, 271233, "x1_fortress_S_03_Judgment", new Vector3(99.29626f, 150.8474f, -9.899999f)),
+					new WaitCoroutine(363405, 271233, 10000),
+					new MoveToScenePositionCoroutine(363405, 271233, "x1_fortress_S_03_Judgment", new Vector3(97.68469f, 132.0456f, -9.899999f)),
+					new WaitCoroutine(363405, 271233, 10000),
+					new MoveToScenePositionCoroutine(363405, 271233, "x1_fortress_S_03_Judgment", new Vector3(113.8369f, 150.1263f, -9.9f)),
+					new WaitCoroutine(363405, 271233, 10000),
+					new MoveToScenePositionCoroutine(363405, 271233, "x1_fortress_S_03_Judgment", new Vector3(98.00818f, 170.0193f, -9.899999f)),
+					new WaitCoroutine(363405, 271233, 10000),
+					new MoveToScenePositionCoroutine(363405, 271233, "x1_fortress_S_03_Judgment", new Vector3(99.28516f, 149.8546f, -9.899999f)),
+					new WaitCoroutine(363405, 271233, 10000),
+					new MoveToScenePositionCoroutine(363405, 271233, "x1_fortress_S_03_Judgment", new Vector3(80.02435f, 153.6859f, -9.9f)),
+					new WaitCoroutine(363405, 271233, 10000),
+					
+//                  new ClearAreaForNSecondsCoroutine(363405, 60, 0, 0, 30),
                 }
             });
 
@@ -1955,19 +2151,38 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new EnterLevelAreaCoroutine(368559,261712,310845,-1342301630,333736 ),
-                        new MoveToPositionCoroutine(310845, new Vector3(763, 140, -9)),
-                        new ClearAreaForNSecondsCoroutine (368559, 15, 0, 2912417),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(921, 161, 0)),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(882, 166, 0)),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(779, 163, -9)),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(764, 118, -9)),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(759, 91, -9)),
+						
+						new ClearAreaForNSecondsCoroutine(368559, 30, 0, 0, 150),
+
                         // x1_BogCellar_TriuneCultist (247595) Distance: 1.502872
                         //new InteractWithUnitCoroutine(368559, 310845, 247595, 0, 5),
                         //new WaitCoroutine(10000),
                         new MoveToPositionCoroutine(310845, new Vector3(747, 40, 0)),
                         // g_Portal_Rectangle_Orange_IconDoor (178293) Distance: 5.280013
                         new InteractWithGizmoCoroutine(368559, 310845, 178293, 798857082, 5),
-                        new MoveToPositionCoroutine(310845, new Vector3(453, 127, 10)),
-                        new MoveToPositionCoroutine(310845, new Vector3(366, 125, 15)),
-                        new MoveToPositionCoroutine(310845, new Vector3(374, 192, 10)),
-                        new MoveToPositionCoroutine(310845, new Vector3(286, 202, 15)),
-                        new MoveToPositionCoroutine(310845, new Vector3(301, 119, 15)),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(458, 198, 0)),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(461, 130, 10)),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(372, 126, 15)),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(368, 183, 10)),
+						new WaitCoroutine(368559, 261712, 5000),
+						new MoveToPositionCoroutine(310845, new Vector3(303, 178, 10)),
+						
+						new ClearAreaForNSecondsCoroutine(368559, 30, 0, 0, 150),
+						
                         // X1_Westm_Door_Hidden_Bookshelf (316627) Distance: 6.397694
                         new InteractWithGizmoCoroutine(368559, 310845, 316627, 0, 5),
                         new MoveToPositionCoroutine(310845, new Vector3(318, 56, 15)),
@@ -1986,7 +2201,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.SpecialEvent,
                 Coroutines = new List<ISubroutine>
                 {
-                    new EnterLevelAreaCoroutine(349020, 71150, 72636, -1965109038, 176002),
+//                  new EnterLevelAreaCoroutine(349020, 71150, 72636, -1965109038, 176002),
+					new EnterLevelAreaCoroutine(349020, 71150, 0, -1965109038, 176002),
                     new MoveToSceneCoroutine(349020,72636,"dead"),
                     //new MoveToMapMarkerCoroutine(349020, 72636, 2912417),
                     new WaitCoroutine(4000),
@@ -2103,55 +2319,32 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.SpecialEvent,
                 Coroutines = new List<ISubroutine>
                 {
-					new MoveToPositionCoroutine(71150, new Vector3(2440, 4620, 0)),
-                    new MoveToMapMarkerCoroutine (344486, 71150, 2912417),
-                    // Gharbad_The_Weak_Ghost (81068) Distance: 20.89377
-                    new MoveToActorCoroutine(344486, 71150, 81068),
+					new MoveToPositionCoroutine(71150, new Vector3(2390, 4562, -1)), 
+					new MoveToPositionCoroutine(71150, new Vector3(2271, 4443, 0)), 
+					new MoveToPositionCoroutine(71150, new Vector3(2212, 4324, 0)), 
+					new MoveToPositionCoroutine(71150, new Vector3(2138, 4347, -28)),
+
+//                  new MoveToMapMarkerCoroutine (344486, 71150, 2912417),
                     // Gharbad_The_Weak_Ghost (81068) Distance: 20.89377
                     new InteractWithUnitCoroutine(344486, 71150, 81068, 2912417, 5),
-                    new WaitCoroutine(10000),
+					
+                    new WaitCoroutine(344486, 71150, 10000),
+					
                     new MoveToScenePositionCoroutine(344486, 71150, "trOut_Highlands_Sub240_POI", new Vector3(122.2505f, 165.7817f, -28.86722f)),
+					new WaitCoroutine(344486, 71150, 5000),
                     new MoveToScenePositionCoroutine(344486, 71150, "trOut_Highlands_Sub240_POI", new Vector3(118.2659f, 99.68457f, -28.36605f)),
-                    new ClearAreaForNSecondsCoroutine(344486, 30, 96582, 0, 45, false),
+					new WaitCoroutine(344486, 71150, 5000),
                     new MoveToScenePositionCoroutine(344486, 71150, "trOut_Highlands_Sub240_POI", new Vector3(137.4558f, 130.5591f, -28.34882f)),
+					new WaitCoroutine(344486, 71150, 3000),
+//                 new ClearAreaForNSecondsCoroutine(344486, 30, 96582, 0, 45, false),
                     new MoveToActorCoroutine(344486, 71150, 81068),
                     // Gharbad_The_Weak_Ghost (81068) Distance: 8.892706
 					new InteractWithUnitCoroutine(344486, 71150, 81068, 0, 5),
-                    new ClearAreaForNSecondsCoroutine(344486, 30, 96582, 0, 45, false),
+                    new ClearAreaForNSecondsCoroutine(344486, 30, 96582, 0, 35, false),
                 }
             });
 
-            // A1 - Bounty: The Precious Ores (347060)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 347060,
-                Act = Act.A1,
-                WorldId = 82371, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                Coroutines = new List<ISubroutine>
-                {
-                    new EnterLevelAreaCoroutine(347060, 71150, 82370, -431250552, 176038),
-                    new EnterLevelAreaCoroutine(347060, 82370, 82371, -431250551, 176038, true),
-                    // A1_UniqueVendor_Miner (107076) Distance: 0.3106932
-                    new MoveToActorCoroutine(347060, 82371, 107076),
-                    // A1_UniqueVendor_Miner (107076) Distance: 0.3106932
-                    new InteractWithUnitCoroutine(347060, 82371, 107076, -431250552, 5),
-                    // a1dun_caves_Rocks_GoldOre (204032) Distance: 19.51709
-                    new MoveToActorCoroutine(347060, 82371, 204032),
-                    // a1dun_caves_Rocks_GoldOre (204032) Distance: 19.51709
-                    new InteractWithGizmoCoroutine(347060, 82371, 204032, 0, 5),
-                    // a1duncave_props_crystal_cluster_A (202277) Distance: 20.88908
-                    new MoveToActorCoroutine(347060, 82371, 202277),
-                    // a1duncave_props_crystal_cluster_A (202277) Distance: 20.88908
-                    new InteractWithGizmoCoroutine(347060, 82371, 202277, 0, 5),
-                    new WaitCoroutine(3000),
-                    // A1_UniqueVendor_Miner (107076) Distance: 14.53862
-                    new MoveToActorCoroutine(347060, 82371, 107076),
-                    // Could not detect an active quest gizmo, you must be out of range.
-                    // A1_UniqueVendor_Miner (107076) Distance: 14.53862
-                    new InteractWithUnitCoroutine(347060, 82371, 107076, 0, 5),
-                }
-            });
+
 
             // A5 - Bounty: A Diversion (363342)
             Bounties.Add(new BountyData
@@ -2165,7 +2358,27 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToMapMarkerCoroutine(363342, 338600, 2912417),
                     // X1_Angel_Trooper_Event_Ballistae (351967) Distance: 3.603116
                     new InteractWithUnitCoroutine(363342, 338600, 351967, 2912417, 5),
-                    new ClearAreaForNSecondsCoroutine(363342, 90, 351967, 2912417 , 30, false),
+					
+					new MoveToScenePositionCoroutine(363342, 338600, "x1_Pand_Ext_240_NSEW_Event_Ballista_01", new Vector3(130.6995f, 139.2733f, 17.94887f)),
+					new WaitCoroutine(363342, 338600, 10000),
+					new MoveToScenePositionCoroutine(363342, 338600, "x1_Pand_Ext_240_NSEW_Event_Ballista_01", new Vector3(130.098f, 105.4987f, 17.94887f)),
+					new WaitCoroutine(363342, 338600, 10000),
+					new MoveToScenePositionCoroutine(363342, 338600, "x1_Pand_Ext_240_NSEW_Event_Ballista_01", new Vector3(136.1014f, 149.4091f, 17.94887f)),
+					new WaitCoroutine(363342, 338600, 10000),
+					new MoveToScenePositionCoroutine(363342, 338600, "x1_Pand_Ext_240_NSEW_Event_Ballista_01", new Vector3(91.58203f, 139.6273f, 17.94887f)),
+					new WaitCoroutine(363342, 338600, 10000),
+					new MoveToScenePositionCoroutine(363342, 338600, "x1_Pand_Ext_240_NSEW_Event_Ballista_01", new Vector3(138.0638f, 143.7219f, 17.94887f)),
+					new WaitCoroutine(363342, 338600, 10000),
+					new MoveToScenePositionCoroutine(363342, 338600, "x1_Pand_Ext_240_NSEW_Event_Ballista_01", new Vector3(131.9744f, 102.1431f, 17.94887f)),
+					new WaitCoroutine(363342, 338600, 10000),
+					new MoveToScenePositionCoroutine(363342, 338600, "x1_Pand_Ext_240_NSEW_Event_Ballista_01", new Vector3(136.7021f, 141.1531f, 17.94887f)),
+					new WaitCoroutine(363342, 338600, 10000),
+					new MoveToScenePositionCoroutine(363342, 338600, "x1_Pand_Ext_240_NSEW_Event_Ballista_01", new Vector3(97.42975f, 140.667f, 17.94887f)),
+					new WaitCoroutine(363342, 338600, 10000),
+					new MoveToScenePositionCoroutine(363342, 338600, "x1_Pand_Ext_240_NSEW_Event_Ballista_01", new Vector3(136.5885f, 143.6037f, 17.94887f)),
+					new WaitCoroutine(363342, 338600, 10000),
+					
+//                    new ClearAreaForNSecondsCoroutine(363342, 90, 351967, 2912417 , 30, false),
                 }
             });
 
@@ -2185,23 +2398,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new InteractWithGizmoCoroutine(368915, 338600, 374776, 0, 5),
                     new MoveToMapMarkerCoroutine(368915, 374778, 1891838257),
                     new ClearLevelAreaCoroutine(368915),
-                }
-            });
-
-            // A5 - Bounty: The True Son of the Wolf (368601)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 368601,
-                Act = Act.A5,
-                WorldId = 336902, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                Coroutines = new List<ISubroutine>
-                {
-                    new EnterLevelAreaCoroutine(368601, 263494, 336902, -752748507, 333736),
-                    new MoveToPositionCoroutine(336902, new Vector3(311, 393, 10)),
-                    // x1_NPC_Westmarch_Aldritch (336711) Distance: 9.175469
-                    new InteractWithUnitCoroutine(368601, 336902, 336711, 0, 5),
-                    new ClearAreaForNSecondsCoroutine(368601, 90, 336711, 0, 60),
                 }
             });
 
@@ -2235,15 +2431,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new MoveToMapMarkerCoroutine(363346, 338600, 2912417),
                     new MoveToSceneCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01"),
-                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(17.71436f, 173.9963f, 0.1487222f)),
-                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(114.0653f, 114.5838f, -17.4f)),
-                    new ClearAreaForNSecondsCoroutine(363346, 60, 0, 0, 150,false),
-                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(195.6577f, 2.806244f, 0.09999999f)),
-                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(130.1381f, 87.56168f, -17.4f)),
-                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(142.9594f, 124.983f, -17.4f)),
-                    new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(111.6299f, 118.7759f, -17.4f)),
-                    new ClearAreaForNSecondsCoroutine(363346, 60, 0, 0, 150,false),
-
+					new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(112.7947f, 128.6941f, -17.4f)),
+                    new ClearAreaForNSecondsCoroutine(363346, 10, 0, 0, 20, false),
+					new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(79.55261f, 139.0135f, -17.4f)),
+                    new ClearAreaForNSecondsCoroutine(363346, 10, 0, 0, 20, false),
+					new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(137.1652f, 87.79041f, -17.39999f)),
+                    new ClearAreaForNSecondsCoroutine(363346, 10, 0, 0, 20, false),
+					new MoveToScenePositionCoroutine(363346, 338600, "x1_Pand_Ext_240_NSEW_Event_RockHive_01", new Vector3(85.9928f, 94.09125f, -17.4f)),
+					new ClearAreaForNSecondsCoroutine(363346, 20, 0, 0, 20, false),
                 }
             });
 
@@ -2260,7 +2455,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     //new MoveToMapMarkerCoroutine(359399, 261712, 2912417),
                     new ClearLevelAreaCoroutine(359399),
                     new MoveToMapMarkerCoroutine(359399, 261712, 2912417),
-                    new ClearAreaForNSecondsCoroutine(359399, 60, 4675, 0, 45,false),
+					
+					new MoveToScenePositionCoroutine(359399, 261712, "x1_westm_NSEW_06", new Vector3(108.632f, 114.135f, 5.099999f)),
+					new WaitCoroutine(359399, 261712, 10000),
+					new MoveToScenePositionCoroutine(359399, 261712, "x1_westm_NSEW_06", new Vector3(107.2872f, 92.01654f, 5.1f)),
+					new WaitCoroutine(359399, 261712, 10000),
+					new MoveToScenePositionCoroutine(359399, 261712, "x1_westm_NSEW_06", new Vector3(128.494f, 114.0747f, 5.1f)),
+					new WaitCoroutine(359399, 261712, 10000),
+					new MoveToScenePositionCoroutine(359399, 261712, "x1_westm_NSEW_06", new Vector3(114.0435f, 140.9714f, 5.1f)),
+					new WaitCoroutine(359399, 261712, 10000),
+					new MoveToScenePositionCoroutine(359399, 261712, "x1_westm_NSEW_06", new Vector3(84.53052f, 114.5778f, 5.1f)),
+					new WaitCoroutine(359399, 261712, 10000),
+					new MoveToScenePositionCoroutine(359399, 261712, "x1_westm_NSEW_06", new Vector3(110.0929f, 115.1127f, 5.1f)),
+					new WaitCoroutine(359399, 261712, 10000),
+
+//                  new ClearAreaForNSecondsCoroutine(359399, 60, 4675, 0, 45,false),
                 }
             });
 
@@ -2271,66 +2480,28 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A4,
                 WorldId = 140709, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
+                LevelAreaIds = new HashSet<int> { 409517 },
                 Coroutines = new List<ISubroutine>
                 {
                     new EnterLevelAreaCoroutine(409895, 409511, 140709, -970799630, 204183),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 415, 0)),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 385, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 385, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 385, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 385, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 385, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 385, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 351, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 351, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 351, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 351, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 351, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 323, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 323, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 323, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 323, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(272, 323, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 296, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 296, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 296, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 296, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(273, 296, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                   
-                    new MoveToPositionCoroutine(140709, new Vector3(276, 281, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(276, 281, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(276, 281, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(276, 281, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-                    new MoveToPositionCoroutine(140709, new Vector3(276, 281, 0)),
-                    new WaitCoroutine(409895, 409511, 1000),
-
+					
+					new MoveToPositionCoroutine(140709, new Vector3(398, 515, 0)), 
+					new MoveToPositionCoroutine(140709, new Vector3(394, 445, 0)), 
+					new MoveToPositionCoroutine(140709, new Vector3(322, 454, 0)), 
+					new MoveToPositionCoroutine(140709, new Vector3(263, 451, 0)),
+					 
+					new MoveToPositionCoroutine(140709, new Vector3(266, 411, 0)),
+					new WaitCoroutine(409895, 409511, 1000),
+					new MoveToPositionCoroutine(140709, new Vector3(278, 398, 0)),
+					new WaitCoroutine(409895, 409511, 1000),
+					new MoveToPositionCoroutine(140709, new Vector3(273, 364, 0)),
+					new WaitCoroutine(409895, 409511, 1000),
+					new MoveToPositionCoroutine(140709, new Vector3(271, 333, 0)),
+					new WaitCoroutine(409895, 409511, 1000),
+					new MoveToPositionCoroutine(140709, new Vector3(274, 304, 0)),
+					new WaitCoroutine(409895, 409511, 1000),
+					new MoveToPositionCoroutine(140709, new Vector3(278, 274, 0)),
+					new WaitCoroutine(409895, 409511, 10000),
                 }
             });
 
@@ -2398,18 +2569,24 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToActorCoroutine(368420, 303361, 316371),
                     // X1_westm_Necro_Jar_of_Souls (316371) Distance: 12.90147
                     new InteractWithGizmoCoroutine(368420, 303361, 316371, 0, 5),
+
+
+					new MoveToPositionCoroutine(303361, new Vector3(84, 185, 0)),					 
+					new MoveToPositionCoroutine(303361, new Vector3(120, 181, 0)),					 
+					new MoveToPositionCoroutine(303361, new Vector3(105, 129, 10)),					 
+					new MoveToPositionCoroutine(303361, new Vector3(79, 132, 10)),					 
+					new MoveToPositionCoroutine(303361, new Vector3(106, 128, 10)),					 
+					new MoveToPositionCoroutine(303361, new Vector3(137, 166, 0)),					 
+					new MoveToPositionCoroutine(303361, new Vector3(83, 179, 0)),					 
+					new MoveToPositionCoroutine(303361, new Vector3(102, 126, 10)),
+					
                     new ClearAreaForNSecondsCoroutine(368420, 60, 0, 0, 200),
-
-                    new MoveToScenePositionCoroutine(368420, 303361, "x1_westm_Int_Gen_A_01_Necromancer", new Vector3(130.7036f, 177.8941f, 0.1f)),
-                    new MoveToScenePositionCoroutine(368420, 303361, "x1_westm_Int_Gen_A_01_Necromancer", new Vector3(89.54332f, 182.3007f, 0.1000009f)),
-                    new MoveToScenePositionCoroutine(368420, 303361, "x1_westm_Int_Gen_A_01_Necromancer", new Vector3(141.7386f, 143.7506f, 0.1f)),
-
-
+					
                     // oldNecromancer (4798) Distance: 27.00111
                     new MoveToActorCoroutine(368420, 303361, 4798),
                     // oldNecromancer (4798) Distance: 27.00111
                     new InteractWithUnitCoroutine(368420, 303361, 4798, 0, 5),
-                    new WaitCoroutine(20000),
+                    new WaitCoroutine(368420, 303361, 20000),
                 }
             });
 
@@ -2423,28 +2600,17 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new EnterLevelAreaCoroutine(433017, 59486, 432993, 705396550, 175467),
-                    new MoveToMapMarkerCoroutine(433017, 432993, 2912417),
-                    //new MoveToMapMarkerCoroutine(433017, 432993, 2912417),
-                    new ClearAreaForNSecondsCoroutine(433017, 20, 121821, 0, 45),
-                    // a2dun_Aqd_Mummy_Spawner_Muck (121821) Distance: 9.79975
-                    //new MoveToActorCoroutine(433017, 432993, 121821),
-                    new InteractWithGizmoCoroutine(433017, 432993, 121821,0,5),
-                    new WaitCoroutine(2000),
- 
-                    // a2dun_Aqd_Mummy_Spawner_Muck (121821) Distance: 16.20963
-                    //new MoveToActorCoroutine(433017, 432993, 121821),
-                    new InteractWithGizmoCoroutine(433017, 432993, 121821,0,5),
-                    new WaitCoroutine(2000),
- 
-                    // a2dun_Aqd_Mummy_Spawner_Muck (121821) Distance: 17.57193
-                    //new MoveToActorCoroutine(433017, 432993, 121821),
-                    new InteractWithGizmoCoroutine(433017, 432993, 121821,0,5),
-                    new WaitCoroutine(2000),
- 
-                    // a2dun_Aqd_Mummy_Spawner_Muck (121821) Distance: 28.6147
-                    //new MoveToActorCoroutine(433017, 432993, 121821),
-                    new InteractWithGizmoCoroutine(433017, 432993, 121821,0,5),
-                    new WaitCoroutine(2000),
+//                  new MoveToMapMarkerCoroutine(433017, 432993, 2912417),
+
+					new MoveToScenePositionCoroutine(433017, 432993, "a2dun_Aqd_NE_02", new Vector3(47.39954f, 56.66663f, -1.567047f)),
+					new WaitCoroutine(433017, 432993, 5000),
+					new MoveToScenePositionCoroutine(433017, 432993, "a2dun_Aqd_NE_02", new Vector3(47.39954f, 56.66663f, -1.567047f)),
+					new WaitCoroutine(433017, 432993, 5000),
+					new MoveToScenePositionCoroutine(433017, 432993, "a2dun_Aqd_NE_02", new Vector3(47.39954f, 56.66663f, -1.567047f)),
+					new WaitCoroutine(433017, 432993, 5000),
+					new MoveToScenePositionCoroutine(433017, 432993, "a2dun_Aqd_NE_02", new Vector3(47.39954f, 56.66663f, -1.567047f)),
+
+                    new WaitCoroutine(433017, 432993, 5000),
                     new ClearLevelAreaCoroutine(433017),
                 }
             });
@@ -2494,31 +2660,28 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new MoveToMapMarkerCoroutine(345500, 71150, 2912417),
                     // NPC_Human_Male_Event_FarmAmbush (81980) Distance: 59.84805
-                    new MoveToScenePositionCoroutine(345500, 71150, "trOut_TristramFields_Sub240_POI_01", new Vector3(95.08228f, 73.23065f, 0.1f)),
-                    new MoveToActorCoroutine(345500, 71150, 81980),
- 
-                    // NPC_Human_Male_Event_FarmAmbush (81980) Distance: 59.84805
+					new MoveToScenePositionCoroutine(345500, 71150, "trOut_Sub240x240_FarmHouseB_x01_y01", new Vector3(88.14417f, 64.0542f, 0.09999999f)),
+					new WaitCoroutine(345500, 71150, 1000),
                     new InteractWithUnitCoroutine(345500, 71150, 81980, 0, 5),
 
+					new MoveToScenePositionCoroutine(345500, 71150, "trOut_TristramFields_Sub240_POI_01", new Vector3(90f, 182.5f, 0.1f)),
+					new WaitCoroutine(345500, 71150, 5000),
+					new MoveToScenePositionCoroutine(345500, 71150, "trOut_Sub240x240_FarmHouseB_x01_y01", new Vector3(182.719f, 183.8639f, 0.1f)),
+					new WaitCoroutine(345500, 71150, 5000),
+					new MoveToScenePositionCoroutine(345500, 71150, "trOut_Sub240x240_FarmHouseB_x01_y01", new Vector3(184.0928f, 117.3088f, 0.1f)),
+					new WaitCoroutine(345500, 71150, 5000),
+					new MoveToScenePositionCoroutine(345500, 71150, "trOut_TristramFields_Sub240_POI_01", new Vector3(90f, 182.5f, 0.1f)),
+					new WaitCoroutine(345500, 71150, 5000),
+					new MoveToScenePositionCoroutine(345500, 71150, "trOut_Sub240x240_FarmHouseB_x01_y01", new Vector3(182.719f, 183.8639f, 0.1f)),
+					new WaitCoroutine(345500, 71150, 5000),
+					new MoveToScenePositionCoroutine(345500, 71150, "trOut_Sub240x240_FarmHouseB_x01_y01", new Vector3(184.0928f, 117.3088f, 0.1f)),
+					new WaitCoroutine(345500, 71150, 5000),
 
-                    new MoveToScenePositionCoroutine(345500, 71150, "trOut_TristramFields_Sub240_POI_01", new Vector3(93.28857f, 187.4562f, 0.1f)),
-
-                    new MoveToScenePositionCoroutine(345500, 71150, "trOut_TristramFields_Sub240_POI_01", new Vector3(129.1501f, 166.2041f, 0.1f)),
-
-                    new MoveToScenePositionCoroutine(345500, 71150, "trOut_TristramFields_Sub240_POI_01", new Vector3(194.272f, 178.9236f, 0.1f)),
-
-                    new MoveToScenePositionCoroutine(345500, 71150, "trOut_TristramFields_Sub240_POI_01", new Vector3(177.3428f, 106.7409f, 0.1f)),
-
-                    new MoveToScenePositionCoroutine(345500, 71150, "trOut_TristramFields_Sub240_POI_01", new Vector3(92.67603f, 78.44818f, 0.1f)),
-                    // NPC_Human_Male_Event_FarmAmbush (81980) Distance: 5.45416
+                    // NPC_Human_Male_Event_FarmAmbush (81980) Distance: 36.39687
+					new MoveToScenePositionCoroutine(345500, 71150, "trOut_Sub240x240_FarmHouseB_x01_y01", new Vector3(88.14417f, 64.0542f, 0.09999999f)),
+                    // NPC_Human_Male_Event_FarmAmbush (81980) Distance: 36.39687
                     new InteractWithUnitCoroutine(345500, 71150, 81980, 0, 5),
-
-                    new ClearAreaForNSecondsCoroutine(345500,30,0,0,200,false),
-                    // NPC_Human_Male_Event_FarmAmbush (81980) Distance: 36.39687
-                    new MoveToActorCoroutine(345500, 71150, 81980),
- 
-                    // NPC_Human_Male_Event_FarmAmbush (81980) Distance: 36.39687
-                    new InteractWithUnitCoroutine(345500, 71150, 81980, 0, 5),                }
+                }
             });
 
             // A1 - Bounty: Apothecary's Brother (350529)
@@ -2530,17 +2693,20 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.SpecialEvent,
                 Coroutines = new List<ISubroutine>
                 {
-                    new MoveToPositionCoroutine(71150, new Vector3(1443, 4034, 38)),
-                    new MoveToPositionCoroutine(71150, new Vector3(1274, 3892, 78)),
-                    new EnterLevelAreaCoroutine(350529, 71150, 132995, 853662530, 0),
+					new MoveToMapMarkerCoroutine(350529, 71150, 853662530),
+					new EnterLevelAreaCoroutine(350529, 71150, 0, 853662530, 175482),
                     // Event_VendorRescue_Vendor (129782) Distance: 13.24948
                     new MoveToActorCoroutine(350529, 132995, 129782),
                     // Event_VendorRescue_Vendor (129782) Distance: 13.24948
                     new InteractWithUnitCoroutine(350529, 132995, 129782, -1472187117, 5),
                     //ActorId: 136009, Type: Monster, Name: Event_VendorRescue_Brother-2746, Distance2d: 2.170177, CollisionRadius: 0, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0 
-                    new MoveToActorCoroutine(350529, 132995,136009),
+
+					new MoveToScenePositionCoroutine(350529, 132995, "trDun_Cave_NSW_01", new Vector3(165.4375f, 136.5941f, 0.1f)),
+
+					new MoveToActorCoroutine(350529, 132995, 136009),
                     new ClearAreaForNSecondsCoroutine(350529, 60, 136009, 0, 30),
                     // Event_VendorRescue_Vendor (129782) Distance: 11.94286
+
                     new MoveToActorCoroutine(350529, 132995, 129782),
                     // Event_VendorRescue_Vendor (129782) Distance: 11.94286
                     new InteractWithUnitCoroutine(350529, 132995, 129782, 0, 5),
@@ -2591,6 +2757,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     // bastionsKeepGuard_Melee_A_02_NPC_RescueEscort (174995) Distance: 22.82924
                     new InteractWithUnitCoroutine(349196, 221749, 174995, -1049649953, 5),
 
+					new MoveToScenePositionCoroutine(349196, 221749, "a3dun_Keep_EW_02", new Vector3(107.3766f, 180.9147f, 0.1f)),
                     new MoveToActorCoroutine(349196,221749,118261),
                     // FallenGrunt_C_RescueEscort_Unique (260230) Distance: 7.861986
                     //new MoveToActorCoroutine(349196, 221749, 260230),
@@ -2638,7 +2805,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToActorCoroutine(346184, 95804, 152145),
                     // bastionsKeepGuard_Melee_A_02_BlazeOfGlory (152145) Distance: 22.61426
                     new InteractWithUnitCoroutine(346184, 95804, 152145, 0, 5),
-                    new WaitCoroutine(20000),
+                    new WaitCoroutine(346184, 95804, 20000),
                 }
             });
 
@@ -2653,13 +2820,27 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new EnterLevelAreaCoroutine(349016, 71150, 72636, -1965109038, 176002),
+					
                     new MoveToSceneCoroutine(349016,72636,"JarSouls"),
                     //new MoveToMapMarkerCoroutine(349016, 72636, 2912417),
-                    new MoveToActorCoroutine(349016, 72636,93713),
+                    new MoveToScenePositionCoroutine(349016, 72636, "trDun_Crypt_NSEW_JarSouls_01", new Vector3(102.2006f, 103.909f, 2.337343f)),
                     new InteractWithGizmoCoroutine(349016, 72636, 93713,2912417,5),
-                    new ClearAreaForNSecondsCoroutine(349016, 65, 93713, 2912417, 120),
+
+					new MoveToScenePositionCoroutine(349016, 72636, "trDun_Crypt_NSEW_JarSouls_01", new Vector3(103.8495f, 103.4797f, 2.337343f)),
+					new WaitCoroutine(349016, 72636, 10000),
+					new MoveToScenePositionCoroutine(349016, 72636, "trDun_Crypt_NSEW_JarSouls_01", new Vector3(97.08398f, 74.22736f, 0.1f)),
+					new WaitCoroutine(349016, 72636, 10000),
+					new MoveToScenePositionCoroutine(349016, 72636, "trDun_Crypt_NSEW_JarSouls_01", new Vector3(129.2886f, 101.6852f, 0.1000002f)),
+					new WaitCoroutine(349016, 72636, 10000),
+					new MoveToScenePositionCoroutine(349016, 72636, "trDun_Crypt_NSEW_JarSouls_01", new Vector3(104.57f, 127.1461f, 0.1f)),
+					new WaitCoroutine(349016, 72636, 10000),
+					new MoveToScenePositionCoroutine(349016, 72636, "trDun_Crypt_NSEW_JarSouls_01", new Vector3(72.63531f, 97.39606f, 0.1000001f)),
+					new WaitCoroutine(349016, 72636, 10000),
+					new MoveToScenePositionCoroutine(349016, 72636, "trDun_Crypt_NSEW_JarSouls_01", new Vector3(100.5025f, 104.5255f, 2.337343f)),
+					new WaitCoroutine(349016, 72636, 10000),
+					
                     // a1dun_Crypts_Jar_of_Souls_02 (219334) Distance: 4.83636
-                    new MoveToActorCoroutine(349016, 72636, 219334),
+                    new MoveToScenePositionCoroutine(349016, 72636, "trDun_Crypt_NSEW_JarSouls_01", new Vector3(102.2006f, 103.909f, 2.337343f)),
                     // a1dun_Crypts_Jar_of_Souls_02 (219334) Distance: 4.83636
                     new InteractWithGizmoCoroutine(349016, 72636, 219334, 0, 5),
                 }
@@ -2678,7 +2859,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     // x1_PortalGuardian_A_Haziael (374752) Distance: 89.75109
                     new ClearAreaForNSecondsCoroutine(368921, 5, 374752, -702665403),
                     // x1_Pand_Maze_PortalTest_OnDeathPortal_Haziael (374768) Distance: 14.4978
-                    new InteractWithGizmoCoroutine(368921, 338600, 374768, 0, 5),
+					new InteractWithGizmoCoroutine(368921, 338600, 374768, 0, 5),
                     new MoveToMapMarkerCoroutine(368921, 374770, 329854592),
                     // X1_Angel_Trooper_Unique_HexMaze (307329) Distance: 76.83235
                     new ClearAreaForNSecondsCoroutine(368921, 5, 307329, 329854592),
@@ -2712,7 +2893,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-
             // A3 - Bounty: The Triage (346180)
             Bounties.Add(new BountyData
             {
@@ -2723,34 +2903,30 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 LevelAreaIds = new HashSet<int> { 112548 },
                 Coroutines = new List<ISubroutine>
                 {
+					new MoveToPositionCoroutine(95804, new Vector3(4240, 407, -2)), 
+					new MoveToPositionCoroutine(95804, new Vector3(4174, 385, -2)), 
+					new MoveToPositionCoroutine(95804, new Vector3(4066, 473, 0)),
+
                     new MoveToMapMarkerCoroutine(346180, 95804, 2912417),
                     // bastionsKeepGuard_Melee_A_01_snatched (205312) Distance: 34.26495
-                    new MoveToActorCoroutine(346180, 95804, 205312),
+//                 new MoveToActorCoroutine(346180, 95804, 205312),
                     // bastionsKeepGuard_Melee_A_01_snatched (205312) Distance: 34.26495
                     new InteractWithUnitCoroutine(346180, 95804, 205312, 2912417, 5),
 					
-					new MoveToSceneCoroutine(346180, 95804, "a3_Battlefield_NSE_02"),
+                    new MoveToSceneCoroutine(346180, 95804, "a3_Battlefield_NSE_02"), 
+	
+					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(141.176f, 167.222f, 0.2f)),
+					new WaitCoroutine(346180, 95804, 10000),
+					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(126.7441f, 150.7867f, 0.1999999f)),
+					new WaitCoroutine(346180, 95804, 10000),
+					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(116.4688f, 166.6454f, 0.1999991f)),
+					new WaitCoroutine(346180, 95804, 10000),
+					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(127.8069f, 180.6221f, 0.2000004f)),
+					new WaitCoroutine(346180, 95804, 10000),
+					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(141.6938f, 164.2231f, 0.2000004f)),
+					new WaitCoroutine(346180, 95804, 10000),
 
-					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(128.9805f, 166.7167f, 0.1999991f)),
-					new WaitCoroutine(346180, 95804, 5000),
-					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(122.8569f, 149.6015f, 0.1999999f)),
-					new WaitCoroutine(346180, 95804, 5000),
-					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(126.9546f, 206.4209f, 0.2000004f)),
-					new WaitCoroutine(346180, 95804, 5000),
-					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(133.7424f, 168.5616f, 0.1999992f)),
-					new WaitCoroutine(346180, 95804, 5000),
-					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(128.9805f, 166.7167f, 0.1999991f)),
-					new WaitCoroutine(346180, 95804, 5000),
-					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(122.8569f, 149.6015f, 0.1999999f)),
-					new WaitCoroutine(346180, 95804, 5000),
-					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(126.9546f, 206.4209f, 0.2000004f)),
-					new WaitCoroutine(346180, 95804, 5000),
-					new MoveToScenePositionCoroutine(346180, 95804, "a3_Battlefield_Sub120_HumanGenericE", new Vector3(133.7424f, 168.5616f, 0.1999992f)),
-					new WaitCoroutine(346180, 95804, 5000),
-					
-//                    new ClearAreaForNSecondsCoroutine (346180, 60, 205312, 2912417, 30, false),
-                    // OmniNPC_Female_Act3_B_MedicalCamp (205468) Distance: 24.66534
-                    new MoveToActorCoroutine(346180, 95804, 205468),
+//                    new ClearAreaForNSecondsCoroutine(346180, 60, 0, 0, 30),
                     // OmniNPC_Female_Act3_B_MedicalCamp (205468) Distance: 24.66534
                     new InteractWithUnitCoroutine(346180, 95804, 205468, 0, 5),
                 }
@@ -2767,22 +2943,22 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new EnterLevelAreaCoroutine(347520, 70885, 60838, 288776660, 185067),
 
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(237.9481f, 218.7702f, 12.86322f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(188.0312f, 80.27813f, 13.02337f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(166.8428f, 171.1376f, -0.8271087f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(124.2203f, 208.412f, -0.8271091f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(147.923f, 87.49158f, -0.811231f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(138.6424f, 77.63069f, -0.8271122f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(173.1153f, 185.4816f, -0.8271179f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(227.2027f, 174.8042f, 13.07317f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(169.9771f, 165.031f, -0.8271087f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(145.8862f, 182.5604f, -0.8271087f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(147.9561f, 82.96754f, -0.7381248f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(195.4805f, 93.29275f, 12.89117f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(165.5553f, 161.1067f, -0.8271087f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(165.5553f, 161.1067f, -0.8271087f)),
-                    new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(161.0718f, 123.2829f, -0.8271011f)),
-
+					new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(216.0627f, 151.6613f, 12.99976f)),
+					new WaitCoroutine(347520, 60838, 5000),
+					new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(207.9222f, 86.58944f, 12.99976f)),
+					new WaitCoroutine(347520, 60838, 5000),
+					new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(163.856f, 119.5887f, -0.8271011f)),
+					new WaitCoroutine(347520, 60838, 5000),
+					new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(132.1614f, 72.54372f, -0.8271086f)),
+					new WaitCoroutine(347520, 60838, 5000),
+					new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(95.32114f, 139.1705f, -3.564227f)),
+					new WaitCoroutine(347520, 60838, 5000),
+					new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(74.49428f, 215.861f, -0.882843f)),
+					new WaitCoroutine(347520, 60838, 5000),
+					new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(176.3916f, 171.3593f, -0.8271087f)),
+					new WaitCoroutine(347520, 60838, 5000),
+					new MoveToScenePositionCoroutine(347520, 60838, "caOut_Interior_G_x01_y01", new Vector3(179.2931f, 181.3407f, -0.8271185f)),
+					new WaitCoroutine(347520, 60838, 5000),
 
                     new ClearLevelAreaCoroutine(347520),
                 }
@@ -2819,19 +2995,19 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new MoveToMapMarkerCoroutine(345546, 58982, 2912417),
                     new MoveToSceneCoroutine(345546, 58982,"Exit_Boss"),
-                    new MoveToActorCoroutine(345546, 58982, 218071),
+//                    new MoveToActorCoroutine(345546, 58982, 218071),
                     // a1dun_Leoric_IronMaiden_Event (221574) Distance: 5.864555
                     new ClearAreaForNSecondsCoroutine(345546,60,218071,0,30),
                     // OmniNPC_Tristram_Male_Leoric_RescueEvent (218071) Distance: 1.570357
-                    new MoveToActorCoroutine(345546, 58982, 221574),
+//                    new MoveToActorCoroutine(345546, 58982, 221574),
                     // a1dun_Leoric_IronMaiden_Event (221574) Distance: 10.85653
                     new InteractWithGizmoCoroutine(345546, 58982, 221574, 0, 5),
-                    new WaitCoroutine(15000),
+                    new WaitCoroutine(345546, 58982, 15000),
                     // OmniNPC_Tristram_Male_Leoric_RescueEvent (218071) Distance: 4.789657
-                    new MoveToActorCoroutine(345546, 58982, 218071),
+ //                   new MoveToActorCoroutine(345546, 58982, 218071),
                     // OmniNPC_Tristram_Male_Leoric_RescueEvent (218071) Distance: 4.789657
                     new InteractWithUnitCoroutine(345546, 58982, 218071, 0, 5),
-                    new WaitCoroutine(25000),
+                    new WaitCoroutine(345546, 58982, 25000),
                 }
             });
 
@@ -2865,16 +3041,23 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(359112, 338944, 2912417),
-
-                    new MoveToSceneCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14"),
-                    new MoveToScenePositionCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14", new Vector3(51.71503f, 80.73083f, 0.1f)),
-
-                    // x1_Graveyard_GraveRobert (351621) Distance: 45.1498
+					
                     new InteractWithUnitCoroutine(359112, 338944, 351621, 2912417, 5),
-                    new ClearAreaForNSecondsCoroutine(359112, 90, 351621, 2912417, 30),
-                    // x1_Graveyard_GraveRobert (351621) Distance: 13.97965
-                    new MoveToActorCoroutine(359112, 332336, 351621),
-                    // x1_Graveyard_GraveRobert (351621) Distance: 13.97965
+                    new MoveToSceneCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14"),
+					
+					new MoveToScenePositionCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14", new Vector3(49.48395f, 74.43878f, 0.09999999f)),
+					new WaitCoroutine(359112, 338944, 10000),
+					new MoveToScenePositionCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14", new Vector3(46.55865f, 59.42267f, 0.1f)),
+					new WaitCoroutine(359112, 338944, 10000),
+					new MoveToScenePositionCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14", new Vector3(58.74109f, 69.40292f, 0.1f)),
+					new WaitCoroutine(359112, 338944, 10000),
+					new MoveToScenePositionCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14", new Vector3(35.54315f, 68.42136f, 0.1f)),
+					new WaitCoroutine(359112, 338944, 10000),
+					new MoveToScenePositionCoroutine(359112, 338944, "x1_westm_graveyard_NSEW_14", new Vector3(48.36139f, 80.40656f, 0.1f)),
+					new WaitCoroutine(359112, 338944, 10000),
+
+                    new ClearAreaForNSecondsCoroutine(359112, 90, 0, 0, 30, false),
+
                     new InteractWithUnitCoroutine(359112, 338944, 351621, 0, 5),
                 }
             });
@@ -2929,41 +3112,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     }
             });
 
-            // A1 - Scavenged Scabbard (344488)
-             // Fixed pathing to entrance but it doesnt attack the boss at the end. Trinity issue.
-            Bounties.Add(new BountyData
-            {
-                QuestId = 344488,
-                Act = Act.A1,
-                WorldId = 82313,
-                QuestType = BountyQuestType.SpecialEvent,
-                Coroutines = new List<ISubroutine>
-                    {
-//						new MoveToMapMarkerCoroutine(344488, 71150, 497382903),
-						
-						new MoveToPositionCoroutine(71150, new Vector3(2375, 4544, 0)),						 
-						new MoveToPositionCoroutine(71150, new Vector3(2364, 4405, 0)),						 
-						new MoveToPositionCoroutine(71150, new Vector3(2355, 4120, 0)),						 
-						new MoveToPositionCoroutine(71150, new Vector3(2359, 4023, 0)),						 
-						new MoveToPositionCoroutine(71150, new Vector3(2373, 3886, 5)),						 
-						new MoveToPositionCoroutine(71150, new Vector3(2330, 3869, 10)),
-						
-                        new EnterLevelAreaCoroutine (344488, 71150, 82076, 497382903, 175482),
- 
-                        //Navigation appears to be busted on this level
-                        //new EnterLevelAreaCoroutine (344488, 71150, 82076, 497382903, 175482),
 
-                        new EnterLevelAreaCoroutine (344488, 82076, 82313, 497382904, 176001, true),
-						new WaitCoroutine(3000),
-                        new MoveToPositionCoroutine(82313, new Vector3(328, 519, 0)),
-                        new InteractWithUnitCoroutine(344488,82313,81609,0,3),
-                        new MoveToActorCoroutine(344488,82313,222404),
-                        new ClearAreaForNSecondsCoroutine(344488,10,222404,0,60,false),
-                        new InteractWithGizmoCoroutine(344488,82313,222404,0,3),
-                        new InteractWithUnitCoroutine(344488,82313,81609,0,3),
-
-                    }
-            });
 
             // A5 - Home Invasion (368555)
             Bounties.Add(new BountyData
@@ -3059,7 +3208,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             });
 
 
-            // A2 - A Miner's Gold (345954)
+             // A2 - A Miner's Gold (345954)
             Bounties.Add(new BountyData
             {
                 QuestId = 345954,
@@ -3068,39 +3217,35 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.SpecialEvent,
                 Coroutines = new List<ISubroutine>
                     {
+						new MoveToPositionCoroutine(70885, new Vector3(2687, 1513, 184)), 
+
                         new MoveToMapMarkerCoroutine(345954,70885, 2912417),
 
                         new MoveToSceneCoroutine(345954,70885,"caOut_Sub240x240_Mine_Destroyed"),
                         new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(113.6646f, 99.63721f, 230.3514f)),
                         new InteractWithUnitCoroutine(345954,70885,2924,2912417,5),
                         new WaitCoroutine(345954, 70885, 20000),
+						
                         new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(80.57178f, 72.74329f, 230.2913f)),
+						new WaitCoroutine(345954, 70885, 5000),
                         new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(80.69434f, 157.0466f, 230.3514f)),
+						new WaitCoroutine(345954, 70885, 5000),
                         new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(84.9397f, 49.0614f, 218.9766f)),
+						new WaitCoroutine(345954, 70885, 5000),
                         new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(87.19385f, 177.0327f, 220.3537f)),
+						new WaitCoroutine(345954, 70885, 5000),
                         new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(92.45044f, 110.6554f, 230.3514f)),
+						new WaitCoroutine(345954, 70885, 5000),
+                        new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(129.2219f, 96.4989f, 231.3068f)),
+						new WaitCoroutine(345954, 70885, 5000),
+                        new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(87.19385f, 177.0327f, 220.3537f)),
+						new WaitCoroutine(345954, 70885, 5000),
+                        new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(92.45044f, 110.6554f, 230.3514f)),
+						new WaitCoroutine(345954, 70885, 5000),
                         new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(129.2219f, 96.4989f, 231.3068f)),
                         
                         // a2dun_Aqd_Chest_Special_GreedyMiner (260238) Distance: 14.79873
                         new InteractWithGizmoCoroutine(345954, 70885, 260238, 0, 5),
-
-                        //new InteractWithUnitCoroutine(345954,70885,2924,2912417,5),
-                        //new ClearAreaForNSecondsCoroutine (345954, 60, 2924, 2912417, 20),
-
-                        //new MoveToScenePositionCoroutine(345502, 71150, "trOut_FesteringWoods_Sub120_Generic_03", new Vector3(59.35184f, 54.93524f, 43.3257f)),
-                        //new MoveToScenePositionCoroutine(345502, 71150, "trOut_FesteringWoods_Sub120_Generic_03", new Vector3(103.5425f, 13.15448f, 20.13758f)),
-                        //new MoveToScenePositionCoroutine(345502, 71150, "trOut_FesteringWoods_Sub120_Generic_03", new Vector3(83.09296f, 101.742f, 21.35553f)),
-
-                        //new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(554.2419f, -335.7521f, 230.3514f)),
-                        //new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(596.1028f, -382.4034f, 230.3126f)),
-                        //new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(567.9431f, -433.8203f, 218.9766f)),
-                        //new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(646.894f, -428.8292f, 207.4076f)),
-                        //new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(623.7473f, -285.5134f, 207.4762f)),
-                        //new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(558.137f, -342.7196f, 230.3514f)),
-                        //new MoveToScenePositionCoroutine(345954, 70885, "caOut_Sub240x240_Mine_Destroyed", new Vector3(611.3267f, -378.5343f, 231.1981f)),
-
-                        // a2dun_Aqd_Chest_Special_GreedyMiner (260238) Distance: 14.76077
-                         //new InteractWithGizmoCoroutine(345954,70885,260238,0,5)
                     }
             });
 
@@ -3115,15 +3260,20 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
 
                         new MoveToMapMarkerCoroutine(345502, 71150, 2912417),
-                        new InteractWithGizmoCoroutine(345502,71150,102008,2912417,5),
-                        new WaitCoroutine(10000),
+                        new InteractWithGizmoCoroutine(345502, 71150,102008,2912417,5),
+                        new WaitCoroutine(345502, 71150, 10000),
                         //new ClearAreaForNSecondsCoroutine (345502, 60, 102008, 2912417),
 						new MoveToScenePositionCoroutine(345502, 71150, "trOut_FesteringWoods_Sub120_Generic_03", new Vector3(52.79926f, 57.75702f, 43.55412f)),
+						new WaitCoroutine(345502, 71150, 10000),
 						new MoveToScenePositionCoroutine(345502, 71150, "trOut_FesteringWoods_Sub120_Generic_03", new Vector3(101.1246f, 22.6095f, 22.2632f)),
+						new WaitCoroutine(345502, 71150, 10000),
 						new MoveToScenePositionCoroutine(345502, 71150, "trOut_FesteringWoods_Sub120_Generic_03", new Vector3(98.59137f, 63.27435f, 36.85922f)),
+						new WaitCoroutine(345502, 71150, 10000),
 						new MoveToScenePositionCoroutine(345502, 71150, "trOut_FesteringWoods_Sub120_Generic_03", new Vector3(86.4173f, 98.62268f, 23.32761f)),
+						new WaitCoroutine(345502, 71150, 10000),
 						new MoveToScenePositionCoroutine(345502, 71150, "trOut_FesteringWoods_Sub120_Generic_03", new Vector3(98.59137f, 63.27435f, 36.85922f)),
-                        new ClearAreaForNSecondsCoroutine(345502, 60, 0, 0, 45),
+						new WaitCoroutine(345502, 71150, 10000),
+ //                     new ClearAreaForNSecondsCoroutine(345502, 60, 0, 0, 45),
                     }
             });
 
@@ -3141,26 +3291,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
 //                     new MoveToActorCoroutine(374571,271235,301177),
 
                         // x1_PandExt_Time_Activator (301177) Distance: 25.83982
-                        new InteractWithGizmoCoroutine(374571, 271235, 301177, 2912417, 5),
+//                      new InteractWithGizmoCoroutine(374571, 271235, 301177, 2912417, 5),
+						
+						// x1_PandExt_Time_Activator (301177) Distance: 13.5326
+                        new InteractWithGizmoCoroutine(374571, 271235, 301177, 0, 5),
 
                         new WaitCoroutine(2000),
                         new ClearAreaForNSecondsCoroutine (374571, 20, 0, 0)
                     }
             });
 
-            //// A5 - Kill Sartor (359543)
-            //Bounties.Add(new BountyData
-            //{
-            //    QuestId = 359543,
-            //    Act = Act.A5,
-            //    WorldId = 338600,
-            //    QuestType = BountyQuestType.KillMonster,
-            //    Coroutines = new List<ISubroutine>
-            //        {
-            //            new KillUniqueMonsterCoroutine (359543, 222189, 255791851),
-            //            new ClearLevelAreaCoroutine (359543)
-            //        }
-            //});
 
             // A3 - Forged in Battle (346146)
             Bounties.Add(new BountyData
@@ -3172,8 +3312,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
 						
-                    new MoveToPositionCoroutine(93104, new Vector3(376, 1040, 0)),
-                    new MoveToActorCoroutine(346146,93104,149331),
+                    new MoveToMapMarkerCoroutine(346146, 93104, 2912417),
              
                     new MoveToScenePositionCoroutine(346146, 93104, "a3dun_Keep_SW_03_Forge", new Vector3(83.1055f, 111.15f, 0.2562059f)),
                     // A3_UniqueVendor_Weaponsmith (149331) Distance: 17.43861
@@ -3193,13 +3332,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new WaitCoroutine(346146, 93104, 10000),
                     new InteractWithUnitCoroutine(346146, 93104, 149331, 1, 5),
 
-                        //new MoveToActorCoroutine(346146,93104,149331),
-                        //new MoveToActorCoroutine(346146,93104,149331),
-                        //new InteractWithUnitCoroutine(346146,93104, 149331, 0, 5),
-                        //new ClearAreaForNSecondsCoroutine (346146, 60, 0, 0),
-                        //new MoveToActorCoroutine(346146,93104,149331),
-                        //new InteractWithUnitCoroutine(346146, 93104, 149331, 0, 5),
-                        //new WaitCoroutine(10000)
                     }
             });
 
@@ -3225,10 +3357,13 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 409884,
                 Act = Act.A4,
                 WorldId = 139965,
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
+                LevelAreaIds = new HashSet<int> { 409517 },
                 Coroutines = new List<ISubroutine>
                     {
-                        new EnterLevelAreaCoroutine(409884, 409511, 139965, -970799631 , 204183),
+						new MoveToMapMarkerCoroutine(409884, 409511, -970799631),
+                        new EnterLevelAreaCoroutine(409884, 409511, 0, -970799631 , 204183),
+						
                         new MoveToPositionCoroutine(139965, new Vector3(365, 288, 0)),
                         new MoveToPositionCoroutine(139965, new Vector3(273, 284, 0)),
                         new MoveToPositionCoroutine(139965, new Vector3(277, 437, 0)),
@@ -3245,6 +3380,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToPositionCoroutine(139965, new Vector3(273, 284, 0)),
                         new MoveToPositionCoroutine(139965, new Vector3(277, 437, 0)),
                         new MoveToPositionCoroutine(139965, new Vector3(375, 427, 0)),
+
                         new ClearLevelAreaCoroutine(409884)
 
                         // Look for actorId 410426
@@ -3287,13 +3423,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
                     {
-                        new MoveToPositionCoroutine(71150, new Vector3(1497, 4082, 40)),
-                        new MoveToPositionCoroutine(71150, new Vector3(1428, 4011, 38)),
-                        new MoveToPositionCoroutine(71150, new Vector3(1279, 3897, 78)),
-                        new MoveToPositionCoroutine(71150, new Vector3(1090, 4052, 80)),
-                        new MoveToPositionCoroutine(71150, new Vector3(1079, 3703, 78)),
-                        new MoveToPositionCoroutine(71150, new Vector3(1081, 3521, 78)),
-                        new EnterLevelAreaCoroutine (367559, 71150, 75049, -1019926638 , 176001),
+						new MoveToPositionCoroutine(71150, new Vector3(1711, 3856, 40)),
+						new MoveToPositionCoroutine(71150, new Vector3(1517, 3837, 40)),
+						new MoveToPositionCoroutine(71150, new Vector3(1587, 4023, 38)),
+						new MoveToPositionCoroutine(71150, new Vector3(1413, 4076, 40)),
+						new MoveToPositionCoroutine(71150, new Vector3(1437, 3930, 50)),
+						new MoveToPositionCoroutine(71150, new Vector3(1214, 3903, 79)),
+						new MoveToPositionCoroutine(71150, new Vector3(1202, 3773, 80)),
+						new MoveToPositionCoroutine(71150, new Vector3(1076, 3880, 78)),
+						new MoveToPositionCoroutine(71150, new Vector3(957, 3950, 80)),
+						new MoveToPositionCoroutine(71150, new Vector3(892, 3860, 90)),
+						new MoveToPositionCoroutine(71150, new Vector3(1085, 3729, 78)),
+						new MoveToPositionCoroutine(71150, new Vector3(1080, 3506, 74)),
+						new MoveToPositionCoroutine(71150, new Vector3(1077, 3389, 65)),
+						
+                        new EnterLevelAreaCoroutine (367561, 71150, 75049, -1019926638, 176001),
                         new KillUniqueMonsterCoroutine (367559,75049, 218664, 718706852),
                         new ClearLevelAreaCoroutine (367559)
                     }
@@ -3338,10 +3482,26 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine(345505, 71150, 2912417),
-                        new InteractWithGizmoCoroutine(345505,71150, 111907, 0, 5),
-                        new WaitCoroutine(10000),
-                        new ClearAreaForNSecondsCoroutine (345505, 30, 111907, 0, 25),
-                        new ClearAreaForNSecondsCoroutine (345505, 30, 111907, 0, 90),
+			            new MoveToScenePositionCoroutine(345505, 71150, "trOut_FesteringWoods_Sub120_Generic_02", new Vector3(56.42166f, 67.17035f, 20.1f)),
+                        new InteractWithGizmoCoroutine(345505, 71150, 111907, 2912417, 5),
+                        new WaitCoroutine(345505, 71150, 10000),
+						
+						new MoveToScenePositionCoroutine(345505, 71150, "trOut_FesteringWoods_Sub120_Generic_02", new Vector3(54.41251f, 60.12646f, 20.1f)),
+						new WaitCoroutine(345505, 71150, 5000),
+						new MoveToScenePositionCoroutine(345505, 71150, "trOut_FesteringWoods_Sub120_Generic_02", new Vector3(66.2486f, 44.25531f, 20.1f)),
+						new WaitCoroutine(345505, 71150, 5000),
+						new MoveToScenePositionCoroutine(345505, 71150, "trOut_FesteringWoods_Sub120_Generic_02", new Vector3(57.53882f, 62.03363f, 20.1f)),
+						new WaitCoroutine(345505, 71150, 5000),
+						new MoveToScenePositionCoroutine(345505, 71150, "trOut_FesteringWoods_Sub120_Generic_02", new Vector3(48.30765f, 87.24634f, 20.1f)),
+						new WaitCoroutine(345505, 71150, 5000),
+						new MoveToScenePositionCoroutine(345505, 71150, "trOut_FesteringWoods_Sub120_Generic_02", new Vector3(61.108f, 63.65912f, 20.1f)),
+						new WaitCoroutine(345505, 71150, 5000),
+						new MoveToScenePositionCoroutine(345505, 71150, "trOut_FesteringWoods_Sub120_Generic_02", new Vector3(72.8396f, 36.59406f, 20.1f)),
+						new WaitCoroutine(345505, 71150, 5000),
+						new MoveToScenePositionCoroutine(345505, 71150, "trOut_FesteringWoods_Sub120_Generic_02", new Vector3(58.68997f, 62.7016f, 20.1f)),
+						new WaitCoroutine(345505, 71150, 5000),
+						
+                        new ClearAreaForNSecondsCoroutine (345505, 60, 111907, 2912417, 25),
                     }
             });
 
@@ -3356,12 +3516,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new EnterLevelAreaCoroutine (347058,71150, 0, 1070710595, 176001),
                         new EnterLevelAreaCoroutine (347058,102299, 0, 1070710596, 176002),
-                        new MoveToActorCoroutine(347058, 165797, 76907),
+						
+                        new MoveToScenePositionCoroutine(347058, 165797, "trDun_Crypt_NSEW_01", new Vector3(116.1539f, 97.55945f, -4.9f)),
                         new InteractWithUnitCoroutine(347058,165797, 76907, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (347058, 25, 76907, 0),
-                        // FamilyTree_Daughter (76907) Distance: 2.111575
-                        new MoveToActorCoroutine(347058, 165797, 76907),
-                        // FamilyTree_Daughter (76907) Distance: 2.111575
+						
+						new MoveToScenePositionCoroutine(347058, 165797, "trDun_Crypt_NSEW_01", new Vector3(103.6976f, 82.98633f, -4.9f)),
+						new WaitCoroutine(347058, 165797, 5000),
+						new MoveToScenePositionCoroutine(347058, 165797, "trDun_Crypt_NSEW_01", new Vector3(119.7391f, 97.01306f, -4.9f)),
+						new WaitCoroutine(347058, 165797, 5000),
+						new MoveToScenePositionCoroutine(347058, 165797, "trDun_Crypt_NSEW_01", new Vector3(102.7822f, 126.6759f, -4.9f)),
+						new WaitCoroutine(347058, 165797, 5000),
+						new MoveToScenePositionCoroutine(347058, 165797, "trDun_Crypt_NSEW_01", new Vector3(80.44812f, 101.0051f, -4.9f)),
+						new WaitCoroutine(347058, 165797, 5000),
+						
+                        new ClearAreaForNSecondsCoroutine (347058, 60, 76907, 0, 30),
+                        // FamilyTree_Daughter (76907) Distance: 2.11157
                         new InteractWithUnitCoroutine(347058, 165797, 76907, 0, 5),
                     }
             });
@@ -3472,7 +3641,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new WaitCoroutine(10000),
 					new MoveToScenePositionCoroutine(436267, 428493, "p4_ruins_frost_NW_01", new Vector3(71.05536f, 113.5079f, -9.9f)),
                     new WaitCoroutine(10000),
-                    new ClearAreaForNSecondsCoroutine(436267, 120, 365097, 2912417, 20, false),
+//                  new ClearAreaForNSecondsCoroutine(436267, 120, 365097, 2912417, 20, false),
                 }
             });
 
@@ -3535,7 +3704,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (365401, 71150, 2912417),
-                        new InteractWithGizmoCoroutine (365401,71150, 365097, 2912417, 5),
+						new WaitCoroutine(365401,71150, 1000),
+                        new InteractWithGizmoCoroutine (365401,71150, 365097, 0, 5),
                         new ClearAreaForNSecondsCoroutine (365401, 60, 365097, 2912417, 30)
                     }
             });
@@ -3550,8 +3720,20 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369763, 71150, 2912417),
-                        new InteractWithGizmoCoroutine (369763,71150, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369763, 60, 365097, 2912417, 30)
+                        new InteractWithGizmoCoroutine (369763, 71150, 365097, 2912417, 5),
+						
+						new MoveToScenePositionCoroutine(369763, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(129.8826f, 98.04395f, 9.915272f)),
+						new WaitCoroutine(369763, 71150, 10000),
+						new MoveToScenePositionCoroutine(369763, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(140.8633f, 123.8149f, 9.915271f)),
+						new WaitCoroutine(369763, 71150, 10000),
+						new MoveToScenePositionCoroutine(369763, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(129.5017f, 139.8765f, 9.915272f)),
+						new WaitCoroutine(369763, 71150, 10000),
+						new MoveToScenePositionCoroutine(369763, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(130.6418f, 121.6338f, 9.915272f)),
+						new WaitCoroutine(369763, 71150, 10000),
+						new MoveToScenePositionCoroutine(369763, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(126.72f, 120.3223f, 9.915272f)),
+						new WaitCoroutine(369763, 71150, 10000),
+						
+//                      new ClearAreaForNSecondsCoroutine (369763, 60, 365097, 2912417, 30)
                     }
             });
 
@@ -3566,7 +3748,19 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new MoveToMapMarkerCoroutine (369789,58983, 2912417),
 						new InteractWithGizmoCoroutine (369789,58983, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369789, 90, 365097, 2912417, 30)
+						
+						new MoveToScenePositionCoroutine(369789, 58983, "a1dun_Leor_EW_01_BellowsRoom", new Vector3(88.48364f, 135.6439f, -9.300045f)),
+						new WaitCoroutine(369789, 58983, 10000),
+						new MoveToScenePositionCoroutine(369789, 58983, "a1dun_Leor_EW_01_BellowsRoom", new Vector3(94.53369f, 165.1028f, -9.300045f)),
+						new WaitCoroutine(369789, 58983, 10000),
+						new MoveToScenePositionCoroutine(369789, 58983, "a1dun_Leor_EW_01_BellowsRoom", new Vector3(102.0026f, 131.6589f, -9.300045f)),
+						new WaitCoroutine(369789, 58983, 10000),
+						new MoveToScenePositionCoroutine(369789, 58983, "a1dun_Leor_EW_01_BellowsRoom", new Vector3(96.51099f, 98.6366f, -9.300044f)),
+						new WaitCoroutine(369789, 58983, 10000),
+						new MoveToScenePositionCoroutine(369789, 58983, "a1dun_Leor_EW_01_BellowsRoom", new Vector3(88.48364f, 135.6439f, -9.300045f)),
+						new WaitCoroutine(369789, 58983, 10000),
+
+//                      new ClearAreaForNSecondsCoroutine (369789, 90, 365097, 2912417, 30)
 						
                     }
             });
@@ -3597,7 +3791,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new MoveToMapMarkerCoroutine (369800, 70885, 2912417),
                         new InteractWithGizmoCoroutine (369800,70885, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369800, 60, 365097, 2912417, 30)
+						
+						new MoveToScenePositionCoroutine(369800, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(147.6401f, 133.1014f, 207.4763f)),
+						new WaitCoroutine(369800, 70885, 10000),
+						new MoveToScenePositionCoroutine(369800, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(170.0735f, 144.5144f, 207.4762f)),
+						new WaitCoroutine(369800, 70885, 10000),
+						new MoveToScenePositionCoroutine(369800, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(151.7021f, 164.7112f, 207.4762f)),
+						new WaitCoroutine(369800, 70885, 10000),
+						new MoveToScenePositionCoroutine(369800, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(128.4934f, 149.3925f, 207.4762f)),
+						new WaitCoroutine(369800, 70885, 10000),
+						new MoveToScenePositionCoroutine(369800, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(153.5044f, 151.0697f, 207.4763f)),
+						new WaitCoroutine(369800, 70885, 10000),
+						new MoveToScenePositionCoroutine(369800, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(146.2393f, 127.4581f, 207.4762f)),	
+						new WaitCoroutine(369800, 70885, 10000),
+						
+//                      new ClearAreaForNSecondsCoroutine (369800, 60, 365097, 2912417, 30)
                     }
             });
 
@@ -3642,21 +3850,25 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearCurse,
                 Coroutines = new List<ISubroutine>
                     {
+						new MoveToPositionCoroutine(95804, new Vector3(3328, 587, 0)),
 //						new MoveToMapMarkerCoroutine(369851, 95804, 942020622),
 						new EnterLevelAreaCoroutine(369851, 95804, 0, 942020622, 176003),
                         new MoveToMapMarkerCoroutine (369851, 189910, 2912417),
+						new MoveToScenePositionCoroutine(369851, 189910, "a3dun_iceCaves_EW_01", new Vector3(91.36786f, 135.6528f, 0.1000028f)),
                         new InteractWithGizmoCoroutine (369851,189910, 365097, 2912417, 5),
 						
 						new MoveToScenePositionCoroutine(369851, 189910, "a3dun_iceCaves_EW_01", new Vector3(91.36786f, 135.6528f, 0.1000028f)),
-						new WaitCoroutine(10000),
+						new WaitCoroutine(369851, 189910, 10000),
 						new MoveToScenePositionCoroutine(369851, 189910, "a3dun_iceCaves_EW_01", new Vector3(97.97012f, 105.6096f, 0.2187943f)),
-						new WaitCoroutine(10000),
+						new WaitCoroutine(369851, 189910, 10000),
 						new MoveToScenePositionCoroutine(369851, 189910, "a3dun_iceCaves_EW_01", new Vector3(99.60431f, 158.5022f, 0.1000038f)),
-						new WaitCoroutine(10000),
+						new WaitCoroutine(369851, 189910, 10000),
 						new MoveToScenePositionCoroutine(369851, 189910, "a3dun_iceCaves_EW_01", new Vector3(112.0791f, 139.3915f, 0.6401573f)),
-						new WaitCoroutine(10000),
+						new WaitCoroutine(369851, 189910, 10000),
+						new MoveToScenePositionCoroutine(369851, 189910, "a3dun_iceCaves_EW_01", new Vector3(91.36786f, 135.6528f, 0.1000028f)),
+						new WaitCoroutine(369851, 189910, 10000),
 
-                        new ClearAreaForNSecondsCoroutine (369851, 60, 365097, 2912417, 30, false)
+ //                       new ClearAreaForNSecondsCoroutine (369851, 60, 365097, 2912417, 30)
                     }
             });
 
@@ -3669,9 +3881,22 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearCurse,
                 Coroutines = new List<ISubroutine>
                     {
-                        new MoveToMapMarkerCoroutine (369853, 75434, 2912417),
-                        new InteractWithGizmoCoroutine (369853,75434, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369853, 60, 365097, 2912417, 30)
+                        new MoveToMapMarkerCoroutine(369853, 75434, 2912417),
+						
+						new InteractWithGizmoCoroutine(369853, 75434, 365097, 0, 5),
+						
+						new MoveToScenePositionCoroutine(369853, 75434, "a3dun_Keep_NSEW_03_War", new Vector3(180.0914f, 89.91431f, 0.5058147f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(369853, 75434, "a3dun_Keep_NSEW_03_War", new Vector3(191.4712f, 98.52448f, 0.1000001f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(369853, 75434, "a3dun_Keep_NSEW_03_War", new Vector3(178.8483f, 113.7626f, 0.9475988f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(369853, 75434, "a3dun_Keep_NSEW_03_War", new Vector3(161.0414f, 85.14581f, 0.1f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(369853, 75434, "a3dun_Keep_NSEW_03_War", new Vector3(180.0914f, 89.91431f, 0.5058147f)),
+						new WaitCoroutine(10000),
+
+//                     new ClearAreaForNSecondsCoroutine (369853, 60, 365097, 2912417, 30)
                     }
             });
 
@@ -3685,8 +3910,23 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369868, 81934, 2912417),
+						
                         new InteractWithGizmoCoroutine (369868, 81934, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369868, 60, 365097, 2912417, 30)
+						
+						new MoveToScenePositionCoroutine(369868, 81934, "a3dun_Crater_NSW_01_W01_S01", new Vector3(66.18164f, 119.5161f, 0.4913304f)),
+						new WaitCoroutine(369868, 81934, 10000),
+						new MoveToScenePositionCoroutine(369868, 81934, "a3dun_Crater_NSW_01_W01_S01", new Vector3(64.47034f, 146.4824f, 0.1000076f)),
+						new WaitCoroutine(369868, 81934, 10000),
+						new MoveToScenePositionCoroutine(369868, 81934, "a3dun_Crater_NSW_01_W01_S01", new Vector3(32.42139f, 139.2941f, 0.1000038f)),
+						new WaitCoroutine(369868, 81934, 10000),
+						new MoveToScenePositionCoroutine(369868, 81934, "a3dun_Crater_NSW_01_W01_S01", new Vector3(45.05969f, 120.4674f, 0.1000062f)),
+						new WaitCoroutine(369868, 81934, 10000),
+						new MoveToScenePositionCoroutine(369868, 81934, "a3dun_Crater_NSW_01_W01_S01", new Vector3(32.42139f, 139.2941f, 0.1000038f)),
+						new WaitCoroutine(369868, 81934, 10000),
+						new MoveToScenePositionCoroutine(369868, 81934, "a3dun_Crater_NSW_01_W01_S01", new Vector3(45.05969f, 120.4674f, 0.1000062f)),
+						new WaitCoroutine(369868, 81934, 10000),
+
+//                        new ClearAreaForNSecondsCoroutine (369868, 60, 365097, 2912417, 30)
                     }
             });
 
@@ -3747,7 +3987,20 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new EnterLevelAreaCoroutine (369944, 71150, 106752, 1107870150, 176007),
                         new MoveToMapMarkerCoroutine (369944, 106752, 2912417),
                         new InteractWithGizmoCoroutine (369944,106752, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369944, 60, 365097, 2912417, 50)
+						
+						new MoveToScenePositionCoroutine(369944, 106752, "trOut_oldTristram_Cellar_E", new Vector3(124.3548f, 113.0747f, 0.1f)),
+						new WaitCoroutine(369944, 106752, 10000),
+						new MoveToScenePositionCoroutine(369944, 106752, "trOut_oldTristram_Cellar_E", new Vector3(139.9767f, 131.7817f, 0.1000038f)),
+						new WaitCoroutine(369944, 106752, 10000),
+						new MoveToScenePositionCoroutine(369944, 106752, "trOut_oldTristram_Cellar_E", new Vector3(103.9924f, 132.6982f, 0.1000038f)),
+						new WaitCoroutine(369944, 106752, 10000),
+						new MoveToScenePositionCoroutine(369944, 106752, "trOut_oldTristram_Cellar_E", new Vector3(132.0145f, 145.1403f, 0.1000002f)),
+						new WaitCoroutine(369944, 106752, 10000),
+						new MoveToScenePositionCoroutine(369944, 106752, "trOut_oldTristram_Cellar_E", new Vector3(128.9004f, 132.4343f, 0.1000037f)),
+						new WaitCoroutine(369944, 106752, 10000),
+						new MoveToScenePositionCoroutine(369944, 106752, "trOut_oldTristram_Cellar_E", new Vector3(124.0268f, 106.3538f, 0.1f)),
+						
+ //                       new ClearAreaForNSecondsCoroutine (369944, 60, 365097, 2912417, 50)
                     }
             });
 
@@ -3778,7 +4031,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new MoveToMapMarkerCoroutine (375191,50582, 2912417),
                         new InteractWithGizmoCoroutine (375191,50582, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (375191, 60, 365097, 2912417, 30)
+						
+						new MoveToScenePositionCoroutine(375191, 50582, "trDun_Cath_SW_Hall_01", new Vector3(142.7451f, 127.8218f, -24.9f)),
+						new WaitCoroutine(375191, 50582, 10000),
+						new MoveToScenePositionCoroutine(375191, 50582, "trDun_Cath_SW_Hall_01", new Vector3(157.5084f, 141.0096f, -22.92235f)),
+						new WaitCoroutine(375191, 50582, 10000),
+						new MoveToScenePositionCoroutine(375191, 50582, "trDun_Cath_SW_Hall_01", new Vector3(144.483f, 157.0942f, -22.67825f)),
+						new WaitCoroutine(375191, 50582, 10000),
+						new MoveToScenePositionCoroutine(375191, 50582, "trDun_Cath_SW_Hall_01", new Vector3(128.2968f, 141.8916f, -23.27051f)),
+						new WaitCoroutine(375191, 50582, 10000),
+						new MoveToScenePositionCoroutine(375191, 50582, "trDun_Cath_SW_Hall_01", new Vector3(144.0414f, 142.2489f, -22.926f)),
+						new WaitCoroutine(375191, 50582, 10000),
+						new MoveToScenePositionCoroutine(375191, 50582, "trDun_Cath_SW_Hall_01", new Vector3(138.0294f, 129.1142f, -24.9f)),
+						new WaitCoroutine(375191, 50582, 10000),
+
+ //                     new ClearAreaForNSecondsCoroutine (375191, 60, 365097, 2912417, 30)
                     }
             });
 
@@ -3792,18 +4059,27 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (375198, 50579, 2912417),
+						
+						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(96.61365f, 143.3563f, 0.1000008f)),
+						
                         new InteractWithGizmoCoroutine (375198,50579, 365097, 2912417, 5),
 						
-						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(101.7427f, 148.6325f, 0.09999999f)),
-						new WaitCoroutine(10000),
-						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(99.03552f, 113.3025f, 2.454627f)),
-						new WaitCoroutine(10000),
-						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(75.14752f, 140.8801f, 0.1f)),
-						new WaitCoroutine(10000),
-						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(125.3271f, 125.9225f, 0.1000068f)),
-						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(78.06195f, 118.1667f, 1.457689f)),
+						new WaitCoroutine(375198, 50579, 10000),
+						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(100.1196f, 115.9618f, 2.645245f)),
+						new WaitCoroutine(375198, 50579, 10000),
+						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(122.5316f, 116.9459f, 1.237238f)),
+						new WaitCoroutine(375198, 50579, 10000),
+						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(97.40033f, 117.3986f, 2.177974f)),
+						new WaitCoroutine(375198, 50579, 10000),
+						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(100.0737f, 137.4675f, 1.262186f)),
+						new WaitCoroutine(375198, 50579, 10000),
+						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(99.34674f, 116.4901f, 2.515652f)),
+						new WaitCoroutine(375198, 50579, 10000),
+						new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(100.7628f, 147.187f, 0.1f)),
+						new WaitCoroutine(375198, 50579, 10000),
 						
-                        new ClearAreaForNSecondsCoroutine (375198, 90, 365097, 2912417, 30, false)
+//                        new ClearAreaForNSecondsCoroutine (375198, 90, 365097, 2912417, 30, false)
                     }
             });
 
@@ -3835,12 +4111,24 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new EnterLevelAreaCoroutine (375257, 50613, 50610, -1363317799, 185067),
                         new MoveToMapMarkerCoroutine (375257,50610, 2912417),
-
-                        // x1_Global_Chest_CursedChest_B (365097) Distance: 8.065943 new MoveToSceneCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02"),
-                        new MoveToActorCoroutine(375257, 50610, 365097),
-
+						
                         new InteractWithGizmoCoroutine (375257,50610, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (375257, 60, 365097, 2912417, 30)
+						
+						new MoveToScenePositionCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02", new Vector3(82.68777f, 98.2832f, 0.1000001f)),
+						new WaitCoroutine(375257, 50610, 10000),
+						new MoveToScenePositionCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02", new Vector3(60.56305f, 100.6702f, 0.1000001f)),
+						new WaitCoroutine(375257, 50610, 10000),
+						new MoveToScenePositionCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02", new Vector3(78.98157f, 120.9982f, 0.1000008f)),
+						new WaitCoroutine(375257, 50610, 10000),
+						new MoveToScenePositionCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02", new Vector3(102.0769f, 103.844f, 0.1000001f)),
+						new WaitCoroutine(375257, 50610, 10000),
+						new MoveToScenePositionCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02", new Vector3(81.83029f, 117.8888f, 0.1839012f)),
+						new WaitCoroutine(375257, 50610, 10000),
+						new MoveToScenePositionCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02", new Vector3(64.01669f, 104.2493f, 0.1000001f)),
+						new WaitCoroutine(375257, 50610, 10000),
+						new MoveToScenePositionCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02", new Vector3(81.71918f, 96.44299f, 0.1000001f)),
+						
+//                      new ClearAreaForNSecondsCoroutine (375257, 60, 365097, 2912417, 30)
                     }
             });
 
@@ -3856,7 +4144,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new EnterLevelAreaCoroutine (375261, 50613, 50611, -1363317798, 185067),
                         new MoveToMapMarkerCoroutine (375261, 50611, 2912417),
                         new InteractWithGizmoCoroutine (375261,50611, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (375261, 60, 365097, 2912417, 30)
+						
+						new MoveToScenePositionCoroutine(375261, 50611, "a2dun_Zolt_Hall_EW_02", new Vector3(89.11694f, 97.45593f, 0.1000001f)),
+						new WaitCoroutine(375261, 50611, 10000),
+						new MoveToScenePositionCoroutine(375261, 50611, "a2dun_Zolt_Hall_EW_02", new Vector3(90.1842f, 81.74347f, 0.1250016f)),
+						new WaitCoroutine(375261, 50611, 10000),
+						new MoveToScenePositionCoroutine(375261, 50611, "a2dun_Zolt_Hall_EW_02", new Vector3(114.6979f, 99.00391f, 0.1000002f)),
+						new WaitCoroutine(375261, 50611, 10000),
+						new MoveToScenePositionCoroutine(375261, 50611, "a2dun_Zolt_Hall_EW_02", new Vector3(89.98718f, 116.8755f, 0.1000004f)),
+						new WaitCoroutine(375261, 50611, 10000),
+						new MoveToScenePositionCoroutine(375261, 50611, "a2dun_Zolt_Hall_EW_02", new Vector3(62.31152f, 97.84348f, 0.1000001f)),
+						new WaitCoroutine(375261, 50611, 10000),
+						new MoveToScenePositionCoroutine(375261, 50611, "a2dun_Zolt_Hall_EW_02", new Vector3(91.53711f, 99.19025f, 0.1000001f)),
+                        new WaitCoroutine(375261, 50611, 10000),
+						
+//                      new ClearAreaForNSecondsCoroutine (375261, 60, 365097, 2912417, 30)
                     }
             });
 
@@ -3872,17 +4174,23 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToMapMarkerCoroutine (375268, 261712, 2912417),
                         new MoveToSceneCoroutine(375268, 261712, "x1_westm_NSEW_06"),
                         new InteractWithGizmoCoroutine (375268,261712, 365097, 2912417, 5),
-                        new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(86.94189f, 81.26221f, 5.1f)),
-                        new WaitCoroutine(2000),
-                        new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(82.91467f, 149.3269f, 5.1f)),
-                        new WaitCoroutine(2000),
-                        new MoveToSceneCoroutine(375268, 261712, "x1_westm_NSEW_06"),
-                        new WaitCoroutine(2000),
-                        new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(148.5044f, 72.07056f, 5.1f)),
-                        new WaitCoroutine(2000),
-                        new InteractWithGizmoCoroutine (375268,261712, 365097, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (375268, 60, 0, 0, 40, false),
-                        new ClearLevelAreaCoroutine(375268),
+						
+						new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(115.2922f, 106.7599f, 5.1f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(120.9968f, 91.24005f, 5.1f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(147.4745f, 110.2294f, 5.1f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(106.0229f, 141.2579f, 5.1f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(115.2922f, 106.7599f, 5.1f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(106.0229f, 141.2579f, 5.1f)),
+						new WaitCoroutine(10000),
+						new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(115.2922f, 106.7599f, 5.1f)),
+						new WaitCoroutine(10000),
+						
+//                        new ClearAreaForNSecondsCoroutine (375268, 60, 365097, 2912417, 30, false),
                     }
             });
 
@@ -3942,27 +4250,43 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A4,
                 WorldId = 181644,
                 QuestType = BountyQuestType.ClearCurse,
+                LevelAreaIds = new HashSet<int> { 409517 },
                 Coroutines = new List<ISubroutine>
                     {
-						new MoveToPositionCoroutine(409511, new Vector3(2724, 2024, 15)),
+
 						new MoveToMapMarkerCoroutine(409897, 409511, -970799629),
-						new InteractWithGizmoCoroutine(409897, 409511, 204183, -970799629, 5),
-//						new EnterLevelAreaCoroutine(409897, 409511, 0, -970799629, 204183),
-                        new MoveToActorCoroutine (409897,181644, 365097),
+						
+//						new InteractWithGizmoCoroutine(409897, 409511, 204183, -970799629, 5),
+						new EnterLevelAreaCoroutine(409897, 409511, 0, -970799629, 204183),
+						
+						new MoveToPositionCoroutine(181644, new Vector3(349, 557, 0)), 
+						new MoveToPositionCoroutine(181644, new Vector3(348, 421, -14)), 
+						new MoveToPositionCoroutine(181644, new Vector3(341, 351, -12)),
+						
                         new InteractWithGizmoCoroutine (409897,181644, 365097, 2912417, 5),
+						
 						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(111.6542f, 110.5945f, -12.64518f)),
-						new WaitCoroutine(5000),
+						new WaitCoroutine(409897,181644, 5000),
 						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(67.57697f, 111.5117f, -14.9f)),
-						new WaitCoroutine(5000),
+						new WaitCoroutine(409897,181644, 5000),
 						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(119.326f, 77.41565f, -14.66502f)),
-						new WaitCoroutine(5000),
+						new WaitCoroutine(409897,181644, 5000),
 						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(161.381f, 120.7327f, -14.9f)),
-						new WaitCoroutine(5000),
+						new WaitCoroutine(409897,181644, 5000),
 						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(108.6663f, 148.4656f, -14.9f)),
-						new WaitCoroutine(5000),
+						new WaitCoroutine(409897,181644, 5000),
 						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(73.42627f, 108.64f, -14.9f)),
-						new WaitCoroutine(5000),
-                        new ClearAreaForNSecondsCoroutine (409897, 80, 365097, 2912417, 30, false)
+						new WaitCoroutine(409897,181644, 5000),
+						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(119.326f, 77.41565f, -14.66502f)),
+						new WaitCoroutine(409897,181644, 5000),
+						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(161.381f, 120.7327f, -14.9f)),
+						new WaitCoroutine(409897,181644, 5000),
+						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(108.6663f, 148.4656f, -14.9f)),
+						new WaitCoroutine(409897,181644, 5000),
+						new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(73.42627f, 108.64f, -14.9f)),
+						new WaitCoroutine(409897,181644, 5000),
+						
+//                     new ClearAreaForNSecondsCoroutine (409897, 80, 365097, 2912417, 30, false)
                     }
             });
         }
@@ -3970,8 +4294,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
         private static void AddBounties()
         {
 
-
-			
 			// A5 - 현상금 사냥: 톨리퍼 최후의 저항 (359426)
 			Bounties.Add(new BountyData
 			{
@@ -3983,21 +4305,23 @@ namespace Trinity.Components.Adventurer.Game.Quests
 				Coroutines = new List<ISubroutine>
 				{
 					new MoveToMapMarkerCoroutine(359426, 261712, 2912417),
-					new MoveToActorCoroutine(359426, 261712, 312375),
+//					new MoveToActorCoroutine(359426, 261712, 312375),
 					new InteractWithGizmoCoroutine(359426, 261712, 312375, 2912417, 5),
 					
 					new MoveToScenePositionCoroutine(359426, 261712, "x1_westm_NS_03", new Vector3(112.1254f, 119.2485f, 10.1f)),
+					new WaitCoroutine(359426, 261712, 10000),
 					new MoveToScenePositionCoroutine(359426, 261712, "x1_westm_NS_03", new Vector3(162.8093f, 119.7774f, 10.1f)),
+					new WaitCoroutine(359426, 261712, 10000),
 					new MoveToScenePositionCoroutine(359426, 261712, "x1_westm_NS_03", new Vector3(112.1254f, 119.2485f, 10.1f)),
+					new WaitCoroutine(359426, 261712, 10000),
 					new MoveToScenePositionCoroutine(359426, 261712, "x1_westm_NS_03", new Vector3(70.59937f, 123.0006f, 10.1f)),
-					
-					
-					new ClearAreaForNSecondsCoroutine(359426, 60, 312375, 2912417, 30),
+					new WaitCoroutine(359426, 261712, 10000),
+					new MoveToScenePositionCoroutine(359426, 261712, "x1_westm_NS_03", new Vector3(112.1254f, 119.2485f, 10.1f)),
+					new WaitCoroutine(359426, 261712, 10000),
+
+//					new ClearAreaForNSecondsCoroutine(359426, 60, 312375, 2912417, 30),
 				}
 			});
-
-
-
 			
 			// A5 - 현상금 사냥: 쥐잡기 (368613)
 			Bounties.Add(new BountyData
@@ -4308,19 +4632,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     }
             });
 
-            // A2 - Kill Taros the Wild (345971)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 345971,
-                Act = Act.A2,
-                WorldId = 70885,
-                QuestType = BountyQuestType.KillMonster,
-                Coroutines = new List<ISubroutine>
-                    {
-                        new KillUniqueMonsterCoroutine (345971,70885, 221372, -1258389667),
-                        new ClearLevelAreaCoroutine (345971)
-                    }
-            });
+
 
             // A2 - Kill Shondar the Invoker (346036)
             Bounties.Add(new BountyData
@@ -4362,7 +4674,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearZone,
                 Coroutines = new List<ISubroutine>
                     {
-                        new EnterLevelAreaCoroutine (346071, 70885, 62569, 1352061373, 176003),
+						new MoveToMapMarkerCoroutine(346071, 70885, 1352061373),
+                        new EnterLevelAreaCoroutine (346071, 70885, 0, 1352061373, 176003),
                         new EnterLevelAreaCoroutine (346071, 62569, 0, -1718038890, 176002, true),
                         new ClearLevelAreaCoroutine (346071)
                     }
@@ -4684,9 +4997,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearZone,
                 Coroutines = new List<ISubroutine>
                     {
-//						new MoveToMapMarkerCoroutine(346192, 95804, 942020622),
 						new EnterLevelAreaCoroutine(346192, 95804, 189910, 942020622, 176003),
-                        new EnterLevelAreaCoroutine (346192, 189910, 0, -802596186, 176038),
+						new EnterLevelAreaCoroutine(346192, 189910, 0, -802596186, 176038),
                         new ClearLevelAreaCoroutine (346192)
                     }
             });
@@ -5165,7 +5477,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
                     {
-                        new KillUniqueMonsterCoroutine (347600,70885, 215445, -1086742663),
+						new MoveToMapMarkerCoroutine(347600, 70885, -1086742663),
+                        new KillUniqueMonsterCoroutine (347600, 70885, 215445, -1086742663),
                         new ClearLevelAreaCoroutine (347600)
                     }
             });
@@ -5797,7 +6110,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.ClearZone,
                 Coroutines = new List<ISubroutine>
                     {
-                        new EnterLevelAreaCoroutine (350556, 70885, 50594, 151028377, 185067),
+						new EnterLevelAreaCoroutine(350556, 70885, 0, 151028377, 185067),
                         new EnterLevelAreaCoroutine (350556, 50594, 222575, 151028378, 185067, true),
                         new ClearLevelAreaCoroutine (350556)
                     }
@@ -6636,26 +6949,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
                     {
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_Sub80_MothMound", new Vector3(65.67407f, 25.02417f, 40.10001f)),
-						new WaitCoroutine(3000),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_Roads_NSEW_01", new Vector3(17.74841f, 20.76855f, 40.1f)),
-						new WaitCoroutine(3000),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_Roads_NSEW_01", new Vector3(91.89099f, 104.7712f, 40.1f)),
-						new WaitCoroutine(3000),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOUT_Highlands_Edge_NE_01_AO_2", new Vector3(170.3914f, 2.388184f, 40.1f)),
-						new WaitCoroutine(3000),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_Chokepoint_B_E08_S02", new Vector3(46.60999f, 4.004395f, 50.1f)),
-						new WaitCoroutine(3000),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_Roads_NS_03", new Vector3(100.559f, 81.85815f, 79.12151f)),
-						new WaitCoroutine(3000),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_LeoricManor_E03_S01", new Vector3(104.829f, 238.3418f, 82.89355f)),
-						new WaitCoroutine(3000),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_Edge_N_02", new Vector3(110.462f, 184.7673f, 90.1f)),
-						new WaitCoroutine(3000),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_Roads_SW_02", new Vector3(68.82397f, 117.5298f, 80.10001f)),
-						new WaitCoroutine(3000),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_Roads_EW_03", new Vector3(58.31152f, 8.549072f, 78.10001f)),
-						new MoveToScenePositionCoroutine(367561, 71150, "trOut_Highlands_LeoricManor_E02_S02", new Vector3(62.13855f, 156.0732f, 65.74921f)),
+//						new MoveToMapMarkerCoroutine(367561, 71150, -1019926638),
+						
+						new MoveToPositionCoroutine(71150, new Vector3(1711, 3856, 40)),
+						new MoveToPositionCoroutine(71150, new Vector3(1517, 3837, 40)),
+						new MoveToPositionCoroutine(71150, new Vector3(1587, 4023, 38)),
+						new MoveToPositionCoroutine(71150, new Vector3(1413, 4076, 40)),
+						new MoveToPositionCoroutine(71150, new Vector3(1437, 3930, 50)),
+						new MoveToPositionCoroutine(71150, new Vector3(1214, 3903, 79)),
+						new MoveToPositionCoroutine(71150, new Vector3(1202, 3773, 80)),
+						new MoveToPositionCoroutine(71150, new Vector3(1076, 3880, 78)),
+						new MoveToPositionCoroutine(71150, new Vector3(957, 3950, 80)),
+						new MoveToPositionCoroutine(71150, new Vector3(892, 3860, 90)),
+						new MoveToPositionCoroutine(71150, new Vector3(1085, 3729, 78)),
+						new MoveToPositionCoroutine(71150, new Vector3(1080, 3506, 74)),
+						new MoveToPositionCoroutine(71150, new Vector3(1077, 3389, 65)),
 						
                         new EnterLevelAreaCoroutine (367561, 71150, 75049, -1019926638, 176001),
                         new KillUniqueMonsterCoroutine (367561,71150, 218662, 718706851),
@@ -7682,42 +7990,49 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
                     new MoveToSceneCoroutine(436280, 428493, "p4_ruins_frost_NS_01"),
 
-                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(64.43317f, 166.5968f, -9.9f)),
-                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(130.7856f, 147.6561f, 0.1000014f)),
-					
-                    new MoveToActorCoroutine(436280, 428493, 435703),
-
-                    // px_Ruins_frost_camp_cage (435703) Distance: 62.45116
-                    new InteractWithGizmoCoroutine(436280, 428493, 435703, 0, 5),
-					new WaitCoroutine(5000),
-					
+                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(183.717f, 168.832f, -0.01446433f)),
                     new MoveToActorCoroutine(436280, 428493, 435703),
 
                     // px_Ruins_frost_camp_cage (435703) Distance: 13.54914
                     new InteractWithGizmoCoroutine(436280, 428493, 435703, 0, 5),
-					new WaitCoroutine(5000),
+					new WaitCoroutine(436280, 428493, 5000),
+					
+                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(122.0508f, 144.9282f, 0.1000014f)),
+                    new MoveToActorCoroutine(436280, 428493, 435703),
 
-                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(223.5715f, 81.98212f, -9.899994f)),
+                    // px_Ruins_frost_camp_cage (435703) Distance: 62.45116
+                    new InteractWithGizmoCoroutine(436280, 428493, 435703, 0, 5),
+					new WaitCoroutine(436280, 428493, 5000),
+					
+                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(183.717f, 168.832f, -0.01446433f)),
+                    new MoveToActorCoroutine(436280, 428493, 435703),
+
+                    // px_Ruins_frost_camp_cage (435703) Distance: 13.54914
+                    new InteractWithGizmoCoroutine(436280, 428493, 435703, 0, 5),
+					new WaitCoroutine(436280, 428493, 5000),
+					
+                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(122.0508f, 144.9282f, 0.1000014f)),
+                    new MoveToActorCoroutine(436280, 428493, 435703),
+
+                    // px_Ruins_frost_camp_cage (435703) Distance: 62.45116
+                    new InteractWithGizmoCoroutine(436280, 428493, 435703, 0, 5),
+					new WaitCoroutine(436280, 428493, 5000),
+					
+                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(161.8187f, 61.48199f, -9.913034f)),
 					
                     new MoveToActorCoroutine(436280, 428493, 435703),
 
                     // px_Ruins_frost_camp_cage (435703) Distance: 62.45116
                     new InteractWithGizmoCoroutine(436280, 428493, 435703, 0, 5),
-					new WaitCoroutine(5000),
-                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(150.1893f, 81.20508f, -9.835966f)),
+					new WaitCoroutine(436280, 428493, 5000),
+					
+                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(49.39655f, 63.32892f, 0.1000005f)),
 
                     new MoveToActorCoroutine(436280, 428493, 435703),
 
                     // px_Ruins_frost_camp_cage (435703) Distance: 92.18051
                     new InteractWithGizmoCoroutine(436280, 428493, 435703, 0, 5),
-					new WaitCoroutine(5000),
-
-                    new MoveToScenePositionCoroutine(436280, 428493, "p4_ruins_frost_NS_01", new Vector3(84.56f, 75.17822f, 0.1000005f)),
-
-                    new MoveToActorCoroutine(436280, 428493, 435703),
-
-                    // px_Ruins_frost_camp_cage (435703) Distance: 124.4732
-                    new InteractWithGizmoCoroutine(436280, 428493, 435703, 0, 5),
+					new WaitCoroutine(436280, 428493, 5000),
 
                     new ClearAreaForNSecondsCoroutine(448619, 90, 0, 0, 45),
 
@@ -7746,6 +8061,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
             // A3 - Bounty: King of the Ziggurat (436282) - 6	0
 
+            // A3 - Bounty: King of the Ziggurat (436282) - 6	0
+
              Bounties.Add(new BountyData
              {
                  QuestId = 436282,
@@ -7759,21 +8076,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                      new MoveToSceneCoroutine(436282, 428493, "Ziggurat"),
 
                      new MoveToScenePositionCoroutine(436282, 428493, "p4_ruins_frost_NSEW_03_Ziggurat", new Vector3(119.4838f, 123.1133f, 20.4907f)),
-                     new WaitCoroutine(1000),
+                     new WaitCoroutine(5000),
                      new MoveToScenePositionCoroutine(436282, 428493, "p4_ruins_frost_NSEW_03_Ziggurat", new Vector3(63.26221f, 120.9539f, 10.09718f)),
-                     new WaitCoroutine(3000),
+                     new WaitCoroutine(10000),
                      new MoveToScenePositionCoroutine(436282, 428493, "p4_ruins_frost_NSEW_03_Ziggurat", new Vector3(119.4838f, 123.1133f, 20.4907f)),
-                     new WaitCoroutine(1000),
+                     new WaitCoroutine(5000),
                      new MoveToScenePositionCoroutine(436282, 428493, "p4_ruins_frost_NSEW_03_Ziggurat", new Vector3(119.5901f, 76.61993f, 10.77626f)),
-                     new WaitCoroutine(3000),
+                     new WaitCoroutine(10000),
                      new MoveToScenePositionCoroutine(436282, 428493, "p4_ruins_frost_NSEW_03_Ziggurat", new Vector3(119.4838f, 123.1133f, 20.4907f)),
-                     new WaitCoroutine(1000),
+                     new WaitCoroutine(5000),
                      new MoveToScenePositionCoroutine(436282, 428493, "p4_ruins_frost_NSEW_03_Ziggurat", new Vector3(169.4726f, 117.2496f, 10.27893f)),
-                     new WaitCoroutine(3000),
+                     new WaitCoroutine(10000),
                      new MoveToScenePositionCoroutine(436282, 428493, "p4_ruins_frost_NSEW_03_Ziggurat", new Vector3(119.4838f, 123.1133f, 20.4907f)),
-                     new WaitCoroutine(1000),
+                     new WaitCoroutine(5000),
                      new MoveToScenePositionCoroutine(436282, 428493, "p4_ruins_frost_NSEW_03_Ziggurat", new Vector3(123.4897f, 170.7134f, 10.7916f)),
-                     new WaitCoroutine(3000),
+                     new WaitCoroutine(10000),
 			         new MoveToScenePositionCoroutine(436282, 428493, "p4_ruins_frost_NSEW_03_Ziggurat", new Vector3(119.4838f, 123.1133f, 20.4907f)),
                      new ClearAreaForNSecondsCoroutine(436282, 90, 0, 0, 30),
 
@@ -7817,33 +8134,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             //     }
             // });
 
-            // A2 - Bounty: Restless Sands (350562)
-            // Has trouble finding all the gizmos that spawn monsters.
-            //Bounties.Add(new BountyData
-            //{
-            //    QuestId = 350562,
-            //    Act = Act.A2,
-            //    WorldId = 70885,
-            //    QuestType = BountyQuestType.SpecialEvent,
-            //    //WaypointNumber = 22,
-            //    Coroutines = new List<ISubroutine>
-            //    {
-            //        new MoveToMapMarkerCoroutine(350562, 70885, 2912417),
-            //        // oldNecromancer (4798) Distance: 25.94104
-            //        new InteractWithUnitCoroutine(350562, 70885, 4798, 2912417, 5),
-            //        // caOut_Totem_A (3707) Distance: 86.27297
-            //        new InteractWithGizmoCoroutine(350562, 70885, 3707, 0, 5),
-            //        new ClearAreaForNSecondsCoroutine(350562, 10, 0, 0, 45),
-            //        new MoveToScenePositionCoroutine(350562, 70885, "caOut_StingingWinds_E04_S09", new Vector3(71.31079f, 119.0617f, 172.3481f)),
-            //        // caOut_Totem_A (3707) Distance: 68.86753
-            //        new InteractWithGizmoCoroutine(350562, 70885, 3707, 0, 5),
-            //        new ClearAreaForNSecondsCoroutine(350562, 10, 0, 0, 45),
-            //        // oldNecromancer (4798) Distance: 9.559196
-            //        new InteractWithUnitCoroutine(350562, 70885, 4798, 0, 5),
-            //        new ClearAreaForNSecondsCoroutine(350562, 10, 0, 0, 45),
-            //        new InteractWithUnitCoroutine(350562, 70885, 4798, 0, 5),
-            //    }
-            //});
 
             // A5 - Bounty: The Ghost Prison (444573)
             Bounties.Add(new BountyData
@@ -8177,27 +8467,40 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            //// A3 - Bounty: Crazy Climber (346186) - this is quite rare 1/30, 1/50 maybe
-            //Bounties.Add(new BountyData
-            //{
-            //    QuestId = 346186,
-            //    Act = Act.A3,
-            //    WorldId = 95804, // Enter the final worldId here
-            //    QuestType = BountyQuestType.SpecialEvent,
-            //    //WaypointNumber = 35,
-            //    Coroutines = new List<ISubroutine>
-            //    {
-            //        new MoveToMapMarkerCoroutine(346186, 95804, 2912417),
-            //        // bastionsKeepGuard_Injured_Reinforcement_Event (153419) Distance: 17.03967
-            //        new InteractWithUnitCoroutine(346186, 95804, 153419, 2912417, 5),
-            //        new MoveToPositionCoroutine(95804, new Vector3(2488, 594, 38)),
-            //        new MoveToPositionCoroutine(95804, new Vector3(2474, 520, 63)),
-            //        new MoveToPositionCoroutine(95804, new Vector3(2540, 519, 87)),
-            //        // bastionsKeepGuard_Lieutenant_Reinforcement_Event (153428) Distance: 4.879069
-            //        new InteractWithUnitCoroutine(346186, 95804, 153428, 0, 5),
+            // A3 - Bounty: Crazy Climber (346186)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 346186,
+                Act = Act.A3,
+                WorldId = 95804, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                //WaypointNumber = 34,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine(346186, 95804, 2912417),
+					
+                    new MoveToScenePositionCoroutine(346186, 95804, "a3dun_Bridge_NS_Towers_05", new Vector3(196.2253f, 85.36218f, 0.624619f)),
+					new WaitCoroutine(346186, 95804, 1000),
+                    new InteractWithUnitCoroutine(346186, 95804, 153419, 2912417, 5),
+					
+					new MoveToScenePositionCoroutine(346186, 95804, "a3dun_Bridge_NS_Towers_05", new Vector3(192.509f, 83.62573f, 0.7063226f)),
+					new WaitCoroutine(346186, 95804, 1000),
+                    new InteractWithUnitCoroutine(346186, 95804, 153419, 2912417, 5),
+					
+					new MoveToScenePositionCoroutine(346186, 95804, "a3dun_Bridge_NS_Towers_05", new Vector3(131.6942f, 108.8494f, 38.24864f)),
+					new WaitCoroutine(346186, 95804, 5000),
+					new MoveToScenePositionCoroutine(346186, 95804, "a3dun_Bridge_NS_Towers_05", new Vector3(76.2251f, 108.259f, 38.20418f)),
+					new WaitCoroutine(346186, 95804, 5000),
+					new MoveToScenePositionCoroutine(346186, 95804, "a3dun_Bridge_NS_Towers_05", new Vector3(79.22241f, 41.45508f, 63.26687f)),
+					new WaitCoroutine(346186, 95804, 10000),
+					new MoveToScenePositionCoroutine(346186, 95804, "a3dun_Bridge_NS_Towers_05", new Vector3(79.22241f, 41.45508f, 63.26687f)),
+					new WaitCoroutine(346186, 95804, 10000),
+					new MoveToScenePositionCoroutine(346186, 95804, "a3dun_Bridge_NS_Towers_05", new Vector3(143.4139f, 35.06018f, 87.60001f)),
 
-            //    }
-            //});
+                    // bastionsKeepGuard_Lieutenant_Reinforcement_Event (153428) Distance: 3.705163
+                    new InteractWithUnitCoroutine(346186, 95804, 153428, 0, 5),
+                }
+            });
 
             // A1 - Bounty: Kill Morgan LeDay (449841)
             Bounties.Add(new BountyData
@@ -8480,11 +8783,23 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new InteractWithUnitCoroutine(363394, 271233, 354345, 2912417, 5),
                     //ActorId: 363943, Type: Gizmo, Name: x1_Fortress_Crystal_Prison_Yellow-2093, Distance2d: 19.41266, CollisionRadius: 14.90234, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0
                     new InteractWithGizmoCoroutine(363394, 271233, 363943, -1, 5),
-                    new ClearAreaForNSecondsCoroutine(363394, 60, 0, 0, 40),
+					
+					new MoveToScenePositionCoroutine(363394, 271233, "x1_fortress_NEW_02", new Vector3(118.0137f, 140.5249f, -9.534434f)),
+					new WaitCoroutine(363394, 271233, 10000),
+					new MoveToScenePositionCoroutine(363394, 271233, "x1_fortress_NEW_02", new Vector3(119.1356f, 114.215f, -9.534435f)),
+					new WaitCoroutine(363394, 271233, 10000),
+					new MoveToScenePositionCoroutine(363394, 271233, "x1_fortress_NEW_02", new Vector3(137.9068f, 127.946f, -9.806384f)),
+					new WaitCoroutine(363394, 271233, 10000),
+					new MoveToScenePositionCoroutine(363394, 271233, "x1_fortress_NEW_02", new Vector3(125.8439f, 149.037f, -9.534435f)),
+					new WaitCoroutine(363394, 271233, 10000),
+					new MoveToScenePositionCoroutine(363394, 271233, "x1_fortress_NEW_02", new Vector3(99.97601f, 134.6227f, -9.814684f)),
+					new WaitCoroutine(363394, 271233, 10000),
+					new MoveToScenePositionCoroutine(363394, 271233, "x1_fortress_NEW_02", new Vector3(117.2425f, 125.2808f, -9.534436f)),
+					new WaitCoroutine(363394, 271233, 10000),
+	
+//                  new ClearAreaForNSecondsCoroutine(363394, 60, 0, 0, 40),
                 }
             });
-
-
 
             // A3 - Bounty: Kill Korae and Samae (436274)
             Bounties.Add(new BountyData
@@ -8604,6 +8919,17 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToMapMarkerCoroutine(359101, 338944, 2912417),
 //                    new MoveToActorCoroutine(359101, 338944, 331951),
                     new WaitCoroutine(3000),
+					
+					new MoveToScenePositionCoroutine(359101, 338944, "x1_westm_graveyard_NSEW_13", new Vector3(79.35699f, 47.7887f, 0.1f)),
+					new WaitCoroutine(10000),
+					new MoveToScenePositionCoroutine(359101, 338944, "x1_westm_graveyard_NSEW_13", new Vector3(89.59161f, 69.89282f, 0.1f)),
+					new WaitCoroutine(10000),
+					new MoveToScenePositionCoroutine(359101, 338944, "x1_westm_graveyard_NSEW_13", new Vector3(64.90564f, 82.27252f, 0.1f)),
+					new WaitCoroutine(10000),
+					new MoveToScenePositionCoroutine(359101, 338944, "x1_westm_graveyard_NSEW_13", new Vector3(66.88336f, 34.40729f, 0.1f)),
+					new WaitCoroutine(10000),
+					new MoveToScenePositionCoroutine(359101, 338944, "x1_westm_graveyard_NSEW_13", new Vector3(77.21259f, 48.01953f, 0.1f)),					
+					
                     new ClearAreaForNSecondsCoroutine(359101, 60, 331951, 2912417, 30),
 					new InteractWithUnitCoroutine(359101, 338944, 331948, 0, 5),
                 }
