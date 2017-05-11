@@ -62,6 +62,7 @@ namespace Trinity.Framework
         public static ProfileSettings ProfileSettings { get; } = new ProfileSettings();
         public static GameCleaner GameCleaner { get; } = new GameCleaner();
         public static SettingsModel Settings => TrinitySettings.Settings;
+        public static ProfilePulsator ProfilePulsator => new ProfilePulsator();
         public static TrinityStorage Storage => TrinitySettings.Storage;
         public static MainGridProvider DBGridProvider => (MainGridProvider)Navigator.SearchGridProvider;
         public static DefaultNavigationProvider DBNavProvider => (DefaultNavigationProvider)Navigator.NavigationProvider;

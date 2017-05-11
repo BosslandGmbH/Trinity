@@ -93,7 +93,13 @@ namespace Trinity.ProfileTags
 
             Core.Logger.Debug($"[{TagClassName}] Actor Found: {actor}");
             ActorId = actor.ActorSnoId;
-            StopDistance = actor.Radius;
+
+            if (IsDefault(nameof(StopDistance), StopDistance))
+            {
+                StopDistance = actor.Radius;
+                Core.Logger.Debug($"[{TagClassName}] Using Actor Radius as StopDistance: {StopDistance}");
+            }
+
             return true;
         }
 

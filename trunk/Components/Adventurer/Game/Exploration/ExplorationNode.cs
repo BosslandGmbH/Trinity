@@ -98,6 +98,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             Calculate(this);
         }
 
+        public bool IsNextTo(ExplorationNode other)
+        {
+            return Math.Abs(Center.Distance(other.Center) - _boxSize) < 1;
+        }
+
         private static void Calculate(ExplorationNode instance)
         {
             var navBoxSize = ExplorationData.NavigationNodeBoxSize;
@@ -149,13 +154,15 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
             instance.NavigableCellCount = walkableExcludingNearWall.Count;
             //instance.FillPercentage = instance.NavigableCellCount / (float)maxCellsCount;
-            var fillPercetnage = instance.NavigableCellCount / (float)maxCellsCount;
-            instance.HasEnoughNavigableCells = fillPercetnage >= instance._boxTolerance;
+            instance.FillPercentage = instance.NavigableCellCount / (float)maxCellsCount;
+            instance.HasEnoughNavigableCells = instance.FillPercentage >= instance._boxTolerance;
             if (walkableExcludingNearWall.Count > 0)
             {
                 instance.NavigableCenterNode = walkableExcludingNearWall.OrderBy(ncp => ncp.NavigableCenter.DistanceSqr(instance.Center.ToVector3())).First();
             }
         }
+
+        public float FillPercentage { get; set; }
 
         public bool IsConnectionNode { get; set; }
 

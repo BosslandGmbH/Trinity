@@ -489,8 +489,24 @@ namespace Trinity.Components.Coroutines.Town
         private static InventoryMap GetInventoryMap()
         {
             Core.Actors.Update();
-            var items = Core.Inventory.Stash.ToList();
-            return new InventoryMap(items.ToDictionary(k => new Tuple<int, int>(k.InventoryColumn, k.InventoryRow), v => v));
+            var stashItems = Core.Inventory.Stash.ToList();
+            var itemDict = new Dictionary<Tuple<int, int>,TrinityItem>();
+            foreach (var item in stashItems)
+            {
+                var key = new Tuple<int, int>(item.InventoryColumn, item.InventoryRow);
+                if (itemDict.ContainsKey(key))
+                {
+                    var dup = itemDict[key];
+                    Core.Logger.Debug($"Duplicate Col/Row [{item.InventoryColumn}, {item.InventoryRow}] found while creating InventoryMap for: {item.Name} ({item.ActorSnoId}) {item.ItemType} IsValid=({item.IsValid}) duplicate is: {dup.Name} ({dup.ActorSnoId}) {dup.ItemType} IsValid=({dup.IsValid})");
+                    itemDict[key] = item.IsValid ? item : dup;
+                }
+                else
+                {
+                    itemDict[key] = item;
+                }
+            }
+            return new InventoryMap(itemDict);
+           // return new InventoryMap(stashItems.DistinctBy().ToDictionary(k => new Tuple<int, int>(k.InventoryColumn, k.InventoryRow), v => v));
         }
 
         private static bool TryGetStackLocation(TrinityItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)

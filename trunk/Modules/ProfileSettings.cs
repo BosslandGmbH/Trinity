@@ -44,7 +44,7 @@ namespace Trinity.Modules
 
             public SceneOptions GetSceneOptions(int sceneSnoId)
             {
-                return Scenes?.FirstOrDefault(s => s.SnoId == sceneSnoId) ?? DefaultSceneOptions;
+                return Scenes?.FirstOrDefault(s => s != null && s.SnoId == sceneSnoId) ?? DefaultSceneOptions;
             }
 
             public SceneOptions GetSceneOptions(string sceneName)

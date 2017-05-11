@@ -23,7 +23,7 @@ namespace Trinity
     {
         private static TrinityPlugin _instance;
         public string Name => "Trinity";
-        public Version Version => new Version(2, 250, 776);
+        public Version Version => new Version(2, 250, 781);
         public string Author => "xzjv, TarasBulba, rrrix, jubisman, Phelon and many more";
         public string Description => $"v{Version} provides combat, exploration and much more";
         public Window DisplayWindow => UILoader.GetDisplayWindow(Path.Combine(FileManager.PluginPath, "UI"));
@@ -76,10 +76,10 @@ namespace Trinity
 
         public void OnPulse()
         {
-            if (ZetaDia.CurrentQuest  == null || ZetaDia.CurrentQuest.QuestSnoId == -1)
+            if (ZetaDia.CurrentQuest == null || ZetaDia.CurrentQuest.QuestSnoId == -1)
             {
                 Core.Logger.Debug("Waiting while Quest is invalid (-1)");
-                BotMain.PauseFor(TimeSpan.FromSeconds(5));
+                BotMain.PauseFor(TimeSpan.FromSeconds(1));
             }
 
             HookManager.CheckHooks();

@@ -16,7 +16,7 @@ namespace Trinity.Framework.Actors.Properties
             if (!actor.IsAcdBased || !actor.IsAcdValid)
                 return;
 
-            var attributes = actor.Attributes as PlayerAttributes;
+            var attributes = actor.Attributes as AttributesWrapper;
             actor.ActorClass = GetActorClass(actor.ActorSnoId);
             actor.IsMe = actor.RActorId == Core.Actors.ActivePlayerRActorId;
             actor.HeroId = ZetaDia.Service.Hero.HeroId;

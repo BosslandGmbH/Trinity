@@ -2,6 +2,7 @@
 using System.Linq;
 using Trinity;
 using Trinity.Components.Adventurer.Game.Exploration;
+using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Framework;
 using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
@@ -64,6 +65,21 @@ namespace Trinity.Components.QuestTools
         public static bool CurrentSceneName(string sceneName)
         {
             return ZetaDia.Me.CurrentScene.Name.ToLowerInvariant().Contains(sceneName.ToLowerInvariant());
+        }
+
+        public static bool IsInDeathGateWorld()
+        {
+            return DeathGates.IsInDeathGateWorld;
+        }
+
+        public static bool IsInDeathGateScene()
+        {
+            return DeathGates.Scenes.FirstOrDefault(s => s.WorldScene.IsInScene(ZetaDia.Me.Position)) != null;
+        }
+
+        public static bool GameFinishedWithinSeconds(int seconds)
+        {
+            return DateTime.UtcNow.Subtract(GameUI.LastClosedCreditsTime).TotalSeconds <= seconds;
         }
 
         public static bool CurrentDifficulty(string difficulty)

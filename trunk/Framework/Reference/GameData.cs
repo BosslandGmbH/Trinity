@@ -21,6 +21,20 @@ namespace Trinity.Framework.Reference
 
         public const int WALLER_SNO = 226808;
 
+        /// <summary>
+        /// Some questing sequences have odd line of sight issues around stairs
+        /// Areas listed here should have the bot move onto the same ZDiff as target
+        /// Before casting spells.
+        /// </summary>
+        public static HashSet<int> ForceSameZDiffSceneSnoIds = new HashSet<int>
+        {
+            //World: x1_Heaven_Pandemonium_Portal, Id: 339160, AnnId: 2000355341, IsGenerated: False
+            //Scene: x1_Heaven_Pandemonium_Portal_E03_S03, SnoId: 339214,
+            //LevelArea: x1_Heaven_Pandemonium_Portal, Id: 339468
+            //Quest: x1_ToHeaven: The Pandemonium Gate (263851) MainQuest Step: GoGate (15)
+            //Objective: 0: Go to the Pandemonium Gate (InProgress)
+            339214,339202,339199,339205
+        };
 
         public static HashSet<GizmoType> PortalTypes = new HashSet<GizmoType>
         {

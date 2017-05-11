@@ -728,6 +728,20 @@ namespace Trinity.Routines.Monk
 
         public TrinityPower DefaultDestructiblePower()
         {
+
+            if (CurrentTarget.IsCorruptGrowth)
+            {
+                if (Skills.Monk.LashingTailKick.CanCast())
+                    return LashingTailKick(CurrentTarget);
+
+                if (Skills.Monk.DashingStrike.CanCast())
+                    return DashingStrike(CurrentTarget.Position);
+
+                if (Skills.Monk.SevenSidedStrike.CanCast())
+                    return SevenSidedStrike(CurrentTarget);
+            }
+
+
             if (Skills.Monk.FistsOfThunder.CanCast())
                 return FistsOfThunder(CurrentTarget);
 
@@ -743,6 +757,7 @@ namespace Trinity.Routines.Monk
             if (Skills.Monk.TempestRush.CanCast())
                 return TempestRush(CurrentTarget.Position);
 
+
             if (Skills.Monk.LashingTailKick.CanCast())
                 return LashingTailKick(CurrentTarget);
 
@@ -751,9 +766,6 @@ namespace Trinity.Routines.Monk
 
             if (Skills.Monk.SevenSidedStrike.CanCast())
                 return SevenSidedStrike(CurrentTarget);
-
-            if (Skills.Monk.LashingTailKick.CanCast())
-                return LashingTailKick(CurrentTarget);
 
             return DefaultPower;
         }

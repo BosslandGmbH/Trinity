@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Trinity;
 using Trinity.Framework;
@@ -17,9 +18,9 @@ using Zeta.TreeSharp;
 using Zeta.XmlEngine;
 
 namespace Trinity.Components.QuestTools
-{
+{   
     public abstract class BaseProfileBehavior : ProfileBehavior, IEnhancedProfileBehavior
-    {
+    {        
         protected BaseProfileBehavior()
         {
             LoadDefaults();
@@ -37,6 +38,16 @@ namespace Trinity.Components.QuestTools
                     property.SetValue(this, myAttribute.Value);
                 }
             }
+        }
+
+        public bool IsDefault(string propertyName, object value)
+        {
+            var property = GetType().GetProperty(propertyName);
+            var attribute = property
+                .GetCustomAttribute(typeof(DefaultValueAttribute))
+                    as DefaultValueAttribute;
+
+            return attribute?.Value.Equals(value) ?? false;
         }
 
         public string TagClassName { get; set; }
@@ -62,6 +73,8 @@ namespace Trinity.Components.QuestTools
         public bool IsStarted { get; private set; }
         public DateTime StartTime { get; private set; } = DateTime.MinValue;
         public DateTime EndTime { get; private set; } = DateTime.MinValue;
+
+        public virtual void OnPulse() { }
 
         private async Task<bool> Run()
         {
@@ -101,7 +114,7 @@ namespace Trinity.Components.QuestTools
             }
             catch (Exception ex)
             {
-                Core.Logger.Debug($"Exception in {TagClassName}: {ex}");
+                Core.Logger.Error($"Exception in {TagClassName}: {ex}");
             }
             Done();
             return true;

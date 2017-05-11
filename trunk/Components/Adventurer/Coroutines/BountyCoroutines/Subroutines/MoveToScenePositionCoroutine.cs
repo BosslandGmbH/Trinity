@@ -265,6 +265,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                         Core.Logger.Debug($"Scan found target scene {_worldScene.Name} ({_worldScene.SnoId}). Pos={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
                     }
                 }
+
+                if (!Core.Scenes.CurrentScene.IsConnected(_objectiveLocation))
+                {
+                    Core.Logger.Debug($"Unable to reach the scene, we need to uncover more intermediary scenes first");
+                    _objectiveLocation = Vector3.Zero;
+                }
+
                 //else if (!string.IsNullOrEmpty(_tempSceneName))
                 //{
                 //    var scene = Core.Scenes.CurrentWorldScenes.OrderBy(s => s.Center.DistanceSqr(AdvDia.MyPosition.ToVector2())).FirstOrDefault(s => s.Name == _tempSceneName);

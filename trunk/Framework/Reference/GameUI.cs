@@ -373,7 +373,10 @@ namespace Trinity.Framework.Reference
             // These buttons should be clicked with no delay
 
             if (SafeClickElement(CloseCreditsButton, "Close Credits Button"))
+            {
+                LastClosedCreditsTime = DateTime.UtcNow;
                 return;
+            }
             if (SafeClickElement(PatchOKButton, "Patch Update OK Button"))
                 return;
             if (isInGame && SafeClickElement(ChinaStoreCloseButton, "Closing China Store Window"))
@@ -444,6 +447,8 @@ namespace Trinity.Framework.Reference
                 return;
 
         }
+
+        public static DateTime LastClosedCreditsTime { get; set; }
 
         public static bool IsPartyDialogVisible
         {

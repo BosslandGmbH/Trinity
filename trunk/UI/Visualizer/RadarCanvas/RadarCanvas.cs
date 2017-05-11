@@ -106,6 +106,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
                     var result = Core.Grids.Avoidance.CanRayWalk(startWorldPosition, Player.Actor.Position);
                     CurrentRayWalk = new Tuple<Vector3, Vector3, bool>(startWorldPosition, Player.Actor.Position, result);
 
+                    var isConnectedScene = Core.Scenes.CurrentScene.IsConnected(startWorldPosition);
+
                     //var result = Core.Grids.Avoidance.CanRayCast(clickedWorldPosition, Player.Actor.Position);
                     //CurrentRayCast = new Tuple<Vector3, Vector3, bool>(clickedWorldPosition, Player.Actor.Position, result);
 
@@ -1312,7 +1314,7 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 foreach (var adventurerScene in Core.Scenes.CurrentWorldScenes.Where(s => s.DynamicWorldId == worldId).ToList())
                 {
-                    foreach (var exitPosition in adventurerScene.ExitPositions)
+                    foreach (var exitPosition in adventurerScene.ExitPositions.Values)
                     {
                         //dc.DrawLine(RadarResources.SceneConnectionPen,
                         //    connectedScene.EdgePointA.ToVector3().ToCanvasPoint(),

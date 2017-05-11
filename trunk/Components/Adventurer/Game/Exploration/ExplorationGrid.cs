@@ -114,7 +114,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 currentWorldKnownPositions.Add(nearestNode.Center.ToVector3());
                 nearestNode.IsKnown = true;
                 nearestNode.IsVisited = true;
-                var radius = 55;
+                var radius = 40;
                 switch (PluginEvents.CurrentProfileType)
                 {
                     case ProfileType.Rift:

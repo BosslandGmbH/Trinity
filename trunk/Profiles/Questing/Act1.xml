@@ -120,7 +120,7 @@
       <LogMessage message=">> The Falle Star - Inside Slaughtered Calf Inn" />
       <Interact questId="87700" stepId="42" actorId="4580" actorName="Leah" x="111" y="59" z="0" worldSnoId="109362" levelAreaSnoId="109457" sceneSnoId="109359" sceneName="trOut_Tristram_Inn" />
       <Kill>
-        <WaitForCombat timeout="15" />
+        <Wait seconds="10" />
         <Interact questId="87700" stepId="46" actorId="4580" actorName="Leah" x="115" y="58" z="0" worldSnoId="109362" levelAreaSnoId="109457" sceneSnoId="109359" sceneName="trOut_Tristram_Inn" />
       </Kill>
       <Interact questId="87700" stepId="50" actorId="178293" actorName="g_Portal_Rectangle_Orange_IconDoor" x="83" y="124" z="0" worldSnoId="109362" levelAreaSnoId="109457" sceneSnoId="109359" sceneName="trOut_Tristram_Inn" />
@@ -289,12 +289,12 @@
 
     <If condition="IsActiveQuest(72095) and IsActiveQuestStep(23) and CurrentWorldId == 71150">
       <!-- Enter Cathedral -->
-      <Interact questId="72095" stepId="23" actorId="182738" isPortal="True" destinationWorldId="50579" interactRange="30" x="1451" y="2720" z="53" />
+      <Interact questId="72095" stepId="23" actorId="182738" isPortal="True" destinationWorldId="50579" x="1451" y="2720" z="53" />
       <WaitTimer questId="72095" stepId="23" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(72095) and IsActiveQuestStep(11) and CurrentWorldId == 71150">
       <!-- Enter Cathedral -->
-      <Interact questId="72095" stepId="11" actorId="182738" isPortal="True" destinationWorldId="50579" interactRange="30" x="1451" y="2720" z="53" />
+      <Interact questId="72095" stepId="11" actorId="182738" isPortal="True" destinationWorldId="50579" x="1451" y="2720" z="53" />
       <WaitTimer questId="72095" stepId="11" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(72095) and IsActiveQuestStep(11) and CurrentWorldId == 50579">
@@ -411,7 +411,7 @@
     <!-- 72221 -->
     <!-- A Shattered Crown -->
     <!-- Talk to Cain -->
-    <While condition="IsActiveQuestAndStep(72221, -1) and CurrentLevelAreaId == 19947">
+    <While condition="IsActiveQuest(72221) and IsActiveQuestStep(-1) and CurrentLevelAreaId == 19947">
       <LogMessage questId="1" stepId="-1" output="Talk to Cain (72221) A Shattered Crown" />
       <Interact questId="72221" stepId="-1" actorId="3533" x="1477" y="2847" z="58" />
       <WaitTimer questId="72221" stepId="-1" waitTime="5000"  />
@@ -929,7 +929,17 @@
     <If condition="IsActiveQuestAndStep(72061,48) and CurrentWorldId == 73261">
       <!-- Go in Desolate Chamber -->
       <Interact questId="72061" stepId="48" actorId="175467" isPortal="True" destinationWorldId="117405" x="339" y="251" z="21" />
-      <Wait seconds="8" />
+      <Wait seconds="3" />
+    </If>
+
+    <!-- Quest: SkeletonKing: Reign of the Black King (72061) MainQuest Step: TalkStranger (50) -->
+    <!-- Objective: 0: Talk to the Stranger in the Desolate Chamber (InProgress) -->
+    <!-- World: a1trDun_King_Level08 (73261) Scene: A1_trDun_Level07D Crypt of the Skeleton King (19789) Generated=False -->
+    <If condition="IsActiveQuest(72061) and IsActiveQuestStep(50) and CurrentWorldId == 73261">
+      <LogMessage output="Quest: SkeletonKing: Reign of the Black King (72061) MainQuest Step: TalkStranger (50) Talk to the Stranger in the Desolate Chamber" />
+      <!-- Go in Desolate Chamber -->
+      <Interact questId="72061" stepId="48" actorId="175467" isPortal="True" destinationWorldId="117405" x="339" y="251" z="21" />
+      <Wait seconds="3" />
     </If>
 
     <If condition="IsActiveQuest(72061) and IsActiveQuestStep(50) and CurrentWorldId == 117405">

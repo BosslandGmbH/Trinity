@@ -64,7 +64,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 HasParent = mesh.ParentSceneId > 0;
                 IsIgnored = ExplorationData.IgnoreScenes.Contains(Name);
                 DynamicWorldId = mesh.WorldId;
-                ExitDirections = ParseExitDirection(Name);
 
                 NorthWest = Min;
                 NorthEast = new Vector2(Min.X, Max.Y);
@@ -90,7 +89,23 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
                 CreateGrid(mesh);
 
-                ExitPositions = ExitDirections.GetFlags<SceneExitDirections>().Select(GetNavigableConnection);
+                if (!ExitPositions.Any())
+                {
+                    ScanExitDirection(SceneExitDirections.North);
+                    ScanExitDirection(SceneExitDirections.South);
+                    ScanExitDirection(SceneExitDirections.East);
+                    ScanExitDirection(SceneExitDirections.West);
+                }
+            }
+        }
+
+        private void ScanExitDirection(SceneExitDirections dir)
+        {
+            var n = GetNavigableConnection(dir);
+            if (n != Vector3.Zero)
+            {
+                ExitPositions.Add(dir, n);
+                ExitDirections |= dir;
             }
         }
 
@@ -120,7 +135,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             }
         }
 
-        public IEnumerable<Vector3> ExitPositions { get; set; }
+        public Dictionary<SceneExitDirections, Vector3> ExitPositions { get; set; } = new Dictionary<SceneExitDirections, Vector3>();
 
         public Vector2 SouthWest { get; set; }
 
@@ -130,41 +145,73 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public Vector2 NorthWest { get; set; }
 
+        public bool IsOnEdge(ExplorationNode n, SceneExitDirections direction)
+        {
+            switch (direction)
+            {
+                case SceneExitDirections.North:
+                    return n.TopLeft.X == NorthWest.X;
+                case SceneExitDirections.East:
+                    return n.BottomLeft.Y == NorthEast.Y;
+                case SceneExitDirections.South:
+                    return n.BottomRight.X == SouthEast.X;
+                case SceneExitDirections.West:
+                    return n.TopRight.Y == SouthWest.Y;
+            }
+            return false;
+        }
+
+
         public Vector3 GetNavigableConnection(SceneExitDirections direction)
         {
-            foreach (var n in Nodes.Where(n => n.HasEnoughNavigableCells && n.IsConnectionNode))
+            var nodes = Nodes.Where(n => n.IsEdgeNode && IsOnEdge(n, direction) && n.IsConnectionNode).ToList();
+            if (!nodes.Any())
+                return Vector3.Zero;
+
+            if (nodes.Count == 2 && nodes.First().IsNextTo(nodes.Last()))
             {
-                switch (direction)
-                {
-                    case SceneExitDirections.North:
-                        if (n.TopLeft.X == NorthWest.X)
-                            return n.NavigableCenter;
-                        break;
-
-                    case SceneExitDirections.East:
-                        if (n.BottomLeft.Y == NorthEast.Y)
-                            return n.NavigableCenter;
-                        break;
-
-                    case SceneExitDirections.South:
-                        if (n.BottomRight.X == SouthEast.X)
-                            return n.NavigableCenter;
-                        break;
-
-                    case SceneExitDirections.West:
-                        if (n.TopRight.Y == SouthWest.Y)
-                            return n.NavigableCenter;
-                        break;
-                }
+                var start = nodes.First().NavigableCenter;
+                var end = nodes.Last().NavigableCenter;
+                return MathEx.CalculatePointFrom(start, end, start.Distance2D(end) / 2);
             }
-            return Vector3.Zero;
+
+            var centerIndex = Math.Max(0, (int)Math.Round((double)nodes.Count / 2, 0)-1);
+            var center = nodes.ElementAt(centerIndex);
+            return center.NavigableCenter;
+
+            //foreach (var n in Nodes.Where(n => n.HasEnoughNavigableCells && n.IsConnectionNode))
+            //{
+            //    switch (direction)
+            //    {
+            //        case SceneExitDirections.North:
+            //            if (n.TopLeft.X == NorthWest.X)
+            //                return n.NavigableCenter;
+            //            break;
+
+            //        case SceneExitDirections.East:
+            //            if (n.BottomLeft.Y == NorthEast.Y)
+            //                return n.NavigableCenter;
+            //            break;
+
+            //        case SceneExitDirections.South:
+            //            if (n.BottomRight.X == SouthEast.X)
+            //                return n.NavigableCenter;
+            //            break;
+
+            //        case SceneExitDirections.West:
+            //            if (n.TopRight.Y == SouthWest.Y)
+            //                return n.NavigableCenter;
+            //            break;
+            //    }
+            //}
+            //return Vector3.Zero;
         }
 
         public Vector2 Size { get; set; }
 
         internal static Regex SceneNameDirectionRegex = new Regex(@"_([NSEW]+)_", RegexOptions.Compiled);
 
-        private SceneExitDirections ParseExitDirection(string name)
+        private SceneExitDirections ParseExitDirectionFromName(string name)
         {
             var match = SceneNameDirectionRegex.Match(name);
             var flag = SceneExitDirections.Unknown;
@@ -188,6 +235,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             public SceneExitDirections Direction;
             public Vector2 EdgePointA;
             public Vector2 EdgePointB;
+            public Vector3 ExitPosition;
         }
 
         public IEnumerable<ConnectedSceneResult> ConnectedScenes()
@@ -200,6 +248,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         s => s.ExitDirections.HasFlag(SceneExitDirections.South) &&
                              s.SouthWest == NorthWest && s.SouthEast == NorthEast),
                     Direction = SceneExitDirections.North,
+                    ExitPosition = ExitPositions[SceneExitDirections.North],
                     EdgePointA = NorthWest,
                     EdgePointB = NorthEast,
                 };
@@ -212,6 +261,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         s => s.ExitDirections.HasFlag(SceneExitDirections.West) &&
                              s.NorthWest == NorthEast && s.SouthWest == SouthEast),
                     Direction = SceneExitDirections.East,
+                    ExitPosition = ExitPositions[SceneExitDirections.East],
                     EdgePointA = NorthEast,
                     EdgePointB = SouthEast,
                 };
@@ -224,6 +274,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         s => s.ExitDirections.HasFlag(SceneExitDirections.North) &&
                              s.NorthEast == SouthEast && s.NorthWest == SouthWest),
                     Direction = SceneExitDirections.South,
+                    ExitPosition = ExitPositions[SceneExitDirections.South],
                     EdgePointA = SouthEast,
                     EdgePointB = SouthWest,
                 };
@@ -236,6 +287,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         s => s.ExitDirections.HasFlag(SceneExitDirections.East) &&
                              s.SouthEast == SouthWest && s.NorthEast == NorthWest),
                     Direction = SceneExitDirections.West,
+                    ExitPosition = ExitPositions[SceneExitDirections.West],
                     EdgePointA = SouthWest,
                     EdgePointB = NorthWest,
                 };
@@ -261,6 +313,54 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public bool IsInScene(Vector3 position)
         {
             return position.X >= Min.X && position.X <= Max.X && position.Y >= Min.Y && position.Y <= Max.Y;
+        }
+
+        public bool IsConnected(Vector3 position)
+        {
+            return IsConnected(Core.Scenes.GetScene(position));
+        }
+
+        public bool IsConnected(WorldScene to)
+        {
+            var results = TryConnectScenes(this, to);
+            if (results == null || !results.Any())
+                return false;
+
+            results.ForEach(r => Core.Logger.Verbose(LogCategory.Movement, $"> {r.Scene.Name} {r.Direction} {ExitPositions[r.Direction]}"));
+            return true;
+        }
+
+        private static List<ConnectedSceneResult> TryConnectScenes(WorldScene from, WorldScene to, WorldScene parent = null, HashSet<string> sceneHashes = null)
+        {
+            if (from == null || to == null)
+                return null;
+
+            var checkedScenes = sceneHashes ?? new HashSet<string>();
+
+            if (!checkedScenes.Contains(from.HashName))
+                checkedScenes.Add(from.HashName);
+
+            foreach (var connection in from.ConnectedScenes().Where(s => s.Scene != parent))
+            {
+                if (connection.Scene == to)
+                    return new List<ConnectedSceneResult> { connection };
+
+                if (connection.Scene == null)
+                    continue;
+
+                if (checkedScenes.Contains(connection.Scene.HashName))
+                    continue;
+
+                checkedScenes.Add(connection.Scene.HashName);
+
+                var childResults = TryConnectScenes(connection.Scene, to, from, checkedScenes);
+                if (childResults == null || !childResults.Any())
+                    continue;
+
+                childResults.Insert(0, connection);
+                return childResults;
+            }
+            return null;
         }
 
         private void CreateGrid(Scene.NavMesh mesh)

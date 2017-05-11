@@ -2050,8 +2050,13 @@
 
       <Kill>
         <MoveToMapMarker questId="57335" stepId="24" markerNameHash="0" interactAttempts="0" actorId="135248" />
-        <Interact actorId="135248" />
+        <!-- a2dun_Zolt_Blood_Container-25998 (213820) a2dun_Zolt_Blood_Container Distance=18.46152 Type=Container Anim=a2dun_Zolt_Head_Container_idle -->
+        <Interact questId="57335" stepId="24" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="213820" markerHash="0" explore="false" maxRange="300" startAnimation="a2dun_Zolt_Head_Container_idle" x="385.82" y="472.67" z="0" sceneX="145.82" sceneY="232.67" sceneZ="0" sceneSnoId="153331" sceneName="a2dun_Cave_E_dungeonStone_Exit_01" distance="5" useNavigation="true"  worldSnoId="204674" levelAreaSnoId="204675" />
       </Kill>
+
+
+
+      <Interact actorId="135248" />
     </If>
     <If condition="IsActiveQuest(57335) and IsActiveQuestStep(24) and CurrentWorldId == 204674">
 
@@ -2147,7 +2152,8 @@
         <WaitTimer questId="57335" stepId="24" waitTime="1000" />
       </If>
       <If condition="IsActiveQuest(57335) and IsActiveQuestStep(24) and CurrentWorldId == 70885">
-        <MoveToPosition x="361" y="3920" z="112" />
+        <!--<MoveToPosition x="361" y="3920" z="112" />-->
+        <MoveToPosition questId="57335" stepId="24" x="391.15" y="3896.29" z="110.1" sceneX="151.15" sceneY="56.29" sceneZ="110.1" sceneSnoId="54772" sceneName="caOut_Boneyard_Sub80_Bones_06" distance="5" useNavigation="true"  worldSnoId="70885" levelAreaSnoId="53834" />
         <MoveToMapMarker questId="57335" stepId="24" pathPrecision="40" actorId="185067" markerNameHash="-1758560943"
                          isPortal="True" destinationWorldId="123183" pathPointLimit="250" />
         <Interact markerNameHash="-1758560943" actorId="185067" />

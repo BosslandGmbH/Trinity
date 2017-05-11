@@ -12,6 +12,11 @@ namespace Trinity.Modules
 {
     public sealed class Cooldowns : Module
     {
+        /// <summary>
+        /// Note ZetaDia.Globals.GameTick should now match the Buff start/end tick
+        /// So this can be refactored / eliminated.
+        /// </summary>
+
         public class CooldownData
         {
             /// <summary>

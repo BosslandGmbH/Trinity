@@ -66,7 +66,7 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                 if (_navigationCoroutine.State == States.Failed)
                 {
-                    Core.Logger.Debug($"NavigationCoroutine failed for {destination}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
+                    Core.Logger.Debug($"NavigationCoroutine failed for {destination} Distance={destination.Distance(ZetaDia.Me.Position)}, within a range of (specified={distance}, actual={_navigationCoroutine._distance}). ({callerPath.Split('\\').LastOrDefault()} > {caller} )");
                     return true;
                 }
 
@@ -397,8 +397,10 @@ namespace Trinity.Components.Adventurer.Coroutines
 
                     case MoveResult.PathGenerationFailed:
                         Core.Logger.Debug("[Navigation] Path generation failed.");
+                        Core.PlayerMover.MoveTowards(Destination);
                         if (distanceToDestination < 100 && Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination))
                         {
+                            
                             _mover = Mover.StraightLine;
                             return false;
                         }
@@ -638,21 +640,23 @@ namespace Trinity.Components.Adventurer.Coroutines
             if (LastDestination == Destination)
             {
                 FailCount++;
+                var distance = AdvDia.MyPosition.Distance2D(Destination);
+
                 if (FailCount > 5)
                 {
-                    var distance = AdvDia.MyPosition.Distance2D(Destination);
                     var canWalkTo = Core.Grids.CanRayWalk(AdvDia.MyPosition, Destination);
                     var canStandAt = AdvDia.MainGridProvider.CanStandAt(Destination);
                     var portalNearby = ZetaDia.Actors.GetActorsOfType<GizmoPortal>().Any(g => g.Position.Distance(Destination) < 30f);
                     if (distance < 25f && !portalNearby && (!canStandAt && !canWalkTo))
                     {
-                        Core.Logger.Debug($"Destination cant be reached. A");
+                        Core.Logger.Debug($"Destination cant be reached. A. Position={Destination} Distance={distance}");
+                        ResetNavigator();
                         //Reset();
                     }
                 }
                 else if (FailCount > 15)
                 {
-                    Core.Logger.Debug($"Destination cant be reached. B");
+                    Core.Logger.Debug($"Destination cant be reached. B. Position={Destination} Distance={distance}");
                     //Reset();
                 }
             }

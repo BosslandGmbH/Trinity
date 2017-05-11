@@ -4,6 +4,28 @@
   <PickupLoot>True</PickupLoot>
   <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
   <Order>
+
+<!--
+Clear the Flooded Cave (346071)
+Clear the Ancient Cave (346069)
+-->
+    <RunBounty questId="346071" />
+    <RunBounty questId="346069" />
+    
+    <!--<RunBounty questId="436280" name="Bounty: Last of the Barbarians" />
+    <RunBounty questId="445044" name="Bounty: Binding Evil" />
+    <RunBounty questId="365401" name="Bounty: The Cursed Mill" />
+    <RunBounty questId="363402" name="Bounty: Lost Host" />
+    <RunBounty questId="430723" name="Bounty: Templar Inquisition" />
+    <RunBounty questId="369853" name="Bounty: The Cursed Depths" />
+    <RunBounty questId="369851" name="Bounty: The Cursed Glacier" />
+    <RunBounty questId="349020" name="Bounty: The Matriarch's Bones" />
+    <RunBounty questId="436276" name="Bounty: Kill Garan" />
+    <RunBounty questId="347065" name="Bounty: Clear Khazra Den" />
+    <RunBounty questId="365381" name="Bounty: The Cursed Grove" />
+    <RunBounty questId="347027" name="Bounty: Kill Garrach the Afflicted" />
+    <RunBounty questId="359280" name="Bounty: The Burning Man" />
+    <RunBounty questId="350529" name="Bounty: Apothecary's Brother" />-->
     
     <!--<RunBounty questId="369868" name="Bounty: The Cursed Caldera" />
     <RunBounty questId="359927" name="Bounty: Kill Malthael" />
@@ -52,8 +74,8 @@
     <RunBounty questId="369878" name="Bounty: The Cursed Chapel" />
     <RunBounty questId="347600" name="Bounty: Kill Bashiok" />-->
     
-    <RunBounty questId="369853" name="The Cursed Depths" />
-    <RunBounty questId="368601" name="The True Son of the Wolf" />
+    <!--<RunBounty questId="369853" name="The Cursed Depths" />
+    <RunBounty questId="368601" name="The True Son of the Wolf" />-->
 
     <LogMessage message=">> Profile Finished" />
     <WaitTimer questId="1" stepId="1" waitTime="3000" />

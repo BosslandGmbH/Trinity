@@ -196,11 +196,16 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 {
                     //var objectiveActor = BountyHelpers.ScanForActor(_actorId, _objectiveScanRange, _actorSelector);
                     var objectiveActor = ActorFinder.FindActor(_actorId, _markerId, 500, "", _actorSelector);
-
-                    _objectiveLocation = objectiveActor.Position;
-
-                    if (_stopDistance == -1)
-                        _stopDistance = objectiveActor.Radius;
+                    if (objectiveActor != null)
+                    {
+                        _objectiveLocation = objectiveActor.Position;
+                        if (_stopDistance == -1)
+                            _stopDistance = objectiveActor.Radius;
+                    }
+                    else
+                    {
+                        _objectiveLocation = Vector3.Zero;
+                    }
                 }
                 if (_objectiveLocation != Vector3.Zero)
                 {

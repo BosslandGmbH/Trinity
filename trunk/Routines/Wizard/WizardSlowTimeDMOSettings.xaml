@@ -1,0 +1,78 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+
+    mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../UI/Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Padding="10">
+        <Grid>
+            <StackPanel>
+                <GroupBox>
+                    <GroupBox.Header>General</GroupBox.Header>
+                    <StackPanel>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cluster Size"
+                            ToolTip="Number of monsters that must be grouped up before fighting starts"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterSize}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                        Tag="Health Emergency %"
+                        ToolTip="How low your health must drop before the potion is used"
+                                Interval="500" Maximum="99" Minimum="0" 
+                                SmallChange="1" LargeChange="5"
+                                TickPlacement="None" 
+                                Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
+                                HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Author Notes:</GroupBox.Header>
+                    <StackPanel>
+                        <TextBlock>* Setting cluster size to a rational number is recommended.</TextBlock>
+                        <TextBlock>This rouine is aware of damage ampliciators</TextBlock>
+                        <TextBlock>such as Convention of Elements Timings, SlowTime Bubble,</TextBlock>
+                        <TextBlock>Flash of Insights stacks with Arcane Orb, etc.</TextBlock>
+						<TextBlock>Please make sure you have enough of everything (gear, stats, etc.).</TextBlock>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox>
+                    <GroupBox.Header>Teleport</GroupBox.Header>
+                    <StackPanel>
+                        <StackPanel Margin="0,8,0,0">
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Recast delay"
+                            ToolTip="The time between casts"
+                            Interval="100" Maximum="4000" Minimum="200" 
+                            SmallChange="100" LargeChange="100" 
+                            TickPlacement="BottomRight" TickFrequency="100"
+                            Value="{Binding DataContext.Teleport.RecastDelayMs}" 
+                            HorizontalAlignment="Stretch" Margin="2"
+                            />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
+
+    

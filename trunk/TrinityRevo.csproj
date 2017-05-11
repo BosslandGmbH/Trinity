@@ -1,4 +1,5 @@
-﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -173,6 +174,8 @@
     <Compile Include="Components\Adventurer\UI\DeveloperUI.cs" />
     <Compile Include="Components\Adventurer\UI\MainUI.cs" />
     <Compile Include="Components\QuestTools\BaseContainerProfileBehavior.cs" />
+    <Compile Include="Framework\Objects\Enums\RequirementType.cs" />
+    <Compile Include="Modules\ProfilePulsator.cs" />
     <Compile Include="Components\QuestTools\BaseProfileBehavior.cs" />
     <Compile Include="Components\QuestTools\BehaviorTreeExecutor.cs" />
     <Compile Include="Components\QuestTools\BotBehaviorQueue.cs" />
@@ -184,7 +187,7 @@
     <Compile Include="Components\QuestTools\ProfileTagLogger.cs" />
     <Compile Include="Components\QuestTools\ProfileUtils.cs" />
     <Compile Include="Components\QuestTools\QuestTools.cs" />
-    <Compile Include="Framework\Actors\Attributes\Attributes.cs" />
+    <Compile Include="Framework\Actors\Attributes\AttributesWrapper.cs" />
     <Compile Include="Framework\Helpers\Extensions\CollectionExtensions.cs" />
     <Compile Include="Framework\Helpers\Extensions\AttributeExtensions.cs" />
     <Compile Include="Framework\Helpers\CoroutineQueue.cs" />
@@ -266,9 +269,6 @@
     <Compile Include="Framework\Actors\ActorTypes\TrinityActor.cs" />
     <Compile Include="Framework\Actors\ActorTypes\TrinityItem.cs" />
     <Compile Include="Framework\Actors\ActorTypes\TrinityPlayer.cs" />
-    <Compile Include="Framework\Actors\Attributes\ActorAttributes.cs" />
-    <Compile Include="Framework\Actors\Attributes\ItemAttributes.cs" />
-    <Compile Include="Framework\Actors\Attributes\PlayerAttributes.cs" />
     <Compile Include="Framework\Actors\Properties\CommonProperties.cs" />
     <Compile Include="Framework\Actors\Properties\GizmoProperties.cs" />
     <Compile Include="Framework\Actors\Properties\ItemProperties.cs" />
@@ -384,21 +384,11 @@
     <Compile Include="Framework\Objects\Item.cs" />
     <Compile Include="Framework\Objects\ItemStatRange.cs" />
     <Compile Include="Framework\Objects\IUnique.cs" />
-    <Compile Include="Framework\Objects\Memory\AttributeDescripter.cs" />
-    <Compile Include="Framework\Objects\Memory\AttributeGroup.cs" />
-    <Compile Include="Framework\Objects\Memory\AttributeItem.cs" />
-    <Compile Include="Framework\Objects\Memory\AttributeKey.cs" />
-    <Compile Include="Framework\Objects\Memory\AttributeManager.cs" />
-    <Compile Include="Framework\Objects\Memory\Attributes.cs" />
-    <Compile Include="Framework\Objects\Memory\BasicMap.cs" />
     <Compile Include="Framework\Objects\Memory\Container.cs" />
-    <Compile Include="Framework\Objects\Memory\ExpandoContainer.cs" />
     <Compile Include="Framework\Objects\Memory\GameBalanceHelper.cs" />
-    <Compile Include="Framework\Objects\Memory\Table.cs" />
     <Compile Include="Framework\Objects\Memory\MemoryWrapper.cs" />
     <Compile Include="Framework\Objects\Memory\ItemRecord.cs" />
     <Compile Include="Framework\Objects\Memory\Marker.cs" />
-    <Compile Include="Framework\Objects\Memory\SnoSearchProxy.cs" />
     <Compile Include="Framework\Objects\Memory\StringListHelper.cs" />
     <Compile Include="Framework\Objects\Memory\SnoDictionary.cs" />
     <Compile Include="Framework\Objects\Memory\SnoManager.cs" />
@@ -455,6 +445,7 @@
     <Compile Include="Routines\DemonHunter\DemonHunterShadowImpale.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonBlizzard.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonHydra.cs" />
+    <Compile Include="Routines\Wizard\WizardSlowTimeDMO.cs" />
     <Compile Include="Settings\ItemList\ItemListEvaluator.cs" />
     <Compile Include="Components\Coroutines\ItemSort.cs" />
     <Compile Include="Modules\BlockedCheck.cs" />
@@ -686,6 +677,9 @@
     <Content Include="Profiles\Debug\MoveWithinScene.xml" />
     <Content Include="Profiles\Debug\MultiTest.xml" />
     <Content Include="Profiles\Debug\WaitForCombatTag.xml" />
+    <Content Include="Profiles\Debug\WithoutTrinityMoveInTownTest.xml" />
+    <Content Include="Profiles\Debug\WithoutTrinityMoveTest.xml" />
+    <Content Include="Profiles\Debug\WithoutTrinityProfileEndTest.xml" />
     <Content Include="Profiles\Diablo1.xml" />
     <Content Include="Profiles\ExploreCowLevel.xml" />
     <Content Include="Profiles\ExploreGoblinRealm.xml" />
@@ -710,7 +704,9 @@
     <Content Include="Profiles\Questing\Act3_StartNew.xml" />
     <Content Include="Profiles\Questing\Act4.xml" />
     <Content Include="Profiles\Questing\Act4_StartNew.xml" />
-    <Content Include="Profiles\Questing\Act5.xml" />
+    <Content Include="Profiles\Questing\Act5.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Questing\Act5_StartNew.xml" />
     <Content Include="Profiles\Questing\AllActs_Relogger.xml" />
     <Content Include="Profiles\Questing\AllActs_RestartCurrentAct.xml" />
@@ -910,6 +906,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Routines\Wizard\WizardSlowTimeDMOSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Routines\Wizard\WizardVyRashaManaldArchonSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -979,9 +979,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Profiles\InDevelopment\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSHARP.Targets" />
   <ProjectExtensions>
     <VisualStudio AllowExistingFolder="true" />

@@ -1,0 +1,21 @@
+﻿<Profile>
+  <Name>WithoutTrinityMoveTest.xml</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+
+    <If condition="ZetaDia.CurrentLevelAreaSnoId != 19952">
+	<UseWaypoint questId="312429" stepId="2"  waypointNumber="8" /> 
+    	<WaitTimer questId="312429" stepId="2" waitTime="5000" />     
+    </If>
+
+    <MoveTo questId="312429" stepId="2" pathPrecision="1000" x="2190.812" y="1048.75" z="0.101638" />
+    <MoveTo questId="312429" stepId="2" pathPrecision="1000"  x="1994.026" y="732.875" />
+    <MoveTo questId="312429" stepId="2" pathPrecision="1000"  x="1804.394" y="834.1463"  />
+
+    <LogMessage questId="312429" stepId="2" message=">> Profile Finished" />
+    <WaitTimer questId="312429" stepId="2" waitTime="500" />   
+
+  </Order>  
+</Profile>

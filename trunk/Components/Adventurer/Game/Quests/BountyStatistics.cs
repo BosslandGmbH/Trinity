@@ -4,6 +4,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
+using Trinity.Components.Adventurer.Util;
 using Zeta.Game;
 using Zeta.Game.Internals.Service;
 using Zeta.Game.Internals.SNO;
@@ -73,7 +74,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             //    var incompleteCount = stats.Count(s => s.QuestId == item1.QuestId && !(s.IsCompleted || s.IsFailed));
             //    var successCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsCompleted);
             //    var failureCount = stats.Count(s => s.QuestId == item1.QuestId && s.IsFailed);
-
             //    Core.Logger.Log($"[BountyStatistics][FailedQuest] QuestId: {item1.QuestId}, IncompleteCount: {incompleteCount},  SuccessCount: {successCount}, Act: {item1.Act}, Name: {item1.Name} TimeAvg: {wastedAvg}");
             //}
         }
@@ -82,38 +82,31 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public static void Pulse()
         {
-            //if (PluginTime.ReadyToUse(_lastPulseTime, 2000))
-            //{
-            //    GameId gameId = default(GameId);
-            //    _lastPulseTime = PluginTime.CurrentMillisecond;
-            //    try
-            //    {
-            //        gameId = ZetaDia.Service.CurrentGameId;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Core.Logger.Error($"Exception reading ZetaDia.Service.CurrentGameId {ex}");
-            //    }
+            if (!Core.TrinityIsReady) return;
 
-            //    if (gameId.FactoryId == 0)
-            //        return;
+            if (PluginTime.ReadyToUse(_lastPulseTime, 2000))
+            {
+                GameId gameId = default(GameId);
+                _lastPulseTime = PluginTime.CurrentMillisecond;
+                if (gameId.FactoryId == 0)
+                    return;
 
-            //    foreach (var bountyStatistic in Stats.Where(s => !(s.IsCompleted || s.IsFailed) && s.GameId == gameId))
-            //    {
-            //        bountyStatistic.LastSeen = DateTime.UtcNow;
-            //    }
+                foreach (var bountyStatistic in Stats.Where(s => !(s.IsCompleted || s.IsFailed) && s.GameId == gameId))
+                {
+                    bountyStatistic.LastSeen = DateTime.UtcNow;
+                }
 
-            //    var isTurnIn = BountyHelpers.IsAnyActTurninInProgress();
-            //    if (isTurnIn != _isTurnInInProgress)
-            //    {
-            //        _isTurnInInProgress = isTurnIn;
-            //        if (isTurnIn)
-            //        {
-            //            CompletedBountyActs++;
-            //        }
-            //    }
+                var isTurnIn = BountyHelpers.IsAnyActTurninInProgress();
+            if (isTurnIn != _isTurnInInProgress)
+            {
+                _isTurnInInProgress = isTurnIn;
+                if (isTurnIn)
+                {
+                    CompletedBountyActs++;
+                }
+            }
 
-            //}
+            }
         }
 
         public static IEnumerable<BountyStatistic> CurrentGame => Stats.Where(b => ZetaDia.Service.CurrentGameId == b.GameId);

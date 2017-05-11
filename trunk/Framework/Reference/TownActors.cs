@@ -327,6 +327,152 @@ namespace Trinity.Framework.Reference
             LevelAreaId = 270011
         };
 
+        // A4 Campaign
+
+        public static TownActor A4CampaignHearthPortal = new TownActor
+        {
+            Name = "A4 HearthPortal",
+            InternalName = "hearthPortal",
+            Act = Act.A4,
+            ActorId = 191492,
+            InteractPosition = new Vector3(373.9471f, 414.2664f, 0.3321428f),
+            Position = new Vector3(374.071f, 417.005f, 0.614487f),
+            IsAdventurerMode = false,
+            ServiceType = ServiceType.ReturnPortal,
+            IsGizmo = true,
+            IsUnit = false,
+            WorldSnoId = 178152,
+            LevelAreaId = 197101,
+        };
+
+        public static TownActor A4CampaignBookOfCain = new TownActor
+        {
+            Name = "A4 Book of Cain",
+            InternalName = "a3_Id_All_Book_Of_Cain",
+            Act = Act.A4,
+            ActorId = 295415,
+            InteractPosition = new Vector3(378.305f, 388.9206f, 0.4707598f),
+            Position = new Vector3(373.871f, 388.59f, -0.306229f),
+            IsAdventurerMode = false,
+            ServiceType = ServiceType.Identify,
+            IsGizmo = true,
+            IsUnit = false,
+            WorldSnoId = 178152,
+            LevelAreaId = 197101,
+        };
+
+        public static TownActor A4CampaignStash = new TownActor
+        {
+            Name = "A4 Stash",
+            InternalName = "Player_Shared_Stash",
+            Act = Act.A4,
+            ActorId = 130400,
+            InteractPosition = new Vector3(388.1244f, 385.259f, 0.332143f),
+            Position = new Vector3(387.683f, 382.029f, 0f),
+            IsAdventurerMode = false,
+            ServiceType = ServiceType.Stash,
+            IsGizmo = true,
+            IsUnit = false,
+            WorldSnoId = 178152,
+            LevelAreaId = 197101,
+        };
+
+        public static TownActor A4CampaignTownWaypoint = new TownActor
+        {
+            Name = "A4 Waypoint",
+            InternalName = "Waypoint",
+            Act = Act.A4,
+            ActorId = 6442,
+            InteractPosition = new Vector3(401.6938f, 414.5268f, 1.5338f),
+            Position = new Vector3(402.54f, 414.342f, 0.7017f),
+            IsAdventurerMode = false,
+            ServiceType = ServiceType.Waypoint,
+            IsGizmo = true,
+            IsUnit = false,
+            WorldSnoId = 178152,
+            LevelAreaId = 197101,
+        };
+
+        public static TownActor A4CampaignMiner = new TownActor
+        {
+            Name = "A4 The Miner",
+            InternalName = "A4_UniqueVendor_Miner_InTown_01",
+            Act = Act.A4,
+            ActorId = 182390,
+            InteractPosition = new Vector3(391.9044f, 513.2457f, 0.1f),
+            Position = new Vector3(388.982f, 519.2976f, 0.948341f),
+            IsAdventurerMode = false,
+            ServiceType = ServiceType.Miner,
+            IsGizmo = false,
+            IsUnit = true,
+            WorldSnoId = 178152,
+            LevelAreaId = 197101,
+        };
+
+        public static TownActor A4CampaignBlacksmithSalvage = new TownActor
+        {
+            Name = "A4 Blacksmith Salvage",
+            InternalName = "PT_Blacksmith_RepairShortcut",
+            Act = Act.A4,
+            ActorId = 195170,
+            InteractPosition = new Vector3(328.9132f, 424.1724f, 0.3253784f),
+            Position = new Vector3(320.9509f, 423.937f, -0.11f),
+            IsAdventurerMode = false,
+            ServiceType = ServiceType.Salvage,
+            IsGizmo = false,
+            IsUnit = true,
+            WorldSnoId = 178152,
+            LevelAreaId = 197101,
+        };
+
+        public static TownActor A4CampaignFence = new TownActor
+        {
+            Name = "A4 The Fence",
+            InternalName = "A4_UniqueVendor_Fence_InTown_01",
+            Act = Act.A4,
+            ActorId = 182389,
+            InteractPosition = new Vector3(442.6061f, 517.278f, 0.1000001f),
+            Position = new Vector3(440.712f, 518.9634f, -0.0501633f),
+            IsAdventurerMode = false,
+            ServiceType = ServiceType.Fence,
+            IsGizmo = false,
+            IsUnit = true,
+            WorldSnoId = 178152,
+            LevelAreaId = 197101,
+        };
+
+        public static TownActor A4CampaignCollector = new TownActor
+        {
+            Name = "A4 The Collector",
+            InternalName = "A3_UniqueVendor_Collector_InTown_01",
+            Act = Act.A4,
+            ActorId = 181466,
+            InteractPosition = new Vector3(441.8826f, 322.1977f, 0.1000005f),
+            Position = new Vector3(444.577f, 318.0379f, 0f),
+            IsAdventurerMode = false,
+            ServiceType = ServiceType.Collector,
+            IsGizmo = false,
+            IsUnit = true,
+            WorldSnoId = 178152,
+            LevelAreaId = 197101,
+        };
+
+        public static TownActor A4CampaignJeweler = new TownActor
+        {
+            Name = "A4 Jeweler",
+            InternalName = "PT_Jeweler",
+            Act = Act.A4,
+            ActorId = 56949,
+            InteractPosition = new Vector3(406.0522f, 320.8097f, 0.1000005f),
+            Position = new Vector3(404.894f, 317.7354f, 0.0188384f),
+            IsAdventurerMode = true,
+            ServiceType = ServiceType.GemTraining,
+            IsGizmo = false,
+            IsUnit = true,
+            WorldSnoId = 178152,
+            LevelAreaId = 197101,
+        };
+
         // A4
 
         public static TownActor A4HearthPortal = new TownActor
