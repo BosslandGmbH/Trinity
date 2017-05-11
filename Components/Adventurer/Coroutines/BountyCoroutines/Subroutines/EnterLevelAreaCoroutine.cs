@@ -177,6 +177,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         public void Reset()
         {
             _isDone = false;
+            _interactRange = 5;
             _state = States.NotStarted;
             _objectiveScanRange = 5000;
             _objectiveLocation = Vector3.Zero;
@@ -258,7 +259,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _deathGateLocation = Vector3.Zero;
             }
 
-            if (!await NavigationCoroutine.MoveTo(_objectiveLocation, 15))
+            if (!await NavigationCoroutine.MoveTo(_objectiveLocation, 5))
                 return false;
 
             if (NavigationCoroutine.LastMoveResult == MoveResult.UnstuckAttempt)
@@ -267,10 +268,9 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 Navigator.Clear();
             }
 
-            if (AdvDia.MyPosition.Distance(_objectiveLocation) > 30 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
+            if (AdvDia.MyPosition.Distance(_objectiveLocation) > 50 && NavigationCoroutine.LastResult == CoroutineResult.Failure)
             {
                 Core.Logger.Debug("[EnterLevelAreaCoroutine] Navigation ended, extending scan radius to continue searching.");
-
                 NavigationCoroutine.Reset();
                 _previouslyFoundLocation = _objectiveLocation;
                 _returnTimeForPreviousLocation = PluginTime.CurrentMillisecond;
@@ -336,9 +336,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 State = States.Searching;
                 return false;
             }
+
+            Core.Logger.Debug($"[EnterLevelArea] Using interact range from portal: {_interactRange}");
+            _interactRange = portal.CollisionSphere.Radius;
             _objectiveLocation = portal.Position;
             State = States.Entering;
             _prePortalWorldDynamicId = AdvDia.CurrentWorldDynamicId;
+
+            Core.PlayerMover.MoveTowards(portal.Position);
+            await Coroutine.Sleep(1000);
             return false;
         }
 
@@ -378,7 +384,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         private async Task<bool> Entering()
         {
-            if (_objectiveLocation.Distance(AdvDia.MyPosition) > 22)
+            if (_objectiveLocation.Distance(AdvDia.MyPosition) > _interactRange)
             {
                 State = States.Moving;
                 return false;
@@ -427,6 +433,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         private DateTime _timeoutStartTime = DateTime.MinValue;
         private DateTime _timeoutEndTime = DateTime.MaxValue;
         private bool _prioritizeExitScene;
+        private float _interactRange = 5;
 
         private void ScanForObjective()
         {

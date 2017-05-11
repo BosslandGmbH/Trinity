@@ -88,7 +88,7 @@ namespace Trinity.ProfileTags
         public Vector3 AbsolutePosition => new Vector3(X, Y, Z);
         public Vector3 RelativePosition => new Vector3(RelativeSceneX, RelativeSceneY, RelativeSceneZ);
         public Vector3 Destination { get; set; }
-    
+
         public override async Task<bool> StartTask()
         {
             if (TrySetAbsoluteDestination(AbsolutePosition))
@@ -104,8 +104,7 @@ namespace Trinity.ProfileTags
 
         public bool TrySetAbsoluteDestination(Vector3 absPos)
         {
-            const int skycrownBattlements = 81019;
-            if (absPos != Vector3.Zero && !ZetaDia.WorldInfo.IsGenerated || (absPos != Vector3.Zero && ZetaDia.Globals.WorldSnoId == skycrownBattlements))
+            if (absPos != Vector3.Zero && (!ZetaDia.WorldInfo.IsGenerated || RelativePosition == Vector3.Zero))
             {
                 _movementTask = new MoveToPositionCoroutine(AdvDia.CurrentWorldId, absPos, (int)StopDistance, !UseNavigation);
                 return true;

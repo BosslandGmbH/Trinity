@@ -1,6 +1,7 @@
 ﻿using System;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
+using System.Linq;
 using Trinity.Components.Coroutines.Town;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Actors.Attributes;
@@ -164,7 +165,7 @@ namespace Trinity.Framework.Actors.Properties
             if (actor.LastInventorySlot == InventorySlot.None && actor.InventorySlot == InventorySlot.BackpackItems)
             {
                 UpdateBasicProperties(actor);
-                actor.Attributes = new ItemAttributes(actor.FastAttributeGroupId);
+                actor.Attributes = new AttributesWrapper(commonData);
                 Create(actor);
                 actor.OnPickedUp();
             }
@@ -176,8 +177,8 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.InventorySlot == InventorySlot.BackpackItems && actor.IsUnidentified && !actor.Attributes.IsUnidentified)
             {
+                //actor.Attributes = new AttributesWrapper(commonData);
                 UpdateBasicProperties(actor);
-                actor.Attributes = new ItemAttributes(actor.FastAttributeGroupId);
                 Create(actor);
                 actor.OnIdentified();
             }
@@ -237,7 +238,7 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.Attributes != null)
             {
-                if (actor.Attributes.ItemBoundToAnnId != 0)
+                if (actor.Attributes.ItemBoundToAnnId != 0 && actor.Attributes.ItemBoundToAnnId != -1)
                 {
                     return actor.Attributes.ItemBoundToAnnId == Core.Actors.Me?.AnnId;
                 }
@@ -250,7 +251,7 @@ namespace Trinity.Framework.Actors.Properties
 
             if (actor.ItemQualityLevel >= ItemQuality.Legendary || actor.IsCraftingReagent)
             {
-                return !actor.Attributes.IsTradeable || actor.Attributes.ItemTradePlayerLow.Contains(ZetaDia.Storage.PlayerDataManager.ActivePlayerData.TradingPlayerACDId);
+                return actor.Attributes != null && (!actor.Attributes.IsTradeable || actor.Attributes.ItemTradePlayerLow.Any(a => a == ZetaDia.Storage.PlayerDataManager.ActivePlayerData.TradingPlayerACDId));
             }
 
             if (actor.IsEquipment && actor.ItemQualityLevel <= ItemQuality.Rare6)

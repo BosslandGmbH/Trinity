@@ -10,7 +10,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 {
     public class TrinityPlayer : TrinityActor, IPartyMember
     {
-        public override ActorAttributes Attributes { get; set; }
+        public override AttributesWrapper Attributes { get; set; }
         public int HeroId { get; set; }
         public string HeroName { get; set; }
         public ActorClass ActorClass { get; set; }
@@ -32,14 +32,15 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnCreated()
         {
-            Attributes = new PlayerAttributes(FastAttributeGroupId);
+            //Attributes = new PlayerAttributes(FastAttributeGroupId);
+            Attributes = new AttributesWrapper(CommonData);
             base.Attributes = Attributes;
             UpdateProperties();
         }
 
         public override void OnUpdated()
         {
-            Attributes.Update();
+            Attributes.Update(CommonData);
             UpdateProperties();
         }
 

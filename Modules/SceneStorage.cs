@@ -216,6 +216,9 @@ namespace Trinity.Modules
         {
             return ((IEnumerable<WorldScene>)CurrentWorldScenes).GetEnumerator();
         }
+
+        public WorldScene GetScene(Vector3 position) 
+            => CurrentWorldScenes.FirstOrDefault(s => s.IsInScene(position));
     }
 
     public static class SceneExtensions

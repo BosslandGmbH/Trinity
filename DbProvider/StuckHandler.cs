@@ -332,7 +332,8 @@ namespace Trinity.DbProvider
             Core.Logger.Warn("Trying to get Unstuck...");
             Navigator.Clear();
             Navigator.NavigationProvider.Clear();
-            ClearDestructibleNearby();
+            await ClearDestructibleNearby();
+
             await Navigator.SearchGridProvider.Update();
             var startPosition = ZetaDia.Me.Position;
             Core.Logger.Log("Starting Segment 1...");
@@ -342,20 +343,28 @@ namespace Trinity.DbProvider
             return true;
         }
 
-        private void ClearDestructibleNearby()
+        private async Task<bool> ClearDestructibleNearby()
         {
+            await Coroutine.Sleep(250);
+
             var target = ZetaDia.Actors.GetActorsOfType<DiaGizmo>(true)
                 .Where(a => GameData.DestructibleTypes.Contains(a.ActorInfo.GizmoType))
                 .OrderBy(a => a.Distance).FirstOrDefault();
 
             if (target == null || !target.IsFullyValid())
-                return;
+                return false;
 
             var pos = target.Position;
             var acdId = target.CommonData?.ACDId ?? -1;
-
             var skill = SkillUtils.Active.FirstOrDefault(s => s.IsDamaging);
+
+            await Coroutine.Sleep(250);
+
             TrinityCombat.Spells.CastPower(skill?.SNOPower ?? RoutineBase.DefaultWeaponPower, pos, acdId);
+
+            await Coroutine.Sleep(250);
+            return true;
+
         }
 
         private static async Task<bool> MoveAwayFrom(Vector3 position)

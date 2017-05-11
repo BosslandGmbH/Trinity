@@ -89,6 +89,7 @@ namespace Trinity.Modules
         public bool IsCastingPortal { get; set; }
         public bool IsInParty { get; set; }
         public float ShieldHitpoints { get; private set; }
+        public DateTime LastInCombatTime { get; private set; }
 
 
         public bool IsInventoryLockedForGreaterRift { get; set; }
@@ -183,6 +184,7 @@ namespace Trinity.Modules
         internal void UpdateFastChangingData()
         {
             var commonData = _me.CommonData;
+            if (_me.IsInCombat) LastInCombatTime = DateTime.UtcNow;
             IsInParty = ZetaDia.Service.Party.NumPartyMembers > 1;
             AcdId = _me.ACDId;
             RActorGuid = _me.RActorId;

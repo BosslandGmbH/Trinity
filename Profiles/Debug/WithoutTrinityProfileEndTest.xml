@@ -1,0 +1,17 @@
+﻿<Profile>
+  <Name>WithoutTrinityProfileEndTest.xml</Name>
+  <KillMonsters>True</KillMonsters>
+  <PickupLoot>True</PickupLoot>
+  <GameParams act="OpenWorld" resumeFromSave="False" isPrivate="True" numGames="1" />
+  <Order>
+    <ToggleTargeting questId="1" combat="True" killRadius="90" looting="True" lootRadius="300" />
+    <LogMessage message=">> Profile Started" />
+    <WaitTimer questId="1" stepId="1" waitTime="500" />  
+
+	<UseWaypoint questId="1" stepId="1" waypointNumber="0" />   
+
+  
+    <WaitTimer questId="1" stepId="1" waitTime="500" />    
+    <LogMessage message=">> Profile Finished" />
+  </Order>  
+</Profile>

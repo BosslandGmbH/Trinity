@@ -1526,8 +1526,9 @@ namespace Trinity.UI
         }
 
         private static readonly SolidColorBrush BackgroundBrush = new SolidColorBrush(Color.FromRgb(67, 67, 67));
-        private static Dictionary<int, AttributeItem> _lastAtts;
-        private static int _lastAnn;
+
+        //private static Dictionary<int, AttributeItem> _lastAtts;
+        //private static int _lastAnn;
         //private static MemoryAnalysis.FlagComparison<UXControlFlags> _overflagComparison;
 
         private static void CreateGroup(string title, List<Control> items)

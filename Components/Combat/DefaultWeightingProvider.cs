@@ -366,9 +366,10 @@ namespace Trinity.Components.Combat
                             continue;
                         }
 
+                        var stoneFortLevellAreaId = 93173;
                         var behindClosedDoor =
                             Core.Grids.Avoidance.IsIntersectedByFlags(Core.Player.Position,
-                                cacheObject.Position, AvoidanceFlags.ClosedDoor);
+                                cacheObject.Position, AvoidanceFlags.ClosedDoor) && Core.Player.LevelAreaId != stoneFortLevellAreaId;
 
                         if (behindClosedDoor && cacheObject.GizmoType != GizmoType.Door)
                         {

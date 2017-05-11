@@ -24,7 +24,7 @@ namespace Trinity.Framework.Actors.ActorTypes
     {
         public DateTime LastFullUpdate { get; set; }
         public TargetingInfo Targeting { get; set; } = new TargetingInfo();
-        public virtual ActorAttributes Attributes { get; set; }
+        public virtual AttributesWrapper Attributes { get; set; }
         public bool IsAllowedClientEffect { get; set; }
         public bool IsExcludedId { get; set; }
         public bool IsExcludedType { get; set; }
@@ -160,7 +160,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnCreated()
         {
-            Attributes = new ActorAttributes(FastAttributeGroupId);
+            Attributes = new AttributesWrapper(CommonData);
 
             //Test to replace attributes with DB's attribute system. 
             //Player Map Ptr is currently wrong.
@@ -171,15 +171,15 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnUpdated()
         {
+            Attributes.Update(CommonData);
+
             // Strange case where shrine has no attributes, try to refresh
             if (FastAttributeGroupId == 0 && IsValid && IsGizmo)
             {
-                Attributes = new ActorAttributes(FastAttributeGroupId);
                 FullUpdate();
                 return;
             }
 
-            Attributes.Update();
             if (DateTime.UtcNow.Subtract(LastFullUpdate).TotalSeconds > 10)
             {
                 FullUpdate();

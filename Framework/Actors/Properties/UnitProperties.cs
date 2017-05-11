@@ -108,7 +108,7 @@ namespace Trinity.Framework.Actors.Properties
             return true;
         }
 
-        private static void UpdateStatus(TrinityActor actor, ActorAttributes attributes)
+        private static void UpdateStatus(TrinityActor actor, AttributesWrapper attributes)
         {
             actor.HitPoints = attributes.Hitpoints;
             actor.HitPointsMax = attributes.HitpointsMax;
@@ -124,7 +124,7 @@ namespace Trinity.Framework.Actors.Properties
             actor.HasBuffVisualEffect = attributes.HasBuffVisualEffect;
         }
 
-        private static void UpdateTeam(TrinityActor actor, ActorAttributes attributes)
+        private static void UpdateTeam(TrinityActor actor, AttributesWrapper attributes)
         {
             var teamOverride = attributes.TeamOverride;
             actor.TeamId = teamOverride > 0 ? teamOverride : attributes.TeamId;
@@ -205,7 +205,8 @@ namespace Trinity.Framework.Actors.Properties
 
                 if (monster.IsElite && !monster.IsBoss && monster.HitPointsPct < 0.25f)
                 {
-                    return monster.Attributes.GetAttributeDirectlyFromTable<bool>(ActorAttributeType.DeletedOnServer);
+                    return monster.Attributes.IsDeletedOnServer; 
+                        //monster.Attributes.GetAttributeDirectlyFromTable<bool>(ActorAttributeType.DeletedOnServer);
                 }
 
                 ////if (CurrentCacheObject.CommonData.GetAttribute<int>(ActorAttributeType.DeletedOnServer) > 0)

@@ -482,7 +482,7 @@ namespace Trinity.Routines.DemonHunter
             => new TrinityPower(Skills.DemonHunter.FanOfKnives, 5f, position);
 
         protected virtual TrinityPower Multishot(TrinityActor target)
-            => new TrinityPower(Skills.DemonHunter.Multishot, 80f, target.AcdId);
+            => new TrinityPower(Skills.DemonHunter.Multishot, 70f, target.AcdId);
 
         protected virtual TrinityPower Strafe(Vector3 position)
             => new TrinityPower(Skills.DemonHunter.Strafe, 60f, position, 25, 25);

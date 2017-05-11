@@ -77,9 +77,9 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                             !n.IsIgnored &&
                             !n.IsVisited &&
                             !n.IsBlacklisted &&
-                            n.DynamicWorldId == dynamicWorldId &&
-                            n.NavigableCenter.DistanceSqr(myPosition) > 100 &&
-                            levelAreaIds.Contains(n.LevelAreaId))
+                            //n.DynamicWorldId == dynamicWorldId &&
+                            n.NavigableCenter.DistanceSqr(myPosition) > 50 //&& levelAreaIds.Contains(n.LevelAreaId)
+                            )
                         .OrderByDescending(n => (1 / n.NavigableCenter.Distance(AdvDia.MyPosition)) * n.UnvisitedWeight)
                         .FirstOrDefault();
                     //if (node != null)

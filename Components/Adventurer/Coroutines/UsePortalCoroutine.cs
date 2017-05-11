@@ -138,6 +138,7 @@ namespace Trinity.Components.Adventurer.Coroutines
         private async Task<bool> Interacting()
         {
             _interactAttempts++;
+
             if (ZetaDia.Globals.IsLoadingWorld)
             {
                 Core.Logger.Debug("[UsePortal] Waiting for the world to load");
@@ -172,6 +173,8 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interact(DiaObject actor)
         {
+            Core.PlayerMover.MoveTowards(actor.Position);
+
             Core.Logger.Debug("[UsePortal] Attempting to use portal {0} at distance {1}", ((SNOActor)actor.ActorSnoId).ToString(), actor.Distance);
             bool retVal = false;
             switch (actor.ActorType)
@@ -198,6 +201,8 @@ namespace Trinity.Components.Adventurer.Coroutines
 
             // Doubly-make sure we interact
             actor.Interact();
+            actor.Interact();
+
             _interactAttempts++;
             //GameEvents.FireWorldTransferStart();
             await Coroutine.Sleep(_sleepTime);

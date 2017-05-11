@@ -1103,7 +1103,7 @@ namespace Trinity.Components.Coroutines
                 IsJewelry = TypeConversions.JewleryTypes.Contains(ItemType);
                 IsWeapon = TypeConversions.WeaponTypes.Contains(ItemType);
                 IsEquipment = TypeConversions.EquipmentTypes.Contains(item.ItemBaseType);
-                IsTwoSquareItem = TypeConversions.TwoSquareTypes.Contains(item.ItemBaseType);
+                IsTwoSquareItem = TypeConversions.GetIsTwoSlot(item.ItemBaseType, item.ItemType); /*Adding itemType exception into consideration -Seq*/
                 IsMisc = TypeConversions.MiscTypes.Contains(ItemType);
                 IsGem = item.ItemBaseType == ItemBaseType.Gem;
                 IsPotion = item.IsPotion;

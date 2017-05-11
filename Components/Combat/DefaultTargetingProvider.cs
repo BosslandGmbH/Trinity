@@ -57,8 +57,16 @@ namespace Trinity.Components.Combat
                 Core.Logger.Log(LogCategory.Targetting, $"Long target time detected: {CurrentTarget} duration: {CurrentTarget.Targeting.TotalTargetedTime.TotalSeconds:N2}s");
             }
 
-            if (CurrentTarget == target || target != null && target.IsMe)
+            if (target != null && target.IsMe)
+            {
                 return;
+            }
+
+            if (CurrentTarget == target)
+            {
+                target?.Targeting.UpdateTargetInfo(true);
+                return;
+            }
 
             if (target == null && CurrentTarget != null)
             {
@@ -67,13 +75,13 @@ namespace Trinity.Components.Combat
 
             if (CurrentTarget != null)
             {
-                CurrentTarget.Targeting.IsTargetted = false;
+                target?.Targeting.UpdateTargetInfo(false);
                 LastTarget = CurrentTarget;
             }
 
             if (target != null)
             {
-                target.Targeting.IsTargetted = true;
+                target?.Targeting.UpdateTargetInfo(true);
                 Core.Logger.Log(LogCategory.Targetting, $"New Target: {target.Name} {target.Targeting} WeightInfo={target.WeightInfo} Targeting={target.Targeting}");
             }
 
@@ -225,6 +233,12 @@ namespace Trinity.Components.Combat
             if (duration > TimeSpan.FromSeconds(10) && times > 5)
             {
                 GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(5), $"Micro-Blacklist for reposition / anti-flipflop (Times={times} Duration={duration})");
+                return true;
+            }
+
+            if (target.IsCorruptGrowth && duration > TimeSpan.FromSeconds(10) && Core.Player.MovementSpeed <= 2)
+            {
+                GenericBlacklist.Blacklist(target, TimeSpan.FromSeconds(3), $"Micro-Blacklist for corrupt growth reposition (Times={times} Duration={duration})");
                 return true;
             }
 
@@ -407,6 +421,9 @@ namespace Trinity.Components.Combat
             if (CurrentPower != null && CurrentPower.IsCastOnSelf)
                 return true;
 
+            if (GameData.ForceSameZDiffSceneSnoIds.Contains(Core.Player.CurrentSceneSnoId) && Math.Abs(target.Position.Z - Core.Player.Position.Z) > 2)
+                return false;
+
             var objectRange = Math.Max(2f, target.RequiredRadiusDistance);
 
             var spellRange = CurrentPower != null ? Math.Max(2f, CurrentPower.MinimumRange) : objectRange;
@@ -431,6 +448,9 @@ namespace Trinity.Components.Combat
 
             if (power.CastWhenBlocked && PlayerMover.IsBlocked)
                 return true;
+
+            if (GameData.ForceSameZDiffSceneSnoIds.Contains(Core.Player.CurrentSceneSnoId) && Math.Abs(position.Z - Core.Player.Position.Z) > 2)
+                return false;
 
             var rangeRequired = Math.Max(1f, power.MinimumRange);
             var distance = position.Distance(Core.Player.Position);

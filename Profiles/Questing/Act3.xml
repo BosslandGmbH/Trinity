@@ -59,93 +59,6 @@
     </If>
 
 
-
-    <!--[20361794] [The Breached Keep] QuestSnoId: 93697, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
-    [Step] FindLevel2, Id: 20
-    [Objective] Type: EnterLevelArea
-    [Step] FindBreach, Id: 18
-    [Objective] Type: HadConversation
-    [Step] FindLarder, Id: 22
-    [Objective] Type: EnterLevelArea
-    [Step] KillGluttony, Id: 1
-    [Objective] Type: KillMonster
-    [Step] ReturnKeep, Id: 16
-    [Objective] Type: EnterWorld-->
-
-    <!--[20361904] [Tremors in the Stone] QuestSnoId: 203595, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
-    [Step] GoInn, Id: 1
-    [Objective] BSS_Exploded, Type: EventReceived
-    [Step] SaveLeah, Id: 4
-    [Objective] QuelledBSS, Type: EventReceived
-    [Step] TalkLeah, Id: 6
-    [Objective] Type: HadConversation-->
-
-    <!--[20361A74] [Machines of War] QuestSnoId: 101756, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
-    [Step] GoToBattlefields, Id: 4
-    [Objective] Type: EnterWorld
-    [Step] FindPagle, Id: 6
-    [Objective] Type: HadConversation
-    [Step] CrossFirstBridge, Id: 9
-    [Objective] Type: EnterLevelArea
-    [Step] DestroyBallistas, Id: 1
-    [Objective] Type: KillMonster
-    [Objective] disabledTrebuchet, Type: EventReceived
-    [Step] GoBridge, Id: 18
-    [Objective] BridgeIntroTrigger, Type: EnterTrigger
-    [Step] TalkTyrael, Id: 21
-    [Objective] Type: HadConversation-->
-
-    <!--[20361BE4] [Siegebreaker] QuestSnoId: 101750, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
-    [Step] ReturnHub, Id: 4
-    [Objective] Type: EnterWorld
-    [Step] GoInn, Id: 14
-    [Objective] BSS_Exploded, Type: EventReceived
-    [Step] SaveLeah, Id: 6
-    [Objective] QuelledBSS, Type: EventReceived
-    [Step] TalkLeah, Id: 8
-    [Objective] Type: HadConversation
-    [Step] TraverseBridge, Id: 1
-    [Objective] KillSiegebreaker, Type: EventReceived
-    [Step] KillSiegeBreaker, Id: 10
-    [Objective] SiegebreakerDead, Type: EventReceived
-    [Step] TalkAdria, Id: 17
-    [Objective] Type: HadConversation
-    [Step] Return, Id: 12
-    [Objective] Type: EnterWorld-->
-
-    <!--[20361D54] [Heart of Sin] QuestSnoId: 101758, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
-    [Step] FindFirstTower, Id: 10
-    [Objective] Type: EnterWorld
-    [Step] ExploreTower, Id: 41
-    [Objective] Type: HadConversation
-    [Step] DestroyHeart1, Id: 25
-    [Objective] DaughtersOfPain, Type: KillGroup
-    [Objective] DemonHeartDestroyed, Type: EventReceived
-    [Step] FindSecondTower, Id: 14
-    [Objective] Type: EnterWorld
-    [Step] Huntfor2ndHeart, Id: 29
-    [Objective] BeginMistressFight, Type: EventReceived
-    [Step] KillLust, Id: 23
-    [Objective] Type: KillMonster
-    [Step] DestroyHeart2, Id: 27
-    [Objective] DemonHeartDestroyed, Type: EventReceived
-    [Step] KillAzmodan, Id: 1
-    [Objective] Type: KillMonster
-    [Step] GetSoulStone, Id: 32
-    [Objective] gotSoulstone, Type: EventReceived
-    [Step] ReturnHub, Id: 5
-    [Objective] Type: EnterWorld
-    [Step] TalkHaile, Id: 39
-    [Objective] Type: HadConversation
-    [Step] EnterTower, Id: 46
-    [Objective] Type: EnterWorld
-    [Step] AdriaEvent, Id: 34
-    [Objective] AdriaBetrayalComplete, Type: EventReceived
-    [Step] EnterPortal, Id: 36
-    [Objective] Act3Done, Type: EventReceived-->
-
-
-
     <!-- Diablo 1.0.7 resume game handling -->
     <If condition="IsInTown">
       <ResumeUseTownPortal forceUsePortal="true" timeLimit="30" />
@@ -569,6 +482,19 @@
       <UseTownPortal questId="93684" stepId="20" />
       <WaitTimer questId="93684" stepId="20" waitTime="5000" />
     </If>
+
+    <!--[20361794] [The Breached Keep] QuestSnoId: 93697, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
+    [Step] FindLevel2, Id: 20
+    [Objective] Type: EnterLevelArea
+    [Step] FindBreach, Id: 18
+    [Objective] Type: HadConversation
+    [Step] FindLarder, Id: 22
+    [Objective] Type: EnterLevelArea
+    [Step] KillGluttony, Id: 1
+    [Objective] Type: KillMonster
+    [Step] ReturnKeep, Id: 16
+    [Objective] Type: EnterWorld-->
+
     <If condition="IsActiveQuest(93697) and IsActiveQuestStep(-1) and CurrentWorldId == 81019 ">
       <UseTownPortal questId="93697" stepId="-1" />
       <WaitTimer questId="93697" stepId="-1" waitTime="5000" />
@@ -862,6 +788,13 @@
       <WaitTimer questId="93697" stepId="16" waitTime="6000" />
     </If>
 
+    <!--[20361904] [Tremors in the Stone] QuestSnoId: 203595, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
+    [Step] GoInn, Id: 1
+    [Objective] BSS_Exploded, Type: EventReceived
+    [Step] SaveLeah, Id: 4
+    [Objective] QuelledBSS, Type: EventReceived
+    [Step] TalkLeah, Id: 6
+    [Objective] Type: HadConversation-->
 
     <If condition="IsActiveQuest(203595) and IsActiveQuestStep(-1) and CurrentWorldId == 103209">
       <!-- Step Changed (Prob because of town run) -->
@@ -909,6 +842,20 @@
     <!-- Machines of War -->
     <!-- We're in The Amory -->
 
+    <!--[20361A74] [Machines of War] QuestSnoId: 101756, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
+    [Step] GoToBattlefields, Id: 4
+    [Objective] Type: EnterWorld
+    [Step] FindPagle, Id: 6
+    [Objective] Type: HadConversation
+    [Step] CrossFirstBridge, Id: 9
+    [Objective] Type: EnterLevelArea
+    [Step] DestroyBallistas, Id: 1
+    [Objective] Type: KillMonster
+    [Objective] disabledTrebuchet, Type: EventReceived
+    [Step] GoBridge, Id: 18
+    [Objective] BridgeIntroTrigger, Type: EnterTrigger
+    [Step] TalkTyrael, Id: 21
+    [Objective] Type: HadConversation-->
 
     <!-- Quest: DestroyBallistas: Machines of War (101756) MainQuest Step: GoToBattlefields (4) -->
     <!-- Objective: 0: Go through the Arreat Gate (InProgress) -->
@@ -950,13 +897,21 @@
       <WaitTimer questId="101756" stepId="6" waitTime="1000" />
     </If>
 
-    <!-- Go to the Barracks Level 1 Portal -->
+    <!-- Go to the Barracks Level 1 Portal --><!--
     <If condition="IsActiveQuest(101756) and IsActiveQuestStep(9) and CurrentWorldId == 95804">
       <Interact questId="101759" stepId="9" name="The Barracks Level 1 Entrance" actorId="176001" interactRange="10" x="4144" y="316" z="1" isPortal="True" destinationWorldId="174555" />
       <WaitTimer questId="101756" stepId="9" waitTime="1000" />
     </If>
 
-    <!-- Explore The Barracks Level 1 -->
+    --><!-- Quest: DestroyBallistas: Machines of War (101756) MainQuest Step: CrossFirstBridge (9) --><!--
+    --><!-- Objective: 0: Cross the Bridge of Korsikk (InProgress) --><!--
+    --><!-- World: a3Dun_Keep_random_01 (174516) Scene: A3_Dun_Keep_Random_01 Fortified Bunker Level 1 (174666) Generated=True --><!--
+    <If condition="IsActiveQuest(101756) and IsActiveQuestStep(9) and CurrentWorldId == 174516">
+      <LogMessage output="Quest: DestroyBallistas: Machines of War (101756) MainQuest Step: CrossFirstBridge (9) Cross the Bridge of Korsikk" />
+
+    </If>
+
+    --><!-- Explore The Barracks Level 1 --><!--
     <If condition="IsActiveQuest(101756) and IsActiveQuestStep(9) and CurrentWorldId == 174555">
       <TrinityExploreDungeon questId="101756" stepId="9" until="ExitFound" boxSize="10" boxTolerance="0.70" exitNameHash="-1693984105" pathPrecision="40">
         <PrioritizeScenes>
@@ -966,8 +921,23 @@
       <MoveToMapMarker questId="101756" stepId="9" markerNameHash="-1693984105" interactRange="10" actorId="175482" />
       <Interact questId="101756" stepId="9" markerNameHash="-1693984105" interactRange="10" actorId="175482" />
 
-    </If>
 
+      --><!-- g_Portal_Rectangle_Orange-97692 (175482) g_Portal_Rectangle_Orange Distance=24.54298 Type=Portal Anim=0 Marker=The Barracks Level 2 (-1693984105, QuestSceneEntrance) --><!--
+      <Interact questId="101756" stepId="9" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="175482" markerHash="-1693984105" explore="false" maxRange="300" startAnimation="" x="1046.11" y="539.32" z="3.15" sceneX="86.11" sceneY="59.32" sceneZ="3.15" sceneSnoId="73935" sceneName="a3dun_Keep_W_Exit_01" distance="5" useNavigation="true"  worldSnoId="174555" levelAreaSnoId="182258" />--><!--
+
+    </If>-->
+
+
+    <!-- Quest: DestroyBallistas: Machines of War (101756) MainQuest Step: CrossFirstBridge (9) --><!--
+    --><!-- Objective: 0: Cross the Bridge of Korsikk (InProgress) --><!--
+    --><!-- Objective: 0: Find the missing Guard of the Keep (InProgress) --><!--
+    --><!-- World: a3Dun_Keep_random_02_Level_02 (221749) Scene: A3_Dun_Keep_Random_02_Level_02 The Barracks Level 2 (221753) Generated=True --><!--
+    <If condition="IsActiveQuest(101756) and IsActiveQuestStep(9) and CurrentWorldId == 221749">
+      <LogMessage output="Quest: DestroyBallistas: Machines of War (101756) MainQuest Step: CrossFirstBridge (9) Cross the Bridge of Korsikk" />
+      <Explore questId="101756" stepId="9" startReset="true"  worldSnoId="221749" levelAreaSnoId="221753" />
+
+    </If>-->
+    
     <If condition="IsActiveQuest(101756) and IsActiveQuestStep(9) and CurrentWorldId == 95804">
 
       <SafeMoveTo questId="101756" stepId="9" name="Bridge of Korsikk" pathPrecision="10" x="3451" y="613" z="0" />
@@ -1013,6 +983,25 @@
       <!-- TalkTo Tyrael -->
       <WaitTimer questId="101756" stepId="21" waitTime="1000" />
     </If>
+
+    <!--[20361BE4] [Siegebreaker] QuestSnoId: 101750, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
+    [Step] ReturnHub, Id: 4
+    [Objective] Type: EnterWorld
+    [Step] GoInn, Id: 14
+    [Objective] BSS_Exploded, Type: EventReceived
+    [Step] SaveLeah, Id: 6
+    [Objective] QuelledBSS, Type: EventReceived
+    [Step] TalkLeah, Id: 8
+    [Objective] Type: HadConversation
+    [Step] TraverseBridge, Id: 1
+    [Objective] KillSiegebreaker, Type: EventReceived
+    [Step] KillSiegeBreaker, Id: 10
+    [Objective] SiegebreakerDead, Type: EventReceived
+    [Step] TalkAdria, Id: 17
+    [Objective] Type: HadConversation
+    [Step] Return, Id: 12
+    [Objective] Type: EnterWorld-->
+
     <If condition="IsActiveQuest(101750)  and IsActiveQuestStep(-1) and CurrentWorldId == 95804">
       <!-- Siegebreaker -->
       <Interact questId="101750" stepId="-1" actorId="170038" x="2797" y="606" z="0" />
@@ -1036,7 +1025,9 @@
       <!-- Demon Gate to Edge of the Abyss -->
       <!--<SafeMoveTo questId="101750" pathPointLimit="200" stepId="1" x="566" y="602" z="0" />-->
       <Interact questId="101750" stepId="1" actorId="226784" isPortal="True" destinationWorldId="226713" x="566" y="602" z="0" timeout="300" />
-      <UsePortal questId="101750" stepId="1" destinationWorldId="226713" portalMarkerHash="-443762283" />
+      <!--<UsePortal questId="101750" stepId="1" destinationWorldId="226713" portalMarkerHash="-443762283" />-->
+      <!-- Boss_Portal_Siegebreaker-128042 (226784) Boss_Portal_Siegebreaker Distance=0.7109898 Type=Unknown Anim=0 MinimapName=Edge of the Abyss Marker=Edge of the Abyss (-443762283, QuestSceneEntrance) -->
+      <Interact questId="101750" stepId="1" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="226784" markerHash="-443762283" explore="false" maxRange="300" startAnimation="" x="567" y="598.76" z="0.23" sceneX="87" sceneY="118.76" sceneZ="0.23" sceneSnoId="145392" sceneName="a3_Battlefield_Exit_E01_S03" distance="5" useNavigation="true"  worldSnoId="95804" levelAreaSnoId="69504" />
       <WaitTimer questId="101750" stepId="1" waitTime="5000" />
     </If>
 
@@ -1065,6 +1056,37 @@
       <Interact questId="101750" stepId="17" actorId="3095" x="427" y="332" z="0" />
       <WaitTimer questId="101750" stepId="17" waitTime="4500" />
     </If>
+
+    <!--[20361D54] [Heart of Sin] QuestSnoId: 101758, QuestMeter: -1, QuestState: NotStarted, QuestStep: -1, KillCount: 0, BonusCount: 0
+    [Step] FindFirstTower, Id: 10
+    [Objective] Type: EnterWorld
+    [Step] ExploreTower, Id: 41
+    [Objective] Type: HadConversation
+    [Step] DestroyHeart1, Id: 25
+    [Objective] DaughtersOfPain, Type: KillGroup
+    [Objective] DemonHeartDestroyed, Type: EventReceived
+    [Step] FindSecondTower, Id: 14
+    [Objective] Type: EnterWorld
+    [Step] Huntfor2ndHeart, Id: 29
+    [Objective] BeginMistressFight, Type: EventReceived
+    [Step] KillLust, Id: 23
+    [Objective] Type: KillMonster
+    [Step] DestroyHeart2, Id: 27
+    [Objective] DemonHeartDestroyed, Type: EventReceived
+    [Step] KillAzmodan, Id: 1
+    [Objective] Type: KillMonster
+    [Step] GetSoulStone, Id: 32
+    [Objective] gotSoulstone, Type: EventReceived
+    [Step] ReturnHub, Id: 5
+    [Objective] Type: EnterWorld
+    [Step] TalkHaile, Id: 39
+    [Objective] Type: HadConversation
+    [Step] EnterTower, Id: 46
+    [Objective] Type: EnterWorld
+    [Step] AdriaEvent, Id: 34
+    [Objective] AdriaBetrayalComplete, Type: EventReceived
+    [Step] EnterPortal, Id: 36
+    [Objective] Act3Done, Type: EventReceived-->
 
     <!-- Heart of Sin -->
     <!-- Edge of the Abyss -->
@@ -1133,11 +1155,28 @@
       <MoveTo questId="101758" stepId="41" x="1104" y="1048" z="-68" />
       
             <!-- g_Portal_ArchTall_Orange-12023 (176001) g_Portal_ArchTall_Orange Distance=26.07806 Type=Portal Anim=0 Marker=Heart of the Damned (2083727835, QuestSceneEntrance) -->
-     <Interact questId="101758" stepId="41" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="176001" markerHash="2083727835" explore="false" maxRange="300" startAnimation="" x="1080.01" y="1040.57" z="-67.72" sceneX="0.01" sceneY="320.57" sceneZ="-67.72" sceneSnoId="120294" sceneName="a3dun_Crater_ST_Circ_01_W01_S01" distance="5" useNavigation="true"  worldSnoId="80763" levelAreaSnoId="80792" />
+     <Interact questId="101758" stepId="41" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="176001" markerHash="2083727835" explore="false" maxRange="300" startAnimation="" x="1080.01" y="1040.57" z="-67.72" />
 
       <!--<UsePortal questId="101758" stepId="41" actorId="176001" portalMarkerHash="2083727835" isPortal="True" interactRange="20"  destinationWorldId="85201" x="1104" y="1048" z="-68" />-->
       <WaitTimer questId="101758" stepId="41" waitTime="1000" />
     </If>
+
+
+    <!-- Quest: KillAzmodan: Heart of Sin (101758) MainQuest Step: ExploreTower (41) -->
+    <!-- Objective: 0: Find the Sin Heart in the Heart of the Damned (InProgress) -->
+    <!-- World: a3dun_Crater_ST_Level02 (80763) Scene: A3_dun_Crater_ST_Level02 Tower of the Damned Level 2 (80792) Generated=True -->
+    <If condition="IsActiveQuest(101758) and IsActiveQuestStep(41) and CurrentWorldId == 80763">
+      <LogMessage output="Quest: KillAzmodan: Heart of Sin (101758) MainQuest Step: ExploreTower (41) Find the Sin Heart in the Heart of the Damned" />
+      <!-- g_Portal_ArchTall_Orange-121065 (176001) g_Portal_ArchTall_Orange Distance=32.34538 Type=Portal Anim=0 Marker=Heart of the Damned (2083727835, QuestSceneEntrance) -->
+      <Interact questId="101758" stepId="41" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="176001" markerHash="2083727835" explore="true" maxRange="300" startAnimation="" sceneX="0.01" sceneY="163.42" sceneZ="-112.38" sceneSnoId="129728" sceneName="a3dun_Crater_ST_Cent_01_W01_S01" distance="5" useNavigation="true"  worldSnoId="80763" levelAreaSnoId="80792" />
+
+    </If>
+
+
+
+
+
+
     <!-- Tower of the Damned Level 2 Version 2 -->
     <!-- Start: x="1044" y="1105" z="21" (new Vector3(1044.012f,1105.141f,21.44909f)) -->
     <!-- Death restart: x="945" y="1198" z="10" (new Vector3(945.6113f,1198.71f,10.10001f)) -->
@@ -1375,7 +1414,7 @@
 
       
      <!-- Boss_Portal_MistressOfPain-17605 (161278) Boss_Portal_MistressOfPain Distance=19.88274 Type=Unknown Anim=0 Marker=Heart of the Cursed (43541885, QuestSceneEntrance) -->
-     <Interact questId="101758" stepId="29" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="161278" markerHash="43541885" explore="false" maxRange="300" startAnimation="" x="1083.05" y="1043.11" z="-70.48" sceneX="3.05" sceneY="323.11" sceneZ="-70.48" sceneSnoId="141807" sceneName="a3dun_Crater_ST_Circ_02_W01_S01" distance="5" useNavigation="true"  worldSnoId="139272" levelAreaSnoId="139274" />
+     <Interact questId="101758" stepId="29" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="161278" markerHash="43541885"  />
       <!--<UsePortal questId="101758" stepId="29" actorId="161278" destinationWorldId="119650" interactRange="40" portalMarkerHash="43541885" x="1083" y="1043" z="-70.48186" />
       <Interact questId="101758" stepId="29" actorId="161278" isPortal="True" destinationWorldId="119650" interactRange="20" />-->
       <WaitTimer questId="101758" stepId="29" waitTime="2000" />

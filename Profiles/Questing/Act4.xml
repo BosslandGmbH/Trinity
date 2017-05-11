@@ -51,6 +51,14 @@
       <ResumeUseTownPortal forceUsePortal="True" timeLimit="30" />
     </If>
 
+    <!-- Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: FindHellPortal2 (52) -->
+    <!-- Objective: 0: Find and destroy the Corrupt Growths to reveal the hidden Hell Rift portal in the Gardens of Hope 2nd Tier (InProgress) -->
+    <!-- World: a4dun_heaven_hub_keep (178152) Scene: A4_Dun_Keep_Hub Bastion's Keep Stronghold (197101) Generated=False -->
+    <If condition="IsActiveQuest(113910) and IsActiveQuestStep(52) and CurrentWorldId == 178152">
+      <LogMessage output="Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: FindHellPortal2 (52) Find and destroy the Corrupt Growths to reveal the hidden Hell Rift portal in the Gardens of Hope 2nd Tier" />
+      <TakeWaypoint levelAreaId="109514" />
+    </If>
+
 
     <!-- Fall of the High Heavens -->
     <If condition="IsActiveQuest(112498) and IsActiveQuestStep(2)">
@@ -219,6 +227,7 @@
     </If>
 
 
+
     <!-- Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: CloseHellPortal1 (44) -->
     <!-- Objective: 0: Destroy the Rift Oculus in the Hell Rift (InProgress) -->
     <!-- World: a4dun_Hell_Portal_01 (109525) Scene: A4_dun_Hell_Portal_01 Hell Rift (109526) Generated=True -->
@@ -269,6 +278,42 @@
       <Interact questId="113910" stepId="62" actorId="204901" isPortal="True" destinationWorldId="109513" />
       <WaitTimer questId="113910" stepId="62" waitTime="1000" />
     </While>
+
+
+    <!-- Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: EnterGardens2 (50) -->
+    <!-- Objective: 0: Enter the Gardens of Hope 2nd Tier (InProgress) -->
+    <!-- World: a4dun_Garden_of_Hope_01 (109513) Scene: A4_dun_Garden_of_Hope_01 Gardens of Hope 1st Tier (109514) Generated=False -->
+    <If condition="IsActiveQuest(113910) and IsActiveQuestStep(50) and CurrentWorldId == 109513">
+      <LogMessage output="Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: EnterGardens2 (50) Enter the Gardens of Hope 2nd Tier" />
+
+      <Explore questId="113910" stepId="50" startReset="true" stopCondition="ActorExistsNearMe(204901,80)" useSceneRegions="true"  worldSnoId="109513" levelAreaSnoId="109514" />
+
+      <!-- Gardens of Hope 2nd Tier -1524911733 QuestSceneEntrance Distance=13.94054 TextureId=102320 WorldSnoId=2005270564 Actor=g_Portal_HeavenTeal-150295 (204901) -->
+      <!--
+      <MoveToMapMarker questId="113910" stepId="50" markerHash="-1524911733" markerName="Gardens of Hope 2nd Tier" markerType="102320" zerg="false"  worldSnoId="109513" levelAreaSnoId="109514" />-->
+
+      <!--  0 QuestPortalForward Distance=418.4853 TextureId=81058 WorldSnoId=2000093193 -->
+      <MoveToMapMarker questId="113910" stepId="60" markerType="QuestPortalForward" zerg="false"  worldSnoId="109530" levelAreaSnoId="109531" />
+
+      <!-- g_Portal_HeavenTeal-150295 (204901) g_Portal_HeavenTeal Distance=13.94054 Type=Portal Anim=townPortal_neverLeaveUs_idle_01 Marker=Gardens of Hope 2nd Tier (-1524911733, QuestSceneEntrance) -->
+      <Interact questId="113910" stepId="50" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="204901" explore="false" maxRange="300"  />
+    </If>
+
+    <!-- Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: FindHellPortal2 (52) -->
+    <!-- Objective: 0: Find and destroy the Corrupt Growths to reveal the hidden Hell Rift portal in the Gardens of Hope 2nd Tier (InProgress) -->
+    <!-- World: a4dun_Garden_of_Hope_01 (109513) Scene: A4_dun_Garden_of_Hope_01 Gardens of Hope 1st Tier (109514) Generated=False -->
+    <If condition="IsActiveQuest(113910) and IsActiveQuestStep(52) and CurrentWorldId == 109513">
+      <LogMessage output="Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: FindHellPortal2 (52) Find and destroy the Corrupt Growths to reveal the hidden Hell Rift portal in the Gardens of Hope 2nd Tier" />
+      <MoveToMapMarker questId="113910" stepId="60" markerType="QuestPortalForward" zerg="false"  worldSnoId="109530" levelAreaSnoId="109531" />
+      <!-- g_Portal_HeavenTeal-150295 (204901) g_Portal_HeavenTeal Distance=13.94054 Type=Portal Anim=townPortal_neverLeaveUs_idle_01 Marker=Gardens of Hope 2nd Tier (-1524911733, QuestSceneEntrance) -->
+
+      <Explore questId="113910" stepId="52" startReset="true" stopCondition="ActorExistsNearMe(204901,80)" useSceneRegions="true"  worldSnoId="109513" levelAreaSnoId="109514" />
+      <!--  0 QuestPortalForward Distance=418.4853 TextureId=81058 WorldSnoId=2000093193 -->
+      <MoveToMapMarker questId="113910" stepId="60" markerType="QuestPortalForward" zerg="false"  worldSnoId="109530" levelAreaSnoId="109531" />
+      <!-- g_Portal_HeavenTeal-150295 (204901) g_Portal_HeavenTeal Distance=13.94054 Type=Portal Anim=townPortal_neverLeaveUs_idle_01 Marker=Gardens of Hope 2nd Tier (-1524911733, QuestSceneEntrance) -->
+      <Interact questId="113910" stepId="52" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="204901" explore="false" maxRange="300"  />
+    </If>
+
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(50) and CurrentWorldId == 109513">
 
       <!-- Portal to Gardens of Hope 2nd Tier -->
@@ -313,20 +358,39 @@
       <!-- Destroy the Rift Oculous -->
       <TrinityExploreDungeon questId="113910" stepId="48" boxTolerance="0.18" boxSize="18" until="ObjectFound" actorId="225834" />
       <Interact questId="113910" stepId="48" actorId="225834" />
-      <WaitTimer questId="113910" stepId="48" waitTime="45000" />
+      <WaitTimer questId="113910" stepId="48" waitTime="20000" />
+    </If>
+    <!-- Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: CloseHellPortal2 (48) -->
+    <!-- Objective: 0: Destroy the Rift Oculus in the Hell Rift (InProgress) -->
+    <!-- World: a4dun_Hell_Portal_02 (109530) Scene: A4_dun_Hell_Portal_02 Hell Rift (109531) Generated=True -->
+    <If condition="IsActiveQuest(113910) and IsActiveQuestStep(48) and CurrentWorldId == 109530">
+      <LogMessage output="Quest: Heaven_RestorationOfHope: The Light of Hope (113910) MainQuest Step: CloseHellPortal2 (48) Destroy the Rift Oculus in the Hell Rift" />
+      <WaitTimer questId="113910" stepId="48" waitTime="4000" />
+
+      <!--  0 QuestPortalForward Distance=381.658 TextureId=81058 WorldSnoId=2005336095 -->
+      <MoveToMapMarker questId="113910" stepId="48" markerName="" markerType="QuestPortalForward" zerg="false"  worldSnoId="109530" levelAreaSnoId="109531" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(60) and CurrentWorldId == 109530">
       <WaitTimer questId="113910" stepId="60" waitTime="20000" />
       <!-- Use Auriel's portal to Gardens of Hope 2nd Tier -->
       <!-- Quest: Heaven_RestorationOfHope (113910) World: a4dun_Hell_Portal_02 (109530) LevelArea: A4_dun_Hell_Portal_02 (109531) -->
-      <MoveToMapMarker questId="113910" stepId="60" markerNameHash="-1524911733" actorId="204901" interactRange="8.316568"
-                             pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />
+      <!--<MoveToMapMarker questId="113910" stepId="60" markerNameHash="-1524911733" actorId="204901" interactRange="8.316568"
+                             pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="-1" statusText="" />-->
+
+
+      <!--  0 QuestPortalForward Distance=381.9612 TextureId=81058 WorldSnoId=2005336095 Actor=a4dun_Garden_Hellportal_Pillar-119850 (208561) -->
+      <MoveToMapMarker questId="113910" stepId="60" markerType="QuestPortalForward" zerg="false"  worldSnoId="109530" levelAreaSnoId="109531" />
+
       <!-- g_Portal_HeavenTeal-29108 (204901) g_Portal_HeavenTeal Distance=7.503984 Type=Portal Anim=townPortal_neverLeaveUs_idle_01 Marker=Gardens of Hope 2nd Tier (-1524911733, QuestSceneEntrance) -->
-      <Interact questId="113910" stepId="60" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="204901" markerHash="-1524911733" explore="false" maxRange="300" startAnimation="townPortal_neverLeaveUs_idle_01" x="689.9" y="734.25" z="20" sceneX="209.9" sceneY="14.25" sceneZ="20" sceneSnoId="151076" sceneName="a3dun_Crater_S_Dead_End_02_E01_N01" distance="5" useNavigation="true"  worldSnoId="109530" levelAreaSnoId="109531" />
+      <Interact questId="113910" stepId="60" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="204901" />
       <!--<Interact questId="113910" stepId="60" actorId="204901" isPortal="True" destinationWorldId="219659" />-->
       <WaitTimer questId="113910" stepId="60" waitTime="1000" />
     </If>
     <If condition="IsActiveQuest(113910) and IsActiveQuestStep(56) and CurrentWorldId == 219659">
+
+      <!--  0 QuestPortalForward Distance=399.7525 TextureId=81058 WorldSnoId=1999568897 -->
+      <MoveToMapMarker questId="113910" stepId="56" markerHash="0" markerName="" markerType="81058" zerg="false"  worldSnoId="219659" levelAreaSnoId="109516" />
+
       <!-- The Light of Hope: Find the portal to the Crystal Colonnade -->
       <TrinityExploreDungeon questId="113910" stepId="56" boxTolerance="0.18" boxSize="18" until="ObjectFound" actorId="122552" pathPrecision="40">
         <PrioritizeScenes>
@@ -334,6 +398,8 @@
         </PrioritizeScenes>
       </TrinityExploreDungeon>
       <WaitTimer questId="113910" stepId="56" waitTime="1000" />
+
+      <Interact questId="113910" stepId="56" markerNameHash="-1524911733" actorId="204901" interactRange="20" pathPrecision="5" pathPointLimit="250" isPortal="True" destinationWorldId="219659" statusText="" />
     </If>
 
     <!-- Quest: Heaven_RestorationOfHope World: a4dun_Hell_Portal_02 LevelArea: A4_dun_Hell_Portal_02 -->

@@ -17,7 +17,7 @@ namespace Trinity.Framework.Actors.ActorTypes
     {
         public bool IsCosmeticItem { get; set; }
         public bool IsLowQuality { get; set; }
-        public new ItemAttributes Attributes { get; set; }
+        public new AttributesWrapper Attributes { get; set; }
         public bool IsFirstUpdate { get; set; } = true;
         public int InventoryColumn { get; set; }
         public int InventoryRow { get; set; }
@@ -78,7 +78,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         public override void OnCreated()
         {
-            Attributes = new ItemAttributes(FastAttributeGroupId);
+            Attributes = new AttributesWrapper(CommonData);
             CommonProperties.Populate(this);
             ItemProperties.Create(this);
         }
@@ -88,6 +88,7 @@ namespace Trinity.Framework.Actors.ActorTypes
             if (InventorySlot == InventorySlot.SharedStash && !Core.Player.IsInTown)
                 return;
 
+            Attributes.Update(CommonData);
             ItemProperties.Update(this);
             CommonProperties.Update(this);
         }

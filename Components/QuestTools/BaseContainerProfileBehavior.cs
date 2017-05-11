@@ -53,6 +53,9 @@ namespace Trinity.Components.QuestTools
         public DateTime StartTime { get; private set; } = DateTime.MinValue;
         public DateTime EndTime { get; private set; } = DateTime.MinValue;
 
+        public virtual void OnPulse() { }
+
+
         /// <summary>
         /// Method run every tick of self and children. Return true to end the tag, false to continue.
         /// </summary>
