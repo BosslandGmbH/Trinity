@@ -360,6 +360,9 @@ namespace Trinity.DbProvider
 
             await Coroutine.Sleep(250);
 
+            if (Core.IsOutOfGame)
+                return false;
+
             TrinityCombat.Spells.CastPower(skill?.SNOPower ?? RoutineBase.DefaultWeaponPower, pos, acdId);
 
             await Coroutine.Sleep(250);
@@ -390,7 +393,12 @@ namespace Trinity.DbProvider
                 var distance = targetPosition.Distance(ZetaDia.Me.Position);
 
                 Core.Logger.Log("Moving to {0} Dist={1}", targetPosition, distance);
+
+                if (Core.IsOutOfGame)
+                    return false;
+
                 ZetaDia.Me.UsePower(SNOPower.Walk, targetPosition, ZetaDia.Globals.WorldId);
+
                 await Coroutine.Sleep(50);
 
                 if (distance < 4f || position.Distance(ZetaDia.Me.Position) > 25f)

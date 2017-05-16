@@ -67,6 +67,9 @@ namespace Trinity.DbProvider
             if (ZetaDia.Globals.IsLoadingWorld)
                 return;
 
+            if (Core.IsOutOfGame)
+                return;
+
             if (DateTime.UtcNow < SleepUntilTime)
                 return;
 

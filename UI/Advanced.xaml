@@ -17,12 +17,12 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <ScrollViewer>
-  
-            <DockPanel>
-                <StackPanel DockPanel.Dock="Top" Margin="0,10,5,0">
 
-                    
-                    
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Margin="0,10,5,0">
+
+
+
                 <!--TPS-->
                 <GroupBox Header="Ticks Per Second">
                     <StackPanel>
@@ -49,7 +49,7 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
-                    
+
 
                 <GroupBox Margin="2" Header="Inactivity Timers">
                     <UniformGrid Columns="1" VerticalAlignment="Top">
@@ -87,12 +87,11 @@
                         <!--<CheckBox IsChecked="{Binding Path=Advanced.DebugInStatusBar}" ToolTip="Update the DB Status bar with Combat Info">Use TrinityPlugin Status Bar</CheckBox>-->
                         <!--<CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=ProfileTag}">Use Profile Tag Logging</CheckBox>-->
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Targetting}">Log Targetting System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Weight}">Log Target Weight System</CheckBox>
-                        <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=CacheManagement}">Log Cache System</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Behavior}">Log Behavior System</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Routine}">Log Routine</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Spells}">Log Spell Casting</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Avoidance}">Log Avoidance System</CheckBox>
+                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=Exploration, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Exploration"/>
 
                     </UniformGrid>
                 </GroupBox>
@@ -110,7 +109,7 @@
                             <CheckBox IsChecked="{Binding Advanced.ForceSpecificGambleSettings}" Content="Gambling"/>
                         </UniformGrid>
                     </StackPanel>
-                </GroupBox>-->                
+                </GroupBox>-->
 
 
 
@@ -120,7 +119,7 @@
                         <CheckBox IsChecked="{Binding Path=Advanced.LogDroppedItems}" ToolTip="Create a CSV file for all dropped items">Log dropped Items</CheckBox>
                     </UniformGrid>
                 </GroupBox>-->
-                    
+
                 <GroupBox Header="TrinityPlugin Support Specialized logs">
                     <UniformGrid Columns="2" HorizontalAlignment="Stretch">
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Performance}">Log System Performance</CheckBox>
@@ -135,11 +134,15 @@
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Cooldowns}">Log Cooldowns</CheckBox>
                         <CheckBox IsChecked="{Binding Path=Advanced.LogCategories, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=StuckHandler}">Log Stuck Handler</CheckBox>
                         <CheckBox IsChecked="{Binding Advanced.ItemEvents, ConverterParameter=StuckHandler, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Item Events"/>
+                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=Weight, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Target Weight System"/>
+                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=CacheManagement, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Cache System"/>
+                        <CheckBox IsChecked="{Binding Advanced.LogCategories, ConverterParameter=TraceCoroutines, Converter={StaticResource flagsEnumValueBooleanConverter}}" Content="Log Coroutine Trace"/>
 
                     </UniformGrid>
-                    
+
                 </GroupBox>
-                <!--APS--><!--
+                <!--APS-->
+                <!--
                 <GroupBox Header="Actions Per Second">
                     <StackPanel>
                         <TextBlock TextWrapping="Wrap">Prevents TrinityPlugin from casting too many spells in too short of a time peroid. Default=10. Higher settings (or disabling) will allow faster attacks but risks causing a disconnection from diablo3</TextBlock>
@@ -151,7 +154,7 @@
                     HorizontalAlignment="Stretch" Margin="5,0,5,0" ToolTip=""/>
                         </UniformGrid>
                     </StackPanel>
-                </GroupBox>-->                
+                </GroupBox>-->
 
 
                 <!--Cache Refresh Rate-->
@@ -210,7 +213,7 @@
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
- 
+
             <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Center" DockPanel.Dock="Bottom">
                 <!--Reset Button-->
                 <Button Margin="5,0" HorizontalAlignment="Center" Command="{Binding ResetAdvancedCommand}">Reset</Button>

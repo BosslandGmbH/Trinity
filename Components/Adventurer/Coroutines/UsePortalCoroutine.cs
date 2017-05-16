@@ -9,7 +9,7 @@ using Zeta.Game.Internals.SNO;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
-    public sealed class UsePortalCoroutine
+    public sealed class UsePortalCoroutine : ICoroutine
     {
         private static UsePortalCoroutine _usePortalCoroutine;
         private static int _usePortalActorSNO;
@@ -61,18 +61,29 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         #endregion State
 
-        private readonly int _actorId;
-        private readonly int _sourceWorldDynamicId;
+        private int _actorId;
+        private int _sourceWorldDynamicId;
         private readonly TimeSpan _sleepTime = new TimeSpan(0, 0, 1);
 
         private UsePortalCoroutine(int actorId, int sourceWorldDynamicId)
         {
             _actorId = actorId;
             _sourceWorldDynamicId = sourceWorldDynamicId;
+            Id = Guid.NewGuid();
         }
 
-        private async Task<bool> GetCoroutine()
+        public Guid Id { get; }
+
+        public void Reset()
         {
+            _actorId = 0;
+            _sourceWorldDynamicId = 0;
+        }
+
+        public async Task<bool> GetCoroutine()
+        {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:

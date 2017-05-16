@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Linq; using Trinity.Framework;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
@@ -9,17 +10,17 @@ using Zeta.Common;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
-    public sealed class ClearAreaCoroutine
+    public sealed class ClearAreaCoroutine : ICoroutine
     {
         private static ClearAreaCoroutine _clearAreaCoroutine;
         private static Vector3 _clearCenter;
         private static int _clearRadius;
         private static bool _clearForce;
         private static bool _clearReturnToCenter = true;
-        private readonly Vector3 _center;
-        private readonly bool _forceMoveAround;
-        private readonly int _radius;
-        private readonly bool _returnToCenter;
+        private Vector3 _center;
+        private bool _forceMoveAround;
+        private int _radius;
+        private bool _returnToCenter;
         private Vector3 _currentDestination;
         private ConcurrentBag<Vector3> _forceClearDestinations;
         private States _state;
@@ -30,6 +31,16 @@ namespace Trinity.Components.Adventurer.Coroutines
             _radius = radius;
             _forceMoveAround = forceMoveAround;
             _returnToCenter = returnToCenter;
+            Id = Guid.NewGuid();
+        }
+
+        public Guid Id { get; }
+        public void Reset()
+        {
+            _center = Vector3.Zero;
+            _radius = 0;
+            _forceMoveAround = false;
+            _returnToCenter = true;
         }
 
         private States State
@@ -65,8 +76,11 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
-        private async Task<bool> GetCoroutine()
+        public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
+
             switch (State)
             {
                 case States.NotStarted:

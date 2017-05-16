@@ -98,6 +98,7 @@
     <Compile Include="Components\Adventurer\Coroutines\CommonSubroutines\ISubroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\CommonSubroutines\MoveToPositionCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\CoroutineResult.cs" />
+    <Compile Include="Components\Adventurer\Coroutines\CoroutineCoodinator.cs" />
     <Compile Include="Components\Adventurer\Coroutines\ExplorationCoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\ICoroutine.cs" />
     <Compile Include="Components\Adventurer\Coroutines\InteractionCoroutine.cs" />
@@ -443,6 +444,8 @@
     <Compile Include="ProfileTags\KillTag.cs" />
     <Compile Include="ProfileTags\ZergTag.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterShadowImpale.cs" />
+    <Compile Include="Routines\DemonHunter\DH_ShadowThreeKnifes.cs" />
+    <Compile Include="Routines\Wizard\WizardManaldCoE.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonBlizzard.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonHydra.cs" />
     <Compile Include="Routines\Wizard\WizardSlowTimeDMO.cs" />
@@ -675,7 +678,9 @@
     <Content Include="Profiles\Debug\Bosses.xml" />
     <Content Include="Profiles\Debug\MalthaelBounty.xml" />
     <Content Include="Profiles\Debug\MoveWithinScene.xml" />
-    <Content Include="Profiles\Debug\MultiTest.xml" />
+    <Content Include="Profiles\Debug\MultiTest.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Profiles\Debug\WaitForCombatTag.xml" />
     <Content Include="Profiles\Debug\WithoutTrinityMoveInTownTest.xml" />
     <Content Include="Profiles\Debug\WithoutTrinityMoveTest.xml" />
@@ -828,6 +833,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Routines\DemonHunter\DH_ShadowThreeKnifesSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Routines\Monk\MonkDefaultSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -889,6 +898,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Routines\Wizard\WizardFlashFireSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Wizard\WizardManaldCoESettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

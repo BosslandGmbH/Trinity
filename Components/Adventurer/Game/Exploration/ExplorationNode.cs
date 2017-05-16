@@ -211,5 +211,6 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public byte AStarValue { get; set; }
         public int FailedNavigationAttempts { get; set; }
+        public bool Priority { get; set; }
     }
 }

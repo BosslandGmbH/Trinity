@@ -11,6 +11,8 @@ using Trinity.Components.Adventurer.Game.Exploration.SceneMapping;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Components.Adventurer.Util;
+using Trinity.UI.Visualizer;
+using Zeta.Bot.Coroutines;
 using Zeta.Bot.Navigation;
 using Zeta.Common;
 using Zeta.Game;
@@ -99,6 +101,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _portalMarker = portalMarker;
             _portalActorIds = portalActorIds;
             _prioritizeExitScene = prioritizeExitScene;
+            Id = Guid.NewGuid();
         }
 
         public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, int portalActorId, TimeSpan timeout)
@@ -109,6 +112,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _portalMarker = portalMarker;
             _portalActorId = portalActorId;
             _timeoutDuration = timeout;
+            Id = Guid.NewGuid();
         }
 
         public EnterLevelAreaCoroutine(int questId, int sourceWorldId, int destinationWorldId, int portalMarker, int portalActorId, bool prioritizeExitScene = false)
@@ -119,17 +123,24 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _portalMarker = portalMarker;
             _portalActorId = portalActorId;
             _prioritizeExitScene = prioritizeExitScene;
+            Id = Guid.NewGuid();
         }
+
 
         public EnterLevelAreaCoroutine(int questId, int sourceWorldId, IList<BountyHelpers.ObjectiveActor> objectives)
         {
             _questId = questId;
             _sourceWorldId = sourceWorldId;
             _objectives = objectives;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             if (State != States.Failed && _timeoutEndTime < DateTime.UtcNow && _timeoutDuration != TimeSpan.Zero)
             {
                 Core.Logger.Debug($"EnterLevelAreaCoroutine timed out after {_timeoutDuration.TotalSeconds} seconds");
@@ -219,6 +230,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     State = States.MovingToNearestScene;
                 }
 
+                NavigationCoroutine.Reset();
                 State = States.Moving;
                 return false;
             }
@@ -301,9 +313,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             {
                 portal = ActorFinder.FindGizmo(_portalActorId);
             }
+
             if (portal == null)
             {
-                portal = BountyHelpers.GetPortalNearMarkerPosition(_objectiveLocation);
+                portal = BountyHelpers.GetPortalNearPosition(_objectiveLocation);
                 if (portal != null)
                 {
                     _discoveredPortalActorId = portal.ActorSnoId;
@@ -317,28 +330,26 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                         Core.Logger.Log($"[EnterLevelArea] Unable to find the portal we needed, using this one instead {portal.Name} ({portal.ActorSnoId})");
                     }
                 }
+            }
 
-                //if (_portalActorId != portal.ActorSnoId && BountyData.Act == Act.A5)
-                //{
-                //    Core.Logger.Log("[EnterLevelArea] Was expecting to use portal SNO {0}, using {1} instead.", _portalActorId, portal.ActorSnoId);
-                //    _portalActorId = portal.ActorSnoId;
-                //}
-            }
-            else
-            {
-                if (portal.Position.Distance(_objectiveLocation) > 15)
-                {
-                    portal = null;
-                }
-            }
             if (portal == null)
             {
                 State = States.Searching;
                 return false;
             }
 
-            Core.Logger.Debug($"[EnterLevelArea] Using interact range from portal: {_interactRange}");
             _interactRange = portal.CollisionSphere.Radius;
+
+            Core.Logger.Debug($"[EnterLevelArea] Using interact range from portal: {_interactRange}");
+
+            if (portal.Position.Distance(_objectiveLocation) > _interactRange)
+            {
+                Core.Logger.Debug($"[EnterLevelArea] Portal is still too far away, something went wrong with NavigationCoroutine");
+                await CommonCoroutines.MoveTo(portal.Position);
+                State = States.Searching;
+                return false;
+            }
+
             _objectiveLocation = portal.Position;
             State = States.Entering;
             _prePortalWorldDynamicId = AdvDia.CurrentWorldDynamicId;
@@ -451,6 +462,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 _lastScanTime = PluginTime.CurrentMillisecond;
                 if (_portalMarker != 0)
                 {
+                    if (_objectiveLocation == Vector3.Zero)
+                    {
+                        // Help with weighting exploration nodes even if its unreachable/unpathable.
+                        var markerlocation = BountyHelpers.ScanForMarkerLocation(_portalMarker, 5000);
+                        ExplorationHelpers.SetExplorationPriority(markerlocation);
+                    }
+
                     _objectiveLocation = BountyHelpers.ScanForMarkerLocation(_portalMarker, _objectiveScanRange);
 
                     if (ExplorationData.FortressLevelAreaIds.Contains(AdvDia.CurrentLevelAreaId))
@@ -493,6 +511,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_objectiveLocation != Vector3.Zero)
                 {
                     Core.Logger.Log("[EnterLevelArea] Found the objective at distance {0}", AdvDia.MyPosition.Distance(_objectiveLocation));
+                    ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
                 }
             }
         }

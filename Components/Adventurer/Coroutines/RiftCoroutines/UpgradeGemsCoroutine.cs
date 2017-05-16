@@ -68,6 +68,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
+
             if (_isPulsing)
             {
                 PulseChecks();

@@ -68,15 +68,19 @@ namespace Trinity.Components.Adventurer.Game.Combat
                 combatState = true;
             }
 
-            if (!combatState &&
-
-                ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).Any(u => u.IsFullyValid() && u.IsAlive && (
-                KeywardenDataFactory.GoblinSNOs.Contains(u.ActorSnoId) || (KeywardenDataFactory.A4CorruptionSNOs.Contains(u.ActorSnoId) && u.IsAlive & u.Position.Distance(AdvDia.MyPosition) <= corruptGrowthDetectionRadius))
-                ))
-
+            if (!combatState)
             {
-                Core.Logger.Verbose("Turning off zerg because either corrupt growth or keywarden nearby");
-                combatState = true;
+                var thing =
+                    ZetaDia.Actors.GetActorsOfType<DiaUnit>(true).FirstOrDefault(u => 
+                        u.IsFullyValid() && u.IsAlive && (KeywardenDataFactory.GoblinSNOs.Contains(u.ActorSnoId) ||
+                        (KeywardenDataFactory.A4CorruptionSNOs.Contains(u.ActorSnoId) &&u.IsAlive & 
+                        u.Position.Distance(AdvDia.MyPosition) <= corruptGrowthDetectionRadius)));
+                
+                if (thing != null)
+                {
+                    Core.Logger.Verbose($"Turning off zerg because either corrupt growth or goblin nearby. {thing.Name} ({thing.ActorSnoId}) Dist:{thing.Distance}");
+                    combatState = true;
+                }
             }
 
             var keywarden = KeywardenDataFactory.Items.FirstOrDefault(kw => kw.Value.WorldId == AdvDia.CurrentWorldId);

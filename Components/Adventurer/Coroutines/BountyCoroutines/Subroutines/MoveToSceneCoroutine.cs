@@ -14,6 +14,7 @@ using Trinity.Framework.Actors;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
 using Trinity.Framework.Reference;
+using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -49,6 +50,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             SceneName = ZetaDia.SNO.LookupSNOName(SNOGroup.Scene, sceneSnoId);
             _zergEnabled = zergSafe;
             _explore = explore;
+            Id = Guid.NewGuid();
+
         }
 
         public MoveToSceneCoroutine(int questId, int worldId, string sceneName, bool zergSafe = false, bool explore = true)
@@ -58,7 +61,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             SceneName = sceneName;
             _zergEnabled = zergSafe;
             _explore = explore;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public string SceneName { get; }
 
@@ -69,6 +75,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
+            CoroutineCoodinator.Current = this;
+
             if (_scene != null && _scene.IsInScene(AdvDia.MyPosition))
             {
                 Core.Logger.Debug($"Currently in Target Scene: {_scene.Name}. IsSubScene={_scene.SubScene}");
@@ -220,6 +230,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     {
                         Core.Logger.Log("[MoveToScene] Found the objective at distance {0}",
                             AdvDia.MyPosition.Distance(_objectiveLocation));
+
+                        ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
                     }
                 }
                 else

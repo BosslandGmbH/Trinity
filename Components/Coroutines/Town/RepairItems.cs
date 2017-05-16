@@ -105,7 +105,7 @@ namespace Trinity.Components.Coroutines.Town
 
         public static bool EquipmentNeedsRepair()
         {
-            var equippedItems = InventoryManager.Equipped.Where(i => i.DurabilityCurrent < i.DurabilityMax).ToList();
+            var equippedItems = InventoryManager.Equipped.Where(i => i.IsValid && !i.IsDisposed && i.DurabilityCurrent < i.DurabilityMax).ToList();
             if (!equippedItems.Any())
                 return false;
 

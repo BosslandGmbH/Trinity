@@ -20,7 +20,7 @@ using Zeta.Game.Internals.Actors;
 
 namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
 {
-    public class KeywardenCoroutine : IDisposable
+    public class KeywardenCoroutine : IDisposable, ICoroutine
     {
         private readonly KeywardenData _keywardenData;
         private Vector3 _keywardenLocation = Vector3.Zero;
@@ -65,10 +65,15 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
         {
             _keywardenData = keywardenData;
             _levelAreaIds = new HashSet<int> { _keywardenData.LevelAreaId };
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:
@@ -93,6 +98,12 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                     return await Failed();
             }
             return false;
+        }
+
+
+        public void Reset()
+        {
+          
         }
 
         private bool NotStarted()

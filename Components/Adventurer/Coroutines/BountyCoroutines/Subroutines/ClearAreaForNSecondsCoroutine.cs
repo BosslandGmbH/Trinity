@@ -1,10 +1,12 @@
 ﻿using System;
 using Trinity.Framework;
 using System.Threading.Tasks;
+using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Zeta.Common;
+using Zeta.Game;
 
 
 namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
@@ -62,10 +64,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _marker = marker;
             _radius = radius;
             _increaseRadius = increaseRadius;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             if (_worldId > 0 && AdvDia.CurrentWorldId != _worldId)
             {
                 State = States.Completed;
@@ -75,6 +82,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             if (_startPosition != Vector3.Zero)
             {
                 ClearAreaHelper.CheckClearArea(_startPosition, _radius);
+            }
+
+            if (IsQuestStepComplete())
+            {
+                Core.Logger.Log("Ending ClearAreaForNSecondsCoroutine because quest step appears to be completed!");
+                State = States.Completed;
+                return false;
             }
 
             switch (State)
@@ -97,10 +111,22 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             return false;
         }
 
+
+        private bool IsQuestStepComplete()
+        {
+            if (BountyHelpers.QuestNpcExistsNearMe(80f))
+            {
+                return true;
+            }
+            return false;
+        }
+
         private async Task<bool> NotStarted()
         {
             SafeZerg.Instance.DisableZerg();
             ScanForObjective();
+
+
             if (_center == Vector3.Zero)
             {
                 _center = AdvDia.MyPosition;

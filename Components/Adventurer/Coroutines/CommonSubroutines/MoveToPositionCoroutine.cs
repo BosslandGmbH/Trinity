@@ -55,10 +55,15 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
             _worldId = worldId;
             _position = position;
             _straightLinePathing = forceStraightLinePathing;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:

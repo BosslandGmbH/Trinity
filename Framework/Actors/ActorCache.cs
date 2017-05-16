@@ -5,6 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Scripting.Utils;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Objects;
@@ -53,6 +54,7 @@ namespace Trinity.Framework.Actors
 
         private readonly Dictionary<int, short> _annToAcdIndex = new Dictionary<int, short>();
         private readonly Dictionary<int, int> _acdToRActorIndex = new Dictionary<int, int>();
+        private GameId _gameId;
         public HashSet<int> CurrentAcdIds { get; set; } = new HashSet<int>();
         public HashSet<int> CurrentRActorIds { get; set; } = new HashSet<int>();
         public ulong LastUpdatedFrame { get; private set; }
@@ -68,16 +70,28 @@ namespace Trinity.Framework.Actors
             Clear();
         }
 
+        protected override void OnGameChanged()
+        {
+            Clear();
+        }
+
         public void Update()
         {
             var currentFrame = ZetaDia.Memory.Executor.FrameCount;
-            //if (LastUpdatedFrame == currentFrame)
-            //    return;
 
             if (!ZetaDia.IsInGame)
                 return;
 
-            if (ZetaDia.Actors.Me == null)
+            var gameId = ZetaDia.Service.CurrentGameId;
+            if (_gameId != gameId)
+            {
+                Core.Logger.Debug("Game Change Detected");
+                ZetaDia.Actors.Update();
+                _gameId = gameId;
+                return;
+            }
+
+            if (ZetaDia.Actors.Me == null || !ZetaDia.Actors.Me.IsFullyValid())
                 ZetaDia.Actors.Update();
 
             ActivePlayerRActorId = ZetaDia.ActivePlayerRActorId;
@@ -147,10 +161,14 @@ namespace Trinity.Framework.Actors
 
             var untouchedIds = new List<int>(_rActors.Keys.ToList());
 
-            foreach (var rActor in ZetaDia.RActors)
+            var actors = ZetaDia.RActors.ToList<DiaObject>();
+            foreach (var rActor in actors)
             {
                 var rActorId = rActor.RActorId;
                 if (rActorId == -1)
+                    continue;
+
+                if (rActor.IsACDBased && !rActor.IsFullyValid())
                     continue;
 
                 var result = true;
@@ -166,13 +184,9 @@ namespace Trinity.Framework.Actors
             foreach (var key in untouchedIds)
             {
                 TrinityActor item;
-                if (_rActors.TryRemove(key, out item) && item != null)
+                if (_rActors.TryRemove(key, out item))
                 {
-                    //item.RActor?.UpdatePointer(IntPtr.Zero);
-                    //item.CommonData?.UpdatePointer(IntPtr.Zero);
-                    //item.ActorInfo?.UpdatePointer(IntPtr.Zero);
-                    //item.MonsterInfo?.UpdatePointer(IntPtr.Zero);
-                    item.OnDestroyed();
+                    item?.OnDestroyed();
                 }
             }
         }
@@ -388,13 +402,8 @@ namespace Trinity.Framework.Actors
         {
             Core.Logger.Warn("Resetting ActorCache");
             _annToAcdIndex.Clear();
-            //_commonData.ForEach(o => o.Value.UpdatePointer(IntPtr.Zero));
             foreach (var pair in _rActors)
             {
-                //pair.Value.RActor.UpdatePointer(IntPtr.Zero);
-                //pair.Value.ActorInfo?.UpdatePointer(IntPtr.Zero);
-                //pair.Value.MonsterInfo?.UpdatePointer(IntPtr.Zero);
-                //pair.Value.CommonData?.UpdatePointer(IntPtr.Zero);
                 pair.Value.Attributes?.Destroy();
                 pair.Value.RActor = null;
                 pair.Value.CommonData = null;
@@ -405,6 +414,8 @@ namespace Trinity.Framework.Actors
             _commonData.Clear();
             CurrentAcdIds.Clear();
             CurrentRActorIds.Clear();
+            _acdToRActorIndex.Clear();
+            ActivePlayerRActorId = 0;
             Me = null;
         }
 

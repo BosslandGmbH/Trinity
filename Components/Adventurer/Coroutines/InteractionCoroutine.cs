@@ -88,12 +88,17 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 _sleepTime = new TimeSpan(0, 0, 1);
             }
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public bool IsDone => State == States.Failed || State == States.Completed;
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             if (Core.Player.IsCastingOrLoading)
             {
                 Core.Logger.Log("Waiting for cast to finish.");
@@ -209,15 +214,22 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         private async Task<bool> Interacting()
         {
-            if (ZetaDia.Me.IsFullyValid() 
-                && (_castWaitStartTime.Subtract(DateTime.UtcNow).TotalSeconds < 10 || _castWaitStartTime == DateTime.MinValue) 
-                && (ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting || ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling) 
-                && !AdvDia.IsInArchonForm)
+            if (ZetaDia.Me.IsFullyValid() && (_castWaitStartTime.Subtract(DateTime.UtcNow).TotalSeconds < 10 || _castWaitStartTime == DateTime.MinValue))
             {
-                _castWaitStartTime = DateTime.UtcNow;
-                Core.Logger.Debug("Waiting for the cast to end");
-                await Coroutine.Sleep(500);
-                return false;
+                if (ZetaDia.Me.CommonData.AnimationState == AnimationState.Casting)
+                {
+                    _castWaitStartTime = DateTime.UtcNow;
+                    Core.Logger.Debug("Waiting while AnimationState.Casting");
+                    await Coroutine.Sleep(500);
+                    return false;
+                }
+                if (ZetaDia.Me.CommonData.AnimationState == AnimationState.Channeling)
+                {
+                    _castWaitStartTime = DateTime.UtcNow;
+                    Core.Logger.Debug("Waiting while  AnimationState.Channeling");
+                    await Coroutine.Sleep(500);
+                    return false;
+                }
             }
 
             if (ZetaDia.Globals.IsLoadingWorld)

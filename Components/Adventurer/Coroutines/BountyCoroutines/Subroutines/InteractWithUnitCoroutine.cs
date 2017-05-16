@@ -69,12 +69,17 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _interactAttemps = interactAttemps;
             _secondsToSleepAfterInteraction = secondsToSleepAfterInteraction;
             _secondsToTimeout = secondsToTimeout;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         private WaitTimer _timeout = new WaitTimer(TimeSpan.FromSeconds(30));
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:

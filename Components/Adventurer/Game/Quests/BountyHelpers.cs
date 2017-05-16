@@ -186,7 +186,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return !ZetaDia.Storage.Quests.Bounties.ToList().Any(b => b.Act == act && b.Info.State != QuestState.Completed);
         }
 
-        public static DiaGizmo GetPortalNearMarkerPosition(Vector3 position)
+        public static DiaGizmo GetPortalNearPosition(Vector3 position)
         {
             if (JustEnteredWorld)
             {
@@ -200,7 +200,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     .FirstOrDefault();
                 return gizmo;
             }
-        }
+        }    
 
         public static bool JustEnteredWorld
         {
@@ -289,6 +289,12 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return
                 ZetaDia.Storage.Quests.AllQuests.Any(
                     q => q.Quest == ActBountyFinishingQuests[act] && q.State == QuestState.Completed);
+        }
+
+        public static bool QuestNpcExistsNearMe(float radius)
+        {
+            return ZetaDia.Actors.GetActorsOfType<DiaObject>(true)
+                .Any(o => o != null && o.IsFullyValid() && o.Position.Distance(ZetaDia.Me.Position) <= radius && (o.CommonData.MarkerType == MarkerType.Exclamation || o.CommonData.MarkerType == MarkerType.Question));
         }
     }
 }

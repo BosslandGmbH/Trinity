@@ -2,6 +2,7 @@
 using Trinity.Framework;
 using System.Linq;
 using System.Threading.Tasks;
+using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Combat.Resources;
 using Trinity.Components.Coroutines;
 using Trinity.Framework.Actors.ActorTypes;
@@ -75,6 +76,15 @@ namespace Trinity.Components.Combat
             await UsePotion.Execute();
             await OpenTreasureBags.Execute();
             await VacuumItems.Execute();
+
+            /* If standing on/nearby a portal, then it is intended to get in there. 
+             * This could get better by comparing NearMarker's position with ObjectiveMarker position, 
+             * if equal; then there is definite intention to enter. So stop MainCombatTask -Seq */
+            if (!Core.Player.IsInRift && BountyHelpers.GetPortalNearPosition(ZetaDia.Me.Position) != null)
+            {
+                Core.Logger.Debug("MainCombatTask Waiting for portal interaction");
+                return false;
+            }
 
             var target = Weighting.WeightActors(Core.Targets);
 

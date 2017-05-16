@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq; using Trinity.Framework;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
@@ -65,6 +66,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _markerHash = markerHash;
             _markerType = type;
             _allowSafeZerg = zergAllowSafe;
+            Id = Guid.NewGuid();
+
         }
 
         public MoveToMapMarkerCoroutine(int questId, int worldId, int markerHash, int doesNothing, bool zergAllowSafe = true)
@@ -73,6 +76,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _worldId = worldId;
             _markerHash = markerHash;
             _allowSafeZerg = zergAllowSafe;
+            Id = Guid.NewGuid();
+
         }
 
         public MoveToMapMarkerCoroutine(int questId, int worldId, int markerHash, bool zergAllowSafe = true)
@@ -81,6 +86,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _worldId = worldId;
             _markerHash = markerHash;
             _allowSafeZerg = zergAllowSafe;
+            Id = Guid.NewGuid();
+
         }
 
         public MoveToMapMarkerCoroutine(int questId, int worldId, WorldMarkerType type, bool zergAllowSafe = true)
@@ -89,6 +96,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _worldId = worldId;
             _markerType = type;
             _allowSafeZerg = zergAllowSafe;
+            Id = Guid.NewGuid();
+
         }
 
         public MoveToMapMarkerCoroutine(int questId, int worldId, string name, bool zergAllowSafe = true)
@@ -97,10 +106,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _worldId = worldId;
             _markerName = name;
             _allowSafeZerg = zergAllowSafe;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             if (_allowSafeZerg && PluginSettings.Current.BountyZerg && BountyData != null &&
                 BountyData.QuestType != BountyQuestType.KillMonster)
             {
@@ -291,6 +305,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 {
                     _objectiveLocation = marker.Position;
                     Core.Logger.Log($"[MoveToMapMarker] Found the objective {marker}");
+                    ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
                 }
                 _objectiveLocation = marker?.Position ?? Vector3.Zero;
             }

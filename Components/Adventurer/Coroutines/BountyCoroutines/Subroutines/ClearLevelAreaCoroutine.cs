@@ -60,10 +60,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         {
             _questId = questId;
             _stopWhenExplored = stopWhenExplored;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             SafeZerg.Instance.DisableZerg();
             TrinityCombat.SetKillMode(1000);
 

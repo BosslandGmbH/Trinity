@@ -168,12 +168,12 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             if (!nodes.Any())
                 return Vector3.Zero;
 
-            if (nodes.Count == 2 && nodes.First().IsNextTo(nodes.Last()))
-            {
-                var start = nodes.First().NavigableCenter;
-                var end = nodes.Last().NavigableCenter;
-                return MathEx.CalculatePointFrom(start, end, start.Distance2D(end) / 2);
-            }
+            //if (nodes.Count == 2 && nodes.First().IsNextTo(nodes.Last()))
+            //{
+            //    var start = nodes.First().NavigableCenter;
+            //    var end = nodes.Last().NavigableCenter;
+            //    return MathEx.CalculatePointFrom(start, end, start.Distance2D(end) / 2);
+            //}
 
             var centerIndex = Math.Max(0, (int)Math.Round((double)nodes.Count / 2, 0)-1);
             var center = nodes.ElementAt(centerIndex);
@@ -317,7 +317,11 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public bool IsConnected(Vector3 position)
         {
-            return IsConnected(Core.Scenes.GetScene(position));
+            var targetScene = Core.Scenes.GetScene(position);
+            if (targetScene == Core.Scenes.CurrentScene)
+                return true;
+
+            return IsConnected(targetScene);
         }
 
         public bool IsConnected(WorldScene to)
@@ -326,8 +330,17 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             if (results == null || !results.Any())
                 return false;
 
-            results.ForEach(r => Core.Logger.Verbose(LogCategory.Movement, $"> {r.Scene.Name} {r.Direction} {ExitPositions[r.Direction]}"));
+            results.ForEach(r => Core.Logger.Verbose(LogCategory.Movement, $"> {r.Scene.Name} {r.Direction} {(ExitPositions.ContainsKey(r.Direction) ? ExitPositions[r.Direction].ToString() : "")}"));
             return true;
+        }
+
+        public IEnumerable<ConnectedSceneResult> GetConnectedScenes(WorldScene to)
+        {
+            var results = TryConnectScenes(this, to);
+            if (results == null || !results.Any())
+                return Enumerable.Empty<ConnectedSceneResult>();
+
+            return results;
         }
 
         private static List<ConnectedSceneResult> TryConnectScenes(WorldScene from, WorldScene to, WorldScene parent = null, HashSet<string> sceneHashes = null)

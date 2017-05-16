@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Framework;
 using Zeta.Bot.Coroutines;
@@ -8,7 +9,7 @@ using Zeta.Game;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
-    public sealed class TownPortalCoroutine
+    public sealed class TownPortalCoroutine : ICoroutine
     {
         private static TownPortalCoroutine _townPortalCoroutine;
 
@@ -27,6 +28,18 @@ namespace Trinity.Components.Adventurer.Coroutines
                 return true;
             }
             return false;
+        }
+
+        public TownPortalCoroutine()
+        {
+            Id = Guid.NewGuid();
+        }
+
+        public Guid Id { get; }
+
+        public void Reset()
+        {
+            
         }
 
         private Vector3 _startingPosition;
@@ -57,8 +70,10 @@ namespace Trinity.Components.Adventurer.Coroutines
             }
         }
 
-        private async Task<bool> GetCoroutine()
+        public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:

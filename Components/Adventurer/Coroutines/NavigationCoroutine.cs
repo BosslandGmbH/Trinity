@@ -22,7 +22,7 @@ using Zeta.Game.Internals.Actors.Gizmos;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
-    public sealed class NavigationCoroutine
+    public sealed class NavigationCoroutine : ICoroutine
     {
         private static NavigationCoroutine _navigationCoroutine;
         private static Vector3 _moveToDestination = Vector3.Zero;
@@ -132,10 +132,20 @@ namespace Trinity.Components.Adventurer.Coroutines
             {
                 _distance = 5;
             }
+            Id = Guid.NewGuid();
+        }
+
+        public Guid Id { get; }
+
+        void ICoroutine.Reset()
+        {
+            Reset();
         }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:

@@ -467,7 +467,7 @@ namespace Trinity.Routines.DemonHunter
             => new TrinityPower(Skills.DemonHunter.Caltrops);
 
         protected virtual TrinityPower Sentry(Vector3 position)
-            => new TrinityPower(Skills.DemonHunter.Sentry, 60f, position);
+            => new TrinityPower(Skills.DemonHunter.Sentry, 60f, position) { CastWhenBlocked = true };
 
         protected virtual TrinityPower MarkedForDeath(TrinityActor target)
             => new TrinityPower(Skills.DemonHunter.MarkedForDeath, 60f, target.AcdId);

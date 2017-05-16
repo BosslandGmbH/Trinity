@@ -1,4 +1,5 @@
-﻿using System.Linq; using Trinity.Framework;
+﻿using System;
+using System.Linq; using Trinity.Framework;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
@@ -6,6 +7,7 @@ using Trinity.Components.Adventurer.Game.Exploration;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Components.Adventurer.Util;
 using Trinity.Framework.Helpers;
+using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
@@ -68,10 +70,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _worldId = worldId;
             _actorId = actorId;
             _marker = marker;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:
@@ -212,17 +219,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 {
                     using (new PerformanceLogger("[KillUniqueMonster] Path to Objective Check", true))
                     {
-                        //if ((Navigator.GetNavigationProviderAs<Navigator>().CanFullyClientPathTo(_objectiveLocation)))
-                        //{
                         Core.Logger.Log("[KillUniqueMonster] Found the objective at distance {0}",
                             AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //}
-                        //else
-                        //{
-                        //    Core.Logger.Debug("[KillUniqueMonster] Found the objective at distance {0}, but cannot get a path to it.",
-                        //        AdvDia.MyPosition.Distance(_objectiveLocation));
-                        //    _objectiveLocation = Vector3.Zero;
-                        //}
+
+                        ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
                     }
                 }
             }

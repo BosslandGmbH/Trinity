@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq; using Trinity.Framework;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Actors;
@@ -67,6 +68,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _sceneName = sceneName;
             _position = position;
             _straightLinePath = straightLinePath;
+            Id = Guid.NewGuid();
+
         }
 
         public MoveToScenePositionCoroutine(int sceneSnoId, Vector3 position, bool straightLinePath = false)
@@ -74,6 +77,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _sceneSnoId = sceneSnoId;
             _position = position;
             _straightLinePath = straightLinePath;
+            Id = Guid.NewGuid();
 
         }
 
@@ -82,10 +86,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _sceneName = sceneName;
             _position = position;
             _straightLinePath = straightLinePath;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             if (PluginSettings.Current.BountyZerg && BountyData != null)
             {
                 SafeZerg.Instance.EnableZerg();
@@ -245,6 +254,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     {
                         _worldScene = scene;
                         _objectiveLocation = _worldScene.GetWorldPosition(_position);
+                        ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
                         Core.Logger.Debug($"Scan found target scene by SnoId {_worldScene.Name} ({_worldScene.SnoId}). Pos={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
                     }
                 }
@@ -261,7 +271,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     {
                         _worldScene = scene;
                         _objectiveLocation = _worldScene.GetWorldPosition(_position);
-                        VisualizerViewModel.DebugPosition = _objectiveLocation;
+                        ExplorationHelpers.SetExplorationPriority(_objectiveLocation);
                         Core.Logger.Debug($"Scan found target scene {_worldScene.Name} ({_worldScene.SnoId}). Pos={_objectiveLocation} Dist={_objectiveLocation.Distance(AdvDia.MyPosition)} Relative={_position}");
                     }
                 }
@@ -271,6 +281,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                     Core.Logger.Debug($"Unable to reach the scene, we need to uncover more intermediary scenes first");
                     _objectiveLocation = Vector3.Zero;
                 }
+
 
                 //else if (!string.IsNullOrEmpty(_tempSceneName))
                 //{

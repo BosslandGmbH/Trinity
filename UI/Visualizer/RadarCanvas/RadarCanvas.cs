@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using Trinity.Components.Adventurer.Coroutines;
@@ -26,9 +27,11 @@ using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals.SNO;
 using CombineType = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.CombineType;
+using Cursors = System.Windows.Input.Cursors;
 using DeathGates = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.DeathGates;
+using FlowDirection = System.Windows.FlowDirection;
 using LineSegment = System.Windows.Media.LineSegment;
-
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using RectangularRegion = Trinity.Components.Adventurer.Game.Exploration.SceneMapping.RectangularRegion;
 
 
@@ -927,10 +930,54 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
                 foreach (var node in _explorationNodes)
                 {
-                    var color = node.IsVisited ? PinkBrush : node.IsBlacklisted ? BlackBrush : node.HasEnoughNavigableCells ? GreenBrush : null;
+                    var weight = ExplorationHelpers.PriorityDistanceFormula(node);
+
+                    SolidColorBrush color;
+                    if (node.IsVisited)
+                        color = RadarResources.Node0;
+                    else if (node.IsBlacklisted)
+                        color = BlackBrush;
+                    else
+                    {
+                        if (weight < 0.05)
+                        {
+                            color = RadarResources.NodeA;
+                        }   
+                        else if (weight < 0.15)
+                        {
+                            color = RadarResources.NodeB;
+                        }
+                        else if (weight < 0.35)
+                        {
+                            color = RadarResources.NodeC;
+                        }
+                        else if (weight < 0.60)
+                        {
+                            color = RadarResources.NodeD;
+                        }
+                        else
+                        {
+                            color = RadarResources.GreenBrush;
+                        }
+                    }
+
+                    //var color = node.IsVisited ? PinkBrush :
+                    //    node.IsBlacklisted ? BlackBrush :
+                    //    node.HasEnoughNavigableCells && node.Priority ? DarkGreenBrush : 
+                    //    node.HasEnoughNavigableCells ? GreenBrush : null;
+
+                    var border = node.Priority ? RadarResources.BlackPen : null;
+
                     if (color != null)
                     {
-                        dc.DrawEllipse(color, null, node.NavigableCenter.ToCanvasPoint(), 5, 5);
+                        var point = node.NavigableCenter.ToCanvasPoint();
+                        dc.DrawEllipse(color, border, point, 5, 5);
+
+                        if (node.IsBlacklisted || node.IsVisited)
+                            continue;
+
+                        var weightLabel = $"{weight:.000}";
+                        DrawLabel(dc, canvas, weightLabel, point, color, 15, 12, 8);
                     }
                 }
             }
@@ -976,6 +1023,8 @@ namespace Trinity.UI.Visualizer.RadarCanvas
         internal static readonly SolidColorBrush OrangeRedBrush = Brushes.OrangeRed;
         internal static readonly SolidColorBrush RedBrush = Brushes.DarkRed;
         internal static readonly SolidColorBrush GreenBrush = Brushes.Green;
+        internal static readonly SolidColorBrush DarkGreenBrush = Brushes.DarkGreen;
+        
         internal static readonly SolidColorBrush BlackBrush = Brushes.Black;
         internal static readonly SolidColorBrush DarkGrayBrush = Brushes.DarkGray;
 
