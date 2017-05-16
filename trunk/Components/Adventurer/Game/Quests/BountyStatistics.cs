@@ -82,31 +82,30 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public static void Pulse()
         {
-            if (!Core.TrinityIsReady) return;
+            //if (!Core.TrinityIsReady) return;
 
-            if (PluginTime.ReadyToUse(_lastPulseTime, 2000))
-            {
-                GameId gameId = default(GameId);
-                _lastPulseTime = PluginTime.CurrentMillisecond;
-                if (gameId.FactoryId == 0)
-                    return;
+            //if (PluginTime.ReadyToUse(_lastPulseTime, 2000))
+            //{
+            //    GameId gameId = default(GameId);
+            //    _lastPulseTime = PluginTime.CurrentMillisecond;
+            //    if (gameId.FactoryId == 0)
+            //        return;
 
-                foreach (var bountyStatistic in Stats.Where(s => !(s.IsCompleted || s.IsFailed) && s.GameId == gameId))
-                {
-                    bountyStatistic.LastSeen = DateTime.UtcNow;
-                }
+            //    foreach (var bountyStatistic in Stats.Where(s => !(s.IsCompleted || s.IsFailed) && s.GameId == gameId))
+            //    {
+            //        bountyStatistic.LastSeen = DateTime.UtcNow;
+            //    }
 
-                var isTurnIn = BountyHelpers.IsAnyActTurninInProgress();
-            if (isTurnIn != _isTurnInInProgress)
-            {
-                _isTurnInInProgress = isTurnIn;
-                if (isTurnIn)
-                {
-                    CompletedBountyActs++;
-                }
-            }
-
-            }
+            //    var isTurnIn = BountyHelpers.IsAnyActTurninInProgress();
+            //    if (isTurnIn != _isTurnInInProgress)
+            //    {
+            //        _isTurnInInProgress = isTurnIn;
+            //        if (isTurnIn)
+            //        {
+            //            CompletedBountyActs++;
+            //        }
+            //    }
+            //}
         }
 
         public static IEnumerable<BountyStatistic> CurrentGame => Stats.Where(b => ZetaDia.Service.CurrentGameId == b.GameId);

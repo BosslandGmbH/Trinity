@@ -1,4 +1,5 @@
-﻿using Buddy.Coroutines;
+﻿using System;
+using Buddy.Coroutines;
 using System.Collections.Generic;
 using System.Linq;
 using Trinity.Framework;
@@ -12,7 +13,7 @@ using Zeta.Game.Internals.Actors.Gizmos;
 
 namespace Trinity.Components.Adventurer.Coroutines
 {
-    public sealed class WaypointCoroutine
+    public sealed class WaypointCoroutine : ICoroutine
     {
         private static WaypointCoroutine _waypointCoroutine;
         private static int _useWaypointWaypointNumber;
@@ -45,7 +46,7 @@ namespace Trinity.Components.Adventurer.Coroutines
             return false;
         }
 
-        private readonly int _waypointNumber;
+        private int _waypointNumber;
         private Vector3 _startingPosition;
 
         private enum States
@@ -80,10 +81,25 @@ namespace Trinity.Components.Adventurer.Coroutines
         private WaypointCoroutine(int waypointNumber)
         {
             _waypointNumber = waypointNumber;
+            Id = Guid.NewGuid();
+        }
+
+        Task<bool> ICoroutine.GetCoroutine()
+        {
+            return GetCoroutine();
+        }
+
+        public Guid Id { get; }
+
+        public void Reset()
+        {
+            _waypointNumber = 0;
         }
 
         private async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:

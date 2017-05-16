@@ -7,10 +7,20 @@
 
 <!--
 Clear the Flooded Cave (346071)
-Clear the Ancient Cave (346069)
+Clear the Ancient Cave (346069).
+The Cursed Glacier (369851)
+A2 - A Miner's Gold (345954)
 -->
-    <RunBounty questId="346071" />
+
+    <RunBounty questId="433099" />
+    <RunBounty questId="409897" />
+    <RunBounty questId="409895" />
+    <RunBounty questId="409884" />
+
+    <!--<RunBounty questId="346071" />
     <RunBounty questId="346069" />
+    <RunBounty questId="369851" />
+    <RunBounty questId="345954" />-->
     
     <!--<RunBounty questId="436280" name="Bounty: Last of the Barbarians" />
     <RunBounty questId="445044" name="Bounty: Binding Evil" />

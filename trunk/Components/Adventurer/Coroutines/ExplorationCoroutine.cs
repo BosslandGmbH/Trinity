@@ -63,10 +63,15 @@ namespace Trinity.Components.Adventurer.Coroutines
             _breakCondition = breakCondition;
             _allowReExplore = allowReExplore;
             _useIgnoreRegions = useIgnoreRegions;
+            Id = Guid.NewGuid();
         }
 
-        private async Task<bool> GetCoroutine()
+        public Guid Id { get; }
+
+        public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             if (_breakCondition != null && _breakCondition.Invoke())
             {
                 Core.Logger.Debug("BreakCondition Triggered");
@@ -241,10 +246,10 @@ namespace Trinity.Components.Adventurer.Coroutines
 
         public bool IsDone => State == States.Completed;
 
-        Task<bool> ISubroutine.GetCoroutine()
-        {
-            return GetCoroutine();
-        }
+        //Task<bool> ISubroutine.GetCoroutine()
+        //{
+        //    return GetCoroutine();
+        //}
 
         public void Reset()
         {

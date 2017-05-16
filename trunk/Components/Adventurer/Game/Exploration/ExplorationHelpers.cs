@@ -3,6 +3,8 @@ using Trinity.Framework;
 using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using Remit.Core;
+using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
 using Zeta.Game.Internals;
@@ -23,72 +25,86 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         //    }
         //}
 
+        public static Vector3 PriorityPosition { get; private set; }
+
+        public static void SetExplorationPriority(Vector3 position)
+        {
+            PriorityPosition = position;
+            VisualizerViewModel.DebugPosition = position;
+
+            foreach (var connection in Core.Scenes.CurrentScene.GetConnectedScenes(Core.Scenes.GetScene(position)))
+            {
+                connection.Scene.Nodes.ForEach(n => n.Priority = true);
+            }
+        }
+
+        public static bool IsInPriorityDirection(Vector3 position, double degreesDifferenceAllowed)
+        {
+            return MathUtil.GetRelativeAngularVariance(Core.Player.Position, PriorityPosition, position) <= degreesDifferenceAllowed;
+        }
+
         public static ExplorationNode NearestWeightedUnvisitedNode(HashSet<int> levelAreaIds, List<string> ignoreScenes = null)
         {
             var dynamicWorldId = AdvDia.CurrentWorldDynamicId;
             var myPosition = AdvDia.MyPosition;
             ExplorationNode node = null;
+
             using (new PerformanceLogger("NearestUnvisitedNodeLocation", true))
             {
                 var nearestNode = ExplorationGrid.Instance.GetNearestWalkableNodeToPosition(myPosition);
+
+                // Try for nodes nearby walkable nodes first
                 for (var i = 3; i <= 4; i++)
                 {
-                    var closestUnvisitedNode = ExplorationGrid.Instance.GetNeighbors(nearestNode, i).Cast<ExplorationNode>()
+                    var closestUnvisitedNodes = ExplorationGrid.Instance.GetNeighbors(nearestNode, i)
                         .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells &&
-                        n.DynamicWorldId == dynamicWorldId && levelAreaIds.Contains(n.LevelAreaId) &&
-                        Core.Grids.CanRayWalk(myPosition, n.NavigableCenter))
-                        .OrderBy(n => n.Distance)
-                        .FirstOrDefault();
+                                    n.DynamicWorldId == dynamicWorldId && levelAreaIds.Contains(n.LevelAreaId) && 
+                                    Core.Grids.CanRayWalk(myPosition, n.NavigableCenter))
+                        .OrderByDescending(n => n.Priority)
+                        .ThenBy(PriorityDistanceFormula);
+                        
+                    var closestUnvisitedNode = closestUnvisitedNodes.FirstOrDefault();
                     if (closestUnvisitedNode != null)
                     {
-                        node = closestUnvisitedNode;
+                        Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                        return closestUnvisitedNode;
                     }
                 }
 
-                if (node == null)
+                // Try any nearby nodes
+                for (var i = 3; i <= 6; i++)
                 {
-                    Core.Logger.Debug("Closest Unvisited Node Selection Failed");
-
-                    //var nodes = ExplorationGrid.Instance.WalkableNodes.Where(
-                    //    n =>
-                    //        !n.IsVisited && n.WorldId == dynamicWorldId &&
-                    //        n.NavigableCenter.DistanceSqr(myPosition) > 100 &&
-                    //        levelAreaIds.Contains(n.LevelAreaSnoIdId) && n.GetNeighbors(3).Count(nn => n.HasEnoughNavigableCells) > 1)
-                    //    .OrderBy(n =>  n.NavigableCenter.DistanceSqr(myPosition))
-                    //    .Take(10)
-                    //    .ToList();
-                    //if (nodes.Count > 1)
-                    //{
-                    //    var min = nodes.Min(n => n.NavigableCenter.Distance(myPosition));
-                    //    var max = nodes.Max(n => n.NavigableCenter.Distance(myPosition));
-                    //    var averageDistance = (max + min) / 2 + 1;
-                    //    node =
-                    //        nodes.Where(n => n.NavigableCenter.Distance(myPosition) < averageDistance)
-                    //            .OrderBy(n => n.UnvisitedWeight)
-                    //            .FirstOrDefault();
-                    //}
-                    //else if (nodes.Count == 1)
-                    //{
-                    //    node = nodes[0];
-                    //}
-                    node =
-                        ExplorationGrid.Instance.WalkableNodes
-                        .Where(n =>
-                            !n.IsIgnored &&
-                            !n.IsVisited &&
-                            !n.IsBlacklisted &&
-                            //n.DynamicWorldId == dynamicWorldId &&
-                            n.NavigableCenter.DistanceSqr(myPosition) > 50 //&& levelAreaIds.Contains(n.LevelAreaId)
-                            )
-                        .OrderByDescending(n => (1 / n.NavigableCenter.Distance(AdvDia.MyPosition)) * n.UnvisitedWeight)
+                    var closestUnvisitedNode = ExplorationGrid.Instance.GetNeighbors(nearestNode, i)
+                        .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells &&
+                        n.DynamicWorldId == dynamicWorldId && levelAreaIds.Contains(n.LevelAreaId))
+                        .OrderBy(PriorityDistanceFormula)
                         .FirstOrDefault();
-                    //if (node != null)
-                    //{
-                    //    Core.Logger.Debug("[ExplorationLogic] Picked a node using unvisited weighting method (Node Distance: {0}, Node Weight: {1})", node.NavigableCenter.Distance(AdvDia.MyPosition), node.UnvisitedWeight);
-                    //}
+
+                    if (closestUnvisitedNode != null)
+                    {
+                        Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                        return closestUnvisitedNode;
+                    }
                 }
 
-                if (node == null && ExplorationGrid.Instance.NearestNode != null && !levelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
+                // Try any univisted node by distance.
+                node = ExplorationGrid.Instance.WalkableNodes.Where(n =>
+                        !n.IsIgnored &&
+                        !n.IsVisited &&
+                        !n.IsBlacklisted &&
+                        //n.DynamicWorldId == dynamicWorldId &&
+                        n.NavigableCenter.DistanceSqr(myPosition) > 50 //&& levelAreaIds.Contains(n.LevelAreaId)
+                        )
+                    .OrderByDescending(PriorityDistanceFormula)
+                    .FirstOrDefault();
+
+                if (node != null)
+                {
+                    Core.Logger.Debug(LogCategory.Exploration, $"Explore: Selected Nearby Node: [{node.NavigableCenter.X},{node.NavigableCenter.Y},{node.NavigableCenter.Z}] Dist:{node.Distance} {(node.Priority ? "(Priority)" : "")} ");
+                    return node;
+                }
+
+                if (ExplorationGrid.Instance.NearestNode != null && !levelAreaIds.Contains(ZetaDia.CurrentLevelAreaSnoId))
                 {
                     Core.Logger.Debug("[ExplorationLogic] Adventurer is trying to find nodes that are not in this LevelArea. DefinedIds='{0}' CurrentId='{0}'. Marking current area's nodes as valid.", string.Join(", ", levelAreaIds), ZetaDia.CurrentLevelAreaSnoId);
                     levelAreaIds.Add(ZetaDia.CurrentLevelAreaSnoId);
@@ -101,7 +117,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                         !n.IsBlacklisted &&
                         n.DynamicWorldId == dynamicWorldId &&
                         n.NavigableCenter.DistanceSqr(myPosition) > 100)
-                    .OrderByDescending(n => (1 / n.NavigableCenter.Distance(AdvDia.MyPosition)) * n.UnvisitedWeight)
+                    .OrderByDescending(PriorityDistanceFormula)
                     .FirstOrDefault();
                 }
 
@@ -117,10 +133,18 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                                 AdvDia.MainGridProvider.Width != 0);
 
                     //Core.Scenes.Reset();
-                    //BotMain.PauseFor(TimeSpan.FromSeconds(1));
                 }
+
                 return node;
             }
+        }
+
+        public static float PriorityDistanceFormula(ExplorationNode n)
+        {
+            var directionMultiplier = IsInPriorityDirection(n.NavigableCenter, 30) ? 4 : 0;
+            var priorityMultiplier = n.Priority ? 2 : 0;
+            var baseDistanceFactor = 1/n.NavigableCenter.Distance(AdvDia.MyPosition);
+            return baseDistanceFactor * (n.UnvisitedWeight + directionMultiplier + priorityMultiplier);
         }
 
         /// <summary>

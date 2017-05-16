@@ -70,10 +70,15 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _actorSelector = actorSelector;
             _stopDistance = stopDistance;
             _markerId = markerId;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:

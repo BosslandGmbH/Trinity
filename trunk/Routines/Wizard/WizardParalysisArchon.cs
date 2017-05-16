@@ -152,7 +152,7 @@ namespace Trinity.Routines.Wizard
                     //Core.Logger.Log($"Building Tal'Rasha Set Stacks ({TalRashaStacks})");
 
                     var target = TargetUtil.GetBestClusterUnit(70f) ?? Player.Actor;
-                    if (!target.IsValid)
+                    if (target == null || !target.IsValid)
                         return DefaultBuffPower();
 
                     if (Skills.Wizard.FrostNova.CanCast())

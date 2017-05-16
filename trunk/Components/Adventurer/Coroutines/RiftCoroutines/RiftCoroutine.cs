@@ -969,7 +969,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     .FirstOrDefault();
             if (portal == null)
             {
-                portal = BountyHelpers.GetPortalNearMarkerPosition(_nextLevelPortalLocation);
+                portal = BountyHelpers.GetPortalNearPosition(_nextLevelPortalLocation);
                 if (portal == null)
                 {
                     if (_RiftType == RiftType.Nephalem && PluginSettings.Current.NephalemRiftFullExplore &&

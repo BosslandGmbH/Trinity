@@ -14,7 +14,17 @@ namespace Trinity.Modules
 {
     public class GameCleaner : Module
     {
+        protected override void OnGameChanged()
+        {
+            Clean();
+        }
+
         protected override void OnGameLeft()
+        {
+            Clean();
+        }
+
+        private static void Clean()
         {
             ZetaDia.Actors.Clear();
             ZetaDia.Actors.Update();

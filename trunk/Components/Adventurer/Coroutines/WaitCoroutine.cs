@@ -33,10 +33,15 @@ namespace Trinity.Components.Adventurer.Coroutines
             _worldId = worldSnoId;
             _questId = questId;
             _waitTime = TimeSpan.FromMilliseconds(milliSeconds);
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             SafeZerg.Instance.DisableZerg();
             if (_waitTimer == null)
             {

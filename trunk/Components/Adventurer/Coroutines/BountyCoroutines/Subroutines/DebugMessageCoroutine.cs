@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Game.Quests;
 using Trinity.Framework;
 
@@ -13,12 +14,17 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
         public DebugMessageCoroutine(string message)
         {
             _message = message;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public bool IsDone => _isDone;
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             Core.Logger.Warn(_message);
             _isDone = true;
             return true;

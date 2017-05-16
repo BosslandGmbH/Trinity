@@ -1,4 +1,5 @@
-﻿using Buddy.Coroutines;
+﻿using System;
+using Buddy.Coroutines;
 using System.Threading.Tasks;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
@@ -20,7 +21,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         public AttackCoroutine(int actorId)
         {
             _actorId = actorId;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         #region ISubroutine
 
@@ -72,6 +76,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         public virtual async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:

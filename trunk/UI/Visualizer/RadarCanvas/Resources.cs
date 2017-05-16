@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Trinity.Framework;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -50,6 +51,16 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
         static RadarResources()
         {
+            Node0 = new SolidColorBrush(Colors.DarkGray);
+            NodeA = new SolidColorBrush(Colors.Green);
+            NodeB = new SolidColorBrush(ControlPaint.Light(System.Drawing.Color.Green, 5).ToMediaColor());
+            NodeC = new SolidColorBrush(ControlPaint.Light(System.Drawing.Color.Green, 10).ToMediaColor());
+            NodeD = new SolidColorBrush(ControlPaint.Light(System.Drawing.Color.Green, 20).ToMediaColor());
+            //NodeA = new SolidColorBrush(ControlPaint.Light(System.Drawing.Color.Green, 25).ToMediaColor());
+            //NodeB = new SolidColorBrush(ControlPaint.Light(System.Drawing.Color.Green, 50).ToMediaColor());
+            //NodeC = new SolidColorBrush(ControlPaint.Light(System.Drawing.Color.Green, 75).ToMediaColor());
+            //NodeD = new SolidColorBrush(ControlPaint.Light(System.Drawing.Color.Green, 100).ToMediaColor());
+
 
             WalkableTerrainBorder = new Pen(Brushes.NavajoWhite, 0.3);
 
@@ -293,6 +304,16 @@ namespace Trinity.UI.Visualizer.RadarCanvas
 
             BlankNode = new SolidColorBrush(Colors.Transparent);
         }
+
+        public static SolidColorBrush Node0 { get; set; }
+
+        public static SolidColorBrush NodeD { get; set; }
+
+        public static SolidColorBrush NodeC { get; set; }
+
+        public static SolidColorBrush NodeB { get; set; }
+
+        public static SolidColorBrush NodeA { get; set; }
 
         public static RadialGradientBrush BuffedRegionBrush { get; set; }
 

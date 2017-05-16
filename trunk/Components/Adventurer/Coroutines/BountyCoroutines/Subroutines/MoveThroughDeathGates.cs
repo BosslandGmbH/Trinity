@@ -37,7 +37,10 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _questId = questId;
             _worldId = worldId;
             _gatesToUse = numberOfGatesToUse;
+            Id = Guid.NewGuid();
         }
+
+        public Guid Id { get; }
 
         public DeathGateScene CurrentGateScene { get; set; }
 
@@ -47,6 +50,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
         public async Task<bool> GetCoroutine()
         {
+            CoroutineCoodinator.Current = this;
+
             switch (State)
             {
                 case States.NotStarted:
