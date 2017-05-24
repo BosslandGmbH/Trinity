@@ -479,10 +479,10 @@
       <If condition="IsActiveQuest(80322) and IsActiveQuestStep(91) and CurrentWorldId == 70885">
         <Kill>
           <!-- Disrupt the Hidden Conclave Ritual -->
-        <SafeMoveTo questId="80322" stepId="91" x="2296" y="971" z="207" pathPrecision="5" />
-        <Interact questId="80322" stepId="91" actorId="176008" isPortal="True" destinationWorldId="50657" x="2287"
-                  y="969" z="208" />
-        <WaitTimer questId="80322" stepId="91" waitTime="1000" />
+          <SafeMoveTo questId="80322" stepId="91" x="2296" y="971" z="207" pathPrecision="5" />
+          <Interact questId="80322" stepId="91" actorId="176008" isPortal="True" destinationWorldId="50657" x="2287"
+                    y="969" z="208" />
+          <WaitTimer questId="80322" stepId="91" waitTime="1000" />
         </Kill>
       </If>
 
@@ -617,7 +617,7 @@
 
       <WaitTimer questId="80322" stepId="117" waitTime="2000" />
       <Interact questId="80322" stepId="117" actorId="85843" x="2157" y="1052" z="170" />
-      
+
       <!-- TalkTo Enchantress -->
       <WaitTimer questId="1" waitTime="5000" />
       <!-- click yes if you want enchantress, no if you don't -->
@@ -1687,15 +1687,16 @@
 
     <!-- Move to Ancient Waterway, new game  -->
     <If condition="IsActiveQuest(57335) and IsActiveQuestStep(52) and ZetaDia.IsInTown">
+      <LogMessage output="In town, taking portal to Eastern Flow Control" />
       <TakeWaypoint questId="57335" stepId="52" waypointNumber="6" />
       <WaitTimer questId="57335" stepId="52" waitTime="1000" />
+
     </If>
 
     <!-- Move to Ancient Waterway death handling from Dahlgur Oasis -->
     <If condition="IsActiveQuest(57335) and IsActiveQuestStep(52) and CurrentWorldId == 70885">
       <LogMessage output="Move to Ancient Waterway death handling from Dahlgur Oasis" />
 
-      <!--<TrinityExploreDungeon questId="57335" stepId="52" until="exitFound" exitNameHash="-152269522" boxSize="45" boxTolerance=".10" />-->
       <SafeMoveTo questId="57335" stepId="52" name="Ancient Waterway" pathPrecision="10" x="2791" y="4155" z="109" />
       <Interact questId="57335" stepId="52" actorId="176007" isPortal="True" destinationWorldId="59486" x="2791"
                 y="4155" z="109" />
@@ -1703,14 +1704,24 @@
       <WaitTimer questId="57335" stepId="52" waitTime="1000" />
     </If>
 
+    <!-- Enter the Ancient Waterway after taking Heartportal from town. -->
+    <!-- Standing in Eastern Flow Control - Use Portal to Ancient Waterway #1 -->
+    <If condition="IsActiveQuest(57335) and IsActiveQuestStep(52) and CurrentWorldId == 59486 
+        and InPoly([(163, 150), (134, 133), (96, 133), (68,148), (73,159), (95,183), (128,203), (139,203), (163,181)])">
+      <LogMessage output="Standing in Ancient Waterway - Use Portal to Waterlogged Passage #0" />
+      <SafeMoveTo questId="57335" stepId="52" x="81.03378" y="155.3222" z="50.27085" straightLinePathing="True" />
+      <Interact interactAttempts="0" questId="57335" stepId="52" actorId="176007" interactRange="10" isPortal="False"
+                x="81" y="155" z="50" straightLinePathing="True" />
+      <WaitTimer questId="57335" stepId="52" waitTime="1000" />
+    </If>
+    
     <!-- Enter the Waterlogged passage from the Ancient Waterway -->
     <!-- Standing in Eastern Flow Control - Use Portal to Ancient Waterway #1 -->
-    <If
-      condition="IsActiveQuest(57335) and IsActiveQuestStep(52) and CurrentWorldId == 59486 and 
-		(ActorExistsAt(ZetaDia.Me.ActorSnoId, 131, 144, 50, 20) or
-     ActorExistsAt(ZetaDia.Me.ActorSnoId, 135, 192, 50, 20) or
-     ActorExistsAt(ZetaDia.Me.ActorSnoId, 80, 156, 50, 20) or
-     ActorExistsAt(ZetaDia.Me.ActorSnoId, 96, 135, 50, 20))">
+    <If condition="IsActiveQuest(57335) and IsActiveQuestStep(52) and CurrentWorldId == 59486 and 
+		(AtLocation(131, 144, 50, 20) or
+     AtLocation(135, 192, 50, 20) or
+     AtLocation(80, 156, 50, 20) or
+     AtLocation(96, 135, 50, 20))">
       <LogMessage output="Standing in Ancient Waterway - Use Portal to Waterlogged Passage #1" />
       <SafeMoveTo questId="57335" stepId="52" x="81.03378" y="155.3222" z="50.27085" straightLinePathing="True" />
       <Interact interactAttempts="1" questId="57335" stepId="52" actorId="176007" interactRange="10" isPortal="True"
@@ -1721,7 +1732,7 @@
     <!-- Standing in Ancient Waterway - Use Portal to Waterlogged Passage #2 -->
     <If
       condition="IsActiveQuest(57335) and IsActiveQuestStep(52) and CurrentWorldId == 59486 and 
-			ActorExistsAt(ZetaDia.Me.ActorSnoId, 124, 139, 50, 15)">
+			AtLocation(124, 139, 50, 15)">
       <LogMessage output="Standing in Ancient Waterway - Use Portal to Waterlogged Passage #2" />
       <MoveToMapMarker questId="57335" stepId="52" actorId="176007" isPortal="True" destinationWorldId="59486"
                        markerNameHash="1825723588" interactRange="25" maxSearchDistance="20" x="73" y="154" z="48"
@@ -1733,8 +1744,8 @@
     <!-- Standing in Ancient Waterway - Use Portal to Waterlogged Passage #3 -->
     <If
       condition="IsActiveQuest(57335) and IsActiveQuestStep(52) and CurrentWorldId == 59486 
-					and (ActorExistsAt(ZetaDia.Me.ActorSnoId, 1,37,1, 60)
-					 or  ActorExistsAt(ZetaDia.Me.ActorSnoId, 61, 6, -15, 60))">
+					and (AtLocation(1,37,1, 60)
+					 or  AtLocation(61, 6, -15, 60))">
 
       <LogMessage output="Standing in Ancient Waterway - Use Portal to Waterlogged Passage #3" />
       <MoveToMapMarker questId="57335" stepId="52" actorId="176007" markerNameHash="1825723588" interactRange="25"
@@ -1745,9 +1756,9 @@
     <!-- Standing in Ancient Waterway - Use Portal to Waterlogged Passage #4 -->
     <If
       condition="IsActiveQuest(57335) and IsActiveQuestStep(52) and CurrentWorldId == 59486 
-					and (ActorExistsAt(ZetaDia.Me.ActorSnoId, 1, 37, 1, 60)
-					 or  ActorExistsAt(ZetaDia.Me.ActorSnoId, 61, 6, -15, 60)
-           or  ActorExistsAt(ZetaDia.Me.ActorSnoId, 63, 77, 1, 20))">
+					and (AtLocation(1, 37, 1, 60)
+					 or  AtLocation(61, 6, -15, 60)
+           or  AtLocation(63, 77, 1, 20))">
       <LogMessage output="Standing in Ancient Waterway - Use Portal to Waterlogged Passage #4" />
       <Interact questId="57335" stepId="52" actorId="176007" x="56" y="3" z="-16" interactRange="25" isPortal="True"
                 destinationWorldId="192687" straightLinePathing="True" />
@@ -2627,9 +2638,9 @@
     <If condition="IsActiveQuest(57337) and IsActiveQuestStep(3) and CurrentWorldId == 80589">
       <LogMessage
         output="Quest: Archives: The Black Soulstone (57337) MainQuest Step: PrepareKulle (3) Talk to Leah in the Terminus" />
-    
-        <Wait seconds="5" />
-    
+
+      <Wait seconds="5" />
+
       <!-- The Terminus -944805511 Exit Distance=17.07382 TextureId=102320 WorldSnoId=1999831045 Actor=g_Portal_Circle_ZoltRed-7189 (210760) -->
       <!--
       <MoveToMapMarker questId="57337" stepId="3" markerHash="-944805511" markerName="The Terminus" markerType="Exit" zerg="false"  worldSnoId="80589" levelAreaSnoId="80592" />
@@ -2873,9 +2884,9 @@
                 destinationWorldId="60756" x="241" y="557" z="7" />
       <!-- GoTo Imperial Palace -->
       <WaitTimer questId="57339" stepId="12" waitTime="5000" />
-    
-     <!-- Boss_Portal_Belial-39275 (159574) Boss_Portal_Belial Distance=8.245991 Type=Unknown Anim=0 Marker=Imperial Palace (1074632599, Exit) -->
-     <Interact questId="57339" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="159574" markerHash="1074632599" explore="false" maxRange="300" startAnimation="" x="247.03" y="558.23" z="7.98" sceneX="7.03" sceneY="78.23" sceneZ="7.98" sceneSnoId="86586" sceneName="a2dun_Cald_E03_S02" distance="5"  worldSnoId="109894" levelAreaSnoId="210451" />
+
+      <!-- Boss_Portal_Belial-39275 (159574) Boss_Portal_Belial Distance=8.245991 Type=Unknown Anim=0 Marker=Imperial Palace (1074632599, Exit) -->
+      <Interact questId="57339" stepId="12" interactAttempts="2" ignoreSanityChecks="true" delay="2" actorId="159574" markerHash="1074632599" explore="false" maxRange="300" startAnimation="" x="247.03" y="558.23" z="7.98" sceneX="7.03" sceneY="78.23" sceneZ="7.98" sceneSnoId="86586" sceneName="a2dun_Cald_E03_S02" distance="5"  worldSnoId="109894" levelAreaSnoId="210451" />
     </If>
     <If condition="IsActiveQuest(57339) and IsActiveQuestStep(12) and CurrentWorldId == 60756">
       <WaitTimer questId="57339" stepId="12" waitTime="5000" />
