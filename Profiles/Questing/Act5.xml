@@ -1228,7 +1228,8 @@
     </If>
 
     <!-- Quest: x1_Adria World: x1_Catacombs_Level01 LevelArea: x1_Catacombs_Level01 -->
-    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(10) and CurrentWorldId==283552">
+    <If condition="IsActiveQuest(257120) and IsActiveQuestStep(10) and CurrentWorldId == 283552">
+      <SafeMoveTo questId="257120" stepId="10" x="435.4597" y="370.1292" z="0.2221981" pathPrecision="5" pathPointLimit="250" statusText="Moving away from portal, it's evil!" />
       <TrinityExploreDungeon questId="257120" stepId="10" until="ExitFound" exitNameHash="1943159982" actorId="341572" pathPrecision="25" boxSize="25" boxTolerance="0.01" objectDistance="45">
         <PriorityScenes>
           <PriorityScene sceneName="Exit" />
