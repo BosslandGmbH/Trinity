@@ -1,4 +1,7 @@
 ﻿using Trinity.Framework.Helpers;
+using System.Linq;
+using Trinity.Framework;
+using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Controls;
@@ -90,9 +93,15 @@ namespace Trinity.Routines.Barbarian
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
+            var destinationPortal =
+                Core.Actors.FirstOrDefault(g => g.IsPortal && g.Position.DistanceSqr(destination) < 5 * 5);
+
+            if (destinationPortal != null)
+                return Walk(destination);
+
             // All walking is replaced by Whirlwind if possible.
 
-            if(Skills.Barbarian.Whirlwind.CanCast() && !Player.IsInTown)
+            if (Skills.Barbarian.Whirlwind.CanCast() && !Player.IsInTown)
             {
                 if (CurrentTarget == null || !(CurrentTarget.IsGizmo && CurrentTarget.RadiusDistance <= 1f))
                     return Whirlwind(destination);
