@@ -7,317 +7,310 @@ namespace Trinity.Framework.Reference
 {
     public static class Passives
     {
-        public class DemonHunter : FieldCollection<DemonHunter, Passive>
+        public class Monk : FieldCollection<Monk, Passive>
         {
             /// <summary>
-            /// Enemies hit by your Hatred spenders are Slowed by 80% for 2 seconds.
+            /// Damage you deal reduces enemy damage by 20% for 4 seconds. 
             /// </summary>
-            public static Passive ThrillOfTheHunt = new Passive
+            public static Passive Resolve = new Passive
             {
                 Index = 0,
-                Name = "Thrill of the Hunt",
-                SNOPower = SNOPower.DemonHunter_Passive_ThrillOfTheHunt,
+                Name = "Resolve",
+                SNOPower = SNOPower.Monk_Passive_Resolve,
                 RequiredLevel = 10,
-                Slug = "thrill-of-the-hunt",
-                IconSlug = "demonhunter_passive_thrillofthehunt",
-                Description = "Enemies hit by your Hatred spenders are Slowed by 80% for 2 seconds.",
-                Tooltip = "skill/demon-hunter/thrill-of-the-hunt",
-                Class = ActorClass.DemonHunter
+                Slug = "resolve",
+                IconSlug = "monk_passive_resolve",
+                Description = " Damage you deal reduces enemy damage by 20% for 4 seconds. ",
+                Tooltip = "skill/monk/resolve",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Whenever you use Vault, Shadow Power, Smoke Screen, or backflip with Evasive Fire you gain 60% movement speed for 2 seconds.
+            /// Increase movement speed by 10% . 
             /// </summary>
-            public static Passive TacticalAdvantage = new Passive
+            public static Passive FleetFooted = new Passive
             {
                 Index = 1,
-                Name = "Tactical Advantage",
-                SNOPower = SNOPower.DemonHunter_Passive_TacticalAdvantage,
+                Name = "Fleet Footed",
+                SNOPower = SNOPower.Monk_Passive_FleetFooted,
                 RequiredLevel = 10,
-                Slug = "tactical-advantage",
-                IconSlug = "demonhunter_passive_tacticaladvantage",
-                Description = "Whenever you use Vault, Shadow Power, Smoke Screen, or backflip with Evasive Fire you gain 60% movement speed for 2 seconds.",
-                Tooltip = "skill/demon-hunter/tactical-advantage",
-                Class = ActorClass.DemonHunter
+                Slug = "fleet-footed",
+                IconSlug = "monk_passive_fleetfooted",
+                Description = " Increase movement speed by 10% . ",
+                Tooltip = "skill/monk/fleet-footed",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Your maximum Hatred is increased by 25. In addition, gain 30 Hatred and 3 Discipline when you are healed by a health globe.
+            /// Increase maximum Spirit by 50 and increase Spirit Regeneration by 4 per second. Spirit fuels your defensive and offensive abilities. 
             /// </summary>
-            public static Passive BloodVengeance = new Passive
+            public static Passive ExaltedSoul = new Passive
             {
                 Index = 2,
-                Name = "Blood Vengeance",
-                SNOPower = SNOPower.DemonHunter_Passive_Vengeance,
+                Name = "Exalted Soul",
+                SNOPower = SNOPower.Monk_Passive_ExaltedSoul,
                 RequiredLevel = 13,
-                Slug = "blood-vengeance",
-                IconSlug = "demonhunter_passive_vengeance",
-                Description = "Your maximum Hatred is increased by 25. In addition, gain 30 Hatred and 3 Discipline when you are healed by a health globe.",
-                Tooltip = "skill/demon-hunter/blood-vengeance",
-                Class = ActorClass.DemonHunter
+                Slug = "exalted-soul",
+                IconSlug = "monk_passive_exaltedsoul",
+                Description =
+                    " Increase maximum Spirit by 50 and increase Spirit Regeneration by 4 per second. Spirit fuels your defensive and offensive abilities. ",
+                Tooltip = "skill/monk/exalted-soul",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// As long as there are no enemies within 10 yards, all damage is increased by 20%.
+            /// Every point of Spirit spent heals you for 429 Life. Heal amount is increased by 0.4% of your Health Globe Healing Bonus. 
             /// </summary>
-            public static Passive SteadyAim = new Passive
+            public static Passive Transcendence = new Passive
             {
                 Index = 3,
-                Name = "Steady Aim",
-                SNOPower = SNOPower.DemonHunter_Passive_SteadyAim,
+                Name = "Transcendence",
+                SNOPower = SNOPower.Monk_Passive_Transcendence,
                 RequiredLevel = 16,
-                Slug = "steady-aim",
-                IconSlug = "demonhunter_passive_steadyaim",
-                Description = "As long as there are no enemies within 10 yards, all damage is increased by 20%.",
-                Tooltip = "skill/demon-hunter/steady-aim",
-                Class = ActorClass.DemonHunter
+                Slug = "transcendence",
+                IconSlug = "monk_passive_transcendence",
+                Description =
+                    " Every point of Spirit spent heals you for 429 Life. Heal amount is increased by 0.4% of your Health Globe Healing Bonus. ",
+                Tooltip = "skill/monk/transcendence",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Increase damage against Slowed or Chilled enemies by 20%.
+            /// The Spirit costs of Mantra activation effects are reduced by 50% and you gain 4 Spirit every second when you have a Mantra learned. 
             /// </summary>
-            public static Passive CullTheWeak = new Passive
+            public static Passive ChantOfResonance = new Passive
             {
                 Index = 4,
-                Name = "Cull the Weak",
-                SNOPower = SNOPower.DemonHunter_Passive_CullTheWeak,
+                Name = "Chant of Resonance",
+                SNOPower = SNOPower.Monk_Passive_ChantOfResonance,
                 RequiredLevel = 20,
-                Slug = "cull-the-weak",
-                IconSlug = "demonhunter_passive_culltheweak",
-                Description = "Increase damage against Slowed or Chilled enemies by 20%.",
-                Tooltip = "skill/demon-hunter/cull-the-weak",
-                Class = ActorClass.DemonHunter
+                Slug = "chant-of-resonance",
+                IconSlug = "monk_passive_chantofresonance",
+                Description =
+                    " The Spirit costs of Mantra activation effects are reduced by 50% and you gain 4 Spirit every second when you have a Mantra learned. ",
+                Tooltip = "skill/monk/chant-of-resonance",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Your primary skills generate an additional 4 Hatred.
+            /// Dealing damage to enemies above 75% Life increases your attack speed by 30% for 4 seconds. 
             /// </summary>
-            public static Passive NightStalker = new Passive
+            public static Passive SeizeTheInitiative = new Passive
             {
                 Index = 5,
-                Name = "Night Stalker",
-                SNOPower = SNOPower.DemonHunter_Passive_NightStalker,
+                Name = "Seize the Initiative",
+                SNOPower = SNOPower.Monk_Passive_SeizeTheInitiative,
                 RequiredLevel = 20,
-                Slug = "night-stalker",
-                IconSlug = "demonhunter_passive_nightstalker",
-                Description = "Your primary skills generate an additional 4 Hatred.",
-                Tooltip = "skill/demon-hunter/night-stalker",
-                Class = ActorClass.DemonHunter
+                Slug = "seize-the-initiative",
+                IconSlug = "monk_passive_seizetheinitiative",
+                Description =
+                    " Dealing damage to enemies above 75% Life increases your attack speed by 30% for 4 seconds. ",
+                Tooltip = "skill/monk/seize-the-initiative",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Gain 3.0% Life regeneration per second for every second you remain stationary, stacking up to 3 times. This bonus is reset 5 seconds after you move.
+            /// While dual-wielding, you gain a 35% chance to dodge incoming attacks. While using a two-handed weapon, all Spirit generation is increased by 15% . 
             /// </summary>
-            public static Passive Brooding = new Passive
+            public static Passive TheGuardiansPath = new Passive
             {
                 Index = 6,
-                Name = "Brooding",
-                SNOPower = SNOPower.DemonHunter_Passive_Brooding,
-                RequiredLevel = 25,
-                Slug = "brooding",
-                IconSlug = "demonhunter_passive_brooding",
-                Description = "Gain 3.0% Life regeneration per second for every second you remain stationary, stacking up to 3 times. This bonus is reset 5 seconds after you move.",
-                Tooltip = "skill/demon-hunter/brooding",
-                Class = ActorClass.DemonHunter
+                Name = "The Guardian's Path",
+                SNOPower = SNOPower.Monk_Passive_TheGuardiansPath,
+                RequiredLevel = 24,
+                Slug = "the-guardians-path",
+                IconSlug = "monk_passive_theguardianspath",
+                Description =
+                    " While dual-wielding, you gain a 35% chance to dodge incoming attacks. While using a two-handed weapon, all Spirit generation is increased by 15% . ",
+                Tooltip = "skill/monk/the-guardians-path",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Increase movement speed by 20% for 4 seconds when you hit an enemy.
+            /// Reduce all non-Physical damage taken by 25% . 
             /// </summary>
-            public static Passive HotPursuit = new Passive
+            public static Passive SixthSense = new Passive
             {
                 Index = 7,
-                Name = "Hot Pursuit",
-                SNOPower = SNOPower.DemonHunter_Passive_HotPursuit,
+                Name = "Sixth Sense",
+                SNOPower = SNOPower.Monk_Passive_SixthSense,
                 RequiredLevel = 27,
-                Slug = "hot-pursuit",
-                IconSlug = "demonhunter_passive_hotpursuit",
-                Description = "Increase movement speed by 20% for 4 seconds when you hit an enemy.",
-                Tooltip = "skill/demon-hunter/hot-pursuit",
-                Class = ActorClass.DemonHunter
+                Slug = "sixth-sense",
+                IconSlug = "monk_passive_sixthsense",
+                Description = " Reduce all non-Physical damage taken by 25% . ",
+                Tooltip = "skill/monk/sixth-sense",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Gain a bonus based on your weapon type:Bow: 8% increased damageCrossbow: 50% Critical Hit DamageHand Crossbow: 5% Critical Hit Chance2nd Hand Crossbow: 1 Hatred per Second
+            /// Each enemy within 12 yards increases your damage by 4% , up to a maximum of 20% . 
             /// </summary>
-            public static Passive Archery = new Passive
+            public static Passive Determination = new Passive
             {
                 Index = 8,
-                Name = "Archery",
-                SNOPower = SNOPower.DemonHunter_Passive_Archery,
+                Name = "Determination",
+                SNOPower = SNOPower.p1_Monk_Passive_Provocation,
                 RequiredLevel = 30,
-                Slug = "archery",
-                IconSlug = "demonhunter_passive_archery",
-                Description = "Gain a bonus based on your weapon type:Bow: 8% increased damageCrossbow: 50% Critical Hit DamageHand Crossbow: 5% Critical Hit Chance2nd Hand Crossbow: 1 Hatred per Second",
-                Tooltip = "skill/demon-hunter/archery",
-                Class = ActorClass.DemonHunter
+                Slug = "determination",
+                IconSlug = "p1_monk_passive_provocation",
+                Description = " Each enemy within 12 yards increases your damage by 4% , up to a maximum of 20% . ",
+                Tooltip = "skill/monk/determination",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Enemies you Slow, Chill, or hit with Fan of Knives, Spike Trap, Caltrops, Grenades, and Sentry fire have their damage reduced by 25% for 5 seconds.
+            /// You deal 20% more damage to enemies that are Blind, Frozen or Stunned. 
             /// </summary>
-            public static Passive NumbingTraps = new Passive
+            public static Passive RelentlessAssault = new Passive
             {
                 Index = 9,
-                Name = "Numbing Traps",
-                SNOPower = SNOPower.DemonHunter_Passive_NumbingTraps,
+                Name = "Relentless Assault",
+                SNOPower = SNOPower.p1_Monk_Passive_RelentlessAssault,
                 RequiredLevel = 30,
-                Slug = "numbing-traps",
-                IconSlug = "demonhunter_passive_numbingtraps",
-                Description = "Enemies you Slow, Chill, or hit with Fan of Knives, Spike Trap, Caltrops, Grenades, and Sentry fire have their damage reduced by 25% for 5 seconds.",
-                Tooltip = "skill/demon-hunter/numbing-traps",
-                Class = ActorClass.DemonHunter
+                Slug = "relentless-assault",
+                IconSlug = "p1_monk_passive_relentlessassault",
+                Description = " You deal 20% more damage to enemies that are Blind, Frozen or Stunned. ",
+                Tooltip = "skill/monk/relentless-assault",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Reduce the Discipline cost of all skills by 10%. Increase your Armor and resistance to all damage types by 10%.Discipline is used to fuel many of your tactical and defensive skills.
+            /// Reduce all cooldowns by 20% . 
             /// </summary>
-            public static Passive Perfectionist = new Passive
+            public static Passive BeaconOfYtar = new Passive
             {
                 Index = 10,
-                Name = "Perfectionist",
-                SNOPower = SNOPower.DemonHunter_Passive_Perfectionist,
+                Name = "Beacon of Ytar",
+                SNOPower = SNOPower.Monk_Passive_BeaconOfYtar,
                 RequiredLevel = 35,
-                Slug = "perfectionist",
-                IconSlug = "demonhunter_passive_perfectionist",
-                Description = "Reduce the Discipline cost of all skills by 10%. Increase your Armor and resistance to all damage types by 10%.Discipline is used to fuel many of your tactical and defensive skills.",
-                Tooltip = "skill/demon-hunter/perfectionist",
-                Class = ActorClass.DemonHunter
+                Slug = "beacon-of-ytar",
+                IconSlug = "monk_passive_beaconofytar",
+                Description = " Reduce all cooldowns by 20% . ",
+                Tooltip = "skill/monk/beacon-of-ytar",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Increase the duration of your Caltrops, Marked for Death, Spike Trap, and Sentry by 100%.Increase the maximum number and charges of Sentries to 3 and number of Spike Traps to 3.
+            /// Increase the attack speed of Spirit Generators by 15% . 
             /// </summary>
-            public static Passive CustomEngineering = new Passive
+            public static Passive Alacrity = new Passive
             {
                 Index = 11,
-                Name = "Custom Engineering",
-                SNOPower = SNOPower.DemonHunter_Passive_CustomEngineering,
+                Name = "Alacrity",
+                SNOPower = SNOPower.Monk_Passive_GuidingLight,
                 RequiredLevel = 40,
-                Slug = "custom-engineering",
-                IconSlug = "demonhunter_passive_customengineering",
-                Description = "Increase the duration of your Caltrops, Marked for Death, Spike Trap, and Sentry by 100%.Increase the maximum number and charges of Sentries to 3 and number of Spike Traps to 3.",
-                Tooltip = "skill/demon-hunter/custom-engineering",
-                Class = ActorClass.DemonHunter
+                Slug = "alacrity",
+                IconSlug = "monk_passive_guidinglight",
+                Description = " Increase the attack speed of Spirit Generators by 15% . ",
+                Tooltip = "skill/monk/alacrity",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Increase the damage of grenades by 10%.Increase the explosion size of grenades by 20%.Upon death, you drop a giant grenade that explodes for 1000% weapon damage as Fire.
+            /// 40% of your single elemental resistances from items instead increases your resistance to all elements. 
             /// </summary>
-            public static Passive Grenadier = new Passive
+            public static Passive Harmony = new Passive
             {
                 Index = 12,
-                Name = "Grenadier",
-                SNOPower = SNOPower.DemonHunter_Passive_Grenadier,
+                Name = "Harmony",
+                SNOPower = SNOPower.p1_Monk_Passive_Harmony,
                 RequiredLevel = 45,
-                Slug = "grenadier",
-                IconSlug = "demonhunter_passive_grenadier",
-                Description = "Increase the damage of grenades by 10%.Increase the explosion size of grenades by 20%.Upon death, you drop a giant grenade that explodes for 1000% weapon damage as Fire.",
-                Tooltip = "skill/demon-hunter/grenadier",
-                Class = ActorClass.DemonHunter
+                Slug = "harmony",
+                IconSlug = "p1_monk_passive_harmony",
+                Description =
+                    " 40% of your single elemental resistances from items instead increases your resistance to all elements. ",
+                Tooltip = "skill/monk/harmony",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Gain 4% Critical Hit Chance every second. This bonus is reset 1 seconds after you successfully critically hit.
+            /// Each different Spirit Generator you use increases your damage by 10% for 3 seconds. 
             /// </summary>
-            public static Passive Sharpshooter = new Passive
+            public static Passive CombinationStrike = new Passive
             {
                 Index = 13,
-                Name = "Sharpshooter",
-                SNOPower = SNOPower.DemonHunter_Passive_Sharpshooter,
+                Name = "Combination Strike",
+                SNOPower = SNOPower.Monk_Passive_CombinationStrike,
                 RequiredLevel = 50,
-                Slug = "sharpshooter",
-                IconSlug = "demonhunter_passive_sharpshooter",
-                Description = "Gain 4% Critical Hit Chance every second. This bonus is reset 1 seconds after you successfully critically hit.",
-                Tooltip = "skill/demon-hunter/sharpshooter",
-                Class = ActorClass.DemonHunter
+                Slug = "combination-strike",
+                IconSlug = "monk_passive_combinationstrike",
+                Description = " Each different Spirit Generator you use increases your damage by 10% for 3 seconds. ",
+                Tooltip = "skill/monk/combination-strike",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Increase damage of rockets by 100%.In addition, you have a 20% chance to fire a homing rocket for 150% weapon damage when you attack.
+            /// When receiving fatal damage, you instead restore 35% Life and 35% Spirit and are immune to damage and control impairing effects for 2 seconds. This effect may occur once every 60 seconds. 
             /// </summary>
-            public static Passive Ballistics = new Passive
+            public static Passive NearDeathExperience = new Passive
             {
                 Index = 14,
-                Name = "Ballistics",
-                SNOPower = SNOPower.DemonHunter_Passive_Ballistics,
-                RequiredLevel = 55,
-                Slug = "ballistics",
-                IconSlug = "demonhunter_passive_ballistics",
-                Description = "Increase damage of rockets by 100%.In addition, you have a 20% chance to fire a homing rocket for 150% weapon damage when you attack.",
-                Tooltip = "skill/demon-hunter/ballistics",
-                Class = ActorClass.DemonHunter
+                Name = "Near Death Experience",
+                SNOPower = SNOPower.Monk_Passive_NearDeathExperience,
+                RequiredLevel = 58,
+                Slug = "near-death-experience",
+                IconSlug = "monk_passive_neardeathexperience",
+                Description =
+                    " When receiving fatal damage, you instead restore 35% Life and 35% Spirit and are immune to damage and control impairing effects for 2 seconds. This effect may occur once every 60 seconds. ",
+                Tooltip = "skill/monk/near-death-experience",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// Gain 18507 Life per Hit.Heal amount is increased by 75% of your Life per Kill.
+            /// Each ally affected by your Mantras increases your damage by 5% , up to a maximum of 20% , and has 5% increased damage. 
             /// </summary>
-            public static Passive Leech = new Passive
+            public static Passive Unity = new Passive
             {
                 Index = 15,
-                Name = "Leech",
-                SNOPower = SNOPower.X1_DemonHunter_Passive_Leech,
-                RequiredLevel = 60,
-                Slug = "leech",
-                IconSlug = "x1_demonhunter_passive_leech",
-                Description = "Gain 18507 Life per Hit.Heal amount is increased by 75% of your Life per Kill.",
-                Tooltip = "skill/demon-hunter/leech",
-                Class = ActorClass.DemonHunter
+                Name = "Unity",
+                SNOPower = SNOPower.X1_Monk_Passive_Unity,
+                RequiredLevel = 64,
+                Slug = "unity",
+                IconSlug = "x1_monk_passive_unity",
+                Description =
+                    " Each ally affected by your Mantras increases your damage by 5% , up to a maximum of 20% , and has 5% increased damage. ",
+                Tooltip = "skill/monk/unity",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// You deal 40% additional damage to enemies above 75% health.
+            /// Moving 25 yards increases your damage by 20% for 6 seconds. 
             /// </summary>
-            public static Passive Ambush = new Passive
+            public static Passive Momentum = new Passive
             {
                 Index = 16,
-                Name = "Ambush",
-                SNOPower = SNOPower.X1_DemonHunter_Passive_Ambush,
-                RequiredLevel = 64,
-                Slug = "ambush",
-                IconSlug = "x1_demonhunter_passive_ambush",
-                Description = "You deal 40% additional damage to enemies above 75% health.",
-                Tooltip = "skill/demon-hunter/ambush",
-                Class = ActorClass.DemonHunter
+                Name = "Momentum",
+                SNOPower = SNOPower.X1_Monk_Passive_Momentum,
+                RequiredLevel = 66,
+                Slug = "momentum",
+                IconSlug = "x1_monk_passive_momentum",
+                Description = " Moving 25 yards increases your damage by 20% for 6 seconds. ",
+                Tooltip = "skill/monk/momentum",
+                Class = ActorClass.Monk
             };
 
             /// <summary>
-            /// When you receive fatal damage, you instead vanish for 2 seconds and regenerate 50% of maximum Life.This effect may occur once every 60 seconds.
+            /// Every third hit from a Spirit Generator increases the damage of your next damaging Spirit Spender by 40% . 
             /// </summary>
-            public static Passive Awareness = new Passive
+            public static Passive MythicRhythm = new Passive
             {
                 Index = 17,
-                Name = "Awareness",
-                SNOPower = SNOPower.X1_DemonHunter_Passive_Awareness,
-                RequiredLevel = 66,
-                Slug = "awareness",
-                IconSlug = "x1_demonhunter_passive_awareness",
-                Description = "When you receive fatal damage, you instead vanish for 2 seconds and regenerate 50% of maximum Life.This effect may occur once every 60 seconds.",
-                Tooltip = "skill/demon-hunter/awareness",
-                Class = ActorClass.DemonHunter
-            };
-
-            /// <summary>
-            /// Gain 25% Critical Hit Chance against enemies who are more than 20 yards away from any other enemies.
-            /// </summary>
-            public static Passive SingleOut = new Passive
-            {
-                Index = 18,
-                Name = "Single Out",
-                SNOPower = SNOPower.X1_DemonHunter_Passive_SingleOut,
+                Name = "Mythic Rhythm",
+                SNOPower = SNOPower.X1_Monk_Passive_MythicRhythm,
                 RequiredLevel = 68,
-                Slug = "single-out",
-                IconSlug = "x1_demonhunter_passive_singleout",
-                Description = "Gain 25% Critical Hit Chance against enemies who are more than 20 yards away from any other enemies.",
-                Tooltip = "skill/demon-hunter/single-out",
-                Class = ActorClass.DemonHunter
+                Slug = "mythic-rhythm",
+                IconSlug = "x1_monk_passive_mythicrhythm",
+                Description =
+                    " Every third hit from a Spirit Generator increases the damage of your next damaging Spirit Spender by 40% . ",
+                Tooltip = "skill/monk/mythic-rhythm",
+                Class = ActorClass.Monk
             };
         }
 
         public class Crusader : FieldCollection<Crusader, Passive>
         {
             /// <summary>
-            /// You can wield a two-handed weapon in your main hand while bearing a shield in your off hand.Your damage dealt is reduced by 20%.
+            /// You can wield a two-handed weapon in your main hand while bearing a shield in your off hand. Your damage dealt is reduced by 20% . 
             /// </summary>
             public static Passive HeavenlyStrength = new Passive
             {
@@ -327,13 +320,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 10,
                 Slug = "heavenly-strength",
                 IconSlug = "x1_crusader_passive_heavenlystrength",
-                Description = "You can wield a two-handed weapon in your main hand while bearing a shield in your off hand.Your damage dealt is reduced by 20%.",
+                Description =
+                    " You can wield a two-handed weapon in your main hand while bearing a shield in your off hand. Your damage dealt is reduced by 20% . ",
                 Tooltip = "skill/crusader/heavenly-strength",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// While wielding a one-handed weapon, your attack speed is increased by 15% and all cooldowns are reduced by 15%.
+            /// While wielding a one-handed weapon , your attack speed is increased by 15% and all cooldowns are reduced by 15% . 
             /// </summary>
             public static Passive Fervor = new Passive
             {
@@ -343,13 +337,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 10,
                 Slug = "fervor",
                 IconSlug = "x1_crusader_passive_fervor",
-                Description = "While wielding a one-handed weapon, your attack speed is increased by 15% and all cooldowns are reduced by 15%.",
+                Description =
+                    " While wielding a one-handed weapon , your attack speed is increased by 15% and all cooldowns are reduced by 15% . ",
                 Tooltip = "skill/crusader/fervor",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Increase Life regeneration by 2682.Reduce all non-Physical damage taken by 20%.
+            /// Increase Life regeneration by 2682 . Reduce all non-Physical damage taken by 20% . 
             /// </summary>
             public static Passive Vigilant = new Passive
             {
@@ -359,13 +354,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 13,
                 Slug = "vigilant",
                 IconSlug = "x1_crusader_passive_vigilant",
-                Description = "Increase Life regeneration by 2682.Reduce all non-Physical damage taken by 20%.",
+                Description = " Increase Life regeneration by 2682 . Reduce all non-Physical damage taken by 20% . ",
                 Tooltip = "skill/crusader/vigilant",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Your primary skills generate an additional 3 Wrath.Increase maximum Wrath by 30.
+            /// Your primary skills generate an additional 3 Wrath. Increase maximum Wrath by 30 . 
             /// </summary>
             public static Passive Righteousness = new Passive
             {
@@ -375,13 +370,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 16,
                 Slug = "righteousness",
                 IconSlug = "x1_crusader_passive_righteousness",
-                Description = "Your primary skills generate an additional 3 Wrath.Increase maximum Wrath by 30.",
+                Description = " Your primary skills generate an additional 3 Wrath. Increase maximum Wrath by 30 . ",
                 Tooltip = "skill/crusader/righteousness",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Blocking an attack generates 6 Wrath.
+            /// Blocking an attack generates 6 Wrath. 
             /// </summary>
             public static Passive Insurmountable = new Passive
             {
@@ -391,13 +386,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 20,
                 Slug = "insurmountable",
                 IconSlug = "x1_crusader_passive_insurmountable",
-                Description = "Blocking an attack generates 6 Wrath.",
+                Description = " Blocking an attack generates 6 Wrath. ",
                 Tooltip = "skill/crusader/insurmountable",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Increase the attack speed of Punish, Slash, Smite and Justice by 15%.
+            /// Increase the attack speed of Punish, Slash, Smite and Justice by 15% . 
             /// </summary>
             public static Passive Fanaticism = new Passive
             {
@@ -407,13 +402,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 20,
                 Slug = "fanaticism",
                 IconSlug = "x1_crusader_passive_nephalemmajesty",
-                Description = "Increase the attack speed of Punish, Slash, Smite and Justice by 15%.",
+                Description = " Increase the attack speed of Punish, Slash, Smite and Justice by 15% . ",
                 Tooltip = "skill/crusader/fanaticism",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// When you receive fatal damage, you instead become immune to damage, gain 35% increased damage and gain 107284 Life per Kill for 5 seconds.This effect may occur once every 60 seconds.
+            /// When you receive fatal damage, you instead become immune to damage, gain 35% increased damage and gain 107284 Life per Kill for 5 seconds. This effect may occur once every 60 seconds. 
             /// </summary>
             public static Passive Indestructible = new Passive
             {
@@ -423,13 +418,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 25,
                 Slug = "indestructible",
                 IconSlug = "x1_crusader_passive_indestructible",
-                Description = "When you receive fatal damage, you instead become immune to damage, gain 35% increased damage and gain 107284 Life per Kill for 5 seconds.This effect may occur once every 60 seconds.",
+                Description =
+                    " When you receive fatal damage, you instead become immune to damage, gain 35% increased damage and gain 107284 Life per Kill for 5 seconds. This effect may occur once every 60 seconds. ",
                 Tooltip = "skill/crusader/indestructible",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// The amount of damage dealt by your weapon is increased by 10%.Whenever you deal Holy damage, you heal up to 1% of your total Life.
+            /// The amount of damage dealt by your weapon is increased by 10% . Whenever you deal Holy damage, you heal up to 1% of your total Life. 
             /// </summary>
             public static Passive HolyCause = new Passive
             {
@@ -439,13 +435,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 27,
                 Slug = "holy-cause",
                 IconSlug = "x1_crusader_passive_holycause",
-                Description = "The amount of damage dealt by your weapon is increased by 10%.Whenever you deal Holy damage, you heal up to 1% of your total Life.",
+                Description =
+                    " The amount of damage dealt by your weapon is increased by 10% . Whenever you deal Holy damage, you heal up to 1% of your total Life. ",
                 Tooltip = "skill/crusader/holy-cause",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Each point of Wrath spent heals you for 1341 Life.Heal amount is increased by 1% of your Health Globe Healing Bonus.
+            /// Each point of Wrath spent heals you for 1341 Life. Heal amount is increased by 1% of your Health Globe Healing Bonus. 
             /// </summary>
             public static Passive Wrathful = new Passive
             {
@@ -455,13 +452,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 30,
                 Slug = "wrathful",
                 IconSlug = "x1_crusader_passive_wrathful",
-                Description = "Each point of Wrath spent heals you for 1341 Life.Heal amount is increased by 1% of your Health Globe Healing Bonus.",
+                Description =
+                    " Each point of Wrath spent heals you for 1341 Life. Heal amount is increased by 1% of your Health Globe Healing Bonus. ",
                 Tooltip = "skill/crusader/wrathful",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Your Armor is increased by a percent equal to your shield&#39;s Block Chance.
+            /// Your Armor is increased by a percent equal to your shield&amp;#39;s Block Chance. 
             /// </summary>
             public static Passive DivineFortress = new Passive
             {
@@ -471,13 +469,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 30,
                 Slug = "divine-fortress",
                 IconSlug = "x1_crusader_passive_divinefortress",
-                Description = "Your Armor is increased by a percent equal to your shield&#39;s Block Chance.",
+                Description = " Your Armor is increased by a percent equal to your shield&amp;#39;s Block Chance. ",
                 Tooltip = "skill/crusader/divine-fortress",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// The cooldown of Steed Charge is reduced by 25% and Bombardment by 35%.Damage dealt by Phalanx is increased 20%.
+            /// The cooldown of Steed Charge is reduced by 25% and Bombardment by 35% . Damage dealt by Phalanx is increased 20% . 
             /// </summary>
             public static Passive LordCommander = new Passive
             {
@@ -487,13 +485,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 35,
                 Slug = "lord-commander",
                 IconSlug = "x1_crusader_passive_lordcommander",
-                Description = "The cooldown of Steed Charge is reduced by 25% and Bombardment by 35%.Damage dealt by Phalanx is increased 20%.",
+                Description =
+                    " The cooldown of Steed Charge is reduced by 25% and Bombardment by 35% . Damage dealt by Phalanx is increased 20% . ",
                 Tooltip = "skill/crusader/lord-commander",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// You can no longer Dodge, but your Block Chance is increased by 30%.
+            /// You can no longer Dodge, but your Block Chance is increased by 30% . 
             /// </summary>
             public static Passive HoldYourGround = new Passive
             {
@@ -503,13 +502,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 40,
                 Slug = "hold-your-ground",
                 IconSlug = "x1_crusader_passive_holdyourground",
-                Description = "You can no longer Dodge, but your Block Chance is increased by 30%.",
+                Description = " You can no longer Dodge, but your Block Chance is increased by 30% . ",
                 Tooltip = "skill/crusader/hold-your-ground",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Increase the duration of the Active effect of all Laws by 5 seconds.
+            /// Increase the duration of the Active effect of all Laws by 5 seconds. 
             /// </summary>
             public static Passive LongArmOfTheLaw = new Passive
             {
@@ -519,13 +518,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 45,
                 Slug = "long-arm-of-the-law",
                 IconSlug = "x1_crusader_passive_longarmofthelaw",
-                Description = "Increase the duration of the Active effect of all Laws by 5 seconds.",
+                Description = " Increase the duration of the Active effect of all Laws by 5 seconds. ",
                 Tooltip = "skill/crusader/long-arm-of-the-law",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Your Thorns is increased by 50%.
+            /// Your Thorns is increased by 50% . 
             /// </summary>
             public static Passive IronMaiden = new Passive
             {
@@ -535,13 +534,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 50,
                 Slug = "iron-maiden",
                 IconSlug = "x1_crusader_passive_ironmaiden",
-                Description = "Your Thorns is increased by 50%.",
+                Description = " Your Thorns is increased by 50% . ",
                 Tooltip = "skill/crusader/iron-maiden",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Whenever you successfully block, you gain 16093 Life.
+            /// Whenever you successfully block, you gain 16093 Life. 
             /// </summary>
             public static Passive Renewal = new Passive
             {
@@ -551,13 +550,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 55,
                 Slug = "renewal",
                 IconSlug = "x1_crusader_passive_renewal",
-                Description = "Whenever you successfully block, you gain 16093 Life.",
+                Description = " Whenever you successfully block, you gain 16093 Life. ",
                 Tooltip = "skill/crusader/renewal",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Gain 1.5% Strength for every gem socketed into your gear.
+            /// Gain 1.5% Strength for every gem socketed into your gear. 
             /// </summary>
             public static Passive Finery = new Passive
             {
@@ -567,13 +566,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 60,
                 Slug = "finery",
                 IconSlug = "x1_crusader_passive_finery",
-                Description = "Gain 1.5% Strength for every gem socketed into your gear.",
+                Description = " Gain 1.5% Strength for every gem socketed into your gear. ",
                 Tooltip = "skill/crusader/finery",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Increase the damage of Justice and Blessed Hammer by 20%.
+            /// Increase the damage of Justice and Blessed Hammer by 20% . 
             /// </summary>
             public static Passive Blunt = new Passive
             {
@@ -583,13 +582,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 65,
                 Slug = "blunt",
                 IconSlug = "x1_crusader_passive_blunt",
-                Description = "Increase the damage of Justice and Blessed Hammer by 20%.",
+                Description = " Increase the damage of Justice and Blessed Hammer by 20% . ",
                 Tooltip = "skill/crusader/blunt",
                 Class = ActorClass.Crusader
             };
 
             /// <summary>
-            /// Increase the damage of Punish, Shield Bash and Blessed Shield by 20%.Reduce the cooldown of Shield Glare by 30%.
+            /// Increase the damage of Punish, Shield Bash and Blessed Shield by 20% . Reduce the cooldown of Shield Glare by 30% . 
             /// </summary>
             public static Passive ToweringShield = new Passive
             {
@@ -599,7 +598,8 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 70,
                 Slug = "towering-shield",
                 IconSlug = "x1_crusader_passive_toweringshield",
-                Description = "Increase the damage of Punish, Shield Bash and Blessed Shield by 20%.Reduce the cooldown of Shield Glare by 30%.",
+                Description =
+                    " Increase the damage of Punish, Shield Bash and Blessed Shield by 20% . Reduce the cooldown of Shield Glare by 30% . ",
                 Tooltip = "skill/crusader/towering-shield",
                 Class = ActorClass.Crusader
             };
@@ -608,7 +608,7 @@ namespace Trinity.Framework.Reference
         public class WitchDoctor : FieldCollection<WitchDoctor, Passive>
         {
             /// <summary>
-            /// Reduce all damage taken by you and your pets by 15%.
+            /// Reduce all damage taken by you and your pets by 15% . 
             /// </summary>
             public static Passive JungleFortitude = new Passive
             {
@@ -618,13 +618,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 10,
                 Slug = "jungle-fortitude",
                 IconSlug = "witchdoctor_passive_junglefortitude",
-                Description = "Reduce all damage taken by you and your pets by 15%.",
+                Description = " Reduce all damage taken by you and your pets by 15% . ",
                 Tooltip = "skill/witch-doctor/jungle-fortitude",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// When an enemy dies within 20 yards, there is a 15% chance that a Zombie Dog will automatically emerge.The range of this effect is increased by your gold pickup radius.
+            /// When an enemy dies within 20 yards, there is a 15% chance that a Zombie Dog will automatically emerge. The range of this effect is increased by your gold pickup radius. 
             /// </summary>
             public static Passive CircleOfLife = new Passive
             {
@@ -634,13 +634,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 10,
                 Slug = "circle-of-life",
                 IconSlug = "witchdoctor_passive_circleoflife",
-                Description = "When an enemy dies within 20 yards, there is a 15% chance that a Zombie Dog will automatically emerge.The range of this effect is increased by your gold pickup radius.",
+                Description =
+                    " When an enemy dies within 20 yards, there is a 15% chance that a Zombie Dog will automatically emerge. The range of this effect is increased by your gold pickup radius. ",
                 Tooltip = "skill/witch-doctor/circle-of-life",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// Maximum Mana is increased by 10%. Regenerate 2% of your maximum Mana per second.Mana fuels your offensive and defensive skills.
+            /// Maximum Mana is increased by 10% . Regenerate 2% of your maximum Mana per second. Mana fuels your offensive and defensive skills. 
             /// </summary>
             public static Passive SpiritualAttunement = new Passive
             {
@@ -650,13 +651,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 13,
                 Slug = "spiritual-attunement",
                 IconSlug = "witchdoctor_passive_spiritualattunement",
-                Description = "Maximum Mana is increased by 10%. Regenerate 2% of your maximum Mana per second.Mana fuels your offensive and defensive skills.",
+                Description =
+                    " Maximum Mana is increased by 10% . Regenerate 2% of your maximum Mana per second. Mana fuels your offensive and defensive skills. ",
                 Tooltip = "skill/witch-doctor/spiritual-attunement",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// When you are healed by a health globe, gain 10% of your maximum Mana and 10% Intelligence for 15 seconds. The Intelligence bonus stacks up to 5 times.
+            /// When you are healed by a health globe, gain 10% of your maximum Mana and 10% Intelligence for 15 seconds. The Intelligence bonus stacks up to 5 times. 
             /// </summary>
             public static Passive GruesomeFeast = new Passive
             {
@@ -666,13 +668,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 16,
                 Slug = "gruesome-feast",
                 IconSlug = "witchdoctor_passive_gruesomefeast",
-                Description = "When you are healed by a health globe, gain 10% of your maximum Mana and 10% Intelligence for 15 seconds. The Intelligence bonus stacks up to 5 times.",
+                Description =
+                    " When you are healed by a health globe, gain 10% of your maximum Mana and 10% Intelligence for 15 seconds. The Intelligence bonus stacks up to 5 times. ",
                 Tooltip = "skill/witch-doctor/gruesome-feast",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// 20% of Mana costs are paid with Life. In addition, you regenerate 1% of your maximum Life per second.
+            /// 20% of Mana costs are paid with Life. In addition, you regenerate 1% of your maximum Life per second. 
             /// </summary>
             public static Passive BloodRitual = new Passive
             {
@@ -682,13 +685,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 20,
                 Slug = "blood-ritual",
                 IconSlug = "witchdoctor_passive_bloodritual",
-                Description = "20% of Mana costs are paid with Life. In addition, you regenerate 1% of your maximum Life per second.",
+                Description =
+                    " 20% of Mana costs are paid with Life. In addition, you regenerate 1% of your maximum Life per second. ",
                 Tooltip = "skill/witch-doctor/blood-ritual",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// When you deal Poison damage to an enemy, its damage is reduced by 25% for 5 seconds.
+            /// When you deal Poison damage to an enemy, its damage is reduced by 25% for 5 seconds. 
             /// </summary>
             public static Passive BadMedicine = new Passive
             {
@@ -698,13 +702,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 20,
                 Slug = "bad-medicine",
                 IconSlug = "witchdoctor_passive_badmedicine",
-                Description = "When you deal Poison damage to an enemy, its damage is reduced by 25% for 5 seconds.",
+                Description = " When you deal Poison damage to an enemy, its damage is reduced by 25% for 5 seconds. ",
                 Tooltip = "skill/witch-doctor/bad-medicine",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// Your Life, and that of your Zombie Dogs and Gargantuan are increased by 20%.Additionally, you may have 1 additional Zombie Dog summoned at one time.
+            /// Your Life, and that of your Zombie Dogs and Gargantuan are increased by 20% . Additionally, you may have 1 additional Zombie Dog summoned at one time. 
             /// </summary>
             public static Passive ZombieHandler = new Passive
             {
@@ -714,13 +718,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 24,
                 Slug = "zombie-handler",
                 IconSlug = "witchdoctor_passive_zombiehandler",
-                Description = "Your Life, and that of your Zombie Dogs and Gargantuan are increased by 20%.Additionally, you may have 1 additional Zombie Dog summoned at one time.",
+                Description =
+                    " Your Life, and that of your Zombie Dogs and Gargantuan are increased by 20% . Additionally, you may have 1 additional Zombie Dog summoned at one time. ",
                 Tooltip = "skill/witch-doctor/zombie-handler",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// All of your damage is increased by 20%, but your Mana costs are increased by 30%.
+            /// All of your damage is increased by 20% , but your Mana costs are increased by 30% . 
             /// </summary>
             public static Passive PierceTheVeil = new Passive
             {
@@ -730,13 +735,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 27,
                 Slug = "pierce-the-veil",
                 IconSlug = "witchdoctor_passive_piercetheveil",
-                Description = "All of your damage is increased by 20%, but your Mana costs are increased by 30%.",
+                Description = " All of your damage is increased by 20% , but your Mana costs are increased by 30% . ",
                 Tooltip = "skill/witch-doctor/pierce-the-veil",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// When you receive fatal damage, you automatically enter the spirit realm for 2 seconds and heal to 50% of your maximum Life. This effect may occur once every 60 seconds.
+            /// When you receive fatal damage, you automatically enter the spirit realm for 2 seconds and heal to 50% of your maximum Life. This effect may occur once every 60 seconds. 
             /// </summary>
             public static Passive SpiritVessel = new Passive
             {
@@ -746,13 +751,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 30,
                 Slug = "spirit-vessel",
                 IconSlug = "witchdoctor_passive_spiritvessel",
-                Description = "When you receive fatal damage, you automatically enter the spirit realm for 2 seconds and heal to 50% of your maximum Life. This effect may occur once every 60 seconds.",
+                Description =
+                    " When you receive fatal damage, you automatically enter the spirit realm for 2 seconds and heal to 50% of your maximum Life. This effect may occur once every 60 seconds. ",
                 Tooltip = "skill/witch-doctor/spirit-vessel",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// When you hit enemies with your spells, you have up to a 15% chance to summon a dagger-wielding Fetish to fight by your side for 60 seconds.
+            /// When you hit enemies with your spells, you have up to a 15% chance to summon a dagger-wielding Fetish to fight by your side for 60 seconds. 
             /// </summary>
             public static Passive FetishSycophants = new Passive
             {
@@ -762,13 +768,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 30,
                 Slug = "fetish-sycophants",
                 IconSlug = "witchdoctor_passive_fetishsycophants",
-                Description = "When you hit enemies with your spells, you have up to a 15% chance to summon a dagger-wielding Fetish to fight by your side for 60 seconds.",
+                Description =
+                    " When you hit enemies with your spells, you have up to a 15% chance to summon a dagger-wielding Fetish to fight by your side for 60 seconds. ",
                 Tooltip = "skill/witch-doctor/fetish-sycophants",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// Spirit spells return 100 Mana over 10 seconds.Spirit spells are: Haunt Horrify Mass Confusion Soul Harvest Spirit Barrage Spirit Walk
+            /// Spirit spells return 100 Mana over 10 seconds. Spirit spells are: Haunt Horrify Mass Confusion Soul Harvest Spirit Barrage Spirit Walk 
             /// </summary>
             public static Passive RushOfEssence = new Passive
             {
@@ -778,13 +785,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 36,
                 Slug = "rush-of-essence",
                 IconSlug = "witchdoctor_passive_rushofessence",
-                Description = "Spirit spells return 100 Mana over 10 seconds.Spirit spells are: Haunt Horrify Mass Confusion Soul Harvest Spirit Barrage Spirit Walk",
+                Description =
+                    " Spirit spells return 100 Mana over 10 seconds. Spirit spells are: Haunt Horrify Mass Confusion Soul Harvest Spirit Barrage Spirit Walk ",
                 Tooltip = "skill/witch-doctor/rush-of-essence",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// When you deal damage with Corpse Spiders, Firebomb, Plague of Toads, or Poison Dart, your Mana regeneration is increased by 40% for 5 seconds.
+            /// When you deal damage with Corpse Spiders, Firebomb, Plague of Toads, or Poison Dart, your Mana regeneration is increased by 40% for 5 seconds. 
             /// </summary>
             public static Passive VisionQuest = new Passive
             {
@@ -794,13 +802,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 40,
                 Slug = "vision-quest",
                 IconSlug = "witchdoctor_passive_visionquest",
-                Description = "When you deal damage with Corpse Spiders, Firebomb, Plague of Toads, or Poison Dart, your Mana regeneration is increased by 40% for 5 seconds.",
+                Description =
+                    " When you deal damage with Corpse Spiders, Firebomb, Plague of Toads, or Poison Dart, your Mana regeneration is increased by 40% for 5 seconds. ",
                 Tooltip = "skill/witch-doctor/vision-quest",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// While you have a Gargantuan, Zombie Dog, or Fetish summoned, your movement speed is increased by 15%.This bonus is increased to 30% while a Gargantuan, Zombie Dog, or Fetish is not in combat.Additionally, you may have 1 additional Zombie Dog summoned at one time.
+            /// While you have a Gargantuan, Zombie Dog, or Fetish summoned, your movement speed is increased by 15% . This bonus is increased to 30% while a Gargantuan, Zombie Dog, or Fetish is not in combat. Additionally, you may have 1 additional Zombie Dog summoned at one time. 
             /// </summary>
             public static Passive FierceLoyalty = new Passive
             {
@@ -810,13 +819,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 45,
                 Slug = "fierce-loyalty",
                 IconSlug = "witchdoctor_passive_fierceloyalty",
-                Description = "While you have a Gargantuan, Zombie Dog, or Fetish summoned, your movement speed is increased by 15%.This bonus is increased to 30% while a Gargantuan, Zombie Dog, or Fetish is not in combat.Additionally, you may have 1 additional Zombie Dog summoned at one time.",
+                Description =
+                    " While you have a Gargantuan, Zombie Dog, or Fetish summoned, your movement speed is increased by 15% . This bonus is increased to 30% while a Gargantuan, Zombie Dog, or Fetish is not in combat. Additionally, you may have 1 additional Zombie Dog summoned at one time. ",
                 Tooltip = "skill/witch-doctor/fierce-loyalty",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// Gain 1% of your maximum Life and Mana and reduce the cooldown of all of your skills by 1 second when an enemy dies within 20 yards.The range is extended by items that increase your gold pickup radius.
+            /// Gain 1% of your maximum Life and Mana and reduce the cooldown of all of your skills by 1 second when an enemy dies within 20 yards. The range is extended by items that increase your gold pickup radius. 
             /// </summary>
             public static Passive GraveInjustice = new Passive
             {
@@ -826,13 +836,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 50,
                 Slug = "grave-injustice",
                 IconSlug = "witchdoctor_passive_graveinjustice",
-                Description = "Gain 1% of your maximum Life and Mana and reduce the cooldown of all of your skills by 1 second when an enemy dies within 20 yards.The range is extended by items that increase your gold pickup radius.",
+                Description =
+                    " Gain 1% of your maximum Life and Mana and reduce the cooldown of all of your skills by 1 second when an enemy dies within 20 yards. The range is extended by items that increase your gold pickup radius. ",
                 Tooltip = "skill/witch-doctor/grave-injustice",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// Reduce the cooldowns of the following skills by 25%: Hex Gargantuan Fetish Army Summon Zombie Dogs Big Bad Voodoo Mass Confusion
+            /// Reduce the cooldowns of the following skills by 25% : Hex Gargantuan Fetish Army Summon Zombie Dogs Big Bad Voodoo Mass Confusion 
             /// </summary>
             public static Passive TribalRites = new Passive
             {
@@ -842,23 +853,24 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 55,
                 Slug = "tribal-rites",
                 IconSlug = "witchdoctor_passive_tribalrites",
-                Description = "Reduce the cooldowns of the following skills by 25%: Hex Gargantuan Fetish Army Summon Zombie Dogs Big Bad Voodoo Mass Confusion",
+                Description =
+                    " Reduce the cooldowns of the following skills by 25% : Hex Gargantuan Fetish Army Summon Zombie Dogs Big Bad Voodoo Mass Confusion ",
                 Tooltip = "skill/witch-doctor/tribal-rites",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// You deal 25% additional damage to enemies within 20 yards.
+            /// You deal 25% additional damage to enemies within 20 yards. 
             /// </summary>
             public static Passive ConfidenceRitual = new Passive
             {
                 Index = 15,
                 Name = "Confidence Ritual",
-                SNOPower = SNOPower.X1_WitchDoctor_Passive_ConfidenceRitual,//X1_Witchdoctor_Passive_ConfidenceRitual,
+                SNOPower = SNOPower.X1_WitchDoctor_Passive_ConfidenceRitual,
                 RequiredLevel = 60,
                 Slug = "confidence-ritual",
                 IconSlug = "x1_witchdoctor_passive_confidenceritual",
-                Description = "You deal 25% additional damage to enemies within 20 yards.",
+                Description = " You deal 25% additional damage to enemies within 20 yards. ",
                 Tooltip = "skill/witch-doctor/confidence-ritual",
                 Class = ActorClass.Witchdoctor
             };
@@ -874,29 +886,31 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 64,
                 Slug = "creeping-death",
                 IconSlug = "witchdoctor_passive_creepingdeath",
-                Description = "Your Haunt, Locust Swarm and the damage amplification from Piranhas last almost forever. ",
+                Description =
+                    " Your Haunt, Locust Swarm and the damage amplification from Piranhas last almost forever. ",
                 Tooltip = "skill/witch-doctor/creeping-death",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// You and your pets gain 120 Physical, Poison, Fire, and Cold Resistance for every enemy within 20 yards.The range of this effect is increased by your gold pickup radius.
+            /// You and your pets gain 120 Physical, Poison, Fire, and Cold Resistance for every enemy within 20 yards. The range of this effect is increased by your gold pickup radius. 
             /// </summary>
             public static Passive SwamplandAttunement = new Passive
             {
                 Index = 17,
                 Name = "Swampland Attunement",
-                SNOPower = SNOPower.Witchdoctor_Passive_PhysicalAttunement,//Witchdoctor_Passive_Physicalattunement,
+                SNOPower = SNOPower.Witchdoctor_Passive_PhysicalAttunement,
                 RequiredLevel = 66,
                 Slug = "swampland-attunement",
                 IconSlug = "witchdoctor_passive_physicalattunement",
-                Description = "You and your pets gain 120 Physical, Poison, Fire, and Cold Resistance for every enemy within 20 yards.The range of this effect is increased by your gold pickup radius.",
+                Description =
+                    " You and your pets gain 120 Physical, Poison, Fire, and Cold Resistance for every enemy within 20 yards. The range of this effect is increased by your gold pickup radius. ",
                 Tooltip = "skill/witch-doctor/swampland-attunement",
                 Class = ActorClass.Witchdoctor
             };
 
             /// <summary>
-            /// The damage of your Zombie Dogs and Gargantuan is increased by 50%.Additionally, you may have 1 additional Zombie Dog summoned at one time.
+            /// The damage of your Zombie Dogs and Gargantuan is increased by 50% . Additionally, you may have 1 additional Zombie Dog summoned at one time. 
             /// </summary>
             public static Passive MidnightFeast = new Passive
             {
@@ -906,16 +920,336 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 68,
                 Slug = "midnight-feast",
                 IconSlug = "witchdoctor_passive_midnightfeast",
-                Description = "The damage of your Zombie Dogs and Gargantuan is increased by 50%.Additionally, you may have 1 additional Zombie Dog summoned at one time.",
+                Description =
+                    " The damage of your Zombie Dogs and Gargantuan is increased by 50% . Additionally, you may have 1 additional Zombie Dog summoned at one time. ",
                 Tooltip = "skill/witch-doctor/midnight-feast",
                 Class = ActorClass.Witchdoctor
+            };
+        }
+
+        public class DemonHunter : FieldCollection<DemonHunter, Passive>
+        {
+            /// <summary>
+            /// Enemies hit by your Hatred spenders are Slowed by 80% for 2 seconds. 
+            /// </summary>
+            public static Passive ThrillOfTheHunt = new Passive
+            {
+                Index = 0,
+                Name = "Thrill of the Hunt",
+                SNOPower = SNOPower.DemonHunter_Passive_ThrillOfTheHunt,
+                RequiredLevel = 10,
+                Slug = "thrill-of-the-hunt",
+                IconSlug = "demonhunter_passive_thrillofthehunt",
+                Description = " Enemies hit by your Hatred spenders are Slowed by 80% for 2 seconds. ",
+                Tooltip = "skill/demon-hunter/thrill-of-the-hunt",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Whenever you use Vault, Shadow Power, Smoke Screen, or backflip with Evasive Fire you gain 60% movement speed for 2 seconds. 
+            /// </summary>
+            public static Passive TacticalAdvantage = new Passive
+            {
+                Index = 1,
+                Name = "Tactical Advantage",
+                SNOPower = SNOPower.DemonHunter_Passive_TacticalAdvantage,
+                RequiredLevel = 10,
+                Slug = "tactical-advantage",
+                IconSlug = "demonhunter_passive_tacticaladvantage",
+                Description =
+                    " Whenever you use Vault, Shadow Power, Smoke Screen, or backflip with Evasive Fire you gain 60% movement speed for 2 seconds. ",
+                Tooltip = "skill/demon-hunter/tactical-advantage",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Your maximum Hatred is increased by 25 . In addition, gain 30 Hatred and 3 Discipline when you are healed by a health globe. 
+            /// </summary>
+            public static Passive BloodVengeance = new Passive
+            {
+                Index = 2,
+                Name = "Blood Vengeance",
+                SNOPower = SNOPower.DemonHunter_Passive_Vengeance,
+                RequiredLevel = 13,
+                Slug = "blood-vengeance",
+                IconSlug = "demonhunter_passive_vengeance",
+                Description =
+                    " Your maximum Hatred is increased by 25 . In addition, gain 30 Hatred and 3 Discipline when you are healed by a health globe. ",
+                Tooltip = "skill/demon-hunter/blood-vengeance",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// As long as there are no enemies within 10 yards, all damage is increased by 20% . 
+            /// </summary>
+            public static Passive SteadyAim = new Passive
+            {
+                Index = 3,
+                Name = "Steady Aim",
+                SNOPower = SNOPower.DemonHunter_Passive_SteadyAim,
+                RequiredLevel = 16,
+                Slug = "steady-aim",
+                IconSlug = "demonhunter_passive_steadyaim",
+                Description = " As long as there are no enemies within 10 yards, all damage is increased by 20% . ",
+                Tooltip = "skill/demon-hunter/steady-aim",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Increase damage against Slowed or Chilled enemies by 20% . 
+            /// </summary>
+            public static Passive CullTheWeak = new Passive
+            {
+                Index = 4,
+                Name = "Cull the Weak",
+                SNOPower = SNOPower.DemonHunter_Passive_CullTheWeak,
+                RequiredLevel = 20,
+                Slug = "cull-the-weak",
+                IconSlug = "demonhunter_passive_culltheweak",
+                Description = " Increase damage against Slowed or Chilled enemies by 20% . ",
+                Tooltip = "skill/demon-hunter/cull-the-weak",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Your primary skills generate an additional 4 Hatred. 
+            /// </summary>
+            public static Passive NightStalker = new Passive
+            {
+                Index = 5,
+                Name = "Night Stalker",
+                SNOPower = SNOPower.DemonHunter_Passive_NightStalker,
+                RequiredLevel = 20,
+                Slug = "night-stalker",
+                IconSlug = "demonhunter_passive_nightstalker",
+                Description = " Your primary skills generate an additional 4 Hatred. ",
+                Tooltip = "skill/demon-hunter/night-stalker",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Gain 3.0% Life regeneration per second for every second you remain stationary, stacking up to 3 times. This bonus is reset 5 seconds after you move. 
+            /// </summary>
+            public static Passive Brooding = new Passive
+            {
+                Index = 6,
+                Name = "Brooding",
+                SNOPower = SNOPower.DemonHunter_Passive_Brooding,
+                RequiredLevel = 25,
+                Slug = "brooding",
+                IconSlug = "demonhunter_passive_brooding",
+                Description =
+                    " Gain 3.0% Life regeneration per second for every second you remain stationary, stacking up to 3 times. This bonus is reset 5 seconds after you move. ",
+                Tooltip = "skill/demon-hunter/brooding",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Increase movement speed by 20% for 4 seconds when you hit an enemy. 
+            /// </summary>
+            public static Passive HotPursuit = new Passive
+            {
+                Index = 7,
+                Name = "Hot Pursuit",
+                SNOPower = SNOPower.DemonHunter_Passive_HotPursuit,
+                RequiredLevel = 27,
+                Slug = "hot-pursuit",
+                IconSlug = "demonhunter_passive_hotpursuit",
+                Description = " Increase movement speed by 20% for 4 seconds when you hit an enemy. ",
+                Tooltip = "skill/demon-hunter/hot-pursuit",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Gain a bonus based on your weapon type: Bow: 8% increased damage Crossbow: 50% Critical Hit Damage Hand Crossbow: 5% Critical Hit Chance 2nd Hand Crossbow: 1 Hatred per Second 
+            /// </summary>
+            public static Passive Archery = new Passive
+            {
+                Index = 8,
+                Name = "Archery",
+                SNOPower = SNOPower.DemonHunter_Passive_Archery,
+                RequiredLevel = 30,
+                Slug = "archery",
+                IconSlug = "demonhunter_passive_archery",
+                Description =
+                    " Gain a bonus based on your weapon type: Bow: 8% increased damage Crossbow: 50% Critical Hit Damage Hand Crossbow: 5% Critical Hit Chance 2nd Hand Crossbow: 1 Hatred per Second ",
+                Tooltip = "skill/demon-hunter/archery",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Enemies you Slow, Chill, or hit with Fan of Knives, Spike Trap, Caltrops, Grenades, and Sentry fire have their damage reduced by 25% for 5 seconds. 
+            /// </summary>
+            public static Passive NumbingTraps = new Passive
+            {
+                Index = 9,
+                Name = "Numbing Traps",
+                SNOPower = SNOPower.DemonHunter_Passive_NumbingTraps,
+                RequiredLevel = 30,
+                Slug = "numbing-traps",
+                IconSlug = "demonhunter_passive_numbingtraps",
+                Description =
+                    " Enemies you Slow, Chill, or hit with Fan of Knives, Spike Trap, Caltrops, Grenades, and Sentry fire have their damage reduced by 25% for 5 seconds. ",
+                Tooltip = "skill/demon-hunter/numbing-traps",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Reduce the Discipline cost of all skills by 10% . Increase your Armor and resistance to all damage types by 10% . Discipline is used to fuel many of your tactical and defensive skills. 
+            /// </summary>
+            public static Passive Perfectionist = new Passive
+            {
+                Index = 10,
+                Name = "Perfectionist",
+                SNOPower = SNOPower.DemonHunter_Passive_Perfectionist,
+                RequiredLevel = 35,
+                Slug = "perfectionist",
+                IconSlug = "demonhunter_passive_perfectionist",
+                Description =
+                    " Reduce the Discipline cost of all skills by 10% . Increase your Armor and resistance to all damage types by 10% . Discipline is used to fuel many of your tactical and defensive skills. ",
+                Tooltip = "skill/demon-hunter/perfectionist",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Increase the duration of your Caltrops, Marked for Death, Spike Trap, and Sentry by 100% . Increase the maximum number and charges of Sentries to 3 and number of Spike Traps to 5 . 
+            /// </summary>
+            public static Passive CustomEngineering = new Passive
+            {
+                Index = 11,
+                Name = "Custom Engineering",
+                SNOPower = SNOPower.DemonHunter_Passive_CustomEngineering,
+                RequiredLevel = 40,
+                Slug = "custom-engineering",
+                IconSlug = "demonhunter_passive_customengineering",
+                Description =
+                    " Increase the duration of your Caltrops, Marked for Death, Spike Trap, and Sentry by 100% . Increase the maximum number and charges of Sentries to 3 and number of Spike Traps to 5 . ",
+                Tooltip = "skill/demon-hunter/custom-engineering",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Increase the damage of grenades by 10% . Increase the explosion size of grenades by 20% . Upon death, you drop a giant grenade that explodes for 1000% weapon damage as Fire. 
+            /// </summary>
+            public static Passive Grenadier = new Passive
+            {
+                Index = 12,
+                Name = "Grenadier",
+                SNOPower = SNOPower.DemonHunter_Passive_Grenadier,
+                RequiredLevel = 45,
+                Slug = "grenadier",
+                IconSlug = "demonhunter_passive_grenadier",
+                Description =
+                    " Increase the damage of grenades by 10% . Increase the explosion size of grenades by 20% . Upon death, you drop a giant grenade that explodes for 1000% weapon damage as Fire. ",
+                Tooltip = "skill/demon-hunter/grenadier",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Gain 4% Critical Hit Chance every second. This bonus is reset 1 seconds after you successfully critically hit. 
+            /// </summary>
+            public static Passive Sharpshooter = new Passive
+            {
+                Index = 13,
+                Name = "Sharpshooter",
+                SNOPower = SNOPower.DemonHunter_Passive_Sharpshooter,
+                RequiredLevel = 50,
+                Slug = "sharpshooter",
+                IconSlug = "demonhunter_passive_sharpshooter",
+                Description =
+                    " Gain 4% Critical Hit Chance every second. This bonus is reset 1 seconds after you successfully critically hit. ",
+                Tooltip = "skill/demon-hunter/sharpshooter",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Increase damage of rockets by 100% . In addition, you have a 20% chance to fire a homing rocket for 150% weapon damage when you attack. 
+            /// </summary>
+            public static Passive Ballistics = new Passive
+            {
+                Index = 14,
+                Name = "Ballistics",
+                SNOPower = SNOPower.DemonHunter_Passive_Ballistics,
+                RequiredLevel = 55,
+                Slug = "ballistics",
+                IconSlug = "demonhunter_passive_ballistics",
+                Description =
+                    " Increase damage of rockets by 100% . In addition, you have a 20% chance to fire a homing rocket for 150% weapon damage when you attack. ",
+                Tooltip = "skill/demon-hunter/ballistics",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Gain 18507 Life per Hit. Heal amount is increased by 75% of your Life per Kill. 
+            /// </summary>
+            public static Passive Leech = new Passive
+            {
+                Index = 15,
+                Name = "Leech",
+                SNOPower = SNOPower.X1_DemonHunter_Passive_Leech,
+                RequiredLevel = 60,
+                Slug = "leech",
+                IconSlug = "x1_demonhunter_passive_leech",
+                Description = " Gain 18507 Life per Hit. Heal amount is increased by 75% of your Life per Kill. ",
+                Tooltip = "skill/demon-hunter/leech",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// You deal 40% additional damage to enemies above 75% health. 
+            /// </summary>
+            public static Passive Ambush = new Passive
+            {
+                Index = 16,
+                Name = "Ambush",
+                SNOPower = SNOPower.X1_DemonHunter_Passive_Ambush,
+                RequiredLevel = 64,
+                Slug = "ambush",
+                IconSlug = "x1_demonhunter_passive_ambush",
+                Description = " You deal 40% additional damage to enemies above 75% health. ",
+                Tooltip = "skill/demon-hunter/ambush",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// When you receive fatal damage, you instead vanish for 2 seconds and regenerate 50% of maximum Life. This effect may occur once every 60 seconds. 
+            /// </summary>
+            public static Passive Awareness = new Passive
+            {
+                Index = 17,
+                Name = "Awareness",
+                SNOPower = SNOPower.X1_DemonHunter_Passive_Awareness,
+                RequiredLevel = 66,
+                Slug = "awareness",
+                IconSlug = "x1_demonhunter_passive_awareness",
+                Description =
+                    " When you receive fatal damage, you instead vanish for 2 seconds and regenerate 50% of maximum Life. This effect may occur once every 60 seconds. ",
+                Tooltip = "skill/demon-hunter/awareness",
+                Class = ActorClass.DemonHunter
+            };
+
+            /// <summary>
+            /// Gain 25% Critical Hit Chance against enemies who are more than 20 yards away from any other enemies. 
+            /// </summary>
+            public static Passive SingleOut = new Passive
+            {
+                Index = 18,
+                Name = "Single Out",
+                SNOPower = SNOPower.X1_DemonHunter_Passive_SingleOut,
+                RequiredLevel = 68,
+                Slug = "single-out",
+                IconSlug = "x1_demonhunter_passive_singleout",
+                Description =
+                    " Gain 25% Critical Hit Chance against enemies who are more than 20 yards away from any other enemies. ",
+                Tooltip = "skill/demon-hunter/single-out",
+                Class = ActorClass.DemonHunter
             };
         }
 
         public class Barbarian : FieldCollection<Barbarian, Passive>
         {
             /// <summary>
-            /// When you are healed by a health globe, gain 2% Life regeneration per second and 4% increased movement speed for 15 seconds. This bonus stacks up to 5 times.
+            /// When you are healed by a health globe, gain 2% Life regeneration per second and 4% increased movement speed for 15 seconds. This bonus stacks up to 5 times. 
             /// </summary>
             public static Passive PoundOfFlesh = new Passive
             {
@@ -925,13 +1259,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 10,
                 Slug = "pound-of-flesh",
                 IconSlug = "barbarian_passive_poundofflesh",
-                Description = "When you are healed by a health globe, gain 2% Life regeneration per second and 4% increased movement speed for 15 seconds. This bonus stacks up to 5 times.",
+                Description =
+                    " When you are healed by a health globe, gain 2% Life regeneration per second and 4% increased movement speed for 15 seconds. This bonus stacks up to 5 times. ",
                 Tooltip = "skill/barbarian/pound-of-flesh",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// You deal 40% additional damage to enemies below 30% health.
+            /// You deal 40% additional damage to enemies below 30% health. 
             /// </summary>
             public static Passive Ruthless = new Passive
             {
@@ -941,13 +1276,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 10,
                 Slug = "ruthless",
                 IconSlug = "barbarian_passive_ruthless",
-                Description = "You deal 40% additional damage to enemies below 30% health.",
+                Description = " You deal 40% additional damage to enemies below 30% health. ",
                 Tooltip = "skill/barbarian/ruthless",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Fatal damage instead reduces you to 15% Life. For 3 seconds afterward, you take 95% reduced damage and are immune to all control-impairing effects.This effect may occur once every 60 seconds.
+            /// Fatal damage instead reduces you to 15% Life. For 3 seconds afterward, you take 95% reduced damage and are immune to all control-impairing effects. This effect may occur once every 60 seconds. 
             /// </summary>
             public static Passive NervesOfSteel = new Passive
             {
@@ -957,13 +1292,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 13,
                 Slug = "nerves-of-steel",
                 IconSlug = "barbarian_passive_nervesofsteel",
-                Description = "Fatal damage instead reduces you to 15% Life. For 3 seconds afterward, you take 95% reduced damage and are immune to all control-impairing effects.This effect may occur once every 60 seconds.",
+                Description =
+                    " Fatal damage instead reduces you to 15% Life. For 3 seconds afterward, you take 95% reduced damage and are immune to all control-impairing effects. This effect may occur once every 60 seconds. ",
                 Tooltip = "skill/barbarian/nerves-of-steel",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Gain a bonus based on the weapon type of your main hand weapon:Swords/Daggers: 8% increased damageMaces/Axes: 5% Critical Hit ChancePolearms/Spears: 8% attack speedMighty Weapons: 2 Fury per hit
+            /// Gain a bonus based on the weapon type of your main hand weapon: Swords/Daggers: 8% increased damage Maces/Axes: 5% Critical Hit Chance Polearms/Spears: 8% attack speed Mighty Weapons: 2 Fury per hit 
             /// </summary>
             public static Passive WeaponsMaster = new Passive
             {
@@ -973,13 +1309,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 16,
                 Slug = "weapons-master",
                 IconSlug = "barbarian_passive_weaponsmaster",
-                Description = "Gain a bonus based on the weapon type of your main hand weapon:Swords/Daggers: 8% increased damageMaces/Axes: 5% Critical Hit ChancePolearms/Spears: 8% attack speedMighty Weapons: 2 Fury per hit",
+                Description =
+                    " Gain a bonus based on the weapon type of your main hand weapon: Swords/Daggers: 8% increased damage Maces/Axes: 5% Critical Hit Chance Polearms/Spears: 8% attack speed Mighty Weapons: 2 Fury per hit ",
                 Tooltip = "skill/barbarian/weapons-master",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// The duration of your shouts is doubled. After using a shout you and all allies within 100 yards regenerate 3% of maximum Life per second for 120 seconds.Your shouts are: Battle Rage Threatening Shout War Cry
+            /// The duration of your shouts is doubled. After using a shout you and all allies within 100 yards regenerate 3% of maximum Life per second for 120 seconds. Your shouts are: Battle Rage Threatening Shout War Cry 
             /// </summary>
             public static Passive InspiringPresence = new Passive
             {
@@ -989,13 +1326,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 20,
                 Slug = "inspiring-presence",
                 IconSlug = "barbarian_passive_inspiringpresence",
-                Description = "The duration of your shouts is doubled. After using a shout you and all allies within 100 yards regenerate 3% of maximum Life per second for 120 seconds.Your shouts are: Battle Rage Threatening Shout War Cry",
+                Description =
+                    " The duration of your shouts is doubled. After using a shout you and all allies within 100 yards regenerate 3% of maximum Life per second for 120 seconds. Your shouts are: Battle Rage Threatening Shout War Cry ",
                 Tooltip = "skill/barbarian/inspiring-presence",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// You deal 25% additional damage while near maximum Fury.
+            /// You deal 25% additional damage while near maximum Fury. 
             /// </summary>
             public static Passive BerserkerRage = new Passive
             {
@@ -1005,13 +1343,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 20,
                 Slug = "berserker-rage",
                 IconSlug = "barbarian_passive_berserkerrage",
-                Description = "You deal 25% additional damage while near maximum Fury.",
+                Description = " You deal 25% additional damage while near maximum Fury. ",
                 Tooltip = "skill/barbarian/berserker-rage",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Each point of Fury spent heals you for 966 Life.Heal amount is increased by 1% of your Health Globe Healing Bonus.
+            /// Each point of Fury spent heals you for 966 Life. Heal amount is increased by 1% of your Health Globe Healing Bonus. 
             /// </summary>
             public static Passive Bloodthirst = new Passive
             {
@@ -1021,13 +1359,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 24,
                 Slug = "bloodthirst",
                 IconSlug = "barbarian_passive_bloodthirst",
-                Description = "Each point of Fury spent heals you for 966 Life.Heal amount is increased by 1% of your Health Globe Healing Bonus.",
+                Description =
+                    " Each point of Fury spent heals you for 966 Life. Heal amount is increased by 1% of your Health Globe Healing Bonus. ",
                 Tooltip = "skill/barbarian/bloodthirst",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Increase all Fury generation by 10%.Increase maximum Fury by 20.Fury is used to fuel your most powerful attacks.
+            /// Increase all Fury generation by 10% . Increase maximum Fury by 20 . Fury is used to fuel your most powerful attacks. 
             /// </summary>
             public static Passive Animosity = new Passive
             {
@@ -1037,13 +1376,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 27,
                 Slug = "animosity",
                 IconSlug = "barbarian_passive_animosity",
-                Description = "Increase all Fury generation by 10%.Increase maximum Fury by 20.Fury is used to fuel your most powerful attacks.",
+                Description =
+                    " Increase all Fury generation by 10% . Increase maximum Fury by 20 . Fury is used to fuel your most powerful attacks. ",
                 Tooltip = "skill/barbarian/animosity",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Reduce all non-Physical damage by 20%. When you take damage from a ranged or elemental attack, you have a chance to gain 2 Fury.
+            /// Reduce all non-Physical damage by 20% . When you take damage from a ranged or elemental attack, you have a chance to gain 2 Fury. 
             /// </summary>
             public static Passive Superstition = new Passive
             {
@@ -1053,13 +1393,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 30,
                 Slug = "superstition",
                 IconSlug = "barbarian_passive_superstition",
-                Description = "Reduce all non-Physical damage by 20%. When you take damage from a ranged or elemental attack, you have a chance to gain 2 Fury.",
+                Description =
+                    " Reduce all non-Physical damage by 20% . When you take damage from a ranged or elemental attack, you have a chance to gain 2 Fury. ",
                 Tooltip = "skill/barbarian/superstition",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Increase Armor by 25%.Increase Thorns by 100%.
+            /// Increase Armor by 25% . Increase Thorns by 100% . 
             /// </summary>
             public static Passive ToughAsNails = new Passive
             {
@@ -1069,13 +1410,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 30,
                 Slug = "tough-as-nails",
                 IconSlug = "barbarian_passive_toughasnails",
-                Description = "Increase Armor by 25%.Increase Thorns by 100%.",
+                Description = " Increase Armor by 25% . Increase Thorns by 100% . ",
                 Tooltip = "skill/barbarian/tough-as-nails",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Increase the damage of Weapon Throw, Seismic Slam, Ancient Spear, and Avalanche by 30% against enemies more than 15 yards away from you.
+            /// Increase the damage of Weapon Throw, Seismic Slam, Ancient Spear, and Avalanche by 30% against enemies more than 15 yards away from you. 
             /// </summary>
             public static Passive NoEscape = new Passive
             {
@@ -1085,13 +1426,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 35,
                 Slug = "no-escape",
                 IconSlug = "barbarian_passive_noescape",
-                Description = "Increase the damage of Weapon Throw, Seismic Slam, Ancient Spear, and Avalanche by 30% against enemies more than 15 yards away from you.",
+                Description =
+                    " Increase the damage of Weapon Throw, Seismic Slam, Ancient Spear, and Avalanche by 30% against enemies more than 15 yards away from you. ",
                 Tooltip = "skill/barbarian/no-escape",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// While below 35% Life, all skills cost 50% less Fury, Life per Fury Spent is doubled, and all damage taken is reduced by 50%.
+            /// While below 35% Life, all skills cost 50% less Fury, Life per Fury Spent is doubled, and all damage taken is reduced by 50% . 
             /// </summary>
             public static Passive Relentless = new Passive
             {
@@ -1101,13 +1443,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 40,
                 Slug = "relentless",
                 IconSlug = "barbarian_passive_relentless",
-                Description = "While below 35% Life, all skills cost 50% less Fury, Life per Fury Spent is doubled, and all damage taken is reduced by 50%.",
+                Description =
+                    " While below 35% Life, all skills cost 50% less Fury, Life per Fury Spent is doubled, and all damage taken is reduced by 50% . ",
                 Tooltip = "skill/barbarian/relentless",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// As long as there are 3 enemies within 12 yards, all of your damage is increased by 20%.
+            /// As long as there are 3 enemies within 12 yards, all of your damage is increased by 20% . 
             /// </summary>
             public static Passive Brawler = new Passive
             {
@@ -1117,13 +1460,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 45,
                 Slug = "brawler",
                 IconSlug = "barbarian_passive_brawler",
-                Description = "As long as there are 3 enemies within 12 yards, all of your damage is increased by 20%.",
+                Description =
+                    " As long as there are 3 enemies within 12 yards, all of your damage is increased by 20% . ",
                 Tooltip = "skill/barbarian/brawler",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// The duration of control-impairing effects on you are reduced by 50%. In addition, whenever a Stun, Freeze, Fear, or Immobilize is cast on you, you have a chance to recover 20% of your maximum Life.
+            /// The duration of control-impairing effects on you are reduced by 50% . In addition, whenever a Stun, Freeze, Fear, or Immobilize is cast on you, you have a chance to recover 20% of your maximum Life. 
             /// </summary>
             public static Passive Juggernaut = new Passive
             {
@@ -1133,13 +1477,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 50,
                 Slug = "juggernaut",
                 IconSlug = "barbarian_passive_juggernaut",
-                Description = "The duration of control-impairing effects on you are reduced by 50%. In addition, whenever a Stun, Freeze, Fear, or Immobilize is cast on you, you have a chance to recover 20% of your maximum Life.",
+                Description =
+                    " The duration of control-impairing effects on you are reduced by 50% . In addition, whenever a Stun, Freeze, Fear, or Immobilize is cast on you, you have a chance to recover 20% of your maximum Life. ",
                 Tooltip = "skill/barbarian/juggernaut",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// You no longer degenerate Fury. Instead, you generate 2 Fury every 1 seconds.
+            /// You no longer degenerate Fury. Instead, you generate 2 Fury every 1 seconds. 
             /// </summary>
             public static Passive Unforgiving = new Passive
             {
@@ -1149,13 +1494,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 55,
                 Slug = "unforgiving",
                 IconSlug = "barbarian_passive_unforgiving",
-                Description = "You no longer degenerate Fury. Instead, you generate 2 Fury every 1 seconds.",
+                Description = " You no longer degenerate Fury. Instead, you generate 2 Fury every 1 seconds. ",
                 Tooltip = "skill/barbarian/unforgiving",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Reduce the cooldowns of your: Earthquake by 15 seconds. Call of the Ancients by 30 seconds. Wrath of the Berserker by 30 seconds.
+            /// Reduce the cooldowns of your: Earthquake by 15 seconds. Call of the Ancients by 30 seconds. Wrath of the Berserker by 30 seconds. 
             /// </summary>
             public static Passive BoonOfBulkathos = new Passive
             {
@@ -1165,13 +1510,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 60,
                 Slug = "boon-of-bulkathos",
                 IconSlug = "barbarian_passive_boonofbulkathos",
-                Description = "Reduce the cooldowns of your: Earthquake by 15 seconds. Call of the Ancients by 30 seconds. Wrath of the Berserker by 30 seconds.",
+                Description =
+                    " Reduce the cooldowns of your: Earthquake by 15 seconds. Call of the Ancients by 30 seconds. Wrath of the Berserker by 30 seconds. ",
                 Tooltip = "skill/barbarian/boon-of-bulkathos",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Gain 30 Fury when Avalanche or Earthquake is triggered.
+            /// Gain 30 Fury when Avalanche or Earthquake is triggered. 
             /// </summary>
             public static Passive EarthenMight = new Passive
             {
@@ -1181,13 +1527,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 64,
                 Slug = "earthen-might",
                 IconSlug = "x1_barbarian_passive_earthenmight",
-                Description = "Gain 30 Fury when Avalanche or Earthquake is triggered.",
+                Description = " Gain 30 Fury when Avalanche or Earthquake is triggered. ",
                 Tooltip = "skill/barbarian/earthen-might",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// While wielding a shield, reduce all damage taken by 30% and reduce Fury costs by 20%.
+            /// While wielding a shield, reduce all damage taken by 30% and reduce Fury costs by 20% . 
             /// </summary>
             public static Passive SwordAndBoard = new Passive
             {
@@ -1197,13 +1543,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 66,
                 Slug = "sword-and-board",
                 IconSlug = "x1_barbarian_passive_swordandboard",
-                Description = "While wielding a shield, reduce all damage taken by 30% and reduce Fury costs by 20%.",
+                Description = " While wielding a shield, reduce all damage taken by 30% and reduce Fury costs by 20% . ",
                 Tooltip = "skill/barbarian/sword-and-board",
                 Class = ActorClass.Barbarian
             };
 
             /// <summary>
-            /// Increase Strength by 1% for 8 seconds after killing or assisting in killing an enemy. This effect stacks up to 25 times.
+            /// Increase Strength by 1% for 8 seconds after killing or assisting in killing an enemy. This effect stacks up to 25 times. 
             /// </summary>
             public static Passive Rampage = new Passive
             {
@@ -1213,7 +1559,8 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 68,
                 Slug = "rampage",
                 IconSlug = "x1_barbarian_passive_rampage",
-                Description = "Increase Strength by 1% for 8 seconds after killing or assisting in killing an enemy. This effect stacks up to 25 times.",
+                Description =
+                    " Increase Strength by 1% for 8 seconds after killing or assisting in killing an enemy. This effect stacks up to 25 times. ",
                 Tooltip = "skill/barbarian/rampage",
                 Class = ActorClass.Barbarian
             };
@@ -1222,7 +1569,7 @@ namespace Trinity.Framework.Reference
         public class Wizard : FieldCollection<Wizard, Passive>
         {
             /// <summary>
-            /// You deal 30% additional damage to enemies farther than 30 yards.
+            /// You deal 30% additional damage to enemies farther than 30 yards. 
             /// </summary>
             public static Passive PowerHungry = new Passive
             {
@@ -1232,13 +1579,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 10,
                 Slug = "power-hungry",
                 IconSlug = "wizard_passive_powerhungry",
-                Description = "You deal 30% additional damage to enemies farther than 30 yards.",
+                Description = " You deal 30% additional damage to enemies farther than 30 yards. ",
                 Tooltip = "skill/wizard/power-hungry",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Decrease damage taken by 17%.
+            /// Decrease damage taken by 17% . 
             /// </summary>
             public static Passive Blur = new Passive
             {
@@ -1248,13 +1595,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 10,
                 Slug = "blur",
                 IconSlug = "wizard_passive_blur",
-                Description = "Decrease damage taken by 17%.",
+                Description = " Decrease damage taken by 17% . ",
                 Tooltip = "skill/wizard/blur",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Reduce all cooldowns by 20%.
+            /// Reduce all cooldowns by 20% . 
             /// </summary>
             public static Passive Evocation = new Passive
             {
@@ -1264,13 +1611,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 13,
                 Slug = "evocation",
                 IconSlug = "wizard_passive_evocation",
-                Description = "Reduce all cooldowns by 20%.",
+                Description = " Reduce all cooldowns by 20% . ",
                 Tooltip = "skill/wizard/evocation",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Increase all damage done by 15%, but decrease Armor and resistances by 10%.
+            /// Increase all damage done by 15% , but decrease Armor and resistances by 10% . 
             /// </summary>
             public static Passive GlassCannon = new Passive
             {
@@ -1280,13 +1627,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 16,
                 Slug = "glass-cannon",
                 IconSlug = "wizard_passive_glasscannon",
-                Description = "Increase all damage done by 15%, but decrease Armor and resistances by 10%.",
+                Description = " Increase all damage done by 15% , but decrease Armor and resistances by 10% . ",
                 Tooltip = "skill/wizard/glass-cannon",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// When you cast a Signature spell, you gain 5 Arcane Power.The following skills are Signature spells: Magic Missile Shock Pulse Spectral Blade Electrocute
+            /// When you cast a Signature spell, you gain 5 Arcane Power. The following skills are Signature spells: Magic Missile Shock Pulse Spectral Blade Electrocute 
             /// </summary>
             public static Passive Prodigy = new Passive
             {
@@ -1296,13 +1643,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 20,
                 Slug = "prodigy",
                 IconSlug = "wizard_passive_prodigy",
-                Description = "When you cast a Signature spell, you gain 5 Arcane Power.The following skills are Signature spells: Magic Missile Shock Pulse Spectral Blade Electrocute",
+                Description =
+                    " When you cast a Signature spell, you gain 5 Arcane Power. The following skills are Signature spells: Magic Missile Shock Pulse Spectral Blade Electrocute ",
                 Tooltip = "skill/wizard/prodigy",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Increase your maximum Arcane Power by 20 and Arcane Power regeneration by 2.5 per second.
+            /// Increase your maximum Arcane Power by 20 and Arcane Power regeneration by 2.5 per second. 
             /// </summary>
             public static Passive AstralPresence = new Passive
             {
@@ -1312,13 +1660,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 24,
                 Slug = "astral-presence",
                 IconSlug = "wizard_passive_astralpresence",
-                Description = "Increase your maximum Arcane Power by 20 and Arcane Power regeneration by 2.5 per second.",
+                Description =
+                    " Increase your maximum Arcane Power by 20 and Arcane Power regeneration by 2.5 per second. ",
                 Tooltip = "skill/wizard/astral-presence",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// When you take more than 15% of your maximum Life in damage within 1 second, the cooldowns on Mirror Image, Slow Time, and Teleport are reset.When you use Mirror Image, Slow Time, or Teleport, your movement speed is increased by 30% for 3 seconds.
+            /// When you take more than 15% of your maximum Life in damage within 1 second, the cooldowns on Mirror Image, Slow Time, and Teleport are reset. When you use Mirror Image, Slow Time, or Teleport, your movement speed is increased by 30% for 3 seconds. 
             /// </summary>
             public static Passive Illusionist = new Passive
             {
@@ -1328,13 +1677,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 27,
                 Slug = "illusionist",
                 IconSlug = "wizard_passive_illusionist",
-                Description = "When you take more than 15% of your maximum Life in damage within 1 second, the cooldowns on Mirror Image, Slow Time, and Teleport are reset.When you use Mirror Image, Slow Time, or Teleport, your movement speed is increased by 30% for 3 seconds.",
+                Description =
+                    " When you take more than 15% of your maximum Life in damage within 1 second, the cooldowns on Mirror Image, Slow Time, and Teleport are reset. When you use Mirror Image, Slow Time, or Teleport, your movement speed is increased by 30% for 3 seconds. ",
                 Tooltip = "skill/wizard/illusionist",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Enemies chilled or frozen by you take 10% more damage from all sources for the duration of the chill or Freeze.
+            /// Enemies chilled or frozen by you take 10% more damage from all sources for the duration of the chill or Freeze. 
             /// </summary>
             public static Passive ColdBlooded = new Passive
             {
@@ -1344,13 +1694,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 30,
                 Slug = "cold-blooded",
                 IconSlug = "wizard_passive_coldblooded",
-                Description = "Enemies chilled or frozen by you take 10% more damage from all sources for the duration of the chill or Freeze.",
+                Description =
+                    " Enemies chilled or frozen by you take 10% more damage from all sources for the duration of the chill or Freeze. ",
                 Tooltip = "skill/wizard/cold-blooded",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Fire damage dealt to enemies applies a burning effect, increasing their chance to be critically hit by 6% for 3 seconds.
+            /// Fire damage dealt to enemies applies a burning effect, increasing their chance to be critically hit by 6% for 3 seconds. 
             /// </summary>
             public static Passive Conflagration = new Passive
             {
@@ -1360,13 +1711,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 34,
                 Slug = "conflagration",
                 IconSlug = "wizard_passive_conflagration",
-                Description = "Fire damage dealt to enemies applies a burning effect, increasing their chance to be critically hit by 6% for 3 seconds.",
+                Description =
+                    " Fire damage dealt to enemies applies a burning effect, increasing their chance to be critically hit by 6% for 3 seconds. ",
                 Tooltip = "skill/wizard/conflagration",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Lightning spells have a 15% chance to Stun all targets hit for 1.5 seconds.
+            /// Lightning spells have a 15% chance to Stun all targets hit for 1.5 seconds. 
             /// </summary>
             public static Passive Paralysis = new Passive
             {
@@ -1376,13 +1728,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 37,
                 Slug = "paralysis",
                 IconSlug = "wizard_passive_paralysis",
-                Description = "Lightning spells have a 15% chance to Stun all targets hit for 1.5 seconds.",
+                Description = " Lightning spells have a 15% chance to Stun all targets hit for 1.5 seconds. ",
                 Tooltip = "skill/wizard/paralysis",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// As long as you have not taken damage in the last 5 seconds you gain a protective shield that absorbs the next 60% of your Life in damage.
+            /// As long as you have not taken damage in the last 5 seconds you gain a protective shield that absorbs the next 60% of your Life in damage. 
             /// </summary>
             public static Passive GalvanizingWard = new Passive
             {
@@ -1392,13 +1744,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 40,
                 Slug = "galvanizing-ward",
                 IconSlug = "wizard_passive_galvanizingward",
-                Description = "As long as you have not taken damage in the last 5 seconds you gain a protective shield that absorbs the next 60% of your Life in damage.",
+                Description =
+                    " As long as you have not taken damage in the last 5 seconds you gain a protective shield that absorbs the next 60% of your Life in damage. ",
                 Tooltip = "skill/wizard/galvanizing-ward",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Enemies that take Arcane damage are slowed by 80% for 2 seconds.
+            /// Enemies that take Arcane damage are slowed by 80% for 2 seconds. 
             /// </summary>
             public static Passive TemporalFlux = new Passive
             {
@@ -1408,13 +1761,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 45,
                 Slug = "temporal-flux",
                 IconSlug = "wizard_passive_temporalflux",
-                Description = "Enemies that take Arcane damage are slowed by 80% for 2 seconds.",
+                Description = " Enemies that take Arcane damage are slowed by 80% for 2 seconds. ",
                 Tooltip = "skill/wizard/temporal-flux",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Killing an enemy grants a shield that absorbs 2% of your Life in damage for 3 seconds. This effect can stack up to 10 times.Refreshing Dominance will set the shield to its maximum possible potency and each stack will increase its total duration by 0.5 seconds.
+            /// Killing an enemy grants a shield that absorbs 2% of your Life in damage for 3 seconds. This effect can stack up to 10 times. Refreshing Dominance will set the shield to its maximum possible potency and each stack will increase its total duration by 0.5 seconds. 
             /// </summary>
             public static Passive Dominance = new Passive
             {
@@ -1424,13 +1777,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 50,
                 Slug = "dominance",
                 IconSlug = "x1_wizard_passive_arcaneaegis",
-                Description = "Killing an enemy grants a shield that absorbs 2% of your Life in damage for 3 seconds. This effect can stack up to 10 times.Refreshing Dominance will set the shield to its maximum possible potency and each stack will increase its total duration by 0.5 seconds.",
+                Description =
+                    " Killing an enemy grants a shield that absorbs 2% of your Life in damage for 3 seconds. This effect can stack up to 10 times. Refreshing Dominance will set the shield to its maximum possible potency and each stack will increase its total duration by 0.5 seconds. ",
                 Tooltip = "skill/wizard/dominance",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// When you cast a Signature spell, you gain a Flash of Insight. After 5 Flashes of Insight, your next non-Signature spell deals 60% additional damage. The following skills are Signature spells: Magic Missile Shock Pulse Spectral Blade Electrocute
+            /// When you cast a Signature spell, you gain a Flash of Insight. After 5 Flashes of Insight, your next non-Signature spell deals 60% additional damage. The following skills are Signature spells: Magic Missile Shock Pulse Spectral Blade Electrocute 
             /// </summary>
             public static Passive ArcaneDynamo = new Passive
             {
@@ -1440,13 +1794,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 55,
                 Slug = "arcane-dynamo",
                 IconSlug = "wizard_passive_arcanedynamo",
-                Description = "When you cast a Signature spell, you gain a Flash of Insight. After 5 Flashes of Insight, your next non-Signature spell deals 60% additional damage. The following skills are Signature spells: Magic Missile Shock Pulse Spectral Blade Electrocute",
+                Description =
+                    " When you cast a Signature spell, you gain a Flash of Insight. After 5 Flashes of Insight, your next non-Signature spell deals 60% additional damage. The following skills are Signature spells: Magic Missile Shock Pulse Spectral Blade Electrocute ",
                 Tooltip = "skill/wizard/arcane-dynamo",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// When you receive fatal damage, you instead gain a shield equal to 400% of your maximum Life for 5 seconds and release a shockwave that knocks enemies back and Stuns them for 3 seconds. This effect may occur once every 60 seconds.
+            /// When you receive fatal damage, you instead gain a shield equal to 400% of your maximum Life for 5 seconds and release a shockwave that knocks enemies back and Stuns them for 3 seconds. This effect may occur once every 60 seconds. 
             /// </summary>
             public static Passive UnstableAnomaly = new Passive
             {
@@ -1456,13 +1811,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 60,
                 Slug = "unstable-anomaly",
                 IconSlug = "wizard_passive_unstableanomaly",
-                Description = "When you receive fatal damage, you instead gain a shield equal to 400% of your maximum Life for 5 seconds and release a shockwave that knocks enemies back and Stuns them for 3 seconds. This effect may occur once every 60 seconds.",
+                Description =
+                    " When you receive fatal damage, you instead gain a shield equal to 400% of your maximum Life for 5 seconds and release a shockwave that knocks enemies back and Stuns them for 3 seconds. This effect may occur once every 60 seconds. ",
                 Tooltip = "skill/wizard/unstable-anomaly",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Standing still for 1.5 seconds increases the following attributes: Armor: 20% All Resistances: 20% Damage: 10%
+            /// Standing still for 1.5 seconds increases the following attributes: Armor: 20% All Resistances: 20% Damage: 10% 
             /// </summary>
             public static Passive UnwaveringWill = new Passive
             {
@@ -1472,13 +1828,14 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 64,
                 Slug = "unwavering-will",
                 IconSlug = "x1_wizard_passive_unwaveringwill",
-                Description = "Standing still for 1.5 seconds increases the following attributes: Armor: 20% All Resistances: 20% Damage: 10%",
+                Description =
+                    " Standing still for 1.5 seconds increases the following attributes: Armor: 20% All Resistances: 20% Damage: 10% ",
                 Tooltip = "skill/wizard/unwavering-will",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// You deal 30% additional damage to enemies within 15 yards.
+            /// You deal 30% additional damage to enemies within 15 yards. 
             /// </summary>
             public static Passive Audacity = new Passive
             {
@@ -1488,13 +1845,13 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 66,
                 Slug = "audacity",
                 IconSlug = "x1_wizard_passive_audacity",
-                Description = "You deal 30% additional damage to enemies within 15 yards.",
+                Description = " You deal 30% additional damage to enemies within 15 yards. ",
                 Tooltip = "skill/wizard/audacity",
                 Class = ActorClass.Wizard
             };
 
             /// <summary>
-            /// Damaging enemies with Arcane, Cold, Fire or Lightning will cause them to take 5% more damage from your attacks for 5 seconds. Each different damage type applies a stack, stacking up to 4 times.Elemental damage from your weapon contributes to Elemental Exposure.
+            /// Damaging enemies with Arcane, Cold, Fire or Lightning will cause them to take 5% more damage from your attacks for 5 seconds. Each different damage type applies a stack, stacking up to 4 times. Elemental damage from your weapon contributes to Elemental Exposure. 
             /// </summary>
             public static Passive ElementalExposure = new Passive
             {
@@ -1504,300 +1861,342 @@ namespace Trinity.Framework.Reference
                 RequiredLevel = 68,
                 Slug = "elemental-exposure",
                 IconSlug = "x1_wizard_passive_elementalexposure",
-                Description = "Damaging enemies with Arcane, Cold, Fire or Lightning will cause them to take 5% more damage from your attacks for 5 seconds. Each different damage type applies a stack, stacking up to 4 times.Elemental damage from your weapon contributes to Elemental Exposure.",
+                Description =
+                    " Damaging enemies with Arcane, Cold, Fire or Lightning will cause them to take 5% more damage from your attacks for 5 seconds. Each different damage type applies a stack, stacking up to 4 times. Elemental damage from your weapon contributes to Elemental Exposure. ",
                 Tooltip = "skill/wizard/elemental-exposure",
                 Class = ActorClass.Wizard
             };
         }
 
-        public class Monk : FieldCollection<Monk, Passive>
+        public class Necromancer : FieldCollection<Necromancer, Passive>
         {
             /// <summary>
-            /// Damage you deal reduces enemy damage by 20% for 4 seconds.
+            /// Consuming a corpse has a 20% chance to spawn a health globe. 
             /// </summary>
-            public static Passive Resolve = new Passive
+            public static Passive LifeFromDeath = new Passive
             {
                 Index = 0,
-                Name = "Resolve",
-                SNOPower = SNOPower.Monk_Passive_Resolve,
+                Name = "Life from Death",
+                SNOPower = SNOPower.P6_Necro_Passive_HealthGlobesFromCorpseConsumption,
                 RequiredLevel = 10,
-                Slug = "resolve",
-                IconSlug = "monk_passive_resolve",
-                Description = "Damage you deal reduces enemy damage by 20% for 4 seconds.",
-                Tooltip = "skill/monk/resolve",
-                Class = ActorClass.Monk
+                Slug = "life-from-death",
+                IconSlug = "p6_necro_passive_healthglobesfromcorpseconsumption",
+                Description = " Consuming a corpse has a 20% chance to spawn a health globe. ",
+                Tooltip = "skill/necromancer/life-from-death",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Increase movement speed by 10%.
+            /// Consuming a corpse increases your movement speed by 3% for 5 seconds. This effect can stack up to 10 times. 
             /// </summary>
-            public static Passive FleetFooted = new Passive
+            public static Passive FueledByDeath = new Passive
             {
                 Index = 1,
-                Name = "Fleet Footed",
-                SNOPower = SNOPower.Monk_Passive_FleetFooted,
+                Name = "Fueled by Death",
+                SNOPower = SNOPower.P6_Necro_Passive_CorpseConsumptionIncreasesMovementSpeed,
                 RequiredLevel = 10,
-                Slug = "fleet-footed",
-                IconSlug = "monk_passive_fleetfooted",
-                Description = "Increase movement speed by 10%.",
-                Tooltip = "skill/monk/fleet-footed",
-                Class = ActorClass.Monk
+                Slug = "fueled-by-death",
+                IconSlug = "p6_necro_passive_corpseconsumptionincreasesmovementspeed",
+                Description =
+                    " Consuming a corpse increases your movement speed by 3% for 5 seconds. This effect can stack up to 10 times. ",
+                Tooltip = "skill/necromancer/fueled-by-death",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Increase maximum Spirit by 50 and increase Spirit Regeneration by 4 per second.Spirit fuels your defensive and offensive abilities.
+            /// Increase armor by 100% , reduced by 10% for each active minion. 
             /// </summary>
-            public static Passive ExaltedSoul = new Passive
+            public static Passive StandAlone = new Passive
             {
                 Index = 2,
-                Name = "Exalted Soul",
-                SNOPower = SNOPower.Monk_Passive_ExaltedSoul,
-                RequiredLevel = 13,
-                Slug = "exalted-soul",
-                IconSlug = "monk_passive_exaltedsoul",
-                Description = "Increase maximum Spirit by 50 and increase Spirit Regeneration by 4 per second.Spirit fuels your defensive and offensive abilities.",
-                Tooltip = "skill/monk/exalted-soul",
-                Class = ActorClass.Monk
+                Name = "Stand Alone",
+                SNOPower = SNOPower.P6_Necro_Passive_StandAlone,
+                RequiredLevel = 14,
+                Slug = "stand-alone",
+                IconSlug = "p6_necro_passive_standalone",
+                Description = " Increase armor by 100% , reduced by 10% for each active minion. ",
+                Tooltip = "skill/necromancer/stand-alone",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Every point of Spirit spent heals you for 429 Life.Heal amount is increased by 0.4% of your Health Globe Healing Bonus.
+            /// Bone Spear, Bone Spikes, and Bone Spirit have a 30% chance to trap enemies in a Bone Prison for 3 seconds. 
             /// </summary>
-            public static Passive Transcendence = new Passive
+            public static Passive BonePrison = new Passive
             {
                 Index = 3,
-                Name = "Transcendence",
-                SNOPower = SNOPower.Monk_Passive_Transcendence,
+                Name = "Bone Prison",
+                SNOPower = SNOPower.P6_Necro_Passive_BonePrison,
                 RequiredLevel = 16,
-                Slug = "transcendence",
-                IconSlug = "monk_passive_transcendence",
-                Description = "Every point of Spirit spent heals you for 429 Life.Heal amount is increased by 0.4% of your Health Globe Healing Bonus.",
-                Tooltip = "skill/monk/transcendence",
-                Class = ActorClass.Monk
+                Slug = "bone-prison",
+                IconSlug = "p6_necro_passive_boneprison",
+                Description =
+                    " Bone Spear, Bone Spikes, and Bone Spirit have a 30% chance to trap enemies in a Bone Prison for 3 seconds. ",
+                Tooltip = "skill/necromancer/bone-prison",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// The Spirit costs of Mantra activation effects are reduced by 50% and you gain 4 Spirit every second when you have a Mantra learned.
+            /// Increase the attack speed of Bone Spikes, Siphon Blood, and Grim Scythe by 15% . 
             /// </summary>
-            public static Passive ChantOfResonance = new Passive
+            public static Passive SwiftHarvesting = new Passive
             {
                 Index = 4,
-                Name = "Chant of Resonance",
-                SNOPower = SNOPower.Monk_Passive_ChantOfResonance,
+                Name = "Swift Harvesting",
+                SNOPower = SNOPower.P6_Necro_Passive_BuilderAttackSpeed,
                 RequiredLevel = 20,
-                Slug = "chant-of-resonance",
-                IconSlug = "monk_passive_chantofresonance",
-                Description = "The Spirit costs of Mantra activation effects are reduced by 50% and you gain 4 Spirit every second when you have a Mantra learned.",
-                Tooltip = "skill/monk/chant-of-resonance",
-                Class = ActorClass.Monk
+                Slug = "swift-harvesting",
+                IconSlug = "p6_necro_passive_builderattackspeed",
+                Description = " Increase the attack speed of Bone Spikes, Siphon Blood, and Grim Scythe by 15% . ",
+                Tooltip = "skill/necromancer/swift-harvesting",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Dealing damage to enemies above 75% Life increases your attack speed by 30% for 4 seconds.
+            /// The Essence cost of Command Skeletons and the cooldown of Command Golem are reduced by 30% . 
             /// </summary>
-            public static Passive SeizeTheInitiative = new Passive
+            public static Passive CommanderOfTheRisenDead = new Passive
             {
                 Index = 5,
-                Name = "Seize the Initiative",
-                SNOPower = SNOPower.Monk_Passive_SeizeTheInitiative,
+                Name = "Commander of the Risen Dead",
+                SNOPower = SNOPower.P6_Necro_Passive_CommanderoftheDead,
                 RequiredLevel = 20,
-                Slug = "seize-the-initiative",
-                IconSlug = "monk_passive_seizetheinitiative",
-                Description = "Dealing damage to enemies above 75% Life increases your attack speed by 30% for 4 seconds.",
-                Tooltip = "skill/monk/seize-the-initiative",
-                Class = ActorClass.Monk
+                Slug = "commander-of-the-risen-dead",
+                IconSlug = "p6_necro_passive_commanderofthedead",
+                Description =
+                    " The Essence cost of Command Skeletons and the cooldown of Command Golem are reduced by 30% . ",
+                Tooltip = "skill/necromancer/commander-of-the-risen-dead",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// While dual-wielding, you gain a 35% chance to dodge incoming attacks. While using a two-handed weapon, all Spirit generation is increased by 15%.
+            /// Increase the duration of your Skeletal Mage and Revive minions by 25% . 
             /// </summary>
-            public static Passive TheGuardiansPath = new Passive
+            public static Passive ExtendedServitude = new Passive
             {
                 Index = 6,
-                Name = "The Guardian's Path",
-                SNOPower = SNOPower.Monk_Passive_TheGuardiansPath,
+                Name = "Extended Servitude",
+                SNOPower = SNOPower.P6_Necro_Passive_PuppetMaster,
                 RequiredLevel = 24,
-                Slug = "the-guardians-path",
-                IconSlug = "monk_passive_theguardianspath",
-                Description = "While dual-wielding, you gain a 35% chance to dodge incoming attacks. While using a two-handed weapon, all Spirit generation is increased by 15%.",
-                Tooltip = "skill/monk/the-guardians-path",
-                Class = ActorClass.Monk
+                Slug = "extended-servitude",
+                IconSlug = "p6_necro_passive_puppetmaster",
+                Description = " Increase the duration of your Skeletal Mage and Revive minions by 25% . ",
+                Tooltip = "skill/necromancer/extended-servitude",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Reduce all non-Physical damage taken by 25%.
+            /// Poison abilities also slow enemies by 30% and reduce their attack speed by 30% for 5 seconds. 
             /// </summary>
-            public static Passive SixthSense = new Passive
+            public static Passive RigorMortis = new Passive
             {
                 Index = 7,
-                Name = "Sixth Sense",
-                SNOPower = SNOPower.Monk_Passive_SixthSense,
+                Name = "Rigor Mortis",
+                SNOPower = SNOPower.P6_Necro_Passive_RigorMortis,
                 RequiredLevel = 27,
-                Slug = "sixth-sense",
-                IconSlug = "monk_passive_sixthsense",
-                Description = "Reduce all non-Physical damage taken by 25%.",
-                Tooltip = "skill/monk/sixth-sense",
-                Class = ActorClass.Monk
+                Slug = "rigor-mortis",
+                IconSlug = "p6_necro_passive_rigormortis",
+                Description =
+                    " Poison abilities also slow enemies by 30% and reduce their attack speed by 30% for 5 seconds. ",
+                Tooltip = "skill/necromancer/rigor-mortis",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Each enemy within 12 yards increases your damage by 4%, up to a maximum of 20%.
+            /// Increase your maximum Essence by 40 . 
             /// </summary>
-            public static Passive Determination = new Passive
+            public static Passive OverwhelmingEssence = new Passive
             {
                 Index = 8,
-                Name = "Determination",
-                SNOPower = SNOPower.p1_Monk_Passive_Provocation,//P1_Monk_Passive_Provocation,
+                Name = "Overwhelming Essence",
+                SNOPower = SNOPower.P6_Necro_Passive_MaxEssence,
                 RequiredLevel = 30,
-                Slug = "determination",
-                IconSlug = "p1_monk_passive_provocation",
-                Description = "Each enemy within 12 yards increases your damage by 4%, up to a maximum of 20%.",
-                Tooltip = "skill/monk/determination",
-                Class = ActorClass.Monk
+                Slug = "overwhelming-essence",
+                IconSlug = "p6_necro_passive_maxessence",
+                Description = " Increase your maximum Essence by 40 . ",
+                Tooltip = "skill/necromancer/overwhelming-essence",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// You deal 20% more damage to enemies that are Blind, Frozen or Stunned.
+            /// While using a scythe, gain 2% Essence and Life per kill. 
             /// </summary>
-            public static Passive RelentlessAssault = new Passive
+            public static Passive DarkReaping = new Passive
             {
                 Index = 9,
-                Name = "Relentless Assault",
-                SNOPower = SNOPower.p1_Monk_Passive_RelentlessAssault,//P1_Monk_Passive_RelentlessAssault,
-                RequiredLevel = 30,
-                Slug = "relentless-assault",
-                IconSlug = "p1_monk_passive_relentlessassault",
-                Description = "You deal 20% more damage to enemies that are Blind, Frozen or Stunned.",
-                Tooltip = "skill/monk/relentless-assault",
-                Class = ActorClass.Monk
+                Name = "Dark Reaping",
+                SNOPower = SNOPower.P6_Necro_Passive_ScytheRegenPerKill,
+                RequiredLevel = 31,
+                Slug = "dark-reaping",
+                IconSlug = "p6_necro_passive_scytheregenperkill",
+                Description = " While using a scythe, gain 2% Essence and Life per kill. ",
+                Tooltip = "skill/necromancer/dark-reaping",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Reduce all cooldowns by 20%.
+            /// Receive a 1% damage bonus for each enemy afflicted by one of your curses. 
             /// </summary>
-            public static Passive BeaconOfYtar = new Passive
+            public static Passive SpreadingMalediction = new Passive
             {
                 Index = 10,
-                Name = "Beacon of Ytar",
-                SNOPower = SNOPower.Monk_Passive_BeaconOfYtar,
-                RequiredLevel = 35,
-                Slug = "beacon-of-ytar",
-                IconSlug = "monk_passive_beaconofytar",
-                Description = "Reduce all cooldowns by 20%.",
-                Tooltip = "skill/monk/beacon-of-ytar",
-                Class = ActorClass.Monk
+                Name = "Spreading Malediction",
+                SNOPower = SNOPower.P6_Necro_Passive_CurseDamageBonus,
+                RequiredLevel = 38,
+                Slug = "spreading-malediction",
+                IconSlug = "p6_necro_passive_cursedamagebonus",
+                Description = " Receive a 1% damage bonus for each enemy afflicted by one of your curses. ",
+                Tooltip = "skill/necromancer/spreading-malediction",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Increase the attack speed of Spirit Generators by 15%.
+            /// Your curses cost 50% less Essence and last forever. 
             /// </summary>
-            public static Passive Alacrity = new Passive
+            public static Passive EternalTorment = new Passive
             {
                 Index = 11,
-                Name = "Alacrity",
-                SNOPower = SNOPower.Monk_Passive_GuidingLight,//Monk_Passive_Guidinglight,
+                Name = "Eternal Torment",
+                SNOPower = SNOPower.P6_Necro_Passive_EternalTorment,
                 RequiredLevel = 40,
-                Slug = "alacrity",
-                IconSlug = "monk_passive_guidinglight",
-                Description = "Increase the attack speed of Spirit Generators by 15%.",
-                Tooltip = "skill/monk/alacrity",
-                Class = ActorClass.Monk
+                Slug = "eternal-torment",
+                IconSlug = "p6_necro_passive_eternaltorment",
+                Description = " Your curses cost 50% less Essence and last forever. ",
+                Tooltip = "skill/necromancer/eternal-torment",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// 40% of your single elemental resistances from items instead increases your resistance to all elements.
+            /// When you take lethal damage, you are sustained preventing all damage for 4 seconds. In addition, all minions are consumed to heal you for 10% of your Life. This effect cannot occur more than once every 60 seconds. 
             /// </summary>
-            public static Passive Harmony = new Passive
+            public static Passive FinalService = new Passive
             {
                 Index = 12,
-                Name = "Harmony",
-                SNOPower = SNOPower.p1_Monk_Passive_Harmony,//P1_Monk_Passive_Harmony,
-                RequiredLevel = 45,
-                Slug = "harmony",
-                IconSlug = "p1_monk_passive_harmony",
-                Description = "40% of your single elemental resistances from items instead increases your resistance to all elements.",
-                Tooltip = "skill/monk/harmony",
-                Class = ActorClass.Monk
+                Name = "Final Service",
+                SNOPower = SNOPower.P6_Necro_Passive_CheatDeath,
+                RequiredLevel = 41,
+                Slug = "final-service",
+                IconSlug = "p6_necro_passive_cheatdeath",
+                Description =
+                    " When you take lethal damage, you are sustained preventing all damage for 4 seconds. In addition, all minions are consumed to heal you for 10% of your Life. This effect cannot occur more than once every 60 seconds. ",
+                Tooltip = "skill/necromancer/final-service",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Each different Spirit Generator you use increases your damage by 10% for 3 seconds.
+            /// You are healed for 10% of your Life on Hit when one of your minions hits an enemy. 
             /// </summary>
-            public static Passive CombinationStrike = new Passive
+            public static Passive GrislyTribute = new Passive
             {
                 Index = 13,
-                Name = "Combination Strike",
-                SNOPower = SNOPower.Monk_Passive_CombinationStrike,
-                RequiredLevel = 50,
-                Slug = "combination-strike",
-                IconSlug = "monk_passive_combinationstrike",
-                Description = "Each different Spirit Generator you use increases your damage by 10% for 3 seconds.",
-                Tooltip = "skill/monk/combination-strike",
-                Class = ActorClass.Monk
+                Name = "Grisly Tribute",
+                SNOPower = SNOPower.P6_Necro_Passive_GrislyTribute,
+                RequiredLevel = 45,
+                Slug = "grisly-tribute",
+                IconSlug = "p6_necro_passive_grislytribute",
+                Description = " You are healed for 10% of your Life on Hit when one of your minions hits an enemy. ",
+                Tooltip = "skill/necromancer/grisly-tribute",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// When receiving fatal damage, you instead restore 35% Life and 35% Spirit and are immune to damage and control impairing effects for 2 seconds.This effect may occur once every 60 seconds.
+            /// Increases your Life regeneration by 10% for each enemy within 20 yards. 
             /// </summary>
-            public static Passive NearDeathExperience = new Passive
+            public static Passive DrawLife = new Passive
             {
                 Index = 14,
-                Name = "Near Death Experience",
-                SNOPower = SNOPower.Monk_Passive_NearDeathExperience,
-                RequiredLevel = 58,
-                Slug = "near-death-experience",
-                IconSlug = "monk_passive_neardeathexperience",
-                Description = "When receiving fatal damage, you instead restore 35% Life and 35% Spirit and are immune to damage and control impairing effects for 2 seconds.This effect may occur once every 60 seconds.",
-                Tooltip = "skill/monk/near-death-experience",
-                Class = ActorClass.Monk
+                Name = "Draw Life",
+                SNOPower = SNOPower.P6_Necro_Passive_HealthRegen,
+                RequiredLevel = 50,
+                Slug = "draw-life",
+                IconSlug = "p6_necro_passive_healthregen",
+                Description = " Increases your Life regeneration by 10% for each enemy within 20 yards. ",
+                Tooltip = "skill/necromancer/draw-life",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Each ally affected by your Mantras increases your damage by 5%, up to a maximum of 20%, and has 5% increased damage.
+            /// Bone Spikes, Bone Spear, and Bone Spirit deal 1% increased damage for every 1.5 yards from you, up to a maximum of 20% . 
             /// </summary>
-            public static Passive Unity = new Passive
+            public static Passive Serration = new Passive
             {
                 Index = 15,
-                Name = "Unity",
-                SNOPower = SNOPower.X1_Monk_Passive_Unity,
-                RequiredLevel = 64,
-                Slug = "unity",
-                IconSlug = "x1_monk_passive_unity",
-                Description = "Each ally affected by your Mantras increases your damage by 5%, up to a maximum of 20%, and has 5% increased damage.",
-                Tooltip = "skill/monk/unity",
-                Class = ActorClass.Monk
+                Name = "Serration",
+                SNOPower = SNOPower.P6_Necro_Passive_Serration,
+                RequiredLevel = 55,
+                Slug = "serration",
+                IconSlug = "p6_necro_passive_serration",
+                Description =
+                    " Bone Spikes, Bone Spear, and Bone Spirit deal 1% increased damage for every 1.5 yards from you, up to a maximum of 20% . ",
+                Tooltip = "skill/necromancer/serration",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Moving 25 yards increases your damage by 20% for 6 seconds.
+            /// Your minions gain 200% of your Thorns. 
             /// </summary>
-            public static Passive Momentum = new Passive
+            public static Passive AberrantAnimator = new Passive
             {
                 Index = 16,
-                Name = "Momentum",
-                SNOPower = SNOPower.X1_Monk_Passive_Momentum,
-                RequiredLevel = 66,
-                Slug = "momentum",
-                IconSlug = "x1_monk_passive_momentum",
-                Description = "Moving 25 yards increases your damage by 20% for 6 seconds.",
-                Tooltip = "skill/monk/momentum",
-                Class = ActorClass.Monk
+                Name = "Aberrant Animator",
+                SNOPower = SNOPower.P6_Necro_Passive_AberrantAnimator,
+                RequiredLevel = 64,
+                Slug = "aberrant-animator",
+                IconSlug = "p6_necro_passive_aberrantanimator",
+                Description = " Your minions gain 200% of your Thorns. ",
+                Tooltip = "skill/necromancer/aberrant-animator",
+                Class = ActorClass.Necromancer
             };
 
             /// <summary>
-            /// Every third hit from a Spirit Generator increases the damage of your next damaging Spirit Spender by 40%.
+            /// Picking up a health globe removes the health cost of the next Blood spell. This effect can stack up to 10 times. 
             /// </summary>
-            public static Passive MythicRhythm = new Passive
+            public static Passive BloodForBlood = new Passive
             {
                 Index = 17,
-                Name = "Mythic Rhythm",
-                SNOPower = SNOPower.X1_Monk_Passive_MythicRhythm,
+                Name = "Blood for Blood",
+                SNOPower = SNOPower.P6_Necro_Passive_HealthGlobesFreeCast,
+                RequiredLevel = 66,
+                Slug = "blood-for-blood",
+                IconSlug = "p6_necro_passive_healthglobesfreecast",
+                Description =
+                    " Picking up a health globe removes the health cost of the next Blood spell. This effect can stack up to 10 times. ",
+                Tooltip = "skill/necromancer/blood-for-blood",
+                Class = ActorClass.Necromancer
+            };
+
+            /// <summary>
+            /// After cumulatively losing 100% of your maximum Life, all ability cooldowns are reduced by 20% . This effect cannot reduce an ability&amp;#39;s cooldown more than once for each time that ability is used. 
+            /// </summary>
+            public static Passive BloodIsPower = new Passive
+            {
+                Index = 18,
+                Name = "Blood is Power",
+                SNOPower = SNOPower.P6_Necro_Passive_BloodIsPower,
                 RequiredLevel = 68,
-                Slug = "mythic-rhythm",
-                IconSlug = "x1_monk_passive_mythicrhythm",
-                Description = "Every third hit from a Spirit Generator increases the damage of your next damaging Spirit Spender by 40%.",
-                Tooltip = "skill/monk/mythic-rhythm",
-                Class = ActorClass.Monk
+                Slug = "blood-is-power",
+                IconSlug = "p6_necro_passive_bloodispower",
+                Description =
+                    " After cumulatively losing 100% of your maximum Life, all ability cooldowns are reduced by 20% . This effect cannot reduce an ability&amp;#39;s cooldown more than once for each time that ability is used. ",
+                Tooltip = "skill/necromancer/blood-is-power",
+                Class = ActorClass.Necromancer
+            };
+
+            /// <summary>
+            /// You cannot lose Life for 4 seconds after using Land of the Dead, Army of the Dead, or Simulacrum. 
+            /// </summary>
+            public static Passive RathmasShield = new Passive
+            {
+                Index = 19,
+                Name = "Rathma's Shield",
+                SNOPower = SNOPower.P6_Necro_Passive_RathmasShield,
+                RequiredLevel = 70,
+                Slug = "rathmas-shield",
+                IconSlug = "p6_necro_passive_rathmasshield",
+                Description =
+                    " You cannot lose Life for 4 seconds after using Land of the Dead, Army of the Dead, or Simulacrum. ",
+                Tooltip = "skill/necromancer/rathmas-shield",
+                Class = ActorClass.Necromancer
             };
         }
     }

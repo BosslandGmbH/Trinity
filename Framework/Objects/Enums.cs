@@ -231,6 +231,10 @@ namespace Trinity.Framework.Objects
         Mastery,
         Force,
         Archon,
+        Curses,
+        Reanimation,
+        Corpses,
+        BloodAndBone
     }
 
     public enum Resource

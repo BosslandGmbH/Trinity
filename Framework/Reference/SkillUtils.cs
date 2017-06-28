@@ -138,6 +138,7 @@ namespace Trinity.Framework.Reference
                     _all.AddRange(Skills.Wizard.ToList());
                     _all.AddRange(Skills.Crusader.ToList());
                     _all.AddRange(Skills.Monk.ToList());
+                    _all.AddRange(Skills.Necromancer.ToList());
                 }
                 return _all;
             }
@@ -160,6 +161,8 @@ namespace Trinity.Framework.Reference
                     return Skills.WitchDoctor.ToList();
                 case ActorClass.Wizard:
                     return Skills.Wizard.ToList();
+                case ActorClass.Necromancer:
+                    return Skills.Necromancer.ToList();
             }
             return new List<Skill>();
         }
