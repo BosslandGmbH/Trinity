@@ -339,10 +339,12 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             }
 
             _interactRange = portal.CollisionSphere.Radius;
+            // Add some tolerance, sometimes the radius is pretty high and it will keep stuck trying to move to it even when it's right besides it.
+            _interactRange += 3;
 
             Core.Logger.Debug($"[EnterLevelArea] Using interact range from portal: {_interactRange}");
 
-            if (portal.Position.Distance(_objectiveLocation) > _interactRange)
+            if (portal.Position.Distance(_objectiveLocation) > _interactRange || !portal.InLineOfSight)
             {
                 Core.Logger.Debug($"[EnterLevelArea] Portal is still too far away, something went wrong with NavigationCoroutine");
                 await CommonCoroutines.MoveTo(portal.Position);
