@@ -355,35 +355,36 @@ namespace Trinity.Routines.Necromancer
         {
             target = null;
 
+            // note: this is returning PowerManager.CanCast true even when active is on cooldown.
+
             if (!Skills.Necromancer.CommandGolem.CanCast())
                 return false;
 
             var rune = Skills.Necromancer.CommandGolem.CurrentRune;
             if (rune == Runes.Necromancer.FleshGolem)
             {
-                if (!TrinityCombat.Spells.CanCast(SNOPower.P6_Necro_RaiseGolem_FleshGolem_DropCorpses))
-                    return false;
+                //
             }
             if (rune == Runes.Necromancer.IceGolem)
             {
-                if (!TrinityCombat.Spells.CanCast(SNOPower.P6_Necro_RaiseGolem_IceGolem_Freeze))
-                    return false;
+                //
             }
             if (rune == Runes.Necromancer.BoneGolem)
             {
-                if (!TrinityCombat.Spells.CanCast(SNOPower.P6_Necro_RaiseGolem_BoneGolem_Tornado))
-                    return false;
+                //
             }
             if (rune == Runes.Necromancer.DecayGolem)
             {
-                if (!TrinityCombat.Spells.CanCast(SNOPower.P6_Necro_RaiseGolem_ConsumeGolem_EatCorpses))
+                if (TargetUtil.CorpseCount(20f) == 0)
                     return false;
             }
             if (rune == Runes.Necromancer.BloodGolem)
             {
-                if (!TrinityCombat.Spells.CanCast(SNOPower.p6_Necro_RaiseGolem_BloodGolem_VeinAoE))
-                    return false;
+                //
             }
+
+            if (Core.Cooldowns.GetSkillCooldownRemaining(SNOPower.P6_Necro_RaiseGolem).TotalMilliseconds > 0)
+                return false;
 
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
             return target != null;
@@ -439,6 +440,16 @@ namespace Trinity.Routines.Necromancer
             if (!Skills.Necromancer.Frailty.CanCast())
                 return false;
 
+
+            if (Player.PrimaryResource < PrimaryEnergyReserve)
+                return false;
+
+            // todo: investigate why cant find the power on monsters.         
+
+            // anti-spam workaround
+            if (Skills.Necromancer.Frailty.TimeSinceUse < 5000)
+                return false;
+
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
             return target != null;
         }
@@ -455,7 +466,7 @@ namespace Trinity.Routines.Necromancer
             // todo: investigate why cant find the power on monsters.         
 
             // anti-spam workaround
-            if (Skills.Necromancer.Decrepify.TimeSinceUse < 10000) 
+            if (Skills.Necromancer.Decrepify.TimeSinceUse < 8000) 
                 return false;
 
             target = TargetUtil.BestTargetWithoutDebuff(60f, SNOPower.P6_Necro_Decrepify);
@@ -466,6 +477,16 @@ namespace Trinity.Routines.Necromancer
         {
             target = null;
             if (!Skills.Necromancer.Leech.CanCast())
+                return false;
+
+
+            if (Player.PrimaryResource < PrimaryEnergyReserve)
+                return false;
+
+            // todo: investigate why cant find the debuff on monsters.         
+
+            // anti-spam workaround
+            if (Skills.Necromancer.Leech.TimeSinceUse < 10000)
                 return false;
 
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
