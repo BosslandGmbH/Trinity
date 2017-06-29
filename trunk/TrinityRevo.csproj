@@ -448,6 +448,8 @@
     <Compile Include="ProfileTags\ZergTag.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterShadowImpale.cs" />
     <Compile Include="Routines\DemonHunter\DH_ShadowThreeKnifes.cs" />
+    <Compile Include="Routines\Necromancer\NecromancerDefault.cs" />
+    <Compile Include="Routines\Necromancer\NecromancerBase.cs" />
     <Compile Include="Routines\Wizard\WizardManaldCoE.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonBlizzard.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonHydra.cs" />
@@ -869,6 +871,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Routines\Monk\MonkZDPSSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Necromancer\NecromancerDefaultSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

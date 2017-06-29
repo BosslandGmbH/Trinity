@@ -21,6 +21,12 @@ namespace Trinity.Framework.Reference
 
         public const int WALLER_SNO = 226808;
 
+
+        public static HashSet<int> NecroCorpseSnoIds = new HashSet<int>
+        {
+            454066, //P6_Necro_Corpse_Flesh
+        };
+            
         /// <summary>
         /// Some questing sequences have odd line of sight issues around stairs
         /// Areas listed here should have the bot move onto the same ZDiff as target
@@ -662,6 +668,7 @@ namespace Trinity.Framework.Reference
 
         public static List<SNOPower> ChargeBasedPowers = new List<SNOPower>
         {
+            SNOPower.p6_Necro_BoneSpirit,
             SNOPower.Barbarian_Revenge,
             SNOPower.Barbarian_FuriousCharge,
             SNOPower.X1_Monk_DashingStrike,

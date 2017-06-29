@@ -1,4 +1,5 @@
-﻿using Buddy.Coroutines;
+﻿using System.Collections.Generic;
+using Buddy.Coroutines;
 using System.Threading.Tasks;
 using Trinity.Components.Combat.Resources;
 using Trinity.DbProvider;
@@ -149,14 +150,28 @@ namespace Trinity.Components.Combat
             if (!HasEnoughCharges(skill))
                 return false;
 
-            if (!PowerManager.CanCast(skill.SNOPower))
-                return false;
+            PowerManager.CanCastFlags reason;
+            if (!PowerManager.CanCast(skill.SNOPower, out reason))
+            {
+                if (reason == PowerManager.CanCastFlags.PowerInvalidTarget && !AllowInvalidTargetPowers.Contains(skill.SNOPower))
+                {
+                    Core.Logger.Debug(LogCategory.Spells, $"PowerManager CanCast failed for {skill.SNOPower} with flags: {reason}");
+                    return false;
+                }
+            }
 
             if (!HasEnoughResource(skill))
                 return false;
 
             return true;
         }
+
+        public HashSet<SNOPower> AllowInvalidTargetPowers = new HashSet<SNOPower>
+        {
+            // these new skills are failing with PowerInvalidTarget, somethign to do with check on mouse highlighted target?
+            SNOPower.P6_Necro_CommandSkeletons, 
+            SNOPower.P6_Necro_CorpseLance,
+        };
 
         public bool HasEnoughCharges(Skill skill)
         {

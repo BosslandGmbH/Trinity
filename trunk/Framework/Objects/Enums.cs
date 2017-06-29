@@ -247,7 +247,8 @@ namespace Trinity.Framework.Objects
         Mana,
         Discipline,
         Hatred,
-        Spirit
+        Spirit,
+        Essense,
     }
 
     public enum ItemQualityName

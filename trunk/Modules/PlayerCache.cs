@@ -195,7 +195,7 @@ namespace Trinity.Modules
             IsIncapacitated = _me.IsFeared || _me.IsStunned || _me.IsFrozen || _me.IsBlind || IsPowerUseDisabled;
             IsRooted = _me.IsRooted;
             CurrentHealthPct = _me.HitpointsCurrentPct;
-            PrimaryResource = _me.CurrentPrimaryResource;
+            PrimaryResource = GetCurrentPrimaryResource();
             PrimaryResourcePct = PrimaryResource / PrimaryResourceMax;
             PrimaryResourceMissing = PrimaryResourceMax - PrimaryResource;
             SecondaryResource = _me.CurrentSecondaryResource;
@@ -252,6 +252,24 @@ namespace Trinity.Modules
 
             // For WD Angry Chicken
             IsHidden = _me.IsHidden;
+        }
+
+        private static float GetCurrentPrimaryResource()
+        {
+            if (_me.ActorClass == ActorClass.Necromancer)
+            {
+                return _me.CommonData.GetAttribute<float>(ActorAttributeType.ResourceCur, 8);
+            }
+            return _me.CurrentPrimaryResource;
+        }
+
+        private static float GetMaxPrimaryResource()
+        {
+            if (_me.ActorClass == ActorClass.Necromancer)
+            {
+                return _me.CommonData.GetAttribute<float>(ActorAttributeType.ResourceEffectiveMax, 8);
+            }
+            return _me.MaxPrimaryResource;
         }
 
         public bool IsInteractingWithGizmo { get; set; }
@@ -372,7 +390,7 @@ namespace Trinity.Modules
             ParagonExperienceNextLevel = (long)ZetaDia.Me.ParagonExperienceNextLevel;
             //GameDifficulty = ZetaDia.Service.Hero.CurrentDifficulty;
             SecondaryResourceMax = _me.MaxSecondaryResource;//GetMaxSecondaryResource(_me);
-            PrimaryResourceMax = _me.MaxPrimaryResource; //GetMaxPrimaryResource(_me);
+            PrimaryResourceMax = GetMaxPrimaryResource(); //_me.MaxPrimaryResource; //GetMaxPrimaryResource(_me);
             TeamId = _me.CommonData.TeamId;
             Radius = _me.CollisionSphere.Radius;
             IsRanged = ActorClass == ActorClass.Witchdoctor || ActorClass == ActorClass.Wizard || ActorClass == ActorClass.DemonHunter;
@@ -430,7 +448,7 @@ namespace Trinity.Modules
                 case ActorClass.DemonHunter:
                     return player.CommonData.GetAttribute<float>(149 | (int)ResourceType.Hatred << 12) + player.CommonData.GetAttribute<float>(ActorAttributeType.ResourceMaxBonusHatred);
                 case ActorClass.Witchdoctor:
-                    return player.CommonData.GetAttribute<float>(149 | (int)ResourceType.Mana << 12) + player.CommonData.GetAttribute<float>(ActorAttributeType.ResourceMaxBonusMana);
+                    return player.CommonData.GetAttribute<float>(149 | (int)ResourceType.Mana << 12) + player.CommonData.GetAttribute<float>(ActorAttributeType.ResourceMaxBonusMana);            
             }
             return -1;
         }
