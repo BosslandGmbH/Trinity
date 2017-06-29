@@ -569,16 +569,17 @@ namespace Trinity.Components.Combat.Resources
             return false;
         }
 
-        public static int NearbyUnitsWithinDistance(TrinityActor actor, float range = 5f)
+        public static int NearbyUnitsWithinDistance(TrinityActor actor, float range = 5f, bool unitsOnly = true)
         {
-            using (new PerformanceLogger("CacheObject.UnitsNear"))
-            {
-                if (actor.Type != TrinityObjectType.Unit)
-                    return 0;
+            if (unitsOnly && actor.Type != TrinityObjectType.Unit)
+                return 0;
 
-                return Core.Targets
-                    .Count(u => u.RActorId != actor.RActorId && u.IsUnit && u.Position.Distance(actor.Position) <= range && u.HasBeenInLoS);
-            }
+            return Core.Targets.Count(u => u.RActorId != actor.RActorId && u.IsUnit && u.Position.Distance(actor.Position) <= range && u.HasBeenInLoS);          
+        }
+
+        public static IEnumerable<TrinityActor> NearbyTargets(TrinityActor actor, float range = 5f)
+        {
+            return Core.Targets.Where(u => u.RActorId != actor.RActorId && u.IsUnit && u.Position.Distance(actor.Position) <= range && u.HasBeenInLoS);
         }
 
         /// <summary>
@@ -1733,6 +1734,13 @@ namespace Trinity.Components.Combat.Resources
             return units.Any() ? units.FirstOrDefault() : null;
         }
 
+
+        internal static TrinityActor BestTargetWithoutDebuff(float range, SNOPower debuff, Vector3 position = default(Vector3))
+        {
+            return BestTargetWithoutDebuffs(range, new List<SNOPower> { debuff }, position);
+        }
+
+
         internal static TrinityActor BestTargetWithoutDebuffs(float range, IEnumerable<SNOPower> debuffs, Vector3 position = default(Vector3))
         {
             if (position == new Vector3())
@@ -2093,8 +2101,12 @@ namespace Trinity.Components.Combat.Resources
             if (SpellTracker.IsUnitTracked(obj.AcdId, debuffSNO))
                 return true;
 
-            if (obj.Attributes.Powers.ContainsKey(debuffSNO))
-                return true;
+            // todo: AttributesWrapper needs to be updated, throwing exceptions so the objects probably changed.
+            //if (obj.Attributes.Powers.ContainsKey(debuffSNO))
+            //    return true;
+
+            //if (obj.Attributes.Powers.ContainsKey(debuffSNO))
+            //    return true;
 
             //ActorAttributeType att;
             //Enum.TryParse("PowerBuff0VisualEffect" + Skills.Monk.ExplodingPalm.CurrentRune.TypeId, out att);
@@ -2104,13 +2116,13 @@ namespace Trinity.Components.Combat.Resources
 
             //var sno = (int)debuffSNO;
 
-            //try
-            //{
-            //    return _debuffSlots.Any(attr => obj.Attributes.GetAttribute<bool>(attr, sno));
-            //}
-            //catch (Exception)
-            //{
-            //}
+            try
+            {
+                return _debuffSlots.Any(attr => obj.Attributes.GetAttribute<bool>(attr, (int)debuffSNO));
+            }
+            catch (Exception)
+            {
+            }
 
             return false;
         }
@@ -2169,5 +2181,39 @@ namespace Trinity.Components.Combat.Resources
             return BestLOSEliteInRange(maxSearchRange, includeUnitsInAoE) ??
                     GetFarthestClusterUnit(clusterRadius, maxSearchRange, unitCount, useWeights, includeUnitsInAoE);
         }
+
+        public static Vector3 GetBestCorpsePoint(float rangeFromPlayer, float targetRegionRadius)
+        {
+            var corpses = GetCorpses(rangeFromPlayer).ToList();
+            var clusterCorpse = (from u in corpses
+                                 where u.IsInLineOfSight
+                                 where NearbyTargets(u).Any()
+                                 orderby
+                        NearbyUnitsWithinDistance(u, targetRegionRadius, false) descending,
+                        u.Distance ascending 
+                    select u).FirstOrDefault();
+
+            if (clusterCorpse != null)
+                return clusterCorpse.Position;
+
+            //if (corpses.Any())
+            //    return corpses.First().Position;
+
+            return Vector3.Zero;
+        }
+
+        public static int CorpseCount(float radius)
+            => Core.Actors.Count(a => GameData.NecroCorpseSnoIds.Contains(a.ActorSnoId) && a.Distance <= radius);
+
+        public static int CorpseCount(float radius, Vector3 position)
+            => Core.Actors.Count(a => GameData.NecroCorpseSnoIds.Contains(a.ActorSnoId) && a.Position.Distance(position) <= radius);
+
+        public static IEnumerable<TrinityActor> GetCorpses(float radius)
+            => Core.Actors.Where(a => GameData.NecroCorpseSnoIds.Contains(a.ActorSnoId) && a.Distance <= radius);
+
+        public static IEnumerable<TrinityActor> GetCorpses(float radius, Vector3 position)
+            => Core.Actors.Where(a => GameData.NecroCorpseSnoIds.Contains(a.ActorSnoId) && a.Position.Distance(position) <= radius);
+
+
     }
 }

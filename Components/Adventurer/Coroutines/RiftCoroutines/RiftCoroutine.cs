@@ -1409,11 +1409,15 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
 
         private void ScanForBoss()
         {
-            var portalMarker = AdvDia.CurrentWorldMarkers.FirstOrDefault(m => m.Id >= 0 && m.Id <= 200);
-            if (portalMarker != null)
-            {
-                _bossLocation = portalMarker.Position;
-            }
+            //// removed due to mistaking shrine markers for boss marker
+            //// todo: find boss marker and use that when far away.
+
+            //var portalMarker = AdvDia.CurrentWorldMarkers.FirstOrDefault(m => m.Id >= 0 && m.Id <= 200);
+            //if (portalMarker != null)
+            //{
+            //    _bossLocation = portalMarker.Position;
+            //}
+
             if (_bossLocation == Vector3.Zero)
             {
                 var boss =

@@ -1,0 +1,96 @@
+﻿<UserControl 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:converters="clr-namespace:Trinity.UI.UIComponents.Converters"
+
+    mc:Ignorable="d" Background="#434343" d:DesignHeight="820" d:DesignWidth="390">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../../UI/Template.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <converters:PercentConverter x:Key="PercentConverter" />
+            <converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+            <converters:EnumVisibilityConverter x:Key="HiddenWhenEnumTrueConverter" Reverse="True" />
+            <converters:EnumVisibilityConverter x:Key="VisibleWhenEnumTrueConverter"  />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Border Padding="10">
+        <Grid>
+            <StackPanel>
+                <GroupBox>
+                    <GroupBox.Header>General</GroupBox.Header>
+                    <StackPanel>
+                        <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Cluster Size"
+                            ToolTip="Number of monsters that must be grouped up before fighting starts"
+                            Interval="100" IsSnapToTickEnabled="True"
+                            Maximum="40" Minimum="1" SmallChange="100" TickFrequency="1" TickPlacement="BottomRight" 
+                            Value="{Binding Path=DataContext.ClusterSize}" 
+                            HorizontalAlignment="Stretch" Margin="0,0,0,0"
+                            MinWidth="175"/>
+                        <Slider  Template="{DynamicResource LabelledSliderEditable}" 
+                        Tag="Health Emergency %"
+                        ToolTip="How low your health must drop before the potion is used"
+                                Interval="500" Maximum="99" Minimum="0" 
+                                SmallChange="1" LargeChange="5"
+                                TickPlacement="None" 
+                                Value="{Binding Path=DataContext.EmergencyHealthPct, Converter={StaticResource PercentConverter}}" 
+                                HorizontalAlignment="Stretch" Margin="0"/>
+                    </StackPanel>
+                </GroupBox>                
+                <!--<GroupBox>
+                    <GroupBox.Header>Wrath of the Berserker</GroupBox.Header>
+                    <StackPanel>
+
+                        <WrapPanel>
+                            <RadioButton Content="Always" IsChecked="{Binding DataContext.WrathOfTheBerserker.UseMode, ConverterParameter=Always, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}"  />
+                            <RadioButton Content="Selectively" IsChecked="{Binding DataContext.WrathOfTheBerserker.UseMode, ConverterParameter=Selective, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}}" />
+                        </WrapPanel>
+                        <StackPanel Margin="0,5,0,0" Visibility="{Binding DataContext.WrathOfTheBerserker.UseMode, ConverterParameter=Selective, Converter={StaticResource VisibleWhenEnumTrueConverter}}">
+                            <CheckBox ToolTip="Use when there are elites close nearby" 
+                                      IsChecked="{Binding DataContext.WrathOfTheBerserker.Reasons, ConverterParameter=Elites, Converter={converters:FlagsToBoolConverter}}">Elites nearby</CheckBox>
+                            <CheckBox ToolTip="Use when you are surrounded by enemies" 
+                                      IsChecked="{Binding DataContext.WrathOfTheBerserker.Reasons, ConverterParameter=Surrounded, Converter={converters:FlagsToBoolConverter}}">Surrounded</CheckBox>
+                            <CheckBox ToolTip="Use when you're low on health" 
+                                      IsChecked="{Binding DataContext.WrathOfTheBerserker.Reasons, ConverterParameter=HealthEmergency, Converter={converters:FlagsToBoolConverter}}">Health emergency</CheckBox>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>-->
+                <!--<GroupBox>
+                    <GroupBox.Header>Furious Charge</GroupBox.Header>
+                    <StackPanel>
+                        <WrapPanel Margin="0,5,0,10">
+                            <RadioButton ToolTip="Use vault whenever it makes sense"
+                                Content="Anytime" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Default}"  />
+                            <RadioButton ToolTip="Use only while fighting monsters"
+                                Content="In combat" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=InCombat}" />
+                            <RadioButton  ToolTip="Use only while NOT fighting monsters"
+                                Content="Out of combat" IsChecked="{Binding DataContext.FuriousCharge.UseMode, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=OutOfCombat}" />
+                        </WrapPanel>
+                        <StackPanel Margin="0,0,0,0">
+                            <CheckBox ToolTip="Use when movement is blocked" 
+                                      IsChecked="{Binding DataContext.FuriousCharge.Reasons, ConverterParameter=Blocked, Converter={converters:FlagsToBoolConverter}}">Use when movement is blocked</CheckBox>
+                        </StackPanel>
+                        <StackPanel Margin="0,8,0,0">
+                            <Slider Template="{DynamicResource LabelledSliderEditable}" 
+                            Tag="Recast delay"
+                            ToolTip="The time between casts"
+                            Interval="100" Maximum="4000" Minimum="200" 
+                            SmallChange="100" LargeChange="100" 
+                            TickPlacement="BottomRight" TickFrequency="100"
+                            Value="{Binding DataContext.FuriousCharge.RecastDelayMs}" 
+                            HorizontalAlignment="Stretch" Margin="2"
+                            />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>-->
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
+
+    

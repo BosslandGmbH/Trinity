@@ -29,6 +29,7 @@ namespace Trinity.Components.Combat.Resources
             public Vector3 MyPosition { get; set; }
             public Vector3 TargetPosition { get; set; }
             public TimeSpan TimeSinceUse => DateTime.UtcNow.Subtract(UseTime);
+            public int TargetAcdId { get; set; }
 
             public TimeSpan TimeDistanceFrom(SpellHistoryItem other)
             {
@@ -84,7 +85,8 @@ namespace Trinity.Components.Combat.Resources
                 Power = power,
                 UseTime = DateTime.UtcNow,
                 MyPosition = Core.Player.Position,
-                TargetPosition = power.TargetPosition
+                TargetPosition = power.TargetPosition,
+                TargetAcdId = power.TargetAcdId,
             });
 
             LastSpellUseTime = DateTime.UtcNow;
@@ -99,13 +101,6 @@ namespace Trinity.Components.Combat.Resources
 
         public static void RecordSpell(SNOPower power)
         {
-            RecordSpell(new TrinityPower(power));
-        }
-
-        public static void RecordSpell(SNOPower power, int targetAcdId)
-        {
-            SpellTracker.TrackSpellOnUnit(targetAcdId, power);
-            //Combat.TargetHandler.LastActionTimes.Add(DateTime.UtcNow);
             RecordSpell(new TrinityPower(power));
         }
 
@@ -206,7 +201,23 @@ namespace Trinity.Components.Combat.Resources
 
         public static void RecordSpell(SNOPower power, Vector3 position, int targetAcdId)
         {
-            RecordSpell(new TrinityPower(power, 0, position));
+            SpellTracker.TrackSpellOnUnit(targetAcdId, power);
+            var p = new TrinityPower(power)
+            {
+                TargetAcdId = targetAcdId,
+                TargetPosition = position,
+            };
+            RecordSpell(p);
+        }
+
+        public static void RecordSpell(SNOPower power, int targetAcdId)
+        {
+            SpellTracker.TrackSpellOnUnit(targetAcdId, power);
+            var p = new TrinityPower(power)
+            {
+                TargetAcdId = targetAcdId
+            };
+            RecordSpell(p);
         }
     }
 }
