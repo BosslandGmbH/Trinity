@@ -244,6 +244,9 @@ namespace Trinity.Settings.ItemList
             //TrinityItemType.Gold,
             //TrinityItemType.PortalDevice,
             //TrinityItemType.UberReagent
+            TrinityItemType.Scythe,
+            TrinityItemType.TwoHandScythe,
+            TrinityItemType.Phylactery,
         };
 
         private bool _alwaysStashPrimalAncients;

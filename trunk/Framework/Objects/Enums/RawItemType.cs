@@ -187,5 +187,14 @@ namespace Trinity.Framework.Objects.Enums
         CosmeticPennant = -1933735925,
         CosmeticPet = -1269690848,
         CosmeticPortraitFrame = 1089435095,
+        NecroPants = -943720265,
+        NecroChest = 2146108164,
+        NecroHelm = -487438254,
+        NecroShoulders = -1118573915,
+        NecroBoots = -2032851597,
+        NecroGloves = 208688284,
+        TwoHandedScythe = 151398954,
+        Phylactery = 311436835,
+        Scythe = 151398921,
     }
 }

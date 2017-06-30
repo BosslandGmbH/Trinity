@@ -245,6 +245,7 @@ namespace Trinity.Components.Coroutines
                 case ActorClass.DemonHunter:
                     return PlayerAttributeType.Dexterity;
 
+                case ActorClass.Necromancer:
                 case ActorClass.Witchdoctor:
                 case ActorClass.Wizard:
                     return PlayerAttributeType.Intelligence;
@@ -727,7 +728,7 @@ namespace Trinity.Components.Coroutines
                     InventorySlot = item.InventorySlot,
                 };
 
-                TrinityItemBaseType trinityItemBaseType = TypeConversions.DetermineBaseType(TypeConversions.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType));
+                TrinityItemBaseType trinityItemBaseType = TypeConversions.GetTrinityItemBaseType(TypeConversions.DetermineItemType(item.InternalName, item.ItemType, item.FollowerSpecialType));
                 cItem.TrinityItemBaseType = trinityItemBaseType;
                 cItem.IsEquipment = GetIsEquipment(trinityItemBaseType);
                 cItem.IsSalvageable = GetIsSalvageable(cItem);

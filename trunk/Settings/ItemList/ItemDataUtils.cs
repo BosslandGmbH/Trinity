@@ -211,6 +211,7 @@ namespace Trinity.Settings.ItemList
                 case StatType.Intelligence:
                     actorClasses.Add(ActorClass.Witchdoctor);
                     actorClasses.Add(ActorClass.Wizard);
+                    actorClasses.Add(ActorClass.Necromancer);
                     break;
 
                 case StatType.Strength:
@@ -257,7 +258,8 @@ namespace Trinity.Settings.ItemList
                     ActorClass.Witchdoctor,
                     ActorClass.Wizard,
                     ActorClass.Crusader,
-                    ActorClass.Barbarian
+                    ActorClass.Barbarian,
+                    ActorClass.Necromancer,
                 };
                 foreach (var ac in actorClasses)
                 {

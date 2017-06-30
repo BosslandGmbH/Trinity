@@ -146,6 +146,11 @@ namespace Trinity.Framework.Objects
                 case TrinityItemType.Orb:
                     return ActorClass.Wizard;
 
+                case TrinityItemType.Scythe:
+                case TrinityItemType.TwoHandScythe:
+                case TrinityItemType.Phylactery:
+                    return ActorClass.Necromancer;
+
                 case TrinityItemType.HandCrossbow:
                 case TrinityItemType.Cloak:
                 case TrinityItemType.Quiver:

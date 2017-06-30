@@ -81,216 +81,217 @@ namespace Trinity.Framework.Helpers
             return TrinityItemQuality.None;
         }
 
-        internal static ItemType GItemTypeToItemType(TrinityItemType itemType)
-        {
-            switch (itemType)
-            {
-                case TrinityItemType.Axe:
-                    return ItemType.Axe;
+        //internal static ItemType GItemTypeToItemType(TrinityItemType itemType)
+        //{
+        //    switch (itemType)
+        //    {
+        //        case TrinityItemType.Axe:
+        //            return ItemType.Axe;
 
-                case TrinityItemType.Dagger:
-                    return ItemType.Dagger;
+        //        case TrinityItemType.Dagger:
+        //            return ItemType.Dagger;
 
-                case TrinityItemType.Flail:
-                    return ItemType.Flail;
+        //        case TrinityItemType.Flail:
+        //            return ItemType.Flail;
 
-                case TrinityItemType.FistWeapon:
-                    return ItemType.FistWeapon;
+        //        case TrinityItemType.FistWeapon:
+        //            return ItemType.FistWeapon;
 
-                case TrinityItemType.Mace:
-                    return ItemType.Mace;
+        //        case TrinityItemType.Mace:
+        //            return ItemType.Mace;
 
-                case TrinityItemType.MightyWeapon:
-                    return ItemType.MightyWeapon;
+        //        case TrinityItemType.MightyWeapon:
+        //            return ItemType.MightyWeapon;
 
-                case TrinityItemType.Spear:
-                    return ItemType.Spear;
+        //        case TrinityItemType.Spear:
+        //            return ItemType.Spear;
 
-                case TrinityItemType.Sword:
-                    return ItemType.Sword;
+        //        case TrinityItemType.Sword:
+        //            return ItemType.Sword;
 
-                case TrinityItemType.Wand:
-                    return ItemType.Wand;
+        //        case TrinityItemType.Wand:
+        //            return ItemType.Wand;
 
-                case TrinityItemType.HandCrossbow:
-                    return ItemType.HandCrossbow;
+        //        case TrinityItemType.HandCrossbow:
+        //            return ItemType.HandCrossbow;
 
-                case TrinityItemType.CeremonialKnife:
-                    return ItemType.CeremonialDagger;
+        //        case TrinityItemType.CeremonialKnife:
+        //            return ItemType.CeremonialDagger;
 
-                case TrinityItemType.TwoHandDaibo:
-                    return ItemType.Daibo;
+        //        case TrinityItemType.TwoHandDaibo:
+        //            return ItemType.Daibo;
 
-                case TrinityItemType.TwoHandMace:
-                    return ItemType.Mace;
+        //        case TrinityItemType.TwoHandMace:
+        //            return ItemType.Mace;
 
-                case TrinityItemType.TwoHandFlail:
-                    return ItemType.Flail;
+        //        case TrinityItemType.TwoHandFlail:
+        //            return ItemType.Flail;
 
-                case TrinityItemType.TwoHandMighty:
-                    return ItemType.MightyWeapon;
+        //        case TrinityItemType.TwoHandMighty:
+        //            return ItemType.MightyWeapon;
 
-                case TrinityItemType.TwoHandPolearm:
-                    return ItemType.Polearm;
+        //        case TrinityItemType.TwoHandPolearm:
+        //            return ItemType.Polearm;
 
-                case TrinityItemType.TwoHandStaff:
-                    return ItemType.Staff;
+        //        case TrinityItemType.TwoHandStaff:
+        //            return ItemType.Staff;
 
-                case TrinityItemType.TwoHandSword:
-                    return ItemType.Sword;
+        //        case TrinityItemType.TwoHandSword:
+        //            return ItemType.Sword;
 
-                case TrinityItemType.TwoHandAxe:
-                    return ItemType.Axe;
+        //        case TrinityItemType.TwoHandAxe:
+        //            return ItemType.Axe;
 
-                case TrinityItemType.TwoHandCrossbow:
-                    return ItemType.Crossbow;
+        //        case TrinityItemType.TwoHandCrossbow:
+        //            return ItemType.Crossbow;
 
-                case TrinityItemType.TwoHandBow:
-                    return ItemType.Bow;
+        //        case TrinityItemType.TwoHandBow:
+        //            return ItemType.Bow;
 
-                case TrinityItemType.FollowerEnchantress:
-                case TrinityItemType.FollowerScoundrel:
-                case TrinityItemType.FollowerTemplar:
-                    return ItemType.FollowerSpecial;
+        //        case TrinityItemType.FollowerEnchantress:
+        //        case TrinityItemType.FollowerScoundrel:
+        //        case TrinityItemType.FollowerTemplar:
+        //            return ItemType.FollowerSpecial;
 
-                case TrinityItemType.CraftingMaterial:
-                    return ItemType.CraftingReagent;
+        //        case TrinityItemType.CraftingMaterial:
+        //            return ItemType.CraftingReagent;
 
-                case TrinityItemType.CraftTome:
-                    return ItemType.CraftingPlan;
+        //        case TrinityItemType.CraftTome:
+        //            return ItemType.CraftingPlan;
 
-                case TrinityItemType.HealthPotion:
-                case TrinityItemType.Dye:
-                case TrinityItemType.ConsumableAddSockets:
-                case TrinityItemType.ProgressionGlobe:
-                case TrinityItemType.PowerGlobe:
-                case TrinityItemType.HealthGlobe:
-                    return ItemType.Consumable;
+        //        case TrinityItemType.HealthPotion:
+        //        case TrinityItemType.Dye:
+        //        case TrinityItemType.ConsumableAddSockets:
+        //        case TrinityItemType.ProgressionGlobe:
+        //        case TrinityItemType.PowerGlobe:
+        //        case TrinityItemType.HealthGlobe:
+        //            return ItemType.Consumable;
 
-                case TrinityItemType.Ruby:
-                case TrinityItemType.Emerald:
-                case TrinityItemType.Topaz:
-                case TrinityItemType.Amethyst:
-                case TrinityItemType.Diamond:
-                    return ItemType.Gem;
+        //        case TrinityItemType.Ruby:
+        //        case TrinityItemType.Emerald:
+        //        case TrinityItemType.Topaz:
+        //        case TrinityItemType.Amethyst:
+        //        case TrinityItemType.Diamond:
+        //            return ItemType.Gem;
 
-                case TrinityItemType.LootRunKey:
-                case TrinityItemType.HoradricRelic:
-                case TrinityItemType.SpecialItem:
-                case TrinityItemType.CraftingPlan:
-                case TrinityItemType.HoradricCache:
-                case TrinityItemType.StaffOfHerding:
-                case TrinityItemType.InfernalKey:
-                case TrinityItemType.TieredLootrunKey:
-                    return ItemType.Unknown;
-            }
+        //        case TrinityItemType.LootRunKey:
+        //        case TrinityItemType.HoradricRelic:
+        //        case TrinityItemType.SpecialItem:
+        //        case TrinityItemType.CraftingPlan:
+        //        case TrinityItemType.HoradricCache:
+        //        case TrinityItemType.StaffOfHerding:
+        //        case TrinityItemType.InfernalKey:
+        //        case TrinityItemType.TieredLootrunKey:
+        //            return ItemType.Unknown;
+        //    }
 
-            ItemType newType;
-            if (Enum.TryParse(itemType.ToString(), true, out newType))
-                return newType;
+        //    ItemType newType;
+        //    if (Enum.TryParse(itemType.ToString(), true, out newType))
+        //        return newType;
 
-            return ItemType.Unknown;
-        }
+        //    return ItemType.Unknown;
+        //}
 
-        internal static TrinityItemBaseType DetermineBaseType(TrinityItemType itemType)
-        {
-            // One Handed Weapons
-            switch (itemType)
-            {
-                case TrinityItemType.Axe:
-                case TrinityItemType.CeremonialKnife:
-                case TrinityItemType.Dagger:
-                case TrinityItemType.Flail:
-                case TrinityItemType.FistWeapon:
-                case TrinityItemType.Mace:
-                case TrinityItemType.MightyWeapon:
-                case TrinityItemType.Spear:
-                case TrinityItemType.Sword:
-                case TrinityItemType.Wand:
-                    return TrinityItemBaseType.WeaponOneHand;
+        //internal static TrinityItemBaseType DetermineBaseType(TrinityItemType itemType)
+        //{
+        //    // One Handed Weapons
+        //    switch (itemType)
+        //    {
+        //        case TrinityItemType.Axe:
+        //        case TrinityItemType.CeremonialKnife:
+        //        case TrinityItemType.Dagger:
+        //        case TrinityItemType.Flail:
+        //        case TrinityItemType.FistWeapon:
+        //        case TrinityItemType.Mace:
+        //        case TrinityItemType.MightyWeapon:
+        //        case TrinityItemType.Spear:
+        //        case TrinityItemType.Sword:
+        //        case TrinityItemType.Wand:
+        //            return TrinityItemBaseType.WeaponOneHand;
 
-                case TrinityItemType.TwoHandDaibo:
-                case TrinityItemType.TwoHandMace:
-                case TrinityItemType.TwoHandFlail:
-                case TrinityItemType.TwoHandMighty:
-                case TrinityItemType.TwoHandPolearm:
-                case TrinityItemType.TwoHandStaff:
-                case TrinityItemType.TwoHandSword:
-                case TrinityItemType.TwoHandAxe:
-                    return TrinityItemBaseType.WeaponTwoHand;
+        //        case TrinityItemType.TwoHandDaibo:
+        //        case TrinityItemType.TwoHandMace:
+        //        case TrinityItemType.TwoHandFlail:
+        //        case TrinityItemType.TwoHandMighty:
+        //        case TrinityItemType.TwoHandPolearm:
+        //        case TrinityItemType.TwoHandStaff:
+        //        case TrinityItemType.TwoHandSword:
+        //        case TrinityItemType.TwoHandAxe:
+        //            return TrinityItemBaseType.WeaponTwoHand;
 
-                case TrinityItemType.TwoHandCrossbow:
-                case TrinityItemType.HandCrossbow:
-                case TrinityItemType.TwoHandBow:
-                    return TrinityItemBaseType.WeaponRange;
+        //        case TrinityItemType.TwoHandCrossbow:
+        //        case TrinityItemType.HandCrossbow:
+        //        case TrinityItemType.TwoHandBow:
+        //            return TrinityItemBaseType.WeaponRange;
 
-                case TrinityItemType.Mojo:
-                case TrinityItemType.Orb:
-                case TrinityItemType.CrusaderShield:
-                case TrinityItemType.Quiver:
-                case TrinityItemType.Shield:
-                    return TrinityItemBaseType.Offhand;
+        //        case TrinityItemType.Mojo:
+        //        case TrinityItemType.Orb:
+        //        case TrinityItemType.CrusaderShield:
+        //        case TrinityItemType.Quiver:
+        //        case TrinityItemType.Shield:
+        //            return TrinityItemBaseType.Offhand;
 
-                case TrinityItemType.Boots:
-                case TrinityItemType.Bracer:
-                case TrinityItemType.Chest:
-                case TrinityItemType.Cloak:
-                case TrinityItemType.Gloves:
-                case TrinityItemType.Helm:
-                case TrinityItemType.Legs:
-                case TrinityItemType.Shoulder:
-                case TrinityItemType.SpiritStone:
-                case TrinityItemType.VoodooMask:
-                case TrinityItemType.WizardHat:
-                case TrinityItemType.Belt:
-                case TrinityItemType.MightyBelt:
-                    return TrinityItemBaseType.Armor;
+        //        case TrinityItemType.Boots:
+        //        case TrinityItemType.Bracer:
+        //        case TrinityItemType.Chest:
+        //        case TrinityItemType.Cloak:
+        //        case TrinityItemType.Gloves:
+        //        case TrinityItemType.Helm:
+        //        case TrinityItemType.Legs:
+        //        case TrinityItemType.Shoulder:
+        //        case TrinityItemType.SpiritStone:
+        //        case TrinityItemType.VoodooMask:
+        //        case TrinityItemType.WizardHat:
+        //        case TrinityItemType.Belt:
+        //        case TrinityItemType.MightyBelt:
+        //            return TrinityItemBaseType.Armor;
 
-                case TrinityItemType.Amulet:
-                case TrinityItemType.Ring:
-                    return TrinityItemBaseType.Jewelry;
+        //        case TrinityItemType.Amulet:
+        //        case TrinityItemType.Ring:
+        //            return TrinityItemBaseType.Jewelry;
 
-                case TrinityItemType.FollowerEnchantress:
-                case TrinityItemType.FollowerScoundrel:
-                case TrinityItemType.FollowerTemplar:
-                    return TrinityItemBaseType.FollowerItem;
+        //        case TrinityItemType.FollowerEnchantress:
+        //        case TrinityItemType.FollowerScoundrel:
+        //        case TrinityItemType.FollowerTemplar:
+        //            return TrinityItemBaseType.FollowerItem;
 
-                case TrinityItemType.CraftingMaterial:
-                case TrinityItemType.CraftTome:
-                case TrinityItemType.LootRunKey:
-                case TrinityItemType.HoradricRelic:
-                case TrinityItemType.SpecialItem:
-                case TrinityItemType.CraftingPlan:
-                case TrinityItemType.HealthPotion:
-                case TrinityItemType.HoradricCache:
-                case TrinityItemType.Dye:
-                case TrinityItemType.StaffOfHerding:
-                case TrinityItemType.InfernalKey:
-                case TrinityItemType.ConsumableAddSockets:
-                case TrinityItemType.TieredLootrunKey:
-                    return TrinityItemBaseType.Misc;
+        //        case TrinityItemType.CraftingMaterial:
+        //        case TrinityItemType.CraftTome:
+        //        case TrinityItemType.LootRunKey:
+        //        case TrinityItemType.HoradricRelic:
+        //        case TrinityItemType.SpecialItem:
+        //        case TrinityItemType.CraftingPlan:
+        //        case TrinityItemType.HealthPotion:
+        //        case TrinityItemType.HoradricCache:
+        //        case TrinityItemType.Dye:
+        //        case TrinityItemType.StaffOfHerding:
+        //        case TrinityItemType.InfernalKey:
+        //        case TrinityItemType.ConsumableAddSockets:
+        //        case TrinityItemType.TieredLootrunKey:
+        //            return TrinityItemBaseType.Misc;
 
-                case TrinityItemType.Ruby:
-                case TrinityItemType.Emerald:
-                case TrinityItemType.Topaz:
-                case TrinityItemType.Amethyst:
-                case TrinityItemType.Diamond:
-                    return TrinityItemBaseType.Gem;
+        //        case TrinityItemType.Ruby:
+        //        case TrinityItemType.Emerald:
+        //        case TrinityItemType.Topaz:
+        //        case TrinityItemType.Amethyst:
+        //        case TrinityItemType.Diamond:
+        //            return TrinityItemBaseType.Gem;
 
-                case TrinityItemType.HealthGlobe:
-                    return TrinityItemBaseType.HealthGlobe;
+        //        case TrinityItemType.HealthGlobe:
+        //            return TrinityItemBaseType.HealthGlobe;
 
-                case TrinityItemType.PowerGlobe:
-                    return TrinityItemBaseType.PowerGlobe;
+        //        case TrinityItemType.PowerGlobe:
+        //            return TrinityItemBaseType.PowerGlobe;
 
-                case TrinityItemType.ProgressionGlobe:
-                    return TrinityItemBaseType.ProgressionGlobe;
-            }
-            return TrinityItemBaseType.Unknown;
-        }
+        //        case TrinityItemType.ProgressionGlobe:
+        //            return TrinityItemBaseType.ProgressionGlobe;
+        //    }
+        //    return TrinityItemBaseType.Unknown;
+        //}
 
         private static readonly Regex ItemExpansionRegex = new Regex(@"^[xp]\d_", RegexOptions.Compiled);
 
+        [Obsolete]
         public static TrinityItemType DetermineItemType(string name, ItemType dbItemType, FollowerType dbFollowerType = FollowerType.None)
         {
             name = name.ToLower();
@@ -462,6 +463,7 @@ namespace Trinity.Framework.Helpers
                 case ItemType.Wand:
                 case ItemType.Daibo:
                 case ItemType.HandCrossbow:
+                case ItemType.Scythe:
                     return ItemBaseType.Weapon;
 
                 case ItemType.Shield:
@@ -482,6 +484,7 @@ namespace Trinity.Framework.Helpers
                 case ItemType.Cloak:
                 case ItemType.SpiritStone:
                 case ItemType.VoodooMask:
+                case ItemType.Phylactery:
                     return ItemBaseType.Armor;
 
                 case ItemType.Ring:
@@ -510,8 +513,10 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.Spear:
                 case TrinityItemType.Sword:
                 case TrinityItemType.Wand:
+                case TrinityItemType.Scythe:
                     return TrinityItemBaseType.WeaponOneHand;
 
+                case TrinityItemType.TwoHandScythe:
                 case TrinityItemType.TwoHandDaibo:
                 case TrinityItemType.TwoHandMace:
                 case TrinityItemType.TwoHandFlail:
@@ -532,6 +537,7 @@ namespace Trinity.Framework.Helpers
                 case TrinityItemType.CrusaderShield:
                 case TrinityItemType.Quiver:
                 case TrinityItemType.Shield:
+                case TrinityItemType.Phylactery:
                     return TrinityItemBaseType.Offhand;
 
                 case TrinityItemType.Boots:
@@ -590,6 +596,8 @@ namespace Trinity.Framework.Helpers
 
                 case TrinityItemType.ProgressionGlobe:
                     return TrinityItemBaseType.ProgressionGlobe;
+
+
             }
             return TrinityItemBaseType.Unknown;
         }
@@ -616,6 +624,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Boots_WitchDoctor:
                 case RawItemType.Boots_Wizard:
                 case RawItemType.Boots:
+                case RawItemType.NecroBoots:
                     return TrinityItemType.Boots;
                 //case RawItemType.StarterBow:
                 case RawItemType.GenericBowWeapon:
@@ -685,6 +694,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Gloves_WitchDoctor:
                 case RawItemType.Gloves_Wizard:
                 case RawItemType.Gloves:
+                case RawItemType.NecroGloves:
                     return TrinityItemType.Gloves;
 
                 case RawItemType.HandXbow:
@@ -703,6 +713,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Legs_WitchDoctor:
                 case RawItemType.Legs_Wizard:
                 case RawItemType.Legs:
+                case RawItemType.NecroPants:
                     return TrinityItemType.Legs;
 
                 case RawItemType.Polearm:
@@ -725,6 +736,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Shoulders_WitchDoctor:
                 case RawItemType.Shoulders_Wizard:
                 case RawItemType.Shoulders:
+                case RawItemType.NecroShoulders:
                     return TrinityItemType.Shoulder;
 
                 case RawItemType.Spear:
@@ -788,6 +800,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.ChestArmor_Wizard:
                 case RawItemType.ChestArmor:
                 case RawItemType.Armor:
+                case RawItemType.NecroChest:
                     return TrinityItemType.Chest;
 
                 case RawItemType.Helm_Barbarian:
@@ -798,6 +811,7 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Helm_Wizard:
                 case RawItemType.Helm:
                 case RawItemType.GenericHelm:
+                case RawItemType.NecroHelm:
                     return TrinityItemType.Helm;
 
                 case RawItemType.Belt_Crusader:
@@ -834,6 +848,15 @@ namespace Trinity.Framework.Helpers
 
                 case RawItemType.PortalDevice:
                     return TrinityItemType.PortalDevice;
+               
+                case RawItemType.TwoHandedScythe:
+                    return TrinityItemType.TwoHandScythe;
+
+                case RawItemType.Scythe:
+                    return TrinityItemType.Scythe;
+
+                case RawItemType.Phylactery:
+                    return TrinityItemType.Phylactery;
 
                 case RawItemType.Gem:
                     switch (gemType)
@@ -855,6 +878,7 @@ namespace Trinity.Framework.Helpers
                     }
                     break;
             }
+            
 
             return TrinityItemType.Unknown;
         }
@@ -890,7 +914,7 @@ namespace Trinity.Framework.Helpers
             {
                 case RawItemType.Axe:
                 case RawItemType.Axe2H:
-                    return ItemType.Axe;
+                    return ItemType.Axe;                               
 
                 case RawItemType.Sword:
                 case RawItemType.Sword2H:
@@ -1094,6 +1118,19 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Dye:
                     return ItemType.Consumable;
 
+                case RawItemType.NecroPants:
+                    return ItemType.Legs;
+                case RawItemType.NecroChest:
+                    return ItemType.Chest;
+                case RawItemType.NecroHelm:
+                    return ItemType.Helm;
+                case RawItemType.NecroGloves:
+                    return ItemType.Gloves;
+                case RawItemType.TwoHandedScythe:
+                    return ItemType.Scythe;
+                case RawItemType.Phylactery:
+                    return ItemType.Phylactery;
+
                     //return ItemType.SeasonCache; ??
             }
             return ItemType.Unknown;
@@ -1107,6 +1144,7 @@ namespace Trinity.Framework.Helpers
                 case ItemType.Quiver:
                 case ItemType.CrusaderShield:
                 case ItemType.Shield:
+                case ItemType.Phylactery:
                 case ItemType.Orb:
                     return true;
             }
@@ -1154,6 +1192,8 @@ namespace Trinity.Framework.Helpers
                 case ItemType.Crossbow:
                 case ItemType.HandCrossbow:
                 case ItemType.Bow:
+                case ItemType.Phylactery:
+                case ItemType.Scythe:                
                     return true;
             }
             return false;
@@ -1216,6 +1256,13 @@ namespace Trinity.Framework.Helpers
                         return false;
                     break;
 
+                case TrinityItemType.Phylactery:
+                case TrinityItemType.Scythe:
+                case TrinityItemType.TwoHandScythe:
+                    if (actorClass != ActorClass.Necromancer)
+                        return false;
+                    break;
+
                 case TrinityItemType.Cloak:
                 case TrinityItemType.Quiver:
                 case TrinityItemType.TwoHandBow:
@@ -1224,6 +1271,7 @@ namespace Trinity.Framework.Helpers
                     if (actorClass != ActorClass.DemonHunter)
                         return false;
                     break;
+                
             }
 
             return true;
@@ -1240,6 +1288,7 @@ namespace Trinity.Framework.Helpers
             ItemType.Quiver,
             ItemType.Shield,
             ItemType.CrusaderShield,
+            ItemType.Scythe
         };
 
         internal static HashSet<ItemType> ShieldTypes = new HashSet<ItemType>
@@ -1279,6 +1328,7 @@ namespace Trinity.Framework.Helpers
             ItemType.Staff,
             ItemType.Sword,
             ItemType.Wand,
+            ItemType.Scythe
         };
 
         internal static HashSet<ItemType> ArmorTypes = new HashSet<ItemType>

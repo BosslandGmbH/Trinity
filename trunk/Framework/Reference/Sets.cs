@@ -2,6 +2,7 @@
 using System.Linq;
 using Trinity.Framework.Helpers;
 using Trinity.Framework.Objects;
+using Zeta.Game;
 
 namespace Trinity.Framework.Reference
 {
@@ -661,6 +662,90 @@ namespace Trinity.Framework.Reference
             FirstBonusItemCount = 2,
             SecondBonusItemCount = 4,
             ThirdBonusItemCount = 6
+        };
+
+        public static Set TragoulsAvatar = new Set
+        {
+            Name = "Trag'Oul's Avatar",
+            Items = new List<Item>
+            {
+                Legendary.TragoulsClaws,
+                Legendary.TragoulsGuise,
+                Legendary.TragoulsHeart,
+                Legendary.TragoulsHide,
+                Legendary.TragoulsScales,
+                Legendary.TragoulsStalwartGreaves
+            },
+            FirstBonusItemCount = 2,
+            SecondBonusItemCount = 4,
+            ThirdBonusItemCount = 6,
+            ClassRestriction = ActorClass.Necromancer,
+        };
+
+        public static Set BonesOfRathma = new Set
+        {
+            Name = "Bones of Rathma",
+            Items = new List<Item>
+            {
+                Legendary.RathmasMacabreVambraces,
+                Legendary.RathmasOssifiedSabatons,
+                Legendary.RathmasRibcagePlate,
+                Legendary.RathmasSkeletalLegplates,
+                Legendary.RathmasSkullHelm,
+                Legendary.RathmasSpikes
+            },
+            FirstBonusItemCount = 2,
+            SecondBonusItemCount = 4,
+            ThirdBonusItemCount = 6,
+            ClassRestriction = ActorClass.Necromancer,
+        };
+
+        public static Set PestilenceMastersShroud = new Set
+        {
+            Name = "Pestilence Master's Shroud",
+            Items = new List<Item>
+            {
+                Legendary.PestilenceBattleBoots,
+                Legendary.PestilenceDefense,
+                Legendary.PestilenceGloves,
+                Legendary.PestilenceIncantations,
+                Legendary.PestilenceMask,
+                Legendary.PestilenceRobe,
+            },
+            FirstBonusItemCount = 2,
+            SecondBonusItemCount = 4,
+            ThirdBonusItemCount = 6,
+            ClassRestriction = ActorClass.Necromancer,
+        };
+
+        public static Set GraceOfInarius = new Set
+        {
+            Name = "Grace of Inarius",
+            Items = new List<Item>
+            {
+                Legendary.InariussConviction,
+                Legendary.InariussMartyrdom,
+                Legendary.InariussPerseverance,
+                Legendary.InariussReticence,
+                Legendary.InariussUnderstanding,
+                Legendary.InariussWill,
+            },
+            FirstBonusItemCount = 2,
+            SecondBonusItemCount = 4,
+            ThirdBonusItemCount = 6,
+            ClassRestriction = ActorClass.Necromancer,
+        };
+
+        public static Set JessethArms = new Set
+        {
+            Name = "Jesseth Arms",
+            Items = new List<Item>
+            {
+                Legendary.JessethSkullscythe,
+                Legendary.JessethSkullshield,
+            },
+            FirstBonusItemCount = 2,
+            ClassRestriction = ActorClass.Necromancer,
         };
 
         //public static Set BornsCommand = new Set
