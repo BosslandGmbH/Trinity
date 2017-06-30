@@ -542,6 +542,9 @@ namespace Trinity.Routines.Necromancer
             if (!Skills.Necromancer.BloodRush.CanCast())
                 return false;
 
+            if (Skills.Necromancer.BloodRush.CooldownRemaining > 0)
+                return false;
+
             position = TargetUtil.GetBestClusterPoint();
             return position != Vector3.Zero;
         }
