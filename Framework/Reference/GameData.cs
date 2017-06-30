@@ -2743,6 +2743,8 @@ namespace Trinity.Framework.Reference
 
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            464983, // P6_Church_IronMaiden-8410 (464983)
+
             // these bounty chests are not clickable they have a protection globe on them during event then sno changes.
             (int)SNOActor.x1_Global_Chest_Locked,
 

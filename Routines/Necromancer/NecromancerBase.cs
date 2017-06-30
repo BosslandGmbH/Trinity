@@ -447,7 +447,7 @@ namespace Trinity.Routines.Necromancer
             // todo: investigate why cant find the power on monsters.         
 
             // anti-spam workaround
-            if (Skills.Necromancer.Frailty.TimeSinceUse < 5000)
+            if (Skills.Necromancer.Frailty.TimeSinceUse < 4000)
                 return false;
 
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;
@@ -466,7 +466,7 @@ namespace Trinity.Routines.Necromancer
             // todo: investigate why cant find the power on monsters.         
 
             // anti-spam workaround
-            if (Skills.Necromancer.Decrepify.TimeSinceUse < 8000) 
+            if (Skills.Necromancer.Decrepify.TimeSinceUse < 4000) 
                 return false;
 
             target = TargetUtil.BestTargetWithoutDebuff(60f, SNOPower.P6_Necro_Decrepify);
@@ -486,7 +486,7 @@ namespace Trinity.Routines.Necromancer
             // todo: investigate why cant find the debuff on monsters.         
 
             // anti-spam workaround
-            if (Skills.Necromancer.Leech.TimeSinceUse < 10000)
+            if (Skills.Necromancer.Leech.TimeSinceUse < 8000)
                 return false;
 
             target = TargetUtil.GetBestClusterUnit() ?? CurrentTarget;

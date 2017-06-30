@@ -45,6 +45,7 @@ namespace Trinity.Framework.Reference
                     _all.AddRange(Runes.Wizard.ToList());
                     _all.AddRange(Runes.Crusader.ToList());
                     _all.AddRange(Runes.Monk.ToList());
+                    _all.AddRange(Runes.Necromancer.ToList());
                 }
                 return _all;
             }
@@ -72,6 +73,8 @@ namespace Trinity.Framework.Reference
                         return Runes.WitchDoctor.ToList();
                     case ActorClass.Wizard:
                         return Runes.Wizard.ToList();
+                    case ActorClass.Necromancer:
+                        return Runes.Necromancer.ToList();
                 }
             }
             return new List<Rune>();

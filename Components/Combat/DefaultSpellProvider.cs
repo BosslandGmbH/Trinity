@@ -153,7 +153,7 @@ namespace Trinity.Components.Combat
             PowerManager.CanCastFlags reason;
             if (!PowerManager.CanCast(skill.SNOPower, out reason))
             {
-                if (reason == PowerManager.CanCastFlags.PowerInvalidTarget && !AllowInvalidTargetPowers.Contains(skill.SNOPower))
+                if (reason != PowerManager.CanCastFlags.PowerInvalidTarget || !AllowInvalidTargetPowers.Contains(skill.SNOPower))
                 {
                     Core.Logger.Debug(LogCategory.Spells, $"PowerManager CanCast failed for {skill.SNOPower} with flags: {reason}");
                     return false;

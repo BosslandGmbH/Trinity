@@ -91,7 +91,7 @@ namespace Trinity.Modules
 
                 SkillUtils.Active.ForEach(logSkill);
 
-                Core.Logger.Log("------ Passives ------", SkillUtils.Active.Count, SkillUtils.Active.Count);
+                Core.Logger.Log("------ Passives ------");
 
                 Action<Passive> logPassive = p => Core.Logger.Log("Passive: {0}", p.Name);
 

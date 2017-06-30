@@ -439,6 +439,8 @@ namespace Trinity.Routines
                     return WitchdoctorElements;
                 case ActorClass.Monk:
                     return MonkElements;
+                case ActorClass.Necromancer:
+                    return NecromancerElements;
             }
             return new List<Element>();
         }
@@ -449,6 +451,7 @@ namespace Trinity.Routines
         protected static readonly List<Element> DemonHunterElements = new List<Element> { Element.Cold, Element.Fire, Element.Lightning, Element.Physical };
         protected static readonly List<Element> WitchdoctorElements = new List<Element> { Element.Cold, Element.Fire, Element.Physical, Element.Poison };
         protected static readonly List<Element> MonkElements = new List<Element> { Element.Cold, Element.Fire, Element.Holy, Element.Lightning, Element.Physical };
+        protected static readonly List<Element> NecromancerElements = new List<Element> { Element.Cold, Element.Physical, Element.Poison };
 
 
 

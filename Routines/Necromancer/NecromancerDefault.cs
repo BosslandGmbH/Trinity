@@ -28,12 +28,16 @@ namespace Trinity.Routines.Necromancer
         public TrinityPower GetOffensivePower()
         {
             TrinityPower power;
+            TrinityActor target;
 
             if (TryCursePower(out power))
                 return power;
 
             if (TryBloodPower(out power))
                 return power;
+
+            if (ShouldApplyCurseWithScythe() && ShouldGrimScythe(out target))
+                return GrimScythe(target);
 
             if (TryCorpsePower(out power))
                 return power;
@@ -48,6 +52,13 @@ namespace Trinity.Routines.Necromancer
                 return power;
 
             return null;
+        }
+
+        private bool ShouldApplyCurseWithScythe()
+        {
+            // Inarius build with Shadowhook should rarely run out of resource to force primary,
+            // so it needs to be occasionally prioritized to apply curses.
+            return Runes.Necromancer.CursedScythe.IsActive && Skills.Necromancer.GrimScythe.TimeSinceUse > 2000;
         }
 
         protected override bool ShouldCommandSkeletons(out TrinityActor target)
@@ -77,11 +88,12 @@ namespace Trinity.Routines.Necromancer
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            if (Skills.Necromancer.BloodRush.CanCast())
-            {
-                if (Player.CurrentHealthPct < 0.5 || Avoider.ShouldAvoid || Player.Actor.IsInCriticalAvoidance)
-                    return BloodRush(Avoider.SafeSpot);
-            } 
+            // todo powermanager not checking cooldown properly
+            //if (Skills.Necromancer.BloodRush.CanCast())
+            //{
+            //    if (Player.CurrentHealthPct < 0.5 || Avoider.ShouldAvoid || Player.Actor.IsInCriticalAvoidance)
+            //        return BloodRush(Avoider.SafeSpot);
+            //} 
 
             return Walk(destination);
         }

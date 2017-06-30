@@ -63,6 +63,7 @@ namespace Trinity.Framework.Reference
                     _all.AddRange(Passives.Wizard.ToList());
                     _all.AddRange(Passives.Crusader.ToList());
                     _all.AddRange(Passives.Monk.ToList());
+                    _all.AddRange(Passives.Necromancer.ToList());
                 }
                 return _all;
             }
@@ -91,6 +92,8 @@ namespace Trinity.Framework.Reference
                         return Passives.WitchDoctor.ToList();
                     case ActorClass.Wizard:
                         return Passives.Wizard.ToList();
+                    case ActorClass.Necromancer:
+                        return Passives.Necromancer.ToList();
                 }
             }
             return new List<Passive>();
