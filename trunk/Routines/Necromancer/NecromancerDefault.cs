@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Controls;
+using Trinity.Components.Combat;
 using Trinity.Components.Combat.Resources;
 using Trinity.Framework.Actors.ActorTypes;
 using Trinity.Framework.Helpers;
@@ -77,7 +78,15 @@ namespace Trinity.Routines.Necromancer
 
         public TrinityPower GetBuffPower()
         {
-            // todo: what buffs does necro have?
+            if (Player.CurrentHealthPct < 0.25 && Skills.Necromancer.BloodRush.CanCast())
+            {
+                return BloodRush(Avoider.SafeSpot);
+            }
+            // Put up bone armor when running around with high cluster size setting and not yet fighting
+            if (!Skills.Necromancer.BoneArmor.IsBuffActive && TargetUtil.AnyMobsInRange(15f, 3))
+            {
+                return BoneArmor();
+            }
             return null;
         }
 
@@ -88,12 +97,13 @@ namespace Trinity.Routines.Necromancer
 
         public TrinityPower GetMovementPower(Vector3 destination)
         {
-            // todo powermanager not checking cooldown properly
-            //if (Skills.Necromancer.BloodRush.CanCast())
-            //{
-            //    if (Player.CurrentHealthPct < 0.5 || Avoider.ShouldAvoid || Player.Actor.IsInCriticalAvoidance)
-            //        return BloodRush(Avoider.SafeSpot);
-            //} 
+            TrinityPower power;
+
+            if (!IsInCombat || CurrentTarget != null && CurrentTarget.IsElite && CurrentTarget.Position.Distance(destination) <= 10f)
+            {
+                if (TryBloodrushMovement(destination, out power))
+                    return power;
+            }
 
             return Walk(destination);
         }

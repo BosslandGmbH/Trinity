@@ -599,6 +599,34 @@ namespace Trinity.Routines.Necromancer
             return DefaultPower;
         }
 
+        protected bool TryBloodrushMovement(Vector3 destination, out TrinityPower trinityPower)
+        {
+            trinityPower = null;
+
+            if (!Skills.Necromancer.BloodRush.IsActive)
+                return false;
+
+            var path = Core.DBNavProvider.CurrentPath;
+            if (path != null && path.Contains(destination) && Skills.Necromancer.BloodRush.CanCast())
+            {
+                var projectedPosition = IsBlocked
+                    ? Core.Grids.Avoidance.GetPathCastPosition(50f, true)
+                    : Core.Grids.Avoidance.GetPathWalkPosition(50f, true);
+
+                if (projectedPosition != Vector3.Zero)
+                {
+                    var distance = projectedPosition.Distance(Player.Position);
+                    var inFacingDirection = Core.Grids.Avoidance.IsInPlayerFacingDirection(projectedPosition, 90);
+                    if ((distance > 15f || IsBlocked && distance > 5f) && inFacingDirection)
+                    {
+                        trinityPower = BloodRush(projectedPosition);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         #endregion
 
     }
