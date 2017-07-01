@@ -1118,6 +1118,10 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.Dye:
                     return ItemType.Consumable;
 
+                case RawItemType.NecroShoulders:
+                    return ItemType.Shoulder;
+                case RawItemType.NecroBoots:
+                    return ItemType.Boots;
                 case RawItemType.NecroPants:
                     return ItemType.Legs;
                 case RawItemType.NecroChest:
@@ -1127,6 +1131,8 @@ namespace Trinity.Framework.Helpers
                 case RawItemType.NecroGloves:
                     return ItemType.Gloves;
                 case RawItemType.TwoHandedScythe:
+                    return ItemType.Scythe;
+                case RawItemType.Scythe:
                     return ItemType.Scythe;
                 case RawItemType.Phylactery:
                     return ItemType.Phylactery;
