@@ -120,6 +120,8 @@ namespace Trinity.Components.Coroutines.Town
                             int col;
                             int row;
 
+                            item.OnUpdated(); // make sure wrong col/row/location is not cached after a move.
+
                             var page = GetBestStashLocation(item, out col, out row);
                             if (page == -1)
                             {
@@ -139,7 +141,9 @@ namespace Trinity.Components.Coroutines.Town
                             Core.Logger.Debug($"[StashItems] Stashing: {item.Name} ({item.ActorSnoId}) [{item.InventoryColumn},{item.InventoryRow} {item.InventorySlot}] Quality={item.ItemQualityLevel} IsAncient={item.IsAncient} InternalName={item.InternalName} StashPage={page}");
                             InventoryManager.MoveItem(item.AnnId, Core.Player.MyDynamicID, InventorySlot.SharedStash, col, row);                     
                             await Coroutine.Sleep(100);
+
                             Core.Actors.Update();
+
                             await Coroutine.Wait(5000, () => !item.IsValid || item.InventoryRow == row && item.InventoryColumn == col);
                             ItemEvents.FireItemStashed(item);
                         }
@@ -489,7 +493,7 @@ namespace Trinity.Components.Coroutines.Town
         private static InventoryMap GetInventoryMap()
         {
             Core.Actors.Update();
-            var stashItems = Core.Inventory.Stash.ToList();
+            var stashItems = Core.Actors.Inventory.Where(i => i.InventorySlot == InventorySlot.SharedStash).ToList();
             var itemDict = new Dictionary<Tuple<int, int>,TrinityItem>();
             foreach (var item in stashItems)
             {
@@ -506,7 +510,6 @@ namespace Trinity.Components.Coroutines.Town
                 }
             }
             return new InventoryMap(itemDict);
-           // return new InventoryMap(stashItems.DistinctBy().ToDictionary(k => new Tuple<int, int>(k.InventoryColumn, k.InventoryRow), v => v));
         }
 
         private static bool TryGetStackLocation(TrinityItem item, int stashPageNumber, int col, int row, InventoryMap map, ref int placeAtCol, ref int placeAtRow)
@@ -575,10 +578,7 @@ namespace Trinity.Components.Coroutines.Town
 
         public class InventoryMap : Dictionary<Tuple<int, int>, TrinityItem>
         {
-            public InventoryMap(Dictionary<Tuple<int, int>, TrinityItem> dictionary) : base(dictionary)
-            {
-            }
-
+            public InventoryMap(Dictionary<Tuple<int, int>, TrinityItem> dictionary) : base(dictionary)  { }
             public TrinityItem this[int indexX, int indexY] => this[new Tuple<int, int>(indexX, indexY)];
         }
 
