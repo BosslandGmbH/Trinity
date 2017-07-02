@@ -78,9 +78,16 @@ namespace Trinity.Routines.Necromancer
 
         public TrinityPower GetBuffPower()
         {
-            if (Player.CurrentHealthPct < 0.25 && Skills.Necromancer.BloodRush.CanCast())
+            if (Skills.Necromancer.BloodRush.CanCast())
             {
-                return BloodRush(Avoider.SafeSpot);
+                if (CurrentTarget?.Type == TrinityObjectType.ProgressionGlobe)
+                {
+                    return BloodRush(CurrentTarget.Position);
+                }
+                if (Player.CurrentHealthPct < 0.25)
+                {
+                    return BloodRush(Avoider.SafeSpot);
+                }
             }
             // Put up bone armor when running around with high cluster size setting and not yet fighting
             if (!Skills.Necromancer.BoneArmor.IsBuffActive && TargetUtil.AnyMobsInRange(15f, 3))

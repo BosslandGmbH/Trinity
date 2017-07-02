@@ -62,7 +62,7 @@ namespace Trinity.Routines.Necromancer
             => new TrinityPower(Skills.Necromancer.ArmyOfTheDead, 60f, target.AcdId);
 
         protected virtual TrinityPower BloodRush(Vector3 position)
-            => new TrinityPower(Skills.Necromancer.BloodRush, 50f, position);
+            => new TrinityPower(Skills.Necromancer.BloodRush, 50f, position) { CastWhenBlocked = true };
 
         protected virtual TrinityPower BoneArmor()
             => new TrinityPower(Skills.Necromancer.BoneArmor);

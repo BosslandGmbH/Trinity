@@ -66,8 +66,10 @@ namespace Trinity.Framework.Objects.Memory
 
         public int xF48_Neg1 => ReadOffset<int>(0xF48);
         public int xF4C => ReadOffset<int>(0xF4C);
-        public int x1678 => ReadOffset<int>(0x1678);
-        
+        //public int x1678 => ReadOffset<int>(0x1678);
+
+        public int x167c_ItemAnnId => ReadOffset<int>(0x167c);
+
     }
 
     public class UXButton : UXLabel
