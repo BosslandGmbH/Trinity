@@ -6656,7 +6656,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item WisdomOfKalan = new Item
         {
-            Id = 0,
+            Id = 476718,
             Name = "Wisdom of Kalan",
             Quality = ItemQuality.Legendary,
             Slug = "wisdom-of-kalan",
@@ -12199,7 +12199,7 @@ namespace Trinity.Framework.Reference
         /// </summary>
         public static Item SpearOfJairo = new Item
         {
-            Id = 0,
+            Id = 470273,
             Name = "Spear of Jairo",
             Quality = ItemQuality.Legendary,
             Slug = "spear-of-jairo",

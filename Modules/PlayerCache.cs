@@ -464,7 +464,7 @@ namespace Trinity.Modules
                     var element = UXHelper.GetControl(13566120389425937876);
                     if (element != null && element.IsValid)
                     {
-                        var ann = ((UXHotbarButton)element.Parent.Control).x1678;
+                        var ann = ((UXHotbarButton)element.Parent.Control).x167c_ItemAnnId;
                         return ZetaDia.Actors.GetActorsOfType<ACDItem>().FirstOrDefault(a => a.AnnId == ann);
                     }
                 }
