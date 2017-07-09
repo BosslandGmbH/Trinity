@@ -297,6 +297,7 @@ namespace Trinity.Components.Adventurer.Game.Exploration
         public HashSet<Vector3> BlacklistedPositions { get; set; } = new HashSet<Vector3>();
 
         public int SnoId { get; set; }
+        public bool HasBeenVisited { get; set; }
 
         public Vector3 GetRelativePosition(Vector3 worldPosition)
         {

@@ -60,6 +60,27 @@ namespace Trinity.Routines
         protected static TrinityPower Walk(Vector3 destination, float range = 7f)
             => new TrinityPower(SNOPower.Walk, range, destination);
 
+        public bool IsEliteNearby 
+            => WeightedUnits.Any(u => u.IsElite || u.IsTreasureGoblin);
+
+        public bool IsEliteClose
+            => WeightedUnits.Any(u => (u.IsElite || u.IsTreasureGoblin) && u.Distance < 25f);
+
+        public IEnumerable<TrinityActor> LocalElites 
+            => WeightedUnits.Where(u => (u.IsElite || u.IsTreasureGoblin) && u.Distance <= 100f);
+
+        public Vector3 EliteCentroid 
+            => TargetUtil.GetCentroid(LocalElites.Select(u => u.Position));
+
+        public bool IsClusteredElites 
+            => LocalElites.All(u => u.Position.Distance(EliteCentroid) < 25f);
+
+        public bool IsPartyGroupedTogether 
+            => Party.Members.Count() <= 1 || Party.Members.Count(p => p.Distance <= 30f) == PartyMembersNearby;
+
+        public int PartyMembersNearby
+            => Party.Members.Count(p => p.Distance <= 80f);
+
         /// <summary>
         /// A safe list of units who are valid and have a weight.
         /// </summary>

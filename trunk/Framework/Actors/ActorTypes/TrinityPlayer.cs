@@ -23,6 +23,7 @@ namespace Trinity.Framework.Actors.ActorTypes
 
         ITargetable IPartyMember.Target => TrinityCombat.Targeting.CurrentTarget;
         float IPartyMember.LeashDistance => 100f;
+        double IPartyMember.HitpointsMaxTotal => (double)HitPointsMax;
         bool IPartyMember.IsLeader => TrinityCombat.Party.Leader == this;
         bool IPartyMember.IsFollower => TrinityCombat.Party.Leader != this;
         PartyRole IPartyMember.Role => TrinityCombat.Party.Leader == this ? PartyRole.Leader : PartyRole.Follower;

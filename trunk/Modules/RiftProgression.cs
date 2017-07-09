@@ -21,7 +21,7 @@ namespace Trinity.Modules
                 return;
 
             CurrentProgressionPct = ZetaDia.Globals.RiftProgressionPercent;
-            IsInRift = ZetaDia.Globals.IsLoadingWorld && ZetaDia.Storage.RiftStarted && GameData.RiftWorldIds.Contains(ZetaDia.Globals.WorldSnoId);
+            IsInRift = !ZetaDia.Globals.IsLoadingWorld && ZetaDia.Storage.RiftStarted && GameData.RiftWorldIds.Contains(ZetaDia.Globals.WorldSnoId);
             IsGaurdianSpawned = IsInRift && ZetaDia.Storage.RiftGuardianSpawned;
             RiftComplete = ZetaDia.Storage.RiftCompleted;
         }

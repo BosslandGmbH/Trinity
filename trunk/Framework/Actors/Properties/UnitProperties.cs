@@ -111,7 +111,7 @@ namespace Trinity.Framework.Actors.Properties
         private static void UpdateStatus(TrinityActor actor, AttributesWrapper attributes)
         {
             actor.HitPoints = attributes.Hitpoints;
-            actor.HitPointsMax = attributes.HitpointsMax;
+            actor.HitPointsMax = attributes.HitpointsMaxTotal;
             actor.HitPointsPct = actor.HitPoints / actor.HitPointsMax;
             actor.HasDotDps = attributes.HasDotDps;
             actor.IsReflectingDamage = actor.MonsterAffixes.HasFlag(MonsterAffixes.ReflectsDamage) && attributes.IsReflecting;

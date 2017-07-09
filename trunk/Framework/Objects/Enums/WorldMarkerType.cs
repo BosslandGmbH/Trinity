@@ -16,6 +16,10 @@
         QuestPortalForward = 81058,
         QuestPortalBack = 102321,
         QuestSceneEntrance = 102320,
+        RiftPortalBack = 215746,
+        RiftPortalForward = 215744,
+        ConduitPylon = 451503,
+        SpeedPylon = 451504,
     }
 }
 

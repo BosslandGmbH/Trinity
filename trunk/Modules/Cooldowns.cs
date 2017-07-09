@@ -363,6 +363,7 @@ namespace Trinity.Modules
             (int)ActorAttributeType.BuffIconEndTick30,
             (int)ActorAttributeType.BuffIconEndTick31,
         };
+
     }
 
 

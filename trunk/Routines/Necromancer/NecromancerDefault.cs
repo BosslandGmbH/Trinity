@@ -97,6 +97,11 @@ namespace Trinity.Routines.Necromancer
             return null;
         }
 
+        protected override bool ShouldLandOfTheDead(out TrinityActor target)
+        {
+            return base.ShouldLandOfTheDead(out target) && (target.IsElite || CurrentTarget.IsElite && CurrentTarget.Distance < 20f);
+        }
+
         public TrinityPower GetDestructiblePower()
         {
             return DefaultDestructiblePower();

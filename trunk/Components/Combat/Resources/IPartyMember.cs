@@ -15,5 +15,6 @@ namespace Trinity.Components.Combat.Resources
         bool IsMe { get; }
         bool IsInCombat { get; }
         int HeroId { get; }
+        double HitpointsMaxTotal { get; }
     }
 }

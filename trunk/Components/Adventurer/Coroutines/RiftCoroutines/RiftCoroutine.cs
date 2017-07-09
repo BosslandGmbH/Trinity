@@ -5,6 +5,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media.TextFormatting;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Components.Adventurer.Game.Actors;
 using Trinity.Components.Adventurer.Game.Combat;
@@ -14,6 +15,7 @@ using Trinity.Components.Adventurer.Game.Rift;
 using Trinity.Components.Adventurer.Game.Stats;
 using Trinity.Components.Adventurer.Settings;
 using Trinity.Framework.Objects.Enums;
+using Trinity.Framework.Objects.Memory;
 using Trinity.Settings;
 using Zeta.Bot;
 using Zeta.Bot.Coroutines;
@@ -23,7 +25,7 @@ using Zeta.Common.Helpers;
 using Zeta.Game;
 using Zeta.Game.Internals;
 using Zeta.Game.Internals.Actors;
-using Zeta.Game.Internals.SNO;
+using GizmoType = Zeta.Game.Internals.SNO.GizmoType;
 
 
 namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
@@ -151,6 +153,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         public void Reset()
         {
             _riftCounter = 0;
+            _currentExitScene = null;
+            _entranceSceneNames.Clear();
             State = States.NotStarted;
         }
 
@@ -319,7 +323,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             _currentWorldDynamicId = AdvDia.CurrentWorldDynamicId;
             if (AdvDia.RiftQuest.State == QuestState.InProgress && RiftData.RiftWorldIds.Contains(AdvDia.CurrentWorldId))
             {
-                State = States.SearchingForExitPortal;
+                //State = States.SearchingForExitPortal;
+                State = States.OnNewRiftLevel;
                 return false;
             }
             State = AdvDia.CurrentWorldId == ExplorationData.ActHubWorldIds[Act.A1] ? States.InTown : States.GoingToAct1Hub;
@@ -561,6 +566,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
+            _entranceSceneNames.Clear();
             long empoweredCost = 0;
             bool shouldEmpower = _options.IsEmpowered;
             bool haveMoneyForEmpower = RiftData.EmpoweredRiftCost.TryGetValue(_level, out empoweredCost) && ZetaDia.Storage.PlayerDataManager.ActivePlayerData.Coinage >= (empoweredCost + PluginSettings.Current.MinimumGold);
@@ -772,6 +778,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 return false;
             }
 
+            _currentExitScene = null;
+            _currentEntranceScene = null;
+
             if (AdvDia.CurrentLevelAreaId == 276150 && !_holyCowEventCompleted)
             {
                 _possiblyCowLevel = true;
@@ -794,6 +803,18 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             }
             return false;
         }
+
+        private static WorldScene FindEntranceScene()
+        {
+            // Sometimes the rift entry scene will be named 'entrance' and sometimes 'exit', 
+            // so we use the marker to identify it instead.
+
+            var entrancePortalPosition = BountyHelpers.ScanForRiftEntryMarkerLocation();            
+            var entranceScene = Core.Scenes.FirstOrDefault(s => s.IsInScene(entrancePortalPosition));
+            return entranceScene;
+        }
+
+        private WorldScene _currentExitScene;
 
         private string lastError = null;
 
@@ -1278,7 +1299,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     {
                         ScanForHolyCow();
                     }
+                    ScanForEntranceScene();
                     ScanForExitPortal();
+                    ScanForExitScene();
                     return;
 
                 case States.SearchingForBoss:
@@ -1298,9 +1321,59 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     {
                         ScanForHolyCow();
                     }
+                    ScanForEntranceScene();
                     ScanForExitPortal();
+                    ScanForExitScene();
                     ScanForTownstone();
                     return;
+            }
+        }
+
+        private void ScanForEntranceScene()
+        {
+            if (_currentEntranceScene == null)
+            {
+                var entranceScene = FindEntranceScene();
+                if (entranceScene != null && !_entranceSceneNames.Contains(entranceScene.HashName))
+                {
+                    Core.Logger.Warn($"Found the marker entrance scene '{entranceScene.Name}' ({entranceScene.SnoId}) {entranceScene.Center.Distance(Core.Player.Position.ToVector2())} yards away!");
+
+                    _currentEntranceScene = entranceScene;
+                    _entranceSceneNames.Add(entranceScene.HashName);
+                }
+            }
+        }
+
+        private void ScanForExitScene()
+        {
+            if (_currentExitScene != null)
+                return;
+
+            var exitMarkerPosition = BountyHelpers.ScanForRiftExitMarkerLocation();
+            if (exitMarkerPosition != Vector3.Zero)
+            {
+                var markerExitScene = Core.Scenes.FirstOrDefault(s => s.IsInScene(exitMarkerPosition));
+                if (markerExitScene != null)
+                {
+                    _currentExitScene = markerExitScene;
+                    var exitSceneConnection = markerExitScene.ExitPositions.FirstOrDefault();
+                    ExplorationHelpers.SetExplorationPriority(exitSceneConnection.Value);
+                    Core.Logger.Warn($"Found the marker exit '{markerExitScene.Name}' ({markerExitScene.SnoId}) {exitSceneConnection.Value.Distance(Core.Player.Position)} yards away!");
+                }
+                return;
+            }
+
+            if (_currentEntranceScene == null)
+                return;
+
+            var exitName = _currentEntranceScene.HashName.ToLowerInvariant().Contains("entrance") ? "exit" : "entrance";
+            var exitScene = Core.Scenes.FirstOrDefault(s => s.Name.ToLowerInvariant().Contains(exitName) && !_entranceSceneNames.Contains(s.HashName));
+            if (exitScene != null)
+            {
+                _currentExitScene = exitScene;                
+                var exitSceneConnection = exitScene.ExitPositions.FirstOrDefault();
+                ExplorationHelpers.SetExplorationPriority(exitSceneConnection.Value);
+                Core.Logger.Warn($"Found the exit '{exitScene.Name}' ({exitScene.SnoId}) {exitSceneConnection.Value.Distance(Core.Player.Position)} yards away!");
             }
         }
 
@@ -1484,12 +1557,17 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                     }
                 }
             }
-            if (_nextLevelPortalLocation != Vector3.Zero)
+            if (_nextLevelPortalLocation != Vector3.Zero && !EntranceScenes.Any(s => s.IsInScene(_nextLevelPortalLocation)))
             {
                 Core.Logger.Log("[Rift] Oh look! There is a portal over there, let's see what's on the other side.");
                 Core.Logger.Debug("[Rift] Found the objective at distance {0}",
                     AdvDia.MyPosition.Distance(_nextLevelPortalLocation));
             }
+        }
+
+        private IEnumerable<WorldScene> EntranceScenes
+        {
+            get { return Core.Scenes.Where(s => _entranceSceneNames.Contains(s.HashName)); }
         }
 
         private void ScanForTownstone()
@@ -1513,6 +1591,9 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
         private RiftOptions _options;
         private int _riftCounter;
         private int _nextLevelPortalZRequirement;
+
+        private List<string> _entranceSceneNames = new List<string>();
+        private WorldScene _currentEntranceScene;
 
         private void EnablePulse()
         {
