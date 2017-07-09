@@ -448,8 +448,11 @@
     <Compile Include="ProfileTags\ZergTag.cs" />
     <Compile Include="Routines\DemonHunter\DemonHunterShadowImpale.cs" />
     <Compile Include="Routines\DemonHunter\DH_ShadowThreeKnifes.cs" />
+    <Compile Include="Routines\Necromancer\NecromancerBoneStorm.cs" />
+    <Compile Include="Routines\Necromancer\NecromancerInariusThorns.cs" />
     <Compile Include="Routines\Necromancer\NecromancerDefault.cs" />
     <Compile Include="Routines\Necromancer\NecromancerBase.cs" />
+    <Compile Include="Routines\Necromancer\NecromancerInariusCorpseLance.cs" />
     <Compile Include="Routines\Wizard\WizardManaldCoE.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonBlizzard.cs" />
     <Compile Include="Routines\Wizard\WizardParalysisArchonHydra.cs" />
@@ -874,7 +877,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Routines\Necromancer\NecromancerBoneStormSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Necromancer\NecromancerInariusThornsSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Routines\Necromancer\NecromancerDefaultSettings.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Routines\Necromancer\NecromancerInariusCorpseLanceSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

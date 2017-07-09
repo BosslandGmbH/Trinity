@@ -58,6 +58,7 @@ namespace Trinity.Modules
 
         protected override void OnWorldChanged(ChangeEventArgs<int> args)
         {
+            ExplorationHelpers.ClearExplorationPriority();
             PurgeOldScenes();
             Update();
         }

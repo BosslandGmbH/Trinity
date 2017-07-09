@@ -310,7 +310,7 @@ namespace Trinity.Framework.Actors.Attributes
             public ActorAttributeType BaseAttribute => (ActorAttributeType)(-1 << 12) + (DescripterId & 0xFFF);
 
             private AttributeDescriptor? _descriptor;
-            public AttributeDescriptor Descriptor => _descriptor ?? (_descriptor = DescriptorHelper.GetDescriptor(DescripterId)).Value;
+            public AttributeDescriptor Descriptor => _descriptor ?? (_descriptor = DescriptorHelper.GetDescriptor(DescripterId, true)).Value;
 
             /// <summary>
             /// The modifier portion of a key value.
@@ -435,6 +435,8 @@ namespace Trinity.Framework.Actors.Attributes
         public float Hitpoints => GetAttribute<float>(ActorAttributeType.HitpointsCur);
 
         public float HitpointsMax => GetAttribute<float>(ActorAttributeType.HitpointsMax);
+
+        public float HitpointsMaxTotal => GetAttribute<float>(ActorAttributeType.HitpointsMaxTotal);
 
         public float HitpointsPct => HitpointsMax > 0 ? Hitpoints / HitpointsMax * 100 : 0;
 

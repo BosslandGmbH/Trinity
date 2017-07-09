@@ -90,6 +90,18 @@ namespace Trinity.Components.Adventurer.Game.Quests
             return marker?.Position ?? Vector3.Zero;
         }
 
+        public static Vector3 ScanForRiftEntryMarkerLocation(int searchRadius = 2000)
+        {
+            var marker = Core.Markers.FirstOrDefault(m => m.MarkerType == WorldMarkerType.QuestPortalBack || m.MarkerType == WorldMarkerType.RiftPortalBack && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
+            return marker?.Position ?? Vector3.Zero;
+        }
+
+        public static Vector3 ScanForRiftExitMarkerLocation(int searchRadius = 2000)
+        {
+            var marker = Core.Markers.FirstOrDefault(m => m.MarkerType == WorldMarkerType.QuestSceneEntrance || m.MarkerType == WorldMarkerType.RiftPortalForward && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));
+            return marker?.Position ?? Vector3.Zero;
+        }
+
         public static Vector3 ScanForMarkerLocation(string name, int searchRadius)
         {
             var marker = Core.Markers.FirstOrDefault(m => m.Name.ToLowerInvariant().Contains(name.ToLowerInvariant()) && m.Position.Distance(AdvDia.MyPosition) <= searchRadius && !EntryPortals.IsEntryPortal(AdvDia.CurrentWorldDynamicId, m.NameHash));

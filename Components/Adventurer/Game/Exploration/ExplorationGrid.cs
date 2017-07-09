@@ -114,12 +114,16 @@ namespace Trinity.Components.Adventurer.Game.Exploration
                 currentWorldKnownPositions.Add(nearestNode.Center.ToVector3());
                 nearestNode.IsKnown = true;
                 nearestNode.IsVisited = true;
+
+                var worldScene = AdvDia.CurrentWorldScene;
+                worldScene.HasBeenVisited = true;               
+
                 var radius = 40;
                 switch (PluginEvents.CurrentProfileType)
                 {
                     case ProfileType.Rift:
                         radius = 55;
-                        var worldScene = AdvDia.CurrentWorldScene;
+                        
                         if (worldScene != null && worldScene.Name.Contains("Exit"))
                         {
                             radius = 30;

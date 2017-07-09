@@ -103,11 +103,14 @@ namespace Trinity.Routines.Necromancer
         protected virtual TrinityPower LandOfTheDead()
             => new TrinityPower(Skills.Necromancer.LandOfTheDead);
 
+        protected virtual TrinityPower LandOfTheDead(TrinityActor target)
+            => new TrinityPower(Skills.Necromancer.LandOfTheDead, 20f, target.Position);
+
         protected virtual TrinityPower Leech(TrinityActor target)
             => new TrinityPower(Skills.Necromancer.Leech, 60f, target.AcdId);
 
         protected virtual TrinityPower Decrepify(TrinityActor target)
-            => new TrinityPower(Skills.Necromancer.Decrepify, 60f, target.AcdId);
+            => new TrinityPower(Skills.Necromancer.Decrepify, 60f, target.Position);
 
         protected virtual TrinityPower Revive(Vector3 position)
             => new TrinityPower(Skills.Necromancer.Revive, 60f, position);
@@ -325,7 +328,7 @@ namespace Trinity.Routines.Necromancer
                 power = ArmyOfTheDead(target);
 
             else if (ShouldLandOfTheDead(out target))
-                power = LandOfTheDead();
+                power = LandOfTheDead(target);
 
             return power != null;
         }
@@ -627,7 +630,39 @@ namespace Trinity.Routines.Necromancer
             return false;
         }
 
-        #endregion
+        protected bool UnitHasAnyCurse(TrinityActor actor) => NecromancerCurses.Any(actor.HasDebuff);
 
+        protected bool UnitHasDecrepify(TrinityActor actor) => actor.HasDebuff(SNOPower.P6_Necro_PassiveManager_Decrepify);
+
+        protected bool UnitHasFrailty(TrinityActor actor) => actor.HasDebuff(SNOPower.P6_Necro_PassiveManager_Frailty);
+
+        protected bool UnitHasLeech(TrinityActor actor) => actor.HasDebuff(SNOPower.X1_DemonHunter_Passive_Leech);
+
+        protected bool IsFrailtyAuraPresent => Runes.Necromancer.AuraOfFrailty.IsActive || PartyHelper.AnyPlayerWithSkill(SNOPower.P6_Necro_Frailty_Aura);
+
+        protected bool IsUncursedUnitInRange => WeightedUnits.Any(u => u.Distance < 25f && !UnitHasAnyCurse(u));
+
+        protected bool IsMaxBoneArmorStacks => Skills.Necromancer.BoneArmor.IsBuffActive && Skills.Necromancer.BoneArmor.BuffStacks == MaxBoneArmorStacks;
+
+        public int MaxBoneArmorStacks => Legendary.WisdomOfKalan.IsEquipped ? 15 : 10;
+
+        protected bool IsInLandOfTheDead
+        {
+            get
+            {
+                var secsSinceCast = Core.Cooldowns.GetSkillCooldownElapsed(Skills.Necromancer.LandOfTheDead.SNOPower).TotalSeconds;
+                return secsSinceCast > 0 && secsSinceCast < 10;
+            }
+        }
+
+        public static HashSet<SNOPower> NecromancerCurses = new HashSet<SNOPower>
+        {
+            SNOPower.P6_Necro_PassiveManager_Decrepify,
+            SNOPower.P6_Necro_PassiveManager_Frailty,
+            SNOPower.X1_DemonHunter_Passive_Leech,
+        };
+
+
+        #endregion
     }
 }

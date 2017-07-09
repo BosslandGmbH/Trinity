@@ -4,6 +4,7 @@ using Trinity.Framework.Helpers;
 using System.Collections.Generic;
 using System.Linq;
 using Remit.Core;
+using Trinity.Modules;
 using Trinity.UI.Visualizer;
 using Zeta.Common;
 using Zeta.Game;
@@ -27,10 +28,18 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public static Vector3 PriorityPosition { get; private set; }
 
+        public static void ClearExplorationPriority()
+        {
+            PriorityPosition = Vector3.Zero;
+        }
+
         public static void SetExplorationPriority(Vector3 position)
         {
             PriorityPosition = position;
+
             VisualizerViewModel.DebugPosition = position;
+
+            Core.Logger.Warn($"Setting priority exploration position to '{position}' {position.Distance(Core.Player.Position)} yards away!");
 
             foreach (var connection in Core.Scenes.CurrentScene.GetConnectedScenes(Core.Scenes.GetScene(position)))
             {
@@ -40,7 +49,19 @@ namespace Trinity.Components.Adventurer.Game.Exploration
 
         public static bool IsInPriorityDirection(Vector3 position, double degreesDifferenceAllowed)
         {
+            if (PriorityPosition == Vector3.Zero) return false;
+
             return MathUtil.GetRelativeAngularVariance(Core.Player.Position, PriorityPosition, position) <= degreesDifferenceAllowed;
+        }
+
+        public static bool IsInSceneConnectionDirection(Vector3 position, double degreesDifferenceAllowed)
+        {
+            return Core.Scenes.CurrentScene.ExitPositions.Values.Any(p => MathUtil.GetRelativeAngularVariance(Core.Player.Position, p, position) <= degreesDifferenceAllowed);
+        }
+
+        public static bool IsInUnexploredScene(Vector3 position)
+        {
+            return Core.Scenes.Where(s => s.ExitPositions.Count > 1).Any(s => !s.HasBeenVisited && s.IsInScene(position));
         }
 
         public static ExplorationNode NearestWeightedUnvisitedNode(HashSet<int> levelAreaIds, List<string> ignoreScenes = null)
@@ -52,6 +73,26 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             using (new PerformanceLogger("NearestUnvisitedNodeLocation", true))
             {
                 var nearestNode = ExplorationGrid.Instance.GetNearestWalkableNodeToPosition(myPosition);
+
+                if (Core.Rift.IsInRift && !Core.BlockedCheck.IsBlocked && !Core.StuckHandler.IsStuck)
+                {           
+                    Core.Logger.Warn("in rift");
+                    // In rift prefer the highest weight nodes because we dont need to explore everything, just need to find the exit.    
+                         
+                    var closestUnvisitedNodes = ExplorationGrid.Instance.WalkableNodes
+                        .Where(n => !n.IsIgnored && !n.IsVisited && !n.IsBlacklisted && n.HasEnoughNavigableCells &&
+                                    n.DynamicWorldId == dynamicWorldId && levelAreaIds.Contains(n.LevelAreaId))
+                        .OrderByDescending(n => n.Priority)
+                        .ThenByDescending(PriorityDistanceFormula);
+
+                    var closestUnvisitedNode = closestUnvisitedNodes.FirstOrDefault();
+                    if (closestUnvisitedNode != null)
+                    {
+                        var weight = PriorityDistanceFormula(closestUnvisitedNode);
+                        Core.Logger.Debug(LogCategory.Exploration, $"Explore: Best Rift Weighted Node: [{closestUnvisitedNode.NavigableCenter.X},{closestUnvisitedNode.NavigableCenter.Y},{closestUnvisitedNode.NavigableCenter.Z}] Dist:{closestUnvisitedNode.Distance} Weight: {weight} {(closestUnvisitedNode.Priority ? "(Priority)" : "")} ");
+                        return closestUnvisitedNode;
+                    }                   
+                }
 
                 // Try for nodes nearby walkable nodes first
                 for (var i = 3; i <= 4; i++)
@@ -139,13 +180,30 @@ namespace Trinity.Components.Adventurer.Game.Exploration
             }
         }
 
-        public static float PriorityDistanceFormula(ExplorationNode n)
+        public static double PriorityDistanceFormula(ExplorationNode n)
         {
-            var directionMultiplier = IsInPriorityDirection(n.NavigableCenter, 30) ? 4 : 0;
-            var priorityMultiplier = n.Priority ? 2 : 0;
+            var directionMultiplier = IsInPriorityDirection(n.NavigableCenter, 30) ? 2 : 1;
+            var sceneConnectionDirectionMultiplier = IsInSceneConnectionDirection(n.NavigableCenter, 30) ? 2 : 1;
+            var unexploredMultiplier = IsInUnexploredScene(n.NavigableCenter) ? 1.5 : 1;
+            var nodeInPrioritySceneMultiplier = n.Priority ? 4 : 0;
             var baseDistanceFactor = 1/n.NavigableCenter.Distance(AdvDia.MyPosition);
-            return baseDistanceFactor * (n.UnvisitedWeight + directionMultiplier + priorityMultiplier);
+
+            return baseDistanceFactor * directionMultiplier * unexploredMultiplier * sceneConnectionDirectionMultiplier * (n.UnvisitedWeight + nodeInPrioritySceneMultiplier);
         }
+
+        //public static float FarDistanceDistanceFormula(ExplorationNode n)
+        //{
+        //    var directionMultiplier = IsInPriorityDirection(n.NavigableCenter, 30) ? 2 : 1;
+        //    var sceneConnectionDirectionMultiplier = IsInSceneConnectionDirection(n.NavigableCenter, 30) ? 4 : 0;
+        //    var unexploredMultiplier = IsInUnexploredScene(n.NavigableCenter) ? 2 : 0;
+        //    var nodeInPrioritySceneMultiplier = n.Priority ? 4 : 0;
+        //    var baseDistanceFactor = 1 / n.NavigableCenter.Distance(AdvDia.MyPosition);
+
+        //    return baseDistanceFactor * directionMultiplier * (n.UnvisitedWeight
+        //        + nodeInPrioritySceneMultiplier
+        //        + unexploredMultiplier
+        //        + sceneConnectionDirectionMultiplier);
+        //}
 
         /// <summary>
         /// Defines areas of a scene where exploration nodes should be blacklisted
