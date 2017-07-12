@@ -26,6 +26,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
             AddCursedBounties();
             AddGuardedGizmoBounties();
             AddCustomBounties();
+
+            AddNewBounties();
         }
 
         public static BountyData GetBountyData(int questId)
@@ -4500,7 +4502,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         private static void AddBounties()
         {
-
             // A5 - 현상금 사냥: 톨리퍼 최후의 저항 (359426)
             Bounties.Add(new BountyData
             {
@@ -8637,6 +8638,500 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
 
 
+        }
+
+        private static void AddNewBounties()
+        {
+            // A1 - Bounty: The Cursed Mill (365401)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 365401,
+                Act = Act.A1,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Lost Treasure of Khan Dakab (346067)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 346067,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Grave Mistakes (466790)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 466790,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Kill Vidian (474066)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 474066,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Kill Bain (464406)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 464406,
+                Act = Act.A2,
+                WorldId = 456634,
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 456638,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine(464406, 456634, 632612270),
+                    new AttackCoroutine(336711),
+                    new ClearLevelAreaCoroutine(464406),
+                }
+            });
+
+            // A2 - Bounty: The Hematic Key (471761)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471761,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Clear the Mysterious Cave (347598)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 347598,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Off The Wagon (470068)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470068,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Clear the Forgotten Well (467028)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 467028,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Kill Seanus Greyback (464180)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 464180,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 270011,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Blood Collection (465117)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 465117,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 0,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Kill Elizar Bathory (471622)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471622,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 270011,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Blood and Iron (432334)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 432334,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 270011,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Blood Statue (465128)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 465128,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 92945,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: The Ancient Devices (433025)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 433025,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 92945,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Kill Lupgaron (471712)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471712,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 109538,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: The Cursed Lake (466835)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 466835,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 109514,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Gro'Mag (468481)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 468481,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 0,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Janderson (470746)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470746,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Jadtalek (471158)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471158,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Barfield (471107)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471107,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Barrigast (471135)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471135,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Strychnos (471228)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471228,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: The Cursed Realm (470608)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470608,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Prratshet the Reaper (471131)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471131,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Necronom (471224)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471224,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Silli (471133)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471133,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 270011,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Guytan Pyrrus (471105)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471105,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill the Manipulator of Lore (470717)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470717,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 92945,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: The Cursed Realm (467798)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 467798,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 92945,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Reyes (464928)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 464928,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 92945,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Mzuuman (471160)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471160,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 92945,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Senahde (468089)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 468089,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 19954,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill K'Zigler (470651)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470651,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 19954,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A5 - Bounty: Brutal Assault (359939)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 359939,
+                Act = Act.A5,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
         }
 
         [Obsolete("Use waypoint factory for levelarea instead")]

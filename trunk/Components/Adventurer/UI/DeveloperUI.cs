@@ -906,7 +906,7 @@ namespace Trinity.Components.Adventurer.UI
             Core.Logger.Raw("    Act = Act.{0},", bountyInfo.Act);
             Core.Logger.Raw("    WorldId = 0, // Enter the final worldId here");
             Core.Logger.Raw("    QuestType = BountyQuestType.SpecialEvent,");
-            Core.Logger.Raw("    StartingLevelAreaId = {0},", AdvDia.CurrentLevelAreaId);
+            Core.Logger.Raw("    WaypointLevelAreaId = {0},", AdvDia.CurrentLevelAreaId);
             //Core.Logger.Raw("    WaypointNumber = {0},", waypointNumber);
             Core.Logger.Raw("    Coroutines = new List<ISubroutine>");
             Core.Logger.Raw("    {");
