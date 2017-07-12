@@ -10,7 +10,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
         public int KeySNO { get; set; }
         public int WorldId { get; set; }
         public int LevelAreaId { get; set; }
-        public int WaypointNumber { get; set; }
+        public int WaypointLevelAreaId { get; set; }
         public SNOBossEncounter BossEncounter { get; set; }
 
         public bool IsAlive
