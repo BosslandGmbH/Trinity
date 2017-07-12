@@ -125,7 +125,8 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
         private async Task<bool> TakingWaypoint()
         {
             DisablePulse();
-            if (!await WaypointCoroutine.UseWaypoint(_keywardenData.WaypointNumber)) return false;
+            Waypoint wp = ZetaDia.Storage.ActManager.GetWaypointByLevelAreaSnoId(_keywardenData.WaypointLevelAreaId);
+            if (!await WaypointCoroutine.UseWaypoint(wp.Number)) return false;
             State = States.Searching;
             return false;
         }

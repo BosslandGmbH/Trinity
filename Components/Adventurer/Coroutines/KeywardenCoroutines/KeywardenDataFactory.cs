@@ -136,7 +136,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 KeySNO = 366946,
                 WorldId = 71150,
                 LevelAreaId = 19952,
-                WaypointNumber = 8,
+                WaypointLevelAreaId = 19952,
                 BossEncounter = SNOBossEncounter.A1_KeywardenPlaceholder
             };
             Items.Add(Act.A1, act1);
@@ -148,7 +148,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 KeySNO = 366947,
                 WorldId = 70885,
                 LevelAreaId = 57425,
-                WaypointNumber = 24,
+                WaypointLevelAreaId = 57425,
                 BossEncounter = SNOBossEncounter.A2_KeywardenPlaceholder
             };
             Items.Add(Act.A2, act2);
@@ -160,7 +160,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 KeySNO = 366948,
                 WorldId = 93099,
                 LevelAreaId = 93173,
-                WaypointNumber = 29,
+                WaypointLevelAreaId = 93173,
                 BossEncounter = SNOBossEncounter.A3_KeywardenPlaceholder
             };
             Items.Add(Act.A3, act3);
@@ -172,7 +172,7 @@ namespace Trinity.Components.Adventurer.Coroutines.KeywardenCoroutines
                 KeySNO = 366949,
                 WorldId = 409510,
                 LevelAreaId = 409512,
-                WaypointNumber = 44,
+                WaypointLevelAreaId = 409512,
                 BossEncounter = SNOBossEncounter.A4_KeywardenPlaceholder
             };
             Items.Add(Act.A4, act4);
