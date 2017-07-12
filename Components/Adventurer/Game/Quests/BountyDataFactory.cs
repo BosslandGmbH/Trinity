@@ -3702,7 +3702,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         private static void AddCursedBounties()
         {
-
             // A3 - Bounty: The Cursed Stronghold (436267)
             Bounties.Add(new BountyData
             {
@@ -8656,6 +8655,40 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A2 - Bounty: Kill Vidian (474066)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 474066,
+                Act = Act.A2,
+                WorldId = 464096, // Enter the final worldId here
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 456638,
+                Coroutines = new List<ISubroutine>
+                {
+                     new EnterLevelAreaCoroutine(474066, 456634, 464096, -1355958932, 176001),
+                     new MoveToMapMarkerCoroutine (474066, 464096, 1944200381),
+                     new EnterLevelAreaCoroutine(474066, 464096, 470238, -1355958932, 176001),
+                     // Type: Monster Name: p6_Shepherd_Boss-32030 ActorSnoId: 464225
+                     new KillUniqueMonsterCoroutine (474066, 464096, 464225, 0),
+                }
+            });
+
+            // A2 - Bounty: The Cursed Lake (466835)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 466835,
+                Act = Act.A2,
+                WorldId = 460372, // Enter the final worldId here
+                QuestType = BountyQuestType.ClearCurse,
+                WaypointLevelAreaId = 460671,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine (466835, 460372, 2912417),
+                    new InteractWithGizmoCoroutine (466835,460372, 365097, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine (466835, 60, 365097, 2912417, 30)
+                }
+            });
+
             // A2 - Bounty: Lost Treasure of Khan Dakab (346067)
             Bounties.Add(new BountyData
             {
@@ -8684,20 +8717,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A2 - Bounty: Kill Vidian (474066)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 474066,
-                Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
-                Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
-            });
-
             // A2 - Bounty: Kill Bain (464406)
             Bounties.Add(new BountyData
             {
@@ -8708,9 +8727,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WaypointLevelAreaId = 456638,
                 Coroutines = new List<ISubroutine>
                 {
-                    new MoveToMapMarkerCoroutine(464406, 456634, 632612270),
-                    new AttackCoroutine(336711),
-                    new ClearLevelAreaCoroutine(464406),
                 }
             });
 
@@ -8862,20 +8878,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WorldId = 0, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
                 WaypointLevelAreaId = 109538,
-                Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
-            });
-
-            // A2 - Bounty: The Cursed Lake (466835)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 466835,
-                Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 109514,
                 Coroutines = new List<ISubroutine>
                 {
                     // Coroutines goes here

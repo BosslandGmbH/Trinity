@@ -3128,6 +3128,7 @@ namespace Trinity.Framework.Reference
             454194, //p43_AD_trDun_Cath_WoodDoor_Lazarus-56453 (454194)
             454187, //p43_AD_a1dun_Leor_Jail_Door_SuperLocked_A-61290 (454187)
             454173, //43_AD_a1dun_Leor_Gate_A-61285 (454173)
+            465787, //P6_Church_BloodPool-25682
         };
 
         public static HashSet<int> EventQuests { get { return GameData.eventQuests; } }
