@@ -228,14 +228,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         public static bool AreAllActBountiesSupported(Act act)
         {
-            var result =
-                ZetaDia.Storage.Quests.Bounties.Count(
-                    b => b.Act == act && BountyDataFactory.GetBountyData((int)b.Quest) != null) == 5;
-            if (!result)
+            int numSupported = ZetaDia.Storage.Quests.Bounties.Count(b => b.Act == act && BountyDataFactory.GetBountyData((int)b.Quest) != null);
+            bool hasUnsupported = numSupported != 5;
+            if (hasUnsupported)
             {
                 Core.Logger.Debug("[Bounties] Unsupported bounties are detected in {0}", act);
+                return false;
             }
-            return result;
+            return true;
         }
 
         public static bool AnyUnsupportedBounties()

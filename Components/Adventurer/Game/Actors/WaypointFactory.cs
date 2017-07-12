@@ -31,9 +31,9 @@ namespace Trinity.Components.Adventurer.Game.Actors
         {
                 {Act.A1, 0},
                 {Act.A2, 19},
-                {Act.A3, 28},
-                {Act.A4, 42},
-                {Act.A5, 50}
+                {Act.A3, 30},
+                {Act.A4, 30},
+                {Act.A5, 58}
             };
 
         public static int GetWaypointNumber(int levelAreaId)

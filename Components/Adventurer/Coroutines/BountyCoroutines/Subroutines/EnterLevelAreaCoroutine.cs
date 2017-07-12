@@ -344,7 +344,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
 
             Core.Logger.Debug($"[EnterLevelArea] Using interact range from portal: {_interactRange}");
 
-            if (portal.Position.Distance(_objectiveLocation) > _interactRange || !portal.InLineOfSight)
+            if (portal.Position.Distance(_objectiveLocation) > _interactRange)
             {
                 Core.Logger.Debug($"[EnterLevelArea] Portal is still too far away, something went wrong with NavigationCoroutine");
                 await CommonCoroutines.MoveTo(portal.Position);
