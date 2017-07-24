@@ -8655,6 +8655,34 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A2 - Bounty: The Cursed Moors (464596)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 464596,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 270011,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Break A Few Eggs (469699)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 469699,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
             // A2 - Bounty: Kill Vidian (474066)
             Bounties.Add(new BountyData
             {
@@ -8667,7 +8695,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                      new EnterLevelAreaCoroutine(474066, 456634, 464096, -1355958932, 176001),
                      new MoveToMapMarkerCoroutine (474066, 464096, 1944200381),
-                     new EnterLevelAreaCoroutine(474066, 464096, 470238, -1355958932, 176001),
+                     new EnterLevelAreaCoroutine(474066, 464096, 470238, 1944200381, 467345),
                      // Type: Monster Name: p6_Shepherd_Boss-32030 ActorSnoId: 464225
                      new KillUniqueMonsterCoroutine (474066, 464096, 464225, 0),
                 }
