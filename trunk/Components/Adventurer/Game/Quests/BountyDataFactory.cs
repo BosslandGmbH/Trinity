@@ -8706,6 +8706,22 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A2 - Bounty: Clear the Forgotten Well (467028)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 467028,
+                Act = Act.A2,
+                WorldId = 465884,
+                QuestType = BountyQuestType.ClearZone,
+                WaypointLevelAreaId = 460671,
+                Coroutines = new List<ISubroutine>
+                {
+                    // g_Portal_Circle_Blue-32941 
+                    new EnterLevelAreaCoroutine(467028, 460372, 465884, -1484677704, 176003),
+                    new ClearLevelAreaCoroutine(467028)
+                }
+            });
+
             // A2 - Bounty: The Cursed Moors (464596)
             Bounties.Add(new BountyData
             {
@@ -8795,20 +8811,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             Bounties.Add(new BountyData
             {
                 QuestId = 470068,
-                Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
-                Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
-            });
-
-            // A2 - Bounty: Clear the Forgotten Well (467028)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 467028,
                 Act = Act.A2,
                 WorldId = 0, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
