@@ -123,6 +123,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _failureCount = 0;
         }
 
+        public string StatusText { get; set; }
+
         public void DisablePulse()
         {
         }
@@ -260,6 +262,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                     Core.Logger.Log("[MoveToScene] " + value);
+                    StatusText = "[MoveToScene] " + value;
                 _state = value;
             }
         }

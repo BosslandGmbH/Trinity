@@ -43,6 +43,8 @@ namespace Trinity.Components.Adventurer.Coroutines
             _returnToCenter = true;
         }
 
+        public string StatusText { get; set; }
+
         private States State
         {
             get { return _state; }
@@ -52,6 +54,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (value != States.NotStarted)
                 {
                     Core.Logger.Debug("[ClearArea] " + value);
+                    StatusText = "[ClearArea] " + value;
                 }
                 _state = value;
             }
