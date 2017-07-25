@@ -335,10 +335,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (365401, 71150, 2912417),
-
                         new InteractWithGizmoCoroutine (365401,71150, 365097, 0, 5),
                         new ClearAreaForNSecondsCoroutine (365401, 60, 365097, 2912417, 30, false)
-
                     }
             });
 
@@ -8619,6 +8617,22 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A2 - Bounty: The Cursed Temple (464598)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 464598,
+                Act = Act.A2,
+                WorldId = 456634, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 456638,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine (464598, 456634, 2912417),
+                    new InteractWithGizmoCoroutine (464598,456634, 365097, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine (464598, 60, 365097, 2912417, 30)
+                }
+            });
+
             // A2 - Bounty: Kill Agustin The Marked (464730)
             Bounties.Add(new BountyData
             {
@@ -9060,12 +9074,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 471133,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 270011,
+                WorldId = 457461,
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 464065,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    // p6_DeathMaiden_Unique_RoF_V3-711 ActorSnoId: 471137
+                    new KillUniqueMonsterCoroutine(471133, 457461, 471137, -454310883),
+                    new MoveToScenePositionCoroutine(471133, 457461, "P6_Lost_Souls_x1_fortress_EW_05_soul_well", new Vector3(185.6754f, 73.09955f, -74.9f)),
+                    new MoveThroughDeathGates(471133, 457461, 1),
+                    new ClearLevelAreaCoroutine(471133)
                 }
             });
 
