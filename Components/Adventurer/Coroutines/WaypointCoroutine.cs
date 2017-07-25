@@ -156,7 +156,6 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             if (!UIElements.WaypointMap.IsVisible)
             {
-                StatusText = "[Waypoint] Toggling waypoint map";
                 State = States.TogglingWaypointMap;
                 UIManager.ToggleWaypointMap();
                 await Coroutine.Sleep(100);
@@ -198,7 +197,6 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             if (!_usedWaypoint)
             {
-                StatusText = $"[Waypoint] Using waypoint {_waypointNumber}";
                 Core.Logger.Debug($"[Waypoint] Using waypoint {_waypointNumber}");
                 // Checking for near by waypoint gizmos.
                 var gizmoWaypoint =
