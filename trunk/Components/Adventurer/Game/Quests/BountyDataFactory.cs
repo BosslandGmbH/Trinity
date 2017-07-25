@@ -7122,6 +7122,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Act = Act.A1,
                 WorldId = 75049,
                 QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 19941,
                 Coroutines = new List<ISubroutine>
                     {
 //						new MoveToMapMarkerCoroutine(367561, 71150, -1019926638),
@@ -8920,6 +8921,23 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A2 - Bounty: One In The Hand (470218)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470218,
+                Act = Act.A2,
+                WorldId = 460372,
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 460671,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine(470218, 460372, 2912417),
+                    new WaitCoroutine(470218, 460372, 7500),
+                    // p6_Moor_Chest-3053 ActorSnoId: 462211
+                    new ClearAreaForNSecondsCoroutine(470218, 30, 462211, 2912417),
+                }
+            });
+
             // A4 - Bounty: Kill Bjortor (470712)
             Bounties.Add(new BountyData
             {
@@ -8931,7 +8949,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(470712, 456029, -1254225905),
-                    // P6_Sasquatch_B_Unique_RoF_01-17925 ActorSnoId: 470709, Distance: 8.153741
+                    // P6_Sasquatch_B_Unique_RoF_01-17925 ActorSnoId: 470709
                     new KillUniqueMonsterCoroutine(470712, 456029, 470709, -1254225905),
                     new ClearLevelAreaCoroutine(470712),
                 }
@@ -8942,12 +8960,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 468481,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 0,
+                WorldId = 460587,
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 464066,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    //new MoveToScenePositionCoroutine(468481, 460587, "LS_a4dun_spire_LibraryOfFate_05", new Vector3(117.0737f, 229.1764f, 31.1f)),
+                    //new MoveToScenePositionCoroutine(468481, 460587, "LS_a4dun_spire_corrupt_NS_02", new Vector3(226.8757f, 92.24744f, 31.1f)),
+                    // p6_x1_westmarchRanged_A_Unique_ROF_V5_01-75810 ActorSnoId: 468511
+                    new KillUniqueMonsterCoroutine(468481, 460587, 468511, 465303410),
+                    new ClearLevelAreaCoroutine(468481),
                 }
             });
 
@@ -9042,12 +9064,15 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 470561,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 456029, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 464063,
                 Coroutines = new List<ISubroutine>
                 {
-                    
+                    new MoveToMapMarkerCoroutine(470561, 456029, 2912417),
+                    // x1_Global_Chest_CursedChest_B (365097) Distance: 27.16287
+                    new InteractWithGizmoCoroutine(470561, 456029, 365097, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine(470561, 60, 365097, 2912417, 30),
                 }
             });
    
@@ -9141,7 +9166,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WaypointLevelAreaId = 464857,
                 Coroutines = new List<ISubroutine>
                 {
-                    
                     // Coroutines goes here
                 }
             });
