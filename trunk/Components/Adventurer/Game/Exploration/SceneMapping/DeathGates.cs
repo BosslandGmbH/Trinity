@@ -23,6 +23,19 @@ namespace Trinity.Components.Adventurer.Game.Exploration.SceneMapping
             // Y axis increases from top left to bottom right.
             // Scene size of 240/240
 
+            SceneDefs.Add(464285, new DeathGateScene
+            {
+                Name = "P6_Lost_Souls_x1_fortress_EW_05_soul_well",
+                SnoId = 464285,
+                RelativeEnterPosition = new Vector3(186.25f, 76.25f, -74.9f),
+                RelativeExitPosition = new Vector3(181.25f, 8.75f, -94.9f),
+                Type = DeathGateType.ExitSequence,
+                Regions = new RegionGroup
+                {
+                    new RectangularRegion(0, 160, 0, 150, CombineType.Subtract)
+                }
+            });
+
             SceneDefs.Add(338627, new DeathGateScene
             {
                 Name = "x1_fortress_island_NW_01",
