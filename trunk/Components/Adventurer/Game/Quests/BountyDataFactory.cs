@@ -8620,34 +8620,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A2 - Bounty: The Cursed Moors (464596)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 464596,
-                Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 270011,
-                Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
-            });
-
-            // A2 - Bounty: Break A Few Eggs (469699)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 469699,
-                Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
-                Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
-            });
-
             // A2 - Bounty: Kill Vidian (474066)
             Bounties.Add(new BountyData
             {
@@ -8692,7 +8664,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WaypointLevelAreaId = 57425,
                 Coroutines = new List<ISubroutine>
                 {
-					new MoveToSceneCoroutine(346067, 70885, "caOut_Oasis_Sub240_POI"),
+                    new MoveToSceneCoroutine(346067, 70885, "caOut_Oasis_Sub240_POI"),
 
                     new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(95.17871f, 61.56543f, 80.34052f)),
                     new InteractWithGizmoCoroutine(346067, 70885, 175603, 0, 5),
@@ -8716,6 +8688,52 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new ClearAreaForNSecondsCoroutine(346067, 30, 0, 0, 45),
                 }
             });
+
+            // A2 - Bounty: Kill Bain (464406)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 464406,
+                Act = Act.A2,
+                WorldId = 456634,
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 456638,
+                Coroutines = new List<ISubroutine>
+                {
+                    // a2dun_Aqd_GodHead_Door_LargePuzzle-8357
+                    new MoveToMapMarkerCoroutine(464406, 456634, 632612270),
+                    new KillUniqueMonsterCoroutine(464406, 456634, 464204, 0),
+                    new ClearLevelAreaCoroutine(464406),
+                }
+            });
+
+            // A2 - Bounty: The Cursed Moors (464596)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 464596,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 270011,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
+            // A2 - Bounty: Break A Few Eggs (469699)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 469699,
+                Act = Act.A2,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Coroutines goes here
+                }
+            });
+
 
             // A2 - Bounty: Blood Statue (465128)
             Bounties.Add(new BountyData
@@ -8742,19 +8760,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // Coroutines goes here
-                }
-            });
-
-            // A2 - Bounty: Kill Bain (464406)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 464406,
-                Act = Act.A2,
-                WorldId = 456634,
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 456638,
-                Coroutines = new List<ISubroutine>
-                {
                 }
             });
 
