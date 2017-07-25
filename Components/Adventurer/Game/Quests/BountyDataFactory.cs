@@ -311,6 +311,64 @@ namespace Trinity.Components.Adventurer.Game.Quests
             // when in radius
 
 
+            // A2 - Clear the Mysterious Cave (347598)
+            // If delete blacklist NPC actorID in GameData.cs, this quest succeed. But It takes long time because of movement problem.
+            Bounties.Add(new BountyData
+            {
+                QuestId = 347598,
+                Act = Act.A2,
+                WorldId = 194238,
+                QuestType = BountyQuestType.ClearZone,
+                Coroutines = new List<ISubroutine>
+                    {
+                        // DBs navigation in this little nook of the map is really bad.
+                        new MoveToMapMarkerCoroutine(347598,70885,-1615133822),
+
+                        new MoveToSceneCoroutine(347598, 70885, "caOut_Oasis_Sub240_POI_Edge"),
+
+                        // Move into the scene nook by npc
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f)),
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f), true),
+
+                        // kill anything first to ensure combat doesn't move hero out of place.
+//                        new ClearAreaForNSecondsCoroutine(347598, 20, 0, 0, 15, false),
+
+                        // the forced straightline movement sequence to get player by NPC
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f)),
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f), true),
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(125.0679f, 114.7373f, 97.34129f), true),
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(116.5557f, 98.87109f, 97.34128f), true),
+
+                        new WaitCoroutine(347598, 70885, 8500),
+                        // Try interact with the NPC.
+                        // A2_UniqueVendor_Event_MapVendor-15507 ActorSnoId: 115928
+                        new InteractionCoroutine(115928, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(1), 6),
+
+                        // Wait 6 seconds for him to open door (and also try interact in case we failed previously)
+//                        new InteractWithUnitCoroutine(347598,70885,115928,0,3,2,6),
+//                        new WaitCoroutine(347598, 70885, 5000),
+
+                        // try interact wtih portal or timeout 
+                        new EnterLevelAreaCoroutine (347598,70885, 169477, -1615133822, 176007, TimeSpan.FromSeconds(15)),
+
+                        new ClearAreaForNSecondsCoroutine(347598, 5, 0, 0, 15, false),
+
+                        // try again (this should all get skipped due to worldId/QuestId if we already went inside)
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f)),
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f), true),
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(125.0679f, 114.7373f, 97.34129f), true),
+                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(116.5557f, 98.87109f, 97.34128f), true),                        new InteractWithUnitCoroutine(347598,70885,115928,0,10,2,10),
+                        new InteractWithUnitCoroutine(347598,70885,115928,0,10,2,10),
+                        new WaitCoroutine(347598, 70885, 4000),
+                        new EnterLevelAreaCoroutine (347598,70885, 169477, -1615133822, 176007),
+
+                        // Finish bounty
+                        new EnterLevelAreaCoroutine (347598,169477, 194238, 1109456219, 176002, true),
+                        new ClearLevelAreaCoroutine (347598)
+                    }
+            });
+
+
             // A2 - Blood and Iron (432334)
             Bounties.Add(new BountyData
             {
@@ -457,63 +515,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A2 - Clear the Mysterious Cave (347598)
-            // If delete blacklist NPC actorID in GameData.cs, this quest succeed. But It takes long time because of movement problem.
-            Bounties.Add(new BountyData
-            {
-                QuestId = 347598,
-                Act = Act.A2,
-                WorldId = 194238,
-                QuestType = BountyQuestType.ClearZone,
-                Coroutines = new List<ISubroutine>
-                    {
-                        // DBs navigation in this little nook of the map is really bad.
-                        new MoveToMapMarkerCoroutine(347598,70885,-1615133822),
-
-                        new MoveToSceneCoroutine(347598, 70885, "caOut_Oasis_Sub240_POI_Edge"),
-
-                        // Move into the scene nook by npc
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f)),
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f), true),
-
-                        // kill anything first to ensure combat doesn't move hero out of place.
-//                        new ClearAreaForNSecondsCoroutine(347598, 20, 0, 0, 15, false),
-
-                        // the forced straightline movement sequence to get player by NPC
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f)),
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f), true),
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(125.0679f, 114.7373f, 97.34129f), true),
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(116.5557f, 98.87109f, 97.34128f), true),
-
-                        // Try interact with the NPC.
-                        new WaitCoroutine(347598, 70885, 1000),
-                        new InteractionCoroutine(115928, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(1), 6),
-
-                        // Wait 6 seconds for him to open door (and also try interact in case we failed previously)
-//                        new InteractWithUnitCoroutine(347598,70885,115928,0,3,2,6),
-//                        new WaitCoroutine(347598, 70885, 5000),
-
-                        // try interact wtih portal or timeout 
-                        new EnterLevelAreaCoroutine (347598,70885, 169477, -1615133822, 176007, TimeSpan.FromSeconds(15)),
-
-                        new ClearAreaForNSecondsCoroutine(347598, 5, 0, 0, 15, false),
-
-                        // try again (this should all get skipped due to worldId/QuestId if we already went inside)
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f)),
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(93.72876f, 101.2554f, 97.34128f), true),
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(125.0679f, 114.7373f, 97.34129f), true),
-                        new MoveToScenePositionCoroutine(347598, 70885, "caOut_Oasis_Edge_SE_01", new Vector3(116.5557f, 98.87109f, 97.34128f), true),                        new InteractWithUnitCoroutine(347598,70885,115928,0,10,2,10),
-                        new InteractWithUnitCoroutine(347598,70885,115928,0,10,2,10),
-                        new WaitCoroutine(347598, 70885, 4000),
-                        new EnterLevelAreaCoroutine (347598,70885, 169477, -1615133822, 176007),
-
-                        // Finish bounty
-                        new EnterLevelAreaCoroutine (347598,169477, 194238, 1109456219, 176002, true),
-                        new ClearLevelAreaCoroutine (347598)
-                    }
-            });
-
-
             // A5 - 현상금 사냥: 보물고 (359911)
             Bounties.Add(new BountyData
             {
@@ -547,22 +548,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new ClearAreaForNSecondsCoroutine(359911, 90, 0, 0, 45),
                 }
             });
-
-            //A2 - Ancient Devices - Interact with operated gizmo repeatly
-            Bounties.Add(new BountyData
-            {
-                QuestId = 433025,
-                Act = Act.A2,
-                WorldId = 70885,
-                QuestType = BountyQuestType.GuardedGizmo,
-                WaypointLevelAreaId = 53834,
-                Coroutines = new List<ISubroutine>
-                {
-                    new GuardedGizmoCoroutine(433025, 432885)
-                }
-            });
-
-
         }
 
         private static void AddKillBossBounties()
@@ -4801,8 +4786,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     }
             });
 
-
-
             // A2 - Kill Shondar the Invoker (346036)
             Bounties.Add(new BountyData
             {
@@ -8610,7 +8593,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 365401,
                 Act = Act.A1,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.ClearCurse,
                 WaypointLevelAreaId = 332339,
                 Coroutines = new List<ISubroutine>
                 {
@@ -8624,7 +8607,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 464598,
                 Act = Act.A2,
                 WorldId = 456634, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.ClearCurse,
                 WaypointLevelAreaId = 456638,
                 Coroutines = new List<ISubroutine>
                 {
@@ -8803,12 +8786,15 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 466790,
                 Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 460372, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 460671,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToMapMarkerCoroutine(466790, 460372, 2912417),
+                    new MoveToActorCoroutine(466790, 460372, (int)SNOActor.p6_Event_Moor_GraveRobbers_graveDigger_A),
+                    new WaitCoroutine(466790, 460372, 5000),
+                    new ClearAreaForNSecondsCoroutine(466790, 60, (int)SNOActor.p6_Event_Moor_GraveRobbers_graveDigger_A, 0, 50)
                 }
             });
 
@@ -8860,7 +8846,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 464180,
                 Act = Act.A2,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 270011,
                 Coroutines = new List<ISubroutine>
                 {
@@ -8888,7 +8874,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 471622,
                 Act = Act.A2,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 270011,
                 Coroutines = new List<ISubroutine>
                 {
@@ -8896,17 +8882,17 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A2 - Bounty: The Ancient Devices (433025)
+            //A2 - Ancient Devices - Interact with operated gizmo repeatly
             Bounties.Add(new BountyData
             {
                 QuestId = 433025,
                 Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 92945,
+                WorldId = 70885,
+                QuestType = BountyQuestType.GuardedGizmo,
+                WaypointLevelAreaId = 53834,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new GuardedGizmoCoroutine(433025, 432885)
                 }
             });
 
@@ -8916,7 +8902,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 471712,
                 Act = Act.A2,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 109538,
                 Coroutines = new List<ISubroutine>
                 {
@@ -9014,7 +9000,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 471158,
                 Act = Act.A4,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 332339,
                 Coroutines = new List<ISubroutine>
                 {
@@ -9028,7 +9014,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 471107,
                 Act = Act.A4,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 332339,
                 Coroutines = new List<ISubroutine>
                 {
@@ -9042,7 +9028,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 471135,
                 Act = Act.A4,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 332339,
                 Coroutines = new List<ISubroutine>
                 {
@@ -9056,7 +9042,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 471228,
                 Act = Act.A4,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 Coroutines = new List<ISubroutine>
                 {
                     // Coroutines goes here
@@ -9086,7 +9072,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 470561,
                 Act = Act.A4,
                 WorldId = 456029, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.ClearCurse,
                 WaypointLevelAreaId = 464063,
                 Coroutines = new List<ISubroutine>
                 {
@@ -9122,7 +9108,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 471224,
                 Act = Act.A4,
                 WorldId = 458965, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 464857,
                 Coroutines = new List<ISubroutine>
                 {
@@ -9156,7 +9142,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 471105,
                 Act = Act.A4,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 332339,
                 Coroutines = new List<ISubroutine>
                 {
@@ -9222,7 +9208,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 464928,
                 Act = Act.A4,
                 WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 92945,
                 Coroutines = new List<ISubroutine>
                 {
@@ -9236,7 +9222,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestId = 471160,
                 Act = Act.A4,
                 WorldId = 460587,
-                QuestType = BountyQuestType.SpecialEvent,
+                QuestType = BountyQuestType.KillMonster,
                 WaypointLevelAreaId = 464066,
                 Coroutines = new List<ISubroutine>
                 {
