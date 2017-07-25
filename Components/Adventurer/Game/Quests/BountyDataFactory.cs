@@ -6,6 +6,7 @@ using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Framework;
+using Trinity.ProfileTags;
 using Zeta.Common;
 using Zeta.Game;
 
@@ -513,42 +514,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new EnterLevelAreaCoroutine (347598,169477, 194238, 1109456219, 176002, true),
                         new ClearLevelAreaCoroutine (347598)
                     }
-            });
-
-
-            // A2 - Bounty: Lost Treasure of Khan Dakab (346067)
-            // Doesnt interact with door properly
-            Bounties.Add(new BountyData
-            {
-                QuestId = 346067,
-                Act = Act.A2,
-                WorldId = 70885,
-                QuestType = BountyQuestType.SpecialEvent,
-                //WaypointNumber = 24,
-                Coroutines = new List<ISubroutine>
-                {
-//					new MoveToMapMarkerCoroutine(346067, 70885, -2009241926),
-					new MoveToMapMarkerCoroutine(346067, 70885, 242772911),
- //                   new MoveToMapMarkerCoroutine(346067, 70885, 913850831),
-
-					new MoveToSceneCoroutine(346067, 70885, "caOut_Oasis_Sub240_POI"),
-
-                    new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(90.85815f, 45.47217f, 79.77377f)),
-                    new MoveToActorCoroutine(346067, 70885, 175603),
-                    new InteractWithGizmoCoroutine(346067, 70885, 175603, 0, 5),
-
-                    new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(48.02637f, 85.47168f, 79.74346f)),
-                    new MoveToActorCoroutine(346067, 70885, 175603),
-                    new InteractWithGizmoCoroutine(346067, 70885, 175603, 0, 5),
-
-                    new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(73.2168f, 68.68799f, 71.29655f)),
-                    new EnterLevelAreaCoroutine(346067, 70885, 158593, 913850831, 176002),
-                    // a2dun_Aqd_Act_Lever_FacePuzzle_02 (219880) Distance: 20.90631
-                    new InteractWithGizmoCoroutine(346067, 158593, 219880, 0, 5),
-                    // a2dun_Aqd_Chest_Special_FacePuzzle_Large (190524) Distance: 27.1103
-                    new InteractWithGizmoCoroutine(346067, 158593, 190524, 0, 5),
-                    new ClearAreaForNSecondsCoroutine(346067, 30, 0, 0, 45),
-                }
             });
 
 
@@ -8722,9 +8687,44 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 346067,
                 Act = Act.A2,
+                WorldId = 158593,
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 57425,
+                Coroutines = new List<ISubroutine>
+                {
+					new MoveToSceneCoroutine(346067, 70885, "caOut_Oasis_Sub240_POI"),
+
+                    new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(95.17871f, 61.56543f, 80.34052f)),
+                    new InteractWithGizmoCoroutine(346067, 70885, 175603, 0, 5),
+
+                    new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(65.4021f, 90.04639f, 80.63489f)),
+                    new InteractWithGizmoCoroutine(346067, 70885, 175603, 0, 5),
+
+                    // Haxx.. g_Portal_ArchTall_Blue (176002) Distance: 29.04947
+                    new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(94.06543f, 95.49268f, 73.67375f)),
+                    new InteractionCoroutine(176002, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1)),
+
+                    // Find and pull the lever. a2dun_Aqd_Act_Lever_FacePuzzle_02 (219880) Distance: 20.90631
+                    new InteractWithGizmoCoroutine(346067, 158593, 219880, 0, 5),
+
+                    // a2dun_Aqd_GodHead_Door_LargePuzzle-8357
+                    new MoveToMapMarkerCoroutine(346067, 158593, -1469964931),
+                    new InteractWithGizmoCoroutine(346067, 158593, 207615, 0),
+
+                    // a2dun_Aqd_Chest_Special_FacePuzzle_Large (190524) Distance: 27.1103
+                    new InteractWithGizmoCoroutine(346067, 158593, 190524, 0, 5),
+                    new ClearAreaForNSecondsCoroutine(346067, 30, 0, 0, 45),
+                }
+            });
+
+            // A2 - Bounty: Blood Statue (465128)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 465128,
+                Act = Act.A2,
                 WorldId = 0, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 92945,
                 Coroutines = new List<ISubroutine>
                 {
                     // Coroutines goes here
@@ -8864,20 +8864,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WorldId = 0, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
                 WaypointLevelAreaId = 270011,
-                Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
-            });
-
-            // A2 - Bounty: Blood Statue (465128)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 465128,
-                Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 92945,
                 Coroutines = new List<ISubroutine>
                 {
                     // Coroutines goes here
