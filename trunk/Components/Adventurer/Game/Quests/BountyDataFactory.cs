@@ -8771,12 +8771,15 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 469699,
                 Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 460372,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 460671,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToMapMarkerCoroutine(469699, 460372, 2912417),
+                    new WaitCoroutine(469699, 460372, 5000),
+                    // : P6_Friendly_Adventurer-465 ActorSnoId: 462095
+                    new ClearAreaForNSecondsCoroutine(469699, 60, 462095, 0, 50)
                 }
             });
 
