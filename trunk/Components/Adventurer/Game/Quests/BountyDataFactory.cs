@@ -8978,12 +8978,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 470746,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
+                WorldId = 460587, // Enter the final worldId here
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 475856,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    // Name: P6_Skeleton_B_Unique_01_RoF-5950 ActorSnoId: 470744
+                    new KillUniqueMonsterCoroutine(470746, 460587, 470744, 243521159),
+                    new ClearLevelAreaCoroutine(470746),
                 }
             });
 
@@ -9219,12 +9221,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 470651,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 19954,
+                WorldId = 458965, // Enter the final worldId here
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 464857,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                     // Name: p6_X1_armorScavenger_A_Unique_ROF_V4_01-4477 ActorSnoId: 470666
+                    new KillUniqueMonsterCoroutine (470651, 458965, 470666, -541902607),
+                    new ClearLevelAreaCoroutine (470651)
                 }
             });
 
