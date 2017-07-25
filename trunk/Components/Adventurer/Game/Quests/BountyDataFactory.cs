@@ -9121,12 +9121,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 471224,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 458965, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 464857,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    // Name: p6_X1_armorScavenger_Unique_RoF_V4_01-809 ActorSnoId: 471230
+                    new KillUniqueMonsterCoroutine(471224, 458965, 471230, 1900506513),
+                    new ClearLevelAreaCoroutine(471224)
                 }
             });
 
