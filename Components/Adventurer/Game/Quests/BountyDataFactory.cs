@@ -8965,8 +8965,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WaypointLevelAreaId = 464066,
                 Coroutines = new List<ISubroutine>
                 {
-                    //new MoveToScenePositionCoroutine(468481, 460587, "LS_a4dun_spire_LibraryOfFate_05", new Vector3(117.0737f, 229.1764f, 31.1f)),
-                    //new MoveToScenePositionCoroutine(468481, 460587, "LS_a4dun_spire_corrupt_NS_02", new Vector3(226.8757f, 92.24744f, 31.1f)),
+                    new MoveToScenePositionCoroutine(468481, 460587, "LS_a4dun_spire_LibraryOfFate_05", new Vector3(117.0737f, 229.1764f, 31.1f)),
+                    new MoveToScenePositionCoroutine(468481, 460587, "LS_a4dun_spire_corrupt_NS_02", new Vector3(226.8757f, 92.24744f, 31.1f)),
                     // p6_x1_westmarchRanged_A_Unique_ROF_V5_01-75810 ActorSnoId: 468511
                     new KillUniqueMonsterCoroutine(468481, 460587, 468511, 465303410),
                     new ClearLevelAreaCoroutine(468481),
@@ -9158,17 +9158,40 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A4 - Bounty: Kill Old Hardshell (471156)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471156,
+                Act = Act.A4,
+                WorldId = 460587, // Enter the final worldId here
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 475856,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Name: p6_Crab_Mother_Unique_RoF_V5_01-10653 ActorSnoId: 471182
+                    new KillUniqueMonsterCoroutine(471156, 460587, 471182, 1898390417),
+                    new ClearLevelAreaCoroutine(471156)
+                }
+            });
+
             // A4 - Bounty: The Cursed Realm (467798)
             Bounties.Add(new BountyData
             {
                 QuestId = 467798,
                 Act = Act.A4,
-                WorldId = 458965, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 464857,
+                WorldId = 457461, // Enter the final worldId here
+                QuestType = BountyQuestType.ClearCurse,
+                WaypointLevelAreaId = 464065,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToScenePositionCoroutine(467798, 457461, "P6_Lost_Souls_a4dun_spire_LibraryOfFate_03", new Vector3(120.01f, 229.5111f, 15.1f)),
+                    new MoveToScenePositionCoroutine(467798, 457461, "P6_Lost_Souls_x1_fortress_EW_05_soul_well", new Vector3(186.6548f, 76.25372f, -74.9f)),
+                    new MoveThroughDeathGates(467798, 457461, 1),
+
+                    new MoveToMapMarkerCoroutine(467798, 457461, 2912417),
+                    // x1_Global_Chest_CursedChest_B (365097) Distance: 27.16287
+                    new InteractWithGizmoCoroutine(467798, 457461, 365097, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine(467798, 60, 365097, 2912417, 30),
                 }
             });
 
