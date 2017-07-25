@@ -9027,12 +9027,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 471135,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 457461,
                 QuestType = BountyQuestType.KillMonster,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 464065,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToScenePositionCoroutine(471135, 457461, "P6_Lost_Souls_x1_fortress_EW_05_soul_well", new Vector3(184.2814f, 72.55072f, -74.9f)),
+                    new MoveThroughDeathGates(471135, 457461, 1),
+                    // p6_Angel_Corrupt_A_Unique_RoF_V3_01-22241 ActorSnoId: 471142
+                    new KillUniqueMonsterCoroutine(471135, 457461, 471139, -856974543),
+                    new ClearLevelAreaCoroutine(471135)
                 }
             });
 
