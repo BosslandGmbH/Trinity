@@ -47,6 +47,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (value != States.NotStarted)
                 {
                     Core.Logger.Log("[InteractWithGizmo] " + value);
+                    StatusText = "[InteractWithGizmo] " + value;
                 }
                 _state = value;
             }
@@ -108,6 +109,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _objectiveScanRange = 5000;
             _objectiveLocation = Vector3.Zero;
         }
+
+        public string StatusText { get; set; }
 
         public void DisablePulse()
         {

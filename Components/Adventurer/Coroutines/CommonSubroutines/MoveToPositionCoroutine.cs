@@ -36,6 +36,7 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
                 if (value != States.NotStarted)
                 {
                     Core.Logger.Debug("[MoveToPosition] " + value);
+                    StatusText = "[MoveToPosition] " + value;
                 }
                 _state = value;
             }
@@ -87,6 +88,8 @@ namespace Trinity.Components.Adventurer.Coroutines.CommonSubroutines
             _startTime = DateTime.MinValue;
             _state = States.NotStarted;
         }
+
+        public string StatusText { get; set; }
 
         public void DisablePulse()
         {

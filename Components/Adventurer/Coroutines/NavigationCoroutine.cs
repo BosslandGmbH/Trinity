@@ -42,6 +42,8 @@ namespace Trinity.Components.Adventurer.Coroutines
             _moveToDestination = Vector3.Zero;
         }
 
+        public string StatusText { get; set; }
+
         public static async Task<bool> MoveTo(Vector3 destination, int distance, bool straightLinePath = false, [CallerMemberName] string caller = "", [CallerFilePath] string callerPath = "")
         {
             //destination.Z = AdvDia.MainGridProvider.GetHeight(destination.ToVector2());
@@ -112,6 +114,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                     case States.Completed:
                     case States.Failed:
                         Core.Logger.Debug("[Navigation] " + value);
+                        StatusText = "[Navigation] " + value;
                         break;
                 }
                 if (value != States.NotStarted)

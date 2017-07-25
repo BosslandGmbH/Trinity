@@ -52,6 +52,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (value != States.NotStarted)
                 {
                     Core.Logger.Log("[KillUniqueMonster] " + value);
+                    StatusText = "[KillUniqueMonster] " + value;
                 }
                 _state = value;
             }
@@ -110,6 +111,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _objectiveLocation = Vector3.Zero;
             _previouslyFoundLocation = Vector3.Zero;
         }
+
+        public string StatusText { get; set; }
 
         public void DisablePulse()
         {

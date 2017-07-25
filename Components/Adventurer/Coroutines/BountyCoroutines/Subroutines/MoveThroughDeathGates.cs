@@ -93,6 +93,8 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
             _sceneDataBufferStartTime = DateTime.MinValue;
         }
 
+        public string StatusText { get; set; }
+
         public void DisablePulse()
         {
         }
@@ -360,6 +362,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines
                 if (_state == value) return;
                 if (value != States.NotStarted)
                     Core.Logger.Log("[MoveThroughDeathGates] " + value);
+                    StatusText = "[MoveThroughDeathGates] " + value;
                 _state = value;
             }
         }

@@ -119,6 +119,7 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
                 if (value != States.NotStarted)
                 {
                     Core.Logger.Debug("[Rift] " + value);
+                    StatusText = "[Rift] " + value;
                 }
                 _state = value;
             }
@@ -157,6 +158,8 @@ namespace Trinity.Components.Adventurer.Coroutines.RiftCoroutines
             _entranceSceneNames.Clear();
             State = States.NotStarted;
         }
+
+        public string StatusText { get; set; }
 
         public virtual async Task<bool> GetCoroutine()
         {

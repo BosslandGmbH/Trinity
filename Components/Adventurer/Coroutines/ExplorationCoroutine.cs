@@ -51,6 +51,7 @@ namespace Trinity.Components.Adventurer.Coroutines
                 if (value != States.NotStarted)
                 {
                     Core.Logger.Debug("[Exploration] " + value);
+                    StatusText = "[Exploration] " + value;
                 }
                 _state = value;
             }
@@ -255,6 +256,8 @@ namespace Trinity.Components.Adventurer.Coroutines
         {
             State = States.NotStarted;
         }
+
+        public string StatusText { get; set; }
 
         public void DisablePulse()
         {
