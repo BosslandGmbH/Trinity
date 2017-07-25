@@ -742,6 +742,23 @@ namespace Trinity.Components.Adventurer.UI
                     {
                         DumpBountyInfo(bountyInfo, wpNr);
                     }
+
+
+                    var bountiesNoCoroutines = ZetaDia.Storage.Quests.Bounties.Where(
+                        b =>
+                        {
+                            BountyData bd = BountyDataFactory.GetBountyData((int) b.Quest);
+                            if (bd != null && bd.Coroutines.Count == 0)
+                                return true;
+
+                            return false;
+                        });
+                    Core.Logger.Raw("Bounties with no coroutines:");
+
+                    foreach (var bountyInfo in bountiesNoCoroutines)
+                    {
+                        DumpBountyInfo(bountyInfo, 0);
+                    }
                 }
             }
             catch (Exception ex)
