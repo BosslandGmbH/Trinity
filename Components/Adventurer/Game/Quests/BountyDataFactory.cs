@@ -310,6 +310,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
             // for this area, visited nodes are not being flagged properly
             // when in radius
 
+
+            // A2 - Blood and Iron (432334)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 432334,
+                Act = Act.A2,
+                WorldId = 70885,
+                QuestType = BountyQuestType.GuardedGizmo,
+                WaypointLevelAreaId = 57425,
+                Coroutines = new List<ISubroutine>
+                {
+                    new GuardedGizmoCoroutine(432334, 432331)
+                }
+            });
+
             // A1 - The Cursed Mill (365401)
             Bounties.Add(new BountyData
             {
@@ -347,22 +362,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
 //                 new ClearLevelAreaCoroutine(336902),
                 }
             });
-
-
-            // A2 - Blood and Iron (432334)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 432334,
-                Act = Act.A2,
-                WorldId = 70885,
-                QuestType = BountyQuestType.GuardedGizmo,
-                WaypointLevelAreaId = 57425,
-                Coroutines = new List<ISubroutine>
-                {
-                    new GuardedGizmoCoroutine(432334, 432331)
-                }
-            });
-
 
             // A5 - Bounty: The Crystal Prison (363390)
             Bounties.Add(new BountyData
@@ -8863,20 +8862,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A2 - Bounty: Blood and Iron (432334)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 432334,
-                Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 270011,
-                Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
-            });
-
             // A2 - Bounty: The Ancient Devices (433025)
             Bounties.Add(new BountyData
             {
@@ -8902,6 +8887,23 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // Coroutines goes here
+                }
+            });
+
+            // A4 - Bounty: Kill Bjortor (470712)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470712,
+                Act = Act.A4,
+                WorldId = 456029,
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 475854,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine(470712, 456029, -1254225905),
+                    // P6_Sasquatch_B_Unique_RoF_01-17925 ActorSnoId: 470709, Distance: 8.153741
+                    new KillUniqueMonsterCoroutine(470712, 456029, 470709, -1254225905),
+                    new ClearLevelAreaCoroutine(470712),
                 }
             });
 
