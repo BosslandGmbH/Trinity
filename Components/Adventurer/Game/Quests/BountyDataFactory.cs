@@ -8995,12 +8995,15 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 470608,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
+                WorldId = 458965, // Enter the final worldId here
+                QuestType = BountyQuestType.ClearCurse,
+                WaypointLevelAreaId = 464857,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToMapMarkerCoroutine(470608, 458965, 2912417),
+                    // x1_Global_Chest_CursedChest_B (365097) Distance: 27.16287
+                    new InteractWithGizmoCoroutine(470608, 458965, 365097, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine(470608, 60, 365097, 2912417, 30),
                 }
             });
 
@@ -9065,12 +9068,13 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 470717,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 92945,
+                WorldId = 457461,
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 464065,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToMapMarkerCoroutine(470717, 457461, 619535446),
+                    new ClearLevelAreaCoroutine(470717),
                 }
             });
 
@@ -9079,11 +9083,12 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 467798,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 458965, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 92945,
+                WaypointLevelAreaId = 464857,
                 Coroutines = new List<ISubroutine>
                 {
+                    
                     // Coroutines goes here
                 }
             });

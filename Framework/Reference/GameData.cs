@@ -2743,6 +2743,9 @@ namespace Trinity.Framework.Reference
 
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            // Obstacle you can't destroy.
+            467026, // LS_a3dun_Keep_Exploding_Arch_A-6641 
+
             464983, // P6_Church_IronMaiden-8410 (464983)
 
             // these bounty chests are not clickable they have a protection globe on them during event then sno changes.
