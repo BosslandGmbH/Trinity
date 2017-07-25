@@ -3125,6 +3125,7 @@ namespace Trinity.Framework.Reference
         // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
         public static HashSet<int> DoorsToAlwaysIgnore { get; } = new HashSet<int>
         {
+            115373, //caOut_Oasis_Door_Aqueduct_A_Top-5549
             454194, //p43_AD_trDun_Cath_WoodDoor_Lazarus-56453 (454194)
             454187, //p43_AD_a1dun_Leor_Jail_Door_SuperLocked_A-61290 (454187)
             454173, //43_AD_a1dun_Leor_Gate_A-61285 (454173)
@@ -3267,7 +3268,8 @@ namespace Trinity.Framework.Reference
         // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
         public static Dictionary<int, int> SceneSpecificDoorsIgnore { get; } = new Dictionary<int, int>
         {
-            { 454485, 454346 } //p43_AD_Catacombs_Door_A-13146 (454346)  // D1 Valor Scene Event
+            { 454485, 454346 }, // p43_AD_Catacombs_Door_A-13146 (454346)  // D1 Valor Scene Event
+            { 158161, 207615 }  // a2dun_Aqd_GodHead_Door_LargePuzzle-8357  // Bounty: Lost Treasure of Khan Dakab
         };
 
         /// <summary>

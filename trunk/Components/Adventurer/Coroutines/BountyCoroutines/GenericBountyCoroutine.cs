@@ -110,7 +110,13 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
             //}
 
             _lastGenericBountySubroutine = _currentStep;
-            BotMain.SetCurrentStatusTextProvider(() => _lastGenericBountySubroutine.StatusText);
+            BotMain.SetCurrentStatusTextProvider(() =>
+            {
+                if (_lastGenericBountySubroutine != null)
+                    return _lastGenericBountySubroutine.StatusText;
+                return string.Empty;
+            });
+
             await _currentStep.GetCoroutine();
             return false;
         }
@@ -122,6 +128,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
         {
             _lastGenericBountySubroutine = null;
             _currentStep = null;
+            BotMain.SetCurrentStatusTextProvider(null);
             base.Reset();
         }
 
