@@ -8938,6 +8938,22 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A4 - Bounty: Kill Argosh (470722)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470722,
+                Act = Act.A4,
+                WorldId = 456029,
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 464063,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Name: p6_Unburied_C_Unique_01_ROF_V2_01-1437 ActorSnoId: 4707559
+                    new KillUniqueMonsterCoroutine(470722, 456029, 4707559, 881692424),
+                    new ClearLevelAreaCoroutine(470722),
+                }
+            });
+
             // A4 - Bounty: Kill Bjortor (470712)
             Bounties.Add(new BountyData
             {
