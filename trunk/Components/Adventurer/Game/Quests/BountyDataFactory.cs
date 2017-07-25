@@ -8619,6 +8619,22 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A2 - Bounty: Kill Agustin The Marked (464730)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 464730,
+                Act = Act.A2,
+                WorldId = 460372,
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 460671,
+                Coroutines = new List<ISubroutine>
+                {
+                   // Name: p6_RavenFlyer_Unique_A-23893 ActorSnoId: 464732, Distance: 4.847482
+                   new KillUniqueMonsterCoroutine (464730, 460372, 464732, -2033595591),
+                   new ClearLevelAreaCoroutine(464730)
+                }
+            });
+
             // A2 - Bounty: Kill Vidian (474066)
             Bounties.Add(new BountyData
             {
