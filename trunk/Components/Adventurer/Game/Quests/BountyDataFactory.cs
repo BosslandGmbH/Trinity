@@ -9037,6 +9037,21 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A4 - Bounty: The Cursed Realm (470561)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470561,
+                Act = Act.A4,
+                WorldId = 0, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 332339,
+                Coroutines = new List<ISubroutine>
+                {
+                    
+                }
+            });
+   
+
             // A4 - Bounty: Kill Prratshet the Reaper (471131)
             Bounties.Add(new BountyData
             {
@@ -9150,12 +9165,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 471160,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 460587,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 92945,
+                WaypointLevelAreaId = 464066,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    // Name: p6_morluSpellcaster_A_Unique_RoF_V5_01-950 ActorSnoId: 471180
+                    new KillUniqueMonsterCoroutine (471160, 460587, 471180, 2034862812),
+                    new ClearLevelAreaCoroutine (471160)
                 }
             });
 
