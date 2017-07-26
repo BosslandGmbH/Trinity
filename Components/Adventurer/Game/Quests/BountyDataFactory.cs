@@ -6,6 +6,7 @@ using Trinity.Components.Adventurer.Coroutines.BountyCoroutines;
 using Trinity.Components.Adventurer.Coroutines.BountyCoroutines.Subroutines;
 using Trinity.Components.Adventurer.Coroutines.CommonSubroutines;
 using Trinity.Framework;
+using Trinity.Modules;
 using Trinity.ProfileTags;
 using Zeta.Common;
 using Zeta.Game;
@@ -713,6 +714,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 //WaypointNumber = 31,
                 Coroutines = new List<ISubroutine>
                 {
+                    // Move a little to make sure it loads the adjecent scene or it will get stuck.
+                    new ExplorationCoroutine(new HashSet<int>() { 136448 }, breakCondition: () => (Core.Player.WorldSnoId == (int)SNOWorld.Gluttony_Boss || Core.Scenes.CurrentWorldScenes.Count >= 5)),
+
                     new MoveToMapMarkerCoroutine(346166, 136415, 2102427919),
                     new EnterLevelAreaCoroutine(346166, 136415, 103209, 2102427919, 161277),
                     new ClearLevelAreaCoroutine(346166),
@@ -8860,12 +8864,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 465117,
                 Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 460372,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 0,
+                WaypointLevelAreaId = 460671,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToMapMarkerCoroutine(465117, 460372, 2912417),
+                    // p6_Event_Moor_BloodCollection_Altar-1214 ActorSnoId: 465103
+                    new ClearAreaForNSecondsCoroutine(465117, 30, (int)SNOActor.p6_Event_Moor_BloodCollection_Altar, 2912417),
+                    new MoveToScenePositionCoroutine(465117, 460372, "p6_Moor_NSEW_240_03", new Vector3(128.7017f, 134.2486f, 10.1f)),
+                    new InteractionCoroutine((int)SNOActor.p6_Event_Moor_BloodCollection_Altar, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2)),
                 }
             });
 
@@ -9202,7 +9210,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // Name: P6_x1_Squigglet_A_Unique_RoF-1024 ActorSnoId: 470730, 
-                    new KillUniqueMonsterCoroutine(470732, 458965, (int)SNOActor.P6_x1_Squigglet_A_Unique_RoF, -777267042 ),
+                    new KillUniqueMonsterCoroutine(470732, 458965, (int)SNOActor.P6_x1_Squigglet_A_Unique_RoF, -777267042),
                     new ClearLevelAreaCoroutine(470732)
                 }
             });
