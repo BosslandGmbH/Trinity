@@ -8928,6 +8928,24 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A2 - Bounty: Ascension Ritual (465564)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 465564,
+                Act = Act.A2,
+                WorldId = 456634,
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 456638,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine(465564, 456634, 2912417),
+                    new MoveToScenePositionCoroutine(465564, 456634, "p6_Church_SEW_02", new Vector3(71.31311f, 118.5031f, 0.1000002f)),
+                    // Name: P6_Church_BloodPool-1277 ActorSnoId: 465787
+                    new ClearAreaForNSecondsCoroutine(465564, 60, 465787, 0)
+                }
+            });
+            
+
             // A4 - Bounty: Kill Jarryd (471226)
             Bounties.Add(new BountyData
             {
