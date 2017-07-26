@@ -8851,12 +8851,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 464180,
                 Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 460372, // Enter the final worldId here
                 QuestType = BountyQuestType.KillMonster,
-                WaypointLevelAreaId = 270011,
+                WaypointLevelAreaId = 460671,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    // Name: P6_Werewolf_White_Unique_A-691 ActorSnoId: 464164
+                   new KillUniqueMonsterCoroutine (464180, 460372, (int)SNOActor.P6_Werewolf_White_Unique_A, -840003354),
+                   new ClearLevelAreaCoroutine(464180)
                 }
             });
 
