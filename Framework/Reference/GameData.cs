@@ -3272,8 +3272,8 @@ namespace Trinity.Framework.Reference
         // De-weight to zero but they still need to be processed for ClsoedDoor checks. todo proper fix.
         public static Dictionary<int, int> SceneSpecificDoorsIgnore { get; } = new Dictionary<int, int>
         {
-            { 454485, 454346 }, // p43_AD_Catacombs_Door_A-13146 (454346)  // D1 Valor Scene Event
-            { 158161, 207615 }  // a2dun_Aqd_GodHead_Door_LargePuzzle-8357  // Bounty: Lost Treasure of Khan Dakab
+            { 454485, (int)SNOActor.p43_AD_Catacombs_Door_A },              // p43_AD_Catacombs_Door_A-13146 (454346)  // D1 Valor Scene Event
+            { 158161, (int)SNOActor.a2dun_Aqd_GodHead_Door_LargePuzzle },   // a2dun_Aqd_GodHead_Door_LargePuzzle  // Bounty: Lost Treasure of Khan Dakab
         };
 
         /// <summary>

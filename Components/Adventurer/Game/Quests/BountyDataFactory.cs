@@ -312,6 +312,20 @@ namespace Trinity.Components.Adventurer.Game.Quests
             // when in radius
 
 
+            //A2 - Ancient Devices - Interact with operated gizmo repeatly
+            Bounties.Add(new BountyData
+            {
+                QuestId = 433025,
+                Act = Act.A2,
+                WorldId = 70885,
+                QuestType = BountyQuestType.GuardedGizmo,
+                WaypointLevelAreaId = 53834,
+                Coroutines = new List<ISubroutine>
+                {
+                    new GuardedGizmoCoroutine(433025, 432885)
+                }
+            });
+
             // A2 - Clear the Mysterious Cave (347598)
             // If delete blacklist NPC actorID in GameData.cs, this quest succeed. But It takes long time because of movement problem.
             Bounties.Add(new BountyData
@@ -8745,12 +8759,15 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 464596,
                 Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 270011,
+                WorldId = 460372,
+                QuestType = BountyQuestType.ClearCurse,
+                WaypointLevelAreaId = 460671,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToMapMarkerCoroutine(464596, 460372, 2912417),
+                    // x1_Global_Chest_CursedChest_B ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 27.16287
+                    new InteractWithGizmoCoroutine(464596, 460372, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine(464596, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
                 }
             });
 
@@ -8808,20 +8825,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
             Bounties.Add(new BountyData
             {
                 QuestId = 471761,
-                Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
-                Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
-            });
-
-            // A2 - Bounty: Clear the Mysterious Cave (347598)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 347598,
                 Act = Act.A2,
                 WorldId = 0, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
@@ -8894,20 +8897,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            //A2 - Ancient Devices - Interact with operated gizmo repeatly
-            Bounties.Add(new BountyData
-            {
-                QuestId = 433025,
-                Act = Act.A2,
-                WorldId = 70885,
-                QuestType = BountyQuestType.GuardedGizmo,
-                WaypointLevelAreaId = 53834,
-                Coroutines = new List<ISubroutine>
-                {
-                    new GuardedGizmoCoroutine(433025, 432885)
-                }
-            });
-
             // A2 - Bounty: Kill Lupgaron (471712)
             Bounties.Add(new BountyData
             {
@@ -8935,7 +8924,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToMapMarkerCoroutine(470218, 460372, 2912417),
                     new WaitCoroutine(470218, 460372, 7500),
                     // p6_Moor_Chest-3053 ActorSnoId: 462211
-                    new ClearAreaForNSecondsCoroutine(470218, 30, (int)SNOActor.p6_Moor_Chest, 2912417),
+                    new ClearAreaForNSecondsCoroutine(470218, 45, 0, 2912417),
                 }
             });
 
@@ -9308,12 +9297,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 468089,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 460587,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 19954,
+                WaypointLevelAreaId = 475856,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToMapMarkerCoroutine(468089, 460587, 1629495090),
+                    // GizmoType: Chest Name: p4_forest_coast_cave_mermaid_idol-1582 ActorSnoId: 449645 
+                    // Might be better to try with a GuardedGizmo coroutine on this one.
+                    new InteractWithGizmoCoroutine(468089, 460587, (int)SNOActor.p4_forest_coast_cave_mermaid_idol, 0),
+                    new ClearAreaForNSecondsCoroutine(468089, 90, 0, 0)
                 }
             });
 
@@ -9348,6 +9341,33 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToMapMarkerCoroutine(359939, 271233, 2912417),
                     new ClearAreaForNSecondsCoroutine(359939, 90, 0, 0, 45)
 
+                }
+            });
+
+            // A5 - Bounty: Treasure Room (359911)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 359911,
+                Act = Act.A5,
+                WorldId = 283552, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 283553,
+                Coroutines = new List<ISubroutine>
+                {
+                     new MoveToMapMarkerCoroutine(359911, 283552, 2912417),
+
+                     // GizmoType: Switch Name: x1_Catacombs_Nephalem_Event_Switch-6817 ActorSnoId: 368515 
+                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(166.0807f, 159.9316f, 0.6154587f)),
+                     new InteractWithGizmoCoroutine(359911, 283552, (int)SNOActor.x1_Catacombs_Nephalem_Event_Switch, 0),
+
+                     //...
+                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(139.5948f, 61.59454f, 0.5280046f)),
+                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(69.77344f, 76.85925f, 0.2960601f)),
+                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(60.94092f, 177.8383f, 0.1f)),
+                     new InteractWithGizmoCoroutine(359911, 283552, (int)SNOActor.x1_Catacombs_Nephalem_Event_Switch, 0),
+
+					new InteractWithGizmoCoroutine(359911, 283552, (int)SNOActor.x1_Catacombs_chest_rare_treasureRoom, 0, 5),
+                    new ClearAreaForNSecondsCoroutine(359911, 90, 0, 0, 45),
                 }
             });
         }
