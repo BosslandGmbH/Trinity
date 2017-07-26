@@ -8606,18 +8606,20 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         private static void AddNewBounties()
         {
-            // A1 - Bounty: The Cursed Mill (365401)
+            // A1 - The Cursed Mill (365401)
             Bounties.Add(new BountyData
             {
                 QuestId = 365401,
                 Act = Act.A1,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 71150,
                 QuestType = BountyQuestType.ClearCurse,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 19952,
                 Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
+                    {
+                        new MoveToMapMarkerCoroutine (365401, 71150, 2912417),
+                        new InteractWithGizmoCoroutine (365401,71150, (int)SNOActor.x1_Global_Chest_CursedChest_B, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (365401, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30, false)
+                    }
             });
 
             // A2 - Bounty: The Cursed Temple (464598)
@@ -9048,12 +9050,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 471107,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 456029,
                 QuestType = BountyQuestType.KillMonster,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 475854,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    // Name: p6_Corpulent_A_Unique_RoF_V2_01-1117 ActorSnoId: 471117
+                    new KillUniqueMonsterCoroutine(471107, 456029, (int)SNOActor.p6_Corpulent_A_Unique_RoF_V2_01, 1096650244),
+                    new ClearLevelAreaCoroutine(471107),
                 }
             });
 
