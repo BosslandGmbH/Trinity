@@ -101,7 +101,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new EnterLevelAreaCoroutine(quest.QuestId, quest.Waypoint.WorldSnoId, BountyHelpers.DynamicBountyPortals.Values.ToList()),
-                    new InteractWithGizmoCoroutine(quest.QuestId, -1, 365097, 2912417, 5),
+                    new InteractWithGizmoCoroutine(quest.QuestId, -1, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 //                 new ClearAreaForNSecondsCoroutine(quest.QuestId, 60, 0, 0, 60),
                     new ClearLevelAreaCoroutine(quest.QuestId),
                 }
@@ -393,8 +393,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (365401, 71150, 2912417),
-                        new InteractWithGizmoCoroutine (365401,71150, 365097, 0, 5),
-                        new ClearAreaForNSecondsCoroutine (365401, 60, 365097, 2912417, 30, false)
+                        new InteractWithGizmoCoroutine (365401,71150, (int)SNOActor.x1_Global_Chest_CursedChest_B, 0, 5),
+                        new ClearAreaForNSecondsCoroutine (365401, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30, false)
                     }
             });
 
@@ -3662,9 +3662,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     // todo needs work, failing.
                     new MoveToMapMarkerCoroutine(436267, 428493, 2912417),
-                    // x1_Event_CursedShrine (365097) Distance: 22.65772
-                    new InteractWithGizmoCoroutine(436267, 428493, 365097, 2912417, 5),
-                    //ActorId: 365097, Type: Gizmo, Name: x1_Event_CursedShrine-36946, Distance2d: 4.163542, CollisionRadius: 10.04086, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
+                    // x1_Event_CursedShrine ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 22.65772
+                    new InteractWithGizmoCoroutine(436267, 428493, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    //ActorId: (int)SNOActor.x1_Global_Chest_CursedChest_B, Type: Gizmo, Name: x1_Event_CursedShrine-36946, Distance2d: 4.163542, CollisionRadius: 10.04086, MinimapActive: 1, MinimapIconOverride: -1, MinimapDisableArrow: 0
 
 					new MoveToScenePositionCoroutine(436267, 428493, "p4_ruins_frost_NW_01", new Vector3(73.44867f, 127.4745f, -9.9f)),
                     new WaitCoroutine(436267, 428493, 10000),
@@ -3682,7 +3682,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new WaitCoroutine(436267, 428493, 10000),
                     new MoveToScenePositionCoroutine(436267, 428493, "p4_ruins_frost_NW_01", new Vector3(71.05536f, 113.5079f, -9.9f)),
                     new WaitCoroutine(436267, 428493, 10000),
-//                  new ClearAreaForNSecondsCoroutine(436267, 120, 365097, 2912417, 20, false),
+//                  new ClearAreaForNSecondsCoroutine(436267, 120, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 20, false),
                 }
             });
 
@@ -3698,9 +3698,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new EnterLevelAreaCoroutine(436269, 428493, 430335, 1615795536, 175467),
                     new MoveToMapMarkerCoroutine(436269, 430335, 2912417),
-                    // x1_Global_Chest_CursedChest_B (365097) Distance: 27.16287
-                    new InteractWithGizmoCoroutine(436269, 430335, 365097, 2912417, 5),
-                    new ClearAreaForNSecondsCoroutine(436269, 60, 365097, 2912417, 30),
+                    // x1_Global_Chest_CursedChest_B ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 27.16287
+                    new InteractWithGizmoCoroutine(436269, 430335, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine(436269, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
                 }
             });
 
@@ -3715,7 +3715,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new EnterLevelAreaCoroutine(375264, 70885, 123183, -1758560943, 185067),
                         new MoveToMapMarkerCoroutine (375264, 123183, 2912417),
-                        new InteractWithGizmoCoroutine (375264,123183, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (375264,123183, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(375264, 123183, "a2dun_Zolt_Random_NSEW_02", new Vector3(66.73035f, 71.62518f, 12.70991f)),
                         new WaitCoroutine(375264, 123183, 10000),
@@ -3735,7 +3735,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new WaitCoroutine(375264, 123183, 10000),
                         new MoveToScenePositionCoroutine(375264, 123183, "a2dun_Zolt_Random_NSEW_02", new Vector3(66.0199f, 68.46393f, 12.70991f)),
 
-//                      new ClearAreaForNSecondsCoroutine (375264, 90, 365097, 2912417, 30)
+//                      new ClearAreaForNSecondsCoroutine (375264, 90, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -3749,8 +3749,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (365381,71150, 2912417),
-                        new InteractWithGizmoCoroutine (365381,71150, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (365381, 60, 365097, 2912417, 30)
+                        new InteractWithGizmoCoroutine (365381,71150, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                        new ClearAreaForNSecondsCoroutine (365381, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -3766,7 +3766,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369763, 71150, 2912417),
-                        new InteractWithGizmoCoroutine (369763, 71150, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (369763, 71150, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(369763, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(129.8826f, 98.04395f, 9.915272f)),
                         new WaitCoroutine(369763, 71150, 10000),
@@ -3779,7 +3779,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(369763, 71150, "trOut_Highlands_Sub240_LeoricBattlements_A", new Vector3(126.72f, 120.3223f, 9.915272f)),
                         new WaitCoroutine(369763, 71150, 10000),
 						
-//                      new ClearAreaForNSecondsCoroutine (369763, 60, 365097, 2912417, 30)
+//                      new ClearAreaForNSecondsCoroutine (369763, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -3793,7 +3793,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369789,58983, 2912417),
-                        new InteractWithGizmoCoroutine (369789,58983, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (369789,58983, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(369789, 58983, "a1dun_Leor_EW_01_BellowsRoom", new Vector3(88.48364f, 135.6439f, -9.300045f)),
                         new WaitCoroutine(369789, 58983, 10000),
@@ -3806,7 +3806,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(369789, 58983, "a1dun_Leor_EW_01_BellowsRoom", new Vector3(88.48364f, 135.6439f, -9.300045f)),
                         new WaitCoroutine(369789, 58983, 10000),
 
-//                      new ClearAreaForNSecondsCoroutine (369789, 90, 365097, 2912417, 30)
+//                      new ClearAreaForNSecondsCoroutine (369789, 90, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
 						
                     }
             });
@@ -3821,7 +3821,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine(369797, 70885, 2912417),
-                        new InteractWithGizmoCoroutine (369797,70885, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (369797,70885, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(369797, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(128.3037f, 139.0692f, 207.4763f)),
                         new WaitCoroutine(369797, 70885, 10000),
@@ -3836,7 +3836,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(369797, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(129.7896f, 137.2734f, 207.4762f)),
                         new WaitCoroutine(369797, 70885, 10000),
 
-//                      new ClearAreaForNSecondsCoroutine (369797, 60, 365097, 2912417, 30)	
+//                      new ClearAreaForNSecondsCoroutine (369797, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)	
                     }
             });
 
@@ -3850,7 +3850,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369800, 70885, 2912417),
-                        new InteractWithGizmoCoroutine (369800,70885, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (369800,70885, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(369800, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(147.6401f, 133.1014f, 207.4763f)),
                         new WaitCoroutine(369800, 70885, 10000),
@@ -3865,7 +3865,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(369800, 70885, "caOut_Sub240x240_Battlements_Destroyed", new Vector3(146.2393f, 127.4581f, 207.4762f)),
                         new WaitCoroutine(369800, 70885, 10000),
 						
-//                      new ClearAreaForNSecondsCoroutine (369800, 60, 365097, 2912417, 30)
+//                      new ClearAreaForNSecondsCoroutine (369800, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -3881,8 +3881,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
 //                        new MoveToMapMarkerCoroutine (369813, 70885, 1352061373),
                         new EnterLevelAreaCoroutine(369813, 70885, 0, 1352061373, 176003),
                         new MoveToMapMarkerCoroutine (369813, 62569, 2912417),
-                        new InteractWithGizmoCoroutine (369813,62569, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369813, 60, 365097, 2912417, 30)
+                        new InteractWithGizmoCoroutine (369813,62569, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                        new ClearAreaForNSecondsCoroutine (369813, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -3896,7 +3896,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369825,95804, 2912417),
-                        new InteractWithGizmoCoroutine (369825,95804, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (369825,95804, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
                         new MoveToSceneCoroutine(369825, 95804, "a3_Battlefield_Sub240_ParentScene"),
 
                         new MoveToScenePositionCoroutine(369825, 95804, "a3_Battlefield_Sub240_HumanOutpost_02", new Vector3(88.71631f, 149.5671f, 20.1f)),
@@ -3920,7 +3920,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(369825, 95804, "a3_Battlefield_Sub240_HumanOutpost_02", new Vector3(88.94995f, 146.5066f, 20.1f)),
                         new WaitCoroutine(369825, 95804, 10000),
 
-//                      new ClearAreaForNSecondsCoroutine (369825, 60, 365097, 2912417, 30)
+//                      new ClearAreaForNSecondsCoroutine (369825, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -3939,7 +3939,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new EnterLevelAreaCoroutine(369851, 95804, 0, 942020622, 176003),
                         new MoveToMapMarkerCoroutine (369851, 189910, 2912417),
                         new MoveToScenePositionCoroutine(369851, 189910, "a3dun_iceCaves_EW_01", new Vector3(91.36786f, 135.6528f, 0.1000028f)),
-                        new InteractWithGizmoCoroutine (369851,189910, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (369851,189910, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(369851, 189910, "a3dun_iceCaves_EW_01", new Vector3(91.36786f, 135.6528f, 0.1000028f)),
                         new WaitCoroutine(369851, 189910, 5000),
@@ -3964,7 +3964,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(369851, 189910, "a3dun_iceCaves_EW_01", new Vector3(91.36786f, 135.6528f, 0.1000028f)),
                         new WaitCoroutine(369851, 189910, 5000),
 
- //                       new ClearAreaForNSecondsCoroutine (369851, 60, 365097, 2912417, 30)
+ //                       new ClearAreaForNSecondsCoroutine (369851, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -3981,7 +3981,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
                         new MoveToScenePositionCoroutine(369853, 75434, "a3dun_Keep_NSEW_03_War", new Vector3(180.0914f, 89.91431f, 0.5058147f)),
                         new WaitCoroutine(369853, 75434, 1000),
-                        new InteractWithGizmoCoroutine(369853, 75434, 365097, 0, 5),
+                        new InteractWithGizmoCoroutine(369853, 75434, (int)SNOActor.x1_Global_Chest_CursedChest_B, 0, 5),
 
                         new MoveToScenePositionCoroutine(369853, 75434, "a3dun_Keep_NSEW_03_War", new Vector3(180.0914f, 89.91431f, 0.5058147f)),
                         new WaitCoroutine(369853, 75434, 10000),
@@ -4000,7 +4000,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(369853, 75434, "a3dun_Keep_NSEW_03_War", new Vector3(180.0914f, 89.91431f, 0.5058147f)),
                         new WaitCoroutine(369853, 75434, 10000),
 
-//                     new ClearAreaForNSecondsCoroutine (369853, 60, 365097, 2912417, 30)
+//                     new ClearAreaForNSecondsCoroutine (369853, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4015,7 +4015,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new MoveToMapMarkerCoroutine (369868, 81934, 2912417),
 
-                        new InteractWithGizmoCoroutine (369868, 81934, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (369868, 81934, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(369868, 81934, "a3dun_Crater_NSW_01_W01_S01", new Vector3(66.18164f, 119.5161f, 0.4913304f)),
                         new WaitCoroutine(369868, 81934, 10000),
@@ -4030,7 +4030,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(369868, 81934, "a3dun_Crater_NSW_01_W01_S01", new Vector3(45.05969f, 120.4674f, 0.1000062f)),
                         new WaitCoroutine(369868, 81934, 10000),
 
-//                        new ClearAreaForNSecondsCoroutine (369868, 60, 365097, 2912417, 30)
+//                        new ClearAreaForNSecondsCoroutine (369868, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4044,7 +4044,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369878, 129305, 2912417),
-                        new InteractWithGizmoCoroutine (369878, 129305, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (369878, 129305, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(369878, 129305, "a4dun_spire_corrupt_SE_02", new Vector3(185.7661f, 167.3568f, 0.8628434f)),
                         new WaitCoroutine(369878, 129305, 10000),
@@ -4065,7 +4065,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(369878, 129305, "a4dun_spire_corrupt_SE_02", new Vector3(183.8937f, 165.0882f, 0.8628433f)),
                         new WaitCoroutine(369878, 129305, 10000),
 						
-//                      new ClearAreaForNSecondsCoroutine (369878, 60, 365097, 2912417,30)
+//                      new ClearAreaForNSecondsCoroutine (369878, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417,30)
                     }
             });
 
@@ -4079,8 +4079,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (369900, 109513, 2912417),
-                        new InteractWithGizmoCoroutine(369900, 109513, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369900, 60, 365097, 2912417, 30)
+                        new InteractWithGizmoCoroutine(369900, 109513, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                        new ClearAreaForNSecondsCoroutine (369900, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4094,8 +4094,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine(369908, 338600, 2912417),
-                        new InteractWithGizmoCoroutine (369908, 338600, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369908, 60, 365097, 2912417, 20, false)
+                        new InteractWithGizmoCoroutine (369908, 338600, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                        new ClearAreaForNSecondsCoroutine (369908, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 20, false)
                     }
             });
 
@@ -4110,7 +4110,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new EnterLevelAreaCoroutine (369944, 71150, 106752, 1107870150, 176007),
                         new MoveToMapMarkerCoroutine (369944, 106752, 2912417),
-                        new InteractWithGizmoCoroutine (369944,106752, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (369944,106752, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(369944, 106752, "trOut_oldTristram_Cellar_E", new Vector3(124.3548f, 113.0747f, 0.1f)),
                         new WaitCoroutine(369944, 106752, 10000),
@@ -4124,7 +4124,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new WaitCoroutine(369944, 106752, 10000),
                         new MoveToScenePositionCoroutine(369944, 106752, "trOut_oldTristram_Cellar_E", new Vector3(124.0268f, 106.3538f, 0.1f)),
 						
- //                       new ClearAreaForNSecondsCoroutine (369944, 60, 365097, 2912417, 50)
+ //                       new ClearAreaForNSecondsCoroutine (369944, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 50)
                     }
             });
 
@@ -4139,8 +4139,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new EnterLevelAreaCoroutine (369952, 267412, 341040, 1344182686, 0),
                         new MoveToMapMarkerCoroutine (369952,341040, 2912417),
-                        new InteractWithGizmoCoroutine (369952,341040, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (369952, 60, 365097, 2912417, 30)
+                        new InteractWithGizmoCoroutine (369952,341040, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                        new ClearAreaForNSecondsCoroutine (369952, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4154,7 +4154,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (375191,50582, 2912417),
-                        new InteractWithGizmoCoroutine (375191,50582, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (375191,50582, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(375191, 50582, "trDun_Cath_SW_Hall_01", new Vector3(142.7451f, 127.8218f, -24.9f)),
                         new WaitCoroutine(375191, 50582, 10000),
@@ -4169,7 +4169,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(375191, 50582, "trDun_Cath_SW_Hall_01", new Vector3(138.0294f, 129.1142f, -24.9f)),
                         new WaitCoroutine(375191, 50582, 10000),
 
- //                     new ClearAreaForNSecondsCoroutine (375191, 60, 365097, 2912417, 30)
+ //                     new ClearAreaForNSecondsCoroutine (375191, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4186,7 +4186,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
                         new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(96.61365f, 143.3563f, 0.1000008f)),
 
-                        new InteractWithGizmoCoroutine (375198,50579, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (375198,50579, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(78.06195f, 118.1667f, 1.457689f)),
                         new WaitCoroutine(375198, 50579, 5000),
@@ -4215,7 +4215,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(375198, 50579, "trDun_Cath_NSW_01", new Vector3(100.7628f, 147.187f, 0.1f)),
                         new WaitCoroutine(375198, 50579, 5000),
 						
-//                        new ClearAreaForNSecondsCoroutine (375198, 90, 365097, 2912417, 30, false)
+//                        new ClearAreaForNSecondsCoroutine (375198, 90, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30, false)
                     }
             });
 
@@ -4230,9 +4230,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (375201,180550, 2912417),
-                        new InteractWithGizmoCoroutine (375201,180550, 365097, 2912417, 5),
-                    //new ClearAreaForNSecondsCoroutine (375201, 60, 365097, 2912417, 30)
-                    new ClearAreaForNSecondsCoroutine (375201, 60, 365097, 2912417, 30)
+                        new InteractWithGizmoCoroutine (375201,180550, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    //new ClearAreaForNSecondsCoroutine (375201, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
+                    new ClearAreaForNSecondsCoroutine (375201, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                 }
             });
 
@@ -4248,7 +4248,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new EnterLevelAreaCoroutine (375257, 50613, 50610, -1363317799, 185067),
                         new MoveToMapMarkerCoroutine (375257,50610, 2912417),
 
-                        new InteractWithGizmoCoroutine (375257,50610, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (375257,50610, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02", new Vector3(82.68777f, 98.2832f, 0.1000001f)),
                         new WaitCoroutine(375257, 50610, 10000),
@@ -4264,7 +4264,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new WaitCoroutine(375257, 50610, 10000),
                         new MoveToScenePositionCoroutine(375257, 50610, "a2dun_Zolt_Hall_EW_02", new Vector3(81.71918f, 96.44299f, 0.1000001f)),
 						
-//                      new ClearAreaForNSecondsCoroutine (375257, 60, 365097, 2912417, 30)
+//                      new ClearAreaForNSecondsCoroutine (375257, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4279,7 +4279,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new EnterLevelAreaCoroutine (375261, 50613, 50611, -1363317798, 185067),
                         new MoveToMapMarkerCoroutine (375261, 50611, 2912417),
-                        new InteractWithGizmoCoroutine (375261,50611, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (375261,50611, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(375261, 50611, "a2dun_Zolt_Hall_EW_02", new Vector3(89.11694f, 97.45593f, 0.1000001f)),
                         new WaitCoroutine(375261, 50611, 10000),
@@ -4294,7 +4294,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(375261, 50611, "a2dun_Zolt_Hall_EW_02", new Vector3(91.53711f, 99.19025f, 0.1000001f)),
                         new WaitCoroutine(375261, 50611, 10000),
 						
-//                      new ClearAreaForNSecondsCoroutine (375261, 60, 365097, 2912417, 30)
+//                      new ClearAreaForNSecondsCoroutine (375261, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4309,7 +4309,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new MoveToMapMarkerCoroutine (375268, 261712, 2912417),
                         new MoveToSceneCoroutine(375268, 261712, "x1_westm_NSEW_06"),
-                        new InteractWithGizmoCoroutine (375268,261712, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (375268,261712, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(115.2922f, 106.7599f, 5.1f)),
                         new WaitCoroutine(375268, 261712, 10000),
@@ -4326,7 +4326,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(375268, 261712, "x1_westm_NSEW_06", new Vector3(115.2922f, 106.7599f, 5.1f)),
                         new WaitCoroutine(375268, 261712, 10000),
 						
-//                        new ClearAreaForNSecondsCoroutine (375268, 60, 365097, 2912417, 30, false),
+//                        new ClearAreaForNSecondsCoroutine (375268, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30, false),
                     }
             });
 
@@ -4341,7 +4341,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     {
                         new MoveThroughDeathGates(375275,271233,1),
                         new MoveToMapMarkerCoroutine (375275, 271233, 2912417),
-                        new InteractWithGizmoCoroutine(375275, 271233, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine(375275, 271233, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(375275, 271233, "x1_fortress_NE_02", new Vector3(124.3028f, 116.0892f, -19.25122f)),
                         new WaitCoroutine(375275, 271233, 10000),
@@ -4362,7 +4362,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(375275, 271233, "x1_fortress_NE_02", new Vector3(125.6252f, 112.6357f, -19.25122f)),
                         new WaitCoroutine(375275, 271233, 10000),
 						
-//                      new ClearAreaForNSecondsCoroutine (375275, 60, 365097, 2912417, 30)
+//                      new ClearAreaForNSecondsCoroutine (375275, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4376,8 +4376,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                     {
                         new MoveToMapMarkerCoroutine (375278, 267412, 2912417),
-                        new InteractWithGizmoCoroutine (375278,267412, 365097, 2912417, 5),
-                        new ClearAreaForNSecondsCoroutine (375278, 60, 365097, 2912417, 30)
+                        new InteractWithGizmoCoroutine (375278,267412, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                        new ClearAreaForNSecondsCoroutine (375278, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4394,8 +4394,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
  //                       new EnterLevelAreaCoroutine (375348, 338976, 338977, 2115492897, 175482, true),
 						new EnterLevelAreaCoroutine(375348, 338976, 0, 2115492897, 0),
                         new MoveToMapMarkerCoroutine (375348, 338977, 2912417),
-                        new InteractWithGizmoCoroutine (375348,338977, 365097, 2912417, 30),
-                        new ClearAreaForNSecondsCoroutine (375348, 60, 365097, 2912417, 30)
+                        new InteractWithGizmoCoroutine (375348,338977, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
+                        new ClearAreaForNSecondsCoroutine (375348, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                     }
             });
 
@@ -4419,7 +4419,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToPositionCoroutine(181644, new Vector3(348, 421, -14)),
                         new MoveToPositionCoroutine(181644, new Vector3(341, 351, -12)),
 
-                        new InteractWithGizmoCoroutine (409897,181644, 365097, 2912417, 5),
+                        new InteractWithGizmoCoroutine (409897,181644, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                         new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(111.6542f, 110.5945f, -12.64518f)),
                         new WaitCoroutine(409897,181644, 5000),
@@ -4442,7 +4442,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                         new MoveToScenePositionCoroutine(409897, 181644, "a4dun_spire_SigilRoom_C", new Vector3(73.42627f, 108.64f, -14.9f)),
                         new WaitCoroutine(409897,181644, 5000),
 						
-//                     new ClearAreaForNSecondsCoroutine (409897, 80, 365097, 2912417, 30, false)
+//                     new ClearAreaForNSecondsCoroutine (409897, 80, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30, false)
                     }
             });
         }
@@ -7834,9 +7834,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new EnterLevelAreaCoroutine(448260, 129305, 0, 37697317, 444404),
                     new MoveToActorCoroutine(448260, 129305, 444404),
-                    // x1_Global_Chest_CursedChest_B (365097) Distance: 24.08629
+                    // x1_Global_Chest_CursedChest_B ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 24.08629
                     new InteractWithGizmoCoroutine(448260, 129305, 444404, 37697317, 5),
-                                        new InteractWithGizmoCoroutine(448260, 443756, 365097, 2912417, 5),
+                                        new InteractWithGizmoCoroutine(448260, 443756, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
                                         new ClearAreaForNSecondsCoroutine(448260, 60, 0, 0, 45),
                                         new ClearLevelAreaCoroutine(448260),
                                         new MoveToPositionCoroutine(443756, new Vector3(159, 182, 0)),
@@ -8050,9 +8050,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(445158, 408254, 2912417), 
-                    // x1_Global_Chest_CursedChest_B (365097) Distance: 22.02429
-                    new InteractWithGizmoCoroutine(445158, 408254, 365097, 0, 5),
-                    new ClearAreaForNSecondsCoroutine(445158, 60, 365097, 2912417, 30),
+                    // x1_Global_Chest_CursedChest_B ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 22.02429
+                    new InteractWithGizmoCoroutine(445158, 408254, (int)SNOActor.x1_Global_Chest_CursedChest_B, 0, 5),
+                    new ClearAreaForNSecondsCoroutine(445158, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
                 }
             });
 
@@ -8170,9 +8170,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new EnterLevelAreaCoroutine(447419, 428493, 444305, -1665315172, 175467),
                     new MoveToMapMarkerCoroutine(447419, 444305, 2912417),
-                    // x1_Event_CursedShrine (365097) Distance: 11.55153
-                    new InteractWithGizmoCoroutine(447419, 444305, 365097, 0, 5),
-                    new ClearAreaForNSecondsCoroutine(447419, 90, 365097, 2912417, 30),
+                    // x1_Event_CursedShrine ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 11.55153
+                    new InteractWithGizmoCoroutine(447419, 444305, (int)SNOActor.x1_Global_Chest_CursedChest_B, 0, 5),
+                    new ClearAreaForNSecondsCoroutine(447419, 90, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
                 }
             });
 
@@ -8188,9 +8188,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new EnterLevelAreaCoroutine(447218, 428493, 444305, -1665315172, 175467),
                     new MoveToMapMarkerCoroutine(447218, 444305, 2912417),
-                    // x1_Global_Chest_CursedChest_B (365097) Distance: 24.78498
-					new InteractWithGizmoCoroutine(447218, 444305, 365097, 2912417, 5),
-                    new ClearAreaForNSecondsCoroutine(447218, 60, 365097, 2912417, 30),
+                    // x1_Global_Chest_CursedChest_B ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 24.78498
+					new InteractWithGizmoCoroutine(447218, 444305, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine(447218, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
 //                    new ClearLevelAreaCoroutine(447218),
                 }
             });
@@ -8206,7 +8206,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(445139, 408254, 2912417),
-                    new InteractWithGizmoCoroutine(445139, 408254, 365097, 0, 5),
+                    new InteractWithGizmoCoroutine(445139, 408254, (int)SNOActor.x1_Global_Chest_CursedChest_B, 0, 5),
                     new ClearAreaForNSecondsCoroutine(445139, 60, 0, 0, 30),
                 }
             });
@@ -8341,9 +8341,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(436965, 408254, 2912417),
-                    // x1_Event_CursedShrine (365097) Distance: 15.57718
-//                    new InteractWithGizmoCoroutine(436965, 408254, 365097, 2912417, 5),
-					new InteractWithGizmoCoroutine(436965, 408254, 365097, 2912417, 5),
+                    // x1_Event_CursedShrine ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 15.57718
+//                    new InteractWithGizmoCoroutine(436965, 408254, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+					new InteractWithGizmoCoroutine(436965, 408254, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
 
                     new MoveToScenePositionCoroutine(436965, 408254, "p4_Forest_Coast_NSEW_06", new Vector3(59.4035f, 51.7612f, -0.7321681f)),
                     new WaitCoroutine(436965, 408254, 10000),
@@ -8364,7 +8364,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToScenePositionCoroutine(436965, 408254, "p4_Forest_Coast_NSEW_06", new Vector3(57.27289f, 50.69296f, -0.9f)),
                     new WaitCoroutine(436965, 408254, 10000),
 										
-//                  new ClearAreaForNSecondsCoroutine(436965, 60, 365097, 2912417, 30),
+//                  new ClearAreaForNSecondsCoroutine(436965, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
                 }
             });
 
@@ -8613,8 +8613,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine (464598, 456634, 2912417),
-                    new InteractWithGizmoCoroutine (464598,456634, 365097, 2912417, 5),
-                    new ClearAreaForNSecondsCoroutine (464598, 60, 365097, 2912417, 30)
+                    new InteractWithGizmoCoroutine (464598,456634, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine (464598, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                 }
             });
 
@@ -8629,7 +8629,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                    // Name: p6_RavenFlyer_Unique_A-23893 ActorSnoId: 464732, Distance: 4.847482
-                   new KillUniqueMonsterCoroutine (464730, 460372, 464732, -2033595591),
+                   new KillUniqueMonsterCoroutine (464730, 460372, (int)SNOActor.p6_RavenFlyer_Unique_A, -2033595591),
                    new ClearLevelAreaCoroutine(464730)
                 }
             });
@@ -8648,7 +8648,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                      new MoveToMapMarkerCoroutine (474066, 464096, 1944200381),
                      new EnterLevelAreaCoroutine(474066, 464096, 470238, 1944200381, 467345),
                      // Type: Monster Name: p6_Shepherd_Boss-32030 ActorSnoId: 464225
-                     new KillUniqueMonsterCoroutine (474066, 464096, 464225, 0),
+                     new KillUniqueMonsterCoroutine (474066, 464096, (int)SNOActor.p6_Shepherd_Boss, 0),
                 }
             });
 
@@ -8663,8 +8663,8 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine (466835, 460372, 2912417),
-                    new InteractWithGizmoCoroutine (466835,460372, 365097, 2912417, 5),
-                    new ClearAreaForNSecondsCoroutine (466835, 60, 365097, 2912417, 30)
+                    new InteractWithGizmoCoroutine (466835,460372, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine (466835, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30)
                 }
             });
 
@@ -8681,24 +8681,24 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToSceneCoroutine(346067, 70885, "caOut_Oasis_Sub240_POI"),
 
                     new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(95.17871f, 61.56543f, 80.34052f)),
-                    new InteractWithGizmoCoroutine(346067, 70885, 175603, 0, 5),
+                    new InteractWithGizmoCoroutine(346067, 70885, (int)SNOActor.a2dun_Aqd_Act_Waterwheel_Lever_A_01_WaterPuzzle, 0, 5),
 
                     new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(65.4021f, 90.04639f, 80.63489f)),
-                    new InteractWithGizmoCoroutine(346067, 70885, 175603, 0, 5),
+                    new InteractWithGizmoCoroutine(346067, 70885, (int)SNOActor.a2dun_Aqd_Act_Waterwheel_Lever_A_01_WaterPuzzle, 0, 5),
 
                     // Haxx.. g_Portal_ArchTall_Blue (176002) Distance: 29.04947
                     new MoveToScenePositionCoroutine(346067, 70885, "caOut_Oasis_Sub240_WaterPuzzle", new Vector3(94.06543f, 95.49268f, 73.67375f)),
-                    new InteractionCoroutine(176002, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1)),
+                    new InteractionCoroutine((int)SNOActor.g_Portal_ArchTall_Blue, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(1)),
 
                     // Find and pull the lever. a2dun_Aqd_Act_Lever_FacePuzzle_02 (219880) Distance: 20.90631
-                    new InteractWithGizmoCoroutine(346067, 158593, 219880, 0, 5),
+                    new InteractWithGizmoCoroutine(346067, 158593, (int)SNOActor.a2dun_Aqd_Act_Lever_FacePuzzle_02, 0, 5),
 
                     // a2dun_Aqd_GodHead_Door_LargePuzzle-8357
                     new MoveToMapMarkerCoroutine(346067, 158593, -1469964931),
-                    new InteractWithGizmoCoroutine(346067, 158593, 207615, 0),
+                    new InteractWithGizmoCoroutine(346067, 158593, (int)SNOActor.a2dun_Aqd_GodHead_Door_LargePuzzle, 0),
 
                     // a2dun_Aqd_Chest_Special_FacePuzzle_Large (190524) Distance: 27.1103
-                    new InteractWithGizmoCoroutine(346067, 158593, 190524, 0, 5),
+                    new InteractWithGizmoCoroutine(346067, 158593, (int)SNOActor.a2dun_Aqd_Chest_Special_FacePuzzle_Large, 0, 5),
                     new ClearAreaForNSecondsCoroutine(346067, 30, 0, 0, 45),
                 }
             });
@@ -8715,7 +8715,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     // a2dun_Aqd_GodHead_Door_LargePuzzle-8357
                     new MoveToMapMarkerCoroutine(464406, 456634, 632612270),
-                    new KillUniqueMonsterCoroutine(464406, 456634, 464204, 0),
+                    new KillUniqueMonsterCoroutine(464406, 456634, (int)SNOActor.a2dun_Aqd_GodHead_Door_LargePuzzle, 0),
                     new ClearLevelAreaCoroutine(464406),
                 }
             });
@@ -8731,7 +8731,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // g_Portal_Circle_Blue-32941 
-                    new EnterLevelAreaCoroutine(467028, 460372, 465884, -1484677704, 176003),
+                    new EnterLevelAreaCoroutine(467028, 460372, 465884, -1484677704,  (int)SNOActor.g_Portal_Circle_Blue),
                     new ClearLevelAreaCoroutine(467028)
                 }
             });
@@ -8763,7 +8763,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToMapMarkerCoroutine(469699, 460372, 2912417),
                     new WaitCoroutine(469699, 460372, 5000),
                     // : P6_Friendly_Adventurer-465 ActorSnoId: 462095
-                    new ClearAreaForNSecondsCoroutine(469699, 60, 462095, 0, 50)
+                    new ClearAreaForNSecondsCoroutine(469699, 60, (int)SNOActor.P6_Friendly_Adventurer, 0, 50)
                 }
             });
 
@@ -8924,7 +8924,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToMapMarkerCoroutine(470218, 460372, 2912417),
                     new WaitCoroutine(470218, 460372, 7500),
                     // p6_Moor_Chest-3053 ActorSnoId: 462211
-                    new ClearAreaForNSecondsCoroutine(470218, 30, 462211, 2912417),
+                    new ClearAreaForNSecondsCoroutine(470218, 30, (int)SNOActor.p6_Moor_Chest, 2912417),
                 }
             });
 
@@ -8941,7 +8941,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToMapMarkerCoroutine(465564, 456634, 2912417),
                     new MoveToScenePositionCoroutine(465564, 456634, "p6_Church_SEW_02", new Vector3(71.31311f, 118.5031f, 0.1000002f)),
                     // Name: P6_Church_BloodPool-1277 ActorSnoId: 465787
-                    new ClearAreaForNSecondsCoroutine(465564, 60, 465787, 0)
+                    new ClearAreaForNSecondsCoroutine(465564, 60, (int)SNOActor.P6_Church_BloodPool, 0)
                 }
             });
             
@@ -8957,7 +8957,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // Name: p6_Skeleton_B_Unique_RoF_V4_01-18093 ActorSnoId: 471234
-                    new KillUniqueMonsterCoroutine(471226, 458965, 471234, 352361040),
+                    new KillUniqueMonsterCoroutine(471226, 458965, (int)SNOActor.p6_Skeleton_B_Unique_RoF_V4_01, 352361040),
                     new ClearLevelAreaCoroutine(471226),
                 }
             });
@@ -8973,7 +8973,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // Name: p6_Unburied_C_Unique_01_ROF_V2_01-1437 ActorSnoId: 4707559
-                    new KillUniqueMonsterCoroutine(470722, 456029, 4707559, 881692424),
+                    new KillUniqueMonsterCoroutine(470722, 456029, (int)SNOActor.p6_Unburied_C_Unique_01_ROF_V2_01, 881692424),
                     new ClearLevelAreaCoroutine(470722),
                 }
             });
@@ -8990,7 +8990,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 {
                     new MoveToMapMarkerCoroutine(470712, 456029, -1254225905),
                     // P6_Sasquatch_B_Unique_RoF_01-17925 ActorSnoId: 470709
-                    new KillUniqueMonsterCoroutine(470712, 456029, 470709, -1254225905),
+                    new KillUniqueMonsterCoroutine(470712, 456029, (int)SNOActor.P6_Sasquatch_B_Unique_RoF_01, -1254225905),
                     new ClearLevelAreaCoroutine(470712),
                 }
             });
@@ -9008,7 +9008,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToScenePositionCoroutine(468481, 460587, "LS_a4dun_spire_LibraryOfFate_05", new Vector3(117.0737f, 229.1764f, 31.1f)),
                     new MoveToScenePositionCoroutine(468481, 460587, "LS_a4dun_spire_corrupt_NS_02", new Vector3(226.8757f, 92.24744f, 31.1f)),
                     // p6_x1_westmarchRanged_A_Unique_ROF_V5_01-75810 ActorSnoId: 468511
-                    new KillUniqueMonsterCoroutine(468481, 460587, 468511, 465303410),
+                    new KillUniqueMonsterCoroutine(468481, 460587, (int)SNOActor.p6_x1_westmarchRanged_A_Unique_ROF_V5_01, 465303410),
                     new ClearLevelAreaCoroutine(468481),
                 }
             });
@@ -9024,7 +9024,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // Name: P6_Skeleton_B_Unique_01_RoF-5950 ActorSnoId: 470744
-                    new KillUniqueMonsterCoroutine(470746, 460587, 470744, 243521159),
+                    new KillUniqueMonsterCoroutine(470746, 460587, (int)SNOActor.P6_Skeleton_B_Unique_01_RoF, 243521159),
                     new ClearLevelAreaCoroutine(470746),
                 }
             });
@@ -9070,7 +9070,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToScenePositionCoroutine(471135, 457461, "P6_Lost_Souls_x1_fortress_EW_05_soul_well", new Vector3(184.2814f, 72.55072f, -74.9f)),
                     new MoveThroughDeathGates(471135, 457461, 1),
                     // p6_Angel_Corrupt_A_Unique_RoF_V3_01-22241 ActorSnoId: 471142
-                    new KillUniqueMonsterCoroutine(471135, 457461, 471139, -856974543),
+                    new KillUniqueMonsterCoroutine(471135, 457461, (int)SNOActor.p6_Angel_Corrupt_A_Unique_RoF_V3_01, -856974543),
                     new ClearLevelAreaCoroutine(471135)
                 }
             });
@@ -9099,9 +9099,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(470608, 458965, 2912417),
-                    // x1_Global_Chest_CursedChest_B (365097) Distance: 27.16287
-                    new InteractWithGizmoCoroutine(470608, 458965, 365097, 2912417, 5),
-                    new ClearAreaForNSecondsCoroutine(470608, 60, 365097, 2912417, 30),
+                    // x1_Global_Chest_CursedChest_B ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 27.16287
+                    new InteractWithGizmoCoroutine(470608, 458965, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine(470608, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
                 }
             });
 
@@ -9116,9 +9116,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(470561, 456029, 2912417),
-                    // x1_Global_Chest_CursedChest_B (365097) Distance: 27.16287
-                    new InteractWithGizmoCoroutine(470561, 456029, 365097, 2912417, 5),
-                    new ClearAreaForNSecondsCoroutine(470561, 60, 365097, 2912417, 30),
+                    // x1_Global_Chest_CursedChest_B ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 27.16287
+                    new InteractWithGizmoCoroutine(470561, 456029, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine(470561, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
                 }
             });
    
@@ -9136,7 +9136,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToScenePositionCoroutine(471131, 457461, "P6_Lost_Souls_x1_fortress_EW_05_soul_well", new Vector3(184.2814f, 72.55072f, -74.9f)),
                     new MoveThroughDeathGates(471131, 457461, 1),
                     // p6_Angel_Corrupt_A_Unique_RoF_V3_01-22241 ActorSnoId: 471142
-                    new KillUniqueMonsterCoroutine(471131, 457461, 471142, -1208602370),
+                    new KillUniqueMonsterCoroutine(471131, 457461, (int)SNOActor.p6_Angel_Corrupt_A_Unique_RoF_V3_01, -1208602370),
                     new ClearLevelAreaCoroutine(471131)
                 }
             });
@@ -9152,7 +9152,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // Name: p6_X1_armorScavenger_Unique_RoF_V4_01-809 ActorSnoId: 471230
-                    new KillUniqueMonsterCoroutine(471224, 458965, 471230, 1900506513),
+                    new KillUniqueMonsterCoroutine(471224, 458965, (int)SNOActor.p6_X1_armorScavenger_Unique_RoF_V4_01, 1900506513),
                     new ClearLevelAreaCoroutine(471224)
                 }
             });
@@ -9168,7 +9168,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // p6_DeathMaiden_Unique_RoF_V3-711 ActorSnoId: 471137
-                    new KillUniqueMonsterCoroutine(471133, 457461, 471137, -454310883),
+                    new KillUniqueMonsterCoroutine(471133, 457461, (int)SNOActor.p6_DeathMaiden_Unique_RoF_V3, -454310883),
                     new MoveToScenePositionCoroutine(471133, 457461, "P6_Lost_Souls_x1_fortress_EW_05_soul_well", new Vector3(185.6754f, 73.09955f, -74.9f)),
                     new MoveThroughDeathGates(471133, 457461, 1),
                     new ClearLevelAreaCoroutine(471133)
@@ -9180,12 +9180,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 471105,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 456029,
                 QuestType = BountyQuestType.KillMonster,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 464063,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    // Name: p6_GoatMutant_Shaman_B_Unique_RoF_V2_01-1067 ActorSnoId: 471113
+                    new KillUniqueMonsterCoroutine(471105, 456029, (int)SNOActor.p6_GoatMutant_Shaman_B_Unique_RoF_V2_01, -174945948),
+                    new ClearLevelAreaCoroutine(471105)
                 }
             });
 
@@ -9215,7 +9217,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // Name: p6_Crab_Mother_Unique_RoF_V5_01-10653 ActorSnoId: 471182
-                    new KillUniqueMonsterCoroutine(471156, 460587, 471182, 1898390417),
+                    new KillUniqueMonsterCoroutine(471156, 460587, (int)SNOActor.p6_Crab_Mother_Unique_RoF_V5_01, 1898390417),
                     new ClearLevelAreaCoroutine(471156)
                 }
             });
@@ -9235,9 +9237,9 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveThroughDeathGates(467798, 457461, 1),
 
                     new MoveToMapMarkerCoroutine(467798, 457461, 2912417),
-                    // x1_Global_Chest_CursedChest_B (365097) Distance: 27.16287
-                    new InteractWithGizmoCoroutine(467798, 457461, 365097, 2912417, 5),
-                    new ClearAreaForNSecondsCoroutine(467798, 60, 365097, 2912417, 30),
+                    // x1_Global_Chest_CursedChest_B ((int)SNOActor.x1_Global_Chest_CursedChest_B) Distance: 27.16287
+                    new InteractWithGizmoCoroutine(467798, 457461, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 5),
+                    new ClearAreaForNSecondsCoroutine(467798, 60, (int)SNOActor.x1_Global_Chest_CursedChest_B, 2912417, 30),
                 }
             });
 
@@ -9266,7 +9268,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                     // Name: p6_morluSpellcaster_A_Unique_RoF_V5_01-950 ActorSnoId: 471180
-                    new KillUniqueMonsterCoroutine (471160, 460587, 471180, 2034862812),
+                    new KillUniqueMonsterCoroutine (471160, 460587, (int)SNOActor.p6_morluSpellcaster_A_Unique_RoF_V5_01, 2034862812),
                     new ClearLevelAreaCoroutine (471160)
                 }
             });
@@ -9296,7 +9298,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 Coroutines = new List<ISubroutine>
                 {
                      // Name: p6_X1_armorScavenger_A_Unique_ROF_V4_01-4477 ActorSnoId: 470666
-                    new KillUniqueMonsterCoroutine (470651, 458965, 470666, -541902607),
+                    new KillUniqueMonsterCoroutine (470651, 458965, (int)SNOActor.p6_X1_armorScavenger_A_Unique_ROF_V4_01, -541902607),
                     new ClearLevelAreaCoroutine (470651)
                 }
             });
