@@ -8777,12 +8777,13 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 465128,
                 Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 460372,
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 92945,
+                WaypointLevelAreaId = 460671,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToMapMarkerCoroutine(465128, 460372, 2912417),
+                    new ClearAreaForNSecondsCoroutine(465128, 90, 0, 0, 45),
                 }
             });
 
@@ -9335,12 +9336,16 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 359939,
                 Act = Act.A5,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 271233, // Enter the final worldId here
                 QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 332339,
+                WaypointLevelAreaId = 271234,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    new MoveToScenePositionCoroutine(359939, 271233, "x1_fortress_NE_05_soul_well", new Vector3(91.4856f, 196.1569f, 20.1f)),
+                    new MoveThroughDeathGates(359939, 271233, 1),
+                    new MoveToMapMarkerCoroutine(359939, 271233, 2912417),
+                    new ClearAreaForNSecondsCoroutine(359939, 90, 0, 0, 45)
+
                 }
             });
         }
