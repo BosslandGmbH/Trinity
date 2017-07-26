@@ -9191,6 +9191,22 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+            // A4 - Bounty: Kill Serpentor (470732)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 470732,
+                Act = Act.A4,
+                WorldId = 458965,
+                QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 464857,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Name: P6_x1_Squigglet_A_Unique_RoF-1024 ActorSnoId: 470730, 
+                    new KillUniqueMonsterCoroutine(470732, 458965, (int)SNOActor.P6_x1_Squigglet_A_Unique_RoF, -777267042 ),
+                    new ClearLevelAreaCoroutine(470732)
+                }
+            });
+
             // A4 - Bounty: Kill the Manipulator of Lore (470717)
             Bounties.Add(new BountyData
             {
