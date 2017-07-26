@@ -1573,14 +1573,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
-            // A3 - Bounty: Khazra Guardians (436284)
+            // A3 - Bounty: The Three Guardians (436284)
             Bounties.Add(new BountyData
             {
                 QuestId = 436284,
                 Act = Act.A3,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 428493,
                 QuestType = BountyQuestType.SpecialEvent,
-                //WaypointNumber = 40,
+                WaypointLevelAreaId = 428494,
                 Coroutines = new List<ISubroutine>
                 {
                     new MoveToMapMarkerCoroutine(436284, 428493, 2912417),
@@ -9088,11 +9088,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 471228,
                 Act = Act.A4,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 458965,
                 QuestType = BountyQuestType.KillMonster,
+                WaypointLevelAreaId = 464857,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    // Name: p6_QuillDemon_C_Unique_RoF_V4_01-2905 ActorSnoId: 471232
+                    new KillUniqueMonsterCoroutine(471228, 458965, (int)SNOActor.p6_QuillDemon_C_Unique_RoF_V4_01, 1111559942),
+                    new ClearLevelAreaCoroutine(471228),
                 }
             });
 
