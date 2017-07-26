@@ -866,16 +866,17 @@ namespace Trinity.Components.Adventurer.Game.Quests
         private static void AddGuardedGizmoBounties()
         {
 
-            //A1 - Templar Inquisition
+            // A1 - Bounty: Templar Inquisition
             Bounties.Add(new BountyData
             {
                 QuestId = 430723,
                 Act = Act.A1,
                 WorldId = 71150,
                 QuestType = BountyQuestType.GuardedGizmo,
+                WaypointLevelAreaId = 19954,
                 Coroutines = new List<ISubroutine>
                 {
-                    new GuardedGizmoCoroutine(430723,430733)
+                    new GuardedGizmoCoroutine(430723, Int32.MaxValue)
                 }
             });
 
@@ -8924,6 +8925,22 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new WaitCoroutine(470218, 460372, 7500),
                     // p6_Moor_Chest-3053 ActorSnoId: 462211
                     new ClearAreaForNSecondsCoroutine(470218, 30, 462211, 2912417),
+                }
+            });
+
+            // A4 - Bounty: Kill Jarryd (471226)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 471226,
+                Act = Act.A4,
+                WorldId = 458965, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 464857,
+                Coroutines = new List<ISubroutine>
+                {
+                    // Name: p6_Skeleton_B_Unique_RoF_V4_01-18093 ActorSnoId: 471234
+                    new KillUniqueMonsterCoroutine(471226, 458965, 471234, 352361040),
+                    new ClearLevelAreaCoroutine(471226),
                 }
             });
 
