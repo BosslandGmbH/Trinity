@@ -201,6 +201,7 @@ namespace Trinity.Components.Adventurer.Coroutines.BountyCoroutines
 
         private async Task<bool> Completed()
         {
+            BountyStatistics.CompletedBountyActs++;
             Core.Logger.Log("[ActBounties] Successfully completed {0} bounties.", Act);
             return true;
         }
