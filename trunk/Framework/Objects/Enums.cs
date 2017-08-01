@@ -123,6 +123,9 @@ namespace Trinity.Framework.Objects
         VoodooMask = 0x4000000000,
         Wand = 0x8000000000,
         WizardHat = 0x10000000000,
+        TwoHandScythe = 0x20000000000,
+        Scythe = 0x40000000000,
+        Phylactery = 0x80000000000
     }
 
     public enum ItemQualityColor

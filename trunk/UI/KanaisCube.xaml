@@ -191,7 +191,11 @@
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Shield}">
                                 Shield
                             </CheckBox>
-                        </UniformGrid>
+							<CheckBox
+                                IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Phylactery}">
+								Phylactery
+							</CheckBox>
+							</UniformGrid>
 
                         <Label FontWeight="Bold">1-Hand Weapons</Label>
                         <UniformGrid Columns="3">
@@ -239,7 +243,11 @@
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Wand}">
                                 Wand
                             </CheckBox>
-                        </UniformGrid>
+							<CheckBox
+                                IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=Scythe}">
+								Scythe
+							</CheckBox>
+							</UniformGrid>
 
                         <Label FontWeight="Bold">2-Hand Weapons</Label>
                         <UniformGrid Columns="2">
@@ -283,7 +291,11 @@
                                 IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandSword}">
                                 TwoHandSword
                             </CheckBox>
-                        </UniformGrid>
+							<CheckBox
+                                IsChecked="{Binding Path=KanaisCube.RareUpgradeTypes, Converter={StaticResource flagsEnumValueBooleanConverter}, ConverterParameter=TwoHandScythe}">
+								TwoHandScythe
+							</CheckBox>
+							</UniformGrid>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="Limits" Margin="0,0,0,0" Padding="0,0,0,5">
