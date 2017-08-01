@@ -71,7 +71,7 @@ namespace Trinity.Routines.Necromancer
             => new TrinityPower(Skills.Necromancer.BoneSpear, 60f, target.AcdId);
 
         protected virtual TrinityPower BoneSpikes(TrinityActor target)
-            => new TrinityPower(Skills.Necromancer.BoneSpikes, 60f, target.AcdId);
+            => new TrinityPower(Skills.Necromancer.BoneSpikes, 60f, target.AcdId, 50, 50);
 
         protected virtual TrinityPower BoneSpirit(TrinityActor target)
             => new TrinityPower(Skills.Necromancer.BoneSpirit, 60f, target.AcdId);
@@ -119,7 +119,7 @@ namespace Trinity.Routines.Necromancer
             => new TrinityPower(Skills.Necromancer.Simulacrum, 60f, position);
 
         protected virtual TrinityPower SiphonBlood(TrinityActor target)
-            => new TrinityPower(Skills.Necromancer.SiphonBlood, 60f, target.AcdId);
+            => new TrinityPower(Skills.Necromancer.SiphonBlood, 60f, target.AcdId, 50, 50);
 
         protected virtual TrinityPower SkeletalMage(Vector3 position)
             => new TrinityPower(Skills.Necromancer.SkeletalMage, 60f, position);
