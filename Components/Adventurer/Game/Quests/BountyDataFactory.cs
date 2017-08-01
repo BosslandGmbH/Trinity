@@ -22,6 +22,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
 
         static BountyDataFactory()
         {
+
             //BrokenBounties();
             AddBounties();
             AddKillBossBounties();
@@ -311,6 +312,66 @@ namespace Trinity.Components.Adventurer.Game.Quests
             // for this area, visited nodes are not being flagged properly
             // when in radius
 
+
+            // A5 - Bounty: The Harvest (359396)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 359396,
+                Act = Act.A5,
+                WorldId = 261712,
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 261758,
+                Coroutines = new List<ISubroutine>
+                {
+                    new MoveToMapMarkerCoroutine(359396, 261712, 1629495090),
+                }
+            });
+
+            // A5 - Bounty: Treasure Room (359911)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 359911,
+                Act = Act.A5,
+                WorldId = 283552, // Enter the final worldId here
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 283553,
+                Coroutines = new List<ISubroutine>
+                {
+                     new MoveToMapMarkerCoroutine(359911, 283552, 2912417),
+
+                     // GizmoType: Switch Name: x1_Catacombs_Nephalem_Event_Switch-6817 ActorSnoId: 368515 
+                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(166.0807f, 159.9316f, 0.6154587f)),
+                     new InteractWithGizmoCoroutine(359911, 283552, (int)SNOActor.x1_Catacombs_Nephalem_Event_Switch, 0),
+
+                     //...
+                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(139.5948f, 61.59454f, 0.5280046f)),
+                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(69.77344f, 76.85925f, 0.2960601f)),
+                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(60.94092f, 177.8383f, 0.1f)),
+                     new InteractWithGizmoCoroutine(359911, 283552, (int)SNOActor.x1_Catacombs_Nephalem_Event_Switch, 0),
+
+                    new InteractWithGizmoCoroutine(359911, 283552, (int)SNOActor.x1_Catacombs_chest_rare_treasureRoom, 0, 5),
+                    new ClearAreaForNSecondsCoroutine(359911, 90, 0, 0, 45),
+                }
+            });
+
+            // todo: Test more.
+            // A5 - Bounty: The Angered Dead (359394)
+            Bounties.Add(new BountyData
+            {
+                QuestId = 359394,
+                Act = Act.A5,
+                WorldId = 261712,
+                QuestType = BountyQuestType.SpecialEvent,
+                WaypointLevelAreaId = 261758,
+                Coroutines = new List<ISubroutine>
+                {
+                     // Move a little to make sure it loads the adjecent scene or it will get stuck.
+                    new ExplorationCoroutine(new HashSet<int>() { 261758 }, breakCondition: () => (Core.Player.LevelAreaId == 314782 || Core.Scenes.CurrentWorldScenes.Count >= 15)),
+                    new MoveToMapMarkerCoroutine(359394, 261712, 2912417),
+                    // Name: X1_Event_WestM_HauntedManor_GhostLord-8869 ActorSnoId: 286040
+                    new ClearAreaForNSecondsCoroutine(470651, 60, (int)SNOActor.X1_Event_WestM_HauntedManor_GhostLord, 0),
+                }
+            });
 
             // A2 - Bounty: Lost Treasure of Khan Dakab (346067)
             Bounties.Add(new BountyData
@@ -8896,7 +8957,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 WaypointLevelAreaId = 460671,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Name: P6_Werewolf_White_Unique_A-691 ActorSnoId: 464164
+                   // Name: P6_Werewolf_White_Unique_A-691 ActorSnoId: 464164
                    new KillUniqueMonsterCoroutine (464180, 460372, (int)SNOActor.P6_Werewolf_White_Unique_A, -840003354),
                    new ClearLevelAreaCoroutine(464180)
                 }
@@ -8925,12 +8986,14 @@ namespace Trinity.Components.Adventurer.Game.Quests
             {
                 QuestId = 471622,
                 Act = Act.A2,
-                WorldId = 0, // Enter the final worldId here
+                WorldId = 456634,
                 QuestType = BountyQuestType.KillMonster,
-                WaypointLevelAreaId = 270011,
+                WaypointLevelAreaId = 456638,
                 Coroutines = new List<ISubroutine>
                 {
-                    // Coroutines goes here
+                    // Name: p6_TempleCultist_Caster_Unique_A-747 ActorSnoId: 471616
+                   new KillUniqueMonsterCoroutine(471622, 456634, (int)SNOActor.p6_TempleCultist_Caster_Unique_A, -1213009173),
+                   new ClearLevelAreaCoroutine(471622)
                 }
             });
 
@@ -9386,6 +9449,7 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 }
             });
 
+
             // A5 - Bounty: Brutal Assault (359939)
             Bounties.Add(new BountyData
             {
@@ -9401,47 +9465,6 @@ namespace Trinity.Components.Adventurer.Game.Quests
                     new MoveToMapMarkerCoroutine(359939, 271233, 2912417),
                     new ClearAreaForNSecondsCoroutine(359939, 90, 0, 0, 45)
 
-                }
-            });
-
-            // A5 - Bounty: The Harvest (359396)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 359396,
-                Act = Act.A5,
-                WorldId = 0, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 261758,
-                Coroutines = new List<ISubroutine>
-                {
-                    // Coroutines goes here
-                }
-            });
-
-            // A5 - Bounty: Treasure Room (359911)
-            Bounties.Add(new BountyData
-            {
-                QuestId = 359911,
-                Act = Act.A5,
-                WorldId = 283552, // Enter the final worldId here
-                QuestType = BountyQuestType.SpecialEvent,
-                WaypointLevelAreaId = 283553,
-                Coroutines = new List<ISubroutine>
-                {
-                     new MoveToMapMarkerCoroutine(359911, 283552, 2912417),
-
-                     // GizmoType: Switch Name: x1_Catacombs_Nephalem_Event_Switch-6817 ActorSnoId: 368515 
-                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(166.0807f, 159.9316f, 0.6154587f)),
-                     new InteractWithGizmoCoroutine(359911, 283552, (int)SNOActor.x1_Catacombs_Nephalem_Event_Switch, 0),
-
-                     //...
-                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(139.5948f, 61.59454f, 0.5280046f)),
-                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(69.77344f, 76.85925f, 0.2960601f)),
-                     new MoveToScenePositionCoroutine(359911, 283552, "x1_Catacombs_SEW_01", new Vector3(60.94092f, 177.8383f, 0.1f)),
-                     new InteractWithGizmoCoroutine(359911, 283552, (int)SNOActor.x1_Catacombs_Nephalem_Event_Switch, 0),
-
-					new InteractWithGizmoCoroutine(359911, 283552, (int)SNOActor.x1_Catacombs_chest_rare_treasureRoom, 0, 5),
-                    new ClearAreaForNSecondsCoroutine(359911, 90, 0, 0, 45),
                 }
             });
         }

@@ -22,9 +22,9 @@ namespace Trinity.Modules
             GameEvents.OnGameJoined += (sender, args) => Update();
             GameEvents.OnWorldChanged += (sender, args) => Update();
 
+            AllItems.Source = () => Core.Actors.Inventory.Where(i => !InvalidAnnIds.Contains(i.AnnId));
             Stash.Source = () => Core.Inventory.AllItems.Where(i => i.InventorySlot == InventorySlot.SharedStash);
             Backpack.Source = () => Core.Inventory.AllItems.Where(i => i.InventorySlot == InventorySlot.BackpackItems);
-            AllItems.Source = () => Core.Actors.Inventory.Where(i => !InvalidAnnIds.Contains(i.AnnId));
         }
 
         public HashSet<int> KanaisCubeIds { get; private set; } = new HashSet<int>();
