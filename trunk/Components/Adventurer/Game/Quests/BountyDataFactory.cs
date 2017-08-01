@@ -1224,14 +1224,10 @@ namespace Trinity.Components.Adventurer.Game.Quests
                 QuestType = BountyQuestType.SpecialEvent,
                 Coroutines = new List<ISubroutine>
                 {
-                    new MoveToMapMarkerCoroutine(350529, 71150, 853662530),
-
-                    new EnterLevelAreaCoroutine(350529, 71150, 0, 853662530, 175482),
-                    new InteractWithUnitCoroutine(350529, 132995, 129782, -1472187117, 5),
+                    new EnterLevelAreaCoroutine(350529, 71150, 132995, 853662530, 175482),
+                    new InteractWithUnitCoroutine(350529, 132995, 129782, -1472187117, 3),
                     //ActorId: 136009, Type: Monster, Name: Event_VendorRescue_Brother-2746, Distance2d: 2.170177, CollisionRadius: 0, MinimapActive: 0, MinimapIconOverride: -1, MinimapDisableArrow: 0 
-
 					new MoveToScenePositionCoroutine(350529, 132995, "trDun_Cave_NSW_01", new Vector3(165.4375f, 136.5941f, 0.1f)),
-//         			new MoveToActorCoroutine(350529, 132995, 136009),
                     new ClearAreaForNSecondsCoroutine(350529, 20, 136009, 0, 30),
                     // Event_VendorRescue_Vendor (129782) Distance: 11.94286
                     new MoveToActorCoroutine(350529, 132995, 129782),
