@@ -127,9 +127,10 @@ namespace Trinity.Modules
                     var sceneHashName = scene.GetSceneNameString();
                     worldId = scene.Mesh.WorldId;
 
-                    if (scene.IsAlmostValid() && scene.Mesh.ParentSceneId <= 0 && worldId == currentWorldId)
+                    Scene subScene = scene.Mesh.SubScene;
+                    if (scene.IsAlmostValid() && scene.Mesh.ParentSceneId <= 0 && worldId == currentWorldId )
                     {
-                        if (scene.Mesh.Zone.GridSquares.Length <= 1)
+                        if (scene.Mesh.Zone.GridSquares.Length <= 1 && (subScene != null && !subScene.HasGridSquares()))
                             continue;
 
                         var adventurerScene = new WorldScene(scene, ExplorationData.ExplorationNodeBoxSize,
@@ -229,6 +230,11 @@ namespace Trinity.Modules
         public static bool HasParent(this Scene scene)
         {
             return scene.Mesh.ParentSceneId > 0;
+        }
+
+        public static bool HasGridSquares(this Scene scene)
+        {
+            return scene.Mesh.Zone.GridSquares.Length > 0;
         }
 
         public static bool IsAlmostValid(this Scene scene)
