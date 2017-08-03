@@ -2744,6 +2744,8 @@ namespace Trinity.Framework.Reference
 
         private static HashSet<int> blacklistIds = new HashSet<int>
         {
+            (int)SNOActor.P4_Forest_DyingGuy, // Guy in Greyhollow Island the bot tries to attack.
+
             // Obstacle you can't destroy.
             467026, // LS_a3dun_Keep_Exploding_Arch_A-6641 
 
