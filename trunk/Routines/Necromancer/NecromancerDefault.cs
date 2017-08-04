@@ -90,7 +90,7 @@ namespace Trinity.Routines.Necromancer
                 }
             }
             // Put up bone armor when running around with high cluster size setting and not yet fighting
-            if (!Skills.Necromancer.BoneArmor.IsBuffActive && TargetUtil.AnyMobsInRange(15f, 3))
+            if (Skills.Necromancer.BoneArmor.CanCast() && !Skills.Necromancer.BoneArmor.IsBuffActive && TargetUtil.AnyMobsInRange(15f, 3))
             {
                 return BoneArmor();
             }
